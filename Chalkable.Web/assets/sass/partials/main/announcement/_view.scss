@@ -394,22 +394,38 @@ $red-color: #842727;
           &:not(:last-child){
             margin-right: 32px;
           }
+
+          &+.standards-block{
+            margin-top: -17px;
+          }
         }
+      }
+
+      .standards-block{
+        margin: 15px 11px 12px;
       }
 
       .standard-item{
         display: inline-block;
-
-        .grey-input{
-          width:65px;
-        }
+        float: right;
+        margin-left: 10px;
       }
 
       .grey-input{
-        height: 31px;
-        line-height: 31px;
+        width: 56px;
+        height: 21px;
+        line-height: 21px;
         border: 1px solid #BCBCBC;
+        text-align: center;
         @include border-radius(3px);
+      }
+
+      .letters{
+        font-size: 10px;
+        color: #5F5F5F;
+        font-family: Arial;
+        letter-spacing: 1px;
+        text-align: center;
       }
 
       .row{
@@ -607,18 +623,14 @@ $red-color: #842727;
 
             INPUT{
               vertical-align: middle;
-              width: 65px;
+              margin: 10px 0 4px;
             }
 
             .letters{
               position: absolute;
               display: block;
-              font-size: 10px;
-              color: #5F5F5F;
-              font-family: Arial;
               left: 26px;
               bottom: -10px;
-              letter-spacing: 1px;
             }
           }
 

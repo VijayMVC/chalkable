@@ -34,7 +34,7 @@ mixin AnnouncementTooltip()
                 if self.getUserRole().isStudent()
                     +AnnouncementTooltip().comment-grade-container
                         .comment=self.getComment() || Msg.Your_grade + ":"
-                        .grade-value= self.isDropped() ? Msg.Dropped : (self.getGradeLetter() || '')
+                        .grade-value= self.isDropped() ? Msg.Dropped : (self.getGrade() || '')
                 if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
                     +AnnouncementTooltip().make-visible-container
                         .comment This item is hidden from students.

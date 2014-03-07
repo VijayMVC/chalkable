@@ -23,13 +23,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
             Number, function getStudentAnnGradingStyle(){return this.getStudentAnnouncements().getGradingStyle();},
-            chlk.models.grading.Mapping, function getMapping(){return this.getStudentAnnouncements().getMapping()},
-
-            String, function getGradeLetter(){
-                return GradingStyler.getLetterByGrade(this.getGrade(), this.getMapping(), this.getStudentAnnGradingStyle());
-            },
-            Number, function getGradeNumber(){
-                return GradingStyler.getGradeNumberValue(this.getGrade(), this.getMapping(), this.getStudentAnnGradingStyle());
-            }
+            chlk.models.grading.Mapping, function getMapping(){return this.getStudentAnnouncements().getMapping()}
         ])
 });

@@ -65,11 +65,11 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                         )
         .attachments-container.z-10
             .attachments-container-2
-                .standards-block
-                    +RenderWith(item, chlk.templates.announcement.AnnouncementViewStandardsTpl)
                 each attachment, i in item.getAttachments()
                     +ActionLink('announcement', 'viewAttachment', attachment.getId()).announcement-item.attachment
                         +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)
                 each app, i in self.getApplications()
                     +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId()).announcement-item.application
                         +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74), i)
+                .standards-block
+                    +RenderWith(item, chlk.templates.announcement.AnnouncementViewStandardsTpl)
