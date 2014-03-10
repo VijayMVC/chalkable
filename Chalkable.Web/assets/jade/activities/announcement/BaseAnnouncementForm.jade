@@ -22,7 +22,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
 
     //+AnnouncementFormDescriptionBlock(announcement)
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-    isAdminAnnouncement = adminRecipients && announcement.isAdminAnnouncement()
+    isAdminAnnouncement = adminRecipients && self.getUserRole().isAdmin()
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
     disableDeleteBtn = announcement.getGradingStudentsCount() <= 0
     if !isAdminAnnouncement

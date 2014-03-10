@@ -24,7 +24,7 @@ mixin AnnouncementFormApplicationItem(app, i)
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
 typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-isAnnouncement = (self.isStandartAnnouncement() || self.isAdminAnnouncement())
+isAnnouncement = (self.isStandartAnnouncement() || self.getUserRole().isAdmin())
 items = self.getSortedAppsAndAttachments();
 
 +Hidden('attachments', self.getAttachments())
