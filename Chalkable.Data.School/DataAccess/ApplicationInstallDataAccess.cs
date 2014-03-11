@@ -170,6 +170,4 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
     }
-    
-    
 }

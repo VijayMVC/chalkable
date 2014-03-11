@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface ISchoolYearService
     {
-        SchoolYear Add(int id, int schoolId, string name, string description, DateTime startDate, DateTime endDate);
+        SchoolYear Add(int id, int schoolId, string name, string description, DateTime? startDate, DateTime? endDate);
         IList<SchoolYear> AddSchoolYears(IList<SchoolYear> schoolYears); 
         SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate);
         SchoolYear GetSchoolYearById(int id);
@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
         //TODO: needs test 
-        public SchoolYear Add(int id, int schoolId, string name, string description, DateTime startDate, DateTime endDate)
+        public SchoolYear Add(int id, int schoolId, string name, string description, DateTime? startDate, DateTime? endDate)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
@@ -40,9 +40,6 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
-                if(IsOverlaped(startDate, endDate, da))
-                    throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
-                
                 var schoolYear = new SchoolYear
                     {
                         Id = id,

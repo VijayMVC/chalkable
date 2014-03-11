@@ -25,12 +25,6 @@ namespace Chalkable.StiConnector.Connectors
         private void InitServices()
         {
             UsersConnector = new UsersConnector(this);
-            SchoolConnector = new SchoolConnector(this);
-            AcadSessionConnector = new AcadSessionConnector(this);
-            StudentConnector = new StudentConnector(this);
-            GradeLevelConnector = new GradeLevelConnector(this);
-            GenderConnector = new GenderConnector(this);
-            ContactConnector = new ContactConnector(this);
             AttendanceConnector = new AttendanceConnector(this);
             ActivityConnector = new ActivityConnector(this);
             ActivityAttachmentsConnector = new ActivityAttachmentsConnector(this);
@@ -38,16 +32,11 @@ namespace Chalkable.StiConnector.Connectors
             SectionStandardConnector = new SectionStandardConnector(this);
             ActivityScoreConnector = new ActivityScoreConnector(this);
             ReportConnector = new ReportConnector(this);
+            SyncConnector = new SyncConnector(this);
             GradebookConnector = new GradebookConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
-        public SchoolConnector SchoolConnector { get; private set; }
-        public AcadSessionConnector AcadSessionConnector { get; private set; }
-        public StudentConnector StudentConnector { get; private set; }
-        public GradeLevelConnector GradeLevelConnector { get; private set; }
-        public GenderConnector GenderConnector { get; private set; }
-        public ContactConnector ContactConnector { get; private set; }
         public AttendanceConnector AttendanceConnector { get; private set; }
         public ActivityConnector ActivityConnector { get; private set; }
         public ActivityAttachmentsConnector ActivityAttachmentsConnector { get; private set; }
@@ -55,6 +44,7 @@ namespace Chalkable.StiConnector.Connectors
         public SectionStandardConnector SectionStandardConnector { get; private set; }
         public ActivityScoreConnector ActivityScoreConnector { get; private set; }
         public ReportConnector ReportConnector { get; private set; }
+        public SyncConnector SyncConnector { get; private set; }
         public GradebookConnector GradebookConnector { get; private set; }
 
         public class TokenModel

@@ -13,6 +13,8 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
+
+
         public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime)
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
@@ -43,7 +45,6 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult LogOut()
         {
-            var userName = ControllerContext.HttpContext.User.Identity.Name;
             ChalkableAuthentication.SignOut();
             return Json(new { success = true, data = new { success = true } }, JsonRequestBehavior.AllowGet);
         }
