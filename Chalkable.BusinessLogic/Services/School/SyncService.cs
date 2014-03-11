@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -31,10 +32,9 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new SyncVersionDataAccess(uow);
-                foreach (var version in versions)
-                {
-                    da.UpdateVersion(version.Key, version.Value);    
-                }
+                IList<SyncVersion> list = versions.Select(version => new SyncVersion {TableName = version.Key, Version = version.Value}).ToList();
+                da.DeleteAll();
+                da.Insert(list);
                 uow.Commit();
             }
         }

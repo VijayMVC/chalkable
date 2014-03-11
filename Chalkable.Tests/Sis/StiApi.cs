@@ -29,7 +29,7 @@ namespace Chalkable.Tests.Sis
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
             var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
-            var r = cl.SyncConnector.GetDiff(typeof(School), null);
+            var r = cl.SyncConnector.GetDiff(typeof(CourseStandard), null);
             Assert.NotNull(r);
         }
     }

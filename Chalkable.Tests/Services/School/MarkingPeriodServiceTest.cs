@@ -16,7 +16,7 @@ namespace Chalkable.Tests.Services.School
         public void TestAddGet()
         {
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(DistrictTestContext.DistrictLocatorFirstSchool);
-            DateTime startDate = sy.StartDate.AddDays(1), endDate = startDate.AddMonths(2);
+            DateTime startDate = sy.StartDate.Value.AddDays(1), endDate = startDate.AddMonths(2);
             var mpService = DistrictTestContext.DistrictLocatorFirstSchool.MarkingPeriodService;
             var newMpId = GetNewMpId(FirstSchoolContext.AdminGradeSl);
             AssertForDeny(sl => sl.MarkingPeriodService.Add(newMpId, sy.Id, startDate, endDate, MP_NAME, MP_NAME, DEFAULT_WEEK_DAYS)
@@ -62,17 +62,17 @@ namespace Chalkable.Tests.Services.School
             var mpService = DistrictTestContext.DistrictLocatorFirstSchool.MarkingPeriodService;
             var newId = mp1.Id + 1;
             AssertException<Exception>(() => mpService.Add(newId, sy.Id, mp1.EndDate, mp1.StartDate, MP_NAME, MP_NAME, DEFAULT_WEEK_DAYS));
-            AssertException<Exception>(() => mpService.Add(newId, sy.Id, sy.StartDate.AddMonths(-3), sy.EndDate.AddMonths(-3), MP_NAME, MP_NAME, DEFAULT_WEEK_DAYS));
+            AssertException<Exception>(() => mpService.Add(newId, sy.Id, sy.StartDate.Value.AddMonths(-3), sy.EndDate.Value.AddMonths(-3), MP_NAME, MP_NAME, DEFAULT_WEEK_DAYS));
 
             var mp2 = CreateNextMp(DistrictTestContext.DistrictLocatorFirstSchool, sy.Id);
             AssertException<Exception>(() => mpService.Edit(mp1.Id, sy.Id, mp2.StartDate.AddDays(-2), mp2.StartDate.AddDays(2), MP_NAME, MP_NAME, DEFAULT_WEEK_DAYS));
 
             var newMp1Name = MP_NAME + "_3";
             var sy2 = SchoolYearServiceTest.CreateNextSchoolYear(DistrictTestContext.DistrictLocatorFirstSchool);
-            mp1 = mpService.Edit(mp1.Id, sy2.Id, sy2.StartDate.AddDays(1), sy2.StartDate.AddMonths(1), newMp1Name, newMp1Name, DEFAULT_WEEK_DAYS);
+            mp1 = mpService.Edit(mp1.Id, sy2.Id, sy2.StartDate.Value.AddDays(1), sy2.StartDate.Value.AddMonths(1), newMp1Name, newMp1Name, DEFAULT_WEEK_DAYS);
 
-            Assert.AreEqual(mp1.StartDate, sy2.StartDate.AddDays(1));
-            Assert.AreEqual(mp1.EndDate, sy2.StartDate.AddMonths(1));
+            Assert.AreEqual(mp1.StartDate, sy2.StartDate.Value.AddDays(1));
+            Assert.AreEqual(mp1.EndDate, sy2.StartDate.Value.AddMonths(1));
             Assert.AreEqual(mp1.Name, newMp1Name);
             Assert.AreEqual(mp1.Description, newMp1Name);
             Assert.AreEqual(mp1.SchoolYearRef, sy2.Id);
@@ -116,7 +116,7 @@ namespace Chalkable.Tests.Services.School
             DateTime startDate;
             if (mps.Count > 0)
                 startDate = mps[mps.Count - 1].EndDate.AddDays(1);
-            else startDate = sy.StartDate.AddDays(1);
+            else startDate = sy.StartDate.Value.AddDays(1);
 
             var newId = GetNewMpId(locator);
             var newMpName = MP_NAME + "_" + newId + 1;

@@ -33,7 +33,7 @@ namespace Chalkable.Tests.Services.School
 
             Assert.IsNull(pService.GetPeriod(440));
             Assert.IsNull(pService.GetPeriod(510));
-            Assert.IsNull(pService.GetPeriod(480, sy.EndDate.AddDays(1)));
+            Assert.IsNull(pService.GetPeriod(480, sy.EndDate.Value.AddDays(1)));
             Assert.IsNull(SecondSchoolContext.AdminGradeSl.PeriodService.GetPeriod(480));
             AssertAreEqual(period1, pService.GetPeriod(480));
             var periods = pService.GetPeriods(sy.Id);

@@ -630,3 +630,25 @@ go
 alter table ClassPeriod
 drop column RoomRef 
 go
+
+alter table SchoolYear 
+	drop QU_SchoolYear_Name
+GO
+alter table SchoolYear 
+	add constraint UQ_SchoolYear_Name unique (SchoolRef, Name)
+GO
+
+Create Table SyncVersion
+(
+	Id int not null primary key identity,
+	TableName nvarchar(256),
+	[Version] int
+)
+GO
+
+Alter Table SchoolYear
+	Alter Column StartDate DateTime2
+GO
+Alter Table SchoolYear
+	Alter Column EndDate DateTime2
+GO

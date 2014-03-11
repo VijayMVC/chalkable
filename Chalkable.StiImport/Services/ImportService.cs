@@ -43,9 +43,16 @@ namespace Chalkable.StiImport.Services
         public void DownloadSyncData()
         {
             context = new SyncContext();
-            context.SetCurrentVersions(ServiceLocatorSchool.SyncService.GetVersions());
+            var currentVersions = ServiceLocatorSchool.SyncService.GetVersions();
+            context.SetCurrentVersions(currentVersions);
+            //We need all user to match with persons
+            context.TablesToSync[typeof (User).Name] = null;
+            context.TablesToSync[typeof(Student).Name] = null;
+            //context.TablesToSync[typeof(Staff).Name] = null;
+
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();
+            
             var cl = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             foreach (var table in toSync)
             {
@@ -57,6 +64,13 @@ namespace Chalkable.StiImport.Services
             {
                 context.SetResult(syncResultBase);   
             }
+            var newVersions = new Dictionary<string, int>();
+            foreach (var i in context.TablesToSync)
+                if (i.Value.HasValue)
+                {
+                    newVersions.Add(i.Key, i.Value.Value);
+                }
+            ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
         }
     }
 

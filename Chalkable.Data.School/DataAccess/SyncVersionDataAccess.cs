@@ -10,15 +10,9 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void UpdateVersion(string tableName, int version)
+        public void DeleteAll()
         {
-            IDictionary<string, object> ps = new Dictionary<string, object>
-                {
-                    {SyncVersion.TABLE_NAME_FIELD, tableName},
-                    {SyncVersion.VERSION_FIELD, version},
-                };
-            string sql = string.Format("Update SyncVersion Set {0}=@{0} where {1}=@{1}", SyncVersion.VERSION_FIELD, SyncVersion.TABLE_NAME_FIELD);
-            ExecuteNonQueryParametrized(sql, ps);
+            ExecuteNonQueryParametrized("Delete from SyncVersion", new Dictionary<string, object>());
         }
     }
 }

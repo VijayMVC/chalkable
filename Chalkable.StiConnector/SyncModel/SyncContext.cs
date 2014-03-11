@@ -23,14 +23,18 @@ namespace Chalkable.StiConnector.SyncModel
             Types = new Dictionary<string, Type>();
             
             RegisterType(typeof(School));
+            RegisterType(typeof(User));
             RegisterType(typeof(Address));
             RegisterType(typeof(Person));
+            RegisterType(typeof(Student));
+            //RegisterType(typeof(Staff));
             RegisterType(typeof(StudentSchool));
             RegisterType(typeof(StaffSchool));
             RegisterType(typeof(PersonTelephone));
             RegisterType(typeof(GradeLevel));
             RegisterType(typeof(AcadSession));
             RegisterType(typeof(StudentAcadSession));
+            RegisterType(typeof(StudentScheduleTerm));
             RegisterType(typeof(Term));
             RegisterType(typeof(DayType));
             RegisterType(typeof(CalendarDay));
@@ -69,7 +73,7 @@ namespace Chalkable.StiConnector.SyncModel
         {
             var tName = result.Name;
             results.Add(tName, result);
-            TablesToSync[tName] = result.VersionNumber;
+            TablesToSync[tName] = result.CurrentVersion;
         }
          
         public SyncResult<T> GetSyncResult<T>()
@@ -81,13 +85,13 @@ namespace Chalkable.StiConnector.SyncModel
 
     public abstract class SyncResultBase
     {
-        public int VersionNumber { get; set; }
+        public int CurrentVersion { get; set; }
         public abstract string Name { get; }
     }
 
     public class SyncResult<T> : SyncResultBase
     {
-        public T[] Created { get; set; }
+        public T[] Inserted { get; set; }
         public T[] Updated { get; set; }
         public T[] Deleted { get; set; }
         public T[] Rows { get; set; }
@@ -97,7 +101,7 @@ namespace Chalkable.StiConnector.SyncModel
             {
                 if (Rows != null)
                     return Rows;
-                return Created;
+                return Inserted;
             }
         }
 

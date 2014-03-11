@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.School.Model;
 using Chalkable.Tests.Services.TestContext;
 using NUnit.Framework;
 
@@ -16,7 +11,7 @@ namespace Chalkable.Tests.Services.School
         {
             var districtSl = DistrictTestContext.DistrictLocatorFirstSchool;
             var sy = SchoolYearServiceTest.CreateNextSchoolYear(districtSl, FirstSchoolContext.NowDate.AddDays(-7));
-            var sy2 = SchoolYearServiceTest.CreateNextSchoolYear(districtSl, sy.EndDate.AddDays(1));
+            var sy2 = SchoolYearServiceTest.CreateNextSchoolYear(districtSl, sy.EndDate.Value.AddDays(1));
             AssertForDeny(sl => sl.CalendarDateService.Add(FirstSchoolContext.NowDate.Date, true, sy.Id, null), FirstSchoolContext
                 ,SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor |  SchoolContextRoles.FirstTeacher
                 | SchoolContextRoles.FirstStudent | SchoolContextRoles.FirstParent | SchoolContextRoles.Checkin | SchoolContextRoles.AdminViewer);

@@ -80,12 +80,15 @@ namespace Chalkable.StiImport.Services
             }).ToList();
             ServiceLocatorSchool.AddressService.Add(addressInfos);
         }
-
+        
         private void InsertPersons()
         {
             int counter = 0;
             var persons = context.GetSyncResult<Person>().All;
             var ps = new List<PersonInfo>();
+            var users = context.GetSyncResult<User>().All.ToDictionary(x => x.UserID);
+            var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
+            //var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
             foreach (var person in persons)
             {
                 counter++;
@@ -93,7 +96,12 @@ namespace Chalkable.StiImport.Services
                     Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
                 var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
                 //TODO: what about admins? probably will be resolved by API
-                string userName = string.Empty;//We need this to login into the chalkable directly now
+                string userName = string.Empty;
+                if (students.ContainsKey(person.PersonID))
+                    userName = users[students[person.PersonID].UserID].UserName;
+                //if (staff.ContainsKey(person.PersonID) && staff[person.PersonID].UserID.HasValue)
+                    //userName = users[staff[person.PersonID].UserID.Value].UserName;
+
                 ps.Add(new PersonInfo
                 {
                     Active = true,
@@ -178,30 +186,18 @@ namespace Chalkable.StiImport.Services
         private void InsertSchoolYears()
         {
             var sessions = context.GetSyncResult<AcadSession>().All;
-            foreach (var calendar in sessions)
+            foreach (var session in sessions)
             {
-                if (!calendar.StartDate.HasValue)
-                {
-                    Log.LogWarning(string.Format(ChlkResources.ERR_SCHEDULE_IMPORT_START_DATE_IS_NULL, calendar.AcadSessionID));
-                    continue;
-                }
-                if (!calendar.EndDate.HasValue)
-                {
-                    Log.LogWarning(string.Format(ChlkResources.ERR_SCHEDULE_IMPORT_END_DATE_IS_NULL, calendar.AcadSessionID));
-                    continue;
-                }
-                ServiceLocatorSchool.SchoolYearService.Add(calendar.AcadSessionID, calendar.SchoolID, calendar.Name,
-                                                           calendar.Description, calendar.StartDate.Value, calendar.EndDate.Value);
+                ServiceLocatorSchool.SchoolYearService.Add(session.AcadSessionID, session.SchoolID, session.Name,
+                                                           session.Description, session.StartDate.Value, session.EndDate.Value);
             }
         }
 
         private void InsertStudentSchoolYears()
         {
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
             var assignments = context.GetSyncResult<StudentAcadSession>().All
                 .Where(x => x.GradeLevelID.HasValue)
                 .ToList()
-                .Where(x => years.Any(y => y.Id == x.AcadSessionID))
                 .Select(x => new StudentSchoolYear
                 {
                     GradeLevelRef = x.GradeLevelID.Value,
@@ -222,10 +218,8 @@ namespace Chalkable.StiImport.Services
 
         private void InsertDayTypes()
         {
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
             var dayTypes = context.GetSyncResult<DayType>().All
-                                      .ToList()
-                                      .Where(x => years.Any(y => y.Id == x.AcadSessionID));
+                                      .ToList();
             foreach (var dayType in dayTypes)
             {
                 var dt = ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
@@ -273,8 +267,7 @@ namespace Chalkable.StiImport.Services
                     .Select(x => new Pair<string, Guid>(x, chalkableDepartment.Id)));
             }
 
-            var courses = context.GetSyncResult<Course>().All
-                .Where(x => x.AcadSessionID.HasValue && years.ContainsKey(x.AcadSessionID.Value));
+            var courses = context.GetSyncResult<Course>().All;
             var classes = new List<Class>();
             foreach (var course in courses)
             {
@@ -305,7 +298,8 @@ namespace Chalkable.StiImport.Services
                     Name = course.ShortName,
                     SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
                     SchoolYearRef = course.AcadSessionID,
-                    TeacherRef = course.PrimaryTeacherID
+                    TeacherRef = course.PrimaryTeacherID,
+                    RoomRef = course.RoomID
                 });
             }
 
@@ -389,10 +383,7 @@ namespace Chalkable.StiImport.Services
 
         private void InsertPeriods()
         {
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToList();
-            var periods = context.GetSyncResult<TimeSlot>().All.ToList()
-                .Where(x => years.Any(y => y.Id == x.AcadSessionID));
-
+            var periods = context.GetSyncResult<TimeSlot>().All.ToList();
             foreach (var timeSlot in periods)
             {   
                 //TODO:
@@ -418,7 +409,6 @@ namespace Chalkable.StiImport.Services
                     ClassRef = x.SectionID,
                     DayTypeRef = x.DayTypeID,
                     PeriodRef = x.TimeSlotID,
-                    RoomRef = x.RoomID,
                     SchoolRef = classes[x.SectionID].SchoolRef.Value
                 }).ToList();
             ServiceLocatorSchool.ClassPeriodService.Add(scheduledSections);
