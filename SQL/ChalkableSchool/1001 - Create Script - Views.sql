@@ -89,6 +89,7 @@ SELECT
 	Class.GradeLevelRef as Class_GradeLevelRef,
 	Class.ChalkableDepartmentRef as Class_ChalkableDepartmentRef,
 	Class.SchoolRef as Class_SchoolRef,
+	Class.CourseRef as Class_CourseRef,
 	GradeLevel.Id as GradeLevel_Id,
 	GradeLevel.Name as GradeLevel_Name,
 	GradeLevel.Number as GradeLevel_Number,
@@ -108,7 +109,10 @@ FROM
 	left join SchoolPerson on SchoolPerson.PersonRef = Class.TeacherRef and SchoolPerson.SchoolRef = Class.SchoolRef
 	left join SchoolYear on SchoolYear.Id = Class.SchoolYearRef
 where Class.TeacherRef is null or SchoolPerson.RoleRef is not null 
+
 GO
+
+
 
 
 CREATE VIEW [vwAnnouncementQnA]

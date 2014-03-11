@@ -1,5 +1,5 @@
 --Get Classes Procedure
-CREATE procedure [dbo].[spGetClasses] @schoolId int, @schoolYearId int, @markingPeriodId int, @callerId int, @callerRoleId int,
+create procedure [dbo].[spGetClasses] @schoolId int, @schoolYearId int, @markingPeriodId int, @callerId int, @callerRoleId int,
 										@personId int, @start int, @count int, @classId int, 
 										@filter1 nvarchar(max), @filter2 nvarchar(max), @filter3 nvarchar(max)
 as
@@ -17,6 +17,7 @@ declare @class table
 	Class_GradeLevelRef int,
 	Class_ChalkableDepartmentRef uniqueidentifier,
 	Class_SchoolRef  int,
+	Class_CourseRef int,
 	GradeLevel_Id int,
 	GradeLevel_Name nvarchar(max),
 	GradeLevel_Number int,
@@ -85,8 +86,8 @@ select * from @class
 
 select mpc.* from MarkingPeriodClass mpc
 join @class c on c.Class_Id = mpc.ClassRef
-
 GO
+
 
 
 CREATE PROCEDURE [dbo].[spGetPersons] @schoolId int, @personId int, @callerId int, @roleId int, @start int, @count int, @startFrom nvarchar(255)
