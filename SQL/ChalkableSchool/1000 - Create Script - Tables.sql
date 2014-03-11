@@ -652,3 +652,7 @@ GO
 Alter Table SchoolYear
 	Alter Column EndDate DateTime2
 GO
+
+alter table Class
+add CourseRef int null constraint FK_Class_Course foreign key references Class(Id)
+go
