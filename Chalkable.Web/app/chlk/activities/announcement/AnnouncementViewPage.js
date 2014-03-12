@@ -563,7 +563,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('submit', 'form.update-grade-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
-                return node.find('.error').valueOf().length == 0;
+                return node.find('.input-container').find('.error').valueOf().length == 0;
             }
         ]
     );
