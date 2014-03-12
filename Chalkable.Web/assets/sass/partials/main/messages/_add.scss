@@ -31,9 +31,41 @@
       color: #654a16;
       vertical-align: top;
     }
-    .body-text, .subject-text{
-      word-wrap: break-word;
+
+    .general-info{
+      margin-left: 30px;
+      .body, .subject{
+        .text{
+          word-wrap: break-word;
+        }
+        margin-top: 20px;
+      }
+      .subject{
+        margin-left: 80px;
+        .text{
+          color: #3e4d76;
+          font-size: 12px;
+        }
+      }
+      .body{
+        .title{
+          width: 77px;
+          font-size: 13px;
+          color: #654a16;
+          display: inline-block;
+          vertical-align: top;
+        }
+        .text{
+          background: rgba(255,255,255,0.23);
+          border: none;
+          width: 294px;
+          border-top: 1px solid #E0C89A;
+          font: normal 14px Arial;
+          min-height: 100px;
+        }
+      }
     }
+
     textarea{
       height: 60px;
       width: 320px;
