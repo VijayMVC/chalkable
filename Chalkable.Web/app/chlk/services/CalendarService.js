@@ -102,7 +102,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.common.ChlkDate, String]],
             ria.async.Future, function getAdminDay(date_, gradeLevelsIds_) {
                 return this.get('AnnouncementCalendar/AdminDay.json', chlk.models.calendar.announcement.AdminDayCalendar, {
-                    date: date_ && date_.toString('mm-dd-yy'),
+                    day: date_ && date_.toString('mm-dd-yy'),
                     gradeLevelsIds: gradeLevelsIds_
                 });
             },
