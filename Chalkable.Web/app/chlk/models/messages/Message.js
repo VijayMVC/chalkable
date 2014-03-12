@@ -22,6 +22,14 @@ NAMESPACE('chlk.models.messages', function () {
             chlk.models.people.User, 'sender',
             chlk.models.people.User, 'recipient',
 
+
+            String, function getShortSubject(){
+                return buildShortText(this.getSubject(), 50);
+            },
+            String, function getShortBody(){
+                return buildShortText(this.getBody(), 70);
+            },
+
             [[String, String, chlk.models.people.User, chlk.models.common.ChlkDate]],
             function $(body_, subject_, recipient_, sent_){
                 BASE();
