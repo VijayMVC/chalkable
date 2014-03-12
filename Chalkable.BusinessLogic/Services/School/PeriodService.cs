@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -15,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(int id);
         void Delete(IList<int> ids);
         Period Edit(int id, int startTime, int endTime);
+        IList<Period> Edit(IList<Period> periods); 
         Period GetPeriod(int time, DateTime date);
         Period GetPeriod(int time);
         IList<Period> GetPeriods(int schoolYearId);
@@ -178,17 +180,32 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            foreach (var period in periods)
-            {
-                if (period.StartTime >= period.EndTime)
-                    throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
-            }
+            ValidatePeriods(periods);
             using (var uow = Update())
             {
                 new PeriodDataAccess(uow, Context.SchoolLocalId).Insert(periods);
                 uow.Commit();
                 return periods;
             }
+        }
+
+        public IList<Period> Edit(IList<Period> periods)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            ValidatePeriods(periods);
+            using (var uow = Update())
+            {
+                new PeriodDataAccess(uow, Context.SchoolLocalId).Update(periods);
+                uow.Commit();
+                return periods;
+            }
+        }
+
+        private void ValidatePeriods(IEnumerable<Period> periods)
+        {
+            if (periods.Any(period => period.StartTime >= period.EndTime))
+                throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
         }
 
         public void Delete(IList<int> ids)

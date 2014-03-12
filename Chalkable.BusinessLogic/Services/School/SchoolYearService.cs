@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         SchoolYear Add(int id, int schoolId, string name, string description, DateTime? startDate, DateTime? endDate);
         IList<SchoolYear> AddSchoolYears(IList<SchoolYear> schoolYears); 
         SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate);
+        IList<SchoolYear> Edit(IList<SchoolYear> schoolYears); 
         SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
         void AssignStudent(int schoolYearId, int personId, int gradeLevelId);
@@ -189,6 +190,19 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 new SchoolYearDataAccess(uow, Context.SchoolLocalId).Delete(schoolYearIds);
                 uow.Commit();
+            }
+        }
+
+
+        public IList<SchoolYear> Edit(IList<SchoolYear> schoolYears)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new SchoolYearDataAccess(uow, Context.SchoolLocalId).Update(schoolYears);
+                uow.Commit();
+                return schoolYears;
             }
         }
     }

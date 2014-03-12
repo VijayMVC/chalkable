@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAlphaGradeService
     {
         void AddAlphaGrades(IList<AlphaGrade> alphaGrades);
+        void EditAlphaGrades(IList<AlphaGrade> alphaGrades);
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<AlphaGrade> GetAlphaGrades();
@@ -62,6 +63,19 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new AlphaGradeDataAccess(uow, Context.SchoolLocalId).Delete(ids);
+                uow.Commit();
+            }
+        }
+
+
+        public void EditAlphaGrades(IList<AlphaGrade> alphaGrades)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                new AlphaGradeDataAccess(uow, null).Update(alphaGrades);
                 uow.Commit();
             }
         }

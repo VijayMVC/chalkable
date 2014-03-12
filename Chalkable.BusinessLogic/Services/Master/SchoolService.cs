@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -15,7 +16,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count);
         IList<Data.Master.Model.School> GetAll();
         void Add(Guid districtId, int localId, string name);
-        void Add(IList<Data.Master.Model.School> schools);
+        void Add(IList<SchoolInfo> schools, Guid districtId);
+        void Edit(IList<SchoolInfo> schoolInfos, Guid districtId);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -53,13 +55,11 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void Add(Guid districtId, int localId, string name)
         {
-            Add(new List<Data.Master.Model.School>{new Data.Master.Model.School
+            Add(new List<SchoolInfo>{new SchoolInfo
                     {
-                        DistrictRef = districtId,
-                        Id = Guid.NewGuid(),
                         LocalId = localId,
                         Name = name
-                    }});
+                    }}, districtId);
         }
 
 
@@ -83,15 +83,47 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public void Add(IList<Data.Master.Model.School> schools)
+        public void Add(IList<SchoolInfo> schools, Guid districtId)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new SchoolDataAccess(uow).Insert(schools);
+                new SchoolDataAccess(uow).Insert(schools.Select(x => new Data.Master.Model.School
+                    {
+                        Name = x.Name,
+                        LocalId = x.LocalId,
+                        DistrictRef = districtId,
+                        Id = Guid.NewGuid()
+                    }).ToList());
                 uow.Commit();
             }
         }
+
+        public void Edit(IList<SchoolInfo> schoolInfos, Guid districtId)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new SchoolDataAccess(uow);
+                var schools = da.GetSchools(districtId, 0, int.MaxValue).ToList();
+                schools = schools.Where(x => schoolInfos.Any(y => y.LocalId == x.LocalId)).ToList();
+                foreach (var school in schools)
+                {
+                   var si = schoolInfos.FirstOrDefault(x=>x.LocalId == school.LocalId);
+                    if (si != null)
+                        school.Name = si.Name;
+                }
+                da.Update(schools);
+                uow.Commit();
+            }
+        }
+    }
+
+    public class SchoolInfo
+    {
+        public int LocalId { get; set; }
+        public string Name { get; set; }
     }
 }

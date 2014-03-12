@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<PersonInfo> persons);
         void AsssignToSchool(IList<SchoolPerson> assignments);
         Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId);
+        IList<Person> Edit(IList<PersonInfo> personInfos);
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<Person> GetPersons();
@@ -211,13 +212,40 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId)
         {
+            return Edit(new List<PersonInfo>
+                {
+                    new PersonInfo
+                        {
+                            Id = localId,
+                            Email = email,
+                            AddressRef = addressId,
+                            FirstName = firstName,
+                            LastName = lastName,
+                            Gender = gender,
+                            Salutation = salutation,
+                            BirthDate = birthDate,
+                        }
+                }).First();
+        }
+
+        public IList<Person> Edit(IList<PersonInfo> personInfos)
+        {
             using (var uow = Update())
             {
-                var res = Edit(new PersonDataAccess(uow, Context.SchoolLocalId), localId, email, firstName, lastName, gender, salutation, birthDate, addressId);
+                var res = new List<Person>();
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                foreach (var personInfo in personInfos)
+                {
+                     res.Add(Edit(da, personInfo.Id, personInfo.Email, personInfo.FirstName, 
+                                  personInfo.LastName,personInfo.Gender, personInfo.Salutation, 
+                                  personInfo.BirthDate, personInfo.AddressRef));
+                }
+                da.Update(res);
                 uow.Commit();
                 return res;
             }
         }
+
 
         public Person EditEmail(int id, string email, out string error)
         {
@@ -303,6 +331,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             ServiceLocator.ServiceLocatorMaster.UserService.DeleteUsers(ids, Context.DistrictId.Value);
         }
+
+
+
     }
 
     public class PersonInfo
@@ -311,6 +342,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }
+        public string Salutation { get; set; }
         public string Gender { get; set; }
         public bool Active { get; set; }
         public string Email { get; set; }

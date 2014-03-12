@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<AddressInfo> addressInfos);
         Address Add(AddressInfo addressInfo);
         Address Edit(AddressInfo address);
+        IList<Address> Edit(IList<AddressInfo> addresses);
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<Address> GetAddress();
@@ -54,37 +55,39 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Address Edit(AddressInfo addressInfo)
         {
-            if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
+            return Edit(new List<AddressInfo> {addressInfo}).First();
+        }
+        public IList<Address> Edit(IList<AddressInfo> addresses)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = da.GetById(addressInfo.Id);
-                if (!AddressSecurity.CanModify(address, Context))
-                    throw new ChalkableSecurityException();
-                address = EditAddress(addressInfo);
-                da.Update(address);
+                var res = addresses.Select(EditAddress).ToList();
+                da.Update(res);
                 uow.Commit();
-                return address;
+                return res;
             }
         }
 
-        private Address EditAddress(AddressInfo addressInfo)
+        private static Address EditAddress(AddressInfo addressInfo)
         {
-            var address = new Address();
-            address.Id = addressInfo.Id;
-            address.AddressLine1 = addressInfo.AddressLine1;
-            address.AddressLine2 = addressInfo.AddressLine2;
-            address.AddressNumber = addressInfo.AddressNumber;
-            address.StreetNumber = addressInfo.StreetNumber;
-            address.City = addressInfo.City;
-            address.State = addressInfo.State;
-            address.Country = addressInfo.Country;
-            address.CountyId = addressInfo.CountyId;
-            address.Latitude = addressInfo.Latitude;
-            address.Longitude = addressInfo.Longitude;
-            address.PostalCode = addressInfo.PostalCode;
-            return address;
+            return new Address
+                {
+                    Id = addressInfo.Id,
+                    AddressLine1 = addressInfo.AddressLine1,
+                    AddressLine2 = addressInfo.AddressLine2,
+                    AddressNumber = addressInfo.AddressNumber,
+                    StreetNumber = addressInfo.StreetNumber,
+                    City = addressInfo.City,
+                    State = addressInfo.State,
+                    Country = addressInfo.Country,
+                    CountyId = addressInfo.CountyId,
+                    Latitude = addressInfo.Latitude,
+                    Longitude = addressInfo.Longitude,
+                    PostalCode = addressInfo.PostalCode
+                };
         }
 
         public void Delete(int id)
@@ -135,5 +138,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
+
+
+       
     }
 }

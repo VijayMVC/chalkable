@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Room AddRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber);
         void AddRooms(IList<Room> rooms);
         Room EditRoom(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber);
+        void EditRooms(IList<Room> rooms); 
         void DeleteRoom(int id);
         void DeleteRooms(IList<int> ids);
         PaginatedList<Room> GetRooms(int start = 0, int count = int.MaxValue);
@@ -83,6 +84,18 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public void EditRooms(IList<Room> rooms)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new RoomDataAccess(uow, Context.SchoolLocalId);
+                da.Update(rooms);
+                uow.Commit();
+            }
+        }
+
         public void DeleteRoom(int id)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -138,5 +151,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
+
+
+        
     }
 }

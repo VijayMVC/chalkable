@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(int id);
         void DeleteMarkingPeriods(IList<int> ids);
         MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
+        IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods); 
         MarkingPeriod GetMarkingPeriodById(int id);
         MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null);
         MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId);
@@ -283,6 +284,26 @@ namespace Chalkable.BusinessLogic.Services.School
                     ValidateMarkingPeriodData(mpDa, sy, markingPeriod.StartDate, markingPeriod.EndDate, markingPeriod.Id);
                 }
                 new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).Insert(markingPeriods);
+                uow.Commit();
+                return markingPeriods;
+            }
+        }
+
+
+        public IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var sys = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetAll();
+                var mpDa = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
+                foreach (var markingPeriod in markingPeriods)
+                {
+                    var sy = sys.First(x => x.Id == markingPeriod.SchoolYearRef);
+                    ValidateMarkingPeriodData(mpDa, sy, markingPeriod.StartDate, markingPeriod.EndDate, markingPeriod.Id);
+                }
+                new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).Update(markingPeriods);
                 uow.Commit();
                 return markingPeriods;
             }
