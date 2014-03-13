@@ -43,6 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IAlternateScoreService AlternateScoreService { get; }
         IGradingPeriodService GradingPeriodService { get; }
         ISyncService SyncService { get; }
+        IGradingStandardService GradingStandardService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -83,6 +84,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAlternateScoreService alternateScoreService;
         private IGradingPeriodService gradingPeriodService;
         private ISyncService syncService;
+        private IGradingStandardService gradingStandardService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -124,6 +126,7 @@ namespace Chalkable.BusinessLogic.Services.School
             alternateScoreService = new AlternateScoreService(this);
             gradingPeriodService = new GradingPeriodService(this);
             syncService = new SyncService(this);
+            gradingStandardService = new GradingStandardService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -163,5 +166,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IAlternateScoreService AlternateScoreService { get { return alternateScoreService; } }
         public IGradingPeriodService GradingPeriodService { get { return gradingPeriodService; } }
         public ISyncService SyncService { get { return syncService; } }
+        public IGradingStandardService GradingStandardService { get { return gradingStandardService; }
+        }
     }
 }

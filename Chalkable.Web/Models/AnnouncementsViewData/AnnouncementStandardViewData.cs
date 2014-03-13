@@ -4,6 +4,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
+
     public class AnnouncementStandardViewData
     {
         public int StandardId { get; set; }

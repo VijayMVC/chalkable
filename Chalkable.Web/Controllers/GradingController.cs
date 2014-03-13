@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -31,6 +33,24 @@ namespace Chalkable.Web.Controllers
             var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBooks(classId);
             return Json(GradingGridViewData.Create(gradeBooks));
             //return FakeJson("~/fakeData/teacherGradingGrid.json");
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ClassStandardGrid(int classId)
+        {
+            var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId);
+            var schoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
+            var mpIds = gradingPeriods.GroupBy(x => x.MarkingPeriodRef).Select(x => x.Key).ToList();
+            var res = new List<StandardGradingGridViewData>();
+            foreach (var mpId in mpIds)
+            {
+                var currentGradingPeriods = gradingPeriods.Where(x => x.MarkingPeriodRef == mpId).ToList();
+                var markingPeriod = currentGradingPeriods.First().MarkingPeriod;
+                var gs = gradingStandards.Where(x => currentGradingPeriods.Any(y => y.Id == x.GradingPeriodId)).ToList();
+                res.Add(StandardGradingGridViewData.Create(markingPeriod, gs));
+            }
+            return Json(res);
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]

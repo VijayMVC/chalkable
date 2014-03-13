@@ -17,7 +17,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public IList<StandardScore> GetStandardScores(int sectionId, int? standardId, int? gradingPeriodId)
         {
-            var url = string.Format("chalkable/sections/{0}/standards/students", sectionId);
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/standards/students", sectionId);
             var nvc = new NameValueCollection();
             if(standardId.HasValue)
                 nvc.Add("standardId", standardId.Value.ToString());
@@ -28,7 +28,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public StandardScore GetStandardScore(int sectionId, int studentId, int standardId, int gradingPeriodId)
         {
-            var url = string.Format("chalkable/sections/{0}/standards/{1}/students/{2}/gradingPeriods/{3}"
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/standards/{1}/students/{2}/gradingPeriods/{3}"
                                     , sectionId, standardId, studentId, gradingPeriodId);
             return Call<StandardScore>(url);
         }
@@ -36,7 +36,7 @@ namespace Chalkable.StiConnector.Connectors
         public StandardScore Update(int sectionId, int studentId, int standardId, int gradingPeriodId,
                                     StandardScore standardScore)
         {
-            var url = string.Format("chalkable/sections/{0}/standards/{1}/students/{2}/gradingPeriods/{3}"
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/standards/{1}/students/{2}/gradingPeriods/{3}"
                                     , sectionId, standardId, standardId, gradingPeriodId);
             return Post(url, standardScore, null, HttpMethod.Put);
         }
