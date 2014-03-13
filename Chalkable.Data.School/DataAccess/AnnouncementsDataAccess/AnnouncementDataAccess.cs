@@ -248,8 +248,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool CanAddStandard(int announcementId)
         {
             var dbQuery = new DbQuery();
-            dbQuery.Sql.Append(string.Format("select [{0}].[{4}] from [{0}] join [{1}] on [{1}].[{2}] = [{0}].[{3}]"
-                , "Announcement", "ClassStandard", ClassStandard.CLASS_REF_FIELD, Announcement.CLASS_REF_FIELD, Announcement.ID_FIELD));
+            //dbQuery.Sql.Append(string.Format("select [{0}].[{4}] from [{0}] join [{1}] on [{1}].[{2}] = [{0}].[{3}]"
+            //    , "Announcement", "ClassStandard", ClassStandard.CLASS_REF_FIELD, Announcement.CLASS_REF_FIELD, Announcement.ID_FIELD));
+            dbQuery.Sql.Append(@"select [Announcement].Id from Announcement 
+                                 join Class on Class.Id = Announcement.ClassRef
+                                 join ClassStandard  on ClassStandard.ClassRef = Class.Id or ClassStandard.ClassRef = Class.CourseRef ");
             var conds = new AndQueryCondition {{Announcement.ID_FIELD, announcementId}};
             conds.BuildSqlWhere(dbQuery, "Announcement");
             return Exists(dbQuery);
