@@ -34,6 +34,7 @@ namespace Chalkable.StiConnector.Connectors
             ReportConnector = new ReportConnector(this);
             SyncConnector = new SyncConnector(this);
             GradebookConnector = new GradebookConnector(this);
+            StandardScoreConnector = new StandardScoreConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -46,6 +47,7 @@ namespace Chalkable.StiConnector.Connectors
         public ReportConnector ReportConnector { get; private set; }
         public SyncConnector SyncConnector { get; private set; }
         public GradebookConnector GradebookConnector { get; private set; }
+        public StandardScoreConnector StandardScoreConnector { get; private set; }
 
         public class TokenModel
         {

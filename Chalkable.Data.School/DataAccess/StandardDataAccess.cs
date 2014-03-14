@@ -47,9 +47,10 @@ namespace Chalkable.Data.School.DataAccess
             {
                 dbQuery.Sql.AppendFormat("and [{0}].[{1}] in (", "Standard", Standard.ID_FIELD);
                 dbQuery.Sql.AppendFormat(@"select [{0}].[{1}] from [{0}] 
-                                           join [{3}] on [{3}].[{4}] = [{0}].[{2}] 
+                                           join [{3}] on [{3}].[{4}] = [{0}].[{2}] or [{3}].[{5}] = [{0}].[{2}]
                                            where 1=1 ", "ClassStandard", ClassStandard.STANDARD_REF_FIELD
-                                                      , ClassStandard.CLASS_REF_FIELD, "Class", Class.ID_FIELD);
+                                                      , ClassStandard.CLASS_REF_FIELD, "Class", Class.ID_FIELD
+                                                      , Class.COURSE_REF_FIELD);
                 if (query.CourseId.HasValue)
                 {
                     dbQuery.Parameters.Add("courseId", query.CourseId);
