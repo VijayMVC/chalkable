@@ -319,10 +319,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     'Late', 'Late (fill all)', 'Absent', 'Absent (fill all)']);
 
                 if(model.isAbleDropStudentScore()){
-                    allScores = allScores.content(['Dropped', 'Dropped (fill all)']);
+                    allScores = allScores.concat(['Dropped', 'Dropped (fill all)']);
                 }
                 if(model.isAbleToExempt()){
-                    allScores = allScores.content(['Exempt', 'Exempt (fill all)']);
+                    allScores = allScores.concat(['Exempt', 'Exempt (fill all)']);
                 }
                 this.setAllScores(allScores);
 
