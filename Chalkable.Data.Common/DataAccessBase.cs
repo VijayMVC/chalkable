@@ -107,8 +107,11 @@ namespace Chalkable.Data.Common
         }
         protected void SimpleDelete<T>(IList<T> objs)
         {
-            var q = Orm.Orm.SimpleDelete(objs);
-            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            if (objs.Count > 0)
+            {
+                var q = Orm.Orm.SimpleDelete(objs);
+                ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);    
+            }
         }
 
         protected void SimpleDelete<T>(QueryCondition conds)

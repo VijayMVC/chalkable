@@ -36,7 +36,7 @@
                             +ActionLink('message', 'page', true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()) Admin
                 each item in self.getMessages().getItems()
                     +GridRow()
-                        .read
+                        div(class= item.isRead() ? "read" : "unread").item-container
                             .chk
                                 +Checkbox(item.getId().valueOf().toString(), false)(name='ch')
                             .av
@@ -54,6 +54,6 @@
                                         else
                                             =item.getRecipient().getFirstName()+ " "  + item.getRecipient().getLastName()
                                         |, &nbsp;
-                                        small= item.getSubject()
-                                    p= item.getBody()
+                                        small= item.getShortSubject()
+                                    p= item.getShortBody()
                                     .sent= item.getSent().toString('dd/m/yy hh:min:ss')

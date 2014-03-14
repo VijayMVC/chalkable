@@ -15,8 +15,10 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         Person Add(int localId, string email, string password, string firstName, string lastName, string gender, string salutation, DateTime? birthDate
             , int? addressId, string sisUserName, IList<SchoolPerson> assignments);
-        void Add(IList<PersonInfo> persons, IList<SchoolPerson> assignments);
+        void Add(IList<PersonInfo> persons);
+        void AsssignToSchool(IList<SchoolPerson> assignments);
         Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId);
+        IList<Person> Edit(IList<PersonInfo> personInfos);
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<Person> GetPersons();
@@ -79,7 +81,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Add(IList<PersonInfo> persons, IList<SchoolPerson> assignments)
+        public void Add(IList<PersonInfo> persons)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
@@ -102,19 +104,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUsers(users);
 
-                var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetSchools(Context.DistrictId.Value, 0,
-                                                                                           int.MaxValue);
-
-                var schoolUsers = assignments.Select(x => new SchoolUser
-                    {
-                        Id = Guid.NewGuid(),
-                        Role = x.RoleRef,
-                        SchoolRef = schools.First(y=>y.LocalId == x.SchoolRef).Id,
-                        UserRef = users.First(y => y.LocalId == x.PersonRef).Id
-
-                    }).ToList();
-                ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(schoolUsers);
-
                 var ps = persons.Select(x => new Person
                     {
                         Active = x.Active,
@@ -126,7 +115,33 @@ namespace Chalkable.BusinessLogic.Services.School
                         Gender = x.Gender,
                         Id = x.Id,
                     }).ToList();
-                da.Insert(ps);
+                da.Insert(ps);                
+                uow.Commit();
+            }
+        }
+
+        public void AsssignToSchool(IList<SchoolPerson> assignments)
+        {
+            //TODO: need cross db transaction handling
+            if (!BaseSecurity.IsAdminEditor(Context))
+                throw new ChalkableSecurityException();
+            if (!Context.DistrictId.HasValue)
+                throw new UnassignedUserException();
+            var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetSchools(Context.DistrictId.Value, 0,
+                                                                                           int.MaxValue);
+            //TODO: not the best performance solution for all sync but first one
+            var users = ServiceLocator.ServiceLocatorMaster.UserService.GetByDistrict(Context.DistrictId.Value);
+            var schoolUsers = assignments.Select(x => new SchoolUser
+            {
+                Id = Guid.NewGuid(),
+                Role = x.RoleRef,
+                SchoolRef = schools.First(y => y.LocalId == x.SchoolRef).Id,
+                UserRef = users.First(y => y.LocalId == x.PersonRef).Id
+
+            }).ToList();
+            ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(schoolUsers);
+            using (var uow = Update())
+            {
                 var schoolDataAccess = new SchoolPersonDataAccess(uow);
                 schoolDataAccess.Insert(assignments);
                 uow.Commit();
@@ -197,13 +212,40 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Person Edit(int localId, string email, string firstName, string lastName, string gender, string salutation, DateTime? birthDate, int? addressId)
         {
+            return Edit(new List<PersonInfo>
+                {
+                    new PersonInfo
+                        {
+                            Id = localId,
+                            Email = email,
+                            AddressRef = addressId,
+                            FirstName = firstName,
+                            LastName = lastName,
+                            Gender = gender,
+                            Salutation = salutation,
+                            BirthDate = birthDate,
+                        }
+                }).First();
+        }
+
+        public IList<Person> Edit(IList<PersonInfo> personInfos)
+        {
             using (var uow = Update())
             {
-                var res = Edit(new PersonDataAccess(uow, Context.SchoolLocalId), localId, email, firstName, lastName, gender, salutation, birthDate, addressId);
+                var res = new List<Person>();
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                foreach (var personInfo in personInfos)
+                {
+                     res.Add(Edit(da, personInfo.Id, personInfo.Email, personInfo.FirstName, 
+                                  personInfo.LastName,personInfo.Gender, personInfo.Salutation, 
+                                  personInfo.BirthDate, personInfo.AddressRef));
+                }
+                da.Update(res);
                 uow.Commit();
                 return res;
             }
         }
+
 
         public Person EditEmail(int id, string email, out string error)
         {
@@ -289,6 +331,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             ServiceLocator.ServiceLocatorMaster.UserService.DeleteUsers(ids, Context.DistrictId.Value);
         }
+
+
+
     }
 
     public class PersonInfo
@@ -297,6 +342,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }
+        public string Salutation { get; set; }
         public string Gender { get; set; }
         public bool Active { get; set; }
         public string Email { get; set; }

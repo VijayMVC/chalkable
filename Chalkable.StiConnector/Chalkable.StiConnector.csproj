@@ -86,230 +86,80 @@
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\ClassroomOption.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
-    <Compile Include="Connectors\Model\School.cs" />
     <Compile Include="Connectors\Model\Score.cs" />
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
+    <Compile Include="Connectors\Model\StandardScore.cs" />
     <Compile Include="Connectors\Model\StiAttachment.cs" />
     <Compile Include="Connectors\Model\StudentAverages.cs" />
+    <Compile Include="Connectors\Model\User.cs" />
     <Compile Include="Connectors\ReportConnector.cs" />
-    <Compile Include="Connectors\SchoolConnector.cs" />
     <Compile Include="Connectors\SectionStandardConnector.cs" />
-    <Compile Include="Model\AbsenceLevelReason.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AbsenceReason.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AcadSession.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ActivityCategory.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Address.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AlphaGrade.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AlternateScore.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AttendanceCalendar.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AttendanceCalendarDay.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\AttendanceSetting.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\BellSchedule.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\CalendarDay.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Course.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\CourseSchool.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\CourseStandard.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\CourseType.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\DayType.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Document.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Enrollment.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Ethnicity.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Gender.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\GradeLevel.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\OrganizationAddress.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Person.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PersonAddress.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PersonEmail.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PersonEthnicity.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\PersonTelephone.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Room.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ScheduledBlock.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ScheduledSection.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\ScheduledTimeSlot.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\School.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\SchoolGradeLevel.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\SectionStaff.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\SectionTerm.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Staff.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StaffClassification.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StaffContact.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StaffRole.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StaffSchool.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Standard.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StandardSubject.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StiEntities.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StiEntities.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StiEntities.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StiEntities.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StiEntities.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StiEntitiesEx.cs" />
-    <Compile Include="Model\Student.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentAcadSession.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentAttendanceMinute.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentCheckInOut.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentDailyAbsence.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentGradeLevel.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentPeriodAbsence.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentSchedule.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentScheduleTerm.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\StudentSchool.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Term.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\TimeSlot.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\User.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UserLogin.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UserPassword.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\UserSchool.cs">
-      <DependentUpon>StiEntities.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Connectors\StandardScoreConnector.cs" />
+    <Compile Include="Connectors\SyncConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="Model\StiEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StiEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
+    <Compile Include="SyncModel\AbsenceLevelReason.cs" />
+    <Compile Include="SyncModel\AbsenceReason.cs" />
+    <Compile Include="SyncModel\AcadSession.cs" />
+    <Compile Include="SyncModel\ActivityCategory.cs" />
+    <Compile Include="SyncModel\Address.cs" />
+    <Compile Include="SyncModel\AlphaGrade.cs" />
+    <Compile Include="SyncModel\AlternateScore.cs" />
+    <Compile Include="SyncModel\AttendanceCalendar.cs" />
+    <Compile Include="SyncModel\AttendanceCalendarDay.cs" />
+    <Compile Include="SyncModel\AttendanceSetting.cs" />
+    <Compile Include="SyncModel\BellSchedule.cs" />
+    <Compile Include="SyncModel\CalendarDay.cs" />
+    <Compile Include="SyncModel\Course.cs" />
+    <Compile Include="SyncModel\CourseSchool.cs" />
+    <Compile Include="SyncModel\CourseStandard.cs" />
+    <Compile Include="SyncModel\CourseType.cs" />
+    <Compile Include="SyncModel\DayType.cs" />
+    <Compile Include="SyncModel\Document.cs" />
+    <Compile Include="SyncModel\Enrollment.cs" />
+    <Compile Include="SyncModel\Ethnicity.cs" />
+    <Compile Include="SyncModel\Gender.cs" />
+    <Compile Include="SyncModel\GradeLevel.cs" />
+    <Compile Include="SyncModel\OrganizationAddress.cs" />
+    <Compile Include="SyncModel\Person.cs" />
+    <Compile Include="SyncModel\PersonAddress.cs" />
+    <Compile Include="SyncModel\PersonEmail.cs" />
+    <Compile Include="SyncModel\PersonEthnicity.cs" />
+    <Compile Include="SyncModel\PersonTelephone.cs" />
+    <Compile Include="SyncModel\Room.cs" />
+    <Compile Include="SyncModel\ScheduledBlock.cs" />
+    <Compile Include="SyncModel\ScheduledSection.cs" />
+    <Compile Include="SyncModel\ScheduledTimeSlot.cs" />
+    <Compile Include="SyncModel\School.cs" />
+    <Compile Include="SyncModel\SchoolGradeLevel.cs" />
+    <Compile Include="SyncModel\SectionStaff.cs" />
+    <Compile Include="SyncModel\SectionTerm.cs" />
+    <Compile Include="SyncModel\Staff.cs" />
+    <Compile Include="SyncModel\StaffClassification.cs" />
+    <Compile Include="SyncModel\StaffContact.cs" />
+    <Compile Include="SyncModel\StaffRole.cs" />
+    <Compile Include="SyncModel\StaffSchool.cs" />
+    <Compile Include="SyncModel\Standard.cs" />
+    <Compile Include="SyncModel\StandardSubject.cs" />
+    <Compile Include="SyncModel\Student.cs" />
+    <Compile Include="SyncModel\StudentAcadSession.cs" />
+    <Compile Include="SyncModel\StudentAttendanceMinute.cs" />
+    <Compile Include="SyncModel\StudentCheckInOut.cs" />
+    <Compile Include="SyncModel\StudentDailyAbsence.cs" />
+    <Compile Include="SyncModel\StudentGradeLevel.cs" />
+    <Compile Include="SyncModel\StudentPeriodAbsence.cs" />
+    <Compile Include="SyncModel\StudentSchedule.cs" />
+    <Compile Include="SyncModel\StudentScheduleTerm.cs" />
+    <Compile Include="SyncModel\StudentSchool.cs" />
+    <Compile Include="SyncModel\SyncContext.cs" />
+    <Compile Include="SyncModel\Term.cs" />
+    <Compile Include="SyncModel\TimeSlot.cs" />
+    <Compile Include="SyncModel\User.cs" />
+    <Compile Include="SyncModel\UserLogin.cs" />
+    <Compile Include="SyncModel\UserPassword.cs" />
+    <Compile Include="SyncModel\UserSchool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="Model\StiEntities.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StiEntities.Context.cs</LastGenOutput>
-      <DependentUpon>StiEntities.edmx</DependentUpon>
-    </None>
-    <None Include="Model\StiEntities.edmx.diagram">
-      <DependentUpon>StiEntities.edmx</DependentUpon>
-    </None>
-    <None Include="Model\StiEntities.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StiEntities.edmx</DependentUpon>
-      <LastGenOutput>StiEntities.cs</LastGenOutput>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

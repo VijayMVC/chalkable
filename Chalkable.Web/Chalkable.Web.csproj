@@ -291,6 +291,7 @@
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\GradingClassSummaryViewData.cs" />
     <Compile Include="Models\GradingGridViewData.cs" />
+    <Compile Include="Models\GradingStandardGridViewData.cs" />
     <Compile Include="Models\GradingStudentClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentSummaryViewData.cs" />
     <Compile Include="Models\GradingStyleViewData.cs" />

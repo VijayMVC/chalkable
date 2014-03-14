@@ -70,9 +70,9 @@ namespace Chalkable.Tests.Services.School
             var secondSyName = SCHOOL_YEAR_NAME + "_2";
             districtSyService.Add(newId + 1, schoolId1, secondSyName, secondSyName, nowTime.AddYears(1).AddDays(1), nowTime.AddYears(2));
             AssertException<Exception>(() => districtSyService.Edit(sy.Id, secondSyName, secondSyName, nowTime, nowTime.AddYears(1)));
-            AssertException<Exception>(() => districtSyService.Edit(sy.Id, sy.Name, sy.Description, nowTime.AddMonths(1), sy.EndDate.AddMonths(1)));
+            AssertException<Exception>(() => districtSyService.Edit(sy.Id, sy.Name, sy.Description, nowTime.AddMonths(1), sy.EndDate.Value.AddMonths(1)));
 
-            DateTime newStartDate = sy.StartDate.AddMonths(1), newEndDate = sy.EndDate;
+            DateTime newStartDate = sy.StartDate.Value.AddMonths(1), newEndDate = sy.EndDate.Value;
             sy = districtSyService.Edit(sy.Id, "testSchoolYear3", "testDesc3", newStartDate, newEndDate);
             Assert.AreEqual(sy.Name, "testSchoolYear3");
             Assert.AreEqual(sy.Description, "testDesc3");
@@ -98,7 +98,7 @@ namespace Chalkable.Tests.Services.School
             if (schoolYears.Count > 0)
             {
                 var lastSy = schoolYears[schoolYears.Count - 1];
-                startDate = lastSy.EndDate.AddDays(1);
+                startDate = lastSy.EndDate.Value.AddDays(1);
             }
             var newId = GetNewId(locator, sl => sl.SchoolYearService.GetSortedYears(), x => x.Id);
             string syName = string.Format("{0}_{1}", SCHOOL_YEAR_NAME, newId);

@@ -77,6 +77,14 @@ function getSerial(number){
     }
 }
 
+function buildShortText(text, newTextlength){
+    newTextlength = newTextlength || 80;
+    if(text != null && text.length > newTextlength){
+        return text.slice(0, newTextlength) + '...';
+    }
+    return text;
+}
+
 var GradingStyler = {
 
     gradeLettersReverse: ['A+', 'A', 'A-','B+', 'B', 'B-','C+', 'C', 'C-','D+', 'D', 'D-','F' ],

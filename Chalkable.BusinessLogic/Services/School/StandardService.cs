@@ -11,6 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         Standard AddStandard(int id, string name, string description, int standardSubjectId, int? parentStandardId, int? lowerGradeLevelId, int? upperGradeLevelId, bool isActive);
         void AddStandards(IList<Standard> standards);
+        void EditStandard(IList<Standard> standards);
         void DeleteStandard(int id);
         void DeleteStandards(IList<int> ids);
         Standard GetStandardById(int id);
@@ -18,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
+        void EditStandardSubjects(IList<StandardSubject> standardSubjects);
         IList<StandardSubject> GetStandardSubjects();
         //IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
 
@@ -145,6 +147,30 @@ namespace Chalkable.BusinessLogic.Services.School
         public void DeleteStandards(IList<int> ids)
         {
             throw new System.NotImplementedException();
+        }
+
+
+        public void EditStandard(IList<Standard> standards)
+        {
+            if(!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new StandardDataAccess(uow).Update(standards);
+                uow.Commit();
+            }
+        }
+
+
+        public void EditStandardSubjects(IList<StandardSubject> standardSubjects)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new StandardSubjectDataAccess(uow).Update(standardSubjects);
+                uow.Commit();
+            }        
         }
     }
 }

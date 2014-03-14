@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         DayType Add(int id, int number, string name, int schoolYearId);
         IList<DayType> Add(IList<DayType> dayTypes); 
         DayType Edit(int id, int number, string name);
+        IList<DayType> Edit(IList<DayType> dayTypes);
         void Delete(int id);
         void Delete(IList<int> ids);
     }
@@ -185,6 +186,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 da.Update(dayTypesForUpdate);
                 uow.Commit();
+            }
+        }
+
+
+        public IList<DayType> Edit(IList<DayType> dayTypes)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            //TODO: adjust numbering
+            using (var uow = Update())
+            {
+                new DayTypeDataAccess(uow).Update(dayTypes);
+                uow.Commit();
+                return dayTypes;
             }
         }
     }

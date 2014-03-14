@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -12,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(Data.School.Model.School school);
         void Add(IList<Data.School.Model.School> schools);
+        void Edit(IList<Data.School.Model.School> schools);
         void Delete(IList<int> ids);
         IList<Data.School.Model.School> GetSchools();
     }
@@ -51,13 +53,30 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Insert(schools);
                 uow.Commit();
             }
-            ServiceLocator.ServiceLocatorMaster.SchoolService.Add(schools.Select(x=> new Data.Master.Model.School
+            ServiceLocator.ServiceLocatorMaster.SchoolService.Add(schools.Select(x => new SchoolInfo
                 {
-                    Id = Guid.NewGuid(),
-                    DistrictRef = Context.DistrictId.Value,
                     LocalId = x.Id,
                     Name = x.Name
-                }).ToList());
+                }).ToList(), Context.DistrictId.Value);
+        }
+
+        public void Edit(IList<Data.School.Model.School> schools)
+        {
+            if (Context.Role.Id != CoreRoles.SUPER_ADMIN_ROLE.Id)
+                throw new ChalkableSecurityException();
+            if (!Context.DistrictId.HasValue)
+                throw new UnassignedUserException();
+            using (var uow = Update())
+            {
+                var da = new SchoolDataAccess(uow);
+                da.Update(schools);
+                uow.Commit();
+            }
+            ServiceLocator.ServiceLocatorMaster.SchoolService.Edit(schools.Select(x=> new SchoolInfo
+                {
+                    LocalId = x.Id,
+                    Name = x.Name
+                }).ToList(), Context.DistrictId.Value);
         }
 
         public void Delete(IList<int> ids)
@@ -71,5 +90,8 @@ namespace Chalkable.BusinessLogic.Services.School
             //ServiceLocator.ServiceLocatorMaster.SchoolService.
             throw new NotImplementedException();
         }
+
+
+
     }
 }

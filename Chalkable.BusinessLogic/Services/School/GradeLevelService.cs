@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddGradeLevel(int id, string name, int number);
         void AddGradeLevels(IList<GradeLevel> gradeLevels);
         void DeleteGradeLevels(IList<int> ids);
+        void Edit(IList<GradeLevel> gradeLevels);
         GradeLevel AddSchoolGradeLevel(int gradeLevelId, int schoolId);
         GradeLevel DeleteSchoolGradeLevel(int gradeLevelId, int schoolId);
         IList<GradeLevel> CreateDefault();
@@ -118,6 +119,17 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new GradeLevelDataAccess(uow).Delete(ids);
+                uow.Commit();
+            }
+        }
+
+        public void Edit(IList<GradeLevel> gradeLevels)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new GradeLevelDataAccess(uow).Update(gradeLevels);
                 uow.Commit();
             }
         }

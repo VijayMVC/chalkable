@@ -141,23 +141,28 @@ BODY {
                       color: #815d38;
                       background: transparent;
 
-                      .read{
-                        @include background(linear-gradient(top, #ded5c3,#d4c6af));
+                      .item-container{
+                        &.read{
+                          @include background(linear-gradient(top, #ded5c3,#d4c6af));
+                          border-top: 1px solid #e8e8e8;
+                          &:hover{
+                            @include background(linear-gradient(top, #cec5b3, #c4b69f));
+                          }
+                        }
+                        &.unread{
+                          @include background(linear-gradient(top, #f5ebd7,#eadac1));
+                          border-top: 1px solid white;
+                          &:hover{
+                            @include background(linear-gradient(top, #e5dbc7, #dacab1));
+                          }
+                        }
                         border-bottom: 1px solid #968466;
-                        -moz-box-shadow: 0 1px 0 #88785d;
-                        -webkit-box-shadow: 0 1px 0 #88785d;
-                        -o-box-shadow: 0 1px 0 #88785d;
-                        box-shadow: 0 1px 0 #88785d;
+                        @include box-shadow(0 1px 0 #88785d);
                         height: 82px;
                         display: table;
 
                         position: relative;
-                        -moz-border-radius: 7px;
-                        -webkit-border-radius: 7px;
-                        -o-border-radius: 7px;
-                        -ms-border-radius: 7px;
-                        -khtml-border-radius: 7px;
-                        border-radius: 7px;
+                        @include border-radius(7px);
 
                         >DIV.chk {
                           display: table-cell;

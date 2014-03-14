@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using System.Linq;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -10,6 +11,11 @@ namespace Chalkable.Data.School.DataAccess
     {
         public GradingPeriodDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
+        }
+
+        public void Delete(IList<int> ids)
+        {
+            SimpleDelete(ids.Select(x=> new GradingPeriod{Id = x}).ToList());
         }
 
         public IList<GradingPeriodDetails> GetGradingPeriodDetails(int schoolYearId, int? markingPeriodId)

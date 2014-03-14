@@ -13,7 +13,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Phone> GetPhones();
         IList<Phone> GetPhones(int personId);
         Phone Add(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary);
-        IList<Phone> AddPhones(IList<Phone> phones); 
+        IList<Phone> AddPhones(IList<Phone> phones);
+        IList<Phone> EditPhones(IList<Phone> phones);
         Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary);
         void Delete(string digitOnlyValue, int personId);
         void DeletePhones(Dictionary<int, string> personsPhonesValues);
@@ -69,12 +70,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
+            if (!(BaseSecurity.IsDistrict(Context)))
+                throw new ChalkableSecurityException(); 
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
                 var phone = da.GetPhone(personId, digitOnlyValue);
-                if (!(BaseSecurity.IsDistrict(Context)))
-                    throw new ChalkableSecurityException();
                 phone.DigitOnlyValue = DigitsOnly(value);
                 phone.Value = value;
                 phone.IsPrimary = isPrimary;
@@ -124,6 +125,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new PhoneDataAccess(uow);
                 da.Delete(personsPhonesValues.Select(x=>new Phone{PersonRef = x.Key, DigitOnlyValue = x.Value}).ToList());
                 uow.Commit();
+            }
+        }
+
+
+        public IList<Phone> EditPhones(IList<Phone> phones)
+        {
+            if (!(BaseSecurity.IsDistrict(Context)))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new PhoneDataAccess(uow).Update(phones);
+                uow.Commit();
+                return phones;
             }
         }
     }

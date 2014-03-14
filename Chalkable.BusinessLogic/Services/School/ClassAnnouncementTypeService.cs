@@ -10,6 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true);
         void Add(IList<ClassAnnouncementType> classAnnouncementTypes);
+        void Edit(IList<ClassAnnouncementType> classAnnouncementTypes);
         void Delete(IList<int> ids);
     }
 
@@ -48,6 +49,17 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new ClassAnnouncementTypeDataAccess(uow).Delete(ids);
+                uow.Commit();
+            }
+        }
+
+
+        public void Edit(IList<ClassAnnouncementType> classAnnouncementTypes)
+        {
+            using (var uow = Update())
+            {
+                var da = new ClassAnnouncementTypeDataAccess(uow);
+                da.Update(classAnnouncementTypes);
                 uow.Commit();
             }
         }

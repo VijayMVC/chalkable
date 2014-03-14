@@ -5,13 +5,14 @@
             span= self.getSender().getFirstName() + self.getSender().getLastName()
         .x-window-body
             .general-info
-                div
-                    =self.subject
-                div
-                    =self.body
+                .subject
+                    .text=self.subject
+                .body
+                    lable.title Message:
+                    +TextArea()(readonly).text=self.body
                 br
                 .form-buttons
-                    +ActionLink('message', 'sendPage', self.id)= self.isReplay() ? 'Replay' : 'Send'
+                    +ActionLinkButton('message', 'sendPage', self.id).special-button.blue-button.submit-btn= self.isReplay() ? 'Reply' : 'Send'
                     +Button.special-button.cancel-button.close=Msg.Cancel
 
     .bg-bottom

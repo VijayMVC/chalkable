@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAlternateScoreService
     {
         void AddAlternateScores(IList<AlternateScore> alternateScores);
+        void EditAlternateScores(IList<AlternateScore> alternateScores);
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<AlternateScore> GetAlternateScores();
@@ -60,6 +61,18 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new AlternateScoreDataAccess(uow).Delete(ids);
+                uow.Commit();
+            }
+        }
+
+        public void EditAlternateScores(IList<AlternateScore> alternateScores)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                new AlternateScoreDataAccess(uow).Update(alternateScores);
                 uow.Commit();
             }
         }
