@@ -27,7 +27,7 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(Address));
             RegisterType(typeof(Person));
             RegisterType(typeof(Student));
-            //RegisterType(typeof(Staff));
+            RegisterType(typeof(Staff));
             RegisterType(typeof(StudentSchool));
             RegisterType(typeof(StaffSchool));
             RegisterType(typeof(PersonTelephone));

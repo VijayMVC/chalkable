@@ -48,7 +48,7 @@ namespace Chalkable.StiImport.Services
             //We need all user to match with persons
             context.TablesToSync[typeof (User).Name] = null;
             context.TablesToSync[typeof(Student).Name] = null;
-            //context.TablesToSync[typeof(Staff).Name] = null;
+            context.TablesToSync[typeof(Staff).Name] = null;
 
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();

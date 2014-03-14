@@ -36,7 +36,9 @@ namespace Chalkable.StiImport.Services
             InsertDays();
             InsertRooms();
             InsertCourses();
+            InsertStandardSubject();
             InsertStandards();
+            InsertClassStandard();
             InsertMarkingPeriodClasses();
             InsertClassAnnouncementTypes();
             InsertPeriods();
@@ -88,7 +90,7 @@ namespace Chalkable.StiImport.Services
             var ps = new List<PersonInfo>();
             var users = context.GetSyncResult<User>().All.ToDictionary(x => x.UserID);
             var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
-            //var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
+            var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
             foreach (var person in persons)
             {
                 counter++;
@@ -99,8 +101,8 @@ namespace Chalkable.StiImport.Services
                 string userName = string.Empty;
                 if (students.ContainsKey(person.PersonID))
                     userName = users[students[person.PersonID].UserID].UserName;
-                //if (staff.ContainsKey(person.PersonID) && staff[person.PersonID].UserID.HasValue)
-                    //userName = users[staff[person.PersonID].UserID.Value].UserName;
+                if (staff.ContainsKey(person.PersonID) && staff[person.PersonID].UserID.HasValue)
+                    userName = users[staff[person.PersonID].UserID.Value].UserName;
 
                 ps.Add(new PersonInfo
                 {
@@ -299,14 +301,15 @@ namespace Chalkable.StiImport.Services
                     SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
                     SchoolYearRef = course.AcadSessionID,
                     TeacherRef = course.PrimaryTeacherID,
-                    RoomRef = course.RoomID
+                    RoomRef = course.RoomID,
+                    CourseRef = course.SectionOfCourseID
                 });
             }
 
             ServiceLocatorSchool.ClassService.Add(classes);
         }
 
-        private void InsertStandards()
+        private void InsertStandardSubject()
         {
             var ss = context.GetSyncResult<StandardSubject>().All.Select(x => new Data.School.Model.StandardSubject
             {
@@ -317,7 +320,10 @@ namespace Chalkable.StiImport.Services
                 Name = x.Name
             }).ToList();
             ServiceLocatorSchool.StandardService.AddStandardSubjects(ss);
+        }
 
+        private void InsertStandards()
+        {
             var sts = context.GetSyncResult<Standard>().All.Select(x => new Data.School.Model.Standard
             {
                 Description = x.Description,
@@ -330,10 +336,13 @@ namespace Chalkable.StiImport.Services
                 UpperGradeLevelRef = x.UpperGradeLevelID
             }).ToList();
             ServiceLocatorSchool.StandardService.AddStandards(sts);
+        }
 
-            var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
+        private void InsertClassStandard()
+        {
+            //var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
             var cs = context.GetSyncResult<CourseStandard>().All
-                .Where(x => classes.Any(y => y.Id == x.CourseID))
+                //.Where(x => classes.Any(y => y.Id == x.CourseID))
                 .Select(x => new ClassStandard
                 {
                     ClassRef = x.CourseID,
