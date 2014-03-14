@@ -1,0 +1,10 @@
+.seating-chart-people
+    .x-close-btn.close-people.absolute
+    .people-container
+        each item in self.getNotSeatingStudents()
+            .student-block.draggable
+                +RenderWith(item, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)(
+                    smallPicture = true
+                )
+
+
