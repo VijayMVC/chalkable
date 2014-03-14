@@ -12,6 +12,8 @@ NAMESPACE('chlk.activities.attendance', function () {
         cancel: '.empty-box'
     };
 
+    var activeDragging = false;
+
     var droppableOptions = {
         activeClass: "active",
         hoverClass: "hover",
@@ -78,6 +80,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                     this.dom.addClass('dragging-on');
                     $(".draggable").draggable(draggableOptions);
                     $(".droppable").droppable(droppableOptions);
+                    activeDragging = true;
                     setTimeout(function(){
                         var body = jQuery('body');
                         var padding = parseInt(body.css('padding-bottom'), 10);
@@ -113,11 +116,18 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.setModel(model);
             },
 
-            function stopDragging(){
-                new ria.dom.Dom('.seating-chart-people').hide();
+            function stopDragging(remove_){
+                var chart = new ria.dom.Dom('.seating-chart-people');
+                if(remove_)
+                    chart.remove();
+                else
+                    chart.hide();
                 this.dom.removeClass('dragging-on');
-                $( ".droppable" ).droppable( "destroy" );
-                $( ".draggable" ).draggable( "destroy" );
+                if(activeDragging){
+                    $( ".droppable" ).droppable( "destroy" );
+                    $( ".draggable" ).draggable( "destroy" );
+                    activeDragging = false;
+                }
                 setTimeout(function(){
                     var body = jQuery('body');
                     var padding = body.data('padding');
@@ -142,6 +152,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();
+                this.stopDragging(true);
                 new ria.dom.Dom().off('click.seating');
                 jQuery(window).off('resize.seating');
             }
