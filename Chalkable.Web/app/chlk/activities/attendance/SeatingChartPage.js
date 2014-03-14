@@ -1,12 +1,149 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.attendance.SeatingChartTpl');
+REQUIRE('chlk.templates.attendance.SeatingChartPeopleTpl');
+REQUIRE('chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
     "use strict";
+
+    var draggableOptions = {
+        revert: true,
+        revertDuration: 0,
+        cancel: '.empty-box'
+    };
+
+    var droppableOptions = {
+        activeClass: "active",
+        hoverClass: "hover",
+
+        drop: function(event, ui) {
+            var droppable = $(this);
+            var draggable = ui.draggable;
+            if(droppable.find('.empty')[0]){
+                droppable.html(draggable.html()).removeClass('empty-box');
+                if(draggable.parents('.seating-chart-people')[0]){
+                    draggable.css('opacity', 0);
+                    draggable.animate({
+                        width: 0
+                    }, 250, function(){
+                        draggable.remove();
+                        checkPadding();
+                    });
+                }else{
+                    setEmptyBoxHtml(new ria.dom.Dom(draggable));
+                }
+            }else{
+                var html = droppable.html();
+                droppable.html(draggable.html());
+                draggable.html(html);
+            }
+        }
+    };
+
+    function setEmptyBoxHtml(node){
+        var model = new chlk.models.attendance.ClassAttendance();
+        var tpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl();
+        tpl.assign(model);
+        node.setHTML(tpl.render()).addClass('empty-box');
+    }
+
+    function checkPadding(){
+        var body = jQuery('body');
+        var padding = parseInt(body.css('padding-bottom'), 10);
+        var height = body.find('.seating-chart-people').height();
+        if(!padding || padding != height){
+            body.css('padding-bottom', height);
+        }
+    }
 
     /** @class chlk.activities.attendance.SeatingChartPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.SeatingChartTpl)],
-        'SeatingChartPage', EXTENDS(chlk.activities.lib.TemplatePage), []);
+        'SeatingChartPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+            chlk.models.attendance.SeatingChart, 'model',
+
+            [ria.mvc.DomEventBind('click', '.add-remove-students')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addRemoveStudentsClick(node, event){
+                if(!new ria.dom.Dom('.seating-chart-people:visible').exists()){
+                    var chart = new ria.dom.Dom('.seating-chart-people');
+                    if(chart.exists()){
+                        chart.show();
+                    }else{
+                        var tpl = new chlk.templates.attendance.SeatingChartPeopleTpl();
+                        tpl.assign(this.getModel());
+                        tpl.renderTo(new ria.dom.Dom('body'));
+                    }
+                    this.dom.addClass('dragging-on');
+                    $(".draggable").draggable(draggableOptions);
+                    $(".droppable").droppable(droppableOptions);
+                    setTimeout(function(){
+                        var body = jQuery('body');
+                        var padding = parseInt(body.css('padding-bottom'), 10);
+                        var height = body.find('.seating-chart-people').height();
+                        if(!padding || padding < height){
+                            if(padding)
+                                body.data('padding', padding);
+                            body.css('padding-bottom', height);
+                        }
+                    }, 1);
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.remove-student')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function removeStudentClick(node, event){
+                var parent = node.parent();
+                var clone = parent.clone();
+                parent.addClass('empty-box');
+                setEmptyBoxHtml(parent);
+                var container = new ria.dom.Dom('.seating-chart-people')
+                    .find('.people-container');
+                clone.appendTo(container)
+                    .removeClass('droppable')
+                    .removeClass('ui-droppable');
+                jQuery(clone.valueOf()).draggable(draggableOptions);
+                checkPadding();
+            },
+
+            OVERRIDE, VOID, function onPartialRender_(model, msg_){
+                BASE(model, msg_);
+                this.stopDragging();
+                this.setModel(model);
+            },
+
+            function stopDragging(){
+                new ria.dom.Dom('.seating-chart-people').hide();
+                this.dom.removeClass('dragging-on');
+                $( ".droppable" ).droppable( "destroy" );
+                $( ".draggable" ).draggable( "destroy" );
+                setTimeout(function(){
+                    var body = jQuery('body');
+                    var padding = body.data('padding');
+                    body.css('padding-bottom', padding || 'inherit');
+                }, 1);
+            },
+
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                this.setModel(model);
+
+                new ria.dom.Dom().on('click.seating', '.close-people', function(node, event){
+                    this.stopDragging();
+                }.bind(this));
+
+                jQuery(window).on('resize.seating', function(){
+                    if(new ria.dom.Dom('.seating-chart-people').exists())
+                        checkPadding();
+                });
+
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                BASE();
+                new ria.dom.Dom().off('click.seating');
+                jQuery(window).off('resize.seating');
+            }
+        ]);
 });

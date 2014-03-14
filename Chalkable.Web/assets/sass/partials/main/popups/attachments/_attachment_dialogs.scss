@@ -45,19 +45,6 @@
 
 
     .x-window-header{
-      .x-close-btn{
-        background: url(images/ui/white-close-btn.png) 0 0 no-repeat !important;
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        float: right;
-        cursor: pointer;
-
-        &:hover{
-          opacity: 0.8;
-        }
-      }
-
       .toolbar{
         position: absolute;
         left:0;
@@ -112,5 +99,23 @@
     }
 
 
+  }
+}
+
+.x-close-btn{
+  background: url(images/ui/white-close-btn.png) center center no-repeat, #000;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  float: right;
+  cursor: pointer;
+
+  &.absolute{
+    top: -24px;
+    right: 0;
+  }
+
+  &:hover{
+    opacity: 0.8;
   }
 }

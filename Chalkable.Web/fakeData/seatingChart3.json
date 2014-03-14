@@ -1,7 +1,7 @@
 {"data":{
-    "sizex":7,
-    "sizey":6,
-    "seatinglist":[{
+    "columns":7,
+    "rows":6,
+    "seatinglist":[[{
         "index":0,
         "info":{
             "id":0,
@@ -211,7 +211,7 @@
             "classname":"Bib Wrldview",
             "isposted":true
         }
-    }, {
+    }], [{
         "index":7,
         "info":null
     }, {
@@ -318,7 +318,7 @@
     }, {
         "index":13,
         "info":null
-    }, {
+    }], [{
         "index":14,
         "info":{
             "id":0,
@@ -420,7 +420,7 @@
             "classname":"Bib Wrldview",
             "isposted":true
         }
-    }, {
+    }], [{
         "index":21,
         "info":null
     }, {
@@ -468,7 +468,7 @@
     }, {
         "index":27,
         "info":null
-    }, {
+    }], [{
         "index":28,
         "info":{
             "id":0,
@@ -651,7 +651,7 @@
             "classname":"Bib Wrldview",
             "isposted":true
         }
-    }, {
+    }], [{
         "index":35,
         "info":{
             "id":0,
@@ -780,6 +780,6 @@
             "classname":"Bib Wrldview",
             "isposted":true
         }
-    }],
+    }]],
     "notseatingstudents":[]
 },"success":true}

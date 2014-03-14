@@ -39,6 +39,24 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, Number, Number]],
+            ria.async.Future, function updateSeatingChart(classId, columns, rows) {
+                return this.get('Attendance/UpdateSeatingChart.json', chlk.models.attendance.SeatingChart, {
+                    classId: classId.valueOf(),
+                    columns: columns,
+                    rows: rows
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, Number]],
+            ria.async.Future, function changeStudentSeat(classId, studentId, index) {
+                return this.get('Attendance/ChangeStudentSeat.json', chlk.models.attendance.SeatingChart, {
+                    classId: classId.valueOf(),
+                    studentId: studentId,
+                    index: index
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             ria.async.Future, function getStudentAttendance(studentId, datetime_) {
                 return this.get('Attendance/GetAttendanceForStudent.json', chlk.models.attendance.StudentDayAttendances, {

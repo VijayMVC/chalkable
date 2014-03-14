@@ -161,3 +161,11 @@
     }
   }
 }
+
+.dialog-window{
+  background: #e7e7e7;
+  border: 1px solid #adadad;
+  border-radius: 4px;
+  @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+  padding: 12px 17px;
+}
