@@ -41,6 +41,13 @@ function joinUrls(){
     return res;
 }
 
+function strcmp(a, b) {
+    if (a.toString().toLowerCase() < b.toString().toLowerCase()) return -1;
+    if (a.toString().toLowerCase() > b.toString().toLowerCase()) return 1;
+    return 0;
+}
+
+
 function HtmlEncode(s)
 {
     var el = document.createElement("div");

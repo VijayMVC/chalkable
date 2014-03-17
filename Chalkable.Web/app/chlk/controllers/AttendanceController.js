@@ -204,8 +204,7 @@ NAMESPACE('chlk.controllers', function (){
                     sortField1 = item1.getStudent().getFirstName();
                     sortField2 = item2.getStudent().getFirstName();
                 }
-
-                return sortField1 > sortField2;
+                return strcmp(sortField1, sortField2);
             });
             model.setByLastName(byLastName);
             var result = new ria.async.DeferredData(model);
