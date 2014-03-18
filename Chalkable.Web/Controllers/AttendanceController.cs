@@ -184,7 +184,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult UpdateSeatingChart(int classId, int sizeX, int sizeY)
+        public ActionResult UpdateSeatingChart(int classId, int columns, int rows)
         {
             if (classId == 645)
                 return FakeJson("~/fakeData/seatingChart2.json");
@@ -194,7 +194,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult ChangeStudentSeat(DateTime? date, int classId)
+        public ActionResult ChangeStudentSeat(int studentId, int classId, int index)
         {
             if (classId == 723 || classId == 645)
                 return FakeJson("~/fakeData/seatingChart3.json");

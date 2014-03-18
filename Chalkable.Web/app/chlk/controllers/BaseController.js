@@ -44,6 +44,10 @@ NAMESPACE('chlk.controllers', function (){
 
            Boolean, 'notAblePressSidebarButton',
 
+           function closeCurrentActivity_(){
+               return this.BackgroundCloseView(this.getView().getCurrent());
+           },
+
            ria.async.Future, function validateResponse_() {
                var head, me = this;
                (head = new ria.async.Future)

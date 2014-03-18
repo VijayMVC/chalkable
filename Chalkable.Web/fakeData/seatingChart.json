@@ -1,7 +1,7 @@
 {"data":{
-    "sizex":5,
-    "sizey":5,
-    "seatinglist":[{
+    "columns":5,
+    "rows":5,
+    "seatinglist":[[{
         "index":0,
         "info":null
     }, {
@@ -16,7 +16,7 @@
     }, {
         "index":4,
         "info":null
-    }, {
+    }], [{
         "index":5,
         "info":null
     }, {
@@ -31,7 +31,7 @@
     }, {
         "index":9,
         "info":null
-    }, {
+    }], [{
         "index":10,
         "info":null
     }, {
@@ -46,7 +46,7 @@
     }, {
         "index":14,
         "info":null
-    }, {
+    }], [{
         "index":15,
         "info":null
     }, {
@@ -61,7 +61,7 @@
     }, {
         "index":19,
         "info":null
-    }, {
+    }], [{
         "index":20,
         "info":null
     }, {
@@ -76,7 +76,7 @@
     }, {
         "index":24,
         "info":null
-    }],
+    }]],
     "notseatingstudents":[{
         "id":0,
         "personid":1839,

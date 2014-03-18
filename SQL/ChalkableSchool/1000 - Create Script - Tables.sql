@@ -656,3 +656,8 @@ GO
 alter table Class
 add CourseRef int null constraint FK_Class_Course foreign key references Class(Id)
 go
+
+
+alter table AnnouncementAttachment
+add SisAttachmentId int null 
+go

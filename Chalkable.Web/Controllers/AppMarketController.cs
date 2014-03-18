@@ -115,9 +115,15 @@ namespace Chalkable.Web.Controllers
             return Json(ApplicationTotalPriceViewData.Create(app, totalPrice));
         }
 
+        public ActionResult ExistsReview(Guid applicationId)
+        {
+            return Json(MasterLocator.ApplicationService.ExistsReview(applicationId));
+        }
+
         public ActionResult WriteReview(Guid applicationId, int rating, string review)
         {
-            MasterLocator.ApplicationService.WriteReview(applicationId, rating, review);
+            if(!MasterLocator.ApplicationService.ExistsReview(applicationId))
+                MasterLocator.ApplicationService.WriteReview(applicationId, rating, review);
             return Read(applicationId);
         }
     }

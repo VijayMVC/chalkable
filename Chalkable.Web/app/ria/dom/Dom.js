@@ -651,7 +651,7 @@ NAMESPACE('ria.dom', function () {
             /* css */
 
             [[String]],
-            Object, function getCss(property) {
+            function getCss(property) {
                 return this._dom
                     .map(function (_) { return window.getComputedStyle(_); })
                     .map(function (style) { return !style ? null : style.getPropertyValue(property); })

@@ -367,7 +367,7 @@ NAMESPACE('ria.dom', function () {
             /* css */
 
             [[String]],
-            OVERRIDE, Object, function getCss(property) {
+            OVERRIDE, function getCss(property) {
                 return this._dom.css(property);
             },
             [[String, Object]],

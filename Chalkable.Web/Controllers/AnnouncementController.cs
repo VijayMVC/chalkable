@@ -108,7 +108,7 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);
         }
 
-        private AnnouncementComplex Save(AnnouncementInfo announcementInfo, int? classId,
+        private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId,
                                          IList<RecipientInfo> recipientInfos = null)
         {
             if (!announcementInfo.ExpiresDate.HasValue)
@@ -148,8 +148,11 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId)
         {
+            if(!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
             var ann = Save(announcementInfo, classId);
-            var res = AnnouncementViewData.Create(ann);
+            var res = AnnouncementDetailedViewData.Create(ann
+                , SchoolLocator.GradingStyleService.GetMapper(), Context.SchoolLocalId.Value);
             res.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
             return Json(res);
         }

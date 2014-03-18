@@ -9,21 +9,18 @@ NAMESPACE('chlk.templates.attendance', function () {
         [ria.templates.ModelBind(chlk.models.attendance.SeatingChart)],
         'SeatingChartTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
-            Number, 'sizeX',
+            Number, 'columns',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'sizeY',
+            Number, 'rows',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.ClassAttendance), 'notSeatingStudents',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attendance.ClassAttendanceWithSeatPlace), 'seatingList',
+            ArrayOf(ArrayOf(chlk.models.attendance.ClassAttendanceWithSeatPlace)), 'seatingList',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'date'
+            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons'
         ]);
 });

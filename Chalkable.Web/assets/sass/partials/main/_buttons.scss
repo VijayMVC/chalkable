@@ -67,6 +67,16 @@ button.disabled, button[disabled]{
   background: url(images/icons/close-item.png) 0% 50% no-repeat;
 }
 
+.remove-red-btn{
+  position: absolute;
+  top: -8px;
+  cursor: pointer;
+  right: -8px;
+  width: 17px;
+  height: 17px;
+  background: url(images/icons/remove.png) center center no-repeat;
+}
+
 .all-button{
   @include border-radius(7px);
   border: 1px solid #b3b3b3;

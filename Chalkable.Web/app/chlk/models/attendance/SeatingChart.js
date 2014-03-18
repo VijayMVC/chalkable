@@ -10,20 +10,16 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.SeatingChart*/
     CLASS(
         'SeatingChart', EXTENDS(chlk.models.common.PageWithClasses), [
-            [ria.serialize.SerializeProperty('sizex')],
-            Number, 'sizeX',
+            Number, 'columns',
 
-            [ria.serialize.SerializeProperty('sizey')],
-            Number, 'sizeY',
+            Number, 'rows',
 
             [ria.serialize.SerializeProperty('notseatingstudents')],
             ArrayOf(chlk.models.attendance.ClassAttendance), 'notSeatingStudents',
 
             [ria.serialize.SerializeProperty('seatinglist')],
-            ArrayOf(chlk.models.attendance.ClassAttendanceWithSeatPlace), 'seatingList',
+            ArrayOf(ArrayOf(chlk.models.attendance.ClassAttendanceWithSeatPlace)), 'seatingList',
 
-            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
-
-            chlk.models.common.ChlkDate, 'date'
+            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons'
         ]);
 });

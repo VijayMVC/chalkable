@@ -102,7 +102,8 @@
   overflow: hidden;
 }
 
-.person-avatar-m-40, .person-avatar-w-40, .person-avatar-m-47, .person-avatar-w-47, .person-avatar-m-64, .person-avatar-w-64, .person-avatar-m-128, .person-avatar-w-128{
+.person-avatar-m-40, .person-avatar-w-40, .person-avatar-m-47, .person-avatar-w-47, .person-avatar-m-55, .person-avatar-w-55,
+.person-avatar-m-64, .person-avatar-w-64, .person-avatar-m-70, .person-avatar-w-70, .person-avatar-m-128, .person-avatar-w-128{
   position: relative;
   background-repeat: no-repeat;
   background-position: center center;
@@ -155,6 +156,23 @@
   }
 }
 
+.person-avatar-m-55, .person-avatar-w-55{
+  height: 55px;
+  width: 55px;
+}
+
+.person-avatar-m-55{
+  &:before{
+    background-image: url(avatars/55/.no-avatar.png);
+  }
+}
+
+.person-avatar-w-55{
+  &:before{
+    background-image: url(avatars/55/.no-avatar-female.png);
+  }
+}
+
 .person-avatar-m-64, .person-avatar-w-64{
   height: 64px;
   width: 64px;
@@ -169,6 +187,23 @@
 .person-avatar-w-64{
   &:before{
     background-image: url(avatars/64/.no-avatar-female.png);
+  }
+}
+
+.person-avatar-m-70, .person-avatar-w-70{
+  height: 70px;
+  width: 70px;
+}
+
+.person-avatar-m-70{
+  &:before{
+    background-image: url(avatars/70/.no-avatar.png);
+  }
+}
+
+.person-avatar-w-70{
+  &:before{
+    background-image: url(avatars/70/.no-avatar-female.png);
   }
 }
 

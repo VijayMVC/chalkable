@@ -466,6 +466,10 @@
     <Content Include="fakeData\creditCardData.json" />
     <Content Include="fakeData\personFunds.json" />
     <Content Include="fakeData\teacherGradingGrid.json" />
+    <Content Include="fakeData\seatingChart.json" />
+    <Content Include="fakeData\seatingChart1.json" />
+    <Content Include="fakeData\seatingChart2.json" />
+    <Content Include="fakeData\seatingChart3.json" />
     <None Include="Web.qa.config">
       <SubType>Designer</SubType>
     </None>

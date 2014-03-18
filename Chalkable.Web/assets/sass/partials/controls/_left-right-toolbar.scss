@@ -7,6 +7,10 @@
   overflow: hidden;
   height: 101px;
 
+  &.auto-h{
+    height: auto;
+  }
+
   &.centered{
     .second-container{
       text-align: center;
@@ -21,6 +25,7 @@
     height: 76px;
     margin: 4px 0;
     cursor: pointer;
+    z-index: 1;
 
     &.disabled{
       opacity: 0.5;
@@ -34,6 +39,36 @@
     &.next-button{
       background: url(images/common/classes-right.png) center center no-repeat;
       right: 3px;
+    }
+  }
+
+  &.big-arrows .arrow{
+    height: auto;
+    width: 34px;
+    top: 7px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: rgba(160, 160, 160, 0.2);
+    bottom: 7px;
+    z-index: 2;
+    @include border-radius(3px);
+
+    &.next-button {
+      right: 8px;
+      background-image: url(images/grading/right-arrow-triangle.png);
+    }
+
+    &.prev-button {
+      left: 8px;
+      background-image: url(images/grading/left-arrow-triangle.png);
+    }
+
+    &:hover{
+      opacity: 0.8;
+    }
+
+    &.disabled{
+      display: none;
     }
   }
 

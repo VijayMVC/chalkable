@@ -1081,11 +1081,150 @@ BODY {
     font-size: 14px;
     padding: 9px 12px;
     line-height: 14px;
+    margin: 14px 12px 0 0;
   }
 
   .black-arrow{
     &.start{
       margin: 24px 64px;
     }
+
+    &.add{
+      margin: 8px 0 0 204px;
+    }
+  }
+
+  &.dragging-on{
+    .seating-chart-container{
+      .seating-row{
+        .student-block{
+          .remove-red-btn{
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  .seating-chart-container{
+    margin: -11px 0 0 5px;
+
+    .seating-row{
+      white-space: nowrap;
+
+      .student-block{
+        width: 74px;
+        height: 120px;
+        display: inline-block;
+        margin: 14px 18px;
+        vertical-align: top;
+        white-space: normal;
+        text-align: center;
+        position: relative;
+
+        .remove-red-btn{
+          display: none;
+        }
+
+        &.hover{
+          .empty{
+            background: url(images/attendance/seating-box.png) center 2px no-repeat, url(images/attendance/seating-plus.png) center 27px no-repeat;
+          }
+        }
+
+        .empty{
+          background: url(images/attendance/seating-box.png) center 2px no-repeat;
+          width: 74px;
+          height: 120px;
+        }
+
+        .student-seating-name{
+          margin-top: 6px;
+        }
+      }
+    }
+  }
+}
+
+.edit-seating-grid{
+  margin: 202px 151px;
+  width: 247px;
+  position: relative;
+
+  h1{
+    font: bold 18px Arial;
+    border-bottom: 1px solid #d7d7d7;
+    color: #434343;
+    padding-bottom: 11px;
+    text-align: center;
+  }
+
+  form >DIV{
+    padding: 8px 0 8px 7px;
+
+    SPAN{
+      font-size: 16px;
+      width: 161px;
+      display: inline-block;
+    }
+
+    INPUT{
+      width: 62px;
+      height: 25px;
+    }
+
+    BUTTON{
+      width: 100%;
+      font: bold 16px Arial;
+      line-height: 34px;
+      margin: 10px 0 0 -3px;
+    }
+  }
+}
+
+.seating-chart-people{
+  background: rgba(242, 242, 242, 0.9);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  .people-container{
+    min-height: 102px;
+  }
+
+  .student-block{
+    display: inline-block;
+    width: 75px;
+    text-align: center;
+    margin: 10px;
+
+    .remove-red-btn{
+      display: none;
+    }
+
+    .avatar-wrapper{
+      zoom: 0.79;
+    }
+  }
+}
+
+.student-seating-name{
+  display: inline-block;
+  overflow: hidden;
+  width: 75px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: bold 12px Arial;
+  color: #2e2e2e;
+}
+
+.ui-draggable-dragging{
+  z-index: 1000;
+  @include transform(rotate(5deg));
+
+  .student-seating-name{
+    display: none;
   }
 }

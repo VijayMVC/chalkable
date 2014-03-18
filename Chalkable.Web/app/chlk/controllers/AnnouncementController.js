@@ -675,6 +675,7 @@ NAMESPACE('chlk.controllers', function (){
                     res.then(function(model){
                         form_.getAnnouncement().setTitle(model.getTitle());
                         form_.getAnnouncement().setCanAddStandard(model.isCanAddStandard());
+                        form_.getAnnouncement().setStandards(model.getStandards());
                         return this.addEditAction(form_, false);
                     }, this);
                     return this.UpdateView(this.getAnnouncementFormPageType_(), res);
@@ -810,7 +811,8 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.standardService.getSubjects()
                 .then(function(subjects){
                     return new chlk.models.announcement.AddStandardViewData(typeName, announcementId, classId, subjects, standardIds);
-                });
+                })
+                .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
         },
 
@@ -820,7 +822,8 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.standardService.getStandards(classId, subjectId, standardId_)
                 .then(function(standards){
                     return new chlk.models.standard.StandardsListViewData(description_, classId, subjectId, standards);
-                });
+                })
+                .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
         },
 
@@ -832,7 +835,8 @@ NAMESPACE('chlk.controllers', function (){
                     this.BackgroundCloseView(chlk.activities.announcement.AddStandardsDialog);
                     this.saveStandardIds(announcement);
                     return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
-                }, this);
+                }, this)
+                .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res);
         },
 
@@ -843,7 +847,8 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(announcement){
                     this.saveStandardIds(announcement);
                     return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
-                }, this);
+                }, this)
+                .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res);
         }
     ])

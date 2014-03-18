@@ -146,7 +146,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (user.IsDeveloper && user.DistrictRef.HasValue)
             {
                 var developer = new DeveloperDataAccess(uow).GetDeveloper(user.DistrictRef.Value);
-                var school = ServiceLocator.SchoolService.GetSchools(developer.DistrictRef, 0, 10).OrderBy(x => x.LocalId).First(); //todo rewrite this later
+                var school = ServiceLocator.SchoolService.GetSchools(user.DistrictRef.Value, 0, 10).OrderBy(x => x.LocalId).First(); //todo rewrite this later
                 return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, school, developer.Id);
             }
             if (user.IsSchoolUser)
