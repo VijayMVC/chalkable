@@ -1,0 +1,31 @@
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedId = topData.getSelectedItemId()
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
+    selectedItemId=selectedId ? selectedId.valueOf() : ""
+).classes-bar
+.action-bar.not-transparent.buttons
+    .container.panel-bg
+        .left.no-border
+            +DatePicker('attendanceDate', self.getDate())(
+                data-options={
+                    showOtherMonths: true,
+                    selectOtherMonths: true
+                },
+                data-controller= "attendance",
+                data-action="seatingChart",
+                data-params=selectedId ? [selectedId.valueOf()] : null
+            )#attendance-date.tb-date-picker
+        .right
+            +ActionLink('attendance', 'classList', selectedId)=Msg.List
+            a.action-link.pressed=Msg.Seating_Chart
+.page-content
+    seatingList = self.getSeatingList()
+    if self.getSizeX() == 0 || self.getSizeY() == 0
+        +ActionLink('attendance', 'showEditGridWindow').grey-button=Msg.Create_grid
+        .black-arrow.start=Msg.Start_by_creating_a_grid
+    else
+        +ActionLink('attendance', 'showEditGridWindow').grey-button=Msg.Edit_grid
+        .black-arrow.add=Msg.Add_your_students
+
+
