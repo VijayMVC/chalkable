@@ -1,0 +1,16 @@
+gradingTypes = [[1, "A-F"], [0, "100-0"], [2, Msg.Complete + '-' + Msg.Incomplete], [3,Msg.Check.toLowerCase()]];
+#new-items-data.grid-container.not-transparent.items-container.relative
+    each item, i in self.getFinalGradeAnnType()
+        div(index=item.getIndex(), class=(item.getValue() ? "active" : "")).announcement-type-item.gradient
+            div
+                .left.name=item.getTypeName()
+                .right.relative
+                    input(typeId=item.getId(), value=(item.getValue()+"%")).announcement-type-weight
+                    .hint.absolute=Msg.Weight
+                .right.type-container
+                    +Select('grading-type')
+                        each gsItem in gradingTypes
+                            +Option(gsItem[0], gsItem[1], item.getGradingStyle() == gsItem[0])
+                .right.relative.drop-lowest-block
+                    .hint.absolute=Msg.Drop_lowest
+                    +SlideCheckbox("dropLowest" + i, item.isDropLowest()).drop-lowest
