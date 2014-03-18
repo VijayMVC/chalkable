@@ -132,11 +132,17 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.MessageId]],
             function viewPageAction(id)
             {
-                var res = this
-                    .getMessageFromSession(id)
+                var res = this.getMessageFromSession(id)
                     .then(function(model){
-                        var isReplay = this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId();
+                        var isReplay = this.getCurrentPerson().getId() == model.getRecipient().getId();
                         model.setReplay(isReplay);
+                        if(isReplay && !model.isRead()){
+                            return this.messageService.markAs(id.valueOf().toString(), true)
+                                .then(function(isRead){
+                                    model.setRead(isRead);
+                                    return model;
+                                }, this);
+                        }
                         return model;
                     }, this);
                 return this.ShadeView(chlk.activities.messages.ViewDialog, res);
