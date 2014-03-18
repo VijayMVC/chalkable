@@ -25,6 +25,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activity.Name = ann.Title;
             activity.Unit = string.Empty;
             activity.MayBeExempt = ann.MayBeExempt;
+            activity.IsScored = ann.IsScored;
             if (ann.ClassRef.HasValue)
                 activity.SectionId = ann.ClassRef.Value;
 
