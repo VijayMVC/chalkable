@@ -52,7 +52,7 @@ NAMESPACE('chlk.services', function () {
             [[String]],
             ria.async.Future, function listApiForRole(role){
                 var apiCache = this.getContext().getSession().get('apiCached');
-                return apiCache ? ria.async.DeferredData(apiCache[role]) :
+                return apiCache && apiCache.hasOwnProperty(role) ? ria.async.DeferredData(apiCache[role]) :
                     this
                         .listApi()
                         .then(function(data){
