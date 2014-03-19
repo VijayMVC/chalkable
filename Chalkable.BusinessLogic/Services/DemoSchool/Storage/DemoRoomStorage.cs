@@ -7,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoRoomStorage
     {
-        private Dictionary<int ,Room> roomData = new Dictionary<int, Room>(); 
+        private readonly Dictionary<int ,Room> roomData = new Dictionary<int, Room>(); 
         public void Add(Room room)
         {
             if (!roomData.ContainsKey(room.Id))
@@ -26,7 +26,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
              return roomData.ContainsKey(id) ? roomData[id] : null;
         }
-
 
         public Room Edit(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber)
         {
@@ -59,7 +58,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Update(IList<Room> rooms)
         {
-            throw new System.NotImplementedException();
+            foreach (var room in rooms)
+            {
+                if (roomData.ContainsKey(room.Id))
+                {
+                    roomData[room.Id] = room;
+                }
+            }
         }
     }
 }

@@ -160,9 +160,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new PaginatedList<Person>(res.Persons, query.Start/query.Count, query.Count, res.SourceCount);
         }
 
-
-      
-
         private PersonQueryResult GetPersons(PersonQuery query)
         {
             query.CallerId = Context.UserLocalId;

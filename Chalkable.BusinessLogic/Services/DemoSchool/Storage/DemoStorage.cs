@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public DemoStorage()
         {
-            UserStorage = new DemoUserStorage();
+            UserStorage = new DemoUserStorage(this);
             PrivateMessageStore = new DemoPrivateMessageStorage();
             SchoolYearStorage = new DemoSchoolYearStorage();
             DisciplineTypeStorage = new DemoDisciplineTypeStorage();
@@ -65,7 +65,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             RoomStorage = new DemoRoomStorage();
             ClassPeriodStorage = new DemoClassPeriodStorage();
             PrivateMessageStorage = new DemoPrivateMessageStorage();
-            PhoneStorage = new DemoPhoneStorage();
+            PhoneStorage = new DemoPhoneStorage(this);
             PersonStorage = new DemoPersonStorage();
             PeriodStorage = new DemoPeriodStorage();
             MarkingPeriodStorage = new DemoMarkingPeriodStorage();

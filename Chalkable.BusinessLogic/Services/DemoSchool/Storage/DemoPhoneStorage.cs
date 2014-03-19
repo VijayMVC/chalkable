@@ -1,23 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoPhoneStorage
+    public class DemoPhoneStorage: BaseDemoStorage
     {
+        private Dictionary<Guid, Phone> phonesData = new Dictionary<Guid, Phone>();
+
+        public DemoPhoneStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public IList<Phone> GetAll()
         {
-            throw new System.NotImplementedException();
+            return phonesData.Select(x => x.Value).ToList();
         }
 
         public IList<Phone> GetAll(int personId)
         {
-            throw new System.NotImplementedException();
+            return phonesData.Where(x => x.Value.PersonRef == personId).Select(x => x.Value).ToList();
         }
 
         public IList<Person> GetUsersByPhone(string phone)
         {
+            return Storage.PersonStorage.GetPersonsByPhone(phone);
             throw new System.NotImplementedException();
         }
 
