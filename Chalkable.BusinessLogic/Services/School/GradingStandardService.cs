@@ -7,13 +7,14 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface  IGradingStandardService
     {
         IList<GradingStandardInfo> GetGradingStandards(int classId);
-        GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int? alphaGradeId, string note);
+        GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note);
     }
 
     public class GradingStandardService : SisConnectedService, IGradingStandardService
@@ -41,9 +42,21 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int? alphaGradeId, string note)
+        public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note)
         {
-            throw new NotImplementedException();
+            var standardScore = new StandardScore
+                {
+                    SectionId = classId,
+                    StudentId = studentId,
+                    StandardId = standardId,
+                    Note = note,
+                    EnteredScoreAlphaGradeId = alphaGradeId,
+                    GradingPeriodId = gradingPeriodId
+                };
+            standardScore = ConnectorLocator.StandardScoreConnector.Update(classId, studentId, standardId, gradingPeriodId, standardScore);
+            var standard = ServiceLocator.StandardService.GetStandardById(standardId);
+            var student = ServiceLocator.PersonService.GetPerson(studentId);
+            return GradingStandardInfo.Create(standardScore, standard, student);
         }
     }
 

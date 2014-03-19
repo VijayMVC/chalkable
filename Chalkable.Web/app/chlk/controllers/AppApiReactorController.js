@@ -47,6 +47,7 @@ NAMESPACE('chlk.controllers', function (){
                 if (data.appReady) {
                     this.view.pop();  //close wrapper
                     //if it's student update announcement view for grade
+                    return null;
                 }
                 else {
                     return this.ShowMsgBox(
@@ -62,6 +63,7 @@ NAMESPACE('chlk.controllers', function (){
 
             function closeCurrentAppAction(){
                  this.getView().getCurrent().close();
+                return null;
             },
 
             [[Object]],
@@ -84,7 +86,8 @@ NAMESPACE('chlk.controllers', function (){
                 /*
                  IWindow.find('.chalkable-app-action-button').fadeIn();
                 * */
-            },
+
+                return null;             },
 
             [[Object]],
             function appErrorAction(data){

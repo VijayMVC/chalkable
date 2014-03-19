@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
@@ -57,7 +58,9 @@ namespace Chalkable.StiImport.Services
             foreach (var table in toSync)
             {
                 var type = context.Types[table.Key];
+                Debug.WriteLine("Start downloading " + table.Key);
                 var res = cl.SyncConnector.GetDiff(type, table.Value);
+                Debug.WriteLine("Table downloaded: " + table.Key);
                 results.Add((SyncResultBase)res);
             }
             foreach (var syncResultBase in results)

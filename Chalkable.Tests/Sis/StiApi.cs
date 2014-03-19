@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
@@ -28,8 +29,17 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
-            var r = cl.SyncConnector.GetDiff(typeof(Staff), null);
+            //var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
+        
+            var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://208.83.95.80:8210/");
+        
+            Debug.WriteLine(DateTime.Now.Ticks);
+            var r = cl.SyncConnector.GetDiff(typeof(AcadSession), null) as SyncResult<AcadSession>;
+            Debug.WriteLine(DateTime.Now.Ticks);
+            foreach (var item in r.All)
+            {
+                Debug.WriteLine(item.StartDate + " " + item.EndDate + " " + item.SchoolID);
+            }
             Assert.NotNull(r);
         }
     }

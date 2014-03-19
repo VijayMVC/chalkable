@@ -52,6 +52,15 @@ namespace Chalkable.Web.Controllers
             }
             return Json(res);
         }
+        
+        [AuthorizationFilter("Teacher")]
+        public ActionResult UpdateStandardGrade(int classId, int gradingPeriodId
+            , int studentId, int standardId, int? alphaGradeId, string note)
+        {
+            var res = SchoolLocator.GradingStandardService.SetGrade(studentId, standardId, classId
+                , gradingPeriodId, alphaGradeId, note);
+            return Json(StandardGradingItemViewData.Create(res));
+        }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummary(int classId)

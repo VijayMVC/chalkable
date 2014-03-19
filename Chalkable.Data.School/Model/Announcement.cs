@@ -44,6 +44,8 @@ namespace Chalkable.Data.School.Model
         public bool MayBeDropped { get; set; }
         [NotDbFieldAttr]
         public bool MayBeExempt { get; set; }
+        [NotDbFieldAttr]
+        public bool IsScored { get; set; }
         public bool VisibleForStudent { get; set; }
 
         public int SchoolRef { get; set; }

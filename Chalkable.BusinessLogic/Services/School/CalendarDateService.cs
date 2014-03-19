@@ -81,10 +81,10 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<Date> days)
         {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                foreach (var date in days) 
-                    ValidateDate(uow, date);   
                 new DateDataAccess(uow, Context.SchoolLocalId).Insert(days);
                 uow.Commit();
             }
@@ -92,6 +92,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(DateTime date)
         {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             Delete(new DateQuery { FromDate = date, ToDate = date});
         }
         
@@ -108,6 +110,8 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId)
         {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
@@ -119,29 +123,18 @@ namespace Chalkable.BusinessLogic.Services.School
                         DayTypeRef = dateTypeId,
                         SchoolRef = sy.SchoolRef
                     };
-                ValidateDate(uow, res);               
                 new DateDataAccess(uow, Context.SchoolLocalId).Insert(res);
                 uow.Commit();
                 return res;
             }
         }
 
-        private void ValidateDate(UnitOfWork uow, Date date)
+        public void Edit(IList<Date> dates)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            if (!date.IsSchoolDay && date.DayTypeRef.HasValue)
-                throw new ChalkableException("Incorrect parameters data");
-            if (date.DayTypeRef.HasValue && !new DayTypeDataAccess(uow).Exists(date.SchoolYearRef))
-                throw new ChalkableException("day type is not assigned to current school year");
-        }
-
-        public void Edit(IList<Date> dates)
-        {
             using (var uow = Update())
             {
-                foreach (var date in dates)
-                    ValidateDate(uow, date);
                 new DateDataAccess(uow, Context.SchoolLocalId).Update(dates);
                 uow.Commit();
             }
@@ -149,15 +142,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(IList<DateTime> dates)
         {
-            //if (!BaseSecurity.IsDistrict(Context))
-            //    throw new ChalkableSecurityException();
-            //using (var uow = Update())
-            //{
-                
-            //    uow.Commit();
-            //}
-            //throw new NotImplementedException();
-            //todo : rewrite later
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             foreach (var date in dates)
             {
                 Delete(date);

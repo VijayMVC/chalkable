@@ -35,7 +35,8 @@ NAMESPACE('chlk.templates.announcement', function () {
                         item.getUrl(),
                         item.getEditUrl(),
                         item.getGradingViewUrl(),
-                        item.getViewUrl()
+                        item.getViewUrl(),
+                        item.getBanInfo() || new chlk.models.apps.BannedAppData()
                     ));
                 });
                 res.sort(function(a,b){

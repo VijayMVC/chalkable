@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
 
                 sa.ExtraCredit = extraCredits;
-                sa.Comment = comment;
+                sa.Comment = comment.Trim();
                 sa.State = StudentAnnouncementStateEnum.Manual;
                 sa.Dropped = dropped;
                 sa.Incomplete = incomplete;

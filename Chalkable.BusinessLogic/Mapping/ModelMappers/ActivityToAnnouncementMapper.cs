@@ -24,6 +24,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             ann.VisibleForStudent = activity.DisplayInHomePortal;
             ann.Title = activity.Name;
             ann.MayBeExempt = activity.MayBeExempt;
+            ann.IsScored = activity.IsScored;
             if (ann is AnnouncementDetails && activity.Attachments != null && activity.Attachments.Any())
             {
                 var annDetails = ann as AnnouncementDetails;

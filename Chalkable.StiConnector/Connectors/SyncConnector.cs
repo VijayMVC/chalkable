@@ -28,7 +28,7 @@ namespace Chalkable.StiConnector.Connectors
                 client.QueryString = new NameValueCollection();
                 var data = client.DownloadData(url);
                 var res = Encoding.UTF8.GetString(data);
-                Debug.WriteLine(res);
+                //Debug.WriteLine(res);
                 stream = new MemoryStream(data);
                 var serializer = new JsonSerializer();
                 var reader = new StreamReader(stream);

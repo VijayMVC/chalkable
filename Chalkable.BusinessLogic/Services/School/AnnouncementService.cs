@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement EditTitle(int announcementId, string title);
         bool Exists(string title);
 
-        AnnouncementComplex EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null);
+        AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null);
         void SubmitAnnouncement(int announcementId, int recipientId);
         void SubmitForAdmin(int announcementId);
 
@@ -368,7 +368,7 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
       
-        public AnnouncementComplex EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null)
+        public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null)
         {
             using (var uow = Update())
             {
@@ -383,6 +383,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     ann.ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeId.Value;
                     ann.MaxScore = announcement.MaxScore;
+                    ann.IsScored = announcement.MaxScore > 0;
                     ann.WeightAddition = announcement.WeightAddition;
                     ann.WeightMultiplier = announcement.WeightMultiplier;
                     ann.MayBeDropped = announcement.CanDropStudentScore;
