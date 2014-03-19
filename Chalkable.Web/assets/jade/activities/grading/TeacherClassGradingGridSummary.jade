@@ -62,7 +62,7 @@
                                 .time
                                 .max-score.dotted-h
                                 each student,i in item.getStudents()
-                                    .dotted-h.grade-value=student.getAvg()
+                                    div(row-index=i).dotted-h.grade-value=student.getAvg()
                                 .dotted-h.grade-value
                             each announcement in item.getAnnouncements()
                                 maxScore = announcement.getMaxScore() || 70
@@ -80,23 +80,25 @@
                                             .edit-cell
                                             +ActionForm('announcement', 'updateAnnouncementGradeFromGrid')
                                                 input(type="submit").x-hidden
-                                                +Hidden('cmment', info.getComment())(
+                                                +Hidden('comment', info.getComment())(
                                                     data-comment = info.getComment()
                                                 ).comment-value
                                                 +Hidden('id', info.getId())
                                                 +Hidden('announcementId', info.getAnnouncementId())
-                                                +Hidden('dropped', info.isDropped())
-                                                +Hidden('exempt', info.isExempt())
-                                                +Hidden('late', info.isLate())
-                                                +Hidden('absent', info.isAbsent())
-                                                +Hidden('incomplete', info.isIncomplete())
-                                                +Hidden('passed', info.isPassed())
-                                                +Hidden('complete', info.isComplete())
                                                 input(value=normalValue,
                                                     name="gradevalue",
                                                     data-max-score=announcement.getMaxScore() || 100,
                                                     data-announcemnt-id=announcement.getId().valueOf(),
                                                     data-marking-period-id=item.getMarkingPeriod().getId().valueOf(),
                                                     data-student-announcement-id=info.getId().valueOf()
-                                                )).grade-autocomplete
+                                                ).grade-autocomplete
+                                                .grading-input-popup.chlk-pop-up-container.popup-bottom
+                                                    .pop-up-triangle.big
+                                                    if announcement.isAbleDropStudentScore()
+                                                        +LabeledCheckbox(Msg.Drop, 'dropped', info.isDropped())(data-value=info.isDropped(), id='dropped' + info.getId().valueOf()).with-value
+                                                    +LabeledCheckbox(Msg.Late, 'islate', info.isLate())(data-value=info.isLate(), id='islate' + info.getId().valueOf()).with-value
+                                                    +LabeledCheckbox(Msg.Incomplete, 'isincomplete', info.isIncomplete())(data-value=info.isIncomplete(), id='isincomplete' + info.getId().valueOf()).with-value
+                                                    +LabeledCheckbox(Msg.Exempt, 'isexempt', info.isExempt())(data-value=info.isExempt(), id='isexempt' + info.getId().valueOf()).with-value
+                                                    +LabeledCheckbox(Msg.Absent, 'isabsent', info.isAbsent())(data-value=info.isAbsent(), id='isabsent' + info.getId().valueOf()).with-value
+                                                    +LabeledCheckbox(Msg.Fill, 'fill', false).fill-grade
                                     .dotted-h.grade-value=announcement.getAvg()

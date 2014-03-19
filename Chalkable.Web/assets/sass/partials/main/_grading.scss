@@ -576,7 +576,7 @@ BODY {
                             }
                           }
 
-                          input{
+                          .grade-autocomplete{
                             position: absolute;
                             left: -1px;
                             right: 0px;
@@ -595,11 +595,21 @@ BODY {
                           }
 
                           &.active-cell{
-                            input{
+                            .grade-autocomplete{
                               display: block;
                             }
 
                             .edit-cell{
+                              display: none;
+                            }
+                          }
+
+                          .grading-input-popup{
+                            left: 0;
+                            top: 47px;
+                            @include border-radius(0 3px 3px 3px);
+
+                            .pop-up-triangle{
                               display: none;
                             }
                           }
@@ -835,5 +845,22 @@ BODY {
         text-align: left;
       }
     }
+  }
+}
+
+.grading-input-popup.chlk-pop-up-container{
+  position: absolute;
+  display: none;
+  padding: 12px;
+  text-align: left;
+  left: -35px;
+  top: 65px;
+  white-space: normal !important;
+
+  .labeled-checkbox{
+    margin: 0 0 3px 0;
+    line-height: initial !important;
+    display: block;
+    font: normal 14px Arial;
   }
 }
