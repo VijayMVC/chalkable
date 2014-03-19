@@ -39,16 +39,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             districtService = new DemoDistrictService(this, storage);
             emailService = new DemoEmailService(this, storage);
             fundService = new DemoFundService(this, storage);
-
             backgroundTaskService = new DemoBackgroundTaskService(this);
             preferenceService = new PreferenceService(this);
             personPictureService = new PersonPictureService(this);
             courseIconService = new CourseIconService(this);
             departmentIconService = new DepartmentIconService(this);
             applicationService = new DemoApplicationService(this, storage);
-            accessControlService = new AccessControlService(this);
             applicationUploadService = new DemoApplicationUploadService(this, storage);
-            
+
+            accessControlService = new AccessControlService(this);
             fundRequestPictureService = new FundRequestPictureService(this);
             applicationPictureService = new ApplicationPictureService(this);
         }

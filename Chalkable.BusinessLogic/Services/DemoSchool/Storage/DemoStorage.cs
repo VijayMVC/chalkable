@@ -45,6 +45,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAttendanceLevelReasonStorage AttendanceLevelReasonStorage { get; private set; }
         public DemoApplicationStorage ApplicationStorage { get; private set; }
         public DemoApplicationRatingStorage ApplicationRatingStorage { get; private set; }
+        public DemoNotificationStorage NotificationStorage{ get; private set; }
 
         public DemoStorage()
         {
@@ -86,6 +87,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AttendanceLevelReasonStorage = new DemoAttendanceLevelReasonStorage();
             ApplicationStorage = new DemoApplicationStorage();
             ApplicationRatingStorage = new DemoApplicationRatingStorage();
+            NotificationStorage = new DemoNotificationStorage();
             setup();
         }
 

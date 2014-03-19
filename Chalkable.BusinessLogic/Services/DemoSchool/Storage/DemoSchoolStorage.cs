@@ -37,5 +37,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new NotImplementedException();
         }
+
+        public void Delete(IList<int> ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

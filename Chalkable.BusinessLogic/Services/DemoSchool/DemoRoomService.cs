@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            return Storage.RoomStorage.Add(new Room
+            var room = new Room
             {
                 Id = id,
                 SchoolRef = schoolId,
@@ -30,7 +30,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 PhoneNumber = phoneNumber,
                 RoomNumber = roomNumber,
                 Size = size,
-            });
+            };
+            Storage.RoomStorage.Add(room);
+            return room;
 
         }
 

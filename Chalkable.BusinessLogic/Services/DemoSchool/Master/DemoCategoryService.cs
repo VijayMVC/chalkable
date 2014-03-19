@@ -17,11 +17,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public PaginatedList<Category> ListCategories(int start = 0, int count = Int32.MaxValue)
         {
-            throw new NotImplementedException();
-            using (var uow = Read())
-            {
-                return new CategoryDataAccess(uow).GetPage(start, count);
-            }
+            return Storage.CategoryStorage.GetPage(start, count);
+            
         }
         public Category GetById(Guid id)
         {

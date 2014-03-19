@@ -38,5 +38,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             categoryData.Remove(id);
         }
+
+        public PaginatedList<Category> GetPage(int start, int count)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

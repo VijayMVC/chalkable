@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Delete(IList<int> ids)
         {
-            throw new NotImplementedException();
+            Storage.SchoolStorage.Delete(ids);
         }
 
         public IList<Data.School.Model.School> GetSchools()

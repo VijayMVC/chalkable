@@ -7,19 +7,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoRoomStorage
     {
-        public Room Add(Room room)
+        private Dictionary<int ,Room> roomData = new Dictionary<int, Room>(); 
+        public void Add(Room room)
         {
-            throw new System.NotImplementedException();
+            if (!roomData.ContainsKey(room.Id))
+                roomData.Add(room.Id, room);
         }
 
         public void AddRooms(IList<Room> rooms)
         {
-            throw new System.NotImplementedException();
+            foreach (var room in rooms)
+            {
+                Add(room);
+            }
         }
 
         public Room GetById(int id)
         {
-            throw new System.NotImplementedException();
+             return roomData.ContainsKey(id) ? roomData[id] : null;
         }
 
 
@@ -36,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            roomData.Remove(id);
         }
 
         public PaginatedList<Room> GetAll(int start, int count)
@@ -46,7 +51,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Delete(IList<int> ids)
         {
-            throw new System.NotImplementedException();
+            foreach (var item in ids)
+            {
+                Delete(item);
+            }
         }
 
         public void Update(IList<Room> rooms)
