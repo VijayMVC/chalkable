@@ -11,12 +11,13 @@ mixin AnnouncementFormApplicationItem(app, i)
     viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
     appMode = self.isGradable() && !self.needDeleteButton ? chlk.models.apps.AppModes.GRADINGVIEW : chlk.models.apps.AppModes.VIEW
     appUrl = app.getUrl()
+
     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
 
     div.announcement-item.application
         if self.needDeleteButton
             +ActionLink('announcement', 'deleteApp', app.getId()).close-btn
-        +ActionLink('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), null, isBanned)
+        +ActionLink('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned)
             +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
             .title
                 div=app.getName()
@@ -31,6 +32,7 @@ items = self.getSortedAppsAndAttachments();
 +Hidden('applicationsids', self.getApplicationsIds())
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
+        -console.log(isAnnouncement, "isAnnouncement")
         if !isAnnouncement
             +ActionLink('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
         .simple-gray-button.file Attach File

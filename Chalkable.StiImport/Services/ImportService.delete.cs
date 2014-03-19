@@ -111,7 +111,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<Standard>().Deleted == null)
                 return;
             var ids = context.GetSyncResult<Standard>().Deleted.Select(x => x.StandardID).ToList();
-            ServiceLocatorSchool.StandardService.DeleteStandards(ids);
+            //ServiceLocatorSchool.StandardService.DeleteStandards(ids);
         }
 
         private void DeleteStandardSubject()

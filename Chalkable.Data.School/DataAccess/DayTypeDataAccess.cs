@@ -16,6 +16,8 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<int> ids)
         {
+            if (ids.Count == 0)
+                return;
             var res = new StringBuilder();
             var sqlFormat = " delete from [{0}] where [{0}].[{1}] in ({2}) ";
             var idsS = ids.Select(x => x.ToString()).JoinString(",");
@@ -38,6 +40,8 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<DayType> GetDateTypes(IList<int> ids)
         {
+            if (ids.Count == 0)
+                return new List<DayType>();
             var sql = string.Format("select * from [DayType] where Id in ({0})",
                                     ids.Select(x => x.ToString()).JoinString(","));
             return ReadMany<DayType>(new DbQuery(sql, new Dictionary<string, object>()));

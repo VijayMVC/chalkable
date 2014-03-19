@@ -191,7 +191,7 @@ namespace Chalkable.StiImport.Services
             foreach (var session in sessions)
             {
                 ServiceLocatorSchool.SchoolYearService.Add(session.AcadSessionID, session.SchoolID, session.Name,
-                                                           session.Description, session.StartDate.Value, session.EndDate.Value);
+                                                           session.Description, session.StartDate, session.EndDate);
             }
         }
 

@@ -6,6 +6,7 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 
+
 NAMESPACE('chlk.templates.announcement', function () {
 
     /** @class chlk.templates.announcement.Announcement*/
