@@ -8,10 +8,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAddressStorage
+    public class DemoAddressStorage: BaseDemoStorage
     {
-        private readonly Dictionary<int, Address> addressData = new Dictionary<int, Address>(); 
- 
+        private readonly Dictionary<int, Address> addressData = new Dictionary<int, Address>();
+
+        public DemoAddressStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public Address GetById(int id)
         {
             if (addressData.ContainsKey(id))

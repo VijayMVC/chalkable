@@ -8,10 +8,14 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoApplicationStorage
+    public class DemoApplicationStorage:BaseDemoStorage
     {
         private readonly Dictionary<Guid, Application> applicationData = new Dictionary<Guid, Application>();
 
+
+        public DemoApplicationStorage(DemoStorage storage) : base(storage)
+        {
+        }
 
         public Application GetApplicationById(Guid applicationId)
         {

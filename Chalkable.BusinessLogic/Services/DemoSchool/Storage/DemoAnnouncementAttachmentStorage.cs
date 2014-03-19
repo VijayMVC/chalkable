@@ -6,8 +6,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementAttachmentStorage
+    public class DemoAnnouncementAttachmentStorage:BaseDemoStorage
     {
+        public DemoAnnouncementAttachmentStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(AnnouncementAttachment annAtt)
         {
             throw new NotImplementedException();

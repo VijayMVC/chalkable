@@ -7,9 +7,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAlphaGradeStorage
+    public class DemoAlphaGradeStorage:BaseDemoStorage
     {
-        private readonly Dictionary<int ,AlphaGrade> alphaGradesData = new Dictionary<int, AlphaGrade>(); 
+        private readonly Dictionary<int ,AlphaGrade> alphaGradesData = new Dictionary<int, AlphaGrade>();
+
+        public DemoAlphaGradeStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(IList<AlphaGrade> alphaGrades)
         {
             foreach (var alphaGrade in alphaGrades)

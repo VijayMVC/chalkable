@@ -6,9 +6,14 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoApplicationRatingStorage
+    public class DemoApplicationRatingStorage:BaseDemoStorage
     {
-        private Dictionary<Guid, ApplicationRating> appRatingData = new Dictionary<Guid, ApplicationRating>(); 
+        private Dictionary<Guid, ApplicationRating> appRatingData = new Dictionary<Guid, ApplicationRating>();
+
+        public DemoApplicationRatingStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public bool Exists(Guid applicationId, Guid userId)
         {
             var res = appRatingData.FirstOrDefault(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId);

@@ -4,9 +4,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAlternateScoreStorage
+    public class DemoAlternateScoreStorage:BaseDemoStorage
     {
-        private readonly Dictionary<int, AlternateScore> alternateScoresData = new Dictionary<int, AlternateScore>(); 
+        private readonly Dictionary<int, AlternateScore> alternateScoresData = new Dictionary<int, AlternateScore>();
+
+        public DemoAlternateScoreStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(IList<AlternateScore> alternateScores)
         {
             foreach (var alternateScore in alternateScores)

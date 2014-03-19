@@ -7,9 +7,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAttendanceReasonStorage
+    public class DemoAttendanceReasonStorage:BaseDemoStorage
     {
-        private Dictionary<int, AttendanceReason> attendanceReasonData = new Dictionary<int, AttendanceReason>(); 
+        private Dictionary<int, AttendanceReason> attendanceReasonData = new Dictionary<int, AttendanceReason>();
+
+        public DemoAttendanceReasonStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(IList<AttendanceReason> reasons)
         {
             foreach (var attendanceReason in reasons)

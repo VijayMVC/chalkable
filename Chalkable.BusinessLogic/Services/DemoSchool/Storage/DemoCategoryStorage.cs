@@ -7,9 +7,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoCategoryStorage
+    public class DemoCategoryStorage:BaseDemoStorage
     {
-        private Dictionary<Guid, Category> categoryData = new Dictionary<Guid, Category>(); 
+        private Dictionary<Guid, Category> categoryData = new Dictionary<Guid, Category>();
+
+        public DemoCategoryStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public Category GetById(Guid id)
         {
             
