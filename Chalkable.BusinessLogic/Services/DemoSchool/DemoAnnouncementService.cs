@@ -85,11 +85,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return GetAnnouncementsComplex(q);
         }
 
-        private IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query)
+        public IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null)
         {
-            throw new NotImplementedException();
-            var activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
-            if (Context.Role == CoreRoles.TEACHER_ROLE)
+            if (activities == null)
+                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
+            else
+            {
+                if (query.ClassId.HasValue)
+                    activities = activities.Where(x => x.SectionId == query.ClassId).ToList();
+                if (query.FromDate.HasValue)
+                    activities = activities.Where(x => x.Date >= query.FromDate).ToList();
+                if (query.ToDate.HasValue)
+                    activities = activities.Where(x => x.Date <= query.ToDate).ToList();
+                activities = activities.Skip(query.Start).Take(query.Count).ToList();
+            }
+            if (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE)
             {
                 query.SisActivitiesIds = activities.Select(x => x.Id).ToList();
                 query.OwnedOnly = false;
@@ -99,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 query.Count = int.MaxValue;
             }
             var anns = GetAnnouncements(query).Announcements;
-            if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE))
+            if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE))
             {
                 var noInDbActivities = activities.Where(x => anns.All(y => y.SisActivityId != x.Id)).ToList();
                 AddActivitiesToChalkable(noInDbActivities);
@@ -107,6 +117,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             return MapActivitiesToAnnouncements(anns, activities);
         }
+
         private void AddActivitiesToChalkable(IEnumerable<Activity> activities)
         {
             throw new NotImplementedException();

@@ -42,19 +42,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new System.NotImplementedException();
         }
 
-        public IList<StudentAnnouncement> GetList(StudentAnnouncementShortQuery studentAnnouncementShortQuery)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void Update(IList<StudentAnnouncement> notGraded)
         {
             throw new System.NotImplementedException();
         }
-
-        public IList<StudentAnnouncementGrade> GetStudentAnnouncementGrades(StudentAnnouncementQuery studentAnnouncementQuery)
-        {
-            throw new System.NotImplementedException();
-        }
+   
     }
 }

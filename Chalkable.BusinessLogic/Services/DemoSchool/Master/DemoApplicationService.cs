@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public IList<AppPermissionType> GetPermisions(Guid applicationId)
         {
-            var app = Storage.ApplicationStorage.GetApplicationById(applicationId);
+            var app = Storage.ApplicationStorage.GetById(applicationId);
             return app.Permissions.Select(x => x.Permission).ToList();
         }
 
