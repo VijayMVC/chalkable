@@ -8,6 +8,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -35,16 +36,29 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
 
+
+        private bool CanAttach(UnitOfWork uow, Announcement ann)
+        {
+            return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
+                   && new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                          .Exists(new ClassPersonQuery
+                              {
+                                  ClassId = ann.ClassRef,
+                                  PersonId = Context.UserLocalId
+                              });
+        }
+
         public Announcement AddAttachment(int announcementId, byte[] content, string name, string uuid)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
                 throw new UnassignedUserException();
-            if(!AnnouncementSecurity.CanAttach(ann, Context))
-                throw new ChalkableSecurityException();
-
+            
             using (var uow = Update())
             {
+                if (!CanAttach(uow, ann))
+                    throw new ChalkableSecurityException();
+
                 var annAtt = new AnnouncementAttachment
                 {
                     AnnouncementRef = ann.Id,

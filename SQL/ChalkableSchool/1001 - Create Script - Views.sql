@@ -24,7 +24,7 @@ FROM
 	--left join GradeLevel on StudentSchoolYear.GradeLevelRef = GradeLevel.Id	
 GO
 
-Create VIEW [dbo].[vwAnnouncement] 
+create VIEW [dbo].[vwAnnouncement] 
 AS 
 SELECT
 	Announcement.Id as Id,
@@ -62,8 +62,6 @@ SELECT
 			where AnnouncementRef = Announcement.Id
 			and PersonRef <> Announcement.PersonRef) as x
 	) as StudentsCountWithAttachments,
-	(Select COUNT(*) from StudentAnnouncement where AnnouncementRef = Announcement.Id and GradeValue is not null) as GradingStudentsCount, 
-	(Select AVG(GradeValue) from StudentAnnouncement where AnnouncementRef = Announcement.Id and GradeValue is not null) as [Avg], 
 	(Select COUNT(*) from AnnouncementApplication where AnnouncementRef = Announcement.Id and Active = 1) as ApplicationCount
 
 FROM 

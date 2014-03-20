@@ -661,3 +661,6 @@ go
 alter table AnnouncementAttachment
 add SisAttachmentId int null 
 go
+
+drop table StudentAnnouncement
+go

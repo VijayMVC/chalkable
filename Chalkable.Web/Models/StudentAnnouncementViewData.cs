@@ -48,9 +48,9 @@ namespace Chalkable.Web.Models
             int? classAvg = 0;
             foreach (var studentAnnouncement in items)
             {
-                if (studentAnnouncement.GradeValue.HasValue && studentAnnouncement.State == StudentAnnouncementStateEnum.Manual)
+                if (studentAnnouncement.NumericScore.HasValue && studentAnnouncement.State == StudentAnnouncementStateEnum.Manual)
                 {
-                    classAvg += studentAnnouncement.GradeValue.Value;
+                    classAvg += studentAnnouncement.NumericScore.Value;
                     count++;
                 }
             }
@@ -63,6 +63,7 @@ namespace Chalkable.Web.Models
 
     public class ShortStudentAnnouncementViewData
     {
+        public int Id { get; set; }
         public string GradeValue { get; set; }
         public int? NumericGradeValue { get; set; }
         public bool Dropped { get; set; }
@@ -70,7 +71,6 @@ namespace Chalkable.Web.Models
         public bool IsIncomplete { get; set; }
         public bool IsLate { get; set; }
         public bool IsAbsent { get; set; }
-        public int Id { get; set; }
         public int AnnouncementId { get; set; }
         public string Comment { get; set; }
         public string ExtraCredits { get; set; }
@@ -82,16 +82,14 @@ namespace Chalkable.Web.Models
             IsExempt = studentAnnouncement.Exempt;
             IsIncomplete = studentAnnouncement.Incomplete;
             IsLate = studentAnnouncement.Late;
-            AnnouncementId = studentAnnouncement.AnnouncementRef;
+            AnnouncementId = studentAnnouncement.AnnouncementId;
             Comment = studentAnnouncement.Comment;
             Dropped = studentAnnouncement.Dropped;
-            GradeValue = studentAnnouncement.StiScoreValue;
+            GradeValue = studentAnnouncement.ScoreValue;
             ExtraCredits = studentAnnouncement.ExtraCredit;
-            Id = studentAnnouncement.Id;
-            State = (int) studentAnnouncement.State;
-            NumericGradeValue = studentAnnouncement.GradeValue;
-            if (string.IsNullOrEmpty(GradeValue))
-                GradeValue = studentAnnouncement.GradeValue.ToString();
+            NumericGradeValue = studentAnnouncement.NumericScore;
+            GradeValue = studentAnnouncement.ScoreValue;
+            State = (int)studentAnnouncement.State;
         }
 
         public static ShortStudentAnnouncementViewData Create(StudentAnnouncement studentAnnouncement)
@@ -117,7 +115,7 @@ namespace Chalkable.Web.Models
             var res = new List<StudentAnnouncementViewData>();
             foreach (var studentAnnouncementInfo in items)
             {
-                var spId = studentAnnouncementInfo.Person.Id;
+                var spId = studentAnnouncementInfo.Student.Id;
                 var ids = attachments != null ? attachments.Where(x => x.Attachment.PersonRef == spId).ToList() : null;
                 res.Add(Create(studentAnnouncementInfo, ids));
             }
@@ -127,7 +125,7 @@ namespace Chalkable.Web.Models
         {
             return new StudentAnnouncementViewData(studentAnnouncement)
             {
-                StudentInfo = ShortPersonViewData.Create(studentAnnouncement.Person),
+                StudentInfo = ShortPersonViewData.Create(studentAnnouncement.Student),
                 Attachments = attachments.Select(x => AnnouncementAttachmentViewData.Create(x, true)).ToList(),
             };
         }
