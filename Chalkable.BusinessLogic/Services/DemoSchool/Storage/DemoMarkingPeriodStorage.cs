@@ -7,10 +7,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoMarkingPeriodStorage
     {
-        public MarkingPeriod getById(int id)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public MarkingPeriod GetLast(DateTime dateTime)
         {

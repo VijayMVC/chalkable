@@ -6,7 +6,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementAttachmentStorage:BaseDemoStorage
+    public class DemoAnnouncementAttachmentStorage:BaseDemoStorage<int, AnnouncementAttachment>
     {
         public DemoAnnouncementAttachmentStorage(DemoStorage storage) : base(storage)
         {
@@ -14,24 +14,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(AnnouncementAttachment annAtt)
         {
-            throw new NotImplementedException();
+            if (!data.ContainsKey(annAtt.Id))
+                data[annAtt.Id] = annAtt;
         }
 
         public IList<AnnouncementAttachment> GetList(int value, int id, string name)
         {
             throw new NotImplementedException();
         }
-
-        public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public PaginatedList<AnnouncementAttachment> GetPaginatedList(int announcementId, int i, int id, int start, int count, bool needsAllAttachments)
         {
             throw new NotImplementedException();

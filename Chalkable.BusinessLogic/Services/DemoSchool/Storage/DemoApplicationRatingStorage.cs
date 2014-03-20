@@ -6,28 +6,26 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoApplicationRatingStorage:BaseDemoStorage
+    public class DemoApplicationRatingStorage:BaseDemoStorage<Guid, ApplicationRating>
     {
-        private Dictionary<Guid, ApplicationRating> appRatingData = new Dictionary<Guid, ApplicationRating>();
-
         public DemoApplicationRatingStorage(DemoStorage storage) : base(storage)
         {
         }
 
         public bool Exists(Guid applicationId, Guid userId)
         {
-            var res = appRatingData.FirstOrDefault(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId);
+            var res = data.FirstOrDefault(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId);
             return res.Value != null;
         }
 
         public void Add(ApplicationRating appRating)
         {
-            appRatingData[appRating.Id] = appRating;
+            data[appRating.Id] = appRating;
         }
 
         public IList<ApplicationRating> GetAll(Guid applicationId)
         {
-            return appRatingData.Where(x => x.Value.ApplicationRef == applicationId).Select(x => x.Value).ToList();
+            return data.Where(x => x.Value.ApplicationRef == applicationId).Select(x => x.Value).ToList();
         }
     }
 }

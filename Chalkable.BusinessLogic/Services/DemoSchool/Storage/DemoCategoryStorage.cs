@@ -7,41 +7,29 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoCategoryStorage:BaseDemoStorage
+    public class DemoCategoryStorage:BaseDemoStorage<Guid, Category>
     {
-        private Dictionary<Guid, Category> categoryData = new Dictionary<Guid, Category>();
-
         public DemoCategoryStorage(DemoStorage storage) : base(storage)
         {
         }
 
-        public Category GetById(Guid id)
-        {
-            
-            if (categoryData.ContainsKey(id))
-            {
-                return categoryData[id];
-            }
-            return null;
-        }
-
         public void Add(Category res)
         {
-            if (!categoryData.ContainsKey(res.Id))
-                categoryData.Add(res.Id, res);
+            if (!data.ContainsKey(res.Id))
+                data.Add(res.Id, res);
         }
 
         public void Update(Category res)
         {
-            if (categoryData.ContainsKey(res.Id))
+            if (data.ContainsKey(res.Id))
             {
-                categoryData[res.Id] = res;
+                data[res.Id] = res;
             }
         }
 
         public void Delete(Guid id)
         {
-            categoryData.Remove(id);
+            data.Remove(id);
         }
 
         public PaginatedList<Category> GetPage(int start, int count)

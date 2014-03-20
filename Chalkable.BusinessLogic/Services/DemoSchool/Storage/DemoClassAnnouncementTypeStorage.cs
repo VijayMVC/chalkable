@@ -4,19 +4,18 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassAnnouncementTypeStorage
+    public class DemoClassAnnouncementTypeStorage:BaseDemoStorage<int, ClassAnnouncementType>
     {
+        public DemoClassAnnouncementTypeStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public IList<ClassAnnouncementType> GetAll(AndQueryCondition cond)
         {
             throw new System.NotImplementedException();
         }
 
         public void Add(IList<ClassAnnouncementType> classAnnouncementTypes)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Delete(IList<int> ids)
         {
             throw new System.NotImplementedException();
         }

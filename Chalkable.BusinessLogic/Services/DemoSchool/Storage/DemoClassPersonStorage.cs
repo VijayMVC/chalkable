@@ -4,8 +4,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassPersonStorage
+    public class DemoClassPersonStorage:BaseDemoStorage<int, ClassPerson>
     {
+        public DemoClassPersonStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Delete(ClassPersonQuery classPersonQuery)
         {
             throw new System.NotImplementedException();

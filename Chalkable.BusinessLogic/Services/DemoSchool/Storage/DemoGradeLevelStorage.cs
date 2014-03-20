@@ -4,8 +4,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoGradeLevelStorage
+    public class DemoGradeLevelStorage:BaseDemoStorage<int, GradeLevel>
     {
+        public DemoGradeLevelStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public IList<GradeLevel> GetGradeLevels(int? schoolId)
         {
             throw new System.NotImplementedException();
@@ -17,16 +21,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
         public void Add(IList<GradeLevel> gradeLevel)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public GradeLevel GetById(int gradeLevelId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Delete(IList<int> ids)
         {
             throw new System.NotImplementedException();
         }

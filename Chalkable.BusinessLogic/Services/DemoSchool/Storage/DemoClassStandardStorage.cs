@@ -4,9 +4,13 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassStandardStorage
+    public class DemoClassStandardStorage:BaseDemoStorage<int, ClassStandard>
     {
-        public IList<ClassStandard> Add(object classStandarts)
+        public DemoClassStandardStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
+        public IList<ClassStandard> Add(IList<ClassStandard> classStandarts)
         {
             throw new System.NotImplementedException();
         }

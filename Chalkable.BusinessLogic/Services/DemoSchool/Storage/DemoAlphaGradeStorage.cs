@@ -7,10 +7,8 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAlphaGradeStorage:BaseDemoStorage
+    public class DemoAlphaGradeStorage:BaseDemoStorage<int, AlphaGrade>
     {
-        private readonly Dictionary<int ,AlphaGrade> alphaGradesData = new Dictionary<int, AlphaGrade>();
-
         public DemoAlphaGradeStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -19,28 +17,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             foreach (var alphaGrade in alphaGrades)
             {
-                if (alphaGradesData.ContainsKey(alphaGrade.Id))
+                if (data.ContainsKey(alphaGrade.Id))
                 {
-                    alphaGradesData[alphaGrade.Id] = alphaGrade;
+                    data[alphaGrade.Id] = alphaGrade;
                 }
-            }
-        }
-
-        public void Delete(int id)
-        {
-            alphaGradesData.Remove(id);
-        }
-
-        public IList<AlphaGrade> GetAll()
-        {
-            return alphaGradesData.Select(x => x.Value).ToList();
-        }
-
-        public void Delete(IList<int> ids)
-        {
-            foreach (var id in ids)
-            {
-                Delete(id);
             }
         }
 
@@ -48,9 +28,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             foreach (var alphaGrade in alphaGrades)
             {
-                if (alphaGradesData.ContainsKey(alphaGrade.Id))
+                if (data.ContainsKey(alphaGrade.Id))
                 {
-                    alphaGradesData[alphaGrade.Id] = alphaGrade;
+                    data[alphaGrade.Id] = alphaGrade;
                 }
             }
         }

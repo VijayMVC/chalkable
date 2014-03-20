@@ -4,8 +4,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassPeriodStorage
+    public class DemoClassPeriodStorage:BaseDemoStorage<int, ClassPeriod>
     {
+        public DemoClassPeriodStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public bool Exists(ClassPeriodQuery classPeriodQuery)
         {
             throw new System.NotImplementedException();

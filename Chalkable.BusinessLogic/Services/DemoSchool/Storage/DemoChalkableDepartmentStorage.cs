@@ -8,39 +8,27 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoChalkableDepartmentStorage
+    public class DemoChalkableDepartmentStorage:BaseDemoStorage<Guid, ChalkableDepartment>
     {
-        private Dictionary<Guid, ChalkableDepartment> chalkableDepartmentData = new Dictionary<Guid, ChalkableDepartment>(); 
-        public void Add(ChalkableDepartment res)
+        public DemoChalkableDepartmentStorage(DemoStorage storage) : base(storage)
         {
-            if (!chalkableDepartmentData.ContainsKey(res.Id))
-                chalkableDepartmentData[res.Id] = res;
         }
 
-        public ChalkableDepartment GetById(Guid id)
+        public void Add(ChalkableDepartment res)
         {
-            return chalkableDepartmentData[id];
+            if (!data.ContainsKey(res.Id))
+                data[res.Id] = res;
         }
 
         public void Update(ChalkableDepartment res)
         {
-            if (chalkableDepartmentData.ContainsKey(res.Id))
-                chalkableDepartmentData[res.Id] = res;
-        }
-
-        public void Delete(Guid id)
-        {
-            chalkableDepartmentData.Remove(id);
-        }
-
-        public IList<ChalkableDepartment> GetAll()
-        {
-            return chalkableDepartmentData.Select(x => x.Value).ToList();
+            if (data.ContainsKey(res.Id))
+                data[res.Id] = res;
         }
 
         public ChalkableDepartment GetByIdOrNull(Guid id)
         {
-            return chalkableDepartmentData.ContainsKey(id) ? chalkableDepartmentData[id] : null;
+            return data.ContainsKey(id) ? data[id] : null;
         }
     }
 }

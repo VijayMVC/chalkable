@@ -6,7 +6,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAttendanceLevelReasonStorage:BaseDemoStorage
+    public class DemoAttendanceLevelReasonStorage:BaseDemoStorage<int , AttendanceLevelReason>
     {
         public DemoAttendanceLevelReasonStorage(DemoStorage storage) : base(storage)
         {

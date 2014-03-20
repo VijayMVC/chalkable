@@ -4,17 +4,17 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoDisciplineTypeStorage
+    public class DemoDisciplineTypeStorage:BaseDemoStorage<Guid, DisciplineType>
     {
+        public DemoDisciplineTypeStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public DisciplineType Add(string name, int score)
         {
             throw new System.NotImplementedException();
         }
 
-        public DisciplineType GetDisciplineTypeById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
 
         public PaginatedList<DisciplineType> GetDisciplineTypes(int start, int count)
         {
@@ -26,9 +26,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public void Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
