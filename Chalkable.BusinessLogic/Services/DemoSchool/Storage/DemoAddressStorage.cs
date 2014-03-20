@@ -8,29 +8,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAddressStorage: BaseDemoStorage
+    public class DemoAddressStorage: BaseDemoStorage<int ,Address>
     {
-        private readonly Dictionary<int, Address> addressData = new Dictionary<int, Address>();
-
         public DemoAddressStorage(DemoStorage storage) : base(storage)
         {
-        }
-
-        public Address GetById(int id)
-        {
-            if (addressData.ContainsKey(id))
-                return addressData[id];
-            return null;
-        }
-
-        public void Delete(int id)
-        {
-            addressData.Remove(id);
-        }
-
-        public IList<Address> GetAll()
-        {
-            return addressData.Select(x => x.Value).ToList();
         }
 
         public IList<Address> GetAddress(int personId)
@@ -39,30 +20,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public void Delete(IList<int> ids)
-        {
-            foreach (var id in ids)
-            {
-                Delete(id);
-            }
-        }
-
         public IList<Address> Update(List<Address> res)
         {
 
             foreach (var address in res)
             {
-                if (addressData.ContainsKey(address.Id))
-                    addressData[address.Id] = address;
+                if (data.ContainsKey(address.Id))
+                    data[address.Id] = address;
             }
             return res;
         }
 
         public void Add(Address address)
         {
-            if (!addressData.ContainsKey(address.Id))
+            if (!data.ContainsKey(address.Id))
             {
-                addressData.Add(address.Id, address);
+                data.Add(address.Id, address);
             }
         }
 

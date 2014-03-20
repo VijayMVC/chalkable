@@ -15,8 +15,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             foreach (var alternateScore in alternateScores)
             {
-                var score = data.FirstOrDefault(x => x.Key == alternateScore.Id).Value;
-                if (score != null)
+                if (data.ContainsKey(alternateScore.Id))
+                {
+                    data[alternateScore.Id] = alternateScore;
+                }
+
+            }
+        }
+
+        public void Add(IList<AlternateScore> alternateScores)
+        {
+            foreach (var alternateScore in alternateScores)
+            {
+                if (!data.ContainsKey(alternateScore.Id))
                 {
                     data[alternateScore.Id] = alternateScore;
                 }

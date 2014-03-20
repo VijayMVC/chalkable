@@ -15,26 +15,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(IList<AttendanceReason> reasons)
         {
-            throw new NotImplementedException();
-            foreach (var attendanceReason in reasons)
+            foreach (var attendanceReason in reasons.Where(attendanceReason => !data.ContainsKey(attendanceReason.Id)))
             {
-                var reason = attendanceReasonData.FirstOrDefault(x => x.Key == attendanceReason.Id).Value;
-                if (reason == null)
-                {
-                    attendanceReasonData.Add(attendanceReason.Id, attendanceReason);
-                }
+                data.Add(attendanceReason.Id, attendanceReason);
             }
         }
 
         public void Update(IList<AttendanceReason> reasons)
         {
-            throw new NotImplementedException();
             foreach (var attendanceReason in reasons)
             {
-                var reason = attendanceReasonData.FirstOrDefault(x => x.Key == attendanceReason.Id).Value;
-                if (reason != null)
+                if (data.ContainsKey(attendanceReason.Id))
                 {
-                    attendanceReasonData[attendanceReason.Id] =  attendanceReason;
+                    data[attendanceReason.Id] =  attendanceReason;
                 }
             }
         }

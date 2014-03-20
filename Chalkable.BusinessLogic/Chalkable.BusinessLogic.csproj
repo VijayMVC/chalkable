@@ -104,6 +104,7 @@
     <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\CrocodocService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
     <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassPeriodService.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
     <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoNotificationStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationRatingStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationStorage.cs" />

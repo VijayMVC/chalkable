@@ -46,24 +46,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoApplicationStorage ApplicationStorage { get; private set; }
         public DemoApplicationRatingStorage ApplicationRatingStorage { get; private set; }
         public DemoNotificationStorage NotificationStorage{ get; private set; }
+        public DemoApplicationInstallStorage ApplicationInstallStorage { get; private set; }
 
         public DemoStorage()
         {
             UserStorage = new DemoUserStorage(this);
             PrivateMessageStore = new DemoPrivateMessageStorage();
             SchoolYearStorage = new DemoSchoolYearStorage();
-            DisciplineTypeStorage = new DemoDisciplineTypeStorage();
-            DisciplineStorage = new DemoDisciplineStorage();
-            AlphaGradeStorage = new DemoAlphaGradeStorage();
-            AlternateScoreStorage = new DemoAlternateScoreStorage();
-            StudentParentStorage = new DemoStudentParentStorage();
+            DisciplineTypeStorage = new DemoDisciplineTypeStorage(this);
+            DisciplineStorage = new DemoDisciplineStorage(this);
+            AlphaGradeStorage = new DemoAlphaGradeStorage(this);
+            AlternateScoreStorage = new DemoAlternateScoreStorage(this);
+            StudentParentStorage = new DemoStudentParentStorage(this);
             StandardStorage = new DemoStandardStorage();
             StandardSubjectStorage = new DemoStandardSubjectStorage();
-            ClasStandardStorage = new DemoClassStandardStorage();
-            SchoolStorage = new DemoSchoolStorage();
+            ClasStandardStorage = new DemoClassStandardStorage(this);
+            SchoolStorage = new DemoSchoolStorage(this);
             SchoolPersonStorage = new DemoSchoolPersonStorage();
             RoomStorage = new DemoRoomStorage();
-            ClassPeriodStorage = new DemoClassPeriodStorage();
+            ClassPeriodStorage = new DemoClassPeriodStorage(this);
             PrivateMessageStorage = new DemoPrivateMessageStorage();
             PhoneStorage = new DemoPhoneStorage(this);
             PersonStorage = new DemoPersonStorage();
@@ -71,23 +72,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             MarkingPeriodStorage = new DemoMarkingPeriodStorage();
             MarkingPeriodClassStorage = new DemoMarkingPeriodClassStorage();
             GradingPeriodStorage = new DemoGradingPeriodStorage();
-            GradeLevelStorage = new DemoGradeLevelStorage();
+            GradeLevelStorage = new DemoGradeLevelStorage(this);
             SchoolGradeLevelStorage = new DemoSchoolGradeLevelStorage();
-            DayTypeStorage = new DemoDayTypeStorage();
-            ClassStorage = new DemoClassStorage();
-            ClassPersonStorage = new DemoClassPersonStorage();
-            ClassAnnouncementTypeStorage = new DemoClassAnnouncementTypeStorage();
-            CategoryStorage = new DemoCategoryStorage();
+            DayTypeStorage = new DemoDayTypeStorage(this);
+            ClassStorage = new DemoClassStorage(this);
+            ClassPersonStorage = new DemoClassPersonStorage(this);
+            ClassAnnouncementTypeStorage = new DemoClassAnnouncementTypeStorage(this);
+            CategoryStorage = new DemoCategoryStorage(this);
             DateStorage = new DemoDateStorage();
-            ChalkableDepartmentStorage = new DemoChalkableDepartmentStorage();
-            MasterSchoolStorage = new DemoMasterSchoolStorage();
+            ChalkableDepartmentStorage = new DemoChalkableDepartmentStorage(this);
+            MasterSchoolStorage = new DemoMasterSchoolStorage(this);
             StudentAnnouncementStorage = new DemoStudentAnnouncementStorage();
-            AnnouncementAttachmentStorage = new DemoAnnouncementAttachmentStorage();
-            AttendanceReasonStorage = new DemoAttendanceReasonStorage();
-            AttendanceLevelReasonStorage = new DemoAttendanceLevelReasonStorage();
-            ApplicationStorage = new DemoApplicationStorage();
-            ApplicationRatingStorage = new DemoApplicationRatingStorage();
+            AnnouncementAttachmentStorage = new DemoAnnouncementAttachmentStorage(this);
+            AttendanceReasonStorage = new DemoAttendanceReasonStorage(this);
+            AttendanceLevelReasonStorage = new DemoAttendanceLevelReasonStorage(this);
+            ApplicationStorage = new DemoApplicationStorage(this);
+            ApplicationRatingStorage = new DemoApplicationRatingStorage(this);
             NotificationStorage = new DemoNotificationStorage();
+            ApplicationInstallStorage = new DemoApplicationInstallStorage(this);
             setup();
         }
 
