@@ -8,6 +8,8 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/StudentAnnouncement.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.StudentAnnouncement)],
         'StudentAnnouncement', EXTENDS(chlk.templates.ChlkTemplate), [
+            Boolean, 'ableDropStudentScore',
+
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 

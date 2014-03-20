@@ -23,6 +23,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             var draggable = ui.draggable;
             if(droppable.find('.empty')[0]){
                 droppable.html(draggable.html()).removeClass('empty-box');
+                if(!droppable.next('.absolute')[0])
+                    jQuery('<div class="empty-box student-block absolute"></div>').insertAfter(droppable);
                 if(draggable.parents('.seating-chart-people')[0]){
                     draggable.css('opacity', 0);
                     draggable.animate({
@@ -47,6 +49,8 @@ NAMESPACE('chlk.activities.attendance', function () {
         var tpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl();
         tpl.assign(model);
         node.setHTML(tpl.render()).addClass('empty-box');
+        var next = node.next('.absolute');
+        next.exists() && next.remove();
     }
 
     function checkPadding(){

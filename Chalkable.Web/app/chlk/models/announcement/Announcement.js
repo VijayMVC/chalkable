@@ -229,9 +229,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('hidefromstudents')],
             Boolean, 'hiddenFromStudents',
 
-            [ria.serialize.SerializeProperty('candropstudentscore')],
-            Boolean, 'ableDropStudentScore',
-
             [ria.serialize.SerializeProperty('maybeexempt')],
             Boolean, 'ableToExempt',
 

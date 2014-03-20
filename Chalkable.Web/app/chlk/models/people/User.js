@@ -3,6 +3,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.Address');
 REQUIRE('chlk.models.people.Phone');
 REQUIRE('chlk.models.people.Role');
+REQUIRE('chlk.models.people.Claim');
 
 NAMESPACE('chlk.models.people', function () {
     "use strict";
@@ -42,6 +43,15 @@ NAMESPACE('chlk.models.people', function () {
             Number, 'index',
 
             Boolean, 'selected',
+
+            ArrayOf(chlk.models.people.Claim), 'claims',
+
+            [[chlk.models.people.UserPermissionEnum]],
+            Boolean, function hasPermission_(userPermission){
+                var claims = this.getClaims();
+                return claims && claims.length > 0
+                    && claims.filter(function(claim){return claim.hasPermission(userPermission); }).length > 0;
+            },
 
             [[String, String, chlk.models.id.SchoolPersonId]],
             function $(firstName_, lastName_, id_){

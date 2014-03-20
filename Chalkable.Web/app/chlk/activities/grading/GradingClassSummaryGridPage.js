@@ -50,10 +50,22 @@ NAMESPACE('chlk.activities.grading', function () {
                     .hide();
             },
 
-            [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
+            [ria.mvc.DomEventBind('contextmenu', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function gradeKeyUp(node, event){
-                var suggestions = [], cell = node.parent('.active-cell');
+            Boolean, function gradeMouseDown(node, event){
+                node.parent().find('.grading-input-popup').show();
+                return false;
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                BASE();
+                new ria.dom.Dom().off('click.grading_popup');
+                new ria.dom.Dom().off('click.grade');
+            },
+
+            [ria.mvc.DomEventBind('keydown', '.grade-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function gradeKeyDown(node, event){
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
@@ -74,8 +86,28 @@ NAMESPACE('chlk.activities.grading', function () {
                                 list.find('.autocomplete-item:eq(0)').addClass('hovered');
                             }
                         }
+                        event.stopPropagation();
                     }
-                }else{
+                }
+
+                return true;
+            },
+
+            [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function gradeKeyUp(node, event){
+                var suggestions = [], cell = node.parent('.active-cell');
+                var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
+                var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
+                var list = this.dom.find('.autocomplete-list:visible');
+                if(!value){
+                    node.addClass('empty-grade');
+                    node.removeClass('error');
+                }
+                else{
+                    node.removeClass('empty-grade');
+                }
+                if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
                         if(list.exists() && list.find('.see-all').hasClass('hovered')){
                             list.find('.see-all').trigger('click');
@@ -286,11 +318,14 @@ NAMESPACE('chlk.activities.grading', function () {
                             }
                     }
                 });
-            },
 
-            OVERRIDE, VOID, function onStop_() {
-                BASE();
-                new ria.dom.Dom().off('click.grade');
+                var dom = this.dom;
+                new ria.dom.Dom().on('click.grading_popup', function(doc, event){
+                    var node = new ria.dom.Dom(event.target);
+                    if(!node.isOrInside('.grading-input-popup')){
+                        dom.find('.grading-input-popup').hide();
+                    }
+                });
             }
         ]);
 });

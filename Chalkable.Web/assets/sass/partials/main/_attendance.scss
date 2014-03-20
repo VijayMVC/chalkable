@@ -662,7 +662,7 @@ BODY {
   }
 }
 
-#chlk-pop-up-container{
+#chlk-pop-up-container, .chlk-pop-up-container{
   .big-triangle {
     left: 0;
     width: 100%;
@@ -1100,6 +1100,7 @@ BODY {
         .student-block{
           .remove-red-btn{
             display: block;
+            z-index: 10;
           }
         }
       }
@@ -1126,20 +1127,29 @@ BODY {
           display: none;
         }
 
+        &.empty-box.absolute, .empty{
+          background: url(images/attendance/seating-box.png) center 2px no-repeat;
+          width: 74px;
+          height: 120px;
+        }
+
         &.hover{
           .empty{
             background: url(images/attendance/seating-box.png) center 2px no-repeat, url(images/attendance/seating-plus.png) center 27px no-repeat;
           }
         }
 
-        .empty{
-          background: url(images/attendance/seating-box.png) center 2px no-repeat;
-          width: 74px;
-          height: 120px;
-        }
-
         .student-seating-name{
           margin-top: 6px;
+        }
+
+        &:not(.absolute){
+          z-index: 1;
+        }
+
+        &+.absolute{
+          margin-left: -92px;
+          z-index: 0;
         }
       }
     }
@@ -1210,6 +1220,12 @@ BODY {
   }
 }
 
+.student-block{
+  .avatar-wrapper{
+    background: #eee;
+  }
+}
+
 .student-seating-name{
   display: inline-block;
   overflow: hidden;
@@ -1220,8 +1236,20 @@ BODY {
   color: #2e2e2e;
 }
 
+.seating-chart-page.dragging-on{
+  .seating-chart-container{
+    .seating-row{
+      .student-block.ui-draggable-dragging{
+        .remove-red-btn{
+          display: none;
+        }
+      }
+    }
+  }
+}
+
 .ui-draggable-dragging{
-  z-index: 1000;
+  z-index: 1000 !important;
   @include transform(rotate(5deg));
 
   .student-seating-name{

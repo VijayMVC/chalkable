@@ -10,12 +10,13 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/checkbox.jade')(this);
             },
 
-            [[String, Boolean]],
-            VOID, function prepareData(name, value) {
+            [[Object, Boolean]],
+            Object, function prepareData(attributes, value) {
+                attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        var hidden = activity.getDom().find('.hidden-checkbox[name=' + name + ']');
-                        activity.getDom().find('#' + name).on('change', function(){
+                        var hidden = activity.getDom().find('#' + attributes.id + '-hidden');
+                        activity.getDom().find('#' + attributes.id).on('change', function(){
                             var lastValue = hidden.getData('value');
                             var newValue = !lastValue;
                             hidden.setData('value', newValue);
@@ -23,6 +24,7 @@ NAMESPACE('chlk.controls', function () {
                         });
                         hidden.setData('value', value || false);
                     }.bind(this));
+                return attributes;
             }
         ]);
 });

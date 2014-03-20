@@ -1,4 +1,5 @@
 REQUIRE('chlk.templates.JadeTemplate');
+REQUIRE('chlk.models.people.User');
 
 NAMESPACE('chlk.templates', function () {
     "use strict";
@@ -31,6 +32,8 @@ NAMESPACE('chlk.templates', function () {
                 return controller;
             },
 
-            chlk.models.common.Role, 'userRole'
+            chlk.models.common.Role, 'userRole',
+
+            chlk.models.people.User, 'currentUser'
         ])
 });

@@ -1,4 +1,5 @@
 REQUIRE('ria.mvc.TemplateActivity');
+REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.Role');
 
 NAMESPACE('chlk.activities.lib', function () {
@@ -50,6 +51,8 @@ NAMESPACE('chlk.activities.lib', function () {
                 BASE(msg_);
             },
 
+            chlk.models.people.User, 'currentUser',
+
             chlk.models.common.Role, 'role',
 
             [[String]],
@@ -62,7 +65,8 @@ NAMESPACE('chlk.activities.lib', function () {
             OVERRIDE, VOID, function onPrepareTemplate_(tpl, model, msg_) {
                 BASE(tpl, model, msg_);
                 tpl.options({
-                    userRole: this.getRole()
+                    userRole: this.getRole(),
+                    currentUser: this.getCurrentUser()
                 })
             }
 

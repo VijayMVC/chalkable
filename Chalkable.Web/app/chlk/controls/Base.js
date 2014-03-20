@@ -1,4 +1,5 @@
 REQUIRE('ria.mvc.DomControl');
+REQUIRE('chlk.models.common.Role');
 
 NAMESPACE('chlk.controls', function () {
 

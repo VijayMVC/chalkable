@@ -130,9 +130,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.people.User, 'owner',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.User, 'currentUser',
-
-            [ria.templates.ModelPropertyBind],
             Number, 'ownerAttachmentsCount',
 
             [ria.templates.ModelPropertyBind],

@@ -31,4 +31,6 @@ selectedId = topData.getSelectedItemId()
                             info = item.getInfo()
                             div(data-index=item.getIndex(), class=info ? '' : 'empty-box').student-block.droppable.draggable
                                 +RenderWith(info || new chlk.models.attendance.ClassAttendance, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
+                            if info
+                                .empty-box.student-block.absolute
 

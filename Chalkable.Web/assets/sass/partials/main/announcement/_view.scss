@@ -611,19 +611,16 @@ $red-color: #842727;
               vertical-align: top;
             }
 
-            INPUT{
+            .grading-input{
               background: white;
               text-align: center;
               overflow: hidden;
+              vertical-align: middle;
+              margin: 10px 0 4px;
 
               &.error{
                 border: 1px solid red;
               }
-            }
-
-            INPUT{
-              vertical-align: middle;
-              margin: 10px 0 4px;
             }
 
             .letters{
