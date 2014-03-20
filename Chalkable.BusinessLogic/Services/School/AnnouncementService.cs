@@ -61,6 +61,7 @@ namespace Chalkable.BusinessLogic.Services.School
         bool CanAddStandard(int announcementId);
         Standard AddAnnouncementStandard(int announcementId, int standardId);
         Standard RemoveStandard(int announcementId, int standardId);
+        IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
     }
 
     public class AnnouncementService : SisConnectedService, IAnnouncementService
@@ -742,6 +743,14 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                return CreateAnnoucnementDataAccess(uow).CanAddStandard(announcementId);
+            }
+        }
+
+        public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
+        {
+            using (var uow = Read())
+            {
+                return new AnnouncementStandardDataAccess(uow).GetAnnouncementStandards(classId);
             }
         }
     }
