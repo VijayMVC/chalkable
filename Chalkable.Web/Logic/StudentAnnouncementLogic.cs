@@ -12,7 +12,7 @@ namespace Chalkable.Web.Logic
             ,IList<AnnouncementAttachmentInfo> announcementAttachmentInfos)
         {
             var gradingItems = announcement.StudentAnnouncements.ToList();
-            gradingItems = gradingItems.OrderBy(x => x.Person.LastName).ThenBy(x => x.Person.FirstName).ToList();
+            gradingItems = gradingItems.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
             var res = StudentAnnouncementsViewData.Create(announcement, gradingItems, announcementAttachmentInfos, announcement.GradingStyle);
             res.GradingStyleMapper = GradingStyleLogic.GetGradingStyleMapper(serviceLocator);
             return res;

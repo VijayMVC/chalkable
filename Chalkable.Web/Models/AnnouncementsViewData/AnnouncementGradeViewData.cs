@@ -36,8 +36,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 if (studentAnnouncements.Count == 1)
                 {
                     var studentAnnouncement = studentAnnouncements.First();
-                    res.Grade = studentAnnouncement.GradeValue;
-                    res.StudentAnnouncementId = studentAnnouncement.Id;
+                    res.Grade = studentAnnouncement.NumericScore;
                     res.Comment = studentAnnouncement.Comment;
                 }
                 int graded = 0;
@@ -45,10 +44,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 int cnt = 0;
                 foreach (var gradeItem in studentAnnouncements)
                 {
-                    if (gradeItem.GradeValue.HasValue)
+                    if (gradeItem.NumericScore.HasValue)
                     {
                         graded++;
-                        summ = summ.HasValue ? summ + gradeItem.GradeValue.Value : gradeItem.GradeValue.Value;
+                        summ = summ.HasValue ? summ + gradeItem.NumericScore.Value : gradeItem.NumericScore.Value;
                         cnt++;
                     }
                 }

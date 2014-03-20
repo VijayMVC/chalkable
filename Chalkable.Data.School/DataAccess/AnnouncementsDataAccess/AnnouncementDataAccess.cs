@@ -52,8 +52,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 reader.NextResult();
                 announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
                 reader.NextResult();
-                announcement.StudentAnnouncements = StudentAnnouncementDataAccess.ReadListStudentAnnouncement(reader);
-                reader.NextResult();
                 announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
                 reader.NextResult();
                 announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();
@@ -63,6 +61,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 announcement.Owner = PersonDataAccess.ReadPersonQueryResult(reader).Persons.FirstOrDefault();
                 reader.NextResult();
                 announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();
+                announcement.StudentAnnouncements = reader.ReadList<StudentAnnouncementDetails>();
             }
             return announcement;
         }

@@ -58,6 +58,7 @@ namespace Chalkable.Web.Models
         public int StandardId { get; set; }
         public int? GradeId { get; set; }
         public string GradeValue { get; set; }
+        public int GradingPeriodId { get; set; }
 
         public static StandardGradingItemViewData Create(GradingStandardInfo gradingStandard)
         {
@@ -66,7 +67,8 @@ namespace Chalkable.Web.Models
                     StudentId = gradingStandard.StudentId,
                     GradeId = gradingStandard.AlphaGradeId,
                     GradeValue = gradingStandard.AlphaGradeName,
-                    StandardId = gradingStandard.Standard.Id
+                    StandardId = gradingStandard.Standard.Id,
+                    GradingPeriodId = gradingStandard.GradingPeriodId
                 };
         }
     }

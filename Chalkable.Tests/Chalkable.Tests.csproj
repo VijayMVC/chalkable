@@ -84,7 +84,6 @@
     <Compile Include="Services\Master\PictureServiceTest.cs" />
     <Compile Include="Services\Master\SchoolServiceTest.cs" />
     <Compile Include="Services\Master\UserServiceTest.cs" />
-    <Compile Include="Services\School\AddressServiceTest.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentServiceTest.cs" />
     <Compile Include="Services\School\AnnouncementQnServiceTest.cs" />
     <Compile Include="Services\School\AnnouncementReminderServiceTest.cs" />

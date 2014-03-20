@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.StiImport.Services
@@ -20,6 +17,7 @@ namespace Chalkable.StiImport.Services
             UpdateSchoolYears();
             UpdateStudentSchoolYears();
             UpdateMarkingPeriods();
+            UpdateGradingPeriods();
             UpdateDayTypes();
             UpdateDays();
             UpdateRooms();
@@ -37,19 +35,48 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateSchools()
         {
-            //var schools = context.GetSyncResult<School>().Updated;
-            
+            var schools = context.GetSyncResult<School>().Updated.Select(x=>new Data.School.Model.School
+                {
+                    Id = x.SchoolID,
+                    IsActive = x.IsActive,
+                    IsPrivate = x.IsPrivate,
+                    Name = x.Name
+                }).ToList();
+            ServiceLocatorSchool.SchoolService.Edit(schools);
         }
 
         private void UpdateAddresses()
         {
-            //var addresses = context.GetSyncResult<Address>().Updated;
-            
+            var addresses = context.GetSyncResult<Address>().Updated.Select(x=>new Data.School.Model.Address
+                {
+                    AddressLine1 = x.AddressLine1,
+                    AddressLine2 = x.AddressLine2,
+                    AddressNumber = x.AddressNumber,
+                    City = x.City,
+                    Country = x.Country,
+                    CountyId = x.CountryID,
+                    Id = x.AddressID,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    PostalCode = x.PostalCode
+                }).ToList();
+            ServiceLocatorSchool.AddressService.Edit(addresses);
         }
 
         private void UpdatePersons()
         {
-            //throw new NotImplementedException();
+            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
+            var persons = context.GetSyncResult<Person>().Updated.Select(x => new PersonInfo
+                {
+                    Id = x.PersonID,
+                    Active = true,
+                    AddressRef = x.PhysicalAddressID,
+                    BirthDate = x.DateOfBirth,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U"
+                }).ToList();
+            ServiceLocatorSchool.PersonService.Edit(persons);
         }
 
         private void UpdateSchoolPersons()
@@ -78,6 +105,11 @@ namespace Chalkable.StiImport.Services
         }
 
         private void UpdateMarkingPeriods()
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void UpdateGradingPeriods()
         {
             //throw new NotImplementedException();
         }

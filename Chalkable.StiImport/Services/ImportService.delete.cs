@@ -22,6 +22,7 @@ namespace Chalkable.StiImport.Services
             DeleteRooms();
             DeleteDays();
             DeleteDayTypes();
+            DeleteGradingPeriods();
             DeleteMarkingPeriods();
             DeleteStudentSchoolYears();
             DeleteSchoolYears();
@@ -147,6 +148,14 @@ namespace Chalkable.StiImport.Services
                 return;
             var ids = context.GetSyncResult<DayType>().Deleted.Select(x => x.DayTypeID).ToList();
             ServiceLocatorSchool.DayTypeService.Delete(ids);
+        }
+
+        private void DeleteGradingPeriods()
+        {
+            if (context.GetSyncResult<GradingPeriod>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<GradingPeriod>().Deleted.Select(x => x.GradingPeriodID).ToList();
+            ServiceLocatorSchool.GradingPeriodService.Delete(ids);
         }
 
         private void DeleteMarkingPeriods()

@@ -15,6 +15,7 @@ using School = Chalkable.StiConnector.SyncModel.School;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
+using GradingPeriod = Chalkable.StiConnector.SyncModel.GradingPeriod;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 
 namespace Chalkable.StiImport.Services
@@ -32,6 +33,7 @@ namespace Chalkable.StiImport.Services
             InsertSchoolYears();
             InsertStudentSchoolYears();
             InsertMarkingPeriods();
+            InsertGradingPeriods();
             InsertDayTypes();
             InsertDays();
             InsertRooms();
@@ -67,7 +69,7 @@ namespace Chalkable.StiImport.Services
         private void InsertAddresses()
         {
             var adds = context.GetSyncResult<Address>().All;
-            var addressInfos = adds.Select(x => new AddressInfo
+            var addressInfos = adds.Select(x => new Data.School.Model.Address
             {
                 AddressLine1 = x.AddressLine1,
                 AddressLine2 = x.AddressLine2,
@@ -91,6 +93,7 @@ namespace Chalkable.StiImport.Services
             var users = context.GetSyncResult<User>().All.ToDictionary(x => x.UserID);
             var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
             var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
+            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
             foreach (var person in persons)
             {
                 counter++;
@@ -111,7 +114,7 @@ namespace Chalkable.StiImport.Services
                     BirthDate = person.DateOfBirth,
                     Email = email,
                     FirstName = person.FirstName,
-                    Gender = "M",//TODO: what about this?
+                    Gender = person.GenderID.HasValue ? genders[person.GenderID.Value].Code : "U",
                     Id = person.PersonID,
                     LastName = person.LastName,
                     Password = ServiceLocatorMaster.UserService.PasswordMd5(DEF_USER_PASS),
@@ -216,6 +219,25 @@ namespace Chalkable.StiImport.Services
             {
                 ServiceLocatorSchool.MarkingPeriodService.Add(term.TermID, term.AcadSessionID, term.StartDate, term.EndDate, term.Name, term.Description, 62);
             }
+        }
+
+        private void InsertGradingPeriods()
+        {
+            var gPeriods = context.GetSyncResult<GradingPeriod>().All
+                .Select(x=>new Data.School.Model.GradingPeriod()
+                    {
+                        Id = x.GradingPeriodID,
+                        AllowGradePosting = x.AllowGradePosting,
+                        Code = x.Code,
+                        Description = x.Description,
+                        EndDate = x.EndDate,
+                        EndTime = x.EndTime,
+                        MarkingPeriodRef = x.TermID,
+                        Name = x.Name,
+                        SchoolAnnouncement = x.SchoolAnnouncement,
+                        SchoolYearRef = x.AcadSessionID
+                    }).ToList();
+            ServiceLocatorSchool.GradingPeriodService.Add(gPeriods);
         }
 
         private void InsertDayTypes()
@@ -392,18 +414,19 @@ namespace Chalkable.StiImport.Services
 
         private void InsertPeriods()
         {
+            //TODO: this logig is not exact how it is in INOW
             var periods = context.GetSyncResult<TimeSlot>().All.ToList();
+            var allSts = context.GetSyncResult<ScheduledTimeSlot>().All.ToList();
             foreach (var timeSlot in periods)
-            {   
-                //TODO:
-                //var sts = timeSlot.ScheduledTimeSlots.FirstOrDefault();
+            {
+                var sts = allSts.FirstOrDefault(x => x.TimeSlotID == timeSlot.TimeSlotID);
                 int startTime = 0;
                 int endTime = 1;
-                /*if (sts != null)
+                if (sts != null)
                 {
                     startTime = sts.StartTime ?? 0;
-                    endTime = sts.EndTime ?? 1;
-                }*/
+                    endTime = sts.EndTime ?? startTime + 1;
+                }
                 ServiceLocatorSchool.PeriodService.Add(timeSlot.TimeSlotID, timeSlot.AcadSessionID, startTime, endTime, timeSlot.Sequence);
             }
         }

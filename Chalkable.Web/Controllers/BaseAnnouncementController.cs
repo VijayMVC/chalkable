@@ -30,17 +30,18 @@ namespace Chalkable.Web.Controllers
             if (isRead && annDetails.State == AnnouncementState.Created)
             {
                 var ids = new HashSet<Guid>();
-                IList<string> appNames = new List<string>();              
-                foreach (var sa in annDetails.StudentAnnouncements)
-                {
-                    var appRef = sa.ApplicationRef;
-                    if (appRef.HasValue && !ids.Contains(appRef.Value))
-                    {
-                        var app = applications.First(x => x.Id == appRef);
-                        ids.Add(appRef.Value);
-                        appNames.Add(app.Name);
-                    }
-                }
+                IList<string> appNames = new List<string>();  
+                //TODO : think about appNames 
+                //foreach (var sa in annDetails.StudentAnnouncements)
+                //{
+                //    var appRef = sa.ApplicationRef;
+                //    if (appRef.HasValue && !ids.Contains(appRef.Value))
+                //    {
+                //        var app = applications.First(x => x.Id == appRef);
+                //        ids.Add(appRef.Value);
+                //        appNames.Add(app.Name);
+                //    }
+                //}
                 var stAnnouncements = annDetails.StudentAnnouncements;
                 annViewData.autoGradeApps = appNames;
                 if (SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)

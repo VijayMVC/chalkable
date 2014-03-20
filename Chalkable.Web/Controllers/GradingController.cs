@@ -125,10 +125,10 @@ namespace Chalkable.Web.Controllers
 
         //TODO: do we need this in API still?
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
-        public ActionResult UpdateItem(int studentAnnouncementId, string gradeValue, string extraCredits
+        public ActionResult UpdateItem(int announcementId, int studentId, string gradeValue, string extraCredits
             , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? absent)
         {
-            var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(studentAnnouncementId, gradeValue, extraCredits
+            var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits
                 , comment, dropped, late ?? false, absent ?? false, exempt ?? false, incomplete ?? false
                 , (int)GradingStyleEnum.Numeric100);
             return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
@@ -137,16 +137,17 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher ,AdminGrade, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
         {
-            var res = SchoolLocator.StudentAnnouncementService.SetAutoGrade(studentAnnouncementId, value, applicationId);
-            return PrepareStudentAnnouncementResponse(res);
+            //var res = SchoolLocator.StudentAnnouncementService.SetAutoGrade(studentAnnouncementId, value, applicationId);
+            //return PrepareStudentAnnouncementResponse(res);
+            throw new NotImplementedException();
         }
 
         private ActionResult PrepareStudentAnnouncementResponse(StudentAnnouncement studentAnn)
         {
-            var studentAnnsInfo = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(studentAnn.AnnouncementRef);
-            var res = studentAnnsInfo.First(x => x.Id == studentAnn.Id);
-            var attachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(res.AnnouncementRef, 0, 1000).ToList();
-            var attc = AttachmentLogic.PrepareAttachmentsInfo(attachments.Where(x => x.PersonRef == res.Id).ToList());
+            var studentAnnsInfo = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(studentAnn.AnnouncementId);
+            var res = studentAnnsInfo.First(x => x.AnnouncementId == studentAnn.AnnouncementId && x.StudentId == studentAnn.StudentId);
+            var attachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(res.AnnouncementId, 0, 1000).ToList();
+            var attc = AttachmentLogic.PrepareAttachmentsInfo(attachments.Where(x => x.PersonRef == res.StudentId).ToList());
             return Json(StudentAnnouncementViewData.Create(res, attc));
         }
     }

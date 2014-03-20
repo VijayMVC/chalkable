@@ -39,6 +39,9 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false);
         IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
+
+        IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null);
+
         Announcement GetLastDraft();
 
         void UpdateAnnouncementGradingStyle(int announcementId, GradingStyleEnum gradingStyle);
@@ -127,9 +130,20 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetAnnouncementsComplex(q);
         }
 
-        private IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query)
+        public IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null)
         {
-            var activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
+            if (activities == null)
+                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
+            else
+            {
+                if (query.ClassId.HasValue)
+                    activities = activities.Where(x => x.SectionId == query.ClassId).ToList();
+                if (query.FromDate.HasValue)
+                    activities = activities.Where(x => x.Date >= query.FromDate).ToList();
+                if (query.ToDate.HasValue)
+                    activities = activities.Where(x => x.Date <= query.ToDate).ToList();
+                activities = activities.Skip(query.Start).Take(query.Count).ToList();
+            }
             if (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE )
             {
                 query.SisActivitiesIds = activities.Select(x => x.Id).ToList();
@@ -354,8 +368,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                     throw new ChalkableSecurityException();
                 
-                var stAnnDa = new StudentAnnouncementDataAccess(uow);
-                stAnnDa.Update(announcementId, drop);
+                //var stAnnDa = new StudentAnnouncementDataAccess(uow);
+                //stAnnDa.Update(announcementId, drop);
                 ann.Dropped = drop;
                 da.Update(ann);
                 uow.Commit();
