@@ -57,8 +57,8 @@ namespace Chalkable.Web.Models
                 res.Announcements = new List<AnnouncementShortGradeViewData>();
                 foreach (var ann in announcements)
                 {
-                    var stAnn = stAnnGrades.FirstOrDefault(x=>x.AnnouncementRef == ann.Id);
-                    res.Announcements.Add(AnnouncementShortGradeViewData.Create(ann, mapper, stAnn != null ? stAnn.GradeValue : null));
+                    var stAnn = stAnnGrades.FirstOrDefault(x=>x.AnnouncementId == ann.Id);
+                    res.Announcements.Add(AnnouncementShortGradeViewData.Create(ann, mapper, stAnn != null ? stAnn.NumericScore : null));
                 }
                 res.StudentAvg = (int?) res.Announcements.Average(x => x.Grade);
             }

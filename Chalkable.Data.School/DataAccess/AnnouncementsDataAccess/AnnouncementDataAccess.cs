@@ -52,8 +52,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 reader.NextResult();
                 announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
                 reader.NextResult();
-                announcement.StudentAnnouncements = StudentAnnouncementDataAccess.ReadListStudentAnnouncement(reader);
-                reader.NextResult();
                 announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
                 reader.NextResult();
                 announcement.AnnouncementReminders = reader.ReadList<AnnouncementReminder>();

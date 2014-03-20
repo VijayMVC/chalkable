@@ -455,7 +455,7 @@ GO
 ----------------------------------------
 
 
-create procedure [dbo].[spGetAdminAnnouncements]  
+CREATE procedure [dbo].[spGetAdminAnnouncements]  
 	@id int, @schoolId int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit
 	,@fromDate DateTime2, @toDate DateTime2, @markingPeriodId int, @start int, @count int, @now DateTime2
 	,@gradeLevelsIds nvarchar(256) 
@@ -527,8 +527,7 @@ where
 	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 GO
 
-
-create procedure [dbo].[spGetStudentAnnouncements]  
+CREATE procedure [dbo].[spGetStudentAnnouncements]  
 	@id int, @schoolId int, @personId int, @classId int,  @roleId int, @staredOnly bit, @ownedOnly bit,  @gradedOnly bit
 	, @fromDate DateTime2, @toDate DateTime2, @markingPeriodId int
 	, @start int, @count int, @now DateTime2, @sisActivitiesIds nvarchar(max)
@@ -576,8 +575,6 @@ where
 	and (@fromDate is null or Expires >= @fromDate)
 	and (@toDate is null or Expires <= @toDate)
 	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
-	and (@gradedOnly = 0 or (GradingStudentsCount > 0 and vwAnnouncement.Id in (select sa.AnnouncementRef from StudentAnnouncement sa 
-																				where  sa.PersonRef = @personId and sa.GradeValue is not null)))
 	and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
 )
 declare @notExpiredCount int = (select count(*) 
@@ -608,8 +605,6 @@ declare @notExpiredCount int = (select count(*)
 		and (@toDate is null or Expires <= @toDate)
 		and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
 		and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
-		and (@gradedOnly = 0 or (GradingStudentsCount > 0 and vwAnnouncement.Id in (select sa.AnnouncementRef from StudentAnnouncement sa 
-																					where  sa.PersonRef = @personId and sa.GradeValue is not null)))
 		)
 
 select *
@@ -649,8 +644,7 @@ from
 		and (@toDate is null or Expires <= @toDate)
 		and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
 		and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
-		and (@gradedOnly = 0 or (GradingStudentsCount > 0 and vwAnnouncement.Id in (select sa.AnnouncementRef from StudentAnnouncement sa 
-																					 where  sa.PersonRef = @personId and sa.GradeValue is not null)))
+
 	union 
 	Select 
 		vwAnnouncement.*,
@@ -686,15 +680,13 @@ from
 		and (@toDate is null or Expires <= @toDate)
 		and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
 		and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
-		and (@gradedOnly = 0 or (GradingStudentsCount > 0 and vwAnnouncement.Id in (select sa.AnnouncementRef from StudentAnnouncement sa 
-																					where  sa.PersonRef = @personId and sa.GradeValue is not null)))
+
 	) x
 where RowNumber > @start and RowNumber <= @start + @count
 order by RowNumber
 GO
 
-
-create procedure [dbo].[spGetTeacherAnnouncements]  
+CREATE procedure [dbo].[spGetTeacherAnnouncements]  
 	@id int, @schoolId int, @personId int, @classId int, @roleId int, @staredOnly bit, @ownedOnly bit, @gradedOnly bit
 	,@fromDate DateTime2, @toDate DateTime2, @markingPeriodId int, @start int, @count int, @now DateTime2, @allSchoolItems bit
 	, @sisActivitiesIds nvarchar(max)
@@ -779,15 +771,11 @@ where
 	and (@fromDate is null or Expires >= @fromDate)
 	and (@toDate is null or Expires <= @toDate)
 	and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
-	and (@gradedOnly = 0 or GradingStudentsCount > 0)	
 	and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
 	
 order by Created desc				
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-
 GO
-
-
 
 
 CREATE procedure [dbo].[spGetAnnouncementsQnA] @callerId int, @announcementQnAId int
@@ -813,52 +801,10 @@ as
 GO
 
 
-CREATE Procedure [dbo].[spGetStudentAnnouncementsForAnnouncement] @announcementId int, @personId int
-as
-	Insert Into StudentAnnouncement
-	(AnnouncementRef, PersonRef, Dropped, [State])
-	select x.AnnouncementRef, x.PersonRef, 0, 1 from
-	StudentAnnouncement
-	right join 	(select Announcement.Id as AnnouncementRef, ClassPerson.ClassRef as ClassRef, ClassPerson.PersonRef as PersonRef  
-					from Announcement
-					join ClassPerson on ClassPerson.ClassRef = Announcement.ClassRef
-					join MarkingPeriod on MarkingPeriod.Id = ClassPerson.MarkingPeriodRef
-					where Announcement.[State] = 1 and Announcement.[Expires] between MarkingPeriod.StartDate and MarkingPeriod.EndDate)x
-	on StudentAnnouncement.PersonRef = x.PersonRef and x.AnnouncementRef = StudentAnnouncement.AnnouncementRef
-	where x.AnnouncementRef = @announcementId
-		and StudentAnnouncement.Id is null
-	
-	declare @roleId int
-	select top 1 @roleId = RoleRef from SchoolPerson where PersonRef = @personId
-
-	select Person.*,
-		   SchoolPerson.RoleRef as RoleRef,
-		   StudentAnnouncement.Id as StudentAnnouncement_Id,
-		   StudentAnnouncement.PersonRef as StudentAnnouncement_PersonRef,
-		   StudentAnnouncement.AnnouncementRef as StudentAnnouncement_AnnouncementRef,
-		   StudentAnnouncement.ApplicationRef as StudentAnnouncement_ApplicationRef,
-		   StudentAnnouncement.Comment as StudentAnnouncement_Comment,
-		   StudentAnnouncement.Dropped as StudentAnnouncement_Dropped,
-		   StudentAnnouncement.ExtraCredit as StudentAnnouncement_ExtraCredit,
-		   StudentAnnouncement.GradeValue as StudentAnnouncement_GradeValue,
-		   StudentAnnouncement.State as StudentAnnouncement_State,
-		   Announcement.ClassRef as StudentAnnouncement_ClassId
-	from StudentAnnouncement 
-	join Announcement on StudentAnnouncement.AnnouncementRef = Announcement.Id
-	join Person  on Person.Id = StudentAnnouncement.PersonRef
-	join SchoolPerson on SchoolPerson.PersonRef = Person.Id and SchoolPerson.SchoolRef = Announcement.SchoolRef
-	where  Announcement.[State] = 1 
-			and AnnouncementRef = @announcementId
-			and (StudentAnnouncement.PersonRef = @personId or @roleId = 2 or @roleId = 5 or @roleId = 8 or @roleId = 7)
-
-GO
-
-
-
 ----------------------------
 --- GET ANNOUNCEMENT DETAILS 
 ----------------------------
-Create procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
+create procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
 as
 
 if @callerRole is null
@@ -897,8 +843,6 @@ declare @announcementTb table
 	AttachmentsCount int,
 	OwnerAttachmentsCount int,
 	StudentsCountWithAttachments int,
-	GradingStudentsCount int,
-	[Avg] int,
 	ApplicationCount int,
 	IsOwner bit,
 	RecipientDataSchoolPersonId int,
@@ -961,7 +905,6 @@ from @announcementTb
 --TODO: announcementQnA stored procedure
 exec spGetAnnouncementsQnA @callerId, null, @id, null, null
 
-exec spGetStudentAnnouncementsForAnnouncement @id, @callerId
 
 select * from AnnouncementAttachment
 where AnnouncementRef = @id
@@ -1001,7 +944,6 @@ select * from AnnouncementStandard
 join [Standard] on [Standard].Id = AnnouncementStandard.StandardRef
 where AnnouncementStandard.AnnouncementRef = @id
 end
-
 GO
 
 
@@ -1023,8 +965,6 @@ where AnnView.Id = Announcement.Id
 select  1
 
 GO
-
-
 
 --------------------------
 -- CREATE ANNOUNCEMENT 
@@ -1075,12 +1015,6 @@ AND [State] = 0)
 delete from AnnouncementApplication where AnnouncementRef IN (SELECT Id FROM Announcement WHERE PersonRef = @personId
 AND ClassAnnouncementTypeRef = @classAnnouncementTypeId
 AND [State] = 0)
-
-/*DELETE StudentAnnouncement*/
-delete from StudentAnnouncement
-where AnnouncementRef in (Select id from announcement where PersonRef = @personId
-AND ClassAnnouncementTypeRef = @classAnnouncementTypeId
-AND [state] = 0)
 
 /*DELETE AnnouncementRecipientData*/
 delete from AnnouncementRecipientData
@@ -1144,7 +1078,6 @@ end
 exec spGetAnnouncementDetails @announcementId, @personId, @callerRole, @schoolId
 GO
 
-
 CREATE PROCEDURE [dbo].[spDeleteAnnouncement] @id int, @personId int, @classId int, @state int, @classAnnouncementTypeId int
 AS
 
@@ -1173,8 +1106,7 @@ delete from AnnouncementReminder where AnnouncementRef in (select Id from @ann)
 /*DELETE Attachment*/
 delete from AnnouncementAttachment where AnnouncementRef in (select Id from @ann)
 /*DELETE AnnouncementApplication*/
-delete from StudentAnnouncement
-where AnnouncementRef in (select Id from @ann)
+
 /*DELETE AnnouncementRecipient*/
 delete from AnnouncementRecipient
 where AnnouncementRef in (select Id from @ann)
@@ -1238,7 +1170,6 @@ CLOSE AnnCursor;
 DEALLOCATE AnnCursor;
 
 GO
-
 
 
 CREATE PROCEDURE [dbo].[spGetPersonsForApplicationInstall]

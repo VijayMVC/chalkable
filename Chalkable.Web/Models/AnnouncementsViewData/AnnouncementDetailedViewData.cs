@@ -54,13 +54,13 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             var studentAnnouncements = announcementDetails.StudentAnnouncements.Select(x => new StudentAnnouncement
             {
-                Id = x.Id,
-                AnnouncementRef = x.AnnouncementRef,
-                PersonRef = x.PersonRef,
+                AnnouncementId = x.AnnouncementId,
+                StudentId = x.StudentId,
                 Comment = x.Comment,
                 Dropped = x.Dropped,
                 ExtraCredit = x.ExtraCredit,
-                GradeValue = x.GradeValue
+                ScoreValue = x.ScoreValue,
+                NumericScore = x.NumericScore
             }).ToList();
             return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements, mapper, currentSchoolPersonId);
         }

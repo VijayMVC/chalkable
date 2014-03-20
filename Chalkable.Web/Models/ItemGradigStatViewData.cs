@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models
             var res = new ItemGradigStatViewData();
             if (studentAnnouncements.Count > 0)
             {
-                var grades = studentAnnouncements.Where(x => x.GradeValue.HasValue).Select(x => x.GradeValue.Value).ToList();
+                var grades = studentAnnouncements.Where(x => x.NumericScore.HasValue).Select(x => x.NumericScore.Value).ToList();
                 var graphPoints = new List<ItemGradingGraphViewData>();
                 if (grades.Count > 0)
                 {

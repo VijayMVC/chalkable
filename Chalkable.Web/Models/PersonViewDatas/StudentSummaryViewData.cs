@@ -102,8 +102,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             };
             if (firstStudentAn != null)
             {
-                res.Title = mapper.Map(firstStudentAn.Announcement.GradingStyle, firstStudentAn.GradeValue).ToString();
-                res.IsPassing = firstStudentAn.GradeValue >= 65;
+                res.Title = mapper.Map(firstStudentAn.Announcement.GradingStyle, firstStudentAn.NumericScore).ToString();
+                res.IsPassing = firstStudentAn.NumericScore >= 65;
             }
             return res;
         }
@@ -180,7 +180,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             var res = new StudentSummeryGradeViewData
             {
                 GradingStyle = (int)gradingStyle,
-                Grade = gradingMapper.Map(gradingStyle, studentAnnouncement.GradeValue),
+                Grade = gradingMapper.Map(gradingStyle, studentAnnouncement.NumericScore),
                 AnnouncementTypeId = studentAnnouncement.Announcement.ChalkableAnnouncementType,
                 AnnouncmentTypeName = studentAnnouncement.Announcement.ClassAnnouncementTypeName
             };

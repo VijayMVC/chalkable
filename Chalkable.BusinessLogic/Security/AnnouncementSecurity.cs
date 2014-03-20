@@ -43,11 +43,11 @@ namespace Chalkable.BusinessLogic.Security
         {
             return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.UserLocalId;
         }
-        public static bool CanAttach(AnnouncementDetails announcementDetails, UserContext context)
-        {
-            return CanModifyAnnouncement(announcementDetails, context) ||
-                   announcementDetails.StudentAnnouncements.Any(x => x.Person.Id == context.UserLocalId);
+        //public static bool CanAttach(AnnouncementDetails announcementDetails, UserContext context)
+        //{
+        //    return CanModifyAnnouncement(announcementDetails, context) ||
+        //           announcementDetails.StudentAnnouncements.Any(x => x.Student.Id == context.UserLocalId);
             
-        }
+        //}
     }
 }
