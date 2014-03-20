@@ -36,6 +36,7 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(StudentAcadSession));
             RegisterType(typeof(StudentScheduleTerm));
             RegisterType(typeof(Term));
+            RegisterType(typeof(GradingPeriod));
             RegisterType(typeof(DayType));
             RegisterType(typeof(CalendarDay));
             RegisterType(typeof(Room));
@@ -52,6 +53,8 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(AbsenceLevelReason));
             RegisterType(typeof(AlphaGrade));
             RegisterType(typeof(AlternateScore));
+            RegisterType(typeof(ScheduledTimeSlot));
+            RegisterType(typeof(Gender));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

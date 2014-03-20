@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -10,10 +9,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAddressService
     {
-        void Add(IList<AddressInfo> addressInfos);
-        Address Add(AddressInfo addressInfo);
-        Address Edit(AddressInfo address);
-        IList<Address> Edit(IList<AddressInfo> addresses);
+        void Add(IList<Address> addressInfos);
+        Address Add(Address addressInfo);
+        Address Edit(Address address);
+        IList<Address> Edit(IList<Address> addresses);
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<Address> GetAddress();
@@ -26,68 +25,48 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void Add(IList<AddressInfo> addressInfos)
+        public void Add(IList<Address> addressInfos)
         {
             if(!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var addresses = addressInfos.Select(EditAddress).ToList();
-                da.Insert(addresses);
+                da.Insert(addressInfos);
                 uow.Commit();
             }
         }
 
-        public Address Add(AddressInfo addressInfo)
+        public Address Add(Address addressInfo)
         {
-            var a = EditAddress(addressInfo);
             if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                da.Insert(a);
+                da.Insert(addressInfo);
                 uow.Commit();
             }
-            return a;
+            return addressInfo;
         }
 
-        public Address Edit(AddressInfo addressInfo)
+        public Address Edit(Address addressInfo)
         {
-            return Edit(new List<AddressInfo> {addressInfo}).First();
+            return Edit(new List<Address> {addressInfo}).First();
         }
-        public IList<Address> Edit(IList<AddressInfo> addresses)
+
+        public IList<Address> Edit(IList<Address> addresses)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var res = addresses.Select(EditAddress).ToList();
+                var res = addresses;
                 da.Update(res);
                 uow.Commit();
                 return res;
             }
-        }
-
-        private static Address EditAddress(AddressInfo addressInfo)
-        {
-            return new Address
-                {
-                    Id = addressInfo.Id,
-                    AddressLine1 = addressInfo.AddressLine1,
-                    AddressLine2 = addressInfo.AddressLine2,
-                    AddressNumber = addressInfo.AddressNumber,
-                    StreetNumber = addressInfo.StreetNumber,
-                    City = addressInfo.City,
-                    State = addressInfo.State,
-                    Country = addressInfo.Country,
-                    CountyId = addressInfo.CountyId,
-                    Latitude = addressInfo.Latitude,
-                    Longitude = addressInfo.Longitude,
-                    PostalCode = addressInfo.PostalCode
-                };
         }
 
         public void Delete(int id)

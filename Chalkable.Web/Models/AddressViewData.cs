@@ -27,9 +27,9 @@ namespace Chalkable.Web.Models
         [SensitiveData]
         public int? CountyId { get; set; }
         [SensitiveData]
-        public decimal Latitude { get; set; }
+        public decimal? Latitude { get; set; }
         [SensitiveData]
-        public decimal Longitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         [SensitiveData]
         public string Value { get; set; } 

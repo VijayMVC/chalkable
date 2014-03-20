@@ -80,7 +80,6 @@
     <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
     <Compile Include="Mapping\ModelMappers\StiAttachmentToAnnouncementAttMapper.cs" />
     <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
-    <Compile Include="Model\AddressInfo.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />

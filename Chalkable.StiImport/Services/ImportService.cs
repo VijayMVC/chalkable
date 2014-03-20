@@ -50,6 +50,9 @@ namespace Chalkable.StiImport.Services
             context.TablesToSync[typeof (User).Name] = null;
             context.TablesToSync[typeof(Student).Name] = null;
             context.TablesToSync[typeof(Staff).Name] = null;
+            context.TablesToSync[typeof(ScheduledTimeSlot).Name] = null;
+            context.TablesToSync[typeof(Gender).Name] = null;
+            
 
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();
