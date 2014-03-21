@@ -148,7 +148,8 @@ NAMESPACE('chlk.controllers', function (){
         function setAnnouncementGrade(model){
             var result = this.gradingService
                 .updateItem(
-                    model.getId(),
+                    model.getAnnouncementId(),
+                    model.getStudentId(),
                     model.getGradeValue(),
                     model.getComment(),
                     model.isDropped(),
@@ -168,6 +169,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeFromGridAction(model){
             this.setAnnouncementGrade(model);
+            return null;
         },
 
         [[chlk.models.announcement.StudentAnnouncement]],
@@ -175,15 +177,10 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.setAnnouncementGrade(model)
                 .then(function(currentItem){
                     var announcement = this.getContext().getSession().get('announcement', {});
-
-                    //TODO Remove fake standards
-                    var standard1 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(1), 'ASD.f-1', '50'),
-                        standard2 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(2), 'ASD.f-2', 'C+'),
-                        standards = [standard1, standard2];
-                    currentItem.setStandards(standards);
-
+                    currentItem.setStudentId(model.getStudentId());
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
                         if(item.getId() == currentItem.getId()){
+                            item.setStudentId(model.getStudentId());
                             item.setGradeValue(currentItem.getGradeValue());
                             item.setNumericGradeValue(currentItem.getNumericGradeValue());
                             item.setAbsent(currentItem.isAbsent());

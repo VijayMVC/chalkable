@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.id.GradingPeriodId');
 REQUIRE('chlk.models.id.GradeId');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.standard', function () {
     "use strict";
@@ -18,6 +19,9 @@ NAMESPACE('chlk.models.standard', function () {
 
             [ria.serialize.SerializeProperty('studentid')],
             chlk.models.id.SchoolPersonId, 'studentId',
+
+            [ria.serialize.SerializeProperty('classid')],
+            chlk.models.id.ClassId, 'classId',
 
             [ria.serialize.SerializeProperty('gradevalue')],
             String, 'gradeValue'

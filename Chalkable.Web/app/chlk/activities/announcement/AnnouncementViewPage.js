@@ -356,9 +356,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 itemTpl.options({
                     maxScore: this.getMaxScore()
                 });
-                var container = this.dom.find('#grade-container-' + itemModel.getId().valueOf());
+                var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());
                 container.empty();
-                var topContent = this.dom.find('#top-content-' + itemModel.getId().valueOf());
+                var topContent = this.dom.find('#top-content-' + itemModel.getStudentId().valueOf());
                 topContent.removeClass('loading');
                 itemTpl.renderTo(container);
             },

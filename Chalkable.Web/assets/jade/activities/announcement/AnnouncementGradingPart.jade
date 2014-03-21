@@ -22,7 +22,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
         .row(class=(i == selectedIndex ? 'selected ' : ' ') + (item.getState() == 0 ? 'z-0' : 'z-10'), index=i).fixed-bg
             +Hidden('readonly', self.isReadonly())
             +Hidden('gradingStyle', gradingStyle)
-            .top-content(id = "top-content-" + item.getId())
+            .top-content(id = "top-content-" + item.getStudentInfo().getId().valueOf())
                 value = item.getGradeValue()
                 normalValue = item.getNormalValue()
                 isDrop = item.isDropped()
@@ -33,7 +33,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                 +ActionForm('announcement', 'updateAnnouncementGrade').update-grade-form
                     input(type="submit").x-hidden
                     +Hidden('id', item.getId())
-                    +Hidden('announcementId', item.getAnnouncementId())
+                    +Hidden('announcementid', item.getAnnouncementId())
+                    +Hidden('studentId', student.getId())
                     +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
                         +PersonImg(student, 47)
                     .i-b.name-block
@@ -51,7 +52,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                                 div
                                                     +TextArea(name="comment").comment-input=item.getComment()
                                                     span.enter=Msg.Enter_when_done
-                    div(id = "grade-container-" + item.getId()).i-b.grade-block
+                    div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                             userRole = self.getUserRole()
                             maxScore = self.getMaxScore()

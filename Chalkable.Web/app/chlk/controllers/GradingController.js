@@ -11,6 +11,7 @@ REQUIRE('chlk.activities.grading.GradingTeacherClassSummaryPage');
 REQUIRE('chlk.activities.grading.GradingStudentSummaryPage');
 REQUIRE('chlk.activities.grading.GradingStudentClassSummaryPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryGridPage');
+REQUIRE('chlk.activities.grading.GradingClassStandardsGridPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -91,6 +92,12 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
+            function standardsTeacherAction(classId_){
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.ClassId]],
             function summaryGridTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
@@ -106,6 +113,24 @@ NAMESPACE('chlk.controllers', function (){
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.ClassId]],
+            function standardsGridTeacherAction(classId_){
+                if(!classId_ || !classId_.valueOf())
+                    return this.BackgroundNavigate('grading', 'summaryAll', []);
+                var classes = this.classService.getClassesForTopBar(true);
+                var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                var alphaGrades = this.getContext().getSession().get('alphaGrades', []);
+                var result = this.gradingService
+                    .getClassStandardsGrid(classId_)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.standard.StandardGradings, topData, null, items, alphaGrades);
+                        return model;
+                    }, this);
+                return this.PushView(chlk.activities.grading.GradingClassStandardsGridPage, result);
             },
 
             [chlk.controllers.SidebarButton('statistic')],

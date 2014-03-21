@@ -9,10 +9,6 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassSummaryGridTpl)],
         'GradingClassSummaryGridPage', EXTENDS(chlk.activities.common.InfoByMpPage), [
-            //ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
-
-            //ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
-
             ArrayOf(String), 'allScores',
 
             [[String]],
@@ -100,6 +96,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
+                var value = node.getValue();
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
@@ -136,36 +133,39 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                     this.updateDropDown(suggestions, node);
                 }
-                var numericValue = parseInt(node.getValue(), 10);
-                if(numericValue == node.getValue()){
-                    var maxScore = node.getData('max-score');
-                    var announcementId = node.getData('announcement-id');
-                    var studentAnnouncementId = node.getData('student-announcement-id');
-                    var markingPeriodId = node.getData('marking-period-id');
-                    var flag = node.parent('.grade-value').find('.alert-flag');
-                    this.getGradingItems().forEach(function(item){
-                        if(item.getMarkingPeriod().getId().valueOf() == markingPeriodId){
-                            item.getAnnouncemnts().forEach(function(announcement){
-                                if(announcement.getId().valueOf() == announcementId){
-                                    announcement.getStudentAnnouncements().getItems().forEach(function(studentAnnouncement){
-                                        if(studentAnnouncement.getId().valueOf() == studentAnnouncementId){
-                                            studentAnnouncement.setGradeValue(node.getValue());
+                setTimeout(function(node){
+                    var numericValue = parseInt(node.getValue(), 10);
+                    if(numericValue == node.getValue()){
+                        var maxScore = node.getData('max-score');
+                        var announcementId = node.getData('announcement-id');
+                        var studentAnnouncementId = node.getData('student-announcement-id');
+                        var markingPeriodId = node.getData('marking-period-id');
+                        var flag = node.parent('.grade-value').find('.alert-flag');
+                        this.getGradingItems().forEach(function(item){
+                            if(item.getMarkingPeriod().getId().valueOf() == markingPeriodId){
+                                item.getGradingItems().forEach(function(announcement){
+                                    if(announcement.getId().valueOf() == announcementId){
+                                        announcement.getStudentAnnouncements().getItems().forEach(function(studentAnnouncement){
+                                            if(studentAnnouncement.getId().valueOf() == studentAnnouncementId){
+                                                studentAnnouncement.setGradeValue(node.getValue());
 
-                                            flag.removeClass(Msg.Error.toLowerCase())
-                                                .removeClass(Msg.Late.toLowerCase())
-                                                .removeClass(Msg.Incomplete.toLowerCase())
-                                                .removeClass(Msg.Absent.toLowerCase())
-                                                .removeClass(Msg.Multiple.toLowerCase());
+                                                flag.removeClass(Msg.Error.toLowerCase())
+                                                    .removeClass(Msg.Late.toLowerCase())
+                                                    .removeClass(Msg.Incomplete.toLowerCase())
+                                                    .removeClass(Msg.Absent.toLowerCase())
+                                                    .removeClass(Msg.Multiple.toLowerCase());
 
-                                            flag.addClass(item.getAlertClass(maxValue));
-                                            flag.setData('tooltip', item.getTooltipText(maxValue));
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
+                                                flag.addClass(item.getAlertClass(maxValue));
+                                                flag.setData('tooltip', item.getTooltipText(maxValue));
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }.bind(this, node), 1);
+
             },
 
             [ria.mvc.DomEventBind('click', '.see-all')],
@@ -260,7 +260,9 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             function setValue(node, isComment_){
-                var nextCell = this.dom.find('.active-cell').next().find('.edit-cell');
+                var activeCell = this.dom.find('.active-cell');
+                activeCell.find('form').trigger('submit');
+                var nextCell = activeCell.next().find('.edit-cell');
                 if(!isComment_){
                     if(nextCell.exists())
                         nextCell.trigger('click');

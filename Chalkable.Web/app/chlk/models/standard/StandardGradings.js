@@ -14,6 +14,10 @@ NAMESPACE('chlk.models.standard', function () {
             [ria.serialize.SerializeProperty('alphagradenameavg')],
             String, 'alphaGradeNameAvg',
 
-            chlk.models.standard.Standard, 'standard'
+            chlk.models.standard.Standard, 'standard',
+
+            String, function getTitle(){
+                return this.getStandard().getName();
+            }
         ]);
 });
