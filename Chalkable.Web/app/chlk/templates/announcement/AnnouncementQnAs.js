@@ -8,5 +8,10 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementQnAs.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.Announcement)],
-        'AnnouncementQnAs', EXTENDS(chlk.templates.announcement.Announcement), [])
+        'AnnouncementQnAs', EXTENDS(chlk.templates.announcement.Announcement), [
+
+            OVERRIDE, chlk.models.people.User, function getCurrentUser(){
+                return this.getModel().getCurrentUser();
+            }
+        ])
 });
