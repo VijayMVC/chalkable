@@ -59,6 +59,7 @@ mixin AnnouncementTooltip()
                                 userRole = self.getUserRole()
                             )
             .questions-and-answers.silver-panel
+                -console.log(self.getModel().getCurrentUser())
                 +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
                     userRole = self.getUserRole()
                 )
