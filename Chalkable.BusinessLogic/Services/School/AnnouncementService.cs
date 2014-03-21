@@ -733,6 +733,12 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new AnnouncementStandardDataAccess(uow).Delete(announcementId, standardId);
+                if (ann.State == AnnouncementState.Created && ann.SisActivityId.HasValue)
+                {
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
+                    activity.Standards = activity.Standards.Where(x => x.StandardId != standardId).ToList();
+                    ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
+                }
                 uow.Commit();
                 return new StandardDataAccess(uow).GetById(standardId);
             }
