@@ -15,10 +15,9 @@ namespace Chalkable.Web.Models
         public MarkingPeriodViewData MarkingPeriod { get; set; }
         public IList<StandardGradingViewData> StandardGradings { get; set; } 
 
-        public static StandardGradingGridViewData Create(MarkingPeriod markingPeriod, IList<GradingStandardInfo> gradingStandardInfos)
+        public static StandardGradingGridViewData Create(MarkingPeriod markingPeriod, IList<GradingStandardInfo> gradingStandardInfos, IList<Person> students)
         {
             var res = new StandardGradingGridViewData {MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod)};
-            var students = gradingStandardInfos.GroupBy(x => x.Student).Select(x => x.Key).ToList();
             res.Students = students.Select(GradeStudentViewData.Create).ToList();
             res.StandardGradings = StandardGradingViewData.Create(gradingStandardInfos);
             if (res.StandardGradings.Count > 0)

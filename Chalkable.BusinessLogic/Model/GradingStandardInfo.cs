@@ -18,13 +18,11 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? NumericGrade { get; set; }
         public string Note { get; set; }
         public Standard Standard { get; set; }
-        public Person Student { get; set; }
-        
-        public static GradingStandardInfo Create(StandardScore standardScore, Standard standard, Person student)
+
+        public static GradingStandardInfo Create(StandardScore standardScore, Standard standard)
         {
             return new GradingStandardInfo
                 {
-                    Student = student,
                     Standard = standard,
                     StudentId = standardScore.StudentId,
                     ClassId = standardScore.SectionId,

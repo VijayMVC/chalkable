@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<GradingStandardInfo> GetGradingStandards(int classId);
         GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note);
+        
     }
 
     public class GradingStandardService : SisConnectedService, IGradingStandardService
@@ -26,18 +27,12 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<GradingStandardInfo> GetGradingStandards(int classId)
         {
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, null);
-            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-                            {
-                                ClassId = classId,
-                                RoleId = CoreRoles.STUDENT_ROLE.Id
-                            });
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
             var res = new List<GradingStandardInfo>();
             foreach (var standardScore in standardScores)
             {
-                var student = students.First(x => x.Id == standardScore.StudentId);
                 var standard = standards.First(x => x.Id == standardScore.StandardId);
-                res.Add(GradingStandardInfo.Create(standardScore, standard, student));
+                res.Add(GradingStandardInfo.Create(standardScore, standard));
             }
             return res;
         }
@@ -56,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
             standardScore = ConnectorLocator.StandardScoreConnector.Update(classId, studentId, standardId, gradingPeriodId, standardScore);
             var standard = ServiceLocator.StandardService.GetStandardById(standardId);
             var student = ServiceLocator.PersonService.GetPerson(studentId);
-            return GradingStandardInfo.Create(standardScore, standard, student);
+            return GradingStandardInfo.Create(standardScore, standard);
         }
     }
 

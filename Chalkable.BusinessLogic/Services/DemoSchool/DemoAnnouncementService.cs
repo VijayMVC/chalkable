@@ -224,10 +224,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int? classId = null)
         {
-            throw new NotImplementedException();
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
 
+            Storage.Annou
             using (var uow = Update())
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);

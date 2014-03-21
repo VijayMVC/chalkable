@@ -99,6 +99,18 @@ namespace Chalkable.Data.School.DataAccess
                     {AnnouncementStandard.STANDARD_REF_FIELD, standardId}
                 });
         }
+
+        public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
+        {
+            var dbQuery = new DbQuery();
+            dbQuery.Parameters.Add("@classId", classId);
+            dbQuery.Sql.AppendFormat(@"select * from AnnouncementStandard 
+                                       where AnnouncementStandard.[{0}] in (select ClassStandard.[{1}] from ClassStandard 
+                                                                            join [Class] on [Class].Id = ClassStandard.ClassRef or ClassStandard.ClassRef = Class.CourseRef 
+                                                                            where Class.Id = @classId)",
+                AnnouncementStandard.STANDARD_REF_FIELD, ClassStandard.STANDARD_REF_FIELD);
+            return ReadMany<AnnouncementStandard>(dbQuery);
+        }
     }
 
     public class StandardQuery
