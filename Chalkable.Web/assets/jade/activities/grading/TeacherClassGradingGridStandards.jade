@@ -49,6 +49,6 @@
                                                 +Hidden('gradeid', info.getGradeId())
                                                 +Hidden('gradingperiodid', info.getGradingPeriodId())
                                                 if item.getStudents()[i]
-                                                    +Hidden('studentId', item.getStudents()[i].getStudentInfo().getId())
+                                                    +Hidden('studentid', item.getStudents()[i].getStudentInfo().getId())
                                                 input(value=normalValue, name="gradevalue").grade-autocomplete
                                     .dotted-h.grade-value=gradingItem.getAlphaGradeNameAvg()

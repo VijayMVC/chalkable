@@ -115,6 +115,20 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
             },
 
+            [[chlk.models.standard.StandardGrading]],
+            function updateStandardGradeFromGridAction(model){
+                var result = this.gradingService
+                    .updateStandardGrade(
+                        model.getClassId(),
+                        model.getGradingPeriodId(),
+                        model.getStudentId(),
+                        model.getStandardId(),
+                        model.getGradeId()
+                    )
+                    .attach(this.validateResponse_());
+                return result;
+            },
+
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function standardsGridTeacherAction(classId_){

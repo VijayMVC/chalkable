@@ -84,7 +84,7 @@
                                                 ).comment-value
                                                 +Hidden('id', info.getId())
                                                 +Hidden('announcementid', info.getAnnouncementId())
-                                                +Hidden('studentId', item.getStudents()[i].getStudentInfo().getId())
+                                                +Hidden('studentId', info.getStudentId())
                                                 input(value=normalValue,
                                                     name="gradevalue",
                                                     data-max-score=announcement.getMaxScore() || 100,
