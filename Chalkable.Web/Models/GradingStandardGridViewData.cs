@@ -19,6 +19,7 @@ namespace Chalkable.Web.Models
         {
             var res = new StandardGradingGridViewData {MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod)};
             res.Students = students.Select(GradeStudentViewData.Create).ToList();
+            gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)).ToList();
             res.StandardGradings = StandardGradingViewData.Create(gradingStandardInfos);
             if (res.StandardGradings.Count > 0)
                 res.Avg = (int?) res.StandardGradings.Average(x => x.NumericAvg);
