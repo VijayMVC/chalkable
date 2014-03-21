@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public IList<Address> Update(List<Address> res)
+        public IList<Address> Update(IList<Address> res)
         {
 
             foreach (var address in res)
@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public void Add(List<Address> addresses)
+        public void Add(IList<Address> addresses)
         {
             foreach (var address in addresses)
             {

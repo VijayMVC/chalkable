@@ -16,61 +16,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             : base(serviceLocator, storage)
         {
         }
+      
 
-        public void Add(IList<AddressInfo> addressInfos)
+        public Address Add(Address addressInfo)
         {
             if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
-            var addresses = addressInfos.Select(EditAddress).ToList();
-            Storage.AddressStorage.Add(addresses);
+            Storage.AddressStorage.Add(addressInfo);
+            return addressInfo;
         }
 
-        public Address Add(AddressInfo addressInfo)
-        {
-            var a = EditAddress(addressInfo);
-            if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
-                throw new ChalkableSecurityException();
-            var address = EditAddress(addressInfo);
-            Storage.AddressStorage.Add(address);
-            return address;
-        }
-
-        public Address Edit(AddressInfo addressInfo)
+        public void Add(IList<Address> addressInfos)
         {
             if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
                 throw new ChalkableSecurityException();
-            var address = Storage.AddressStorage.GetById(addressInfo.Id);
-            if (!AddressSecurity.CanModify(address, Context))
-                throw new ChalkableSecurityException();
-            address = EditAddress(addressInfo);
-            return address;
+            Storage.AddressStorage.Add(addressInfos);
         }
 
-        public IList<Address> Edit(IList<AddressInfo> addresses)
+        public Address Edit(Address addressInfo)
+        {
+            return Edit(new List<Address> { addressInfo }).First();
+        }
+
+        public IList<Address> Edit(IList<Address> addressInfos)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            var res = addresses.Select(EditAddress).ToList();
-            return Storage.AddressStorage.Update(res);
-        }
-
-        private Address EditAddress(AddressInfo addressInfo)
-        {
-            var address = new Address();
-            address.Id = addressInfo.Id;
-            address.AddressLine1 = addressInfo.AddressLine1;
-            address.AddressLine2 = addressInfo.AddressLine2;
-            address.AddressNumber = addressInfo.AddressNumber;
-            address.StreetNumber = addressInfo.StreetNumber;
-            address.City = addressInfo.City;
-            address.State = addressInfo.State;
-            address.Country = addressInfo.Country;
-            address.CountyId = addressInfo.CountyId;
-            address.Latitude = addressInfo.Latitude;
-            address.Longitude = addressInfo.Longitude;
-            address.PostalCode = addressInfo.PostalCode;
-            return address;
+            return Storage.AddressStorage.Update(addressInfos);
         }
 
         public void Delete(int id)
@@ -103,5 +76,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.AddressStorage.GetAddress(personId);
             
         }
+
+      
     }
 }

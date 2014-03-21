@@ -227,7 +227,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
 
-            Storage.Annou
             using (var uow = Update())
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
@@ -706,6 +705,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 uow.Commit();
                 return new StandardDataAccess(uow).GetById(standardId);
             }
+        }
+
+        public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
