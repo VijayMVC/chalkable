@@ -15,14 +15,17 @@ namespace Chalkable.Web.Models
         public MarkingPeriodViewData MarkingPeriod { get; set; }
         public IList<StandardGradingViewData> GradingItems { get; set; } 
 
-        public static StandardGradingGridViewData Create(MarkingPeriod markingPeriod, IList<GradingStandardInfo> gradingStandardInfos)
+        public static StandardGradingGridViewData Create(MarkingPeriod markingPeriod, IList<GradingStandardInfo> gradingStandardInfos, IList<Person> students)
         {
             var res = new StandardGradingGridViewData {MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod)};
-            var students = gradingStandardInfos.GroupBy(x => x.Student).Select(x => x.Key).ToList();
+            
             res.Students = students.Select(GradeStudentViewData.Create).ToList();
-            res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos);
+            gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)).ToList();
             if (res.GradingItems.Count > 0)
                 res.Avg = (int?)res.GradingItems.Average(x => x.NumericAvg);
+            res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos);
+            if (res.GradingItems.Count > 0)
+                res.Avg = (int?) res.GradingItems.Average(x => x.NumericAvg);
             return res;
         }
     }
@@ -59,6 +62,7 @@ namespace Chalkable.Web.Models
         public int? GradeId { get; set; }
         public string GradeValue { get; set; }
         public int GradingPeriodId { get; set; }
+        public int ClassId { get; set; }
 
         public static StandardGradingItemViewData Create(GradingStandardInfo gradingStandard)
         {
@@ -68,7 +72,8 @@ namespace Chalkable.Web.Models
                     GradeId = gradingStandard.AlphaGradeId,
                     GradeValue = gradingStandard.AlphaGradeName,
                     StandardId = gradingStandard.Standard.Id,
-                    GradingPeriodId = gradingStandard.GradingPeriodId
+                    GradingPeriodId = gradingStandard.GradingPeriodId,
+                    ClassId = gradingStandard.ClassId
                 };
         }
     }

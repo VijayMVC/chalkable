@@ -61,6 +61,7 @@ namespace Chalkable.BusinessLogic.Services.School
         bool CanAddStandard(int announcementId);
         Standard AddAnnouncementStandard(int announcementId, int standardId);
         Standard RemoveStandard(int announcementId, int standardId);
+        IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
     }
 
     public class AnnouncementService : SisConnectedService, IAnnouncementService
@@ -732,6 +733,12 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new AnnouncementStandardDataAccess(uow).Delete(announcementId, standardId);
+                if (ann.State == AnnouncementState.Created && ann.SisActivityId.HasValue)
+                {
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
+                    activity.Standards = activity.Standards.Where(x => x.StandardId != standardId).ToList();
+                    ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
+                }
                 uow.Commit();
                 return new StandardDataAccess(uow).GetById(standardId);
             }
@@ -742,6 +749,14 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                return CreateAnnoucnementDataAccess(uow).CanAddStandard(announcementId);
+            }
+        }
+
+        public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
+        {
+            using (var uow = Read())
+            {
+                return new AnnouncementStandardDataAccess(uow).GetAnnouncementStandards(classId);
             }
         }
     }

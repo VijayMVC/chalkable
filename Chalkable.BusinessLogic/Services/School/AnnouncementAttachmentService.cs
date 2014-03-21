@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanAttach(UnitOfWork uow, Announcement ann)
         {
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
-                   && new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                   || new ClassPersonDataAccess(uow, Context.SchoolLocalId)
                           .Exists(new ClassPersonQuery
                               {
                                   ClassId = ann.ClassRef,
@@ -186,6 +186,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                  : ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
             return AttachmentContentInfo.Create(att, content);
         }
+       
         public IList<AnnouncementAttachment> GetAttachments(string filter)
         {
             using (var uow = Read())
@@ -198,6 +199,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return res;
             }
         }
+        
         public static string GetAttachmentRelativeAddress()
         {
             return (new BlobHelper()).GetBlobsRelativeAddress(ATTACHMENT_CONTAINER_ADDRESS);

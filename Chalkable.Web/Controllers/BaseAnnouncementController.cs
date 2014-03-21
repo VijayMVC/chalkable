@@ -15,9 +15,10 @@ namespace Chalkable.Web.Controllers
     {
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, bool needsAllAttachments = true, bool isRead = false)
         {
-            var sts = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
+
             var annDetails = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            annDetails.StudentAnnouncements = sts;
+            if(annDetails.SisActivityId.HasValue)
+                annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId); 
             //if(CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
             //    annDetails.AnnouncementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(annDetails.Id);
             
