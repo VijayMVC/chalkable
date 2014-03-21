@@ -21,8 +21,6 @@ namespace Chalkable.Web.Models
             
             res.Students = students.Select(GradeStudentViewData.Create).ToList();
             gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)).ToList();
-            if (res.GradingItems.Count > 0)
-                res.Avg = (int?)res.GradingItems.Average(x => x.NumericAvg);
             res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos);
             if (res.GradingItems.Count > 0)
                 res.Avg = (int?) res.GradingItems.Average(x => x.NumericAvg);

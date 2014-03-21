@@ -67,35 +67,33 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             function addEvents(){
-                new ria.dom.Dom().on('click.grade', ria.dom.DomEventHandler(this.onDocClick_));
-            },
-
-            [[Object, ria.dom.Event]],
-            function onDocClick_(doc, event){
                 var dom = this.dom;
-                var node = new ria.dom.Dom(event.target);
-                if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
-                    && !node.isOrInside('.autocomplete-list')){
-                        dom.find('.autocomplete-list').setHTML('').hide();
-                        if(!node.hasClass('comment-button')){
-                            var parent = node.parent('.grade-value');
-                            dom.find('.active-cell').removeClass('active-cell');
-                            if(parent.exists()){
-                                if(!parent.hasClass('active-row')){
-                                    var index = parent.getAttr('row-index');
+                new ria.dom.Dom().on('click.grade', function(doc, event){
+
+                    var node = new ria.dom.Dom(event.target);
+                    if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
+                        && !node.isOrInside('.autocomplete-list')){
+                            dom.find('.autocomplete-list').setHTML('').hide();
+                            if(!node.hasClass('comment-button')){
+                                var parent = node.parent('.grade-value');
+                                dom.find('.active-cell').removeClass('active-cell');
+                                if(parent.exists()){
+                                    if(!parent.hasClass('active-row')){
+                                        var index = parent.getAttr('row-index');
+                                        dom.find('.active-row').removeClass('active-row');
+                                        dom.find('[row-index=' + index + ']').addClass('active-row');
+                                    }
+                                    parent.addClass('active-cell');
+                                    setTimeout(function(){
+                                        parent.find('input').trigger('focus');
+                                    },1)
+                                }else{
                                     dom.find('.active-row').removeClass('active-row');
-                                    dom.find('[row-index=' + index + ']').addClass('active-row');
+                                    dom.find('.comment-button').hide();
                                 }
-                                parent.addClass('active-cell');
-                                setTimeout(function(){
-                                    parent.find('input').trigger('focus');
-                                },1)
-                            }else{
-                                dom.find('.active-row').removeClass('active-row');
-                                dom.find('.comment-button').hide();
                             }
-                        }
-                }
+                    }
+                });
             }
         ]);
 });
