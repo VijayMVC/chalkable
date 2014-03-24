@@ -58,17 +58,17 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                         annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
                     foreach (var activityStandard in activity.Standards)
                     {
-                        var annStandard = annDetails.AnnouncementStandards.FirstOrDefault(x => x.StandardRef == activityStandard.StandardId);
+                        var annStandard = annDetails.AnnouncementStandards.FirstOrDefault(x => x.StandardRef == activityStandard.Id);
                         if (annStandard == null)
                         {
                             annStandard = new AnnouncementStandardDetails() { AnnouncementRef = annDetails.Id };
                             annDetails.AnnouncementStandards.Add(annStandard);
                         }
-                        annStandard.StandardRef = activityStandard.StandardId;
+                        annStandard.StandardRef = activityStandard.Id;
                         if (annStandard.Standard == null)
                             annStandard.Standard = new Standard();
-                        annStandard.Standard.Id = activityStandard.StandardId;
-                        annStandard.Standard.Name = activityStandard.StandardName;
+                        annStandard.Standard.Id = activityStandard.Id;
+                        annStandard.Standard.Name = activityStandard.Name;
                     }
                 }
             }

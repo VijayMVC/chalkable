@@ -8,7 +8,7 @@ namespace Chalkable.StiConnector.Connectors.Model
 {
     public class ActivityStandard
     {
-        public int StandardId { get; set; }
-        public string StandardName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

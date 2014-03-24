@@ -736,7 +736,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (ann.State == AnnouncementState.Created && ann.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
-                    activity.Standards = activity.Standards.Where(x => x.StandardId != standardId).ToList();
+                    activity.Standards = activity.Standards.Where(x => x.Id != standardId).ToList();
                     ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
                 }
                 uow.Commit();
