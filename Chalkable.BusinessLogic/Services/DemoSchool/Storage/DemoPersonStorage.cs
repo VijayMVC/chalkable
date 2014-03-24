@@ -105,5 +105,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new NotImplementedException();
         }
+
+        public IList<Person> GetPersonsByPhone(string phone)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
