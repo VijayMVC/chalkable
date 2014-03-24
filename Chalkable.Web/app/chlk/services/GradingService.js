@@ -5,10 +5,17 @@ REQUIRE('chlk.models.grading.GradingClassSummaryItems');
 REQUIRE('chlk.models.grading.GradingClassSummaryGridItems');
 REQUIRE('chlk.models.grading.ItemGradingStat');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
+REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
+REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
+REQUIRE('chlk.models.standard.StandardGradings');
+
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
-REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
+REQUIRE('chlk.models.id.GradingPeriodId');
+REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.StandardId');
+REQUIRE('chlk.models.id.GradeId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -16,12 +23,13 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.GradingService*/
     CLASS(
         'GradingService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.StudentAnnouncementId, String, String, Boolean, Boolean, Boolean, Boolean, Boolean,
+            [[chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId, String, String, Boolean, Boolean, Boolean, Boolean, Boolean,
                 Boolean, Boolean, String, String]],
-            ria.async.Future, function updateItem(studentAnnouncementId, gradeValue, comment, dropped, late, absent,
+            ria.async.Future, function updateItem(announcementId, studentId, gradeValue, comment, dropped, late, absent,
                       incomplete, exempt, passed, complete, standardIds, standardGrades) {
                 return this.get('Grading/UpdateItem', chlk.models.announcement.StudentAnnouncement, {
-                    studentAnnouncementId: studentAnnouncementId.valueOf(),
+                    announcementId: announcementId && announcementId.valueOf(),
+                    studentId: announcementId && studentId.valueOf(),
                     gradeValue: gradeValue,
                     comment: comment,
                     dropped: dropped,
@@ -43,6 +51,20 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.id.StandardId,
+                chlk.models.id.GradeId, String]],
+            ria.async.Future, function updateStandardGrade(classId, gradingPeriodId
+            , studentId, standardId, alphaGradeId_, note_) {
+                return this.get('Grading/UpdateStandardGrade', chlk.models.announcement.StudentAnnouncements, {
+                    classId: classId.valueOf(),
+                    gradingPeriodId: gradingPeriodId.valueOf(),
+                    studentId: studentId.valueOf(),
+                    standardId: standardId.valueOf(),
+                    alphaGradeId: alphaGradeId_ & alphaGradeId_.valueOf(),
+                    note: note_
+                });
+            },
+
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function applyManualGrade(announcementId) {
                 return this.get('Grading/ApplyManualGrade', chlk.models.announcement.StudentAnnouncements, {
@@ -59,7 +81,14 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getClassSummaryGrid(classId) {
-                return this.get('Grading/ClassSummaryGrid', ArrayOf(chlk.models.grading.GradingClassSummaryGridItems), {
+                return this.get('Grading/ClassSummaryGrid', ArrayOf(chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.announcement.ShortAnnouncementViewData)), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getClassStandardsGrid(classId) {
+                return this.get('Grading/ClassStandardGrid', ArrayOf(chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.standard.StandardGradings)), {
                     classId: classId.valueOf()
                 });
             },

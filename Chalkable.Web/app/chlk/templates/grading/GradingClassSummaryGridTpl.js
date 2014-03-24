@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.common.PageWithClasses');
+REQUIRE('chlk.templates.grading.GradingClassStandardsGridTpl');
 REQUIRE('chlk.models.grading.GradingClassSummaryGridViewData');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -7,12 +7,7 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/TeacherClassGradingGridSummary.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryGridViewData)],
-        'GradingClassSummaryGridTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.GradingClassSummaryGridItems), 'items',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
+        'GradingClassSummaryGridTpl', EXTENDS(chlk.templates.grading.GradingClassStandardsGridTpl), [
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
@@ -30,7 +25,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 return res.join('<hr>');
             },
 
-            Object, function getNormalValue(item){
+            OVERRIDE, Object, function getNormalValue(item){
                 var value = item.getGradeValue();
                 if(item.isDropped())
                     return Msg.Dropped;

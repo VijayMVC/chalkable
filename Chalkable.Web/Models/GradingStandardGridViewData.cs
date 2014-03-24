@@ -13,16 +13,17 @@ namespace Chalkable.Web.Models
         public int? Avg { get; set; }
         public IList<GradeStudentViewData> Students { get; set; }
         public MarkingPeriodViewData MarkingPeriod { get; set; }
-        public IList<StandardGradingViewData> StandardGradings { get; set; } 
+        public IList<StandardGradingViewData> GradingItems { get; set; } 
 
         public static StandardGradingGridViewData Create(MarkingPeriod markingPeriod, IList<GradingStandardInfo> gradingStandardInfos, IList<Person> students)
         {
             var res = new StandardGradingGridViewData {MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod)};
+            
             res.Students = students.Select(GradeStudentViewData.Create).ToList();
             gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)).ToList();
-            res.StandardGradings = StandardGradingViewData.Create(gradingStandardInfos);
-            if (res.StandardGradings.Count > 0)
-                res.Avg = (int?) res.StandardGradings.Average(x => x.NumericAvg);
+            res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos);
+            if (res.GradingItems.Count > 0)
+                res.Avg = (int?) res.GradingItems.Average(x => x.NumericAvg);
             return res;
         }
     }
