@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Model
 {
     public class ChalkableGradeBook
     {
-        public MarkingPeriod MarkingPeriod { get; set; }
+        public GradingPeriod GradingPeriod { get; set; }
         public int Avg { get; set; }
         public IList<Person> Students { get; set; }
         public IList<AnnouncementDetails> Announcements { get; set; } 

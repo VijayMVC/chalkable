@@ -43,19 +43,16 @@ namespace Chalkable.Web.Controllers
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId);
             var schoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
-            var mpIds = gradingPeriods.GroupBy(x => x.MarkingPeriodRef).Select(x => x.Key).ToList();
             var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
                         {
                             ClassId = classId,
                             RoleId = CoreRoles.STUDENT_ROLE.Id
                         });
             var res = new List<StandardGradingGridViewData>();
-            foreach (var mpId in mpIds)
+            foreach (var gradingPeriod in gradingPeriods)
             {
-                var currentGradingPeriods = gradingPeriods.Where(x => x.MarkingPeriodRef == mpId).ToList();
-                var markingPeriod = currentGradingPeriods.First().MarkingPeriod;
-                var gs = gradingStandards.Where(x => currentGradingPeriods.Any(y => y.Id == x.GradingPeriodId)).ToList();
-                res.Add(StandardGradingGridViewData.Create(markingPeriod, gs, students));
+                var gs = gradingStandards.Where(x => gradingPeriod.Id== x.GradingPeriodId).ToList();
+                res.Add(StandardGradingGridViewData.Create(gradingPeriod, gs, students));
             }
             return Json(res);
         }
@@ -67,16 +64,13 @@ namespace Chalkable.Web.Controllers
             var anns = SchoolLocator.AnnouncementService.GetAnnouncements(false, 0, int.MaxValue, classId);
             var schoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
-            var mpIds = gradingPeriods.GroupBy(x => x.MarkingPeriodRef).Select(x => x.Key).ToList();
             var res = new List<GradingStandardClassSummaryViewData>();
             var annSts = SchoolLocator.AnnouncementService.GetAnnouncementStandards(classId);
-            foreach (var mpId in mpIds)
+            foreach (var gradingPeriod in gradingPeriods)
             {
-                var currentGradingPeriods = gradingPeriods.Where(x => x.MarkingPeriodRef == mpId).ToList();
-                var markingPeriod = currentGradingPeriods.First().MarkingPeriod;
-                var gs = gradingStandards.Where(x => currentGradingPeriods.Any(y => y.Id == x.GradingPeriodId)).ToList();
-                var announcements = anns.Where(x => x.Expires >= markingPeriod.StartDate && x.Expires <= markingPeriod.EndDate).ToList();
-                res.Add(GradingStandardClassSummaryViewData.Create(markingPeriod, gs, announcements, annSts));
+                var gs = gradingStandards.Where(x => gradingPeriod.Id == x.GradingPeriodId).ToList();
+                var announcements = anns.Where(x => x.Expires >= gradingPeriod.StartDate && x.Expires <= gradingPeriod.EndDate).ToList();
+                res.Add(GradingStandardClassSummaryViewData.Create(gradingPeriod, gs, announcements, annSts));
             }
             return Json(res);
         }

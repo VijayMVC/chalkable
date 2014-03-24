@@ -10,17 +10,17 @@ namespace Chalkable.Web.Models
 {
     public class GradingStandardClassSummaryViewData
     {
-        public MarkingPeriodViewData MarkingPeriod { get; set; }
+        public GradingPeriodViewData GradingPeriod { get; set; }
         public decimal? Avg { get; set; }
         public IList<GradingStandardClassItemViewData> Items { get; set; }
  
-        public static GradingStandardClassSummaryViewData Create(MarkingPeriod markingPeriod
+        public static GradingStandardClassSummaryViewData Create(GradingPeriod gradingPeriod
             , IList<GradingStandardInfo> gradingStandards, IList<AnnouncementComplex> announcements
             , IList<AnnouncementStandard> announcementStandards)
         {
             var res = new GradingStandardClassSummaryViewData
                 {
-                    MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod),
+                    GradingPeriod = GradingPeriodViewData.Create(gradingPeriod),
                     Items = new List<GradingStandardClassItemViewData>()
                 };
             foreach (var gradingStandard in gradingStandards)

@@ -186,25 +186,22 @@ namespace Chalkable.BusinessLogic.Services.School
                             });
             var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var gradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
-            var mpIds = gradingPeriods.GroupBy(x => x.MarkingPeriodRef).Select(x => x.Key).ToList();
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(new AnnouncementsQuery{ClassId = classId}
                 , stiGradeBook.Activities.ToList());
 
             var res = new List<ChalkableGradeBook>();
-            
-            foreach (var mpId in mpIds)
+
+            foreach (var gradingPeriod in gradingPeriods)
             {
-                var currentGradingPeriods = gradingPeriods.Where(x => x.MarkingPeriodRef == mpId).ToList();
-                var markingPeriod = currentGradingPeriods.First().MarkingPeriod;
                 var gradeBook = new ChalkableGradeBook
                     {
-                        MarkingPeriod = markingPeriod,
+                        GradingPeriod = gradingPeriod,
                         Students = students
                     };
-                var activities = stiGradeBook.Activities.Where(x => x.Date >= markingPeriod.StartDate
-                                                                && x.Date <= markingPeriod.EndDate).ToList();
+                var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
+                                                                && x.Date <= gradingPeriod.EndDate).ToList();
                 var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage 
-                    && currentGradingPeriods.Any(y=>y.Id == x.GradingPeriodId)).ToList();
+                    && gradingPeriod.Id == x.GradingPeriodId).ToList();
                 stAvgs = stAvgs.Where(x => x.Score.HasValue).ToList();
                 if (stAvgs.Count > 0)
                     gradeBook.Avg = (int)stAvgs.Average(x => x.Score != null ? x.Score.Value : 0);   
