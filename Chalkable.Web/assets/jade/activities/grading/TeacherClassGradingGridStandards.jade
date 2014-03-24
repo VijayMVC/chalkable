@@ -13,8 +13,8 @@
                     +ActionLink('grading', 'standards', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
                     +ActionLink('grading', 'standardsGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
             .center
-                +ActionLink('grading', "summaryGrid", selectedId).pressed=Msg.Item(true)
-                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
     .mps-container
         each item,i in self.getItems()
             div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
