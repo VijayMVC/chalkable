@@ -108,6 +108,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             function setValue(node, isComment_){
                 var activeCell = node;
+                node.find('.value').setHTML(node.find('.grade-autocomplete').getValue());
                 activeCell.find('form').trigger('submit');
                 var nextCell = activeCell.next().find('.edit-cell');
                 if(nextCell.exists())

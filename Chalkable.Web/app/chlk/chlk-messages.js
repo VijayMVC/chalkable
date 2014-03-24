@@ -179,6 +179,7 @@ var Msg = {
     Simple: 'Simple',
     Source: 'Source',
     Staff: 'Staff',
+    Standard: oneOrMany('Standard'),
     Start: 'Start',
     Status: 'Status',
     Summary: 'Summary',

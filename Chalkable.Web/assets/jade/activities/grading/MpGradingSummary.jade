@@ -8,7 +8,9 @@ div(data-index=self.getIndex()).ann-type-container
         div(data-index=i).announcements-type-item
             +ActionLink('announcement', 'view', announcement.getId())(
                 annId = announcement.getId().valueOf(),
-                class = announcement.isDropped() ? "dropped" : ""
+                class = announcement.isDropped() ? "dropped" : "",
+                data-tooltip = announcement.getTitle(),
+                data-tooltip-type = "overflow"
             ).ann-button
                 |#{announcement.getTitle()}
             +ActionLink('grading', 'showChart', announcement.getId()).x-hidden.show-popup

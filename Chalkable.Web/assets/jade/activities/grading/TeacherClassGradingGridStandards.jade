@@ -6,12 +6,15 @@
         selectedItemId=selectedId
     ).classes-bar
     .autocomplete-list
-    .action-bar.not-transparent
+    .action-bar.not-transparent.buttons
         .container.panel-bg
             .left.no-border
                 .small-grey-buttons-block
                     +ActionLink('grading', 'standards', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
                     +ActionLink('grading', 'standardsGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
+            .center
+                +ActionLink('grading', "summaryGrid", selectedId).pressed=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
     .mps-container
         each item,i in self.getItems()
             div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
@@ -42,7 +45,8 @@
                                     div(data-tooltip=title, data-tooltip-type="overflow").type-name=title
                                     each info,i in gradingItem.getItems()
                                         normalValue = self.getNormalValue(info)
-                                        div(row-index=i, class=(parseInt(normalValue, 10) ? '' : 'letter')).dotted-h.grade-value=normalValue
+                                        div(row-index=i, class=(parseInt(normalValue, 10) ? '' : 'letter')).dotted-h.grade-value
+                                            .value=normalValue
                                             .edit-cell
                                             +ActionForm('grading', 'updateStandardGradeFromGrid')
                                                 +Hidden('standardid', info.getStandardId())

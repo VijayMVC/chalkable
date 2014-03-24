@@ -6,12 +6,15 @@
         selectedItemId=selectedId
     ).classes-bar
     .autocomplete-list
-    .action-bar.not-transparent
+    .action-bar.not-transparent.buttons
         .container.panel-bg
             .left.no-border
                 .small-grey-buttons-block
                     +ActionLink('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
                     +ActionLink('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
+            .center
+                +ActionLink('grading', "summaryGrid", selectedId).pressed=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
     .mps-container
         .chlk-pop-up-container.popup-top.comment
             .pop-up-triangle

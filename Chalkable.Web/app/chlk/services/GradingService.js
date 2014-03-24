@@ -80,6 +80,13 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId]],
+            ria.async.Future, function getClassStandards(classId) {
+                return this.get('Grading/ClassStandardSummary', ArrayOf(chlk.models.grading.GradingClassSummaryItems), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
             ria.async.Future, function getClassSummaryGrid(classId) {
                 return this.get('Grading/ClassSummaryGrid', ArrayOf(chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.announcement.ShortAnnouncementViewData)), {
                     classId: classId.valueOf()
