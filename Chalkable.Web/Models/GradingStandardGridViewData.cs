@@ -18,11 +18,11 @@ namespace Chalkable.Web.Models
             var res = new StandardGradingGridViewData
                 {
                     GradingPeriod = GradingPeriodViewData.Create(gradingPeriod),
-                    Students = students.Select(GradeStudentViewData.Create).ToList()
+                    Students = students.Select(x=>GradeStudentViewData.Create(x, null)).ToList()
                 };
             gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();
-            res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos);
+            res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos, res.Students.Select(x=>x.StudentInfo.Id).ToList());
             if (res.GradingItems.Count > 0)
                 res.Avg = (int?) res.GradingItems.Average(x => x.NumericAvg);
             return res;
@@ -36,19 +36,26 @@ namespace Chalkable.Web.Models
         public string AlphaGradeNameAvg { get; set; }
         public AnnouncementStandardViewData Standard { get; set; }
 
-        public static IList<StandardGradingViewData> Create(IList<GradingStandardInfo> gradingStandards)
+        public static IList<StandardGradingViewData> Create(IList<GradingStandardInfo> gradingStandards, IList<int> studentIds)
         {
             var gradigDic = gradingStandards.GroupBy(x => x.Standard.Id).ToDictionary(x => x.Key, x => x.ToList());
             var res = new List<StandardGradingViewData>();
             foreach (var kv in gradigDic)
             {
                 var gradingSt = kv.Value.First();
-                res.Add(new StandardGradingViewData
+                var standardGrading = new StandardGradingViewData
                     {
                         Standard = AnnouncementStandardViewData.Create(gradingSt.Standard),
-                        NumericAvg = (int?)kv.Value.Average(x => x.NumericGrade),
-                        Items = kv.Value.Select(StandardGradingItemViewData.Create).ToList(),
-                    });
+                        NumericAvg = (int?) kv.Value.Average(x => x.NumericGrade),
+                        Items = new List<StandardGradingItemViewData>()
+                    };
+                res.Add(standardGrading);
+                foreach (var studentId in studentIds)
+                {
+                    var gradingInfo = kv.Value.FirstOrDefault(x=>x.StudentId == studentId);
+                    if(gradingInfo != null)
+                        standardGrading.Items.Add(StandardGradingItemViewData.Create(gradingInfo));
+                }
             }
             return res;
         }

@@ -61,14 +61,14 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                     {
                         if (annStandard.Standard != null)
                         {
-                            var activitySt = activity.Standards.FirstOrDefault(x => x.StandardId == annStandard.StandardRef);
+                            var activitySt = activity.Standards.FirstOrDefault(x => x.Id == annStandard.StandardRef);
                             if (activitySt == null)
                             {
                                 activitySt = new ActivityStandard();
                                 newStandards.Add(activitySt);
                             }
-                            activitySt.StandardId = annStandard.Standard.Id;
-                            activitySt.StandardName = annStandard.Standard.Name;
+                            activitySt.Id = annStandard.Standard.Id;
+                            activitySt.Name = annStandard.Standard.Name;
                         }
                     }
                     activity.Standards = activity.Standards.Concat(newStandards);
