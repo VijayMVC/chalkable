@@ -25,6 +25,13 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             ann.Title = activity.Name;
             ann.MayBeExempt = activity.MayBeExempt;
             ann.IsScored = activity.IsScored;
+
+            if (ann is AnnouncementComplex && activity.Attachments != null)
+            {
+                var annC = ann as AnnouncementComplex;
+                annC.AttachmentsCount = activity.Attachments.Count();
+            }
+
             if (ann is AnnouncementDetails && activity.Attachments != null && activity.Attachments.Any())
             {
                 var annDetails = ann as AnnouncementDetails;

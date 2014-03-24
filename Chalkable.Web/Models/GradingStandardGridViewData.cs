@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -12,14 +10,16 @@ namespace Chalkable.Web.Models
     {
         public int? Avg { get; set; }
         public IList<GradeStudentViewData> Students { get; set; }
-        public MarkingPeriodViewData MarkingPeriod { get; set; }
+        public GradingPeriodViewData GradingPeriod { get; set; }
         public IList<StandardGradingViewData> GradingItems { get; set; } 
 
-        public static StandardGradingGridViewData Create(MarkingPeriod markingPeriod, IList<GradingStandardInfo> gradingStandardInfos, IList<Person> students)
+        public static StandardGradingGridViewData Create(GradingPeriod gradingPeriod, IList<GradingStandardInfo> gradingStandardInfos, IList<Person> students)
         {
-            var res = new StandardGradingGridViewData {MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod)};
-            
-            res.Students = students.Select(GradeStudentViewData.Create).ToList();
+            var res = new StandardGradingGridViewData
+                {
+                    GradingPeriod = GradingPeriodViewData.Create(gradingPeriod),
+                    Students = students.Select(GradeStudentViewData.Create).ToList()
+                };
             gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)).ToList();
             res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos);
             if (res.GradingItems.Count > 0)
