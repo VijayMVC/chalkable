@@ -14,14 +14,14 @@ namespace Chalkable.Web.Models
         public int? Avg { get; set; }
         public IList<GradeStudentViewData> Students { get; set; }
         public IList<ShortAnnouncementGradeViewData> GradingItems { get; set; }
-        public MarkingPeriodViewData MarkingPeriod { get; set; }
+        public GradingPeriodViewData GradingPeriod { get; set; }
 
         public static GradingGridViewData Create(ChalkableGradeBook gradeBook)
         {
             var res = new GradingGridViewData
                 {
                     Avg = gradeBook.Avg,
-                    MarkingPeriod = MarkingPeriodViewData.Create(gradeBook.MarkingPeriod),
+                    GradingPeriod = GradingPeriodViewData.Create(gradeBook.GradingPeriod),
                     Students = gradeBook.Students.Select(GradeStudentViewData.Create).ToList(),
                     GradingItems = gradeBook.Announcements
                                              .Select(x => ShortAnnouncementGradeViewData.Create(x, x.StudentAnnouncements))

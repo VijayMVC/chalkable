@@ -20,7 +20,8 @@ namespace Chalkable.Web.Models
                     GradingPeriod = GradingPeriodViewData.Create(gradingPeriod),
                     Students = students.Select(GradeStudentViewData.Create).ToList()
                 };
-            gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)).ToList();
+            gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)
+                && gradingPeriod.Id == x.GradingPeriodId).ToList();
             res.GradingItems = StandardGradingViewData.Create(gradingStandardInfos);
             if (res.GradingItems.Count > 0)
                 res.Avg = (int?) res.GradingItems.Average(x => x.NumericAvg);
@@ -46,7 +47,7 @@ namespace Chalkable.Web.Models
                     {
                         Standard = AnnouncementStandardViewData.Create(gradingSt.Standard),
                         NumericAvg = (int?)kv.Value.Average(x => x.NumericGrade),
-                        Items = kv.Value.Select(StandardGradingItemViewData.Create).ToList()
+                        Items = kv.Value.Select(StandardGradingItemViewData.Create).ToList(),
                     });
             }
             return res;
