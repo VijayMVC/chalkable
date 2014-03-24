@@ -194,31 +194,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public void DeleteDistrict(Guid id)
         {
             throw new NotImplementedException();
-            var district = GetByIdOrNull(id);
-            using (var uow = Update())
-            {
-                var da = new DistrictDataAccess(uow);
-                da.Delete(id);
-                uow.Commit();
-            }
-
-            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, district.ServerUrl, "Master"), false))
-            {
-                var da = new DistrictDataAccess(unitOfWork);
-                da.DeleteDistrictDataBase(district.Id.ToString());
-            }
         }
 
         public bool IsOnline(Guid id)
         {
-            throw new NotImplementedException();
-            var d = GetByIdOrNull(id);
-            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, d.ServerUrl, "Master"), false))
-            {
-                var da = new DistrictDataAccess(unitOfWork);
-                var l = da.GetOnline(new[] { id });
-                return (l.Count > 0) ;
-            }
+            return true;
         }
     }
 }
