@@ -23,11 +23,13 @@ namespace Chalkable.Web.Models
                     GradingPeriod = GradingPeriodViewData.Create(gradingPeriod),
                     Items = new List<GradingStandardClassItemViewData>()
                 };
-            foreach (var gradingStandard in gradingStandards)
+            var gsDic = gradingStandards.GroupBy(x => x.Standard.Id).ToDictionary(x=>x.Key, x=>x.ToList());
+            foreach (var kv in gsDic)
             {
-                var annIds = announcementStandards.Where(x => x.StandardRef == gradingStandard.Standard.Id).Select(x=>x.AnnouncementRef).ToList();
+                var annIds = announcementStandards.Where(x => x.StandardRef == kv.Key).Select(x => x.AnnouncementRef).ToList();
                 var anns = announcements.Where(x => annIds.Contains(x.Id)).ToList();
-                res.Items.Add(GradingStandardClassItemViewData.Create(anns, gradingStandard));
+                res.Items.Add(GradingStandardClassItemViewData.Create(anns, kv.Value.Average(x => x.NumericGrade)
+                    , kv.Value.First().Standard));
             }
             if(res.Items.Count > 0)
                 res.Avg = res.Items.Average(x => x.StandardAvg);
@@ -42,12 +44,12 @@ namespace Chalkable.Web.Models
         public IList<AnnouncementShortViewData> Announcements { get; set; }
  
         public static GradingStandardClassItemViewData Create(IList<AnnouncementComplex> announcements,
-                                                              GradingStandardInfo gradingStandard)
+                                                              decimal? avg, Standard standard)
         {
             return new GradingStandardClassItemViewData
                 {
-                    Standard = AnnouncementStandardViewData.Create(gradingStandard.Standard),
-                    StandardAvg = gradingStandard.NumericGrade,
+                    Standard = AnnouncementStandardViewData.Create(standard),
+                    StandardAvg = avg,
                     Announcements = AnnouncementShortViewData.Create(announcements)
                 };
         }
