@@ -37,7 +37,7 @@ namespace Chalkable.StiConnector.Connectors
                                     StandardScore standardScore)
         {
             var url = string.Format(BaseUrl + "chalkable/sections/{0}/standards/{1}/students/{2}/gradingPeriods/{3}"
-                                    , sectionId, standardId, standardId, gradingPeriodId);
+                                    , sectionId, standardId, studentId, gradingPeriodId);
             return Post(url, standardScore, null, HttpMethod.Put);
         }
     }
