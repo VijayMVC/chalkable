@@ -1,0 +1,59 @@
+.class-grading.standards-grid
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'standardsGrid')(
+        selectedItemId=selectedId
+    ).classes-bar
+    .autocomplete-list
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left.no-border
+                .small-grey-buttons-block
+                    +ActionLink('grading', 'standards', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
+                    +ActionLink('grading', 'standardsGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
+            .center
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
+    .mps-container
+        each item,i in self.getItems()
+            div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
+                div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
+                    mpName = item.getGradingPeriod().getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                    .collapse
+                .mp-data
+                    .ann-types-container
+                        .dotted-container.name-container.with-horizontal-dots
+                            .type-name=Msg.Student(true)
+                            each student,i in item.getStudents()
+                                name = student.getStudentInfo().getDisplayName()
+                                div(row-index=i).student-name
+                                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
+                                    if student.isWithdrawn()
+                                        div(data-tooltip="Withdrawn").withdrawn
+                            .student-name
+                                .dotted-h=Msg.Avg
+                        +LeftRightToolbar()(
+                            needDots = true,
+                            roundedDots = true,
+                            padding = 77
+                        ).grid-toolbar.i-b.big-arrows
+                            each gradingItem in item.getGradingItems()
+                                .dotted-container.grade-container.with-horizontal-dots
+                                    title = gradingItem.getTitle()
+                                    div(data-tooltip=title, data-tooltip-type="overflow").type-name=title
+                                    each info,i in gradingItem.getItems()
+                                        normalValue = self.getNormalValue(info)
+                                        div(row-index=i, class=(parseInt(normalValue, 10) ? '' : 'letter')).dotted-h.grade-value
+                                            .value=normalValue
+                                            .edit-cell
+                                            +ActionForm('grading', 'updateStandardGradeFromGrid')
+                                                +Hidden('standardid', info.getStandardId())
+                                                +Hidden('gradeid', info.getGradeId())
+                                                +Hidden('classid', info.getClassId())
+                                                +Hidden('gradingperiodid', info.getGradingPeriodId())
+                                                if item.getStudents()[i]
+                                                    +Hidden('studentid', item.getStudents()[i].getStudentInfo().getId())
+                                                input(value=normalValue, name="gradevalue").grade-autocomplete
+                                    .dotted-h.grade-value=gradingItem.getAlphaGradeNameAvg()
