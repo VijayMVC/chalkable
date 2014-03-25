@@ -87,7 +87,6 @@
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\ClassroomOption.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
-    <Compile Include="Connectors\Model\LinkStatus.cs" />
     <Compile Include="Connectors\Model\Score.cs" />
     <Compile Include="Connectors\Model\Seat.cs" />
     <Compile Include="Connectors\Model\SeatingChart.cs" />
