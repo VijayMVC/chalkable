@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     /** @class chlk.templates.announcement.ShortAnnouncementTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementAppAttachments.jade')],
-        [ria.templates.ModelBind(chlk.models.announcement.ShortAnnouncementViewData)],
+        [ria.templates.ModelBind(chlk.models.announcement.BaseAnnouncementViewData)],
         'ShortAnnouncementTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],

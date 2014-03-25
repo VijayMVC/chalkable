@@ -80,7 +80,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(result){
                         result.forEach(function(mpData){
-                            mpData.getByAnnouncementTypes().forEach(function(item){
+                            mpData.getItems().forEach(function(item){
                                 item.setClassId(classId_);
                             });
                         });
@@ -93,7 +93,27 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function standardsTeacherAction(classId_){
-                return null;
+                if(!classId_ || !classId_.valueOf())
+                    return this.BackgroundNavigate('grading', 'summaryAll', []);
+                var classes = this.classService.getClassesForTopBar(true);
+                var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                var model = new chlk.models.grading.GradingClassSummary();
+                model.setTopData(topData);
+                var result = this.gradingService
+                    .getClassStandards(classId_)
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        result.forEach(function(mpData){
+                            mpData.getItems().forEach(function(item){
+                                item.setClassId(classId_);
+                            });
+                        });
+                        model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
+                        model.setAction('standards');
+                        model.setGridAction('standardsGrid');
+                        return model;
+                    }, this);
+                return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
             },
 
             [chlk.controllers.SidebarButton('statistic')],
@@ -157,7 +177,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getStudentsClassSummary(studentId, classId_)
                     .then(function(model){
                         model.getItems().forEach(function(mpData){
-                            mpData.getByAnnouncementTypes().forEach(function(item){
+                            mpData.getItems().forEach(function(item){
                                 item.setClassId(classId_);
                             });
                         });

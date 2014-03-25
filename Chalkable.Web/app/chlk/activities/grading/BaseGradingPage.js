@@ -113,12 +113,12 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             [[ria.dom.Dom]],
-            chlk.models.announcement.ShortAnnouncementViewData, function getAnnouncementInfo(node){
+            chlk.models.announcement.BaseAnnouncementViewData, function getAnnouncementInfo(node){
                 var annIndex = node.parent('.announcements-type-item').getData('index');
                 var typeIndex = node.parent('.ann-type-container').getData('index');
                 this.setCurrentIndex(typeIndex);
                 var mpIndex = node.parent('.marking-period-container').getData('index');
-                var announcement = this.getItems()[mpIndex].getByAnnouncementTypes()[typeIndex].getAnnouncements()[annIndex];
+                var announcement = this.getItems()[mpIndex].getItems()[typeIndex].getAnnouncements()[annIndex];
                 return announcement || null;
             },
 
@@ -128,7 +128,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var typeIndex = node.parent('.ann-type-container').getData('index');
                 var mpIndex = node.parent('.marking-period-container').getData('index');
                 var items = this.getItems();
-                var announcement = items[mpIndex].getByAnnouncementTypes()[typeIndex].getAnnouncements()[annIndex];
+                var announcement = items[mpIndex].getItems()[typeIndex].getAnnouncements()[annIndex];
                 if(announcement){
                     announcement.setDropped(dropped);
                     this.setItems(items);

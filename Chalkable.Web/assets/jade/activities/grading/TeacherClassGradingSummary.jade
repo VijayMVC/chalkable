@@ -2,13 +2,18 @@
     topData = self.getTopData()
     topItems = topData.getTopItems()
     selectedId = topData.getSelectedItemId()
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
+    action = self.getAction() || "summary"
+    gridAction = self.getGridAction() || "summaryGrid"
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', action)(
         selectedItemId=selectedId
     ).classes-bar
-    .action-bar.not-transparent
+    .action-bar.not-transparent.buttons
         .container.panel-bg
             .left.no-border
                 .small-grey-buttons-block
-                    +ActionLink('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes.pressed
-                    +ActionLink('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid
+                    +ActionLink('grading', action, selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes.pressed
+                    +ActionLink('grading', gridAction, selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid
+            .center
+                +ActionLink('grading', "summary", selectedId)(class = (action == "summary") ? "pressed" : "")=Msg.Item(true)
+                +ActionLink('grading', "standards", selectedId)(class = (action == "summary") ? "" : "pressed")=Msg.Standard(true)
     +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)

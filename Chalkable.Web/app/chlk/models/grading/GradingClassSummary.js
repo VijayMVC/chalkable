@@ -8,6 +8,10 @@ NAMESPACE('chlk.models.grading', function () {
         'GradingClassSummary', EXTENDS(chlk.models.common.PageWithClasses), [
             chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
 
+            String, 'action',
+
+            String, 'gridAction',
+
             [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, chlk.models.grading.GradingClassSummaryPart]],
             function $(topData_, selectedId_, summaryPart_){
                 BASE(topData_, selectedId_);

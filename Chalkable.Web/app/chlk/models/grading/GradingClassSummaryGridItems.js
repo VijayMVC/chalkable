@@ -13,8 +13,8 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('gradingitems')],
             ArrayOf(TItem), 'gradingItems',
 
-            [ria.serialize.SerializeProperty('markingperiod')],
-            chlk.models.schoolYear.MarkingPeriod, 'markingPeriod',
+            [ria.serialize.SerializeProperty('gradingperiod')],
+            chlk.models.common.NameId, 'gradingPeriod',
 
             Number, 'avg'
         ]);

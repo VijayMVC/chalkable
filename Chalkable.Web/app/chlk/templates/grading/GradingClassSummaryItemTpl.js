@@ -10,9 +10,9 @@ NAMESPACE('chlk.templates.grading', function () {
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryItem)],
         'GradingClassSummaryItemTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementType, 'type',
+            chlk.models.common.NameId, 'itemDescription',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.ShortAnnouncementViewData), 'announcements',
+            ArrayOf(chlk.models.announcement.BaseAnnouncementViewData), 'announcements',
             [ria.templates.ModelPropertyBind],
             Number, 'percent',
             [ria.templates.ModelPropertyBind],

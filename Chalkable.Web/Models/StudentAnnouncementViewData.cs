@@ -75,6 +75,7 @@ namespace Chalkable.Web.Models
         public string Comment { get; set; }
         public string ExtraCredits { get; set; }
         public int State { get; set; }
+        public int StudentId { get; set; }
 
         protected ShortStudentAnnouncementViewData(StudentAnnouncement studentAnnouncement)
         {
@@ -90,6 +91,7 @@ namespace Chalkable.Web.Models
             NumericGradeValue = studentAnnouncement.NumericScore;
             GradeValue = studentAnnouncement.ScoreValue;
             State = (int)studentAnnouncement.State;
+            StudentId = studentAnnouncement.StudentId;
         }
 
         public static ShortStudentAnnouncementViewData Create(StudentAnnouncement studentAnnouncement)

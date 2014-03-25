@@ -63,6 +63,8 @@ DIV#content-wrapper{
 }
 
 .action-bar{
+  position: relative;
+
   &.buttons{
     .container{
       .action-link, .action-button{
@@ -111,6 +113,11 @@ DIV#content-wrapper{
             box-shadow: -1px 0 0 #d0d0d0;
           }
         }
+      }
+
+      .center.absolute{
+        left: 0;
+        right: 0;
       }
 
       >.left, >.right{

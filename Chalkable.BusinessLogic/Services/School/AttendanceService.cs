@@ -11,6 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId);
         void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items);
+        SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
 
 
         //TODO: OLD!!!!
@@ -38,6 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, string level, IList<Guid> gradeLevelsIds);
         void ProcessClassAttendance(DateTime date);
         void NotAssignedAttendanceProcess();
+
     }
 
     public class AttendanceService : SisConnectedService, IAttendanceService
@@ -113,6 +115,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 return attendances;    
             }
             return null;
+        }
+
+        
+        public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
+        {
+            var seatingChart = ConnectorLocator.SeatingChartConnector.GetChart(classId, markingPeriodId);
+            return SeatingChartInfo.Create(seatingChart);
         }
 
         public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
@@ -214,5 +223,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

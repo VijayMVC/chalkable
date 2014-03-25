@@ -9,6 +9,12 @@ NAMESPACE('chlk.templates.grading', function () {
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummary)],
         'GradingClassSummaryTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.grading.GradingClassSummaryPart, 'summaryPart'
+            chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'action',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'gridAction'
         ]);
 });
