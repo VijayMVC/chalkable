@@ -54,11 +54,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PrivateMessageStore = new DemoPrivateMessageStorage();
             SchoolYearStorage = new DemoSchoolYearStorage();
             DisciplineTypeStorage = new DemoDisciplineTypeStorage(this);
-            DisciplineStorage = new DemoDisciplineStorage(this);
+            DisciplineStorage = new DemoDisciplineStorage();
             AlphaGradeStorage = new DemoAlphaGradeStorage(this);
             AlternateScoreStorage = new DemoAlternateScoreStorage(this);
-            StudentParentStorage = new DemoStudentParentStorage(this);
-            StandardStorage = new DemoStandardStorage();
+            StudentParentStorage = new DemoStudentParentStorage();
+            StandardStorage = new DemoStandardStorage(this);
             StandardSubjectStorage = new DemoStandardSubjectStorage();
             ClasStandardStorage = new DemoClassStandardStorage(this);
             SchoolStorage = new DemoSchoolStorage(this);

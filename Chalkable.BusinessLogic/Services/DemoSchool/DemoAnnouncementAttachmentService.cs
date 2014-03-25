@@ -27,13 +27,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
 
+
+        private bool CanAttach(Announcement ann)
+        {
+            return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
+                   && Storage.ClassPersonStorage.Exists(new ClassPersonQuery
+                              {
+                                  ClassId = ann.ClassRef,
+                                  PersonId = Context.UserLocalId
+                              });
+        }
+
         public Announcement AddAttachment(int announcementId, byte[] content, string name, string uuid)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
                 throw new UnassignedUserException();
-            if(!AnnouncementSecurity.CanAttach(ann, Context))
-                throw new ChalkableSecurityException();
+            if (!CanAttach(ann))
+                    throw new ChalkableSecurityException();
 
             var annAtt = new AnnouncementAttachment
             {
@@ -88,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void DeleteAttachment(int announcementAttachmentId)
         {
-            var annAtt = Storage.AnnouncementAttachmentStorage.GetAttachmentById(announcementAttachmentId);
+            var annAtt = Storage.AnnouncementAttachmentStorage.GetById(announcementAttachmentId);
             if (!AnnouncementSecurity.CanDeleteAttachment(annAtt, Context))
                 throw new ChalkableSecurityException();
 

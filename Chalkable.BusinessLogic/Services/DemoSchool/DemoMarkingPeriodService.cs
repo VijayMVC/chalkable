@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public MarkingPeriod GetMarkingPeriodById(int id)
         {
-            return Storage.MarkingPeriodStorage.getById(id);
+            return Storage.MarkingPeriodStorage.GetById(id);
         }
 
         public MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null)

@@ -43,5 +43,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new System.NotImplementedException();
         }
+
+        public IList<Phone> GetAll(int personId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Phone phone)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(List<Phone> toList)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

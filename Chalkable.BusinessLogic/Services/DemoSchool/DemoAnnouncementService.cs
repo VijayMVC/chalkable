@@ -5,6 +5,7 @@ using System.Security;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -23,14 +24,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        private AnnouncementDataAccess CreateAnnoucnementDataAccess(UnitOfWork unitOfWork)
+        private DemoBaseAnnouncementStorage CreateAnnoucnementDataAccess()
         {
             if(BaseSecurity.IsAdminViewer(Context))
-                return new AnnouncementForAdminDataAccess(unitOfWork, Context.SchoolLocalId);
+                return Storage.new AnnouncementForAdminDataAccess();
             if(Context.Role == CoreRoles.TEACHER_ROLE)
-                return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId);
+                return new AnnouncementForTeacherDataAccess();
             if(Context.Role == CoreRoles.STUDENT_ROLE)
-                return new AnnouncementForStudentDataAccess(unitOfWork, Context.SchoolLocalId);
+                return new AnnouncementForStudentDataAccess();
             throw new ChalkableException("Unsupported role for announcements");
         }
 
@@ -58,7 +59,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
         public IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
         {
-            throw new NotImplementedException();
             var q = new AnnouncementsQuery
             {
                 StarredOnly = starredOnly,
@@ -74,7 +74,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null)
         {
-            throw new NotImplementedException();
             var q = new AnnouncementsQuery
                 {
                     FromDate = fromDate,
@@ -156,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
         }
 
-        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
+        /*private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
         {
             throw new NotImplementedException();
             var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
@@ -170,6 +169,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
             return new List<Activity>();
         }
+
  
         private IList<AnnouncementComplex> MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IEnumerable<Activity> activities)
         {
@@ -185,7 +185,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
             }
             return res;
-        }
+        }*/
         
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
@@ -315,7 +315,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Announcement DropUnDropAnnouncement(int announcementId, bool drop)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();/*
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
@@ -329,7 +329,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 da.Update(ann);
                 uow.Commit();
                 return ann;
-            }
+            }*/
         }
 
         public IList<Announcement> GetDroppedAnnouncement(int markingPeriodClassId)
@@ -668,6 +668,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public bool Exists(string title)
         {
+
             using (var uow = Read())
             {
                 return CreateAnnoucnementDataAccess(uow).Exists(title);

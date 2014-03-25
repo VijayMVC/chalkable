@@ -35,5 +35,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new System.NotImplementedException();
         }
+
+        public void Delete(DayType dateType)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

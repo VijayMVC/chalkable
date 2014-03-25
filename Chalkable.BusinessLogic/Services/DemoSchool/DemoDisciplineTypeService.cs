@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public DisciplineType GetDisciplineTypeById(Guid id)
         {
-            return Storage.DisciplineTypeStorage.GetDisciplineTypeById(id);
+            return Storage.DisciplineTypeStorage.GetById(id);
 
         }
     }

@@ -29,5 +29,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new System.NotImplementedException();
         }
+
+        public bool Exists(ClassPersonQuery classPersonQuery)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
