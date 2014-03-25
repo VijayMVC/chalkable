@@ -6,7 +6,6 @@ mixin SummaryInfo(presentCount, allStudentsCount)
             div(style="width: " + presentPersent + "%").inner-bar
 
 
-
 .students-list.loader-container
     topData = self.getTopData()
     topItems = topData.getTopItems()
@@ -33,7 +32,7 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                 )#attendance-date.tb-date-picker
             .right
                 +ActionLink('attendance', 'classList', selectedId).pressed=Msg.List
-                +ActionLink('attendance', 'seatingChart', selectedId)=Msg.Seating_Chart
+                +ActionLink('attendance', 'seatingChart', selectedId, self.getDate().toStandardFormat())=Msg.Seating_Chart
                 //+ActionLinkList(self.getLinksDataForRightSide())
     if self.getItems().length > 0
         .people-list-container.not-transparent

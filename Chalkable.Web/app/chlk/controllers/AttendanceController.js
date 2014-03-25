@@ -221,11 +221,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId]],
-        function seatingChartAction(classId, isUpdate_){
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+        function seatingChartAction(classId, date_, isUpdate_){
             if(!classId.valueOf())
                 return this.BackgroundNavigate('attendance', 'summary', []);
-            var result = this.attendanceService.getSeatingChartInfo(classId)
+            var result = this.attendanceService.getSeatingChartInfo(classId, date_)
                 .then(function(model){
                     return this.prepareSeatingData(model, classId);
                 }, this);

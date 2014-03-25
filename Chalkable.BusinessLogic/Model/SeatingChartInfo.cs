@@ -31,9 +31,10 @@ namespace Chalkable.BusinessLogic.Model
                     var seat = seatingChart.Seats.FirstOrDefault(x => x.Column == column && x.Row == row);
                     if (seat != null)
                         seatInfo.StudentId = seat.StudentId;
-                    res.SeatsList.Add(seats);
+                    seats.Add(seatInfo);
                     index++;
                 }
+                res.SeatsList.Add(seats);
             }
             return res;
         }
