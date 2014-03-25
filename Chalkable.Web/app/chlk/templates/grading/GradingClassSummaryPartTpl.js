@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.grading.GradingClassSummaryPart');
+REQUIRE('chlk.models.id.GradingPeriodId');
 
 NAMESPACE('chlk.templates.grading', function () {
     "use strict";
@@ -9,6 +10,8 @@ NAMESPACE('chlk.templates.grading', function () {
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryPart)],
         'GradingClassSummaryPartTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'items'
+            ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'items',
+
+            chlk.models.id.GradingPeriodId, 'gradingPeriodId'
         ]);
 });

@@ -29,7 +29,7 @@ NAMESPACE('chlk.services', function () {
                       incomplete, exempt, passed, complete, standardIds, standardGrades) {
                 return this.get('Grading/UpdateItem', chlk.models.announcement.StudentAnnouncement, {
                     announcementId: announcementId && announcementId.valueOf(),
-                    studentId: announcementId && studentId.valueOf(),
+                    studentId: studentId && studentId.valueOf(),
                     gradeValue: gradeValue,
                     comment: comment,
                     dropped: dropped,

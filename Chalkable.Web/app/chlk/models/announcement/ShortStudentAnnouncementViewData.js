@@ -11,6 +11,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('announcementid')],
             chlk.models.id.AnnouncementId, 'announcementId',
 
+            [ria.serialize.SerializeProperty('studentid')],
             chlk.models.id.SchoolPersonId, 'studentId',
 
             String, 'comment',

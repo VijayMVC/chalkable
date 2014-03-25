@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.common.PageWithClasses');
+REQUIRE('chlk.templates.common.PageWithClassesAndGradingPeriodsTpl');
 REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/GradingStudentClassSummary.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradingStudentClassSummaryViewData)],
-        'GradingStudentClassSummaryTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
+        'GradingStudentClassSummaryTpl', EXTENDS(chlk.templates.common.PageWithClassesAndGradingPeriodsTpl), [
             [ria.templates.ModelPropertyBind],
             chlk.models.schoolYear.MarkingPeriod, 'currentMarkingPeriod',
 

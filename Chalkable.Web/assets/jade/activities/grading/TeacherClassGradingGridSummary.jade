@@ -25,9 +25,10 @@
                 a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
                 a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
         each item,i in self.getItems()
-            div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
+            gradingPeriod = item.getGradingPeriod()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
                 div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
-                    mpName = item.getGradingPeriod().getName()
+                    mpName = gradingPeriod.getName()
                     span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
                     .grading-selects
                         +Select('standard')(data-placeholder=Msg.All_standards).standards-select.grading-select
@@ -87,7 +88,7 @@
                                                 ).comment-value
                                                 +Hidden('id', info.getId())
                                                 +Hidden('announcementid', info.getAnnouncementId())
-                                                +Hidden('studentId', info.getStudentId())
+                                                +Hidden('studentid', info.getStudentId())
                                                 input(value=normalValue,
                                                     name="gradevalue",
                                                     data-max-score=announcement.getMaxScore() || 100,

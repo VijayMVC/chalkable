@@ -139,10 +139,10 @@ NAMESPACE('chlk.activities.grading', function () {
                         var maxScore = node.getData('max-score');
                         var announcementId = node.getData('announcement-id');
                         var studentAnnouncementId = node.getData('student-announcement-id');
-                        var markingPeriodId = node.getData('marking-period-id');
+                        var gradingPeriodId = node.getData('grading-period-id');
                         var flag = node.parent('.grade-value').find('.alert-flag');
                         this.getGradingItems().forEach(function(item){
-                            if(item.getMarkingPeriod().getId().valueOf() == markingPeriodId){
+                            if(item.getGradingPeriod().getId().valueOf() == gradingPeriodId){
                                 item.getGradingItems().forEach(function(announcement){
                                     if(announcement.getId().valueOf() == announcementId){
                                         announcement.getStudentAnnouncements().getItems().forEach(function(studentAnnouncement){
@@ -164,7 +164,7 @@ NAMESPACE('chlk.activities.grading', function () {
                             }
                         });
                     }
-                }.bind(this, node), 1);
+                }.bind(this, node), 10);
 
             },
 
