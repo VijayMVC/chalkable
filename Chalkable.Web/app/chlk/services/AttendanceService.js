@@ -32,10 +32,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId]],
-            ria.async.Future, function getSeatingChartInfo(classId) {
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function getSeatingChartInfo(classId, date) {
                 return this.get('Attendance/SeatingChart.json', chlk.models.attendance.SeatingChart, {
-                    classId: classId.valueOf()
+                    classId: classId.valueOf(),
+                    date: date && date.toStandardFormat()
                 });
             },
 

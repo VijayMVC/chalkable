@@ -91,6 +91,7 @@
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\GradingStandardInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
+    <Compile Include="Model\SeatingChartInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AddressSecurity.cs" />
