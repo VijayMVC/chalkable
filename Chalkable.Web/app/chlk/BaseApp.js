@@ -46,6 +46,7 @@ REQUIRE('chlk.models.people.Claim');
 REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.grading.AlternateScore');
 REQUIRE('chlk.models.grading.AlphaGrade');
+REQUIRE('chlk.models.schoolYear.GradingPeriod');
 
 
 REQUIRE('chlk.AppApiHost');

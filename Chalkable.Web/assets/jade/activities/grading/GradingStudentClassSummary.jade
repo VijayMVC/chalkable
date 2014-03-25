@@ -28,5 +28,7 @@ selectedId = topData.getSelectedItemId()
             +Chart()(
                 data-options = self.getChartOptions()
             ).relative.main-chart
-    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)(
+        gradingPeriodId = self.getGradingPeriodId()
+    )
 

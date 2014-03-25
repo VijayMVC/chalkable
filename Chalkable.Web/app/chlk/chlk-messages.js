@@ -364,6 +364,7 @@ var Msg = {
     Grade_Level: 'Grade Level',
     Grade_manually: 'Grade manually',
     Grade_type: oneOrMany('Grade type'),
+    Grading_Period: 'Grading Period',
     Grading_view: 'Grading view',
     Grading_style: 'Grading style',
     Hide_from_Students: 'Hide from Students',

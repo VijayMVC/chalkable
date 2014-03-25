@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.common.PageWithClasses');
+REQUIRE('chlk.templates.common.PageWithClassesAndGradingPeriodsTpl');
 REQUIRE('chlk.models.grading.GradingClassSummary');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/TeacherClassGradingSummary.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummary)],
-        'GradingClassSummaryTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
+        'GradingClassSummaryTpl', EXTENDS(chlk.templates.common.PageWithClassesAndGradingPeriodsTpl), [
             [ria.templates.ModelPropertyBind],
             chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
 
