@@ -16,4 +16,6 @@
             .center
                 +ActionLink('grading', "summary", selectedId)(class = (action == "summary") ? "pressed" : "")=Msg.Item(true)
                 +ActionLink('grading', "standards", selectedId)(class = (action == "summary") ? "" : "pressed")=Msg.Standard(true)
-    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)(
+        gradingPeriodId = self.getGradingPeriodId()
+    )

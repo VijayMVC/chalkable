@@ -17,9 +17,10 @@
                 +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
     .mps-container
         each item,i in self.getItems()
-            div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
+            gradingPeriod = item.getGradingPeriod()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
                 div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
-                    mpName = item.getGradingPeriod().getName()
+                    mpName = gradingPeriod.getName()
                     span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
                     .collapse
                 .mp-data

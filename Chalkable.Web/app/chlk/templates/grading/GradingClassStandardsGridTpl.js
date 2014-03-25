@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.common.PageWithClasses');
+REQUIRE('chlk.templates.common.PageWithClassesAndGradingPeriodsTpl');
 REQUIRE('chlk.models.grading.GradingClassSummaryGridViewData');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/TeacherClassGradingGridStandards.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryGridViewData)],
-        'GradingClassStandardsGridTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
+        'GradingClassStandardsGridTpl', EXTENDS(chlk.templates.common.PageWithClassesAndGradingPeriodsTpl), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.GradingClassSummaryGridItems), 'items',
 

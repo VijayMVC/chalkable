@@ -84,6 +84,8 @@ NAMESPACE('chlk.controllers', function (){
                                 item.setClassId(classId_);
                             });
                         });
+                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        model.setGradingPeriodId(gradingPeriod.getId());
                         model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
                         return model;
                     }, this);
@@ -109,6 +111,8 @@ NAMESPACE('chlk.controllers', function (){
                             });
                         });
                         model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
+                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        model.setGradingPeriodId(gradingPeriod.getId());
                         model.setAction('standards');
                         model.setGridAction('standardsGrid');
                         return model;
@@ -129,7 +133,9 @@ NAMESPACE('chlk.controllers', function (){
                     .getClassSummaryGrid(classId_)
                     .attach(this.validateResponse_())
                     .then(function(items){
-                        var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.announcement.ShortAnnouncementViewData, topData, null, items, alphaGrades, alternateScores);
+                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.announcement.ShortAnnouncementViewData,
+                            gradingPeriod.getId(), topData, null, items, alphaGrades, alternateScores);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
@@ -161,7 +167,9 @@ NAMESPACE('chlk.controllers', function (){
                     .getClassStandardsGrid(classId_)
                     .attach(this.validateResponse_())
                     .then(function(items){
-                        var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.standard.StandardGradings, topData, null, items, alphaGrades);
+                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.standard.StandardGradings,
+                            gradingPeriod.getId(), topData, null, items, alphaGrades);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassStandardsGridPage, result);
@@ -183,6 +191,8 @@ NAMESPACE('chlk.controllers', function (){
                         });
                         var classes = this.classService.getClassesForTopBar(true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        model.setGradingPeriodId(gradingPeriod.getId());
                         model.setClazz(this.classService.getClassById(classId_));
                         model.setTopData(topData);
                         model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(model.getItems()));
