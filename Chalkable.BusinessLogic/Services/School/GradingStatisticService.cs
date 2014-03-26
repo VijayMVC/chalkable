@@ -178,7 +178,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId)
         {
-            var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, gradingPeriodId);
+            var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, null, gradingPeriodId);
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             return GetGradeBooks(classId, new List<GradingPeriodDetails>{gradingPeriod}, stiGradeBook).First();
         }
