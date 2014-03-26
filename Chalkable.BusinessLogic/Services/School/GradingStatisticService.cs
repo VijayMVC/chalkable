@@ -178,7 +178,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ChalkableGradeBook> GetGradeBooks(int classId)
         {
-            var stiGradeBook = ConnectorLocator.GradebookConnector.Get_BySectionAndGradingPeriod(classId);
+            var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId);
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
                             {
                                 ClassId = classId,

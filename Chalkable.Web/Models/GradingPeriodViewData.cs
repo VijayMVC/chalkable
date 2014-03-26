@@ -6,15 +6,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models
 {
-
     public class GradingPeriodViewData
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
-        public int MarkingPeriodRef { get; set; }
-        public int SchoolYearRef { get; set; }
+        public int MarkingPeriodId { get; set; }
+        public int SchoolYearId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime EndTime { get; set; }
@@ -28,8 +27,8 @@ namespace Chalkable.Web.Models
             Name = gradingPeriod.Name;
             Code = gradingPeriod.Code;
             Description = gradingPeriod.Description;
-            MarkingPeriodRef = gradingPeriod.MarkingPeriodRef;
-            SchoolYearRef = gradingPeriod.SchoolYearRef;
+            MarkingPeriodId = gradingPeriod.MarkingPeriodRef;
+            SchoolYearId = gradingPeriod.SchoolYearRef;
             StartDate = gradingPeriod.StartDate;
             EndDate = gradingPeriod.EndDate;
             EndTime = gradingPeriod.EndTime;
