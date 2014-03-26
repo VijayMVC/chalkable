@@ -24,7 +24,7 @@ namespace Chalkable.StiConnector.Connectors
             return Post<Gradebook>(string.Format(url_format + "/calculate", sectionId), null, nvc);
         }
 
-        public Gradebook Get_BySectionAndGradingPeriod(int sectionId, int? categoryId = null,
+        public Gradebook GetBySectionAndGradingPeriod(int sectionId, int? categoryId = null,
                                                        int? gradingPeriodId = null, int? standardId = null)
         {
             var nvc = new NameValueCollection();

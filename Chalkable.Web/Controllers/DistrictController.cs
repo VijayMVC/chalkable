@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers
                     pwd = district.SisPassword;
                 var locator = ConnectorLocator.Create(data.SisUserName, pwd, data.ApiUrl);
                 if (!locator.LinkConnector.Link(data.LinkKey))
-                    throw new Exception("Link was not successful");
+                    throw new Exception("The link keys do not match.");
                 if (district == null)
                 {
                     sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.SisUserName, data.SisPassword, timeZone);
@@ -44,9 +44,6 @@ namespace Chalkable.Web.Controllers
                     district.TimeZone = timeZone;
                     MasterLocator.DistrictService.Update(district);
                 }
-
-
-                
                 return Json(true);
             }
             return Json("Invalid credentials");

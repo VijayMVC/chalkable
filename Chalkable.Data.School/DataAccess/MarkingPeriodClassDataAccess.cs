@@ -15,7 +15,7 @@ namespace Chalkable.Data.School.DataAccess
         }
         
         //TODO: build generel method for list deleting 
-        public void Delete(List<MarkingPeriodClass> markingPeriodClasses)
+        public void Delete(IList<MarkingPeriodClass> markingPeriodClasses)
         {
             SimpleDelete<MarkingPeriodClass>(markingPeriodClasses);
         }

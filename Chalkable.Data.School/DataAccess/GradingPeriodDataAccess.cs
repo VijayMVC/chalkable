@@ -18,26 +18,27 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete(ids.Select(x=> new GradingPeriod{Id = x}).ToList());
         }
 
-        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId)
+        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(GradingPeriodQuery query)
         {
-            var condition = new AndQueryCondition {{GradingPeriod.SCHOOL_YEAR_REF_FIELD, schoolYearId}};
-            if(markingPeriodId.HasValue)
-                condition.Add(GradingPeriod.MARKING_PERIOD_REF_FIELD, markingPeriodId.Value);
-            var dbQuery = BuildGetGradingPeriodQuery(condition);
-            return ReadMany<GradingPeriodDetails>(dbQuery, true);
+            return ReadMany<GradingPeriodDetails>(BuildGetGradingPeriodQuery(BuildCondition(query)), true);
         }
 
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
+        private QueryCondition BuildCondition(GradingPeriodQuery query)
         {
-            var condition = new AndQueryCondition
-                {
-                    { GradingPeriod.SCHOOL_YEAR_REF_FIELD, schoolYearId },
-                    { GradingPeriod.START_DATE_FIELD, date, ConditionRelation.LessEqual },
-                    { GradingPeriod.END_DATE_FIELD, date, ConditionRelation.GreaterEqual },
-                };
-            return ReadOneOrNull<GradingPeriodDetails>(BuildGetGradingPeriodQuery(condition), true);
+            var res = new AndQueryCondition();
+            if(query.GradingPeriodId.HasValue)
+                res.Add(GradingPeriod.ID_FIELD, query.GradingPeriodId);
+            if(query.MarkingPeriodId.HasValue)
+                res.Add(GradingPeriod.MARKING_PERIOD_REF_FIELD, query.MarkingPeriodId);
+            if(query.SchoolYearId.HasValue)
+                res.Add(GradingPeriod.SCHOOL_YEAR_REF_FIELD, query.SchoolYearId);
+            if (query.Date.HasValue)
+            {
+                res.Add(GradingPeriod.START_DATE_FIELD, query.Date, ConditionRelation.LessEqual);
+                res.Add(GradingPeriod.END_DATE_FIELD, query.Date, ConditionRelation.GreaterEqual);
+            }
+            return res;
         }
-
         private DbQuery BuildGetGradingPeriodQuery(QueryCondition condition)
         {
             var dbQuery = new DbQuery();
@@ -48,5 +49,13 @@ namespace Chalkable.Data.School.DataAccess
             condition.BuildSqlWhere(dbQuery, types[0].Name);
             return dbQuery;
         }
+    }
+
+    public class GradingPeriodQuery
+    {
+        public int? GradingPeriodId { get; set; }
+        public int? MarkingPeriodId { get; set; }
+        public int? SchoolYearId { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

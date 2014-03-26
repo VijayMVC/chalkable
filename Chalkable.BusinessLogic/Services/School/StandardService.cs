@@ -21,6 +21,9 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
         void EditStandardSubjects(IList<StandardSubject> standardSubjects);
         IList<StandardSubject> GetStandardSubjects();
+
+        void DeleteStandardSubjects(IList<int> ids);
+        void DeleteClassStandards(IList<ClassStandard> classStandards);
         //IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
 
     }
@@ -171,6 +174,29 @@ namespace Chalkable.BusinessLogic.Services.School
                 new StandardSubjectDataAccess(uow).Update(standardSubjects);
                 uow.Commit();
             }        
+        }
+
+
+        public void DeleteStandardSubjects(IList<int> ids)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new StandardSubjectDataAccess(uow).Delete(ids);
+                uow.Commit();
+            } 
+        }
+
+        public void DeleteClassStandards(IList<ClassStandard> classStandards)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new ClassStandardDataAccess(uow).Delete(classStandards);
+                uow.Commit();
+            } 
         }
     }
 }

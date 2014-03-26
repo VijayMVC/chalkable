@@ -75,6 +75,11 @@ namespace Chalkable.Data.School.DataAccess
             : base(unitOfWork)
         {
         }
+
+        public void Delete(IList<int> ids)
+        {
+            SimpleDelete(ids.Select(x => new StandardSubject {Id = x}));
+        }
     }
 
     public class ClassStandardDataAccess: DataAccessBase<ClassStandard, int>
@@ -82,6 +87,10 @@ namespace Chalkable.Data.School.DataAccess
         public ClassStandardDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)
         {
+        }
+        public void Delete(IList<ClassStandard> classStandards)
+        {
+            SimpleDelete(classStandards);
         }
     }
 

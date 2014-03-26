@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Person> Edit(IList<PersonInfo> personInfos);
         void Delete(int id);
         void Delete(IList<int> ids);
+        void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
         Person GetPerson(int id);
@@ -310,9 +311,17 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             ServiceLocator.ServiceLocatorMaster.UserService.DeleteUsers(ids, Context.DistrictId.Value);
         }
-
-
-
+        
+        public void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new SchoolPersonDataAccess(uow).Delete(schoolPersons);
+                uow.Commit();
+            }
+        }
     }
 
     public class PersonInfo

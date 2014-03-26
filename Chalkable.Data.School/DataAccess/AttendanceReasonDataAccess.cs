@@ -84,5 +84,10 @@ namespace Chalkable.Data.School.DataAccess
         public AttendanceLevelReasonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+        public void Delete(IList<int> ids)
+        {
+            SimpleDelete(ids.Select(x => new AttendanceLevelReason {Id = x}));
+        }
     }
 }

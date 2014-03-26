@@ -9,19 +9,53 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
-    public class GradingGridViewData
+
+    public class GradingGridSummaryViewData
     {
+        public GradingPeriodViewData GradingPeriod { get; set; }
         public int? Avg { get; set; }
+
+        protected GradingGridSummaryViewData(GradingPeriod gradingPeriod, int? avg)
+        {
+            Avg = avg;
+            GradingPeriod = GradingPeriodViewData.Create(gradingPeriod);
+        }
+        public static GradingGridSummaryViewData Create(GradingPeriod gradingPeriod, int? avg)
+        {
+            return new GradingGridSummaryViewData(gradingPeriod, avg);
+        }
+    }
+
+    public class GradingGridsViewData
+    {
+        public GradingGridViewData CurrentGradingGrid { get; set; }
+        public IList<GradingGridSummaryViewData> GradingGridsSummary { get; set; }
+
+        public static GradingGridsViewData Create(IList<ChalkableGradeBook> gradeBooks, int currentGradingPeriodId)
+        {
+            var currentGradeBook = gradeBooks.First(x => x.GradingPeriod.Id == currentGradingPeriodId);
+            return new GradingGridsViewData
+                {
+                    CurrentGradingGrid = GradingGridViewData.Create(currentGradeBook),
+                    GradingGridsSummary = gradeBooks.Select(x => GradingGridSummaryViewData.Create(x.GradingPeriod, x.Avg)).ToList()
+                };
+        }
+    }
+
+    public class GradingGridViewData : GradingGridSummaryViewData
+    {
+        protected GradingGridViewData(ChalkableGradeBook gradeBook)
+            : base(gradeBook.GradingPeriod, gradeBook.Avg)
+        {
+        }
+
         public IList<GradeStudentViewData> Students { get; set; }
         public IList<ShortAnnouncementGradeViewData> GradingItems { get; set; }
-        public GradingPeriodViewData GradingPeriod { get; set; }
-
+        
         public static GradingGridViewData Create(ChalkableGradeBook gradeBook)
         {
-            var res = new GradingGridViewData
+            var res = new GradingGridViewData(gradeBook)
                 {
-                    Avg = gradeBook.Avg,
-                    GradingPeriod = GradingPeriodViewData.Create(gradeBook.GradingPeriod),
                     Students = new List<GradeStudentViewData>()
                 };
             foreach (var student in gradeBook.Students)

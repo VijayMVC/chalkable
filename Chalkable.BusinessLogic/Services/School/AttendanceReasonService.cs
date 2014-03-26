@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AttendanceReason Get(int id);
         void AddAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons);
         void EditAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons);
+        void DeleteAttendanceLevelReasons(IList<int> ids);
         IList<AttendanceReason> GetAll();
     }
 
@@ -109,6 +110,18 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new AttendanceLevelReasonDataAccess(uow).Update(attendanceLevelReasons);
+                uow.Commit();
+            }
+        }
+
+
+        public void DeleteAttendanceLevelReasons(IList<int> ids)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new AttendanceLevelReasonDataAccess(uow).Delete(ids);
                 uow.Commit();
             }
         }
