@@ -29,15 +29,14 @@ namespace Chalkable.Web.Models
     public class GradingGridsViewData
     {
         public GradingGridViewData CurrentGradingGrid { get; set; }
-        public IList<GradingGridSummaryViewData> GradingGridsSummary { get; set; }
+        public IList<GradingPeriodViewData> GradingPeriods { get; set; }
 
-        public static GradingGridsViewData Create(IList<ChalkableGradeBook> gradeBooks, int currentGradingPeriodId)
+        public static GradingGridsViewData Create(ChalkableGradeBook grid, IList<GradingPeriodDetails> gradingPeriods)
         {
-            var currentGradeBook = gradeBooks.First(x => x.GradingPeriod.Id == currentGradingPeriodId);
             return new GradingGridsViewData
                 {
-                    CurrentGradingGrid = GradingGridViewData.Create(currentGradeBook),
-                    GradingGridsSummary = gradeBooks.Select(x => GradingGridSummaryViewData.Create(x.GradingPeriod, x.Avg)).ToList()
+                    CurrentGradingGrid = GradingGridViewData.Create(grid),
+                    GradingPeriods = gradingPeriods.Select(GradingPeriodViewData.Create).ToList()
                 };
         }
     }

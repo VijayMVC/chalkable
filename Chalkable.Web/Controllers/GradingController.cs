@@ -32,10 +32,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummaryGrids(int classId)
         {
-            var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBooks(classId);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, Context.NowSchoolTime.Date);
-            return Json(GradingGridsViewData.Create(gradeBooks, currentGradingPeriod.Id));
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var date = Context.NowSchoolTime.Date;
+            var currentGradingPeriod = gradingPeriods.First(x => x.StartDate <= date && x.EndDate >= date);
+            var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);         
+            return Json(GradingGridsViewData.Create(gradeBooks, gradingPeriods));
         }
 
         [AuthorizationFilter("Teacher")]
