@@ -21,7 +21,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(int id);
         void Delete(IList<int> ids);
         void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons);
-        void DeleteStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
         Person GetPerson(int id);
@@ -320,17 +319,6 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new SchoolPersonDataAccess(uow).Delete(schoolPersons);
-                uow.Commit();
-            }
-        }
-
-        public void DeleteStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears)
-        {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new StudentSchoolYearDataAccess(uow).Delete(studentSchoolYears);
                 uow.Commit();
             }
         }
