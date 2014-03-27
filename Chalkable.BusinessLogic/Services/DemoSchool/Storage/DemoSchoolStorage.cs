@@ -14,37 +14,37 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(Data.School.Model.School school)
         {
-            throw new NotImplementedException();
+
+            if (!data.ContainsKey(school.Id))
+                data[school.Id] = school;
         }
 
-        public IList<Data.School.Model.School> GetAll()
+        public void Update(Data.School.Model.School school)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(school.Id))
+                data[school.Id] = school;
         }
 
-        public void Update(Data.Master.Model.School school)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count)
+        public PaginatedList<Data.School.Model.School> GetSchools(Guid districtId, int start, int count)
         {
             throw new NotImplementedException();
         }
 
         public void Add(IList<Data.School.Model.School> schools)
         {
-            throw new NotImplementedException();
+            foreach (var school in schools)
+            {
+                Add(school);
+            }
         }
 
         public void Update(IList<Data.School.Model.School> schools)
         {
-            throw new NotImplementedException();
+            foreach (var school in schools)
+            {
+                Update(school);
+            }
         }
-
-        public void Delete(IList<int> ids)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }
