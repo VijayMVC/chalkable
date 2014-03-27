@@ -19,22 +19,35 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(Data.Master.Model.School school)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(school.Id))
+                data[school.Id] = school;
         }
 
         public Data.Master.Model.School GetByIdOrNull(Guid id)
         {
-            throw new NotImplementedException();
+            return data.ContainsKey(id) ? data[id] : null;
         }
 
         public void Add(IList<Data.Master.Model.School> schools)
         {
-            throw new NotImplementedException();
+            foreach (var school in schools)
+            {
+                Add(school);
+            }
         }
 
         public void Update(List<Data.Master.Model.School> schools)
         {
-            throw new NotImplementedException();
+            foreach (var school in schools)
+            {
+                Update(school);
+            }
+        }
+
+        public void Update(Data.Master.Model.School school)
+        {
+            if (data.ContainsKey(school.Id))
+                data[school.Id] = school;
         }
     }
 }
