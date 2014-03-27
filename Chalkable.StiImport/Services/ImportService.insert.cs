@@ -421,7 +421,7 @@ namespace Chalkable.StiImport.Services
                 if (ct != null)
                     classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
             }
-            ServiceLocatorSchool.ClassClassAnnouncementTypeService.Add(types);
+            ServiceLocatorSchool.ClassAnnouncementTypeService.Add(types);
         }
 
         private void InsertPeriods()

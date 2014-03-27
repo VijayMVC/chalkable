@@ -103,7 +103,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<ActivityCategory>().Deleted == null)
                 return;
             var ids = context.GetSyncResult<ActivityCategory>().Deleted.Select(x => x.ActivityCategoryID).ToList();
-            ServiceLocatorSchool.ClassClassAnnouncementTypeService.Delete(ids);
+            ServiceLocatorSchool.ClassAnnouncementTypeService.Delete(ids);
         }
 
         private void DeleteMarkingPeriodClasses()

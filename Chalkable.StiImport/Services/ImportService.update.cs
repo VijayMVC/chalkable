@@ -296,7 +296,7 @@ namespace Chalkable.StiImport.Services
                 if (ct != null)
                     classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
             }
-            ServiceLocatorSchool.ClassClassAnnouncementTypeService.Edit(types);
+            ServiceLocatorSchool.ClassAnnouncementTypeService.Edit(types);
         }
 
         private void UpdatePeriods()
