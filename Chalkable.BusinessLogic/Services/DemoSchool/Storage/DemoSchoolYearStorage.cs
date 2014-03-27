@@ -1,26 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoSchoolYearStorage
+    public class DemoSchoolYearStorage:BaseDemoStorage<int, SchoolYear>
     {
-        private Dictionary<int, SchoolYear> schoolYears = new Dictionary<int, SchoolYear>(); 
-        public DemoSchoolYearStorage()
-        {
-            var currentDate = DateTime.Now;
-            schoolYears.Add(1, new SchoolYear
-            {
+        private Dictionary<int, SchoolYear> schoolYears = new Dictionary<int, SchoolYear>();
 
-                StartDate = new DateTime(currentDate.Year, 1, 1),
-                EndDate = new DateTime(currentDate.Year, 12, 31),
-                Id = 1,
-                Description = "Current School Year",
-                Name = "Current"
-            });
+        public DemoSchoolYearStorage(DemoStorage storage) : base(storage)
+        {
         }
 
         public bool Exists(string name)
@@ -53,25 +43,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return schoolYear;
         }
 
-        public SchoolYear GetById(int id)
-        {
-            return schoolYears.First(x => x.Key == id).Value;
-        }
-
         public SchoolYear GetCurrentSchoolYear()
         {
             return schoolYears.First().Value;
         }
 
-        public void Delete(int schoolYearId)
-        {
-            schoolYears.Remove(schoolYearId);
-        }
-
-        public IList<SchoolYear> GetAll()
-        {
-            return schoolYears.Select(x => x.Value).ToList();
-        }
 
         public SchoolYear GetByDate(DateTime date)
         {
@@ -84,15 +60,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
 
                 schoolYears.Add(year.Id, year);
-            }
-
-        }
-
-        public void Delete(IList<int> schoolYearIds)
-        {
-            foreach (var schoolYearId in schoolYearIds)
-            {
-                Delete(schoolYearId);
             }
         }
 

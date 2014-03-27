@@ -5,13 +5,16 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoRoomStorage
+    public class DemoRoomStorage:BaseDemoStorage<int, Room>
     {
-        private readonly Dictionary<int ,Room> roomData = new Dictionary<int, Room>(); 
+        public DemoRoomStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(Room room)
         {
-            if (!roomData.ContainsKey(room.Id))
-                roomData.Add(room.Id, room);
+            if (!data.ContainsKey(room.Id))
+                data.Add(room.Id, room);
         }
 
         public void AddRooms(IList<Room> rooms)
@@ -20,11 +23,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Add(room);
             }
-        }
-
-        public Room GetById(int id)
-        {
-             return roomData.ContainsKey(id) ? roomData[id] : null;
         }
 
         public Room Edit(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber)
@@ -38,31 +36,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return room;
         }
 
-        public void Delete(int id)
-        {
-            roomData.Remove(id);
-        }
-
         public PaginatedList<Room> GetAll(int start, int count)
         {
             throw new System.NotImplementedException();
-        }
-
-        public void Delete(IList<int> ids)
-        {
-            foreach (var item in ids)
-            {
-                Delete(item);
-            }
         }
 
         public void Update(IList<Room> rooms)
         {
             foreach (var room in rooms)
             {
-                if (roomData.ContainsKey(room.Id))
+                if (data.ContainsKey(room.Id))
                 {
-                    roomData[room.Id] = room;
+                    data[room.Id] = room;
                 }
             }
         }
