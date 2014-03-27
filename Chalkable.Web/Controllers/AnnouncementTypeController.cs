@@ -15,7 +15,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult List(int classId)
         {
-            var list = SchoolLocator.ClassClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
+            var list = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var res = ClassAnnouncementTypeViewData.Create(list);
             return Json(res, 3);
         }
@@ -36,7 +36,7 @@ namespace Chalkable.Web.Controllers
 
         public static IList<ClassAnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, int classId)
         {
-            var classAnnTypes = serviceLocator.ClassClassAnnouncementTypeService.GetClassAnnouncementTypes(classId, false).ToList();
+            var classAnnTypes = serviceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId, false).ToList();
             return classAnnTypes;
         }
     }

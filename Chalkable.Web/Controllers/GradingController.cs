@@ -34,20 +34,21 @@ namespace Chalkable.Web.Controllers
         {
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var standards = SchoolLocator.StandardService.GetStandardes(classId, null, null);
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var date = Context.NowSchoolTime.Date;
             var currentGradingPeriod = gradingPeriods.First(x => x.StartDate <= date && x.EndDate >= date);
             var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);         
-            return Json(GradingGridsViewData.Create(gradeBooks, gradingPeriods));
+            return Json(GradingGridsViewData.Create(gradeBooks, gradingPeriods, standards, classAnnouncementTypes));
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult ClassGradingGrid(int classId, int gradingPeriodId)
+        public ActionResult ClassGradingGrid(int classId, int gradingPeriodId, int? standardId, int? classAnnouncementTypeId)
         {
-            var gradeBook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriodId);
+            var gradeBook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriodId, standardId, classAnnouncementTypeId);
             return Json(GradingGridViewData.Create(gradeBook));
         }
-
-
+        
         [AuthorizationFilter("Teacher")]
         public ActionResult ClassStandardGrid(int classId)
         {

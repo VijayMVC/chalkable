@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassPersonGradingStats> GetFullGradingStats(int markingPeriodId, int studentId);
         IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId);
         IList<ChalkableGradeBook> GetGradeBooks(int classId);
-        ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId);
+        ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -176,9 +176,10 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId)
+        public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null)
         {
-            var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, null, gradingPeriodId);
+            var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType
+                , gradingPeriodId, standardId);
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             return GetGradeBooks(classId, new List<GradingPeriodDetails>{gradingPeriod}, stiGradeBook).First();
         }
