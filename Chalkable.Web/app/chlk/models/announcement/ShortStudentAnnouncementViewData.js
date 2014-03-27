@@ -47,8 +47,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'complete',
 
             [[chlk.models.id.StudentAnnouncementId, chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId,
-                Boolean, Boolean, Boolean, Boolean, Boolean, String]],
-            function $(id_, announcementId_, studentId_, dropped_, late_, exempt_, absent_, incomplete_, comment_){
+                Boolean, Boolean, Boolean, Boolean, Boolean, String, String]],
+            function $(id_, announcementId_, studentId_, dropped_, late_, exempt_, absent_, incomplete_, comment_, gradeValue_){
                 BASE();
                 if(id_)
                     this.setId(id_);
@@ -68,6 +68,8 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setIncomplete(incomplete_);
                 if(comment_)
                     this.setComment(comment_);
+                if(gradeValue_)
+                    this.setGradeValue(gradeValue_);
             },
 
             [[Number, Boolean]],

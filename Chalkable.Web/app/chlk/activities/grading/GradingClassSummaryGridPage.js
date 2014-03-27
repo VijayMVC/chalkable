@@ -60,6 +60,16 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
             },
 
+            function getScores(node){
+                var scores = this.getAllScores();
+                var parent = node.parent('.grade-value');
+                if(parent.getData('able-drop-student-score'))
+                    scores.concat(['Dropped', 'Dropped (fill all)']);
+                if(parent.getData('able-exempt-student-score'))
+                    scores.concat(['Exempt', 'Exempt (fill all)']);
+                return scores;
+            },
+
             function openGradingPeriod(container){
                 container.parent('.marking-period-container').addClass('open');
                 var annContainer = container.find('.ann-types-container');
@@ -89,11 +99,11 @@ NAMESPACE('chlk.activities.grading', function () {
 
             ArrayOf(String), 'allScores',
 
-            [[String]],
-            ArrayOf(String), function getSuggestedValues(text){
+            [[String, ria.dom.Dom]],
+            ArrayOf(String), function getSuggestedValues(text, node){
                 var text = text.toLowerCase();
                 var res = [];
-                this.getAllScores().forEach(function(score){
+                this.getScores(node).forEach(function(score){
                     if(score.toLowerCase().indexOf(text) == 0)
                         res.push(score);
                 });
@@ -201,7 +211,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 this.hideDropDown();
                             }
                         }else{
-                            suggestions = text  ? this.getSuggestedValues(text) : [];
+                            suggestions = text  ? this.getSuggestedValues(text, node) : [];
                             if(!suggestions.length)
                                 node.addClass('error');
                             else
@@ -240,7 +250,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.see-all')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function seeAllClick(node, event){
-                this.updateDropDown(this.getAllScores(), this.dom.find('.active-cell'), true);
+                this.updateDropDown(this.getScores(node), this.dom.find('.active-cell'), true);
                 return false;
             },
 
@@ -360,7 +370,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     default:{
                         var numericValue = parseFloat(value);
                         if(Number.NaN == numericValue){
-                            var allScores = this.getAllScores();
+                            var allScores = this.getScores(input);
                             allScores = allScores.find(function(score){
                                 return score.toLowerCase() == value;
                             });
@@ -404,8 +414,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     allScores.push(item.getName() + ' (fill all)');
                 });
 
-                allScores = allScores.concat(['Exempt', 'Exempt (fill all)', 'Incomplete', 'Incomplete (fill all)',
-                    'Late', 'Late (fill all)', 'Dropped', 'Dropped (fill all)', 'Absent', 'Absent (fill all)']);
+                allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)',
+                    'Late', 'Late (fill all)', 'Absent', 'Absent (fill all)']);
                 this.setAllScores(allScores);
                 var dom = this.dom;
                 var that = this;
@@ -466,7 +476,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     this.getBooleanValue(node.getData('isexempt')),
                     this.getBooleanValue(node.getData('isabsent')),
                     this.getBooleanValue(node.getData('isincomplete')),
-                    node.getData('comment')
+                    node.getData('comment'),
+                    cell.find('.grade-text').getHTML()
                 );
                 return model;
             },
@@ -481,7 +492,8 @@ NAMESPACE('chlk.activities.grading', function () {
 
                 tpl.assign(model);
                 tpl.options({
-                    ableDropStudentScore: JSON.parse(cell.getData('able-drop-student-score'))
+                    ableDropStudentScore: this.getBooleanValue(cell.getData('able-drop-student-score')),
+                    ableExemptStudentScore: this.getBooleanValue(cell.getData('able-exempt-student-score'))
                 });
                 tpl.renderTo(cell);
             }

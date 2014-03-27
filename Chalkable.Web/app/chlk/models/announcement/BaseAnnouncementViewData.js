@@ -12,6 +12,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('candropstudentscore')],
             Boolean, 'ableDropStudentScore',
 
+            [ria.serialize.SerializeProperty('maybeexempt')],
+            Boolean, 'ableExemptStudentScore',
+
             Number, 'order',
 
             String, 'title',

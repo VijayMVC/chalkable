@@ -55,6 +55,7 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore)
                     div(
                         row-index=i
                         data-able-drop-student-score= announcement.isAbleDropStudentScore(),
+                        data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
                         data-max-score= maxScore
                     ).dotted-h.grade-value
                         +TeacherClassGradingGridSummaryCell(info, maxScore)

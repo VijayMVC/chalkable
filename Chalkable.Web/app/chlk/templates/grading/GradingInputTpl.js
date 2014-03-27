@@ -10,6 +10,8 @@ NAMESPACE('chlk.templates.grading', function () {
         'GradingInputTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             Boolean, 'ableDropStudentScore',
 
+            Boolean, 'ableExemptStudentScore',
+
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 
