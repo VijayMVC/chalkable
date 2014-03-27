@@ -1,5 +1,4 @@
 REQUIRE('chlk.models.grading.StudentWithAvg');
-REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -8,13 +7,13 @@ NAMESPACE('chlk.models.grading', function () {
     CLASS(
         GENERIC('TItem'),
         'GradingClassSummaryGridItems', [
+            [ria.serialize.SerializeProperty('gradingperiod')],
+            chlk.models.common.NameId, 'gradingPeriod',
+
             ArrayOf(chlk.models.grading.StudentWithAvg), 'students',
 
             [ria.serialize.SerializeProperty('gradingitems')],
             ArrayOf(TItem), 'gradingItems',
-
-            [ria.serialize.SerializeProperty('gradingperiod')],
-            chlk.models.common.NameId, 'gradingPeriod',
 
             Number, 'avg'
         ]);

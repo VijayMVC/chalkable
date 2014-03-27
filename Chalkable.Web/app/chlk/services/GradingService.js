@@ -8,6 +8,8 @@ REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
 REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
 REQUIRE('chlk.models.standard.StandardGradings');
+REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
+REQUIRE('chlk.models.grading.ShortGradingClassSummaryGridItems');
 
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
@@ -23,11 +25,10 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.GradingService*/
     CLASS(
         'GradingService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId, String, String, Boolean, Boolean, Boolean, Boolean, Boolean,
-                Boolean, Boolean, String, String]],
+            [[chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Object]],
             ria.async.Future, function updateItem(announcementId, studentId, gradeValue, comment, dropped, late, absent,
-                      incomplete, exempt, passed, complete, standardIds, standardGrades) {
-                return this.get('Grading/UpdateItem', chlk.models.announcement.StudentAnnouncement, {
+                      incomplete, exempt, model_) {
+                return this.get('Grading/UpdateItem', model_ || chlk.models.announcement.StudentAnnouncement, {
                     announcementId: announcementId && announcementId.valueOf(),
                     studentId: studentId && studentId.valueOf(),
                     gradeValue: gradeValue,
@@ -36,11 +37,7 @@ NAMESPACE('chlk.services', function () {
                     late: late,
                     absent: absent,
                     incomplete: incomplete,
-                    exempt: exempt,
-                    passed: passed,
-                    complete: complete,
-                    standardIds: standardIds,
-                    standardGrades: standardGrades
+                    exempt: exempt
                 });
             },
 
@@ -88,8 +85,16 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getClassSummaryGrid(classId) {
-                return this.get('Grading/ClassSummaryGrid', ArrayOf(chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.announcement.ShortAnnouncementViewData)), {
+                return this.get('Grading/ClassSummaryGrids', chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData, {
                     classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getClassSummaryGridForPeriod(classId, gradingPeriodId) {
+                return this.get('Grading/ClassGradingGrid', chlk.models.grading.ShortGradingClassSummaryGridItems, {
+                    classId: classId.valueOf(),
+                    gradingPeriodId: gradingPeriodId.valueOf()
                 });
             },
 

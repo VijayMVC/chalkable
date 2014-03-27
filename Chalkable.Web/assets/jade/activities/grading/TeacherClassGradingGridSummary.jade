@@ -24,10 +24,13 @@
                     textarea.comment-value
                 a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
                 a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
-        each item,i in self.getItems()
-            gradingPeriod = item.getGradingPeriod()
+        each gradingPeriod,i in self.getGradingPeriods()
             div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
-                div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
+                +ActionLink('grading', 'loadGradingPeriodGridSummary', selectedId, gradingPeriod.getId()).load-grading-period
+                item = self.getCurrentGradingGrid()
+                div(
+                    data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? (item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet') : ''
+                ).mp-title
                     mpName = gradingPeriod.getName()
                     span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
                     .grading-selects
@@ -41,61 +44,6 @@
                             +Option(2, 'Category 2' , false)
                     a(href="javascript:").grey-button.comment-button=Msg.Comment
                     .collapse
-                .mp-data
-                    .ann-types-container
-                        .dotted-container.name-container.with-horizontal-dots
-                            .type-name=Msg.Student(true)
-                            .time
-                            .student-name
-                                .max-score.dotted-h
-                            each student,i in item.getStudents()
-                                name = student.getStudentInfo().getDisplayName()
-                                div(row-index=i).student-name
-                                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
-                                    if student.isWithdrawn()
-                                        div(data-tooltip="Withdrawn").withdrawn
-                            .student-name
-                                .dotted-h=Msg.Avg
-                        +LeftRightToolbar()(
-                            needDots = true,
-                            roundedDots = true,
-                            padding = 77
-                        ).grid-toolbar.i-b.big-arrows
-                            .dotted-container.grade-container.with-horizontal-dots
-                                .type-name=Msg.Avg
-                                .time
-                                .max-score.dotted-h
-                                each student,i in item.getStudents()
-                                    div(row-index=i).dotted-h.grade-value=student.getAvg()
-                                .dotted-h.grade-value
-                            each announcement in item.getGradingItems()
-                                maxScore = announcement.getMaxScore() || 70
-                                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
-                                    div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
-                                    .time=announcement.getExpiresDate().format('M d')
-                                    .max-score.dotted-h=maxScore
-                                    each info,i in announcement.getStudentAnnouncements().getItems()
-                                        normalValue = info.getNormalValue()
-                                        ableDropStudentScore = announcement.isAbleDropStudentScore()
-                                        div(
-                                            row-index= i,
-                                            class= (parseInt(normalValue, 10) ? '' : 'letter'),
-                                            data-id= info.getId(),
-                                            data-announcementid= info.getAnnouncementId(),
-                                            data-studentid= info.getStudentId(),
-                                            data-dropped= info.isDropped(),
-                                            data-islate= info.isLate(),
-                                            data-isexempt= info.isExempt(),
-                                            data-isabsent= info.isAbsent(),
-                                            data-isincomplete= info.isIncomplete(),
-                                            data-comment= info.getComment()
-                                            data-max-score= announcement.getMaxScore() || 100,
-                                            data-normal-value= normalValue,
-                                            data-able-drop-student-score= ableDropStudentScore
-                                        ).dotted-h.grade-value=normalValue
-                                            cls = info.getAlertClass(maxScore, true)
-                                            div(class=cls, data-tooltip=info.getTooltipText(maxScore, true)).alert-flag
-                                            if info.getComment()
-                                                .with-comment
-                                            .edit-cell
-                                    .dotted-h.grade-value=announcement.getAvg()
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    if gradingPeriod.getId() == self.getGradingPeriodId()
+                        +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)

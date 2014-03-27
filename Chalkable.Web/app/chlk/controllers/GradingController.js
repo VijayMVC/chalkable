@@ -121,6 +121,15 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+            function loadGradingPeriodGridSummaryAction(classId, gradingPeriodId){
+                var result = this.gradingService
+                    .getClassSummaryGridForPeriod(classId, gradingPeriodId)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function summaryGridTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
@@ -132,10 +141,12 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.gradingService
                     .getClassSummaryGrid(classId_)
                     .attach(this.validateResponse_())
-                    .then(function(items){
+                    .then(function(model){
                         var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
-                        var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.announcement.ShortAnnouncementViewData,
-                            gradingPeriod.getId(), topData, null, items, alphaGrades, alternateScores);
+                        model.setAlphaGrades(alphaGrades);
+                        model.setTopData(topData);
+                        model.setGradingPeriodId(gradingPeriod.getId());
+                        model.setAlternateScores(alternateScores);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);

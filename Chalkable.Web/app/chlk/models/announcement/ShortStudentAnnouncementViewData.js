@@ -46,6 +46,30 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('iscomplete')],
             Boolean, 'complete',
 
+            [[chlk.models.id.StudentAnnouncementId, chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId,
+                Boolean, Boolean, Boolean, Boolean, Boolean, String]],
+            function $(id_, announcementId_, studentId_, dropped_, late_, exempt_, absent_, incomplete_, comment_){
+                BASE();
+                if(id_)
+                    this.setId(id_);
+                if(announcementId_)
+                    this.setAnnouncementId(announcementId_);
+                if(studentId_)
+                    this.setStudentId(studentId_);
+                if(dropped_)
+                    this.setDropped(dropped_);
+                if(late_)
+                    this.setLate(late_);
+                if(exempt_)
+                    this.setExempt(exempt_);
+                if(absent_)
+                    this.setAbsent(absent_);
+                if(incomplete_)
+                    this.setIncomplete(incomplete_);
+                if(comment_)
+                    this.setComment(comment_);
+            },
+
             [[Number, Boolean]],
             String, function getAlertClass(maxScore, byNumeric_){
                 var classes = [];

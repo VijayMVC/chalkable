@@ -144,8 +144,8 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
         },
 
-        [[chlk.models.announcement.StudentAnnouncement]],
-        function setAnnouncementGrade(model){
+        [[chlk.models.announcement.StudentAnnouncement, Boolean]],
+        function setAnnouncementGrade(model, fromGrid_){
             var result = this.gradingService
                 .updateItem(
                     model.getAnnouncementId(),
@@ -157,10 +157,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.isAbsent(),
                     model.isIncomplete(),
                     model.isExempt(),
-                    model.isPassed(),
-                    model.isComplete(),
-                    model.getStandardIds(),
-                    model.getStandardGrades()
+                    fromGrid_ ? chlk.models.announcement.ShortStudentAnnouncementViewData : null
                 )
                 .attach(this.validateResponse_());
             return result;
@@ -168,8 +165,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeFromGridAction(model){
-            this.setAnnouncementGrade(model);
-            return null;
+            var result = this.setAnnouncementGrade(model, true);
+            return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
         },
 
         [[chlk.models.announcement.StudentAnnouncement]],

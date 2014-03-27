@@ -1,7 +1,12 @@
 REQUIRE('chlk.templates.grading.GradingClassSummaryGridTpl');
-REQUIRE('chlk.activities.common.InfoByMpPage');
-REQUIRE('chlk.models.common.Array');
 REQUIRE('chlk.templates.grading.GradingInputTpl');
+REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl');
+REQUIRE('chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl');
+
+REQUIRE('chlk.activities.lib.TemplatePage');
+
+REQUIRE('chlk.models.common.Array');
+REQUIRE('chlk.models.announcement.ShortStudentAnnouncementViewData');
 
 NAMESPACE('chlk.activities.grading', function () {
 
@@ -9,7 +14,79 @@ NAMESPACE('chlk.activities.grading', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassSummaryGridTpl)],
-        'GradingClassSummaryGridPage', EXTENDS(chlk.activities.common.InfoByMpPage), [
+        'GradingClassSummaryGridPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+
+            [ria.mvc.DomEventBind('click', '.mp-title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function collapseClick(node, event){
+                var nodeT = new ria.dom.Dom(event.target);
+                var dom = this.dom;
+                if(!nodeT.hasClass('comment-button')){
+                    var parent = node.parent('.marking-period-container');
+
+                    var mpData = parent.find('.mp-data');
+
+                    if(parent.hasClass('open')){
+                        jQuery(mpData.valueOf()).animate({
+                            height: 0
+                        }, 500);
+
+                        mpData.addClass('with-data');
+
+                        setTimeout(function(){
+                            parent.removeClass('open');
+                            //mpData.setHTML('');
+                        }, 500);
+                    }else{
+                        var items = this.dom.find('.marking-period-container.open');
+                        var itemsMp = items.find('.mp-data');
+                        jQuery(itemsMp.valueOf()).animate({height: 0}, 500);
+                        if(mpData.hasClass('with-data')){
+                            mpData.removeClass('with-data');
+                            this.openGradingPeriod(mpData);
+                        }else{
+                            parent.find('.load-grading-period').trigger('click');
+                        }
+                        dom.find('.mp-data.with-data')
+                            .setHTML('')
+                            .removeClass('with-data');
+                        setTimeout(function(){
+                            items.removeClass('open');
+                            itemsMp.setHTML('');
+                        }, 500);
+                        //parent.addClass('open');
+
+                    }
+                }
+            },
+
+            function openGradingPeriod(container){
+                container.parent('.marking-period-container').addClass('open');
+                var annContainer = container.find('.ann-types-container');
+                container.setCss('height', 0);
+                jQuery(container.valueOf()).animate({
+                    height: (annContainer.height() + parseInt(annContainer.getCss('margin-bottom'), 10))
+                }, 500);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)],
+            VOID, function updateGradingPeriodPart(tpl, model, msg_) {
+                var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
+                tpl.renderTo(container);
+                setTimeout(function(){
+                    this.openGradingPeriod(container);
+                }.bind(this), 1);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function updateGradingCell(tpl, model, msg_) {
+                var container = this.dom.find('.current-grade-container').removeClass('current-grade-container');
+                tpl.options({
+                    maxScore: container.getData('max-score')
+                });
+                tpl.renderTo(container.setHTML(''));
+            },
+
             ArrayOf(String), 'allScores',
 
             [[String]],
@@ -112,7 +189,7 @@ NAMESPACE('chlk.activities.grading', function () {
                             return false;
                         }
                         else
-                            this.setValue(cell);
+                            this.updateValue();
                     }else{
                         var text = node.getValue() ? node.getValue().trim() : '';
                         var parsed = parseInt(text,10);
@@ -134,38 +211,30 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                     this.updateDropDown(suggestions, node);
                 }
-                setTimeout(function(node){
+                setTimeout(function(cell){
+                    var node = cell.find('.grade-autocomplete');
                     var numericValue = parseInt(node.getValue(), 10);
                     if(numericValue == node.getValue()){
-                        /*var announcementId = node.getData('announcement-id');
-                        var studentAnnouncementId = node.getData('student-announcement-id');
-                        var gradingPeriodId = node.getData('grading-period-id');
-                        var flag = node.parent('.grade-value').find('.alert-flag');
-                        this.getGradingItems().forEach(function(item){
-                            if(item.getGradingPeriod().getId().valueOf() == gradingPeriodId){
-                                item.getGradingItems().forEach(function(announcement){
-                                    if(announcement.getId().valueOf() == announcementId){
-                                        announcement.getStudentAnnouncements().getItems().forEach(function(studentAnnouncement){
-                                            if(studentAnnouncement.getId().valueOf() == studentAnnouncementId){
-                                                studentAnnouncement.setGradeValue(node.getValue());
-
-                                                flag.removeClass(Msg.Error.toLowerCase())
-                                                    .removeClass(Msg.Late.toLowerCase())
-                                                    .removeClass(Msg.Incomplete.toLowerCase())
-                                                    .removeClass(Msg.Absent.toLowerCase())
-                                                    .removeClass(Msg.Multiple.toLowerCase());
-
-                                                flag.addClass(item.getAlertClass(maxValue));
-                                                flag.setData('tooltip', item.getTooltipText(maxValue));
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });*/
+                        var model = this.getModelFromCell(cell);
+                        this.updateFlagByModel(model, cell);
                     }
-                }.bind(this, node), 10);
+                }.bind(this, cell), 10);
 
+            },
+
+            [[chlk.models.announcement.ShortStudentAnnouncementViewData, ria.dom.Dom]],
+            function updateFlagByModel(model, cell){
+                var value = cell.find('.grade-autocomplete').getValue();
+                model.setGradeValue(value);
+                var flag = cell.find('.alert-flag');
+                flag.removeClass(Msg.Error.toLowerCase())
+                    .removeClass(Msg.Late.toLowerCase())
+                    .removeClass(Msg.Incomplete.toLowerCase())
+                    .removeClass(Msg.Absent.toLowerCase())
+                    .removeClass(Msg.Multiple.toLowerCase());
+                var maxValue = cell.getData('max-score');
+                flag.addClass(model.getAlertClass(maxValue));
+                flag.setData('tooltip', model.getTooltipText(maxValue));
             },
 
             [ria.mvc.DomEventBind('click', '.see-all')],
@@ -247,13 +316,14 @@ NAMESPACE('chlk.activities.grading', function () {
                 setTimeout(function(){
                     cell.find('input').trigger('focus');
                 }, 1);
-                this.setValue(cell, true);
+                this.updateValue(true);
             },
 
             [ria.mvc.DomEventBind('click', '.autocomplete-item:not(.see-all)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function listItemBtnClick(node, event){
                 var text = node.getHTML().trim();
+                this.hideDropDown();
                 var value = text, isFill = false;
                 var cell = this.dom.find('.active-cell');
                 cell.find('.error').removeClass('error');
@@ -269,14 +339,13 @@ NAMESPACE('chlk.activities.grading', function () {
                     this.dom.find('.able-fill-all').forEach(function(node){
                         that.setItemValue(value, node, false);
                     });
-                this.hideDropDown();
             },
 
             [[ria.dom.Dom, String, Boolean]],
             function setItemState_(node, stateName, selectNext_){
-                node.setValue(input.getData('value'));
+                node.setValue(node.getData('value'));
                 node.parent('form').find('[name=' + stateName +']').setValue(true);
-                this.setValue(node);
+                this.updateValue();
             },
 
             function setItemValue(value, input, selectNext){
@@ -298,30 +367,33 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(allScores.length == 0) return;
                         }
                         input.setValue(value);
-                        this.setValue(input);
+                        this.updateValue();
                     }
                 }
             },
 
-            function setValue(node, isComment_){
+            [[Boolean]],
+            function updateValue(isComment_){
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
+                activeCell.addClass('current-grade-container');
+                var model = this.getModelFromCell(activeCell);
+                this.updateFlagByModel(model, activeCell);
+                //activeCell.find('.grade-text').setHTML(model.getGradeValue());
+                activeCell.find('.grade-text').setHTML('...');
                 var nextCell = activeCell.next().find('.edit-cell');
                 if(!isComment_){
-                    if(nextCell.exists())
-                        nextCell.trigger('click');
-                    else
-                        this.dom.trigger('click');
+                    setTimeout(function(){
+                        if(nextCell.exists())
+                            nextCell.trigger('click');
+                        else
+                            this.dom.trigger('click');
+                    }.bind(this), 1);
                 }
             },
 
-            ArrayOf(chlk.models.grading.GradingClassSummaryGridItems), 'gradingItems',
-
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                this.setGradingItems(model.getItems());
-                //this.setAlternateScores(model.getAlternateScores());
-                //this.setAlphaGrades(model.getAlphaGrades());
                 var allScores = [];
                 model.getAlternateScores().forEach(function(item){
                     allScores.push(item.getName());
@@ -336,16 +408,23 @@ NAMESPACE('chlk.activities.grading', function () {
                     'Late', 'Late (fill all)', 'Dropped', 'Dropped (fill all)', 'Absent', 'Absent (fill all)']);
                 this.setAllScores(allScores);
                 var dom = this.dom;
+                var that = this;
                 new ria.dom.Dom().on('click.grade', function(doc, event){
+                    var dt = getDate();
                     var popUp = dom.find('.chlk-pop-up-container.comment');
                     var node = new ria.dom.Dom(event.target);
                     if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
-                        && !node.isOrInside('.chlk-pop-up-container.comment') && !node.isOrInside('.autocomplete-list')){
+                        && !node.isOrInside('.chlk-pop-up-container.comment') && !node.isOrInside('.grading-input-popup')
+                        && !node.isOrInside('.autocomplete-list')){
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
                                 popUp.hide();
                                 var parent = node.parent('.grade-value');
-                                dom.find('.active-cell').removeClass('active-cell');
+
+                                //TODO
+                                var activeCell = dom.find('.active-cell');
+                                activeCell.removeClass('active-cell');
+                                activeCell.find('.grading-form').remove();
                                 if(parent.exists() && !node.hasClass('alert-flag')){
                                     if(!parent.hasClass('active-row')){
                                         var index = parent.getAttr('row-index');
@@ -353,6 +432,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                         dom.find('[row-index=' + index + ']').addClass('active-row');
                                     }
                                     parent.addClass('active-cell');
+                                    that.addFormToActiveCell(parent);
                                     node.parent('.marking-period-container').find('.comment-button').show();
                                     setTimeout(function(){
                                         parent.find('input').trigger('focus');
@@ -372,6 +452,38 @@ NAMESPACE('chlk.activities.grading', function () {
                         dom.find('.grading-input-popup').hide();
                     }
                 });
+            },
+
+            [[ria.dom.Dom]],
+            chlk.models.announcement.ShortStudentAnnouncementViewData, function getModelFromCell(cell){
+                var node = cell.find('.grade-info');
+                var model = new chlk.models.announcement.ShortStudentAnnouncementViewData(
+                    new chlk.models.id.StudentAnnouncementId(node.getData('id')),
+                    new chlk.models.id.AnnouncementId(node.getData('announcementid')),
+                    new chlk.models.id.SchoolPersonId(node.getData('studentid')),
+                    this.getBooleanValue(node.getData('dropped')),
+                    this.getBooleanValue(node.getData('islate')),
+                    this.getBooleanValue(node.getData('isexempt')),
+                    this.getBooleanValue(node.getData('isabsent')),
+                    this.getBooleanValue(node.getData('isincomplete')),
+                    node.getData('comment')
+                );
+                return model;
+            },
+
+            Boolean, function getBooleanValue(value){
+                return value == 'false' ? false : !!value;
+            },
+
+            function addFormToActiveCell(cell){
+                var tpl = new chlk.templates.grading.GradingInputTpl();
+                var model = this.getModelFromCell(cell);
+
+                tpl.assign(model);
+                tpl.options({
+                    ableDropStudentScore: JSON.parse(cell.getData('able-drop-student-score'))
+                });
+                tpl.renderTo(cell);
             }
         ]);
 });
