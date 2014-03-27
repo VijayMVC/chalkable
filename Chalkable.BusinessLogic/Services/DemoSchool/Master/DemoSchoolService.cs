@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void Update(Data.Master.Model.School school)
         {
-            Storage.SchoolStorage.Update(school);
+            Storage.MasterSchoolStorage.Update(school);
         }
 
         public PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count)
