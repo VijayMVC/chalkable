@@ -29,6 +29,27 @@ namespace Chalkable.Web.Controllers
             //return Json(GradingTeacherClassSummaryViewData.Create(gradingStats, classes), 6);
         }
 
+        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        public ActionResult ClassSummary(int classId)
+        {
+            return FakeJson("~/fakeData/gradingClassSummary.json");
+            //if (!SchoolLocator.Context.SchoolId.HasValue)
+            //    throw new UnassignedUserException();
+            //var teacherId = Context.UserLocalId;
+            //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        public ActionResult ItemGradingStat(int announcementId)
+        {
+            return FakeJson("~/fakeData/itemGradingStat.json");
+            //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            //var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
+            //var mapper = SchoolLocator.GradingStyleService.GetMapper();
+            //return Json(ItemGradigStatViewData.Create(studentAnns, ann, mapper));
+        }
+
+
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummaryGrids(int classId)
         {
@@ -37,7 +58,7 @@ namespace Chalkable.Web.Controllers
             var standards = SchoolLocator.StandardService.GetStandardes(classId, null, null);
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var date = Context.NowSchoolTime.Date;
-            var currentGradingPeriod = gradingPeriods.First(x => x.StartDate <= date && x.EndDate >= date);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetLastGradingPeriodDetails(sy.Id, date);
             var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);         
             return Json(GradingGridsViewData.Create(gradeBooks, gradingPeriods, standards, classAnnouncementTypes));
         }
@@ -96,25 +117,7 @@ namespace Chalkable.Web.Controllers
             return Json(StandardGradingItemViewData.Create(res));
         }
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ClassSummary(int classId)
-        {
-            return FakeJson("~/fakeData/gradingClassSummary.json");
-            //if (!SchoolLocator.Context.SchoolId.HasValue)
-            //    throw new UnassignedUserException();
-            //var teacherId = Context.UserLocalId;
-            //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
-        }
-
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ItemGradingStat(int announcementId)
-        {
-            return FakeJson("~/fakeData/itemGradingStat.json");
-            //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            //var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
-            //var mapper = SchoolLocator.GradingStyleService.GetMapper();
-            //return Json(ItemGradigStatViewData.Create(studentAnns, ann, mapper));
-        }
+        
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentSummary(int studentId, int? classId)

@@ -32,11 +32,10 @@ namespace Chalkable.Data.School.DataAccess
                 res.Add(GradingPeriod.MARKING_PERIOD_REF_FIELD, query.MarkingPeriodId);
             if(query.SchoolYearId.HasValue)
                 res.Add(GradingPeriod.SCHOOL_YEAR_REF_FIELD, query.SchoolYearId);
-            if (query.Date.HasValue)
-            {
-                res.Add(GradingPeriod.START_DATE_FIELD, query.Date, ConditionRelation.LessEqual);
-                res.Add(GradingPeriod.END_DATE_FIELD, query.Date, ConditionRelation.GreaterEqual);
-            }
+            if (query.FromDate.HasValue)
+                res.Add(GradingPeriod.START_DATE_FIELD, query.FromDate, ConditionRelation.LessEqual);
+            if(query.ToDate.HasValue)
+                res.Add(GradingPeriod.END_DATE_FIELD, query.ToDate, ConditionRelation.GreaterEqual);
             return res;
         }
         private DbQuery BuildGetGradingPeriodQuery(QueryCondition condition)
@@ -56,6 +55,7 @@ namespace Chalkable.Data.School.DataAccess
         public int? GradingPeriodId { get; set; }
         public int? MarkingPeriodId { get; set; }
         public int? SchoolYearId { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
 }
