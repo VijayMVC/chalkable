@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
             if (annDetails.SisActivityId.HasValue)
             {
                 annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
-                annDetails.GradingStudentsCount = annDetails.StudentAnnouncements.Count;
+                annDetails.GradingStudentsCount = annDetails.StudentAnnouncements.Count(x=>!string.IsNullOrEmpty(x.ScoreValue));
             }
             //if(CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
             //    annDetails.AnnouncementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(annDetails.Id);
