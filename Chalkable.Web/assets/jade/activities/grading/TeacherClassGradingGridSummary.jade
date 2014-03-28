@@ -1,0 +1,49 @@
+.class-grading
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid')(
+        selectedItemId=selectedId
+    ).classes-bar
+    .autocomplete-list
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left.no-border
+                .small-grey-buttons-block
+                    +ActionLink('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
+                    +ActionLink('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
+            .center
+                +ActionLink('grading', "summaryGrid", selectedId).pressed=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
+    .mps-container
+        .chlk-pop-up-container.popup-top.comment
+            .pop-up-triangle
+            div
+                h5=Msg.Add_comment
+                .text-container
+                    textarea.comment-value
+                a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
+                a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
+        each gradingPeriod,i in self.getGradingPeriods()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                +ActionLink('grading', 'loadGradingPeriodGridSummary', selectedId, gradingPeriod.getId()).load-grading-period
+                item = self.getCurrentGradingGrid()
+                div(
+                    data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? (item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet') : ''
+                ).mp-title
+                    mpName = gradingPeriod.getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                    .grading-selects
+                        +Select('standard')(data-placeholder=Msg.All_standards).standards-select.grading-select
+                            +Option('', Msg.All_standards , true)
+                            +Option(1, 'Standard 1' , false)
+                            +Option(2, 'Standard 2' , false)
+                        +Select('category')(data-placeholder=Msg.All_categories).categories-select.grading-select
+                            +Option('', Msg.All_categories , true)
+                            +Option(1, 'Category 1' , false)
+                            +Option(2, 'Category 2' , false)
+                    a(href="javascript:").grey-button.comment-button=Msg.Comment
+                    .collapse
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    if gradingPeriod.getId() == self.getGradingPeriodId()
+                        +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)
