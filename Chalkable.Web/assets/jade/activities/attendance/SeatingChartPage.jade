@@ -1,0 +1,36 @@
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedId = topData.getSelectedItemId()
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
+    selectedItemId=selectedId ? selectedId.valueOf() : ""
+).classes-bar
+.action-bar.not-transparent.buttons
+    .container.panel-bg
+        .left
+        .right
+            +ActionLink('attendance', 'classList', selectedId)=Msg.List
+            a.action-link.pressed=Msg.Seating_Chart
+.page-content
+    seatingList = self.getSeatingList()
+    if self.getColumns() == 0 || self.getRows() == 0
+        +ActionLink('attendance', 'showEditGridWindow', selectedId.valueOf(), self.getRows(), self.getColumns()).grey-button=Msg.Create_grid
+        .black-arrow.start=Msg.Start_by_creating_a_grid
+    else
+        +ActionLink('attendance', 'showEditGridWindow', selectedId.valueOf(), self.getRows(), self.getColumns()).grey-button=Msg.Edit_grid
+        .grey-button.add-remove-students=Msg.Add_remove_students
+        .black-arrow.add=Msg.Add_your_students
+        .seating-chart-container
+            +LeftRightToolbar()(
+                needDots = true,
+                roundedDots = true,
+                padding = 110
+            ).seating-toolbar.auto-h.big-arrows
+                each items in seatingList
+                    .seating-row
+                        each item in items
+                            info = item.getInfo()
+                            div(data-index=item.getIndex(), class=info ? '' : 'empty-box').student-block.droppable.draggable
+                                +RenderWith(info || new chlk.models.attendance.ClassAttendance, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
+                            if info
+                                .empty-box.student-block.absolute
+
