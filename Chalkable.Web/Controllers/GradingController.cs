@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -58,9 +59,11 @@ namespace Chalkable.Web.Controllers
             var standards = SchoolLocator.StandardService.GetStandardes(classId, null, null);
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var date = Context.NowSchoolTime.Date;
-            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetLastGradingPeriodDetails(sy.Id, date);
-            var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);         
-            return Json(GradingGridsViewData.Create(gradeBooks, gradingPeriods, standards, classAnnouncementTypes));
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, date);
+            ChalkableGradeBook gradeBook = null;
+            if(currentGradingPeriod != null)
+                gradeBook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);
+            return Json(GradingGridsViewData.Create(gradeBook, gradingPeriods, standards, classAnnouncementTypes));
         }
 
         [AuthorizationFilter("Teacher")]

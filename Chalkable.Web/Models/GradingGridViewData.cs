@@ -38,7 +38,7 @@ namespace Chalkable.Web.Models
         {
             return new GradingGridsViewData
                 {
-                    CurrentGradingGrid = GradingGridViewData.Create(grid),
+                    CurrentGradingGrid = grid != null ? GradingGridViewData.Create(grid) : null,
                     GradingPeriods = gradingPeriods.Select(GradingPeriodViewData.Create).ToList(),
                     Standards = AnnouncementStandardViewData.Create(standards),
                     ClassAnnouncementTypes = ClassAnnouncementTypeViewData.Create(classAnnouncementTypes)

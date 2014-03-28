@@ -126,7 +126,7 @@ namespace Chalkable.Web.Controllers
             if (markingPeriod != null && SchoolLocator.Context.SchoolId.HasValue)
             {
                 PrepareJsonData(MarkingPeriodViewData.Create(markingPeriod), ViewConstants.MARKING_PERIOD);
-                var gradingPeriod = SchoolLocator.GradingPeriodService.GetLastGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolTime.Date);
+                var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolTime.Date);
                 if (gradingPeriod != null)
                     PrepareJsonData(GradingPeriodViewData.Create(gradingPeriod), ViewConstants.GRADING_PERIOD);
 
