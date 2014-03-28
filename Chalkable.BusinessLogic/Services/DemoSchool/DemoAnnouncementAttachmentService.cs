@@ -140,29 +140,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.AnnouncementAttachmentStorage.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
         }
 
-        private IList<AnnouncementAttachment> MapStiAttsToAnnAtts(IEnumerable<StiAttachment> activityAtts)
-        {
-            var res = new List<AnnouncementAttachment>();
-            foreach (var stiAttachment in activityAtts)
-            {
-                var atts = new AnnouncementAttachment {PersonRef = Context.UserLocalId.Value};
-                MapperFactory.GetMapper<AnnouncementAttachment, StiAttachment>().Map(atts, stiAttachment);
-                if (string.IsNullOrEmpty(atts.Uuid) && MimeHelper.GetTypeByName(atts.Name) == MimeHelper.AttachmenType.Document)
-                {
-                    //todo: mock this
-                    /*
-                    var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(stiAttachment.AttachmentId);
-                    atts.Uuid = ServiceLocator.CrocodocService.UploadDocument(stiAttachment.Name, content).uuid;
-                    //ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Id.ToString(), content);
-                     */
-                }
-                res.Add(atts);
-            }
-            return res;
-        } 
-
         public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
         {
+            throw new NotImplementedException();
             using (var uow = Read())
             {
                 var da = new AnnouncementAttachmentDataAccess(uow);
@@ -185,6 +165,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
         public IList<AnnouncementAttachment> GetAttachments(string filter)
         {
+            throw new NotImplementedException();
             using (var uow = Read())
             {
                 var res = new AnnouncementAttachmentDataAccess(uow).GetList(Context.UserLocalId ?? 0, Context.Role.Id, filter);
