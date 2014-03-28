@@ -36,12 +36,12 @@
                     .grading-selects
                         +Select('standard')(data-placeholder=Msg.All_standards).standards-select.grading-select
                             +Option('', Msg.All_standards , true)
-                            +Option(1, 'Standard 1' , false)
-                            +Option(2, 'Standard 2' , false)
+                            each item in self.getStandards()
+                                +Option(item.getStandardId().valueOf(), item.getName() , false)
                         +Select('category')(data-placeholder=Msg.All_categories).categories-select.grading-select
                             +Option('', Msg.All_categories , true)
-                            +Option(1, 'Category 1' , false)
-                            +Option(2, 'Category 2' , false)
+                            each item in self.getClassAnnouncementTypes()
+                                +Option(item.getId(), item.getName() , false)
                     a(href="javascript:").grey-button.comment-button=Msg.Comment
                     .collapse
                 div(data-grading-period-id=gradingPeriod.getId()).mp-data

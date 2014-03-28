@@ -10,6 +10,12 @@ NAMESPACE('chlk.templates.grading', function () {
         'GradingClassSummaryGridTpl', EXTENDS(chlk.templates.common.PageWithClassesAndGradingPeriodsTpl), [
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.NameId), 'classAnnouncementTypes',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
 
             [ria.templates.ModelPropertyBind],

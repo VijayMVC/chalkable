@@ -423,9 +423,11 @@ NAMESPACE('chlk.activities.grading', function () {
                     var dt = getDate();
                     var popUp = dom.find('.chlk-pop-up-container.comment');
                     var node = new ria.dom.Dom(event.target);
+                    console.info('time1', getDate().getTime() - dt.getTime());
                     if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
                         && !node.isOrInside('.chlk-pop-up-container.comment') && !node.isOrInside('.grading-input-popup')
                         && !node.isOrInside('.autocomplete-list')){
+                            console.info('time2', getDate().getTime() - dt.getTime());
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
                                 popUp.hide();
@@ -436,13 +438,16 @@ NAMESPACE('chlk.activities.grading', function () {
                                 activeCell.removeClass('active-cell');
                                 activeCell.find('.grading-form').remove();
                                 if(parent.exists() && !node.hasClass('alert-flag')){
+                                    console.info('time3', getDate().getTime() - dt.getTime());
                                     if(!parent.hasClass('active-row')){
                                         var index = parent.getAttr('row-index');
                                         dom.find('.active-row').removeClass('active-row');
                                         dom.find('[row-index=' + index + ']').addClass('active-row');
                                     }
                                     parent.addClass('active-cell');
+                                    console.info('time4', getDate().getTime() - dt.getTime());
                                     that.addFormToActiveCell(parent);
+                                    console.info('time5', getDate().getTime() - dt.getTime());
                                     node.parent('.marking-period-container').find('.comment-button').show();
                                     setTimeout(function(){
                                         parent.find('input').trigger('focus');
@@ -451,6 +456,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                     dom.find('.active-row').removeClass('active-row');
                                     dom.find('.comment-button').hide();
                                 }
+                                console.info('time6', getDate().getTime() - dt.getTime());
                             }
                     }
                 });

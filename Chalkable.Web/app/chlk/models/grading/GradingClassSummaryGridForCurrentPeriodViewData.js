@@ -13,6 +13,11 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('gradingperiods')],
             ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
 
+            [ria.serialize.SerializeProperty('classannouncementtypes')],
+            ArrayOf(chlk.models.common.NameId), 'classAnnouncementTypes',
+
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
             [ria.serialize.SerializeProperty('currentgradinggrid')],
             chlk.models.grading.ShortGradingClassSummaryGridItems, 'currentGradingGrid',
 
