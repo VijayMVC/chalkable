@@ -5,35 +5,30 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStandardSubjectStorage
+    public class DemoStandardSubjectStorage:BaseDemoStorage<int, StandardSubject>
     {
-        private Dictionary<int ,StandardSubject> standardSubjectsData = new Dictionary<int, StandardSubject>();
- 
+        public DemoStandardSubjectStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(IList<StandardSubject> standardSubjects)
         {
             foreach (var standardSubject in standardSubjects)
             {
-                var subject = standardSubjectsData.FirstOrDefault(x => x.Key == standardSubject.Id).Value;
-                if (subject == null)
+                if (!data.ContainsKey(standardSubject.Id))
                 {
-                    standardSubjectsData.Add(standardSubject.Id, standardSubject);
+                    data[standardSubject.Id] = standardSubject;
                 }
             }
-        }
-
-        public IList<StandardSubject> GetAll()
-        {
-            return standardSubjectsData.Select(x => x.Value).ToList();
         }
 
         public void Update(IList<StandardSubject> standardSubjects)
         {
             foreach (var standardSubject in standardSubjects)
             {
-                var subject = standardSubjectsData.FirstOrDefault(x => x.Key == standardSubject.Id).Value;
-                if (subject != null)
+                if (data.ContainsKey(standardSubject.Id))
                 {
-                    standardSubjectsData[standardSubject.Id] = standardSubject;
+                    data[standardSubject.Id] = standardSubject;
                 }
             }
         }

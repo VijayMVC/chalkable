@@ -46,8 +46,7 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult ListApi()
         {
-            //todo form user name
-            var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
+            //demo prefix add
             var result = new List<ApiExplorerViewData>();
 
             var descriptions = ChalkableApiExplorerLogic.GetApi();
@@ -60,7 +59,7 @@ namespace Chalkable.Web.Controllers
 
                 apiRoles.Add(loweredDescription);
                 var userName = PreferenceService.Get("demoschool" + loweredDescription).Value;
-                MasterLocator.UserService.LoginToDemo(userName);
+                //MasterLocator.UserService.LoginToDemo(userName);
                 var token = ChalkableApiExplorerLogic.GetAccessTokenFor(userName, MasterLocator);
                 result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
             }

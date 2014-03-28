@@ -125,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             return new District()
             {
                 DbName = "DemoDB",
-                DemoPrefix = id.ToString().Replace("-", ""),
+                DemoPrefix = id.ToString(),
                 Id = id,
                 Name = "Demo district"
             };

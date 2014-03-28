@@ -21,16 +21,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             : base(serviceLocator, storage)
         {
         }
-
-        private ConnectorLocator connectorLocator;
-        protected ConnectorLocator ConnectorLocator
-        {
-            get
-            {
-                if (connectorLocator == null)
-                    connectorLocator = new ConnectorLocator(Context.SisToken, Context.SisUrl, Context.SisTokenExpires.Value);
-                return connectorLocator;
-            }
-        }
     }
 }

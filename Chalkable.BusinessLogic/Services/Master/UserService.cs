@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -19,7 +20,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string login, string password);
         UserContext Login(string confirmationKey);
         UserContext LoginToDemo(string roleName, string demoPrefix);
-        UserContext LoginToDemo(string userName);
         UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime);
         UserContext ReLogin(Guid id);
         User GetByLogin(string login);
@@ -92,19 +92,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return res;
             }
         }
-
-        public UserContext LoginToDemo(string userName)
-        {
-            using (var uow = Update())
-            {
-                var demoUser = GetDemoUser(userName);
-                if (demoUser != null)
-                    demoUser.OriginalPassword = PreferenceService.Get(Preference.DEMO_USER_PASSWORD).Value;
-                var res = Login(demoUser, uow);
-                uow.Commit();
-                return res;
-            }
-        }
         
         public UserContext ReLogin(Guid id)
         {
@@ -157,11 +144,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new NotSupportedException(ChlkResources.ERR_MULTIPLE_SCHOOL_ARE_NOT_SUPPORTED);
             if (user.IsSysAdmin)
                 return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null);
-            if (user.IsDeveloper && user.DistrictRef.HasValue)
+            if (user.IsDeveloper)
             {
-                var developer = new DeveloperDataAccess(uow).GetDeveloper(user.DistrictRef.Value);
-                var school = ServiceLocator.SchoolService.GetSchools(user.DistrictRef.Value, 0, 10).OrderBy(x => x.LocalId).First(); //todo rewrite this later
-                return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, school, developer.Id);
+                //demoschool
+                //
+                var developer = new DeveloperDataAccess(uow).GetDeveloper(user.Id);
+
+                return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id);
             }
             if (user.IsSchoolUser)
             {
@@ -202,31 +191,18 @@ namespace Chalkable.BusinessLogic.Services.Master
             return user;
         }
 
-        private string BuildDemoUserName(string roleName, string prefix)
-        {
-            return prefix + PreferenceService.Get("demoschool" + roleName.ToLower()).Value;
-        }
+       
 
         private User GetDemoUser(string roleName, string prefix)
         {
             if (roleName == CoreRoles.DEVELOPER_ROLE.LoweredName)
             {
-                var districts = ServiceLocator.DistrictService.GetDistricts(false, true);
-                var district = districts.FirstOrDefault(x => x.DemoPrefix == prefix);
-                if (district != null)
-                {
-                    var developer = ServiceLocator.DeveloperService.GetDeveloperByDictrict(district.Id);
-                    if (developer != null) return developer.User;
-                }
+                var developer = ServiceLocator.DeveloperService.GetDeveloperByDictrict(Guid.Parse(prefix));
+                if (developer != null) return developer.User;
             }
-            return ServiceLocator.UserService.GetByLogin(BuildDemoUserName(roleName, prefix));
+            return DemoUserService.GetDemoUser(roleName, prefix);
         }
 
-        private User GetDemoUser(string userName)
-        {
-            return ServiceLocator.UserService.GetByLogin(userName);
-        }
-        
         public User GetByLogin(string login)
         {
             using (var uow = Read())

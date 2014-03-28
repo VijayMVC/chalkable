@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoMarkingPeriodStorage
+    public class DemoMarkingPeriodStorage:BaseDemoStorage<int, MarkingPeriod>
     {
-
-        public MarkingPeriod GetLast(DateTime dateTime)
+        public DemoMarkingPeriodStorage(DemoStorage storage) : base(storage)
         {
-            throw new NotImplementedException();
+        }
+
+        public MarkingPeriod GetLast(DateTime tillDate)
+        {
+            return data.First(x => x.Value.StartDate <= tillDate).Value;
         }
 
         public IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId)
         {
-            throw new NotImplementedException();
+            return data.Where(x => x.Value.SchoolYearRef == schoolYearId).Select(x => x.Value).ToList();
         }
 
         public MarkingPeriod GetMarkingPeriod(DateTime date)
@@ -25,7 +29,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(MarkingPeriod mp)
         {
-            throw new NotImplementedException();
+            if (!data.ContainsKey(mp.Id))
+                data[mp.Id] = mp;
         }
 
         public bool IsOverlaped(int id, DateTime startDate, DateTime endDate, int? i)
@@ -43,14 +48,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public MarkingPeriod GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Update(MarkingPeriod mp)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(mp.Id))
+                data[mp.Id] = mp;
         }
 
         public void ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
@@ -65,12 +66,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
         {
-            throw new NotImplementedException();
+            foreach (var mp in markingPeriods)
+            {
+                Add(mp);
+            }
+            return markingPeriods;
         }
 
         public IList<MarkingPeriod> Update(IList<MarkingPeriod> markingPeriods)
         {
-            throw new NotImplementedException();
+            foreach (var mp in markingPeriods)
+            {
+                Update(mp);
+            }
+            return markingPeriods;
         }
     }
 }

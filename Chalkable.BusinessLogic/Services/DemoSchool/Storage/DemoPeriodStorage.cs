@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -29,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Period> GetPeriods(int schoolYearId)
         {
-            throw new System.NotImplementedException();
+            return data.Where( x => x.Value.SchoolYearRef == schoolYearId).Select( x => x.Value).ToList();
         }
 
         public void Add(IList<Period> periods)
@@ -42,7 +43,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Period> Update(IList<Period> periods)
         {
-            throw new System.NotImplementedException();
+            foreach (var period in periods)
+            {
+                Update(period);
+            }
+            return periods;
         }
     }
 }

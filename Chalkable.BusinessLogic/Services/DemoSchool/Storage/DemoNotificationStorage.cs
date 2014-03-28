@@ -5,8 +5,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoNotificationStorage
+    public class DemoNotificationStorage:BaseDemoStorage<int, Notification>
     {
+        public DemoNotificationStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public IList<Notification> GetNotifications(NotificationQuery notificationQuery)
         {
             throw new System.NotImplementedException();

@@ -81,7 +81,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Storage.ApplicationRatingStorage.GetAll(applicationId);
         }
 
-        //TODO: do we ned this?
+        //TODO: do we need this?
         public bool CanGetSecretKey(IList<Application> applications)
         {
             if (Context.Role.Id == CoreRoles.STUDENT_ROLE.Id)//WHY???

@@ -37,14 +37,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue)
         {
-            using (var uow = Read())
-            {
-                return new DistrictDataAccess(uow).GetPage(start, count);
-            }
+            //return one district
+            throw new NotImplementedException();
         }
 
         public IList<District> GetDistricts(bool? demo, bool? usedDemo = null)
         {
+            throw new NotImplementedException();
+
             using (var uow = Read())
             {
                 var da = new DistrictDataAccess(uow);
@@ -54,13 +54,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void Update(District district)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DistrictDataAccess(uow).Update(district);
-                uow.Commit();
-            }
+            throw new NotImplementedException();
         }
         
         public District GetByIdOrNull(Guid id)
@@ -162,33 +156,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             }
             ServiceLocator.UserService.AssignUserToSchool(schoolUsers);
         }
-
-        public IList<District> GetDemoDistrictsToDelete()
-        {
-            return new List<District>();
-        }
-
         
         public District UseDemoDistrict()
         {
-           
-            var district = new District
-            {
-                DemoPrefix = Guid.NewGuid().ToString(),
-                Id = Guid.NewGuid()
-            };
-            return district;
-            throw new NotImplementedException();
-            using (var uow = Update())
-            {
-                var da = new DistrictDataAccess(uow);
-                var notUsedDemo = da.GetDistricts(true, false).FirstOrDefault();
-                if (notUsedDemo == null) return null;
-                notUsedDemo.LastUseDemo = DateTime.UtcNow.ConvertFromUtc(notUsedDemo.TimeZone);
-                da.Update(notUsedDemo);
-                uow.Commit();
-                return notUsedDemo;
-            }
+           throw new NotImplementedException(); 
         }
 
         public void DeleteDistrict(Guid id)

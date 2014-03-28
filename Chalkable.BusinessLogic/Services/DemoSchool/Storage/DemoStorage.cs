@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -47,29 +48,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoApplicationRatingStorage ApplicationRatingStorage { get; private set; }
         public DemoNotificationStorage NotificationStorage{ get; private set; }
         public DemoApplicationInstallStorage ApplicationInstallStorage { get; private set; }
+        public IDemoAnnouncementStorage AnnouncementStorage { get; private set; }
 
         public DemoStorage()
         {
             UserStorage = new DemoUserStorage(this);
             PrivateMessageStore = new DemoPrivateMessageStorage();
-            SchoolYearStorage = new DemoSchoolYearStorage();
+            SchoolYearStorage = new DemoSchoolYearStorage(this);
             DisciplineTypeStorage = new DemoDisciplineTypeStorage(this);
             DisciplineStorage = new DemoDisciplineStorage();
             AlphaGradeStorage = new DemoAlphaGradeStorage(this);
             AlternateScoreStorage = new DemoAlternateScoreStorage(this);
             StudentParentStorage = new DemoStudentParentStorage();
             StandardStorage = new DemoStandardStorage(this);
-            StandardSubjectStorage = new DemoStandardSubjectStorage();
+            StandardSubjectStorage = new DemoStandardSubjectStorage(this);
             ClasStandardStorage = new DemoClassStandardStorage(this);
             SchoolStorage = new DemoSchoolStorage(this);
             SchoolPersonStorage = new DemoSchoolPersonStorage();
-            RoomStorage = new DemoRoomStorage();
+            RoomStorage = new DemoRoomStorage(this);
             ClassPeriodStorage = new DemoClassPeriodStorage(this);
             PrivateMessageStorage = new DemoPrivateMessageStorage();
             PhoneStorage = new DemoPhoneStorage(this);
-            PersonStorage = new DemoPersonStorage();
-            PeriodStorage = new DemoPeriodStorage();
-            MarkingPeriodStorage = new DemoMarkingPeriodStorage();
+            PersonStorage = new DemoPersonStorage(this);
+            PeriodStorage = new DemoPeriodStorage(this);
+            MarkingPeriodStorage = new DemoMarkingPeriodStorage(this);
             MarkingPeriodClassStorage = new DemoMarkingPeriodClassStorage();
             GradingPeriodStorage = new DemoGradingPeriodStorage();
             GradeLevelStorage = new DemoGradeLevelStorage(this);
@@ -88,14 +90,86 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AttendanceLevelReasonStorage = new DemoAttendanceLevelReasonStorage(this);
             ApplicationStorage = new DemoApplicationStorage(this);
             ApplicationRatingStorage = new DemoApplicationRatingStorage(this);
-            NotificationStorage = new DemoNotificationStorage();
+            NotificationStorage = new DemoNotificationStorage(this);
             ApplicationInstallStorage = new DemoApplicationInstallStorage(this);
-            setup();
+            Setup();
         }
 
-        private void setup()
+        private void Setup()
         {
+
+            AttendanceReasonStorage.Setup();
+
+
+            SchoolStorage.Add(new Data.School.Model.School
+            {
+                Id = 1,
+                IsActive = true,
+                IsPrivate = true,
+                Name = "SMITH"
+            });
+
+            MarkingPeriodStorage.Add(new MarkingPeriod
+            {
+                Id = 1,
+                Name = "Semester 2",
+                Description = "",
+                StartDate = new DateTime(2014, 1, 21),
+                EndDate = new DateTime(2014, 5, 30),
+                SchoolRef = 1,
+                SchoolYearRef = 12,
+                WeekDays = 62
+            });
+
+            var currentDate = DateTime.Now;
+            
+            SchoolYearStorage.Add(1, 1, "Current School Year", "", new DateTime(currentDate.Year, 1, 1),
+                new DateTime(currentDate.Year, 12, 31));
             //some init data
+
+            //person storage
+
+            PersonStorage.Add(new Person
+            {
+                BirthDate = null,
+                Active = false,
+                AddressRef = null,
+                Email = "e96ef526fe974703bec2592d977b2115user1195_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com",
+                Id = 1195,
+                FirstName = "ROCKY",
+                LastName = "STEIN",
+                Gender = "F",
+                RoleRef = 2
+            });
+
+            PersonStorage.Add(new Person
+            {
+                BirthDate = new DateTime(1998, 11, 27),
+                Active = false,
+                AddressRef = null,
+                Email = "e96ef526fe974703bec2592d977b2115user19_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com",
+                Id = 19,
+                FirstName = "KAYE",
+                LastName = "BURGESS",
+                Gender = "F",
+                RoleRef = 3
+            });
+
+            PersonStorage.Add(new Person
+            {
+                BirthDate = null,
+                Active = true,
+                AddressRef = null,
+                Salutation = "Mr.",
+                Email = "e96ef526fe974703bec2592d977b2115user2735_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com",
+                Id = 2375,
+                FirstName = "rosteradmin",
+                LastName = "rosteradmin",
+                Gender = null,
+                RoleRef = 5
+            });
+
         }
     }
+    
 }

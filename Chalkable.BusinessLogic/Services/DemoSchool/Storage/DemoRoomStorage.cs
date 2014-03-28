@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -43,12 +44,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Update(IList<Room> rooms)
         {
-            foreach (var room in rooms)
+            foreach (var room in rooms.Where(room => data.ContainsKey(room.Id)))
             {
-                if (data.ContainsKey(room.Id))
-                {
-                    data[room.Id] = room;
-                }
+                data[room.Id] = room;
             }
         }
     }

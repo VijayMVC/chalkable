@@ -24,14 +24,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        private DemoBaseAnnouncementStorage CreateAnnoucnementDataAccess()
+        private AnnouncementDataAccess CreateAnnoucnementDataAccess(UnitOfWork uow)
         {
             if(BaseSecurity.IsAdminViewer(Context))
-                return Storage.new AnnouncementForAdminDataAccess();
+                return new AnnouncementForAdminDataAccess(uow, Context.SchoolLocalId);
             if(Context.Role == CoreRoles.TEACHER_ROLE)
-                return new AnnouncementForTeacherDataAccess();
+                return new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
             if(Context.Role == CoreRoles.STUDENT_ROLE)
-                return new AnnouncementForStudentDataAccess();
+                return new AnnouncementForStudentDataAccess(uow, Context.SchoolLocalId);
             throw new ChalkableException("Unsupported role for announcements");
         }
 
@@ -117,9 +117,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return MapActivitiesToAnnouncements(anns, activities);
         }
 
+        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IList<AnnouncementComplex> MapActivitiesToAnnouncements(List<AnnouncementComplex> anns, IList<Activity> activities)
+        {
+            throw new NotImplementedException();
+        }
+
         private void AddActivitiesToChalkable(IEnumerable<Activity> activities)
         {
             throw new NotImplementedException();
+            /*
             IList<Announcement> addToChlkAnns = new List<Announcement>();
             foreach (var activity in activities)
             {
@@ -152,7 +163,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     CreateAnnoucnementDataAccess(uow).Insert(addToChlkAnns);
                     uow.Commit();
                 }
-            }
+            }*/
         }
 
         /*private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count)
@@ -226,7 +237,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
-
+            /*
             using (var uow = Update())
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
@@ -234,12 +245,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId ?? 0);
                 uow.Commit();
                 return res;
-            }
+            }*/
+            return null;
         }
 
         public AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
             throw new NotImplementedException();
+            /*
             if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             using (var uow = Update())
@@ -268,12 +281,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
                 uow.Commit();
                 return res;
-            }
+            }*/
         }
 
         public void DeleteAnnouncement (int announcementId)
         {
             throw new NotImplementedException();
+            /*
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
@@ -285,23 +299,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     ConnectorLocator.ActivityConnector.DeleteActivity(announcement.SisActivityId.Value);
                 da.Delete(announcementId, null, null, null, null);
                 uow.Commit();
-            }
+            }*/
         }
 
         public void DeleteAnnouncements(int classId, int announcementType, AnnouncementState state)
         {
             throw new NotImplementedException();
+            /*
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 da.Delete(null, Context.UserLocalId, classId, announcementType, state);
                 uow.Commit();
-            }
+            }*/
         }
 
         public void DeleteAnnouncements(int schoolpersonid, AnnouncementState state = AnnouncementState.Draft)
         {
             throw new NotImplementedException();
+            /*
             if(Context.UserLocalId != schoolpersonid && !BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
@@ -310,7 +326,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var da = CreateAnnoucnementDataAccess(uow);
                 da.Delete(null, Context.UserLocalId, null, null, state);
                 uow.Commit();
-            }
+            }*/
         }
 
         public Announcement DropUnDropAnnouncement(int announcementId, bool drop)
@@ -340,52 +356,49 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null)
         {
             throw new NotImplementedException();
-            using (var uow = Update())
+            /*
+            var da = CreateAnnoucnementDataAccess(uow);
+            var ann = da.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.UserLocalId.Value);
+            if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
+                throw new ChalkableSecurityException();
+
+            ann.Content = announcement.Content;
+            ann.Subject = announcement.Subject;
+            if (Context.Role == CoreRoles.TEACHER_ROLE && announcement.ClassAnnouncementTypeId.HasValue)
             {
-                var da = CreateAnnoucnementDataAccess(uow);
-                var ann = da.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.UserLocalId.Value);
-                if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
-                    throw new ChalkableSecurityException();
+                ann.ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeId.Value;
+                ann.MaxScore = announcement.MaxScore;
+                ann.WeightAddition = announcement.WeightAddition;
+                ann.WeightMultiplier = announcement.WeightMultiplier;
+                ann.MayBeDropped = announcement.CanDropStudentScore;
+                ann.VisibleForStudent = !announcement.HideFromStudents;
+            }
+            if (BaseSecurity.IsAdminViewer(Context))
+                ann.ClassAnnouncementTypeRef = null;
 
-                ann.Content = announcement.Content;
-                ann.Subject = announcement.Subject;
-                if (Context.Role == CoreRoles.TEACHER_ROLE && announcement.ClassAnnouncementTypeId.HasValue)
-                {
-                    ann.ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeId.Value;
-                    ann.MaxScore = announcement.MaxScore;
-                    ann.WeightAddition = announcement.WeightAddition;
-                    ann.WeightMultiplier = announcement.WeightMultiplier;
-                    ann.MayBeDropped = announcement.CanDropStudentScore;
-                    ann.VisibleForStudent = !announcement.HideFromStudents;
-                }
-                if (BaseSecurity.IsAdminViewer(Context))
-                    ann.ClassAnnouncementTypeRef = null;
+            if (announcement.ExpiresDate.HasValue)
+                ann.Expires = announcement.ExpiresDate.Value;
 
-                if(announcement.ExpiresDate.HasValue)
-                    ann.Expires = announcement.ExpiresDate.Value;
+            ann = SetClassToAnnouncement(ann, classId, ann.Expires);
+            ann = PrepareReminderData(uow, ann); //todo : remove this later 
+            ann = ReCreateRecipients(uow, ann, recipients);
+            da.Update(ann);
+            uow.Commit();
 
-                ann = SetClassToAnnouncement(ann, classId, ann.Expires);
-                ann = PrepareReminderData(uow, ann); //todo : remove this later 
-                ann = ReCreateRecipients(uow, ann, recipients);
-                da.Update(ann);
-                uow.Commit();
-
-                var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
-                if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
-                {
-                    var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
-                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res); 
-                    ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
-                }
-                return res;
-            }                
-            
+            var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
+            if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
+            {
+                var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
+                MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
+                ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
+            }
+            return res;
+            */
             //TODO: rewrite this for better performens
         }
 
         private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
         {
-            throw new NotImplementedException();
             var res = GetAnnouncementDetails(announcementId);
             if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                 throw new ChalkableSecurityException();
@@ -421,6 +434,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void SubmitAnnouncement(int announcementId, int recipientId)
         {
             throw new NotImplementedException();
+            /*
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
@@ -430,18 +444,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if(res.ClassAnnouncementTypeRef.HasValue)
                     da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
                 uow.Commit();
-            }
+            }*/
         }
         
         public void SubmitForAdmin(int announcementId)
         {
             throw new NotImplementedException();
+            /*
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 Submit(da, uow, announcementId, null);
                 uow.Commit();
-            }
+            }*/
         }
       
         private Announcement PrepareReminderData(UnitOfWork unitOfWork, Announcement announcement)
@@ -528,6 +543,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Announcement GetAnnouncementById(int id)
         {
             throw new NotImplementedException();
+            /*
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
@@ -535,12 +551,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if(res == null)
                     throw new ChalkableSecurityException();
                 return res;
-            }
+            }*/
         }
 
         public int GetNewAnnouncementItemOrder(AnnouncementDetails announcement)
         {
             throw new NotImplementedException();
+            /*
             var attOrder = announcement.AnnouncementAttachments.Max(x => (int?)x.Order);
             var appOrder = announcement.AnnouncementApplications.Max(x => (int?)x.Order);
             int order = 0;
@@ -563,6 +580,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
             }
             return order;
+             */
         }
 
         public Announcement Star(int id, bool starred)
@@ -603,32 +621,35 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Announcement GetLastDraft()
         {
             throw new NotImplementedException();
+            /*
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 return da.GetLastDraft(Context.UserLocalId ?? 0);
-            }
+            }*/
         }
 
         public IList<Person> GetAnnouncementRecipientPersons(int announcementId)
         {
             throw new NotImplementedException();
+            /*
             var ann = GetAnnouncementById(announcementId);
             if (ann.State == AnnouncementState.Draft)
                 throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
             using (var uow = Read())
             {
                 return CreateAnnoucnementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserLocalId ?? 0);
-            }
+            }*/
         }
 
         public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType)
         {
             throw new NotImplementedException();
+            /*
             using (var uow = Read())
             {
                 return CreateAnnoucnementDataAccess(uow).GetLastFieldValues(personId, classId, classAnnouncementType, 10);
-            }
+            }*/
         }
 
         public bool CanAddStandard(int announcementId)
@@ -644,6 +665,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private Announcement EditTitle(Announcement announcement, string title, Func<AnnouncementDataAccess, string, bool> existsTitleAction)
         {
             throw new NotImplementedException();
+            /*
             if (!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             if (announcement == null || announcement.PersonRef != Context.UserLocalId)
@@ -661,18 +683,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     da.Update(announcement);               
                     uow.Commit();
                 }
-            } 
+            } */
             return announcement;
         }
 
 
         public bool Exists(string title)
         {
-
+            throw new NotImplementedException();
+            /*
             using (var uow = Read())
             {
                 return CreateAnnoucnementDataAccess(uow).Exists(title);
-            }
+            }*/
         }
 
 

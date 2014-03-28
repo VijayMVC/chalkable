@@ -43,7 +43,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Developer")]
         public ActionResult Developer(Guid? currentApplicationId)
         {
-            var prefDemoSchool = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value).DemoPrefix;
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             ViewData[ViewConstants.IS_DEV] = true;
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
@@ -53,7 +52,17 @@ namespace Chalkable.Web.Controllers
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.DEV_APP_INFO_URL;
             }
             ViewData[ViewConstants.NEEDS_TOUR] = false;
-            PrepareCommonViewData();
+
+            ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
+            ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
+            ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
+            ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
+            ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
+            ViewData[ViewConstants.DEMO_PREFIX_KEY] = Context.UserId.ToString();
+            
+            //PrepareCommonViewData();
+            //render demo prefix
+            //render school
             PrepareJsonData(BaseApplicationViewData.Create(applications), ViewConstants.APPLICATIONS);
             if (applications.Count > 0)
             {
@@ -100,6 +109,9 @@ namespace Chalkable.Web.Controllers
                 var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
                 school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
+
+
+                /*
                 if (!string.IsNullOrEmpty(district.DemoPrefix))
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
@@ -113,7 +125,7 @@ namespace Chalkable.Web.Controllers
                     if (Context.DeveloperId != null)
                         ViewData[ViewConstants.IS_DEV] = true;
 
-                }
+                }*/
             }
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();

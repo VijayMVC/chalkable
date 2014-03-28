@@ -38,7 +38,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 });
             }
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            ConnectorLocator.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
+            //ConnectorLocator.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
+        }
+
+        public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
+        {
+            throw new NotImplementedException();
         }
 
         private string LevelToClassRoomLevel(string level)
@@ -54,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
         {
-            var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
+            /*var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassById(classId);
@@ -80,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     }
                 }
                 return attendances;    
-            }
+            }*/
             return null;
         }
 

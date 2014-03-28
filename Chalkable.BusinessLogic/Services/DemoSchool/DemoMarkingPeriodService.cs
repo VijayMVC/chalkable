@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                                               DateTime endDate, int? id)
         {
             if (startDate > endDate)
-                throw new ChalkableException("Invalida date params. StartDate is bigger than EndDate");
+                throw new ChalkableException("Invalid date params. StartDate is bigger than EndDate");
             if (Storage.MarkingPeriodStorage.IsOverlaped(sy.Id, startDate, endDate, id))
                 throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_CANT_OVERLAP);
             if (!(sy.StartDate <= startDate && sy.EndDate >= endDate))

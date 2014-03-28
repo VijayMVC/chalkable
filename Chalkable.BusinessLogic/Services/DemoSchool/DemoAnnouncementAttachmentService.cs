@@ -172,12 +172,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
         {
+            throw new NotImplementedException();
+            /*
             //todo: mock this
             var att = GetAttachmentById(announcementAttachmentId);
             var content = att.SisAttachmentId.HasValue 
                                  ? ConnectorLocator.AttachmentConnector.GetAttachmentContent(att.SisAttachmentId.Value)
                                  : ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
+             
             return AttachmentContentInfo.Create(att, content);
+             */
         }
         public IList<AnnouncementAttachment> GetAttachments(string filter)
         {
@@ -198,8 +202,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private IList<ActivityAttachment> GetActivityAttachments(int activityId)
         {
+            throw new NotImplementedException();
             //todo: mock this
-            return ConnectorLocator.ActivityAttachmentsConnector.GetAttachments(activityId);
+            //return ConnectorLocator.ActivityAttachmentsConnector.GetAttachments(activityId);
         } 
     }
 }

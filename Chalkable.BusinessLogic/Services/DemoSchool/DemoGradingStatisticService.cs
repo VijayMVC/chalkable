@@ -169,6 +169,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ChalkableGradeBook> GetGradeBooks(int classId)
         {
+            throw new NotImplementedException();
+            /*
             var stiGradeBook = ConnectorLocator.GradebookConnector.Get_BySectionAndGradingPeriod(classId);
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
             {
@@ -227,6 +229,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 res.Add(gradeBook);
             }
             return res;
+             * */
         }
 
 
