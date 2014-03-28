@@ -1,5 +1,17 @@
 ﻿using System.Linq;
+using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.SyncModel;
+using Address = Chalkable.StiConnector.SyncModel.Address;
+using AlphaGrade = Chalkable.StiConnector.SyncModel.AlphaGrade;
+using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
+using DayType = Chalkable.StiConnector.SyncModel.DayType;
+using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
+using GradingPeriod = Chalkable.StiConnector.SyncModel.GradingPeriod;
+using Person = Chalkable.StiConnector.SyncModel.Person;
+using Room = Chalkable.StiConnector.SyncModel.Room;
+using School = Chalkable.StiConnector.SyncModel.School;
+using Standard = Chalkable.StiConnector.SyncModel.Standard;
+using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 
 namespace Chalkable.StiImport.Services
 {
@@ -56,7 +68,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<AbsenceLevelReason>().Deleted == null)
                 return;
             var ids = context.GetSyncResult<AbsenceLevelReason>().Deleted.Select(x => (int)x.AbsenceReasonID).ToList();
-            //ServiceLocatorSchool.AttendanceReasonService.DeleteAttendanceLevelReasons(ids); TODO
+            ServiceLocatorSchool.AttendanceReasonService.DeleteAttendanceLevelReasons(ids);
         }
 
         private void DeleteAttendanceReasons()
@@ -108,12 +120,26 @@ namespace Chalkable.StiImport.Services
 
         private void DeleteMarkingPeriodClasses()
         {
-            //TODO: implement
+            if (context.GetSyncResult<SectionTerm>().Deleted == null)
+                return;
+            var mps = context.GetSyncResult<SectionTerm>().Deleted.Select(x => new MarkingPeriodClass
+                {
+                    ClassRef = x.SectionID, 
+                    MarkingPeriodRef = x.TermID
+                }).ToList();
+            ServiceLocatorSchool.ClassService.DeleteMarkingPeriodClasses(mps);
         }
         
         private void DeleteClassStandard()
         {
-            //TODO: implement
+            if (context.GetSyncResult<CourseStandard>().Deleted == null)
+                return;
+            var classStandards = context.GetSyncResult<CourseStandard>().Deleted.Select(x => new ClassStandard
+                {
+                    ClassRef = x.CourseID,
+                    StandardRef = x.StandardID
+                }).ToList();
+            ServiceLocatorSchool.StandardService.DeleteClassStandards(classStandards);
         }
 
         private void DeleteStandards()
@@ -121,13 +147,15 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<Standard>().Deleted == null)
                 return;
             var ids = context.GetSyncResult<Standard>().Deleted.Select(x => x.StandardID).ToList();
-            //ServiceLocatorSchool.StandardService.DeleteStandards(ids);
+            ServiceLocatorSchool.StandardService.DeleteStandards(ids);
         }
 
         private void DeleteStandardSubject()
         {
-            //TODO: implement
-            //var ids = context.GetSyncResult<StandardSubject>().Deleted.Select(x => x.StandardSubjectID).ToList();
+            if (context.GetSyncResult<StandardSubject>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<StandardSubject>().Deleted.Select(x => x.StandardSubjectID).ToList();
+            ServiceLocatorSchool.StandardService.DeleteStandardSubjects(ids);
         }
 
         private void DeleteCourses()
@@ -148,7 +176,10 @@ namespace Chalkable.StiImport.Services
 
         private void DeleteDays()
         {
-            //TODO: implement
+            if (context.GetSyncResult<CalendarDay>().Deleted == null)
+                return;
+            var dates = context.GetSyncResult<CalendarDay>().Deleted.Select(x => x.Date.Date).ToList();
+            ServiceLocatorSchool.CalendarDateService.Delete(dates);
         }
 
         private void DeleteDayTypes()
@@ -177,7 +208,17 @@ namespace Chalkable.StiImport.Services
 
         private void DeleteStudentSchoolYears()
         {
-            //TODO: implement
+            if (context.GetSyncResult<StudentAcadSession>().Deleted == null)
+                return;
+            var assignments = context.GetSyncResult<StudentAcadSession>().Deleted
+                                     .Where(x => x.GradeLevelID.HasValue) //TODO: what about this? GL is not assigned?
+                                     .Select(x => new StudentSchoolYear
+                                         {
+                                             GradeLevelRef = x.GradeLevelID.Value,
+                                             SchoolYearRef = x.AcadSessionID,
+                                             StudentRef = x.StudentID
+                                         });
+            //TODO: no delete method   
         }
 
         private void DeleteSchoolYears()
