@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+  <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+	<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>
+
+	<PropertyGroup>
+        <StackTraceEnabled>False</StackTraceEnabled>
+		<BackgroundProcessorConfigRelease>Chalkable.BackgroundTaskProducer\app.Release.config</BackgroundProcessorConfigRelease>
+		<BackgroundProcessorConfigStaging>Chalkable.BackgroundTaskProducer\app.Staging.config</BackgroundProcessorConfigStaging>
+		<BackgroundProcessorConfigQa>Chalkable.BackgroundTaskProducer\app.qa.config</BackgroundProcessorConfigQa>
+		<BackgroundProcessorConfig>Chalkable.BackgroundTaskProducer\app.config</BackgroundProcessorConfig>
+		
+		<BackgroundTaskProcessorConfigRelease>Chalkable.BackgroundTaskProcessor\app.Release.config</BackgroundTaskProcessorConfigRelease>
+		<BackgroundTaskProcessorConfigStaging>Chalkable.BackgroundTaskProcessor\app.Staging.config</BackgroundTaskProcessorConfigStaging>
+		<BackgroundTaskProcessorConfigQa>Chalkable.BackgroundTaskProcessor\app.qa.config</BackgroundTaskProcessorConfigQa>
+		<BackgroundTaskProcessorConfig>Chalkable.BackgroundTaskProcessor\app.config</BackgroundTaskProcessorConfig>
+    </PropertyGroup>
+	
+	<Target Name="Staging">		
+		<MakeDir Directories="Chalkable.Azure\obj\Staging\Package"></MakeDir>
+		<Delete Files="$(BackgroundProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundProcessorConfigStaging)" DestinationFiles="$(BackgroundProcessorConfig)"/>
+		
+		<Delete Files="$(BackgroundTaskProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundTaskProcessorConfigStaging)" DestinationFiles="$(BackgroundTaskProcessorConfig)"/>
+		
+		<Message Text="Using cspack create a package for deployment..."/>		
+		<MSBuild Projects="Chalkable.Azure\Chalkable.Azure.ccproj" Targets="publish" Properties="configuration=staging" />
+		<Move SourceFiles="Chalkable.Azure\bin\staging\app.publish\Chalkable.Azure.cspkg" DestinationFiles="Chalkable.Azure\obj\Staging\Package\StagingPackage.cspkg"/>
+	</Target>  
+	
+	<Target Name="Production">		
+		<MakeDir Directories="Chalkable.Azure\obj\Release\Package"></MakeDir>
+		<Delete Files="$(BackgroundProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundProcessorConfigRelease)" DestinationFiles="$(BackgroundProcessorConfig)"/>
+		
+		<Delete Files="$(BackgroundTaskProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundTaskProcessorConfigRelease)" DestinationFiles="$(BackgroundTaskProcessorConfig)"/>
+		
+		<Message Text="Using cspack create a package for deployment..."/>		
+		<MSBuild Projects="Chalkable.Azure\Chalkable.Azure.ccproj" Targets="publish" Properties="configuration=release" />
+		<Move SourceFiles="Chalkable.Azure\bin\Release\app.publish\Chalkable.Azure.cspkg" DestinationFiles="Chalkable.Azure\obj\Release\Package\ReleasePackage.cspkg"/>
+	</Target>      	
+	
+	<Target Name="Qa">		
+		<MakeDir Directories="Chalkable.Azure\obj\Qa\Package"></MakeDir>
+		<Delete Files="$(BackgroundProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundProcessorConfigQa)" DestinationFiles="$(BackgroundProcessorConfig)"/>
+		
+		<Delete Files="$(BackgroundTaskProcessorConfig)" />
+		<Move SourceFiles="$(BackgroundTaskProcessorConfigQa)" DestinationFiles="$(BackgroundTaskProcessorConfig)"/>
+		
+		<Message Text="Using cspack create a package for deployment..."/>		
+		<MSBuild Projects="Chalkable.Azure\Chalkable.Azure.ccproj" Targets="publish" Properties="configuration=QA" />
+		<Move SourceFiles="Chalkable.Azure\bin\Qa\app.publish\Chalkable.Azure.cspkg" DestinationFiles="Chalkable.Azure\obj\Qa\Package\QAPackage.cspkg"/>
+	</Target>      	
+</Project>
