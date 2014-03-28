@@ -63,8 +63,10 @@ NAMESPACE('chlk.controllers', function (){
                         .then(function(x){
                             return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
                         }, this);
-                    return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
+                }else{
+                    res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 }
+                return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
             },
 
             [[chlk.models.common.PaginatedList, Boolean, String, String]],
