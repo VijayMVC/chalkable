@@ -24,7 +24,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
-   
+        void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
+
     }
 
     public class SchoolYearService : SchoolServiceBase, ISchoolYearService
@@ -215,6 +216,17 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 new StudentSchoolYearDataAccess(uow).Delete(studentSchoolYears);
+                uow.Commit();
+            }
+        }
+
+        public void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new StudentSchoolYearDataAccess(uow).Update(studentSchoolYears);
                 uow.Commit();
             }
         }
