@@ -34,6 +34,11 @@ namespace Chalkable.Data.School.Model
 
         //TODO : remove this later
         public StudentAnnouncementStateEnum State { get { return StudentAnnouncementStateEnum.Manual; } }
+
+        public bool IsGraded
+        {
+            get { return !string.IsNullOrEmpty(ScoreValue) || Late || Incomplete || Exempt || Dropped; }
+        }
     }
 
     public class StudentAnnouncementDetails : StudentAnnouncement
