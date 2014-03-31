@@ -18,5 +18,5 @@
             +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), id='isexempt' + self.getId().valueOf()).with-value
         else
             +Hidden('isexempt', self.isExempt())
-        +LabeledCheckbox(Msg.Absent, 'isabsent', self.isAbsent())(data-value=self.isAbsent(), id='isabsent' + self.getId().valueOf()).with-value
+        +Hidden('isabsent', self.isAbsent())
         +LabeledCheckbox(Msg.Fill, 'fill', false).fill-grade

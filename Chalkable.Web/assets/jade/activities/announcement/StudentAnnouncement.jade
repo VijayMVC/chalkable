@@ -25,8 +25,8 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
                     +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id).with-value
                 else
                     +Hidden('dropped', self.isDropped())
+                +Hidden('isabsent', self.isAbsent())
                 +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), id='islate-' + id).with-value
                 +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), id='isincomplete-' + id).with-value
                 +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), id='isexempt-' + id).with-value
-                +LabeledCheckbox(Msg.Absent, 'isabsent', self.isAbsent())(data-value=self.isAbsent(), id='isabsent-' + id).with-value
                 +LabeledCheckbox(Msg.Fill, 'fill', false).fill-grade
