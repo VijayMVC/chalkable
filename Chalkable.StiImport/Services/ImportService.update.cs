@@ -156,7 +156,13 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateStudentSchoolYears()
         {
-            //do we need to update this?
+            var ssy = context.GetSyncResult<StudentAcadSession>().Updated.Select(x => new StudentSchoolYear
+                {
+                    SchoolYearRef = x.AcadSessionID,
+                    StudentRef = x.StudentID,
+                    GradeLevelRef = x.GradeLevelID.Value
+                }).ToList();
+            ServiceLocatorSchool.SchoolYearService.EditStudentSchoolYears(ssy);
         }
 
         private void UpdateMarkingPeriods()
@@ -319,12 +325,12 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateClassPeriods()
         {
-            //TODO: can we edit this?
+            //TODO: no way to update. delete or insert only
         }
 
         private void UpdateClassPersons()
         {
-            //TODO: can we edit this?
+            //TODO: no way to update. delete or insert only
         }
 
         private void UpdateAttendanceReasons()

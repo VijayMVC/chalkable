@@ -217,8 +217,8 @@ namespace Chalkable.StiImport.Services
                                              GradeLevelRef = x.GradeLevelID.Value,
                                              SchoolYearRef = x.AcadSessionID,
                                              StudentRef = x.StudentID
-                                         });
-            //TODO: no delete method   
+                                         }).ToList();
+            ServiceLocatorSchool.SchoolYearService.UnassignStudents(assignments);
         }
 
         private void DeleteSchoolYears()
