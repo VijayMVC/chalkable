@@ -50,8 +50,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoApplicationInstallStorage ApplicationInstallStorage { get; private set; }
         public IDemoAnnouncementStorage AnnouncementStorage { get; private set; }
 
-        public DemoStorage()
+
+        private UserContext Context { get; set; }
+
+        public DemoStorage(UserContext context)
         {
+            Context = context;
             UserStorage = new DemoUserStorage(this);
             PrivateMessageStore = new DemoPrivateMessageStorage();
             SchoolYearStorage = new DemoSchoolYearStorage(this);
@@ -99,7 +103,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
 
             AttendanceReasonStorage.Setup();
+            AttendanceLevelReasonStorage.Setup();
+            GradeLevelStorage.Setup();
+            ClassStorage.Setup();
 
+            MasterSchoolStorage.Add(new Data.Master.Model.School
+            {
+                Id = Guid.NewGuid(),
+                LocalId = 1,
+                DistrictRef = Context.DistrictId.Value,
+                Name = "SMITH",
+            });
 
             SchoolStorage.Add(new Data.School.Model.School
             {
@@ -168,6 +182,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Gender = null,
                 RoleRef = 5
             });
+
+
+            
 
         }
     }

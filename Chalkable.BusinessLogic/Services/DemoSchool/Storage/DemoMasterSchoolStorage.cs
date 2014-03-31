@@ -49,5 +49,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (data.ContainsKey(school.Id))
                 data[school.Id] = school;
         }
+       
     }
 }
