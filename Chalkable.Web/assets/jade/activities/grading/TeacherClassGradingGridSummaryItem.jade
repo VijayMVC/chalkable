@@ -56,7 +56,8 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore)
                         row-index=i
                         data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                         data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
-                        data-max-score= maxScore
+                        data-max-score= maxScore,
+                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId()
                     ).dotted-h.grade-value
                         +TeacherClassGradingGridSummaryCell(info, maxScore)
                 .dotted-h.grade-value=announcement.getAvg()

@@ -290,8 +290,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     allScores.push(item.getName() + ' (fill all)');
                 });
 
-                allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)',
-                    'Late', 'Late (fill all)', 'Absent', 'Absent (fill all)']);
+                allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
 
                 if(model.isAbleDropStudentScore()){
                     allScores = allScores.concat(['Dropped', 'Dropped (fill all)']);
@@ -565,7 +564,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     case Msg.Dropped.toLowerCase(): this.setItemState_(input, 'dropped', selectNext); break;
                     case Msg.Incomplete.toLowerCase(): this.setItemState_(input, 'isincomplete', selectNext); break;
                     case Msg.Late.toLowerCase(): this.setItemState_(input, 'islate', selectNext); break;
-                    case Msg.Absent.toLowerCase(): this.setItemState_(input, 'isabsent', selectNext); break;
                     case Msg.Exempt.toLowerCase(): this.setItemState_(input, 'isexempt', selectNext); break;
                     default:{
                         var numericValue = parseFloat(value);
