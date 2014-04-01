@@ -611,7 +611,7 @@ NAMESPACE('chlk.controllers', function (){
                     });
                     return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());break;
                 case 'save': model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
-                    model.setApplications(this.getContext().getSession().get('AnnoucementApplications'));
+                    model.setApplications(this.getContext().getSession().get('AnnouncementApplications'));
                     var announcementForm = new chlk.models.announcement.AnnouncementForm();
                     announcementForm.setAnnouncement(model);
                     return this.saveAnnouncement(model, announcementForm);break;
@@ -695,7 +695,7 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_());
             else{
-                var apps = this.getContext().getSession().get('AnnoucementApplications', []);
+                var apps = this.getContext().getSession().get('AnnouncementApplications', []);
                 if((!model.getAttachments() || !model.getAttachments().length) && (!apps.length) && !model.getContent()){
                         this.ShowMsgBox('You should fill in Assignment\nor add attachment or application', 'whoa.');
                         return false;

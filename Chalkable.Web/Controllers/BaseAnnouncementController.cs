@@ -26,10 +26,7 @@ namespace Chalkable.Web.Controllers
             
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.UserLocalId.Value, attInfo);
-            var applications = MasterLocator.ApplicationService.GetApplications();
-            var annApps = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
-            var installs = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.UserLocalId ?? 0);
-            annViewData.Applications = AnnouncementApplicationViewData.Create(annApps, applications, installs, Context.UserLocalId);
+            annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, announcementId);
             if (isRead && annDetails.State == AnnouncementState.Created)
             {
                 var ids = new HashSet<Guid>();

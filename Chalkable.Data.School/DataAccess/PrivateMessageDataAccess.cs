@@ -45,7 +45,7 @@ namespace Chalkable.Data.School.DataAccess
                 var rolesString = roles.JoinString(",");
                 b.AppendFormat(" and PrivateMessage_{1}RoleRef in ({0})", rolesString, prefix);
             }
-            if (string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword + "%";
                 b.AppendFormat(@" and (PrivateMessage_Subject like @keyword or PrivateMessage_Body like @keyword
