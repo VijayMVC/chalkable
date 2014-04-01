@@ -277,10 +277,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            Boolean, 'ableDropStudentScore',
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
 
                 var allScores = [];
+                this.setAbleDropStudentScore(model.isAbleDropStudentScore());
                 model.getAlternateScores().forEach(function(item){
                     allScores.push(item.getName());
                     allScores.push(item.getName() + ' (fill all)');
@@ -353,7 +356,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var itemTpl = new chlk.templates.announcement.StudentAnnouncement;
                 itemTpl.assign(itemModel);
                 itemTpl.options({
-                    maxScore: this.getMaxScore()
+                    maxScore: this.getMaxScore(),
+                    ableDropStudentScore : this.isAbleDropStudentScore()
                 });
                 var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());
                 container.empty();
@@ -555,6 +559,22 @@ NAMESPACE('chlk.activities.announcement', function () {
                         that.setItemValue(value, node, false);
                     });
                 this.hideDropDown();
+            },
+
+            [ria.mvc.DomEventBind('change', '.dropped-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function droppedChange(node, event, options_){
+                if(!node.checked()){
+                    var input = node.parent('.input-container').find('.grade-autocomplete');
+                    input.setValue(input.getData('grade-value'));
+                }
+            },
+
+            [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function exemptChange(node, event, options_){
+                if(!node.checked())
+                    var input = node.parent('.input-container').find('.grade-autocomplete').setValue('');
             },
 
             function setItemValue(value, input, selectNext){

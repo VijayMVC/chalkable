@@ -58,7 +58,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             String, function getGradedWidth(){
                 var res = Math.ceil(100 * this.getGradedStudentCount() / this.getItems().length) + '%';
-                console.info(this.getGradedStudentCount(), this.getItems().length, res);
                 return res;
             },
 

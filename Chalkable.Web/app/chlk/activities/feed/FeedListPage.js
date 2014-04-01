@@ -15,7 +15,7 @@ NAMESPACE('chlk.activities.feed', function () {
             VOID, function starAnnouncement(node, event){
                 setTimeout(function(){
                     var ic = this.dom.find('#importan-count');
-                    var current = parseInt(ic.getHTML(), 10);
+                    var current = parseInt(ic.getHTML(), 10) || 0;
                     var feedItem = node.parent('.feed-item');
                     if (feedItem.getAttr("class").indexOf("starred") != -1)
                     {
@@ -26,7 +26,6 @@ NAMESPACE('chlk.activities.feed', function () {
                         ic.setHTML("" + (current-1));
                     }
                 }.bind(this), 1);
-                return true;
             },
 
             [ria.mvc.DomEventBind('click', '.announcement-link')],

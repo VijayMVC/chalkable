@@ -14,6 +14,7 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
                 value=normalValue,
                 name="gradevalue",
                 data-value=normalValue,
+                data-grade-value=self.getGradeValue(),
                 class=self.getGradeInputClass()
                 data-id=self.getId().valueOf()
             ).no-padding.grade-input.grade-autocomplete.grey-input
@@ -22,11 +23,11 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
                 .pop-up-triangle.big
                 id = getDate().getTime()
                 if self.isAbleDropStudentScore()
-                    +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id).with-value
+                    +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id).with-value.dropped-checkbox
                 else
                     +Hidden('dropped', self.isDropped())
                 +Hidden('isabsent', self.isAbsent())
                 +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), id='islate-' + id).with-value
                 +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), id='isincomplete-' + id).with-value
-                +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), id='isexempt-' + id).with-value
+                +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), id='isexempt-' + id).with-value.exempt-checkbox
                 +LabeledCheckbox(Msg.Fill, 'fill', false).fill-grade
