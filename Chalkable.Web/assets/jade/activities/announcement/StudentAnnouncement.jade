@@ -14,7 +14,7 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
                 value=normalValue,
                 name="gradevalue",
                 data-value=normalValue,
-                class="validate[required,min[0]] " + self.getGradeInputClass()
+                class=self.getGradeInputClass()
                 data-grade-value=self.getGradeValue(),
                 data-id=self.getId().valueOf()
             ).no-padding.grade-input.grade-autocomplete.grey-input
