@@ -214,6 +214,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'hiddenFromStudents',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'ableDropStudentScore'
+            Boolean, 'ableDropStudentScore',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableToExempt'
         ]);
 });

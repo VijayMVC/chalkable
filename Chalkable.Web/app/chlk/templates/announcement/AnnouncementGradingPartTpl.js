@@ -23,6 +23,8 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Boolean, 'ableDropStudentScore',
 
+            Boolean, 'ableToExempt',
+
             ArrayOf(chlk.models.announcement.StudentAnnouncement), function getSortedStudentAnnouncements(){
                 var studentAnnouncement = this.getItems().slice(), res=[];
                 studentAnnouncement.forEach(function(item){
