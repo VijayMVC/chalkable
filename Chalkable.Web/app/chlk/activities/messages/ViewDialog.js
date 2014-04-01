@@ -9,6 +9,14 @@ NAMESPACE('chlk.activities.messages', function () {
         [ria.mvc.ActivityGroup('MessagePopup')],
         [ria.mvc.TemplateBind(chlk.templates.messages.ViewDialog)],
         'ViewDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
+
+//            [ria.mvc.DomEventBind('click', '.close')],
+//            [[ria.dom.Dom, ria.dom.Event]],
+//            OVERRIDE, Boolean, function onCloseBtnClick(node, event) {
+//                BASE();
+//                this.close();
+//                return true;
+//            }
         ]);
 });
 
