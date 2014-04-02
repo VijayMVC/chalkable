@@ -19,17 +19,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<GradingPeriod> gradingPeriods)
         {
-            throw new System.NotImplementedException();
+            Storage.GradingPeriodStorage.Add(gradingPeriods);
         }
 
         public void Edit(IList<GradingPeriod> gradingPeriods)
         {
-            throw new System.NotImplementedException();
+            Storage.GradingPeriodStorage.Update(gradingPeriods);
         }
 
         public void Delete(IList<int> ids)
         {
-            throw new System.NotImplementedException();
+            Storage.GradingPeriodStorage.Delete(ids);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
     public class DemoGradingStyleService : DemoSchoolServiceBase, IGradingStyleService
     {
-        private List<GradingStyle> gradingStyles = new List<GradingStyle>();
+        private readonly List<GradingStyle> gradingStyles = new List<GradingStyle>();
  
         public DemoGradingStyleService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage)
             : base(serviceLocator ,demoStorage)

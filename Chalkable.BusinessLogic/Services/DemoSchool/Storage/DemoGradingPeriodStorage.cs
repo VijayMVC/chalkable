@@ -20,5 +20,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return null;
         }
+
+        public void Add(IList<GradingPeriod> gradingPeriods)
+        {
+            foreach (var gradingPeriod in gradingPeriods)
+            {
+                if (!data.ContainsKey(gradingPeriod.Id))
+                    data[gradingPeriod.Id] = gradingPeriod;
+            }
+        }
+
+        public void Update(IList<GradingPeriod> gradingPeriods)
+        {
+            foreach (var gradingPeriod in gradingPeriods)
+            {
+                data[gradingPeriod.Id] = gradingPeriod;
+            }
+        }
     }
 }
