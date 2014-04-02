@@ -2,6 +2,7 @@ REQUIRE('chlk.templates.grading.GradingClassSummaryGridTpl');
 REQUIRE('chlk.templates.grading.GradingInputTpl');
 REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl');
 REQUIRE('chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl');
+REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl');
 
 REQUIRE('chlk.activities.lib.TemplatePage');
 
@@ -9,6 +10,8 @@ REQUIRE('chlk.models.common.Array');
 REQUIRE('chlk.models.announcement.ShortStudentAnnouncementViewData');
 
 NAMESPACE('chlk.activities.grading', function () {
+
+    var gradingGridTimer;
 
     /** @class chlk.activities.grading.GradingClassSummaryGridPage */
     CLASS(
@@ -72,7 +75,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                var input = node.parent('form').find('.grade-autocomplete').setValue('');
+                node.parent('form').find('.grade-autocomplete').setValue('');
             },
 
             function getScores(node){
@@ -97,12 +100,27 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)],
             VOID, function updateGradingPeriodPart(tpl, model, msg_) {
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
-                tpl.renderTo(container.setHTML(''));
-                setTimeout(function(){
-                    this.openGradingPeriod(container);
-                    var tooltipText = model.getTooltipText();
+                var tooltipText = model.getTooltipText();
+                if(!model.isAutoUpdate()){
+                    tpl.renderTo(container.setHTML(''));
+                    setTimeout(function(){
+                        this.openGradingPeriod(container);
+                        container.parent().find('.mp-title').setData('tooltip', tooltipText);
+                    }.bind(this), 1);
+                }else{
+                    var dom = this.dom;
+                    var avgContainer = container.find('.avgs-container');
+                    var avgTpl = new chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl();
+                    var rowIndex = parseInt(dom.find('.active-row').getAttr('row-index'), 10);
+                    model.setRowIndex(rowIndex);
+                    avgTpl.assign(model);
+                    avgTpl.renderTo(avgContainer.setHTML(''));
+                    model.getGradingItems().forEach(function(item){
+                        dom.find('.avg-' + item.getId().valueOf()).setHTML(item.getAvg() ? item.getAvg().toString() : '');
+                    });
                     container.parent().find('.mp-title').setData('tooltip', tooltipText);
-                }.bind(this), 1);
+                }
+
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl, chlk.activities.lib.DontShowLoader())],
@@ -414,6 +432,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [[Boolean]],
             function updateValue(isComment_){
+                clearTimeout(gradingGridTimer);
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
                 var model = this.getModelFromCell(activeCell);
@@ -429,6 +448,19 @@ NAMESPACE('chlk.activities.grading', function () {
                             this.dom.trigger('click');
                     }.bind(this), 1);
                 }
+
+                var form = activeCell.parent('.marking-period-container').find('.load-grading-period');
+                this.addTimeOut(form);
+            },
+
+            function addTimeOut(form){
+                gradingGridTimer = setTimeout(function(){
+                    form.find('.auto-update').setValue(true);
+                    form.trigger('submit');
+                    setTimeout(function(){
+                        form.find('.auto-update').setValue(false);
+                    }, 1);
+                }, 5000);
             },
 
             OVERRIDE, VOID, function onRender_(model){

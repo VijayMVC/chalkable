@@ -18,6 +18,10 @@ NAMESPACE('chlk.models.grading', function () {
 
             Number, 'avg',
 
+            Number, 'rowIndex',
+
+            Boolean, 'autoUpdate',
+
             function getTooltipText(){
                 return (this.getAvg() != null ? Msg.Avg + " " + this.getAvg() : 'No grades yet');
             }

@@ -127,8 +127,12 @@ NAMESPACE('chlk.controllers', function (){
             function loadGradingPeriodGridSummaryAction(model){
                 var result = this.gradingService
                     .getClassSummaryGridForPeriod(model.getClassId(), model.getGradingPeriodId(), model.getStandardId(), model.getCategoryId())
+                    .then(function(newModel){
+                        newModel.setAutoUpdate(model.isAutoUpdate());
+                        return newModel;
+                    })
                     .attach(this.validateResponse_());
-                return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result);
+                return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, model.isAutoUpdate() ? chlk.activities.lib.DontShowLoader() : null);
             },
 
             [chlk.controllers.SidebarButton('statistic')],

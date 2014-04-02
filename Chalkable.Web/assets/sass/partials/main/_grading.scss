@@ -4,6 +4,12 @@ BODY {
       DIV#content-wrapper{
         #main-wrapper {
           #main{
+            .grading-summary-grid{
+              .mp-data{
+                height: 0;
+              }
+            }
+
             .class-grading{
               .mps-container .marking-period-container .mp-data .ann-types-container {
                 margin-bottom: -30px;
