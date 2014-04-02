@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassPersonGradingStats> GetFullGradingStats(int markingPeriodId, int studentId);
         IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId);
         IList<ChalkableGradeBook> GetGradeBooks(int classId);
-        ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null);
+        ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -176,10 +176,16 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null)
+        public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
-            var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType
+            Gradebook stiGradeBook = null;
+            if(needsReCalculate)
+                stiGradeBook = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriodId);
+            if (!needsReCalculate || standardId.HasValue || classAnnouncementType.HasValue)
+            {
+                stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType
                 , gradingPeriodId, standardId);
+            }
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             return GetGradeBooks(classId, new List<GradingPeriodDetails>{gradingPeriod}, stiGradeBook).First();
         }
@@ -254,8 +260,6 @@ namespace Chalkable.BusinessLogic.Services.School
             gradeBook.Announcements = annsDetails;
             return gradeBook;
         }
-
-
 
     }
 }
