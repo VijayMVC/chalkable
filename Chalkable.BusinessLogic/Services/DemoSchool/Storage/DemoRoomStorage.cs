@@ -39,7 +39,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public PaginatedList<Room> GetAll(int start, int count)
         {
-            throw new System.NotImplementedException();
+            var rooms = data.Select(x => x.Value).ToList().Skip(start).Take(count);
+            //todo fix this
+            return new PaginatedList<Room>(rooms, 0, int.MaxValue);
         }
 
         public void Update(IList<Room> rooms)

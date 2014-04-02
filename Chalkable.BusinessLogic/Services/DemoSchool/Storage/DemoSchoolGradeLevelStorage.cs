@@ -4,21 +4,17 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoSchoolGradeLevelStorage
+    public class DemoSchoolGradeLevelStorage:BaseDemoStorage<int, SchoolGradeLevel>
     {
+        private int index = 0;
+        public DemoSchoolGradeLevelStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(SchoolGradeLevel schoolGradeLevel)
         {
-            throw new System.NotImplementedException();
+            data.Add(index++, schoolGradeLevel);
         }
-
-        public GradeLevel GetById(int gradeLevelId)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void DeleteSchoolGradeLevel(int gradeLevelId)
-        {
-            throw new System.NotImplementedException();
-        }
+        
     }
 }

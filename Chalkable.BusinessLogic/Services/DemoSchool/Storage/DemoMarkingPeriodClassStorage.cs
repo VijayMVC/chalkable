@@ -1,45 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoMarkingPeriodClassStorage
+    public class DemoMarkingPeriodClassStorage:BaseDemoStorage<int, MarkingPeriodClass>
     {
-        public MarkingPeriodClass GetMarkingPeriodClassOrNull(MarkingPeriodClassQuery markingPeriodClassQuery)
+        private int index = 0;
+        public DemoMarkingPeriodClassStorage(DemoStorage storage) : base(storage)
         {
-            throw new NotImplementedException();
         }
 
-        public MarkingPeriodClass GetById(int markingPeriodClassId)
+        public MarkingPeriodClass GetMarkingPeriodClassOrNull(MarkingPeriodClassQuery markingPeriodClassQuery)
         {
             throw new NotImplementedException();
         }
 
         public void Delete(MarkingPeriodClassQuery markingPeriodClassQuery)
         {
-            throw new NotImplementedException();
+            var mpcs = GetMarkingPeriodClasses(markingPeriodClassQuery);
+            foreach (var markingPeriodClass in mpcs)
+            {
+                var item = data.First(x => x.Value == markingPeriodClass);
+                data.Remove(item.Key);
+            }
+        }
+
+        private IList<MarkingPeriodClass> GetMarkingPeriodClasses(MarkingPeriodClassQuery markingPeriodClassQuery)
+        {
+            var mpcs = data.Select(x => x.Value);
+
+
+            if (markingPeriodClassQuery.ClassId.HasValue)
+                mpcs = mpcs.Where(x => x.ClassRef == markingPeriodClassQuery.ClassId);
+            if (markingPeriodClassQuery.MarkingPeriodId.HasValue)
+                mpcs = mpcs.Where(x => x.MarkingPeriodRef == markingPeriodClassQuery.MarkingPeriodId);
+
+            return mpcs.ToList();
         }
 
         public void Add(MarkingPeriodClass mpc)
         {
-            throw new NotImplementedException();
+            data.Add(index++, mpc);
         }
 
         public void Add(IList<MarkingPeriodClass> markingPeriodClasses)
         {
-            throw new NotImplementedException();
+            foreach (var markingPeriodClass in markingPeriodClasses)
+            {
+                Add(markingPeriodClass);
+            }
         }
 
         public bool Exists(int? classId, int? markingPeriodId)
         {
-            return true;
-        }
+            var mpc = GetMarkingPeriodClasses(new MarkingPeriodClassQuery
+            {
+                ClassId = classId,
+                MarkingPeriodId = markingPeriodId
+            });
 
-        public IList<MarkingPeriodClass> GetAll()
-        {
-            throw new NotImplementedException();
+            return mpc.ToList().Count > 0;
         }
     }
 }
