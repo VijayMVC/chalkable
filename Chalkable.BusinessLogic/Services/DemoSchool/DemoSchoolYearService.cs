@@ -12,16 +12,13 @@ using Chalkable.Data.School.Model;
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
 
-    public class DemoSchoolYearService : DemoSchoolService, ISchoolYearService
+    public class DemoSchoolYearService : DemoSchoolServiceBase, ISchoolYearService
     {
         public DemoSchoolYearService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
         {
         }
         
-        private bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYearDataAccess dataAccess, SchoolYear schoolYear = null)
-        {
-            return false;//TODO: isn't supported in INOW
-        }
+       
 
         public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue)
         {

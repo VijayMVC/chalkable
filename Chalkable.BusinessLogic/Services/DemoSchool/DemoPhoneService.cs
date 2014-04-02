@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<Phone> GetPhones()
         {
-            return ((BaseDemoStorage<,>) (Storage.PhoneStorage)).GetAll();
+            return Storage.PhoneStorage.GetAll();
         }
 
         public IList<Phone> GetPhones(int personId)

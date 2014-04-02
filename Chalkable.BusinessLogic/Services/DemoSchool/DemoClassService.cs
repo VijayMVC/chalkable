@@ -149,13 +149,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
             
             var cClass = Storage.ClassStorage.GetById(classId);
-            return Storage.ClassPersonStorage.Add(new ClassPerson
+
+            var classPerson = new ClassPerson
             {
                 PersonRef = personId,
                 ClassRef = classId,
                 MarkingPeriodRef = markingPeriodId,
                 SchoolRef = cClass.SchoolRef.Value
-            });
+            };
+            Storage.ClassPersonStorage.Add(classPerson);
+
+
         }
 
         public void AddStudents(IList<ClassPerson> classPersons)
