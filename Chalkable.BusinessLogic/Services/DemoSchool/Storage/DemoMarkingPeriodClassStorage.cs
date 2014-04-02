@@ -31,5 +31,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new NotImplementedException();
         }
+
+        public bool Exists(int? classId, int? markingPeriodId)
+        {
+            return true;
+        }
+
+        public IList<MarkingPeriodClass> GetAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

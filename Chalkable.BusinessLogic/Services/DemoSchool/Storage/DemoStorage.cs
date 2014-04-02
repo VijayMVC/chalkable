@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IDemoAnnouncementStorage AnnouncementStorage { get; private set; }
 
 
-        private UserContext Context { get; set; }
+        public UserContext Context { get; private set; }
 
         public DemoStorage(UserContext context)
         {

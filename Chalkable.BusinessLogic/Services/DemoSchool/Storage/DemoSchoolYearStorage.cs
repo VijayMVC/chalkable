@@ -7,15 +7,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoSchoolYearStorage:BaseDemoStorage<int, SchoolYear>
     {
-        private Dictionary<int, SchoolYear> schoolYears = new Dictionary<int, SchoolYear>();
-
         public DemoSchoolYearStorage(DemoStorage storage) : base(storage)
         {
         }
 
         public bool Exists(string name)
         {
-            return false;
+            return data.Count(x => x.Value.Name == name) > 0;
         }
 
         public SchoolYear Add(int id, int schoolId, string name, string description, DateTime startDate, DateTime endDate)
@@ -29,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     EndDate = endDate,
                     SchoolRef = schoolId
                 };
-            schoolYears.Add(id, schoolYear);
+            data[id] = schoolYear;
             return schoolYear;
         }
 
@@ -45,21 +43,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public SchoolYear GetCurrentSchoolYear()
         {
-            return schoolYears.First().Value;
+            return data.First().Value;
         }
 
 
         public SchoolYear GetByDate(DateTime date)
         {
-            return schoolYears.First(x => x.Value.StartDate >= date && date <= x.Value.EndDate).Value;
+            return data.First(x => x.Value.StartDate >= date && date <= x.Value.EndDate).Value;
         }
 
         public void Add(IList<SchoolYear> years)
         {
             foreach (var year in years)
             {
-
-                schoolYears.Add(year.Id, year);
+                Add(year);
             }
         }
 
@@ -67,10 +64,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             foreach (var schoolYear in list)
             {
-                var sy = GetById(schoolYear.Id);
-                if (sy != null)
+                if (data.ContainsKey(schoolYear.Id))
                 {
-                    schoolYears[schoolYear.Id] = schoolYear;
+                    data[schoolYear.Id] = schoolYear;
                 }
             }
             return list;
@@ -78,7 +74,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(SchoolYear schoolYear)
         {
-            schoolYears.Add(schoolYear.Id, schoolYear);
+            if (!data.ContainsKey(schoolYear.Id))
+                data[schoolYear.Id] = schoolYear;
         }
     }
 }

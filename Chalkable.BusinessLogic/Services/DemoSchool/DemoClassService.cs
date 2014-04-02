@@ -85,7 +85,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Delete(IList<int> ids)
         {
-            throw new NotImplementedException();
+            foreach (var id in ids)
+            {
+                Delete(id);
+            }
         }
 
         public void AssignClassToMarkingPeriod(int classId, int markingPeriodId)
@@ -225,13 +228,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private  ClassQueryResult GetClassesQueryResult(ClassQuery query)
         {
-            using (var uow = Read())
-            {
-                query.CallerId = Context.UserLocalId.HasValue ? Context.UserLocalId.Value : 0;
-                query.CallerRoleId = Context.Role.Id;
-                return new ClassDataAccess(uow, Context.SchoolLocalId)
-                    .GetClassesComplex(query);
-            }
+            query.CallerId = Context.UserLocalId.HasValue ? Context.UserLocalId.Value : 0;
+            query.CallerRoleId = Context.Role.Id;
+            return Storage.ClassStorage.GetClassesComplex(query);
+            
         }
         //TODO: add markingPeriodId param 
         public ClassPerson GetClassPerson(int classId, int personId)
