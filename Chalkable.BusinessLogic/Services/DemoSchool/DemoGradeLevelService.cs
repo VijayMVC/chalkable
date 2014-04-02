@@ -4,7 +4,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -90,8 +89,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if(!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            Storage.SchoolGradeLevelStorage.DeleteSchoolGradeLevel(gradeLevelId);
-            return Storage.SchoolGradeLevelStorage.GetById(gradeLevelId);
+            Storage.SchoolGradeLevelStorage.Delete(gradeLevelId);
+            return Storage.GradeLevelStorage.GetById(gradeLevelId);
         }
     }
 }
