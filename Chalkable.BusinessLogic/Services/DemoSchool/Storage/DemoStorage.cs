@@ -63,12 +63,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             DisciplineStorage = new DemoDisciplineStorage();
             AlphaGradeStorage = new DemoAlphaGradeStorage(this);
             AlternateScoreStorage = new DemoAlternateScoreStorage(this);
-            StudentParentStorage = new DemoStudentParentStorage();
+            StudentParentStorage = new DemoStudentParentStorage(this);
             StandardStorage = new DemoStandardStorage(this);
             StandardSubjectStorage = new DemoStandardSubjectStorage(this);
             ClasStandardStorage = new DemoClassStandardStorage(this);
             SchoolStorage = new DemoSchoolStorage(this);
-            SchoolPersonStorage = new DemoSchoolPersonStorage();
+            SchoolPersonStorage = new DemoSchoolPersonStorage(this);
             RoomStorage = new DemoRoomStorage(this);
             ClassPeriodStorage = new DemoClassPeriodStorage(this);
             PrivateMessageStorage = new DemoPrivateMessageStorage();
@@ -76,10 +76,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PersonStorage = new DemoPersonStorage(this);
             PeriodStorage = new DemoPeriodStorage(this);
             MarkingPeriodStorage = new DemoMarkingPeriodStorage(this);
-            MarkingPeriodClassStorage = new DemoMarkingPeriodClassStorage();
-            GradingPeriodStorage = new DemoGradingPeriodStorage();
+            MarkingPeriodClassStorage = new DemoMarkingPeriodClassStorage(this);
+            GradingPeriodStorage = new DemoGradingPeriodStorage(this);
             GradeLevelStorage = new DemoGradeLevelStorage(this);
-            SchoolGradeLevelStorage = new DemoSchoolGradeLevelStorage();
+            SchoolGradeLevelStorage = new DemoSchoolGradeLevelStorage(this);
             DayTypeStorage = new DemoDayTypeStorage(this);
             ClassStorage = new DemoClassStorage(this);
             ClassPersonStorage = new DemoClassPersonStorage(this);
@@ -88,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             DateStorage = new DemoDateStorage();
             ChalkableDepartmentStorage = new DemoChalkableDepartmentStorage(this);
             MasterSchoolStorage = new DemoMasterSchoolStorage(this);
-            StudentAnnouncementStorage = new DemoStudentAnnouncementStorage();
+            StudentAnnouncementStorage = new DemoStudentAnnouncementStorage(this);
             AnnouncementAttachmentStorage = new DemoAnnouncementAttachmentStorage(this);
             AttendanceReasonStorage = new DemoAttendanceReasonStorage(this);
             AttendanceLevelReasonStorage = new DemoAttendanceLevelReasonStorage(this);

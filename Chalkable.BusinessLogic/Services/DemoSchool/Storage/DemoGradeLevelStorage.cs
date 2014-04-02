@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -13,7 +14,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<GradeLevel> GetGradeLevels(int? schoolId)
         {
-            throw new System.NotImplementedException();
+            var schoolGradeLevels = Storage.SchoolGradeLevelStorage.GetAll(schoolId).Select(x => x.GradeLevelRef).ToList();
+            return data.Where(x => schoolGradeLevels.Contains(x.Value.Id)).Select(x => x.Value).ToList();
         }
 
         public void Add(GradeLevel gradeLevel)
