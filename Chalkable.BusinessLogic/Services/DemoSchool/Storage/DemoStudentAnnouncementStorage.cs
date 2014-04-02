@@ -1,35 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStudentAnnouncementStorage
+    public class DemoStudentAnnouncementStorage:BaseDemoStorage<int, StudentAnnouncement>
     {
-        public void Add(StudentSchoolYear studentSchoolYear)
+        private int index = 0;
+
+        public DemoStudentAnnouncementStorage(DemoStorage storage) : base(storage)
         {
-            throw new System.NotImplementedException();
         }
 
-        public void Add(IList<StudentSchoolYear> studentSchoolYear)
+        public void Add(StudentAnnouncement an)
         {
-            throw new System.NotImplementedException();
+            data.Add(index++, an);
         }
 
-        public IList<StudentSchoolYear> GetAll()
+        public void Add(IList<StudentAnnouncement> studentAnnouncements)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public StudentAnnouncement GetById(int studentAnnouncementId)
-        {
-            throw new System.NotImplementedException();
+            foreach (var studentAnnouncement in studentAnnouncements)
+            {
+                Add(studentAnnouncement);
+            }
         }
 
         public void Update(StudentAnnouncement sa)
         {
-            throw new System.NotImplementedException();
+            var studentAnnouncement = data.First(x => x.Value == sa);
+            data[studentAnnouncement.Key] = sa;
         }
 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncementsDetails(int announcementId, int i)
@@ -37,14 +38,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new System.NotImplementedException();
         }
 
-        public void Update(List<StudentAnnouncement> notGraded)
+        public void Update(IList<StudentAnnouncement> announcements)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void Update(IList<StudentAnnouncement> notGraded)
-        {
-            throw new System.NotImplementedException();
+            foreach (var studentAnnouncement in announcements)
+            {
+                Update(studentAnnouncement);
+            }
         }
    
     }
