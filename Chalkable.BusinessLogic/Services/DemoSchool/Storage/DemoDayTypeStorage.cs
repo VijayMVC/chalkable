@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -11,18 +12,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<DayType> GetDateTypes(int schoolYearId, int? fromNumber = null, int? toNumber = null)
         {
-            throw new System.NotImplementedException();
+            var dayTypes = data.Select(x => x.Value).Where(x => x.SchoolYearRef == schoolYearId);
+
+            if (fromNumber.HasValue)
+                dayTypes = dayTypes.Where(x => x.Number >= fromNumber);
+            if (toNumber.HasValue)
+                dayTypes = dayTypes.Where(x => x.Number <= toNumber);
+
+            return dayTypes.ToList();
         }
 
         
         public void Add(DayType ss)
         {
-            throw new System.NotImplementedException();
+            if (!data.ContainsKey(ss.Id))
+                data[ss.Id] = ss;
         }
 
         public IList<DayType> Update(IList<DayType> dayTypes)
         {
-            throw new System.NotImplementedException();
+            foreach (var dayType in dayTypes)
+            {
+                if (data.ContainsKey(dayType.Id))
+                    data[dayType.Id] = dayType;
+            }
         }
 
 
@@ -33,12 +46,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<DayType> Add(IList<DayType> dayTypes)
         {
-            throw new System.NotImplementedException();
+            foreach (var dayType in dayTypes)
+            {
+                Add(dayType);
+            }
         }
 
-        public void Delete(DayType dateType)
+        public void Delete(DayType dayType)
         {
-            throw new System.NotImplementedException();
+            data.Remove(dayType.Id);
         }
     }
 }
