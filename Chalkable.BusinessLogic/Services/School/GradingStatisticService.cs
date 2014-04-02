@@ -23,6 +23,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId);
         IList<ChalkableGradeBook> GetGradeBooks(int classId);
         ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true);
+        IList<string> GetGradeBookComments(int schoolYearId, int teacherId);
+
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -261,5 +263,10 @@ namespace Chalkable.BusinessLogic.Services.School
             return gradeBook;
         }
 
+
+        public IList<string> GetGradeBookComments(int schoolYearId, int teacherId)
+        {
+            return ConnectorLocator.GradebookConnector.GetGradebookComments(schoolYearId, teacherId);
+        }
     }
 }

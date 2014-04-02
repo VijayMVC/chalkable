@@ -36,5 +36,10 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add("standardId", standardId.Value.ToString());
             return Call<Gradebook>(string.Format(url_format, sectionId), nvc);
         }
+
+        public IList<string> GetGradebookComments(int acadSessionId, int teacherId)
+        {
+            return Call<IList<string>>(string.Format(BaseUrl + "chalkable/{0}/teachers/{1}/comments", acadSessionId, teacherId));
+        } 
     }
 }
