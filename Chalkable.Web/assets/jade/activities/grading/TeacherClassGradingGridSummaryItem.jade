@@ -1,7 +1,7 @@
 mixin TeacherClassGradingGridSummaryCell(info, maxScore)
     normalValue = info.getNormalValue()
     div(
-        class= (parseInt(normalValue, 10) ? '' : 'letter ') + info.isEmptyGrade() ? "empty-grade" : "",
+        class= (parseInt(normalValue, 10) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : ""),
         data-id= info.getId(),
         data-announcementid= info.getAnnouncementId(),
         data-studentid= info.getStudentId(),
@@ -12,7 +12,7 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore)
         data-isincomplete= info.isIncomplete(),
         data-comment= info.getComment()
     ).grade-info
-        span.grade-text=normalValue
+        span(data-grade-value=info.getGradeValue()).grade-text=normalValue
         cls = info.getAlertClass(maxScore, true)
         div(class=cls, data-tooltip=info.getTooltipText(maxScore, true)).alert-flag
         if info.getComment()
@@ -38,13 +38,8 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore)
         roundedDots = true,
         padding = 77
     ).grid-toolbar.i-b.big-arrows
-        .dotted-container.grade-container.with-horizontal-dots
-            .type-name=Msg.Avg
-            .time
-            .max-score.dotted-h
-            each student,i in self.getStudents()
-                div(row-index=i).dotted-h.grade-value=student.getAvg()
-            .dotted-h.grade-value
+        .dotted-container.grade-container.with-horizontal-dots.avgs-container
+            +RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
         each announcement in self.getGradingItems()
             maxScore = announcement.getMaxScore()
             div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
@@ -60,4 +55,4 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore)
                         class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId()
                     ).dotted-h.grade-value
                         +TeacherClassGradingGridSummaryCell(info, maxScore)
-                .dotted-h.grade-value=announcement.getAvg()
+                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.getAvg()

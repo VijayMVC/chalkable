@@ -14,6 +14,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             chlk.models.id.AnnouncementTypeGradingId, 'categoryId',
 
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            Boolean, 'autoUpdate'
         ]);
 });

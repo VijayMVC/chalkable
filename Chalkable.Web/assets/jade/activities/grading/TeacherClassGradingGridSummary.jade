@@ -1,4 +1,4 @@
-.class-grading
+.class-grading.grading-summary-grid
     topData = self.getTopData()
     topItems = topData.getTopItems()
     selectedId = topData.getSelectedItemId()
@@ -34,6 +34,7 @@
                     span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
                     .grading-selects
                         +ActionForm('grading', 'loadGradingPeriodGridSummary').load-grading-period
+                            +Hidden('autoUpdate', false).auto-update
                             +Hidden('classId', selectedId)
                             +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
                             +Select('standardId')(data-placeholder=Msg.All_standards).standards-select.grading-select

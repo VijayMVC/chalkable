@@ -166,7 +166,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             function setItemState_(node, stateName, selectNext_){
                 var row = node.parent('.row');
                 var input = row.find('.grade-input');
-                input.setValue(input.getData('value'));
+                input.setValue(stateName == 'isexempt' ? '' : input.getData('value'));
                 row.find('[name=' + stateName +']').setValue(true);
                 this.updateItem(node, selectNext_);
             },
@@ -565,7 +565,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function droppedChange(node, event, options_){
                 if(!node.checked()){
-                    var input = node.parent('.input-container').find('.grade-autocomplete');
+                    var input = node.parent('form').find('.grade-autocomplete');
                     input.setValue(input.getData('grade-value'));
                 }
             },
@@ -573,8 +573,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                if(!node.checked())
-                    var input = node.parent('.input-container').find('.grade-autocomplete').setValue('');
+                var input = node.parent('form').find('.grade-autocomplete').setValue('');
             },
 
             function setItemValue(value, input, selectNext){
@@ -604,6 +603,14 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
                 return node.find('.input-container').find('.error').valueOf().length == 0;
+            },
+
+            [ria.mvc.DomEventBind('click', '.grading-input-popup')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function gradingPopUpClick(node, event){
+                setTimeout(function(){
+                    node.parent('form').find('.grade-autocomplete').trigger('focus');
+                }, 1)
             }
         ]
     );

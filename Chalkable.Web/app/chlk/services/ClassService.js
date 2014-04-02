@@ -23,12 +23,19 @@ NAMESPACE('chlk.services', function () {
 
 
             //TODO: refactor
-            [[Boolean]],
-            Array, function getClassesForTopBar(withAll_) {
+            [[Boolean, Boolean]],
+            Array, function getClassesForTopBar(withAll_, forCurrentMp_) {
                 var res = this.getClassesToFilter(), res1 = this.getClassesToFilterWithAll();
-                if(res)
-                    return withAll_ ? res1 : res;
-                res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(window.classesToFilter, ArrayOf(chlk.models.classes.ClassForTopBar));
+                //if(res)
+                    //return withAll_ ? res1 : res;
+                var classes = window.classesToFilter;
+                if(forCurrentMp_){
+                    var mpId = this.getContext().getSession().get('markingPeriod').getId().valueOf();
+                    classes = window.classesToFilter.filter(function(item){
+                        return item.markingperiodsid.indexOf(mpId) > -1
+                    })
+                }
+                res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(classes, ArrayOf(chlk.models.classes.ClassForTopBar));
                 this.setClassesToFilter(res);
                 var classesToFilterWithAll = window.classesToFilter.slice();
                 classesToFilterWithAll.unshift({
@@ -55,6 +62,8 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForWeekMask, function getClassAnnouncementInfo(id){
                 var res = window.classesInfo[id.valueOf()];
+                if(!res)
+                    return null;
                 res.classId = id.valueOf();
                 res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
                 return res;

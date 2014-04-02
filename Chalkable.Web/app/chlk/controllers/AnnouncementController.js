@@ -208,14 +208,14 @@ NAMESPACE('chlk.controllers', function (){
                 this.prepareRecipientsData(model);
             }
             else{
-                var classes = this.classService.getClassesForTopBar();
+                var classes = this.classService.getClassesForTopBar(false, true);
                 var classId_ = announcement.getClassId(), classInfo, types;
                 classes.forEach(function(item){
                     var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
-                    types = currentClassInfo.getTypesByClass();
+                    types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
                     if(types.length)
                         item.setDefaultAnnouncementTypeId(types[0].getId());
-                    if(classId_ && classId_ == item.getId()){
+                    if(currentClassInfo && classId_ && classId_ == item.getId()){
                         classInfo = currentClassInfo;
                         model.setClassInfo(classInfo);
                     }
@@ -655,8 +655,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.getTitle(),
                         model.getContent(),
                         model.getExpiresDate(),
-                        model.getAttachments(),
-                        model.getApplications(),
+                        Array.isArray(model.getAttachments()) ? model.getAttachments().join(',') : model.getAttachments(),
+                        Array.isArray(model.getApplications()) ? model.getApplications().join(',') : model.getApplications(),
                         model.getMarkingPeriodId(),
                         model.getMaxScore(),
                         model.getWeightAddition(),

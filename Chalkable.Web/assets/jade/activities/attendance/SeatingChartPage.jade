@@ -17,7 +17,7 @@ selectedId = topData.getSelectedItemId()
                 data-params=selectedId ? [selectedId.valueOf()] : null
             )#attendance-date.tb-date-picker
         .right
-            +ActionLink('attendance', 'classList', selectedId)=Msg.List
+            +ActionLink('attendance', 'classList', selectedId, self.getDate().format('mm-dd-yy'))=Msg.List
             a.action-link.pressed=Msg.Seating_Chart
 .page-content
     seatingList = self.getSeatingList()
@@ -27,6 +27,10 @@ selectedId = topData.getSelectedItemId()
     else
         +ActionLink('attendance', 'showEditGridWindow', selectedId.valueOf(), self.getRows(), self.getColumns()).grey-button=Msg.Edit_grid
         .grey-button.add-remove-students=Msg.Add_remove_students
+        if self.isAblePost()
+            .right.right-container
+                BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat())#all-present-link=Msg.Mark_all_Present
         .black-arrow.add=Msg.Add_your_students
         .seating-chart-container
             +LeftRightToolbar()(

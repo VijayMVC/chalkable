@@ -130,7 +130,7 @@ NAMESPACE('chlk.models.announcement', function () {
                     return Msg.Dropped;
                 if(this.isExempt())
                     return Msg.Exempt;
-                return (value >= 0) ? value : '';
+                return value || '';
             },
 
             Boolean, function isEmptyGrade(){
