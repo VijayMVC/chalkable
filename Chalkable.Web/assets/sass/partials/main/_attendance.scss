@@ -1,6 +1,27 @@
 $blue-color: #2f7790;
 
 BODY {
+  #submit-attendance-button{
+    font-weight: bold;
+    font-size: 14px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    float: right;
+    padding-right: 25px;
+    padding-left: 25px;
+    margin-top: 10px;
+    margin-right: 20px;
+  }
+
+  #all-present-link{
+    margin-right: 25px;
+    color: #5d5d5d;
+    text-shadow: 1px 1px 0 white;
+    font: bold 12px Arial;
+    margin: 21px 45px;
+    float: right;
+  }
+
   .add-student-list{
     max-height: 384px;
     overflow-y: auto;
@@ -465,20 +486,6 @@ BODY {
                   height: 8px;
                 }
               }
-            }
-            #submit-attendance-button{
-              font-weight: bold;
-              font-size: 14px;
-              padding-bottom: 10px;
-              padding-top: 10px;
-              float: right;
-              padding-right: 25px;
-              padding-left: 25px;
-              margin-top: 10px;
-              margin-right: 20px;
-            }
-            #all-present-link{
-              margin-right: 25px;
             }
           }
           #class-attendance-list-panel{

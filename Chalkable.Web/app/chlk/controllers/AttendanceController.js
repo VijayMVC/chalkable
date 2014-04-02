@@ -217,6 +217,8 @@ NAMESPACE('chlk.controllers', function (){
             var classes = this.classService.getClassesForTopBar(true);
             var topModel = new chlk.models.classes.ClassesForTopBar(classes);
             topModel.setSelectedItemId(classId);
+            model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
+            model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ATTENDANCE));
             model.setTopData(topModel);
                 model.setDate(date_);
             return model;

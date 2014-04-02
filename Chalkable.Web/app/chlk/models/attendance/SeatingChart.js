@@ -14,6 +14,10 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Number, 'rows',
 
+            Boolean, 'ablePost',
+
+            Boolean, 'ableRePost',
+
             chlk.models.common.ChlkDate, 'date',
 
             [ria.serialize.SerializeProperty('notseatingstudents')],
