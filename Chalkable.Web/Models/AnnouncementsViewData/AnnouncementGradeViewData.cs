@@ -9,20 +9,20 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 {
     public class AnnouncementGradeViewData : AnnouncementViewData
     {
-        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, bool isGradable = false, bool? wasAnnouncementTypeGraded = null)
-            : base(announcement, wasAnnouncementTypeGraded, isGradable)
+        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, bool? wasAnnouncementTypeGraded = null)
+            : base(announcement, wasAnnouncementTypeGraded)
         {
             PrepareGradingInfo(this, announcement, studentAnnouncements, mapper);
         }
 
-        protected AnnouncementGradeViewData(AnnouncementComplex announcement, bool isGradable, bool? wasAnnouncementTypeGraded = null)
-            : base(announcement, wasAnnouncementTypeGraded, isGradable)
+        protected AnnouncementGradeViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null)
+            : base(announcement, wasAnnouncementTypeGraded)
         {
         }
 
-        public static AnnouncementGradeViewData Create(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, bool isGradable = false, bool? wasAnnouncementTypeGraded = null)
+        public static AnnouncementGradeViewData Create(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, bool? wasAnnouncementTypeGraded = null)
         {
-            var res = new AnnouncementGradeViewData(announcement, studentAnnouncements, mapper, isGradable, wasAnnouncementTypeGraded);
+            var res = new AnnouncementGradeViewData(announcement, studentAnnouncements, mapper, wasAnnouncementTypeGraded);
             return res;
         }
 

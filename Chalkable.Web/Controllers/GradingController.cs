@@ -74,6 +74,15 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("Teacher")]
+        public ActionResult GetGridComments(int gradingPeriodId)
+        {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            return Json(SchoolLocator.GradingStatisticService.GetGradeBookComments(gradingPeriod.SchoolYearRef, Context.UserLocalId.Value));
+        }
+
+        [AuthorizationFilter("Teacher")]
         public ActionResult ClassStandardGrid(int classId)
         {
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId);
@@ -92,6 +101,7 @@ namespace Chalkable.Web.Controllers
             }
             return Json(res);
         }
+
 
         [AuthorizationFilter("Teacher")]
         public ActionResult ClassStandardSummary(int classId)
