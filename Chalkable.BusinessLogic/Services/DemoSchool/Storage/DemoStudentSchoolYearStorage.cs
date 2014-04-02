@@ -3,21 +3,25 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStudentSchoolYearStorage
+    public class DemoStudentSchoolYearStorage:BaseDemoStorage<int, StudentSchoolYear>
     {
+        private int index = 0;
+        public DemoStudentSchoolYearStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
         public void Add(StudentSchoolYear studentSchoolYear)
         {
-            throw new System.NotImplementedException();
+
+            data.Add(index++, studentSchoolYear);
         }
 
-        public void Add(IList<StudentSchoolYear> studentSchoolYear)
+        public void Add(IList<StudentSchoolYear> studentSchoolYears)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public IList<StudentSchoolYear> GetAll()
-        {
-            throw new System.NotImplementedException();
+            foreach (var schoolYear in studentSchoolYears)
+            {
+                Add(schoolYear);
+            }
         }
     }
 }
