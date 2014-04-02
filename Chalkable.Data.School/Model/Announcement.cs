@@ -104,7 +104,7 @@ namespace Chalkable.Data.School.Model
 
         public bool Gradable
         {
-            get { return GradableType && IsOwner; }
+            get { return GradableType && IsOwner && IsScored; }
         }
         public bool GradableType  
         {

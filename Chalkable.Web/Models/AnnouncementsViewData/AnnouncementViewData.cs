@@ -12,7 +12,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public DateTime Created { get; set; }
 
-        public bool Gradable { get; set; }
         public bool Starred { get; set; }
         public int State { get; set; }
         public AnnouncementState StateTyped { get; set; }
@@ -49,13 +48,12 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool? WasAnnouncementTypeGraded { get; set; }
         public bool ShowGradingIcon { get; set; }
 
-        protected AnnouncementViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded, bool isGradable)
+        protected AnnouncementViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded)
             : base(announcement)
         {
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             QnACount = announcement.QnACount;
-            Gradable = isGradable;
             Starred = announcement.Starred ?? false;
             State = (int)announcement.State;
             RecipientId = announcement.ClassRef;
@@ -80,9 +78,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         }
 
 
-        public static AnnouncementViewData Create(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null, bool isGradable = false)
+        public static AnnouncementViewData Create(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null)
         {
-            var res = new AnnouncementViewData(announcement, wasAnnouncementTypeGraded, isGradable);
+            var res = new AnnouncementViewData(announcement, wasAnnouncementTypeGraded);
             return res;
         }
 
