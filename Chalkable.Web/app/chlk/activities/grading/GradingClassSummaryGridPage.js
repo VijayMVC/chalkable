@@ -48,6 +48,7 @@ NAMESPACE('chlk.activities.grading', function () {
                             mpData.removeClass('with-data');
                             this.openGradingPeriod(mpData);
                         }else{
+                            clearTimeout(gradingGridTimer);
                             parent.find('.load-grading-period').trigger('submit');
                         }
                         dom.find('.mp-data.with-data')
@@ -172,6 +173,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('change', '.grading-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function gradingSelectChange(node, event, selected_){
+                clearTimeout(gradingGridTimer);
                 node.parent('form').trigger('submit');
             },
 
