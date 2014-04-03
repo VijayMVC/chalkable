@@ -15,122 +15,88 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        //TODO : notification sending 
-        //TODO : tests 
-
         public AnnouncementQnA AskQuestion(int announcementId, string question)
         {
-            using (var uow = Update())
+            if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                throw new UnassignedUserException();
+
+            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+
+            var annQnA = new AnnouncementQnAComplex
             {
-                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
-                    throw new UnassignedUserException();
-          
-                var da = new AnnouncementQnADataAccess(uow);
-                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
-                
-                var annQnA = new AnnouncementQnAComplex
-                    {
-                        AnnouncementRef = announcementId,
-                        PersonRef = Context.UserLocalId.Value,
-                        Question = question,
-                        QuestionTime = Context.NowSchoolTime,
-                        State = AnnouncementQnAState.Asked
-                    };
-                da.Insert(annQnA);
-                uow.Commit();
-                annQnA = da.GetAnnouncementQnA(new AnnouncementQnAQuery 
-                                {
-                                    AnnouncementId = announcementId,
-                                    CallerId = annQnA.PersonRef
-                                }).AnnouncementQnAs.OrderByDescending(x=>x.Id).First();
-                ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
-                return annQnA;
-            }
+                AnnouncementRef = announcementId,
+                PersonRef = Context.UserLocalId.Value,
+                Question = question,
+                QuestionTime = Context.NowSchoolTime,
+                State = AnnouncementQnAState.Asked
+            };
+            Storage.AnnouncementQnAStorage.Add(annQnA);
+            annQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
+            {
+                AnnouncementId = announcementId,
+                CallerId = annQnA.PersonRef
+            }).AnnouncementQnAs.OrderByDescending(x => x.Id).First();
+            ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
+            return annQnA;
         }
 
         public AnnouncementQnA Answer(int announcementQnAId, string question, string answer)
         {
-            using (var uow = Update())
-            {
-                var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
-                    throw new ChalkableSecurityException();
+            var annQnA = GetAnnouncementQnA(announcementQnAId);
+            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                throw new ChalkableSecurityException();
 
-                annQnA.State = AnnouncementQnAState.Answered;
-                annQnA.Question = question;
-                annQnA.Answer = answer;
-                annQnA.AnsweredTime = Context.NowSchoolTime;
-                da.Update(annQnA);
-                uow.Commit();
-                ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
-                return annQnA;
-            }
+            annQnA.State = AnnouncementQnAState.Answered;
+            annQnA.Question = question;
+            annQnA.Answer = answer;
+            annQnA.AnsweredTime = Context.NowSchoolTime;
+            Storage.AnnouncementQnAStorage.Update(annQnA);
+            ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
+            return annQnA;
         }
 
         public AnnouncementQnA EditAnswer(int announcementQnAId, string answer)
         {
-            using (var uow = Update())
-            {
-                var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
-                    throw new ChalkableSecurityException();
+            var annQnA = GetAnnouncementQnA(announcementQnAId);
+            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                throw new ChalkableSecurityException();
 
-                annQnA.Answer = answer;
-                annQnA.AnsweredTime = Context.NowSchoolTime;
-                da.Update(annQnA);
-                uow.Commit();
-                return annQnA;
-            }
+            annQnA.Answer = answer;
+            annQnA.AnsweredTime = Context.NowSchoolTime;
+            Storage.AnnouncementQnAStorage.Update(annQnA);
+            return annQnA;
         }
 
         public AnnouncementQnA EditQuestion(int announcementQnAId, string question)
         {
-            using (var uow = Update())
-            {
-                var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
-                    throw new ChalkableSecurityException();
+            var annQnA = GetAnnouncementQnA(announcementQnAId);
+            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                throw new ChalkableSecurityException();
 
-                
-                annQnA.Question = question;
-                annQnA.QuestionTime = Context.NowSchoolTime;
-                da.Update(annQnA);
-                uow.Commit();
-                return annQnA;
-            }
+
+            annQnA.Question = question;
+            annQnA.QuestionTime = Context.NowSchoolTime;
+            Storage.AnnouncementQnAStorage.Update(annQnA);
+            return annQnA;
         }
 
         public void Delete(int announcementQnAId)
         {
-            using (var uow = Update())
-            {
-                var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
-                    throw new ChalkableSecurityException();
-
-                da.Delete(annQnA.Id);
-                uow.Commit();
-            }
+            var annQnA = GetAnnouncementQnA(announcementQnAId);
+            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                throw new ChalkableSecurityException();
+            Storage.AnnouncementQnAStorage.Delete(annQnA.Id);
         }
 
         public AnnouncementQnA MarkUnanswered(int announcementQnAId)
         {
-            using (var uow = Update())
-            {
-                var da = new AnnouncementQnADataAccess(uow);
-                var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
-                    throw new ChalkableSecurityException();
+            var annQnA = GetAnnouncementQnA(announcementQnAId);
+            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                throw new ChalkableSecurityException();
 
-                annQnA.State = AnnouncementQnAState.Unanswered;
-                da.Update(annQnA);
-                uow.Commit();
-                return annQnA;
-            }
+            annQnA.State = AnnouncementQnAState.Unanswered;
+            Storage.AnnouncementQnAStorage.Update(annQnA);
+            return annQnA;
         }
 
         public AnnouncementQnAComplex GetAnnouncementQnA(int announcementQnAId)
@@ -141,10 +107,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private AnnouncementQnAQueryResult GetAnnouncmentQnAs(AnnouncementQnAQuery query)
         {
             query.CallerId = Context.UserLocalId;
-            using (var uow = Read())
-            {
-                return new AnnouncementQnADataAccess(uow).GetAnnouncementQnA(query);
-            }
+            return Storage.AnnouncementQnAStorage.GetAnnouncementQnA(query);
         }
 
         public IList<AnnouncementQnAComplex> GetAnnouncementQnAs(int announcementId)
