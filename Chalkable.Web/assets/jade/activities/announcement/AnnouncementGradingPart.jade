@@ -19,7 +19,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
         div(class=(autoCount == 1 ? 'double' : '')).grid-modal
             div Accept auto-grades from #{self.getAutoGradeApps().length == 1 ? self.getAutoGradeApps()[0] : 'apps'}#
     each item, i in items
-        .row(class=(i == selectedIndex ? 'selected ' : ' ') + (item.getState() == 0 ? 'z-0' : 'z-10'), index=i).fixed-bg
+        .row(class=(i == selectedIndex ? 'selected ' : ' ') + (item.getState() == 0 ? 'z-0' : 'z-10') + (self.isGradable() ? '' : ' readonly'), index=i).fixed-bg
             +Hidden('readonly', self.isReadonly())
             +Hidden('gradingStyle', gradingStyle)
             .top-content(id = "top-content-" + item.getStudentInfo().getId().valueOf())
@@ -53,11 +53,13 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                                     +TextArea(name="comment").comment-input=item.getComment()
                                                     span.enter=Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
+                        -console.info(!self.isGradable())
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                             userRole = self.getUserRole()
                             maxScore = self.getMaxScore()
                             ableDropStudentScore = self.isAbleDropStudentScore()
-                            ableToExempt = self.isAbleToExempt()
+                            ableToExempt = self.isAbleToExempt(),
+                            readonly = !self.isGradable()
                         )
         .attachments-container.z-10
             .attachments-container-2

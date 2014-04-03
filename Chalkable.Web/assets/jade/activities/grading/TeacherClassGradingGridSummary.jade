@@ -36,6 +36,7 @@
                         +ActionForm('grading', 'loadGradingPeriodGridSummary').load-grading-period
                             +Hidden('autoUpdate', false).auto-update
                             +Hidden('classId', selectedId)
+                            +Hidden('notCalculateGrid', false).not-calculate-grid
                             +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
                             +Select('standardId')(data-placeholder=Msg.All_standards).standards-select.grading-select
                                 +Option('', Msg.All_standards , true)

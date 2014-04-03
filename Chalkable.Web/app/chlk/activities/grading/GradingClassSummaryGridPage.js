@@ -174,7 +174,13 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function gradingSelectChange(node, event, selected_){
                 clearTimeout(gradingGridTimer);
-                node.parent('form').trigger('submit');
+                var form = node.parent('form');
+                var hidden = form.find('.not-calculate-grid');
+                hidden.setValue(true);
+                form.trigger('submit');
+                setTimeout(function(){
+                    hidden.setValue(false);
+                }, 1)
             },
 
             [ria.mvc.DomEventBind('contextmenu', '.grade-autocomplete')],
@@ -193,6 +199,8 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('keydown', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeKeyDown(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && node.hasClass('error'))
+                    return false;
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
@@ -222,7 +230,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function gradeKeyUp(node, event){
+            function gradeKeyUp(node, event){
                 var suggestions = [], cell = node.parent('.active-cell');
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();

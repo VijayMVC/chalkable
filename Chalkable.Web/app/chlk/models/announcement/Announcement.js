@@ -128,7 +128,6 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.adminAnnouncement = !this.classId;
             },
 
-            Boolean, 'gradable',
             Number, 'grade',
 
             [ria.serialize.SerializeProperty('gradesummary')],

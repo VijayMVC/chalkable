@@ -126,7 +126,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.grading.GradingSummaryGridSubmitViewData]],
             function loadGradingPeriodGridSummaryAction(model){
                 var result = this.gradingService
-                    .getClassSummaryGridForPeriod(model.getClassId(), model.getGradingPeriodId(), model.getStandardId(), model.getCategoryId())
+                    .getClassSummaryGridForPeriod(model.getClassId(), model.getGradingPeriodId(), model.getStandardId(), model.getCategoryId(), model.isNotCalculateGrid())
                     .then(function(newModel){
                         newModel.setAutoUpdate(model.isAutoUpdate());
                         return newModel;
