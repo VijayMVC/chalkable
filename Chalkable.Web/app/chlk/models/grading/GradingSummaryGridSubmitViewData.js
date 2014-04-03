@@ -16,6 +16,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             chlk.models.id.ClassId, 'classId',
 
-            Boolean, 'autoUpdate'
+            Boolean, 'autoUpdate',
+
+            Boolean, 'notCalculateGrid'
         ]);
 });

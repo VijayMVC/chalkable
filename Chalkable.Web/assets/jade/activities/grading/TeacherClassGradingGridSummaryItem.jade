@@ -46,13 +46,14 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore)
                 div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
                 .time=announcement.getExpiresDate().format('M d')
                 .max-score.dotted-h=maxScore
+                -console.info(announcement.isGradable())
                 each info,i in announcement.getStudentAnnouncements().getItems()
                     div(
                         row-index=i
                         data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                         data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
                         data-max-score= maxScore,
-                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId()
+                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (announcement.isGradable() ? ' gradable' : '')
                     ).dotted-h.grade-value
                         +TeacherClassGradingGridSummaryCell(info, maxScore)
                 div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.getAvg()

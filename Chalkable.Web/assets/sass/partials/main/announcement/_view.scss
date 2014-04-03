@@ -572,6 +572,11 @@ $red-color: #842727;
             font-family: 'Reenie Beanie';
             color: $red-color;
             font-size: 40px;
+            display: block;
+            padding-left: 90px;
+            margin-top: -9px;
+            width: 60px;
+            text-align: center;
           }
 
           .grade-triangle{
@@ -629,14 +634,6 @@ $red-color: #842727;
               left: 26px;
               bottom: -10px;
             }
-          }
-
-          .not-selected{
-            display: block;
-            padding-left: 90px;
-            margin-top: -9px;
-            width: 60px;
-            text-align: center;
           }
 
           .comment-icon{

@@ -50,6 +50,8 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Number, 'maxScore',
 
+            Boolean, 'gradable',
+
             Number, function getAutoGradeCount(){
                 return this.getItems().filter(function(item){
                     return item.getState() == 0;

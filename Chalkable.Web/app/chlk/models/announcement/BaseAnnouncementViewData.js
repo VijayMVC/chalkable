@@ -32,6 +32,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'maxScore',
 
             [ria.serialize.SerializeProperty('isowner')],
-            Boolean, 'annOwner'
+            Boolean, 'annOwner',
+
+            Boolean, 'gradable'
         ]);
 });

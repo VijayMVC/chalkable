@@ -27,6 +27,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
             Number, 'maxScore',
             ArrayOf(chlk.models.announcement.StudentAnnouncement), 'studentAnnouncements',
+            Boolean, 'gradable',
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
@@ -38,7 +39,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     applications: this.getApplications(),
                     owner: this.getOwner(),
                     announcementId: this.getAnnouncementId(),
-                    ableDropStudentScore : this.isAbleDropStudentScore()
+                    ableDropStudentScore : this.isAbleDropStudentScore(),
+                    gradable: this.isGradable()
                 });
                 var container = this.dom.find('.grading-part');
                 container.empty();
@@ -310,6 +312,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setApplications(model.getApplications());
                 this.setAutoGradeApps(model.getAutoGradeApps());
                 this.setAnnouncementId(model.getId());
+                this.setGradable(model.isGradable());
+
                 var moving = new ria.dom.Dom('.moving-wrapper');
                 if(moving.exists()){
                     this.dom.setCss('display', 'none');
@@ -349,7 +353,8 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 tpl.assign(model);
                 tpl.options({
-                    announcementId: this.getAnnouncementId()
+                    announcementId: this.getAnnouncementId(),
+                    gradable: this.isGradable()
                 });
                 tpl.renderTo(this.dom.find('.student-announcements-top-panel').empty());
                 var itemModel = model.getCurrentItem();
@@ -357,6 +362,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 itemTpl.assign(itemModel);
                 itemTpl.options({
                     maxScore: this.getMaxScore(),
+                    readonly: !this.isGradable(),
                     ableDropStudentScore : this.isAbleDropStudentScore()
                 });
                 var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());

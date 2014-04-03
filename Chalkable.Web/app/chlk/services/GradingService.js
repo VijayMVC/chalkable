@@ -91,13 +91,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId]],
-            ria.async.Future, function getClassSummaryGridForPeriod(classId, gradingPeriodId, standardId_, classAnnouncementTypeId_) {
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId, Boolean]],
+            ria.async.Future, function getClassSummaryGridForPeriod(classId, gradingPeriodId, standardId_, classAnnouncementTypeId_, notCalculateGrid_) {
                 return this.get('Grading/ClassGradingGrid', chlk.models.grading.ShortGradingClassSummaryGridItems, {
                     classId: classId.valueOf(),
                     gradingPeriodId: gradingPeriodId.valueOf(),
                     standardId: standardId_ && standardId_.valueOf(),
-                    classAnnouncementTypeId: classAnnouncementTypeId_ && classAnnouncementTypeId_.valueOf()
+                    classAnnouncementTypeId: classAnnouncementTypeId_ && classAnnouncementTypeId_.valueOf(),
+                    notCalculateGrid: notCalculateGrid_
                 });
             },
 
