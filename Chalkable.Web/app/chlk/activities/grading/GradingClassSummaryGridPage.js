@@ -499,7 +499,7 @@ NAMESPACE('chlk.activities.grading', function () {
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
                                 popUp.hide();
-                                var parent = node.parent('.grade-value');
+                                var parent = node.parent('.grade-value.gradable');
 
                                 //TODO
                                 var activeCell = dom.find('.active-cell');

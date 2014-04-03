@@ -53,7 +53,6 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                                     +TextArea(name="comment").comment-input=item.getComment()
                                                     span.enter=Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
-                        -console.info(!self.isGradable())
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                             userRole = self.getUserRole()
                             maxScore = self.getMaxScore()
