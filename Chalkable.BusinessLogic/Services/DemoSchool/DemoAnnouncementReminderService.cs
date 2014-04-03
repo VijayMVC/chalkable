@@ -17,85 +17,65 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        //TODO: security 
-        //TODO: notification sending
-        //TODO: tests
-
         public IList<AnnouncementReminder> GetReminders(int announcementId)
         {
-            using (var uow = Read())
-            {
-                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
-                    throw new UnassignedUserException();
+            if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                throw new UnassignedUserException();
 
-                var da = new AnnouncementReminderDataAccess(uow);
-                return da.GetList(announcementId, Context.UserLocalId.Value);
-            }
+            return Storage.AnnouncementReminderStorage.GetList(announcementId, Context.UserLocalId.Value);
         }
 
         public AnnouncementReminder AddReminder(int announcementId, int? before)
         {
-            using (var uow = Update())
-            {
-                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId); // security here 
-                var da = new AnnouncementReminderDataAccess(uow);
-                var nowDate = Context.NowSchoolTime.Date;
-                var remiderDateTime = before.HasValue && ann.Expires >= nowDate
-                                     ? ann.Expires.AddDays(-before.Value) : nowDate;
+            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId); // security here 
 
-                var reminder = new AnnouncementReminder
-                    {
-                        AnnouncementRef = ann.Id,
-                        Before = before,
-                        RemindDate = remiderDateTime,
-                        Announcement = ann
-                    };
-                if (ann.PersonRef != Context.UserLocalId)
-                    reminder.PersonRef = Context.UserLocalId;
-                da.Insert(reminder);
-                uow.Commit();
-                return reminder;
-            }
+            var nowDate = Context.NowSchoolTime.Date;
+            var remiderDateTime = before.HasValue && ann.Expires >= nowDate
+                                 ? ann.Expires.AddDays(-before.Value) : nowDate;
+
+            var reminder = new AnnouncementReminder
+            {
+                AnnouncementRef = ann.Id,
+                Before = before,
+                RemindDate = remiderDateTime,
+                Announcement = ann
+            };
+            if (ann.PersonRef != Context.UserLocalId)
+                reminder.PersonRef = Context.UserLocalId;
+            Storage.AnnouncementReminderStorage.Add(reminder);
+            return reminder;
+
+
         }
 
         public Announcement DeleteReminder(int reminderId)
         {
-            using (var uow = Update())
-            {
-                if(!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
-                    throw new UnassignedUserException();
+            if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                throw new UnassignedUserException();
 
-                var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(reminderId, Context.UserLocalId.Value);
-                if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
-                    throw new ChalkableSecurityException();
-                da.Delete(reminder);
-                uow.Commit();
-                return reminder.Announcement;
-            }
+            var reminder = Storage.AnnouncementReminderStorage.GetById(reminderId, Context.UserLocalId.Value);
+            if (!AnnouncementSecurity.IsReminderOwner(reminder, Context))
+                throw new ChalkableSecurityException();
+            Storage.AnnouncementReminderStorage.Delete(reminder);
+            return reminder.Announcement;
          }
 
         public AnnouncementReminder EditReminder(int reminderId, int? before)
         {
-            using (var uow = Update())
-            {
-                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
-                    throw new UnassignedUserException();
+            if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                throw new UnassignedUserException();
 
-                var da = new AnnouncementReminderDataAccess(uow);
-                var reminder = da.GetById(reminderId, Context.UserLocalId.Value);
-                
-                if(!AnnouncementSecurity.IsReminderOwner(reminder, Context))
-                    throw new ChalkableSecurityException();
+            var reminder = Storage.AnnouncementReminderStorage.GetById(reminderId, Context.UserLocalId.Value);
 
-                reminder.Before = before;
-                var annExpires = reminder.Announcement.Expires;
-                var nowLocalTime = Context.NowSchoolTime.Date;
-                reminder.RemindDate = before.HasValue && annExpires >= nowLocalTime ? annExpires.AddDays(-before.Value) : nowLocalTime;
-                da.Update(reminder);
-                uow.Commit();
-                return reminder;
-            }
+            if (!AnnouncementSecurity.IsReminderOwner(reminder, Context))
+                throw new ChalkableSecurityException();
+
+            reminder.Before = before;
+            var annExpires = reminder.Announcement.Expires;
+            var nowLocalTime = Context.NowSchoolTime.Date;
+            reminder.RemindDate = before.HasValue && annExpires >= nowLocalTime ? annExpires.AddDays(-before.Value) : nowLocalTime;
+            Storage.AnnouncementReminderStorage.Update(reminder);
+            return reminder;
         }
 
         public void ProcessReminders(int count)
@@ -105,20 +85,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var now = DateTime.UtcNow;
             Debug.WriteLine(now);
 
-            using (var uow = Update())
-            {
-                var da = new AnnouncementReminderDataAccess(uow);
-                var toProcess = da.GetRemindersToProcess(Context.NowSchoolTime, count);
+            var toProcess = Storage.AnnouncementReminderStorage.GetRemindersToProcess(Context.NowSchoolTime, count);
 
-                var toProcessList = toProcess.ToList();
-                foreach (var announcementReminder in toProcessList)
-                {
-                    var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementReminder.AnnouncementRef);
-                    ServiceLocator.NotificationService.AddAnnouncementReminderNotification(announcementReminder, ann);
-                    announcementReminder.Processed = true;
-                    da.Update(announcementReminder);
-                }
-                uow.Commit();
+            var toProcessList = toProcess.ToList();
+            foreach (var announcementReminder in toProcessList)
+            {
+                var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementReminder.AnnouncementRef);
+                ServiceLocator.NotificationService.AddAnnouncementReminderNotification(announcementReminder, ann);
+                announcementReminder.Processed = true;
+                Storage.AnnouncementReminderStorage.Update(announcementReminder);
             }
         }
     }
