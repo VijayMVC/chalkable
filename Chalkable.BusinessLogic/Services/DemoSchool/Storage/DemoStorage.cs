@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.Remoting.Messaging;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -49,7 +50,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoNotificationStorage NotificationStorage{ get; private set; }
         public DemoApplicationInstallStorage ApplicationInstallStorage { get; private set; }
         public IDemoAnnouncementStorage AnnouncementStorage { get; private set; }
-
+        public DemoAnnouncementQnAStorage AnnouncementQnAStorage { get; private set; }
+        public DemoAnnouncementReminderStorage AnnouncementReminderStorage { get; private set; }
+        public DemoAnnouncementRecipientStorage AnnouncementRecipientStorage { get; private set; }
+        public DemoAnnouncementStandardStorage AnnouncementStandardStorage{ get; private set; }
 
         public UserContext Context { get; private set; }
 
@@ -96,6 +100,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ApplicationRatingStorage = new DemoApplicationRatingStorage(this);
             NotificationStorage = new DemoNotificationStorage(this);
             ApplicationInstallStorage = new DemoApplicationInstallStorage(this);
+            AnnouncementQnAStorage = new DemoAnnouncementQnAStorage(this);
+            AnnouncementRecipientStorage = new DemoAnnouncementRecipientStorage();
+            AnnouncementStandardStorage = new DemoAnnouncementStandardStorage();
             Setup();
         }
 

@@ -45,6 +45,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Update(studentAnnouncement);
             }
         }
-   
+
+        public void Update(int announcementId, bool drop)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

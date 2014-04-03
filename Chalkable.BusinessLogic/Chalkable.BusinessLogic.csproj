@@ -131,6 +131,10 @@
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
     <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementStandardStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementReminderStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementQnAStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoBaseAnnouncementStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoNotificationStorage.cs" />

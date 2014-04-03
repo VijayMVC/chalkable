@@ -56,34 +56,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
             };
             IList<AnnouncementAttachment> atts;
-            if (CoreRoles.TEACHER_ROLE == Context.Role)
-            {
-                //todo: mock this
-
-                /*
-                var stiAtts = ConnectorLocator.AttachmentConnector.DownloadAttachment(name, content).ToList();
-                var lastStiAtts = stiAtts.Last();
-                if (!string.IsNullOrEmpty(uuid))
-                    lastStiAtts.CrocoDocId = Guid.Parse(uuid);
-                */
-
-
-                /*if (ann.SisActivityId.HasValue)
-                {
-                    //todo: mock this
-                    var activityAtt = ActivityAttachment.Create(ann.SisActivityId.Value, lastStiAtts, null);
-                    activityAtt = ConnectorLocator.ActivityAttachmentsConnector
-                        .CreateActivityAttachments(ann.SisActivityId.Value, activityAtt);
-                }
-                annAtt.SisAttachmentId = lastStiAtts.AttachmentId;
-                 * */
-            }
+            
 
             Storage.AnnouncementAttachmentStorage.Add(annAtt);
 
             atts = Storage.AnnouncementAttachmentStorage.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
 
-            //todo maybe mock this
             if (CoreRoles.TEACHER_ROLE != Context.Role)
                 ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
 
@@ -142,50 +120,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
         {
-            throw new NotImplementedException();
-            using (var uow = Read())
-            {
-                var da = new AnnouncementAttachmentDataAccess(uow);
-                return da.GetById(announcementAttachmentId, Context.UserLocalId ?? 0, Context.Role.Id);
-            }
+            return Storage.AnnouncementAttachmentStorage.GetById(announcementAttachmentId, Context.UserLocalId ?? 0, Context.Role.Id);
         }
 
         public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
         {
-            throw new NotImplementedException();
-            /*
-            //todo: mock this
             var att = GetAttachmentById(announcementAttachmentId);
-            var content = att.SisAttachmentId.HasValue 
-                                 ? ConnectorLocator.AttachmentConnector.GetAttachmentContent(att.SisAttachmentId.Value)
-                                 : ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
-             
+            var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
             return AttachmentContentInfo.Create(att, content);
-             */
         }
         public IList<AnnouncementAttachment> GetAttachments(string filter)
         {
-            throw new NotImplementedException();
-            using (var uow = Read())
-            {
-                var res = new AnnouncementAttachmentDataAccess(uow).GetList(Context.UserLocalId ?? 0, Context.Role.Id, filter);
-                //if (CoreRoles.TEACHER_ROLE == Context.Role)
-                //{
-                //    var atts = GetActivityAttachments()
-                //}
-                return res;
-            }
+            return Storage.AnnouncementAttachmentStorage.GetList(Context.UserLocalId ?? 0, Context.Role.Id, filter);
         }
         public static string GetAttachmentRelativeAddress()
         {
             return (new BlobHelper()).GetBlobsRelativeAddress(ATTACHMENT_CONTAINER_ADDRESS);
         }
-
-        private IList<ActivityAttachment> GetActivityAttachments(int activityId)
-        {
-            throw new NotImplementedException();
-            //todo: mock this
-            //return ConnectorLocator.ActivityAttachmentsConnector.GetAttachments(activityId);
-        } 
     }
 }

@@ -27,5 +27,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new NotImplementedException();
         }
+
+        public AnnouncementAttachment GetById(int announcementAttachmentId, int i, int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

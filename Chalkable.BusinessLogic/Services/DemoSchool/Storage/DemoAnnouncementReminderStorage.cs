@@ -42,5 +42,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new NotImplementedException();
         }
+
+        public void Update(IList<AnnouncementReminder> annReminders)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteByAnnouncementId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(int annReminders, int i, bool starred, object o, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
