@@ -72,10 +72,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AttendanceReason> GetAll()
         {
-            using (var uow = Read())
-            {
-                return new AttendanceReasonDataAccess(uow).GetAll();
-            }
+            return Storage.AttendanceReasonStorage.GetAll();
+            
         }
     }
 }

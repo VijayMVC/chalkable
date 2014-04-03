@@ -6,6 +6,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoClassPeriodStorage:BaseDemoStorage<int, ClassPeriod>
     {
+        private int index = 0;
         public DemoClassPeriodStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -17,12 +18,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(ClassPeriod res)
         {
-            throw new System.NotImplementedException();
+            data.Add(index++, res);
         }
 
         public void Add(IList<ClassPeriod> classPeriods)
         {
-            throw new System.NotImplementedException();
+            foreach (var classPeriod in classPeriods)
+            {
+                Add(classPeriod);
+            }
         }
 
         public void FullDelete(int periodId, int classId, int dayTypeId)

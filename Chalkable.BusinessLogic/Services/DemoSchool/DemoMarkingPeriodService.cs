@@ -131,7 +131,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void DeleteMarkingPeriods(IList<int> ids)
         {
-            throw new NotImplementedException();
+            Delete(ids);
         }
 
         private void Delete(IList<int> markingPeriodIds)
