@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             data.Add(index++, schoolGradeLevel);
         }
 
-        public IList<SchoolGradeLevel> GetAll(int schoolId)
+        public IList<SchoolGradeLevel> GetAll(int? schoolId)
         {
             return data.Where(x => x.Value.SchoolRef == schoolId).Select(x => x.Value).ToList();
         } 

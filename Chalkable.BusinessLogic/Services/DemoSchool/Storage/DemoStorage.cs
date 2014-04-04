@@ -113,6 +113,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AttendanceLevelReasonStorage.Setup();
             GradeLevelStorage.Setup();
             ClassStorage.Setup();
+            MarkingPeriodClassStorage.Setup();
+            DayTypeStorage.Setup();
 
             MasterSchoolStorage.Add(new Data.Master.Model.School
             {

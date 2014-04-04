@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
 using Chalkable.Data.School.Model;
@@ -15,22 +16,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public StudentParent Add(int studentId, int parentId)
         {
-            data.Add(index++, new StudentParent
+            var studentParent = new StudentParent
             {
                 ParentRef = parentId,
                 StudentRef = studentId
-            });
-        }
-
-        public void Delete(int studentParentId)
-        {
-            data.Remove(studentParentId);
+            };
+ 
+            data.Add(index++, studentParent);
+            return studentParent;
         }
 
         public IList<StudentParentDetails> GetParents(int studentId)
         {
+            var studentParents = data.Where(x => x.Value.StudentRef == studentId).Select(x => x.Value).ToList();
+            throw new NotImplementedException();
 
-            return data.Where(x => x.Value.StudentRef == studentId).Select(x => x.Value).ToList();
+
         }
 
         public void SetParents(int studentId, IList<int> parentIds)

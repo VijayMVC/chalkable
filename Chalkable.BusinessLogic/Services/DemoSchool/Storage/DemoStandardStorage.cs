@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -22,8 +23,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Standard> GetStandarts(StandardQuery standardQuery)
         {
+            throw new NotImplementedException();
 
-            throw new System.NotImplementedException();
             /*
             var condition = new AndQueryCondition();
             if (query.StandardSubjectId.HasValue)

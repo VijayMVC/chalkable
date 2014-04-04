@@ -58,6 +58,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 DemoPrefix = prefix,
                 Id = Guid.Parse(prefix),
                 Name = "Demo District",
+                TimeZone = "UTC"
             };
 
 

@@ -4,7 +4,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoDayTypeStorage:BaseDemoStorage<int ,DayType>
+    public class DemoDayTypeStorage : BaseDemoStorage<int, DayType>
     {
         public DemoDayTypeStorage(DemoStorage storage) : base(storage)
         {
@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return dayTypes.ToList();
         }
 
-        
+
         public void Add(DayType ss)
         {
             if (!data.ContainsKey(ss.Id))
@@ -36,6 +36,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 if (data.ContainsKey(dayType.Id))
                     data[dayType.Id] = dayType;
             }
+            return dayTypes;
         }
 
 
@@ -50,11 +51,39 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Add(dayType);
             }
+            return dayTypes;
         }
 
         public void Delete(DayType dayType)
         {
             data.Remove(dayType.Id);
+        }
+
+        public void Setup()
+        {
+            Add(new DayType
+            {
+                Id = 1,
+                Name = "M",
+                Number = 0,
+                SchoolYearRef = 12
+            });
+
+            Add(new DayType
+            {
+                Id = 2,
+                Name = "TTh",
+                Number = 1,
+                SchoolYearRef = 12
+            });
+
+            Add(new DayType
+            {
+                Id = 3,
+                Name = "WF",
+                Number = 2,
+                SchoolYearRef = 12
+            });
         }
     }
 }

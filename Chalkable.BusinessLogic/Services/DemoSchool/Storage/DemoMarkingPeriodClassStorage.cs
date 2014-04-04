@@ -64,5 +64,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return mpc.ToList().Count > 0;
         }
+
+        public void Setup()
+        {
+           Add(new MarkingPeriodClass
+           {
+               SchoolRef = 1,
+               MarkingPeriodRef = 1,
+               ClassRef = 1
+           });
+
+           Add(new MarkingPeriodClass
+           {
+               SchoolRef = 1,
+               MarkingPeriodRef = 1,
+               ClassRef = 2
+           });
+        }
     }
 }

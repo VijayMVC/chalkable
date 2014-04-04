@@ -86,6 +86,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null)
         {
+            throw new NotImplementedException();
+            /*
             if (activities == null)
                 activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
             else
@@ -115,6 +117,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 anns = GetAnnouncements(query).Announcements;
             }
             return MapActivitiesToAnnouncements(anns, activities);
+             */
         }
         
         
@@ -263,22 +266,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ann.Expires = announcement.ExpiresDate.Value;
 
             ann = SetClassToAnnouncement(ann, classId, ann.Expires);
-            ann = PrepareReminderData(uow, ann); //todo : remove this later 
-            ann = ReCreateRecipients(uow, ann, recipients);
-            da.Update(ann);
-            uow.Commit();
+            ann = PrepareReminderData(storage, ann); //todo : remove this later 
+            ann = ReCreateRecipients(storage, ann, recipients);
+            storage.Update(ann);
 
-            var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
-            if (res.State == AnnouncementState.Created && res.ClassRef.HasValue && res.SisActivityId.HasValue)
-            {
-                var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
-                MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
-                ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
-            }
-            return res;
+            return storage.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
         }
 
-        private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
+        private Announcement Submit(IDemoAnnouncementStorage storage, int announcementId, int? classId)
         {
             var res = GetAnnouncementDetails(announcementId);
             if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
@@ -291,15 +286,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 res.Created = dateNow;
                 if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
                     res.Title = res.DefaultTitle;
+
+                /*
                 if (classId.HasValue)
                 {
                     var activity = new Activity();
                     MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                     activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
                     res.SisActivityId = activity.Id;
-                }
+                }*/
             }
-            res = (AnnouncementDetails)PrepareReminderData(unitOfWork, res);
+            res = (AnnouncementDetails)PrepareReminderData(storage, res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
             //TODO : add gradingStyle to ClassAnnouncementtype
             //if (res.ClassAnnouncementTypeRef.HasValue)
@@ -308,7 +305,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //    classAnnType. 
             //}
            
-            dataAccess.Update(res);
+            storage.Update(res);
             return res;
         }
 
@@ -330,18 +327,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         
         public void SubmitForAdmin(int announcementId)
         {
-            throw new NotImplementedException();
-            /*
-            using (var uow = Update())
-            {
-                var da = CreateAnnoucnementDataAccess(uow);
-                Submit(da, uow, announcementId, null);
-                uow.Commit();
-            }*/
+            var da = CreateAnnouncementStorage();
+            Submit(da, announcementId, null);
         }
       
-        private Announcement PrepareReminderData(UnitOfWork unitOfWork, Announcement announcement)
+        private Announcement PrepareReminderData(IDemoAnnouncementStorage storage, Announcement announcement)
         {
+            throw new NotImplementedException();
             var dateNow = Context.NowSchoolTime;
             var expires = announcement.Expires;
 
@@ -359,6 +351,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
         private Announcement SetClassToAnnouncement(Announcement announcement, int? classId, DateTime expiresDate)
         {
+            throw new NotImplementedException();
             if (classId.HasValue)
             {
                 var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate);
@@ -373,8 +366,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             return announcement;
         }
-        private Announcement ReCreateRecipients(UnitOfWork unitOfWork, Announcement announcement, IList<RecipientInfo> recipientInfos)
+        private Announcement ReCreateRecipients(IDemoAnnouncementStorage storage, Announcement announcement, IList<RecipientInfo> recipientInfos)
         {
+            throw new NotImplementedException();
             if (recipientInfos != null && BaseSecurity.IsAdminViewer(Context))
             {
 
@@ -549,6 +543,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
         {
+            //return Storage.AnnouncementStandardStorage.
             throw new NotImplementedException();
         }
     }

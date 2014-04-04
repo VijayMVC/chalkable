@@ -158,7 +158,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 SchoolRef = cClass.SchoolRef.Value
             };
             Storage.ClassPersonStorage.Add(classPerson);
-
+            return GetClassById(classId);
 
         }
 
