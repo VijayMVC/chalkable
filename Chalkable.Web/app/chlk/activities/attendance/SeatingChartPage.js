@@ -121,15 +121,20 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var columns = this.dom.find('.seating-row:eq(0)').find('.student-block[data-index]').count();
                 var classId = this.dom.find('.class-id').getValue();
                 var seatingList = [];
-                this.dom.find('.student-block[data-index]').forEach(function(node){
-                    var node2 = node.find('.image-container');
-                    seatingList.push({
-                        index: node.getData('index'),
-                        row: node.getData('row'),
-                        column: node.getData('column'),
-                        studentId: node2.exists() ? node2.getData('id') : null
-                    })
-                });
+                this.dom.find('.seating-row').forEach(function(items){
+                    var seatings = [];
+                    items.find('.student-block[data-index]').forEach(function(node){
+                        var node2 = node.find('.image-container');
+                        seatings.push({
+                            index: node.getData('index'),
+                            row: node.getData('row'),
+                            column: node.getData('column'),
+                            studentId: node2.exists() ? node2.getData('id') : null
+                        })
+                    });
+                    seatingList.push(seatings);
+                }.bind(this));
+
                 var res = {
                     rows: rows,
                     columns: columns,

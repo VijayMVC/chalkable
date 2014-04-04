@@ -39,14 +39,16 @@ NAMESPACE('chlk.templates.attendance', function () {
                     classId: this.getTopData().getSelectedItemId().valueOf()
                 }, seatsList = [];
                 this.getSeatingList().forEach(function(items){
+                    var seatings = [];
                     items.forEach(function(item){
-                        seatsList.push({
+                        seatings.push({
                             row: item.getRow(),
                             column: item.getColumn(),
                             studentId: item.getInfo() ? item.getInfo().getStudent().getId().valueOf() : null,
                             index: item.getIndex()
                         })
-                    })
+                    });
+                    seatsList.push(seatings);
                 });
                 res.seatsList = seatsList;
                 return JSON.stringify(res);
