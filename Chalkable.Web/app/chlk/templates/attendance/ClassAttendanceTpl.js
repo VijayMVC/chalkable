@@ -24,8 +24,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'classId',
 
-            [ria.templates.ModelPropertyBind('type', chlk.converters.attendance.AttendanceTypeToNameConverter)],
-            String, 'typeName',
+            String, function getTypeName(){
+                return this.getModel().getTypeName();
+            },
 
             [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'student',

@@ -30,6 +30,26 @@ NAMESPACE('chlk.templates.attendance', function () {
             ArrayOf(ArrayOf(chlk.models.attendance.ClassAttendanceWithSeatPlace)), 'seatingList',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons'
+            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
+
+            String, function getTextForPost(){
+                var res = {
+                    columns: this.getColumns(),
+                    rows: this.getRows(),
+                    classId: this.getTopData().getSelectedItemId().valueOf()
+                }, seatsList = [];
+                this.getSeatingList().forEach(function(items){
+                    items.forEach(function(item){
+                        seatsList.push({
+                            row: item.getRow(),
+                            column: item.getColumn(),
+                            studentId: item.getInfo() ? item.getInfo().getStudent().getId().valueOf() : null,
+                            index: item.getIndex()
+                        })
+                    })
+                });
+                res.seatsList = seatsList;
+                return JSON.stringify(res);
+            }
         ]);
 });

@@ -80,9 +80,17 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.attendance.SetClassListAttendance]],
             ria.async.Future, function setAttendance(setAttendanceData) {
                 return this.post('Attendance/SetAttendance.json', Boolean,{
-                    classid: setAttendanceData.getClassId() && setAttendanceData.getClassId().valueOf(),
+                    classId: setAttendanceData.getClassId() && setAttendanceData.getClassId().valueOf(),
                     date: setAttendanceData.getDate().toStandardFormat(),
                     items: setAttendanceData.getPostItems()
+                });
+            },
+
+            [[chlk.models.common.ChlkDate, Object]],
+            ria.async.Future, function postSeatingChart(date, postSeatingChartData) {
+                return this.post('Attendance/PostSeatingChart.json', Boolean,{
+                    seatingChartInfo: postSeatingChartData,
+                    date: date.toStandardFormat()
                 });
             },
 
