@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.Common;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -133,7 +135,13 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = classId,
                 };
             var stiSeats = new List<Seat>();
-            foreach (var seats in seatingChartInfo.SeatsList)
+            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+                {
+                    ClassId = classId,
+                    RoleId = CoreRoles.STUDENT_ROLE.Id
+                });
+            var defaultStudent = students.First(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
+            foreach (var seats in seatingChartInfo.SeatingList)
             {
                 foreach (var seatInfo in seats)
                 {
@@ -142,7 +150,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         seat.Column = seatInfo.Column;
                         seat.Row = seatInfo.Row;
+                        seat.StudentId = seatInfo.StudentId.Value;
                     }
+                    else seat.StudentId = defaultStudent.Id;
                     stiSeats.Add(seat);
                 }
             }
