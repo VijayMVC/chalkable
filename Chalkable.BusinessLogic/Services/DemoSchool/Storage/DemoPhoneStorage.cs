@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoPhoneStorage: BaseDemoStorage<Guid, Phone>
+    public class DemoPhoneStorage: BaseDemoStorage<int, Phone>
     {
         public DemoPhoneStorage(DemoStorage storage) : base(storage)
         {
@@ -16,7 +16,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<Person> GetUsersByPhone(string phone)
         {
             return Storage.PersonStorage.GetPersonsByPhone(phone);
-            throw new System.NotImplementedException();
         }
 
         public Phone GetPhone(int personId, string digitOnlyValue)
@@ -46,17 +45,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Phone> GetAll(int personId)
         {
-            throw new NotImplementedException();
+            return data.Where(x => x.Value.PersonRef == personId).Select(x => x.Value).ToList();
         }
 
         public void Delete(Phone phone)
         {
-            throw new NotImplementedException();
+            var item = data.First(x => x.Value == phone);
+            Delete(item.Key);
         }
 
         public void Delete(List<Phone> toList)
         {
-            throw new NotImplementedException();
+            foreach (var phone in toList)
+            {
+                Delete(phone);
+            }
         }
     }
 }

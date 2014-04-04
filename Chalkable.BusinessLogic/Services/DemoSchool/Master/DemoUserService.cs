@@ -35,11 +35,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             var localIds = new Dictionary<string, int>
             {
                 {CoreRoles.TEACHER_ROLE.Name, 1195},
-                {CoreRoles.ADMIN_GRADE_ROLE.Name, 1196},
-                {CoreRoles.STUDENT_ROLE.Name, 1197},
+                {CoreRoles.STUDENT_ROLE.Name, 1196},
+                {CoreRoles.ADMIN_GRADE_ROLE.Name, 1197},
+                
             };
-
-
 
             var district = DemoDistrictStorage.CreateDemoDistrict(Guid.Parse(prefix));
 

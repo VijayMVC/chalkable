@@ -68,7 +68,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Count = 1
             }).Persons.First();
 
-            var personDetails = (PersonDetails) person;
+            var personDetails = new PersonDetails
+            {
+                Active = true,
+                AddressRef = person.AddressRef,
+                BirthDate = person.BirthDate,
+                Email = person.Email,
+                FirstLoginDate = person.FirstLoginDate,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                Gender = person.Gender,
+                Id = person.Id,
+                LastMailNotification = person.LastMailNotification,
+                LastPasswordReset = person.LastPasswordReset,
+                RoleRef = person.RoleRef,
+                Salutation = person.Salutation
+            };
 
             if (personDetails.AddressRef.HasValue)
                 personDetails.Address = Storage.AddressStorage.GetById(personDetails.AddressRef.Value);
@@ -77,7 +92,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         //    personDetails.StudentSchoolYears = Storage.StudentSchoolYearStorage.GetAll()
 
-            personDetails.Address = Storage.AddressStorage.GetById(personDetails.AddressRef.Value);
             return personDetails;
         }
 
@@ -127,7 +141,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Setup()
         {
-            
             Add(new Person
             {
                 Active = true,
@@ -135,11 +148,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Gender = "M",
                 FirstName = "ROCKY",
                 LastName = "STEIN",
-                Id = 1195
+                Id = 1195,
+                RoleRef = 2
             });
 
+            Add(new Person
+            {
+                BirthDate = new DateTime(1998, 11, 27),
+                Active = true,
+                Email = PreferenceService.Get("demoschool" + CoreRoles.STUDENT_ROLE.LoweredName).Value,
+                Id = 1196,
+                FirstName = "KAYE",
+                LastName = "BURGESS",
+                Gender = "F",
+                RoleRef = 3
+            });
 
-            //add 3 persons
+            Add(new Person
+            {
+                Active = true,
+                Salutation = "Mr.",
+                Email = PreferenceService.Get("demoschool" + CoreRoles.ADMIN_GRADE_ROLE.LoweredName).Value,
+                Id = 1197,
+                FirstName = "rosteradmin",
+                LastName = "rosteradmin",
+                Gender = null,
+                RoleRef = 5
+            });
             
         }
     }
