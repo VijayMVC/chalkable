@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassPersonStorage = new DemoClassPersonStorage(this);
             ClassAnnouncementTypeStorage = new DemoClassAnnouncementTypeStorage(this);
             CategoryStorage = new DemoCategoryStorage(this);
-            DateStorage = new DemoDateStorage();
+            DateStorage = new DemoDateStorage(this);
             ChalkableDepartmentStorage = new DemoChalkableDepartmentStorage(this);
             MasterSchoolStorage = new DemoMasterSchoolStorage(this);
             StudentAnnouncementStorage = new DemoStudentAnnouncementStorage(this);
