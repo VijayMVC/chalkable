@@ -119,6 +119,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             DayTypeStorage.Setup();
             DistrictStorage.Setup();
             MasterSchoolStorage.Setup();
+            MarkingPeriodStorage.Setup();
 
             SchoolStorage.Add(new Data.School.Model.School
             {
@@ -128,17 +129,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Name = "SMITH"
             });
 
-            MarkingPeriodStorage.Add(new MarkingPeriod
-            {
-                Id = 1,
-                Name = "Semester 2",
-                Description = "",
-                StartDate = new DateTime(2014, 1, 21),
-                EndDate = new DateTime(2014, 5, 30),
-                SchoolRef = 1,
-                SchoolYearRef = 12,
-                WeekDays = 62
-            });
+
+
+
+            
 
             var currentDate = DateTime.Now;
             

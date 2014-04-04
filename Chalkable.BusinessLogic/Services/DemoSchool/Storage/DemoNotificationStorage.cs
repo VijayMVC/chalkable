@@ -37,7 +37,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public PaginatedList<NotificationDetails> GetPaginatedNotificationsDetails(NotificationQuery notificationQuery)
         {
-            throw new System.NotImplementedException();
+            var notifications = GetNotifications(notificationQuery);
+            var nfDetails = new List<NotificationDetails>();
+            foreach (var notification in notifications)
+            {
+                var notificationDetails = (NotificationDetails) notification;
+
+                notificationDetails.Person = Storage.PersonStorage.GetById(notificationDetails.PersonRef);
+
+                if (notificationDetails.AnnouncementRef.HasValue)
+                    notificationDetails.Announcement = Storage.AnnouncementStorage.GetById(notificationDetails.AnnouncementRef.Value);
+
+
+                //
+                //if (notificationDetails.PrivateMessageRef.HasValue)
+                //    notificationDetails.PrivateMessage = Storage.PrivateMessageStorage.GetDetailsById()
+
+                if (notificationDetails.QuestionPersonRef.HasValue)
+                    notificationDetails.QuestionPerson = Storage.PersonStorage.GetById(notificationDetails.QuestionPersonRef.Value);
+
+                if (notificationDetails.MarkingPeriodRef.HasValue)
+                    notificationDetails.MarkingPeriod =
+                        Storage.MarkingPeriodStorage.GetById(notificationDetails.MarkingPeriodRef.Value);
+                
+                nfDetails.Add(notificationDetails);
+
+            }
+            return new PaginatedList<NotificationDetails>(nfDetails, 1, 10);
         }
 
         public void Update(IList<Notification> notifications)

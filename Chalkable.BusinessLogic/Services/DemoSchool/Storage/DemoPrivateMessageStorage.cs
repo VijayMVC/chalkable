@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public PrivateMessageDetails GetDetailsById(int id, int value)
+        public PrivateMessageDetails GetDetailsById(int id, int userLocalId)
         {
             throw new NotImplementedException();
         }

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoMarkingPeriodStorage:BaseDemoStorage<int, MarkingPeriod>
+    public class DemoMarkingPeriodStorage : BaseDemoStorage<int, MarkingPeriod>
     {
         public DemoMarkingPeriodStorage(DemoStorage storage) : base(storage)
         {
@@ -64,7 +63,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public MarkingPeriod GetNextInYear(int markingPeriodId)
         {
-            throw new NotImplementedException();
+            var mp = GetById(markingPeriodId);
+
+            return
+                data.Where(x => x.Value.SchoolYearRef == mp.SchoolYearRef && x.Value.StartDate > mp.StartDate)
+                    .Select(x => x.Value)
+                    .First();
         }
 
         public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
@@ -84,5 +88,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
             return markingPeriods;
         }
-    }
+
+        public void Setup()
+        {
+            Add(new MarkingPeriod
+            {
+                Id = 1,
+                Name = "Semester 2",
+                Description = "",
+                StartDate = new DateTime(2014, 1, 21),
+                EndDate = new DateTime(2014, 5, 30),
+                SchoolRef = 1,
+                SchoolYearRef = 12,
+                WeekDays = 62
+            });
+
+            Add(new MarkingPeriod
+            {
+                Id = 2,
+                Name = "Semester 3",
+                Description = "",
+                StartDate = new DateTime(2014, 6, 30),
+                EndDate = new DateTime(2014, 10, 30),
+                SchoolRef = 1,
+                SchoolYearRef = 12,
+                WeekDays = 62
+            });
+        }
+}
 }
