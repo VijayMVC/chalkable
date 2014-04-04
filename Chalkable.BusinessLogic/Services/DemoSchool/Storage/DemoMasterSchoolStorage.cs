@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(Data.Master.Model.School school)
         {
-            if (data.ContainsKey(school.Id))
+            if (!data.ContainsKey(school.Id))
                 data[school.Id] = school;
         }
 
@@ -44,11 +44,31 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
+        public static Data.Master.Model.School CreateMasterSchool(Guid id)
+        {
+            return new Data.Master.Model.School
+            {
+                DistrictRef = id,
+                Id = id,
+                LocalId = 1,
+                Name = "SMITH"
+            };
+        }
+
         public void Update(Data.Master.Model.School school)
         {
             if (data.ContainsKey(school.Id))
                 data[school.Id] = school;
         }
-       
+
+
+        public void Setup()
+        {
+            var schoolId = Storage.Context.SchoolId.Value;
+            Add(new List<Data.Master.Model.School>{CreateMasterSchool(schoolId)});
+
+        }
+
+
     }
 }

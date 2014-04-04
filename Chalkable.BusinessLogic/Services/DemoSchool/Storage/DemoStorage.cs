@@ -118,14 +118,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             MarkingPeriodClassStorage.Setup();
             DayTypeStorage.Setup();
             DistrictStorage.Setup();
-
-            MasterSchoolStorage.Add(new Data.Master.Model.School
-            {
-                Id = Guid.NewGuid(),
-                LocalId = 1,
-                DistrictRef = Context.DistrictId.Value,
-                Name = "SMITH",
-            });
+            MasterSchoolStorage.Setup();
 
             SchoolStorage.Add(new Data.School.Model.School
             {

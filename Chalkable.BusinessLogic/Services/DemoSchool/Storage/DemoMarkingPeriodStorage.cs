@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public MarkingPeriod GetMarkingPeriod(DateTime date)
         {
-            throw new NotImplementedException();
+            return data.Where(x => x.Value.StartDate >= date && date <= x.Value.EndDate).Select(x => x.Value).First();
         }
 
         public void Add(MarkingPeriod mp)
@@ -40,12 +40,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public bool Exists(IList<int> markingPeriodIds)
         {
-            throw new NotImplementedException();
+            return data.Any(x => markingPeriodIds.Contains(x.Key));
         }
 
         public void DeleteMarkingPeriods(IList<int> markingPeriodIds)
         {
-            throw new NotImplementedException();
+            foreach (var mp in markingPeriodIds)
+            {
+                Delete(mp);
+            }
         }
 
         public void Update(MarkingPeriod mp)

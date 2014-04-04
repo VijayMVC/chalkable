@@ -35,13 +35,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
             var schoolUsers = new List<SchoolUser>();
 
-            var school = new Data.Master.Model.School
-            {
-                DistrictRef = Guid.Parse(prefix),
-                Id = Guid.NewGuid(),
-                LocalId = 1,
-                Name = "SMITH"
-            };
+            var school = DemoMasterSchoolStorage.CreateMasterSchool(Guid.Parse(prefix));
 
             var userRef = Guid.NewGuid();
 
