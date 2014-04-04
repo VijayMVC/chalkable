@@ -7,7 +7,6 @@
  */
 
 REQUIRE('ria.templates.IConverter');
-REQUIRE('chlk.models.attendance.ClassAttendance');
 
 NAMESPACE('chlk.converters.attendance', function () {
 
