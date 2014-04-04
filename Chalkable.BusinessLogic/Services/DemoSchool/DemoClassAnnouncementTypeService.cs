@@ -16,8 +16,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true)
         {
-            var cond = new AndQueryCondition { { ClassAnnouncementType.CLASS_REF_FIELD, classId } };
-            var res = Storage.ClassAnnouncementTypeStorage.GetAll(cond);
+            var res = Storage.ClassAnnouncementTypeStorage.GetAll(classId);
             if (!all)
                 res = res.Where(x => x.Percentage > 0).ToList();
             return res;

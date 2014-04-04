@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
@@ -10,19 +11,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        public IList<ClassAnnouncementType> GetAll(AndQueryCondition cond)
+        public IList<ClassAnnouncementType> GetAll(int classId)
         {
-            throw new System.NotImplementedException();
+            return data.Where(x => x.Value.ClassRef == classId).Select(x => x.Value).ToList();
         }
 
         public void Add(IList<ClassAnnouncementType> classAnnouncementTypes)
         {
-            throw new System.NotImplementedException();
+            foreach (var classAnnouncementType in classAnnouncementTypes.Where(classAnnouncementType => !data.ContainsKey(classAnnouncementType.Id)))
+            {
+                data[classAnnouncementType.Id] = classAnnouncementType;
+            }
         }
 
         public void Edit(IList<ClassAnnouncementType> classAnnouncementTypes)
         {
-            throw new System.NotImplementedException();
+            foreach (var classAnnouncementType in classAnnouncementTypes)
+            {
+                if (data.ContainsKey(classAnnouncementType.Id))
+                    data[classAnnouncementType.Id] = classAnnouncementType;
+            }
         }
     }
 }
