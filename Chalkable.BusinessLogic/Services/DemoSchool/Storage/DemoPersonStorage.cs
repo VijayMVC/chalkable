@@ -14,28 +14,79 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public PersonQueryResult GetPersons(PersonQuery query)
         {
-            var res = new PersonQueryResult();
 
+            //public int? ClassId { get; set; }
+            //public int? TeacherId { get; set; }
+            //public int? PersonId { get; set; }
+            //public int? CallerId { get; set; }
+            //public int CallerRoleId { get; set; }
 
-            ///filter persons
-            res.Persons = GetAll().ToList();
-            res.Query = query;
-            return res;
+            //public string StartFrom { get; set; }
+            //public SortTypeEnum SortType { get; set; }
+
+            var persons = data.Select(x => x.Value);
+
+            //if (query.ClassId.HasValue)
+            //    persons = persons.Where(x => x.)
+
+            if (query.RoleId.HasValue)
+                persons = persons.Where(x => x.RoleRef == query.RoleId);
+
+            if (!string.IsNullOrEmpty(query.Filter))
+                persons = persons.Where(x => x.FullName.Contains(query.Filter));
+            
+            if (query.PersonId.HasValue)
+                persons = persons.Where(x => x.Id == query.PersonId);
+
+            persons = persons.Where(x => query.GradeLevelIds.Contains(x.Id));
+
+            persons = persons.Where(x => query.RoleIds.Contains(x.RoleRef));
+
+            persons = persons.Skip(query.Start).Take(query.Count).ToList();
+
+            var enumerable = persons as IList<Person> ?? persons.ToList();
+            return new PersonQueryResult
+            {
+                Persons = enumerable.ToList(),
+                Query = query,
+                SourceCount = enumerable.Count
+            };
         }
 
-        public PersonDetails GetPersonDetails(int id, int i, int id1)
+        public PersonDetails GetPersonDetails(int personId, int callerId, int callerRoleId)
         {
-            throw new NotImplementedException();
+            var person = GetPersons(new PersonQuery()
+            {
+                PersonId = personId,
+                CallerId = callerId,
+                CallerRoleId = callerRoleId,
+                Count = 1
+            }).Persons.First();
+
+            var personDetails = (PersonDetails) person;
+
+            if (personDetails.AddressRef.HasValue)
+                personDetails.Address = Storage.AddressStorage.GetById(personDetails.AddressRef.Value);
+
+            personDetails.Phones = Storage.PhoneStorage.GetAll(personDetails.Id);
+
+        //    personDetails.StudentSchoolYears = Storage.StudentSchoolYearStorage.GetAll()
+
+            personDetails.Address = Storage.AddressStorage.GetById(personDetails.AddressRef.Value);
+            return personDetails;
         }
 
         public bool Exists(string email, int id)
         {
-            throw new NotImplementedException();
+            return data.Count(x => x.Value.Email == email && x.Value.Id == id) == 1;
         }
 
         public IList<Person> Update(List<Person> res)
         {
-            throw new NotImplementedException();
+            foreach (var person in res)
+            {
+                Update(person);
+            }
         }
 
         public void Add(Person person)
@@ -54,17 +105,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public Person GetPerson(PersonQuery personQuery)
         {
-            throw new NotImplementedException();
+            return GetPersons(personQuery).Persons.First();
         }
 
         public void Update(Person res)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(res.Id))
+                data[res.Id] = res;
         }
 
         public IList<Person> GetPersonsByPhone(string phone)
         {
-            throw new NotImplementedException();
+            return Storage.PhoneStorage.GetUsersByPhone(phone);
+        }
+
+        public void Setup()
+        {
+            //add 3 persons
         }
     }
 }

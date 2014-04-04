@@ -27,14 +27,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public void Delete(Guid id)
-        {
-            data.Remove(id);
-        }
-
         public PaginatedList<Category> GetPage(int start, int count)
         {
-            throw new NotImplementedException();
+
+            return new PaginatedList<Category>(new List<Category>(), 1, 1);
         }
 
         public void Setup()

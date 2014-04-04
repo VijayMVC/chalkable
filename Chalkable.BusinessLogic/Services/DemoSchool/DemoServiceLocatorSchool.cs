@@ -53,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             this.serviceLocatorMaster = serviceLocatorMaster;
             notificationService = new DemoNotificationService(this, storage);
-            appMarketService = new DemoAppMarketService(this, storage);
+            appMarketService = new AppMarketService(this);
             announcementService = new DemoAnnouncementService(this, storage);
 
             personService = new DemoPersonService(this, storage);

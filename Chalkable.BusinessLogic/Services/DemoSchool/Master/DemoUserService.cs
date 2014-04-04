@@ -40,6 +40,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             var userRef = Guid.NewGuid();
 
 
+            var localIds = new Dictionary<string, int>
+            {
+                {CoreRoles.TEACHER_ROLE.Name, 1195},
+                {CoreRoles.ADMIN_EDIT_ROLE.Name, 1196},
+                {CoreRoles.STUDENT_ROLE.Name, 1197},
+            };
+
+
 
             var district = DemoDistrictStorage.CreateDemoDistrict(Guid.Parse(prefix));
 
@@ -48,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 ConfirmationKey = null,
                 DistrictRef = Guid.Parse(prefix),
                 Id = userRef,
-                LocalId = 1195,
+                LocalId = localIds[roleName],
                 IsDeveloper = false,
                 IsSysAdmin = false,
                 Login = demoUserName,
