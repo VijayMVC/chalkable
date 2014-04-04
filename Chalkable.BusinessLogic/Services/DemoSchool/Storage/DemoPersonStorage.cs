@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -38,9 +40,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.PersonId.HasValue)
                 persons = persons.Where(x => x.Id == query.PersonId);
 
-            persons = persons.Where(x => query.GradeLevelIds.Contains(x.Id));
 
-            persons = persons.Where(x => query.RoleIds.Contains(x.RoleRef));
+            if (query.GradeLevelIds != null)
+                persons = persons.Where(x => query.GradeLevelIds.Contains(x.Id));
+
+            if (query.RoleIds != null)
+                persons = persons.Where(x => query.RoleIds.Contains(x.RoleRef));
 
             persons = persons.Skip(query.Start).Take(query.Count).ToList();
 
@@ -87,6 +92,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Update(person);
             }
+            return res;
         }
 
         public void Add(Person person)
@@ -121,7 +127,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Setup()
         {
+            
+            Add(new Person
+            {
+                Active = true,
+                Email = PreferenceService.Get("demoschool" + CoreRoles.TEACHER_ROLE.LoweredName).Value,
+                Gender = "M",
+                FirstName = "ROCKY",
+                LastName = "STEIN",
+                Id = 1195
+            });
+
+
             //add 3 persons
+            
         }
     }
 }

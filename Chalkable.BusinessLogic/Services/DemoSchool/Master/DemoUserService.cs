@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
-using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
@@ -43,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             var localIds = new Dictionary<string, int>
             {
                 {CoreRoles.TEACHER_ROLE.Name, 1195},
-                {CoreRoles.ADMIN_EDIT_ROLE.Name, 1196},
+                {CoreRoles.ADMIN_GRADE_ROLE.Name, 1196},
                 {CoreRoles.STUDENT_ROLE.Name, 1197},
             };
 
