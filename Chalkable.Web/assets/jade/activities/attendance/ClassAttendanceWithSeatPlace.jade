@@ -1,0 +1,9 @@
+if self.getStudent()
+    .remove-red-btn.remove-student
+    student = self.getStudent()
+    A(data-id=student.getId().valueOf()).image-container.white.shadow
+        +PersonImg(student, 70)
+    div(data-tooltip=student.getDisplayName(), data-tooltip-type="overflow").student-seating-name=student.getDisplayName()
+else
+    .empty
+
