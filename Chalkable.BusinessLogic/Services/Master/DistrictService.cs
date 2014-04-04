@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
     public class DistrictService : MasterServiceBase, IDistrictService
     {
-        public const int DEMO_EXPIRE_HOURS = 3;
+
 
         public DistrictService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)

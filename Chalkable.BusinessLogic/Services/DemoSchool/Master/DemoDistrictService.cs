@@ -27,44 +27,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone)
         {
-            throw new NotImplementedException();
+            return Storage.DistrictStorage.Create(name, dbName, sisUrl, sisUserName, sisPassword, timeZone);
         }
 
         public District Create(string name, string sisUrl, string sisUserName, string sisPassword, string timeZone, Guid? sisDistrictId)
         {
-            throw new NotImplementedException();
+            return Storage.DistrictStorage.Create(name, sisUrl, sisUserName, sisPassword, timeZone, sisDistrictId);
         }
 
         public PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue)
         {
-            //return one district
-            throw new NotImplementedException();
+            return Storage.DistrictStorage.GetDistricts(start, count);
         }
 
         public IList<District> GetDistricts(bool? demo, bool? usedDemo = null)
         {
-            throw new NotImplementedException();
-
-            using (var uow = Read())
-            {
-                var da = new DistrictDataAccess(uow);
-                return da.GetDistricts(demo, usedDemo);
-            }
+            return Storage.DistrictStorage.GetDistricts(demo, usedDemo);
         }
 
         public void Update(District district)
         {
-            throw new NotImplementedException();
+            Storage.DistrictStorage.Update(district);
         }
         
         public District GetByIdOrNull(Guid id)
         {
-            throw new NotImplementedException();
-            using (var uow = Read())
-            {
-                var da = new DistrictDataAccess(uow);
-                return da.GetByIdOrNull(id);
-            }
+            return Storage.DistrictStorage.GetByIdOrNull(id);
         }
         
         public void CreateDemo()
@@ -164,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void DeleteDistrict(Guid id)
         {
-            throw new NotImplementedException();
+            Storage.DistrictStorage.Delete(id);
         }
 
         public bool IsOnline(Guid id)

@@ -54,6 +54,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAnnouncementReminderStorage AnnouncementReminderStorage { get; private set; }
         public DemoAnnouncementRecipientStorage AnnouncementRecipientStorage { get; private set; }
         public DemoAnnouncementStandardStorage AnnouncementStandardStorage{ get; private set; }
+        public DemoDistrictStorage DistrictStorage { get; private set; }
 
         public UserContext Context { get; private set; }
 
@@ -103,6 +104,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementQnAStorage = new DemoAnnouncementQnAStorage(this);
             AnnouncementRecipientStorage = new DemoAnnouncementRecipientStorage();
             AnnouncementStandardStorage = new DemoAnnouncementStandardStorage();
+            DistrictStorage = new DemoDistrictStorage(this);
             Setup();
         }
 
@@ -115,6 +117,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassStorage.Setup();
             MarkingPeriodClassStorage.Setup();
             DayTypeStorage.Setup();
+            DistrictStorage.Setup();
 
             MasterSchoolStorage.Add(new Data.Master.Model.School
             {

@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
             var schoolUsers = new List<SchoolUser>();
 
-            var school = new Chalkable.Data.Master.Model.School
+            var school = new Data.Master.Model.School
             {
                 DistrictRef = Guid.Parse(prefix),
                 Id = Guid.NewGuid(),
@@ -44,27 +44,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             };
 
             var userRef = Guid.NewGuid();
-            schoolUsers.Add(new SchoolUser
-            {
-                Id = Guid.NewGuid(),
-                Role = CoreRoles.GetByName(roleName).Id,
-                SchoolRef = school.Id,
-                UserRef = userRef
-            });
-
-            var district = new District
-            {
-                DbName = "DemoDB",
-                DemoPrefix = prefix,
-                Id = Guid.Parse(prefix),
-                Name = "Demo District",
-                TimeZone = "UTC"
-            };
 
 
-            //set local id for current user
 
-            return new User
+            var district = DemoDistrictStorage.CreateDemoDistrict(Guid.Parse(prefix));
+
+            var user = new User
             {
                 ConfirmationKey = null,
                 DistrictRef = Guid.Parse(prefix),
@@ -73,9 +58,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 IsDeveloper = false,
                 IsSysAdmin = false,
                 Login = demoUserName,
-                SchoolUsers = schoolUsers,
-                District = district
+     
+                District = district,
+                              
             };
+
+            schoolUsers.Add(new SchoolUser
+            {
+                Id = Guid.NewGuid(),
+                Role = CoreRoles.GetByName(roleName).Id,
+                SchoolRef = school.Id,
+                UserRef = userRef,
+                School = school,
+                User = user
+            });
+
+            user.SchoolUsers = schoolUsers;
+
+            return user;
         }
 
 

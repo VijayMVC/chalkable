@@ -86,38 +86,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null)
         {
-            throw new NotImplementedException();
-            /*
-            if (activities == null)
-                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
-            else
-            {
-                if (query.ClassId.HasValue)
-                    activities = activities.Where(x => x.SectionId == query.ClassId).ToList();
-                if (query.FromDate.HasValue)
-                    activities = activities.Where(x => x.Date >= query.FromDate).ToList();
-                if (query.ToDate.HasValue)
-                    activities = activities.Where(x => x.Date <= query.ToDate).ToList();
-                activities = activities.Skip(query.Start).Take(query.Count).ToList();
-            }
-            if (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE)
-            {
-                query.SisActivitiesIds = activities.Select(x => x.Id).ToList();
-                query.OwnedOnly = false;
-                query.GradedOnly = false;
-                query.StarredOnly = false;
-                query.Start = 0;
-                query.Count = int.MaxValue;
-            }
             var anns = GetAnnouncements(query).Announcements;
-            if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE))
-            {
-                var noInDbActivities = activities.Where(x => anns.All(y => y.SisActivityId != x.Id)).ToList();
-                AddActivitiesToChalkable(noInDbActivities);
-                anns = GetAnnouncements(query).Announcements;
-            }
-            return MapActivitiesToAnnouncements(anns, activities);
-             */
+            return anns;
         }
         
         
