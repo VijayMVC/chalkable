@@ -9,6 +9,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoPhoneStorage: BaseDemoStorage<int, Phone>
     {
+
+        private int index = 0;
         public DemoPhoneStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -20,12 +22,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public Phone GetPhone(int personId, string digitOnlyValue)
         {
-            throw new System.NotImplementedException();
+            return
+                data.Where(x => x.Value.PersonRef == personId && x.Value.DigitOnlyValue == digitOnlyValue)
+                    .Select(x => x.Value)
+                    .First();
         }
 
         public Phone Add(Phone phone)
         {
-            throw new System.NotImplementedException();
+            data.Add(index++, phone);
         }
 
         public void Update(Phone phone, AndQueryCondition andQueryCondition)
@@ -35,12 +40,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Phone> Add(IList<Phone> phones)
         {
-            throw new System.NotImplementedException();
+            foreach (var phone in phones)
+            {
+                Add(phone);
+            }
         }
 
         public IList<Phone> Update(IList<Phone> phones)
         {
-            throw new System.NotImplementedException();
+
+            //foreach (var phone in phones)
+            //{
+            //    if (data.ContainsKey(phone.i))
+            //}
+            //throw new System.NotImplementedException();
         }
 
         public IList<Phone> GetAll(int personId)

@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public MarkingPeriodClass GetMarkingPeriodClassOrNull(MarkingPeriodClassQuery markingPeriodClassQuery)
         {
-            throw new NotImplementedException();
+            return GetMarkingPeriodClasses(markingPeriodClassQuery).FirstOrDefault();
         }
 
         public void Delete(MarkingPeriodClassQuery markingPeriodClassQuery)

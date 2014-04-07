@@ -16,8 +16,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         //TODO: needs test 
         public Developer GetDeveloperByDictrict(Guid districtId)
         {
-            throw new NotImplementedException();
-            //return current developer
             using (var uow = Read())
             {
                 return new DeveloperDataAccess(uow).GetDeveloper(districtId);
@@ -27,21 +25,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public Developer GetDeveloperById(Guid developerId)
         {
             throw new NotImplementedException();
-            //return current dev
-            using (var uow = Read())
-            {
-                return new DeveloperDataAccess(uow).GetById(developerId);
-            }
         }
 
         public IList<Developer> GetDevelopers()
         {
             throw new NotImplementedException();
-            //return 1 dev here
-            using (var uow = Read())
-            {
-                return new DeveloperDataAccess(uow).GetAll();
-            }
         }
 
         public Developer Add(string login, string password, string name, string webSite, Guid districtId)

@@ -16,8 +16,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Address> GetAddress(int personId)
         {
+            
             //add data to person storage
-            //var ids = Storage.PersonStorage.
             //return addressData.Where(x => x.Value.)
             throw new NotImplementedException();
         }

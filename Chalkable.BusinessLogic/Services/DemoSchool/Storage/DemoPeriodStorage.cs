@@ -23,8 +23,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[period.Id] = period;
         }
 
-        public Period GetPeriodOrNull(int time, int id)
+        public Period GetPeriodOrNull(int time, int schoolYearId)
         {
+
+            //return data.Where(x => x.Value.t)
             throw new System.NotImplementedException();
         }
 
