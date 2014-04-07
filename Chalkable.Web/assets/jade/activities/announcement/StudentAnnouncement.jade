@@ -1,0 +1,37 @@
+normalValue = self.getNormalValue()
+itemCls = (self.isDropped() ? 'dropped' :'')
+selectedCls = (!self.isReadonly() ? 'not-selected' : '')
+maxScore = self.getMaxScore()
+.grade-triangle
+div(class=self.getModel().getAlertClass(maxScore, true), data-tooltip=self.getModel().getTooltipText(maxScore, true)).alert-flag
+div(class=selectedCls + ' ' + itemCls).i-b.text-value=normalValue
+div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
+    if !self.isReadonly()
+        .input-container
+            INPUT(
+                type="text",
+                autofill="off",
+                value=normalValue,
+                name="gradevalue",
+                data-value=normalValue,
+                class=self.getGradeInputClass()
+                data-grade-value=self.getGradeValue(),
+                data-id=self.getId().valueOf()
+            ).no-padding.grade-input.grade-autocomplete.grey-input
+            .letters 0 - #{self.getMaxScore()}
+            .grading-input-popup.chlk-pop-up-container.popup-bottom
+                .pop-up-triangle.big
+                id = getDate().getTime()
+                if self.isAbleDropStudentScore()
+                    +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id).with-value.dropped-checkbox
+                else
+                    +Hidden('dropped', self.isDropped())
+                +Hidden('isabsent', self.isAbsent())
+                +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), id='islate-' + id).with-value
+                +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), id='isincomplete-' + id).with-value
+                if self.isAbleToExempt()
+                    +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), id='isexempt-' + id).with-value.exempt-checkbox
+
+                else
+                    +Hidden('isexempt', self.isExempt())
+                +LabeledCheckbox(Msg.Fill, 'fill', false).fill-grade
