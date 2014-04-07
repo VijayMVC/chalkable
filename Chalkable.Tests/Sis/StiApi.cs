@@ -33,11 +33,11 @@ namespace Chalkable.Tests.Sis
             //var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://208.83.95.80:8210/");
         
             Debug.WriteLine(DateTime.Now.Ticks);
-            var r = cl.SyncConnector.GetDiff(typeof(Gender), null) as SyncResult<Gender>;
+            var r = cl.SyncConnector.GetDiff(typeof(SpEdStatus), null) as SyncResult<SpEdStatus>;
             Debug.WriteLine(DateTime.Now.Ticks);
             foreach (var item in r.All)
             {
-                Debug.WriteLine(item.Description + " " + item.Name);
+                Debug.WriteLine(item.SpEdStatusID + " " + item.Name);
             }
             Assert.NotNull(r);
         }

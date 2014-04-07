@@ -55,6 +55,7 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(AlternateScore));
             RegisterType(typeof(ScheduledTimeSlot));
             RegisterType(typeof(Gender));
+            RegisterType(typeof(SpEdStatus));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

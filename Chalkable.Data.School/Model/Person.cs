@@ -32,6 +32,10 @@ namespace Chalkable.Data.School.Model
         public DateTime? LastMailNotification { get; set; }
         public string Email { get; set; }
         public int? AddressRef { get; set; }
+        public bool HasMedicalAlert { get; set; }
+        public bool IsAllowedInetAccess { get; set; }
+        public string SpecialInstructions { get; set; }
+        public string SpEdStatus { get; set; }
 
         [NotDbFieldAttr]
         public string FullName
