@@ -16,12 +16,17 @@ namespace Chalkable.BackgroundTaskProcessor
             Trace.WriteLine("Chalkable.BackgroundTaskProcessor entry point called", "Information");
             var processor = new TaskProcessor();
             var delay = Settings.Configuration.TaskProcessorDelay;
-            if (delay < 0) delay = 7200000;
             while (true)
             {
-                Thread.Sleep(delay);
+                if (delay <= 0)
+                {
+                    Thread.Sleep(7200000);
+                    Trace.TraceError("Task processing is turned off");
+                    continue;
+                }
                 try
                 {
+                    Thread.Sleep(delay);
                     processor.Process();
                 }
                 catch (Exception ex)
