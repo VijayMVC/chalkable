@@ -42,7 +42,7 @@ namespace Chalkable.Web.Models
                     SeatingList = new List<IList<AttendanceSeatingChartItemViewData>>(),
                     NotSeatingStudents = new List<ClassAttendanceViewData>()
                 };
-            var notSeatingStudents = students.Where(x => seatingChart.SeatingList.All(y => y.All(z => x.Id != z.StudentId))).ToList();
+            var notSeatingStudents = students.Where(x => seatingChart.SeatsList.All(y => y.All(z => x.Id != z.StudentId))).ToList();
             foreach (var notSeatingStudent in notSeatingStudents)
             {
                 var classAtt = classAttendance.FirstOrDefault(x => x.Student.Id == notSeatingStudent.Id) ??
@@ -50,8 +50,8 @@ namespace Chalkable.Web.Models
                 res.NotSeatingStudents.Add(classAtt);
             }
             
-            classAttendance.Where(x => seatingChart.SeatingList.All(y => y.All(z => x.Student.Id != z.StudentId))).ToList();
-            foreach (var seats in seatingChart.SeatingList)
+            classAttendance.Where(x => seatingChart.SeatsList.All(y => y.All(z => x.Student.Id != z.StudentId))).ToList();
+            foreach (var seats in seatingChart.SeatsList)
             {
                 var seatingItems = new List<AttendanceSeatingChartItemViewData>();
                 foreach (var seat in seats)
