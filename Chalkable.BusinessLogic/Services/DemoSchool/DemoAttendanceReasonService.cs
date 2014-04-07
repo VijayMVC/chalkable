@@ -70,6 +70,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.AttendanceLevelReasonStorage.Update(attendanceLevelReasons);
         }
 
+        public void DeleteAttendanceLevelReasons(IList<int> ids)
+        {
+              if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            Storage.AttendanceLevelReasonStorage.Delete(ids);
+        }
+
         public IList<AttendanceReason> GetAll()
         {
             return Storage.AttendanceReasonStorage.GetAll();
