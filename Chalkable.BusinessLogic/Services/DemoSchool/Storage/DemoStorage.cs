@@ -114,6 +114,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ApplicationInstallActionGradeLevelStorage = new DemoApplicationInstallActionGradeLevelStorage(this);
             ApplicationInstallActionDepartmentStorage = new DemoApplicationInstallActionDepartmentStorage(this);
             ApplicationInstallActionRoleStorage = new DemoApplicationInstallActionRoleStorage(this);
+            StudentSchoolYearStorage = new DemoStudentSchoolYearStorage(this);
             Setup();
         }
 

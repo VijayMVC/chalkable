@@ -44,6 +44,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IAlphaGradeService alphaGradeService;
         private IAlternateScoreService alternateScoreService;
         private IGradingPeriodService gradingPeriodService;
+        private IGradingStandardService gradingStandardService;
 
 
 
@@ -88,6 +89,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             alternateScoreService = new DemoAlternateScoreService(this, storage);
             gradingPeriodService = new DemoGradingPeriodService(this, storage);
             classAnnouncementTypeService = new DemoClassAnnouncementTypeService(this, storage);
+            gradingStandardService = new DemoGradingStandardService(this, storage);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -127,6 +129,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IAlternateScoreService AlternateScoreService { get { return alternateScoreService; } }
         public IGradingPeriodService GradingPeriodService { get {return gradingPeriodService;} }
         public ISyncService SyncService { get; private set; }
-        public IGradingStandardService GradingStandardService { get; private set; }
+        public IGradingStandardService GradingStandardService { get { return GradingStandardService; } }
     }
 }

@@ -90,7 +90,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             personDetails.Phones = Storage.PhoneStorage.GetAll(personDetails.Id);
 
-        //    personDetails.StudentSchoolYears = Storage.StudentSchoolYearStorage.GetAll()
+            personDetails.StudentSchoolYears = Storage.StudentSchoolYearStorage.GetAll(personDetails.Id);
 
             return personDetails;
         }

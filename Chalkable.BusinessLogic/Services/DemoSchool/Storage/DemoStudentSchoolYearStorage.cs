@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -23,5 +24,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Add(schoolYear);
             }
         }
+
+        public IList<StudentSchoolYear> GetAll(int personId)
+        {
+            return data.Where(x => x.Value.StudentRef == personId).Select(x => x.Value).ToList();
+        } 
     }
 }
