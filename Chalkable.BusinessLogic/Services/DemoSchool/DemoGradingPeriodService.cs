@@ -59,5 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             Storage.GradingPeriodStorage.Delete(ids);
         }
+
+       
     }
 }

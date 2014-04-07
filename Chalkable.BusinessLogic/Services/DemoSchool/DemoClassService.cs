@@ -207,7 +207,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
 
             Storage.MarkingPeriodClassStorage.Delete(markingPeriodClasses);
-            throw new NotImplementedException();
         }
 
         public IList<Person> GetStudents(int classId)
