@@ -16,8 +16,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public PersonQueryResult GetPersons(PersonQuery query)
         {
-
-            //public int? ClassId { get; set; }
             //public int? TeacherId { get; set; }
             //public int? PersonId { get; set; }
             //public int? CallerId { get; set; }
@@ -28,8 +26,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var persons = data.Select(x => x.Value);
 
-            //if (query.ClassId.HasValue)
-            //    persons = persons.Where(x => x.)
+
+            if (query.ClassId.HasValue)
+            {
+                var personIds = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
+                {
+                    ClassId = query.ClassId
+                }).Select(x => x.PersonRef).ToList();
+
+                persons = persons.Where(x => personIds.Contains(x.Id));
+            }
 
             if (query.RoleId.HasValue)
                 persons = persons.Where(x => x.RoleRef == query.RoleId);

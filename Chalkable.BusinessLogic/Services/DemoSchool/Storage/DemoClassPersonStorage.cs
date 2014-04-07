@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     classPersonQuery.PersonId.HasValue) && classPersonsList.Count > 0;
         }
 
-        private IEnumerable<ClassPerson> GetClassPersons(ClassPersonQuery classPersonQuery)
+        public IEnumerable<ClassPerson> GetClassPersons(ClassPersonQuery classPersonQuery)
         {
             var classPersons = data.Select(x => x.Value);
 

@@ -46,17 +46,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IGradingPeriodService gradingPeriodService;
         private IGradingStandardService gradingStandardService;
 
-
-
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
             : base(serviceLocatorMaster.Context)
         {
-
             this.serviceLocatorMaster = serviceLocatorMaster;
             notificationService = new DemoNotificationService(this, storage);
             appMarketService = new DemoAppMarketService(this, storage);
             announcementService = new DemoAnnouncementService(this, storage);
-
             personService = new DemoPersonService(this, storage);
             schoolYearService = new DemoSchoolYearService(this, storage);
             markingPeriodService = new DemoMarkingPeriodService(this, storage);
