@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -29,12 +30,55 @@ namespace Chalkable.Web.Controllers
             //return Json(GradingTeacherClassSummaryViewData.Create(gradingStats, classes), 6);
         }
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ClassSummaryGrid(int classId)
+        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        public ActionResult ClassSummary(int classId)
         {
-            var gradeBooks = SchoolLocator.GradingStatisticService.GetGradeBooks(classId);
-            return Json(GradingGridViewData.Create(gradeBooks));
-            //return FakeJson("~/fakeData/teacherGradingGrid.json");
+            return FakeJson("~/fakeData/gradingClassSummary.json");
+            //if (!SchoolLocator.Context.SchoolId.HasValue)
+            //    throw new UnassignedUserException();
+            //var teacherId = Context.UserLocalId;
+            //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        public ActionResult ItemGradingStat(int announcementId)
+        {
+            return FakeJson("~/fakeData/itemGradingStat.json");
+            //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            //var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
+            //var mapper = SchoolLocator.GradingStyleService.GetMapper();
+            //return Json(ItemGradigStatViewData.Create(studentAnns, ann, mapper));
+        }
+
+
+        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        public ActionResult ClassSummaryGrids(int classId)
+        {
+            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var standards = SchoolLocator.StandardService.GetStandardes(classId, null, null);
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
+            var date = Context.NowSchoolTime.Date;
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, date);
+            ChalkableGradeBook gradeBook = null;
+            if(currentGradingPeriod != null)
+                gradeBook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);
+            return Json(GradingGridsViewData.Create(gradeBook, gradingPeriods, standards, classAnnouncementTypes));
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ClassGradingGrid(int classId, int gradingPeriodId, int? standardId, int? classAnnouncementTypeId, bool? notCalculateGrid)
+        {
+            var gradeBook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriodId, standardId, classAnnouncementTypeId, !(notCalculateGrid ?? false));
+            return Json(GradingGridViewData.Create(gradeBook));
+        }
+        
+        [AuthorizationFilter("Teacher")]
+        public ActionResult GetGridComments(int schoolYearId)
+        {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+            return Json(SchoolLocator.GradingStatisticService.GetGradeBookComments(schoolYearId, Context.UserLocalId.Value));
         }
 
         [AuthorizationFilter("Teacher")]
@@ -56,6 +100,7 @@ namespace Chalkable.Web.Controllers
             }
             return Json(res);
         }
+
 
         [AuthorizationFilter("Teacher")]
         public ActionResult ClassStandardSummary(int classId)
@@ -84,25 +129,7 @@ namespace Chalkable.Web.Controllers
             return Json(StandardGradingItemViewData.Create(res));
         }
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ClassSummary(int classId)
-        {
-            return FakeJson("~/fakeData/gradingClassSummary.json");
-            //if (!SchoolLocator.Context.SchoolId.HasValue)
-            //    throw new UnassignedUserException();
-            //var teacherId = Context.UserLocalId;
-            //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
-        }
-
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ItemGradingStat(int announcementId)
-        {
-            return FakeJson("~/fakeData/itemGradingStat.json");
-            //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            //var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
-            //var mapper = SchoolLocator.GradingStyleService.GetMapper();
-            //return Json(ItemGradigStatViewData.Create(studentAnns, ann, mapper));
-        }
+        
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentSummary(int studentId, int? classId)
@@ -148,10 +175,10 @@ namespace Chalkable.Web.Controllers
         //TODO: do we need this in API still?
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult UpdateItem(int announcementId, int studentId, string gradeValue, string extraCredits
-            , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? absent)
+            , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late)
         {
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits
-                , comment, dropped, late ?? false, absent ?? false, exempt ?? false, incomplete ?? false
+                , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false
                 , (int)GradingStyleEnum.Numeric100);
             return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
         }

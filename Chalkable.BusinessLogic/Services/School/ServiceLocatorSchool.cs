@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IStudentParentService StudentParentService { get; }
         IGradingStyleService GradingStyleService { get; }
         IStudentAnnouncementService StudentAnnouncementService { get; }
-        IClassAnnouncementTypeService ClassClassAnnouncementTypeService { get; }
+        IClassAnnouncementTypeService ClassAnnouncementTypeService { get; }
         IDisciplineTypeService DisciplineTypeService { get; }
         IApplicationSchoolService ApplicationSchoolService { get; }
         IDisciplineService DisciplineService { get; }
@@ -153,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IStudentParentService StudentParentService { get { return studentParentService; } }
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
-        public IClassAnnouncementTypeService ClassClassAnnouncementTypeService { get { return classClassAnnouncementTypeService; } }
+        public IClassAnnouncementTypeService ClassAnnouncementTypeService { get { return classClassAnnouncementTypeService; } }
         public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }

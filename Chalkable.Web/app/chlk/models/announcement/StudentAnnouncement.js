@@ -21,15 +21,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 return value;//GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())
             },
 
-            Object, function getNormalValue(){
-                var value = this.getGradeValue();
-                if(this.isDropped())
-                    return Msg.Dropped;
-                if(this.isExempt())
-                    return Msg.Exempt;
-                return (value >= 0) ? value : '';
-            },
-
             Object, function isGradeDisabled(){
                 return this.isDropped() || this.isExempt();
             },

@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId);
         void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items);
         SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
-
+        void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
 
         //TODO: OLD!!!!
         IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null);
@@ -124,6 +124,32 @@ namespace Chalkable.BusinessLogic.Services.School
             return SeatingChartInfo.Create(seatingChart);
         }
 
+        public void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChartInfo)
+        {
+            var seatingChart = new SeatingChart
+                {
+                    Columns = seatingChartInfo.Columns,
+                    Rows = seatingChartInfo.Rows,
+                    SectionId = classId,
+                };
+            var stiSeats = new List<Seat>();
+            foreach (var seats in seatingChartInfo.SeatsList)
+            {
+                foreach (var seatInfo in seats)
+                {
+                    var seat = new Seat();
+                    if (seatInfo.StudentId.HasValue)
+                    {
+                        seat.Column = seatInfo.Column;
+                        seat.Row = seatInfo.Row;
+                    }
+                    stiSeats.Add(seat);
+                }
+            }
+            seatingChart.Seats = stiSeats;
+            ConnectorLocator.SeatingChartConnector.UpdateChart(classId, markingPeriodId, seatingChart);
+        }
+
         public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
         {
             throw new NotImplementedException();
@@ -223,7 +249,5 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

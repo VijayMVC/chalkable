@@ -9,6 +9,8 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.StudentAnnouncement)],
         'StudentAnnouncement', EXTENDS(chlk.templates.ChlkTemplate), [
             Boolean, 'ableDropStudentScore',
+            Boolean, 'ableToExempt',
+
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',

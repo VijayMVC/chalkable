@@ -2,8 +2,8 @@
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
-using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.StiConnector.Connectors;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -12,14 +12,38 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class DistrictController : ChalkableController
     {
-        public ActionResult Register(string userName, string password, Guid guid, string sisUrl, string sisUserName, string sisPassword, string timeZone)
+        public ActionResult Register(DistrictRegisterViewData data)
         {
-            string name = guid.ToString();
+            //http://sandbox.sti-k12.com/chalkable/api/chalkale/linkstatus?LinkKey=[LinkKeyGuid]
+            string name = data.DistrictGuid.ToString();
+            string timeZone = data.DistrictTimeZone ?? "UTC";
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var context = sl.UserService.Login(userName, password);
+            var context = sl.UserService.Login(data.UserName, data.Password);
             if (context != null)
             {
-                sl.DistrictService.Create(name, sisUrl, sisUserName, sisPassword, timeZone ?? "UTC", guid);
+                var district = MasterLocator.DistrictService.GetByIdOrNull(data.DistrictGuid);
+                if (district == null && string.IsNullOrEmpty(data.SisPassword))
+                    throw new Exception("SIS password can not be null for a new district");
+                var pwd = data.SisPassword;
+                if (string.IsNullOrEmpty(pwd))
+                    pwd = district.SisPassword;
+                var locator = ConnectorLocator.Create(data.SisUserName, pwd, data.ApiUrl);
+                if (!locator.LinkConnector.Link(data.LinkKey))
+                    throw new Exception("The link keys do not match.");
+                if (district == null)
+                {
+                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.SisUserName, data.SisPassword, timeZone);
+                }
+                else
+                {
+                    district.Name = name;
+                    if (!string.IsNullOrEmpty(data.Password))
+                        district.SisPassword = data.Password;
+                    district.SisUrl = data.ApiUrl;
+                    district.SisUserName = data.SisUserName;
+                    district.TimeZone = timeZone;
+                    MasterLocator.DistrictService.Update(district);
+                }
                 return Json(true);
             }
             return Json("Invalid credentials");
@@ -35,10 +59,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult Create(string name, Guid guid, string sisUrl, string sisUserName, string sisPassword, string timeZone)
+        public ActionResult Create()
         {
-            var district = MasterLocator.DistrictService.Create(name, sisUrl, sisUserName, sisPassword, timeZone ?? "UTC", guid);
-            return Json(DistrictViewData.Create(district));
+            throw new NotSupportedException();
         }
 
         public ActionResult ListTimeZones()

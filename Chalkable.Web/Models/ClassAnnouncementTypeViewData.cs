@@ -25,6 +25,7 @@ namespace Chalkable.Web.Models
             Description = announcementType.Description;
             Percentage = announcementType.Percentage;
             Gradable = announcementType.Gradable;
+            ClassId = announcementType.ClassRef;
         }
 
         public static ClassAnnouncementTypeViewData Create(ClassAnnouncementType announcementType)

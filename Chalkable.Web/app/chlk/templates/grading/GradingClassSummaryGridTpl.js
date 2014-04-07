@@ -1,13 +1,28 @@
 REQUIRE('chlk.templates.grading.GradingClassStandardsGridTpl');
-REQUIRE('chlk.models.grading.GradingClassSummaryGridViewData');
+REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
 
 NAMESPACE('chlk.templates.grading', function () {
     "use strict";
     /** @class chlk.templates.grading.GradingClassSummaryGridTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/TeacherClassGradingGridSummary.jade')],
-        [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryGridViewData)],
-        'GradingClassSummaryGridTpl', EXTENDS(chlk.templates.grading.GradingClassStandardsGridTpl), [
+        [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData)],
+        'GradingClassSummaryGridTpl', EXTENDS(chlk.templates.common.PageWithClassesAndGradingPeriodsTpl), [
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.NameId), 'classAnnouncementTypes',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.grading.ShortGradingClassSummaryGridItems, 'currentGradingGrid',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
@@ -23,15 +38,6 @@ NAMESPACE('chlk.templates.grading', function () {
                 if(!res.length)
                     return '';
                 return res.join('<hr>');
-            },
-
-            OVERRIDE, Object, function getNormalValue(item){
-                var value = item.getGradeValue();
-                if(item.isDropped())
-                    return Msg.Dropped;
-                if(item.isExempt())
-                    return Msg.Exempt;
-                return (value >= 0) ? value : '';
             }
         ]);
 });

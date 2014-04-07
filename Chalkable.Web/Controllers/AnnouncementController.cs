@@ -51,6 +51,7 @@ namespace Chalkable.Web.Controllers
             var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.UserLocalId.Value, attachments);
             avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
+            avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
             var res = new CreateAnnouncementViewData
                 {
                     Announcement = avd,
@@ -154,6 +155,7 @@ namespace Chalkable.Web.Controllers
             var res = AnnouncementDetailedViewData.Create(ann
                 , SchoolLocator.GradingStyleService.GetMapper(), Context.SchoolLocalId.Value);
             res.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
+            res.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             return Json(res);
         }
 

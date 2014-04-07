@@ -211,12 +211,16 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getActivityClass_(isProfile_), result);
         },
 
-        [[chlk.models.attendance.SeatingChart, chlk.models.id.ClassId]],
-        chlk.models.attendance.SeatingChart, function prepareSeatingData(model, classId){
+        [[chlk.models.attendance.SeatingChart, chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+        chlk.models.attendance.SeatingChart, function prepareSeatingData(model, classId, date_){
+            date_ = date_ || new chlk.models.common.ChlkDate(getDate());
             var classes = this.classService.getClassesForTopBar(true);
             var topModel = new chlk.models.classes.ClassesForTopBar(classes);
             topModel.setSelectedItemId(classId);
+            model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
+            model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ATTENDANCE));
             model.setTopData(topModel);
+                model.setDate(date_);
             return model;
         },
 
@@ -227,7 +231,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.BackgroundNavigate('attendance', 'summary', []);
             var result = this.attendanceService.getSeatingChartInfo(classId, date_)
                 .then(function(model){
-                    return this.prepareSeatingData(model, classId);
+                    return this.prepareSeatingData(model, classId, date_);
                 }, this);
             return this.PushView(chlk.activities.attendance.SeatingChartPage, result);
         },

@@ -12,6 +12,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('candropstudentscore')],
             Boolean, 'ableDropStudentScore',
 
+            [ria.serialize.SerializeProperty('maybeexempt')],
+            Boolean, 'ableExemptStudentScore',
+
             Number, 'order',
 
             String, 'title',
@@ -29,6 +32,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'maxScore',
 
             [ria.serialize.SerializeProperty('isowner')],
-            Boolean, 'annOwner'
+            Boolean, 'annOwner',
+
+            Boolean, 'gradable'
         ]);
 });

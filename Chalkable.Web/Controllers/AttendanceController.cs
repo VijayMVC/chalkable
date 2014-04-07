@@ -190,11 +190,16 @@ namespace Chalkable.Web.Controllers
             var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
             var seatingChart = SchoolLocator.AttendanceService.GetSeatingChart(classId, markingPeriod.Id);
             var attendances = ClassAttendanceList(d, classId);
-            return Json(AttendanceSeatingChartViewData.Create(seatingChart, attendances));
+            var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
+                {
+                    ClassId = classId,
+                    RoleId = CoreRoles.STUDENT_ROLE.Id
+                });
+            return Json(AttendanceSeatingChartViewData.Create(seatingChart, attendances, students));
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult UpdateSeatingChart(int classId, int columns, int rows)
+        public ActionResult UpdateSeatingChart(DateTime? date, int classId, int columns, int rows)
         {
             if (classId == 645)
                 return FakeJson("~/fakeData/seatingChart2.json");
@@ -204,7 +209,16 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult ChangeStudentSeat(int studentId, int classId, int index)
+        public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo)
+        {
+            var d = (date ?? Context.NowSchoolTime).Date;
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
+            SchoolLocator.AttendanceService.UpdateSeatingChart(seatingChartInfo.ClassId, mp.Id, seatingChartInfo);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ChangeStudentSeat(DateTime? date, int studentId, int classId, int index)
         {
             if (classId == 723 || classId == 645)
                 return FakeJson("~/fakeData/seatingChart3.json");

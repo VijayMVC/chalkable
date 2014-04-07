@@ -50,6 +50,8 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Number, 'maxScore',
 
+            Boolean, 'gradable',
+
             Number, function getAutoGradeCount(){
                 return this.getItems().filter(function(item){
                     return item.getState() == 0;
@@ -58,7 +60,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             String, function getGradedWidth(){
                 var res = Math.ceil(100 * this.getGradedStudentCount() / this.getItems().length) + '%';
-                console.info(this.getGradedStudentCount(), this.getItems().length, res);
                 return res;
             },
 

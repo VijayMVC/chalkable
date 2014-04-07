@@ -24,6 +24,11 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public DateTime? ExpiresDate { get; set; }
         public int Order { get; set; }
         public string Subject { get; set; }
+        public decimal? MaxScore { get; set; }
+        public bool CanDropStudentScore { get; set; }
+        public bool MayBeExempt { get; set; }
+        public bool Gradable { get; set; }
+  
 
         //todo add property departmentid 
 
@@ -45,6 +50,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             Order = announcement.Order;
             IsOwner = announcement.IsOwner;
             Subject = announcement.Subject;
+            MaxScore = announcement.MaxScore;
+            CanDropStudentScore = announcement.MayBeDropped;
+            MayBeExempt = announcement.MayBeExempt;
+            Gradable = announcement.Gradable;
         }
 
         public static AnnouncementShortViewData Create(AnnouncementComplex announcement)

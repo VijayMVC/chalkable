@@ -15,19 +15,18 @@ namespace Chalkable.Web.Controllers
     {
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, bool needsAllAttachments = true, bool isRead = false)
         {
-
             var annDetails = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            if(annDetails.SisActivityId.HasValue)
-                annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId); 
+            if (annDetails.SisActivityId.HasValue)
+            {
+                annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
+                annDetails.GradingStudentsCount = annDetails.StudentAnnouncements.Count(x=>x.IsGraded);
+            }
             //if(CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
             //    annDetails.AnnouncementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(annDetails.Id);
             
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.UserLocalId.Value, attInfo);
-            var applications = MasterLocator.ApplicationService.GetApplications();
-            var annApps = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
-            var installs = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.UserLocalId ?? 0);
-            annViewData.Applications = AnnouncementApplicationViewData.Create(annApps, applications, installs, Context.UserLocalId);
+            annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, announcementId);
             if (isRead && annDetails.State == AnnouncementState.Created)
             {
                 var ids = new HashSet<Guid>();

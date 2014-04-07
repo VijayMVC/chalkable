@@ -144,8 +144,8 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set('AnnouncementAttachments', attachments);
         },
 
-        [[chlk.models.announcement.StudentAnnouncement]],
-        function setAnnouncementGrade(model){
+        [[chlk.models.announcement.StudentAnnouncement, Boolean]],
+        function setAnnouncementGrade(model, fromGrid_){
             var result = this.gradingService
                 .updateItem(
                     model.getAnnouncementId(),
@@ -157,10 +157,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.isAbsent(),
                     model.isIncomplete(),
                     model.isExempt(),
-                    model.isPassed(),
-                    model.isComplete(),
-                    model.getStandardIds(),
-                    model.getStandardGrades()
+                    fromGrid_ ? chlk.models.announcement.ShortStudentAnnouncementViewData : null
                 )
                 .attach(this.validateResponse_());
             return result;
@@ -168,8 +165,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeFromGridAction(model){
-            this.setAnnouncementGrade(model);
-            return null;
+            var result = this.setAnnouncementGrade(model, true);
+            return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
         },
 
         [[chlk.models.announcement.StudentAnnouncement]],
@@ -211,14 +208,14 @@ NAMESPACE('chlk.controllers', function (){
                 this.prepareRecipientsData(model);
             }
             else{
-                var classes = this.classService.getClassesForTopBar();
+                var classes = this.classService.getClassesForTopBar(false, true);
                 var classId_ = announcement.getClassId(), classInfo, types;
                 classes.forEach(function(item){
                     var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
-                    types = currentClassInfo.getTypesByClass();
+                    types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
                     if(types.length)
                         item.setDefaultAnnouncementTypeId(types[0].getId());
-                    if(classId_ && classId_ == item.getId()){
+                    if(currentClassInfo && classId_ && classId_ == item.getId()){
                         classInfo = currentClassInfo;
                         model.setClassInfo(classInfo);
                     }
@@ -614,7 +611,7 @@ NAMESPACE('chlk.controllers', function (){
                     });
                     return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());break;
                 case 'save': model.setAnnouncementAttachments(this.getContext().getSession().get('AnnouncementAttachments'));
-                    model.setApplications(this.getContext().getSession().get('AnnoucementApplications'));
+                    model.setApplications(this.getContext().getSession().get('AnnouncementApplications'));
                     var announcementForm = new chlk.models.announcement.AnnouncementForm();
                     announcementForm.setAnnouncement(model);
                     return this.saveAnnouncement(model, announcementForm);break;
@@ -658,8 +655,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.getTitle(),
                         model.getContent(),
                         model.getExpiresDate(),
-                        model.getAttachments(),
-                        model.getApplications(),
+                        Array.isArray(model.getAttachments()) ? model.getAttachments().join(',') : model.getAttachments(),
+                        Array.isArray(model.getApplications()) ? model.getApplications().join(',') : model.getApplications(),
                         model.getMarkingPeriodId(),
                         model.getMaxScore(),
                         model.getWeightAddition(),
@@ -698,7 +695,7 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_());
             else{
-                var apps = this.getContext().getSession().get('AnnoucementApplications', []);
+                var apps = this.getContext().getSession().get('AnnouncementApplications', []);
                 if((!model.getAttachments() || !model.getAttachments().length) && (!apps.length) && !model.getContent()){
                         this.ShowMsgBox('You should fill in Assignment\nor add attachment or application', 'whoa.');
                         return false;

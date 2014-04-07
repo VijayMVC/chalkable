@@ -13,7 +13,7 @@
                 br
                 .form-buttons
                     +ActionLinkButton('message', 'sendPage', self.id).special-button.blue-button.submit-btn= self.isReplay() ? 'Reply' : 'Send'
-                    +Button.special-button.cancel-button.close=Msg.Cancel
+                    +ActionLinkButton('message', 'page').special-button.cancel-button=Msg.Cancel
 
     .bg-bottom
 

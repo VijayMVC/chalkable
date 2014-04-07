@@ -22,25 +22,6 @@ namespace Chalkable.Web.Controllers
             return Json(MarkingPeriodViewData.Create(res));
         }
 
-
-
-        //[AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit")]
-        //public ActionResult ChangeMarkingPeriodsDate(Guid? previosMarkingPeriodId, Guid currentMarkingPeriodId
-        //    , Guid? nextMarkingPeriodId, DateTime currentMarkingPeriodStartDate)
-        //{
-
-        //    //SchoolLocator.MarkingPeriodService.EditMarkingPeriodDates(leftMarkingPeriodId, rightMarkingPeriodId, date);
-        //    return Json(true);
-        //}
-
-        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit")]
-        public ActionResult ChangeMarkingPeriodsCount(int schoolYearId, int count)
-        {
-            string error;
-            var res = SchoolLocator.MarkingPeriodService.ChangeMarkingPeriodsCount(schoolYearId, count, out error);
-            return string.IsNullOrEmpty(error) ? Json(res) : Json(new ChalkableException(error));
-        }
-
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit")]
         public ActionResult ChangeWeekDays(IntList markingPeriodIds, int weekDays)
         {

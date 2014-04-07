@@ -9,19 +9,57 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
-    public class GradingGridViewData
+
+    public class GradingGridSummaryViewData
     {
+        public GradingPeriodViewData GradingPeriod { get; set; }
         public int? Avg { get; set; }
+
+        protected GradingGridSummaryViewData(GradingPeriod gradingPeriod, int? avg)
+        {
+            Avg = avg;
+            GradingPeriod = GradingPeriodViewData.Create(gradingPeriod);
+        }
+        public static GradingGridSummaryViewData Create(GradingPeriod gradingPeriod, int? avg)
+        {
+            return new GradingGridSummaryViewData(gradingPeriod, avg);
+        }
+    }
+
+    public class GradingGridsViewData
+    {
+        public GradingGridViewData CurrentGradingGrid { get; set; }
+        public IList<GradingPeriodViewData> GradingPeriods { get; set; }
+        public IList<AnnouncementStandardViewData> Standards { get; set; }
+        public IList<ClassAnnouncementTypeViewData> ClassAnnouncementTypes { get; set; }
+
+        public static GradingGridsViewData Create(ChalkableGradeBook grid, IList<GradingPeriodDetails> gradingPeriods
+            , IList<Standard> standards, IList<ClassAnnouncementType> classAnnouncementTypes)
+        {
+            return new GradingGridsViewData
+                {
+                    CurrentGradingGrid = grid != null ? GradingGridViewData.Create(grid) : null,
+                    GradingPeriods = gradingPeriods.Select(GradingPeriodViewData.Create).ToList(),
+                    Standards = AnnouncementStandardViewData.Create(standards),
+                    ClassAnnouncementTypes = ClassAnnouncementTypeViewData.Create(classAnnouncementTypes)
+                };
+        }
+    }
+
+    public class GradingGridViewData : GradingGridSummaryViewData
+    {
+        protected GradingGridViewData(ChalkableGradeBook gradeBook)
+            : base(gradeBook.GradingPeriod, gradeBook.Avg)
+        {
+        }
+
         public IList<GradeStudentViewData> Students { get; set; }
         public IList<ShortAnnouncementGradeViewData> GradingItems { get; set; }
-        public GradingPeriodViewData GradingPeriod { get; set; }
-
+        
         public static GradingGridViewData Create(ChalkableGradeBook gradeBook)
         {
-            var res = new GradingGridViewData
+            var res = new GradingGridViewData(gradeBook)
                 {
-                    Avg = gradeBook.Avg,
-                    GradingPeriod = GradingPeriodViewData.Create(gradeBook.GradingPeriod),
                     Students = new List<GradeStudentViewData>()
                 };
             foreach (var student in gradeBook.Students)

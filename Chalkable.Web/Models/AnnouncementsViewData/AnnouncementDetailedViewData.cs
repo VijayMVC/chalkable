@@ -22,7 +22,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public ShortPersonViewData Owner { get; set; }
         
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, int currentSchoolPersonId)
-            : base(announcementDetails, studentAnnouncements, mapper, announcementDetails.Gradable, null)
+            : base(announcementDetails, studentAnnouncements, mapper, null)
         {
             if (announcementDetails.AnnouncementQnAs != null)
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
@@ -40,14 +40,14 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             //}
         }
 
-        private AnnouncementDetailedViewData(AnnouncementComplex announcement, bool isGradable, bool? wasAnnouncementTypeGraded)
-            : base(announcement, isGradable, wasAnnouncementTypeGraded)
+        private AnnouncementDetailedViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded)
+            : base(announcement, wasAnnouncementTypeGraded)
         {
         }
 
-        public static AnnouncementDetailedViewData CreateEmpty(AnnouncementComplex announcement, bool isGradable = false, bool? wasAnnouncementTypeGraded = null)
+        public static AnnouncementDetailedViewData CreateEmpty(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null)
         {
-            return new AnnouncementDetailedViewData(announcement, isGradable, wasAnnouncementTypeGraded);
+            return new AnnouncementDetailedViewData(announcement, wasAnnouncementTypeGraded);
         }
 
         public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, IGradingStyleMapper mapper, int currentSchoolPersonId)

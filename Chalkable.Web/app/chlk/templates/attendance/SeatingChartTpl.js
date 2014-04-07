@@ -15,6 +15,15 @@ NAMESPACE('chlk.templates.attendance', function () {
             Number, 'rows',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'ablePost',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableRePost',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'date',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.ClassAttendance), 'notSeatingStudents',
 
             [ria.templates.ModelPropertyBind],

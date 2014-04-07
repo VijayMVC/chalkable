@@ -27,6 +27,7 @@ NAMESPACE('chlk.controllers', function (){
             function pageAction(postback_, inbox_, role_, keyword_, start_) {
 
                 var result = this.getMessages_(inbox_, role_, keyword_, start_);
+                //this.CloseView(chlk.activities.messages.ViewDialog);
                 return postback_ ?
                     this.UpdateView(chlk.activities.messages.MessageListPage, result) :
                     this.PushView(chlk.activities.messages.MessageListPage, result);
@@ -63,8 +64,10 @@ NAMESPACE('chlk.controllers', function (){
                         .then(function(x){
                             return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
                         }, this);
-                    return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
+                }else{
+                    res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 }
+                return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
             },
 
             [[chlk.models.common.PaginatedList, Boolean, String, String]],

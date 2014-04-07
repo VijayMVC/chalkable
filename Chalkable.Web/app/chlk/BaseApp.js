@@ -46,6 +46,7 @@ REQUIRE('chlk.models.people.Claim');
 REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.grading.AlternateScore');
 REQUIRE('chlk.models.grading.AlphaGrade');
+REQUIRE('chlk.models.schoolYear.GradingPeriod');
 
 
 REQUIRE('chlk.AppApiHost');
@@ -85,6 +86,7 @@ NAMESPACE('chlk', function (){
                 var session = BASE();
                 window.currentChlkPerson.claims = window.userClaims;
                 this.saveInSession(session, 'markingPeriod', chlk.models.schoolYear.MarkingPeriod);
+                this.saveInSession(session, 'gradingPeriod', chlk.models.schoolYear.GradingPeriod);
                 this.saveInSession(session, 'nextMarkingPeriod', chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, 'finalizedClassesIds');
                 this.saveInSession(session, 'currentChlkPerson', chlk.models.people.User, 'currentPerson');

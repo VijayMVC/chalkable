@@ -75,5 +75,7 @@ mixin AnnouncementTooltip()
                         owner = self.getOwner(),
                         announcementId = self.getId(),
                         maxScore = self.getMaxScore(),
-                        ableDropStudentScore = self.isAbleDropStudentScore()
+                        ableDropStudentScore = self.isAbleDropStudentScore(),
+                        ableToExempt = self.isAbleToExempt(),
+                        gradable = self.isGradable()
                     )

@@ -1,4 +1,5 @@
-﻿using Chalkable.Data.Common;
+﻿using System.Collections.Generic;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -8,6 +9,11 @@ namespace Chalkable.Data.School.DataAccess
         public StudentSchoolYearDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)
         {
+        }
+
+        public void Delete(IList<StudentSchoolYear> studentSchoolYears)
+        {
+            SimpleDelete(studentSchoolYears);
         }
     }
 }

@@ -22,6 +22,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             returnObj.Incomplete = sourceObj.Incomplete;
             returnObj.Withdrawn = sourceObj.Withdrawn;
             returnObj.OverMaxScore = sourceObj.OverMaxScore;
+            returnObj.AbsenceCategory = sourceObj.AbsenceCategory;
         }
     }
 }

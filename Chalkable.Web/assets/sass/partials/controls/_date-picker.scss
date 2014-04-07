@@ -56,6 +56,11 @@
   z-index: 10 !important;
   @include box-shadow(0 0 5px gray);
 
+  .ui-widget-header{
+    border: none;
+    @include border-radius(0);
+  }
+
   TABLE{
     margin: 0;
   }
@@ -84,7 +89,7 @@
       &.ui-datepicker-next{
         right:0;
         >SPAN{
-          background: url(images/mini-calendar/arrow-right.png) center center no-repeat;
+          background: url(images/mini-calendar/arrow-right.png) center center no-repeat
         }
       }
 
@@ -92,6 +97,13 @@
         left: 0;
         >SPAN{
           background: url(images/mini-calendar/arrow-left.png) center center no-repeat;
+        }
+      }
+
+      &.ui-datepicker-prev, &.ui-datepicker-next{
+        &.ui-state-hover{
+          background: transparent;
+          border: none;
         }
       }
 
@@ -127,6 +139,8 @@
           A{
             text-align: center;
             color: #666;
+            background: transparent;
+            border: none;
           }
 
           &.ui-datepicker-other-month{

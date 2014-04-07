@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void ResolveAutoGrading(int announcementId, bool apply);
         //IList<StudentAnnouncement> GetStudentAnnouncements(int schoolPersonId, int classId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
-            , bool dropped, bool late, bool absent, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
+            , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         //StudentAnnouncementInfo SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId);
         //IList<StudentGradingComplex> GetStudentGradedAnnouncements(int schoolPersonId, int markingPeriodId);
 
@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO : needs testing 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
-                                            bool late, bool absent, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
+                                            bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
             var stAnn = new StudentAnnouncement
@@ -52,7 +52,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 Incomplete = incomplete,
                 Late = late,
                 Exempt = exempt,
-                Absent = absent,
                 ActivityId = ann.SisActivityId.Value,
                 AnnouncementId = announcementId,
                 StudentId = studentId,

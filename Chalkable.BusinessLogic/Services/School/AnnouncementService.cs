@@ -419,6 +419,11 @@ namespace Chalkable.BusinessLogic.Services.School
                     var date = ann.Expires > DateTime.MinValue ? ann.Expires : ann.Created;
                     var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(date);
                     da.ReorderAnnouncements(sy.Id, ann.ClassAnnouncementTypeRef.Value, ann.PersonRef, ann.ClassRef.Value);
+
+                    var stDa = new AnnouncementStandardDataAccess(uow);
+                    stDa.Delete(new AndQueryCondition{{AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, ann.Id}}
+                               , new AndQueryCondition{{Class.ID_FIELD, ann.ClassRef, ConditionRelation.NotEqual}});
+
                 }
                 uow.Commit();
                 var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);

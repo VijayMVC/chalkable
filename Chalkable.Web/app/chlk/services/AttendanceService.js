@@ -33,10 +33,10 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function getSeatingChartInfo(classId, date) {
+            ria.async.Future, function getSeatingChartInfo(classId, date_) {
                 return this.get('Attendance/SeatingChart.json', chlk.models.attendance.SeatingChart, {
                     classId: classId.valueOf(),
-                    date: date && date.toStandardFormat()
+                    date: date_ && date_.toStandardFormat()
                 });
             },
 

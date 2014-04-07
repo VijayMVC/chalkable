@@ -27,12 +27,18 @@ namespace Chalkable.Data.School.Model
         public bool Exempt { get; set; }
         public bool Incomplete { get; set; }
         public bool Late { get; set; }
+        public string AbsenceCategory { get; set; }
         public bool Absent { get; set; }
         public bool Withdrawn { get; set; }
         public bool OverMaxScore { get; set; }
 
         //TODO : remove this later
         public StudentAnnouncementStateEnum State { get { return StudentAnnouncementStateEnum.Manual; } }
+
+        public bool IsGraded
+        {
+            get { return !string.IsNullOrEmpty(ScoreValue) || Late || Incomplete || Exempt || Dropped; }
+        }
     }
 
     public class StudentAnnouncementDetails : StudentAnnouncement

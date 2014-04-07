@@ -27,6 +27,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
             Number, 'maxScore',
             ArrayOf(chlk.models.announcement.StudentAnnouncement), 'studentAnnouncements',
+            Boolean, 'gradable',
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
@@ -38,7 +39,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     applications: this.getApplications(),
                     owner: this.getOwner(),
                     announcementId: this.getAnnouncementId(),
-                    ableDropStudentScore : this.isAbleDropStudentScore()
+                    ableDropStudentScore : this.isAbleDropStudentScore(),
+                    gradable: this.isGradable()
                 });
                 var container = this.dom.find('.grading-part');
                 container.empty();
@@ -166,7 +168,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             function setItemState_(node, stateName, selectNext_){
                 var row = node.parent('.row');
                 var input = row.find('.grade-input');
-                input.setValue(input.getData('value'));
+                input.setValue(stateName == 'isexempt' ? '' : input.getData('value'));
                 row.find('[name=' + stateName +']').setValue(true);
                 this.updateItem(node, selectNext_);
             },
@@ -277,10 +279,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            Boolean, 'ableDropStudentScore',
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
 
                 var allScores = [];
+                this.setAbleDropStudentScore(model.isAbleDropStudentScore());
                 model.getAlternateScores().forEach(function(item){
                     allScores.push(item.getName());
                     allScores.push(item.getName() + ' (fill all)');
@@ -290,8 +295,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     allScores.push(item.getName() + ' (fill all)');
                 });
 
-                allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)',
-                    'Late', 'Late (fill all)', 'Absent', 'Absent (fill all)']);
+                allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
 
                 if(model.isAbleDropStudentScore()){
                     allScores = allScores.concat(['Dropped', 'Dropped (fill all)']);
@@ -308,6 +312,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setApplications(model.getApplications());
                 this.setAutoGradeApps(model.getAutoGradeApps());
                 this.setAnnouncementId(model.getId());
+                this.setGradable(model.isGradable());
+
                 var moving = new ria.dom.Dom('.moving-wrapper');
                 if(moving.exists()){
                     this.dom.setCss('display', 'none');
@@ -347,14 +353,17 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 tpl.assign(model);
                 tpl.options({
-                    announcementId: this.getAnnouncementId()
+                    announcementId: this.getAnnouncementId(),
+                    gradable: this.isGradable()
                 });
                 tpl.renderTo(this.dom.find('.student-announcements-top-panel').empty());
                 var itemModel = model.getCurrentItem();
                 var itemTpl = new chlk.templates.announcement.StudentAnnouncement;
                 itemTpl.assign(itemModel);
                 itemTpl.options({
-                    maxScore: this.getMaxScore()
+                    maxScore: this.getMaxScore(),
+                    readonly: !this.isGradable(),
+                    ableDropStudentScore : this.isAbleDropStudentScore()
                 });
                 var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());
                 container.empty();
@@ -558,6 +567,21 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.hideDropDown();
             },
 
+            [ria.mvc.DomEventBind('change', '.dropped-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function droppedChange(node, event, options_){
+                if(!node.checked()){
+                    var input = node.parent('form').find('.grade-autocomplete');
+                    input.setValue(input.getData('grade-value'));
+                }
+            },
+
+            [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function exemptChange(node, event, options_){
+                var input = node.parent('form').find('.grade-autocomplete').setValue('');
+            },
+
             function setItemValue(value, input, selectNext){
                 input.removeClass('able-fill-all');
                 value = value || '';
@@ -565,7 +589,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     case Msg.Dropped.toLowerCase(): this.setItemState_(input, 'dropped', selectNext); break;
                     case Msg.Incomplete.toLowerCase(): this.setItemState_(input, 'isincomplete', selectNext); break;
                     case Msg.Late.toLowerCase(): this.setItemState_(input, 'islate', selectNext); break;
-                    case Msg.Absent.toLowerCase(): this.setItemState_(input, 'isabsent', selectNext); break;
                     case Msg.Exempt.toLowerCase(): this.setItemState_(input, 'isexempt', selectNext); break;
                     default:{
                         var numericValue = parseFloat(value);
@@ -586,6 +609,14 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
                 return node.find('.input-container').find('.error').valueOf().length == 0;
+            },
+
+            [ria.mvc.DomEventBind('click', '.grading-input-popup')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function gradingPopUpClick(node, event){
+                setTimeout(function(){
+                    node.parent('form').find('.grade-autocomplete').trigger('focus');
+                }, 1)
             }
         ]
     );

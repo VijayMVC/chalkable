@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -75,6 +76,11 @@ namespace Chalkable.Data.School.DataAccess
             : base(unitOfWork)
         {
         }
+
+        public void Delete(IList<int> ids)
+        {
+            SimpleDelete(ids.Select(x => new StandardSubject {Id = x}));
+        }
     }
 
     public class ClassStandardDataAccess: DataAccessBase<ClassStandard, int>
@@ -82,6 +88,10 @@ namespace Chalkable.Data.School.DataAccess
         public ClassStandardDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)
         {
+        }
+        public void Delete(IList<ClassStandard> classStandards)
+        {
+            SimpleDelete(classStandards);
         }
     }
 
@@ -100,15 +110,55 @@ namespace Chalkable.Data.School.DataAccess
                 });
         }
 
+//        public void DeleteByClassId(int announcementId, int classId)
+//        {
+//            var sql = string.Format(@"delete from AnnouncementStandard 
+//                        where AnnouncementStandard.[{0}]=@{0} and  AnnouncementStandard.[{1}]
+//                                in (select ClassStandard.[{2}] from ClassStandard 
+//                                    join [Class] on [Class].Id = ClassStandard.ClassRef or ClassStandard.ClassRef = Class.CourseRef 
+//                                    where Class.Id = @classId)"
+//                , AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, AnnouncementStandard.STANDARD_REF_FIELD, ClassStandard.STANDARD_REF_FIELD);
+//            var parameters = new Dictionary<string, object>
+//                {
+//                    {AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId},
+//                    {"classId", classId}
+//                };
+//            ExecuteNonQueryParametrized(sql, parameters);
+//        }
+
+        public void Delete(QueryCondition annCondition, QueryCondition classCondition)
+        {
+            var cStandardDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, classCondition);
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(@"delete from AnnouncementStandard ");
+            annCondition.BuildSqlWhere(dbQuery, "AnnouncementStandard");
+            dbQuery.Sql.AppendFormat(" and AnnouncementStandard.[{0}] in ({1})"
+                , AnnouncementStandard.STANDARD_REF_FIELD, cStandardDbQuery.Sql);
+            foreach (var parameter in cStandardDbQuery.Parameters)
+                dbQuery.Parameters.Add(parameter);
+            ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);
+        }
+
+        private DbQuery BuildClassStandardQuery(IEnumerable<string> columnsResList, QueryCondition classCondition)
+        {
+            var res = new DbQuery();
+            res.Sql.AppendFormat(@"select {0}
+                                   from ClassStandard 
+                                   join [Class] on [Class].[{1}] = ClassStandard.[{2}] or ClassStandard.[{2}] = Class.[{3}]"
+                                , columnsResList.Select(x => "ClassStandard.[" + x + "]").JoinString(",")
+                                , Class.ID_FIELD, ClassStandard.CLASS_REF_FIELD, Class.COURSE_REF_FIELD);
+            classCondition.BuildSqlWhere(res, "Class");
+            return res;
+        }
+
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
         {
+            var cond = new AndQueryCondition {{Class.ID_FIELD, classId}};
+            var classStDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, cond);
             var dbQuery = new DbQuery();
-            dbQuery.Parameters.Add("@classId", classId);
-            dbQuery.Sql.AppendFormat(@"select * from AnnouncementStandard 
-                                       where AnnouncementStandard.[{0}] in (select ClassStandard.[{1}] from ClassStandard 
-                                                                            join [Class] on [Class].Id = ClassStandard.ClassRef or ClassStandard.ClassRef = Class.CourseRef 
-                                                                            where Class.Id = @classId)",
-                AnnouncementStandard.STANDARD_REF_FIELD, ClassStandard.STANDARD_REF_FIELD);
+            dbQuery.Sql.AppendFormat(@"select * from AnnouncementStandard where AnnouncementStandard.[{0}] in ({1})",
+                AnnouncementStandard.STANDARD_REF_FIELD, classStDbQuery.Sql);
+            dbQuery.Parameters = classStDbQuery.Parameters;
             return ReadMany<AnnouncementStandard>(dbQuery);
         }
     }

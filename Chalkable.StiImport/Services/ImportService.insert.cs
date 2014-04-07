@@ -47,6 +47,7 @@ namespace Chalkable.StiImport.Services
             InsertClassPeriods();
             InsertClassPersons();
             InsertAttendanceReasons();
+            InsertAttendanceLevelReasons();
             InsertAlphaGrades();
             InsertAlternateScores();
         }
@@ -215,10 +216,23 @@ namespace Chalkable.StiImport.Services
         private void InsertMarkingPeriods()
         {
             var terms = context.GetSyncResult<Term>().All;
+            var sys = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
+            var mps = new List<MarkingPeriod>();
             foreach (var term in terms)
             {
-                ServiceLocatorSchool.MarkingPeriodService.Add(term.TermID, term.AcadSessionID, term.StartDate, term.EndDate, term.Name, term.Description, 62);
+                mps.Add(new MarkingPeriod
+                    {
+                        Description = term.Description,
+                        EndDate = term.EndDate,
+                        Id = term.TermID,
+                        Name = term.Name,
+                        SchoolRef = sys[term.AcadSessionID].SchoolRef,
+                        SchoolYearRef = term.AcadSessionID,
+                        StartDate = term.StartDate,
+                        WeekDays = 62
+                    });
             }
+            ServiceLocatorSchool.MarkingPeriodService.Add(mps);
         }
 
         private void InsertGradingPeriods()
@@ -362,9 +376,7 @@ namespace Chalkable.StiImport.Services
 
         private void InsertClassStandard()
         {
-            //var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
             var cs = context.GetSyncResult<CourseStandard>().All
-                //.Where(x => classes.Any(y => y.Id == x.CourseID))
                 .Select(x => new ClassStandard
                 {
                     ClassRef = x.CourseID,
@@ -409,12 +421,12 @@ namespace Chalkable.StiImport.Services
                 if (ct != null)
                     classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
             }
-            ServiceLocatorSchool.ClassClassAnnouncementTypeService.Add(types);
+            ServiceLocatorSchool.ClassAnnouncementTypeService.Add(types);
         }
 
         private void InsertPeriods()
         {
-            //TODO: this logig is not exact how it is in INOW
+            //TODO: this logic is not exact how it is in INOW
             var periods = context.GetSyncResult<TimeSlot>().All.ToList();
             var allSts = context.GetSyncResult<ScheduledTimeSlot>().All.ToList();
             foreach (var timeSlot in periods)
@@ -474,8 +486,10 @@ namespace Chalkable.StiImport.Services
                 Name = x.Name
             }).ToList();
             ServiceLocatorSchool.AttendanceReasonService.Add(rs);
+        }
 
-
+        private void InsertAttendanceLevelReasons()
+        {
             var absenceLevelReasons = context.GetSyncResult<AbsenceLevelReason>().All
                                                  .Select(x => new AttendanceLevelReason
                                                  {

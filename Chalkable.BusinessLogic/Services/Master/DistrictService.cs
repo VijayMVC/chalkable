@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IDistrictService
     {
         District GetByIdOrNull(Guid id);
-        District Create(string name, string sisUrl, string sisUserName, string sisPassword, string timeZone, Guid? sisDistrictId);
+        District Create(Guid id, string name, string sisUrl, string sisUserName, string sisPassword, string timeZone);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
         IList<District> GetDistricts(bool? demo, bool? usedDemo = null);
         void Update(District district);
@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public District Create(string name, string sisUrl, string sisUserName, string sisPassword, string timeZone, Guid? sisDistrictId)
+        public District Create(Guid id, string name, string sisUrl, string sisUserName, string sisPassword, string timeZone)
         {
             string server;
             District res;
@@ -45,14 +45,14 @@ namespace Chalkable.BusinessLogic.Services.Master
                 res = new District
                     {
                         ServerUrl = server,
-                        Id = Guid.NewGuid(),
+                        Id = id,
                         Name = name,
                         DbName = string.Empty,//TODO: remove from DB?
                         SisUrl = sisUrl,
                         SisUserName = sisUserName,
                         SisPassword = sisPassword,
                         TimeZone = timeZone,
-                        SisDistrictId = sisDistrictId
+                        SisDistrictId = id//TODO: need to remove from DB
                     };
                 da.Insert(res);
                 uow.Commit();

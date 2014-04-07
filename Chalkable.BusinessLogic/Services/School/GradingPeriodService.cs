@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -11,6 +12,8 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IGradingPeriodService
     {
         IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null);
+        GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime tillDate);
+        GradingPeriodDetails GetGradingPeriodById(int id);
         void Add(IList<GradingPeriod> gradingPeriods);
         void Edit(IList<GradingPeriod> gradingPeriods);
         void Delete(IList<int> ids);
@@ -26,7 +29,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new GradingPeriodDataAccess(uow).GetGradingPeriodDetails(schoolYearId, markingPeriodId);
+                return new GradingPeriodDataAccess(uow).GetGradingPeriodsDetails(new GradingPeriodQuery
+                    {
+                        SchoolYearId = schoolYearId,
+                        MarkingPeriodId = markingPeriodId
+                    });
             }
         }
 
@@ -71,6 +78,33 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 new GradingPeriodDataAccess(uow).Delete(ids);
                 uow.Commit();
+            }
+        }
+        
+        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
+        {
+            using (var uow = Update())
+            {
+                var da = new GradingPeriodDataAccess(uow);
+                var grPeriods = da.GetGradingPeriodsDetails(new GradingPeriodQuery
+                    {
+                        FromDate = date,
+                        ToDate = date,
+                        SchoolYearId = schoolYearId
+                    });
+                return grPeriods.FirstOrDefault();
+            }
+        }
+
+        public GradingPeriodDetails GetGradingPeriodById(int id)
+        {
+            using (var uow = Update())
+            {
+                return new GradingPeriodDataAccess(uow)
+                    .GetGradingPeriodsDetails(new GradingPeriodQuery
+                    {
+                        GradingPeriodId = id
+                    }).First();
             }
         }
     }

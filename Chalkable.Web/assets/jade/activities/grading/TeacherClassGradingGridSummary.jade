@@ -1,4 +1,4 @@
-.class-grading
+.class-grading.grading-summary-grid
     topData = self.getTopData()
     topItems = topData.getTopItems()
     selectedId = topData.getSelectedItemId()
@@ -24,86 +24,30 @@
                     textarea.comment-value
                 a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
                 a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
-        each item,i in self.getItems()
-            div(class=(i==0) ? "open" : "", data-index=i).marking-period-container
-                div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
-                    mpName = item.getGradingPeriod().getName()
+        each gradingPeriod,i in self.getGradingPeriods()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                item = self.getCurrentGradingGrid()
+                div(
+                    data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
+                ).mp-title
+                    mpName = gradingPeriod.getName()
                     span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
                     .grading-selects
-                        +Select('standard')(data-placeholder=Msg.All_standards).standards-select.grading-select
-                            +Option('', Msg.All_standards , true)
-                            +Option(1, 'Standard 1' , false)
-                            +Option(2, 'Standard 2' , false)
-                        +Select('category')(data-placeholder=Msg.All_categories).categories-select.grading-select
-                            +Option('', Msg.All_categories , true)
-                            +Option(1, 'Category 1' , false)
-                            +Option(2, 'Category 2' , false)
+                        +ActionForm('grading', 'loadGradingPeriodGridSummary').load-grading-period
+                            +Hidden('autoUpdate', false).auto-update
+                            +Hidden('classId', selectedId)
+                            +Hidden('notCalculateGrid', false).not-calculate-grid
+                            +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                            +Select('standardId')(data-placeholder=Msg.All_standards).standards-select.grading-select
+                                +Option('', Msg.All_standards , true)
+                                each item in self.getStandards()
+                                    +Option(item.getStandardId().valueOf(), item.getName() , false)
+                            +Select('categoryId')(data-placeholder=Msg.All_categories).categories-select.grading-select
+                                +Option('', Msg.All_categories , true)
+                                each item in self.getClassAnnouncementTypes()
+                                    +Option(item.getId(), item.getName() , false)
                     a(href="javascript:").grey-button.comment-button=Msg.Comment
                     .collapse
-                .mp-data
-                    .ann-types-container
-                        .dotted-container.name-container.with-horizontal-dots
-                            .type-name=Msg.Student(true)
-                            .time
-                            .student-name
-                                .max-score.dotted-h
-                            each student,i in item.getStudents()
-                                name = student.getStudentInfo().getDisplayName()
-                                div(row-index=i).student-name
-                                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
-                                    if student.isWithdrawn()
-                                        div(data-tooltip="Withdrawn").withdrawn
-                            .student-name
-                                .dotted-h=Msg.Avg
-                        +LeftRightToolbar()(
-                            needDots = true,
-                            roundedDots = true,
-                            padding = 77
-                        ).grid-toolbar.i-b.big-arrows
-                            .dotted-container.grade-container.with-horizontal-dots
-                                .type-name=Msg.Avg
-                                .time
-                                .max-score.dotted-h
-                                each student,i in item.getStudents()
-                                    div(row-index=i).dotted-h.grade-value=student.getAvg()
-                                .dotted-h.grade-value
-                            each announcement in item.getGradingItems()
-                                maxScore = announcement.getMaxScore() || 70
-                                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
-                                    div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
-                                    .time=announcement.getExpiresDate().format('M d')
-                                    .max-score.dotted-h=maxScore
-                                    each info,i in announcement.getStudentAnnouncements().getItems()
-                                        normalValue = self.getNormalValue(info)
-                                        div(row-index=i, class=(parseInt(normalValue, 10) ? '' : 'letter')).dotted-h.grade-value=normalValue
-                                            cls = info.getAlertClass(maxScore, true)
-                                            div(class=cls, data-tooltip=info.getTooltipText(maxScore, true)).alert-flag
-                                            if info.getComment()
-                                                .with-comment
-                                            .edit-cell
-                                            +ActionForm('announcement', 'updateAnnouncementGradeFromGrid')
-                                                +Hidden('comment', info.getComment())(
-                                                    data-comment = info.getComment()
-                                                ).comment-value
-                                                +Hidden('id', info.getId())
-                                                +Hidden('announcementid', info.getAnnouncementId())
-                                                +Hidden('studentId', info.getStudentId())
-                                                input(value=normalValue,
-                                                    name="gradevalue",
-                                                    data-max-score=announcement.getMaxScore() || 100,
-                                                    data-announcemnt-id=announcement.getId().valueOf(),
-                                                    data-marking-period-id=item.getGradingPeriod().getId().valueOf(),
-                                                    data-student-announcement-id=info.getId().valueOf()
-                                                ).grade-autocomplete
-                                                .grading-input-popup.chlk-pop-up-container.popup-bottom
-                                                    .pop-up-triangle.big
-                                                    if announcement.isAbleDropStudentScore()
-                                                        +LabeledCheckbox(Msg.Drop, 'dropped', info.isDropped())(data-value=info.isDropped(), id='dropped' + info.getId().valueOf()).with-value
-                                                    else
-                                                        +Hidden('dropped', info.isDropped())
-                                                    +LabeledCheckbox(Msg.Late, 'islate', info.isLate())(data-value=info.isLate(), id='islate' + info.getId().valueOf()).with-value
-                                                    +LabeledCheckbox(Msg.Incomplete, 'isincomplete', info.isIncomplete())(data-value=info.isIncomplete(), id='isincomplete' + info.getId().valueOf()).with-value
-                                                    +LabeledCheckbox(Msg.Exempt, 'isexempt', info.isExempt())(data-value=info.isExempt(), id='isexempt' + info.getId().valueOf()).with-value
-                                                    +LabeledCheckbox(Msg.Absent, 'isabsent', info.isAbsent())(data-value=info.isAbsent(), id='isabsent' + info.getId().valueOf()).with-value
-                                                    +LabeledCheckbox(Msg.Fill, 'fill', false).fill-grade
-                                    .dotted-h.grade-value=announcement.getAvg()
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    if gradingPeriod.getId() == self.getGradingPeriodId()
+                        +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)
