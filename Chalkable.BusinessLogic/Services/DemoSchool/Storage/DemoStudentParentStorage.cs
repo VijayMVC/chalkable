@@ -31,30 +31,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var studentParents = data.Where(x => x.Value.StudentRef == studentId).Select(x => x.Value).ToList();
 
 
-            var studentParentDetailsList = new List<StudentParentDetails>();
-
-
-            foreach (var studentParent in studentParents)
+            return studentParents.Select(studentParent => new StudentParentDetails
             {
-                var studentParentDetails = new StudentParentDetails
-                {
-                    Id = studentParent.Id,
-                    ParentRef = studentParent.ParentRef,
-                    StudentRef = studentParent.StudentRef
-                };
-
-
-
-                //studentParentDetails.Parent = Storage.PersonStorage.GetPersonDetails(studentParentDetails.ParentRef);
-                studentParentDetailsList.Add(studentParentDetails);
-            }
-            return studentParentDetailsList;
+                Id = studentParent.Id, 
+                ParentRef = studentParent.ParentRef, 
+                StudentRef = studentParent.StudentRef
+            }).ToList();
         }
 
         public void SetParents(int studentId, IList<int> parentIds)
         {
-
-            throw new System.NotImplementedException();
+            foreach (var parentId in parentIds)
+            {
+                if (data.Count(x => x.Value.StudentRef == studentId && x.Value.ParentRef == parentId) == 0)
+                    Add(studentId, parentId);
+            }
         }
     }
 }
