@@ -52,6 +52,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateSchools()
         {
+            if (context.GetSyncResult<School>().Updated == null)
+                return;
             var schools = context.GetSyncResult<School>().Updated.Select(x=>new Data.School.Model.School
                 {
                     Id = x.SchoolID,
@@ -64,6 +66,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateAddresses()
         {
+            if (context.GetSyncResult<Address>().Updated == null)
+                return;
             var addresses = context.GetSyncResult<Address>().Updated.Select(x=>new Data.School.Model.Address
                 {
                     AddressLine1 = x.AddressLine1,
@@ -82,18 +86,45 @@ namespace Chalkable.StiImport.Services
 
         private void UpdatePersons()
         {
+            if (context.GetSyncResult<Person>().Updated == null)
+                return;
+            var persons = context.GetSyncResult<Person>().Updated;
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
-            var persons = context.GetSyncResult<Person>().Updated.Select(x => new PersonInfo
+            var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
+            var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
+            IList<PersonInfo> pi = new List<PersonInfo>();
+            foreach (var person in persons)
+            {
+                var hasMedicalAlert = false;
+                var isAllowedInetAccess = false;
+                string specialInstructions = "";
+                string spEdStatus = null;
+                if (students.ContainsKey(person.PersonID))
                 {
-                    Id = x.PersonID,
-                    Active = true,
-                    AddressRef = x.PhysicalAddressID,
-                    BirthDate = x.DateOfBirth,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U"
-                }).ToList();
-            ServiceLocatorSchool.PersonService.Edit(persons);
+                    hasMedicalAlert = students[person.PersonID].HasMedicalAlert;
+                    isAllowedInetAccess = students[person.PersonID].IsAllowedInetAccess;
+                    specialInstructions = students[person.PersonID].SpecialInstructions;
+                    if (students[person.PersonID].SpEdStatusID.HasValue)
+                    {
+                        spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
+                    }
+                }
+                pi.Add(new PersonInfo
+                    {
+                        Id = person.PersonID,
+                        Active = true,
+                        AddressRef = person.PhysicalAddressID,
+                        BirthDate = person.DateOfBirth,
+                        FirstName = person.FirstName,
+                        LastName = person.LastName,
+                        Gender = person.GenderID.HasValue ? genders[person.GenderID.Value].Code : "U",
+                        HasMedicalAlert = hasMedicalAlert,
+                        IsAllowedInetAccess = isAllowedInetAccess,
+                        SpecialInstructions = specialInstructions,
+                        SpEdStatus = spEdStatus    
+                    });
+            }
+            ServiceLocatorSchool.PersonService.Edit(pi);
         }
 
         private void UpdateSchoolPersons()
@@ -103,6 +134,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdatePhones()
         {
+            if (context.GetSyncResult<PersonTelephone>().Updated == null)
+                return;
             var phones = context.GetSyncResult<PersonTelephone>().Updated;
             IList<Phone> ps = new List<Phone>();
             foreach (var pt in phones)
@@ -129,6 +162,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateGradeLevels()
         {
+            if (context.GetSyncResult<GradeLevel>().Updated == null)
+                return;
             var gradeLevels = context.GetSyncResult<GradeLevel>().Updated
                 .Select(x=>new Data.School.Model.GradeLevel
                     {
@@ -142,6 +177,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateSchoolYears()
         {
+            if (context.GetSyncResult<AcadSession>().Updated == null)
+                return;
             var schoolYears = context.GetSyncResult<AcadSession>().Updated.Select(x => new SchoolYear
                 {
                     Id = x.AcadSessionID,
@@ -156,6 +193,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateStudentSchoolYears()
         {
+            if (context.GetSyncResult<StudentAcadSession>().Updated == null)
+                return;
             var ssy = context.GetSyncResult<StudentAcadSession>().Updated.Select(x => new StudentSchoolYear
                 {
                     SchoolYearRef = x.AcadSessionID,
@@ -167,6 +206,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateMarkingPeriods()
         {
+            if (context.GetSyncResult<Term>().Updated == null)
+                return;
             var sys = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var mps = context.GetSyncResult<Term>().Updated.Select(x => new MarkingPeriod
                 {
@@ -184,6 +225,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateGradingPeriods()
         {
+            if (context.GetSyncResult<GradingPeriod>().Updated == null)
+                return;
             var gps = context.GetSyncResult<GradingPeriod>().Updated.Select(x => new Data.School.Model.GradingPeriod
             {
                 Description = x.Description,
@@ -202,6 +245,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateDayTypes()
         {
+            if (context.GetSyncResult<DayType>().Updated == null)
+                return;
             var dts = context.GetSyncResult<DayType>().Updated.Select(x => new Data.School.Model.DayType
             {
                 Id = x.DayTypeID,
@@ -214,6 +259,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateDays()
         {
+            if (context.GetSyncResult<CalendarDay>().Updated == null)
+                return;
             var sys = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var ds = context.GetSyncResult<CalendarDay>().Updated.Select(x => new Date
                 {
@@ -227,6 +274,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateRooms()
         {
+            if (context.GetSyncResult<Room>().Updated == null)
+                return;
             var rooms = context.GetSyncResult<Room>().Updated.Select(x=>new Data.School.Model.Room
                 {
                     Capacity = x.StudentCapacity,
@@ -245,6 +294,8 @@ namespace Chalkable.StiImport.Services
 
         public void UpdateStandardSubject()
         {
+            if (context.GetSyncResult<StandardSubject>().Updated == null)
+                return;
             var ss = context.GetSyncResult<StandardSubject>().Updated.Select(x => new Data.School.Model.StandardSubject
             {
                 AdoptionYear = x.AdoptionYear,
@@ -258,6 +309,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateStandards()
         {
+            if (context.GetSyncResult<Standard>().Updated == null)
+                return;
             var sts = context.GetSyncResult<Standard>().Updated.Select(x => new Data.School.Model.Standard
             {
                 Description = x.Description,
@@ -284,6 +337,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateClassAnnouncementTypes()
         {
+            if (context.GetSyncResult<ActivityCategory>().Updated == null)
+                return;
             var types = context.GetSyncResult<ActivityCategory>().Updated.Select(x => new ClassAnnouncementType
             {
                 Id = x.ActivityCategoryID,
@@ -307,6 +362,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdatePeriods()
         {
+            if (context.GetSyncResult<TimeSlot>().Updated == null)
+                return;
             var periods = context.GetSyncResult<TimeSlot>().Updated.ToList();
             var allSts = context.GetSyncResult<ScheduledTimeSlot>().All.ToList();
             foreach (var timeSlot in periods)
@@ -335,6 +392,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateAttendanceReasons()
         {
+            if (context.GetSyncResult<AbsenceReason>().Updated == null)
+                return;
             var reasons = context.GetSyncResult<AbsenceReason>().Updated;
             var rs = reasons.Select(x => new AttendanceReason
             {
@@ -351,6 +410,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateAttendanceLevelReasons()
         {
+            if (context.GetSyncResult<AbsenceLevelReason>().Updated == null)
+                return;
             var absenceLevelReasons = context.GetSyncResult<AbsenceLevelReason>().Updated
                                                  .Select(x => new AttendanceLevelReason
                                                  {
@@ -364,6 +425,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateAlphaGrades()
         {
+            if (context.GetSyncResult<AlphaGrade>().Updated == null)
+                return;
             var alphaGrades = context.GetSyncResult<AlphaGrade>().Updated.Select(x => new Data.School.Model.AlphaGrade
             {
                 Id = x.AlphaGradeID,
@@ -376,6 +439,8 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateAlternateScores()
         {
+            if (context.GetSyncResult<AlternateScore>().Updated == null)
+                return;
             var alternateScores = context.GetSyncResult<AlternateScore>().Updated.Select(x => new Data.School.Model.AlternateScore
             {
                 Id = x.AlternateScoreID,
