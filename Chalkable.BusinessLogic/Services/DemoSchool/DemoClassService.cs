@@ -201,6 +201,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             
         }
 
+        public void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+
+            Storage.MarkingPeriodClassStorage.Delete(markingPeriodClasses);
+            throw new NotImplementedException();
+        }
+
         public IList<Person> GetStudents(int classId)
         {
             return ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery

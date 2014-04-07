@@ -142,6 +142,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.PersonStorage.Delete(ids);
         }
 
+        public void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            Storage.SchoolPersonStorage.Delete(schoolPersons);
+        }
+
         public IList<Person> GetPersons()
         {
             if (!BaseSecurity.IsAdminOrTeacher(Context))

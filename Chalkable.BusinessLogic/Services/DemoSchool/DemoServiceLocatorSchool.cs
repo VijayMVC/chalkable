@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IStudentParentService studentParentService;
         private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
-        private IClassAnnouncementTypeService classClassAnnouncementTypeService;
+        private IClassAnnouncementTypeService classAnnouncementTypeService;
         private IDisciplineTypeService disciplineTypeService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
@@ -77,7 +77,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             attendanceService = new DemoAttendanceService(this, storage);
             studentParentService = new DemoStudentParentService(this, storage);
             studentAnnouncementService = new DemoStudentAnnouncementService(this , storage);
-            classClassAnnouncementTypeService = new DemoClassClassAnnouncementTypeService(this, storage);
             disciplineTypeService = new DemoDisciplineTypeService(this, storage);
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DemoDisciplineService(this, storage);
@@ -88,6 +87,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             alphaGradeService = new DemoAlphaGradeService(this, storage);
             alternateScoreService = new DemoAlternateScoreService(this, storage);
             gradingPeriodService = new DemoGradingPeriodService(this, storage);
+            classAnnouncementTypeService = new DemoClassAnnouncementTypeService(this, storage);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -114,7 +114,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IStudentParentService StudentParentService { get { return studentParentService; } }
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
-        public IClassAnnouncementTypeService ClassClassAnnouncementTypeService { get { return classClassAnnouncementTypeService; } }
+        public IClassAnnouncementTypeService ClassAnnouncementTypeService { get { return classAnnouncementTypeService; } }
         public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }

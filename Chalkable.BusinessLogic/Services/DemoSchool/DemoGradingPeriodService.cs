@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime tillDate)
         {
-            throw new NotImplementedException();
+            return Storage.GradingPeriodStorage.GetGradingPeriodDetails(schoolYearId, tillDate);
         }
 
         public GradingPeriodDetails GetGradingPeriodById(int id)

@@ -108,6 +108,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.StandardSubjectStorage.GetAll();
         }
 
+        public void DeleteStandardSubjects(IList<int> ids)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            Storage.StandardSubjectStorage.Delete(ids);
+        }
+
+        public void DeleteClassStandards(IList<ClassStandard> classStandards)
+        {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            Storage.ClasStandardStorage.Delete(classStandards);
+        }
+
         public IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards)
         {
             if(!BaseSecurity.IsSysAdmin(Context))

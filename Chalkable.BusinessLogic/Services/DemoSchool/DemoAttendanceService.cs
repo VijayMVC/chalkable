@@ -46,6 +46,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart)
+        {
+            throw new NotImplementedException();
+        }
+
         private string LevelToClassRoomLevel(string level)
         {
             if (level == null)

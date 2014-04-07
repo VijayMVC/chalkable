@@ -232,7 +232,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
              * */
         }
 
+        public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null,
+            int? classAnnouncementType = null, bool needsReCalculate = true)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public IList<string> GetGradeBookComments(int schoolYearId, int teacherId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

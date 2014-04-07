@@ -36,5 +36,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.Where(x => x.Value.PersonRef == personId && x.Value.SchoolRef == schoolRef)
                     .Select(x => x.Value.RoleRef).First();
         }
+
+        public void Delete(IList<SchoolPerson> schoolPersons)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

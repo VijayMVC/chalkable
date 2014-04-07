@@ -56,7 +56,7 @@ namespace Chalkable.Web.Controllers
         {
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
-            var standards = SchoolLocator.StandardService.GetStandardes(classId, null, null);
+            var standards = SchoolLocator.StandardService.GetStandards(classId, null, null);
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var date = Context.NowSchoolTime.Date;
             var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, date);

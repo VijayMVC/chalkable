@@ -116,6 +116,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.StudentSchoolYearStorage.Add(studentAssignments);
         }
 
+        public void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete(int schoolYearId)
         {
             if (!BaseSecurity.IsDistrict(Context))

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
 
@@ -16,6 +17,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.Where(x => x.Value.SchoolYearRef == schoolYearId && x.Value.MarkingPeriodRef == markingPeriodId).Select(x => x.Value)
                     .ToList();
 
+            return GetGradingPeriodDetailsList(gradingPeriods);
+        }
+
+        private IList<GradingPeriodDetails> GetGradingPeriodDetailsList(IEnumerable<GradingPeriod> gradingPeriods)
+        {
             var gpDetailsList = new List<GradingPeriodDetails>();
 
             foreach (var gp in gradingPeriods)
@@ -56,6 +62,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 data[gradingPeriod.Id] = gradingPeriod;
             }
+        }
+
+        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime tillDate)
+        {
+            var gradingPeriods =
+                data.Where(x => x.Value.SchoolYearRef == schoolYearId && x.Value.EndDate <= tillDate).Select(x => x.Value)
+                    .ToList();
+            return GetGradingPeriodDetailsList(gradingPeriods).First();
         }
     }
 }

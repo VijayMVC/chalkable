@@ -81,5 +81,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                ClassRef = 2
            });
         }
+
+        public void Delete(IList<MarkingPeriodClass> markingPeriodClasses)
+        {
+            foreach (var mpc in markingPeriodClasses)
+            {
+                Delete(new MarkingPeriodClassQuery
+                {
+                    MarkingPeriodId = mpc.MarkingPeriodRef,
+                    ClassId = mpc.ClassRef
+                });
+            }
+        }
     }
 }

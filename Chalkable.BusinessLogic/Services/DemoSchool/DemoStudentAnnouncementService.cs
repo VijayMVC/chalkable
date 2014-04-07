@@ -130,6 +130,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment,
+            bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
+        {
+            throw new NotImplementedException();
+        }
+
 
         //public IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue)
         //{
