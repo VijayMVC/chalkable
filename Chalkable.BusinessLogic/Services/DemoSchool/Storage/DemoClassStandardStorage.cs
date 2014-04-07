@@ -11,12 +11,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        public IList<ClassStandard> Add(IList<ClassStandard> classStandarts)
+        public IList<ClassStandard> Add(IList<ClassStandard> classStandards)
         {
-            foreach (var classStandard in classStandarts)
+            foreach (var classStandard in classStandards)
             {
                 data.Add(index++, classStandard);
             }
+            return classStandards;
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public Phone Add(Phone phone)
         {
             data.Add(index++, phone);
+            return phone;
         }
 
         public void Update(Phone phone, AndQueryCondition andQueryCondition)
@@ -44,16 +45,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Add(phone);
             }
+            return phones;
         }
 
         public IList<Phone> Update(IList<Phone> phones)
         {
-
-            //foreach (var phone in phones)
-            //{
-            //    if (data.ContainsKey(phone.i))
-            //}
-            //throw new System.NotImplementedException();
+            foreach (var phone in phones)
+            {
+                var item = data.First(x => x.Value == phone);
+                data[item.Key] = phone;
+            }
+            return phones;
         }
 
         public IList<Phone> GetAll(int personId)
