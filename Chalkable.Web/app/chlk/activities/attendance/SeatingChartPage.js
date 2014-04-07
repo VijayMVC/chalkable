@@ -114,7 +114,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 checkPadding();
             },
 
-            [ria.mvc.DomEventBind('click', '#submit-attendance-button')],
+            [ria.mvc.DomEventBind('click', '#submit-attendance-button, .update-grid')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function postButtonClick(node, event){
                 var rows = this.dom.find('.seating-row').count();
@@ -142,7 +142,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                     seatingList: seatingList
                 };
                 this.dom.find('.text-for-post').setValue(JSON.stringify(res));
-                this.dom.find('.save-chart-form').trigger('submit');
+                if(node.getAttr('id') == 'submit-attendance-button')
+                    this.dom.find('.save-chart-form').trigger('submit');
             },
 
             OVERRIDE, VOID, function onPartialRender_(model, msg_){

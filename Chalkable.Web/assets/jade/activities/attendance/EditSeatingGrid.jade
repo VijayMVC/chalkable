@@ -2,6 +2,8 @@
     .close.close-btn.dark
     +ActionForm('attendance', 'editSeatingGrid').edit-seating-grid-form
         +Hidden('classId', self.getClassId().valueOf())
+        +Hidden('date', self.getDate().format('mm/dd/yy'))
+        +Hidden('seatingChartInfo', self.getSeatingChartInfo())
         h1=Msg.Edit_the_student_grid
         div
             span=Msg.Number_of_rows

@@ -6,7 +6,7 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
         +Hidden('minRows', minRows)#min-rows
         +Hidden('minColumns', minColumns)#min-columns
         +Hidden('classId', classId)
-        +Hidden('date', self.getDate())
+        +Hidden('date', self.getDate().format('mm/dd/yy'))
         +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
 
 topData = self.getTopData()

@@ -237,6 +237,7 @@ NAMESPACE('chlk.controllers', function (){
             model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ATTENDANCE));
             model.setTopData(topModel);
             model.setDate(date_);
+            this.getContext().getSession().set('seatingInfo', model);
             return model;
         },
 
@@ -259,18 +260,16 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.attendance.EditSeatingGridDialog, result);
         },
 
-        [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.attendance.EditSeatingGridViewData]],
-        function editSeatingGridAction(model){
+        function prepareSeatingChartEdit(model, resModel){
             var classId = model.getClassId();
-            var Serializer = new chlk.lib.serialize.ChlkJsonSerializer;
-            var resModel = Serializer.deserialize(JSON.parse(model.getSeatingChartInfo()), chlk.models.attendance.SeatingChart);
             resModel = this.prepareSeatingData(resModel, classId, model.getDate());
+            if(!resModel.getSeatingList())
+                resModel.setSeatingList([]);
             var rows = model.getRows(),
                 resRows = resModel.getRows(),
                 columns = model.getColumns(),
                 resColumns = resModel.getColumns(),
-                seatingList = resModel.getSeatingList();
+                seatingList = resModel.getSeatingList() || [];
             if(resRows != rows){
                 if(resRows > rows){
                     seatingList.splice(rows);
@@ -312,8 +311,27 @@ NAMESPACE('chlk.controllers', function (){
                     item.setIndex(rows * i + j + 1);
                 });
             });
+            return resModel;
+        },
+
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.attendance.EditSeatingGridViewData]],
+        function editSeatingGridAction(model){
+            var resModel = this.getContext().getSession().get('seatingInfo'), res;
+            if(resModel.getColumns() == 0 || resModel.getRows() == 0){
+                resModel = this.prepareSeatingChartEdit(model, resModel);
+                res = ria.async.DeferredData(resModel);
+            }else{
+                res = this.attendanceService.postSeatingChart(model.getDate(), JSON.parse(model.getSeatingChartInfo()))
+                    .then(function(resModel){
+                        resModel = this.prepareSeatingChartEdit(model, resModel);
+                        this.getView().pop();
+                        return resModel;
+                    }, this);
+                this.ShadeLoader();
+            }
             this.BackgroundCloseView(chlk.activities.attendance.EditSeatingGridDialog);
-            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, ria.async.DeferredData(resModel));
+            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, res);
         },
 
         [chlk.controllers.SidebarButton('attendance')],
