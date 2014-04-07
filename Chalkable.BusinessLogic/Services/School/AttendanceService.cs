@@ -140,8 +140,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     ClassId = classId,
                     RoleId = CoreRoles.STUDENT_ROLE.Id
                 });
-            var defaultStudent = students.First(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
-            foreach (var seats in seatingChartInfo.SeatingList)
+            var defaultStudent = students.First(x => seatingChartInfo.SeatsList.All(y => y.All(z => z.StudentId != x.Id)));
+            foreach (var seats in seatingChartInfo.SeatsList)
             {
                 foreach (var seatInfo in seats)
                 {
