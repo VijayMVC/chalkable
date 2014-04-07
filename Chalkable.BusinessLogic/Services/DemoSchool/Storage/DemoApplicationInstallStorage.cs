@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(ApplicationInstall appInstall)
         {
+            if (!data.ContainsKey(appInstall.Id))
             data[appInstall.Id] = appInstall;
         }
 
@@ -28,12 +29,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<ApplicationInstall> GetInstalledForClass(ClassDetails clazz)
         {
+            
             throw new NotImplementedException();
         }
 
-        public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, int id)
+        public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, int schoolYearId)
         {
-            throw new NotImplementedException();
+            return
+                data.Where(x => x.Value.ApplicationRef == applicationId && x.Value.SchoolYearRef == schoolYearId)
+                    .Select(x => x.Value)
+                    .ToList();
         }
     }
 }

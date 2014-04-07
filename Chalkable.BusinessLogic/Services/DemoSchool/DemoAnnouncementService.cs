@@ -348,7 +348,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 {
                     annRecipients.Add(InternalAddAnnouncementRecipient(announcement.Id, recipientInfo));
                 }
-                Storage.AnnouncementRecipientStorage.Insert(annRecipients);
+                Storage.AnnouncementRecipientStorage.Add(annRecipients);
             }
             return announcement;
         }

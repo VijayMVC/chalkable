@@ -13,12 +13,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<GradingPeriodDetails> GetGradingPeriodDetails(int schoolYearId, int? markingPeriodId)
         {
             var gradingPeriods =
-                data.Where(x => x.Value.SchoolYearRef == schoolYearId && x.Value.MarkingPeriodRef == markingPeriodId)
+                data.Where(x => x.Value.SchoolYearRef == schoolYearId && x.Value.MarkingPeriodRef == markingPeriodId).Select(x => x.Value)
                     .ToList();
 
-            //convert to marking period details
+            var gpDetailsList = new List<GradingPeriodDetails>();
 
-            return null;
+            foreach (var gp in gradingPeriods)
+            {
+                var gpDetails = new GradingPeriodDetails
+                {
+                    AllowGradePosting = gp.AllowGradePosting,
+                    Code = gp.Code,
+                    Description = gp.Description,
+                    EndDate = gp.EndDate,
+                    EndTime = gp.EndTime,
+                    Id = gp.Id,
+                    MarkingPeriodRef = gp.MarkingPeriodRef,
+                    Name = gp.Name,
+                    SchoolYearRef = gp.SchoolYearRef,
+                    SchoolAnnouncement = gp.SchoolAnnouncement,
+                    StartDate = gp.StartDate
+                };
+
+                gpDetails.MarkingPeriod = Storage.MarkingPeriodStorage.GetById(gpDetails.MarkingPeriodRef);
+                gpDetailsList.Add(gpDetails);
+            }
+            return gpDetailsList;
         }
 
         public void Add(IList<GradingPeriod> gradingPeriods)

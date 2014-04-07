@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(ApplicationRating appRating)
         {
-            if (data.ContainsKey(appRating.Id))
+            if (!data.ContainsKey(appRating.Id))
                 data[appRating.Id] = appRating;
         }
 

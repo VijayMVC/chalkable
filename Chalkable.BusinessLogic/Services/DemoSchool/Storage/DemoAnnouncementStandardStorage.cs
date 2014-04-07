@@ -1,0 +1,29 @@
+﻿using System.Linq;
+using Chalkable.Data.School.Model;
+
+namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
+{
+    public class DemoAnnouncementStandardStorage:BaseDemoStorage<int, AnnouncementStandard>
+    {
+        private int index = 0;
+        public DemoAnnouncementStandardStorage(DemoStorage storage) : base(storage)
+        {
+        }
+
+        public void Add(AnnouncementStandard announcementStandard)
+        {
+            data.Add(index++, announcementStandard);
+        }
+
+        public void Delete(int announcementId, int standardId)
+        {
+
+            var annStandarts =
+                data.Where(x => x.Value.AnnouncementRef == announcementId && x.Value.StandardRef == standardId)
+                    .Select(x => x.Key)
+                    .ToList();
+
+            Delete(annStandarts);
+        }
+    }
+}

@@ -1,23 +1,34 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementRecipientStorage
+    public class DemoAnnouncementRecipientStorage:BaseDemoStorage<int ,AnnouncementRecipient>
     {
-        public void Insert(List<AnnouncementRecipient> annRecipients)
+        public DemoAnnouncementRecipientStorage(DemoStorage storage) : base(storage)
         {
-            throw new System.NotImplementedException();
+        }
+
+        public void Add(List<AnnouncementRecipient> annRecipients)
+        {
+            foreach (var announcementRecipient in annRecipients)
+            {
+                if (!data.ContainsKey(announcementRecipient.Id))
+                    data[announcementRecipient.Id] = announcementRecipient;
+            }
+            
         }
 
         public void DeleteByAnnouncementId(int id)
         {
-            throw new System.NotImplementedException();
+            var annRep = data.Where(x => x.Value.AnnouncementRef == id).Select(x => x.Key).ToList();
+            Delete(annRep);
         }
 
         public IList<AnnouncementRecipient> GetList(int announcementId)
         {
-            throw new System.NotImplementedException();
+            return data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value).ToList();
         }
     }
 }

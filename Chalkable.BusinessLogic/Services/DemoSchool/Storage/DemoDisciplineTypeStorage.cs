@@ -12,7 +12,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public DisciplineType Add(string name, int score)
         {
-            throw new System.NotImplementedException();
+            var dp = new DisciplineType
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Score = score
+            };
+            data[dp.Id] = dp;
+            return dp;
         }
 
 
@@ -23,7 +30,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public DisciplineType Edit(Guid id, string name, int score)
         {
-            throw new NotImplementedException();
+            var dp = data.ContainsKey(id) ? GetById(id) : null;
+
+
+            if (dp != null)
+            {
+                dp.Name = name;
+                dp.Score = score;
+            }
+
+            return dp;
         }
 
     }
