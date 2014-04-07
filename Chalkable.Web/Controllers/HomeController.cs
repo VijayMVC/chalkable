@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
@@ -59,10 +60,16 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
             ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
             ViewData[ViewConstants.DEMO_PREFIX_KEY] = Context.UserId.ToString();
-            
-            //PrepareCommonViewData();
-            //render demo prefix
-            //render school
+
+            if (Context.DistrictId.HasValue)
+            {
+                var district = DemoDistrictStorage.CreateDemoDistrict(Context.DistrictId.Value);
+                var school = DemoMasterSchoolStorage.CreateMasterSchool(Context.DistrictId.Value);
+                school.District = district;
+                PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
+            }
+
+
             PrepareJsonData(BaseApplicationViewData.Create(applications), ViewConstants.APPLICATIONS);
             if (applications.Count > 0)
             {
@@ -111,7 +118,7 @@ namespace Chalkable.Web.Controllers
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
 
 
-                /*
+                
                 if (!string.IsNullOrEmpty(district.DemoPrefix))
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
@@ -125,7 +132,7 @@ namespace Chalkable.Web.Controllers
                     if (Context.DeveloperId != null)
                         ViewData[ViewConstants.IS_DEV] = true;
 
-                }*/
+                }
             }
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();

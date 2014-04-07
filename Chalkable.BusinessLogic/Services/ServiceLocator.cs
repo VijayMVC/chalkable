@@ -53,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services
 
         private static bool IsDemoUser(UserContext context)
         {
-            var userLogin = context.Login.Replace(context.DistrictId.ToString(), "");
+            var userLogin = context.DistrictId.HasValue ? context.Login.Replace(context.DistrictId.ToString(), "") : context.Login;
             var logins = new string[]
             {
                 PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_EDIT).Value,

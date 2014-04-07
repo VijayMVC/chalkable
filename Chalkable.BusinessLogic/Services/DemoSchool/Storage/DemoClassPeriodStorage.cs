@@ -32,6 +32,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void FullDelete(int periodId, int classId, int dayTypeId)
         {
+            
             throw new System.NotImplementedException();
         }
 

@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -146,10 +147,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null);
             if (user.IsDeveloper)
             {
-                //demoschool
-                //
                 var developer = new DeveloperDataAccess(uow).GetDeveloper(user.Id);
-
+                user.DistrictRef = developer.DistrictRef;
+                user.District = DemoDistrictStorage.CreateDemoDistrict(developer.DistrictRef.Value);
                 return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id);
             }
             if (user.IsSchoolUser)
