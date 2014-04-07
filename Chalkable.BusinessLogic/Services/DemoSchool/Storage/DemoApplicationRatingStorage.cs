@@ -14,8 +14,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public bool Exists(Guid applicationId, Guid userId)
         {
-            var res = data.FirstOrDefault(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId);
-            return res.Value != null;
+            return data.Count(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId) == 1;
         }
 
         public void Add(ApplicationRating appRating)

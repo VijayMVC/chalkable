@@ -125,12 +125,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public void AssignUserToSchool(IList<SchoolUser> schoolUsers)
         {
             throw new NotImplementedException();
-            using (var uow = Update())
-            {
-                var schoolUserDa = new SchoolUserDataAccess(uow);
-                schoolUserDa.Insert(schoolUsers);
-                uow.Commit();
-            }
         }
 
         public void ChangePassword(string login, string newPassword)
@@ -141,12 +135,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public void CreateSchoolUsers(IList<User> users)
         {
             throw new NotImplementedException();
-            using (var uow = Update())
-            {
-                var userDa = new UserDataAccess(uow);
-                userDa.Insert(users);
-                uow.Commit();
-            }
         }
 
 

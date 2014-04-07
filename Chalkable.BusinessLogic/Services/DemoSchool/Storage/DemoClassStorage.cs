@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -192,5 +193,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
+        public List<Class> GetAll(AndQueryCondition andQueryCondition)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

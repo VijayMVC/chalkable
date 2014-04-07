@@ -45,7 +45,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAnnouncementAttachmentStorage AnnouncementAttachmentStorage { get; private set; }
         public DemoAttendanceReasonStorage AttendanceReasonStorage { get; private set; }
         public DemoAttendanceLevelReasonStorage AttendanceLevelReasonStorage { get; private set; }
-        public DemoApplicationStorage ApplicationStorage { get; private set; }
         public DemoApplicationRatingStorage ApplicationRatingStorage { get; private set; }
         public DemoNotificationStorage NotificationStorage{ get; private set; }
         public DemoApplicationInstallStorage ApplicationInstallStorage { get; private set; }
@@ -55,6 +54,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAnnouncementRecipientStorage AnnouncementRecipientStorage { get; private set; }
         public DemoAnnouncementStandardStorage AnnouncementStandardStorage{ get; private set; }
         public DemoDistrictStorage DistrictStorage { get; private set; }
+        public DemoApplicationInstallActionStorage ApplicationInstallActionStorage { get; private set; }
+        public DemoApplicationInstallActionClassesStorage ApplicationInstallActionClassesStorage { get; private set; }
+        public DemoApplicationInstallActionGradeLevelStorage ApplicationInstallActionGradeLevelStorage { get; private set; }
+        public DemoApplicationInstallActionDepartmentStorage ApplicationInstallActionDepartmentStorage { get; private set; }
+        public DemoApplicationInstallActionRoleStorage ApplicationInstallActionRoleStorage { get; private set; }
 
         public UserContext Context { get; private set; }
 
@@ -98,7 +102,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementAttachmentStorage = new DemoAnnouncementAttachmentStorage(this);
             AttendanceReasonStorage = new DemoAttendanceReasonStorage(this);
             AttendanceLevelReasonStorage = new DemoAttendanceLevelReasonStorage(this);
-            ApplicationStorage = new DemoApplicationStorage(this);
             ApplicationRatingStorage = new DemoApplicationRatingStorage(this);
             NotificationStorage = new DemoNotificationStorage(this);
             ApplicationInstallStorage = new DemoApplicationInstallStorage(this);
@@ -106,6 +109,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementRecipientStorage = new DemoAnnouncementRecipientStorage(this);
             AnnouncementStandardStorage = new DemoAnnouncementStandardStorage(this);
             DistrictStorage = new DemoDistrictStorage(this);
+            ApplicationInstallActionStorage = new DemoApplicationInstallActionStorage(this);
+            ApplicationInstallActionClassesStorage = new DemoApplicationInstallActionClassesStorage(this);
+            ApplicationInstallActionGradeLevelStorage = new DemoApplicationInstallActionGradeLevelStorage(this);
+            ApplicationInstallActionDepartmentStorage = new DemoApplicationInstallActionDepartmentStorage(this);
+            ApplicationInstallActionRoleStorage = new DemoApplicationInstallActionRoleStorage(this);
             Setup();
         }
 

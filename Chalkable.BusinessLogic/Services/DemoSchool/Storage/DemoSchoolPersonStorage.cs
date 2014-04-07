@@ -12,9 +12,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
-        public object GetSchoolPerson(int toPersonId, int? schoolLocalId, int? o)
+        public SchoolPerson GetSchoolPerson(int personId, int? schoolLocalId, int? roleId)
         {
-            throw new System.NotImplementedException();
+            var persons = data.Where(x => x.Value.PersonRef == personId && x.Value.SchoolRef == schoolLocalId);
+            if (roleId.HasValue)
+                persons = data.Where(x => x.Value.RoleRef == roleId);
+            return persons.Select(x => x.Value).First();
         }
 
         public void Add(IList<SchoolPerson> assignments)
@@ -25,9 +28,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public bool Exists(int teacherId, int id, int? schoolRef)
+        public bool Exists(int personId, int roleRef, int? schoolRef)
         {
-            throw new System.NotImplementedException();
+            return
+                data.Count(
+                    x => x.Value.RoleRef == roleRef && x.Value.PersonRef == personId && x.Value.SchoolRef == schoolRef) ==
+                1;
         }
 
         public int GetRoleId(int personId, int schoolRef)
@@ -39,7 +45,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Delete(IList<SchoolPerson> schoolPersons)
         {
-            throw new System.NotImplementedException();
+            foreach (var schoolPerson in schoolPersons)
+            {
+                var item =
+                    data.First(x => x.Value.PersonRef == schoolPerson.PersonRef && x.Value.RoleRef == schoolPerson.RoleRef &&
+                                    x.Value.SchoolRef == schoolPerson.SchoolRef);
+
+                Delete(item.Key);
+            }
         }
     }
 }

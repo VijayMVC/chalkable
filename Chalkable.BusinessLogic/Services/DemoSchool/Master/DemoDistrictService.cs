@@ -19,12 +19,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone)
         {
-            return Storage.DistrictStorage.Create(name, dbName, sisUrl, sisUserName, sisPassword, timeZone);
+            throw new NotImplementedException();
         }
 
         public District Create(string name, string sisUrl, string sisUserName, string sisPassword, string timeZone, Guid? sisDistrictId)
         {
-            return Storage.DistrictStorage.Create(name, sisUrl, sisUserName, sisPassword, timeZone, sisDistrictId);
+            throw new NotImplementedException();
         }
 
         public District Create(Guid id, string name, string sisUrl, string sisUserName, string sisPassword, string timeZone)
@@ -34,17 +34,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue)
         {
-            return Storage.DistrictStorage.GetDistricts(start, count);
+            throw new NotImplementedException();
         }
 
         public IList<District> GetDistricts(bool? demo, bool? usedDemo = null)
         {
-            return Storage.DistrictStorage.GetDistricts(demo, usedDemo);
+            throw new NotImplementedException();
         }
 
         public void Update(District district)
         {
-            Storage.DistrictStorage.Update(district);
+            throw new NotImplementedException();
         }
         
         public District GetByIdOrNull(Guid id)
@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void DeleteDistrict(Guid id)
         {
-            Storage.DistrictStorage.Delete(id);
+            throw new NotImplementedException();
         }
 
         public bool IsOnline(Guid id)

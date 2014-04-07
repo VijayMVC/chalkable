@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             emailService = new DemoEmailService(this, storage);
             fundService = new DemoFundService(this, storage);
             backgroundTaskService = new DemoBackgroundTaskService(this);
-            applicationService = new ApplicationService(this);
+            applicationService = new DemoApplicationService(this, storage);
             applicationUploadService = new DemoApplicationUploadService(this, storage);
 
             preferenceService = new PreferenceService(this);
