@@ -4,46 +4,54 @@ selectedId = topData.getSelectedItemId()
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
     selectedItemId=selectedId ? selectedId.valueOf() : ""
 ).classes-bar
-.action-bar.not-transparent.buttons
-    .container.panel-bg
-        .left.no-border
-            +DatePicker('attendanceDate', self.getDate())(
-                data-options={
-                    showOtherMonths: true,
-                    selectOtherMonths: true
-                },
-                data-controller= "attendance",
-                data-action="seatingChart",
-                data-params=selectedId ? [selectedId.valueOf()] : null
-            )#attendance-date.tb-date-picker
-        .right
-            +ActionLink('attendance', 'classList', selectedId, self.getDate().format('mm-dd-yy'))=Msg.List
-            a.action-link.pressed=Msg.Seating_Chart
-.page-content
-    seatingList = self.getSeatingList()
-    if self.getColumns() == 0 || self.getRows() == 0
-        +ActionLink('attendance', 'showEditGridWindow', selectedId.valueOf(), self.getRows(), self.getColumns()).grey-button=Msg.Create_grid
-        .black-arrow.start=Msg.Start_by_creating_a_grid
-    else
-        +ActionLink('attendance', 'showEditGridWindow', selectedId.valueOf(), self.getRows(), self.getColumns()).grey-button=Msg.Edit_grid
-        .grey-button.add-remove-students=Msg.Add_remove_students
-        if self.isAblePost()
++ActionForm('attendance', 'saveFromSeatingChart')
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left.no-border
+                +DatePicker('date', self.getDate())(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true
+                    },
+                    data-controller= "attendance",
+                    data-action="seatingChart",
+                    data-params=selectedId ? [selectedId.valueOf()] : null
+                )#attendance-date.tb-date-picker
+                +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
+                +Hidden('classId', selectedId.valueOf()).class-id
+            .right
+                +ActionLink('attendance', 'classList', selectedId, self.getDate().format('mm-dd-yy'))=Msg.List
+                a.action-link.pressed=Msg.Seating_Chart
+    .page-content
+        seatingList = self.getSeatingList()
+        if self.getColumns() == 0 || self.getRows() == 0
+            +ActionLink('attendance', 'showEditGridWindow', selectedId.valueOf(), self.getRows(), self.getColumns()).grey-button=Msg.Create_grid
+            .black-arrow.start=Msg.Start_by_creating_a_grid
+        else
+            +ActionLink('attendance', 'showEditGridWindow', selectedId.valueOf(), self.getRows(), self.getColumns()).grey-button=Msg.Edit_grid
+            .grey-button.add-remove-students=Msg.Add_remove_students
             .right.right-container
                 BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
-                +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat())#all-present-link=Msg.Mark_all_Present
-        .black-arrow.add=Msg.Add_your_students
-        .seating-chart-container
-            +LeftRightToolbar()(
-                needDots = true,
-                roundedDots = true,
-                padding = 110
-            ).seating-toolbar.auto-h.big-arrows
-                each items in seatingList
-                    .seating-row
-                        each item in items
-                            info = item.getInfo()
-                            div(data-index=item.getIndex(), class=info ? '' : 'empty-box').student-block.droppable.draggable
-                                +RenderWith(info || new chlk.models.attendance.ClassAttendance, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
-                            if info
-                                .empty-box.student-block.absolute
+                if self.isAblePost()
+                    +ActionLink('attendance', 'markAllFromSeating', selectedId.valueOf(), self.getDate().toStandardFormat())#all-present-link=Msg.Mark_all_Present
+            .black-arrow.add=Msg.Add_your_students
+            .seating-chart-container
+                +LeftRightToolbar()(
+                    needDots = true,
+                    roundedDots = true,
+                    padding = 110
+                ).seating-toolbar.auto-h.big-arrows
+                    each items in seatingList
+                        .seating-row
+                            each item in items
+                                info = item.getInfo()
+                                div(
+                                    data-index= item.getIndex(),
+                                    data-column= item.getColumn(),
+                                    data-row= item.getRow(),
+                                    class=info ? '' : 'empty-box'
+                                ).student-block.droppable.draggable
+                                    +RenderWith(info || new chlk.models.attendance.ClassAttendance, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
+                                if info
+                                    .empty-box.student-block.absolute
 

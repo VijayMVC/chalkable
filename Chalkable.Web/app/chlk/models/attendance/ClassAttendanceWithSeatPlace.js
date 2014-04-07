@@ -9,6 +9,10 @@ NAMESPACE('chlk.models.attendance', function () {
         'ClassAttendanceWithSeatPlace', [
             chlk.models.attendance.ClassAttendance, 'info',
 
-            Number, 'index'
+            Number, 'index',
+
+            Number, 'column',
+
+            Number, 'row'
         ]);
 });

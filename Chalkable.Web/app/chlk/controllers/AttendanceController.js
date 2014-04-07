@@ -15,6 +15,7 @@ REQUIRE('chlk.activities.attendance.EditSeatingGridDialog');
 
 REQUIRE('chlk.models.attendance.AttendanceList');
 REQUIRE('chlk.models.attendance.AttendanceStudentBox');
+REQUIRE('chlk.models.attendance.UpdateSeatingChart');
 REQUIRE('chlk.models.id.ClassId');
 
 REQUIRE('chlk.models.common.ChlkDate');
@@ -125,6 +126,15 @@ NAMESPACE('chlk.controllers', function (){
 
         },
 
+        [[chlk.models.attendance.UpdateSeatingChart]],
+        function saveFromSeatingChartAction(model){
+            this.attendanceService.postSeatingChart(model.getDate(), JSON.parse(model.getSeatingChartInfo()))
+                .then(function(model){
+                    this.getView().pop();
+                }, this);
+            return this.ShadeLoader();
+        },
+
         [[chlk.models.attendance.AdminAttendanceSummary, String, chlk.models.common.ChlkDate, chlk.models.id.MarkingPeriodId,
                 chlk.models.id.MarkingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
         chlk.models.attendance.AdminAttendanceSummary,
@@ -187,6 +197,12 @@ NAMESPACE('chlk.controllers', function (){
                     return this.BackgroundNavigate('attendance', 'classList', [classId, date, true, isProfile_]);
                   //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
+        },
+
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
+        function markAllFromSeatingAction(classId, date, isProfile_){
+
         },
 
         [[Boolean, Boolean]],

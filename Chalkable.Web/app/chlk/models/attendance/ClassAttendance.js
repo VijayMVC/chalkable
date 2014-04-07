@@ -7,6 +7,7 @@ REQUIRE('chlk.models.id.AttendanceReasonId');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.period.Period');
 REQUIRE('chlk.models.attendance.AttendanceReason');
+REQUIRE('chlk.converters.attendance.AttendanceTypeToNameConverter');
 //REQUIRE('chlk.converters.attendance.AttendanceLevelToTypeConverter');
 
 NAMESPACE('chlk.models.attendance', function () {
@@ -75,6 +76,11 @@ NAMESPACE('chlk.models.attendance', function () {
 
             //todo change number to AttendanceTypeEnum
             Number, 'type',
+
+            String, function getTypeName(){
+                return chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert(this.getType())
+            },
+
             Number, function getType(){
                 return this._attendanceTypeMapper.map(this.getLevel()).valueOf();
             },

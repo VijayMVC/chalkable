@@ -1107,7 +1107,7 @@ BODY {
         .student-block{
           .remove-red-btn{
             display: block;
-            z-index: 10;
+            z-index: 20;
           }
         }
       }
@@ -1217,6 +1217,10 @@ BODY {
     text-align: center;
     margin: 10px;
 
+    .reason-container{
+      display: none;
+    }
+
     .remove-red-btn{
       display: none;
     }
@@ -1230,6 +1234,32 @@ BODY {
 .student-block{
   .avatar-wrapper{
     background: #eee;
+  }
+
+  .image-container{
+    position: relative;
+  }
+
+  .reason-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    display: table;
+    vertical-align: middle;
+    height: 70px;
+    color: black;
+    text-transform: uppercase;
+    font: bold 13px Arial;
+    width: 70px;
+    z-index: 10;
+
+    .reason-text{
+      display: table-cell;
+      vertical-align: middle;
+    }
   }
 }
 
@@ -1255,11 +1285,37 @@ BODY {
   }
 }
 
+.student-seating-type{
+  position: absolute;
+  top: 108px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background: #276435;
+  left: 33px;
+
+  &.late{
+    background: #c97d11;
+  }
+
+  &.absent{
+    background: #880909;
+  }
+}
+
 .ui-draggable-dragging{
   z-index: 1000 !important;
   @include transform(rotate(5deg));
 
   .student-seating-name{
+    display: none;
+  }
+
+  .reason-container{
+    display: none !important;
+  }
+
+  .student-seating-type{
     display: none;
   }
 }

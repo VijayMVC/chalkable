@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Model
     {
         public byte Columns { get; set; }
         public byte Rows { get; set; }
-        public IList<IList<SeatInfo>> SeatsList { get; set; }
+        public IList<IList<SeatInfo>> SeatingList { get; set; }
         public int ClassId { get; set; }
 
         public static SeatingChartInfo Create(SeatingChart seatingChart)
@@ -19,13 +19,13 @@ namespace Chalkable.BusinessLogic.Model
                     Columns = seatingChart.Columns,
                     Rows = seatingChart.Rows,
                     ClassId = seatingChart.SectionId,
-                    SeatsList = new List<IList<SeatInfo>>()
+                    SeatingList = new List<IList<SeatInfo>>()
                 };
             var index = 0;
             for (byte row = 1; row <= res.Rows; row++)
             {
                 var seats = new List<SeatInfo>();
-                for (byte column = 1; column < res.Columns; column++)
+                for (byte column = 1; column <= res.Columns; column++)
                 {
                     var seatInfo = new SeatInfo { Row = row, Column = column, Index = index };
                     var seat = seatingChart.Seats.FirstOrDefault(x => x.Column == column && x.Row == row);
@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Model
                     seats.Add(seatInfo);
                     index++;
                 }
-                res.SeatsList.Add(seats);
+                res.SeatingList.Add(seats);
             }
             return res;
         }

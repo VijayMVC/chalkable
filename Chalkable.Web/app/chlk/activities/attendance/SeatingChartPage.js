@@ -114,6 +114,36 @@ NAMESPACE('chlk.activities.attendance', function () {
                 checkPadding();
             },
 
+            [ria.mvc.DomEventBind('click', '#submit-attendance-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function postButtonClick(node, event){
+                var rows = this.dom.find('.seating-row').count();
+                var columns = this.dom.find('.seating-row:eq(0)').find('.student-block[data-index]').count();
+                var classId = this.dom.find('.class-id').getValue();
+                var seatingList = [];
+                this.dom.find('.seating-row').forEach(function(items){
+                    var seatings = [];
+                    items.find('.student-block[data-index]').forEach(function(node){
+                        var node2 = node.find('.image-container');
+                        seatings.push({
+                            index: node.getData('index'),
+                            row: node.getData('row'),
+                            column: node.getData('column'),
+                            studentId: node2.exists() ? node2.getData('id') : null
+                        })
+                    });
+                    seatingList.push(seatings);
+                }.bind(this));
+
+                var res = {
+                    rows: rows,
+                    columns: columns,
+                    classId: classId,
+                    seatingList: seatingList
+                };
+                this.dom.find('.text-for-post').setValue(JSON.stringify(res));
+            },
+
             OVERRIDE, VOID, function onPartialRender_(model, msg_){
                 BASE(model, msg_);
                 this.stopDragging();
@@ -143,7 +173,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 BASE(model);
                 this.setModel(model);
 
-                new ria.dom.Dom().on('click.seating', '.close-people', function(node, event){
+                new ria.dom.Dom().on('click.seating', '.close-people, #submit-attendance-button', function(node, event){
                     this.stopDragging();
                 }.bind(this));
 
