@@ -32,6 +32,27 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
+            function getLateReasons(){
+                return this.getReasons().filter(function(item){
+                    var len;
+                    len = item.getAttendanceLevelReasons().filter(function(reason){
+                        return reason.getLevel() == 'T'
+                    }).length;
+                    return !!len;
+                })
+            },
+
+            function getAbsentReasons(){
+                return this.getReasons().filter(function(item){
+                    var len;
+                    len = item.getAttendanceLevelReasons().filter(function(reason){
+                        return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
+                            reason.getLevel() == 'H' || reason.getLevel() == 'HO';
+                    }).length;
+                    return !!len;
+                })
+            },
+
             String, function getTextForPost(){
                 var res = {
                     columns: this.getColumns(),

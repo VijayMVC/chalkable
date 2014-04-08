@@ -1301,6 +1301,7 @@ BODY {
       .reason-text{
         display: table-cell;
         vertical-align: middle;
+        word-break: break-word;
       }
     }
 
@@ -1354,17 +1355,48 @@ BODY {
   font-weight: bold;
 }
 
-.seating-chart-popup{
+.seating-chart-popup.chlk-pop-up-container{
   display: none;
+  padding: 0;
 
-  &.start{
-    .second-part{
-      display: none;
+  .item{
+    position: relative;
+    cursor: pointer;
+    padding: 0 5px 0 33px;
+    height: 38px;
+    font: normal 14px/38px Arial italic;
+    color: #7c7c7c;
+
+    &.selected{
+      background: #fbfbfb;
+      border-top: 1ps solid #d7d7d7;
+      border-bottom: 1ps solid #d7d7d7;
+    }
+
+    .student-seating-type{
+      top: 14px;
+      left: 14px;
     }
   }
 
-  &:not(.start){
-    .second-part{
+  .absent-part, .late-part{
+    display: none;
+  }
+
+  &.absent{
+    .absent-part{
+      display: block;
+    }
+  }
+
+  &.late{
+    .late-part{
+      display: block;
+    }
+  }
+
+  &.absent, &.late{
+    .first-part{
       display: none;
     }
   }

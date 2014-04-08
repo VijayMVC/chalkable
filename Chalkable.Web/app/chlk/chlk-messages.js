@@ -426,6 +426,7 @@ var Msg = {
     No_items_marked_important: 'No items marked important.',
     No_new_notifications: 'No new notifications',
     No_notifications_to_display: 'No notifications to display',
+    No_reason: 'No reason',
     Not_In_Class_Now: 'Not In Class Now',
     Not_in_class_right_now: 'Not in class right now',
     Nothing_to_display: 'Nothing to display',
