@@ -181,21 +181,20 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SEATING_CHART, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         public ActionResult SeatingChart(DateTime? date, int classId)
         {
-            //if (classId == 645)
-            //    return FakeJson("~/fakeData/seatingChart2.json");
-            //if (classId == 723)
-            //    return FakeJson("~/fakeData/seatingChart3.json");
-            //return FakeJson("~/fakeData/seatingChart1.json");
+            return Json(GetSeatingChart(date, classId));
+        }
+
+        private AttendanceSeatingChartViewData GetSeatingChart(DateTime? date, int classId) {
             var d = (date ?? Context.NowSchoolTime).Date;
             var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
             var seatingChart = SchoolLocator.AttendanceService.GetSeatingChart(classId, markingPeriod.Id);
             var attendances = ClassAttendanceList(d, classId);
             var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
-                {
-                    ClassId = classId,
-                    RoleId = CoreRoles.STUDENT_ROLE.Id
-                });
-            return Json(AttendanceSeatingChartViewData.Create(seatingChart, attendances, students));
+            {
+                ClassId = classId,
+                RoleId = CoreRoles.STUDENT_ROLE.Id
+            });
+            return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);
         }
 
         [AuthorizationFilter("Teacher")]
@@ -209,11 +208,13 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo)
+        public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, Boolean needInfo)
         {
             var d = (date ?? Context.NowSchoolTime).Date;
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
             SchoolLocator.AttendanceService.UpdateSeatingChart(seatingChartInfo.ClassId, mp.Id, seatingChartInfo);
+            if (needInfo)
+                return Json(GetSeatingChart(date, seatingChartInfo.ClassId));
             return Json(true);
         }
 
