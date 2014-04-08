@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
@@ -20,22 +21,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(AnnouncementReminder reminder)
         {
-            throw new NotImplementedException();
+            if (!data.ContainsKey(reminder.Id))
+                data[reminder.Id] = reminder;
         }
 
         public void Delete(AnnouncementReminder reminder)
         {
-            throw new NotImplementedException();
+            Delete(reminder.Id);
         }
 
-        public AnnouncementReminder GetById(int reminderId, int value)
+        public AnnouncementReminder GetById(int reminderId, int userId)
         {
-            throw new NotImplementedException();
+            return data.Where(x => x.Value.Id == reminderId && x.Value.PersonRef == userId).Select(x => x.Value).First();
         }
 
         public void Update(AnnouncementReminder reminder)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(reminder.Id))
+                data[reminder.Id] = reminder;
         }
 
         public IList<AnnouncementReminder> GetRemindersToProcess(DateTime nowSchoolTime, int count)
@@ -45,17 +48,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Update(IList<AnnouncementReminder> annReminders)
         {
-            throw new NotImplementedException();
+            foreach (var annReminder in annReminders)
+            {
+                Update(annReminder);
+            }
         }
 
         public void DeleteByAnnouncementId(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(int annReminders, int i, bool starred, object o, DateTime date)
-        {
-            throw new NotImplementedException();
+            var items = data.Where(x => x.Value.AnnouncementRef == id).Select(x => x.Key).ToList();
+            Delete(items);
         }
     }
 }

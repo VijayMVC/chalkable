@@ -390,7 +390,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Announcement Star(int id, bool starred)
         {
             var ann = GetAnnouncementById(id);
-            Storage.AnnouncementReminderStorage.Update(id, Context.UserLocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
+            Storage.AnnouncementRecipientStorage.Update(id, Context.UserLocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
             return ann;
         }
 
@@ -489,8 +489,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
         {
-            //return Storage.AnnouncementStandardStorage.
-            throw new NotImplementedException();
+            var announcementIds = Storage.AnnouncementStandardStorage.GetAll().Select(x => x.AnnouncementRef);
+
+
+            var annStandarts = new List<AnnouncementStandard>();
+            foreach (var id in announcementIds)
+            {
+                var announcement = Storage.AnnouncementStorage.GetById(id);
+
+                if (announcement.ClassRef == classId)
+                {
+                    var standards = Storage.AnnouncementStandardStorage.GetAll(id);
+                    annStandarts.AddRange(standards);
+                }
+                
+            }
+
+            return annStandarts;
         }
     }
 }

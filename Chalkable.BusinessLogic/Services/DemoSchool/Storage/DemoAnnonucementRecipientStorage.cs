@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
 
@@ -29,6 +30,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<AnnouncementRecipient> GetList(int announcementId)
         {
             return data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value).ToList();
+        }
+
+        public void Update(int id, int i, bool starred, object o, DateTime date)
+        {
+            throw new NotImplementedException();
         }
     }
 }

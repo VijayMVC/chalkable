@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -24,6 +26,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .ToList();
 
             Delete(annStandarts);
+        }
+
+        public IList<AnnouncementStandard> GetAll(int announcementId)
+        {
+            return data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value).ToList();
         }
     }
 }
