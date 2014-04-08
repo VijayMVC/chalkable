@@ -27,7 +27,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
 
-
         private bool CanAttach(Announcement ann)
         {
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
@@ -55,12 +54,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Uuid = uuid,
                 Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
             };
-            IList<AnnouncementAttachment> atts;
-            
+
 
             Storage.AnnouncementAttachmentStorage.Add(annAtt);
 
-            atts = Storage.AnnouncementAttachmentStorage.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
+            var atts = Storage.AnnouncementAttachmentStorage.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
 
             if (CoreRoles.TEACHER_ROLE != Context.Role)
                 ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
@@ -84,37 +82,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.AnnouncementAttachmentStorage.Delete(annAtt.Id);
             if (!annAtt.SisAttachmentId.HasValue)
                 ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString());
-            else
-            {
-                if (!Context.UserLocalId.HasValue)
-                    throw new UnassignedUserException();
-                /*
-                var ann = (new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId))
-                    .GetAnnouncement(annAtt.AnnouncementRef, Context.RoleId, Context.UserLocalId.Value);
-                if (ann.SisActivityId.HasValue)
-                {
-                    var atts = ConnectorLocator.ActivityAttachmentsConnector.GetAttachments(ann.SisActivityId.Value);
-                    var att = atts.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId.Value);
-                    if (att != null)
-                        ConnectorLocator.ActivityAttachmentsConnector.Delete(ann.SisActivityId.Value, att.Id);
-                }
-                else ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
-
-                //else 
-                //    ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
-                 * */
-            }
         }
 
         public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
-            /*
-                if (CoreRoles.TEACHER_ROLE == Context.Role)
-                {
-                    var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
-                        .GetAnnouncement(announcementId, Context.RoleId, Context.UserLocalId.Value);
-                    return MapStiAttsToAnnAtts(GetActivityAttachments(ann.SisActivityId.Value));
-                }*/
             return Storage.AnnouncementAttachmentStorage.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
         }
 

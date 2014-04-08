@@ -22,7 +22,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date)
         {
             Storage.DisciplineStorage.DeleteDiscipline(classPersonId, classPeriodId, date);
-            throw new NotImplementedException();
         }
 
         public IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<int> gradeLevelIds = null)

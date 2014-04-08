@@ -112,9 +112,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.PeriodStorage.GetPeriods(schoolYearId);
         }
 
-        public IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, int? lengthBetweenPeriods = null, int? periodCount = null)
+        public IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, 
+            int? lengthBetweenPeriods = null, int? periodCount = null)
         {
-            throw new NotImplementedException();
+            return Storage.PeriodStorage.RegeneratePeriods(markingPeriodIds, startTime, length, lengthBetweenPeriods,
+                periodCount);
         }
     }
 }

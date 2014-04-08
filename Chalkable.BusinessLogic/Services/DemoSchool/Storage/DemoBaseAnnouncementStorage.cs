@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         IList<Person> GetAnnouncementRecipientPersons(int announcementId, int i);
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int i);
         bool Exists(string s);
+        void ReorderAnnouncements(int id, int value, int personRef, int recipientId);
     }
 
 
@@ -78,6 +79,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
         public bool Exists(string s)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReorderAnnouncements(int id, int value, int personRef, int recipientId)
         {
             throw new NotImplementedException();
         }

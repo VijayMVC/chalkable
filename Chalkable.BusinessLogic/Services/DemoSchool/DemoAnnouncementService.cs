@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security;
-using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -68,7 +63,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 MarkingPeriodId = markingPeriodId,
                 OwnedOnly = ownerOnly,
             };
-            //return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
             return GetAnnouncementsComplex(q);
         }
 
@@ -256,15 +250,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 res.Created = dateNow;
                 if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
                     res.Title = res.DefaultTitle;
-
-                /*
-                if (classId.HasValue)
-                {
-                    var activity = new Activity();
-                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
-                    activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
-                    res.SisActivityId = activity.Id;
-                }*/
             }
             res = (AnnouncementDetails)PrepareReminderData(storage, res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
@@ -281,18 +266,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void SubmitAnnouncement(int announcementId, int recipientId)
         {
-            throw new NotImplementedException();
-            /*
-            using (var uow = Update())
-            {
-                var da = CreateAnnoucnementDataAccess(uow);
-                var res = Submit(da, uow, announcementId, recipientId);
+            var storage = CreateAnnouncementStorage();
+            var res = Submit(storage, announcementId, recipientId);
 
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(res.Expires);
-                if(res.ClassAnnouncementTypeRef.HasValue)
-                    da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
-                uow.Commit();
-            }*/
+            var sy = Storage.SchoolYearStorage.GetByDate(res.Expires);
+            if (res.ClassAnnouncementTypeRef.HasValue)
+                Storage.AnnouncementStorage.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
         }
         
         public void SubmitForAdmin(int announcementId)
@@ -303,7 +282,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
       
         private Announcement PrepareReminderData(IDemoAnnouncementStorage storage, Announcement announcement)
         {
-            throw new NotImplementedException();
             var dateNow = Context.NowSchoolTime;
             var expires = announcement.Expires;
 
@@ -321,7 +299,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
         private Announcement SetClassToAnnouncement(Announcement announcement, int? classId, DateTime expiresDate)
         {
-            throw new NotImplementedException();
             if (classId.HasValue)
             {
                 var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate);
@@ -338,7 +315,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
         private Announcement ReCreateRecipients(IDemoAnnouncementStorage storage, Announcement announcement, IList<RecipientInfo> recipientInfos)
         {
-            throw new NotImplementedException();
             if (recipientInfos != null && BaseSecurity.IsAdminViewer(Context))
             {
 

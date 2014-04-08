@@ -173,13 +173,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             
         }
 
-        //TODO: remove this method
-        public bool ChangeMarkingPeriodsCount(int schoolYearId, int count, out string error)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public MarkingPeriodClass GetMarkingPeriodClass(int markingPeriodClassId)
         {
             return Storage.MarkingPeriodClassStorage.GetById(markingPeriodClassId);

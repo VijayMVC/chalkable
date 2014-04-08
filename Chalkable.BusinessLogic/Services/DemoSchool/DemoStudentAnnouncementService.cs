@@ -91,6 +91,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         //TODO: check application existing  
         public StudentAnnouncement SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
         {
+
             //using (var uow = Update())
             //{
             //    var da = new StudentAnnouncementDataAccess(uow);

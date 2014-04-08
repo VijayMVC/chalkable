@@ -33,11 +33,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             data[studentAnnouncement.Key] = sa;
         }
 
-        public IList<StudentAnnouncementDetails> GetStudentAnnouncementsDetails(int announcementId, int i)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void Update(IList<StudentAnnouncement> announcements)
         {
             foreach (var studentAnnouncement in announcements)
@@ -48,7 +43,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Update(int announcementId, bool drop)
         {
-            throw new System.NotImplementedException();
+            var sa = data.Where(x => x.Value.AnnouncementId == announcementId).Select(x => x.Key).First();
+            data[sa].Dropped = drop;
         }
     }
 }

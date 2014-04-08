@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -50,6 +51,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Update(period);
             }
             return periods;
+        }
+
+        public IList<Period> RegeneratePeriods(IList<Guid> markingPeriodIds, int? startTime, int? length, int? lengthBetweenPeriods, int? periodCount)
+        {
+            throw new NotImplementedException();
         }
     }
 }
