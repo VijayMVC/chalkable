@@ -242,7 +242,6 @@
     <Compile Include="Services\DemoSchool\Storage\DemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoServiceLocatorMaster.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoUserService.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoUserStorage.cs" />
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />

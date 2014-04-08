@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
@@ -20,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<AnnouncementAttachment> GetList(int value, int id, string name)
         {
+
             throw new NotImplementedException();
         }
         
@@ -28,9 +30,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public AnnouncementAttachment GetById(int announcementAttachmentId, int i, int id)
+        public AnnouncementAttachment GetById(int announcementAttachmentId, int userId, int roleId)
         {
             throw new NotImplementedException();
+            //return data.Where(x => x.Value.Id == announcementAttachmentId && x.Value.PersonRef == userId && x.Value.)
         }
     }
 }

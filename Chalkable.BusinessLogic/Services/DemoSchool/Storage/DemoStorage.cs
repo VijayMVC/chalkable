@@ -7,7 +7,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoStorage
     {
-        public DemoUserStorage UserStorage { get; private set; }
         public DemoPrivateMessageStorage PrivateMessageStore { get; private set; }
         public DemoSchoolYearStorage SchoolYearStorage { get; private set; }
         public DemoStudentSchoolYearStorage StudentSchoolYearStorage { get; private set; }
@@ -65,7 +64,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStorage(UserContext context)
         {
             Context = context;
-            UserStorage = new DemoUserStorage(this);
             PrivateMessageStore = new DemoPrivateMessageStorage(this);
             SchoolYearStorage = new DemoSchoolYearStorage(this);
             DisciplineTypeStorage = new DemoDisciplineTypeStorage(this);

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementQnAStorage:BaseDemoStorage<int, AnnouncementQnA>
+    public class DemoAnnouncementQnAStorage:BaseDemoStorage<int, AnnouncementQnAComplex>
     {
         public DemoAnnouncementQnAStorage(DemoStorage storage)
             : base(storage)
@@ -14,17 +15,48 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(AnnouncementQnAComplex annQnA)
         {
-            throw new NotImplementedException();
+            if (!data.ContainsKey(annQnA.Id))
+                data[annQnA.Id] = annQnA;
         }
 
         public AnnouncementQnAQueryResult GetAnnouncementQnA(AnnouncementQnAQuery announcementQnAQuery)
         {
-            throw new NotImplementedException();
+            var qnas = data.Select(x => x.Value);
+
+            if (announcementQnAQuery.Id.HasValue)
+                qnas = qnas.Where(x => x.Id == announcementQnAQuery.Id);
+            if (announcementQnAQuery.AskerId.HasValue)
+                qnas = qnas.Where(x => x.PersonRef == announcementQnAQuery.AskerId);
+
+
+            if (announcementQnAQuery.AnnouncementId.HasValue)
+                qnas = qnas.Where(x => x.AnnouncementRef == announcementQnAQuery.AnnouncementId);
+
+            //todo caller id
+
+            if (announcementQnAQuery.AnswererId.HasValue)
+            {
+                var personIds = new List<int>();
+                var announcementIds = qnas.Select(x => x.AnnouncementRef);
+                foreach (var annId in announcementIds)
+                {
+                    var announcement = Storage.AnnouncementStorage.GetById(annId);
+                    personIds.Add(announcement.PersonRef);
+                }
+                qnas = qnas.Where(x => personIds.Contains(x.PersonRef));
+            }
+
+            return new AnnouncementQnAQueryResult
+            {
+                AnnouncementQnAs = qnas.ToList(),
+                Query = announcementQnAQuery
+            };
         }
 
         public void Update(AnnouncementQnAComplex annQnA)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(annQnA.Id))
+                data[annQnA.Id] = annQnA;
         }
     }
 }

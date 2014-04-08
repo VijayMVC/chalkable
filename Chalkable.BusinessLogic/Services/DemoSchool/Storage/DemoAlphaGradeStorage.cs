@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             foreach (var alphaGrade in alphaGrades)
             {
-                if (data.ContainsKey(alphaGrade.Id))
+                if (!data.ContainsKey(alphaGrade.Id))
                 {
                     data[alphaGrade.Id] = alphaGrade;
                 }
