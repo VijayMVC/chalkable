@@ -188,15 +188,18 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
-        function markAllAction(classId, date, isProfile_){
-            return this.attendanceService
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
+        function markAllAction(classId, date, isProfile_, isSeatingChart_){
+            this.attendanceService
                 .markAllPresent(classId, date)
                 .attach(this.validateResponse_())
                 .then(function(success){
+                    if(isSeatingChart_)
+                        return null;
                     return this.BackgroundNavigate('attendance', 'classList', [classId, date, true, isProfile_]);
                   //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
+            return null;
         },
 
         [chlk.controllers.SidebarButton('attendance')],
@@ -234,9 +237,10 @@ NAMESPACE('chlk.controllers', function (){
             var topModel = new chlk.models.classes.ClassesForTopBar(classes);
             topModel.setSelectedItemId(classId);
             model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
-            model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ATTENDANCE));
+//                this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ATTENDANCE)
+                model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE));
             model.setTopData(topModel);
-                model.setDate(date_);
+            model.setDate(date_);
             return model;
         },
 
@@ -253,25 +257,74 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId, Number, Number]],
-        function showEditGridWindowAction(classId, rows, columns){
-            var result = new ria.async.DeferredData(new chlk.models.attendance.EditSeatingGridViewData(classId, rows, columns));
+        [[chlk.models.attendance.EditSeatingGridViewData]],
+        function showEditGridWindowAction(model){
+            var result = new ria.async.DeferredData(model);
             return this.ShadeView(chlk.activities.attendance.EditSeatingGridDialog, result);
+        },
+
+        [[chlk.models.attendance.EditSeatingGridViewData, Object]],
+        function prepareSeatingChartEdit(model, resObject){
+            var rows = model.getRows(),
+                resRows = resObject.rows,
+                columns = model.getColumns(),
+                resColumns = resObject.columns,
+                seatingList = resObject.seatingList || [];
+            if(resRows != rows){
+                if(resRows > rows){
+                    seatingList.splice(rows);
+                }else{
+                    for(var curRow = resRows + 1; curRow <= rows; curRow++){
+                        var newRow = [];
+                        for(var curCol = 1; curCol <= columns; curCol++){
+                            newRow.push({
+                                row: curRow,
+                                column: curCol
+                            });
+                        }
+                        seatingList.push(newRow);
+                    }
+                }
+                resObject.rows = rows;
+            }
+            if(resColumns != columns){
+                if(resColumns > columns){
+                    seatingList.forEach(function(items){
+                        items.splice(columns);
+                    });
+                }else{
+                    for(var curRowIndex = 0; curRowIndex < rows; curRowIndex++){
+                        var curRow = seatingList[curRowIndex];
+                        var len = curRow.length;
+                        for(var curColIndex = len + 1; curColIndex <= columns; curColIndex++){
+                            newRow.push({
+                                row: curRowIndex,
+                                column: curColIndex
+                            });
+                        }
+                    }
+                }
+                resObject.columns = columns;
+            }
+            seatingList.forEach(function(items, i){
+                items.forEach(function(item, j){
+                    item.index = rows * i + j + 1;
+                });
+            });
+            return resObject;
         },
 
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.EditSeatingGridViewData]],
         function editSeatingGridAction(model){
-            var classId = model.getClassId();
-            var result = this.attendanceService
-                .updateSeatingChart(classId, model.getRows(), model.getColumns())
-                .then(function(model){
-                    return this.prepareSeatingData(model, classId);
-                }, this)
-                .attach(this.validateResponse_());
-                //.attach(this.closeCurrentActivity_());
+            var seatingChartInfo = JSON.parse(model.getSeatingChartInfo());
+            var postInfo = this.prepareSeatingChartEdit(model, seatingChartInfo);
+            var res = this.attendanceService.postSeatingChartWithInfo(model.getDate(), postInfo)
+                .then(function(resModel){
+                    return this.prepareSeatingData(resModel, model.getClassId(), model.getDate());
+                }, this);
             this.BackgroundCloseView(chlk.activities.attendance.EditSeatingGridDialog);
-            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result);
+            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, res);
         },
 
         [chlk.controllers.SidebarButton('attendance')],
@@ -295,7 +348,7 @@ NAMESPACE('chlk.controllers', function (){
                         true,
                         this.getContext().getSession().get('attendanceReasons', []),
                         this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE),
-                        this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ATTENDANCE)
+                        this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                     );
                     this.getContext().getSession().set('attendancePageData', model);
                     return model;
@@ -313,7 +366,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.attendanceService.setAttendance(model)
                     .attach(this.validateResponse_())
                     .then(function(res){
-                        this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
+                        if(model.isClassList())
+                            this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
                     }, this);
             return null;
         },

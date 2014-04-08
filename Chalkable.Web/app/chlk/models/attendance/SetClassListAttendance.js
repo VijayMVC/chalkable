@@ -41,14 +41,17 @@ NAMESPACE('chlk.models.attendance', function () {
 
     /** @class chlk.models.attendance.SetClassListAttendance*/
     CLASS('SetClassListAttendance',[
-        [ria.serialize.SerializeProperty('classid')],
         chlk.models.id.ClassId, 'classId',
+
         chlk.models.common.ChlkDate, 'date',
+
         READONLY, ArrayOf(chlk.models.attendance.SetClassAttendanceItem), 'items',
 
         String, 'attendancesJson',
 
         String, 'submitType',
+
+        Boolean, 'classList',
 
         [[String]],
         VOID, function setAttendancesJson(attendancesJson){

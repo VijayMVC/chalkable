@@ -10,6 +10,14 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Number, 'rows',
 
+            chlk.models.common.ChlkDate, 'date',
+
+            Number, 'minColumns',
+
+            Number, 'minRows',
+
+            String, 'seatingChartInfo',
+
             chlk.models.id.ClassId, 'classId',
 
             function $(classId_, rows_, columns_){

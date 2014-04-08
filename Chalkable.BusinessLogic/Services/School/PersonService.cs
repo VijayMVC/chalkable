@@ -114,6 +114,10 @@ namespace Chalkable.BusinessLogic.Services.School
                         LastName = x.LastName,
                         Gender = x.Gender,
                         Id = x.Id,
+                        HasMedicalAlert = x.HasMedicalAlert,
+                        IsAllowedInetAccess = x.IsAllowedInetAccess,
+                        SpecialInstructions = x.SpecialInstructions,
+                        SpEdStatus = x.SpEdStatus
                     }).ToList();
                 da.Insert(ps);                
                 uow.Commit();
@@ -215,14 +219,23 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                var res = new List<Person>();
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                foreach (var personInfo in personInfos)
+                var res = personInfos.Select(x => new Person
                 {
-                     res.Add(Edit(da, personInfo.Id, personInfo.FirstName, 
-                                  personInfo.LastName,personInfo.Gender, personInfo.Salutation, 
-                                  personInfo.BirthDate, personInfo.AddressRef));
-                }
+                    Active = x.Active,
+                    AddressRef = x.AddressRef,
+                    BirthDate = x.BirthDate,
+                    Email = x.Email,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Gender = x.Gender,
+                    Id = x.Id,
+                    HasMedicalAlert = x.HasMedicalAlert,
+                    IsAllowedInetAccess = x.IsAllowedInetAccess,
+                    SpecialInstructions = x.SpecialInstructions,
+                    SpEdStatus = x.SpEdStatus
+                }).ToList();
+
                 da.Update(res);
                 uow.Commit();
                 return res;
@@ -267,21 +280,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return BaseSecurity.IsAdminEditorOrCurrentPerson(person.Id, Context)
                    || (Context.Role == CoreRoles.TEACHER_ROLE && person.RoleRef == CoreRoles.STUDENT_ROLE.Id);
         }
-
-        private Person Edit(PersonDataAccess dataAccess, int localId, string firstName
-                    , string lastName, string gender, string salutation, DateTime? birthDate, int? addressId)
-        {
-            var res = GetPerson(localId);
-            res.FirstName = firstName;
-            res.LastName = lastName;
-            res.Gender = gender;
-            res.Salutation = salutation;
-            res.BirthDate = birthDate;
-            res.AddressRef = addressId;
-            dataAccess.Update(res);
-            return res;
-        }
-
 
         public void ActivatePerson(int id)
         {
@@ -338,5 +336,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public int? AddressRef { get; set; }
         public string Password { get; set; }
         public string SisUserName { get; set; }
+
+        public bool HasMedicalAlert { get; set; }
+        public bool IsAllowedInetAccess { get; set; }
+        public string SpecialInstructions { get; set; }
+        public string SpEdStatus { get; set; }
     }
 }

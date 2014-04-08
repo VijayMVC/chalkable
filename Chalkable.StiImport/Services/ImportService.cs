@@ -52,7 +52,7 @@ namespace Chalkable.StiImport.Services
             context.TablesToSync[typeof(Staff).Name] = null;
             context.TablesToSync[typeof(ScheduledTimeSlot).Name] = null;
             context.TablesToSync[typeof(Gender).Name] = null;
-            
+            context.TablesToSync[typeof(SpEdStatus).Name] = null;
 
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();

@@ -9,7 +9,7 @@ using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Controllers
 {
-    [RequireHttps, TraceControllerFilter]
+    [TraceControllerFilter]
     public class DistrictController : ChalkableController
     {
         public ActionResult Register(DistrictRegisterViewData data)
@@ -21,7 +21,7 @@ namespace Chalkable.Web.Controllers
             var context = sl.UserService.Login(data.UserName, data.Password);
             if (context != null)
             {
-                var district = MasterLocator.DistrictService.GetByIdOrNull(data.DistrictGuid);
+                var district = sl.DistrictService.GetByIdOrNull(data.DistrictGuid);
                 if (district == null && string.IsNullOrEmpty(data.SisPassword))
                     throw new Exception("SIS password can not be null for a new district");
                 var pwd = data.SisPassword;
@@ -42,13 +42,14 @@ namespace Chalkable.Web.Controllers
                     district.SisUrl = data.ApiUrl;
                     district.SisUserName = data.SisUserName;
                     district.TimeZone = timeZone;
-                    MasterLocator.DistrictService.Update(district);
+                    sl.DistrictService.Update(district);
                 }
                 return Json(true);
             }
             return Json("Invalid credentials");
         }
 
+        [RequireHttps]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult List(int? start, int? count)
         {
@@ -58,6 +59,7 @@ namespace Chalkable.Web.Controllers
             return Json(districts.Transform(DistrictViewData.Create));
         }
 
+        [RequireHttps]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Create()
         {
@@ -70,6 +72,7 @@ namespace Chalkable.Web.Controllers
             return Json(tzCollection);
         }
 
+        [RequireHttps]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Delete(Guid districtId)
         {
@@ -77,6 +80,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [RequireHttps]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Update(Guid districtId, string name, string dbName, string sisUrl, string sisUserName, string sisPassword, int sisSystemType)
         {
@@ -93,6 +97,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [RequireHttps]
         public ActionResult Info(Guid districtId)
         {
             var result = MasterLocator.DistrictService.GetByIdOrNull(districtId);

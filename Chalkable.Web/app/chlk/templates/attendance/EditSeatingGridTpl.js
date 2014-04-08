@@ -15,6 +15,18 @@ NAMESPACE('chlk.templates.attendance', function () {
             Number, 'rows',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'classId'
+            Number, 'minColumns',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'minRows',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'date',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'seatingChartInfo'
         ]);
 });

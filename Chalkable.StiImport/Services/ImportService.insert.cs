@@ -95,6 +95,7 @@ namespace Chalkable.StiImport.Services
             var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
             var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
+            var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
             foreach (var person in persons)
             {
                 counter++;
@@ -102,12 +103,29 @@ namespace Chalkable.StiImport.Services
                     Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
                 var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
                 //TODO: what about admins? probably will be resolved by API
-                string userName = string.Empty;
+                var userName = string.Empty;
+                var hasMedicalAlert = false;
+                var isAllowedInetAccess = false;
+                string specialInstructions = "";
+                string spEdStatus = null;
+
                 if (students.ContainsKey(person.PersonID))
+                {
                     userName = users[students[person.PersonID].UserID].UserName;
+                    hasMedicalAlert = students[person.PersonID].HasMedicalAlert;
+                    isAllowedInetAccess = students[person.PersonID].IsAllowedInetAccess;
+                    specialInstructions = students[person.PersonID].SpecialInstructions;
+                    if (students[person.PersonID].SpEdStatusID.HasValue)
+                    {
+                        spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
+                    }
+                    
+                }
+                    
                 if (staff.ContainsKey(person.PersonID) && staff[person.PersonID].UserID.HasValue)
                     userName = users[staff[person.PersonID].UserID.Value].UserName;
 
+                
                 ps.Add(new PersonInfo
                 {
                     Active = true,
@@ -119,7 +137,11 @@ namespace Chalkable.StiImport.Services
                     Id = person.PersonID,
                     LastName = person.LastName,
                     Password = ServiceLocatorMaster.UserService.PasswordMd5(DEF_USER_PASS),
-                    SisUserName = userName
+                    SisUserName = userName,
+                    HasMedicalAlert = hasMedicalAlert,
+                    IsAllowedInetAccess = isAllowedInetAccess,
+                    SpecialInstructions = specialInstructions,
+                    SpEdStatus = spEdStatus
                 });
             }
             ServiceLocatorSchool.PersonService.Add(ps);

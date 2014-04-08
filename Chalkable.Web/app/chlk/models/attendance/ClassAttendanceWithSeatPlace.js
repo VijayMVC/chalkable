@@ -13,6 +13,16 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Number, 'column',
 
-            Number, 'row'
+            Number, 'row',
+
+            function $(row_, column_, index_){
+                BASE();
+                if(column_)
+                    this.setColumn(column_);
+                if(row_)
+                    this.setRow(row_);
+                if(index_)
+                    this.setIndex(index_);
+            }
         ]);
 });

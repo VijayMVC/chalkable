@@ -1163,6 +1163,14 @@ BODY {
   }
 }
 
+.show-edit-grid-form{
+  display: inline-block;
+
+  BUTTON.grey-button{
+    height: 32px;
+  }
+}
+
 .edit-seating-grid{
   margin: 202px 151px;
   width: 247px;
@@ -1206,6 +1214,7 @@ BODY {
   left: 0;
   right: 0;
   z-index: 100;
+  display: none;
 
   .people-container{
     min-height: 102px;
@@ -1221,44 +1230,12 @@ BODY {
       display: none;
     }
 
-    .remove-red-btn{
+    .remove-red-btn, .student-seating-type{
       display: none;
     }
 
     .avatar-wrapper{
       zoom: 0.79;
-    }
-  }
-}
-
-.student-block{
-  .avatar-wrapper{
-    background: #eee;
-  }
-
-  .image-container{
-    position: relative;
-  }
-
-  .reason-container{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.5);
-    display: table;
-    vertical-align: middle;
-    height: 70px;
-    color: black;
-    text-transform: uppercase;
-    font: bold 13px Arial;
-    width: 70px;
-    z-index: 10;
-
-    .reason-text{
-      display: table-cell;
-      vertical-align: middle;
     }
   }
 }
@@ -1274,12 +1251,72 @@ BODY {
 }
 
 .seating-chart-page.dragging-on{
+  .save-attendances-buttons{
+    display: none;
+  }
+
   .seating-chart-container{
     .seating-row{
       .student-block.ui-draggable-dragging{
         .remove-red-btn{
           display: none;
         }
+      }
+    }
+  }
+}
+
+.student-block{
+  .seating-attendance-popup{
+    display: none;
+  }
+
+  .not-empty{
+    position: relative;
+
+    .avatar-wrapper{
+      background: #eee;
+    }
+
+    .image-container{
+      position: relative;
+    }
+
+    .reason-container{
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.5);
+      display: none;
+      vertical-align: middle;
+      height: 70px;
+      color: black;
+      text-transform: uppercase;
+      font: bold 13px Arial;
+      width: 70px;
+      z-index: 10;
+
+      .reason-text{
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+
+    &.late{
+      .student-seating-type{
+        background: #c97d11;
+      }
+    }
+
+    &.absent{
+      .student-seating-type{
+        background: #880909;
+      }
+
+      .reason-container{
+        display: table;
       }
     }
   }
@@ -1293,14 +1330,6 @@ BODY {
   border-radius: 5px;
   background: #276435;
   left: 33px;
-
-  &.late{
-    background: #c97d11;
-  }
-
-  &.absent{
-    background: #880909;
-  }
 }
 
 .ui-draggable-dragging{
@@ -1317,5 +1346,26 @@ BODY {
 
   .student-seating-type{
     display: none;
+  }
+}
+
+#submit-chart{
+  padding: 3px 25px 5px;
+  font-weight: bold;
+}
+
+.seating-chart-popup{
+  display: none;
+
+  &.start{
+    .second-part{
+      display: none;
+    }
+  }
+
+  &:not(.start){
+    .second-part{
+      display: none;
+    }
   }
 }

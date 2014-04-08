@@ -52,6 +52,25 @@ NAMESPACE('chlk.templates.attendance', function () {
                 });
                 res.seatsList = seatsList;
                 return JSON.stringify(res);
+            },
+
+            Object, function getMinData(){
+                var rows = 0, columns = 0;
+                this.getSeatingList().forEach(function(items){
+                    items.forEach(function(item){
+                        if(item.getInfo()){
+                            if(item.getColumn() > columns)
+                                columns = item.getColumn();
+                            if(item.getRow() > rows)
+                                rows = item.getRow();
+                        }
+                    });
+                });
+                var res = {
+                    rows: rows,
+                    columns: columns
+                };
+                return res;
             }
         ]);
 });
