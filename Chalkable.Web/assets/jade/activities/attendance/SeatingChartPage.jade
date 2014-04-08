@@ -29,7 +29,10 @@ selectedId = topData.getSelectedItemId()
                     data-params=selectedId ? [selectedId.valueOf()] : null
                 )#attendance-date.tb-date-picker
                 +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
+            +ActionForm('attendance', 'setClassAttendanceList').save-attendances-form
+                +Hidden('date', self.getDate().format('mm/dd/yy'))
                 +Hidden('classId', selectedId.valueOf()).class-id
+                +Hidden('attendancesJson').attendances-json
         .right
             +ActionLink('attendance', 'classList', selectedId, self.getDate().format('mm-dd-yy'))=Msg.List
             a.action-link.pressed=Msg.Seating_Chart
@@ -41,10 +44,10 @@ selectedId = topData.getSelectedItemId()
     else
         +UpdateGridForm(Msg.Edit_grid, self.getRows(), self.getColumns(), self.getMinData().rows, self.getMinData().columns, selectedId.valueOf())
         .grey-button.add-remove-students=Msg.Add_remove_students
-        .right.right-container
-            BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
+        .right.right-container.save-attendances-buttons
             if self.isAblePost()
-                +ActionLink('attendance', 'markAllFromSeating', selectedId.valueOf(), self.getDate().toStandardFormat())#all-present-link=Msg.Mark_all_Present
+                BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), false, true)#all-present-link=Msg.Mark_all_Present
         .black-arrow.add=Msg.Add_your_students
         .seating-chart-container
             +LeftRightToolbar()(
@@ -67,3 +70,6 @@ selectedId = topData.getSelectedItemId()
                                 +RenderWith(info || new chlk.models.attendance.ClassAttendance, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
                             if info
                                 .empty-box.student-block.absolute
+.chlk-pop-up-container.popup-top.seating-chart-popup.start
+    .first-part
+    .second-part

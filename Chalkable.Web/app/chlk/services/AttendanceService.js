@@ -90,7 +90,17 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function postSeatingChart(date, postSeatingChartData) {
                 return this.post('Attendance/PostSeatingChart.json', Boolean,{
                     seatingChartInfo: postSeatingChartData,
-                    date: date.toStandardFormat()
+                    date: date.toStandardFormat(),
+                    needInfo: false
+                });
+            },
+
+            [[chlk.models.common.ChlkDate, Object]],
+            ria.async.Future, function postSeatingChartWithInfo(date, postSeatingChartData) {
+                return this.post('Attendance/PostSeatingChart.json', chlk.models.attendance.SeatingChart,{
+                    seatingChartInfo: postSeatingChartData,
+                    date: date.toStandardFormat(),
+                    needInfo: true
                 });
             },
 

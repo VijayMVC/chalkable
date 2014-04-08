@@ -188,15 +188,18 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
-        function markAllAction(classId, date, isProfile_){
-            return this.attendanceService
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
+        function markAllAction(classId, date, isProfile_, isSeatingChart_){
+            this.attendanceService
                 .markAllPresent(classId, date)
                 .attach(this.validateResponse_())
                 .then(function(success){
+                    if(isSeatingChart_)
+                        return null;
                     return this.BackgroundNavigate('attendance', 'classList', [classId, date, true, isProfile_]);
                   //  this.classListAction(classId, date, true, isProfile_);
                 }, this);
+            return null;
         },
 
         [chlk.controllers.SidebarButton('attendance')],
@@ -238,7 +241,6 @@ NAMESPACE('chlk.controllers', function (){
                 model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE));
             model.setTopData(topModel);
             model.setDate(date_);
-            this.getContext().getSession().set('seatingInfo', model);
             return model;
         },
 
@@ -261,16 +263,13 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.attendance.EditSeatingGridDialog, result);
         },
 
-        function prepareSeatingChartEdit(model, resModel){
-            var classId = model.getClassId();
-            resModel = this.prepareSeatingData(resModel, classId, model.getDate());
-            if(!resModel.getSeatingList())
-                resModel.setSeatingList([]);
+        [[chlk.models.attendance.EditSeatingGridViewData, Object]],
+        function prepareSeatingChartEdit(model, resObject){
             var rows = model.getRows(),
-                resRows = resModel.getRows(),
+                resRows = resObject.rows,
                 columns = model.getColumns(),
-                resColumns = resModel.getColumns(),
-                seatingList = resModel.getSeatingList() || [];
+                resColumns = resObject.columns,
+                seatingList = resObject.seatingList || [];
             if(resRows != rows){
                 if(resRows > rows){
                     seatingList.splice(rows);
@@ -278,15 +277,15 @@ NAMESPACE('chlk.controllers', function (){
                     for(var curRow = resRows + 1; curRow <= rows; curRow++){
                         var newRow = [];
                         for(var curCol = 1; curCol <= columns; curCol++){
-                            newRow.push(new chlk.models.attendance.ClassAttendanceWithSeatPlace(
-                                curRow,
-                                curCol
-                            ));
+                            newRow.push({
+                                row: curRow,
+                                column: curCol
+                            });
                         }
                         seatingList.push(newRow);
                     }
                 }
-                resModel.setRows(rows);
+                resObject.rows = rows;
             }
             if(resColumns != columns){
                 if(resColumns > columns){
@@ -298,39 +297,32 @@ NAMESPACE('chlk.controllers', function (){
                         var curRow = seatingList[curRowIndex];
                         var len = curRow.length;
                         for(var curColIndex = len + 1; curColIndex <= columns; curColIndex++){
-                            curRow.push(new chlk.models.attendance.ClassAttendanceWithSeatPlace(
-                                curRowIndex,
-                                curColIndex
-                            ));
+                            newRow.push({
+                                row: curRowIndex,
+                                column: curColIndex
+                            });
                         }
                     }
                 }
-                resModel.setColumns(columns);
+                resObject.columns = columns;
             }
             seatingList.forEach(function(items, i){
                 items.forEach(function(item, j){
-                    item.setIndex(rows * i + j + 1);
+                    item.index = rows * i + j + 1;
                 });
             });
-            return resModel;
+            return resObject;
         },
 
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.EditSeatingGridViewData]],
         function editSeatingGridAction(model){
-            var resModel = this.getContext().getSession().get('seatingInfo'), res;
-            if(resModel.getColumns() == 0 || resModel.getRows() == 0){
-                resModel = this.prepareSeatingChartEdit(model, resModel);
-                res = ria.async.DeferredData(resModel);
-            }else{
-                res = this.attendanceService.postSeatingChart(model.getDate(), JSON.parse(model.getSeatingChartInfo()))
-                    .then(function(resModel){
-                        resModel = this.prepareSeatingChartEdit(model, resModel);
-                        this.getView().pop();
-                        return resModel;
-                    }, this);
-                this.ShadeLoader();
-            }
+            var seatingChartInfo = JSON.parse(model.getSeatingChartInfo());
+            var postInfo = this.prepareSeatingChartEdit(model, seatingChartInfo);
+            var res = this.attendanceService.postSeatingChartWithInfo(model.getDate(), postInfo)
+                .then(function(resModel){
+                    return this.prepareSeatingData(resModel, model.getClassId(), model.getDate());
+                }, this);
             this.BackgroundCloseView(chlk.activities.attendance.EditSeatingGridDialog);
             return this.UpdateView(chlk.activities.attendance.SeatingChartPage, res);
         },
@@ -374,7 +366,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.attendanceService.setAttendance(model)
                     .attach(this.validateResponse_())
                     .then(function(res){
-                        this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
+                        if(model.isClassList())
+                            this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
                     }, this);
             return null;
         },
