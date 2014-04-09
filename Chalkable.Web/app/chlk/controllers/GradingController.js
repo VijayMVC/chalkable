@@ -75,23 +75,29 @@ NAMESPACE('chlk.controllers', function (){
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
-                var model = new chlk.models.grading.GradingClassSummary();
-                model.setTopData(topData);
                 var result = this.gradingService
                     .getClassSummary(classId_)
                     .attach(this.validateResponse_())
-                    .then(function(result){
-                        result.forEach(function(mpData){
-                            mpData.getItems().forEach(function(item){
-                                item.setClassId(classId_);
-                            });
-                        });
+                    .then(function(model){
                         var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        model.setTopData(topData);
                         model.setGradingPeriodId(gradingPeriod.getId());
-                        model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.grading.GradingSummaryGridSubmitViewData]],
+            function loadGradingPeriodSummaryAction(model){
+                var result = this.gradingService
+                    .getClassSummaryGridForPeriod(model.getClassId())
+                    .then(function(newModel){
+                        newModel.setAutoUpdate(model.isAutoUpdate());
+                        return newModel;
+                    })
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.grading.GradingClassSummaryPage, result, model.isAutoUpdate() ? chlk.activities.lib.DontShowLoader() : null);
             },
 
             [chlk.controllers.SidebarButton('statistic')],
