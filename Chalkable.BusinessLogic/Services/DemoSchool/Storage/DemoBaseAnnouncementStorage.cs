@@ -115,6 +115,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return new AnnouncementDetails
             {
                 Id = announcement.Id,
+                SisActivityId = announcement.SisActivityId,
+                Starred = announcement.Starred,
+                Subject = announcement.Subject,
+                StudentsCount = announcement.StudentsCount,
+                WeightAddition = announcement.WeightAddition,
+                WeightMultiplier = announcement.WeightMultiplier,
+                QnACount = announcement.QnACount,
+                OwnerAttachmentsCount = announcement.OwnerAttachmentsCount,
                 PersonRef = announcement.PersonRef,
                 PersonName = announcement.PersonName,
                 SchoolRef = announcement.SchoolRef,
@@ -135,8 +143,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Owner = Storage.PersonStorage.GetById(announcement.PersonRef),
                 ApplicationCount = announcement.ApplicationCount,
                 AttachmentsCount = announcement.AttachmentsCount,
-                
-
+                StudentAnnouncements = Storage.StudentAnnouncementStorage.GetAll(announcement.Id),
+                VisibleForStudent = announcement.VisibleForStudent
             };
         }
 
@@ -167,9 +175,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public bool? Starred { get; set; }
              */
 
+
+            var annId = GetNextFreeId();
             var announcement = new AnnouncementComplex
             {
-                Id = GetNextFreeId(),
+                Id = annId,
+                SisActivityId = annId,
                 PersonRef = userId,
                 ClassRef = classId,
                 ClassAnnouncementTypeRef = classAnnouncementTypeId,
@@ -178,6 +189,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
+               
                 
             };
             data[announcement.Id] = announcement;

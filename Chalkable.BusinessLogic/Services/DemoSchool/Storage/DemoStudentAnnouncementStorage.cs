@@ -44,5 +44,31 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var sa = data.Where(x => x.Value.AnnouncementId == announcementId).Select(x => x.Key).First();
             data[sa].Dropped = drop;
         }
+
+        public IList<StudentAnnouncementDetails> GetAll(int announcementId)
+        {
+            return data.Where(x => x.Value.AnnouncementId == announcementId).Select(x => new StudentAnnouncementDetails
+            {
+                AnnouncementId = x.Value.AnnouncementId,
+                AbsenceCategory = x.Value.AbsenceCategory,
+                Absent = x.Value.Absent,
+                ActivityId = x.Value.ActivityId,
+                AlphaGradeId = x.Value.AlphaGradeId,
+                AlternateScoreId = x.Value.AlternateScoreId,
+                Comment = x.Value.Comment,
+                Dropped = x.Value.Dropped,
+                Exempt = x.Value.Exempt,
+                ExtraCredit = x.Value.ExtraCredit,
+                Incomplete = x.Value.Incomplete,
+                //ClassId = x.Value.c
+                Late = x.Value.Late,
+                NumericScore = x.Value.NumericScore,
+                OverMaxScore = x.Value.OverMaxScore,
+                ScoreValue = x.Value.ScoreValue,
+                Student = Storage.PersonStorage.GetById(x.Value.StudentId),
+                StudentId = x.Value.StudentId,
+                Withdrawn = x.Value.Withdrawn
+            }).ToList();
+        }
     }
 }
