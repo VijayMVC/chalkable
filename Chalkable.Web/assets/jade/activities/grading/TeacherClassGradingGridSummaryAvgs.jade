@@ -1,0 +1,6 @@
+.type-name=Msg.Avg
+.time
+.max-score.dotted-h
+each student,i in self.getStudents()
+    div(row-index=i, class=(i == self.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=student.getAvg()
+.dotted-h.grade-value
