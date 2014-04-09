@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -14,7 +13,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(ClassPersonQuery query)
         {
-            SimpleDelete<ClassPerson>(BuildConditioins(query));
+            SimpleDelete(BuildConditioins(query));
         }
 
         public QueryCondition BuildConditioins(ClassPersonQuery query)

@@ -87,7 +87,8 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<int> ids)
         {
-            SimpleDelete(ids.Select(x => new AttendanceLevelReason {Id = x}));
+            IList<AttendanceLevelReason> toDelete = ids.Select(x => new AttendanceLevelReason {Id = x}).ToList();
+            SimpleDelete(toDelete);
         }
     }
 }

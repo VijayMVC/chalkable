@@ -100,18 +100,19 @@ namespace Chalkable.Data.Common
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
-        protected void SimpleDelete<T>(T obj)
-        {
-            var q = Orm.Orm.SimpleDelete(obj);
-            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
-        }
         protected void SimpleDelete<T>(IList<T> objs)
         {
             if (objs.Count > 0)
             {
                 var q = Orm.Orm.SimpleDelete(objs);
-                ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);    
+                ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
             }
+        }
+
+        protected void SimpleDelete(TEntity obj)
+        {
+            var q = Orm.Orm.SimpleDelete(obj);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
         protected void SimpleDelete<T>(QueryCondition conds)
@@ -119,6 +120,13 @@ namespace Chalkable.Data.Common
             var q = Orm.Orm.SimpleDelete<T>(FilterConditions(conds));
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
+        
+        protected void SimpleDelete(QueryCondition conds)
+        {
+            var q = Orm.Orm.SimpleDelete<TEntity>(FilterConditions(conds));
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+        }
+
         protected T Read<T>(DbQuery query, Func<DbDataReader, T> action)
         {
             using (var reader = ExecuteReaderParametrized(query.Sql.ToString(), query.Parameters as Dictionary<string, object>))
@@ -255,7 +263,7 @@ namespace Chalkable.Data.Common
 
         public virtual void Delete(TParam key)
         {
-            SimpleDelete<TEntity>(BuildCondsByKey(key));
+            SimpleDelete(BuildCondsByKey(key));
         }
 
         //public virtual void Delete(IList<TParam> keys)

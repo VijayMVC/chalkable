@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -25,7 +22,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void DeleteBySchoolYearId(int? schoolYearId)
         {
-            SimpleDelete<Period>(GetCondsBySchoolYear(schoolYearId));
+            SimpleDelete(GetCondsBySchoolYear(schoolYearId));
         }
 
         public void Delete(IList<int> ids)

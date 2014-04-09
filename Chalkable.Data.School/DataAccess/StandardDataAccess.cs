@@ -87,7 +87,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<int> ids)
         {
-            SimpleDelete(ids.Select(x => new StandardSubject {Id = x}));
+            SimpleDelete(ids.Select(x => new StandardSubject {Id = x}).ToList());
         }
     }
 
@@ -111,7 +111,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(int announcementId, int standardId)
         {
-            SimpleDelete<AnnouncementStandard>(new AndQueryCondition
+            SimpleDelete(new AndQueryCondition
                 {
                     {AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId},
                     {AnnouncementStandard.STANDARD_REF_FIELD, standardId}
