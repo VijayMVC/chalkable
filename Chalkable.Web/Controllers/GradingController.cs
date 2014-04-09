@@ -49,6 +49,13 @@ namespace Chalkable.Web.Controllers
             //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
         }
 
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ClassGradingPeriodSummary(int classId, int gradingPeriodId)
+        {
+            var res = SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, gradingPeriodId);
+            return Json(GradingClassSummaryViewData.Create(res));
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
