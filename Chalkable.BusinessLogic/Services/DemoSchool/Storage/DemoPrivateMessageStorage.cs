@@ -67,8 +67,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(PrivateMessage message)
         {
-            if (!data.ContainsKey(message.Id))
-                data[message.Id] = message;
+            message.Id = GetNextFreeId();
+            data.Add(message.Id, message);
         }
 
         public PrivateMessageDetails GetDetailsById(int id, int userLocalId)
