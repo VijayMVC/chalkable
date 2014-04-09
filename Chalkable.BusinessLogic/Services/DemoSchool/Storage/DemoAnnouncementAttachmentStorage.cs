@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -19,10 +18,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[annAtt.Id] = annAtt;
         }
 
-        public IList<AnnouncementAttachment> GetList(int value, int id, string name)
+        public IList<AnnouncementAttachment> GetList(int userId, int roleId, string name)
         {
 
-            throw new NotImplementedException();
+            //todo filter by role id
+            return data.Where(x => x.Value.PersonRef == userId && x.Value.Name == name).Select(x => x.Value).ToList();
         }
         
         public PaginatedList<AnnouncementAttachment> GetPaginatedList(int announcementId, int i, int id, int start, int count, bool needsAllAttachments)
@@ -32,8 +32,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public AnnouncementAttachment GetById(int announcementAttachmentId, int userId, int roleId)
         {
-            throw new NotImplementedException();
-            //return data.Where(x => x.Value.Id == announcementAttachmentId && x.Value.PersonRef == userId && x.Value.)
+            //todo filter by role
+            return
+                data.First(x => x.Value.Id == announcementAttachmentId && x.Value.PersonRef == userId).Value;
+
         }
     }
 }

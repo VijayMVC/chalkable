@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             studentParentService = new DemoStudentParentService(this, storage);
             studentAnnouncementService = new DemoStudentAnnouncementService(this , storage);
             disciplineTypeService = new DemoDisciplineTypeService(this, storage);
-            applicationSchoolService = new ApplicationSchoolService(this);
+            applicationSchoolService = new DemoApplicationSchoolService(this, storage);
             disciplineService = new DemoDisciplineService(this, storage);
             gradingStatisticService = new DemoGradingStatisticService(this, storage);
             schoolService = new DemoSchoolService(this, storage);

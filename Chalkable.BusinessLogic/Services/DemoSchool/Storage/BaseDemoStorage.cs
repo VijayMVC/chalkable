@@ -14,7 +14,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     {
         protected DemoStorage Storage { get; private set; }
 
-        protected Dictionary<T, U> data = new Dictionary<T, U>(); 
+        protected Dictionary<T, U> data = new Dictionary<T, U>();
+
+        protected int index = 0;
+
+        public int GetNextFreeId()
+        {
+            int res = index;
+            ++index;
+            return res;
+        }
 
         public BaseDemoStorage(DemoStorage storage)
         {

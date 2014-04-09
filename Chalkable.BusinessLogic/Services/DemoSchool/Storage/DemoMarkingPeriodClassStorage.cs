@@ -80,6 +80,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                MarkingPeriodRef = 1,
                ClassRef = 2
            });
+
+           Add(new MarkingPeriodClass
+           {
+               SchoolRef = 1,
+               MarkingPeriodRef = 2,
+               ClassRef = 1
+           });
+
+           Add(new MarkingPeriodClass
+           {
+               SchoolRef = 1,
+               MarkingPeriodRef = 2,
+               ClassRef = 2
+           });
         }
 
         public void Delete(IList<MarkingPeriodClass> markingPeriodClasses)

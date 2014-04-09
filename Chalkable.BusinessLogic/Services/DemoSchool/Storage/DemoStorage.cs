@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.Remoting.Messaging;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -61,9 +64,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public UserContext Context { get; private set; }
 
+        private IDemoAnnouncementStorage CreateAnnouncementStorage(UserContext context, DemoStorage storage)
+        {
+            if (BaseSecurity.IsAdminViewer(context))
+                return new DemoAnnouncementForAdminStorage(storage);
+            if (context.Role == CoreRoles.TEACHER_ROLE)
+                return new DemoAnnouncementForTeacherStorage(storage);
+            if (context.Role == CoreRoles.STUDENT_ROLE)
+                return new DemoAnnouncementForStudentStorage(storage);
+            throw new ChalkableException("Unsupported role for announcements");
+        }
+
         public DemoStorage(UserContext context)
         {
             Context = context;
+            AnnouncementReminderStorage = new DemoAnnouncementReminderStorage(this);
+            AnnouncementStorage = CreateAnnouncementStorage(Context, this);
             PrivateMessageStore = new DemoPrivateMessageStorage(this);
             SchoolYearStorage = new DemoSchoolYearStorage(this);
             DisciplineTypeStorage = new DemoDisciplineTypeStorage(this);

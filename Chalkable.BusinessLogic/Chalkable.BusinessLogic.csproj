@@ -104,6 +104,7 @@
     <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\CrocodocService.cs" />
+    <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
     <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassService.cs" />

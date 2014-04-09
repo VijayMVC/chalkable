@@ -34,9 +34,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return phone;
         }
 
-        public void Update(Phone phone, AndQueryCondition andQueryCondition)
+        public void Update(Phone phone, string digitOnlyValue, int personId)
         {
-            throw new System.NotImplementedException();
+            var phones =
+                data.Where(x => x.Value.DigitOnlyValue == digitOnlyValue && x.Value.PersonRef == personId).Select(x => x.Key).ToList();
+            foreach (var i in phones)
+            {
+                data[i].Type = phone.Type;
+                data[i].IsPrimary = phone.IsPrimary;
+                data[i].Value = phone.Value;
+            }
         }
 
         public IList<Phone> Add(IList<Phone> phones)

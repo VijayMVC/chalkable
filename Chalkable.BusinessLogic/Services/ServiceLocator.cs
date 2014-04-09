@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Web;
 using System.Web.Caching;
 using Chalkable.BusinessLogic.Services.DemoSchool;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
@@ -9,6 +10,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using CacheItemPriority = System.Web.Caching.CacheItemPriority;
 
 namespace Chalkable.BusinessLogic.Services
 {
@@ -102,13 +104,13 @@ namespace Chalkable.BusinessLogic.Services
         private static IServiceLocatorSchool CreateDemoSchoolLocator(UserContext context)
         {
             //district ref not user id
-            //if (!MemoryCache.Default.Contains(context.UserId.ToString()))
-            //{
-               // MemoryCache.Default[context.UserId.ToString()] = new DemoStorage(context);
-            //}
-            //var storage = (DemoStorage)MemoryCache.Default[context.UserId.ToString()];
+            if (HttpRuntime.Cache[context.DistrictId.ToString()] == null)
+            {
+                HttpRuntime.Cache.Add(context.DistrictId.ToString(), new DemoStorage(context), null,
+                    DateTime.Now.AddHours(3), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+            }
+            var storage = (DemoStorage)HttpRuntime.Cache[context.DistrictId.ToString()];
 
-            var storage = new DemoStorage(context);
             var masterLocator = new DemoServiceLocatorMaster(context, storage);
             return new DemoServiceLocatorSchool(masterLocator, storage);
         }

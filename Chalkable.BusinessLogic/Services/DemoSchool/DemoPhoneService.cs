@@ -75,11 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             phone.Value = value;
             phone.IsPrimary = isPrimary;
             phone.Type = type;
-            Storage.PhoneStorage.Update(phone, new AndQueryCondition
-            {
-                {Phone.DIGIT_ONLY_VALUE_FIELD, digitOnlyValue},
-                {Phone.PERSON_REF_FIELD, personId}
-            });
+            Storage.PhoneStorage.Update(phone, digitOnlyValue, personId);
             return phone;
 
         }

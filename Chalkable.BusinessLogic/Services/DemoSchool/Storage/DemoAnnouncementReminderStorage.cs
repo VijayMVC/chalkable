@@ -14,9 +14,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        public IList<AnnouncementReminder> GetList(int announcementId, int value)
+        public IList<AnnouncementReminder> GetList(int announcementId, int userId)
         {
-            throw new NotImplementedException();
+            return
+                data.Where(x => x.Value.AnnouncementRef == announcementId && x.Value.PersonRef == userId)
+                    .Select(x => x.Value)
+                    .ToList();
         }
 
         public void Add(AnnouncementReminder reminder)
