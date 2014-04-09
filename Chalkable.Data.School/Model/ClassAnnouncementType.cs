@@ -16,4 +16,9 @@ namespace Chalkable.Data.School.Model
         public int ClassRef { get; set; }
         public int? ChalkableAnnouncementTypeRef { get; set; }
     }
+
+    public class GradedClassAnnouncementType : ClassAnnouncementType
+    {
+        public double? Avg { get; set; }      
+    }
 }

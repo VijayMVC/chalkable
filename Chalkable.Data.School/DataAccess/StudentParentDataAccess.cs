@@ -15,7 +15,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(StudentParentQuery query)
         {
-            SimpleDelete<StudentParent>(BuildConditions(query));    
+            SimpleDelete(BuildConditions(query));    
         }
 
 

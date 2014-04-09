@@ -21,6 +21,8 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<int> ids)
         {
+            if (ids.Count == 0)
+                return;
             var res = new StringBuilder();
             var idsS = ids.Select(x => x.ToString()).JoinString(",");
             var sqlFormat = " delete from [{0}] where [{0}].[{1}] in ({2})";

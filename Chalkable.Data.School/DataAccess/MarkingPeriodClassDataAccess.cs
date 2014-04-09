@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.DataAccess
        
         public void Delete(MarkingPeriodClassQuery query)
         {
-            SimpleDelete<MarkingPeriodClass>(BuildConditions(query));
+            SimpleDelete(BuildConditions(query));
         }
 
         public MarkingPeriodClass GetMarkingPeriodClassOrNull(MarkingPeriodClassQuery query)
@@ -44,6 +44,8 @@ namespace Chalkable.Data.School.DataAccess
         }
         public bool Exists(IList<int> markingPeriodIds)
         {
+            if (markingPeriodIds.Count == 0)
+                return false;
             var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
             var query = new DbQuery();
             query.Sql.Append(string.Format(@"select * from MarkingPeriodClass where MarkingPeriodRef in ({0})", mpIdsString));

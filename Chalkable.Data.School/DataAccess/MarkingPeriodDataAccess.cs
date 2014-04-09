@@ -17,6 +17,8 @@ namespace Chalkable.Data.School.DataAccess
 
         public void DeleteMarkingPeriods(IList<int> markingPeriodIds)
         {
+            if (markingPeriodIds.Count == 0)
+                return;
             var b = new StringBuilder();
             var mpidsString = markingPeriodIds.Select(x => "'" + x + "'").JoinString(",");
             b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where MarkingPeriodRef in ({0})) ");

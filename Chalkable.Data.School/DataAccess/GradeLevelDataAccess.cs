@@ -39,7 +39,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void DeleteSchoolGradeLevel(int gradeLevel)
         {
-            SimpleDelete<SchoolGradeLevel>(new AndQueryCondition { { SchoolGradeLevel.GRADE_LEVEL_REF_FIELD, gradeLevel } });
+            SimpleDelete(new AndQueryCondition { { SchoolGradeLevel.GRADE_LEVEL_REF_FIELD, gradeLevel } });
         }
         public bool Exists(int gradeLevel)
         {
