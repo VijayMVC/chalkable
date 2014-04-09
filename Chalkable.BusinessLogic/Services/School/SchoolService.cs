@@ -81,14 +81,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(IList<int> ids)
         {
-            
-            //using (var uow = Update())
-            //{
-            //    new SchoolDataAccess(uow).Delete(ids);
-            //    uow.Commit();
-            //}
-            //ServiceLocator.ServiceLocatorMaster.SchoolService.
-            throw new NotImplementedException();
+            using (var uow = Update())
+            {
+                var da = new SchoolDataAccess(uow);
+                da.Delete(ids);
+                uow.Commit();
+            }
         }
 
 

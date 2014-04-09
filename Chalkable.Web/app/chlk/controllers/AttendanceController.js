@@ -237,10 +237,10 @@ NAMESPACE('chlk.controllers', function (){
             var topModel = new chlk.models.classes.ClassesForTopBar(classes);
             topModel.setSelectedItemId(classId);
             model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
-//                this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ATTENDANCE)
-                model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE));
+            model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE));
             model.setTopData(topModel);
             model.setDate(date_);
+            model.setReasons(this.getContext().getSession().get('attendanceReasons', []));
             return model;
         },
 
@@ -362,14 +362,19 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListAction(model){
-            if(model.getSubmitType() == 'submit')
-                return this.attendanceService.setAttendance(model)
+            if(model.getSubmitType() == 'submit' || !model.isClassList())
+                var result = this.attendanceService.setAttendance(model)
                     .attach(this.validateResponse_())
                     .then(function(res){
-                        if(model.isClassList())
+                        if(model.isClassList()){
                             this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
+                        }else{
+                            return new chlk.models.attendance.SeatingChart();
+                        }
                     }, this);
-            return null;
+            if(model.isClassList())
+                return null;
+            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'saved');
         },
 
         Object, function getActivityClass_(isProfile_){

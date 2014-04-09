@@ -225,7 +225,7 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
-            String, function getHTML() {
+            function getHTML() {
                 return this._dom.html();
             },
 

@@ -106,6 +106,97 @@ NAMESPACE('chlk.activities.attendance', function () {
                 }
             },
 
+            function closePopUp(){
+                this.dom.find('.seating-chart-popup')
+                    .hide()
+                    .removeClass('absent')
+                    .removeClass('late')
+                    .setCss('top', 'auto');
+                this.dom.find('.active-student').removeClass('active-student')
+            },
+
+            [ria.mvc.DomEventBind('click', '.attendance-data')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function studentClick(node, event){
+                if(!this.dom.hasClass('dragging-on') && this.dom.find('#submit-attendance-button').exists()){
+                    var popUp = this.dom.find('.seating-chart-popup');
+                    var main = this.dom.parent('#main');
+                    var bottom = main.height() + main.offset().top - node.offset().top;
+                    var left = node.offset().left - main.offset().left - 54;
+                    popUp.setCss('bottom', bottom);
+                    popUp.setCss('left', left);
+                    var reasonId = node.getData('reason-id') || -1;
+                    var reasonText = node.getData('reason-text') || '';
+                    var type = node.getData('type');
+                    popUp.find('.selected').removeClass('selected');
+                    popUp.find('.reason-text').setHTML('');
+                    popUp.find('.first-part .item[data-type=' + type + ']')
+                        .addClass('selected')
+                        .find('.reason-text')
+                        .setHTML(' - ' + reasonText);
+                    popUp.find('.item[data-id=' + reasonId + ']')
+                        .addClass('selected');
+                    node.addClass('active-student');
+                    setTimeout(function(){
+                        popUp.show();
+                        this.checkPopUp();
+                    }.bind(this), 1);
+                }
+            },
+
+            function checkPopUp(){
+                var popUp = this.dom.find('.seating-chart-popup');
+                if(popUp.offset().top < 0){
+                    popUp.setCss('bottom', 'auto');
+                    popUp.setCss('top', 0);
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.first-part .item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function popUpClick(node, event){
+                var typeId = node.getData('type');
+                var popUp = node.parent('.seating-chart-popup');
+                switch(typeId){
+                    case chlk.models.attendance.AttendanceTypeEnum.ABSENT.valueOf():
+                        popUp.addClass('absent'); this.checkPopUp(); break;
+                    case chlk.models.attendance.AttendanceTypeEnum.LATE.valueOf():
+                        popUp.addClass('late'); this.checkPopUp(); break;
+                    default:
+                        this.setTypeByNode(node);
+                }
+            },
+
+            function setTypeByNode(node){
+                var reasonId = node.getData('id');
+                var typeId = node.getData('type');
+                var reasonText = node.find('.text').getHTML();
+                var studentData = this.dom.find('.active-student');
+                studentData.setData('type', typeId);
+                studentData.setData('reason-id', reasonId);
+                studentData.setData('reason-text', reasonText);
+                var parent = studentData.parent('.not-empty');
+                parent.removeClass('absent')
+                    .removeClass('present')
+                    .removeClass('late');
+                switch(typeId){
+                    case chlk.models.attendance.AttendanceTypeEnum.ABSENT.valueOf():
+                        parent.addClass('absent'); break;
+                    case chlk.models.attendance.AttendanceTypeEnum.LATE.valueOf():
+                        parent.addClass('late'); break;
+                    default:
+                        parent.addClass('present');
+                }
+                parent.find('.reason-text').setHTML(reasonText);
+                this.closePopUp();
+            },
+
+            [ria.mvc.DomEventBind('click', '.reason-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function reasonClick(node, event){
+                this.setTypeByNode(node);
+            },
+
             [ria.mvc.DomEventBind('click', '.remove-student')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function removeStudentClick(node, event){
@@ -169,6 +260,18 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function postButtonClick(node, event){
                 this.dom.find('.attendances-json').setValue(JSON.stringify(this.getAttendances_()));
                 this.dom.find('.save-attendances-form').trigger('submit');
+                node.setHTML('SAVING....');
+            },
+
+            Boolean, 'ableRePost',
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'saved')],
+            VOID, function updateGradingPart(tpl, model, msg_) {
+                if(this.isAbleRePost()){
+                    this.dom.find('#submit-attendance-button').setHTML('POST IT');
+                }else{
+                    this.dom.find('.save-attendances-buttons').remove();
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.update-grid')],
@@ -205,6 +308,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 this.setModel(model);
+                this.setAbleRePost(model.isAbleRePost());
 
                 var tpl = new chlk.templates.attendance.SeatingChartPeopleTpl();
                 tpl.assign(model);
@@ -212,6 +316,12 @@ NAMESPACE('chlk.activities.attendance', function () {
 
                 new ria.dom.Dom().on('click.seating', '.close-people, #submit-chart', function(node, event){
                     this.stopDragging();
+                }.bind(this));
+
+                new ria.dom.Dom().on('click.seating', function(doc, event){
+                    var node = new ria.dom.Dom(event.target);
+                    if(!node.isOrInside('.seating-chart-popup') && this.dom.find('.seating-chart-popup:visible').exists())
+                        this.closePopUp();
                 }.bind(this));
 
                 new ria.dom.Dom().on('click.seating', '#submit-chart', function(){

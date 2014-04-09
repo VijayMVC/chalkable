@@ -375,6 +375,10 @@ TEXTAREA.animated-textarea{
     #pop-up-triangle, .pop-up-triangle{
       bottom: -10px;
       @include transform(rotate(180deg));
+
+      &.big{
+        bottom: -14px;
+      }
     }
   }
 
