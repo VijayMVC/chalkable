@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.grading.GradingClassSummaryTpl');
-REQUIRE('chlk.activities.grading.BaseGradingPage');
+REQUIRE('chlk.activities.lib.TemplatePage');
 
 NAMESPACE('chlk.activities.grading', function () {
 
@@ -7,5 +7,5 @@ NAMESPACE('chlk.activities.grading', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassSummaryTpl)],
-        'GradingClassSummaryPage', EXTENDS(chlk.activities.grading.BaseGradingPage), []);
+        'GradingClassSummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), []);
 });

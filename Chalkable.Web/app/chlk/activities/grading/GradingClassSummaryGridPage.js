@@ -485,6 +485,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     allScores.push(item.getName() + ' (fill all)');
                 });
 
+                this.openGradingPeriod(this.dom.find('.open.marking-period-container').find('.mp-data'));
+
                 allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
                 this.setAllScores(allScores);
                 var dom = this.dom;
