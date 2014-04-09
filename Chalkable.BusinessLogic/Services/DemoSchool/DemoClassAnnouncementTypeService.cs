@@ -37,5 +37,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             Storage.ClassAnnouncementTypeStorage.Delete(ids);
         }
+
+        public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

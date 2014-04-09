@@ -13,16 +13,54 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
+        private IEnumerable<PrivateMessageDetails> GetPrivateMessagesQuery(IList<int> roles, string keyword, bool? read, int personId, bool isIncome, int start, int count)
+        {
+            var msgs = data.Select(x => x.Value);
+
+            var allCount = msgs.Count();
+
+            if (!isIncome)
+                msgs = msgs.Where(x => x.FromPersonRef == personId);
+            else
+                msgs = msgs.Where(x => x.ToPersonRef == personId);
+            
+            msgs = msgs.Where(x => x.Body.Contains(keyword));
+            //filter by roles
+
+            if (read.HasValue)
+                msgs = msgs.Where(x => x.Read == read);
+
+            var msgDetails = msgs.Skip(start).Take(count).Select(x => new PrivateMessageDetails
+            {
+                Id = x.Id,
+                Body = x.Body,
+                DeletedByRecipient = x.DeletedByRecipient,
+                DeletedBySender = x.DeletedBySender,
+                FromPersonRef = x.FromPersonRef,
+                Read = x.Read,
+                Recipient = Storage.PersonStorage.GetById(x.ToPersonRef),
+                Sender = Storage.PersonStorage.GetById(x.FromPersonRef),
+                Sent = x.Sent,
+                Subject = x.Subject,
+                ToPersonRef = x.ToPersonRef
+            });
+
+            return msgDetails;
+        }
+
         public PaginatedList<PrivateMessageDetails> GetOutComeMessage(IList<int> roles, string keyword, int personId,
             int start, int count)
         {
-            throw new NotImplementedException();
+
+            var msgs = GetPrivateMessagesQuery(roles, keyword, null, personId, false, start, count);
+            return new PaginatedList<PrivateMessageDetails>(msgs.ToList(), start / count, count);
         }
 
         public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,
             int personId, int start, int count)
         {
-            throw new NotImplementedException();
+            var msgs = GetPrivateMessagesQuery(roles, keyword, read, personId, true, start, count);
+            return new PaginatedList<PrivateMessageDetails>(msgs.ToList(), start / count, count);
         }
 
         public void Add(PrivateMessage message)

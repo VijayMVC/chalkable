@@ -53,5 +53,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Delete(item.Key);
             }
         }
+
+        public void Setup()
+        {
+            var sps = new List<SchoolPerson>
+            {
+                new SchoolPerson
+                {
+                    PersonRef = 1197,
+                    RoleRef = 5,
+                    SchoolRef = 1
+                },
+                new SchoolPerson
+                {
+                    PersonRef = 1196,
+                    RoleRef = 3,
+                    SchoolRef = 1
+                },
+                new SchoolPerson
+                {
+                    PersonRef = 1195,
+                    RoleRef = 2,
+                    SchoolRef = 1
+                }
+            };
+
+            Add(sps);
+        }
     }
 }

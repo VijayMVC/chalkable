@@ -242,5 +242,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

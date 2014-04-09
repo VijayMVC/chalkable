@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -175,7 +174,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public bool? Starred { get; set; }
              */
 
-
             var annId = GetNextFreeId();
             var announcement = new AnnouncementComplex
             {
@@ -189,18 +187,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
-               
-                
             };
             data[announcement.Id] = announcement;
-
-
-
-
             return ConvertToDetails(announcement);
-
-      
-
         }
 
         public AnnouncementDetails GetDetails(int announcementId, int userId, int roleId)
