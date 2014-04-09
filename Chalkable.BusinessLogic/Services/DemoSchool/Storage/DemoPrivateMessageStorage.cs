@@ -24,7 +24,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             else
                 msgs = msgs.Where(x => x.ToPersonRef == personId);
             
-            msgs = msgs.Where(x => x.Body.Contains(keyword));
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+                msgs = msgs.Where(x => x.Body.Contains(keyword));
             //filter by roles
 
             if (read.HasValue)
