@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private bool CanAttach(Announcement ann)
         {
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
-                   && Storage.ClassPersonStorage.Exists(new ClassPersonQuery
+                   || Storage.ClassPersonStorage.Exists(new ClassPersonQuery
                               {
                                   ClassId = ann.ClassRef,
                                   PersonId = Context.UserLocalId

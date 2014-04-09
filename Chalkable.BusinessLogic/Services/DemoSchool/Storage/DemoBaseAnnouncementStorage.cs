@@ -99,6 +99,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var announcementAttachments = Storage.AnnouncementAttachmentStorage.GetAll(announcement.Id);
             var announcementReminders = Storage.AnnouncementReminderStorage.GetList(announcement.Id, announcement.PersonRef);
+
+
+            var announcementApplications= new List<AnnouncementApplication>();
             var announcementsQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
             {
                 AnnouncementId = announcement.Id
@@ -137,13 +140,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Title = announcement.Title,
                 AnnouncementAttachments = announcementAttachments,
                 AnnouncementReminders = announcementReminders,
+                AnnouncementApplications = announcementApplications,
                 AnnouncementQnAs = announcementsQnA,
                 AnnouncementStandards = announcementStandards,
                 Owner = Storage.PersonStorage.GetById(announcement.PersonRef),
                 ApplicationCount = announcement.ApplicationCount,
                 AttachmentsCount = announcement.AttachmentsCount,
                 StudentAnnouncements = Storage.StudentAnnouncementStorage.GetAll(announcement.Id),
-                VisibleForStudent = announcement.VisibleForStudent
+                VisibleForStudent = announcement.VisibleForStudent,
+                Order = announcement.Order
             };
         }
 
@@ -187,6 +192,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
+                Order = 0
             };
             data[announcement.Id] = announcement;
             return ConvertToDetails(announcement);

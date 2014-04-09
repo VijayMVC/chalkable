@@ -62,5 +62,40 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 classPersons = classPersons.Where(x => x.PersonRef == classPersonQuery.PersonId);
             return classPersons;
         }
+
+        public void Setup()
+        {
+            Add(new ClassPerson
+            {
+                ClassRef = 1,
+                MarkingPeriodRef = 1,
+                PersonRef = 1196,
+                SchoolRef = 1
+            });
+
+            Add(new ClassPerson
+            {
+                ClassRef = 1,
+                MarkingPeriodRef = 2,
+                PersonRef = 1196,
+                SchoolRef = 1
+            });
+
+            Add(new ClassPerson
+            {
+                ClassRef = 2,
+                MarkingPeriodRef = 1,
+                PersonRef = 1196,
+                SchoolRef = 1
+            });
+
+            Add(new ClassPerson
+            {
+                ClassRef = 2,
+                MarkingPeriodRef = 2,
+                PersonRef = 1196,
+                SchoolRef = 1
+            });
+        }
     }
 }
