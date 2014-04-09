@@ -8,15 +8,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoStudentAnnouncementStorage:BaseDemoStorage<int, StudentAnnouncement>
     {
-        private int index = 0;
-
         public DemoStudentAnnouncementStorage(DemoStorage storage) : base(storage)
         {
         }
 
         public void Add(StudentAnnouncement an)
         {
-            data.Add(index++, an);
+            data.Add(GetNextFreeId(), an);
         }
 
         public void Add(IList<StudentAnnouncement> studentAnnouncements)

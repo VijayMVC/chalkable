@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int i);
         AnnouncementDetails GetDetails(int announcementId, int value, int id);
         Announcement GetById(int announcementId);
-        void Delete(int? announcementId, object o, object o1, object o2, object o3);
+        void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state);
         void Update(Announcement ann);
         Announcement GetAnnouncement(int announcementId, int roleId, int value);
         Announcement GetLastDraft(int i);
@@ -46,14 +46,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
             return exists;
         }
-        public AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        public virtual AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
-            /*  public int Start { get; set; }
-        public int Count { get; set; }
-        public int? Id { get; set; }
+            /*
         public int? RoleId { get; set; }
         public int? ClassId { get; set; }
-        public int? PersonId { get; set; }
         public int? MarkingPeriodId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
@@ -74,6 +71,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 announcements = announcements.Where(x => x.Id == query.Id);
             if (query.PersonId.HasValue)
                 announcements = announcements.Where(x => x.PersonRef == query.PersonId);
+
+
+            if (query.Start > 0)
+                announcements = announcements.Skip(query.Start);
+            if (query.Count > 0)
+                announcements = announcements.Take(query.Count);
 
             //
             //if (query.RoleId.HasValue)
@@ -192,10 +195,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.ContainsKey(announcementId) ? data[announcementId] : null;
         }
-
-        public void Delete(int? announcementId, object o, object o1, object o2, object o3)
+        public void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state)
         {
-            throw new NotImplementedException();
+            var announcementsToDelete = GetAnnouncements(new AnnouncementsQuery
+            {
+                PersonId = userId,
+                Id = announcementId,
+                ClassId = classId
+                //announcement type,
+
+            }).Announcements.Where(x => x.State == state).Select(x => x.Id).ToList();
+            Delete(announcementsToDelete);
         }
 
         public void Update(Announcement ann)
@@ -253,9 +263,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int i)
+        public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int count)
         {
-            throw new NotImplementedException();
+
+            // {Announcement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType}
+
+            var announcements = GetAnnouncements(new AnnouncementsQuery
+            {
+                PersonId = personId,
+                ClassId = classId,
+                Count = count
+            }).Announcements.ToList();
+            
+            return announcements.Select(x => x.Content).ToList();
+
         }
 
         public bool Exists(string s)
@@ -327,10 +348,21 @@ select  1
         {
         }
 
-        public AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        /*public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
-            throw new System.NotImplementedException();
+
+            /*
+             *  var parameters = new Dictionary<string, object>
+                {
+                    {GRADED_ONLY_PARAM, query.GradedOnly},
+                    {ALL_SCHOOL_ITEMS_PARAM, query.AllSchoolItems},
+                    {"@sisActivitiesIds", query.SisActivitiesIds != null ? query.SisActivitiesIds.Select(x => x.ToString()).JoinString(",") : null}
+                };
+            return GetAnnouncementsComplex(GET_TEACHER_ANNOUNCEMENTS, parameters, query);
         }
+             
+            throw new System.NotImplementedException();
+        }*/
 
     
     }

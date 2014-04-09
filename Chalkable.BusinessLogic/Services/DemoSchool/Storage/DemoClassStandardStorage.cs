@@ -7,7 +7,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoClassStandardStorage:BaseDemoStorage<int, ClassStandard>
     {
-        private int index = 0;
         public DemoClassStandardStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -16,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             foreach (var classStandard in classStandards)
             {
-                data.Add(index++, classStandard);
+                data.Add(GetNextFreeId(), classStandard);
             }
             return classStandards;
         }

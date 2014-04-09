@@ -7,14 +7,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoSchoolGradeLevelStorage:BaseDemoStorage<int, SchoolGradeLevel>
     {
-        private int index = 0;
         public DemoSchoolGradeLevelStorage(DemoStorage storage) : base(storage)
         {
         }
 
         public void Add(SchoolGradeLevel schoolGradeLevel)
         {
-            data.Add(index++, schoolGradeLevel);
+            data.Add(GetNextFreeId(), schoolGradeLevel);
         }
 
         public IList<SchoolGradeLevel> GetAll(int? schoolId)

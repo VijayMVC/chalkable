@@ -8,7 +8,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoMarkingPeriodClassStorage:BaseDemoStorage<int, MarkingPeriodClass>
     {
-        private int index = 0;
         public DemoMarkingPeriodClassStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -43,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(MarkingPeriodClass mpc)
         {
-            data.Add(index++, mpc);
+            data.Add(GetNextFreeId(), mpc);
         }
 
         public void Add(IList<MarkingPeriodClass> markingPeriodClasses)

@@ -8,8 +8,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoNotificationStorage:BaseDemoStorage<int, Notification>
     {
-        private int index = 0;
-
         public DemoNotificationStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -85,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(Notification notification)
         {
-            data.Add(index++ , notification);
+            data.Add(GetNextFreeId(), notification);
         }
     }
 }

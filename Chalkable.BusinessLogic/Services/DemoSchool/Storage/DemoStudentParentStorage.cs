@@ -8,8 +8,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoStudentParentStorage:BaseDemoStorage<int, StudentParent>
     {
-        private int index = 0;
-
         public DemoStudentParentStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -22,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StudentRef = studentId
             };
  
-            data.Add(index++, studentParent);
+            data.Add(GetNextFreeId(), studentParent);
             return studentParent;
         }
 

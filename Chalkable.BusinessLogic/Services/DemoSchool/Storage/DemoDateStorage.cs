@@ -8,8 +8,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoDateStorage:BaseDemoStorage<int ,Date>
     {
-        private int index = 0;
-
         public DemoDateStorage(DemoStorage storage) : base(storage)
         {
         }
@@ -73,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(Date days)
         {
-            data.Add(index ++, days);
+            data.Add(GetNextFreeId(), days);
         }
 
         public void Update(IList<Date> dates)

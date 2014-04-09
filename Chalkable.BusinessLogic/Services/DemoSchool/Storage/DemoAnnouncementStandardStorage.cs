@@ -7,14 +7,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoAnnouncementStandardStorage:BaseDemoStorage<int, AnnouncementStandard>
     {
-        private int index = 0;
         public DemoAnnouncementStandardStorage(DemoStorage storage) : base(storage)
         {
         }
 
         public void Add(AnnouncementStandard announcementStandard)
         {
-            data.Add(index++, announcementStandard);
+            data.Add(GetNextFreeId(), announcementStandard);
         }
 
         public void Delete(int announcementId, int standardId)

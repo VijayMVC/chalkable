@@ -28,10 +28,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             query.PersonId = Context.UserLocalId;
             query.Now = Context.NowSchoolTime.Date;
 
-            var res = new AnnouncementQueryResult();
-            res.Announcements = new List<AnnouncementComplex>();
-            res.Query = query;
-            return res;
+
+            return Storage.AnnouncementStorage.GetAnnouncements(query);
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly)
