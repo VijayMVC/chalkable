@@ -33,9 +33,18 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummary(int classId)
         {
-            return FakeJson("~/fakeData/gradingClassSummary.json");
-            //if (!SchoolLocator.Context.SchoolId.HasValue)
-            //    throw new UnassignedUserException();
+            if (!SchoolLocator.Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, Context.NowSchoolTime.Date);
+            ClassGradingSummary gradingSummary = null;
+            if (currentGradingPeriod != null)
+            {
+                gradingSummary = SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, currentGradingPeriod.Id);
+            }
+            return Json(ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary));
+            //return FakeJson("~/fakeData/gradingClassSummary.json");
             //var teacherId = Context.UserLocalId;
             //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
         }

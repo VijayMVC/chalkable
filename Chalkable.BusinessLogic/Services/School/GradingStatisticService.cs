@@ -21,9 +21,12 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(int markingPeriodId, IList<int> gradeLevelIds);
         IList<ClassPersonGradingStats> GetFullGradingStats(int markingPeriodId, int studentId);
         IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId);
+        
+        //new services
         IList<ChalkableGradeBook> GetGradeBooks(int classId);
         ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true);
         IList<string> GetGradeBookComments(int schoolYearId, int teacherId);
+        ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId);
 
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
@@ -225,14 +228,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 GradingPeriod = gradingPeriod,
                 Students = students
             };
-            var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
-                                                            && x.Date <= gradingPeriod.EndDate).ToList();
             var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();
             stAvgs = stAvgs.Where(x => x.Score.HasValue).ToList();
             if (stAvgs.Count > 0)
                 gradeBook.Avg = (int)stAvgs.Average(x => x.Score != null ? x.Score.Value : 0);
 
+            gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
+            return gradeBook;
+        }
+
+        private IList<AnnouncementDetails> PrepareAnnounceemntDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
+            , IList<AnnouncementComplex> anns, IList<Person> students)
+        {
+            var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
+                                                           && x.Date <= gradingPeriod.EndDate).ToList();
             var annsDetails = new List<AnnouncementDetails>();
             foreach (var activity in activities)
             {
@@ -261,14 +271,32 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 annsDetails.Add(annDetails);
             }
-            gradeBook.Announcements = annsDetails;
-            return gradeBook;
-        }
+            return annsDetails;
+        } 
 
 
         public IList<string> GetGradeBookComments(int schoolYearId, int teacherId)
         {
             return ConnectorLocator.GradebookConnector.GetGradebookComments(schoolYearId, teacherId);
+        }
+        
+        public ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId)
+        {
+            var gradeBook = ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriodId);
+            var gradedCAnnTypes = ServiceLocator.ClassAnnouncementTypeService.CalculateAnnouncementTypeAvg(classId, gradeBook.Announcements);
+            return new ClassGradingSummary
+                {
+                    Announcements = gradeBook.Announcements,
+                    AnnouncementTypes = gradedCAnnTypes,
+                    GradingPeriod = gradeBook.GradingPeriod,
+                    Avg = CalculateAvgByAnnTypes(gradedCAnnTypes)
+                };
+       }
+
+        private double CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
+        {
+            return classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue)
+                .Average(classAnnType => classAnnType.Percentage*classAnnType.Avg.Value/100);
         }
     }
 }

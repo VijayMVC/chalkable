@@ -12,6 +12,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<ClassAnnouncementType> classAnnouncementTypes);
         void Edit(IList<ClassAnnouncementType> classAnnouncementTypes);
         void Delete(IList<int> ids);
+
+        IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses);
     }
 
     public class ClassClassAnnouncementTypeService : SchoolServiceBase, IClassAnnouncementTypeService
@@ -62,6 +64,29 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Update(classAnnouncementTypes);
                 uow.Commit();
             }
+        }
+
+        public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
+        {
+            var classAnnTypes = GetClassAnnouncementTypes(classId, false);
+            var res = new List<GradedClassAnnouncementType>();
+            foreach (var classAnnouncementType in classAnnTypes)
+            {
+                var gradedClassAnnType = new GradedClassAnnouncementType
+                    {
+                        ClassRef = classAnnouncementType.ClassRef,
+                        Description = classAnnouncementType.Description,
+                        Gradable = classAnnouncementType.Gradable,
+                        Id = classAnnouncementType.Id,
+                        Name = classAnnouncementType.Name,
+                        Percentage = classAnnouncementType.Percentage,
+                        ChalkableAnnouncementTypeRef = classAnnouncementType.ChalkableAnnouncementTypeRef,
+                        Avg = announcementDetailses.Where(x => x.ClassAnnouncementTypeRef == classAnnouncementType.Id)
+                                                   .Average(x => x.StudentAnnouncements.Average(y => y.NumericScore))
+                    };
+                res.Add(gradedClassAnnType);
+            }
+            return res;
         }
     }
 }
