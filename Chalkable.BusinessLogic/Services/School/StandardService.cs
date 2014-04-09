@@ -149,7 +149,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteStandards(IList<int> ids)
         {
-            throw new System.NotImplementedException();
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new StandardDataAccess(uow).Delete(ids);
+                uow.Commit();
+            }
         }
 
 

@@ -16,6 +16,14 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public void Delete(IList<int> ids)
+        {
+            if (ids  != null && ids.Count > 0)
+            {
+                SimpleDelete<Standard>(ids.Select(x => new Standard { Id = x }).ToList());         
+            }
+        }
+
         public override void Delete(int key)
         {
             var q = new DbQuery(new List<DbQuery>
