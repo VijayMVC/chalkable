@@ -19,6 +19,7 @@ NAMESPACE('chlk.activities.attendance', function () {
         hoverClass: "hover",
 
         drop: function(event, ui) {
+            new ria.dom.Dom('#submit-chart').show();
             var droppable = $(this);
             var draggable = ui.draggable;
             if(droppable.find('.empty')[0]){
@@ -72,7 +73,6 @@ NAMESPACE('chlk.activities.attendance', function () {
             Array, function getAttendances_(){
                 var res = [];
                 var attendancesNodes = new ria.dom.Dom('.attendance-data');
-                var len = attendancesNodes.length, i, node;
                 attendancesNodes.forEach(function(node){
                     res.push({
                         personId: node.getData('id'),
@@ -118,10 +118,10 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('click', '.attendance-data')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentClick(node, event){
-                if(!this.dom.hasClass('dragging-on') && this.dom.find('#submit-attendance-button').exists()){
+                if(!this.dom.hasClass('dragging-on') && this.dom.find('.page-content').hasClass('can-post')){
                     var popUp = this.dom.find('.seating-chart-popup');
                     var main = this.dom.parent('#main');
-                    var bottom = main.height() + main.offset().top - node.offset().top;
+                    var bottom = main.height() + main.offset().top - node.offset().top + 71;
                     var left = node.offset().left - main.offset().left - 54;
                     popUp.setCss('bottom', bottom);
                     popUp.setCss('left', left);
@@ -134,10 +134,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                         .addClass('selected')
                         .find('.reason-text')
                         .setHTML(' - ' + reasonText);
-                    popUp.find('.item[data-id=' + reasonId + ']')
+                    popUp.find('.type-part[data-type=' + type + ']')
+                        .find('.item[data-id=' + reasonId + ']')
                         .addClass('selected');
-                    node.addClass('active-student');
                     setTimeout(function(){
+                        node.addClass('active-student');
                         popUp.show();
                         this.checkPopUp();
                     }.bind(this), 1);
@@ -200,13 +201,14 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('click', '.remove-student')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function removeStudentClick(node, event){
-                var parent = node.parent();
+                new ria.dom.Dom('#submit-chart').show();
+                var parent = node.parent('.student-block ');
                 var clone = parent.clone();
                 parent.addClass('empty-box');
                 setEmptyBoxHtml(parent);
                 var container = new ria.dom.Dom('.seating-chart-people')
                     .find('.people-container');
-                clone.appendTo(container)
+                clone.insertAfter(container.find('.student-block:last'))
                     .removeClass('droppable')
                     .removeClass('ui-droppable');
                 jQuery(clone.valueOf()).draggable(draggableOptions);

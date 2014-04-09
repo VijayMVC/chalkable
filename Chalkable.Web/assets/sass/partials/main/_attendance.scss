@@ -1225,9 +1225,10 @@ BODY {
     width: 75px;
     text-align: center;
     margin: 10px;
+    vertical-align: middle;
 
     .reason-container{
-      display: none;
+      display: none !important;
     }
 
     .remove-red-btn, .student-seating-type{
@@ -1262,6 +1263,14 @@ BODY {
           display: none;
         }
       }
+    }
+  }
+}
+
+.can-post{
+  .student-block{
+    .attendance-data{
+      cursor: pointer;
     }
   }
 }
@@ -1305,21 +1314,23 @@ BODY {
       }
     }
 
-    &.late{
-      .student-seating-type{
-        background: #c97d11;
-      }
-    }
-
     &.absent{
-      .student-seating-type{
-        background: #880909;
-      }
-
       .reason-container{
         display: table;
       }
     }
+  }
+}
+
+.late{
+  .student-seating-type{
+    background: #c97d11;
+  }
+}
+
+.absent{
+  .student-seating-type{
+    background: #880909;
   }
 }
 
@@ -1353,29 +1364,40 @@ BODY {
 #submit-chart{
   padding: 3px 25px 5px;
   font-weight: bold;
+  vertical-align: middle;
+  display: none;
 }
 
 .seating-chart-popup.chlk-pop-up-container{
   display: none;
   padding: 0;
+  @include border-radius(3px);
+  min-width: 166px;
+
+  .first-part, .late-part, .absent-part{
+    @include border-radius(3px);
+    overflow: hidden;
+  }
 
   .item{
     position: relative;
     cursor: pointer;
     padding: 0 5px 0 33px;
     height: 38px;
-    font: normal 14px/38px Arial italic;
+    font: normal 12px/38px Georgia italic;
     color: #7c7c7c;
 
-    &.selected{
+    &:not(:last-child){
+      border-bottom: 1px solid #d7d7d7;
+    }
+
+    &.selected, &:hover{
       background: #fbfbfb;
-      border-top: 1ps solid #d7d7d7;
-      border-bottom: 1ps solid #d7d7d7;
     }
 
     .student-seating-type{
-      top: 14px;
-      left: 14px;
+      top: 15px;
+      left: 13px;
     }
   }
 

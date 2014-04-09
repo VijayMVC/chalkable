@@ -11,6 +11,7 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
 
 topData = self.getTopData()
 topItems = topData.getTopItems()
+showButtons = self.getModel().canPost() && self.isScheduled()
 selectedId = topData.getSelectedItemId()
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
     selectedItemId=selectedId ? selectedId.valueOf() : ""
@@ -36,7 +37,7 @@ selectedId = topData.getSelectedItemId()
         .right
             +ActionLink('attendance', 'classList', selectedId, self.getDate().format('mm-dd-yy'))=Msg.List
             a.action-link.pressed=Msg.Seating_Chart
-.page-content
+div(class=showButtons ? 'can-post' : '').page-content
     seatingList = self.getSeatingList()
     if self.getColumns() == 0 || self.getRows() == 0
         +UpdateGridForm(Msg.Create_grid, self.getRows(), self.getColumns(), 0, 0, selectedId.valueOf())
@@ -45,7 +46,7 @@ selectedId = topData.getSelectedItemId()
         +UpdateGridForm(Msg.Edit_grid, self.getRows(), self.getColumns(), self.getMinData().rows, self.getMinData().columns, selectedId.valueOf())
         .grey-button.add-remove-students=Msg.Add_remove_students
         .right.right-container.save-attendances-buttons
-            if self.getModel().canPost()
+            if showButtons
                 BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
                 +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), false, true)#all-present-link=Msg.Mark_all_Present
         .black-arrow.add=Msg.Add_your_students
@@ -85,7 +86,7 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             .student-seating-type
             span.text=Msg.Absent
             span.reason-text
-    .late-part
+    div(data-type=typesEnum.LATE.valueOf()).late-part.type-part
         div(data-type=typesEnum.LATE.valueOf()).item.late.reason-item
             .student-seating-type
             span.text=Msg.No_reason
@@ -93,7 +94,7 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             div(data-id=item.getId().valueOf(), data-type=typesEnum.LATE.valueOf()).item.late.reason-item
                 .student-seating-type
                 span.text=item.getName()
-    .absent-part
+    div(data-type=typesEnum.ABSENT.valueOf()).absent-part.type-part
         div(data-type=typesEnum.ABSENT.valueOf()).item.absent.reason-item
             .student-seating-type
             span.text=Msg.No_reason

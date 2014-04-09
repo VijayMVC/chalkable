@@ -15,6 +15,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             Number, 'rows',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'scheduled',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'ablePost',
 
             [ria.templates.ModelPropertyBind],

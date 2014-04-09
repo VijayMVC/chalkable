@@ -33,11 +33,27 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummary(int classId)
         {
-            return FakeJson("~/fakeData/gradingClassSummary.json");
-            //if (!SchoolLocator.Context.SchoolId.HasValue)
-            //    throw new UnassignedUserException();
+            if (!SchoolLocator.Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, Context.NowSchoolTime.Date);
+            ClassGradingSummary gradingSummary = null;
+            if (currentGradingPeriod != null)
+            {
+                gradingSummary = SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, currentGradingPeriod.Id);
+            }
+            return Json(ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary));
+            //return FakeJson("~/fakeData/gradingClassSummary.json");
             //var teacherId = Context.UserLocalId;
             //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ClassGradingPeriodSummary(int classId, int gradingPeriodId)
+        {
+            var res = SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, gradingPeriodId);
+            return Json(GradingClassSummaryViewData.Create(res));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]

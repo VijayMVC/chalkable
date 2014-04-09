@@ -181,6 +181,21 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            SELF, function insertAfter(dom) {
+                VALIDATE_ARG('dom', [SELF, String, Node], dom);
+
+                if(typeof dom == "string")
+                    dom = new SELF(dom);
+
+                var dest = dom instanceof Node ? dom : dom.valueOf().shift();
+                if(dest){
+                    VALIDATE_ARG('dom', [Node], dest);
+
+                    this._dom.insertAfter(dest);
+                }
+                return this;
+            },
+
             SELF, function appendChild(dom) {
                 VALIDATE_ARG('dom', [SELF, String, Node], dom);
 
@@ -339,6 +354,7 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, SELF, function setAllData(obj) {},
             [[String, Object]],
             OVERRIDE, SELF, function setData(name, value) {
+                this.setAttr('data-' + name, value);
                 this._dom.data(name, value);
                 return this;
             },
