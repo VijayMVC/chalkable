@@ -70,8 +70,16 @@ namespace Chalkable.Web.Models
                     DisplayAlphaGrades = gradeBook.Options.DisplayAlphaGrades,
                     DisplayStudentAverage = gradeBook.Options.DisplayStudentAverage,
                     DisplayTotalPoints = gradeBook.Options.DisplayTotalPoints,
-                    IncludeWithdrawnStudents = gradeBook.Options.IncludeWithdrawnStudents
+                    IncludeWithdrawnStudents = gradeBook.Options.IncludeWithdrawnStudents,
+                    TotalAvarages = new List<StudentTotalAvaragesViewData>()
                 };
+            var avgDic = gradeBook.Averages.GroupBy(x => x.AverageId).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var kv in avgDic)
+            {
+                var stAvarages = gradeBook.Students.Select(student => kv.Value.FirstOrDefault(x => x.StudentId == student.Id))
+                                                    .Where(stAvg => stAvg != null).ToList();
+                res.TotalAvarages.Add(StudentTotalAvaragesViewData.Create(stAvarages));
+            }
             foreach (var student in gradeBook.Students)
             {
                 var ann = gradeBook.Announcements.FirstOrDefault();
