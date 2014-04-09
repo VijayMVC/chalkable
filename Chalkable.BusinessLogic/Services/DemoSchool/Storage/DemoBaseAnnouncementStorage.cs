@@ -48,7 +48,72 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
         public AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
-            throw new NotImplementedException();
+            /*  public int Start { get; set; }
+        public int Count { get; set; }
+        public int? Id { get; set; }
+        public int? RoleId { get; set; }
+        public int? ClassId { get; set; }
+        public int? PersonId { get; set; }
+        public int? MarkingPeriodId { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public DateTime? Now { get; set; }
+        public bool StarredOnly { get; set; }
+        public bool OwnedOnly { get; set; }
+        public bool GradedOnly { get; set; }
+        public bool AllSchoolItems { get; set; }
+
+        public IList<int> GradeLevelIds { get; set; }
+        public IList<int> SisActivitiesIds { get; set; } 
+
+             */
+            var announcements = data.Select(x => x.Value);
+
+
+            if (query.Id.HasValue)
+                announcements = announcements.Where(x => x.Id == query.Id);
+            if (query.PersonId.HasValue)
+                announcements = announcements.Where(x => x.PersonRef == query.PersonId);
+
+            //
+            //if (query.RoleId.HasValue)
+            //    announcements = announcements.Where(x => x.R)
+            return new AnnouncementQueryResult
+            {
+                Announcements = announcements.ToList(),
+                Query = query,
+                SourceCount = announcements.Count()
+            };
+        }
+
+
+        private AnnouncementDetails ConvertToDetails(AnnouncementComplex announcement)
+        {
+            return new AnnouncementDetails
+            {
+                Id = announcement.Id,
+                PersonRef = announcement.PersonRef,
+                //PersonName = announcement.PersonName,
+                SchoolRef = announcement.SchoolRef,
+                ClassRef = announcement.ClassRef,
+                //Gender = announcement.Gender,
+                ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeRef,
+                Created = announcement.Created,
+                Expires = announcement.Expires,
+                GradingStyle = announcement.GradingStyle,
+                State = announcement.State,
+                StudentAnnouncements = new List<StudentAnnouncementDetails>(),
+                AnnouncementApplications = new List<AnnouncementApplication>(),
+                AnnouncementAttachments = new List<AnnouncementAttachment>(),
+                AnnouncementReminders = new List<AnnouncementReminder>(),
+                AnnouncementQnAs = new List<AnnouncementQnAComplex>(),
+                AnnouncementStandards = new List<AnnouncementStandardDetails>(),
+                
+                Owner = Storage.PersonStorage.GetById(announcement.PersonRef)
+                //ApplicationCount = announcement.ApplicationCount,
+                //AttachmentsCount = announcement.AttachmentsCount,
+
+            };
         }
 
         public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId)
@@ -93,32 +158,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             data[announcement.Id] = announcement;
 
 
-            var annDetails = new AnnouncementDetails
-            {
-                Id = announcement.Id,
-                PersonRef = announcement.PersonRef,
-                //PersonName = announcement.PersonName,
-                SchoolRef = announcement.SchoolRef,
-                ClassRef = announcement.ClassRef,
-                //Gender = announcement.Gender,
-                ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeRef,
-                Created = announcement.Created,
-                Expires = announcement.Expires,
-                GradingStyle = announcement.GradingStyle,
-                State = announcement.State,
-                StudentAnnouncements = new List<StudentAnnouncementDetails>(),
-                AnnouncementApplications = new List<AnnouncementApplication>(),
-                AnnouncementAttachments = new List<AnnouncementAttachment>(),
-                AnnouncementReminders = new List<AnnouncementReminder>(),
-                AnnouncementQnAs = new List<AnnouncementQnAComplex>(),
-                AnnouncementStandards = new List<AnnouncementStandardDetails>(),
-                Owner = Storage.PersonStorage.GetById(announcement.PersonRef)
-                //ApplicationCount = announcement.ApplicationCount,
-                //AttachmentsCount = announcement.AttachmentsCount,
-                
-            };
 
-            return annDetails;
+
+            return ConvertToDetails(announcement);
 
             /*
              * public int? FinalGradeStatus { get; set; }
@@ -134,9 +176,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
-        public AnnouncementDetails GetDetails(int announcementId, int value, int id)
+        public AnnouncementDetails GetDetails(int announcementId, int userId, int roleId)
         {
-            throw new NotImplementedException();
+            var announcement = GetAnnouncements(new AnnouncementsQuery
+            {
+                Id = announcementId,
+                PersonId = userId,
+                RoleId = roleId
+            }).Announcements.First();
+
+            return ConvertToDetails(announcement);
         }
 
         public new Announcement GetById(int announcementId)
@@ -151,7 +200,38 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Update(Announcement ann)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(ann.Id))
+            {
+                data[ann.Id].PersonRef = ann.PersonRef;
+                data[ann.Id].Content = ann.Content;
+                data[ann.Id].Created = ann.Created;
+                data[ann.Id].Expires = ann.Expires;
+                data[ann.Id].ClassAnnouncementTypeRef = ann.ClassAnnouncementTypeRef;
+                data[ann.Id].State = ann.State;
+                data[ann.Id].GradingStyle = ann.GradingStyle;
+                data[ann.Id].Subject = ann.Subject;
+                data[ann.Id].ClassRef = ann.ClassRef;
+                data[ann.Id].Order = ann.Order;
+                data[ann.Id].Dropped = ann.Dropped;
+                data[ann.Id].MayBeDropped = ann.MayBeDropped;
+                data[ann.Id].VisibleForStudent = ann.VisibleForStudent;
+                data[ann.Id].SchoolRef = ann.SchoolRef;
+                data[ann.Id].Title = ann.Title;
+            }
+
+                /*  
+    
+        public int? SisActivityId { get; set; }
+        public decimal? MaxScore { get; set; }
+        public decimal? WeightAddition { get; set; }
+        public decimal? WeightMultiplier { get; set; }
+        public bool MayBeDropped { get; set; }
+        [NotDbFieldAttr]
+        public bool MayBeExempt { get; set; }
+        [NotDbFieldAttr]
+        public bool IsScored { get; set; }
+                 */
+                
         }
 
         public Announcement GetAnnouncement(int announcementId, int roleId, int userId)

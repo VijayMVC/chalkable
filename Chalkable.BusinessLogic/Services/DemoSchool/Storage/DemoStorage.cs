@@ -146,6 +146,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PersonStorage.Setup();
             MarkingPeriodStorage.Setup();
             GradingPeriodStorage.Setup();
+            ClassAnnouncementTypeStorage.Setup();
 
             SchoolStorage.Add(new Data.School.Model.School
             {

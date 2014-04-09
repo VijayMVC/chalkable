@@ -32,5 +32,53 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     data[classAnnouncementType.Id] = classAnnouncementType;
             }
         }
+
+
+        public void Setup()
+        {
+            var clsTypes = new List<ClassAnnouncementType>();
+
+            clsTypes.Add(new ClassAnnouncementType
+            {
+                ClassRef = 1,
+                Description = "Type 1",
+                Gradable = true,
+                Id = GetNextFreeId(),
+                Name = "Type 1",
+                Percentage = 100
+            });
+
+            clsTypes.Add(new ClassAnnouncementType
+            {
+                ClassRef = 1,
+                Description = "Type 2",
+                Gradable = true,
+                Id = GetNextFreeId(),
+                Name = "Type 2",
+                Percentage = 100
+            });
+
+            clsTypes.Add(new ClassAnnouncementType
+            {
+                ClassRef = 2,
+                Description = "Type 1",
+                Gradable = true,
+                Id = GetNextFreeId(),
+                Name = "Type 1",
+                Percentage = 100
+            });
+
+            clsTypes.Add(new ClassAnnouncementType
+            {
+                ClassRef = 2,
+                Description = "Type 2",
+                Gradable = true,
+                Id = GetNextFreeId(),
+                Name = "Type 2",
+                Percentage = 100
+            });
+
+            Add(clsTypes);
+        }
     }
 }
