@@ -9,15 +9,7 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
-    public class BaseChartViewData
-    {
-        public byte Columns { get; set; }
-        public byte Rows { get; set; }
-    }
-    
-
-
-    public class BaseChartItemViewData<TInfo>
+ public class BaseChartItemViewData<TInfo>
     {
         public int Index { get; set; }
         public int Column { get; set; }
@@ -30,7 +22,8 @@ namespace Chalkable.Web.Models
         public byte Columns { get; set; }
         public byte Rows { get; set; }
         public IList<IList<AttendanceSeatingChartItemViewData>> SeatingList { get; set; } 
-        public IList<ClassAttendanceViewData> NotSeatingStudents { get; set; } 
+        public IList<ClassAttendanceViewData> NotSeatingStudents { get; set; }
+        public bool IsScheduled { get; set; }
 
         public static AttendanceSeatingChartViewData Create(SeatingChartInfo seatingChart
             , IList<ClassAttendanceViewData> classAttendance, IList<Person> students)
@@ -40,7 +33,8 @@ namespace Chalkable.Web.Models
                     Columns = seatingChart.Columns,
                     Rows = seatingChart.Rows,
                     SeatingList = new List<IList<AttendanceSeatingChartItemViewData>>(),
-                    NotSeatingStudents = new List<ClassAttendanceViewData>()
+                    NotSeatingStudents = new List<ClassAttendanceViewData>(),
+                    IsScheduled = classAttendance.Count > 0
                 };
             var notSeatingStudents = students.Where(x => seatingChart.SeatingList.All(y => y.All(z => x.Id != z.StudentId))).ToList();
             foreach (var notSeatingStudent in notSeatingStudents)
