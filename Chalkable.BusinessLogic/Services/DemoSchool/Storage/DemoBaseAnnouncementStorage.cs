@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 
@@ -92,29 +93,49 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private AnnouncementDetails ConvertToDetails(AnnouncementComplex announcement)
         {
+
+            /*  
+                AnnouncementApplications = new List<AnnouncementApplication>()*/
+
+
+            var announcementAttachments = Storage.AnnouncementAttachmentStorage.GetAll(announcement.Id);
+            var announcementReminders = Storage.AnnouncementReminderStorage.GetList(announcement.Id, announcement.PersonRef);
+            var announcementsQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
+            {
+                AnnouncementId = announcement.Id
+            }).AnnouncementQnAs;
+            var announcementStandards =
+                Storage.AnnouncementStandardStorage.GetAll(announcement.Id).Select(x => new AnnouncementStandardDetails
+                {
+                    AnnouncementRef = x.AnnouncementRef,
+                    StandardRef = x.StandardRef,
+                    Standard = Storage.StandardStorage.GetById(x.StandardRef)
+                }).ToList();
+
             return new AnnouncementDetails
             {
                 Id = announcement.Id,
                 PersonRef = announcement.PersonRef,
-                //PersonName = announcement.PersonName,
+                PersonName = announcement.PersonName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
-                //Gender = announcement.Gender,
+                Gender = announcement.Gender,
                 ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeRef,
                 Created = announcement.Created,
                 Expires = announcement.Expires,
                 GradingStyle = announcement.GradingStyle,
                 State = announcement.State,
-                StudentAnnouncements = new List<StudentAnnouncementDetails>(),
-                AnnouncementApplications = new List<AnnouncementApplication>(),
-                AnnouncementAttachments = new List<AnnouncementAttachment>(),
-                AnnouncementReminders = new List<AnnouncementReminder>(),
-                AnnouncementQnAs = new List<AnnouncementQnAComplex>(),
-                AnnouncementStandards = new List<AnnouncementStandardDetails>(),
+                IsScored = announcement.IsScored,
+                Avg = announcement.Avg,
+                Title = announcement.Title,
+                AnnouncementAttachments = announcementAttachments,
+                AnnouncementReminders = announcementReminders,
+                AnnouncementQnAs = announcementsQnA,
+                AnnouncementStandards = announcementStandards,
+                Owner = Storage.PersonStorage.GetById(announcement.PersonRef),
+                ApplicationCount = announcement.ApplicationCount,
+                AttachmentsCount = announcement.AttachmentsCount,
                 
-                Owner = Storage.PersonStorage.GetById(announcement.PersonRef)
-                //ApplicationCount = announcement.ApplicationCount,
-                //AttachmentsCount = announcement.AttachmentsCount,
 
             };
         }
@@ -157,6 +178,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
+                
             };
             data[announcement.Id] = announcement;
 
@@ -165,17 +187,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return ConvertToDetails(announcement);
 
-            /*
-             * public int? FinalGradeStatus { get; set; }
-        
-        public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
-        public IList<AnnouncementApplication> AnnouncementApplications { get; set; }
-        public IList<AnnouncementAttachment> AnnouncementAttachments { get; set; }
-        public IList<AnnouncementReminder> AnnouncementReminders { get; set; }
-        public IList<AnnouncementQnAComplex> AnnouncementQnAs { get; set; } 
-        public Person Owner { get; set; }
-        public IList<AnnouncementStandardDetails> AnnouncementStandards { get; set; } 
-             */
+      
 
         }
 
@@ -227,21 +239,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[ann.Id].VisibleForStudent = ann.VisibleForStudent;
                 data[ann.Id].SchoolRef = ann.SchoolRef;
                 data[ann.Id].Title = ann.Title;
+                data[ann.Id].SisActivityId = ann.SisActivityId;
+                data[ann.Id].MaxScore = ann.MaxScore;
+                data[ann.Id].WeightAddition = ann.WeightAddition;
+                data[ann.Id].WeightMultiplier = ann.WeightMultiplier;
+                data[ann.Id].MayBeDropped = ann.MayBeDropped;
+                data[ann.Id].MayBeExempt = ann.MayBeExempt;
+                data[ann.Id].IsScored = ann.IsScored;
             }
 
-                /*  
-    
-        public int? SisActivityId { get; set; }
-        public decimal? MaxScore { get; set; }
-        public decimal? WeightAddition { get; set; }
-        public decimal? WeightMultiplier { get; set; }
-        public bool MayBeDropped { get; set; }
-        [NotDbFieldAttr]
-        public bool MayBeExempt { get; set; }
-        [NotDbFieldAttr]
-        public bool IsScored { get; set; }
-                 */
-                
         }
 
         public Announcement GetAnnouncement(int announcementId, int roleId, int userId)
@@ -284,7 +290,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return data.Count(x => x.Value.Title == s) > 0;
         }
 
-        public void ReorderAnnouncements(int schoolYearId, int ClassAnnouncementTypeId, int personRef, int recipientClassId)
+        public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int personRef, int recipientClassId)
         {
 
 

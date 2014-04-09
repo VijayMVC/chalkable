@@ -37,5 +37,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.First(x => x.Value.Id == announcementAttachmentId && x.Value.PersonRef == userId).Value;
 
         }
+
+        public IList<AnnouncementAttachment> GetAll(int announcementId)
+        {
+            return data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value).ToList();
+        }
     }
 }
