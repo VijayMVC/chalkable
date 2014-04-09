@@ -291,12 +291,14 @@ namespace Chalkable.BusinessLogic.Services.School
                     GradingPeriod = gradeBook.GradingPeriod,
                     Avg = CalculateAvgByAnnTypes(gradedCAnnTypes)
                 };
-       }
+        }
 
-        private double CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
+        private double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
         {
-            return classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue)
-                .Average(classAnnType => classAnnType.Percentage*classAnnType.Avg.Value/100);
+            var res = classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue).ToList();
+            if(res.Count > 0)
+                return res.Average(classAnnType => classAnnType.Percentage*classAnnType.Avg.Value/100);
+            return null;
         }
     }
 }
