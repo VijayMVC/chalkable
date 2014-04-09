@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public SchoolYear GetByDate(DateTime date)
         {
-            return data.First(x => x.Value.StartDate >= date && date <= x.Value.EndDate).Value;
+            return data.First(x =>  date >= x.Value.StartDate && date <= x.Value.EndDate).Value;
         }
 
         public void Add(IList<SchoolYear> years)

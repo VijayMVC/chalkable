@@ -260,12 +260,36 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public bool Exists(string s)
         {
-            throw new NotImplementedException();
+            return data.Count(x => x.Value.Title == s) > 0;
         }
 
-        public void ReorderAnnouncements(int id, int value, int personRef, int recipientId)
+        public void ReorderAnnouncements(int schoolYearId, int ClassAnnouncementTypeId, int personRef, int recipientClassId)
         {
-            throw new NotImplementedException();
+
+
+            /*
+            var announcements = GetAnnouncements(new AnnouncementsQuery
+            {
+                PersonId = personRef,
+                
+            })*/
+            /*
+             * with AnnView as
+               (
+                select a.Id, Row_Number() over(order by a.Expires, a.[Created]) as [Order]  
+                from Announcement a
+                join Class c on c.Id = a.ClassRef
+				where c.SchoolYearRef = @schoolYearId and a.ClassAnnouncementTypeRef = @classAnnType 
+                      and a.PersonRef = @ownerId and a.ClassRef = @classId
+               )
+update Announcement
+set [Order] = AnnView.[Order]
+from AnnView 
+where AnnView.Id = Announcement.Id
+select  1
+             */
+
+
         }
     }
 
