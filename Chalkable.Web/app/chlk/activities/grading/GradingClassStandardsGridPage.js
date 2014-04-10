@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.grading.GradingClassStandardsGridTpl');
 REQUIRE('chlk.activities.common.InfoByMpPage');
+REQUIRE('chlk.models.grading.GradingClassSummary');
 
 NAMESPACE('chlk.activities.grading', function () {
 

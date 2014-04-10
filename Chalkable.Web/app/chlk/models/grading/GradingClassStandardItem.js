@@ -3,10 +3,11 @@ REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
-    /** @class chlk.models.grading.GradingClassSummaryItem*/
+    /** @class chlk.models.grading.GradingClassStandardItem*/
     CLASS(
-        'GradingClassSummaryItem', [
-            chlk.models.common.NameId, 'type',
+        'GradingClassStandardItem', [
+            [ria.serialize.SerializeProperty('itemdescription')],
+            chlk.models.common.NameId, 'itemDescription',
 
             ArrayOf(chlk.models.announcement.BaseAnnouncementViewData), 'announcements',
 

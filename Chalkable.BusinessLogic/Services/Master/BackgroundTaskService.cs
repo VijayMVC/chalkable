@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         BackgroundTask GetTaskToProcess(DateTime now);
         PaginatedList<BackgroundTask> GetTasks(int start, int count);
         void Complete(Guid id, bool success);
-        BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type);
+        PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state = null, BackgroundTaskTypeEnum? type = null, bool allDistricts = false, int start = 0, int count = int.MaxValue);
         PaginatedList<BackgroundTaskService.BackgroundTaskLogItem> GetLogItems(Guid backgroundTaskId, int start, int count);
         void Delete(Guid taskId);
     }
@@ -153,12 +153,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
+        public PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state, BackgroundTaskTypeEnum? type, bool allDistricts = false, int start = 0, int count = int.MaxValue)
         {
             using (var uow = Read())
             {
                 var da = new BackgroundTaskDataAccess(uow);
-                return da.Find(schoolId, state, type);
+                return da.Find(districtId, state, type, allDistricts, start, count);
             }
         }
 

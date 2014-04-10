@@ -13,10 +13,11 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.BgTaskService*/
     CLASS(
         'BgTaskService', EXTENDS(chlk.services.BaseService), [
-            [[Number]],
-            ria.async.Future, function getTasks(pageIndex_) {
+            [[Number, Number]],
+            ria.async.Future, function getTasks(pageIndex_, state_) {
                 return this.getPaginatedList('BackgroundTask/GetTasks.json', chlk.models.bgtasks.BgTask, {
-                    start: pageIndex_
+                    start: pageIndex_,
+                    state: state_
                 });
             },
             [[chlk.models.id.BgTaskId, Number]],

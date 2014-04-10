@@ -72,14 +72,22 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getClassSummary(classId) {
-                return this.get('Grading/ClassSummary', ArrayOf(chlk.models.grading.GradingClassSummaryItems), {
+                return this.get('Grading/ClassSummary', chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData, {
                     classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getClassGradingPeriodSummary(classId, gradingPeriodId) {
+                return this.get('Grading/ClassGradingPeriodSummary', chlk.models.grading.GradingClassSummaryItems, {
+                    classId: classId.valueOf(),
+                    gradingPeriodId: gradingPeriodId.valueOf()
                 });
             },
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getClassStandards(classId) {
-                return this.get('Grading/ClassStandardSummary', ArrayOf(chlk.models.grading.GradingClassSummaryItems), {
+                return this.get('Grading/ClassStandardSummary', ArrayOf(chlk.models.grading.GradingClassStandardsItems), {
                     classId: classId.valueOf()
                 });
             },

@@ -100,7 +100,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         ClassId = classId,
                         GradeLavelId = gradeLevelId,
                         StandardSubjectId = subjectId,
-                        ParentStandardId = parentStandardId
+                        ParentStandardId = parentStandardId,
+                        AllStandards = allStandards
                     });
             }
         }

@@ -41,42 +41,17 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);
         },
 
-
         [[chlk.models.id.DistrictId]],
-        function updateAction(id) {
+        function syncAction(id) {
             var result = this.districtService
-                .getDistrict(id)
+                .syncDistrict(id)
                 .attach(this.validateResponse_());
-            return this.ShadeView(chlk.activities.district.DistrictDialog, result);
-        },
-
-
-        function addAction() {
-            var result = new ria.async.DeferredData(new chlk.models.district.District);
-            return this.ShadeView(chlk.activities.district.DistrictDialog, result);
-        },
-
-        [[chlk.models.district.District]],
-        function saveAction(model){
-            var result = this.districtService
-                .saveDistrict(
-                    model.getId(),
-                    model.getName(),
-                    model.getDbName(),
-                    model.getSisUrl(),
-                    model.getSisUserName(),
-                    model.getSisPassword(),
-                    model.getSisSystemType()
-                )
-                .attach(this.validateResponse_())
-                .then(function (data) {
-                    this.view.getCurrent().close();
-                    return this.districtService
-                        .getDistricts(0)
-                        .attach(this.validateResponse_());
-                }, this);
-
-            return this.UpdateView(chlk.activities.district.DistrictListPage, result);
+            this.ShowMsgBox('Sync task is created', 'fyi.', [{
+                text: Msg.GOT_IT.toUpperCase(),
+                controller: "district",
+                action: "list"
+            }]);
+            return null;
         },
 
         [[chlk.models.id.DistrictId]],

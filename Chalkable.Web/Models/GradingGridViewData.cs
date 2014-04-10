@@ -55,21 +55,45 @@ namespace Chalkable.Web.Models
 
         public IList<GradeStudentViewData> Students { get; set; }
         public IList<ShortAnnouncementGradeViewData> GradingItems { get; set; }
-        
+        public IList<StudentTotalAvaragesViewData> TotalAvarages { get; set; } 
+
+        public bool DisplayAlphaGrades { get; set; }
+        public bool DisplayStudentAverage { get; set; }
+        public bool DisplayTotalPoints { get; set; }
+        public bool IncludeWithdrawnStudents { get; set; }
+
+        public IList<int> TotalPotionts { get; set; } 
+
         public static GradingGridViewData Create(ChalkableGradeBook gradeBook)
         {
             var res = new GradingGridViewData(gradeBook)
                 {
-                    Students = new List<GradeStudentViewData>()
+                    Students = new List<GradeStudentViewData>(),
+                    DisplayAlphaGrades = gradeBook.Options.DisplayAlphaGrades,
+                    DisplayStudentAverage = gradeBook.Options.DisplayStudentAverage,
+                    DisplayTotalPoints = gradeBook.Options.DisplayTotalPoints,
+                    IncludeWithdrawnStudents = gradeBook.Options.IncludeWithdrawnStudents,
                 };
+            var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
+            res.TotalAvarages = StudentTotalAvaragesViewData.Create(gradeBook.Averages, stIds);
+            if (gradeBook.Options.DisplayTotalPoints && gradeBook.Announcements.Count > 0)
+            {
+                res.TotalPotionts = new List<int>();
+                foreach (var stId in stIds)
+                {
+                    var total = gradeBook.Announcements.Sum(x => x.StudentAnnouncements.First(y => y.Student.Id == stId).NumericScore);
+                    res.TotalPotionts.Add((int) total);
+                }
+            }
+            
             foreach (var student in gradeBook.Students)
             {
                 var ann = gradeBook.Announcements.FirstOrDefault();
                 bool isWithdrawn = ann != null && ann.StudentAnnouncements.FirstOrDefault() != null
                                    && ann.StudentAnnouncements.First().Withdrawn;
                 res.Students.Add(GradeStudentViewData.Create(student, isWithdrawn));
+
             }
-            var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
             res.GradingItems = gradeBook.Announcements
                                         .Select(x => ShortAnnouncementGradeViewData.Create(x, x.StudentAnnouncements, stIds))
                                         .ToList();
@@ -79,6 +103,68 @@ namespace Chalkable.Web.Models
         public static IList<GradingGridViewData> Create(IList<ChalkableGradeBook> gradeBooks)
         {
             return gradeBooks.Select(Create).ToList();
+        }
+    }
+
+    public class StudentTotalAvaragesViewData
+    {
+        public IList<StudentAveragesViewData> Averages { get; set; }
+        public int AverageId { get; set; }
+        public string AverageName { get; set; }
+        public bool IsGradingPeriodAverage { get; set; }
+        public decimal? TotalAvarage { get; set; }
+
+        public static StudentTotalAvaragesViewData Create(IList<ChalkableStudentAverage> averages)
+        {
+            var res = new StudentTotalAvaragesViewData
+                {
+                    Averages = averages.Select(StudentAveragesViewData.Create).ToList(),
+                };
+            if (averages.Count > 0)
+            {
+                res.AverageId = averages.First().AverageId;
+                res.AverageName = averages.First().AverageName;
+                res.IsGradingPeriodAverage = averages.First().IsGradingPeriodAverage;
+                res.TotalAvarage = averages.Average(x => x.AvgValue);
+            }
+            return res;
+        }
+
+        public static IList<StudentTotalAvaragesViewData> Create(IList<ChalkableStudentAverage> averages,
+                                                                 IList<int> studentIds)
+        {
+            var res = new List<StudentTotalAvaragesViewData>();
+            var avgDic = averages.GroupBy(x => x.AverageId).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var kv in avgDic)
+            {
+                var stAvarages = studentIds.Select(studentId => kv.Value.FirstOrDefault(x => x.StudentId == studentId))
+                                    .Where(stAvg => stAvg != null).ToList();
+
+                res.Add(Create(stAvarages));
+            }
+            return res;
+        } 
+    }
+
+    public class StudentAveragesViewData
+    {
+        public int AvarageId { get; set; }
+        public string AvarageName { get; set; }
+        public decimal? AvgValue { get; set; }
+        public int StudentId { get; set; }
+        public string AlphaGradeValue { get; set; }
+        public bool IsGradingPeriodAverage { get; set; }
+
+        public static StudentAveragesViewData Create(ChalkableStudentAverage studentAverage)
+        {
+            return new StudentAveragesViewData
+                {
+                    AvarageId = studentAverage.AverageId,
+                    AlphaGradeValue = studentAverage.AlphaGrade != null ? studentAverage.AlphaGrade.Name : null,
+                    AvgValue = studentAverage.AvgValue,
+                    StudentId = studentAverage.StudentId,
+                    AvarageName = studentAverage.AverageName
+                };
         }
     }
 

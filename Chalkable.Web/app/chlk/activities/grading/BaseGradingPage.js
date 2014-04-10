@@ -16,7 +16,7 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassSummaryTpl)],
         'BaseGradingPage', EXTENDS(chlk.activities.common.InfoByMpPage), [
 
-            ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'items',
+            Array, 'items',
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
@@ -24,7 +24,7 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             function getGradingItems_(model){
-                return model.getSummaryPart().getItems();
+                return model.getCurrentGradingBox().getByAnnouncementTypes();
             },
 
             Object, 'currentMenu',

@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.grading', function () {
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryPart)],
         'GradingClassSummaryPartTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'items',
+            ArrayOf(chlk.models.grading.GradingClassStandardsItems), 'items',
 
             chlk.models.id.GradingPeriodId, 'gradingPeriodId'
         ]);

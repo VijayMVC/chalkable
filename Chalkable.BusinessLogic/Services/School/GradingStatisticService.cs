@@ -226,7 +226,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var gradeBook = new ChalkableGradeBook
             {
                 GradingPeriod = gradingPeriod,
-                Students = students
+                Students = students,
+                Options = ChalkableClassOptions.Create(stiGradeBook.Options),
+                Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList()
             };
             var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();
