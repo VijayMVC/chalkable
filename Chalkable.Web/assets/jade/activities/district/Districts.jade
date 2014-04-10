@@ -1,7 +1,6 @@
 .districts
     .action-bar.not-transparent
         .container.panel-bg
-            +ActionLink('district', 'add').chlk-add.opacity-button Add District
     +Grid('district', 'page', self).not-transparent
         +GridHead()
             .th Name
@@ -21,7 +20,6 @@
                     .td *
                     .td= item.getSisSystemType()
                     .td.action-links
-                        +ActionLink('schools', 'list', item.getId()).profile
-                        +ActionLink('district', 'update', item.getId()).view
-                        +ActionLink('district', 'delete', item.getId()).remove
+                        +ActionLink('schools', 'list', item.getId()) info
+                        +ActionLink('district', 'sync', item.getId()) sync
 

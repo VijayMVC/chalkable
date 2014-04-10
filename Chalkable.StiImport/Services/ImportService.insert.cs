@@ -269,6 +269,7 @@ namespace Chalkable.StiImport.Services
                         EndDate = x.EndDate,
                         EndTime = x.EndTime,
                         MarkingPeriodRef = x.TermID,
+                        StartDate = x.StartDate,
                         Name = x.Name,
                         SchoolAnnouncement = x.SchoolAnnouncement,
                         SchoolYearRef = x.AcadSessionID

@@ -16,10 +16,10 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.BgTaskService, 'bgTaskService',
 
             [chlk.controllers.SidebarButton('settings')],
-            [[Boolean, Number]],
-            function pageAction(postback_, pageIndex_) {
+            [[Boolean, Number, Number]],
+            function pageAction(postback_, pageIndex_, state_) {
                 var result = this.bgTaskService
-                    .getTasks(pageIndex_ | 0)
+                    .getTasks(pageIndex_ | 0, state_)
                     .attach(this.validateResponse_());
                 return postback_ ?
                     this.UpdateView(chlk.activities.bgtasks.BgTasksListPage, result) :

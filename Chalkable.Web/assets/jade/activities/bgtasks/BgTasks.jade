@@ -1,4 +1,13 @@
 .bg-tasks
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('backgroundtask', 'page') all_
+            +ActionLink('backgroundtask', 'page', true, 0, 0) created_
+            +ActionLink('backgroundtask', 'page', true, 0, 1) processing_
+            +ActionLink('backgroundtask', 'page', true, 0, 2) processed_
+            +ActionLink('backgroundtask', 'page', true, 0, 3) Canceled_
+            +ActionLink('backgroundtask', 'page', true, 0, 4) Failed_
+
     +Grid('backgroundtask', 'page', self, [true]).not-transparent
         +GridHead()
             .th Id

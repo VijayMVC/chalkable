@@ -231,14 +231,15 @@ namespace Chalkable.StiImport.Services
             {
                 Description = x.Description,
                 EndDate = x.EndDate,
-                Id = x.TermID,
+                Id = x.GradingPeriodID,
                 Name = x.Name,
                 SchoolYearRef = x.AcadSessionID,
                 StartDate = x.StartDate,
                 AllowGradePosting = x.AllowGradePosting,
                 Code = x.Code,
                 EndTime = x.EndDate,
-                MarkingPeriodRef = x.TermID
+                MarkingPeriodRef = x.TermID,
+                SchoolAnnouncement = x.SchoolAnnouncement
             }).ToList();
             ServiceLocatorSchool.GradingPeriodService.Edit(gps);
         }
