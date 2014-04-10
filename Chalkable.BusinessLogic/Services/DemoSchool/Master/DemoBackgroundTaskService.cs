@@ -33,6 +33,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state = null, BackgroundTaskTypeEnum? type = null,
+            bool allDistricts = false, int start = 0, int count = Int32.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
         public BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
         {
             throw new NotImplementedException();
