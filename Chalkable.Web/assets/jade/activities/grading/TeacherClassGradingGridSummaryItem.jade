@@ -1,5 +1,9 @@
 mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
     normalValue = info.getNormalValue()
+    -numericV = parseFloat(normalValue)
+    if info.getGradeValue() && numericV
+        -normalValue= numericV.toFixed(2) + '(' + info.getGradeValue() + ')'
+
     div(
         class= (parseInt(normalValue, 10) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : ""),
         data-id= info.getId(),
@@ -27,8 +31,8 @@ mixin StudentAverages(model)
             .time
             .max-score.dotted-h
             each average,i in studentAvg.getAverages()
-                div(row-index=i, class=(i == model.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=average.getNumericValue()
-            .dotted-h.grade-value=studentAvg.getTotalAverage()
+                div(row-index=i, class=(i == model.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=model.displayAvgGradeValue(average)
+            .dotted-h.grade-value=model.displayGrade(studentAvg.getTotalAverage())
 
 .ann-types-container
     .dotted-container.name-container.with-horizontal-dots
