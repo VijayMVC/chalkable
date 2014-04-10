@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -22,16 +23,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return dp;
         }
 
-
         public PaginatedList<DisciplineType> GetDisciplineTypes(int start, int count)
         {
-            throw new NotImplementedException();
+            var disciplineTypes = data.Select(x => x.Value).ToList();
+            return new PaginatedList<DisciplineType>(disciplineTypes, start / count, count, disciplineTypes.Count);
         }
 
         public DisciplineType Edit(Guid id, string name, int score)
         {
             var dp = data.ContainsKey(id) ? GetById(id) : null;
-
 
             if (dp != null)
             {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Hosting;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
@@ -38,8 +39,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<ApplicationInstall> GetInstalledForClass(ClassDetails clazz)
         {
-            
-            throw new NotImplementedException();
+            var persons = Storage.PersonStorage.GetPersons(new PersonQuery
+            {
+                ClassId = clazz.Id
+            }).Persons.Select(x => x.Id);
+
+            return data.Where(x => persons.Contains(x.Value.PersonRef)).Select(x => x.Value).ToList();
+
         }
 
         public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, int schoolYearId)
@@ -62,7 +68,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Update(ApplicationInstall appInst)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(appInst.Id))
+                data[appInst.Id] = appInst;
+
         }
 
         public IEnumerable<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int i, int id)

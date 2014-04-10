@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
@@ -29,8 +30,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public PaginatedList<Category> GetPage(int start, int count)
         {
-
-            return new PaginatedList<Category>(new List<Category>(), 1, 1);
+            var categories = data.Select(x => x.Value).ToList();
+            return new PaginatedList<Category>(categories, start / count, count, categories.Count);
         }
 
         public void Setup()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
@@ -16,10 +17,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Address> GetAddress(int personId)
         {
-            
-            //add data to person storage
-            //return addressData.Where(x => x.Value.)
-            throw new NotImplementedException();
+            var person = Storage.PersonStorage.GetById(personId);
+            var res = new List<Address>();
+
+            if (person.AddressRef.HasValue && data.ContainsKey(person.AddressRef.Value))
+                res.Add(data[person.AddressRef.Value]);
+            return res;
         }
 
         public IList<Address> Update(IList<Address> res)

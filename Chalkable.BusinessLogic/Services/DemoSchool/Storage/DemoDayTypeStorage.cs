@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public bool Exists(int schoolYearId)
         {
-            throw new System.NotImplementedException();
+            return data.Count(x => x.Value.SchoolYearRef == schoolYearId) > 0;
         }
 
         public IList<DayType> Add(IList<DayType> dayTypes)
