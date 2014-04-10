@@ -16,9 +16,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         private IEnumerable<PrivateMessageDetails> GetPrivateMessagesQuery(IList<int> roles, string keyword, bool? read, int personId, bool isIncome, int start, int count)
         {
             var msgs = data.Select(x => x.Value);
-
-            var allCount = msgs.Count();
-
+      
             if (!isIncome)
                 msgs = msgs.Where(x => x.FromPersonRef == personId);
             else
@@ -55,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
 
             var msgs = GetPrivateMessagesQuery(roles, keyword, null, personId, false, start, count);
-            return new PaginatedList<PrivateMessageDetails>(msgs.ToList(), start / count, count);
+            return new PaginatedList<PrivateMessageDetails>(msgs.ToList(), start / count, count, data.Count);
         }
 
         public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,

@@ -181,7 +181,6 @@
     <Compile Include="Services\DemoSchool\Storage\DemoStudentAnnouncementStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoStudentSchoolYearStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoSchoolYearStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoSchoolUserStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPrivateMessageStorage.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStandardService.cs" />
     <Compile Include="Services\Master\AccessControlService.cs" />

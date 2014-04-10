@@ -25,11 +25,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[school.Id] = school;
         }
 
-        public PaginatedList<Data.School.Model.School> GetSchools(Guid districtId, int start, int count)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Add(IList<Data.School.Model.School> schools)
         {
             foreach (var school in schools)

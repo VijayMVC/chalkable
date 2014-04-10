@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public bool IsOverlaped(int id, DateTime startDate, DateTime endDate, int? i)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool Exists(IList<int> markingPeriodIds)
