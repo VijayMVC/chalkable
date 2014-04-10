@@ -12,6 +12,12 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('gradingperiod')],
             chlk.models.common.NameId, 'gradingPeriod',
 
-            Number, 'avg'
+            Number, 'avg',
+
+            Boolean, 'autoUpdate',
+
+            function getTooltipText(){
+                return (this.getAvg() != null ? Msg.Avg + " " + this.getAvg() : 'No grades yet');
+            }
         ]);
 });

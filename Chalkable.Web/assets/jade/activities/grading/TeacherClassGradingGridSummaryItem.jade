@@ -1,5 +1,9 @@
 mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
     normalValue = info.getNormalValue()
+    -numericV = parseFloat(normalValue)
+    if info.getGradeValue() && numericV
+        -normalValue= numericV.toFixed(2) + '(' + info.getGradeValue() + ')'
+
     div(
         class= (parseInt(normalValue, 10) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : ""),
         data-id= info.getId(),
@@ -20,6 +24,27 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
         if gradable
             .edit-cell
 
+mixin StudentAverages(model)
+    each studentAvg in model.getStudentAverages()
+        .dotted-container.grade-container.with-horizontal-dots.avgs-container
+            .type-name=model.displayAvgName(studentAvg)
+            .time
+            .max-score.dotted-h
+            each average,i in studentAvg.getAverages()
+                div(row-index=i, class=(i == model.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=model.displayAvgGradeValue(average)
+            .dotted-h.grade-value=model.displayGrade(studentAvg.getTotalAverage())
+
+mixin DisplayTotalPoints(model)
+    -totalPoints = model.getTotalPoints()
+    if totalPoints && model.isAbleDisplayTotalPoints()
+        .dotted-container.grade-container.with-horizontal-dots
+            .type-name Total Points
+            .time
+            .max-score.dotted-h
+            each totalPoint in totalPoints
+                .dotted-h.grade-value=totalPoint
+
+
 .ann-types-container
     .dotted-container.name-container.with-horizontal-dots
         .type-name=Msg.Student(true)
@@ -39,8 +64,10 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
         roundedDots = true,
         padding = 77
     ).grid-toolbar.i-b.big-arrows
-        .dotted-container.grade-container.with-horizontal-dots.avgs-container
-            +RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
+        if self.isAbleDisplayStudentAverage()
+            //+RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
+            +StudentAverages(self)
+        +DisplayTotalPoints(self)
         each announcement in self.getGradingItems()
             maxScore = announcement.getMaxScore()
             div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots

@@ -92,13 +92,9 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.grading.GradingSummaryGridSubmitViewData]],
             function loadGradingPeriodSummaryAction(model){
                 var result = this.gradingService
-                    .getClassSummaryGridForPeriod(model.getClassId())
-                    .then(function(newModel){
-                        newModel.setAutoUpdate(model.isAutoUpdate());
-                        return newModel;
-                    })
+                    .getClassGradingPeriodSummary(model.getClassId(), model.getGradingPeriodId())
                     .attach(this.validateResponse_());
-                return this.UpdateView(chlk.activities.grading.GradingClassSummaryPage, result, model.isAutoUpdate() ? chlk.activities.lib.DontShowLoader() : null);
+                return this.UpdateView(chlk.activities.grading.GradingClassSummaryPage, result);
             },
 
             [chlk.controllers.SidebarButton('statistic')],

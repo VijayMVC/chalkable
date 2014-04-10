@@ -6,7 +6,8 @@ NAMESPACE('chlk.models.grading', function () {
     /** @class chlk.models.grading.GradingClassSummaryItem*/
     CLASS(
         'GradingClassSummaryItem', [
-            chlk.models.common.NameId, 'type',
+            [ria.serialize.SerializeProperty('type')],
+            chlk.models.common.NameId, 'itemDescription',
 
             ArrayOf(chlk.models.announcement.BaseAnnouncementViewData), 'announcements',
 

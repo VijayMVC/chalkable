@@ -226,9 +226,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var gradeBook = new ChalkableGradeBook
             {
                 GradingPeriod = gradingPeriod,
-                Students = students,
                 Options = ChalkableClassOptions.Create(stiGradeBook.Options),
-                Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList()
+                Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
+                Students = students
             };
             var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();
@@ -237,6 +237,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 gradeBook.Avg = (int)stAvgs.Average(x => x.Score != null ? x.Score.Value : 0);
 
             gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
+            if (!stiGradeBook.Options.IncludeWithdrawnStudents)
+            {
+                gradeBook.Students = new List<Person>();
+                foreach (var student in students)
+                {
+                   var score = stiGradeBook.Scores.FirstOrDefault(x => x.StudentId == student.Id);
+                   if(score != null && !score.Withdrawn)
+                       gradeBook.Students.Add(student);
+                }    
+            }
             return gradeBook;
         }
 

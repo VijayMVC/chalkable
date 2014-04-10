@@ -31,9 +31,10 @@ NAMESPACE('chlk.activities.grading', function () {
 
             Number, 'currentIndex',
 
-            OVERRIDE, VOID, function onRefresh_(model){
-                BASE(model);
+            function activateMenuAim(){
                 var that = this;
+                //new ria.dom.Dom('.ann-grade-pop-up').remove();
+
                 jQuery(this.dom.find('.ann-type-container').valueOf()).menuAim({
                     rowSelector: ".ann-button:not(.plus-ann)",
                     activate: function(row){
@@ -52,6 +53,17 @@ NAMESPACE('chlk.activities.grading', function () {
                         new ria.dom.Dom('.ann-grade-pop-up').remove();
                     }
                 });
+            },
+
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.activateMenuAim();
+            },
+
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                this.activateMenuAim();
+
                 new ria.dom.Dom(document).on('mouseover.popup', function(node, event){
                     var target = new ria.dom.Dom(event.target);
                     var currentIndex = this.getCurrentIndex();
@@ -92,11 +104,12 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function showPopup(tpl, model, msg_) {
                 var target = this.dom.find('.popup-container')
                     .removeClass('popup-container');
+                new ria.dom.Dom('.ann-grade-pop-up').remove();
                 tpl.renderTo(new ria.dom.Dom('body'));
                 var popUp = new ria.dom.Dom('.ann-grade-pop-up');
                 var left = target.offset().left + target.width() + 10;
                 popUp.setCss('left', left);
-                popUp.setCss('top', target.offset().top - 17);
+                popUp.setCss('top', target.offset().top - 17).show();
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.ShortAnnouncementTpl, chlk.activities.lib.DontShowLoader())],
@@ -118,7 +131,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var typeIndex = node.parent('.ann-type-container').getData('index');
                 this.setCurrentIndex(typeIndex);
                 var mpIndex = node.parent('.marking-period-container').getData('index');
-                var announcement = this.getItems()[mpIndex].getItems()[typeIndex].getAnnouncements()[annIndex];
+                var announcement = this.getItems()[typeIndex].getAnnouncements()[annIndex];
                 return announcement || null;
             },
 
@@ -128,7 +141,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var typeIndex = node.parent('.ann-type-container').getData('index');
                 var mpIndex = node.parent('.marking-period-container').getData('index');
                 var items = this.getItems();
-                var announcement = items[mpIndex].getItems()[typeIndex].getAnnouncements()[annIndex];
+                var announcement = items[typeIndex].getAnnouncements()[annIndex];
                 if(announcement){
                     announcement.setDropped(dropped);
                     this.setItems(items);
