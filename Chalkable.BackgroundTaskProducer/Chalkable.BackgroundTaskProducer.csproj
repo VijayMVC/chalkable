@@ -89,7 +89,6 @@
   <ItemGroup>
     <Compile Include="ProducerConfigSection.cs" />
     <Compile Include="Producers\AllDistrictsProducer.cs" />
-    <Compile Include="Producers\CreateDemoDistrictTaskProducer.cs" />
     <Compile Include="Producers\DemoDistrictDeleteTaskProducer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Producers\TaskProducer.cs" />

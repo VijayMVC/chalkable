@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -9,9 +10,10 @@ namespace Chalkable.Web.Controllers
     public class BackgroundTaskController : ChalkableController
     {
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult GetTasks(int? start, int? count)
+        public ActionResult GetTasks(int? start, int? count, int? state)
         {
-            var tasks = MasterLocator.BackgroundTaskService.GetTasks(start ?? 0, count ?? 10);
+            BackgroundTaskStateEnum? st = (BackgroundTaskStateEnum?)state;
+            var tasks = MasterLocator.BackgroundTaskService.Find(null, st, null, true, start ?? 0, count ?? 10);
             return Json(tasks.Transform(BackgroundTaskViewData.Create));
         }
 

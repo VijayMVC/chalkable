@@ -38,13 +38,17 @@ namespace Chalkable.Data.Master.DataAccess
             SimpleUpdate<BackgroundTask>(setParamsDic, conds);
         }
 
-        public BackgroundTask Find(Guid? districtId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
+        public PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state, BackgroundTaskTypeEnum? type, bool allDistricts, int start, int count)
         {
-            return SelectOneOrNull<BackgroundTask>(new AndQueryCondition {
-                                                                        {BackgroundTask.DISTRICT_REF_FIELD_NAME, districtId},
-                                                                        {BackgroundTask.STATE_FIELD_NAME, state},
-                                                                        {BackgroundTask.TYPE_FIELD_NAME, type},
-                                                                });
+            var q = new AndQueryCondition();
+            if (state.HasValue)
+                q.Add(BackgroundTask.STATE_FIELD_NAME, state);
+            if (type.HasValue)
+                q.Add(BackgroundTask.TYPE_FIELD_NAME, type);
+            if (!allDistricts)
+                q.Add(BackgroundTask.DISTRICT_REF_FIELD_NAME, districtId);
+            return PaginatedSelect<BackgroundTask>(q, BackgroundTask.SCHEDULED_FIELD_NAME, start, count, Orm.OrderType.Desc);
+            
         }
     }
 }

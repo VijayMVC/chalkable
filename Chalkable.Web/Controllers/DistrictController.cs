@@ -59,13 +59,6 @@ namespace Chalkable.Web.Controllers
             return Json(districts.Transform(DistrictViewData.Create));
         }
 
-        [RequireHttps]
-        [AuthorizationFilter("SysAdmin")]
-        public ActionResult Create()
-        {
-            throw new NotSupportedException();
-        }
-
         public ActionResult ListTimeZones()
         {
             var tzCollection = DateTimeTools.GetAll();
@@ -82,18 +75,9 @@ namespace Chalkable.Web.Controllers
 
         [RequireHttps]
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult Update(Guid districtId, string name, string dbName, string sisUrl, string sisUserName, string sisPassword, int sisSystemType)
+        public ActionResult Sync(Guid districtId)
         {
-            MasterLocator.DistrictService.Update(
-                new District
-                {
-                    Id = districtId,
-                    Name = name,
-                    DbName = dbName,
-                    SisUrl = sisUrl,
-                    SisUserName = sisUserName,
-                    SisPassword =  sisPassword
-                });
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.SisDataImport, DateTime.UtcNow, districtId, string.Empty);
             return Json(true);
         }
 
