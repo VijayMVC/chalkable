@@ -30,14 +30,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[appInstall.Id] = appInstall;
         }
 
-        public ApplicationInstallAction GetLastAppInstallAction(Guid id, int value)
+        public ApplicationInstallAction GetLastAppInstallAction(Guid id, int userId)
         {
-            throw new NotImplementedException();
+            return data.First(x => x.Value.ApplicationRef == id && x.Value.PersonRef == userId).Value;
         }
 
         public void Update(ApplicationInstallAction res)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(res.Id))
+                data[res.Id] = res;
         }
     }
 }

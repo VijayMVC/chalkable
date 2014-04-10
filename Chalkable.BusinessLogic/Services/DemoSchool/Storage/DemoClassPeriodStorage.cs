@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -81,7 +82,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<Room> GetAvailableRooms(int periodId)
         {
-            throw new System.NotImplementedException();
+            var classIds = GetClassPeriods(new ClassPeriodQuery
+            {
+                PeriodId = periodId
+            }).Select(x => x.ClassRef);
+
+
+            var rooms = new List<Room>();
+
+            foreach (var classId in classIds)
+            {
+                var cls = Storage.ClassStorage.GetById(classId);
+                if (cls.RoomRef.HasValue)
+                    rooms.Add(Storage.RoomStorage.GetById(cls.RoomRef.Value));
+
+            }
+
+            return rooms;
         }
     }
 }
