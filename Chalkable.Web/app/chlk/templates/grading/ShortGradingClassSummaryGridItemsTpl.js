@@ -22,6 +22,30 @@ NAMESPACE('chlk.templates.grading', function () {
             Number, 'avg',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'autoUpdate'
+            Boolean, 'autoUpdate',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'rowIndex',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayAlphaGrades',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayStudentAverage',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayTotalPoints',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(Number), 'totalPoints',
+
+            [[chlk.models.grading.StudentAverageInfo]],
+            String, function displayAvgName(studentAverage){
+                return studentAverage && studentAverage.isGradingPeriodAverage()
+                    ? Msg.Avg : studentAverage.getAverageName();
+            }
         ]);
 });
