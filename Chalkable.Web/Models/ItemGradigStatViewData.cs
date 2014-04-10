@@ -10,13 +10,12 @@ namespace Chalkable.Web.Models
     public class ItemGradigStatViewData
     {
         public int AnnouncementId { get; set; }
-        public int GradingStyle { get; set; }
         public IList<ItemGradingGraphViewData> GraphPoints { get; set; }
 
         private const int INTERVALS_COUNT = 4;
         private const int MAX_GRADE = 100;
 
-        public static ItemGradigStatViewData Create(IList<StudentAnnouncementDetails> studentAnnouncements, Announcement announcement, IGradingStyleMapper mapper)
+        public static ItemGradigStatViewData Create(IList<StudentAnnouncementDetails> studentAnnouncements, int announcementId)
         {
             var res = new ItemGradigStatViewData();
             if (studentAnnouncements.Count > 0)
@@ -31,7 +30,7 @@ namespace Chalkable.Web.Models
                         intervalLength = MAX_GRADE - minGrade;
                     if ((int)minGrade == MAX_GRADE)
                     {
-                        graphPoints.Add(ItemGradingGraphViewData.Create(announcement, (int)minGrade, grades.Count, (int)minGrade, (int)minGrade, mapper));
+                        graphPoints.Add(ItemGradingGraphViewData.Create((int)minGrade, grades.Count, (int)minGrade, (int)minGrade));
                     }
                     double position = minGrade;
                     while (position < MAX_GRADE)
@@ -41,13 +40,11 @@ namespace Chalkable.Web.Models
                         var endInterval = position;
                         var grade = (startInterval + position) / 2;
                         var studentCount = grades.Count(x => x >= startInterval && x < position);
-                        graphPoints.Add(ItemGradingGraphViewData.Create(announcement, (int)grade, studentCount, (int)startInterval, (int)endInterval, mapper));
+                        graphPoints.Add(ItemGradingGraphViewData.Create((int)grade, studentCount, (int)startInterval, (int)endInterval));
                     }
                 }
-                res.AnnouncementId = announcement.Id;
-                res.GradingStyle = (int)announcement.GradingStyle;
+                res.AnnouncementId = announcementId;
                 res.GraphPoints = graphPoints;
-
             }
             return res;
         }
@@ -62,8 +59,7 @@ namespace Chalkable.Web.Models
         public int MappedStartInterval { get; set; }
         public int MappedEndInterval { get; set; }
 
-        public static ItemGradingGraphViewData Create(Announcement announcement, int grade, int studentCount, int startInterval,
-                                               int endInterval, IGradingStyleMapper mapper)
+        public static ItemGradingGraphViewData Create(int grade, int studentCount, int startInterval, int endInterval)
         {
             return new ItemGradingGraphViewData
             {
@@ -71,9 +67,8 @@ namespace Chalkable.Web.Models
                 StudentCount = studentCount,
                 StartInterval = startInterval,
                 EndInterval = endInterval,
-                GradingStyle = (int)announcement.GradingStyle,
-                MappedStartInterval = mapper.Map(announcement.GradingStyle, startInterval).Value,
-                MappedEndInterval = mapper.Map(announcement.GradingStyle, endInterval).Value,
+                MappedStartInterval = startInterval,
+                MappedEndInterval = endInterval,
             };
         }
     }

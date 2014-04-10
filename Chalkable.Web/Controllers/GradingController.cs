@@ -59,11 +59,10 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
-            return FakeJson("~/fakeData/itemGradingStat.json");
+            //return FakeJson("~/fakeData/itemGradingStat.json");
             //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            //var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
-            //var mapper = SchoolLocator.GradingStyleService.GetMapper();
-            //return Json(ItemGradigStatViewData.Create(studentAnns, ann, mapper));
+            var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
+            return Json(ItemGradigStatViewData.Create(studentAnns, announcementId));
         }
 
 
