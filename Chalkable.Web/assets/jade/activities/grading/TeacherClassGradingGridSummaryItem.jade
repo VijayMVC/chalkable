@@ -34,6 +34,17 @@ mixin StudentAverages(model)
                 div(row-index=i, class=(i == model.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=model.displayAvgGradeValue(average)
             .dotted-h.grade-value=model.displayGrade(studentAvg.getTotalAverage())
 
+mixin DisplayTotalPoints(model)
+    -totalPoints = model.getTotalPoints()
+    if totalPoints && model.isAbleDisplayTotalPoints()
+        .dotted-container.grade-container.with-horizontal-dots
+            .type-name Total Points
+            .time
+            .max-score.dotted-h
+            each totalPoint in totalPoints
+                .dotted-h.grade-value=totalPoint
+
+
 .ann-types-container
     .dotted-container.name-container.with-horizontal-dots
         .type-name=Msg.Student(true)
@@ -56,6 +67,7 @@ mixin StudentAverages(model)
         if self.isAbleDisplayStudentAverage()
             //+RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
             +StudentAverages(self)
+        +DisplayTotalPoints(self)
         each announcement in self.getGradingItems()
             maxScore = announcement.getMaxScore()
             div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
