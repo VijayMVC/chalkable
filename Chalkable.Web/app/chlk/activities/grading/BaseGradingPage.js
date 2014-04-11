@@ -72,6 +72,14 @@ NAMESPACE('chlk.activities.grading', function () {
                         && !target.isOrInside('.ann-type-container[data-index="' + currentIndex + '"]'))
                             this.getCurrentMenu() && this.getCurrentMenu().deactivate();
                 }.bind(this));
+
+                new ria.dom.Dom(document).on('click.popup', function(node, event){
+                    var target = new ria.dom.Dom(event.target);
+                    if(!target.isOrInside('.ann-grade-pop-up')){
+                        this.getCurrentMenu().deactivate();
+                    }
+                }.bind(this));
+
                 new ria.dom.Dom(document).on('click.popup', '.ann-grade-pop-up .grey-button', function(node, event){
                     var annId = node.getData('announcementid');
                     var button = this.dom.find('.ann-button[annid=' + annId + ']');
