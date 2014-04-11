@@ -75,11 +75,10 @@
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassAnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineDataAccess.cs" />
-    <Compile Include="DataAccess\ClassDisciplineTypeDataAccess.cs" />
-    <Compile Include="DataAccess\DisciplineTypeDataAccess.cs" />
     <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
     <Compile Include="DataAccess\GradingStatisticDataAccess.cs" />
     <Compile Include="DataAccess\GradingStyleDataAccess.cs" />
+    <Compile Include="DataAccess\InfractionDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
@@ -124,12 +123,11 @@
     <Compile Include="Model\Class.cs" />
     <Compile Include="Model\ClassAnnouncementType.cs" />
     <Compile Include="Model\ClassDiscipline.cs" />
-    <Compile Include="Model\ClassDisciplineType.cs" />
     <Compile Include="Model\ClassPeriod.cs" />
     <Compile Include="Model\ClassPerson.cs" />
     <Compile Include="Model\ClassStandard.cs" />
     <Compile Include="Model\Date.cs" />
-    <Compile Include="Model\DisciplineType.cs" />
+    <Compile Include="Model\Infraction.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\GradingPeriod.cs" />
     <Compile Include="Model\GradingStatistic.cs" />

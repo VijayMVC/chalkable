@@ -31,10 +31,10 @@ namespace Chalkable.Web.Models.ClassesViewData
             return res;
         }
 
-        public static ClassHoverBoxViewData<ClassDisciplineHoveViewData> Create(IList<DisciplineType> disciplineTypes, IList<ClassDisciplineDetails> disciplineList)
+        public static ClassHoverBoxViewData<ClassDisciplineHoveViewData> Create(IList<Infraction> disciplineTypes, IList<ClassDisciplineDetails> disciplineList)
         {
             var res = new ClassHoverBoxViewData<ClassDisciplineHoveViewData>();
-            res.Title = disciplineList.Sum(x => x.DisciplineTypes.Count).ToString();
+            res.Title = disciplineList.Sum(x => x.Infractions.Count).ToString();
             disciplineTypes = disciplineTypes.Take(MAX_HOVER_LIST_NUMBER).ToList();
             res.Hover = ClassDisciplineHoveViewData.Create(disciplineTypes, disciplineList);
             return res;
@@ -87,7 +87,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public string DisciplineName { get; set; }
         public int Count { get; set; }
 
-        public static IList<ClassDisciplineHoveViewData> Create(IList<DisciplineType> disciplineTypes, IList<ClassDisciplineDetails> disciplines)
+        public static IList<ClassDisciplineHoveViewData> Create(IList<Infraction> disciplineTypes, IList<ClassDisciplineDetails> disciplines)
         {
             var res = new List<ClassDisciplineHoveViewData>();
             foreach (var disciplineType in disciplineTypes)
@@ -95,7 +95,7 @@ namespace Chalkable.Web.Models.ClassesViewData
                 res.Add(new ClassDisciplineHoveViewData
                 {
                     DisciplineName = disciplineType.Name,
-                    Count = disciplines.Sum(x=>x.DisciplineTypes.Count(y=>y.DisciplineTypeRef == disciplineType.Id))
+                    Count = disciplines.Sum(x=>x.Infractions.Count(y=>y.Id == disciplineType.Id))
                 });
             }
             return res;

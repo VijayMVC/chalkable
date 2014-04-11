@@ -75,6 +75,8 @@
     <Compile Include="Mapping\ModelMappers\AnnouncementAttToActivityAttMapper.cs" />
     <Compile Include="Mapping\ModelMappers\AnnouncementComplexToActivityMapper.cs" />
     <Compile Include="Mapping\ModelMappers\BaseMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\ClassDisciplineToDisciplineReferralMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\DisciplineReferralToClassDisciplineMapper.cs" />
     <Compile Include="Mapping\ModelMappers\MapperFactory.cs" />
     <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
     <Compile Include="Mapping\ModelMappers\StiAttachmentToAnnouncementAttMapper.cs" />
@@ -141,7 +143,7 @@
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
-    <Compile Include="Services\School\DisciplineTypeService.cs" />
+    <Compile Include="Services\School\InfractionService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\GradingPeriodService.cs" />
     <Compile Include="Services\School\GradingStandardService.cs" />

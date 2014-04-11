@@ -9,32 +9,29 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 {
     public class DisciplineView
     {
+        public int? Id { get; set; }
+        public int StudentId { get; set; }
+        public int? ClassId { get; set; }
         public ShortPersonViewData Student { get; set; }
-        public PeriodViewData Period { get; set; }
         public string ClassName { get; set; }
         public int? TeacherId { get; set; }
         public IList<DisciplineTypeViewData> DisciplineTypes { get; set; }
         public string Description { get; set; }
-        public Guid ClassPersonId { get; set; }
-        public Guid ClassPeriodId { get; set; }
-        public string Summary { get; set; }
         public bool Editable { get; set; }
 
         protected DisciplineView(ClassDisciplineDetails discipline, int currentPersonId, bool canEdit)
         {
+            Id = discipline.Id;
             Student = ShortPersonViewData.Create(discipline.Student);
-            Period = PeriodViewData.Create(discipline.ClassPeriod.Period);
-            DisciplineTypes = DisciplineTypeViewData.Create(discipline.DisciplineTypes.Select(x => x.DisciplineType).ToList());
+            DisciplineTypes = DisciplineTypeViewData.Create(discipline.Infractions.ToList());
             ClassName = discipline.Class.Name;
             TeacherId = discipline.Class.TeacherRef;
-            ClassPeriodId = discipline.ClassPeriodRef;
-            ClassPersonId = discipline.ClassPersonRef;
             Editable = canEdit || currentPersonId == TeacherId;
             Description = discipline.Description;
+            ClassId = discipline.ClassId;
         }
 
-        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, int currentPersonId,
-                                            bool canEdit = false)
+        public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, int currentPersonId, bool canEdit = false)
         {
             return disciplines.Select(x => new DisciplineView(x, currentPersonId, canEdit)).ToList();
         }
