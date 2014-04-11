@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Odbc;
-using System.Linq;
-using System.Web.Hosting;
-using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
+﻿using System.Collections.Generic;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -26,8 +20,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(ApplicationInstallActionRole appInstall)
         {
-            if (!data.ContainsKey(appInstall.Id))
-                data[appInstall.Id] = appInstall;
+            var id = GetNextFreeId();
+            appInstall.Id = id;
+            data[appInstall.Id] = appInstall;
         }
     }
 }

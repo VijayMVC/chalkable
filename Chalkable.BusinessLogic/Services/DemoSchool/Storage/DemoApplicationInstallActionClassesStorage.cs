@@ -26,8 +26,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(ApplicationInstallActionClasses appInstall)
         {
-            if (!data.ContainsKey(appInstall.Id))
-                data[appInstall.Id] = appInstall;
+            var id = Guid.NewGuid();
+            appInstall.Id = id;
+            data.Add(appInstall.Id, appInstall);
         }
     }
 }

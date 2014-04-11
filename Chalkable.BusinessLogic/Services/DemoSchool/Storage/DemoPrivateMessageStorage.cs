@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Chalkable.Common;
@@ -22,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 msgs = msgs.Where(x => x.FromPersonRef == personId);
             else
                 msgs = msgs.Where(x => x.ToPersonRef == personId);
-            
+
 
 
             /* if (!string.IsNullOrEmpty(keyword))
@@ -33,9 +34,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                                         , prefix);
                 conds.Add("keyword", keyword);
 
-            */
+           
             if (!string.IsNullOrWhiteSpace(keyword))
-                msgs = msgs.Where(x => x.Body.Contains(keyword));
+            {
+
+                if (isIncome)
+                {
+                    var fromPersonIds = msgs.Select(x => x.FromPersonRef);
+                    var fromPersonTexts = new List<string>();
+                    foreach (var fromPersonId in fromPersonIds)
+                    {
+                        var person = Storage.PersonStorage.GetById(fromPersonId);
+                        fromPersonTexts.Add(person.FirstName);
+                        fromPersonTexts.Add(person.LastName);
+                    }
+                }
+            }
+             *  */
+            msgs = msgs.Where(x => x.Body.Contains(keyword));
 
             if (roles == null)
                 roles = new List<int>();
