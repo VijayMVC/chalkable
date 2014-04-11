@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradingStyleService GradingStyleService { get; }
         IStudentAnnouncementService StudentAnnouncementService { get; }
         IClassAnnouncementTypeService ClassAnnouncementTypeService { get; }
-        IDisciplineTypeService DisciplineTypeService { get; }
+        IInfractionService InfractionService { get; }
         IApplicationSchoolService ApplicationSchoolService { get; }
         IDisciplineService DisciplineService { get; }
         IGradingStatisticService GradingStatisticService { get; }
@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
         private IClassAnnouncementTypeService classClassAnnouncementTypeService;
-        private IDisciplineTypeService disciplineTypeService;
+        private IInfractionService disciplineTypeService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
         private IGradingStatisticService gradingStatisticService;
@@ -114,7 +114,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingStyleService = new GradingStyleService(this);
             studentAnnouncementService = new StudentAnnouncementService(this);
             classClassAnnouncementTypeService = new ClassClassAnnouncementTypeService(this);
-            disciplineTypeService = new DisciplineTypeService(this);
+            disciplineTypeService = new InfractionService(this);
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DisciplineService(this);
             gradingStatisticService = new GradingStatisticService(this);
@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
         public IClassAnnouncementTypeService ClassAnnouncementTypeService { get { return classClassAnnouncementTypeService; } }
-        public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
+        public IInfractionService InfractionService { get { return disciplineTypeService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
         public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }

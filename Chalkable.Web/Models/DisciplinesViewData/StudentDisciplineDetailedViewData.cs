@@ -18,39 +18,40 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         //TODO: refactor this code later 
         public static StudentDisciplineDetailedViewData Create(PersonDetails student, IList<ClassDisciplineDetails> disciplines, MarkingPeriod markingPeriod)
         {
-            var classdiscTypes = new List<ClassDisciplineTypeDetails>();
-            foreach (var discipline in disciplines)
-            {
-                classdiscTypes.AddRange(discipline.DisciplineTypes);
-            } 
-            var disciplinesDictionary = classdiscTypes.OrderBy(x => x.DisciplineType.Name)
-                                                      .GroupBy(x => x.DisciplineTypeRef)
-                                                      .ToDictionary(x => x.Key, y => y.ToList());
+            //var classdiscTypes = new List<ClassDisciplineTypeDetails>();
+            //foreach (var discipline in disciplines)
+            //{
+            //    classdiscTypes.AddRange(discipline.Infractions);
+            //} 
+            //var disciplinesDictionary = classdiscTypes.OrderBy(x => x.DisciplineType.Name)
+            //                                          .GroupBy(x => x.DisciplineTypeRef)
+            //                                          .ToDictionary(x => x.Key, y => y.ToList());
            
-            string summary = string.Format("{0} is doing great. No discipline issues.", student.FirstName);
-            string className;
-            if(disciplinesDictionary.Count > 0)
-            {
-                var classesDictionary = disciplines.GroupBy(x => x.Class.Id).ToDictionary(x => x.Key, x => x.ToList());
-                if (classesDictionary.Count > 0)
-                {
-                    var classDisciplines = classesDictionary.OrderByDescending(x => x.Value.Count).First().Value;
-                    className = classDisciplines.First().Class.Name;
-                    summary = string.Format(ChlkResources.STUDENT_IS_HAVING_DISCIPLINARY_ISSUES, student.FirstName, className);
-                }
-            }
-            var disciplineBoxes = new List<StudentDisciplineBoxViewData>();
-            foreach (var disciplinesList in disciplinesDictionary)
-            {
-                disciplineBoxes.Add(StudentDisciplineBoxViewData.Create(disciplinesList.Value.Count, disciplinesList.Value.Select(x=>x.ClassDiscipline).ToList(), disciplinesList.Value.First().DisciplineType));
-            }
-            var res = new StudentDisciplineDetailedViewData(student)
-                          {
-                              MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod),
-                              Summary = summary,
-                              DisciplineBoxes = disciplineBoxes
-                          };
-            return res;
+            //string summary = string.Format("{0} is doing great. No discipline issues.", student.FirstName);
+            //string className;
+            //if(disciplinesDictionary.Count > 0)
+            //{
+            //    var classesDictionary = disciplines.GroupBy(x => x.Class.Id).ToDictionary(x => x.Key, x => x.ToList());
+            //    if (classesDictionary.Count > 0)
+            //    {
+            //        var classDisciplines = classesDictionary.OrderByDescending(x => x.Value.Count).First().Value;
+            //        className = classDisciplines.First().Class.Name;
+            //        summary = string.Format(ChlkResources.STUDENT_IS_HAVING_DISCIPLINARY_ISSUES, student.FirstName, className);
+            //    }
+            //}
+            //var disciplineBoxes = new List<StudentDisciplineBoxViewData>();
+            //foreach (var disciplinesList in disciplinesDictionary)
+            //{
+            //    disciplineBoxes.Add(StudentDisciplineBoxViewData.Create(disciplinesList.Value.Count, disciplinesList.Value.Select(x=>x.ClassDiscipline).ToList(), disciplinesList.Value.First().DisciplineType));
+            //}
+            //var res = new StudentDisciplineDetailedViewData(student)
+            //              {
+            //                  MarkingPeriod = MarkingPeriodViewData.Create(markingPeriod),
+            //                  Summary = summary,
+            //                  DisciplineBoxes = disciplineBoxes
+            //              };
+            //return res;
+            throw new NotImplementedException();
         }
     }
 
@@ -59,7 +60,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
     {
         public string Name { get; set; }
         public bool IsPassing { get; set; }
-        public static StudentDisciplineBoxViewData Create(int typeCount, List<ClassDisciplineDetails> disciplines, DisciplineType disciplineType)
+        public static StudentDisciplineBoxViewData Create(int typeCount, List<ClassDisciplineDetails> disciplines, Infraction disciplineType)
         {
             var isPassing = false; //TODO: calc when is passing
             var disciplinesDictionary = disciplines.OrderBy(x => x.Class.Name).GroupBy(x => x.Class.Id).ToDictionary(x => x.Key, x => x.ToList());
@@ -86,7 +87,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 
             var res = new StudentDisciplineHoverViewData
             {
-                Value = disciplines.Sum(x=>x.DisciplineTypes.Count),
+                Value = disciplines.Sum(x=>x.Infractions.Count),
                 ClassName = disciplines.First().Class.Name
             };
             return res;
