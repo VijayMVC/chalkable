@@ -68,6 +68,7 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function updateGradingPeriodPart(tpl, model, msg_) {
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
                 var tooltipText = model.getTooltipText();
+                this.setItems(model.getByAnnouncementTypes());
                 tpl.renderTo(container.setHTML(''));
                 setTimeout(function(){
                     this.openGradingPeriod(container);
