@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -23,10 +24,45 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 msgs = msgs.Where(x => x.ToPersonRef == personId);
             
 
+
+            /* if (!string.IsNullOrEmpty(keyword))
+            {
+                keyword = "%" + keyword + "%";
+                b.AppendFormat(@" and (PrivateMessage_Subject like @keyword or PrivateMessage_Body like @keyword
+                                        or lower(PrivateMessage_{0}FirstName) like @keyword or lower(PrivateMessage_{0}LastName) like @keyword)"
+                                        , prefix);
+                conds.Add("keyword", keyword);
+
+            */
             if (!string.IsNullOrWhiteSpace(keyword))
                 msgs = msgs.Where(x => x.Body.Contains(keyword));
-            //filter by roles
 
+            if (roles == null)
+                roles = new List<int>();
+
+            if (roles.Count > 0)
+            {
+                if (isIncome)
+                {
+
+                    var fromPersonIds = msgs.Select(x => x.FromPersonRef);
+                    var persons = fromPersonIds.Select(fromPersonId => Storage.PersonStorage.GetById(fromPersonId)).ToList();
+
+                    var fromPersonIdsFiltered = persons.Where(x => roles.Contains(x.RoleRef)).Select(x => x.Id).ToList();
+
+                    msgs = msgs.Where(x => fromPersonIdsFiltered.Contains(x.FromPersonRef));
+                }
+                else
+                {
+                    var toPersonIds = msgs.Select(x => x.ToPersonRef);
+                    var persons = toPersonIds.Select(toPersonId => Storage.PersonStorage.GetById(toPersonId)).ToList();
+
+                    var toPersonIdsFiltered = persons.Where(x => roles.Contains(x.RoleRef)).Select(x => x.Id).ToList();
+                    msgs = msgs.Where(x => toPersonIdsFiltered.Contains(x.ToPersonRef));
+                }
+            }
+            
+         
             if (read.HasValue)
                 msgs = msgs.Where(x => x.Read == read);
 

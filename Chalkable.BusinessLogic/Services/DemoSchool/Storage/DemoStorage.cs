@@ -75,6 +75,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new ChalkableException("Unsupported role for announcements");
         }
 
+        public void UpdateContext(UserContext context)
+        {
+            Context = context;
+        }
+
         public DemoStorage(UserContext context)
         {
             Context = context;

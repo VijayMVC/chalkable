@@ -110,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services
                     DateTime.Now.AddHours(3), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
             }
             var storage = (DemoStorage)HttpRuntime.Cache[context.DistrictId.ToString()];
-
+            storage.UpdateContext(context);
             var masterLocator = new DemoServiceLocatorMaster(context, storage);
             return new DemoServiceLocatorSchool(masterLocator, storage);
         }
