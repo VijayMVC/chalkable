@@ -25,6 +25,21 @@ NAMESPACE('chlk.templates.grading', function () {
             Number, 'rowIndex',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'autoUpdate'
+            Boolean, 'autoUpdate',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayAlphaGrades',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayStudentAverage',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayTotalPoints',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(Number), 'totalPoints'
         ]);
 });

@@ -40,6 +40,27 @@ NAMESPACE('chlk.models.grading', function () {
 
             function getTooltipText(){
                 return (this.getAvg() != null ? Msg.Avg + " " + this.getAvg() : 'No grades yet');
+            },
+
+            [[chlk.models.grading.StudentAverageInfo]],
+            String, function displayAvgName(studentAverage){
+                return studentAverage && studentAverage.isGradingPeriodAverage()
+                    ? Msg.Avg : studentAverage.getAverageName();
+            },
+
+            [[Number]],
+            String, function displayGrade(grade){
+                return grade ? grade.toFixed(2) : '';
+            },
+
+            [[chlk.models.grading.ShortStudentAverageInfo, Boolean]],
+            String, function displayAvgGradeValue(averageInfo, isAbleDisplayAlphaGrades_){
+                var alphaGrade = averageInfo.getAlphaGradeValue();
+                var res = this.displayGrade(averageInfo.getNumericValue());
+                if(res && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
+                    res += '(' + alphaGrade + ')';
+                }
+                return res;
             }
         ]);
 });
