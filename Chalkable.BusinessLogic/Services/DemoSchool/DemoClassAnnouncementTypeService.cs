@@ -40,7 +40,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
         {
-            throw new System.NotImplementedException();
+            var classAnnTypes = GetClassAnnouncementTypes(classId, false);
+            return classAnnTypes.Select(classAnnouncementType => new GradedClassAnnouncementType
+            {
+                ClassRef = classAnnouncementType.ClassRef, 
+                Description = classAnnouncementType.Description, 
+                Gradable = classAnnouncementType.Gradable, 
+                Id = classAnnouncementType.Id, 
+                Name = classAnnouncementType.Name, 
+                Percentage = classAnnouncementType.Percentage, 
+                ChalkableAnnouncementTypeRef = classAnnouncementType.ChalkableAnnouncementTypeRef, 
+                Avg = announcementDetailses.Where(x => x.ClassAnnouncementTypeRef == classAnnouncementType.Id).Average(x => x.StudentAnnouncements.Average(y => y.NumericScore))
+            }).ToList();
         }
+
     }
 }

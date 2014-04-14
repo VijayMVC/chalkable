@@ -24,11 +24,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             if (notificationQuery.Type.HasValue)
                 notifications = notifications.Where(x => x.Type == notificationQuery.Type);
-
-
-            //todo: class period ref filter
-            //if (notificationQuery.ClassPeriodRef.HasValue)
-             //   notifications = notifications.Where(x => x.)
             notifications = notifications.Skip(notificationQuery.Start).Take(notificationQuery.Count);
             return notifications.ToList();
         }

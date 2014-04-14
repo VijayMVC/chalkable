@@ -134,6 +134,7 @@
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
     <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementApplicationStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionRoleStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionDepartmentStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionGradeLevelStorage.cs" />

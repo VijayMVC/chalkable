@@ -23,137 +23,90 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
         {
-            throw new NotImplementedException();
             var res = new List<int>();
-            using (var uow = Read())
+            if (announcementAppId.HasValue)
             {
-                if (announcementAppId.HasValue)
+
+                var anDa = new DemoAnnouncementForTeacherStorage(Storage);
+                var announcementApplication = Storage.AnnouncementApplicationStorage.GetById(announcementAppId.Value);
+                var ann = anDa.GetById(announcementApplication.AnnouncementRef);
+                if (ann.ClassRef.HasValue)
                 {
-                    var anDa = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
-                    var da = new AnnouncementApplicationDataAccess(uow);
-                    var announcementApplication = da.GetById(announcementAppId.Value);
-                    var ann = anDa.GetById(announcementApplication.AnnouncementRef);
-                    if (ann.ClassRef.HasValue)
-                    {
-                        var csp = new ClassPersonDataAccess(uow, Context.SchoolLocalId)
-                            .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
-                        res.AddRange(csp.Select(x=>x.PersonRef));
-                    }
-                    res.Add(ann.PersonRef);
+
+                    var csp = Storage.ClassPersonStorage
+                        .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
+                    res.AddRange(csp.Select(x => x.PersonRef));
                 }
-                else
-                {
-                    var inst = new ApplicationInstallDataAccess(uow).GetAll(new AndQueryCondition
+                res.Add(ann.PersonRef);
+            }
+            else
+            {
+
+                var inst = Storage.ApplicationInstallStorage.GetAll(new AndQueryCondition
                         {
                             {ApplicationInstall.ACTIVE_FIELD, true}, 
                             {ApplicationInstall.APPLICATION_REF_FIELD, appId}
                         });
-                    res.AddRange(inst.Select(x=>x.PersonRef));
-                }
+                res.AddRange(inst.Select(x => x.PersonRef));
             }
             return res;
         }
 
         public AnnouncementApplication AddToAnnouncement(int announcementId, Guid applicationId)
         {
-            throw new NotImplementedException();
+            
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
-            using (var uow = Update())
+            var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            if (!ApplicationSecurity.CanAddToAnnouncement(app, ann, Context))
+                throw new ChalkableSecurityException();
+            var aa = new AnnouncementApplication
             {
-                var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-                if (!ApplicationSecurity.CanAddToAnnouncement(app, ann, Context))
-                    throw new ChalkableSecurityException();
-                var aa = new AnnouncementApplication
-                    {
-                        AnnouncementRef = announcementId,
-                        ApplicationRef = applicationId,
-                        Active = false,
-                        Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
-                    };
-                var da = new AnnouncementApplicationDataAccess(uow);
-                da.Insert(aa);
-                uow.Commit();
-                aa = da.GetAll(new AndQueryCondition
-                    {
-                        {AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId},
-                        {AnnouncementApplication.APPLICATION_REF_FIELD, applicationId},
-                        {AnnouncementApplication.ACTIVE_FIELD, false}
-                    }).OrderByDescending(x=>x.Id).First();
-                return aa;
-            }
+                AnnouncementRef = announcementId,
+                ApplicationRef = applicationId,
+                Active = false,
+                Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
+            };
+            Storage.AnnouncementApplicationStorage.Add(aa);
+            aa = Storage.AnnouncementApplicationStorage.GetAll(announcementId, applicationId, false).OrderByDescending(x => x.Id).First();
+            return aa;
         }
 
         public AnnouncementApplication GetAnnouncementApplication(int announcementAppId)
         {
-            throw new NotImplementedException();
-            using (var uow = Read())
-            {
-                return new AnnouncementApplicationDataAccess(uow).GetById(announcementAppId);
-            }
+            return Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
         }
 
         public void AttachAppToAnnouncement(int announcementAppId)
         {
-            throw new NotImplementedException();
-            using (var uow = Update())
-            {
-                var da = new AnnouncementApplicationDataAccess(uow);
-                var aa = da.GetById(announcementAppId);
-                var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
-                    .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserLocalId.Value);
-                if (Context.UserLocalId != ann.PersonRef)
-                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
-                aa.Active = true;
-                da.Update(aa);
-                uow.Commit();
-            }
+            var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
+            var ann = new DemoAnnouncementForTeacherStorage(Storage)
+                .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserLocalId.Value);
+            if (Context.UserLocalId != ann.PersonRef)
+                throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+            aa.Active = true;
+            Storage.AnnouncementApplicationStorage.Update(aa);
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)
         {
-            return new List<AnnouncementApplication>();
-            /*throw new NotImplementedException();
-            
-            //TODO: thing about security
-            using (var uow = Read())
-            {
-                var da = new AnnouncementApplicationDataAccess(uow);
-                var ps = new AndQueryCondition();
-                ps.Add(AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId);
-                if (onlyActive)
-                    ps.Add(AnnouncementApplication.ACTIVE_FIELD, true);
-                return da.GetAll(ps);
-            }*/
+            return Storage.AnnouncementApplicationStorage.GetAll(announcementId, onlyActive);
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false)
         {
-            throw new NotImplementedException();
-            using (var uow = Read())
-            {
-                var da = new AnnouncementApplicationDataAccess(uow);
-                return da.GetAnnouncementApplicationsByPerson(personId, onlyActive);
-            }
+            return Storage.AnnouncementApplicationStorage.GetAnnouncementApplicationsByPerson(personId, onlyActive);
         }
 
         public Announcement RemoveFromAnnouncement(int announcementAppId)
         {
-            throw new NotImplementedException();
             try
             {
-                //TODO: thing about security
-                using (var uow = Update())
-                {
-                    var da = new AnnouncementApplicationDataAccess(uow);
-                    var aa = da.GetById(announcementAppId);
-
-                    da.Delete(announcementAppId);
-                    uow.Commit();
-                    var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                    if (Context.UserLocalId != res.PersonRef)
-                        throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
-                    return res;
-                }
+                var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
+                Storage.AnnouncementApplicationStorage.Delete(announcementAppId);
+                var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
+                if (Context.UserLocalId != res.PersonRef)
+                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+                return res;
             }
             catch
             {
