@@ -36,6 +36,8 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                         {new Pair<Type, Type>(typeof(StudentAnnouncementDetails), typeof(Score)), new ScoreToStudentAnnMapper()},
                         {new Pair<Type, Type>(typeof(Score), typeof(StudentAnnouncementDetails)), new StudentAnnouncementToScoreMapper()},
                         {new Pair<Type, Type>(typeof(Score), typeof(StudentAnnouncement)), new StudentAnnouncementToScoreMapper()},
+                        {new Pair<Type, Type>(typeof(ClassDiscipline), typeof(DisciplineReferral)), new DisciplineReferralToClassDisciplineMapper()},
+                        {new Pair<Type, Type>(typeof(DisciplineReferral), typeof(ClassDiscipline)), new ClassDisciplineToDisciplineReferralMapper()}
                     };
         }
         public static IMapper GetMapper<TReturn, TSource>()

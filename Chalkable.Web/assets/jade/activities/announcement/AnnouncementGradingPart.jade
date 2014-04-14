@@ -42,7 +42,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                         if !self.isReadonly()
                             SPAN.container
                                 SPAN.comment-grade
-                                    span.comment-text=(item.getComment() ? Msg.Commented : Msg.Comment)
+                                    +ActionLink('grading', 'getGradeComments').comment-text=(item.getComment() ? Msg.Commented : Msg.Comment)
                                     .small-pop-up
                                         .container
                                             .triangle
@@ -51,6 +51,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                                     +PersonImg(owner, 24)
                                                 div
                                                     +TextArea(name="comment").comment-input=item.getComment()
+                                                    .grading-comments-list
                                                     span.enter=Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(

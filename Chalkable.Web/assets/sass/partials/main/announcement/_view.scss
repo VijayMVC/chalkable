@@ -514,15 +514,29 @@ $red-color: #842727;
             .comment-grade{
               position: relative;
 
+              .grading-comments-list{
+                margin: -20px 0 0 3px;
+                width: 303px;
+                z-index: 1;
+              }
+
               .small-pop-up{
                 top: 28px;
-                left: -10px;
+                left: -58px;
                 position: absolute;
                 border: 1px solid #b9b9b9;
                 @include border-radius(5px);
                 z-index: 100;
 
                 >DIV.container{
+                  .triangle{
+                    left: 70px;
+                    top: -15px;
+                    width: 26px;
+                    height: 16px;
+                    background: url(images/common/window-triangle-top.png) 0 0 no-repeat;
+                  }
+
                   >DIV{
                     display: table-row;
 
@@ -537,8 +551,9 @@ $red-color: #842727;
                       }
 
                       TEXTAREA{
-                        width: 230px;
-                        margin: 2px 0 10px 5px;
+                        width: 297px;
+                        margin: 7px 3px 17px 3px;
+                        height: 39px;
                       }
                     }
                   }

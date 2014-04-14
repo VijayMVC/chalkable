@@ -75,7 +75,7 @@ namespace Chalkable.StiConnector.Connectors
             }
         }
 
-        public T Post<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null) 
+        public TReturn Post<TReturn, TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null) 
         {
             httpMethod = httpMethod ?? HttpMethod.Post;
             var client = InitWebClient();           
@@ -93,9 +93,9 @@ namespace Chalkable.StiConnector.Connectors
                 if (data != null && data.Length > 0)
                 {
                     stream2 = new MemoryStream(data);
-                    return serializer.Deserialize<T>(new JsonTextReader(new StreamReader(stream2)));
+                    return serializer.Deserialize<TReturn>(new JsonTextReader(new StreamReader(stream2)));
                 }
-                return default(T);
+                return default(TReturn);
             }
             catch (WebException ex)
             {
@@ -111,6 +111,11 @@ namespace Chalkable.StiConnector.Connectors
             }
         }
 
+        public T Post<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
+        {
+            return Post<T, T>(url, obj, optionalParams, httpMethod);
+        }
+
         public T PostWithFile<T>(string url, string fileName, byte[] fileContent, NameValueCollection parameters, HttpMethod method = null)
         {
             var headers = InitHeaders();
@@ -121,11 +126,11 @@ namespace Chalkable.StiConnector.Connectors
 
         public void Delete(string url) 
         {
-            Post<Object>(url, null, null, HttpMethod.Delete);
+            Post<Object,Object>(url, null, null, HttpMethod.Delete);
         }
         public T Put<T>(string url, T obj)
         {
-            return Post(url, obj, null, HttpMethod.Put);
+            return Post<T,T>(url, obj, null, HttpMethod.Put);
         }
 
         private static void ThrowWebException(WebException exception)

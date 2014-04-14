@@ -145,6 +145,12 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Grading/ItemGradingStat', chlk.models.grading.ItemGradingStat, {
                     announcementId: announcementId.valueOf()
                 });
+            },
+
+            ria.async.Future, function getGradeComments() {
+                return this.get('Grading/GetGridComments', Array, {
+                    schoolYearId: this.getContext().getSession().get('currentSchoolYearId', null).valueOf()
+                });
             }
         ])
 });

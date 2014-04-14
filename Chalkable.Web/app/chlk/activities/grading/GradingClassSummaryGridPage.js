@@ -3,6 +3,7 @@ REQUIRE('chlk.templates.grading.GradingInputTpl');
 REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl');
 REQUIRE('chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl');
 REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl');
+REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 
 REQUIRE('chlk.activities.lib.TemplatePage');
 
@@ -17,6 +18,7 @@ NAMESPACE('chlk.activities.grading', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassSummaryGridTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         'GradingClassSummaryGridPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.DomEventBind('click', '.mp-title')],
@@ -70,6 +72,41 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(!node.checked()){
                     var input = node.parent('form').find('.grade-autocomplete');
                     input.setValue(input.getData('grade-value'));
+                }
+            },
+
+            [ria.mvc.DomEventBind('keyup', '.comment-value')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function commentKeyUp(node, event, options_){
+                var popUp = node.parent().find('.grading-comments-list');
+                if(popUp.is(':visible') && (event.which == ria.dom.Keys.UP.valueOf()
+                    || event.which == ria.dom.Keys.DOWN.valueOf() || event.which == ria.dom.Keys.ENTER.valueOf())
+                    && popUp.find('.item').exists()){
+                        var selected = popUp.find('.item.selected'), next = selected;
+                        if(!selected.exists())
+                            selected = popUp.find('.item:first');
+                        switch(event.which){
+                            case ria.dom.Keys.UP.valueOf():
+                                if(selected.previous().exists()){
+                                    selected.removeClass('selected');
+                                    selected.previous().addClass('selected');
+                                }
+                                break;
+                            case ria.dom.Keys.DOWN.valueOf():
+                                if(selected.next().exists()){
+                                    selected.removeClass('selected');
+                                    selected.next().addClass('selected');
+                                }
+                                break;
+                            case ria.dom.Keys.ENTER.valueOf():
+                                this.setCommentByNode(next);
+                                break;
+                        }
+                }else{
+                    if(node.getValue() && node.getValue().trim())
+                        popUp.hide();
+                    else
+                        popUp.show();
                 }
             },
 
@@ -350,8 +387,37 @@ NAMESPACE('chlk.activities.grading', function () {
                 var left = active.offset().left - main.offset().left - 54;
                 popUp.setCss('bottom', bottom);
                 popUp.setCss('left', left);
-                popUp.find('textarea').setValue(active.find('.comment-value').getValue());
+                var comment = active.find('.comment-value').getValue();
+                popUp.find('textarea').setValue(comment);
                 popUp.show();
+                popUp.find('.grading-comments-list').show();
+                if(comment)
+                    popUp.find('.grading-comments-list').hide();
+                setTimeout(function(){
+                    popUp.find('.comment-value').trigger('focus');
+                }, 1)
+            },
+
+            function setCommentByNode(node){
+                var popUp = node.parent('.chlk-pop-up-container');
+                var input = popUp.find('.comment-value');
+                input.setValue(node.getHTML());
+                popUp.find('.grading-comments-list').hide();
+            },
+
+            [ria.mvc.DomEventBind('click', '.grading-comments-list .item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentItemClick(node, event){
+                this.setCommentByNode(node);
+            },
+
+            [ria.mvc.DomEventBind('mouseover', '.grading-comments-list .item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentItemMouseOver(node, event){
+                if(!node.hasClass('selected')){
+                    node.parent('.grading-comments-list').find('.selected').removeClass('selected');
+                    node.addClass('selected');
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.cancel-comment')],

@@ -1,11 +1,14 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
+
 REQUIRE('chlk.templates.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.StudentAnnouncement');
 REQUIRE('chlk.templates.announcement.AnnouncementForStudentAttachments');
 REQUIRE('chlk.templates.announcement.AnnouncementGradingPartTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
 REQUIRE('chlk.templates.announcement.AddStandardsTpl');
+REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.classes.TopBar');
+
 REQUIRE('chlk.models.grading.AlertsEnum');
 
 NAMESPACE('chlk.activities.announcement', function () {
@@ -17,6 +20,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementView)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna', '.questions-and-answers', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.row.selected .grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '.student-attachments', ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
@@ -154,16 +158,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setGrade(row.find('.grade-input'));
             },
 
-            [ria.mvc.DomEventBind('keypress', '.comment-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function commentPress(node, event){
-                if(event.keyCode == ria.dom.Keys.ENTER){
-                    this.updateItem(node, false, true);
-                    node.parent('.small-pop-up').hide();
-                    node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
-                }
-            },
-
             [[ria.dom.Dom, String, Boolean]],
             function setItemState_(node, stateName, selectNext_){
                 var row = node.parent('.row');
@@ -214,6 +208,11 @@ NAMESPACE('chlk.activities.announcement', function () {
             function commentClick(node, event){
                 var popUp = node.find('.small-pop-up');
                 popUp.show();
+                var comments = popUp.find('.grading-comments-list');
+                if(popUp.find('.comment-input').getValue())
+                    comments.hide();
+                else
+                    comments.show();
                 setTimeout(function(){
                     jQuery(popUp.find('textarea').valueOf()).focus();
                 }, 10);
@@ -617,7 +616,67 @@ NAMESPACE('chlk.activities.announcement', function () {
                 setTimeout(function(){
                     node.parent('form').find('.grade-autocomplete').trigger('focus');
                 }, 1)
-            }
+            },
+
+            function setCommentByNode(node){
+                var popUp = node.parent('.small-pop-up');
+                var input = popUp.find('.comment-input');
+                input.setValue(node.getHTML());
+                popUp.find('.grading-comments-list').hide();
+            },
+
+            [ria.mvc.DomEventBind('click', '.grading-comments-list .item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentItemClick(node, event){
+                this.setCommentByNode(node);
+            },
+
+            [ria.mvc.DomEventBind('mouseover', '.grading-comments-list .item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentItemMouseOver(node, event){
+                if(!node.hasClass('selected')){
+                    node.parent('.grading-comments-list').find('.selected').removeClass('selected');
+                    node.addClass('selected');
+                }
+            },
+
+            [ria.mvc.DomEventBind('keyup', '.comment-input')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function commentKeyUp(node, event, options_){
+                var popUp = node.parent().find('.grading-comments-list');
+                if(popUp.is(':visible') && (event.which == ria.dom.Keys.UP.valueOf()
+                    || event.which == ria.dom.Keys.DOWN.valueOf() || event.which == ria.dom.Keys.ENTER.valueOf())
+                    && popUp.find('.item').exists()){
+                        var selected = popUp.find('.item.selected'), next = selected;
+                        if(!selected.exists())
+                            selected = popUp.find('.item:first');
+                        switch(event.which){
+                            case ria.dom.Keys.UP.valueOf():
+                                if(selected.previous().exists()){
+                                    selected.removeClass('selected');
+                                    selected.previous().addClass('selected');
+                                }
+                                break;
+                            case ria.dom.Keys.DOWN.valueOf():
+                                if(selected.next().exists()){
+                                    selected.removeClass('selected');
+                                    selected.next().addClass('selected');
+                                }
+                                break;
+                            case ria.dom.Keys.ENTER.valueOf():
+                                this.setCommentByNode(next);
+                                this.updateItem(node, false, true);
+                                node.parent('.small-pop-up').hide();
+                                node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
+                                break;
+                        }
+                }else{
+                    if(node.getValue() && node.getValue().trim())
+                        popUp.hide();
+                    else
+                        popUp.show();
+                }
+            },
         ]
     );
 });

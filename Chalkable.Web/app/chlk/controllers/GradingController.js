@@ -273,6 +273,15 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
+            function getGradeCommentsAction(){
+                var result = this.gradingService.getGradeComments().then(function(comments){
+                    if(!comments.length)
+                        comments = ["Comment 1", "Some comment"];
+                    return new chlk.models.grading.GradingComments(comments);
+                });
+                return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
+            },
+
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){
                 var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),

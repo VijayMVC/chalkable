@@ -838,6 +838,12 @@ BODY {
   }
 }
 
+.grade-info{
+  width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .ann-grade-pop-up{
   z-index: 10;
   //top: -17px;
@@ -873,5 +879,36 @@ BODY {
     line-height: initial !important;
     display: block;
     font: normal 14px Arial;
+  }
+}
+
+.grading-comments-list{
+  position: absolute;
+  background: white;
+  width: 148px;
+  margin-top: -4px;
+  box-shadow: 0 0 3px #aaa;
+
+  .item {
+    padding: 4px 8px;
+    font: bold 12px Arial;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-shadow: none;
+    cursor: pointer;
+
+    &.selected{
+      background: #26647e;
+      color: white;
+    }
+
+    &:first-child {
+      padding-top: 11px;
+    }
+
+    &:last-child {
+      padding-bottom: 10px;
+    }
   }
 }

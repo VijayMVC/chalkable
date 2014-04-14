@@ -22,6 +22,7 @@
                 h5=Msg.Add_comment
                 .text-container
                     textarea.comment-value
+                    .grading-comments-list
                 a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
                 a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
         each gradingPeriod,i in self.getGradingPeriods()
@@ -46,7 +47,7 @@
                                 +Option('', Msg.All_categories , true)
                                 each item in self.getClassAnnouncementTypes()
                                     +Option(item.getId(), item.getName() , false)
-                    a(href="javascript:").grey-button.comment-button=Msg.Comment
+                    +ActionLink('grading', 'getGradeComments').grey-button.comment-button=Msg.Comment
                     .collapse
                 div(data-grading-period-id=gradingPeriod.getId()).mp-data
                     if gradingPeriod.getId() == self.getGradingPeriodId()

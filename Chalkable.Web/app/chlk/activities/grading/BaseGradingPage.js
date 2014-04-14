@@ -104,7 +104,7 @@ NAMESPACE('chlk.activities.grading', function () {
             OVERRIDE, VOID, function onStop_(){
                 BASE();
                 new ria.dom.Dom(document).off('mouseover.popup');
-                new ria.dom.Dom(document).off('click.popup', '.ann-grade-pop-up .grey-button');
+                new ria.dom.Dom(document).off('click.popup');
                 new ria.dom.Dom('.ann-grade-pop-up').remove();
             },
 
