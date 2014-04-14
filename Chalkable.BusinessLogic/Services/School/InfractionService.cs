@@ -14,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddList(IList<Infraction> infractions);
         void EditList(IList<Infraction> infractions);
         void DeleteList(IList<short> ids);
-        IList<Infraction> GetDisciplineTypes(bool onlyActive = true);
+        IList<Infraction> GetInfractions(bool onlyActive = true);
     }
 
     public class InfractionService : SchoolServiceBase, IInfractionService
@@ -58,7 +58,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Infraction> GetDisciplineTypes(bool onlyActive = true)
+        public IList<Infraction> GetInfractions(bool onlyActive = true)
         {
             using (var uow = Read())
             {

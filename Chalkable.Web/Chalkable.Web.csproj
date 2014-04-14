@@ -284,6 +284,7 @@
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\ClassDisciplineInputModel.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineView.cs" />
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineDetailedViewData.cs" />
