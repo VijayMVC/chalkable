@@ -44,34 +44,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Setup()
         {
-            var classes = new List<Class>();
-           
-
-            classes.Add(new Class
+            var classes = new List<Class>
             {
-                Id = 1,
-                Name = "Geometry",
-                Description = "Geometry",
-                GradeLevelRef = 12,
-                CourseRef = 43,
-                ChalkableDepartmentRef = null,
-                TeacherRef = 1195,
-                SchoolRef = 1,
-                SchoolYearRef = 12
-            });
-
-            classes.Add(new Class
-            {
-                Id = 2,
-                Name = "Algebra",
-                Description = "Algebra",
-                GradeLevelRef = 12,
-                CourseRef = 43,
-                ChalkableDepartmentRef = null,
-                TeacherRef = 1195,
-                SchoolRef = 1,
-                SchoolYearRef = 12
-            });
+                new Class
+                {
+                    Id = 1,
+                    Name = "Geometry",
+                    Description = "Geometry",
+                    GradeLevelRef = 12,
+                    CourseRef = 43,
+                    ChalkableDepartmentRef = null,
+                    TeacherRef = 1195,
+                    SchoolRef = 1,
+                    SchoolYearRef = 12
+                },
+                new Class
+                {
+                    Id = 2,
+                    Name = "Algebra",
+                    Description = "Algebra",
+                    GradeLevelRef = 12,
+                    CourseRef = 43,
+                    ChalkableDepartmentRef = null,
+                    TeacherRef = 1195,
+                    SchoolRef = 1,
+                    SchoolYearRef = 12
+                }
+            };
 
 
             Add(classes);
@@ -109,8 +108,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     filter3 = sl[2];
             }
 
-      
-
             //todo: ask about caller role id
 
             //var roleId = Storage.SchoolPersonStorage.GetRoleId(personId, SchoolRef);
@@ -128,25 +125,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public int? RoomRef { get; set; }
         public int? SchoolRef { get; set; }
 
-          [NotDbFieldAttr]
-        public Person Teacher { get; set; }
-        public IList<MarkingPeriodClass> MarkingPeriodClasses { get; set; }
-        [NotDbFieldAttr]
-        public GradeLevel GradeLevel { get; set; }
-        public int StudentsCount { get; set; }
-
-
-            while (reader.Read())
-            {
-                var c = reader.Read<ClassDetails>(true);
-                if (c.TeacherRef.HasValue)
-                    c.Teacher = reader.Read<Person>(true);
-                c.GradeLevel = reader.Read<GradeLevel>(true);
-                classes.Add(c);
-            }
-            reader.NextResult();
-
-            */
+      */
             if (!string.IsNullOrEmpty(filter1))
                 classes = classes.Where(x => x.Name.Contains(filter1));
             if (!string.IsNullOrEmpty(filter2))

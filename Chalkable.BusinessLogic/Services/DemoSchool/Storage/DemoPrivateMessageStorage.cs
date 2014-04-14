@@ -24,34 +24,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             else
                 msgs = msgs.Where(x => x.ToPersonRef == personId);
 
-
-
-            /* if (!string.IsNullOrEmpty(keyword))
-            {
-                keyword = "%" + keyword + "%";
-                b.AppendFormat(@" and (PrivateMessage_Subject like @keyword or PrivateMessage_Body like @keyword
-                                        or lower(PrivateMessage_{0}FirstName) like @keyword or lower(PrivateMessage_{0}LastName) like @keyword)"
-                                        , prefix);
-                conds.Add("keyword", keyword);
-
-           
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-
-                if (isIncome)
-                {
-                    var fromPersonIds = msgs.Select(x => x.FromPersonRef);
-                    var fromPersonTexts = new List<string>();
-                    foreach (var fromPersonId in fromPersonIds)
-                    {
-                        var person = Storage.PersonStorage.GetById(fromPersonId);
-                        fromPersonTexts.Add(person.FirstName);
-                        fromPersonTexts.Add(person.LastName);
-                    }
-                }
+                msgs = msgs.Where(x => x.Body.Contains(keyword) || x.Subject.Contains(keyword));    
             }
-             *  */
-            msgs = msgs.Where(x => x.Body.Contains(keyword));
 
             if (roles == null)
                 roles = new List<int>();
