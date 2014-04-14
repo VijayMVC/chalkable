@@ -64,18 +64,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoInfractionStorage InfractionStorage { get; private set; }
         public DemoAnnouncementRecipientDataStorage AnnouncementRecipientDataStorage{ get; private set; }
 
+
         public UserContext Context { get; private set; }
 
-        private IDemoAnnouncementStorage CreateAnnouncementStorage(UserContext context, DemoStorage storage)
-        {
-            if (BaseSecurity.IsAdminViewer(context))
-                return new DemoAnnouncementForAdminStorage(storage);
-            if (context.Role == CoreRoles.TEACHER_ROLE)
-                return new DemoAnnouncementForTeacherStorage(storage);
-            if (context.Role == CoreRoles.STUDENT_ROLE)
-                return new DemoAnnouncementForStudentStorage(storage);
-            throw new ChalkableException("Unsupported role for announcements");
-        }
+       
 
         public void UpdateContext(UserContext context)
         {
@@ -86,7 +78,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             Context = context;
             AnnouncementReminderStorage = new DemoAnnouncementReminderStorage(this);
-            AnnouncementStorage = CreateAnnouncementStorage(Context, this);
             PrivateMessageStore = new DemoPrivateMessageStorage(this);
             SchoolYearStorage = new DemoSchoolYearStorage(this);
             InfractionStorage = new DemoInfractionStorage(this);
@@ -138,6 +129,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StudentSchoolYearStorage = new DemoStudentSchoolYearStorage(this);
             AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage(this);
             AnnouncementRecipientDataStorage = new DemoAnnouncementRecipientDataStorage(this);
+
+
+
             Setup();
         }
 

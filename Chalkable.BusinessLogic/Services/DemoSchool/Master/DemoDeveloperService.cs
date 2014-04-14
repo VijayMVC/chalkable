@@ -13,13 +13,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
         }
 
-        //TODO: needs test 
         public Developer GetDeveloperByDictrict(Guid districtId)
         {
-            using (var uow = Read())
-            {
-                return new DeveloperDataAccess(uow).GetDeveloper(districtId);
-            }
+            throw new NotImplementedException();
         }
 
         public Developer GetDeveloperById(Guid developerId)

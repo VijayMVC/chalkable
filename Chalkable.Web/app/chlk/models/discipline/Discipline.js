@@ -4,6 +4,7 @@ REQUIRE('chlk.models.id.DisciplineId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.people.ShortUserInfo')
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.id.DisciplineId');
 
 NAMESPACE('chlk.models.discipline', function(){
     "use strict";

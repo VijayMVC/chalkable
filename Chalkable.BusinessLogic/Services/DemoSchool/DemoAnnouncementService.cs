@@ -72,6 +72,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var anns = GetAnnouncements(query).Announcements;
             return anns;
         }
+
+        private IDemoAnnouncementStorage CreateAnnouncementStorage(UserContext context, DemoStorage storage)
+        {
+            if (BaseSecurity.IsAdminViewer(context))
+                return new DemoAnnouncementForAdminStorage(storage);
+            if (context.Role == CoreRoles.TEACHER_ROLE)
+                return new DemoAnnouncementForTeacherStorage(storage);
+            if (context.Role == CoreRoles.STUDENT_ROLE)
+                return new DemoAnnouncementForStudentStorage(storage);
+            throw new ChalkableException("Unsupported role for announcements");
+        }
         
         
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
