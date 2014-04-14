@@ -677,6 +677,23 @@ NAMESPACE('chlk.activities.announcement', function () {
                         popUp.show();
                 }
             },
+
+            [ria.mvc.DomEventBind('keydown', '.comment-input')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function commentKeyDown(node, event, options_){
+                var popUp = node.parent().find('.grading-comments-list');
+                if(event.which == ria.dom.Keys.ENTER.valueOf()){
+                    if(popUp.is(':visible') && popUp.find('.item').exists()){
+                        var selected = popUp.find('.item.selected');
+                        if(!selected.exists())
+                            selected = popUp.find('.item:first');
+                        this.setCommentByNode(selected);
+                    }
+                    this.updateItem(node, false, true);
+                    node.parent('.small-pop-up').hide();
+                    node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
+                }
+            }
         ]
     );
 });

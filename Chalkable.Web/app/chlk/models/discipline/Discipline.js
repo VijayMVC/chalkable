@@ -1,5 +1,7 @@
 REQUIRE('chlk.models.discipline.DisciplineType');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.DisciplineId');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.discipline', function(){
     "use strict";
