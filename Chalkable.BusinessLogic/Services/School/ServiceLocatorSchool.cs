@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
         private IClassAnnouncementTypeService classClassAnnouncementTypeService;
-        private IInfractionService disciplineTypeService;
+        private IInfractionService infractionService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
         private IGradingStatisticService gradingStatisticService;
@@ -114,7 +114,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingStyleService = new GradingStyleService(this);
             studentAnnouncementService = new StudentAnnouncementService(this);
             classClassAnnouncementTypeService = new ClassClassAnnouncementTypeService(this);
-            disciplineTypeService = new InfractionService(this);
+            infractionService = new InfractionService(this);
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DisciplineService(this);
             gradingStatisticService = new GradingStatisticService(this);
@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
         public IClassAnnouncementTypeService ClassAnnouncementTypeService { get { return classClassAnnouncementTypeService; } }
-        public IInfractionService InfractionService { get { return disciplineTypeService; } }
+        public IInfractionService InfractionService { get { return infractionService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
         public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }

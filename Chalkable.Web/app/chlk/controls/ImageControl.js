@@ -26,8 +26,6 @@ NAMESPACE('chlk.controls', function () {
 
             String, 'defaultSrc',
 
-
-
             //todo: make base method
             [[Object]],
             Object, function processAttrs(attributes){
@@ -44,6 +42,21 @@ NAMESPACE('chlk.controls', function () {
                             jQuery('#'+attributes.id).on('error.load', this.onImgError);
                         }.bind(this));
                 return attributes;
+            },
+
+            [[Object]],
+            Object, function getAlertsAttributes(model){
+                var len = 0, h = 123;
+                if(model.isWithMedicalAlert())
+                    len++;
+                if(model.isAllowedInetAccess())
+                    len++;
+                if(model.getSpecialInstructions())
+                    len++;
+                if(model.getSpedStatus())
+                    len++;
+                var top = -(h * len) / 4;
+                return top + 'px';
             }
         ]);
 });

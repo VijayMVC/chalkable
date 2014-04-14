@@ -172,9 +172,11 @@ NAMESPACE('chlk.controllers', function(){
             },
 
             [[chlk.models.discipline.SetDisciplineListModel]],
-            function setDisciplinesAction(model){
+            function setDisciplineAction(model){
+                var disciplines = model.getDisciplines();
+                var disc = disciplines.length > 0 ? disciplines[0] : null;
                 var result = this.disciplineService
-                    .setDisciplines(model)
+                    .setDiscipline(disc)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         /*var controller = model.getController() || 'discipline';

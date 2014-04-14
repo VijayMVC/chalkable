@@ -11,10 +11,13 @@ NAMESPACE('chlk.templates.discipline',function(){
         'DisciplineTpl', EXTENDS(chlk.templates.ChlkTemplate),[
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassPeriodId, 'classPeriodId',
+            chlk.models.id.DisciplineId, 'id',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassPersonId, 'classPersonId',
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'studentId',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'date',

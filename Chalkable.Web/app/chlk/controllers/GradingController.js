@@ -275,8 +275,6 @@ NAMESPACE('chlk.controllers', function (){
 
             function getGradeCommentsAction(){
                 var result = this.gradingService.getGradeComments().then(function(comments){
-                    if(!comments.length)
-                        comments = ["Comment 1", "Some comment"];
                     return new chlk.models.grading.GradingComments(comments);
                 });
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());

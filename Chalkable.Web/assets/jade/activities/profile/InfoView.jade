@@ -19,7 +19,7 @@ mixin ProfileTopBar(actionLinksData, model)
 mixin ProfileInfoView(model)
     .info-view
         .title
-            .avatar-container.with-border
+            div(style="overflow: visible").avatar-container.with-border
                 +PersonImg(model, 128)
             h1=model.getFullName()
         .sections
@@ -61,7 +61,7 @@ mixin ProfileInfoForm(controller, submitAction, pictureUploadAction,  model)
         +ActionForm(controller, submitAction)#info-edit-form.with-ok
             .title
                 .avatar-block
-                    .avatar-container.with-border
+                    div(style="overflow: visible").avatar-container.with-border
                         +PersonImg(model, 128)
                     button(type="button").simple-gray-button.file Upload
                         +FileUpload(controller, pictureUploadAction, [model.getId().valueOf()])#add-attachment.simple-gray-button

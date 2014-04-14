@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Services.Client;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models;
 using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Controllers
@@ -57,7 +51,7 @@ namespace Chalkable.Web.Controllers
             start = start ?? 0;
             count = count ?? int.MaxValue;
             var currentDate = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
-            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(classId, currentDate);
+            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(classId, currentDate, null);
             IList<DisciplineView> res = new List<DisciplineView>();
             if (disciplines != null)
             {
@@ -76,27 +70,20 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult SetClassDiscipline(ClassDiscipline discipline)
+        public ActionResult SetClassDiscipline(ClassDisciplineInputModel discipline)
         {
-            //foreach (var discInputModel in disciplineList.Disciplines)
-            //{
-            //    if (discInputModel.DisciplineTypeIds != null && discInputModel.DisciplineTypeIds.Count > 0)
-            //    {
-            //        ISet<int> discplineTypesSet = new HashSet<int>();
-            //        foreach (var discplineTypeId in discInputModel.DisciplineTypeIds)
-            //        {
-            //            if (!discplineTypesSet.Contains(discplineTypeId))
-            //                discplineTypesSet.Add(discplineTypeId);
-            //        }
-            //        SchoolLocator.DisciplineService.SetClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date,
-            //                                                           discplineTypesSet, discInputModel.Description);
-            //    }
-            //    else
-            //    {
-            //        SchoolLocator.DisciplineService.DeleteClassDiscipline(discInputModel.ClassPersonId, discInputModel.ClassPeriodId, discInputModel.Date);
-            //    }
-            //}
-            SchoolLocator.DisciplineService.SetClassDiscipline(discipline);
+            var infractions = SchoolLocator.InfractionService.GetInfractions();
+            infractions = infractions.Where(x => discipline.InfractionsIds.Contains(x.Id)).ToList();
+            var classDisciplineModel = new ClassDiscipline
+                {
+                    ClassId = discipline.ClassId,
+                    Date = discipline.Date,
+                    Id = discipline.Id,
+                    Description = discipline.Description,
+                    Infractions = infractions,
+                    StudentId = discipline.StudentId
+                };
+            SchoolLocator.DisciplineService.SetClassDiscipline(classDisciplineModel);
             return Json(true);
         }
 

@@ -7,6 +7,16 @@ namespace Chalkable.Data.Common
 {
     public static class SqlTools
     {
+        public static byte ReadByte(DbDataReader reader, string field)
+        {
+            return reader.GetByte(reader.GetOrdinal(field));
+        }
+
+        public static short ReadInt16(DbDataReader reader, string field)
+        {
+            return reader.GetInt16(reader.GetOrdinal(field));
+        }
+        
         public static int ReadInt32(DbDataReader reader, string field)
         {
             return reader.GetInt32(reader.GetOrdinal(field));
@@ -119,6 +129,10 @@ namespace Chalkable.Data.Common
                 return ReadGuid(reader, field);
             if (type == typeof (Guid?))
                 return ReadGuidNull(reader, field);
+            if (type == typeof (byte))
+                return ReadByte(reader, field);
+            if (type == typeof (short))
+                return ReadInt16(reader, field);
             if (type == typeof (int))
                 return ReadInt32(reader, field);
             if (type == typeof(int?))

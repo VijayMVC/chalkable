@@ -10,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using Infraction = Chalkable.Data.School.Model.Infraction;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -50,20 +51,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 else students = ServiceLocator.ClassService.GetStudents(classId);
                 var cClass = ServiceLocator.ClassService.GetClassById(classId);
-
-                if (disciplineRefferals.Count > 0)
-                {
-                    
-                }
-
                 var res = new List<ClassDisciplineDetails>();
                 foreach (var student in students)
                 {
-                    var discipline = new ClassDisciplineDetails {Class = cClass, Student = student};
+                    var discipline = new ClassDisciplineDetails
+                        {
+                            Class = cClass, 
+                            Student = student,
+                            Infractions = new List<Infraction>()
+                        };
                     var discRefferal = disciplineRefferals.FirstOrDefault(x => x.StudentId == student.Id);
                     if (discRefferal != null)
                         MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>()
-                                     .Map(disciplineRefferals, discRefferal);
+                                     .Map(discipline, discRefferal);
                     else
                     {
                         discipline.Date = date;

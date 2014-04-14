@@ -22,6 +22,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         protected DisciplineView(ClassDisciplineDetails discipline, int currentPersonId, bool canEdit)
         {
             Id = discipline.Id;
+            StudentId = discipline.StudentId;
             Student = ShortPersonViewData.Create(discipline.Student);
             DisciplineTypes = DisciplineTypeViewData.Create(discipline.Infractions.ToList());
             ClassName = discipline.Class.Name;
@@ -29,6 +30,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
             Editable = canEdit || currentPersonId == TeacherId;
             Description = discipline.Description;
             ClassId = discipline.ClassId;
+
         }
 
         public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, int currentPersonId, bool canEdit = false)

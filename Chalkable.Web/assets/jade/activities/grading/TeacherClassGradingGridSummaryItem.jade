@@ -1,7 +1,7 @@
 mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
     normalValue = info.getNormalValue()
     -numericV = parseFloat(normalValue)
-    if info.getGradeValue() && numericV
+    if info.getGradeValue() && Number.isNaN(parseInt(info.getGradeValue(), 10)) && numericV
         -normalValue= numericV.toFixed(2) + '(' + info.getGradeValue() + ')'
 
     div(

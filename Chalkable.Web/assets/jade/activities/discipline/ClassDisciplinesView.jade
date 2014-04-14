@@ -48,7 +48,7 @@ redirectData = self.getRedirectData()
                                 div(data-tooltip=typesToolTip).with-discipline
                         .right.saving-block=Msg.Saving.toLowerCase()
                         .right.saved-block=Msg.Saved.toLowerCase()
-                    +ActionForm('discipline','setDisciplines')(style='display: none;').discipline-form-block
+                    +ActionForm('discipline','setDiscipline')(style='display: none;').discipline-form-block
                         input(name="disciplinesJson", type="hidden")
                         +Hidden('controller', redirectData.controller)
                         +Hidden('action', redirectData.action)
@@ -56,8 +56,9 @@ redirectData = self.getRedirectData()
                         +Hidden('time').save-time
                         div(
                             name="discipline",
-                            data-class-person-id=item.getClassPersonId().valueOf(),
-                            data-class-period-id=item.getClassPeriodId().valueOf(),
+                            data-id=item.getId() && item.getId().valueOf(),
+                            data-student-id=item.getStudentId().valueOf(),
+                            data-class-id=item.getClassId().valueOf(),
                             data-date=self.date.getDate(),
                         ).discipline-info
                             +CheckboxList('disciplineTypes', 'disciplineTypes', null).discipline-types
@@ -65,7 +66,6 @@ redirectData = self.getRedirectData()
                                     if column.length > 0
                                         .column
                                             each discType in column
-                                                -console.info(discType.disciplineTypeData.getName(),discType.disciplineTypeData.getId().valueOf(),discType.selected,false)
                                                 +LabeledCheckbox(
                                                 discType.disciplineTypeData.getName(),
                                                     discType.disciplineTypeData.getId().valueOf().toString(),

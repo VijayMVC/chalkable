@@ -4,7 +4,7 @@ mixin ProfileInfoView(model)
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-view
         .title
-            .avatar-container.with-border
+            div(style="overflow: visible").avatar-container.with-border
                 +PersonImg(model, 128)
             h1=model.getFullName()
         .sections

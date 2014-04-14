@@ -40,6 +40,24 @@ NAMESPACE('chlk.models.people', function () {
 
             String, 'salutation',
 
+            [ria.serialize.SerializeProperty('hasmedicalalert')],
+            Boolean, 'withMedicalAlert',
+
+            [ria.serialize.SerializeProperty('isallowedinetaccess')],
+            Boolean, 'allowedInetAccess',
+
+            [ria.serialize.SerializeProperty('specialinstructions')],
+            String, 'specialInstructions',
+
+            [ria.serialize.SerializeProperty('spedstatus')],
+            String, 'spedStatus',
+
+            Boolean, function showAlerts(){
+                var res = this.isWithMedicalAlert() && this.isAllowedInetAccess()
+                    && this.getSpecialInstructions() && this.getSpedStatus();
+                return !!res;
+            },
+
             [[String, String, chlk.models.id.SchoolPersonId]],
             function $(firstName_, lastName_, id_){
                 BASE();
