@@ -511,10 +511,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 clearTimeout(gradingGridTimer);
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
-                var model = this.getModelFromCell(activeCell);
-                this.updateFlagByModel(model, activeCell);
-                //activeCell.find('.grade-text').setHTML(model.getGradeValue());
-                activeCell.find('.grade-text').setHTML('...');
                 var nextCell = activeCell.next().find('.edit-cell');
                 if(!isComment_){
                     setTimeout(function(){
@@ -525,8 +521,21 @@ NAMESPACE('chlk.activities.grading', function () {
                     }.bind(this), 1);
                 }
 
-                var form = activeCell.parent('.marking-period-container').find('.load-grading-period');
-                this.addTimeOut(form);
+
+            },
+
+            [ria.mvc.DomEventBind('submit', '.grading-form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function gradingFormSubmit(node, event){
+                var input = node.find('.grade-autocomplete');
+                if(!input.hasClass('error')){
+                    var activeCell = node.parent('.active-cell');
+                    var model = this.getModelFromCell(activeCell);
+                    this.updateFlagByModel(model, activeCell);
+                    activeCell.find('.grade-text').setHTML('...');
+                    var form = activeCell.parent('.marking-period-container').find('.load-grading-period');
+                    this.addTimeOut(form);
+                }
             },
 
             function addTimeOut(form){
@@ -571,6 +580,9 @@ NAMESPACE('chlk.activities.grading', function () {
 
                                 //TODO
                                 var activeCell = dom.find('.active-cell');
+                                if(activeCell.exists()){
+                                    activeCell.find('form').trigger('submit');
+                                }
                                 activeCell.removeClass('active-cell');
                                 activeCell.find('.grading-form').remove();
                                 if(parent.exists() && !node.hasClass('alert-flag')){

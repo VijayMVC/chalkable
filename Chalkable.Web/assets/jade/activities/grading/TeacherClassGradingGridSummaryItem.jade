@@ -24,15 +24,15 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
         if gradable
             .edit-cell
 
-mixin StudentAverages(model)
-    each studentAvg in model.getStudentAverages()
+mixin StudentAverages(tpl)
+    each studentAvg in tpl.getStudentAverages()
         .dotted-container.grade-container.with-horizontal-dots.avgs-container
-            .type-name=model.displayAvgName(studentAvg)
+            .type-name=tpl.getModel().displayAvgName(studentAvg)
             .time
             .max-score.dotted-h
             each average,i in studentAvg.getAverages()
-                div(row-index=i, class=(i == model.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=model.displayAvgGradeValue(average)
-            .dotted-h.grade-value=model.displayGrade(studentAvg.getTotalAverage())
+                div(row-index=i, class=(i == tpl.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=tpl.getModel().displayAvgGradeValue(average, self.isAbleDisplayAlphaGrades())
+            .dotted-h.grade-value=tpl.getModel().displayGrade(studentAvg.getTotalAverage())
 
 mixin DisplayTotalPoints(model)
     -totalPoints = model.getTotalPoints()
