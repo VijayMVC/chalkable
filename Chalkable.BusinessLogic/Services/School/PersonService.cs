@@ -232,7 +232,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     HasMedicalAlert = x.HasMedicalAlert,
                     IsAllowedInetAccess = x.IsAllowedInetAccess,
                     SpecialInstructions = x.SpecialInstructions,
-                    SpEdStatus = x.SpEdStatus
+                    SpEdStatus = x.SpEdStatus,
                 }).ToList();
 
                 da.Update(res);

@@ -11,9 +11,9 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IInfractionService
     {
-        void AddList(IList<Infraction> infractions);
-        void EditList(IList<Infraction> infractions);
-        void DeleteList(IList<short> ids);
+        void Add(IList<Infraction> infractions);
+        void Edit(IList<Infraction> infractions);
+        void Delete(IList<int> ids);
         IList<Infraction> GetInfractions(bool onlyActive = true);
     }
 
@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void AddList(IList<Infraction> infractions)
+        public void Add(IList<Infraction> infractions)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void EditList(IList<Infraction> infractions)
+        public void Edit(IList<Infraction> infractions)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void DeleteList(IList<short> ids)
+        public void Delete(IList<int> ids)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();

@@ -15,5 +15,11 @@ namespace Chalkable.StiConnector.Connectors
             var url = string.Format("{0}chalkable/linkstatus?LinkKey={1}", BaseUrl, key);
             return Call<string>(url).Equals("active", StringComparison.OrdinalIgnoreCase);
         }
+
+        public void CompleteSync(int schoolId)
+        {
+            var url = string.Format("{0}chalkable/school/{1}", BaseUrl, schoolId);
+            Post<object, object>(url, new { Id = schoolId, IsSyncComplete = true});
+        }
     }
 }

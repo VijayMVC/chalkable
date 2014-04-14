@@ -33,14 +33,14 @@ namespace Chalkable.Tests.Sis
             //var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://208.83.95.80:8210/");
         
             Debug.WriteLine(DateTime.Now.Ticks);
-            var r = cl.SyncConnector.GetDiff(typeof(GradingPeriod), null) as SyncResult<GradingPeriod>;
+            var r = cl.SyncConnector.GetDiff(typeof(Infraction), null) as SyncResult<Infraction>;
             Debug.WriteLine(DateTime.Now.Ticks);
             foreach (var item in r.All)
             {
 
                 //(id, code, name, description, markingperiodref, schoolyearref, startdate, enddate, endtime, schoolannouncement, allowgradeposting)
-                var s = string.Format("({0}, '{1}', '{2}', '{3}', {4}, {5}, '{6}', '{7}', '{8}', '{9}', {10}),", 
-                    item.GradingPeriodID, item.Code, item.Name, item.Description, item.TermID, item.AcadSessionID, item.StartDate, item.EndDate, item.EndTime, item.SchoolAnnouncement, (item.AllowGradePosting ? 1 : 0));
+                var s = string.Format("({0}, '{1}', '{2}', '{3}', {4}, {5}, '{6}', '{7}', '{8}'),", 
+                    item.InfractionID, item.Code, item.Name, item.Description, item.IsActive, item.IsSystem, item.NCESCode, item.SIFCode, item.StateCode);
 
                 Debug.WriteLine(s);
             }

@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Services.Client;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models;
 using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Controllers
@@ -79,7 +73,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult SetClassDiscipline(ClassDisciplineInputModel discipline)
         {
             var infractions = SchoolLocator.InfractionService.GetInfractions();
-            infractions = infractions.Where(x => discipline.InfractionsIds.Contains(x.InfractionID)).ToList();
+            infractions = infractions.Where(x => discipline.InfractionsIds.Contains(x.Id)).ToList();
             var classDisciplineModel = new ClassDiscipline
                 {
                     ClassId = discipline.ClassId,

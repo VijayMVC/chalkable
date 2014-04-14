@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         {
             return new DisciplineTypeViewData
             {
-                Id = infraction.InfractionID,
+                Id = infraction.Id,
                 Name = infraction.Name,
             };
         }

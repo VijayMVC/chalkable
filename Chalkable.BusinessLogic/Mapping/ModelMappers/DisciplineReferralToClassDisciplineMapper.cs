@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             if (sourceObj.Infractions != null)
                 returnObj.Infractions = sourceObj.Infractions.Select(x => new Data.School.Model.Infraction
                     {
-                        InfractionID = x.Id,
+                        Id = x.Id,
                         Name = x.Name
                     }).ToList();
         }

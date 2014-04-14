@@ -95,7 +95,7 @@ namespace Chalkable.Web.Models.ClassesViewData
                 res.Add(new ClassDisciplineHoveViewData
                 {
                     DisciplineName = disciplineType.Name,
-                    Count = disciplines.Sum(x=>x.Infractions.Count(y=>y.InfractionID == disciplineType.InfractionID))
+                    Count = disciplines.Sum(x=>x.Infractions.Count(y=>y.Id == disciplineType.Id))
                 });
             }
             return res;

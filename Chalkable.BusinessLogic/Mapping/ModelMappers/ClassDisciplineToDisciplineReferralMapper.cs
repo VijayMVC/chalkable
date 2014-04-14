@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             if (sourceObj.Infractions != null)
                 returnObj.Infractions = sourceObj.Infractions.Select(x => new StiConnector.Connectors.Model.Infraction
                     {
-                        Id = x.InfractionID, 
+                        Id = (short)x.Id, 
                         Name = x.Name
                     }).ToList();
         }

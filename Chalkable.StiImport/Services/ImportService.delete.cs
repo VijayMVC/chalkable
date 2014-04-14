@@ -7,6 +7,7 @@ using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
 using DayType = Chalkable.StiConnector.SyncModel.DayType;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
 using GradingPeriod = Chalkable.StiConnector.SyncModel.GradingPeriod;
+using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using School = Chalkable.StiConnector.SyncModel.School;
@@ -19,6 +20,7 @@ namespace Chalkable.StiImport.Services
     {
         private void ProcessDelete()
         {
+            DeleteInfractions();
             DeleteAlternateScores();
             DeleteAlphaGrades();
             DeleteAttendanceLevelReasons();
@@ -45,6 +47,14 @@ namespace Chalkable.StiImport.Services
             DeletePersons();
             DeleteAddresses();
             DeleteSchools();
+        }
+
+        private void DeleteInfractions()
+        {
+            if (context.GetSyncResult<Infraction>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<Infraction>().Deleted.Select(x => x.InfractionID).ToList();
+            ServiceLocatorSchool.InfractionService.Delete(ids);
         }
 
         private void DeleteAlternateScores()
