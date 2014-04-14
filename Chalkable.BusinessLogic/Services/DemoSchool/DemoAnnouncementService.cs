@@ -119,32 +119,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
-
             if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
-            var res = Storage.AnnouncementStorage.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);
-
-
-            if (res.ClassRef.HasValue && res.SisActivityId.HasValue)
-            {
-                /*
-                if (Context.Role == CoreRoles.TEACHER_ROLE)
-                {
-                    //TODO: rewrite this later 
-                    var atts = res.AnnouncementAttachments.Where(x => x.SisAttachmentId.HasValue && x.Id <= 0).ToList();
-                    foreach (var annAtt in atts)
-                    {
-                        annAtt.PersonRef = Context.UserLocalId.Value;
-                        if (string.IsNullOrEmpty(annAtt.Uuid) && ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
-                        {
-                            var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(annAtt.SisAttachmentId.Value);
-                            annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Name, content).uuid;
-                        }
-                        new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
-                    }
-                }*/
-            }
-            return res;
+            return Storage.AnnouncementStorage.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);;
                 
         }
 
@@ -369,7 +346,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Announcement Star(int id, bool starred)
         {
             var ann = GetAnnouncementById(id);
-            Storage.AnnouncementRecipientStorage.Update(id, Context.UserLocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
+            Storage.AnnouncementRecipientDataStorage.Update(id, Context.UserLocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
             return ann;
         }
 
@@ -467,7 +444,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
         {
-            var announcementIds = Storage.AnnouncementStandardStorage.GetAll().Select(x => x.AnnouncementRef);
+            var announcementIds = (Storage.AnnouncementStandardStorage).GetAll().Select(x => x.AnnouncementRef);
 
 
             var annStandarts = new List<AnnouncementStandard>();

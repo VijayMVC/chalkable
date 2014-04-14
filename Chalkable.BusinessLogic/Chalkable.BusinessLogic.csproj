@@ -117,7 +117,6 @@
     <Compile Include="Services\DemoSchool\DemoAttendanceReasonService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementReminderService.cs" />
     <Compile Include="Services\DemoSchool\DemoDisciplineService.cs" />
-    <Compile Include="Services\DemoSchool\DemoDisciplineTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradeLevelService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentParentService.cs" />
@@ -129,11 +128,14 @@
     <Compile Include="Services\DemoSchool\DemoPhoneService.cs" />
     <Compile Include="Services\DemoSchool\DemoPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStatisticService.cs" />
+    <Compile Include="Services\DemoSchool\DemoInfractionService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoBackgroundTaskService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoApplicationUploadService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
     <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientDataStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoInfractionStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementApplicationStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionRoleStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionDepartmentStorage.cs" />
@@ -180,7 +182,6 @@
     <Compile Include="Services\DemoSchool\Storage\DemoAlphaGradeStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAddressStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoDisciplineStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoDisciplineTypeStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoStudentAnnouncementStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoStudentSchoolYearStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoSchoolYearStorage.cs" />

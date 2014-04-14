@@ -13,7 +13,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoPrivateMessageStorage PrivateMessageStore { get; private set; }
         public DemoSchoolYearStorage SchoolYearStorage { get; private set; }
         public DemoStudentSchoolYearStorage StudentSchoolYearStorage { get; private set; }
-        public DemoDisciplineTypeStorage DisciplineTypeStorage { get; private set; }
         public DemoDisciplineStorage DisciplineStorage { get; private set; }
         public DemoAddressStorage AddressStorage { get; private set; }
         public DemoAlphaGradeStorage AlphaGradeStorage { get; private set; }
@@ -62,6 +61,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoApplicationInstallActionDepartmentStorage ApplicationInstallActionDepartmentStorage { get; private set; }
         public DemoApplicationInstallActionRoleStorage ApplicationInstallActionRoleStorage { get; private set; }
         public DemoAnnouncementApplicationStorage AnnouncementApplicationStorage { get; private set; }
+        public DemoInfractionStorage InfractionStorage { get; private set; }
+        public DemoAnnouncementRecipientDataStorage AnnouncementRecipientDataStorage{ get; private set; }
 
         public UserContext Context { get; private set; }
 
@@ -88,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementStorage = CreateAnnouncementStorage(Context, this);
             PrivateMessageStore = new DemoPrivateMessageStorage(this);
             SchoolYearStorage = new DemoSchoolYearStorage(this);
-            DisciplineTypeStorage = new DemoDisciplineTypeStorage(this);
+            InfractionStorage = new DemoInfractionStorage(this);
             DisciplineStorage = new DemoDisciplineStorage();
             AddressStorage = new DemoAddressStorage(this);
             AlphaGradeStorage = new DemoAlphaGradeStorage(this);
@@ -136,6 +137,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ApplicationInstallActionRoleStorage = new DemoApplicationInstallActionRoleStorage(this);
             StudentSchoolYearStorage = new DemoStudentSchoolYearStorage(this);
             AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage(this);
+            AnnouncementRecipientDataStorage = new DemoAnnouncementRecipientDataStorage(this);
             Setup();
         }
 

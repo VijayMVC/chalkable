@@ -33,7 +33,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
         private IClassAnnouncementTypeService classAnnouncementTypeService;
-        private IDisciplineTypeService disciplineTypeService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
         private IGradingStatisticService gradingStatisticService;
@@ -74,7 +73,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             attendanceService = new DemoAttendanceService(this, storage);
             studentParentService = new DemoStudentParentService(this, storage);
             studentAnnouncementService = new DemoStudentAnnouncementService(this , storage);
-            disciplineTypeService = new DemoDisciplineTypeService(this, storage);
             applicationSchoolService = new DemoApplicationSchoolService(this, storage);
             disciplineService = new DemoDisciplineService(this, storage);
             gradingStatisticService = new DemoGradingStatisticService(this, storage);
@@ -113,7 +111,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
         public IClassAnnouncementTypeService ClassAnnouncementTypeService { get { return classAnnouncementTypeService; } }
-        public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
+        public IInfractionService InfractionService { get; private set; }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
         public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }
