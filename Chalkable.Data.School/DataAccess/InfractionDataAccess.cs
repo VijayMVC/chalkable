@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(IList<short> ids)
+        public void Delete(IList<int> ids)
         {
             SimpleDelete<Infraction>(ids.Select(x=> new Infraction{Id = x}).ToList());
         }

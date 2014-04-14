@@ -126,6 +126,7 @@
     <Compile Include="SyncModel\Gender.cs" />
     <Compile Include="SyncModel\GradeLevel.cs" />
     <Compile Include="SyncModel\GradingPeriod.cs" />
+    <Compile Include="SyncModel\Infraction.cs" />
     <Compile Include="SyncModel\OrganizationAddress.cs" />
     <Compile Include="SyncModel\Person.cs" />
     <Compile Include="SyncModel\PersonAddress.cs" />

@@ -11,10 +11,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IInfractionService
     {
-        void AddList(IList<Infraction> infractions);
-        void EditList(IList<Infraction> infractions);
-        void DeleteList(IList<short> ids);
-        IList<Infraction> GetDisciplineTypes(bool onlyActive = true);
+        void Add(IList<Infraction> infractions);
+        void Edit(IList<Infraction> infractions);
+        void Delete(IList<int> ids);
+        IList<Infraction> GetInfractions(bool onlyActive = true);
     }
 
     public class InfractionService : SchoolServiceBase, IInfractionService
@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void AddList(IList<Infraction> infractions)
+        public void Add(IList<Infraction> infractions)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void EditList(IList<Infraction> infractions)
+        public void Edit(IList<Infraction> infractions)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void DeleteList(IList<short> ids)
+        public void Delete(IList<int> ids)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -58,7 +58,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Infraction> GetDisciplineTypes(bool onlyActive = true)
+        public IList<Infraction> GetInfractions(bool onlyActive = true)
         {
             using (var uow = Read())
             {

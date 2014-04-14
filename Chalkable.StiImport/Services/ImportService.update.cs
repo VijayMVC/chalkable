@@ -10,6 +10,7 @@ using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
 using DayType = Chalkable.StiConnector.SyncModel.DayType;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
 using GradingPeriod = Chalkable.StiConnector.SyncModel.GradingPeriod;
+using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using School = Chalkable.StiConnector.SyncModel.School;
@@ -48,8 +49,9 @@ namespace Chalkable.StiImport.Services
             UpdateAttendanceLevelReasons();
             UpdateAlphaGrades();
             UpdateAlternateScores();
+            UpdateInfractions();
         }
-
+        
         private void UpdateSchools()
         {
             if (context.GetSyncResult<School>().Updated == null)
@@ -79,7 +81,9 @@ namespace Chalkable.StiImport.Services
                     Id = x.AddressID,
                     Latitude = x.Latitude,
                     Longitude = x.Longitude,
-                    PostalCode = x.PostalCode
+                    PostalCode = x.PostalCode,
+                    StreetNumber = x.StreetNumber,
+                    State = x.State
                 }).ToList();
             ServiceLocatorSchool.AddressService.Edit(addresses);
         }
@@ -93,6 +97,7 @@ namespace Chalkable.StiImport.Services
             var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
             var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
             IList<PersonInfo> pi = new List<PersonInfo>();
+            
             foreach (var person in persons)
             {
                 var hasMedicalAlert = false;
@@ -109,6 +114,7 @@ namespace Chalkable.StiImport.Services
                         spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
                     }
                 }
+                var email = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID).Email;
                 pi.Add(new PersonInfo
                     {
                         Id = person.PersonID,
@@ -121,7 +127,8 @@ namespace Chalkable.StiImport.Services
                         HasMedicalAlert = hasMedicalAlert,
                         IsAllowedInetAccess = isAllowedInetAccess,
                         SpecialInstructions = specialInstructions,
-                        SpEdStatus = spEdStatus    
+                        SpEdStatus = spEdStatus,
+                        Email = email
                     });
             }
             ServiceLocatorSchool.PersonService.Edit(pi);
@@ -290,7 +297,35 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateCourses()
         {
-            //TODO: need to solve GL problem
+            if (context.GetSyncResult<Course>().Updated == null)
+                return;
+            var courses = context.GetSyncResult<Course>().Updated.ToList();
+            var classes = new List<Class>();
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
+            foreach (var course in courses)
+            {
+                var glId = course.MaxGradeLevelID ?? course.MinGradeLevelID;
+                if (!glId.HasValue)
+                {
+                    Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
+                    continue;
+                }
+                var current = ServiceLocatorSchool.ClassService.GetClassById(course.CourseID);
+                classes.Add(new Class
+                {
+                    ChalkableDepartmentRef = current.ChalkableDepartmentRef,
+                    Description = course.FullName,
+                    GradeLevelRef = glId.Value,
+                    Id = course.CourseID,
+                    Name = course.ShortName,
+                    SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
+                    SchoolYearRef = course.AcadSessionID,
+                    TeacherRef = course.PrimaryTeacherID,
+                    RoomRef = course.RoomID,
+                    CourseRef = course.SectionOfCourseID
+                });   
+            }
+            ServiceLocatorSchool.ClassService.Edit(classes);
         }
 
         public void UpdateStandardSubject()
@@ -452,5 +487,26 @@ namespace Chalkable.StiImport.Services
             }).ToList();
             ServiceLocatorSchool.AlternateScoreService.EditAlternateScores(alternateScores);
         }
+
+        private void UpdateInfractions()
+        {
+            if (context.GetSyncResult<Infraction>().Updated == null)
+                return;
+            var infractions = context.GetSyncResult<Infraction>().Updated.Select(x => new Data.School.Model.Infraction
+            {
+                Code = x.Code,
+                Demerits = x.Demerits,
+                Description = x.Description,
+                Id = x.InfractionID,
+                IsActive = x.IsActive,
+                IsSystem = x.IsSystem,
+                Name = x.Name,
+                NCESCode = x.NCESCode,
+                SIFCode = x.SIFCode,
+                StateCode = x.StateCode
+            }).ToList();
+            ServiceLocatorSchool.InfractionService.Edit(infractions);
+        }
+
     }
 }

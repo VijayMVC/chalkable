@@ -65,8 +65,9 @@ NAMESPACE('chlk.activities.discipline', function(){
                         var descNode = node.find('[name="description"]');
                         var discTypesNode = node.find('[name="disciplineTypes"]');
                         res.push({
-                            classPeriodId: node.getData('class-period-id'),
-                            classPersonId: node.getData('class-person-id'),
+                            id: node.getData('id'),
+                            studentId: node.getData('student-id'),
+                            classId: node.getData('class-id'),
                             date: node.getData('date'),
                             description: descNode.getValue(),
                             disciplineTypeIds: discTypesNode.getValue(),

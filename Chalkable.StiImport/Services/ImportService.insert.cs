@@ -16,6 +16,7 @@ using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
 using GradingPeriod = Chalkable.StiConnector.SyncModel.GradingPeriod;
+using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 
 namespace Chalkable.StiImport.Services
@@ -50,8 +51,9 @@ namespace Chalkable.StiImport.Services
             InsertAttendanceLevelReasons();
             InsertAlphaGrades();
             InsertAlternateScores();
+            InsertInfractions();
         }
-
+        
         private void InsertSchools()
         {
             var schools = context.GetSyncResult<School>().All;
@@ -547,6 +549,24 @@ namespace Chalkable.StiImport.Services
                 PercentOfMaximumScore = x.PercentOfMaximumScore
             }).ToList();
             ServiceLocatorSchool.AlternateScoreService.AddAlternateScores(alternateScores);
+        }
+
+        private void InsertInfractions()
+        {
+            var infractions = context.GetSyncResult<Infraction>().All.Select(x => new Data.School.Model.Infraction
+                {
+                    Code = x.Code,
+                    Demerits = x.Demerits,
+                    Description = x.Description,
+                    Id = x.InfractionID,
+                    IsActive = x.IsActive,
+                    IsSystem = x.IsSystem,
+                    Name = x.Name,
+                    NCESCode = x.NCESCode,
+                    SIFCode = x.SIFCode,
+                    StateCode = x.StateCode
+                }).ToList();
+            ServiceLocatorSchool.InfractionService.Add(infractions);
         }
     }
 }

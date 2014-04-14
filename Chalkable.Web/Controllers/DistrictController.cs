@@ -14,7 +14,6 @@ namespace Chalkable.Web.Controllers
     {
         public ActionResult Register(DistrictRegisterViewData data)
         {
-            //http://sandbox.sti-k12.com/chalkable/api/chalkale/linkstatus?LinkKey=[LinkKeyGuid]
             string name = data.DistrictGuid.ToString();
             string timeZone = data.DistrictTimeZone ?? "UTC";
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
