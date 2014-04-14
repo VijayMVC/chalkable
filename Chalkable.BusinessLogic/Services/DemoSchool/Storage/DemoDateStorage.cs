@@ -61,7 +61,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 dates = dates.Where(x => x.IsSchoolDay);
 
 
-            //todo: add selection by marking periods
+            if (query.MarkingPeriodId.HasValue)
+            {
+
+                var mp = Storage.MarkingPeriodStorage.GetById(query.MarkingPeriodId.Value);
+                dates = dates.Where(x => mp.StartDate <= x.Day && mp.EndDate >= x.Day);
+            }
 
             if (query.DayType.HasValue)
                 dates = dates.Where(x => x.DayType.Id == query.DayType);
