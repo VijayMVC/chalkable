@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -20,9 +21,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             //public int? PersonId { get; set; }
             //public int? CallerId { get; set; }
             //public int CallerRoleId { get; set; }
-
-            //public string StartFrom { get; set; }
-            //public SortTypeEnum SortType { get; set; }
 
             var persons = data.Select(x => x.Value);
 
@@ -47,20 +45,29 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 persons = persons.Where(x => x.Id == query.PersonId);
 
 
-            if (query.GradeLevelIds != null)
-                persons = persons.Where(x => query.GradeLevelIds.Contains(x.Id));
+
+            //
+            //if (query.GradeLevelIds != null)
+            //    persons = persons.Where(x => query.GradeLevelIds.Contains(x.));
 
             if (query.RoleIds != null)
                 persons = persons.Where(x => query.RoleIds.Contains(x.RoleRef));
 
+
+            if (!string.IsNullOrWhiteSpace(query.StartFrom))
+                persons = persons.Where(x => String.Compare(x.LastName, query.StartFrom, true, CultureInfo.InvariantCulture) >= 0);
+
             persons = persons.Skip(query.Start).Take(query.Count).ToList();
+
+            persons = query.SortType == SortTypeEnum.ByFirstName ? persons.OrderBy(x => x.FirstName) : persons.OrderBy(x => x.LastName);
+
 
             var enumerable = persons as IList<Person> ?? persons.ToList();
             return new PersonQueryResult
             {
                 Persons = enumerable.ToList(),
                 Query = query,
-                SourceCount = enumerable.Count
+                SourceCount = data.Count
             };
         }
 
