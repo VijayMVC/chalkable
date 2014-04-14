@@ -195,10 +195,14 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private User GetDemoUser(string roleName, string prefix)
         {
-            if (roleName == CoreRoles.DEVELOPER_ROLE.LoweredName)
+            if (roleName.ToLower() == CoreRoles.DEVELOPER_ROLE.LoweredName)
             {
                 var developer = ServiceLocator.DeveloperService.GetDeveloperByDictrict(Guid.Parse(prefix));
-                if (developer != null) return developer.User;
+                if (developer != null)
+                {
+                    developer.User.SchoolUsers = new List<SchoolUser>();
+                    return developer.User;
+                }
             }
             return DemoUserService.GetDemoUser(roleName, prefix);
         }

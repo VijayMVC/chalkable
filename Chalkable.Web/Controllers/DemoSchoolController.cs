@@ -39,6 +39,7 @@ namespace Chalkable.Web.Controllers
             if (rolename.ToLower() == CoreRoles.ADMIN_GRADE_ROLE.LoweredName) return Redirect<HomeController>(c => c.Admin(false));
             if (rolename.ToLower() == CoreRoles.TEACHER_ROLE.LoweredName) return Redirect<HomeController>(c => c.Teacher(false));
             if (rolename.ToLower() == CoreRoles.STUDENT_ROLE.LoweredName) return Redirect<HomeController>(c => c.Student(false));
+            if (rolename.ToLower() == CoreRoles.DEVELOPER_ROLE.LoweredName) return Redirect<HomeController>(c => c.Developer(null));
             throw new ChalkableSecurityException(ChlkResources.ERR_DEMO_SCHOOL_INCORRECT_ROLE);
         }
     }

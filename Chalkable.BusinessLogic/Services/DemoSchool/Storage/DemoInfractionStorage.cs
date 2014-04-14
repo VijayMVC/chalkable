@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoInfractionStorage:BaseDemoStorage<short, Infraction>
+    public class DemoInfractionStorage:BaseDemoStorage<int, Infraction>
     {
         public DemoInfractionStorage(DemoStorage storage)
             : base(storage)

@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.InfractionStorage.Update(infractions);
         }
 
-        public void DeleteList(IList<short> ids)
+        public void DeleteList(IList<int> ids)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -42,13 +42,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<Infraction> GetDisciplineTypes(bool onlyActive = true)
         {
             return Storage.InfractionStorage.GetAll(onlyActive);
-            using (var uow = Read())
-            {
-                var conds = new AndQueryCondition();
-                if(onlyActive)
-                    conds.Add(Infraction.IS_ACTIVE_FIELD, 1, ConditionRelation.Equal);
-                return new InfractionDataAccess(uow).GetAll(conds);
-            }
+        }
+
+        public void Add(IList<Infraction> infractions)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Edit(IList<Infraction> infractions)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Delete(IList<int> ids)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IList<Infraction> GetInfractions(bool onlyActive = true)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
