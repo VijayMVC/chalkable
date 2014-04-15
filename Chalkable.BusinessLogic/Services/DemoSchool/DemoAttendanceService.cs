@@ -4,7 +4,10 @@ using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -43,12 +46,44 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
         {
-            throw new NotImplementedException();
+            var seatingChart = Storage.StiSeatingChartStorage.GetChart(classId, markingPeriodId);
+            return SeatingChartInfo.Create(seatingChart);
         }
 
-        public void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart)
+        public void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChartInfo)
         {
-            throw new NotImplementedException();
+            var seatingChart = new SeatingChart
+            {
+                Columns = seatingChartInfo.Columns,
+                Rows = seatingChartInfo.Rows,
+                SectionId = classId,
+            };
+            var stiSeats = new List<Seat>();
+            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            {
+                ClassId = classId,
+                RoleId = CoreRoles.STUDENT_ROLE.Id
+            });
+            var defaultStudent = students.FirstOrDefault(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
+            if (defaultStudent == null)
+                defaultStudent = students.First();
+            foreach (var seats in seatingChartInfo.SeatingList)
+            {
+                foreach (var seatInfo in seats)
+                {
+                    var seat = new Seat();
+                    if (seatInfo.StudentId.HasValue)
+                    {
+                        seat.Column = seatInfo.Column;
+                        seat.Row = seatInfo.Row;
+                        seat.StudentId = seatInfo.StudentId.Value;
+                    }
+                    else seat.StudentId = defaultStudent.Id;
+                    stiSeats.Add(seat);
+                }
+            }
+            seatingChart.Seats = stiSeats;
+            Storage.StiSeatingChartStorage.UpdateChart(classId, markingPeriodId, seatingChart);
         }
 
         private string LevelToClassRoomLevel(string level)
@@ -64,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
         {
-            /*var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
+            var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassById(classId);
@@ -90,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     }
                 }
                 return attendances;    
-            }*/
+            }
             return null;
         }
 
