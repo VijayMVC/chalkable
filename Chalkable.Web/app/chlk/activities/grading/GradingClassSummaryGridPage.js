@@ -636,9 +636,16 @@ NAMESPACE('chlk.activities.grading', function () {
                 return value == 'false' ? false : !!value;
             },
 
-            function addFormToActiveCell(cell){
+            function addFormToActiveCell(cell, model_){
                 var tpl = new chlk.templates.grading.GradingInputTpl();
-                var model = this.getModelFromCell(cell);
+                var model;
+                if(model_){
+                    model = model_;
+                    var studentId = cell.find('.grade-info').getData('studentid');
+                    model.setStudentId(new chlk.models.id.SchoolPersonId(studentId));
+                }else{
+                    model = this.getModelFromCell(cell);
+                }
 
                 tpl.assign(model);
                 tpl.options({
@@ -646,6 +653,20 @@ NAMESPACE('chlk.activities.grading', function () {
                     ableExemptStudentScore: this.getBooleanValue(cell.getData('able-exempt-student-score'))
                 });
                 tpl.renderTo(cell);
+            },
+
+            [ria.mvc.DomEventBind('click', '.fill-grade')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function fillGradeClick(node, event){
+                var activeCell = node.parent('.active-cell');
+                var model = this.getModelFromCell(activeCell);
+                node.parent('form').trigger('submit');
+                var that = this;
+                node.parent('.grade-container').find('.empty-grade').forEach(function(item){
+                    var cell = item.parent('.grade-value');
+                    that.addFormToActiveCell(cell, model);
+                    cell.find('form').trigger('submit');
+                });
             }
         ]);
 });
