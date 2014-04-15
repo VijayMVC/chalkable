@@ -88,19 +88,31 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
+
+
         private void AddMonth(int year, int month)
         {
             var daysCount = DateTime.DaysInMonth(year, month);
 
             for (var i = 0; i < daysCount; ++i)
             {
+                var typeRef = 0;
+
                 var day = new DateTime(year, month, i + 1);
+
+                if (day.DayOfWeek == DayOfWeek.Thursday || day.DayOfWeek == DayOfWeek.Tuesday)
+                    typeRef = 20;
+                if (day.DayOfWeek == DayOfWeek.Monday)
+                    typeRef = 19;
+                if (day.DayOfWeek == DayOfWeek.Wednesday || day.DayOfWeek == DayOfWeek.Friday)
+                    typeRef = 21;
                 data.Add(GetNextFreeId(), new Date
                 {
                     Day = day,
                     SchoolYearRef = 12,
                     SchoolRef = 1,
-                    IsSchoolDay = day.DayOfWeek != DayOfWeek.Thursday && day.DayOfWeek != DayOfWeek.Friday
+                    IsSchoolDay = day.DayOfWeek != DayOfWeek.Thursday && day.DayOfWeek != DayOfWeek.Friday,
+                    DayTypeRef = typeRef
                 });
             }
         }
