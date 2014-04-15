@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
             var score = new Score();
             MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, stAnn);
-            //score = ConnectorLocator.ActivityScoreConnector.UpdateScore(score.ActivityId, score.StudentId, score);
+            score = Storage.StiActivityScoreStorage.UpdateScore(score.ActivityId, score.StudentId, score);
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(stAnn, score);
             ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToPerson(announcementId, stAnn.StudentId);
             return stAnn;
@@ -61,12 +61,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 IList<Person> persons = new List<Person>();
                 if (CoreRoles.STUDENT_ROLE == Context.Role)
                 {
-                    //scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.UserLocalId.Value));
+                    scores.Add(Storage.StiActivityScoreStorage.GetScore(ann.SisActivityId.Value, Context.UserLocalId.Value));
                     persons.Add(ServiceLocator.PersonService.GetPerson(Context.UserLocalId.Value));
                 }
                 else
                 {
-                    //scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
+                    scores = Storage.StiActivityScoreStorage.GetSores(ann.SisActivityId.Value);
                     persons = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery { ClassId = ann.ClassRef });
                 }
                 var res = new List<StudentAnnouncementDetails>();
