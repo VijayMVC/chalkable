@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.Remoting.Messaging;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
@@ -63,6 +64,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAnnouncementApplicationStorage AnnouncementApplicationStorage { get; private set; }
         public DemoInfractionStorage InfractionStorage { get; private set; }
         public DemoAnnouncementRecipientDataStorage AnnouncementRecipientDataStorage{ get; private set; }
+        
+
+        public DemoStiDisciplineStorage StiDisciplineStorage { get; private set; }
 
 
         public UserContext Context { get; private set; }
@@ -130,6 +134,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage(this);
             AnnouncementRecipientDataStorage = new DemoAnnouncementRecipientDataStorage(this);
 
+            StiDisciplineStorage = new DemoStiDisciplineStorage(this);
 
 
             Setup();

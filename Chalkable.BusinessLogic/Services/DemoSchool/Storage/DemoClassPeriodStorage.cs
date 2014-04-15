@@ -51,6 +51,62 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return classPeriods.ToList();
 
+
+            /*var conds = new AndQueryCondition();
+            var classPeriodTName = "ClassPeriod";
+            if (query.PeriodId.HasValue)
+                conds.Add(ClassPeriod.PERIOD_REF_FIELD, query.PeriodId);
+            if (query.DateTypeId.HasValue)
+                conds.Add(ClassPeriod.DAY_TYPE_REF_FIELD, query.DateTypeId);
+
+            FilterBySchool(conds).BuildSqlWhere(dbQuery, classPeriodTName);
+
+            if (query.RoomId.HasValue)
+            {
+                conds.Add("roomId", query.RoomId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}] = @roomId)"
+                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "Class", Class.ROOM_REF_FIELD, Class.ID_FIELD);
+            }
+            
+            if (query.StudentId.HasValue)
+            {
+                dbQuery.Parameters.Add("studentId", query.StudentId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}]  = @studentId)"
+                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "ClassPerson", ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD);
+            }
+            if (query.TeacherId.HasValue)
+            {
+                dbQuery.Parameters.Add("teacherId", query.TeacherId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}] = @teacherId)"
+                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "Class", Class.TEACHER_REF_FIELD, Class.ID_FIELD);
+            }
+
+            if (query.SchoolYearId.HasValue)
+            {
+                dbQuery.Parameters.Add(Period.SCHOOL_YEAR_REF, query.SchoolYearId);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] = @{1}", "Period", Period.SCHOOL_YEAR_REF);
+            }
+
+            if (query.Time.HasValue)
+            {
+                dbQuery.Parameters.Add("time", query.Time);
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] <= @time and [{0}].[{2}] >= @time"
+                    , "Period", Period.START_TIME_FIELD, Period.END_TIME_FIELD);
+            }
+            if (query.ClassIds != null && query.ClassIds.Count > 0)
+            {
+                var classIdsParams = new List<string>();
+                for (int i = 0; i < query.ClassIds.Count; i++)
+                {
+                    var classIdParam = "@classId_" + i;
+                    classIdsParams.Add(classIdParam);
+                    dbQuery.Parameters.Add(classIdParam, query.ClassIds[i]);
+                }
+                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in ({2})", classPeriodTName
+                    , ClassPeriod.CLASS_REF_FIELD,  classIdsParams.JoinString(","));
+            }
+            return dbQuery;*/
+
             //
             //if (classPeriodQuery.SchoolYearId.HasValue)
             //    classPeriods = classPeriods.Where(x => x.)

@@ -20,11 +20,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date, int? personId)
         {
-            throw new NotImplementedException();
-            /*fix 
             var classPeriod = ServiceLocator.ClassPeriodService.GetNearestClassPeriod(classId, date);
             if (classPeriod == null) return null;
-            var disciplineRefferals = ConnectorLocator.DisciplineConnector.GetList(classId, date);
+            var disciplineRefferals = Storage.StiDisciplineStorage.GetList(classId, date);
             if (disciplineRefferals != null)
             {
                 IList<Person> students = new List<Person>();
@@ -59,13 +57,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
                 return res;
             }
-            return null;*/
+            return null;
         }
 
         public ClassDiscipline SetClassDiscipline(ClassDiscipline classDiscipline)
         {
-            throw new NotImplementedException();
-            /*
             if (!classDiscipline.ClassId.HasValue)
                 throw new ChalkableException("Invalid classId param");
 
@@ -73,13 +69,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             MapperFactory.GetMapper<DisciplineReferral, ClassDiscipline>().Map(stiDiscipline, classDiscipline);
 
             if (classDiscipline.Id.HasValue)
-                ConnectorLocator.DisciplineConnector.Update(stiDiscipline);
+                Storage.StiDisciplineStorage.Update(stiDiscipline);
             else
             {
-                stiDiscipline = ConnectorLocator.DisciplineConnector.Create(stiDiscipline);
+                stiDiscipline = Storage.StiDisciplineStorage.Create(stiDiscipline);
                 MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>().Map(classDiscipline, stiDiscipline);
             }
-            return classDiscipline;*/
+            return classDiscipline;
         }
 
         public ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description)
