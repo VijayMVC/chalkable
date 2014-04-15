@@ -67,6 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         
 
         public DemoStiDisciplineStorage StiDisciplineStorage { get; private set; }
+        public DemoStiStandardScoreStorage StiStandardScoreStorage { get; private set; }
 
 
         public UserContext Context { get; private set; }
@@ -135,7 +136,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementRecipientDataStorage = new DemoAnnouncementRecipientDataStorage(this);
 
             StiDisciplineStorage = new DemoStiDisciplineStorage(this);
-
+            StiStandardScoreStorage = new DemoStiStandardScoreStorage(this);
 
             Setup();
         }
