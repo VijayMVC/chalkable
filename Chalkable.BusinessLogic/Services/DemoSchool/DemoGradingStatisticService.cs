@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -169,33 +170,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
-            throw new NotImplementedException();
-            /*
+          
             Gradebook stiGradeBook = null;
             if (needsReCalculate)
-                stiGradeBook = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriodId);
+                stiGradeBook = Storage.StiGradeBookStorage.Calculate(classId, gradingPeriodId);
             if (!needsReCalculate || standardId.HasValue || classAnnouncementType.HasValue)
             {
-                stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType
+                stiGradeBook = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, classAnnouncementType
                 , gradingPeriodId, standardId);
             }
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            return GetGradeBooks(classId, new List<GradingPeriodDetails> { gradingPeriod }, stiGradeBook).First();*/
+            return GetGradeBooks(classId, new List<GradingPeriodDetails> { gradingPeriod }, stiGradeBook).First();
         }
 
         public IList<ChalkableGradeBook> GetGradeBooks(int classId)
         {
-            
-
-            //todo fix
-
-            throw new NotImplementedException();
-            /*
-            var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId);
+            var stiGradeBook = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId);
             var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var gradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
             return GetGradeBooks(classId, gradingPeriods, stiGradeBook);
-             */
         }
 
         private IList<ChalkableGradeBook> GetGradeBooks(int classId, IList<GradingPeriodDetails> gradingPeriods, Gradebook gradebook)
@@ -284,8 +277,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<string> GetGradeBookComments(int schoolYearId, int teacherId)
         {
-            throw new NotImplementedException();
-            //return Storage.GradeBookStorage.GetGradebookComments(schoolYearId, teacherId);
+            return Storage.StiGradeBookStorage.GetGradebookComments(schoolYearId, teacherId);
         }
 
         public ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId)

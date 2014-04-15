@@ -7,19 +7,30 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
-    public class DemoStiStandardScoreStorage:BaseDemoStorage<int, StandardScore>
+    public class DemoStiGradeBookStorage:BaseDemoStorage<int, Gradebook>
     {
-        public DemoStiStandardScoreStorage(DemoStorage storage)
+        public DemoStiGradeBookStorage(DemoStorage storage)
             : base(storage)
         {
+
         }
 
-        public IEnumerable<StandardScore> GetStandardScores(int classId, object o, object o1)
+        public Gradebook Calculate(int classId, int gradingPeriodId)
         {
             throw new NotImplementedException();
         }
 
-        public StandardScore Update(int classId, int studentId, int standardId, int gradingPeriodId, StandardScore standardScore)
+        public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType, int gradingPeriodId, int? standardId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Gradebook GetBySectionAndGradingPeriod(int classId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<string> GetGradebookComments(int schoolYearId, int teacherId)
         {
             throw new NotImplementedException();
         }
