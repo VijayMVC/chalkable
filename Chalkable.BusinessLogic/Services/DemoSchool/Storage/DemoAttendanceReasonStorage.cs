@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        public void Setup()
+        public override void Setup()
         {
             var reasons = new List<AttendanceReason>
             {

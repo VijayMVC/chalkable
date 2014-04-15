@@ -40,6 +40,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Update(school);
             }
         }
-      
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

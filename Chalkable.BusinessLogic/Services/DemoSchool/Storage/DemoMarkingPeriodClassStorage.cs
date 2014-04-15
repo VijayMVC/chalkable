@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return mpc.ToList().Count > 0;
         }
 
-        public void Setup()
+        public override void Setup()
         {
            Add(new MarkingPeriodClass
            {

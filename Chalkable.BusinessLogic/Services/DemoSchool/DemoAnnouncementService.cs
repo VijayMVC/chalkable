@@ -19,17 +19,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        
-
-
         public AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
             query.RoleId = Context.Role.Id;
             query.PersonId = Context.UserLocalId;
             query.Now = Context.NowSchoolTime.Date;
 
-
-            return Storage.AnnouncementStorage.GetAnnouncements(query);
+            return CreateAnnouncementStorage(Context, Storage).GetAnnouncements(query);
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly)
@@ -124,7 +120,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
             var nowLocalDate = Context.NowSchoolTime;
-            var res = Storage.AnnouncementStorage.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId ?? 0);
+            var res = CreateAnnouncementStorage(Context, Storage).Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId ?? 0);
             return res;
         }
 
@@ -132,22 +128,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
-            return Storage.AnnouncementStorage.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);;
+            return CreateAnnouncementStorage(Context, Storage).GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id); ;
                 
         }
 
         public void DeleteAnnouncement (int announcementId)
         {
-            var announcement = Storage.AnnouncementStorage.GetById(announcementId);
+            var announcement = CreateAnnouncementStorage(Context, Storage).GetById(announcementId);
             if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
                 throw new ChalkableSecurityException();
-            Storage.AnnouncementStorage.Delete(announcementId, null, null, null, null);
+            CreateAnnouncementStorage(Context, Storage).Delete(announcementId, null, null, null, null);
                 
         }
 
         public void DeleteAnnouncements(int classId, int announcementType, AnnouncementState state)
         {
-            Storage.AnnouncementStorage.Delete(null, Context.UserLocalId, classId, announcementType, state);
+            CreateAnnouncementStorage(Context, Storage).Delete(null, Context.UserLocalId, classId, announcementType, state);
         }
 
         public void DeleteAnnouncements(int schoolpersonid, AnnouncementState state = AnnouncementState.Draft)
@@ -155,18 +151,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (Context.UserLocalId != schoolpersonid && !BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
-            Storage.AnnouncementStorage.Delete(null, Context.UserLocalId, null, null, state);
+            CreateAnnouncementStorage(Context, Storage).Delete(null, Context.UserLocalId, null, null, state);
         }
 
         public Announcement DropUnDropAnnouncement(int announcementId, bool drop)
         {
-            var ann = Storage.AnnouncementStorage.GetById(announcementId);
+            var ann = CreateAnnouncementStorage(Context, Storage).GetById(announcementId);
             if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                 throw new ChalkableSecurityException();
 
             Storage.StudentAnnouncementStorage.Update(announcementId, drop);
             ann.Dropped = drop;
-            Storage.AnnouncementStorage.Update(ann);
+            CreateAnnouncementStorage(Context, Storage).Update(ann);
             return ann;
         }
 
@@ -177,8 +173,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
       
         public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipients = null)
         {
-            
-            var ann = Storage.AnnouncementStorage.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.UserLocalId.Value);
+
+            var ann = CreateAnnouncementStorage(Context, Storage).GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.UserLocalId.Value);
             if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                 throw new ChalkableSecurityException();
 
@@ -200,11 +196,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ann.Expires = announcement.ExpiresDate.Value;
 
             ann = SetClassToAnnouncement(ann, classId, ann.Expires);
-            ann = PrepareReminderData(Storage.AnnouncementStorage, ann); //todo : remove this later 
-            ann = ReCreateRecipients(Storage.AnnouncementStorage, ann, recipients);
-            Storage.AnnouncementStorage.Update(ann);
+            ann = PrepareReminderData(ann); //todo : remove this later 
+            ann = ReCreateRecipients(CreateAnnouncementStorage(Context, Storage), ann, recipients);
+            CreateAnnouncementStorage(Context, Storage).Update(ann);
 
-            return Storage.AnnouncementStorage.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
+            return CreateAnnouncementStorage(Context, Storage).GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
         }
 
         private Announcement Submit(IDemoAnnouncementStorage storage, int announcementId, int? classId)
@@ -221,7 +217,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
                     res.Title = res.DefaultTitle;
             }
-            res = (AnnouncementDetails)PrepareReminderData(storage, res);
+            res = (AnnouncementDetails)PrepareReminderData(res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
             //TODO : add gradingStyle to ClassAnnouncementtype
             //if (res.ClassAnnouncementTypeRef.HasValue)
@@ -236,19 +232,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void SubmitAnnouncement(int announcementId, int recipientId)
         {
-            var res = Submit(Storage.AnnouncementStorage, announcementId, recipientId);
+            var res = Submit(CreateAnnouncementStorage(Context, Storage), announcementId, recipientId);
 
             var sy = Storage.SchoolYearStorage.GetByDate(res.Expires);
             if (res.ClassAnnouncementTypeRef.HasValue)
-                Storage.AnnouncementStorage.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
+                CreateAnnouncementStorage(Context, Storage).ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, res.PersonRef, recipientId);
         }
         
         public void SubmitForAdmin(int announcementId)
         {
-            Submit(Storage.AnnouncementStorage, announcementId, null);
+            Submit(CreateAnnouncementStorage(Context, Storage), announcementId, null);
         }
       
-        private Announcement PrepareReminderData(IDemoAnnouncementStorage storage, Announcement announcement)
+        private Announcement PrepareReminderData(Announcement announcement)
         {
             var dateNow = Context.NowSchoolTime;
             var expires = announcement.Expires;
@@ -322,7 +318,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Announcement GetAnnouncementById(int id)
         {
-            var res = Storage.AnnouncementStorage.GetAnnouncement(id, Context.Role.Id, Context.UserLocalId ?? 0); // security here 
+            var res = CreateAnnouncementStorage(Context, Storage).GetAnnouncement(id, Context.Role.Id, Context.UserLocalId ?? 0); // security here 
             if (res == null)
                 throw new ChalkableSecurityException();
             return res;
@@ -369,14 +365,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (ann.ClassRef.HasValue)
             {
                 ann.VisibleForStudent = visible;
-                Storage.AnnouncementStorage.Update(ann);
+                CreateAnnouncementStorage(Context, Storage).Update(ann);
             }
             return ann;
         }
 
         public Announcement GetLastDraft()
         {
-            return Storage.AnnouncementStorage.GetLastDraft(Context.UserLocalId ?? 0);
+            return CreateAnnouncementStorage(Context, Storage).GetLastDraft(Context.UserLocalId ?? 0);
         }
 
         public IList<Person> GetAnnouncementRecipientPersons(int announcementId)
@@ -384,17 +380,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var ann = GetAnnouncementById(announcementId);
             if (ann.State == AnnouncementState.Draft)
                 throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
-            return Storage.AnnouncementStorage.GetAnnouncementRecipientPersons(announcementId, Context.UserLocalId ?? 0);
+            return CreateAnnouncementStorage(Context, Storage).GetAnnouncementRecipientPersons(announcementId, Context.UserLocalId ?? 0);
         }
 
         public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType)
         {
-            return Storage.AnnouncementStorage.GetLastFieldValues(personId, classId, classAnnouncementType, 10);
+            return CreateAnnouncementStorage(Context, Storage).GetLastFieldValues(personId, classId, classAnnouncementType, 10);
         }
 
         public bool CanAddStandard(int announcementId)
         {
-            return Storage.AnnouncementStorage.CanAddStandard(announcementId);
+            return CreateAnnouncementStorage(Context, Storage).CanAddStandard(announcementId);
         }
 
         public Announcement EditTitle(int announcementId, string title)
@@ -412,10 +408,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 if (string.IsNullOrEmpty(title))
                     throw new ChalkableException("Title parameter is empty");
-                if (existsTitleAction(Storage.AnnouncementStorage, title))
+                if (existsTitleAction(CreateAnnouncementStorage(Context, Storage), title))
                     throw new ChalkableException("The item with current title already exists");
                 announcement.Title = title;
-                Storage.AnnouncementStorage.Update(announcement);
+                CreateAnnouncementStorage(Context, Storage).Update(announcement);
             }
             return announcement;
         }
@@ -423,7 +419,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public bool Exists(string title)
         {
-            return Storage.AnnouncementStorage.Exists(title);
+            return CreateAnnouncementStorage(Context, Storage).Exists(title);
             
         }
 
@@ -461,7 +457,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var annStandarts = new List<AnnouncementStandard>();
             foreach (var id in announcementIds)
             {
-                var announcement = Storage.AnnouncementStorage.GetById(id);
+                var announcement = CreateAnnouncementStorage(Context, Storage).GetById(id);
 
                 if (announcement.ClassRef == classId)
                 {

@@ -62,5 +62,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var items = data.Where(x => x.Value.AnnouncementRef == id).Select(x => x.Key).ToList();
             Delete(items);
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

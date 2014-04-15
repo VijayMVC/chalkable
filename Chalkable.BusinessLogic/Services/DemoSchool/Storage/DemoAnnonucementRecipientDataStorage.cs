@@ -39,6 +39,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.Add(annRecipient.Id, annRecipient);
             }
         }
-   
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

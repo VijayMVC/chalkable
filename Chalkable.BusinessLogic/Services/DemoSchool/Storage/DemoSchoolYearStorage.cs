@@ -77,5 +77,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (!data.ContainsKey(schoolYear.Id))
                 data[schoolYear.Id] = schoolYear;
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

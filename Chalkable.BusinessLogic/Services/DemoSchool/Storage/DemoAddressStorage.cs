@@ -51,5 +51,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Add(address);
             }
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

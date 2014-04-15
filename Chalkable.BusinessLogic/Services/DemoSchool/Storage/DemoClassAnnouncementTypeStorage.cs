@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        public void Setup()
+        public override void Setup()
         {
             var clsTypes = new List<ClassAnnouncementType>
             {

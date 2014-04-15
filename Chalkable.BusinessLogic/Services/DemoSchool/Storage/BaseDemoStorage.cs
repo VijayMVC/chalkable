@@ -10,13 +10,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
 
 
-    public class BaseDemoStorage<T, U> where U:new()
+    public abstract class BaseDemoStorage<T, U> where U:new()
     {
         protected DemoStorage Storage { get; private set; }
 
         protected Dictionary<T, U> data = new Dictionary<T, U>();
 
         protected int index = 0;
+
+        public bool IsEmpty()
+        {
+            return data.Count == 0;
+        }
+
+        public Dictionary<T, U> GetData()
+        {
+            return data;
+        } 
+
 
         public int GetNextFreeId()
         {
@@ -25,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return res;
         }
 
-        public BaseDemoStorage(DemoStorage storage)
+        protected BaseDemoStorage(DemoStorage storage)
         {
             Storage = storage;
         }
@@ -53,11 +64,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public void Init()
-        {
-            //some init data
-        }
-
+        public abstract void Setup();
 
     }
 }

@@ -30,5 +30,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.ContainsKey(id) ? data[id] : null;
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

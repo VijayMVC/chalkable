@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return markingPeriods;
         }
 
-        public void Setup()
+        public override void Setup()
         {
             Add(new MarkingPeriod
             {

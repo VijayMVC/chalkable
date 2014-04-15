@@ -24,5 +24,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         {
             throw new NotImplementedException();
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

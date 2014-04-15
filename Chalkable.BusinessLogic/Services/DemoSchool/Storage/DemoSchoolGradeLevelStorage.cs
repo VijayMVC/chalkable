@@ -19,8 +19,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<SchoolGradeLevel> GetAll(int? schoolId)
         {
             return data.Where(x => x.Value.SchoolRef == schoolId).Select(x => x.Value).ToList();
-        } 
+        }
 
-        
+
+        public override void Setup()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

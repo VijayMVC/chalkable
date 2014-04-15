@@ -14,17 +14,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         {
         }
 
-        public Score GetScore(int value, int i)
+        public Score GetScore(int sisActivityId, int userId)
         {
-            throw new NotImplementedException();
+            return data.First(x => x.Value.ActivityId == sisActivityId && x.Value.StudentId == userId).Value;
         }
 
-        public IList<Score> GetSores(int value)
+        public IList<Score> GetSores(int sisActivityId)
         {
-            throw new NotImplementedException();
+            return data.Where(x => x.Value.ActivityId == sisActivityId).Select(x => x.Value).ToList();
         }
 
         public Score UpdateScore(int activityId, int studentId, Score score)
+        {
+            var item = data.First(x => x.Value.ActivityId == activityId && x.Value.StudentId == studentId);
+            data[item.Key] = score;
+            return score;
+        }
+
+        public override void Setup()
         {
             throw new NotImplementedException();
         }

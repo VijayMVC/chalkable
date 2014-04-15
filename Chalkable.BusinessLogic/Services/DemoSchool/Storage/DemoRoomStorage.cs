@@ -50,5 +50,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[room.Id] = room;
             }
         }
+
+        public override void Setup()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

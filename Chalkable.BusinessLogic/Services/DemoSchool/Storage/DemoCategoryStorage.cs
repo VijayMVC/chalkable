@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return new PaginatedList<Category>(categories, start / count, count, categories.Count);
         }
 
-        public void Setup()
+        public override void Setup()
         {
             
         }

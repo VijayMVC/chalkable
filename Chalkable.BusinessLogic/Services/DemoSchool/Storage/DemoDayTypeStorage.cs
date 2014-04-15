@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             data.Remove(dayType.Id);
         }
 
-        public void Setup()
+        public override void Setup()
         {
             Add(new DayType
             {

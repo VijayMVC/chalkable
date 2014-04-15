@@ -72,5 +72,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     data[standard.Id] = standard;
             }
         }
+
+        public override void Setup()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

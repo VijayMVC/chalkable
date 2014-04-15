@@ -30,5 +30,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             appInstall.Id = id;
             data.Add(appInstall.Id, appInstall);
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

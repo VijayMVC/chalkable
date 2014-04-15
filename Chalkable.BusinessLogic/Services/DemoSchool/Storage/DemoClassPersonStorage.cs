@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return classPersons;
         }
 
-        public void Setup()
+        public override void Setup()
         {
             Add(new ClassPerson
             {

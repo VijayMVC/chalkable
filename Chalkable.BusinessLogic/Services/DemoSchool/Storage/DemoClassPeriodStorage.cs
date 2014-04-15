@@ -49,6 +49,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             classPeriods = classPeriods.Where(x => classPeriodQuery.ClassIds.Contains(x.ClassRef));
 
+           // if (classPeriodQuery.SchoolYearId.HasValue)
+             //   classPeriods = classPeriods.Where( x => x.)
+
             return classPeriods.ToList();
 
 
@@ -155,6 +158,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
             return rooms;
+        }
+
+        public override void Setup()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

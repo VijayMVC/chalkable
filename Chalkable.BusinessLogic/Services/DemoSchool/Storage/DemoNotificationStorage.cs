@@ -82,5 +82,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             data.Add(GetNextFreeId(), notification);
         }
+
+        public override void Setup()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

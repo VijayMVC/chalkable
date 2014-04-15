@@ -32,5 +32,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Delete(item.Key);
             }
         }
+
+        public override void Setup()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -22,13 +22,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         bool Exists(string s);
         void ReorderAnnouncements(int id, int value, int personRef, int recipientId);
         bool CanAddStandard(int announcementId);
+        bool IsEmpty();
+        Dictionary<int, AnnouncementComplex> GetData();
     }
 
 
     public class DemoBaseAnnouncementStorage : BaseDemoStorage<int, AnnouncementComplex>, IDemoAnnouncementStorage
     {
+        //todo pass announcement dictionary 
         public DemoBaseAnnouncementStorage(DemoStorage storage):base(storage)
         {
+            if (storage.AnnouncementStorage != null && !storage.AnnouncementStorage.IsEmpty())
+            {
+                var oldData = storage.AnnouncementStorage.GetData();
+                foreach (var item in oldData)
+                {
+                    if (!data.ContainsKey(item.Key)) 
+                    {
+                        data.Add(item.Key, item.Value);    
+                    }
+                }
+            }
+            storage.UpdateAnnouncementStorage(this);
         }
 
 
@@ -214,6 +229,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.ContainsKey(announcementId) ? data[announcementId] : null;
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state)
         {
             var announcementsToDelete = GetAnnouncements(new AnnouncementsQuery

@@ -87,5 +87,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[item.Key] = date;
             }
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

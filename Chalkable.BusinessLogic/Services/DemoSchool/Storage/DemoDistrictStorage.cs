@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
-        public void Setup()
+        public override void Setup()
         {
             var districtId = Storage.Context.DistrictId.Value;
             data.Add(districtId, CreateDemoDistrict(districtId));

@@ -43,5 +43,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 infractions = infractions.Where(x => x.IsActive == true);
             return infractions.ToList();
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

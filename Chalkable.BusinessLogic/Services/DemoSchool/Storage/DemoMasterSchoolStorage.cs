@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        public void Setup()
+        public override void Setup()
         {
             var schoolId = Storage.Context.SchoolId.Value;
             Add(new List<Data.Master.Model.School>{CreateMasterSchool(schoolId)});

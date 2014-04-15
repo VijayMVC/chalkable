@@ -44,6 +44,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.PersonId.HasValue)
                 persons = persons.Where(x => x.Id == query.PersonId);
 
+            
+            /*(
+			@gradeLevelIds is null 
+			or (vwPerson.RoleRef = 3 and exists(select * from StudentSchoolYear ssy
+												join @glIds gl on gl.id = ssy.GradeLevelRef
+												where ssy.StudentRef = vwPerson.Id))
+			or (vwPerson.RoleRef = 2 and exists
+				(select * from Class where Class.TeacherRef = vwPerson.Id and Class.GradeLevelRef in (select id from @glIds))
+			)
+		)*/
+
+
 
 
             //
@@ -152,7 +164,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return Storage.PhoneStorage.GetUsersByPhone(phone);
         }
 
-        public void Setup()
+        public override void Setup()
         {
             Add(new Person
             {

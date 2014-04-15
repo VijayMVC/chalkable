@@ -70,5 +70,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Withdrawn = x.Value.Withdrawn
             }).ToList();
         }
+
+        public override void Setup()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

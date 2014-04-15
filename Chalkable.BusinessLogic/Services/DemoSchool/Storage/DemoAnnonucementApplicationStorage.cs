@@ -72,5 +72,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             //var aa = data.Where(x => x.Value.)
         }
+
+        public override void Setup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

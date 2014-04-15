@@ -82,6 +82,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             Context = context;
         }
 
+        public void UpdateAnnouncementStorage(IDemoAnnouncementStorage storage)
+        {
+            AnnouncementStorage = storage;
+        }
+
         public DemoStorage(UserContext context)
         {
             Context = context;

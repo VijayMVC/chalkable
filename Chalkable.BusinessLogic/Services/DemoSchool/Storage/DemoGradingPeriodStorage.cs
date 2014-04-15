@@ -72,69 +72,71 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return GetGradingPeriodDetailsList(gradingPeriods).First();
         }
 
-        public void Setup()
+        public override void Setup()
         {
-            var gpList = new List<GradingPeriod>();
 
-            gpList.Add(new GradingPeriod
-            {
-                Id = 1,
-                Name = "Quarter 1",
-                AllowGradePosting = false,
-                Code = "Q1",
-                Description = "",
-                MarkingPeriodRef = 1,
-                SchoolAnnouncement = "",
-                StartDate = new DateTime(2014, 1, 21),
-                EndDate = new DateTime(2014, 3, 30),
-                EndTime = new DateTime(2014, 3, 30, 23, 59, 0),
-                SchoolYearRef = 12
-            });
 
-            gpList.Add(new GradingPeriod
-            {
-                Id = 2,
-                Name = "Quarter 2",
-                AllowGradePosting = false,
-                Code = "Q1",
-                Description = "",
-                MarkingPeriodRef = 1,
-                SchoolAnnouncement = "",
-                StartDate = new DateTime(2014, 3, 30),
-                EndDate = new DateTime(2014, 5, 30),
-                EndTime = new DateTime(2014, 5, 30, 23, 59, 0),
-                SchoolYearRef = 12
-            });
+            var currentYear = DateTime.Now.Year;
 
-            gpList.Add(new GradingPeriod
+            var gpList = new List<GradingPeriod>
             {
-                Id = 3,
-                Name = "Quarter 3",
-                AllowGradePosting = false,
-                Code = "Q3",
-                Description = "",
-                MarkingPeriodRef = 2,
-                SchoolAnnouncement = "",
-                StartDate = new DateTime(2014, 6, 30),
-                EndDate = new DateTime(2014, 8, 30),
-                EndTime = new DateTime(2014, 8, 30, 23, 59, 0),
-                SchoolYearRef = 12
-            });
-
-            gpList.Add(new GradingPeriod
-            {
-                Id = 4,
-                Name = "Quarter 4",
-                AllowGradePosting = false,
-                Code = "Q4",
-                Description = "",
-                MarkingPeriodRef = 2,
-                SchoolAnnouncement = "",
-                StartDate = new DateTime(2014, 8, 30),
-                EndDate = new DateTime(2014, 10, 30),
-                EndTime = new DateTime(2014, 10, 30, 23, 59, 0),
-                SchoolYearRef = 12
-            });
+                new GradingPeriod
+                {
+                    Id = 1,
+                    Name = "Quarter 1",
+                    AllowGradePosting = false,
+                    Code = "Q1",
+                    Description = "",
+                    MarkingPeriodRef = 1,
+                    SchoolAnnouncement = "",
+                    StartDate = new DateTime(currentYear, 1, 21),
+                    EndDate = new DateTime(currentYear, 3, 30),
+                    EndTime = new DateTime(currentYear, 3, 30, 23, 59, 0),
+                    SchoolYearRef = 12
+                },
+                new GradingPeriod
+                {
+                    Id = 2,
+                    Name = "Quarter 2",
+                    AllowGradePosting = false,
+                    Code = "Q1",
+                    Description = "",
+                    MarkingPeriodRef = 1,
+                    SchoolAnnouncement = "",
+                    StartDate = new DateTime(currentYear, 3, 30),
+                    EndDate = new DateTime(currentYear, 5, 30),
+                    EndTime = new DateTime(currentYear, 5, 30, 23, 59, 0),
+                    SchoolYearRef = 12
+                },
+                new GradingPeriod
+                {
+                    Id = 3,
+                    Name = "Quarter 3",
+                    AllowGradePosting = false,
+                    Code = "Q3",
+                    Description = "",
+                    MarkingPeriodRef = 2,
+                    SchoolAnnouncement = "",
+                    StartDate = new DateTime(currentYear, 6, 30),
+                    EndDate = new DateTime(currentYear, 8, 30),
+                    EndTime = new DateTime(currentYear, 8, 30, 23, 59, 0),
+                    SchoolYearRef = 12
+                },
+                new GradingPeriod
+                {
+                    Id = 4,
+                    Name = "Quarter 4",
+                    AllowGradePosting = false,
+                    Code = "Q4",
+                    Description = "",
+                    MarkingPeriodRef = 2,
+                    SchoolAnnouncement = "",
+                    StartDate = new DateTime(currentYear, 8, 30),
+                    EndDate = new DateTime(currentYear, 10, 30),
+                    EndTime = new DateTime(currentYear, 10, 30, 23, 59, 0),
+                    SchoolYearRef = 12
+                }
+            };
 
             Add(gpList);
         }
