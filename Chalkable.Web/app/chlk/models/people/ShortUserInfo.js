@@ -53,8 +53,8 @@ NAMESPACE('chlk.models.people', function () {
             String, 'spedStatus',
 
             Boolean, function showAlerts(){
-                var res = this.isWithMedicalAlert() && this.isAllowedInetAccess()
-                    && this.getSpecialInstructions() && this.getSpedStatus();
+                var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
+                    || this.getSpecialInstructions() || this.getSpedStatus();
                 return !!res;
             },
 

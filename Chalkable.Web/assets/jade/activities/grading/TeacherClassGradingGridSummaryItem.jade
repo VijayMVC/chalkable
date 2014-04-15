@@ -74,14 +74,15 @@ mixin DisplayTotalPoints(model)
                 div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
                 .time=announcement.getExpiresDate().format('M d')
                 .max-score.dotted-h=maxScore
-                each info,i in announcement.getStudentAnnouncements().getItems()
+                studentItems = announcement.getStudentAnnouncements().getItems()
+                each info,i in studentItems
                     div(
                         row-index=i
                         data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                         data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
                         data-gradable= announcement.isGradable(),
                         data-max-score= maxScore,
-                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (announcement.isGradable() ? ' gradable' : '')
+                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (announcement.isGradable() ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
                     ).dotted-h.grade-value
                         +TeacherClassGradingGridSummaryCell(info, maxScore, announcement.isGradable())
                 div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.getAvg()

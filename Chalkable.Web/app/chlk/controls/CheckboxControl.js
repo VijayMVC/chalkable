@@ -29,7 +29,9 @@ NAMESPACE('chlk.controls', function () {
             function addEvents(id, value, dom_){
                 dom_ = dom_ || new ria.dom.Dom();
                 var hidden = dom_.find('#' + id + '-hidden');
-                dom_.find('#' + id).on('change', function(){
+                var node = dom_.find('#' + id);
+                node.off('change.check');
+                node.on('change.check', function(){
                     var lastValue = hidden.getData('value');
                     var newValue = !lastValue;
                     hidden.setData('value', newValue);

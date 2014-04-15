@@ -622,6 +622,13 @@ BODY {
                               display: none;
                             }
                           }
+
+                          &.top-popup{
+                            .grading-input-popup{
+                              top: auto;
+                              bottom: 47px;
+                            }
+                          }
                         }
 
                         &.avg{
