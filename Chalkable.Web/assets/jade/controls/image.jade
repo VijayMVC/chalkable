@@ -11,7 +11,7 @@ mixin PersonImg(person, size, noAlerts)
         div(style=p ? "overflow: visible" : "").avatar-wrapper
             if p
                 top = self.getAlertsAttributes(person)
-                .alerts-icon
+                div(class=(size < 128 ? "small" : "")).alerts-icon
                     div(style="top: " + top).alerts-pop-up
                         .alerts-triangle-container
                             .left-item

@@ -18,6 +18,7 @@ NAMESPACE('chlk.models.people', function () {
         REPOST_CLASSROOM_ATTENDANCE: 'Repost Classroom Attendance',
         VIEW_CLASSROOM_ABSENCE_REASONS: 'View Classroom Absence Reasons',
         VIEW_CLASSROOM_ATTENDANCE: 'View Classroom Attendance',
+        VIEW_CLASSROOM_ATTENDANCE_ADMIN: 'View Classroom Attendance (Admin)',
         VIEW_CLASSROOM_GRADES: 'View Classroom Grades',
         VIEW_CLASSROOM_LUNCH_COUNT: 'View Classroom Lunch Count',
         VIEW_CLASSROOM_ROSTER: 'View Classroom Roster',

@@ -25,7 +25,9 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
                 if self.isAbleDropStudentScore()
                     +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id).with-value.dropped-checkbox
                 else
-                    +Hidden('dropped', self.isDropped())
+                    if self.isDropped()
+                        +LabeledCheckbox("Undrop", 'undropped', !self.isDropped())(data-value=!self.isDropped(), id='undropped-' + id).with-value.undropped-checkbox
+                    +Hidden('dropped', false)
                 +Hidden('isabsent', self.isAbsent())
                 +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), id='islate-' + id).with-value
                 +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), id='isincomplete-' + id).with-value

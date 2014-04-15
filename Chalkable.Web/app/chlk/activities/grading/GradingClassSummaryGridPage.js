@@ -147,12 +147,14 @@ NAMESPACE('chlk.activities.grading', function () {
                     }.bind(this), 1);
                 }else{
                     var dom = this.dom;
-                    var avgContainer = container.find('.avgs-container');
                     var avgTpl = new chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl();
                     var rowIndex = parseInt(dom.find('.active-row').getAttr('row-index'), 10);
                     model.setRowIndex(rowIndex);
                     avgTpl.assign(model);
-                    avgTpl.renderTo(avgContainer.setHTML(''));
+                    var avgs = container.find('.avgs-container');
+                    var html = new ria.dom.Dom().fromHTML(avgTpl.render());
+                    html.prependTo(avgs.parent());
+                    avgs.remove();
                     model.getGradingItems().forEach(function(item){
                         dom.find('.avg-' + item.getId().valueOf()).setHTML(item.getAvg() ? item.getAvg().toString() : '');
                     });
@@ -272,7 +274,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
-                var value = node.getValue();
+                var value = (node.getValue() || '').trim();
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
@@ -287,24 +289,26 @@ NAMESPACE('chlk.activities.grading', function () {
                             return false;
                         }
                         else
-                            this.updateValue();
+                            this.updateValue(true);
                     }else{
-                        var text = node.getValue() ? node.getValue().trim() : '';
-                        var parsed = parseInt(text,10);
-                        if(parsed){
-                            node.removeClass('error');
-                            if(parsed != text){
-                                node.addClass('error');
-                            }else{
-                                this.hideDropDown();
-                            }
-                        }else{
-                            suggestions = text  ? this.getSuggestedValues(text, node) : [];
-                            if(!suggestions.length)
-                                node.addClass('error');
-                            else
+                        if(value){
+                            var text = node.getValue() ? node.getValue().trim() : '';
+                            var parsed = parseInt(text,10);
+                            if(parsed){
                                 node.removeClass('error');
-                            this.updateDropDown(suggestions, node);
+                                if(parsed != text){
+                                    node.addClass('error');
+                                }else{
+                                    this.hideDropDown();
+                                }
+                            }else{
+                                suggestions = text  ? this.getSuggestedValues(text, node) : [];
+                                if(!suggestions.length)
+                                    node.addClass('error');
+                                else
+                                    node.removeClass('error');
+                                this.updateDropDown(suggestions, node);
+                            }
                         }
                     }
                     this.updateDropDown(suggestions, node);
@@ -443,7 +447,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 setTimeout(function(){
                     cell.find('input').trigger('focus');
                 }, 1);
-                this.updateValue(true);
+                this.updateValue(false);
             },
 
             [ria.mvc.DomEventBind('click', '.grading-input-popup')],
@@ -470,17 +474,19 @@ NAMESPACE('chlk.activities.grading', function () {
                 input.removeClass('not-equals');
                 this.setItemValue(value, input, !isFill);
                 var that = this;
-                if(isFill)
+                if(isFill){
+                    this.fillAllOneValue(cell, value);
                     this.dom.find('.able-fill-all').forEach(function(node){
                         that.setItemValue(value, node, false);
                     });
+                }
             },
 
             [[ria.dom.Dom, String, Boolean]],
             function setItemState_(node, stateName, selectNext_){
                 node.setValue(node.getData('value'));
                 node.parent('form').find('[name=' + stateName +']').setValue(true);
-                this.updateValue();
+                this.updateValue(selectNext_);
             },
 
             function setItemValue(value, input, selectNext){
@@ -501,18 +507,19 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(allScores.length == 0) return;
                         }
                         input.setValue(value);
-                        this.updateValue();
+                        this.updateValue(selectNext);
                     }
                 }
             },
 
             [[Boolean]],
-            function updateValue(isComment_){
+            function updateValue(selectNext_){
                 clearTimeout(gradingGridTimer);
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
-                var nextCell = activeCell.next().find('.edit-cell');
-                if(!isComment_){
+
+                if(selectNext_){
+                    var nextCell = activeCell.next().find('.edit-cell');
                     setTimeout(function(){
                         if(nextCell.exists())
                             nextCell.trigger('click');
@@ -529,7 +536,7 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function gradingFormSubmit(node, event){
                 var input = node.find('.grade-autocomplete');
                 if(!input.hasClass('error')){
-                    var activeCell = node.parent('.active-cell');
+                    var activeCell = node.parent('.grade-value');
                     var model = this.getModelFromCell(activeCell);
                     this.updateFlagByModel(model, activeCell);
                     activeCell.find('.grade-text').setHTML('...');
@@ -636,9 +643,16 @@ NAMESPACE('chlk.activities.grading', function () {
                 return value == 'false' ? false : !!value;
             },
 
-            function addFormToActiveCell(cell){
+            function addFormToActiveCell(cell, model_){
                 var tpl = new chlk.templates.grading.GradingInputTpl();
-                var model = this.getModelFromCell(cell);
+                var model;
+                if(model_){
+                    model = model_;
+                    var studentId = cell.find('.grade-info').getData('studentid');
+                    model.setStudentId(new chlk.models.id.SchoolPersonId(studentId));
+                }else{
+                    model = this.getModelFromCell(cell);
+                }
 
                 tpl.assign(model);
                 tpl.options({
@@ -646,6 +660,58 @@ NAMESPACE('chlk.activities.grading', function () {
                     ableExemptStudentScore: this.getBooleanValue(cell.getData('able-exempt-student-score'))
                 });
                 tpl.renderTo(cell);
+            },
+
+            function serializeFromForm(form){
+                var o = form.serialize(true);
+                var js = new ria.serialize.JsonSerializer();
+                return js.deserialize(o, chlk.models.announcement.ShortStudentAnnouncementViewData)
+            },
+
+            function fillAll(activeCell, submitCurrent_){
+                var form = activeCell.find('form');
+                activeCell.removeClass('active-cell');
+                activeCell.find('.grade-info').removeClass('empty-grade');
+                activeCell.find('.grading-input-popup').hide();
+                var model = this.serializeFromForm(form);
+                if(submitCurrent_)
+                    form.trigger('submit');
+                var that = this;
+                activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
+                    var cell = item.parent('.grade-value');
+                    that.addFormToActiveCell(cell, model);
+                    cell.find('form').trigger('submit');
+                });
+            },
+
+            function fillAllOneValue(activeCell, value){
+                var form = activeCell.find('form');
+                activeCell.removeClass('active-cell');
+                activeCell.find('.grade-info').removeClass('empty-grade');
+                activeCell.find('.grading-input-popup').hide();
+                var that = this;
+                activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
+                    var cell = item.parent('.grade-value');
+                    var model = that.getModelFromCell(cell);
+                    switch(value.toLowerCase()){
+                        case Msg.Dropped.toLowerCase(): model.setDropped(true); break;
+                        case Msg.Incomplete.toLowerCase(): model.setIncomplete(true); break;
+                        case Msg.Late.toLowerCase(): model.setLate(true); break;
+                        case Msg.Exempt.toLowerCase(): model.setExempt(true); break;
+                        default:{
+                            model.setGradeValue(value);
+                        }
+                    }
+                    that.addFormToActiveCell(cell, model);
+                    cell.find('form').trigger('submit');
+                });
+            },
+
+            [ria.mvc.DomEventBind('click', '.fill-grade')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function fillGradeClick(node, event){
+                var activeCell = node.parent('.active-cell');
+                this.fillAll(activeCell, true);
             }
         ]);
 });

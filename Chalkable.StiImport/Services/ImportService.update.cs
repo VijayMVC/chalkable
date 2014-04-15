@@ -423,7 +423,19 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateClassPersons()
         {
-            //TODO: no way to update. delete or insert only
+            if (context.GetSyncResult<StudentScheduleTerm>().Updated == null)
+                return;
+            var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
+            var studentSchedules = context.GetSyncResult<StudentScheduleTerm>().Updated
+                .Select(x => new ClassPerson
+                {
+                    ClassRef = x.SectionID,
+                    PersonRef = x.StudentID,
+                    MarkingPeriodRef = x.TermID,
+                    SchoolRef = mps.First(y => y.Id == x.TermID).SchoolRef,
+                    IsEnrolled = x.IsEnrolled
+                }).ToList();
+            ServiceLocatorSchool.ClassService.EditStudents(studentSchedules);
         }
 
         private void UpdateAttendanceReasons()

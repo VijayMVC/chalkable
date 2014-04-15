@@ -40,17 +40,23 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.MarkingPeriodService, 'markingPeriodService',
 
+
+        Array, function getClassForAttendances_(){
+            var classes = this.classService.getClassesForTopBar(true);
+            var canGetAttForClasses = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE)
+                || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN);
+            if(!canGetAttForClasses)
+                return classes.filter(function(item){return item.getName() == 'All';});
+            return classes
+        },
+
         [chlk.controllers.SidebarButton('attendance')],
         function summaryAction() {
             var result = this.attendanceService
                 .getSummary()
                 .attach(this.validateResponse_())
                 .then(function(summary){
-                    var classes = this.classService.getClassesForTopBar(true);
-                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_ATTENDANCE)){
-                        classes = classes.filter(function(item){return item.getName() == 'All';});
-                    }
-                    var topModel = new chlk.models.classes.ClassesForTopBar(classes);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(this.getClassForAttendances_());
                     return new chlk.models.attendance.SummaryPage(topModel, summary);
                 }, this);
             return this.PushView(chlk.activities.attendance.SummaryPage, result);
@@ -338,7 +344,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(items){
                     date_ = date_ || new chlk.models.common.ChlkDate(getDate());
                     this.getContext().getSession().set('attendanceData', items);
-                    var classes = this.classService.getClassesForTopBar(true);
+                    var classes = this.getClassForAttendances_();
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes);
                     var model = new chlk.models.attendance.ClassList(
                         topModel,

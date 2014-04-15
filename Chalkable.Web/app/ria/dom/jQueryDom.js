@@ -443,17 +443,17 @@ NAMESPACE('ria.dom', function () {
 
             /* Form */
 
-            Object, function serialize(){
+            Object, function serialize(noArray_){
                 var o = {};
-                var array = this.dom.serializeArray();
-                array.forEach(function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
+                var array = this._dom.serializeArray();
+                array.forEach(function(item) {
+                    if (o[item.name] !== undefined && !noArray_) {
+                        if (!o[item.name].push) {
+                            o[item.name] = [o[item.name]];
                         }
-                        o[this.name].push(this.value || '');
+                        o[item.name].push(item.value || '');
                     } else {
-                        o[this.name] = this.value || '';
+                        o[item.name] = item.value || '';
                     }
                 });
                 return o;

@@ -492,7 +492,8 @@ namespace Chalkable.StiImport.Services
                     ClassRef = x.SectionID,
                     PersonRef = x.StudentID,
                     MarkingPeriodRef = x.TermID,
-                    SchoolRef = mps.First(y => y.Id == x.TermID).SchoolRef
+                    SchoolRef = mps.First(y => y.Id == x.TermID).SchoolRef,
+                    IsEnrolled = x.IsEnrolled
                 }).ToList();
             ServiceLocatorSchool.ClassService.AddStudents(studentSchedules);
         }
