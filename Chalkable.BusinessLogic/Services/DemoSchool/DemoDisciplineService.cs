@@ -47,6 +47,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                         discipline.Date = date;
                         discipline.ClassId = classId;
                         discipline.StudentId = student.Id;
+                        discipline.Infractions = Storage.InfractionStorage.GetAll();
                     }
                     res.Add(discipline);
                 }

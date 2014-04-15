@@ -15,12 +15,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public IList<DisciplineReferral> GetList(int classId, DateTime date)
         {
-            throw new NotImplementedException();
+            return data.Where(x => x.Value.SectionId == classId && x.Value.Date == date).Select(x => x.Value).ToList();
         }
 
         public DisciplineReferral Create(DisciplineReferral stiDiscipline)
         {
-            throw new NotImplementedException();
+            if (!data.ContainsKey(stiDiscipline.Id))
+                data[stiDiscipline.Id] = stiDiscipline;
+            return stiDiscipline;
         }
 
         public void Update(DisciplineReferral stiDiscipline)
@@ -30,15 +32,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public override void Setup()
         {
-            var referral = Create(new DisciplineReferral
+            Create(new DisciplineReferral
             {
-                Date = DateTime.Now,
+                Date = DateTime.Now.Date,
                 Id = GetNextFreeId(),
                 Infractions = Storage.StiInfractionStorage.GetAll(),
                 StudentId = 1196
             });
-
-            data.Add(referral.Id, referral);
         }
     }
 }

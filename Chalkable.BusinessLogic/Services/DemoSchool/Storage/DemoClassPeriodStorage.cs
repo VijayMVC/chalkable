@@ -162,7 +162,41 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            //todo add class periods
+            Add(new ClassPeriod
+            {
+                ClassRef = 1,
+                DayTypeRef = 19,
+                PeriodRef = 1,
+                SchoolRef = 1,
+                Period = Storage.PeriodStorage.GetById(1)
+            });
+
+            Add(new ClassPeriod
+            {
+                ClassRef = 2,
+                DayTypeRef = 19,
+                PeriodRef = 2,
+                SchoolRef = 1,
+                Period = Storage.PeriodStorage.GetById(2)
+            });
+
+            Add(new ClassPeriod
+            {
+                ClassRef = 1,
+                DayTypeRef = 20,
+                PeriodRef = 1,
+                SchoolRef = 1,
+                Period = Storage.PeriodStorage.GetById(1)
+            });
+
+            Add(new ClassPeriod
+            {
+                ClassRef = 2,
+                DayTypeRef = 20,
+                PeriodRef = 2,
+                SchoolRef = 1,
+                Period = Storage.PeriodStorage.GetById(2)
+            });
         }
     }
 }
