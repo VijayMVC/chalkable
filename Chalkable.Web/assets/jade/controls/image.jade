@@ -1,0 +1,44 @@
+mixin Image()
+    -attributes = self.processAttrs(attributes);
+    img(attributes)
+
+mixin PersonImg(person, size, noAlerts)
+    if(person && person.getGender())
+        src = chlk.templates.ChlkTemplate.prototype.getPictureURL(person.getId(), size, size)
+        isWoman = person.getGender().toLowerCase() == 'f';
+        alternativeHref = joinUrls(window.scriptsRoot, 'Content/avatars/' + size + '/.no-avatar') + (isWoman ? '-female' : '') + '.png';
+        p = !noAlerts && person.showAlerts()
+        div(style=p ? "overflow: visible" : "").avatar-wrapper
+            if p
+                top = self.getAlertsAttributes(person)
+                .alerts-icon
+                    div(style="top: " + top).alerts-pop-up
+                        .alerts-triangle-container
+                            .left-item
+                            .alerts-triangle
+                        .alerts-container
+                            if person.isAllowedInetAccess()
+                                .alert-item.internet
+                                    SPAN.left-item
+                                    SPAN=Msg.Alert_Internet_access_text
+                            if person.isWithMedicalAlert()
+                                .alert-item.medical
+                                    SPAN.left-item
+                                    SPAN=Msg.Alert_Medical_text
+                            if person.getSpecialInstructions()
+                                .alert-item.special
+                                    SPAN.left-item
+                                    SPAN=Msg.Alert_Special_text
+                            if person.getSpedStatus()
+                                .alert-item.sped
+                                    SPAN.left-item
+                                    SPAN=Msg.Alert_Sped_text
+            div(attributes)(class="person-avatar-" + (isWoman ? "w" : "m") + "-" + size, style = "background-image: url(" + src + ")")
+
+mixin ClassImg(course, width, height)
+    -defaultSrc =joinUrls(window.scriptsRoot, 'Content/images/common/course-icons/all.png');
+    if course && course.getDepartmentId()
+        -attributes.src = chlk.templates.ChlkTemplate.prototype.getPictureURL(course.getDepartmentId(), height, width)
+    else
+        -attributes.src = defaultSrc;
+    +Image()(attributes)
