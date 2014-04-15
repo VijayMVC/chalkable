@@ -50,6 +50,10 @@ BODY {
     cursor: pointer;
     position: relative;
 
+    .avatar-wrapper{
+      z-index: 1000;
+    }
+
 
     &.selected{
 

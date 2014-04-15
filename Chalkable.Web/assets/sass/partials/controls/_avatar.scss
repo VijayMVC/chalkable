@@ -108,6 +108,19 @@
     right: -19px;
     top: -17px;
     position: absolute;
+    z-index: 1000;
+
+    &.small{
+      background: url(images/attendance/alerts.png) 0 0 no-repeat;
+      width: 25px;
+      height: 27px;
+      right: -13px;
+      top: -12px;
+
+      .alerts-pop-up{
+        margin-top: 12px;
+      }
+    }
 
     &:hover{
       .alerts-pop-up{

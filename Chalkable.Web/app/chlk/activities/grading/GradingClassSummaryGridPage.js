@@ -279,35 +279,35 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 else{
                     node.removeClass('empty-grade');
-                }
-                if(!isDown && !isUp){
-                    if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
-                        if(list.exists() && list.find('.see-all').hasClass('hovered')){
-                            list.find('.see-all').trigger('click');
-                            return false;
-                        }
-                        else
-                            this.updateValue();
-                    }else{
-                        var text = node.getValue() ? node.getValue().trim() : '';
-                        var parsed = parseInt(text,10);
-                        if(parsed){
-                            node.removeClass('error');
-                            if(parsed != text){
-                                node.addClass('error');
-                            }else{
-                                this.hideDropDown();
+                    if(!isDown && !isUp){
+                        if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
+                            if(list.exists() && list.find('.see-all').hasClass('hovered')){
+                                list.find('.see-all').trigger('click');
+                                return false;
                             }
-                        }else{
-                            suggestions = text  ? this.getSuggestedValues(text, node) : [];
-                            if(!suggestions.length)
-                                node.addClass('error');
                             else
+                                this.updateValue();
+                        }else{
+                            var text = node.getValue() ? node.getValue().trim() : '';
+                            var parsed = parseInt(text,10);
+                            if(parsed){
                                 node.removeClass('error');
-                            this.updateDropDown(suggestions, node);
+                                if(parsed != text){
+                                    node.addClass('error');
+                                }else{
+                                    this.hideDropDown();
+                                }
+                            }else{
+                                suggestions = text  ? this.getSuggestedValues(text, node) : [];
+                                if(!suggestions.length)
+                                    node.addClass('error');
+                                else
+                                    node.removeClass('error');
+                                this.updateDropDown(suggestions, node);
+                            }
                         }
+                        this.updateDropDown(suggestions, node);
                     }
-                    this.updateDropDown(suggestions, node);
                 }
                 setTimeout(function(cell){
                     var node = cell.find('.grade-autocomplete');
@@ -470,10 +470,12 @@ NAMESPACE('chlk.activities.grading', function () {
                 input.removeClass('not-equals');
                 this.setItemValue(value, input, !isFill);
                 var that = this;
-                if(isFill)
+                if(isFill){
+                    this.fillAll(cell);
                     this.dom.find('.able-fill-all').forEach(function(node){
                         that.setItemValue(value, node, false);
                     });
+                }
             },
 
             [[ria.dom.Dom, String, Boolean]],
@@ -529,7 +531,7 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function gradingFormSubmit(node, event){
                 var input = node.find('.grade-autocomplete');
                 if(!input.hasClass('error')){
-                    var activeCell = node.parent('.active-cell');
+                    var activeCell = node.parent('.grade-value');
                     var model = this.getModelFromCell(activeCell);
                     this.updateFlagByModel(model, activeCell);
                     activeCell.find('.grade-text').setHTML('...');
@@ -655,18 +657,33 @@ NAMESPACE('chlk.activities.grading', function () {
                 tpl.renderTo(cell);
             },
 
-            [ria.mvc.DomEventBind('click', '.fill-grade')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function fillGradeClick(node, event){
-                var activeCell = node.parent('.active-cell');
-                var model = this.getModelFromCell(activeCell);
-                node.parent('form').trigger('submit');
+            function serializeFromForm(form){
+                var o = form.serialize(true);
+                var js = new ria.serialize.JsonSerializer();
+                return js.deserialize(o, chlk.models.announcement.ShortStudentAnnouncementViewData)
+            },
+
+            function fillAll(activeCell, submitCurrent_){
+                var form = activeCell.find('form');
+                activeCell.removeClass('active-cell');
+                activeCell.find('.grade-info').removeClass('empty-grade');
+                activeCell.find('.grading-input-popup').hide();
+                var model = this.serializeFromForm(form);
+                if(submitCurrent_)
+                    form.trigger('submit');
                 var that = this;
-                node.parent('.grade-container').find('.empty-grade').forEach(function(item){
+                activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
                     var cell = item.parent('.grade-value');
                     that.addFormToActiveCell(cell, model);
                     cell.find('form').trigger('submit');
                 });
+            },
+
+            [ria.mvc.DomEventBind('click', '.fill-grade')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function fillGradeClick(node, event){
+                var activeCell = node.parent('.active-cell');
+                this.fillAll(activeCell, true);
             }
         ]);
 });
