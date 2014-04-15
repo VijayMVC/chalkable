@@ -19,6 +19,11 @@ namespace Chalkable.Data.School.Model
         public const string ADDRESS_REF_FIELD = "AddressRef";
         public const string EMAIL_FIELD = "Email";
 
+        public const string HAS_MEDICAL_ALERT_FIELD = "HasMedicalAlert";
+        public const string IS_ALLOWED_INET_ACCESS_FIELD = "IsAllowedInetAccess";
+        public const string SPECIAL_INSTRUCTIONS_FIELD = "SpecialInstructions";
+        public const string SP_ED_STATUS_FIELD = "SpEdStatus";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string FirstName { get; set; }
