@@ -91,13 +91,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
+            var currentYear = DateTime.Now.Year;
+
             Add(new MarkingPeriod
             {
                 Id = 1,
-                Name = "Semester 2",
+                Name = "Semester 1",
                 Description = "",
-                StartDate = new DateTime(2014, 1, 21),
-                EndDate = new DateTime(2014, 5, 30),
+                StartDate = new DateTime(currentYear, 1, 21),
+                EndDate = new DateTime(currentYear, 5, 30),
                 SchoolRef = 1,
                 SchoolYearRef = 12,
                 WeekDays = 62
@@ -106,10 +108,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             Add(new MarkingPeriod
             {
                 Id = 2,
-                Name = "Semester 3",
+                Name = "Semester 2",
                 Description = "",
-                StartDate = new DateTime(2014, 6, 30),
-                EndDate = new DateTime(2014, 10, 30),
+                StartDate = new DateTime(currentYear, 6, 30),
+                EndDate = new DateTime(currentYear, 10, 30),
                 SchoolRef = 1,
                 SchoolYearRef = 12,
                 WeekDays = 62
