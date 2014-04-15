@@ -147,12 +147,14 @@ NAMESPACE('chlk.activities.grading', function () {
                     }.bind(this), 1);
                 }else{
                     var dom = this.dom;
-                    var avgContainer = container.find('.avgs-container');
                     var avgTpl = new chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl();
                     var rowIndex = parseInt(dom.find('.active-row').getAttr('row-index'), 10);
                     model.setRowIndex(rowIndex);
                     avgTpl.assign(model);
-                    avgTpl.renderTo(avgContainer.setHTML(''));
+                    var avgs = container.find('.avgs-container');
+                    var html = new ria.dom.Dom().fromHTML(avgTpl.render());
+                    html.prependTo(avgs.parent());
+                    avgs.remove();
                     model.getGradingItems().forEach(function(item){
                         dom.find('.avg-' + item.getId().valueOf()).setHTML(item.getAvg() ? item.getAvg().toString() : '');
                     });
@@ -272,22 +274,24 @@ NAMESPACE('chlk.activities.grading', function () {
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
-                var value = node.getValue();
+                var value = (node.getValue() || '').trim();
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
                 }
                 else{
                     node.removeClass('empty-grade');
-                    if(!isDown && !isUp){
-                        if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
-                            if(list.exists() && list.find('.see-all').hasClass('hovered')){
-                                list.find('.see-all').trigger('click');
-                                return false;
-                            }
-                            else
-                                this.updateValue();
-                        }else{
+                }
+                if(!isDown && !isUp){
+                    if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
+                        if(list.exists() && list.find('.see-all').hasClass('hovered')){
+                            list.find('.see-all').trigger('click');
+                            return false;
+                        }
+                        else
+                            this.updateValue(true);
+                    }else{
+                        if(value){
                             var text = node.getValue() ? node.getValue().trim() : '';
                             var parsed = parseInt(text,10);
                             if(parsed){
@@ -306,8 +310,8 @@ NAMESPACE('chlk.activities.grading', function () {
                                 this.updateDropDown(suggestions, node);
                             }
                         }
-                        this.updateDropDown(suggestions, node);
                     }
+                    this.updateDropDown(suggestions, node);
                 }
                 setTimeout(function(cell){
                     var node = cell.find('.grade-autocomplete');
@@ -443,7 +447,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 setTimeout(function(){
                     cell.find('input').trigger('focus');
                 }, 1);
-                this.updateValue(true);
+                this.updateValue(false);
             },
 
             [ria.mvc.DomEventBind('click', '.grading-input-popup')],
@@ -471,7 +475,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.setItemValue(value, input, !isFill);
                 var that = this;
                 if(isFill){
-                    this.fillAll(cell);
+                    this.fillAllOneValue(cell, value);
                     this.dom.find('.able-fill-all').forEach(function(node){
                         that.setItemValue(value, node, false);
                     });
@@ -482,7 +486,7 @@ NAMESPACE('chlk.activities.grading', function () {
             function setItemState_(node, stateName, selectNext_){
                 node.setValue(node.getData('value'));
                 node.parent('form').find('[name=' + stateName +']').setValue(true);
-                this.updateValue();
+                this.updateValue(selectNext_);
             },
 
             function setItemValue(value, input, selectNext){
@@ -503,18 +507,19 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(allScores.length == 0) return;
                         }
                         input.setValue(value);
-                        this.updateValue();
+                        this.updateValue(selectNext);
                     }
                 }
             },
 
             [[Boolean]],
-            function updateValue(isComment_){
+            function updateValue(selectNext_){
                 clearTimeout(gradingGridTimer);
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
-                var nextCell = activeCell.next().find('.edit-cell');
-                if(!isComment_){
+
+                if(selectNext_){
+                    var nextCell = activeCell.next().find('.edit-cell');
                     setTimeout(function(){
                         if(nextCell.exists())
                             nextCell.trigger('click');
@@ -674,6 +679,29 @@ NAMESPACE('chlk.activities.grading', function () {
                 var that = this;
                 activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
                     var cell = item.parent('.grade-value');
+                    that.addFormToActiveCell(cell, model);
+                    cell.find('form').trigger('submit');
+                });
+            },
+
+            function fillAllOneValue(activeCell, value){
+                var form = activeCell.find('form');
+                activeCell.removeClass('active-cell');
+                activeCell.find('.grade-info').removeClass('empty-grade');
+                activeCell.find('.grading-input-popup').hide();
+                var that = this;
+                activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
+                    var cell = item.parent('.grade-value');
+                    var model = that.getModelFromCell(cell);
+                    switch(value.toLowerCase()){
+                        case Msg.Dropped.toLowerCase(): model.setDropped(true); break;
+                        case Msg.Incomplete.toLowerCase(): model.setIncomplete(true); break;
+                        case Msg.Late.toLowerCase(): model.setLate(true); break;
+                        case Msg.Exempt.toLowerCase(): model.setExempt(true); break;
+                        default:{
+                            model.setGradeValue(value);
+                        }
+                    }
                     that.addFormToActiveCell(cell, model);
                     cell.find('form').trigger('submit');
                 });

@@ -27,7 +27,8 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
 mixin StudentAverages(tpl)
     each studentAvg in tpl.getStudentAverages()
         .dotted-container.grade-container.with-horizontal-dots.avgs-container
-            .type-name=tpl.getModel().displayAvgName(studentAvg)
+            text = tpl.getModel().displayAvgName(studentAvg)
+            div(data-tooltip=text).type-name=text
             .time
             .max-score.dotted-h
             each average,i in studentAvg.getAverages()
@@ -38,11 +39,11 @@ mixin DisplayTotalPoints(model)
     -totalPoints = model.getTotalPoints()
     if totalPoints && model.isAbleDisplayTotalPoints()
         .dotted-container.grade-container.with-horizontal-dots
-            .type-name Total Points
+            div(data-tooltip=Msg.Total_Points).type-name= Msg.Total_Points
             .time
             .max-score.dotted-h
-            each totalPoint in totalPoints
-                .dotted-h.grade-value=totalPoint
+            each totalPoint, i in totalPoints
+                div(row-index=i).dotted-h.grade-value=totalPoint
 
 
 .ann-types-container
