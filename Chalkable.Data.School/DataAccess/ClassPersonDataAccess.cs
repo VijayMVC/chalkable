@@ -25,6 +25,8 @@ namespace Chalkable.Data.School.DataAccess
                 conds.Add(ClassPerson.PERSON_REF_FIELD, query.PersonId);
             if(query.MarkingPeriodId.HasValue)
                 conds.Add(ClassPerson.MARKING_PERIOD_REF, query.MarkingPeriodId);
+            if (query.IsEnrolled.HasValue)
+                conds.Add(ClassPerson.IS_ENROLLED_FIELD, query.IsEnrolled);
             return conds;
         }
 
@@ -54,5 +56,6 @@ namespace Chalkable.Data.School.DataAccess
         public int? ClassId { get; set; }
         public int? PersonId { get; set; }
         public int? MarkingPeriodId { get; set; }
+        public bool? IsEnrolled { get; set; }
     }
 }

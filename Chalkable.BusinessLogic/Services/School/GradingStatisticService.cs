@@ -205,11 +205,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private IList<ChalkableGradeBook> GetGradeBooks(int classId, IList<GradingPeriodDetails> gradingPeriods, Gradebook gradebook)
         {
-            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-            {
-                ClassId = classId,
-                RoleId = CoreRoles.STUDENT_ROLE.Id
-            });
+            var students = ServiceLocator.ClassService.GetStudents(classId, gradebook.Options.IncludeWithdrawnStudents ? (bool?) null : true);
             var annQuery = new AnnouncementsQuery {ClassId = classId};
             if (gradingPeriods.Count == 1)
             {
