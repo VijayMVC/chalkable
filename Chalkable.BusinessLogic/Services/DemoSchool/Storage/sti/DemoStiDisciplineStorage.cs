@@ -30,7 +30,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public override void Setup()
         {
-            throw new NotImplementedException();
+            var referral = Create(new DisciplineReferral
+            {
+                Date = DateTime.Now,
+                Id = GetNextFreeId(),
+                Infractions = Storage.StiInfractionStorage.GetAll(),
+                StudentId = 1196
+            });
+
+            data.Add(referral.Id, referral);
         }
     }
 }

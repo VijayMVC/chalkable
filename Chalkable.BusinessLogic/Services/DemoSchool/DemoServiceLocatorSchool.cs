@@ -84,6 +84,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             gradingPeriodService = new DemoGradingPeriodService(this, storage);
             classAnnouncementTypeService = new DemoClassAnnouncementTypeService(this, storage);
             gradingStandardService = new DemoGradingStandardService(this, storage);
+            InfractionService = new DemoInfractionService(this, storage);
         }
 
         public IPersonService PersonService { get { return personService; } }

@@ -34,11 +34,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 else students = ServiceLocator.ClassService.GetStudents(classId);
                 var cClass = ServiceLocator.ClassService.GetClassById(classId);
 
-                if (disciplineRefferals.Count > 0)
-                {
-
-                }
-
                 var res = new List<ClassDisciplineDetails>();
                 foreach (var student in students)
                 {

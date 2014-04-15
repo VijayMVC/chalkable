@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     }
 
 
-    public class DemoBaseAnnouncementStorage : BaseDemoStorage<int, AnnouncementComplex>, IDemoAnnouncementStorage
+    public abstract class DemoBaseAnnouncementStorage : BaseDemoStorage<int, AnnouncementComplex>, IDemoAnnouncementStorage
     {
         //todo pass announcement dictionary 
         public DemoBaseAnnouncementStorage(DemoStorage storage):base(storage)
@@ -84,8 +84,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             if (query.Id.HasValue)
                 announcements = announcements.Where(x => x.Id == query.Id);
-            if (query.PersonId.HasValue)
-                announcements = announcements.Where(x => x.PersonRef == query.PersonId);
+
+
+            //person id is creator id
+            //if (query.PersonId.HasValue)
+                //announcements = announcements.Where(x => x.PersonRef == query.PersonId);
 
 
             if (query.Start > 0)
@@ -100,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Announcements = announcements.ToList(),
                 Query = query,
-                SourceCount = announcements.Count()
+                SourceCount = data.Count
             };
         }
 
@@ -278,14 +281,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
-        public Announcement GetAnnouncement(int announcementId, int roleId, int userId)
-        {
-            //todo filter by role id
-            return
-                data.Where(x => x.Value.Id == announcementId && x.Value.PersonRef == userId)
-                    .Select(x => x.Value)
-                    .First();
-        }
+        public abstract Announcement GetAnnouncement(int announcementId, int roleId, int userId);
 
         public Announcement GetLastDraft(int i)
         {
@@ -356,9 +352,14 @@ select  1
         {
         }
 
-        public AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
             throw new System.NotImplementedException();
+        }
+
+        public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -369,9 +370,9 @@ select  1
         {
         }
 
-        public AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 
@@ -381,6 +382,8 @@ select  1
             : base(storage)
         {
         }
+
+
 
         /*public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
@@ -398,6 +401,14 @@ select  1
             throw new System.NotImplementedException();
         }*/
 
-    
+
+        public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
+        {
+            //todo filter by role id
+            return
+                data.Where(x => x.Value.Id == announcementId && x.Value.PersonRef == userId)
+                    .Select(x => x.Value)
+                    .First();
+        }
     }
 }

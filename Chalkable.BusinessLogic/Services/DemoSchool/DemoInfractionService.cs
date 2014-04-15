@@ -46,22 +46,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<Infraction> infractions)
         {
-            throw new System.NotImplementedException();
+            Storage.InfractionStorage.Add(infractions);
         }
 
         public void Edit(IList<Infraction> infractions)
         {
-            throw new System.NotImplementedException();
+            Storage.InfractionStorage.Update(infractions);
         }
 
         public void Delete(IList<int> ids)
         {
-            throw new System.NotImplementedException();
+            Storage.InfractionStorage.Delete(ids);
         }
 
         public IList<Infraction> GetInfractions(bool onlyActive = true)
         {
-            throw new System.NotImplementedException();
+            return Storage.InfractionStorage.GetAll(onlyActive);
         }
     }
 }

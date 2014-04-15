@@ -71,6 +71,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStiAttendanceStorage StiAttendanceStorage { get; private set; }
         public DemoStiSeatingChartStorage StiSeatingChartStorage { get; private set; }
         public DemoStiActivityScoreStorage StiActivityScoreStorage { get; private set; }
+        public DemoStiInfractionStorage StiInfractionStorage { get; private set; }
 
 
         public UserContext Context { get; private set; }
@@ -148,6 +149,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StiAttendanceStorage = new DemoStiAttendanceStorage(this);
             StiSeatingChartStorage = new DemoStiSeatingChartStorage(this);
             StiActivityScoreStorage = new DemoStiActivityScoreStorage(this);
+            StiInfractionStorage = new DemoStiInfractionStorage(this);
             
             Setup();
         }
@@ -169,6 +171,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassAnnouncementTypeStorage.Setup();
             SchoolPersonStorage.Setup();
             ClassPersonStorage.Setup();
+
+            StiInfractionStorage.Setup();
+            InfractionStorage.Setup();
+            DateStorage.Setup();
 
             SchoolStorage.Add(new Data.School.Model.School
             {
