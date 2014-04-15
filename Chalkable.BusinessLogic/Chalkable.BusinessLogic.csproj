@@ -181,12 +181,12 @@
     <Compile Include="Services\DemoSchool\Storage\DemoAlternateScoreStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAlphaGradeStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAddressStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoDisciplineStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoStudentAnnouncementStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoStudentSchoolYearStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoSchoolYearStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPrivateMessageStorage.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStandardService.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiActivityScoreStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\sti\StiSeatingChartStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\sti\DemoStiAttendanceStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\sti\DemoStiGradeBookStorage.cs" />

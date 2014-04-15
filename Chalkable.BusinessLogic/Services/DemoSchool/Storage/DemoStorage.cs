@@ -14,7 +14,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoPrivateMessageStorage PrivateMessageStore { get; private set; }
         public DemoSchoolYearStorage SchoolYearStorage { get; private set; }
         public DemoStudentSchoolYearStorage StudentSchoolYearStorage { get; private set; }
-        public DemoDisciplineStorage DisciplineStorage { get; private set; }
         public DemoAddressStorage AddressStorage { get; private set; }
         public DemoAlphaGradeStorage AlphaGradeStorage { get; private set; }
         public DemoAlternateScoreStorage AlternateScoreStorage { get; private set; }
@@ -90,7 +89,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PrivateMessageStore = new DemoPrivateMessageStorage(this);
             SchoolYearStorage = new DemoSchoolYearStorage(this);
             InfractionStorage = new DemoInfractionStorage(this);
-            DisciplineStorage = new DemoDisciplineStorage();
             AddressStorage = new DemoAddressStorage(this);
             AlphaGradeStorage = new DemoAlphaGradeStorage(this);
             AlternateScoreStorage = new DemoAlternateScoreStorage(this);

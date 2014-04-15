@@ -80,12 +80,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description)
         {
-            return Storage.DisciplineStorage.SetDiscipline(classPersonId, classPeriodId, date, disciplineTypes, description);
+            throw new NotImplementedException();
         }
 
         public void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date)
         {
-            Storage.DisciplineStorage.DeleteDiscipline(classPersonId, classPeriodId, date);
+            throw new NotImplementedException();
         }
 
         public IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<int> gradeLevelIds = null)
