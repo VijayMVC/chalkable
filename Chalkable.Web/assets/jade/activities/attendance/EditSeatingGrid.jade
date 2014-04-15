@@ -1,0 +1,28 @@
+.dialog-window.edit-seating-grid
+    .close.close-btn.dark
+    +ActionForm('attendance', 'editSeatingGrid').edit-seating-grid-form
+        +Hidden('classId', self.getClassId().valueOf())
+        +Hidden('date', self.getDate().format('mm/dd/yy'))
+        +Hidden('seatingChartInfo', self.getSeatingChartInfo())
+        h1=Msg.Edit_the_student_grid
+        div
+            span=Msg.Number_of_rows
+            input(
+                name='rows',
+                value=(self.getRows() || 0),
+                class='validate[min[' + self.getMinRows() + ', max[99]]]',
+                data-min-value=self.getMinRows()
+            )
+        div
+            span=Msg.Number_of_columns
+            input(
+                name='columns',
+                value=(self.getColumns() || 0),
+                class='validate[min[' + self.getMinColumns() + ', max[99]]]',
+                data-min-value=self.getMinColumns()
+            )
+        div
+            BUTTON(type="submit").blue-gradient-btn=Msg.Save.toUpperCase()
+
+
+
