@@ -1,0 +1,13 @@
+user = self.getUser()
+.loader-container
+    .loader
+    +UserProfileTopBar(self, 'details')
+    .summary-view
+        #top-summary-panel
+            #avatar-photo-conainer
+                .img-container
+                    +PersonImg(user, 256)
+                    .grades-container
+            #student-info-panel
+                h1.display-name=user.getDisplayName() || user.getFullName()
+                .status=self.getStatusText()

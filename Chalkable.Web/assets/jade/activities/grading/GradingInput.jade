@@ -1,0 +1,22 @@
++ActionForm('announcement', 'updateAnnouncementGradeFromGrid').grading-form
+    +Hidden('comment', self.getComment())(
+        data-comment = self.getComment()
+    ).comment-value
+    +Hidden('id', self.getId())
+    +Hidden('announcementid', self.getAnnouncementId())
+    +Hidden('studentid', self.getStudentId())
+    input(value=self.getModel().getNormalValue(), name="gradevalue", data-grade-value=self.getGradeValue(),).grade-autocomplete
+    .grading-input-popup.chlk-pop-up-container.popup-bottom
+        .pop-up-triangle.big
+        if self.isAbleDropStudentScore()
+            +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), addCallBack = true).with-value.dropped-checkbox
+        else
+            +Hidden('dropped', self.isDropped())
+        +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), addCallBack = true).with-value
+        +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), addCallBack = true).with-value
+        if self.isAbleExemptStudentScore()
+            +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), addCallBack = true).with-value.exempt-checkbox
+        else
+            +Hidden('isexempt', self.isExempt())
+        +Hidden('isabsent', self.isAbsent())
+        +LabeledCheckbox(Msg.Fill, 'fill', false)(addCallBack = true).fill-grade
