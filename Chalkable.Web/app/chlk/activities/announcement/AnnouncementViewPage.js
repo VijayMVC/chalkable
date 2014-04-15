@@ -158,15 +158,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setGrade(row.find('.grade-input'));
             },
 
-            [[ria.dom.Dom, String, Boolean]],
-            function setItemState_(node, stateName, selectNext_){
-                var row = node.parent('.row');
-                var input = row.find('.grade-input');
-                input.setValue(stateName == 'isexempt' ? '' : input.getData('value'));
-                row.find('[name=' + stateName +']').setValue(true);
-                this.updateItem(node, selectNext_);
-            },
-
             [ria.mvc.DomEventBind('click', '.edit-answer-link, .edit-question-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             function editAnswerClick(node, event){
@@ -447,6 +438,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
+                var value = node.getValue();
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
@@ -575,6 +567,15 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+//            [ria.mvc.DomEventBind('change', '.undropped-checkbox')],
+//            [[ria.dom.Dom, ria.dom.Event, Object]],
+//            VOID, function unDroppedChange(node, even, options_){
+//                if(node.checked()){
+//                    var input = node.parent('.grading-input-popup').find('input[name="dropped"]');
+//                    input.setValue(parseInt(!node.checked()));
+//                }
+//            },
+
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
@@ -599,9 +600,25 @@ NAMESPACE('chlk.activities.announcement', function () {
                             if(allScores.length == 0) return;
                         }
                         input.setValue(value);
+                        this.changeGradingCheckBox_(input.parent('.row'), 'isexempt', false);
                         this.updateItem(input, selectNext);
                     }
                 }
+            },
+
+            [[ria.dom.Dom, String, Boolean, Boolean]],
+            function setItemState_(node, stateName, selectNext_){
+                var row = node.parent('.row');
+                var input = row.find('.grade-input');
+                input.setValue(stateName == 'isexempt' ? '' : input.getData('value'));
+                row.find('[name=' + stateName +']').setValue(true);
+                this.changeGradingCheckBox_(row, stateName, true);
+                this.updateItem(node, selectNext_);
+            },
+
+            [[ria.dom.Dom, String, Boolean]],
+            function changeGradingCheckBox_(rowItem, checkboxName, state){
+                rowItem.find('[name=' + checkboxName +']').setValue(state)
             },
 
             [ria.mvc.DomEventBind('submit', 'form.update-grade-form')],
