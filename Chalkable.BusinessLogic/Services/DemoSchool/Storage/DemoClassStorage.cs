@@ -5,6 +5,7 @@ using Chalkable.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
@@ -108,24 +109,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     filter3 = sl[2];
             }
 
-            //todo: ask about caller role id
+            if (query.CallerRoleId == 3)
+            {
+                classes = classes.Where(x => Storage.ClassPersonStorage.Exists(new ClassPersonQuery
+                {
+                    ClassId = x.Id,
+                    PersonId = query.CallerId
+                }));
+            }
 
-            //var roleId = Storage.SchoolPersonStorage.GetRoleId(personId, SchoolRef);
+            if (query.PersonId.HasValue)
+            {
 
-/*
+                var roleId = query.PersonId.HasValue
+                ? Storage.SchoolPersonStorage.GetRoleId(query.PersonId.Value, Storage.SchoolId)
+                : (int?)null;
 
-              public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int? CourseRef { get; set; }
-        public int? SchoolYearRef { get; set; }
-        public Guid? ChalkableDepartmentRef { get; set; }
-        public int? TeacherRef { get; set; }
-        public int GradeLevelRef { get; set; }
-        public int? RoomRef { get; set; }
-        public int? SchoolRef { get; set; }
+                if (roleId == CoreRoles.TEACHER_ROLE.Id)
+                    classes = classes.Where(x => x.TeacherRef == query.PersonId);
 
-      */
+                if (roleId == CoreRoles.STUDENT_ROLE.Id)
+                    classes = classes.Where(x => Storage.ClassPersonStorage.Exists(new ClassPersonQuery
+                    {
+                        ClassId = x.Id,
+                        PersonId = query.PersonId
+                    }));
+            }
+
             if (!string.IsNullOrEmpty(filter1))
                 classes = classes.Where(x => x.Name.Contains(filter1));
             if (!string.IsNullOrEmpty(filter2))
