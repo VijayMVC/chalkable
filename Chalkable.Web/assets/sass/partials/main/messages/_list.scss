@@ -175,6 +175,8 @@ BODY {
                           vertical-align: middle;
                           width: 57px;
                           padding: 0 19px;
+                          position: relative;
+                          z-index: 1;
                         }
                         >DIV.item {
                           display: table-cell;

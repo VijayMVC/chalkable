@@ -5,7 +5,10 @@
 
 .avatar-container{
 
-  overflow: hidden;
+  &:not(.no-overflow){
+    overflow: hidden;
+  }
+
   &.with-border{
     border-radius: 6px;
     border: 2px solid #888;

@@ -222,14 +222,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.addClass('with-grid-focus');
             },
 
-            [ria.mvc.DomEventBind('click', '.grade-triangle')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function gradeTriangleClick(node, event){
-                setTimeout(function(){
-                    node.parent('.row').find('.alerts-pop-up').show();
-                }, 10);
-            },
-
             [ria.mvc.DomEventBind('blur', '.disabled-grade')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeBlur(node, event){
@@ -242,9 +234,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var target = new ria.dom.Dom(event.target);
                 if(!target.hasClass('comment-grade') && !target.parent('.comment-grade').exists())
                     this.dom.find(('.small-pop-up:visible')).hide();
-                var popUp = new ria.dom.Dom('.alerts-pop-up:visible');
-                if(popUp.exists() && !target.isOrInside('.alerts-pop-up'))
-                    popUp.hide();
             },
 
             [[ria.dom.Dom, Boolean, Boolean]],

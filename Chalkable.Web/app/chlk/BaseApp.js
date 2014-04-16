@@ -147,21 +147,27 @@ NAMESPACE('chlk', function (){
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
                     if(!jQuery(this).data('wasClick')){
-                        var node = jQuery(this),
-                            tooltip = jQuery('#chlk-tooltip-item'),
-                            offset = node.offset(),
-                            showTooltip = true;
-                        var value = node.data('tooltip');
-                        var type = node.data('tooltip-type');
-                        if(type == "overflow"){
-                            showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
-                        }
-                        if(value && showTooltip){
-                            tooltip.show();
-                            tooltip.find('.tooltip-content').html(node.data('tooltip'));
-                            tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
-                                .css('top', offset.top - tooltip.height());
-                            e.stopPropagation();
+                        var target = jQuery(e.target),
+                            tooltip = jQuery('#chlk-tooltip-item');
+                        if(target.hasClass('no-tooltip') || target.parents('.no-tooltip')[0]){
+                            tooltip.hide();
+                            tooltip.find('.tooltip-content').html('');
+                        }else{
+                            var node = jQuery(this),
+                                offset = node.offset(),
+                                showTooltip = true;
+                            var value = node.data('tooltip');
+                            var type = node.data('tooltip-type');
+                            if(type == "overflow"){
+                                showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
+                            }
+                            if(value && showTooltip){
+                                tooltip.show();
+                                tooltip.find('.tooltip-content').html(node.data('tooltip'));
+                                tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
+                                    .css('top', offset.top - tooltip.height());
+                                e.stopPropagation();
+                            }
                         }
                     }
 

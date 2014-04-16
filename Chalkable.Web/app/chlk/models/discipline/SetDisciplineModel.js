@@ -33,7 +33,7 @@ NAMESPACE('chlk.models.discipline', function(){
                    id: this.getId() && this.getId().valueOf(),
                    classid: this.getClassId() && this.getClassId().valueOf(),
                    studentid: this.getStudentId() && this.getStudentId().valueOf(),
-                   date: this.getDate().getDate(),
+                   date: this.getDate().toStandardFormat(),
                    description: this.getDescription(),
                    time: this.getTime(),
                    infractionsids: this.getDisciplineTypeIds()

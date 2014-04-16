@@ -19,4 +19,4 @@
         else
             +Hidden('isexempt', self.isExempt())
         +Hidden('isabsent', self.isAbsent())
-        +LabeledCheckbox(Msg.Fill, 'fill', false)(addCallBack = true).fill-grade
+        +LabeledCheckbox(Msg.Fill, 'fill', false)(addCallBack = true, containerClass = "fill-grade-container").fill-grade
