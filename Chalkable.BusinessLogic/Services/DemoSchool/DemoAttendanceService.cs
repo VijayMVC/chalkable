@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 });
             }
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            //ConnectorLocator.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
+            Storage.StiAttendanceStorage.SetSectionAttendance(sy.Id, date, classId, sa);
         }
 
         public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)

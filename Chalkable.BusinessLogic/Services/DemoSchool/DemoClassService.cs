@@ -170,6 +170,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.ClassPersonStorage.Add(classPersons);
         }
 
+        public void EditStudents(IList<ClassPerson> classPersons)
+        {
+            throw new NotImplementedException();
+        }
+
         public ClassDetails DeleteStudent(int classId, int personId)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -207,6 +212,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
 
             Storage.MarkingPeriodClassStorage.Delete(markingPeriodClasses);
+        }
+
+        public IList<Person> GetStudents(int classId, bool? isEnrolled = null)
+        {
+            IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            {
+                ClassId = classId,
+                CallerId = Context.UserLocalId,
+                CallerRoleId = Context.Role.Id,
+                Count = int.MaxValue,
+                RoleId = CoreRoles.STUDENT_ROLE.Id
+            });
+            if (isEnrolled.HasValue)
+            {
+                var cp = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled });
+                res = res.Where(x => cp.Any(y => y.PersonRef == x.Id)).ToList();
+            }
+            return res;
         }
 
         public IList<Person> GetStudents(int classId)
