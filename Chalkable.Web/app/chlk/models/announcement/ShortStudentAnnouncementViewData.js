@@ -135,11 +135,11 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Boolean, function isEmptyGrade(){
                 return !this.getGradeValue() &&
-                        !this.isDropped() &&
-                        !this.isExempt() &&
-                        !this.isLate() &&
-                        !this.isAbsent() &&
-                        !this.isIncomplete()
+                    !this.isDropped() &&
+                    !this.isExempt() &&
+                    !this.isLate() &&
+                    !this.isAbsent() &&
+                    !this.isIncomplete()
             }
         ]);
 });

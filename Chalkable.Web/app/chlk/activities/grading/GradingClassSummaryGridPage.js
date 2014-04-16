@@ -707,7 +707,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 });
             },
 
-            [ria.mvc.DomEventBind('click', '.fill-grade')],
+            [ria.mvc.DomEventBind('click', '.fill-grade-container')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function fillGradeClick(node, event){
                 var activeCell = node.parent('.active-cell');
