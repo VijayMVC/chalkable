@@ -37,5 +37,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new System.NotImplementedException();
         }
+
+        public IList<ClassStandard> GetAll(int? classId)
+        {
+            var items = data.Select(x => x.Value);
+            if (classId.HasValue)
+                items = items.Where(x => x.ClassRef == classId);
+            return items.ToList();
+        }
     }
 }
