@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -9,42 +10,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     {
         public DemoGradingPeriodStorage(DemoStorage storage) : base(storage)
         {
-        }
-
-        public IList<GradingPeriodDetails> GetGradingPeriodDetails(int schoolYearId, int? markingPeriodId)
-        {
-            var gradingPeriods =
-                data.Where(x => x.Value.SchoolYearRef == schoolYearId && x.Value.MarkingPeriodRef == markingPeriodId).Select(x => x.Value)
-                    .ToList();
-
-            return GetGradingPeriodDetailsList(gradingPeriods);
-        }
-
-        private IList<GradingPeriodDetails> GetGradingPeriodDetailsList(IEnumerable<GradingPeriod> gradingPeriods)
-        {
-            var gpDetailsList = new List<GradingPeriodDetails>();
-
-            foreach (var gp in gradingPeriods)
-            {
-                var gpDetails = new GradingPeriodDetails
-                {
-                    AllowGradePosting = gp.AllowGradePosting,
-                    Code = gp.Code,
-                    Description = gp.Description,
-                    EndDate = gp.EndDate,
-                    EndTime = gp.EndTime,
-                    Id = gp.Id,
-                    MarkingPeriodRef = gp.MarkingPeriodRef,
-                    Name = gp.Name,
-                    SchoolYearRef = gp.SchoolYearRef,
-                    SchoolAnnouncement = gp.SchoolAnnouncement,
-                    StartDate = gp.StartDate
-                };
-
-                gpDetails.MarkingPeriod = Storage.MarkingPeriodStorage.GetById(gpDetails.MarkingPeriodRef);
-                gpDetailsList.Add(gpDetails);
-            }
-            return gpDetailsList;
         }
 
         public void Add(IList<GradingPeriod> gradingPeriods)
@@ -62,14 +27,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 data[gradingPeriod.Id] = gradingPeriod;
             }
-        }
-
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime tillDate)
-        {
-            var gradingPeriods =
-                data.Where(x => x.Value.SchoolYearRef == schoolYearId && x.Value.EndDate <= tillDate).Select(x => x.Value)
-                    .ToList();
-            return GetGradingPeriodDetailsList(gradingPeriods).First();
         }
 
         public override void Setup()
@@ -92,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     StartDate = new DateTime(currentYear, 1, 21),
                     EndDate = new DateTime(currentYear, 3, 30),
                     EndTime = new DateTime(currentYear, 3, 30, 23, 59, 0),
-                    SchoolYearRef = 12
+                    SchoolYearRef = 1
                 },
                 new GradingPeriod
                 {
@@ -106,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     StartDate = new DateTime(currentYear, 3, 30),
                     EndDate = new DateTime(currentYear, 5, 30),
                     EndTime = new DateTime(currentYear, 5, 30, 23, 59, 0),
-                    SchoolYearRef = 12
+                    SchoolYearRef = 1
                 },
                 new GradingPeriod
                 {
@@ -120,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     StartDate = new DateTime(currentYear, 6, 30),
                     EndDate = new DateTime(currentYear, 8, 30),
                     EndTime = new DateTime(currentYear, 8, 30, 23, 59, 0),
-                    SchoolYearRef = 12
+                    SchoolYearRef = 1
                 },
                 new GradingPeriod
                 {
@@ -134,11 +91,51 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     StartDate = new DateTime(currentYear, 8, 30),
                     EndDate = new DateTime(currentYear, 10, 30),
                     EndTime = new DateTime(currentYear, 10, 30, 23, 59, 0),
-                    SchoolYearRef = 12
+                    SchoolYearRef = 1
                 }
             };
 
             Add(gpList);
+        }
+
+
+        private IList<GradingPeriodDetails> Convert(IEnumerable<GradingPeriod> gps)
+        {
+            return gps.Select(gp => new GradingPeriodDetails
+            {
+                AllowGradePosting = gp.AllowGradePosting,
+                Code = gp.Code,
+                Description = gp.Description,
+                EndDate = gp.EndDate,
+                EndTime = gp.EndTime,
+                Id = gp.Id,
+                MarkingPeriodRef = gp.MarkingPeriodRef,
+                Name = gp.Name,
+                SchoolYearRef = gp.SchoolYearRef,
+                StartDate = gp.StartDate,
+                SchoolAnnouncement = gp.SchoolAnnouncement,
+                MarkingPeriod = Storage.MarkingPeriodStorage.GetById(gp.MarkingPeriodRef)
+            }).ToList();
+        } 
+
+        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(GradingPeriodQuery query)
+        {
+
+            var gps = data.Select(x => x.Value);
+
+            if (query.GradingPeriodId.HasValue)
+                gps = gps.Where(x => x.Id == query.GradingPeriodId);
+            if (query.MarkingPeriodId.HasValue)
+                gps = gps.Where(x => x.MarkingPeriodRef == query.MarkingPeriodId);
+            if (query.SchoolYearId.HasValue)
+                gps = gps.Where(x => x.SchoolYearRef == query.SchoolYearId);
+            if (query.FromDate.HasValue)
+                gps = gps.Where(x => x.StartDate <= query.FromDate);
+            if (query.ToDate.HasValue)
+                gps = gps.Where(x => x.EndDate >= query.ToDate);
+
+
+            return Convert(gps.ToList());
         }
     }
 }

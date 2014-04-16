@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     ChalkableDepartmentRef = null,
                     TeacherRef = 1195,
                     SchoolRef = 1,
-                    SchoolYearRef = 12
+                    SchoolYearRef = 1
                 },
                 new Class
                 {
@@ -68,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     ChalkableDepartmentRef = null,
                     TeacherRef = 1195,
                     SchoolRef = 1,
-                    SchoolYearRef = 12
+                    SchoolYearRef = 1
                 }
             };
 
@@ -172,9 +172,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
-        public List<Class> GetAll(int teacherRef)
+        public List<Class> GetAll(int? teacherRef)
         {
-            return GetClassesComplex(new ClassQuery()).Classes.Where(x => x.TeacherRef == teacherRef).Select(x => (Class) x).ToList();
+            var classes = GetClassesComplex(new ClassQuery()).Classes;
+
+            if (teacherRef.HasValue)
+                classes = classes.Where(x => x.TeacherRef == teacherRef).ToList();
+            return classes.Where(x => x.TeacherRef == teacherRef).Select(x => (Class)x).ToList();
         }
 
         public bool Exists(List<int> gradeLevelIds, int teacherId)

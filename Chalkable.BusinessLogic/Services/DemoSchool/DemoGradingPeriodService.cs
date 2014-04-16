@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.DataAccess;
@@ -15,34 +16,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null)
         {
-            return Storage.GradingPeriodStorage.GetGradingPeriodDetails(schoolYearId, markingPeriodId);
+            return Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
+            {
+                SchoolYearId = schoolYearId,
+                MarkingPeriodId = markingPeriodId
+            });
         }
 
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime tillDate)
+        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
         {
-            return Storage.GradingPeriodStorage.GetGradingPeriodDetails(schoolYearId, tillDate);
+            var grPeriods = Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
+            {
+                FromDate = date,
+                ToDate = date,
+                SchoolYearId = schoolYearId
+            });
+            return grPeriods.FirstOrDefault();
         }
 
         public GradingPeriodDetails GetGradingPeriodById(int id)
         {
-            var gp = Storage.GradingPeriodStorage.GetById(id);
-            var gpDetails = new GradingPeriodDetails
-            {
-                AllowGradePosting = gp.AllowGradePosting,
-                Code = gp.Code,
-                Description = gp.Description,
-                EndDate = gp.EndDate,
-                EndTime = gp.EndTime,
-                Id = gp.Id,
-                MarkingPeriodRef = gp.MarkingPeriodRef,
-                Name = gp.Name,
-                SchoolYearRef = gp.SchoolYearRef,
-                StartDate = gp.StartDate,
-                SchoolAnnouncement = gp.SchoolAnnouncement,
-                MarkingPeriod = Storage.MarkingPeriodStorage.GetById(gp.MarkingPeriodRef)
-            };
 
-            return gpDetails;
+            return Storage.GradingPeriodStorage
+                   .GetGradingPeriodsDetails(new GradingPeriodQuery
+                   {
+                       GradingPeriodId = id
+                   }).First();
+
+           
         }
 
         public void Add(IList<GradingPeriod> gradingPeriods)

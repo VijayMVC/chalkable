@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.Add(GetNextFreeId(), new Date
                 {
                     Day = day,
-                    SchoolYearRef = 12,
+                    SchoolYearRef = 1,
                     SchoolRef = 1,
                     IsSchoolDay = day.DayOfWeek != DayOfWeek.Thursday && day.DayOfWeek != DayOfWeek.Friday,
                     DayTypeRef = typeRef

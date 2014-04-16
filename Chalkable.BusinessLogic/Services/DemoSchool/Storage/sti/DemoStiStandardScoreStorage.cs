@@ -17,7 +17,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public Gradebook Calculate(int classId, int gradingPeriodId)
         {
-            throw new NotImplementedException();
+            return new Gradebook()
+            {
+                SectionId = classId,
+                Activities = new List<Activity>(),
+                Options = new ClassroomOption(),
+                Scores = new List<Score>(),
+                StudentAverages = new List<StudentAverages>()
+            };
         }
 
         public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType, int gradingPeriodId, int? standardId)

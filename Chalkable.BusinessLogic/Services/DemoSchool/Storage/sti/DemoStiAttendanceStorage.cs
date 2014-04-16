@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             throw new NotImplementedException();
         }
 
-        public void SetSectionAttendance(int id, DateTime date, int classId, SectionAttendance sa)
+        public void SetSectionAttendance(int schoolYearId, DateTime date, int classId, SectionAttendance sa)
         {
             throw new NotImplementedException();
         }

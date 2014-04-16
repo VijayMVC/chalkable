@@ -66,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Id = 1,
                 Name = "M",
                 Number = 0,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new DayType
@@ -74,7 +74,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Id = 2,
                 Name = "TTh",
                 Number = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new DayType
@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Id = 3,
                 Name = "WF",
                 Number = 2,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
         }
     }

@@ -71,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 659,
                 Order = 1,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new Period
@@ -81,7 +81,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 707,
                 Order = 2,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new Period
@@ -91,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 740,
                 Order = 3,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new Period
@@ -101,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 783,
                 Order = 4,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
             	
             Add(new Period
@@ -111,7 +111,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 826,
                 Order = 5,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new Period
@@ -121,7 +121,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 869,
                 Order = 6,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new Period
@@ -131,7 +131,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 912,
                 Order = 7,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new Period
@@ -141,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 955,
                 Order = 8,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
 
             Add(new Period
@@ -151,7 +151,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 EndTime = 1000,
                 Order = 9,
                 SchoolRef = 1,
-                SchoolYearRef = 12
+                SchoolYearRef = 1
             });
         }
     }

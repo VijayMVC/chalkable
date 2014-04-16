@@ -101,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartDate = new DateTime(currentYear, 1, 21),
                 EndDate = new DateTime(currentYear, 5, 30),
                 SchoolRef = 1,
-                SchoolYearRef = 12,
+                SchoolYearRef = 1,
                 WeekDays = 62
             });
 
@@ -113,7 +113,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartDate = new DateTime(currentYear, 6, 30),
                 EndDate = new DateTime(currentYear, 10, 30),
                 SchoolRef = 1,
-                SchoolYearRef = 12,
+                SchoolYearRef = 1,
                 WeekDays = 62
             });
         }

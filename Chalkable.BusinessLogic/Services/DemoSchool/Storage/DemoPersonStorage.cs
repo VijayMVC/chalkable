@@ -26,14 +26,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 			   )
 			or(@callerRoleId = 6 and (Id = @callerId or RoleRef = 3))
 		)))	
-
-			@gradeLevelIds is null 
-			or (vwPerson.RoleRef = 3 and exists(select * from StudentSchoolYear ssy
-												join @glIds gl on gl.id = ssy.GradeLevelRef
-												where ssy.StudentRef = vwPerson.Id))
-			or (vwPerson.RoleRef = 2 and exists
-				(select * from Class where Class.TeacherRef = vwPerson.Id and Class.GradeLevelRef in (select id from @glIds))
-			)
 		)*/
 
             var persons = data.Select(x => x.Value);
