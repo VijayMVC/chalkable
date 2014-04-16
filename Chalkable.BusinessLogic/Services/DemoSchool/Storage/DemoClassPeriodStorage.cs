@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -47,86 +48,60 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (classPeriodQuery.DateTypeId.HasValue)
                 classPeriods = classPeriods.Where(x => x.DayTypeRef == classPeriodQuery.DateTypeId);
 
+
+
+
             classPeriods = classPeriods.Where(x => classPeriodQuery.ClassIds.Contains(x.ClassRef));
 
-           // if (classPeriodQuery.SchoolYearId.HasValue)
-             //   classPeriods = classPeriods.Where( x => x.)
-
-            return classPeriods.ToList();
-
-
-            /*var conds = new AndQueryCondition();
-            var classPeriodTName = "ClassPeriod";
-            if (query.PeriodId.HasValue)
-                conds.Add(ClassPeriod.PERIOD_REF_FIELD, query.PeriodId);
-            if (query.DateTypeId.HasValue)
-                conds.Add(ClassPeriod.DAY_TYPE_REF_FIELD, query.DateTypeId);
-
-            FilterBySchool(conds).BuildSqlWhere(dbQuery, classPeriodTName);
-
-            if (query.RoomId.HasValue)
+            if (classPeriodQuery.Time.HasValue)
             {
-                conds.Add("roomId", query.RoomId);
-                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}] = @roomId)"
-                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "Class", Class.ROOM_REF_FIELD, Class.ID_FIELD);
-            }
-            
-            if (query.StudentId.HasValue)
-            {
-                dbQuery.Parameters.Add("studentId", query.StudentId);
-                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}]  = @studentId)"
-                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "ClassPerson", ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD);
-            }
-            if (query.TeacherId.HasValue)
-            {
-                dbQuery.Parameters.Add("teacherId", query.TeacherId);
-                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}] = @teacherId)"
-                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "Class", Class.TEACHER_REF_FIELD, Class.ID_FIELD);
+                classPeriods =
+                    classPeriods.Where(
+                        x =>
+                            x.Period.StartTime <= classPeriodQuery.Time.Value &&
+                            x.Period.EndTime >= classPeriodQuery.Time.Value);
             }
 
-            if (query.SchoolYearId.HasValue)
+            if (classPeriodQuery.SchoolYearId.HasValue)
             {
-                dbQuery.Parameters.Add(Period.SCHOOL_YEAR_REF, query.SchoolYearId);
-                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] = @{1}", "Period", Period.SCHOOL_YEAR_REF);
+                classPeriods =
+                    classPeriods.Where(
+                        x =>
+                            x.Period.SchoolYearRef == classPeriodQuery.SchoolYearId);
             }
 
-            if (query.Time.HasValue)
+            if (classPeriodQuery.RoomId.HasValue)
             {
-                dbQuery.Parameters.Add("time", query.Time);
-                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] <= @time and [{0}].[{2}] >= @time"
-                    , "Period", Period.START_TIME_FIELD, Period.END_TIME_FIELD);
+                var enumerable = classPeriods as IList<ClassPeriod> ?? classPeriods.ToList();
+                var clsIds =
+                    enumerable.Select(x => Storage.ClassStorage.GetById(x.ClassRef))
+                        .Where(x => x.RoomRef == classPeriodQuery.RoomId)
+                        .Select(x => x.Id);
+
+                classPeriods = enumerable.Where(x => clsIds.Contains(x.ClassRef));
             }
-            if (query.ClassIds != null && query.ClassIds.Count > 0)
+
+
+            if (classPeriodQuery.StudentId.HasValue)
             {
-                var classIdsParams = new List<string>();
-                for (int i = 0; i < query.ClassIds.Count; i++)
+                var csp = Storage.ClassPersonStorage.GetClassPerson(new ClassPersonQuery
                 {
-                    var classIdParam = "@classId_" + i;
-                    classIdsParams.Add(classIdParam);
-                    dbQuery.Parameters.Add(classIdParam, query.ClassIds[i]);
-                }
-                dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in ({2})", classPeriodTName
-                    , ClassPeriod.CLASS_REF_FIELD,  classIdsParams.JoinString(","));
+                    PersonId = classPeriodQuery.StudentId
+                });
+
+                classPeriods = classPeriods.Where(x => x.ClassRef == csp.ClassRef);
             }
-            return dbQuery;*/
 
-            //
-            //if (classPeriodQuery.SchoolYearId.HasValue)
-            //    classPeriods = classPeriods.Where(x => x.)
+            if (classPeriodQuery.TeacherId.HasValue)
+            {
+                var csp = Storage.ClassStorage.GetClassesComplex(new ClassQuery
+                {
+                    PersonId = classPeriodQuery.TeacherId
+                }).Classes.Select(x => x.Id);
 
-            //
-            //if (classPeriodQuery.Time.HasValue)
-            //    classPeriods = classPeriods.Where(x => x.)
-            //
-            //if (classPeriodQuery.TeacherId.HasValue)
-            //  classPeriods = classPeriods.Where(x => x.)
-            //if (classPeriodQuery.StudentId.HasValue)
-            //  classPeriods = classPeriods.Where(x => x.)
-            //if (classPeriodQuery.RoomId.HasValue)
-            //  classPeriods = classPeriods.Where(x => x.)
-            //if (classPeriodQuery.MarkingPeriodId.HasValue)
-            //  classPeriods = classPeriods.Where(x => x.)
-
+                classPeriods = classPeriods.Where(x => csp.Contains(x.ClassRef));
+            }
+            return classPeriods.ToList();
         }
 
         public IList<Class> GetAvailableClasses(int periodId)
