@@ -44,8 +44,10 @@ namespace Chalkable.BusinessLogic.Services.School
                                             bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (!string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value) && value.Trim() != "")
                 exempt = false;
+            else value = null;
+            
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
