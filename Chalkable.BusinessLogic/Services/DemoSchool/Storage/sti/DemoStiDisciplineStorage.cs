@@ -27,7 +27,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public void Update(DisciplineReferral stiDiscipline)
         {
-            throw new NotImplementedException();
+            if (data.ContainsKey(stiDiscipline.Id))
+                data[stiDiscipline.Id] = stiDiscipline;
         }
 
         public override void Setup()

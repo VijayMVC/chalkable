@@ -17,27 +17,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public PersonQueryResult GetPersons(PersonQuery query)
         {
-            //public int? CallerId { get; set; }
-            //public int CallerRoleId { get; set; }
-
-            /*	and (@callerRoleId = 1 or (vwPerson.SchoolRef = @schoolId and (@callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8 or @callerRoleId = 2 or @callerRoleId = 9
-			or(@callerRoleId = 3 and (Id = @callerId   or (RoleRef = 2 or RoleRef = 5 or RoleRef = 7 or RoleRef = 8 
-											   or (RoleRef = 3 and exists(select * from StudentSchoolYear where StudentRef = vwPerson.Id and GradeLevelRef = @callerGradeLevelId))))
-			   )
-			or(@callerRoleId = 6 and (Id = @callerId or RoleRef = 3))
-		)))	
-		)*/
-
             var persons = data.Select(x => x.Value);
-
-
-            /*if(@callerRoleId = 3)
-begin
-	-- todo : needs currentSchoolYearId for getting right grade level 
-	set @callerGradeLevelId = (select  top 1 GradeLevelRef from StudentSchoolYear where StudentRef = @callerId)
-end*/
-
-            //var callerGradeLevelId = Storage.StudentSchoolYearStorage.GetAll(
 
             if (query.PersonId.HasValue)
                 persons = persons.Where(x => x.Id == query.PersonId);
@@ -83,8 +63,25 @@ end*/
                 }
             }
 
-            //caller role id
+            if (query.CallerRoleId == CoreRoles.STUDENT_ROLE.Id)
+            {
+                var studentGradeLevelId =
+                    Storage.StudentSchoolYearStorage.GetAll(query.CallerId.Value).Select(x => x.GradeLevelRef);
+                persons = persons.Where(x => x.Id == query.CallerId ||
+                                             (x.RoleRef == CoreRoles.TEACHER_ROLE.Id ||
+                                              x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id ||
+                                              x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id ||
+                                              x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id)
+                                             ||
+                                             (x.RoleRef == CoreRoles.STUDENT_ROLE.Id &&
+                                              Storage.StudentSchoolYearStorage.Exists(
+                                                  new List<int>(studentGradeLevelId), x.Id)));
+            }
 
+            if (query.CallerRoleId == CoreRoles.CHECKIN_ROLE.Id)
+            {
+                persons = persons.Where(x => x.Id == query.CallerId || x.RoleRef == CoreRoles.STUDENT_ROLE.Id);
+            }
             if (!string.IsNullOrEmpty(query.Filter))
                 persons = persons.Where(x => x.FullName.Contains(query.Filter));
             
@@ -97,9 +94,6 @@ end*/
 
             if (query.RoleIds != null)
                 persons = persons.Where(x => query.RoleIds.Contains(x.RoleRef));
-
-
-            
 
             persons = persons.Skip(query.Start).Take(query.Count).ToList();
 
