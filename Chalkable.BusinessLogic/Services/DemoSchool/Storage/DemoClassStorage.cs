@@ -168,13 +168,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Classes = classDetailsList,
                 Query = query,
-                SourceCount = classes.ToList().Count
+                SourceCount = data.Count
             };
         }
 
-        public List<Class> GetAll(AndQueryCondition andQueryCondition)
+        public List<Class> GetAll(int teacherRef)
         {
-            throw new NotImplementedException();
+            return GetClassesComplex(new ClassQuery()).Classes.Where(x => x.TeacherRef == teacherRef).Select(x => (Class) x).ToList();
+        }
+
+        public bool Exists(List<int> gradeLevelIds, int teacherId)
+        {
+            return GetAll(teacherId).Count(x => gradeLevelIds.Contains(x.GradeLevelRef)) > 0;
         }
     }
 }

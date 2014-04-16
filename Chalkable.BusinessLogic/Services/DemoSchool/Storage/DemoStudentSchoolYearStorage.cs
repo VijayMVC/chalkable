@@ -33,5 +33,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new System.NotImplementedException();
         }
+
+
+        public bool Exists(IList<int> gradeLevelIds, int personId)
+        {
+            return GetAll(personId).Count(x => gradeLevelIds.Contains(x.GradeLevelRef)) > 0;
+        }
     }
 }

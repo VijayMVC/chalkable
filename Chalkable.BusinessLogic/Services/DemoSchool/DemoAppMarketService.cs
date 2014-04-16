@@ -118,7 +118,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             descriptionBuilder.AppendFormat(APP_INSTALLED_FOR_FMT, app.Name);
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
             {
-                var teacherClasses = Storage.ClassStorage.GetAll(new AndQueryCondition { { Class.TEACHER_REF_FIELD, schoolPersonId } });
+                var teacherClasses = Storage.ClassStorage.GetAll(schoolPersonId);
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
 
                 var appInstallAcClasses = new List<ApplicationInstallActionClasses>();

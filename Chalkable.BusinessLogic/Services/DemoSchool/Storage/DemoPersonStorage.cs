@@ -17,35 +17,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public PersonQueryResult GetPersons(PersonQuery query)
         {
-            //public int? TeacherId { get; set; }
-            //public int? PersonId { get; set; }
             //public int? CallerId { get; set; }
             //public int CallerRoleId { get; set; }
 
-            var persons = data.Select(x => x.Value);
+            /*	and (@callerRoleId = 1 or (vwPerson.SchoolRef = @schoolId and (@callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8 or @callerRoleId = 2 or @callerRoleId = 9
+			or(@callerRoleId = 3 and (Id = @callerId   or (RoleRef = 2 or RoleRef = 5 or RoleRef = 7 or RoleRef = 8 
+											   or (RoleRef = 3 and exists(select * from StudentSchoolYear where StudentRef = vwPerson.Id and GradeLevelRef = @callerGradeLevelId))))
+			   )
+			or(@callerRoleId = 6 and (Id = @callerId or RoleRef = 3))
+		)))	
 
-
-            if (query.ClassId.HasValue)
-            {
-                var personIds = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
-                {
-                    ClassId = query.ClassId
-                }).Select(x => x.PersonRef).ToList();
-
-                persons = persons.Where(x => personIds.Contains(x.Id));
-            }
-
-            if (query.RoleId.HasValue)
-                persons = persons.Where(x => x.RoleRef == query.RoleId);
-
-            if (!string.IsNullOrEmpty(query.Filter))
-                persons = persons.Where(x => x.FullName.Contains(query.Filter));
-            
-            if (query.PersonId.HasValue)
-                persons = persons.Where(x => x.Id == query.PersonId);
-
-            
-            /*(
 			@gradeLevelIds is null 
 			or (vwPerson.RoleRef = 3 and exists(select * from StudentSchoolYear ssy
 												join @glIds gl on gl.id = ssy.GradeLevelRef
@@ -55,19 +36,78 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 			)
 		)*/
 
+            var persons = data.Select(x => x.Value);
 
 
+            /*if(@callerRoleId = 3)
+begin
+	-- todo : needs currentSchoolYearId for getting right grade level 
+	set @callerGradeLevelId = (select  top 1 GradeLevelRef from StudentSchoolYear where StudentRef = @callerId)
+end*/
 
-            //
-            //if (query.GradeLevelIds != null)
-            //    persons = persons.Where(x => query.GradeLevelIds.Contains(x.));
+            //var callerGradeLevelId = Storage.StudentSchoolYearStorage.GetAll(
+
+            if (query.PersonId.HasValue)
+                persons = persons.Where(x => x.Id == query.PersonId);
+
+            if (query.RoleId.HasValue)
+                persons = persons.Where(x => x.RoleRef == query.RoleId);
+
+            if (!string.IsNullOrWhiteSpace(query.StartFrom))
+                persons = persons.Where(x => String.Compare(x.LastName, query.StartFrom, true, CultureInfo.InvariantCulture) >= 0);
+
+            if (query.TeacherId.HasValue)
+            {
+                var classPersons = Storage.ClassPersonStorage.GetAll();
+                var classes = classPersons.Select(x => Storage.ClassStorage.GetById(x.ClassRef)).ToList();
+                var clsIds = classes.Where(x => x.TeacherRef == query.TeacherId).Select(x => x.Id).ToList();
+                var personIds = classPersons.Where(x => clsIds.Contains(x.ClassRef)).Select(x => x.PersonRef).ToList();
+                persons = persons.Where(x => personIds.Contains(x.Id));
+            }
+
+            if (query.ClassId.HasValue)
+            {
+                if (query.RoleId.HasValue)
+                {
+                    if (query.RoleId == CoreRoles.TEACHER_ROLE.Id)
+                    {
+                        var teacherRef = Storage.ClassStorage.GetClassesComplex(new ClassQuery
+                        {
+                            ClassId = query.ClassId
+                        }).Classes.Select(x => x.TeacherRef).First();
+
+                        persons = persons.Where(x => x.Id == teacherRef);
+                    }
+
+                    if (query.RoleId == CoreRoles.STUDENT_ROLE.Id)
+                    {
+                        var personIds = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
+                        {
+                            ClassId = query.ClassId
+                        }).Select(x => x.PersonRef).ToList();
+
+                        persons = persons.Where(x => personIds.Contains(x.Id));
+                    }
+                }
+            }
+
+            //caller role id
+
+            if (!string.IsNullOrEmpty(query.Filter))
+                persons = persons.Where(x => x.FullName.Contains(query.Filter));
+            
+            if (query.GradeLevelIds != null)
+            {
+                var gradeLevelIds = Storage.GradeLevelStorage.GetAll().Select(x => x.Id).ToList();
+                persons = persons.Where(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id && Storage.StudentSchoolYearStorage.Exists(gradeLevelIds, x.Id) || 
+                    x.RoleRef == CoreRoles.TEACHER_ROLE.Id && Storage.ClassStorage.Exists(gradeLevelIds, x.Id));
+            }
 
             if (query.RoleIds != null)
                 persons = persons.Where(x => query.RoleIds.Contains(x.RoleRef));
 
 
-            if (!string.IsNullOrWhiteSpace(query.StartFrom))
-                persons = persons.Where(x => String.Compare(x.LastName, query.StartFrom, true, CultureInfo.InvariantCulture) >= 0);
+            
 
             persons = persons.Skip(query.Start).Take(query.Count).ToList();
 

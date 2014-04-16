@@ -76,6 +76,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public UserContext Context { get; private set; }
 
+
+        public int SchoolId { get; private set; }
+
        
 
         public void UpdateContext(UserContext context)
@@ -178,6 +181,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PeriodStorage.Setup();
             ClassPeriodStorage.Setup();
             StiDisciplineStorage.Setup();
+
+
+            SchoolId = 1;
 
             SchoolStorage.Add(new Data.School.Model.School
             {
