@@ -250,7 +250,7 @@ namespace Chalkable.BusinessLogic.Services.School
             , IList<AnnouncementComplex> anns, IList<Person> students)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
-                                                           && x.Date <= gradingPeriod.EndDate).ToList();
+                                                           && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
             var annsDetails = new List<AnnouncementDetails>();
             foreach (var activity in activities)
             {

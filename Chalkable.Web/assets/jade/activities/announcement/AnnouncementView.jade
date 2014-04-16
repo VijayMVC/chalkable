@@ -64,7 +64,7 @@ mixin AnnouncementTooltip()
                     userRole = self.getUserRole()
                 )
             .grading-part
-                if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
+                if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
                     +Hidden('maxScore', self.getMaxScore())#max-score
                     +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
                         autoGradeApps = self.getAutoGradeApps(),
