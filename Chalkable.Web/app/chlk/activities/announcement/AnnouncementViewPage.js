@@ -32,6 +32,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             Number, 'maxScore',
             ArrayOf(chlk.models.announcement.StudentAnnouncement), 'studentAnnouncements',
             Boolean, 'gradable',
+            Boolean, 'ableDropStudentScore',
+            Boolean, 'ableToExempt',
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
@@ -128,6 +130,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     });
                     if(notEquals)
                         return false;
+
+                    if(!value || (this.getSuggestedValues(value).length == 0 && !parseFloat(value)))
+                        value = '';
+
                     this.setItemValue(value, node, true);
                     return true;
                 }
@@ -268,9 +274,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     },1);
                 }
             },
-
-            Boolean, 'ableDropStudentScore',
-            Boolean, 'ableToExempt',
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
@@ -589,7 +592,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 input.removeClass('able-fill-all');
                 value = value || '';
                 switch(value.toLowerCase()){
-                    case Msg.Dropped.toLowerCase(): this.setItemState_(input, 'dropped', selectNext); break;
+                    case Msg.Dropped.toLowerCase(): {
+                        this.setItemState_(input, 'dropped', selectNext);
+                    }
                     case Msg.Incomplete.toLowerCase(): this.setItemState_(input, 'isincomplete', selectNext); break;
                     case Msg.Late.toLowerCase(): this.setItemState_(input, 'islate', selectNext); break;
                     case Msg.Exempt.toLowerCase(): this.setItemState_(input, 'isexempt', selectNext); break;
