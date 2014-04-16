@@ -62,14 +62,12 @@ NAMESPACE('chlk.activities.grading', function () {
                         }
                     }
                 }.bind(this, node, event), 10);
-
-
                 return true;
             },
 
             [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function gradeKeyUp(node, event){
+            Boolean, function gradeKeyUp(node, event){
                 var suggestions = [], cell = node.parent('.active-cell');
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
@@ -122,6 +120,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                     this.updateDropDown(suggestions, node);
                 }
+                return true;
             },
 
             function setValue(node, isComment_){
@@ -248,6 +247,12 @@ NAMESPACE('chlk.activities.grading', function () {
                             }
                     }
                 });
+            },
+
+            [ria.mvc.DomEventBind('submit', '.grade-container form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function submitForm(node, event){
+                return !node.find('input[name="gradevalue"]').hasClass('error');
             }
         ]);
 });
