@@ -224,7 +224,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (stAvgs.Count > 0)
                 gradeBook.Avg = (int)stAvgs.Average(x => x.Score != null ? x.Score.Value : 0);
 
-            gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
+            gradeBook.Announcements = PrepareAnnouncementDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
             if (!stiGradeBook.Options.IncludeWithdrawnStudents)
             {
                 gradeBook.Students = new List<Person>();
@@ -238,11 +238,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return gradeBook;
         }
 
-        private IList<AnnouncementDetails> PrepareAnnounceemntDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
+        private IList<AnnouncementDetails> PrepareAnnouncementDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
             , IList<AnnouncementComplex> anns, IList<Person> students)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
-                                                           && x.Date <= gradingPeriod.EndDate).ToList();
+                                                          && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
             var annsDetails = new List<AnnouncementDetails>();
             foreach (var activity in activities)
             {
