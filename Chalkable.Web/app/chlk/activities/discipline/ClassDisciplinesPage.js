@@ -18,6 +18,7 @@ NAMESPACE('chlk.activities.discipline', function(){
                 this._submitTimeout = null;
                 this._TRIANGLE_CLASS = 'triangle';
                 this._DOWN_CLASS = 'down';
+                this._isAblePostDiscipline = true;
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.disciplines-individual')],
@@ -47,8 +48,15 @@ NAMESPACE('chlk.activities.discipline', function(){
             },
 
             [[Object]],
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                this._isAblePostDiscipline = model.isAblePostDiscipline();
+            },
+
+            [[Object]],
             OVERRIDE, VOID, function onRefresh_(model){
                 BASE(model);
+                this._isAblePostDiscipline = model.isAblePostDiscipline();
                 new ria.dom.Dom('.change-discipline').on('scroll', function(node, event){
                     node.parent().setCss('background-position', '0 ' +  (-jQuery(node.valueOf()).scrollTop()) + 'px')
                 });
@@ -100,16 +108,18 @@ NAMESPACE('chlk.activities.discipline', function(){
 
             [[ria.dom.Dom, Boolean]],
             VOID, function updateDiscipline_(node){
-                var form = node.parent('form');
-                var time = getDate().getTime();
-                form.find('.save-time').setValue(time);
-                form.previous()
-                    .setAttr('time', time)
-                    .removeClass('saved')
-                    .addClass('saving');
-                var disciplinesNode = form.find('input[name="disciplinesJson"]');
-                disciplinesNode.setValue(JSON.stringify(this.getDisciplines_(form)));
-                form.trigger('submit');
+                if(this._isAblePostDiscipline){
+                    var form = node.parent('form');
+                    var time = getDate().getTime();
+                    form.find('.save-time').setValue(time);
+                    form.previous()
+                        .setAttr('time', time)
+                        .removeClass('saved')
+                        .addClass('saving');
+                    var disciplinesNode = form.find('input[name="disciplinesJson"]');
+                    disciplinesNode.setValue(JSON.stringify(this.getDisciplines_(form)));
+                    form.trigger('submit');
+                }
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.discipline.DisciplineTpl, chlk.activities.lib.DontShowLoader())],
@@ -118,6 +128,12 @@ NAMESPACE('chlk.activities.discipline', function(){
                 if(row.exists()){
                     row.removeClass('saving').addClass('saved');
                 }
+            },
+
+            [ria.mvc.DomEventBind('submit', 'form.discipline-form-block')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function submitForm(node, event){
+                return this._isAblePostDiscipline;
             }
     ]);
 });

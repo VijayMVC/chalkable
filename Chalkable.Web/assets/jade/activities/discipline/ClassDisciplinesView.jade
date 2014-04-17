@@ -70,9 +70,9 @@ redirectData = self.getRedirectData()
                                                 discType.disciplineTypeData.getName(),
                                                     discType.disciplineTypeData.getId().valueOf().toString(),
                                                     discType.selected,
-                                                    false).change-discipline
+                                                    !self.isAblePostDiscipline()).change-discipline
                             .discipline-desciption-container
                                 .title Occurrence Note:
                                 .notes-area-container
-                                    textarea(name='description').notes-area.change-discipline=item.getDescription()
+                                    textarea(name='description', readonly=self.isAblePostDiscipline() ? undefined : "readonly").notes-area.change-discipline=item.getDescription()
 
