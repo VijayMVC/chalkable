@@ -1,26 +1,27 @@
-li(data-title = self.description, data-value = self.id.valueOf() + '|' + self.searchType.valueOf(), style="background: white")
+li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|' + self.getSearchType().valueOf(), style="background: white")
     div.site-search
-        if self.searchType == 0
-            -cntrl = self.roleId == 2 ? "teachers" : self.roleId == 3 ? "students" : "admins";
-            +ActionLink(cntrl, 'info', self.id).left.image-container.white.shadow
+        if self.getSearchType() == 0
+            -roleId = self.getPersonInfo() && self.getPersonInfo().getRole() ? self.getPersonInfo().getRole().getId() : 0
+            -cntrl = roleId == 2 ? "teachers" : roleId == 3 ? "students" : "admins";
+            +ActionLink(cntrl, 'info', self.getId()).left.image-container.white.shadow
                 div.site-search-person
-                    +PersonImg(self, 47)
-                    div.title= self.description
-        else if self.searchType == 4
-            +ActionLink('class', 'details', self.id).left.image-container.white.shadow
+                    +PersonImg(self.getPersonInfo(), 47)
+                    div.title= self.getDescription()
+        else if self.getSearchType() == 4
+            +ActionLink('class', 'details', self.getId()).left.image-container.white.shadow
                 div.site-search-class
                     .img-wrapper
-                        +ClassImg(self.course, 45, 80).avatar
-                    div.title= self.description
-        else if self.searchType == 3
-            +ActionLink('announcement', 'view', self.announcementId).left.image-container.white.shadow
+                        +ClassImg(self.getCourse(), 45, 80).avatar
+                    div.title= self.getDescription()
+        else if self.getSearchType() == 3
+            +ActionLink('announcement', 'view', self.getAnnouncementId()).left.image-container.white.shadow
                 div.site-search-attachment
                     .image
-                    div.title= self.description
-        else if self.searchType == 2
-            +ActionLink('announcement', 'view', self.id).left.image-container.white.shadow
+                    div.title= self.getDescription()
+        else if self.getSearchType() == 2
+            +ActionLink('announcement', 'view', self.getId()).left.image-container.white.shadow
                 div.site-search-announcement
                     div(class="announcement-type-" + self.getChalkableAnnouncementType()).icon.blue.image
-                    div.title= self.description
+                    div.title= self.getDescription()
         else
-            div= self.description
+            div= self.getDescription()

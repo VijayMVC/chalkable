@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using Chalkable.StiConnector.Connectors.Model;
 using Newtonsoft.Json;
 
 namespace Chalkable.StiConnector.Connectors
@@ -13,33 +14,23 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public byte[] Download<T>(string url, T obj, HttpMethod httpMethod = null)
+        public byte[] ProgressReport(ProgressReportParams ps)
         {
+            var url = string.Format(BaseUrl + "reports/progress");
+            var res = Download(url, ps);
+            return res;
+        }
 
-            httpMethod = httpMethod ?? HttpMethod.Post;
-            var client = InitWebClient();
-            
-            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
-            var stream = new MemoryStream();
-            try
-            {
-                var serializer = new JsonSerializer();
-                var writer = new StreamWriter(stream);
-                serializer.Serialize(writer, obj);
-                writer.Flush();
-                var data = client.UploadData(url, httpMethod.Method, stream.ToArray());
-                return data;
-            }
-            catch (WebException ex)
-            {
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                var msg = reader.ReadToEnd();
-                throw new Exception(msg);
-            }
-            finally
-            {
-                stream.Dispose();
-            }
+        public byte[] GradebookReport(GradebookReportParams ps)
+        {
+            var url = string.Format(BaseUrl + "reports/gradebook");
+            return Download(url, ps);
+        }
+
+        public byte[] WorksheetReport(WorksheetReportParams ps)
+        {
+            var url = string.Format(BaseUrl + "reports/worksheet");
+            return Download(url, ps);
         }
 
         public class ProgressReportParams
@@ -49,13 +40,6 @@ namespace Chalkable.StiConnector.Connectors
             public int IdToPrint { get; set; }
             public int SectionId { get; set; }
             public int[] StudentIds { get; set; }
-        }
-
-        public byte[] ProgressReport(ProgressReportParams ps)
-        {
-            var url = string.Format(BaseUrl + "reports/progress");
-            var res = Download(url, ps);
-            return res;
         }
     }
 }
