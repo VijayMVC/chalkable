@@ -87,5 +87,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             throw new NotImplementedException();
         }
+
+        public bool Exists(Guid applicationRef, int personId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

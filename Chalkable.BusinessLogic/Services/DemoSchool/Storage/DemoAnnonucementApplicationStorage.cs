@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -44,33 +47,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive)
         {
-            /*      var sql = string.Format(@"select AnnouncementApplication.* from 
-                                        AnnouncementApplication
-                                        join Announcement on AnnouncementApplication.AnnouncementRef = Announcement.Id
-                                        where 
-	                                        exists(select * from ApplicationInstall where ApplicationRef = AnnouncementApplication.ApplicationRef and PersonRef = @{0})
-	                                        and
-	                                        (Announcement.PersonRef = @{0}
-	                                        or exists(select * from ClassPerson where PersonRef = @{0} and ClassRef = Announcement.ClassRef)
-	                                        )
-                                        ", "personId");
-            if (onlyActive)
-                sql += " and AnnouncementApplication.Active = 1";
-            var ps = new Dictionary<string, object> {{"personId", personId}};
-            return ReadMany<AnnouncementApplication>(new DbQuery (sql, ps));
-            
-            var announcementApplications = data.Select(x => x.Value).ToList();
+            var announcementApplications = data.Select(x => x.Value);
 
-            var announcements = new List<Announcement>();
-            foreach (var announcementApplication in announcementApplications)
+            announcementApplications = announcementApplications.Where(x =>
             {
-                announcements.Add(Storage.AnnouncementStorage.GetById(announcementApplication.AnnouncementRef));
-            }
-            */
-            return new List<AnnouncementApplication>();
 
+                var announcement =
+                    Storage.AnnouncementStorage.GetById(
+                        x.AnnouncementRef);
 
-            //var aa = data.Where(x => x.Value.)
+                return Storage.ApplicationInstallStorage.Exists(x.ApplicationRef, personId)
+                       && announcement.PersonRef == personId
+                       || Storage.ClassPersonStorage.Exists(new ClassPersonQuery
+                       {
+                           ClassId = announcement.ClassRef,
+                           PersonId = personId
+                       });
+            });
+            return announcementApplications.ToList();
         }
 
         public override void Setup()

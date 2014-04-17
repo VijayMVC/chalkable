@@ -86,8 +86,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
-            return new List<AnnouncementAttachment>();
-            //return Storage.AnnouncementAttachmentStorage.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
+            return Storage.AnnouncementAttachmentStorage.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
         }
 
         public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
