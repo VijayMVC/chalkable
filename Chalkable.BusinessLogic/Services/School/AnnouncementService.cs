@@ -170,8 +170,9 @@ namespace Chalkable.BusinessLogic.Services.School
             IList<ClassDetails> classes = new List<ClassDetails>();
             using (var uow = Read())
             {
-                if(CreateAnnoucnementDataAccess(uow).Exists(activities.Select(x=>x.Id).ToList()))
-                    throw new ChalkableException("Announcement with such activityId already exists");
+                var ids = activities.Select(x => x.Id).ToList();
+                if(CreateAnnoucnementDataAccess(uow).Exists(ids))
+                    throw new ChalkableException(string.Format("Announcement with such activity Ids {0} already exists", ids.Select(x => x.ToString()).JoinString() ));
                     
             }
             classes = ServiceLocator.ClassService.GetClasses(null, null, Context.UserLocalId);
