@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.discipline',function(){
             [ria.templates.ModelPropertyBind],
             String, 'filter',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ablePostDiscipline',
+
             String, function getTotalText(){
                 var disciplines = this.getDisciplines();
                 var res = disciplines.length + ' ' + Msg.Student(disciplines.length != 1);

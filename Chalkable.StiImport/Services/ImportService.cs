@@ -17,8 +17,9 @@ namespace Chalkable.StiImport.Services
         private const string DEF_USER_PASS = "Qwerty1@";
         private const string DESCR_WORK = "Work";
         private const string DESCR_CELL = "cell";
-        private const string IMG = "image";
         private const string UNKNOWN_ROOM_NUMBER = "Unknown number";
+        private IList<int> importedSchoolIds = new List<int>();
+        private ConnectorLocator connectorLocator;
 
         protected IServiceLocatorMaster ServiceLocatorMaster { get; set; }
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
@@ -35,10 +36,16 @@ namespace Chalkable.StiImport.Services
 
         public void Import()
         {
+            importedSchoolIds.Clear();
+            connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             DownloadSyncData();
             ProcessInsert();
             ProcessUpdate();
             ProcessDelete();
+            foreach (var importedSchoolId in importedSchoolIds)
+            {
+                connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            }
         }
         
         public void DownloadSyncData()
@@ -46,7 +53,7 @@ namespace Chalkable.StiImport.Services
             context = new SyncContext();
             var currentVersions = ServiceLocatorSchool.SyncService.GetVersions();
             context.SetCurrentVersions(currentVersions);
-            //We need all user to match with persons
+            //Tables we need all data
             context.TablesToSync[typeof (User).Name] = null;
             context.TablesToSync[typeof(Student).Name] = null;
             context.TablesToSync[typeof(Staff).Name] = null;
@@ -57,12 +64,11 @@ namespace Chalkable.StiImport.Services
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();
             
-            var cl = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             foreach (var table in toSync)
             {
                 var type = context.Types[table.Key];
                 Debug.WriteLine("Start downloading " + table.Key);
-                var res = cl.SyncConnector.GetDiff(type, table.Value);
+                var res = connectorLocator.SyncConnector.GetDiff(type, table.Value);
                 Debug.WriteLine("Table downloaded: " + table.Key);
                 results.Add((SyncResultBase)res);
             }
