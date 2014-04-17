@@ -20,13 +20,10 @@ NAMESPACE('chlk.templates.search', function () {
             String, 'description',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.people.ShortUserInfo, 'personInfo',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'searchType',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'roleId',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'gender',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.course.Course, 'course',

@@ -5,6 +5,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
@@ -39,9 +40,7 @@ namespace Chalkable.Web.Models
 
     public class PersonSearchViewData : SearchViewData
     {
-        public int RoleId { get; set; }
-        public string Role { get; set; }
-        public string Gender { get; set; }
+        public ShortPersonViewData ShortPersonInfo { get; set; }
         
         public static SearchViewData Create(Person person)
         {
@@ -49,10 +48,8 @@ namespace Chalkable.Web.Models
             {
                 Description = person.FullName,
                 Id = person.Id.ToString(),
-                //RoleId = person.RoleRef,
-                //Role = CoreRoles.GetById(person.RoleRef).LoweredName,
-                Gender = person.Gender,
                 SearchType = (int)SearchTypeEnum.Persons,
+                ShortPersonInfo = ShortPersonViewData.Create(person)
             };
         }
     }
