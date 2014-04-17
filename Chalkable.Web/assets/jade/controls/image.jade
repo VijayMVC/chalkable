@@ -11,28 +11,13 @@ mixin PersonImg(person, size, noAlerts)
         div(style=p ? "overflow: visible" : "").avatar-wrapper
             if p
                 top = self.getAlertsAttributes(person)
-                div(class=(size < 128 ? "small" : "")).alerts-icon.no-tooltip
-                    div(style="top: " + top).alerts-pop-up
-                        .alerts-triangle-container
-                            .left-item
-                            .alerts-triangle
-                        .alerts-container
-                            if person.isAllowedInetAccess()
-                                .alert-item.internet
-                                    SPAN.left-item
-                                    SPAN=Msg.Alert_Internet_access_text
-                            if person.isWithMedicalAlert()
-                                .alert-item.medical
-                                    SPAN.left-item
-                                    SPAN=Msg.Alert_Medical_text
-                            if person.getSpecialInstructions()
-                                .alert-item.special
-                                    SPAN.left-item
-                                    SPAN=Msg.Alert_Special_text
-                            if person.getSpedStatus()
-                                .alert-item.sped
-                                    SPAN.left-item
-                                    SPAN=Msg.Alert_Sped_text
+                div(
+                    class=(size < 128 ? "small" : ""),
+                    data-allowedinetaccess = person.isAllowedInetAccess(),
+                    data-withmedicalalert = person.isWithMedicalAlert(),
+                    data-specialinstructions = person.getSpecialInstructions(),
+                    data-spedstatus = person.getSpedStatus()
+                ).alerts-icon.no-tooltip
             div(attributes)(class="person-avatar-" + (isWoman ? "w" : "m") + "-" + size, style = "background-image: url(" + src + ")")
 
 mixin ClassImg(course, width, height)
