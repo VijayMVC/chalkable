@@ -158,7 +158,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Guid? developerId = null;
                 if (!string.IsNullOrEmpty(user.District.DemoPrefix))
                 {
-                    var developer = new DeveloperDataAccess(uow).GetDeveloper(su.SchoolRef);
+                    var developer = new DeveloperDataAccess(uow).GetDeveloper(Guid.Parse(user.District.DemoPrefix));
                     if (developer != null) developerId = developer.Id;
                 }
                 user = SaveSisToken(user, uow, ref iNowConnector);

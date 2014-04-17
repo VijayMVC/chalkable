@@ -60,8 +60,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var atts = Storage.AnnouncementAttachmentStorage.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
 
-            if (CoreRoles.TEACHER_ROLE != Context.Role)
-                ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
+            
+            ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
 
             if (ann.State != AnnouncementState.Draft)
             {

@@ -133,6 +133,7 @@
     <Compile Include="Services\DemoSchool\Master\DemoApplicationUploadService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
     <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
+    <Compile Include="Services\DemoSchool\DemoStorageBlobService.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientDataStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoInfractionStorage.cs" />
