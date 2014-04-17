@@ -9,7 +9,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoStorageBlobService :  DemoSchoolService, IStorageBlobService
+    public class DemoStorageBlobService : DemoSchoolServiceBase, IStorageBlobService
     {
         public DemoStorageBlobService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
         {
@@ -18,44 +18,36 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public PaginatedList<BlobContainerInfo> GetBlobContainers(int start = 0, int count = int.MaxValue)
         {
             throw new NotImplementedException();
-            var res = BlobContainerInfo.Create(new BlobHelper().GetBlobContainers());
-            return new PaginatedList<BlobContainerInfo>(res, start/count, count);
         }
 
         public PaginatedList<BlobInfo> GetBlobs(string containeraddress, string keyPrefix = null, int start = 0, int count = int.MaxValue)
         {
             throw new NotImplementedException();
-            return new BlobHelper().GetBlobs(containeraddress, keyPrefix, start, count).Transform(BlobInfo.Create);
         }
 
         public IList<IListBlobItem> GetBlobNames(string containeraddress, string keyPrefix = null)
         {
             throw new NotImplementedException();
-            return new BlobHelper().GetBlobNames(containeraddress, keyPrefix);
         }
 
         public void AddBlob(string containerAddress, string key, byte[] content)
         {
-            throw new NotImplementedException();
-            new BlobHelper().AddBlob(containerAddress, key, content);
+            Storage.BlobStorage.Add(containerAddress, key, content);
         }
 
         public byte[] GetBlobContent(string containerAddress, string key)
         {
-            throw new NotImplementedException();
-            return new BlobHelper().GetBlobContent(containerAddress, key);
+            return Storage.BlobStorage.GetBlob(containerAddress, key);
         }
 
         public void DeleteBlob(string blobAddress)
         {
             throw new NotImplementedException();
-            new BlobHelper().DeleteBlob(new Uri(blobAddress));
         }
 
-        public void DeleteBlob(string containderName, string key)
+        public void DeleteBlob(string containerName, string key)
         {
-            throw new NotImplementedException();
-            new BlobHelper().DeleteBlob(containderName, key);
+            Storage.BlobStorage.DeleteBlob(containerName, key);
         }
     }
 }
