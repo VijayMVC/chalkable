@@ -51,7 +51,7 @@ $red-color: #842727;
   }
 
   .z-10{
-    z-index: 10;
+    //z-index: 10;
 
     &.selected{
       z-index: 11;
@@ -454,38 +454,6 @@ $red-color: #842727;
 
             .comment-icon{
               display: none;
-            }
-          }
-        }
-
-        .alerts-pop-up{
-          display: none;
-          top: 72px;
-          right: -45px;
-          width: 166px;
-          padding: 0;
-
-          .alerts-pop-up-content{
-            overflow: hidden;
-            @include border-radius(6px);
-
-            .alerts-pop-up-item{
-              font: normal 12px Georgia italic;
-              color: #7c7c7c;
-              text-shadow: 0 1px 0 white;
-              padding: 10px 14px 14px;
-
-              &:not(:last-child) {
-                border-bottom: 1px solid #d7d7d7;
-              }
-
-              &.disabled{
-                color: #ababab;
-              }
-
-              &:hover{
-                background: #fafafa;
-              }
             }
           }
         }

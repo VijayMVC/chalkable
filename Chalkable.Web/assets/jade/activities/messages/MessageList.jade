@@ -40,7 +40,7 @@
                             .chk
                                 +Checkbox(item.getId().valueOf().toString(), false)(name='ch')
                             .av
-                                .avatar-container
+                                .avatar-container.no-overflow
                                     if self.isInbox()
                                         +PersonImg(item.getSender(), 47)
                                     else

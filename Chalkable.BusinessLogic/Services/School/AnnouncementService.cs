@@ -133,6 +133,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null)
         {
+            if (Context.Role != CoreRoles.TEACHER_ROLE && Context.Role != CoreRoles.STUDENT_ROLE)
+                throw new NotImplementedException();
+            //TODO: Looks shity....think about this method and whole approach
             if (activities == null)
                 activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count);
             else
@@ -145,21 +148,13 @@ namespace Chalkable.BusinessLogic.Services.School
                     activities = activities.Where(x => x.Date <= query.ToDate).ToList();
                 activities = activities.Skip(query.Start).Take(query.Count).ToList();
             }
-            if (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE )
-            {
-                query.SisActivitiesIds = activities.Select(x => x.Id).ToList();
-                query.OwnedOnly = false;
-                query.GradedOnly = false;
-                query.StarredOnly = false;
-                query.Start = 0;
-                query.Count = int.MaxValue;
-            }
-            var anns = GetAnnouncements(query).Announcements;
-            if (anns.Count < activities.Count && (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.STUDENT_ROLE))
+            var q = new AnnouncementsQuery { SisActivitiesIds = activities.Select(x => x.Id).ToList() };
+            var anns = GetAnnouncements(q).Announcements;
+            if (anns.Count < activities.Count)
             {
                 var noInDbActivities = activities.Where(x => anns.All(y => y.SisActivityId != x.Id)).ToList();
                 AddActivitiesToChalkable(noInDbActivities);
-                anns = GetAnnouncements(query).Announcements;
+                anns = GetAnnouncements(q).Announcements;
             }
             return MapActivitiesToAnnouncements(anns, activities);
         }
@@ -170,8 +165,9 @@ namespace Chalkable.BusinessLogic.Services.School
             IList<ClassDetails> classes = new List<ClassDetails>();
             using (var uow = Read())
             {
-                if(CreateAnnoucnementDataAccess(uow).Exists(activities.Select(x=>x.Id).ToList()))
-                    throw new ChalkableException("Announcement with such activityId already exists");
+                var ids = activities.Select(x => x.Id).ToList();
+                if(CreateAnnoucnementDataAccess(uow).Exists(ids))
+                    throw new ChalkableException(string.Format("Announcement with such activity Ids {0} already exists", ids.Select(x => x.ToString()).JoinString() ));
                     
             }
             classes = ServiceLocator.ClassService.GetClasses(null, null, Context.UserLocalId);
