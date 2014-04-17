@@ -42,12 +42,9 @@ NAMESPACE('chlk.controllers', function (){
 
 
         Array, function getClassForAttendances_(){
-            var classes = this.classService.getClassesForTopBar(true);
             var canGetAttForClasses = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE)
                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN);
-            if(!canGetAttForClasses)
-                return classes.filter(function(item){return item.getName() == 'All';});
-            return classes
+            return this.classService.getClassesForTopBar(true, false, !canGetAttForClasses);
         },
 
         [chlk.controllers.SidebarButton('attendance')],

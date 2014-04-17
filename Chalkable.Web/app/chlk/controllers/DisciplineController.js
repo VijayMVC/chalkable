@@ -106,10 +106,16 @@ NAMESPACE('chlk.controllers', function(){
                     .attach(this.validateResponse_())
                     .then(function(data){
                         date_ = date_ || new chlk.models.common.ChlkDate(getDate());
-                        var classes = this.classService.getClassesForTopBar(false);
+                        var classes = this.getClassForDisciplines_();
                         var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
                         return new ria.async.DeferredData(new chlk.models.discipline.PaginatedListByDateModel(classBarData, data, date_));
                     }, this);
+            },
+
+            Array, function getClassForDisciplines_(){
+                var canGetAttForClasses = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE)
+                    || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN);
+                return this.classService.getClassesForTopBar(false, false, !canGetAttForClasses);
             },
 
             [[chlk.models.discipline.DisciplineInputModel]],
