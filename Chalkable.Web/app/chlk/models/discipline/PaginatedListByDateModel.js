@@ -5,7 +5,7 @@ REQUIRE('chlk.models.classes.ClassesForTopBar');
 NAMESPACE('chlk.models.discipline', function(){
     "use strict";
 
-    /** @class chlk.templates.discipline.PaginatedListByDateModel*/
+    /** @class chlk.model.discipline.PaginatedListByDateModel*/
 
     CLASS('PaginatedListByDateModel', EXTENDS(chlk.models.common.PageWithClasses), [
 
