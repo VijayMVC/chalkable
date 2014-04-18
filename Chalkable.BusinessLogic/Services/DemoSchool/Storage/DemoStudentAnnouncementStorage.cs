@@ -47,28 +47,35 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<StudentAnnouncementDetails> GetAll(int announcementId)
         {
-            return data.Where(x => x.Value.AnnouncementId == announcementId).Select(x => new StudentAnnouncementDetails
+            return data.Where(x => x.Value.AnnouncementId == announcementId).Select(x =>
             {
-                AnnouncementId = x.Value.AnnouncementId,
-                AbsenceCategory = x.Value.AbsenceCategory,
-                Absent = x.Value.Absent,
-                ActivityId = x.Value.ActivityId,
-                AlphaGradeId = x.Value.AlphaGradeId,
-                AlternateScoreId = x.Value.AlternateScoreId,
-                Comment = x.Value.Comment,
-                Dropped = x.Value.Dropped,
-                Exempt = x.Value.Exempt,
-                ExtraCredit = x.Value.ExtraCredit,
-                Incomplete = x.Value.Incomplete,
-                //ClassId = x.Value.c
-                Late = x.Value.Late,
-                NumericScore = x.Value.NumericScore,
-                OverMaxScore = x.Value.OverMaxScore,
-                ScoreValue = x.Value.ScoreValue,
-                Student = Storage.PersonStorage.GetById(x.Value.StudentId),
-                StudentId = x.Value.StudentId,
-                Withdrawn = x.Value.Withdrawn
+                var ann = Storage.AnnouncementStorage.GetById(announcementId);
+                var classId = ann.ClassRef.HasValue ? ann.ClassRef.Value : 0;
+                return new StudentAnnouncementDetails
+                {
+                    AnnouncementId = x.Value.AnnouncementId,
+                    AbsenceCategory = x.Value.AbsenceCategory,
+                    Absent = x.Value.Absent,
+                    ActivityId = x.Value.ActivityId,
+                    AlphaGradeId = x.Value.AlphaGradeId,
+                    AlternateScoreId = x.Value.AlternateScoreId,
+                    Comment = x.Value.Comment,
+                    Dropped = x.Value.Dropped,
+                    Exempt = x.Value.Exempt,
+                    ExtraCredit = x.Value.ExtraCredit,
+                    Incomplete = x.Value.Incomplete,
+                    ClassId = classId,
+                    Late = x.Value.Late,
+                    NumericScore = x.Value.NumericScore,
+                    OverMaxScore = x.Value.OverMaxScore,
+                    ScoreValue = x.Value.ScoreValue,
+                    Student = Storage.PersonStorage.GetById(x.Value.StudentId),
+                    StudentId = x.Value.StudentId,
+                    Withdrawn = x.Value.Withdrawn
+                };
+
             }).ToList();
+
         }
 
         public override void Setup()

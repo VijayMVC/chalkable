@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
         {
-            return Storage.ApplicationInstallStorage.GetAll(personId);
+            return Storage.ApplicationInstallStorage.GetInstalled(personId);
         }
 
         public IList<ApplicationInstall> ListInstalledForClass(int classId)
