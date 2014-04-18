@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -112,11 +113,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private AnnouncementDetails ConvertToDetails(AnnouncementComplex announcement)
         {
-
-            /*  
-                AnnouncementApplications = new List<AnnouncementApplication>()*/
-
-
             var announcementAttachments = Storage.AnnouncementAttachmentStorage.GetAll(announcement.Id);
             var announcementReminders = Storage.AnnouncementReminderStorage.GetList(announcement.Id, announcement.PersonRef);
 
@@ -168,7 +164,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 AttachmentsCount = announcement.AttachmentsCount,
                 StudentAnnouncements = Storage.StudentAnnouncementStorage.GetAll(announcement.Id),
                 VisibleForStudent = announcement.VisibleForStudent,
-                Order = announcement.Order
+                Order = announcement.Order,
+                ClassAnnouncementTypeName = announcement.ClassAnnouncementTypeName,
+                ChalkableAnnouncementType = announcement.ChalkableAnnouncementType,
+                ClassName = announcement.ClassName,
+                GradeLevelId = announcement.GradeLevelId,
             };
         }
 
@@ -176,15 +176,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
 
         
-             /*   public string ClassAnnouncementTypeName { get; set; }
-        public int? ChalkableAnnouncementType { get; set; }
-        public string PersonName { get; set; }
-        public string Gender { get; set; }
-
-        public string ClassName { get; set; }
-        public int? GradeLevelId { get; set; }
-        
-        
+             /* 
         public int QnACount { get; set; }
         public int StudentsCount { get; set; }
         public int AttachmentsCount { get; set; }
@@ -200,8 +192,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
              */
 
             var annId = GetNextFreeId();
+
+
+            var person = Storage.PersonStorage.GetById(userId);
+            var gradeLevelRef = classId.HasValue ? Storage.ClassStorage.GetById(classId.Value).GradeLevelRef : (int?)null;
             var announcement = new AnnouncementComplex
             {
+                ClassAnnouncementTypeName = classAnnouncementTypeId.HasValue ? Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name : "",
+                ChalkableAnnouncementType = classAnnouncementTypeId,
+                PersonName = person.FullName,
+                ClassName = classId.HasValue ? Storage.ClassStorage.GetById(classId.Value).Name : "",
+                GradeLevelId = gradeLevelRef,
+                Gender = person.Gender,
                 Id = annId,
                 SisActivityId = annId,
                 PersonRef = userId,
@@ -212,14 +214,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
+
                 Order = 0
             };
 
 
+            //todo: create admin announcements if it's admin
+
             var persons = Storage.PersonStorage.GetPersons(new PersonQuery
             {
                 ClassId = classId,
-                RoleId = Storage.Context.RoleId
+                RoleId = CoreRoles.STUDENT_ROLE.Id
             }).Persons.Select(x => x.Id);
 
 
@@ -399,7 +404,27 @@ select  1
 
         public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
         {
-            throw new NotImplementedException();
+
+            var classRefs = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
+            {
+                PersonId = userId
+            }).Select(x => x.ClassRef).ToList();
+
+
+            var gradeLevelRefs = Storage.StudentSchoolYearStorage.GetAll(userId).Select(x => x.GradeLevelRef).ToList();
+
+            var annRecipients =
+                Storage.AnnouncementRecipientStorage.GetAll()
+                    .Where(
+                        x =>
+                            x.ToAll || x.PersonRef == userId || x.RoleRef == roleId ||
+                            x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
+                    .Select(x => x.AnnouncementRef);
+
+            return
+                data.Where(x => x.Value.Id == announcementId && classRefs.Contains(x.Value.ClassRef.Value) || annRecipients.Contains(x.Value.Id))
+                    .Select(x => x.Value)
+                    .First();
         }
     }
 
@@ -415,8 +440,41 @@ select  1
         /*public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
 
-            /*
-             *  var parameters = new Dictionary<string, object>
+            Select 
+	                vwAnnouncement.*,
+	                cast((case vwAnnouncement.PersonRef when @personId then 1 else 0 end) as bit) as IsOwner,
+	                ard.PersonRef as RecipientDataPersonId,
+	                ard.Starred as Starred,
+	                ROW_NUMBER() OVER(ORDER BY vwAnnouncement.Created desc) as RowNumber,
+	                --@starredCount as StarredCount,
+	 	                @allCount as AllCount
+                from 
+	                vwAnnouncement	
+	                left join (select * from AnnouncementRecipientData where AnnouncementRecipientData.PersonRef = @personId) ard
+			                on vwAnnouncement.Id = ard.AnnouncementRef
+                where
+	                (@id is not null  or [State] = 1) and
+	                (@id is null or vwAnnouncement.Id = @id)
+	                and (@classId is null or ClassRef = @classId)
+	                and ((@allSchoolItems = 1 and @roleId = 2) or vwAnnouncement.PersonRef = @personId 
+		                or (ClassAnnouncementTypeRef is null 
+			                and exists(select AnnouncementRecipient.Id from AnnouncementRecipient
+						                where AnnouncementRef = vwAnnouncement.Id  and (ToAll = 1 or PersonRef = @personId 
+							                or (RoleRef = @roleId and (@roleId <> 2 or GradeLevelRef is null or GradeLevelRef in (select Id from @gradeLevelsT))))
+						                )
+			                )
+		                )			
+	                and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
+	                and (@staredOnly = 0 or Starred = 1)
+	                and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
+	                and (@fromDate is null or Expires >= @fromDate)
+	                and (@toDate is null or Expires <= @toDate)
+	                and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
+	                and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
+	
+                order by Created desc				
+                OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
+                             *  var parameters = new Dictionary<string, object>
                 {
                     {GRADED_ONLY_PARAM, query.GradedOnly},
                     {ALL_SCHOOL_ITEMS_PARAM, query.AllSchoolItems},
@@ -431,9 +489,12 @@ select  1
 
         public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
         {
-            //todo filter by role id
+            var announcementRecipients =
+                Storage.AnnouncementRecipientStorage.GetAll()
+                    .Where(x => x.ToAll || x.PersonRef == userId || x.RoleRef == roleId).Select(x => x.AnnouncementRef);
+
             return
-                data.Where(x => x.Value.Id == announcementId && x.Value.PersonRef == userId)
+                data.Where(x => x.Value.Id == announcementId && x.Value.PersonRef == userId || announcementRecipients.Contains(x.Value.Id))
                     .Select(x => x.Value)
                     .First();
         }

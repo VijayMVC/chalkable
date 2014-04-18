@@ -28,7 +28,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 PersonRef = Context.UserLocalId.Value,
                 Question = question,
                 QuestionTime = Context.NowSchoolTime,
-                State = AnnouncementQnAState.Asked
+                State = AnnouncementQnAState.Asked,
+                Asker = Storage.PersonStorage.GetById(Context.UserLocalId.Value),
+                Answerer = Storage.PersonStorage.GetById(ann.PersonRef)
             };
             Storage.AnnouncementQnAStorage.Add(annQnA);
             annQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery

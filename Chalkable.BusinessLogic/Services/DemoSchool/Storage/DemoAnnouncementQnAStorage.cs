@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(AnnouncementQnAComplex annQnA)
         {
+            annQnA.Id = GetNextFreeId();
             if (!data.ContainsKey(annQnA.Id))
                 data[annQnA.Id] = annQnA;
         }
