@@ -294,7 +294,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         if(value){
                             var text = node.getValue() ? node.getValue().trim() : '';
                             var parsed = parseInt(text,10);
-                            if(parsed){
+                            if(parsed || parsed == 0){
                                 node.removeClass('error');
                                 if(parsed != text){
                                     node.addClass('error');

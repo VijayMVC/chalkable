@@ -176,8 +176,7 @@ NAMESPACE('chlk.controllers', function (){
                     var announcement = this.getContext().getSession().get('announcement', {});
                     currentItem.setStudentId(model.getStudentId());
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
-                        if(item.getId() == currentItem.getId()){
-                            item.setStudentId(model.getStudentId());
+                        if(item.getStudentId() == currentItem.getStudentId()){
                             item.setGradeValue(currentItem.getGradeValue());
                             item.setNumericGradeValue(currentItem.getNumericGradeValue());
                             item.setAbsent(currentItem.isAbsent());

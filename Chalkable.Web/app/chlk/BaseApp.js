@@ -47,7 +47,9 @@ REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.grading.AlternateScore');
 REQUIRE('chlk.models.grading.AlphaGrade');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
+REQUIRE('chlk.models.people.ShortUserInfo');
 
+REQUIRE('chlk.templates.common.AlertsPopUpTpl');
 
 REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
@@ -184,6 +186,43 @@ NAMESPACE('chlk', function (){
                     var tooltip = jQuery('#chlk-tooltip-item');
                     tooltip.hide();
                     tooltip.find('.tooltip-content').html('');
+                });
+
+                jQuery(document).on('mouseover mousemove', '.alerts-icon', function(e){
+                    if(!jQuery(this).data('wasClick')){
+                        var tooltip = jQuery('.alerts-pop-up'),
+                            node = jQuery(this),
+                            offset = node.offset();
+                        var o = {
+                            isallowedinetaccess: !!node.data('allowedinetaccess'),
+                            hasmedicalalert: !!node.data('withmedicalalert'),
+                            specialinstructions: node.data('specialinstructions'),
+                            spedstatus: node.data('spedstatus')
+                        };
+                        var js = new ria.serialize.JsonSerializer();
+                        var model = js.deserialize(o, chlk.models.people.ShortUserInfo);
+                        var tpl = chlk.templates.common.AlertsPopUpTpl();
+                        tpl.assign(model);
+                        tooltip.html(tpl.render());
+                        tooltip.show();
+                        tooltip.css('left', offset.left + node.width() + 20)
+                            .css('top', offset.top - (tooltip.height() - node.height()) / 2);
+                        e.stopPropagation();
+                    }
+
+                });
+
+                jQuery(document).on('mouseleave click', '.alerts-icon', function(e){
+                    if(e.type == "click"){
+                        var node = jQuery(this);
+                        node.data('wasClick', true);
+                        setTimeout(function(){
+                            node.data('wasClick', null);
+                        }, 100)
+                    }
+                    var tooltip = jQuery('.alerts-pop-up');
+                    tooltip.hide();
+                    tooltip.html('');
                 });
 
                  jQuery(document).on('click', '.demo-role-button:not(.coming)', function(){

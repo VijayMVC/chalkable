@@ -99,6 +99,78 @@
   }
 }
 
+.alerts-pop-up{
+  display: none;
+  z-index: 99999999999;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0 22px;
+  width: 268px;
+  position: absolute;
+  @include box-shadow(0 0 2px gray);
+  @include border-radius(3px);
+
+  .alerts-triangle-container{
+    position: absolute;
+    left: -15px;
+    top: 0;
+    bottom: 0;
+
+    .left-item{
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .alerts-triangle{
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-right: 15px solid rgba(255,255,255,0.9);
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
+  .alert-item{
+    height: 61px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 38px;
+    font: bold 14px Arial;
+    color: #532f18;
+    background-position: 0 center;
+    background-repeat: no-repeat;
+
+    SPAN{
+      display: inline-block;
+      vertical-align: middle;
+
+      &.left-item{
+        height: 100%;
+      }
+    }
+
+    &:not(:last-child){
+      border-bottom: 1px solid #ebe6d9;
+    }
+
+    &.internet{
+      background-image: url(images/icons/internet-alert.png);
+    }
+
+    &.medical{
+      background-image: url(images/icons/medical-alert.png);
+    }
+
+    &.special{
+      background-image: url(images/icons/bubble-alert.png);
+    }
+
+    &.sped{
+      background-image: url(images/icons/graduating-cap-alert.png);
+    }
+  }
+}
+
 .avatar-wrapper {
   position: relative;
   z-index: 0;
@@ -119,89 +191,6 @@
       height: 27px;
       right: -13px;
       top: -12px;
-
-      .alerts-pop-up{
-        margin-top: 12px;
-      }
-    }
-
-    &:hover{
-      .alerts-pop-up{
-        display: block;
-      }
-    }
-
-    .alerts-pop-up{
-      margin-top: 17px;
-      display: none;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 0 22px;
-      width: 268px;
-      left: 54px;
-      position: absolute;
-      @include box-shadow(0 0 2px gray);
-      @include border-radius(3px);
-
-      .alerts-triangle-container{
-        position: absolute;
-        left: -15px;
-        top: 0;
-        bottom: 0;
-
-        .left-item{
-          height: 100%;
-          display: inline-block;
-          vertical-align: middle;
-        }
-
-        .alerts-triangle{
-          border-top: 12px solid transparent;
-          border-bottom: 12px solid transparent;
-          border-right: 15px solid rgba(255,255,255,0.9);
-          display: inline-block;
-          vertical-align: middle;
-        }
-      }
-
-      .alert-item{
-        height: 61px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-left: 38px;
-        font: bold 14px Arial;
-        color: #532f18;
-        background-position: 0 center;
-        background-repeat: no-repeat;
-
-        SPAN{
-          display: inline-block;
-          vertical-align: middle;
-
-          &.left-item{
-            height: 100%;
-          }
-        }
-
-        &:not(:last-child){
-          border-bottom: 1px solid #ebe6d9;
-        }
-
-        &.internet{
-          background-image: url(images/icons/internet-alert.png);
-        }
-
-        &.medical{
-          background-image: url(images/icons/medical-alert.png);
-        }
-
-        &.special{
-          background-image: url(images/icons/bubble-alert.png);
-        }
-
-        &.sped{
-          background-image: url(images/icons/graduating-cap-alert.png);
-        }
-      }
     }
   }
 }

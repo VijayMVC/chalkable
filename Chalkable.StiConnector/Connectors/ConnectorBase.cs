@@ -75,13 +75,13 @@ namespace Chalkable.StiConnector.Connectors
             }
         }
 
-        public TReturn Post<TReturn, TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null) 
+        public byte[] Download<TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null,
+                                     HttpMethod httpMethod = null)
         {
             httpMethod = httpMethod ?? HttpMethod.Post;
-            var client = InitWebClient();           
+            var client = InitWebClient();
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var stream = new MemoryStream();
-            MemoryStream stream2 = null;
             try
             {
                 client.QueryString = optionalParams ?? new NameValueCollection();
@@ -89,13 +89,7 @@ namespace Chalkable.StiConnector.Connectors
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
                 writer.Flush();
-                var data = client.UploadData(url, httpMethod.Method, stream.ToArray());
-                if (data != null && data.Length > 0)
-                {
-                    stream2 = new MemoryStream(data);
-                    return serializer.Deserialize<TReturn>(new JsonTextReader(new StreamReader(stream2)));
-                }
-                return default(TReturn);
+                return client.UploadData(url, httpMethod.Method, stream.ToArray());
             }
             catch (WebException ex)
             {
@@ -106,15 +100,28 @@ namespace Chalkable.StiConnector.Connectors
             finally
             {
                 stream.Dispose();
-                if(stream2 != null)
-                    stream2.Dispose();
             }
+        }
+
+        public TReturn Post<TReturn, TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
+        {
+            var data = Download(url, obj, optionalParams, httpMethod);
+            if (data != null && data.Length > 0)
+            {
+                using (var stream2 = new MemoryStream(data))
+                {
+                    var serializer = new JsonSerializer();
+                    return serializer.Deserialize<TReturn>(new JsonTextReader(new StreamReader(stream2)));
+                }
+            }
+            return default(TReturn);
         }
 
         public T Post<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
         {
             return Post<T, T>(url, obj, optionalParams, httpMethod);
         }
+
 
         public T PostWithFile<T>(string url, string fileName, byte[] fileContent, NameValueCollection parameters, HttpMethod method = null)
         {

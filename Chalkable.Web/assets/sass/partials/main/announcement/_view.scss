@@ -418,6 +418,10 @@ $red-color: #842727;
         border: 1px solid #BCBCBC;
         text-align: center;
         @include border-radius(3px);
+
+        &.error{
+          border: 1px solid red;
+        }
       }
 
       .letters{

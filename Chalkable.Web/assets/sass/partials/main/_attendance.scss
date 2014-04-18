@@ -1109,6 +1109,10 @@ BODY {
             display: block;
             z-index: 20;
           }
+          
+          .alerts-icon{
+            display: none;
+          }
         }
       }
     }
@@ -1215,6 +1219,10 @@ BODY {
   right: 0;
   z-index: 100;
   display: none;
+
+  .alerts-icon{
+    display: none;
+  }
 
   .people-container{
     min-height: 102px;

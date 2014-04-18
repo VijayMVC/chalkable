@@ -55,21 +55,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [grid.find('.row:eq(0)'), 0]);
             },
 
-            [[ria.dom.Dom]],
-            function updateStandardsInfo(node){
-                var parent = node.parent('.attachments-container');
-                var form = parent.previous('.row').find('form');
-                var standardIds = [];
-                var standardGrades = [];
-                parent.find('.standard-grade').forEach(function(item){
-                    standardIds.push(item.getData('id'));
-                    standardGrades.push(item.getValue());
-                });
-                form.find('.standard-grades').setValue(standardGrades.join(','));
-                form.find('.standard-ids').setValue(standardIds.join(','));
-                form.trigger('submit');
-            },
-
             [ria.mvc.DomEventBind('click', '.make-visible-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             function makeVisibleClick(node, event){
@@ -82,8 +67,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(event.keyCode == ria.dom.Keys.ENTER){
                     if(!node.hasClass('error')){
                         var row = node.parent('.row');
-                        if(this.setGrade(node))
+                        if(this.setGrade(node, true))
                             this.selectRow(this.dom.find('.grades-individual').find('.row:eq(' + (parseInt(row.getAttr('index'),10) + 1) + ')'));
+                        event.preventDefault();
                         return false;
                     }
                 }
@@ -107,18 +93,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('click', '.fill-grade')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function fillClick(node, event){
-                var gradeNode = this.dom.find('.empty-grade');
-                this.dom.find('.empty-grade').setValue(node.parent('.row').find('.grade-input').getValue());
-                this.setGrade(gradeNode);
-                node.parent('.grading-input-popup').hide();
-                return false;
-            },
-
-            [[ria.dom.Dom]],
-            function setGrade(node){
+            [[ria.dom.Dom, Boolean]],
+            function setGrade(node, checkOnly_){
                 if(!node.hasClass('error') && !node.hasClass('not-equals')){
                     var value = node.getValue();
                     var savedValue = node.getData('value');
@@ -131,10 +107,11 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(notEquals)
                         return false;
 
-                    if(!value || (this.getSuggestedValues(value).length == 0 && !parseFloat(value)))
+                    if(!value || (this.getSuggestedValues(value).length == 0 && parseFloat(value) == Number.NaN))
                         value = '';
 
-                    this.setItemValue(value, node, true);
+                    if(!checkOnly_)
+                        this.setItemValue(value, node, true);
                     return true;
                 }
                 return false;
@@ -228,6 +205,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.removeClass('with-grid-focus');
             },
 
+            [ria.mvc.DomEventBind('click', '.grading-input-popup .labeled-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function checkboxClick(node, event){
+                node.parent('.grading-input-popup').addClass('changed');
+            },
+
             [ria.mvc.DomEventBind('click')],
             [[ria.dom.Dom, ria.dom.Event]],
             function wholeDomClick(node, event){
@@ -239,16 +222,6 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, Boolean, Boolean]],
             VOID, function updateItem(node, selectNext_, noStandardUpdates_){
                 var row = node.parent('.row');
-                var container = row.find('.top-content');
-                container.addClass('loading');
-                if(!noStandardUpdates_){
-                    var standards = row.next().find('.standard-grade');
-                    standards.forEach(function(item){
-                        item.setValue(row.find('.grade-autocomplete').getValue());
-                    });
-                    if(standards.valueOf().length)
-                        this.updateStandardsInfo(standards);
-                }
                 var form = row.find('form');
                 form.trigger('submit');
                 if(selectNext_){
@@ -313,7 +286,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom().on('click.grading_popup', function(doc, event){
                     var node = new ria.dom.Dom(event.target);
                     if(!node.isOrInside('.grading-input-popup')){
+                        var popUp = node.find('.grading-input-popup:visible');
                         dom.find('.grading-input-popup').hide();
+                        if(popUp.hasClass('changed'))
+                            popUp.parent('form').trigger('submit');
                     }
                 });
             },
@@ -351,6 +327,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                     ableToExempt : this.isAbleToExempt()
                 });
                 var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());
+                if(itemModel.isEmptyGrade()){
+                    container.parent('form').addClass('empty-grade-form');
+                }
                 container.empty();
                 var topContent = this.dom.find('#top-content-' + itemModel.getStudentId().valueOf());
                 topContent.removeClass('loading');
@@ -449,34 +428,36 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                         return false;
                     }else{
-                        var text = node.getValue() ? node.getValue().trim() : '';
-                        var parsed = parseFloat(text);
-                        if(parsed){
-                            node.removeClass('error');
-                            if(text && parsed != text){
-                                node.addClass('error');
-                            }else{
-                                this.hideDropDown();
-                            }
-                        }else{
-                            suggestions = text  ? this.getSuggestedValues(text) : [];
-                            if(!suggestions.length)
-                                node.addClass('error');
-                            else{
+                        if(value){
+                            var text = node.getValue() ? node.getValue().trim() : '';
+                            var parsed = parseFloat(text);
+                            if(parsed != Number.NaN){
                                 node.removeClass('error');
-                                var p = false;
-                                suggestions.forEach(function(item){
-                                    if(item == node.getValue())
-                                        p = true;
-                                });
-                                if(p){
-                                    node.removeClass('not-equals');
+                                if(text && parsed != text){
+                                    node.addClass('error');
                                 }else{
-                                    node.addClass('not-equals');
+                                    this.hideDropDown();
                                 }
-                            }
+                            }else{
+                                suggestions = text  ? this.getSuggestedValues(text) : [];
+                                if(!suggestions.length)
+                                    node.addClass('error');
+                                else{
+                                    node.removeClass('error');
+                                    var p = false;
+                                    suggestions.forEach(function(item){
+                                        if(item == node.getValue())
+                                            p = true;
+                                    });
+                                    if(p){
+                                        node.removeClass('not-equals');
+                                    }else{
+                                        node.addClass('not-equals');
+                                    }
+                                }
 
-                            this.updateDropDown(suggestions, node);
+                                this.updateDropDown(suggestions, node);
+                            }
                         }
                     }
                     this.updateDropDown(suggestions, node);
@@ -622,7 +603,15 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('submit', 'form.update-grade-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
-                return node.find('.input-container').find('.error').valueOf().length == 0;
+                var res = node.find('.input-container').find('.error').valueOf().length == 0;
+                if(res){
+                    node.removeClass('empty-grade-form');
+                    var row = node.parent('.row');
+                    var container = row.find('.top-content');
+                    container.addClass('loading');
+                    row.find('.grading-input-popup').hide();
+                }
+                return res;
             },
 
             [ria.mvc.DomEventBind('click', '.grading-input-popup')],
@@ -708,6 +697,29 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.parent('.small-pop-up').hide();
                     node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
                 }
+            },
+
+            [ria.mvc.DomEventBind('click', '.fill-grade-container')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function fillGradeClick(node, event){
+                var form = node.parent('form');
+                var values = {
+                    gradevalue: form.find('input[name=gradevalue]').getValue(),
+                    dropped: form.find('input[name=dropped]').checked(),
+                    isexempt: form.find('input[name=isexempt]').checked(),
+                    isabsent: form.find('input[name=isabsent]').checked(),
+                    islate: form.find('input[name=islate]').checked(),
+                    isincomplete: form.find('input[name=isincomplete]').checked()
+                };
+                form.trigger('submit');
+                this.dom.find('.empty-grade-form').forEach(function(form){
+                    for(var i in values){
+                        if(values.hasOwnProperty(i)){
+                            form.find('input[type!=hidden][name=' + i + ']').setValue(values[i]);
+                        }
+                    }
+                    form.trigger('submit');
+                })
             }
         ]
     );

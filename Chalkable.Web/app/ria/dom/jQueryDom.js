@@ -331,6 +331,11 @@ NAMESPACE('ria.dom', function () {
             [[Object]],
             OVERRIDE, SELF, function setValue(value) {
                 this._dom.val(value);
+                if(this.getAttr('type') == 'checkbox'){
+                    var node = this.parent().find('.hidden-checkbox');
+                    node.setValue(value);
+                    node.setData('value', value);
+                }
                 return this;
             },
 
