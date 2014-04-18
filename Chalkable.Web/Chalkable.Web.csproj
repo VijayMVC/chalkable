@@ -197,6 +197,7 @@
     <Compile Include="Controllers\PersonControllers\TeacherController.cs" />
     <Compile Include="Controllers\PreferenceController.cs" />
     <Compile Include="Controllers\PrivateMessageController.cs" />
+    <Compile Include="Controllers\ReportingController.cs" />
     <Compile Include="Controllers\ScheduleSectionController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\SchoolYearController.cs" />
