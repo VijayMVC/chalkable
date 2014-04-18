@@ -14,6 +14,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         {
         }
 
+        public void Add(Score s)
+        {
+            data.Add(GetNextFreeId(), s);
+        }
+
         public Score GetScore(int sisActivityId, int userId)
         {
             return data.First(x => x.Value.ActivityId == sisActivityId && x.Value.StudentId == userId).Value;

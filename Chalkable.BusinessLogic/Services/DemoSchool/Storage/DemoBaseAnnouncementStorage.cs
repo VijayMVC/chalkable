@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
@@ -30,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     public abstract class DemoBaseAnnouncementStorage : BaseDemoStorage<int, AnnouncementComplex>, IDemoAnnouncementStorage
     {
         //todo pass announcement dictionary 
-        public DemoBaseAnnouncementStorage(DemoStorage storage):base(storage)
+        protected DemoBaseAnnouncementStorage(DemoStorage storage):base(storage)
         {
             if (storage.AnnouncementStorage != null && !storage.AnnouncementStorage.IsEmpty())
             {
@@ -42,6 +43,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         data.Add(item.Key, item.Value);    
                     }
                 }
+                index = oldData.Count;
             }
             storage.UpdateAnnouncementStorage(this);
         }
@@ -212,6 +214,31 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
                 Order = 0
             };
+
+
+            var persons = Storage.PersonStorage.GetPersons(new PersonQuery
+            {
+                ClassId = classId,
+                RoleId = Storage.Context.RoleId
+            }).Persons.Select(x => x.Id);
+
+
+            foreach (var personId in persons)
+            {
+                Storage.StudentAnnouncementStorage.Add(new StudentAnnouncement
+                {
+                    AnnouncementId = annId,
+                    ActivityId = annId,
+                    StudentId = personId
+                });
+
+                Storage.StiActivityScoreStorage.Add(new Score
+                {
+                    ActivityId = annId,
+                    StudentId = personId
+                });
+            }
+            
             data[announcement.Id] = announcement;
             return ConvertToDetails(announcement);
         }
