@@ -1,0 +1,7 @@
+mixin LabeledCheckbox(text, name, val, isReadOnly)
+    div(class=attributes.containerClass).labeled-checkbox
+        +Checkbox(name, val, isReadOnly)(attributes).checkbox
+        label(for=attributes.id)=text
+
+
+
