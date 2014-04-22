@@ -499,10 +499,10 @@ NAMESPACE('chlk.activities.grading', function () {
                     case Msg.Exempt.toLowerCase(): this.setItemState_(input, 'isexempt', selectNext); break;
                     default:{
                         var numericValue = parseFloat(value);
-                        if(Number.NaN == numericValue){
+                        if(Number.isNaN(numericValue) && value){
                             var allScores = this.getScores(input);
-                            allScores = allScores.find(function(score){
-                                return score.toLowerCase() == value;
+                            allScores = allScores.filter(function(score){
+                                return score.toLowerCase() == value.toLowerCase();
                             });
                             if(allScores.length == 0) return;
                         }

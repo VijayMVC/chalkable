@@ -271,6 +271,7 @@
     <Compile Include="Services\School\PersonService.cs" />
     <Compile Include="Services\School\PhoneService.cs" />
     <Compile Include="Services\School\PrivateMessageService.cs" />
+    <Compile Include="Services\School\ReportingService.cs" />
     <Compile Include="Services\School\RoomService.cs" />
     <Compile Include="Services\School\SchoolPersonService.cs" />
     <Compile Include="Services\School\SchoolService.cs" />

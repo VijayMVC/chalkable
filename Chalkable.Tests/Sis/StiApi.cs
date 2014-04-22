@@ -12,7 +12,7 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void ReportTest()
         {
-            var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://sandbox.sti-k12.com/chalkable/");
+            var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
             var obj = new ReportConnector.ProgressReportParams
             {
                 AcadSessionId = 18,

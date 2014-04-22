@@ -174,7 +174,6 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.setAnnouncementGrade(model)
                 .then(function(currentItem){
                     var announcement = this.getContext().getSession().get('announcement', {});
-                    currentItem.setStudentId(model.getStudentId());
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
                         if(item.getStudentId() == currentItem.getStudentId()){
                             item.setGradeValue(currentItem.getGradeValue());

@@ -61,12 +61,16 @@ namespace Chalkable.Common.Web
 
         public static string GetContentTypeByName(string fileName)
         {
-            var ext = GetExtension(fileName);
-            if (attachmenTypes.ContainsKey(ext.ToLower()))
+            return GetContentTypeByExtension(GetExtension(fileName));
+        }
+
+        public static string GetContentTypeByExtension(string fileExtension)
+        {
+            if (attachmenTypes.ContainsKey(fileExtension.ToLower()))
             {
-                return attachmenTypes[ext.ToLower()].Second;
+                return attachmenTypes[fileExtension.ToLower()].Second;
             }
-            return "attachment/" + ext;
+            return "attachment/" + fileExtension;
         }
 
         public static AttachmenType GetTypeByName(string fileName)

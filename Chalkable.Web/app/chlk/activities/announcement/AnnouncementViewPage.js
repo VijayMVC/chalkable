@@ -104,10 +104,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                         if(item.checked() && !item.getData('value') || !item.checked() && item.getData('value'))
                             notEquals = false;
                     });
-                    if(notEquals)
+                    if(notEquals){
+                        var row = node.parent('.row');
+                        this.selectNextRow(row);
                         return false;
+                    }
 
-                    if(!value || (this.getSuggestedValues(value).length == 0 && parseFloat(value) == Number.NaN))
+
+                    if(!value || (this.getSuggestedValues(value).length == 0 && Number.isNaN(value)))
                         value = '';
 
                     if(!checkOnly_)
@@ -219,21 +223,26 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.dom.find(('.small-pop-up:visible')).hide();
             },
 
+            function selectNextRow(row){
+                setTimeout(function(){
+                    var next = row.next().next();
+                    var selected = row.parent().find('.row.selected');
+                    if(next.exists() && !(selected.exists() && selected.getAttr('index') != row.getAttr('index'))){
+                        row.removeClass('selected');
+                        next.addClass('selected');
+                        //jQuery(next.find('.grade-input:not(.with-grid-focus)').valueOf()).focus();
+                        jQuery(next.find('.grade-input').valueOf()).focus();
+                    }
+                },1);
+            },
+
             [[ria.dom.Dom, Boolean, Boolean]],
             VOID, function updateItem(node, selectNext_, noStandardUpdates_){
                 var row = node.parent('.row');
                 var form = row.find('form');
                 form.trigger('submit');
                 if(selectNext_){
-                    setTimeout(function(){
-                        var next = row.next().next();
-                        var selected = row.parent().find('.row.selected');
-                        if(next.exists() && !(selected.exists() && selected.getAttr('index') != row.getAttr('index'))){
-                            row.removeClass('selected');
-                            next.addClass('selected');
-                            jQuery(next.find('.grade-input:not(.with-grid-focus)').valueOf()).focus();
-                        }
-                    },1);
+                    this.selectNextRow(row);
                 }
             },
 
@@ -431,7 +440,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         if(value){
                             var text = node.getValue() ? node.getValue().trim() : '';
                             var parsed = parseFloat(text);
-                            if(parsed != Number.NaN){
+                            if(!Number.isNaN(parsed)){
                                 node.removeClass('error');
                                 if(text && parsed != text){
                                     node.addClass('error');
@@ -570,10 +579,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     case Msg.Exempt.toLowerCase(): this.setItemState_(input, 'isexempt', selectNext); break;
                     default:{
                         var numericValue = parseFloat(value);
-                        if(Number.NaN == numericValue){
+                        if(Number.isNaN(numericValue) && value){
                             var allScores = this.getAllScores();
-                            allScores = allScores.find(function(score){
-                                return score.toLowerCase() == value;
+                            allScores = allScores.filter(function(score){
+                                return score.toLowerCase() == value.toLowerCase();
                             });
                             if(allScores.length == 0) return;
                         }

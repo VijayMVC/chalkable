@@ -256,12 +256,5 @@ namespace Chalkable.Web.Controllers
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);
         }
-
-        //TODO: test only. don't forget to remove :)
-        public ActionResult Create(string userName, string password)
-        {
-            ServiceLocatorFactory.CreateMasterSysAdmin().UserService.CreateSysAdmin(userName, password);
-            return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
-        }        
     }
 }

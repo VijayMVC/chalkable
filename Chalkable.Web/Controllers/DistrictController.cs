@@ -36,8 +36,8 @@ namespace Chalkable.Web.Controllers
                 else
                 {
                     district.Name = name;
-                    if (!string.IsNullOrEmpty(data.Password))
-                        district.SisPassword = data.Password;
+                    if (!string.IsNullOrEmpty(data.SisPassword))
+                        district.SisPassword = data.SisPassword;
                     district.SisUrl = data.ApiUrl;
                     district.SisUserName = data.SisUserName;
                     district.TimeZone = timeZone;

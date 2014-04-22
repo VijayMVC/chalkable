@@ -196,6 +196,21 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            OVERRIDE, SELF, function insertBefore(dom) {
+                VALIDATE_ARG('dom', [SELF, String, Node], dom);
+
+                if(typeof dom == "string")
+                    dom = new SELF(dom);
+
+                var dest = dom instanceof Node ? dom : dom.valueOf().shift();
+                if(dest){
+                    VALIDATE_ARG('dom', [Node], dest);
+
+                    this._dom.insertBefore(dest);
+                }
+                return this;
+            },
+
             SELF, function appendChild(dom) {
                 VALIDATE_ARG('dom', [SELF, String, Node], dom);
 
