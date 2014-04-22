@@ -140,6 +140,9 @@ NAMESPACE('chlk.activities.grading', function () {
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
                 var tooltipText = model.getTooltipText();
                 if(!model.isAutoUpdate()){
+                    tpl.options({
+                        classId: this.getClassId()
+                    });
                     tpl.renderTo(container.setHTML(''));
                     setTimeout(function(){
                         this.openGradingPeriod(container);
@@ -555,6 +558,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 }, 5000);
             },
 
+            chlk.models.id.ClassId, 'classId',
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 var allScores = [];
@@ -566,6 +571,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     allScores.push(item.getName());
                     allScores.push(item.getName() + ' (fill all)');
                 });
+
+                this.setClassId(model.getTopData().getSelectedItemId());
 
                 this.openGradingPeriod(this.dom.find('.open.marking-period-container').find('.mp-data'));
 

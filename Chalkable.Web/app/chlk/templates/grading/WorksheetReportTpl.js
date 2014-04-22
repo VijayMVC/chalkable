@@ -7,5 +7,5 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/WorksheetReport.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradeBookReportViewData)],
-        'WorksheetReportTpl', EXTENDS(chlk.templates.ChlkTemplate), [])
+        'WorksheetReportTpl', EXTENDS(chlk.templates.grading.GradeBookReportTpl), [])
 });

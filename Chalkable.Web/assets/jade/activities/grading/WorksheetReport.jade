@@ -3,7 +3,7 @@
     date = new chlk.models.common.ChlkDate(getDate())
     h1=Msg.Create_Report
     .report-buttons.panel-bg
-        a(href="javascript:").report-button=Msg.Grade_Book_Report
+        +ActionLink('grading', 'gradeBookReport', self.getGradingPeriodId(), self.getClassId()).report-button=Msg.Grade_Book_Report
         a(href="javascript:").report-button.pressed=Msg.Worksheet_Report
     TABLE.report-table
         TR
@@ -95,5 +95,5 @@
                     +Option(4, "TIFF", false)
                     +Option(5, "XML (" + Msg.With_report_data + ")", false)
     .report-bottom
-        BUTTON.chlk-button.blue-gradient-btn=Msg.Download
-        BUTTON.chlk-button.grey-button=Msg.Cancel
+        BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+        BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

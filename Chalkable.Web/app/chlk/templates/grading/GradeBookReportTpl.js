@@ -7,5 +7,11 @@ NAMESPACE('chlk.templates.grading', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/GradeBookReport.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradeBookReportViewData)],
-        'GradeBookReportTpl', EXTENDS(chlk.templates.ChlkTemplate), [])
+        'GradeBookReportTpl', EXTENDS(chlk.templates.ChlkTemplate), [
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.GradingPeriodId, 'gradingPeriodId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId'
+        ])
 });

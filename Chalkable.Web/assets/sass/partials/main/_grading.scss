@@ -920,6 +920,14 @@ BODY {
   }
 }
 
+.report-link{
+  position: absolute;
+  width: 27px;
+  height: 23px;
+  background: url(images/icons/printer-icon.png) center center no-repeat;
+  right: 10px;
+}
+
 .grade-book-report-dialog, .worksheet-report-dialog{
   width: 628px;
 

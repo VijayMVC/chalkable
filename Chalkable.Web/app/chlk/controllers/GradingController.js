@@ -4,6 +4,7 @@ REQUIRE('chlk.services.FinalGradeService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.AnnouncementService');
+REQUIRE('chlk.services.ReportingService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
@@ -17,6 +18,7 @@ REQUIRE('chlk.activities.grading.GradeBookReportDialog');
 REQUIRE('chlk.activities.grading.WorksheetReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
+REQUIRE('chlk.models.grading.SubmitGradeBookReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -35,6 +37,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.GradingService, 'gradingService',
+
+            [ria.mvc.Inject],
+            chlk.services.ReportingService, 'reportingService',
 
             //TODO: refactor
             [chlk.controllers.SidebarButton('statistic')],
@@ -314,14 +319,26 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeLoader();
             },
 
-            function gradeBookReportAction(){
-                var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData);
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId]],
+            function gradeBookReportAction(gradingPeriodId, classId){
+                var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId));
                 return this.ShadeView(chlk.activities.grading.GradeBookReportDialog, res);
             },
 
-            function worksheetReportAction(){
-                var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData);
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId]],
+            function worksheetReportAction(gradingPeriodId, classId){
+                var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId));
                 return this.ShadeView(chlk.activities.grading.WorksheetReportDialog, res);
+            },
+
+            [[chlk.models.grading.SubmitGradeBookReportViewData]],
+            function submitGradeBookReportAction(model){
+                this.reportingService.submitGradeBookReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
+                    model.getEndDate(), model.getReportType(), model.getOrderBy(), model.getIdToPrint(), model.getFormat(),
+                    model.isDisplayLetterGrade(), model.isDisplayTotalPoints(), model.isDisplayStudentAverage(),
+                    model.isIncludeWithdrawnStudents(), model.isIncludeNonGradedActivities());
+                this.BackgroundCloseView(chlk.activities.grading.GradeBookReportDialog);
+                return null;
             }
         ])
 });
