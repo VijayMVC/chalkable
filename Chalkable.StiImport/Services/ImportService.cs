@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
@@ -31,7 +32,7 @@ namespace Chalkable.StiImport.Services
             ConnectionInfo = connectionInfo;
             Log = log;
             ServiceLocatorMaster = ServiceLocatorFactory.CreateMasterSysAdmin();
-            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);    
+            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
         public void Import()
@@ -42,6 +43,7 @@ namespace Chalkable.StiImport.Services
             ProcessInsert();
             ProcessUpdate();
             ProcessDelete();
+            importedSchoolIds = ServiceLocatorSchool.SchoolService.GetSchools().Select(x => x.Id).ToList();
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
