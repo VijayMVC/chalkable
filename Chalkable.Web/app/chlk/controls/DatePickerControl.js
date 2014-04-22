@@ -44,6 +44,12 @@ NAMESPACE('chlk.controls', function () {
                     options.maxDate = mp.getEndDate().getDate();
                 }
 
+                if(options.calendarCls){
+                    options.beforeShow = function(){
+                        jQuery('#ui-datepicker-div').addClass(options.calendarCls);
+                    }
+                }
+
                 this.queueReanimation_(attrs.id, options, value);
                 value && this.setValue(value.getDate());
 

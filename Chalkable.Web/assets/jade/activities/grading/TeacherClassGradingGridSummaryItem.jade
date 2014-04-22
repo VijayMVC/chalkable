@@ -49,6 +49,7 @@ mixin DisplayTotalPoints(model)
 .ann-types-container
     .dotted-container.name-container.with-horizontal-dots
         .type-name=Msg.Student(true)
+            +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId()).report-link
         .time
         .student-name
             .max-score.dotted-h
