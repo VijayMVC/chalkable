@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chalkable.StiConnector.Connectors.Model
 {
@@ -18,7 +14,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         public DateTime EndDate { get; set; }
         public int GradingPeriodId { get; set; }
         public string Header { get; set; }
-        public StudentIdentifier IdToPrint { get; set; }
+        public int IdToPrint { get; set; }
         public bool PrintAverage { get; set; }
         public bool PrintLetterGrade { get; set; }
         public bool PrintScores { get; set; }

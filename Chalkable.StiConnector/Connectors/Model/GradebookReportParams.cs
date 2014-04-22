@@ -6,39 +6,15 @@ using System.Threading.Tasks;
 
 namespace Chalkable.StiConnector.Connectors.Model
 {
-    public enum OrderByMethod
-    {
-        StudentDisplayName = 0,
-        StudentIdentifier = 1,
-        SectionAverage = 2
-    }
-    public enum ReportFormat
-    {
-        Summary = 0,
-        Detail = 1
-    }
-    public enum StudentIdentifier
-    {
-        None = 0,
-        StudentNumber = 1,
-        StateIdNumber = 2,
-        AltStudentNumber = 3,
-        SocialSecurityNumber = 4
-    }
-    public enum GroupByMethod
-    {
-        None = 0,
-        FullSectionNumber = 1
-    }
 
     public class GradebookReportParams
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public ReportFormat ReportType { get; set; }
-        public OrderByMethod OrderBy { get; set; }
-        public StudentIdentifier IdToPrint { get; set; }
-        public GroupByMethod GroupBy { get; set; }
+        public int ReportType { get; set; }
+        public int OrderBy { get; set; }
+        public int IdToPrint { get; set; }
+        public int GroupBy { get; set; }
 
         public bool IncludeNonGradedActivities { get; set; }
         public bool IncludeWithdrawnStudents { get; set; }
