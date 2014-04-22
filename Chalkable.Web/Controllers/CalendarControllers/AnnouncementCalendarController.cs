@@ -10,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -50,6 +51,14 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end);
              var listDayAnnouncements = AnnouncementByDateViewData.Create(dates, anns);
              return Json(listDayAnnouncements);
+         }
+
+         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+         public ActionResult ListByDateRange(DateTime? startDate, DateTime? fromDate, int? classId)
+         {
+             var query = new AnnouncementsQuery {FromDate = startDate, ToDate = fromDate, ClassId = classId};
+             var anns = SchoolLocator.AnnouncementService.GetAnnouncementsComplex(query);
+             return Json(AnnouncementShortViewData.Create(anns));
          }
         
 
