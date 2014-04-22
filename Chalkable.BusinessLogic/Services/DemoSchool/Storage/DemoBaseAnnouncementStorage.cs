@@ -168,34 +168,46 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassAnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                 ChalkableAnnouncementType = announcement.ChalkableAnnouncementType,
                 ClassName = announcement.ClassName,
-                GradeLevelId = announcement.GradeLevelId,
+                GradeLevelId = announcement.GradeLevelId
             };
         }
 
         public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId)
         {
 
-        
-             /* 
-        public int QnACount { get; set; }
-        public int StudentsCount { get; set; }
-        public int AttachmentsCount { get; set; }
-        public int OwnerAttachmentsCount { get; set; }
-        public int StudentsCountWithAttachments { get; set; }
-        public int GradingStudentsCount { get; set; }
-        public int? Avg { get; set; }
-        public int ApplicationCount { get; set; }
-
-        public bool IsOwner { get; set; }
-        public int? RecipientDataPersonId { get; set; }
-        public bool? Starred { get; set; }
-             */
+   
 
             var annId = GetNextFreeId();
 
 
             var person = Storage.PersonStorage.GetById(userId);
             var gradeLevelRef = classId.HasValue ? Storage.ClassStorage.GetById(classId.Value).GradeLevelRef : (int?)null;
+
+            //todo: create admin announcements if it's admin
+
+            var persons = Storage.PersonStorage.GetPersons(new PersonQuery
+            {
+                ClassId = classId,
+                RoleId = CoreRoles.STUDENT_ROLE.Id
+            }).Persons.Select(x => x.Id).ToList();
+
+
+            foreach (var personId in persons)
+            {
+                Storage.StudentAnnouncementStorage.Add(new StudentAnnouncement
+                {
+                    AnnouncementId = annId,
+                    ActivityId = annId,
+                    StudentId = personId
+                });
+
+                Storage.StiActivityScoreStorage.Add(new Score
+                {
+                    ActivityId = annId,
+                    StudentId = personId
+                });
+            }
+
             var announcement = new AnnouncementComplex
             {
                 ClassAnnouncementTypeName = classAnnouncementTypeId.HasValue ? Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name : "",
@@ -214,35 +226,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
-
-                Order = 0
+                QnACount = 0,
+                StudentsCount = persons.Count,
+                Order = 0,
+                AttachmentsCount = 0,
+                ApplicationCount = 0,
+                OwnerAttachmentsCount = 0,
+                StudentsCountWithAttachments = 0
             };
-
-
-            //todo: create admin announcements if it's admin
-
-            var persons = Storage.PersonStorage.GetPersons(new PersonQuery
-            {
-                ClassId = classId,
-                RoleId = CoreRoles.STUDENT_ROLE.Id
-            }).Persons.Select(x => x.Id);
-
-
-            foreach (var personId in persons)
-            {
-                Storage.StudentAnnouncementStorage.Add(new StudentAnnouncement
-                {
-                    AnnouncementId = annId,
-                    ActivityId = annId,
-                    StudentId = personId
-                });
-
-                Storage.StiActivityScoreStorage.Add(new Score
-                {
-                    ActivityId = annId,
-                    StudentId = personId
-                });
-            }
             
             data[announcement.Id] = announcement;
             return ConvertToDetails(announcement);
