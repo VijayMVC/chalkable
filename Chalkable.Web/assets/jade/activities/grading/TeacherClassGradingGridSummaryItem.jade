@@ -49,6 +49,7 @@ mixin DisplayTotalPoints(model)
 .ann-types-container
     .dotted-container.name-container.with-horizontal-dots
         .type-name=Msg.Student(true)
+            +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
         .time
         .student-name
             .max-score.dotted-h
@@ -60,6 +61,8 @@ mixin DisplayTotalPoints(model)
                     div(data-tooltip="Withdrawn").withdrawn
         .student-name
             .dotted-h=Msg.Avg
+            if self.getGradingPeriod().isAblePostGradeBook()
+                +ActionLinkButton('grading','postGradeBook', self.getClassId(), self.getGradingPeriod().getId()).message-button.blue-gradient-btn.post-gradebook-button Post
     +LeftRightToolbar()(
         needDots = true,
         roundedDots = true,

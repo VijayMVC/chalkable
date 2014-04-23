@@ -1,4 +1,5 @@
 REQUIRE('chlk.templates.grading.GradingClassStandardsGridTpl');
+REQUIRE('chlk.models.schoolYear.GradingPeriod');
 REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
 
 NAMESPACE('chlk.templates.grading', function () {
@@ -16,7 +17,7 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
+            ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.grading.ShortGradingClassSummaryGridItems, 'currentGradingGrid',

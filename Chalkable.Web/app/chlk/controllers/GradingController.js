@@ -4,6 +4,8 @@ REQUIRE('chlk.services.FinalGradeService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.AnnouncementService');
+REQUIRE('chlk.services.ReportingService');
+REQUIRE('chlk.services.CalendarService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
@@ -13,8 +15,12 @@ REQUIRE('chlk.activities.grading.GradingStudentSummaryPage');
 REQUIRE('chlk.activities.grading.GradingStudentClassSummaryPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryGridPage');
 REQUIRE('chlk.activities.grading.GradingClassStandardsGridPage');
+REQUIRE('chlk.activities.grading.GradeBookReportDialog');
+REQUIRE('chlk.activities.grading.WorksheetReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
+REQUIRE('chlk.models.grading.SubmitGradeBookReportViewData');
+REQUIRE('chlk.models.grading.SubmitWorksheetReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -33,6 +39,12 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.GradingService, 'gradingService',
+
+            [ria.mvc.Inject],
+            chlk.services.ReportingService, 'reportingService',
+
+            [ria.mvc.Inject],
+            chlk.services.CalendarService , 'calendarService',
 
             //TODO: refactor
             [chlk.controllers.SidebarButton('statistic')],
@@ -280,6 +292,16 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+            function postGradeBookAction(classId, gradingPeriodId){
+                var res = this.gradingService.postGradeBook(classId, gradingPeriodId)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var model = new chlk.models.grading.GradingSummaryGridSubmitViewData(classId, gradingPeriodId, true);
+                        this.BackgroundNavigate('grading', 'loadGradingPeriodGridSummary', [model]);
+                    }, this);
+            },
+
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){
                 var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),
@@ -310,6 +332,50 @@ NAMESPACE('chlk.controllers', function (){
                         return this.BackgroundNavigate('grading', 'teacherSettings', []);
                     }, this);
                 return this.ShadeLoader();
+            },
+
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
+                var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate));
+                return this.ShadeView(chlk.activities.grading.GradeBookReportDialog, res);
+            },
+
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function worksheetReportAction(gradingPeriodId, classId, startDate, endDate){
+                var res = this.getWorksheetReportInfo(gradingPeriodId, classId, startDate, endDate);
+                return this.ShadeView(chlk.activities.grading.WorksheetReportDialog, res);
+            },
+
+            [[chlk.models.grading.SubmitGradeBookReportViewData]],
+            function submitGradeBookReportAction(model){
+                this.reportingService.submitGradeBookReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
+                    model.getEndDate(), model.getReportType(), model.getOrderBy(), model.getIdToPrint(), model.getFormat(),
+                    model.isDisplayLetterGrade(), model.isDisplayTotalPoints(), model.isDisplayStudentAverage(),
+                    model.isIncludeWithdrawnStudents(), model.isIncludeNonGradedActivities());
+                this.BackgroundCloseView(chlk.activities.grading.GradeBookReportDialog);
+                return null;
+            },
+
+            [[chlk.models.grading.SubmitWorksheetReportViewData]],
+            function submitWorksheetReportAction(model){
+                if(model.getSubmitType() == 'submit'){
+                    this.reportingService.submitWorksheetReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
+                        model.getEndDate(), model.getAnnouncementIds(), model.getTitle1(), model.getTitle2(), model.getTitle3(),
+                        model.getTitle4(), model.getTitle5(), model.isPrintAverage(), model.isPrintLetterGrade(), model.isPrintScores(),
+                        model.isPrintStudent(), model.isWorkingFilter(), model.isAppendToExisting(), model.isOverwriteExisting());
+                    this.BackgroundCloseView(chlk.activities.grading.WorksheetReportDialog);
+                    return null;
+                }
+                var res = this.getWorksheetReportInfo(model.getGradingPeriodId(), model.getClassId(), model.getStartDate(), model.getEndDate());
+                return this.UpdateView(chlk.activities.grading.WorksheetReportDialog, res, 'grid');
+            },
+
+            function getWorksheetReportInfo(gradingPeriodId, classId, startDate, endDate){
+                var res = this.calendarService.listByDateRange(startDate, endDate, classId)
+                    .then(function(announcements){
+                        return new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, announcements));
+                    });
+                return res;
             }
         ])
 });

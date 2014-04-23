@@ -10,6 +10,12 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/labeled-checkbox.jade')(this);
             },
 
+            [[Object]],
+            Object, function prepareData(attributes) {
+                attributes.id = attributes.id || ria.dom.Dom.GID();
+                return attributes;
+            },
+
 
             //[ria.mvc.DomEventBind('click', '.labeled-checkbox')],
             [[ria.dom.Dom, ria.dom.Event]],

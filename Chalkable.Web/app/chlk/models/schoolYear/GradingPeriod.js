@@ -12,6 +12,8 @@ NAMESPACE('chlk.models.schoolYear', function () {
             [ria.serialize.SerializeProperty('startdate')],
             chlk.models.common.ChlkDate, 'startDate',
             [ria.serialize.SerializeProperty('enddate')],
-            chlk.models.common.ChlkDate, 'endDate'
+            chlk.models.common.ChlkDate, 'endDate',
+            [ria.serialize.SerializeProperty('allowgradeposting')],
+            Boolean, 'ablePostGradeBook'
         ]);
 });

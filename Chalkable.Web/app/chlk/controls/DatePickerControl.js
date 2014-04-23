@@ -44,8 +44,13 @@ NAMESPACE('chlk.controls', function () {
                     options.maxDate = mp.getEndDate().getDate();
                 }
 
+                if(options.calendarCls){
+                    options.beforeShow = function(){
+                        jQuery('#ui-datepicker-div').addClass(options.calendarCls);
+                    }
+                }
+
                 this.queueReanimation_(attrs.id, options, value);
-                value && this.setValue(value.getDate());
 
                 return attrs;
             },
@@ -54,16 +59,16 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id);
-                        this.reanimate_(node, options, activity, model)
+                        this.reanimate_(node, options, value, activity, model)
                         if(!value)
                             node.setValue('');
                     }.bind(this));
             },
 
-            [[ria.dom.Dom, Object, ria.mvc.IActivity, Object]],
-            VOID, function reanimate_(node, options, activity, model) {
+            [[ria.dom.Dom, Object, Object, ria.mvc.IActivity, Object]],
+            VOID, function reanimate_(node, options, value, activity, model) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
-                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), this.getValue());
+                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value.getDate());
             }
         ]);
 });

@@ -51,4 +51,6 @@
                     .collapse
                 div(data-grading-period-id=gradingPeriod.getId()).mp-data
                     if gradingPeriod.getId() == self.getGradingPeriodId()
-                        +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)
+                        +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)(
+                            classId = selectedId
+                        )

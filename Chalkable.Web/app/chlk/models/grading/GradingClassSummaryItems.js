@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.grading.GradingClassSummaryItem), 'byAnnouncementTypes',
 
             [ria.serialize.SerializeProperty('gradingperiod')],
-            chlk.models.common.NameId, 'gradingPeriod',
+            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
 
             Number, 'avg',
 

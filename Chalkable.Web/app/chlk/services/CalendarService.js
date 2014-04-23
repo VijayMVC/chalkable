@@ -12,6 +12,7 @@ REQUIRE('chlk.models.calendar.announcement.DayItem');
 REQUIRE('chlk.models.calendar.announcement.Day');
 REQUIRE('chlk.models.calendar.ListForWeekCalendarItem');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 REQUIRE('chlk.models.id.ClassId');
 
@@ -27,6 +28,15 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getListForWeek(date_) {
                 return this.get('AnnouncementCalendar/ListForWeek.json', ArrayOf(chlk.models.calendar.ListForWeekCalendarItem) , {
                     date: date_ && date_.toString('mm-dd-yy')
+                });
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+            ria.async.Future, function listByDateRange(startDate_, endDate_, classId_) {
+                return this.get('AnnouncementCalendar/ListByDateRange.json', ArrayOf(chlk.models.announcement.BaseAnnouncementViewData) , {
+                    startDate: startDate_ && startDate_.toString('mm-dd-yy'),
+                    endDate: endDate_ && endDate_.toString('mm-dd-yy'),
+                    classId: classId_ && classId_.valueOf()
                 });
             },
 

@@ -97,6 +97,13 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
+        public ActionResult PostGradebook(int classId, int gradingPeriodId)
+        {
+            SchoolLocator.GradingStatisticService.PostGradebook(classId, gradingPeriodId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
         public ActionResult ClassStandardGrid(int classId)
         {
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId);
