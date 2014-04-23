@@ -34,6 +34,6 @@ mixin FeedItem(item, noDisabled)
                             ).icon.black
                             h2.animated-header=item.getTitle()
                             p.animated=item.getShortContent()
-                            .animated=item.getExpiresDate().toString('d/m/y')
+                            .animated=item.getExpiresDate().toString('m/d/y')
                             div(data-tooltip=Msg.Document_Attached).attachment-icon
                             div(data-tooltip=(item.getApplicationsCount() == 1 ? item.getApplicationName() : Msg.Application(true)) + ' ' + Msg.Attached).apps-icon

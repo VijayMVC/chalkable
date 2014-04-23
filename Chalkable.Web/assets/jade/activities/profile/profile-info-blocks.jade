@@ -52,7 +52,7 @@ mixin ProfileInfoForm(controller, model)
                 .avatar-block
                     .avatar-container.with-border
                         +PersonImg(model, 128)
-                    button(type="button").simple-gray-button.file Upload
+                    //button(type="button").simple-gray-button.file Upload
                         +FileUpload(controller, 'uploadPicture', [model.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block
                     input(name="firstname", value=model.getFirstName(), readonly)
