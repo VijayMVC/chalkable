@@ -3,7 +3,7 @@ each item, i in self.getAnnouncementQnAs()
         input(type="hidden",name="id", value=item.getId())
         input(type="hidden",name="announcementId", value=self.getId())
         .row
-            .avatar-container.i-b
+            .avatar-container.i-b.no-overflow
                 +PersonImg(item.getQuestion().getPerson(), 47)
             .qna.i-b
                 h2= item.getQuestion().getPerson().getFirstName()
@@ -21,7 +21,7 @@ each item, i in self.getAnnouncementQnAs()
         if answered || self.getUserRole().isTeacher()
             .row
                 hideEdit = answered || !self.annOwner
-                .avatar-container.i-b
+                .avatar-container.i-b.no-overflow
                     +PersonImg(item.getAnswer().getPerson(), 47)
                 .qna.i-b
                     h2= item.getAnswer().getPerson().getFirstName()
@@ -38,7 +38,7 @@ each item, i in self.getAnnouncementQnAs()
 
 if !self.annOwner && self.getUserRole().isStudent()
     +ActionForm('announcement', 'askQuestion')
-        .avatar-container.i-b
+        .avatar-container.i-b.no-overflow
             +PersonImg(self.getCurrentUser(), 47)
         .qna.i-b
             h2= self.getCurrentUser().getFirstName()
