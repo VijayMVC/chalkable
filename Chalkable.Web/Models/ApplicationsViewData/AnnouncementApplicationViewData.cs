@@ -28,7 +28,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public static AnnouncementApplicationViewData Create(AnnouncementApplication announcementApplication,
             Application application, IList<ApplicationInstall> installs, int? currentPersonId)
         {
-            var appInstallId = installs != null ? installs.First().Id : (int?)null;
+            //Todo: think how to build urls for annAppViewData if there are no applicationInstalls
+            var appInstallId = installs != null && installs.Any() ? installs.First().Id : (int?)null;
             var res = new AnnouncementApplicationViewData(application)
                 {
                     AnnouncementApplicationId = announcementApplication.Id,
@@ -38,10 +39,10 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     ViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.View),
                     GradingViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.GradingView),
                     CurrentPersonId = currentPersonId,
-                    Order = announcementApplication.Order
+                    Order = announcementApplication.Order,
+                    IsInstalledForMe = installs != null && currentPersonId.HasValue &&
+                                       installs.Any(x => x.OwnerRef == currentPersonId && x.Active)
                 };
-            res.IsInstalledForMe = installs != null && currentPersonId.HasValue &&
-                                   installs.Any(x => x.OwnerRef == currentPersonId && x.Active);
             return res;
         }
 
@@ -52,7 +53,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             foreach (var annApp in annApps)
             {
                 var app = applications.First(x => x.Id == annApp.ApplicationRef);
-                res.Add(Create(annApp, app, installs, currentPersonId));
+                var currentAppInstalls = installs.Where(x => x.ApplicationRef == app.Id).ToList();
+                res.Add(Create(annApp, app, currentAppInstalls, currentPersonId));
             }
             return res;
         }
