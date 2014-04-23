@@ -42,11 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             else
             {
 
-                var inst = Storage.ApplicationInstallStorage.GetAll(new AndQueryCondition
-                        {
-                            {ApplicationInstall.ACTIVE_FIELD, true}, 
-                            {ApplicationInstall.APPLICATION_REF_FIELD, appId}
-                        });
+                var inst = Storage.ApplicationInstallStorage.GetAll(appId, true);
                 res.AddRange(inst.Select(x => x.PersonRef));
             }
             return res;

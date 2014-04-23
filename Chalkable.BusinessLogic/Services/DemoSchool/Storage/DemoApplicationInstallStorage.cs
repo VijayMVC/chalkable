@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -266,30 +267,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return result;
         }
 
-        public IList<ApplicationInstall> GetAll(AndQueryCondition personId)
-        {
-
-            /*  var ps = new AndQueryCondition
-                    {
-                        {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
-                        {ApplicationInstall.ACTIVE_FIELD, true}
-                    };
-                if (owners)
-                    ps.Add(ApplicationInstall.OWNER_REF_FIELD, personId);
-                else
-                   ps.Add(ApplicationInstall.PERSON_REF_FIELD, personId);
-             * 
-             *  var ps = new AndQueryCondition
-                    {
-                        {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
-                        {ApplicationInstall.PERSON_REF_FIELD, personId},
-                        {ApplicationInstall.ACTIVE_FIELD, true}
-                    };
-             
-             */
-
-            throw new NotImplementedException();
-        }
 
         public void Update(ApplicationInstall appInst)
         {
@@ -381,6 +358,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.Where(x => x.Value.OwnerRef == personId || x.Value.PersonRef == personId && x.Value.Active)
                     .Select(x => x.Value)
                     .ToList();
+
+        }
+
+    
+        public IList<ApplicationInstall> GetAll(Guid applicationId, bool personId)
+        {
+            return
+                data.Where(
+                    x => x.Value.ApplicationRef == applicationId && x.Value.Active)
+                    .Select(x => x.Value)
+                    .ToList();
+        }
+
+        public IList<ApplicationInstall> GetAll(Guid applicationId, int personId, bool active, bool ownersOnly = false)
+        {
+            var apps = data.Where(x => x.Value.ApplicationRef == applicationId && x.Value.Active)
+                .Select(x => x.Value);
+            apps = ownersOnly ? apps.Where(x => x.OwnerRef == personId) : apps.Where(x => x.PersonRef == personId);
+            return apps.ToList();
 
         }
     }

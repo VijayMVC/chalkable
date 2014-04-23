@@ -197,27 +197,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!BaseSecurity.IsAdminViewer(Context) && Context.UserLocalId != personId)
                 throw new ChalkableSecurityException();
 
-            var ps = new AndQueryCondition
-                    {
-                        {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
-                        {ApplicationInstall.ACTIVE_FIELD, true}
-                    };
-            if (owners)
-                ps.Add(ApplicationInstall.OWNER_REF_FIELD, personId);
-            else
-                ps.Add(ApplicationInstall.PERSON_REF_FIELD, personId);
-            return Storage.ApplicationInstallStorage.GetAll(ps);
+            return Storage.ApplicationInstallStorage.GetAll(applicationId, personId, true, owners);
         }
 
         public ApplicationInstall GetInstallationForPerson(Guid applicationId, int personId)
         {
-            var ps = new AndQueryCondition
-                    {
-                        {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
-                        {ApplicationInstall.PERSON_REF_FIELD, personId},
-                        {ApplicationInstall.ACTIVE_FIELD, true}
-                    };
-            return Storage.ApplicationInstallStorage.GetAll(ps).FirstOrDefault();
+            return Storage.ApplicationInstallStorage.GetAll(applicationId, personId, true).FirstOrDefault();
         }
 
         public ApplicationInstall GetInstallationById(int applicationInstallId)
