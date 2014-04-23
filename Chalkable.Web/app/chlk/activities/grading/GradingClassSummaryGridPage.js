@@ -536,7 +536,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [ria.mvc.DomEventBind('submit', '.grading-form')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function gradingFormSubmit(node, event){
+            function gradingFormSubmit(node, event){
                 var input = node.find('.grade-autocomplete');
                 if(!input.hasClass('error')){
                     var activeCell = node.parent('.grade-value');
@@ -545,6 +545,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     activeCell.find('.grade-text').setHTML('...');
                     var form = activeCell.parent('.marking-period-container').find('.load-grading-period');
                     this.addTimeOut(form);
+                }else{
+                    event.preventDefault();
+                    return false;
                 }
             },
 

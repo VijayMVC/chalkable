@@ -101,7 +101,20 @@ namespace Chalkable.BusinessLogic.Services.Master
                 using (var uow = Update())
                 {
                     var user = new UserDataAccess(uow).GetUser(null, null, id);
-                    var res = Login(user, uow);
+                    UserContext res;
+                    if (string.IsNullOrEmpty(user.SisUserName))
+                        res = Login(user, uow);
+                    else
+                    {
+                        if(!Context.DistrictId.HasValue)
+                            throw new UnassignedUserException();
+                        if(string.IsNullOrEmpty(Context.SisToken) || !Context.SisTokenExpires.HasValue)
+                            throw new ChalkableException("Can't relogin unlogged user");
+                        var district = ServiceLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
+                        if (!district.SisDistrictId.HasValue)
+                            throw new ChalkableException("There are no such district in Inow");
+                        res = SisLogIn(district.SisDistrictId.Value, Context.SisToken, Context.SisTokenExpires.Value);
+                    }
                     uow.Commit();
                     return res;
                 }

@@ -48,9 +48,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     EnteredScoreAlphaGradeId = alphaGradeId,
                     GradingPeriodId = gradingPeriodId
                 };
-            standardScore = ConnectorLocator.StandardScoreConnector.Update(classId, studentId, standardId, gradingPeriodId, standardScore);
+            var res = ConnectorLocator.StandardScoreConnector.Update(classId, studentId, standardId, gradingPeriodId, standardScore);
             var standard = ServiceLocator.StandardService.GetStandardById(standardId);
-            return GradingStandardInfo.Create(standardScore, standard);
+            return GradingStandardInfo.Create(res, standard);
         }
     }
 

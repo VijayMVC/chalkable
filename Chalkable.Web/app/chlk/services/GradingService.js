@@ -53,12 +53,12 @@ NAMESPACE('chlk.services', function () {
                 chlk.models.id.GradeId, String]],
             ria.async.Future, function updateStandardGrade(classId, gradingPeriodId
             , studentId, standardId, alphaGradeId_, note_) {
-                return this.get('Grading/UpdateStandardGrade', chlk.models.announcement.StudentAnnouncements, {
+                return this.get('Grading/UpdateStandardGrade', chlk.models.standard.StandardGrading, {
                     classId: classId.valueOf(),
                     gradingPeriodId: gradingPeriodId.valueOf(),
                     studentId: studentId.valueOf(),
                     standardId: standardId.valueOf(),
-                    alphaGradeId: alphaGradeId_ & alphaGradeId_.valueOf(),
+                    alphaGradeId: alphaGradeId_ ? (alphaGradeId_.valueOf() || '') : '',
                     note: note_
                 });
             },

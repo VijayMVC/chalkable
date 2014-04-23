@@ -181,10 +181,11 @@ NAMESPACE('chlk.controllers', function (){
                         model.getGradingPeriodId(),
                         model.getStudentId(),
                         model.getStandardId(),
-                        model.getGradeId()
+                        model.getGradeId(),
+                        model.getComment()
                     )
                     .attach(this.validateResponse_());
-                return null;
+                return this.UpdateView(chlk.activities.grading.GradingClassStandardsGridPage, result, chlk.activities.lib.DontShowLoader());
             },
 
             [chlk.controllers.SidebarButton('statistic')],

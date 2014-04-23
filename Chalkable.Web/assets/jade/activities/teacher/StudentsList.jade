@@ -2,16 +2,17 @@
     -topData = self.getTopData();
     -topItems = topData.getTopItems();
     -selectedId = topData.getSelectedItemId();
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'students', self.isMy() ? "my" : "all", [])(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'students', "my", [])(
         selectedItemId=selectedId ? selectedId.valueOf() : ""
     ).classes-bar
     .action-bar.not-transparent.buttons
         .container.panel-bg
-            .right
-                +ActionLink('students', 'my')(class=self.isMy() ? "pressed" : "")
-                    =self.getUserRole().isStudent() ? Msg.Classmates :Msg.My_Students
-                +ActionLink('students', 'all')(class=self.isMy() ? "" : "pressed")
-                    =self.getUserRole().isStudent() ? Msg.My_Teachers :Msg.Whole_School
+            if !selectedId || !selectedId.valueOf()
+                .right
+                    +ActionLink('students', 'my')(class=self.isMy() ? "pressed" : "")
+                        =self.getUserRole().isStudent() ? Msg.Classmates :Msg.My_Students
+                    +ActionLink('students', 'all')(class=self.isMy() ? "" : "pressed")
+                        =self.getUserRole().isStudent() ? Msg.My_Teachers :Msg.Whole_School
     +ActionForm('students', 'updateList')#people-list-form
         input(type="hidden", name="my", value=(self.isMy() ? 'true' : 'false')))
         input(type="hidden", name="classId", value=self.getTopData().getSelectedItemId()))

@@ -63,7 +63,7 @@ mixin ProfileInfoForm(controller, submitAction, pictureUploadAction,  model)
                 .avatar-block
                     div(style="overflow: visible").avatar-container.with-border
                         +PersonImg(model, 128)
-                    button(type="button").simple-gray-button.file Upload
+                    //button(type="button").simple-gray-button.file Upload
                         +FileUpload(controller, pictureUploadAction, [model.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block
                     input(name="firstname", value=model.getFirstName(), class="validate[required]")
