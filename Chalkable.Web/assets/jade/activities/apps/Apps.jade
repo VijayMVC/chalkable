@@ -1,0 +1,43 @@
+mixin AppManagementControls(id, state, liveId)
+    if (liveId && liveId.valueOf())
+        if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+            span=state.toString(true)
+        else
+            +ActionLink('apps', 'approve', id).btn Approve
+            +ActionLink('apps', 'decline', id).btn Reject
+    else
+        if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+            span=state.toString(false)
+        else
+            +ActionLink('apps', 'approve', id).btn Approve
+            +ActionLink('apps', 'decline', id).btn Reject
+
+.apps-list
+    +Grid('apps', 'page', self).not-transparent
+        +GridHead()
+            .th
+            .th Application Name
+            .th Description
+            .th State
+            .th.narrow isInternal
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+
+                    pictureLink = item.getSmallPictureId() ? self.getPictureURL(item.getSmallPictureId(), 74, 74) : '#'
+                    .td
+                        img.app-icon(src=pictureLink)
+                    .td= item.getName()
+                    .td= item.getShortDescription()
+                    .td.app-state
+                        +AppManagementControls(item.getId(), item.getState(), item.getLiveAppId())
+                    .td
+                        +ActionForm('apps', 'changeAppType')
+                            +Checkbox('isInternal', item.isInternal())
+                            +Hidden('appId', item.getId())
+
+                    .td.action-links
+                        +ActionLink('apps', 'details', item.getId()).profile
+                        +ActionLink('apps', 'delete', item.getId()).remove
+
