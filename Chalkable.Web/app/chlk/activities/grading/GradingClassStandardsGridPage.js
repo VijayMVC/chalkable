@@ -1,4 +1,5 @@
 REQUIRE('chlk.templates.grading.GradingClassStandardsGridTpl');
+REQUIRE('chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl');
 REQUIRE('chlk.activities.common.InfoByMpPage');
 REQUIRE('chlk.models.grading.GradingClassSummary');
 
@@ -10,6 +11,47 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassStandardsGridTpl)],
         'GradingClassStandardsGridPage', EXTENDS(chlk.activities.common.InfoByMpPage), [
             Array, 'allScores',
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl)],
+            VOID, function updateGrade(tpl, model, msg_) {
+                var container = this.dom.find('.grade-value[data-student-id=' + model.getStudentId().valueOf() +
+                    '][data-standard-id=' + model.getStandardId().valueOf() +
+                    '][data-grading-period-id=' + model.getGradingPeriodId().valueOf() + ']');
+                container.empty();
+                tpl.renderTo(container);
+            },
+
+            [ria.mvc.DomEventBind('click', '.comment-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentBtnClick(node, event){
+                var active = this.dom.find('.active-cell');
+                var popUp = this.dom.find('.chlk-pop-up-container.comment');
+                var main = this.dom.parent('#main');
+                var bottom = main.height() + main.offset().top - active.offset().top + 73;
+                var left = active.offset().left - main.offset().left - 54;
+                popUp.setCss('bottom', bottom);
+                popUp.setCss('left', left);
+                var comment = active.find('.comment-value').getValue();
+                popUp.find('textarea').setValue(comment);
+                popUp.show();
+                setTimeout(function(){
+                    popUp.find('.comment-value').trigger('focus');
+                }, 1)
+            },
+
+            [ria.mvc.DomEventBind('click', '.add-comment')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addCommentBtnClick(node, event){
+                var cell = this.dom.find('.active-cell');
+                var commentInput = cell.find('.comment-value');
+                var comment = node.parent('.chlk-pop-up-container').find('textarea').getValue();
+                commentInput.setValue(comment).setData('comment', comment);
+                node.parent('.chlk-pop-up-container.comment').hide();
+                setTimeout(function(){
+                    cell.find('input').trigger('focus');
+                }, 1);
+                this.setValue(cell, true);
+            },
 
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.AFTER_RENDER.valueOf(), '.grid-toolbar')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -125,10 +167,9 @@ NAMESPACE('chlk.activities.grading', function () {
 
             function setValue(node, isComment_){
                 var activeCell = node;
-                node.find('.value').setHTML(node.find('.grade-autocomplete').getValue());
                 activeCell.find('form').trigger('submit');
                 var nextCell = activeCell.next().find('.edit-cell');
-                if(nextCell.exists())
+                if(nextCell.exists() && !isComment_)
                     nextCell.trigger('click');
                 else
                     this.dom.trigger('click');
@@ -225,6 +266,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
                     var node = new ria.dom.Dom(event.target);
                     if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
+                        && !node.isOrInside('.chlk-pop-up-container.comment')
                         && !node.isOrInside('.autocomplete-list')){
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
@@ -237,6 +279,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                         dom.find('[row-index=' + index + ']').addClass('active-row');
                                     }
                                     parent.addClass('active-cell');
+                                    node.parent('.marking-period-container').find('.comment-button').show();
                                     setTimeout(function(){
                                         parent.find('input').trigger('focus');
                                     },1)
@@ -252,7 +295,11 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('submit', '.grade-container form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
-                return !node.find('input[name="gradevalue"]').hasClass('error');
+                var res = !node.find('input[name="gradevalue"]').hasClass('error');
+                if(!res)
+                    return false;
+                node.parent().find('.value').setHTML('...');
+                return true;
             }
         ]);
 });
