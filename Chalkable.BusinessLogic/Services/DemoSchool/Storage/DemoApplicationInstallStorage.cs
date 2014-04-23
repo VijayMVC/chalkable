@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Chalkable.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
@@ -184,7 +187,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Type = PersonsFroAppInstallTypeEnum.Person
                 }));
             }
-                
+
 
             /*
              * 
@@ -211,22 +214,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 join @departmentIdsT d on c.ChalkableDepartmentRef = d.value
             end
             --insert by grade level
-            if @gradeLevelIds is not null
-            begin
-                Insert into @preResult
-                ([type], groupId, PersonId)
-                select distinct 2, cast(gl.Value as nvarchar(256)), sp.Id
-                from @localPersons as sp
-                join StudentSchoolYear as ssy on sp.Id = ssy.StudentRef and ssy.SchoolYearRef = @schoolYearId
-                join @gradeLevelIdsT gl on ssy.GradeLevelRef = gl.value 
-	
-                Insert into @preResult
-                ([type], groupId, PersonId)
-                select distinct 2, cast(gl.Value as nvarchar(256)), sp.Id
-                from @localPersons as sp
-                join Class c on sp.Id = c.TeacherRef
-                join @gradeLevelIdsT gl on c.GradeLevelRef = gl.value
-            end
+          
             --insert by class
             if @classIds is not null
             begin
@@ -246,12 +234,35 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     join @classIdsT cc on c.Id = cc.value
                 end
             end
+*/
 
-             * 
-             * 
-          
-            select * 
-            from @preResult*/
+
+            if (gradeLevelIds != null)
+            {
+                var personIds = personsForInstall.Select(x => x.Key).ToList();
+                var ssyPersons =
+                    Storage.StudentSchoolYearStorage.GetAll()
+                        .Where(x => personIds.Contains(x.StudentRef) && x.SchoolYearRef == schoolYearId && gradeLevelIds.Contains(x.GradeLevelRef));
+
+                result.AddRange(ssyPersons.Select(x => new PersonsForApplicationInstall
+                {
+                    Type = PersonsFroAppInstallTypeEnum.GradeLevel,
+                    GroupId = x.GradeLevel.Number.ToString(),
+                    PersonId = x.StudentRef
+                }));
+
+
+
+                var teacherRefs = personsForInstall.Select(x => x.Key).ToList();
+                var classes = Storage.ClassStorage.GetAll().Where(x => x.TeacherRef != null && (gradeLevelIds.Contains(x.GradeLevelRef) && teacherRefs.Contains(x.TeacherRef.Value)));
+
+                result.AddRange(classes.Select( x => new PersonsForApplicationInstall
+                {
+                    Type = PersonsFroAppInstallTypeEnum.GradeLevel,
+                    GroupId = Storage.GradeLevelStorage.GetById(x.GradeLevelRef).Number.ToString(),
+                    PersonId = x.TeacherRef.Value
+                }));
+            }
             return result;
         }
 
@@ -292,35 +303,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
 
             var appInstalls =
-                Storage.ApplicationInstallStorage.GetAll().Where(x => x.ApplicationRef == applicationId).ToList();
+                Storage.ApplicationInstallStorage.GetAll().Where(x => x.ApplicationRef == applicationId && x.Active).ToList();
 
-            /*
-             * CREATE PROCEDURE [dbo].[spGetStudentCountToAppInstallByClass]
-                @applicationId uniqueidentifier, @schoolYearId int, @personId int, @roleId int
-                as
-
-                declare @emptyResult bit = 0;
-
+            var csps = Storage.ClassPersonStorage.GetAll().ToList();
+            var classes = Storage.ClassStorage.GetAll().ToList();
+            var classPersons = from cls in classes
+                join csp in csps on cls.Id equals csp.ClassRef
+                join appInst in appInstalls on new {csp.PersonRef, cls.SchoolYearRef} equals
+                    new {appInst.PersonRef, SchoolYearRef = (int?) appInst.SchoolYearRef} into cspJoined
+                from cspj in cspJoined.DefaultIfEmpty()
+                group cspj by new {cls.Id, cls.Name}
+                into grouped
                 select
-	                Class.Id as ClassId,
-	                Class.Name as ClassName,
-	                Count(*) as NotInstalledStudentCount
-                from Class
-                join ClassPerson on ClassPerson.ClassRef = Class.Id
-                left join (select * from ApplicationInstall where ApplicationRef = @applicationId and Active = 1) x
-                on x.PersonRef = ClassPerson.PersonRef and x.SchoolYearRef = Class.SchoolYearRef
-                where
-	                @emptyResult = 0
-	                and Class.SchoolYearRef = @schoolYearId
-	                and (@roleId = 8 or @roleId = 7 or @roleId = 5 or @roleId = 2 and Class.TeacherRef = @personId)
-	                and x.Id is null
-                group by
-                Class.Id, Class.Name
-             */
+                    new
+                    {
+                        ClassId = grouped.Key.Id,
+                        ClassName = grouped.Key.Name,
+                        NotInstalledStudentCount = grouped.Count()
+                    };
 
 
-
-            throw new NotImplementedException();
+            return classPersons.Select(x => new StudentCountToAppInstallByClass
+            {
+                ClassId = x.ClassId,
+                ClassName = x.ClassName,
+                NotInstalledStudentCount = x.NotInstalledStudentCount
+            });
         }
 
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int userId, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
