@@ -98,7 +98,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             //TODO: think about how to get rememberMe  
             var user = MasterLocator.UserService.GetByLogin(person.Email);
-            var context = LogOn(false, us => us.ReLogin(user.Id));
+            var context = LogOn(false, MasterLocator.UserService, us => us.ReLogin(user.Id));
             if (context == null)
                 throw new ChalkableSecurityException();
         }
