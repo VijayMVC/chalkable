@@ -293,6 +293,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
+        public void PostGradebook(int classId, int? gradingPeriodId)
+        {
+            throw new NotImplementedException();
+        }
+
         private double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
         {
             var res = classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue).ToList();
