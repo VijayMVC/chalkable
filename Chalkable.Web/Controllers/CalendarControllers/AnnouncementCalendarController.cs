@@ -54,9 +54,9 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          }
 
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-         public ActionResult ListByDateRange(DateTime? startDate, DateTime? fromDate, int? classId)
+         public ActionResult ListByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
-             var query = new AnnouncementsQuery {FromDate = startDate, ToDate = fromDate, ClassId = classId};
+             var query = new AnnouncementsQuery {FromDate = startDate, ToDate = endDate, ClassId = classId};
              var anns = SchoolLocator.AnnouncementService.GetAnnouncementsComplex(query);
              return Json(AnnouncementShortViewData.Create(anns));
          }
