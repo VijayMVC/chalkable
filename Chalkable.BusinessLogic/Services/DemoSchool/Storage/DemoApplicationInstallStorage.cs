@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Odbc;
 using System.Linq;
-using System.Web.Hosting;
+using System.Security.Policy;
+using System.Text.RegularExpressions;
+using Chalkable.Common;
 using Chalkable.Data.Common.Orm;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
@@ -60,193 +60,199 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, 
             bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
-            /*CREATE PROCEDURE [dbo].[spGetPersonsForApplicationInstall]
-	            @applicationId uniqueidentifier, @callerId int, @personId int, @roleIds nvarchar(2048), @departmentIds nvarchar(2048)
-	            , @gradeLevelIds nvarchar(2048), @classIds nvarchar(2048), @callerRoleId int
-	            , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
-            as
-       
-            if(@roleIds is not null)
-            begin
-	            insert into @roleIdsT(value)
-	            select cast(s as int) from dbo.split(',', @roleIds) 
-            end
-            if(@departmentIds is not null)
-            begin
-	            insert into @departmentIdsT(value)
-	            select cast(s as uniqueidentifier) from dbo.split(',', @departmentIds)
-            end
-            if(@gradeLevelIds is not null)
-            begin
-	            insert into @gradeLevelIdsT(value)
-	            select cast(s as int) from dbo.split(',', @gradeLevelIds)
-            end
-            if(@classIds is not null)
-            begin
-	            insert into @classIdsT(value)
-	            select cast(s as int) from dbo.split(',', @classIds)
-            end
-
-            declare @canInstallForTeahcer bit = @hasTeacherMyApps | @canAttach
-            declare @canInstallForStudent bit = @hasStudentMyApps | @canAttach
-
-            declare @canInstall bit = 0
-            if (
-	            (@callerRoleId = 3 and @hasStudentMyApps = 1) 
-	            or (@callerRoleId = 2 and (@canInstallForStudent = 1 or @canInstallForTeahcer = 1))
-	            or ((@callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8) 
-		             and (@hasAdminMyApps = 1 or @canInstallForStudent = 1 or @canInstallForTeahcer = 1)
-	               )
-               )
-            set @canInstall = 1
 
 
-            declare @schoolId int = (select SchoolRef from SchoolYear where Id = @schoolYearId)
+            var callerRoleId = Storage.Context.RoleId;
+            var callerId = Storage.Context.UserLocalId;
 
-            declare @preResult table
-            (
-	            [Type] int not null,
-	            GroupId nvarchar(256) not null,
-	            PersonId int not null
-            );
-            declare @localPersons table
-            (
-	            Id int not null,
-	            RoleRef int not null
-            );
-            --select sp due to security
-            if @canInstall = 1
-            begin
-	            if @callerRoleId = 3
-	            begin
-		            insert into @localPersons (Id, RoleRef)
-		            select PersonRef, RoleRef 
-		            from SchoolPerson
-		            where PersonRef = @callerId and SchoolRef = @schoolId and @hasStudentMyApps = 1
-	            end
-	            if  @callerRoleId = 2
-	            begin
-		            insert into @localPersons (Id, RoleRef)
-		            select PersonRef, RoleRef 
-		            from SchoolPerson
-		            where ((@canInstallForStudent = 1 and PersonRef in (select ClassPerson.PersonRef
-															            from ClassPerson
-															            join Class on ClassPerson.ClassRef = Class.Id
-															            where Class.TeacherRef = @callerId
-									  					               )
-			               ) 
-			               or (PersonRef = @callerId and @canInstallForTeahcer = 1))
-			               and SchoolRef = @schoolId
-	            end
-	            if @callerRoleId = 5 or @callerRoleId = 7 or @callerRoleId = 8
-	            begin
-		            insert into @localPersons (Id, RoleRef)
-		            select PersonRef, RoleRef 
-		            from SchoolPerson
-		            where ((RoleRef = 2 and @canInstallForTeahcer = 1)
-				            or ((RoleRef = 5 or RoleRef = 7 or RoleRef = 8) and @hasAdminMyApps = 1)
-				            or (RoleRef = 3 and @canInstallForStudent = 1))
-			              and SchoolRef = @schoolId
-	            end
-            end
+            var canInstalledForTeacher = hasTeacherMyApps || canAttach;
+            var canInstallForStudent = hasStudentMyApps || canAttach;
 
-            delete from @localPersons where Id in (select PersonRef from ApplicationInstall where ApplicationRef = @applicationId and Active = 1)
+            var canInstall = callerRoleId == CoreRoles.STUDENT_ROLE.Id || hasStudentMyApps ||
+                             (callerRoleId == CoreRoles.TEACHER_ROLE.Id &&
+                              (canInstallForStudent || canInstalledForTeacher))
+                             ||
+                             ((callerRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id ||
+                               callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id ||
+                               callerRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id)
+                              && (hasAdminMyApps || canInstallForStudent || canInstalledForTeacher));
+
+            var schoolId = Storage.SchoolYearStorage.GetById(schoolYearId).SchoolRef;
+
+
+            var personsForInstall = new List<KeyValuePair<int, int>>();
+
+            if (canInstall)
+            {
+                if (callerRoleId == CoreRoles.STUDENT_ROLE.Id)
+                {
+                    var sp =
+                        Storage.SchoolPersonStorage.GetAll()
+                            .First(x => x.PersonRef == callerId && x.SchoolRef == schoolId && hasStudentMyApps);
+                    personsForInstall.Add(new KeyValuePair<int, int>(sp.PersonRef, sp.RoleRef));
+                }
+
+                if (callerRoleId == CoreRoles.TEACHER_ROLE.Id)
+                {
+
+                    var classes = Storage.ClassStorage.GetClassesComplex(new ClassQuery
+                    {
+                        PersonId = callerId
+                    }).Classes.Select(x => x.Id);
+
+                    var personRefs =
+                        Storage.ClassPersonStorage.GetAll()
+                            .Where(x => classes.Contains(x.ClassRef))
+                            .Select(x => x.PersonRef);
+
+                    var sps =
+                        Storage.SchoolPersonStorage.GetAll()
+                            .Where(x => (personRefs.Contains(x.PersonRef) && canInstallForStudent || x.PersonRef == callerId && canInstalledForTeacher) && x.SchoolRef == schoolId);
+
+                    personsForInstall.AddRange(sps.Select(schoolPerson => new KeyValuePair<int, int>(schoolPerson.PersonRef, schoolPerson.RoleRef)));
+                }
+
+                if (callerRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id || callerRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id ||
+                    callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id)
+                {
+                    var sps = Storage.SchoolPersonStorage.GetAll().Where(x =>
+                        (x.RoleRef == CoreRoles.TEACHER_ROLE.Id && canInstalledForTeacher) ||
+                        (x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id || x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id ||
+                         x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id) && hasAdminMyApps
+                        || (x.RoleRef == CoreRoles.STUDENT_ROLE.Id && canInstallForStudent) && x.SchoolRef == schoolId)
+                        .ToList();
+                    personsForInstall.AddRange(sps.Select(schoolPerson => new KeyValuePair<int, int>(schoolPerson.PersonRef, schoolPerson.RoleRef)));
+
+
+                }
+
+            }
+
+            var installed =
+                Storage.ApplicationInstallStorage.GetAll()
+                    .Where(x => x.Active && x.ApplicationRef == applicationId).Select(x => x.PersonRef)
+                    .ToList();
+
+            personsForInstall = personsForInstall.Where(x => !installed.Contains(x.Key)).ToList();
+
+
+            var result = new List<PersonsForApplicationInstall>();
+
+
+            if (roleIds != null)
+            {
+                result.AddRange(personsForInstall.Where(x => roleIds.Contains(x.Value)).Select(x => new PersonsForApplicationInstall
+                {
+                    GroupId = x.Key.ToString(),
+                    PersonId = x.Key,
+                    Type = PersonsFroAppInstallTypeEnum.Role
+                }));
+    
+            }
+
+            
+
+
+            //todo departments gradelevels
+
+            if (personId.HasValue)
+            {
+                result.AddRange(personsForInstall.Where(x => x.Key == personId).Select(x => new PersonsForApplicationInstall
+                {
+                    GroupId = x.Key.ToString(),
+                    PersonId = x.Key,
+                    Type = PersonsFroAppInstallTypeEnum.Person
+                }));
+            }
+
+
+            var isSinglePerson = false;
+
+            if (callerRoleId == CoreRoles.TEACHER_ROLE.Id && !personId.HasValue)
+            {
+                personId = callerId;
+                isSinglePerson = true;
+            }
+
+            if (roleIds == null && departmentIds == null && gradeLevelIds == null && classIds == null &&
+                (isSinglePerson || !personId.HasValue))
+            {
+                result.AddRange(personsForInstall.Where(x => x.Key == personId).Select(x => new PersonsForApplicationInstall
+                {
+                    GroupId = x.Key.ToString(),
+                    PersonId = x.Key,
+                    Type = PersonsFroAppInstallTypeEnum.Person
+                }));
+            }
+                
+
             /*
+             * 
             TYPES:
-            0 - role
             1 - department
             2 - grade level
             3 - class
-            4 - person
-
-            --insert by roles
-            if @roleIds is not null
-            Insert into @preResult
-            ([type], groupId, PersonId)
-            select 0, cast(RoleRef as nvarchar(256)), Id
-            from @localPersons
-            where RoleRef in (select Value from @roleIdsT)
+          
             --insert by departments
             if @departmentIds is not null
             begin
-	            Insert into @preResult ([type], groupId, PersonId)
-	            select distinct 1, cast(d.Value as nvarchar(256)), sp.Id
-	            from @localPersons as sp
-	            join ClassPerson as csp on sp.Id = csp.PersonRef
-	            join Class c on csp.ClassRef = c.Id
-	            join @departmentIdsT d on c.ChalkableDepartmentRef = d.value
+                Insert into @preResult ([type], groupId, PersonId)
+                select distinct 1, cast(d.Value as nvarchar(256)), sp.Id
+                from @localPersons as sp
+                join ClassPerson as csp on sp.Id = csp.PersonRef
+                join Class c on csp.ClassRef = c.Id
+                join @departmentIdsT d on c.ChalkableDepartmentRef = d.value
 
 
-	            Insert into @preResult ([type], groupId, PersonId)
-	            select distinct 1, cast(d.Value as nvarchar(256)), sp.Id
-	            from @localPersons as sp
-	            join Class c on c.TeacherRef = sp.Id
-	            join @departmentIdsT d on c.ChalkableDepartmentRef = d.value
+                Insert into @preResult ([type], groupId, PersonId)
+                select distinct 1, cast(d.Value as nvarchar(256)), sp.Id
+                from @localPersons as sp
+                join Class c on c.TeacherRef = sp.Id
+                join @departmentIdsT d on c.ChalkableDepartmentRef = d.value
             end
             --insert by grade level
             if @gradeLevelIds is not null
             begin
-	            Insert into @preResult
-	            ([type], groupId, PersonId)
-	            select distinct 2, cast(gl.Value as nvarchar(256)), sp.Id
-	            from @localPersons as sp
-	            join StudentSchoolYear as ssy on sp.Id = ssy.StudentRef and ssy.SchoolYearRef = @schoolYearId
-	            join @gradeLevelIdsT gl on ssy.GradeLevelRef = gl.value 
+                Insert into @preResult
+                ([type], groupId, PersonId)
+                select distinct 2, cast(gl.Value as nvarchar(256)), sp.Id
+                from @localPersons as sp
+                join StudentSchoolYear as ssy on sp.Id = ssy.StudentRef and ssy.SchoolYearRef = @schoolYearId
+                join @gradeLevelIdsT gl on ssy.GradeLevelRef = gl.value 
 	
-	            Insert into @preResult
-	            ([type], groupId, PersonId)
-	            select distinct 2, cast(gl.Value as nvarchar(256)), sp.Id
-	            from @localPersons as sp
-	            join Class c on sp.Id = c.TeacherRef
-	            join @gradeLevelIdsT gl on c.GradeLevelRef = gl.value
+                Insert into @preResult
+                ([type], groupId, PersonId)
+                select distinct 2, cast(gl.Value as nvarchar(256)), sp.Id
+                from @localPersons as sp
+                join Class c on sp.Id = c.TeacherRef
+                join @gradeLevelIdsT gl on c.GradeLevelRef = gl.value
             end
             --insert by class
             if @classIds is not null
             begin
-	            Insert into @preResult
-	            ([type], groupId, PersonId)
-	            select distinct 3, cast(cc.Value as nvarchar(256)), sp.Id
-	            from @localPersons as sp
-	            join ClassPerson csp on csp.PersonRef = sp.Id
-	            join @classIdsT cc on csp.ClassRef = cc.value
+                Insert into @preResult
+                ([type], groupId, PersonId)
+                select distinct 3, cast(cc.Value as nvarchar(256)), sp.Id
+                from @localPersons as sp
+                join ClassPerson csp on csp.PersonRef = sp.Id
+                join @classIdsT cc on csp.ClassRef = cc.value
 
-	            if @callerRoleId <> 2
-	            begin
-		            Insert into @preResult ([type], groupId, PersonId)
-		            select distinct 3, cast(cc.Value as nvarchar(256)), sp.Id
-		            from @localPersons as sp
-		            join Class c on sp.Id = c.TeacherRef
-		            join @classIdsT cc on c.Id = cc.value
-	            end
+                if @callerRoleId <> 2
+                begin
+                    Insert into @preResult ([type], groupId, PersonId)
+                    select distinct 3, cast(cc.Value as nvarchar(256)), sp.Id
+                    from @localPersons as sp
+                    join Class c on sp.Id = c.TeacherRef
+                    join @classIdsT cc on c.Id = cc.value
+                end
             end
 
-            declare @isSinglePerson bit = 0
-            if @personId is null and @callerRoleId = 2
-            begin
-	            set @personId = @callerId
-	            set @isSinglePerson = 1
-            end
-
-            --insert by sp
-            if @personId is not null
-	            Insert into @preResult([type], groupId, PersonId)
-	            select 4, cast(Id as nvarchar(256)), Id
-	            from @localPersons
-	            where id = @personId
-
-
-
-            if @roleIds is null and @departmentIds is null and @gradeLevelIds is null 
-	            and @classIds is null and (@isSinglePerson = 1 or @personId is null)
-	
-	            Insert into @preResult
-	            ([type], groupId, PersonId)
-	            select 4, cast(Id as nvarchar(256)), Id
-	            from @localPersons
-
+             * 
+             * 
+          
             select * 
             from @preResult*/
-            throw new NotImplementedException();
+            return result;
         }
 
         public IList<ApplicationInstall> GetAll(AndQueryCondition personId)
@@ -317,40 +323,38 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int userId, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int id1)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int userId, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
-            /*
-             * CREATE PROCEDURE [dbo].[spGetPersonsForApplicationInstallCount]
-	                @applicationId uniqueidentifier, @callerId int, @personId int,
-	                 @roleIds nvarchar(2048), @departmentIds nvarchar(2048)
-	                , @gradeLevelIds nvarchar(2048), @classIds nvarchar(2048), @callerRoleId int
-	                , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
-                as
-                PRINT('start');
-                PRINT(getDate());
-                declare @preResult table
-                (
-	                [Type] int not null,
-	                GroupId nvarchar(256) not null,
-	                PersonId int not null
-                );
-                insert into @preResult
-                exec dbo.spGetPersonsForApplicationInstall @applicationId, @callerId, @personId, @roleIds, @departmentIds, @gradeLevelIds, @classIds
-                , @callerRoleId , @hasAdminMyApps , @hasTeacherMyApps , @hasStudentMyApps , @canAttach, @schoolYearId
-
-                select [Type], [GroupId], Count(*) as [Count]
-                from @preResult
-                group by [Type], [GroupId]
-                union
-                select 5 as [Type], null as [GroupId], COUNT(*) as [Count] from (select distinct PersonId from @preResult) z
-
-                PRINT('end');
-                PRINT(getDate());
 
 
-                GO
-             */
-            throw new NotImplementedException();
+            var personsForAppInstall = GetPersonsForApplicationInstall(applicationId, userId, personId, roleIds, departmentIds,
+                gradeLevelIds, classIds, id, hasAdminMyApps, hasTeacherMyApps, hasStudentMyApps, canAttach, schoolYearId);
+
+
+
+            var res =
+                (from p in personsForAppInstall
+                group p by new {p.Type, p.GroupId}
+                into gr
+                select new
+                {
+                    Count = gr.ToList().Count,
+                    GroupId = gr.Key.GroupId,
+                    Type = gr.Key.Type
+                }).Union(new[] {new
+                {
+                    personsForAppInstall.Select(x => x.PersonId).Distinct().ToList().Count,
+                    GroupId = "",
+                    Type = PersonsFroAppInstallTypeEnum.Total
+                }});
+
+
+            return res.Select(x => new PersonsForApplicationInstallCount
+            {
+                Type = x.Type,
+                Count = x.Count,
+                GroupId = x.GroupId
+            }).ToList();
         }
 
         public override void Setup()

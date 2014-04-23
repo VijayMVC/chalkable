@@ -126,5 +126,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IGradingPeriodService GradingPeriodService { get {return gradingPeriodService;} }
         public ISyncService SyncService { get; private set; }
         public IGradingStandardService GradingStandardService { get { return gradingStandardService; } }
+        public IReportingService ReportService { get; private set; }
     }
 }
