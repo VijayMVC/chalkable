@@ -151,6 +151,14 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Grading/GetGridComments', Array, {
                     schoolYearId: this.getContext().getSession().get('currentSchoolYearId', null).valueOf()
                 });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function postGradeBook(classId, gradingPeriodId){
+                return this.post('Grading/PostGradebook', Boolean, {
+                    classId: classId && classId.valueOf(),
+                    gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf()
+                });
             }
         ])
 });

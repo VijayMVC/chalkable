@@ -719,6 +719,12 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function fillGradeClick(node, event){
                 var activeCell = node.parent('.active-cell');
                 this.fillAll(activeCell, true);
+            },
+
+            [ria.mvc.DomEventBind('click', '.post-gradebook-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function postGradeBookClick(node, event){
+                jQuery(node.find('a').valueOf()[0]).text('Saving')
             }
         ]);
 });

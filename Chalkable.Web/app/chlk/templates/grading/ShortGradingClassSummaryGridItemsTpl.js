@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.grading.ShortGradingClassSummaryGridItems');
 REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.models.schoolYear.GradingPeriod');
 
 NAMESPACE('chlk.templates.grading', function () {
     "use strict";

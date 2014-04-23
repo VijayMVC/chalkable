@@ -292,6 +292,16 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+            function postGradeBookAction(classId, gradingPeriodId){
+                var res = this.gradingService.postGradeBook(classId, gradingPeriodId)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        var model = new chlk.models.grading.GradingSummaryGridSubmitViewData(classId, gradingPeriodId, true);
+                        this.BackgroundNavigate('grading', 'loadGradingPeriodGridSummary', [model]);
+                    }, this);
+            },
+
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){
                 var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),

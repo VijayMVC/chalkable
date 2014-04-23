@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true);
         IList<string> GetGradeBookComments(int schoolYearId, int teacherId);
         ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId);
-
+        void PostGradebook(int classId, int? gradingPeriodId);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -307,6 +307,11 @@ namespace Chalkable.BusinessLogic.Services.School
             if(res.Count > 0)
                 return res.Average(classAnnType => classAnnType.Percentage*classAnnType.Avg.Value/100);
             return null;
+        }
+
+        public void PostGradebook(int classId, int? gradingPeriodId)
+        {
+            ConnectorLocator.GradebookConnector.PostGrades(classId, gradingPeriodId);
         }
     }
 }

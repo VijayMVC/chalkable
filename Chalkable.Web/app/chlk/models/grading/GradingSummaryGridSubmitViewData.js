@@ -18,6 +18,17 @@ NAMESPACE('chlk.models.grading', function () {
 
             Boolean, 'autoUpdate',
 
-            Boolean, 'notCalculateGrid'
+            Boolean, 'notCalculateGrid',
+
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean, Boolean]],
+            function $(classId_, gradingPeriodId_, notCalculateGrid_, isAutoUpdate_){
+                BASE();
+                if(classId_)
+                    this.setClassId(classId_);
+                if(gradingPeriodId_)
+                    this.setGradingPeriodId(gradingPeriodId_);
+                this.setNotCalculateGrid(notCalculateGrid_ || false);
+                this.setAutoUpdate(isAutoUpdate_ || false);
+            }
         ]);
 });
