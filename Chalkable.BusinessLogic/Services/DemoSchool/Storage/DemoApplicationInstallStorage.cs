@@ -32,8 +32,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(ApplicationInstall appInstall)
         {
-            if (!data.ContainsKey(appInstall.Id))
-                data[appInstall.Id] = appInstall;
+            appInstall.Id = GetNextFreeId();
+            appInstall.Active = true;
+            data[appInstall.Id] = appInstall;
         }
 
         public IList<ApplicationInstall> GetAll(int personId)

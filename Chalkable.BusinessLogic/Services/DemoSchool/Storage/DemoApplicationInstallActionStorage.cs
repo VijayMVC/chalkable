@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public ApplicationInstallAction GetLastAppInstallAction(Guid id, int userId)
         {
-            return data.First(x => x.Value.ApplicationRef == id && x.Value.PersonRef == userId).Value;
+            return data.OrderByDescending(x => x.Value.Id).First(x => x.Value.ApplicationRef == id && x.Value.OwnerRef == userId).Value;
         }
 
         public void Update(ApplicationInstallAction res)
