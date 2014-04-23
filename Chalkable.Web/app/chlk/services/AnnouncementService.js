@@ -142,7 +142,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, String,String, String, chlk.models.common.ChlkDate,  String]],
             ria.async.Future, function submitAdminAnnouncement(id, recipients,title_, content_, expiresdate_, attachments_) {
-                return this.get('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
+                return this.post('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId:id.valueOf(),
                     content: content_,
                     attachments: attachments_,
@@ -158,7 +158,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function submitAnnouncement(id, classId_, announcementTypeId_, title_, content_
                 , expiresdate_, attachments_, applications_, markingPeriodId_, maxScore_, weightAddition_, weighMultiplier_
                 , hideFromStudent_, canDropStudentScore_) {
-                return this.get('Announcement/SubmitAnnouncement.json', Boolean, {
+                return this.post('Announcement/SubmitAnnouncement.json', Boolean, {
                     announcementid:id.valueOf(),
                     classannouncementtypeid:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
