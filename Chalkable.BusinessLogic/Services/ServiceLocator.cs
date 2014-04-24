@@ -53,20 +53,7 @@ namespace Chalkable.BusinessLogic.Services
             return serviceLocator;
         }
 
-        private static bool IsDemoUser(UserContext context)
-        {
-            var userLogin = context.DistrictId.HasValue ? context.Login.Replace(context.DistrictId.ToString(), "") : context.Login;
-            var logins = new string[]
-            {
-                PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_EDIT).Value,
-                PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_GRADE).Value,
-                PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_VIEW).Value,
-                PreferenceService.Get(Preference.DEMO_SCHOOL_TEACHER).Value,
-                PreferenceService.Get(Preference.DEMO_SCHOOL_STUDENT).Value
-            };
-                
-            return logins.Any(login => String.Equals(userLogin, login, StringComparison.CurrentCultureIgnoreCase));
-        }
+      
         
         public static IServiceLocatorSchool CreateSchoolLocator(SchoolUser schoolUser)
         {
@@ -88,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services
         {
             IServiceLocatorSchool locator;
             
-            if (context != null && IsDemoUser(context))
+            if (context != null && DemoUserService.IsDemoUser(context))
             {
                 locator = CreateDemoSchoolLocator(context);
             }

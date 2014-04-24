@@ -227,6 +227,10 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public User GetByLogin(string login)
         {
+            if (DemoUserService.IsDemoUser(login))
+                return DemoUserService.GetDemoUser(login);
+            
+
             using (var uow = Read())
             {
                 var da = new UserDataAccess(uow);

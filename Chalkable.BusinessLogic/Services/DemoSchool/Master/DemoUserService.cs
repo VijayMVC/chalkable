@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -21,6 +22,56 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public string PasswordMd5(string password)
         {
             throw new NotImplementedException();
+        }
+
+
+        private static bool IsDemoLogin(string userLogin)
+        {
+            var logins = new string[]
+            {
+                PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_EDIT).Value,
+                PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_GRADE).Value,
+                PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_VIEW).Value,
+                PreferenceService.Get(Preference.DEMO_SCHOOL_TEACHER).Value,
+                PreferenceService.Get(Preference.DEMO_SCHOOL_STUDENT).Value
+            };
+
+            return logins.Any(login => String.Equals(userLogin, login, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        public static bool IsDemoUser(UserContext context)
+        {
+            var userLogin = context.DistrictId.HasValue ? context.Login.Replace(context.DistrictId.ToString(), "") : context.Login;
+            return IsDemoLogin(userLogin);
+        }
+
+
+        public static User GetDemoUser(string login)
+        {
+            var userRoles = new Dictionary<string, string>
+            {
+                {PreferenceService.Get("demoschool" + CoreRoles.TEACHER_ROLE.LoweredName).Value, CoreRoles.TEACHER_ROLE.LoweredName},
+                {PreferenceService.Get("demoschool" + CoreRoles.STUDENT_ROLE.LoweredName).Value,CoreRoles.STUDENT_ROLE.LoweredName},
+                {PreferenceService.Get("demoschool" + CoreRoles.ADMIN_GRADE_ROLE.LoweredName).Value,CoreRoles.ADMIN_GRADE_ROLE.LoweredName},
+                {PreferenceService.Get("demoschool" + CoreRoles.ADMIN_EDIT_ROLE.LoweredName).Value, CoreRoles.ADMIN_EDIT_ROLE.LoweredName},
+                {PreferenceService.Get("demoschool" + CoreRoles.ADMIN_VIEW_ROLE.LoweredName).Value, CoreRoles.ADMIN_VIEW_ROLE.LoweredName},
+            };
+
+
+            var userLogin = login.Substring(login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase));
+            var prefix = login.Substring(0, login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase));
+            if (userRoles.ContainsKey(userLogin))
+            {
+                var role = userRoles[userLogin];
+                return GetDemoUser(role, prefix);
+            }
+            return null;
+        }
+
+        public static bool IsDemoUser(string login)
+        {
+            var userLogin = login.Substring(login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase));
+            return IsDemoLogin(userLogin);
         }
 
         public static User GetDemoUser(string roleName, string prefix)
@@ -243,5 +294,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 }
             };
         }
+
+     
     }
 }

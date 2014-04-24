@@ -298,6 +298,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId,
+            string averageValue)
+        {
+            throw new NotImplementedException();
+        }
+
         private double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
         {
             var res = classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue).ToList();

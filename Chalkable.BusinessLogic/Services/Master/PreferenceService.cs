@@ -126,9 +126,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             var res = new Dictionary<string, PreferenceInfo>();
             res.Add(Preference.DEMO_DISTRICT_ID, new PreferenceInfo { Value = "4562e5bb-f5f2-42bd-aab4-3c61ba775581" });
-            res.Add(Preference.DEMO_SCHOOL_ADMIN_GRADE, new PreferenceInfo { Value = "user2735_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
-            res.Add(Preference.DEMO_SCHOOL_ADMIN_EDIT, new PreferenceInfo { Value = "" });
-            res.Add(Preference.DEMO_SCHOOL_ADMIN_VIEW, new PreferenceInfo { Value = "" });
+            res.Add(Preference.DEMO_SCHOOL_ADMIN_GRADE, new PreferenceInfo { Value = "user1197_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_SCHOOL_ADMIN_EDIT, new PreferenceInfo { Value = "user1198_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_SCHOOL_ADMIN_VIEW, new PreferenceInfo { Value = "user1199_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
             res.Add(Preference.DEMO_SCHOOL_TEACHER, new PreferenceInfo { Value = "user1195_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
             res.Add(Preference.DEMO_SCHOOL_STUDENT, new PreferenceInfo { Value = "user19_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
             res.Add(Preference.DEMO_USER_PASSWORD, new PreferenceInfo {Value = "Qwerty1@"});
