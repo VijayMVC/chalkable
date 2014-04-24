@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private IBackgroundTaskService backgroundTaskService;
         private IPreferenceService preferenceService;
         private IChalkableDepartmentService chalkableDepartmentService;
-        private IPictureService personPictureService;
+        private IPersonPictureService personPictureService;
         private IPictureService courseIconService;
         private IPictureService departmentIconService;
         private IPictureService fundRequestPictureService;
@@ -58,7 +58,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
         public IPreferenceService PreferenceService { get { return preferenceService; } }
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
-        public IPictureService PersonPictureService { get { return personPictureService; } }
+        public IPersonPictureService PersonPictureService { get { return personPictureService; } }
         public IPictureService CourseIconService { get { return courseIconService; } }
         public IPictureService DepartmentIconService { get { return departmentIconService; } }
         public IApplicationService ApplicationService { get { return applicationService; } }
