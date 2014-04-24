@@ -205,6 +205,13 @@ namespace Chalkable.Web.Controllers
             return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
         }
 
+        [AuthorizationFilter("Teacher")]
+        public ActionResult UpdateStudentAverage(int classId, int gradingPeriodId, int studentId, int averageId, string averageValue)
+        {
+            var res = SchoolLocator.GradingStatisticService.UpdateStudentAverage(classId, studentId, averageId, gradingPeriodId, averageValue);
+            return Json(StudentAveragesViewData.Create(res));
+        }
+
         [AuthorizationFilter("Teacher ,AdminGrade, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
         {
