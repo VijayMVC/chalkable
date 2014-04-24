@@ -1,18 +1,8 @@
 ﻿
 namespace Chalkable.StiConnector.Connectors.Model
 {
-    public class StudentAverages
+    public class StudentAverage
     {
-        /// <summary>
-        /// Id of the Alpha Grade for the Average
-        /// </summary>
-        public int? AlphaGradeId { get; set; }
-
-        /// <summary>
-        /// Name of the Alpha Grade.  Examples: "A", "A+", "A-"
-        /// </summary>
-        public string AlphaGradeName { get; set; }
-
         /// <summary>
         /// Id of the average
         /// </summary>
@@ -24,7 +14,43 @@ namespace Chalkable.StiConnector.Connectors.Model
         public string AverageName { get; set; }
 
         /// <summary>
-        /// Indicates whether or not the average is exempt for the student
+        /// Id of the Alpha Grade for the calculated average.  This value cannot be updated.
+        /// </summary>
+        public int? CalculatedAlphaGradeId { get; set; }
+
+        /// <summary>
+        /// Name of the Alpha Grade for the calculated average.  Examples: "A", "A+", "A-".  This value cannot be updated.
+        /// </summary>
+        public string CalculatedAlphaGradeName { get; set; }
+
+        /// <summary>
+        /// The numeric value of the calculated average.  This value cannot be updated.
+        /// </summary>
+        public decimal? CalculatedNumericAverage { get; set; }
+
+        /// <summary>
+        /// Id of the Alpha Grade for the manually entered average.  This value cannot be updated.
+        /// </summary>
+        public int? EnteredAlphaGradeId { get; set; }
+
+        /// <summary>
+        /// Name of the Alpha Grade for the manually entered average.  Examples: "A", "A+", "A-".  This value cannot be updated.
+        /// </summary>
+        public string EnteredAlphaGradeName { get; set; }
+
+        /// <summary>
+        /// The numeric value of the manually entered average.  This value cannot be updated.
+        /// </summary>
+        public decimal? EnteredNumericAverage { get; set; }
+
+        /// <summary>
+        /// The value a user entered to manually override the calculated average.  This can be numeric or alpha.  
+        /// Examples: "A", "98.76".  This is the value that will used for updates.
+        /// </summary>
+        public string EnteredAverageValue { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not the average is exempt for the student.
         /// </summary>
         public bool Exempt { get; set; }
 
@@ -34,20 +60,15 @@ namespace Chalkable.StiConnector.Connectors.Model
         public int? GradingPeriodId { get; set; }
 
         /// <summary>
-        /// Indicates whether or not this is the average that is assocaited with the graded item marked as 
+        /// Indicates whether or not this is the average that is associated with the graded item marked as 
         /// DisplayAvgInGradebook.  This should be the main average column in the gradebook.
         /// </summary>
         public bool IsGradingPeriodAverage { get; set; }
 
         /// <summary>
-        /// Indicates whether or not the teacher has overriden the calculated average and manually entered in a score for the average.
+        /// Indicates whether or not the average can be exempt
         /// </summary>
-        public bool ManuallyEntered { get; set; }
-
-        /// <summary>
-        /// The numeric value of the average.
-        /// </summary>
-        public decimal? Score { get; set; }
+        public bool MayBeExempt { get; set; }
 
         /// <summary>
         /// Id of the student

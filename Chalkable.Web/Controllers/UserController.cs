@@ -13,8 +13,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
-
-
         public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime)
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
@@ -98,7 +96,12 @@ namespace Chalkable.Web.Controllers
         protected UserContext LogOn(bool remember, Func<IUserService, UserContext> logOnAction)
         {
             var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var context = logOnAction(serviceLocator.UserService);
+            return LogOn(remember, serviceLocator.UserService, logOnAction);
+        }
+
+        protected UserContext LogOn(bool remember, IUserService userService, Func<IUserService, UserContext> logOnAction)
+        {
+            var context = logOnAction(userService);
             if (context != null)
                 ChalkableAuthentication.SignIn(context, remember);
             return context;

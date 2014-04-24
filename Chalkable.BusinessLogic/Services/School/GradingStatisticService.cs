@@ -228,9 +228,9 @@ namespace Chalkable.BusinessLogic.Services.School
             };
             var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();
-            stAvgs = stAvgs.Where(x => x.Score.HasValue).ToList();
+            stAvgs = stAvgs.Where(x => x.CalculatedNumericAverage.HasValue || x.EnteredNumericAverage.HasValue).ToList();
             if (stAvgs.Count > 0)
-                gradeBook.Avg = (int)stAvgs.Average(x => x.Score != null ? x.Score.Value : 0);
+                gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
 
             gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
             if (!stiGradeBook.Options.IncludeWithdrawnStudents)

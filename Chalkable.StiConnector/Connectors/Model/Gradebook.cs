@@ -28,7 +28,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// <summary>
         /// A list of averages that should be displayed in the gradebook
         /// </summary>
-        public IEnumerable<StudentAverages> StudentAverages { get; set; }
+        public IEnumerable<StudentAverage> StudentAverages { get; set; }
 
     }
 }
