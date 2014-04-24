@@ -42,6 +42,13 @@ namespace Chalkable.StiConnector.Connectors
             return Call<IList<string>>(string.Format(BaseUrl + "chalkable/{0}/teachers/{1}/comments", acadSessionId, teacherId));
         } 
 
+        public StudentAverage UpdateStudentAverage(int sectionId, StudentAverage studentAverage)
+        {
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/averages/{1}/students/{2}"
+                                    , sectionId, studentAverage.AverageId, studentAverage.StudentId);
+            return Put(url, studentAverage);
+        }
+
         public void PostGrades(int sectionId, int? gradingPeriodId)
         {
             var nvc = new NameValueCollection();
@@ -49,5 +56,6 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
             Post<Object, Object>(string.Format(url_format + "/postgrades", sectionId), new Object(), nvc);
         }
+        
     }
 }

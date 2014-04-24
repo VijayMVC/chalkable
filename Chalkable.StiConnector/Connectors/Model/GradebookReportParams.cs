@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chalkable.StiConnector.Connectors.Model
 {
@@ -26,6 +22,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         public int? SectionId { get; set; }
         public int? StaffId { get; set; }
         public int? GradingPeriodId { get; set; }
-        public int StudentId { get; set; }
+        public int[] StudentIds { get; set; }
     }
 }

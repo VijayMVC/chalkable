@@ -22,7 +22,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
         {
-            var stiModel = new GradebookReportParams
+             var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
+             var stiModel = new GradebookReportParams
                 {
                     StartDate = inputModel.StartDate,
                     EndDate = inputModel.EndDate,
@@ -36,7 +37,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     IdToPrint = inputModel.IdToPrint,
                     ReportType = inputModel.ReportType,
                     GradingPeriodId = inputModel.GradingPeriodId,
-                    SectionId = inputModel.ClassId
+                    SectionId = inputModel.ClassId,
+                    StudentIds = students.Select(x=>x.Id).ToArray()
                 };
             if (CoreRoles.TEACHER_ROLE == Context.Role)
                 stiModel.StaffId = Context.UserLocalId;
