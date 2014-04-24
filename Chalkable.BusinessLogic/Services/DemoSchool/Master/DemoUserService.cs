@@ -24,6 +24,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public static User GetDemoUser(string roleName, string prefix)
         {
             var demoUserName = BuildDemoUserName(roleName, prefix);
+            roleName = roleName.ToLowerInvariant();
+
 
             var schoolUsers = new List<SchoolUser>();
 
@@ -34,9 +36,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
             var localIds = new Dictionary<string, int>
             {
-                {CoreRoles.TEACHER_ROLE.Name, 1195},
-                {CoreRoles.STUDENT_ROLE.Name, 1196},
-                {CoreRoles.ADMIN_GRADE_ROLE.Name, 1197},
+                {CoreRoles.TEACHER_ROLE.LoweredName, 1195},
+                {CoreRoles.STUDENT_ROLE.LoweredName, 1196},
+                {CoreRoles.ADMIN_GRADE_ROLE.LoweredName, 1197},
+                {CoreRoles.ADMIN_EDIT_ROLE.LoweredName, 1198},
+                {CoreRoles.ADMIN_VIEW_ROLE.LoweredName, 1199},
                 
             };
 

@@ -46,7 +46,6 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult ListApi()
         {
-            //demo prefix add
             var result = new List<ApiExplorerViewData>();
 
             var descriptions = ChalkableApiExplorerLogic.GetApi();
@@ -54,13 +53,11 @@ namespace Chalkable.Web.Controllers
 
             foreach (var description in descriptions)
             {
-                var loweredDescription = description.Key.ToLowerInvariant();
-                if (loweredDescription == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || loweredDescription == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
-
-                apiRoles.Add(loweredDescription);
-                var userName = PreferenceService.Get("demoschool" + loweredDescription).Value;
-                //MasterLocator.UserService.LoginToDemo(userName);
-                var token = ChalkableApiExplorerLogic.GetAccessTokenFor(userName, MasterLocator);
+                var roleName = description.Key.ToLowerInvariant();
+                if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || roleName == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
+                apiRoles.Add(roleName);
+                var context = MasterLocator.UserService.LoginToDemo(roleName, Context.UserId.ToString());
+                var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, MasterLocator);
                 result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
             }
             return Json(result, 8);
