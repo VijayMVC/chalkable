@@ -147,6 +147,8 @@ namespace Chalkable.StiImport.Services
                     SpEdStatus = spEdStatus,
                     PhotoModifiedDate = person.PhotoModifiedDate
                 });
+                if (person.PhotoModifiedDate.HasValue)
+                    personsForImportPictures.Add(person);
             }
             ServiceLocatorSchool.PersonService.Add(ps);
         }
