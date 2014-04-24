@@ -19,14 +19,19 @@ NAMESPACE('chlk.models.discipline', function(){
           String, 'disciplineTypeIds',
           Number, 'time',
 
-          String, 'disciplineJson',
+//          String, 'disciplineJson',
 
-          [[String]],
-          VOID, function setDisciplineJson(disciplineJsonObj){
-               var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
-               var disciplinesObj = disciplineJsonObj ? JSON.parse(disciplineJsonObj) : null;
-               var discipline = serializer.deserialize(disciplinesObj, chlk.models.discipline.SetDisciplineModel);
-          },
+
+          String, 'controller',
+          String, 'action',
+          String, 'params',
+
+//          [[String]],
+//          VOID, function setDisciplineJson(disciplineJsonObj){
+//               var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
+//               var disciplinesObj = disciplineJsonObj ? JSON.parse(disciplineJsonObj) : null;
+//               var discipline = serializer.deserialize(disciplinesObj, chlk.models.discipline.SetDisciplineModel);
+//          },
 
           Object, function getPostData(){
                return{

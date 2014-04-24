@@ -56,8 +56,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             [[chlk.models.grading.ShortStudentAverageInfo, Boolean]],
             String, function displayAvgGradeValue(averageInfo, isAbleDisplayAlphaGrades_){
-                var alphaGrade = averageInfo.getAlphaGradeValue();
-                var res = this.displayGrade(averageInfo.getNumericValue());
+                var alphaGrade = averageInfo.getAlphaGrade();
+                var res = this.displayGrade(averageInfo.getNumericAvg());
                 if(res && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
                     res += '(' + alphaGrade + ')';
                 }

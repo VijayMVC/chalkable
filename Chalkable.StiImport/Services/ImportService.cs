@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
-using School = Chalkable.StiConnector.SyncModel.School;
 
 namespace Chalkable.StiImport.Services
 {
@@ -21,6 +19,7 @@ namespace Chalkable.StiImport.Services
         private const string UNKNOWN_ROOM_NUMBER = "Unknown number";
         private IList<int> importedSchoolIds = new List<int>();
         private ConnectorLocator connectorLocator;
+        private IList<Person> personsForImportPictures = new List<Person>();
 
         protected IServiceLocatorMaster ServiceLocatorMaster { get; set; }
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
@@ -38,17 +37,35 @@ namespace Chalkable.StiImport.Services
         public void Import()
         {
             importedSchoolIds.Clear();
+            personsForImportPictures.Clear();
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             DownloadSyncData();
             ProcessInsert();
             ProcessUpdate();
+            ProcessPictures();
             ProcessDelete();
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
             }
         }
-        
+
+        private void ProcessPictures()
+        {
+            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for import");
+            foreach (var person in personsForImportPictures)
+            {
+                var content = connectorLocator.UsersConnector.GetPhoto(person.PersonID);
+                if (content != null)
+                    ServiceLocatorMaster.PersonPictureService.UploadPicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID ,content);
+                else
+                {
+                    ServiceLocatorMaster.PersonPictureService.DeletePicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID);
+                }
+            }
+        }
+
         public void DownloadSyncData()
         {
             context = new SyncContext();

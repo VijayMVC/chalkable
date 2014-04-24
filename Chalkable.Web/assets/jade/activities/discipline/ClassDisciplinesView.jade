@@ -49,19 +49,17 @@ redirectData = self.getRedirectData()
                         .right.saving-block=Msg.Saving.toLowerCase()
                         .right.saved-block=Msg.Saved.toLowerCase()
                     +ActionForm('discipline','setDiscipline')(style='display: none;').discipline-form-block
-                        input(name="disciplinesJson", type="hidden")
+                        //input(name="disciplinesJson", type="hidden")
                         +Hidden('controller', redirectData.controller)
                         +Hidden('action', redirectData.action)
                         +Hidden('params', redirectData.params)
                         +Hidden('time').save-time
-                        div(
-                            name="discipline",
-                            data-id=item.getId() && item.getId().valueOf(),
-                            data-student-id=item.getStudentId().valueOf(),
-                            data-class-id=item.getClassId().valueOf(),
-                            data-date=self.date.getDate(),
-                        ).discipline-info
-                            +CheckboxList('disciplineTypes', 'disciplineTypes', null).discipline-types
+                        +Hidden('id', item.getId() && item.getId().valueOf())
+                        +Hidden('studentId', item.getStudentId().valueOf())
+                        +Hidden('classId', item.getClassId().valueOf())
+                        +Hidden('date', self.getDate().toStandardFormat())
+                        .discipline-info
+                            +CheckboxList('disciplineTypeIds', 'disciplineTypeIds', self.getSelectedTypeIds(item)).discipline-types
                                 each column in self.getGroupDisciplineTypes(item)
                                     if column.length > 0
                                         .column

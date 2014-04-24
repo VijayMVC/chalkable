@@ -28,7 +28,7 @@ namespace Chalkable.StiConnector.Connectors
         {
             if (!discipline.SectionId.HasValue)
                 throw new ChalkableException("Invalid sectionId param");
-            Put(BuildUrl(discipline.SectionId.Value, discipline.Date), discipline);
+            Put(BuildUrl(discipline.SectionId.Value, discipline.Date, discipline.Id), discipline);
         }
 
         public void Delete(int id, int sectionId, DateTime date)

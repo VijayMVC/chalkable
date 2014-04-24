@@ -72,15 +72,19 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetClassDiscipline(ClassDisciplineInputModel discipline)
         {
-            var infractions = SchoolLocator.InfractionService.GetInfractions();
-            infractions = infractions.Where(x => discipline.InfractionsIds.Contains(x.Id)).ToList();
+            IList<Infraction> infractions = null;
+            if (discipline.InfractionsIds != null && discipline.InfractionsIds.Count > 0)
+            {
+                infractions = SchoolLocator.InfractionService.GetInfractions();
+                infractions = infractions.Where(x => discipline.InfractionsIds.Contains(x.Id)).ToList();
+            }
             var classDisciplineModel = new ClassDiscipline
                 {
                     ClassId = discipline.ClassId,
                     Date = discipline.Date,
                     Id = discipline.Id,
                     Description = discipline.Description,
-                    Infractions = infractions,
+                    Infractions = infractions ?? new List<Infraction>(),
                     StudentId = discipline.StudentId
                 };
             SchoolLocator.DisciplineService.SetClassDiscipline(classDisciplineModel);

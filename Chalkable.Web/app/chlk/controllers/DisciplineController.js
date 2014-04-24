@@ -178,19 +178,19 @@ NAMESPACE('chlk.controllers', function(){
                         }, this);
             },
 
-            [[chlk.models.discipline.SetDisciplineListModel]],
+            [[chlk.models.discipline.SetDisciplineModel]],
             function setDisciplineAction(model){
-                var disciplines = model.getDisciplines();
-                var disc = disciplines.length > 0 ? disciplines[0] : null;
+//                var disciplines = model.getDisciplines();
+//                var disc = disciplines.length > 0 ? disciplines[0] : null;
                 var result = this.disciplineService
-                    .setDiscipline(disc)
+                    .setDiscipline(model)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         /*var controller = model.getController() || 'discipline';
                         var action = model.getAction() || 'list';
                         var params = JSON.parse(model.getParams()) || [];
                         return this.Redirect(controller, action, params);*/
-                        return model.getDisciplines()[0];
+                        return model;//model.getDisciplines()[0];
                     }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },

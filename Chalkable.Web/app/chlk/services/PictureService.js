@@ -15,7 +15,7 @@ NAMESPACE('chlk.services', function () {
                 if (width_){
                     suffix =  height_ ? "-" + width_ + "x" + height_ : "-" + width_ + "x" + width_;
                 }
-                return id && id.valueOf() ? prefix + id.valueOf() + suffix: '#';
+                return id && id.valueOf() ? prefix + window.school.districtid + '_' + id.valueOf() + suffix: '#';
             },
 
             [[ArrayOf(chlk.models.id.PictureId), Number, Number]],

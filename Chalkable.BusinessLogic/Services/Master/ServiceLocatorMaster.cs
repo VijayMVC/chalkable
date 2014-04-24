@@ -1,5 +1,4 @@
 ﻿using System;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 
@@ -16,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IBackgroundTaskService BackgroundTaskService { get; }
         IPreferenceService PreferenceService { get; }
         IChalkableDepartmentService ChalkableDepartmentService { get; }
-        IPictureService PersonPictureService { get; }
+        IPersonPictureService PersonPictureService { get; }
         IPictureService CourseIconService { get; }
         IPictureService DepartmentIconService { get; }
         IPictureService FundRequestPictureService { get; }
@@ -38,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IBackgroundTaskService backgroundTaskService;
         private IPreferenceService preferenceService;
         private IChalkableDepartmentService chalkableDepartmentService;
-        private IPictureService personPictureService;
+        private IPersonPictureService personPictureService;
         private IPictureService courseIconService;
         private IPictureService departmentIconService;
         private IPictureService fundRequestPictureService;
@@ -79,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
         public IPreferenceService PreferenceService { get { return preferenceService; } }
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
-        public IPictureService PersonPictureService { get { return personPictureService; } }
+        public IPersonPictureService PersonPictureService { get { return personPictureService; } }
         public IPictureService CourseIconService { get { return courseIconService; } }
         public IPictureService DepartmentIconService { get { return departmentIconService; } }
         public IApplicationService ApplicationService { get { return applicationService; } }

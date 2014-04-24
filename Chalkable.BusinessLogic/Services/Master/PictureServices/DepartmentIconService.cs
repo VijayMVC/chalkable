@@ -13,8 +13,8 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
         public DepartmentIconService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)
         {
-            supportedSizes.Add(new PictureSize { Height = 80, Width = 45 });
-            supportedSizes.Add(new PictureSize { Height = 46, Width = 26 });
+            SupportedSizes.Add(new PictureSize { Height = 80, Width = 45 });
+            SupportedSizes.Add(new PictureSize { Height = 46, Width = 26 });
         }
         public override void UploadPicture(Guid id, byte[] content)
         {

@@ -35,7 +35,7 @@ namespace Chalkable.Tests.Sis
             Debug.WriteLine(DateTime.Now.Ticks);
             //var r = cl.SyncConnector.GetDiff(typeof(School), null) as SyncResult<School>;
             Debug.WriteLine(DateTime.Now.Ticks);
-            cl.UsersConnector.GetPhoto(19);
+            cl.UsersConnector.GetPhoto(987);
         }
     }
 }

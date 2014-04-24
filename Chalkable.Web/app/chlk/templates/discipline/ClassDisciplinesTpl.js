@@ -39,6 +39,16 @@ NAMESPACE('chlk.templates.discipline',function(){
             },
 
             [[chlk.models.discipline.Discipline]],
+            String, function getSelectedTypeIds(discipline){
+                var selectedDisciplineTypes = discipline.getDisciplineTypes();
+                var res = [];
+                for(var i = 0; i < selectedDisciplineTypes.length; i++){
+                    res.push(selectedDisciplineTypes[i].getId().valueOf());
+                }
+                return res.join(',');
+            },
+
+            [[chlk.models.discipline.Discipline]],
             Array, function getGroupDisciplineTypes(discipline){
                 var res = [];
                 var disciplineTypes = this.getDisciplineTypes();

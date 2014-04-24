@@ -83,7 +83,13 @@ NAMESPACE('chlk.activities.discipline', function(){
                         });
                     }
                 }
+                this.prepareDisciplineTypeToolTip_(rowNode);
+                return res;
+            },
+            [[ria.dom.Dom]],
+            VOID, function prepareDisciplineTypeToolTip_(rowNode){
                 var row = rowNode.previous();
+                var discTypesNode = rowNode.find('[name="disciplineTypeIds"]');
                 var tooltipNode = row.find('.with-discipline');
                 if(discTypesNode.getValue()){
                     var text = rowNode.find(':checked').next().valueOf().map(function(item){
@@ -102,8 +108,6 @@ NAMESPACE('chlk.activities.discipline', function(){
                     if(tooltipNode.exists())
                         tooltipNode.hide();
                 }
-
-                return res;
             },
 
             [[ria.dom.Dom, Boolean]],
@@ -116,8 +120,9 @@ NAMESPACE('chlk.activities.discipline', function(){
                         .setAttr('time', time)
                         .removeClass('saved')
                         .addClass('saving');
-                    var disciplinesNode = form.find('input[name="disciplinesJson"]');
-                    disciplinesNode.setValue(JSON.stringify(this.getDisciplines_(form)));
+//                    var disciplinesNode = form.find('input[name="disciplinesJson"]');
+//                    disciplinesNode.setValue(JSON.stringify(this.getDisciplines_(form)));
+                    this.prepareDisciplineTypeToolTip_(node);
                     form.trigger('submit');
                 }
             },

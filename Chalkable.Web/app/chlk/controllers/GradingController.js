@@ -349,22 +349,24 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.grading.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(model){
-                this.reportingService.submitGradeBookReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
+                var src = this.reportingService.submitGradeBookReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
                     model.getEndDate(), model.getReportType(), model.getOrderBy(), model.getIdToPrint(), model.getFormat(),
                     model.isDisplayLetterGrade(), model.isDisplayTotalPoints(), model.isDisplayStudentAverage(),
                     model.isIncludeWithdrawnStudents(), model.isIncludeNonGradedActivities());
                 this.BackgroundCloseView(chlk.activities.grading.GradeBookReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },
 
             [[chlk.models.grading.SubmitWorksheetReportViewData]],
             function submitWorksheetReportAction(model){
                 if(model.getSubmitType() == 'submit'){
-                    this.reportingService.submitWorksheetReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
+                    var src = this.reportingService.submitWorksheetReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
                         model.getEndDate(), model.getAnnouncementIds(), model.getTitle1(), model.getTitle2(), model.getTitle3(),
                         model.getTitle4(), model.getTitle5(), model.isPrintAverage(), model.isPrintLetterGrade(), model.isPrintScores(),
                         model.isPrintStudent(), model.isWorkingFilter(), model.isAppendToExisting(), model.isOverwriteExisting());
                     this.BackgroundCloseView(chlk.activities.grading.WorksheetReportDialog);
+                    this.getContext().getDefaultView().submitToIFrame(src);
                     return null;
                 }
                 var res = this.getWorksheetReportInfo(model.getGradingPeriodId(), model.getClassId(), model.getStartDate(), model.getEndDate());

@@ -6,6 +6,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementForStudentAttachments');
 REQUIRE('chlk.templates.announcement.AnnouncementGradingPartTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
 REQUIRE('chlk.templates.announcement.AddStandardsTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementViewStandardsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.classes.TopBar');
 

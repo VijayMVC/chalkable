@@ -30,10 +30,10 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
                 Number, Number, Number, Number, Boolean, Boolean, Boolean, Boolean, Boolean]],
-            ria.async.Future, function submitGradeBookReport(classId, gradingPeriodId, startDate, endDate, reportType, orderBy,
+            String, function submitGradeBookReport(classId, gradingPeriodId, startDate, endDate, reportType, orderBy,
                                                              idToPrint, format, displayLetterGrade_, displayTotalPoints_,
                                                              displayStudentAverage_, includeWithdrawnStudents_, includeNonGradedActivities_) {
-                return this.get('Reporting/GradeBookReport.json', Object, {
+                return this.getUrl('Reporting/GradeBookReport.json', {
                     classId: classId.valueOf(),
                     gradingPeriodId: gradingPeriodId.valueOf(),
                     startDate: startDate.toStandardFormat(),
@@ -52,9 +52,9 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
                 String, String, String, String, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
-            ria.async.Future, function submitWorksheetReport(classId, gradingPeriodId, startDate, endDate, announcementIds, title1, title2, title3,
+            String, function submitWorksheetReport(classId, gradingPeriodId, startDate, endDate, announcementIds, title1, title2, title3,
                         title4, title5, printAverage_, printLetterGrade_, printScores_, printStudent_, workingFilter_, appendToExisting_, overwriteExisting_) {
-                return this.get('Reporting/WorksheetReport.json', Object, {
+                return this.getUrl('Reporting/WorksheetReport.json', {
                     classId: classId.valueOf(),
                     gradingPeriodId: gradingPeriodId.valueOf(),
                     startDate: startDate.toStandardFormat(),
