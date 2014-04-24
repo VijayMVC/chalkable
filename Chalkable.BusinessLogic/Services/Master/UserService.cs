@@ -179,6 +179,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 if (iNowUser == null && iNowConnector != null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();          
                 if(iNowUser != null) res.Claims = iNowUser.Claims;
+
+                if (user.IsDemoUser)
+                {
+                    res.Claims = DemoUserService.GetDemoClaims();
+                }
                 return res;
             }
             throw new UnknownRoleException();

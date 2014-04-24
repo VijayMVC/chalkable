@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 Activities = new List<Activity>(),
                 Options = new ClassroomOption(),
                 Scores = new List<Score>(),
-                StudentAverages = new List<StudentAverages>()
+                StudentAverages = new List<StudentAverage>()
             };
         }
 

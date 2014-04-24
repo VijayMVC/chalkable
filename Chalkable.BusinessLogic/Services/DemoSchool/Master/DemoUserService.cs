@@ -5,6 +5,8 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.StiConnector.Connectors.Model;
+using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
@@ -55,7 +57,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 IsDeveloper = false,
                 IsSysAdmin = false,
                 Login = demoUserName,
-     
+                IsDemoUser = true,
                 District = district,
                               
             };
@@ -168,6 +170,78 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-      
+
+        public static IList<Claim> GetDemoClaims()
+        {
+            return new List<Claim>
+            {
+                new Claim
+                {
+                    Type = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+                    Values = new List<string>
+                    {
+                        "Access Future Academic Sessions",
+                        "Access Past Academic Sessions",
+                        "View Academic Session",
+                        "Maintain Address",
+                        "View Address",
+                        "Maintain Attendance",
+                        "View Attendance",
+                        "Maintain Classroom Absence Reasons",
+                        "Maintain Classroom Attendance",
+                        "Maintain Classroom Discipline",
+                        "Maintain Classroom Discipline (Admin)",
+                        "Maintain Classroom Grades",
+                        "Maintain Classroom Lunch Count",
+                        "Maintain Classroom Roster",
+                        "Repost Classroom Attendance",
+                        "View Classroom Absence Reasons",
+                        "View Classroom Attendance",
+                        "View Classroom Attendance (Admin)",
+                        "View Classroom Discipline",
+                        "View Classroom Discipline (Admin)",
+                        "View Classroom Grades",
+                        "View Classroom Lunch Count",
+                        "View Classroom Roster",
+                        "Maintain Discipline",
+                        "View Discipline",
+                        "Change Activity Dates",
+                        "Maintain Classroom",
+                        "Maintain Grade Book Averaging Method",
+                        "Maintain Grade Book Categories",
+                        "Maintain Standards Options",
+                        "Maintain Student Averages",
+                        "Reconcile GradeBook",
+                        "View Classroom",
+                        "Maintain Grading",
+                        "View Grading",
+                        "Maintain Lookup",
+                        "View Lookup",
+                        "Maintain Person",
+                        "View Person",
+                        "View Course",
+                        "View Model",
+                        "View Section",
+                        "Maintain Locker",
+                        "View Locker",
+                        "View Staff",
+                        "Maintain Student",
+                        "Maintain Student Form",
+                        "View Health Condition",
+                        "View Medical",
+                        "View Registration",
+                        "View Special Education",
+                        "View Special Instructions",
+                        "View Student",
+                        "View Student Commendations",
+                        "View Student Custom",
+                        "View Student Form",
+                        "View Student Miscellaneous",
+                        "Maintain Student Filter",
+                        "View Student Filter"
+                    }
+                }
+            };
+        }
     }
 }

@@ -29,6 +29,8 @@ namespace Chalkable.Data.Master.Model
             get { return DistrictRef.HasValue && SchoolUsers != null && SchoolUsers.Count > 0; }
         }
 
+        [NotDbFieldAttr]
+        public bool IsDemoUser { get; set; }
         public bool IsSysAdmin { get; set;}
         public bool IsDeveloper { get; set; }
         public string ConfirmationKey { get; set; }
