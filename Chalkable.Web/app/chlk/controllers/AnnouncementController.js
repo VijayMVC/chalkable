@@ -398,7 +398,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_GRADES)
                         || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADING)
                         || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)){
-                        announcement.setGradable(false);
+                        announcement.setAbleToGrade(false);
                     }
                     announcement.setAbleEdit(announcement.isAnnOwner()
                         && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));

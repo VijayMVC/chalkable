@@ -12,6 +12,7 @@ mixin AnnouncementTooltip()
             .white.comment-triangle
 
 .announcement-view.not-transparent
+    -console.log('gradable:' + self.isGradable())
     isNotStudent = true
     isReadonly = !self.isAnnOwner()
     studentAnnouncements = false

@@ -22,10 +22,11 @@ namespace Chalkable.BusinessLogic.Model
     {
         public int AverageId { get; set; }
         public string AverageName { get; set; }
-        public string AlphaGradeAvg { get;set; }
-        public decimal? AvgValue { get; set; }
+        public decimal? CalculatedAvg { get; set; }
+        public decimal? EnteredAvg { get; set; }
         public int StudentId { get; set; }
-        public AlphaGrade AlphaGrade { get; set; }
+        public AlphaGrade CalculatedAlphaGrade { get; set; }
+        public AlphaGrade EnteredAlphaGrade { get; set; }
         public bool IsGradingPeriodAverage { get; set; }
 
         public static ChalkableStudentAverage Create(StudentAverage studentAverage)
@@ -34,18 +35,23 @@ namespace Chalkable.BusinessLogic.Model
                 {
                     AverageId = studentAverage.AverageId,
                     AverageName = studentAverage.AverageName,
-                    AvgValue = studentAverage.CalculatedNumericAverage ?? studentAverage.EnteredNumericAverage,
+                    CalculatedAvg = studentAverage.CalculatedNumericAverage, 
+                    EnteredAvg = studentAverage.EnteredNumericAverage,
                     StudentId = studentAverage.StudentId,
                     IsGradingPeriodAverage = studentAverage.IsGradingPeriodAverage
                 };
-            if (studentAverage.CalculatedAlphaGradeId.HasValue || studentAverage.EnteredAlphaGradeId.HasValue)
-            {
-                res.AlphaGrade = new AlphaGrade
+            if (studentAverage.CalculatedAlphaGradeId.HasValue)
+                res.CalculatedAlphaGrade = new AlphaGrade
                     {
-                        Id = (studentAverage.CalculatedAlphaGradeId ?? studentAverage.EnteredAlphaGradeId).Value,
-                        Name = studentAverage.CalculatedAlphaGradeName ?? studentAverage.EnteredAlphaGradeName
+                        Id = studentAverage.CalculatedAlphaGradeId.Value,
+                        Name = studentAverage.CalculatedAlphaGradeName
                     };
-            }
+            if (studentAverage.EnteredAlphaGradeId.HasValue)
+                res.EnteredAlphaGrade = new AlphaGrade
+                    {
+                        Id = studentAverage.EnteredAlphaGradeId.Value,
+                        Name = studentAverage.EnteredAlphaGradeName
+                    };
             return res;
         }
     }

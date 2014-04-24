@@ -124,7 +124,7 @@ namespace Chalkable.Web.Models
                 res.AverageId = averages.First().AverageId;
                 res.AverageName = averages.First().AverageName;
                 res.IsGradingPeriodAverage = averages.First().IsGradingPeriodAverage;
-                res.TotalAverage = averages.Average(x => x.AvgValue);
+                res.TotalAverage = averages.Average(x => (x.EnteredAvg ?? x.CalculatedAvg));
             }
             return res;
         }
@@ -149,9 +149,11 @@ namespace Chalkable.Web.Models
     {
         public int AverageId { get; set; }
         public string AverageName { get; set; }
-        public decimal? AvgValue { get; set; }
+        public decimal? CalculatedAvg { get; set; }
+        public string CalculatedAlphaGrade { get; set; }
         public int StudentId { get; set; }
-        public string AlphaGradeValue { get; set; }
+        public decimal? EnteredAvg { get; set; }
+        public string EnteredAlphaGrade { get; set; }
         public bool IsGradingPeriodAverage { get; set; }
 
         public static StudentAveragesViewData Create(ChalkableStudentAverage studentAverage)
@@ -159,8 +161,10 @@ namespace Chalkable.Web.Models
             return new StudentAveragesViewData
                 {
                     AverageId = studentAverage.AverageId,
-                    AlphaGradeValue = studentAverage.AlphaGrade != null ? studentAverage.AlphaGrade.Name : null,
-                    AvgValue = studentAverage.AvgValue,
+                    CalculatedAlphaGrade = studentAverage.CalculatedAlphaGrade != null ? studentAverage.CalculatedAlphaGrade.Name : null,
+                    CalculatedAvg = studentAverage.CalculatedAvg,
+                    EnteredAlphaGrade = studentAverage.EnteredAlphaGrade != null ? studentAverage.EnteredAlphaGrade.Name : null,
+                    EnteredAvg = studentAverage.EnteredAvg,
                     StudentId = studentAverage.StudentId,
                     AverageName = studentAverage.AverageName
                 };

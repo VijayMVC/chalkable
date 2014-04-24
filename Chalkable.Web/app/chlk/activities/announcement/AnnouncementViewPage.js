@@ -32,6 +32,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             Number, 'maxScore',
             ArrayOf(chlk.models.announcement.StudentAnnouncement), 'studentAnnouncements',
             Boolean, 'gradable',
+            Boolean, 'ableToGrade',
             Boolean, 'ableDropStudentScore',
             Boolean, 'ableToExempt',
 
@@ -46,7 +47,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     owner: this.getOwner(),
                     announcementId: this.getAnnouncementId(),
                     ableDropStudentScore : this.isAbleDropStudentScore(),
-                    gradable: this.isGradable()
+                    gradable: this.isAbleToGrade()//this.isGradable()
                 });
                 var container = this.dom.find('.grading-part');
                 container.empty();
@@ -279,6 +280,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setAutoGradeApps(model.getAutoGradeApps());
                 this.setAnnouncementId(model.getId());
                 this.setGradable(model.isGradable());
+                this.setAbleToGrade(model.isAbleToGrade());
 
                 var moving = new ria.dom.Dom('.moving-wrapper');
                 if(moving.exists()){
@@ -323,7 +325,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 tpl.assign(model);
                 tpl.options({
                     announcementId: this.getAnnouncementId(),
-                    gradable: this.isGradable()
+                    gradable: this.isAbleToGrade() // this.isGradable()
                 });
                 tpl.renderTo(this.dom.find('.student-announcements-top-panel').empty());
                 var itemModel = model.getCurrentItem();
@@ -331,7 +333,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 itemTpl.assign(itemModel);
                 itemTpl.options({
                     maxScore: this.getMaxScore(),
-                    readonly: !this.isGradable(),
+                    readonly: !this.isAbleToGrade(),//!this.isGradable(),
                     ableDropStudentScore : this.isAbleDropStudentScore(),
                     ableToExempt : this.isAbleToExempt()
                 });

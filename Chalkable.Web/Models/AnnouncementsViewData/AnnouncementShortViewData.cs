@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool CanDropStudentScore { get; set; }
         public bool MayBeExempt { get; set; }
         public bool Gradable { get; set; }
-  
+        public bool CanGrade { get; set; }
 
         //todo add property departmentid 
 
@@ -54,6 +54,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             CanDropStudentScore = announcement.MayBeDropped;
             MayBeExempt = announcement.MayBeExempt;
             Gradable = announcement.Gradable;
+            CanGrade = Gradable && IsOwner;
         }
 
         public static AnnouncementShortViewData Create(AnnouncementComplex announcement)
