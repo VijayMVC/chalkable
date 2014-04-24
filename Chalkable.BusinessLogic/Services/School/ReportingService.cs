@@ -22,9 +22,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
         {
-             var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
-             var stiModel = new GradebookReportParams
+            var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var stiModel = new GradebookReportParams
                 {
+                    AcadSessionId = gp.SchoolYearRef,
                     StartDate = inputModel.StartDate,
                     EndDate = inputModel.EndDate,
                     DisplayStudentAverage = inputModel.DisplayLetterGrade,
