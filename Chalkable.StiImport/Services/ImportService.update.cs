@@ -128,7 +128,8 @@ namespace Chalkable.StiImport.Services
                         IsAllowedInetAccess = isAllowedInetAccess,
                         SpecialInstructions = specialInstructions,
                         SpEdStatus = spEdStatus,
-                        Email = email
+                        Email = email,
+                        PhotoModifiedDate = person.PhotoModifiedDate
                     });
             }
             ServiceLocatorSchool.PersonService.Edit(pi);

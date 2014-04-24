@@ -41,6 +41,7 @@ namespace Chalkable.Data.School.Model
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
+        public DateTime? PhotoModifiedDate { get; set; }
 
         [NotDbFieldAttr]
         public string FullName
