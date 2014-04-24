@@ -183,6 +183,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (Context.Role == CoreRoles.TEACHER_ROLE && announcement.ClassAnnouncementTypeId.HasValue)
             {
                 ann.ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeId.Value;
+                ann.IsScored = announcement.MaxScore > 0;
                 ann.MaxScore = announcement.MaxScore;
                 ann.WeightAddition = announcement.WeightAddition;
                 ann.WeightMultiplier = announcement.WeightMultiplier;

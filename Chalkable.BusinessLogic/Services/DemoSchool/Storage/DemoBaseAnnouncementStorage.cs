@@ -43,6 +43,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     {
                         data.Add(item.Key, item.Value);    
                     }
+                    else
+                    {
+                        data[item.Key] = item.Value;
+                    }
                 }
                 index = oldData.Count;
             }
@@ -216,6 +220,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassName = classId.HasValue ? Storage.ClassStorage.GetById(classId.Value).Name : "",
                 GradeLevelId = gradeLevelRef,
                 Gender = person.Gender,
+                IsScored = false,
                 Id = annId,
                 SisActivityId = annId,
                 PersonRef = userId,
