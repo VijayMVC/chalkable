@@ -22,27 +22,28 @@ namespace Chalkable.BusinessLogic.Model
     {
         public int AverageId { get; set; }
         public string AverageName { get; set; }
+        public string AlphaGradeAvg { get;set; }
         public decimal? AvgValue { get; set; }
         public int StudentId { get; set; }
         public AlphaGrade AlphaGrade { get; set; }
         public bool IsGradingPeriodAverage { get; set; }
 
-        public static ChalkableStudentAverage Create(StudentAverages studentAverages)
+        public static ChalkableStudentAverage Create(StudentAverage studentAverage)
         {
             var res = new ChalkableStudentAverage
                 {
-                    AverageId = studentAverages.AverageId,
-                    AverageName = studentAverages.AverageName,
-                    AvgValue = studentAverages.Score,
-                    StudentId = studentAverages.StudentId,
-                    IsGradingPeriodAverage = studentAverages.IsGradingPeriodAverage
+                    AverageId = studentAverage.AverageId,
+                    AverageName = studentAverage.AverageName,
+                    AvgValue = studentAverage.CalculatedNumericAverage ?? studentAverage.EnteredNumericAverage,
+                    StudentId = studentAverage.StudentId,
+                    IsGradingPeriodAverage = studentAverage.IsGradingPeriodAverage
                 };
-            if (studentAverages.AlphaGradeId.HasValue)
+            if (studentAverage.CalculatedAlphaGradeId.HasValue || studentAverage.EnteredAlphaGradeId.HasValue)
             {
                 res.AlphaGrade = new AlphaGrade
                     {
-                        Id = studentAverages.AlphaGradeId.Value,
-                        Name = studentAverages.AlphaGradeName
+                        Id = (studentAverage.CalculatedAlphaGradeId ?? studentAverage.EnteredAlphaGradeId).Value,
+                        Name = studentAverage.CalculatedAlphaGradeName ?? studentAverage.EnteredAlphaGradeName
                     };
             }
             return res;
