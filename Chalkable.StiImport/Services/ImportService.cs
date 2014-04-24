@@ -43,7 +43,6 @@ namespace Chalkable.StiImport.Services
             ProcessInsert();
             ProcessUpdate();
             ProcessDelete();
-            importedSchoolIds = ServiceLocatorSchool.SchoolService.GetSchools().Select(x => x.Id).ToList();
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);

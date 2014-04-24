@@ -478,6 +478,7 @@
     <Content Include="fakeData\seatingChart3.json" />
     <None Include="Web.qa.config">
       <SubType>Designer</SubType>
+      <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.staging.config">
       <DependentUpon>Web.config</DependentUpon>
