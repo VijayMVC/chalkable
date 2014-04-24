@@ -68,7 +68,7 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, Object, Object, ria.mvc.IActivity, Object]],
             VOID, function reanimate_(node, options, value, activity, model) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
-                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value.getDate());
+                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value && value.getDate());
             }
         ]);
 });
