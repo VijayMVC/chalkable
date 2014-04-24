@@ -33,20 +33,9 @@ namespace Chalkable.Tests.Sis
             //var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://208.83.95.80:8210/");
         
             Debug.WriteLine(DateTime.Now.Ticks);
-            var r = cl.SyncConnector.GetDiff(typeof(School), null) as SyncResult<School>;
+            //var r = cl.SyncConnector.GetDiff(typeof(School), null) as SyncResult<School>;
             Debug.WriteLine(DateTime.Now.Ticks);
-            
-            foreach (var item in r.All)
-            {
-                cl.LinkConnector.CompleteSync(item.SchoolID);
-                
-                //(id, code, name, description, markingperiodref, schoolyearref, startdate, enddate, endtime, schoolannouncement, allowgradeposting)
-                //var s = string.Format("({0}, '{1}', '{2}', '{3}', {4}, {5}, '{6}', '{7}', '{8}'),", 
-                    //item.InfractionID, item.Code, item.Name, item.Description, item.IsActive, item.IsSystem, item.NCESCode, item.SIFCode, item.StateCode);
-
-                
-            }
-            Assert.NotNull(r);
+            cl.UsersConnector.GetPhoto(19);
         }
     }
 }

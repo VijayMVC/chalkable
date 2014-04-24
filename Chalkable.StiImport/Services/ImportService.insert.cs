@@ -66,6 +66,7 @@ namespace Chalkable.StiImport.Services
                     IsPrivate = school.IsPrivate,
                     Name = school.Name
                 });
+                importedSchoolIds.Add(school.SchoolID);
             }
         }
 
@@ -143,7 +144,8 @@ namespace Chalkable.StiImport.Services
                     HasMedicalAlert = hasMedicalAlert,
                     IsAllowedInetAccess = isAllowedInetAccess,
                     SpecialInstructions = specialInstructions,
-                    SpEdStatus = spEdStatus
+                    SpEdStatus = spEdStatus,
+                    PhotoModifiedDate = person.PhotoModifiedDate
                 });
             }
             ServiceLocatorSchool.PersonService.Add(ps);

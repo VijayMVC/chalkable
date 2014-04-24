@@ -117,7 +117,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         HasMedicalAlert = x.HasMedicalAlert,
                         IsAllowedInetAccess = x.IsAllowedInetAccess,
                         SpecialInstructions = x.SpecialInstructions,
-                        SpEdStatus = x.SpEdStatus
+                        SpEdStatus = x.SpEdStatus,
+                        PhotoModifiedDate = x.PhotoModifiedDate
                     }).ToList();
                 da.Insert(ps);                
                 uow.Commit();
@@ -233,6 +234,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     IsAllowedInetAccess = x.IsAllowedInetAccess,
                     SpecialInstructions = x.SpecialInstructions,
                     SpEdStatus = x.SpEdStatus,
+                    PhotoModifiedDate = x.PhotoModifiedDate
                 }).ToList();
 
                 da.Update(res);
@@ -340,5 +342,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
+        public DateTime? PhotoModifiedDate { get; set; }
     }
 }

@@ -176,6 +176,12 @@ namespace Chalkable.StiConnector.Connectors
             var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users"); //"http://localhost/Api/chalkable/users/me"; //
             return Call<User>(url); 
         }
+
+        public byte[] GetPhoto(int personId)
+        {
+            var url = string.Format("{0}person/{1}/photo", BaseUrl, personId); //"http://localhost/Api/chalkable/users/me"; //
+            return Call<byte[]>(url); 
+        }
     }
 
     public class AttendanceConnector : ConnectorBase
