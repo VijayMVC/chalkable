@@ -114,7 +114,8 @@ namespace Chalkable.StiImport.Services
                         spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
                     }
                 }
-                var email = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID).Email;
+                var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID);
+                var email = chalkablePerson.Email;
                 pi.Add(new PersonInfo
                     {
                         Id = person.PersonID,
@@ -131,6 +132,11 @@ namespace Chalkable.StiImport.Services
                         Email = email,
                         PhotoModifiedDate = person.PhotoModifiedDate
                     });
+                if (person.PhotoModifiedDate.HasValue)
+                {
+                    if (!chalkablePerson.PhotoModifiedDate.HasValue || chalkablePerson.PhotoModifiedDate < person.PhotoModifiedDate)
+                        personsForImportPictures.Add(person);
+                }
             }
             ServiceLocatorSchool.PersonService.Edit(pi);
         }

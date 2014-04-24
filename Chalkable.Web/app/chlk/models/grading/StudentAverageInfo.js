@@ -7,14 +7,28 @@ NAMESPACE('chlk.models.grading', function () {
     CLASS(
         'ShortStudentAverageInfo', [
 
-            [ria.serialize.SerializeProperty('avgvalue')],
-            Number, 'numericValue',
+            [ria.serialize.SerializeProperty('calculatedavg')],
+            Number, 'calculatedAvg',
 
-            [ria.serialize.SerializeProperty('alphagradevalue')],
-            String, 'alphaGradeValue',
+            [ria.serialize.SerializeProperty('enteredavg')],
+            Number, 'enteredAvg',
+
+            [ria.serialize.SerializeProperty('calculatedalphagrade')],
+            Number, 'calculatedAlphaGrade',
+
+            [ria.serialize.SerializeProperty('enteredalphagrade')],
+            Number, 'enteredAlphaGrade',
 
             [ria.serialize.SerializeProperty('studentid')],
-            chlk.models.id.SchoolPersonId, 'studentId'
+            chlk.models.id.SchoolPersonId, 'studentId',
+
+            function getNumericAvg(){
+                return this.getEnteredAvg() || this.getCalculatedAvg()
+            },
+
+            function getAlphaGrade(){
+                return this.getEnteredAlphaGrade() || this.getCalculatedAlphaGrade()
+            }
 
     ]);
 

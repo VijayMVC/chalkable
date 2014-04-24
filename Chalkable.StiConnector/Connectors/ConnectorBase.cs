@@ -89,10 +89,14 @@ namespace Chalkable.StiConnector.Connectors
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
                 writer.Flush();
+                
                 return client.UploadData(url, httpMethod.Method, stream.ToArray());
             }
             catch (WebException ex)
             {
+                if (ex.Response is HttpWebResponse &&
+                    (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                    return null;
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
                 throw new Exception(msg);
@@ -100,6 +104,27 @@ namespace Chalkable.StiConnector.Connectors
             finally
             {
                 stream.Dispose();
+            }
+        }
+
+        public byte[] Download(string url, NameValueCollection optionalParams = null)
+        {
+            
+            var client = InitWebClient();
+            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
+            try
+            {
+                client.QueryString = optionalParams ?? new NameValueCollection();
+                var res = client.DownloadData(url);
+                var type = client.ResponseHeaders[HttpResponseHeader.ContentType];
+                Debug.WriteLine(type);
+                return res;
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg);
             }
         }
 
@@ -179,8 +204,8 @@ namespace Chalkable.StiConnector.Connectors
 
         public byte[] GetPhoto(int personId)
         {
-            var url = string.Format("{0}person/{1}/photo", BaseUrl, personId); //"http://localhost/Api/chalkable/users/me"; //
-            return Call<byte[]>(url); 
+            var url = string.Format("{0}persons/{1}/photo", BaseUrl, personId); //"http://localhost/Api/chalkable/users/me"; //
+            return Download(url);
         }
     }
 
