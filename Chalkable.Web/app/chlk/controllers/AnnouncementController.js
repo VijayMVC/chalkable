@@ -405,13 +405,14 @@ NAMESPACE('chlk.controllers', function (){
 
                     this.getContext().getSession().set('announcement', announcement);
 
-                    announcement.getStudentAnnouncements().getItems().forEach(function(item){
-                        var standard1 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(1), 'ASD.f-1', '10'),
-                            standard2 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(2), 'ASD.f-2', 'A+'),
-                            standards = [standard1, standard2];
-                        item.setStandards(standards);
-                    });
-
+                    if(announcement.getStudentAnnouncements() && announcement.getStudentAnnouncements().getItems()){
+                        announcement.getStudentAnnouncements().getItems().forEach(function(item){
+                            var standard1 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(1), 'ASD.f-1', '10'),
+                                standard2 = new chlk.models.standard.Standard(new chlk.models.id.StandardId(2), 'ASD.f-2', 'A+'),
+                                standards = [standard1, standard2];
+                            item.setStandards(standards);
+                        });
+                    }
                     return new ria.async.DeferredData(announcement);
                 }, this);
 
