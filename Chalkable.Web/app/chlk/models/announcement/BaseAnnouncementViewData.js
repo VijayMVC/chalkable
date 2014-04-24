@@ -34,6 +34,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('isowner')],
             Boolean, 'annOwner',
 
-            Boolean, 'gradable'
+            Boolean, 'gradable',
+
+            [ria.serialize.SerializeProperty('cangrade')],
+            Boolean, 'ableToGrade'
         ]);
 });
