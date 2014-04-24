@@ -24,6 +24,16 @@ NAMESPACE('chlk.lib.mvc', function () {
                 return this.getContext().getSession().get('currentPerson');
             },
 
+            [[String]],
+            function submitToIFrame(src){
+                var iframe = new ria.dom.Dom('<iframe>');
+                iframe.setAttr('src', src);
+                iframe.appendTo('body');
+                iframe.on('load', function(node, event){
+                    node.remove();
+                })
+            },
+
             [[ria.mvc.IActivity]],
             ria.mvc.IActivity, function prepareActivity_(activity){
                 //todo: ichlkactivity
