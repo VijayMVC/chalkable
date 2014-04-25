@@ -14,9 +14,6 @@ namespace Chalkable.BackgroundTaskProducer
         {
             Trace.WriteLine("BackgroundTaskProducer entry point called", "Information");
             var cp = new CompositeProducer();
-            //cp.AddProducer("Demo school producer", new CreateDemoDistrictTaskProducer());
-            //cp.AddProducer("Demo school delete producer", new DemoDistrictDeleteTaskProducer());
-
             //cp.AddProducer("Process Reminders Producer", new AllDistrictsProducer("ProcessReminderProducer", BackgroundTaskTypeEnum.ProcessReminder));
             //cp.AddProducer("Attendance Notification Producer", new AllDistrictsProducer("AttendanceNotificationProducer", BackgroundTaskTypeEnum.AttendanceNotification));
             //cp.AddProducer("Teacher Attendance Notification Producer", new AllDistrictsProducer("TeacherAttendanceNotification", BackgroundTaskTypeEnum.TeacherAttendanceNotification));

@@ -25,8 +25,11 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult RedirectToINow()
         {
+            if (!Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for redirect to SIS");
             var schoolYearId = GetCurrentSchoolYearId();
-            var sisUrl = Context.SisUrl;
+            var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
+            var sisUrl = district.SisRedirectUrl;
             var url = string.Format(
                     "{0}InformationNow/TokenLogin.aspx?Token={1}&AcadSessionId={2}"
                     , sisUrl, Context.SisToken, schoolYearId);

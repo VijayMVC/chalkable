@@ -17,7 +17,9 @@ namespace Chalkable.StiConnector.Connectors
         public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires)
         {
             Token = token;
-            BaseUrl = baseUrl + "Api/";
+            if (!baseUrl.EndsWith("/"))
+                baseUrl += "/";
+            BaseUrl = baseUrl;
             TokenExpires = tokenExpires;
             InitServices();
         }

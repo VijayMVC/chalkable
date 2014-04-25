@@ -32,6 +32,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword,
+                               string timeZone)
+        {
+            throw new NotImplementedException();
+        }
+
         public PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue)
         {
             throw new NotImplementedException();
@@ -52,11 +58,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Storage.DistrictStorage.GetByIdOrNull(id);
         }
  
-        public District UseDemoDistrict()
-        {
-           throw new NotImplementedException(); 
-        }
-
         public void DeleteDistrict(Guid id)
         {
             throw new NotImplementedException();

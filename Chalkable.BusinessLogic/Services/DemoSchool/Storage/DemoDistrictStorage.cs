@@ -22,7 +22,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return new District
             {
                 DbName = "DemoDB",
-                DemoPrefix = id.ToString(),
                 Id = id,
                 Name = "Demo District",
                 TimeZone = "UTC"

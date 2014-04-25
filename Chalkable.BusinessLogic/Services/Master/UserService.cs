@@ -169,9 +169,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var su = user.SchoolUsers[0];
                 Guid? developerId = null;
-                if (!string.IsNullOrEmpty(user.District.DemoPrefix))
+                if (user.District.IsDemoDistrict)
                 {
-                    var developer = new DeveloperDataAccess(uow).GetDeveloper(Guid.Parse(user.District.DemoPrefix));
+                    var developer = new DeveloperDataAccess(uow).GetDeveloper(user.District.Id);
                     if (developer != null) developerId = developer.Id;
                 }
                 user = SaveSisToken(user, uow, ref iNowConnector);
@@ -208,8 +208,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             return user;
         }
-
-       
 
         private User GetDemoUser(string roleName, string prefix)
         {

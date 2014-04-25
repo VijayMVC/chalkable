@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
@@ -10,7 +9,6 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -116,19 +114,14 @@ namespace Chalkable.Web.Controllers
                 var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
                 school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
-
-
-                
-                if (!string.IsNullOrEmpty(district.DemoPrefix))
+                if (district.IsDemoDistrict)
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
                     ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.DemoPrefix;
-
-
+                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.Id.ToString();
                     if (Context.DeveloperId != null)
                         ViewData[ViewConstants.IS_DEV] = true;
 
