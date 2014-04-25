@@ -16,19 +16,12 @@ namespace Chalkable.Web.Controllers
         public ActionResult Index()
         {
             var roles = new List<CoreRole>
-                            {
-                                CoreRoles.ADMIN_GRADE_ROLE,
-                                CoreRoles.TEACHER_ROLE,
-                                CoreRoles.STUDENT_ROLE
-                            };
-            var id = Guid.NewGuid();
-            var demoSchool = new District
             {
-                DbName = "DemoDB",
-                Id = id,
-                Name = "Demo district"
+                CoreRoles.ADMIN_GRADE_ROLE,
+                CoreRoles.TEACHER_ROLE,
+                CoreRoles.STUDENT_ROLE
             };
-            ViewData[ViewConstants.DEMO_PREFIX_KEY] = demoSchool.Id.ToString();
+            ViewData[ViewConstants.DEMO_PREFIX_KEY] = Guid.NewGuid().ToString();
             return View(RoleViewData.Create(roles));
         }
 

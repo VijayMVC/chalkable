@@ -23,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 DbName = "DemoDB",
                 Id = id,
+                IsDemoDistrict = true,
                 Name = "Demo District",
                 TimeZone = "UTC"
             };
