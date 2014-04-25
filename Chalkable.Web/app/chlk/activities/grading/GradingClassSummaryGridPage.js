@@ -628,9 +628,12 @@ NAMESPACE('chlk.activities.grading', function () {
                 var dom = this.dom;
                 var that = this;
                 new ria.dom.Dom().on('click.grade', function(doc, event){
-                    var dt = getDate();
-                    var popUp = dom.find('.chlk-pop-up-container.comment');
                     var node = new ria.dom.Dom(event.target);
+                    if(!node.isOrInside('.grading-comments-list')){
+                        dom.find('.grading-comments-list').hide();
+                    }
+
+                    var popUp = dom.find('.chlk-pop-up-container.comment');
                     if(!node.hasClass('value-input') && !node.hasClass('arrow')
                         && !node.isOrInside('.chlk-pop-up-container.comment') && !node.isOrInside('.grading-input-popup')
                         && !node.isOrInside('.autocomplete-list')){
