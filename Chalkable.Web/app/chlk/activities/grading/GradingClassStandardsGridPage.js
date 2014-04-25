@@ -82,10 +82,29 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('keydown', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeKeyDown(node, event){
+                var list = this.dom.find('.autocomplete-list:visible'),
+                    cell = node.parent('.active-cell');
+                if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
+                    if(!node.hasClass('error') && !node.hasClass('blocked')){
+                        if(list.exists()){
+                            if(list.find('.see-all').hasClass('hovered')){
+                                list.find('.see-all').trigger('click');
+                                return false;
+                            }
+                            var hovered = list.find('.hovered');
+                            if(hovered.exists()){
+                                node.setValue(hovered.getHTML());
+                                node.parent('form').find('input[name=gradeid]').setValue(hovered.getData('id'));
+                            }
+                        }
+                        this.setValue(cell);
+
+                    }
+                }
+
                 setTimeout(function(node, event){
                     var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                     var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
-                    var list = this.dom.find('.autocomplete-list:visible');
                     if((isDown || isUp) && list.exists()){
                         var hovered = list.find('.hovered');
                         if(hovered.exists()){
@@ -124,21 +143,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
-                        if(!node.hasClass('error') && !node.hasClass('blocked')){
-                            if(list.exists()){
-                                if(list.find('.see-all').hasClass('hovered')){
-                                    list.find('.see-all').trigger('click');
-                                    return false;
-                                }
-                                var hovered = list.find('hovered');
-                                if(hovered.exists()){
-                                    node.setValue(hovered.getHTML());
-                                    node.parent('form').find('input[name=gradeid]').setValue(hovered.getData('id'));
-                                }
-                            }
-                            this.setValue(cell);
-
-                        }
                         return false;
                     }else{
                         var text = node.getValue() ? node.getValue().trim() : '';

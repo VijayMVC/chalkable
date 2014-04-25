@@ -5,7 +5,7 @@
     +Hidden('id', self.getId())
     +Hidden('announcementid', self.getAnnouncementId())
     +Hidden('studentid', self.getStudentId())
-    input(value=self.getModel().getNormalValue(), name="gradevalue", data-grade-value=self.getGradeValue(),).grade-autocomplete
+    input(value=self.getModel().getNormalValue(), name="gradevalue", data-grade-value=self.getGradeValue(),).grade-autocomplete.value-input
     .grading-input-popup.chlk-pop-up-container.popup-bottom
         .pop-up-triangle.big
         if self.isAbleDropStudentScore()

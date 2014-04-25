@@ -32,7 +32,18 @@ mixin StudentAverages(tpl)
             .time
             .max-score.dotted-h
             each average,i in studentAvg.getAverages()
-                div(row-index=i, class=(i == tpl.getRowIndex() ? 'active-row' : '')).dotted-h.grade-value=tpl.getModel().displayAvgGradeValue(average, self.isAbleDisplayAlphaGrades())
+                div(
+                    row-index=i,
+                    class=(i == tpl.getRowIndex() ? 'active-row' : ''),
+                    data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
+                    data-average-id=average.getAverageId(),
+                    data-student-id=average.getStudentId(),
+                    data-grading-period-id=self.getGradingPeriod().getId().valueOf()
+                ).dotted-h.grade-value.gradable.avg-value-container
+                    +RenderWith(average, chlk.templates.grading.StudentAverageTpl)(
+                        ableDisplayAlphaGrades = self.isAbleDisplayAlphaGrades(),
+                        gradingPeriodId = self.getGradingPeriod().getId()
+                    )
             .dotted-h.grade-value=tpl.getModel().displayGrade(studentAvg.getTotalAverage())
 
 mixin DisplayTotalPoints(model)

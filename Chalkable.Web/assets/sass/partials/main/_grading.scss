@@ -584,7 +584,7 @@ BODY {
                             top: 0;
                             bottom: 1px;
                             background: url(images/grading/edit-cell.png) center center no-repeat, #eeeeee;
-                            z-index: 0;
+                            z-index: 1;
                             opacity: 0;
 
                             &:hover{
@@ -592,7 +592,7 @@ BODY {
                             }
                           }
 
-                          .grade-autocomplete{
+                          .grade-autocomplete, .avg-value{
                             position: absolute;
                             left: -1px;
                             right: 0px;
@@ -611,7 +611,7 @@ BODY {
                           }
 
                           &.active-cell{
-                            .grade-autocomplete{
+                            .grade-autocomplete, .avg-value{
                               display: block;
                             }
 
@@ -857,6 +857,18 @@ BODY {
   width: 70px;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  .edited{
+    font: normal 10px Arial italic;
+    text-align: left;
+    position: absolute;
+    color: #b1b1b1;
+    text-shadow: 0 1px 0 white;
+    padding-left: 13px;
+    bottom: 1px;
+    left: 18px;
+    background: url(images/grading/edited-avg.png) 0 center no-repeat;
+  }
 }
 
 .ann-grade-pop-up{
@@ -1167,6 +1179,17 @@ BODY {
           border-left: 1px solid #fff;
         }
       }
+    }
+  }
+}
+
+#chlk-dialogs {
+  >DIV{
+    &.student-avg-popup-dialog{
+      position: fixed;
+      width: 472px;
+      top: 80px;
+      left: 411px;
     }
   }
 }

@@ -1,4 +1,6 @@
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.GradingPeriodId');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -6,6 +8,8 @@ NAMESPACE('chlk.models.grading', function () {
     /** @class chlk.models.grading.ShortStudentAverageInfo*/
     CLASS(
         'ShortStudentAverageInfo', [
+            [ria.serialize.SerializeProperty('averageid')],
+            Number, 'averageId',
 
             [ria.serialize.SerializeProperty('calculatedavg')],
             Number, 'calculatedAvg',
@@ -14,13 +18,19 @@ NAMESPACE('chlk.models.grading', function () {
             Number, 'enteredAvg',
 
             [ria.serialize.SerializeProperty('calculatedalphagrade')],
-            Number, 'calculatedAlphaGrade',
+            String, 'calculatedAlphaGrade',
 
             [ria.serialize.SerializeProperty('enteredalphagrade')],
-            Number, 'enteredAlphaGrade',
+            String, 'enteredAlphaGrade',
 
             [ria.serialize.SerializeProperty('studentid')],
             chlk.models.id.SchoolPersonId, 'studentId',
+
+            chlk.models.id.ClassId, 'classId',
+
+            chlk.models.id.GradingPeriodId, 'gradingPeriodId',
+
+            String, 'averageValue',
 
             function getNumericAvg(){
                 return this.getEnteredAvg() || this.getCalculatedAvg()
@@ -28,6 +38,20 @@ NAMESPACE('chlk.models.grading', function () {
 
             function getAlphaGrade(){
                 return this.getEnteredAlphaGrade() || this.getCalculatedAlphaGrade()
+            },
+
+            [[Boolean, Boolean]],
+            String, function displayAvgGradeValue(isAbleDisplayAlphaGrades_, original_){
+                var alphaGrade = original_ ? this.getCalculatedAlphaGrade() : this.getAlphaGrade();
+                var res = this.displayGrade(original_ ? this.getCalculatedAvg() : this.getNumericAvg());
+                if(res && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
+                    res += '(' + alphaGrade + ')';
+                }
+                return res;
+            },
+
+            String, function displayGrade(grade){
+                return grade || grade == 0 ? grade.toFixed(2) : '';
             }
 
     ]);
