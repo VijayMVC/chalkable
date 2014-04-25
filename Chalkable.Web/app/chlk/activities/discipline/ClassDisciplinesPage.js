@@ -43,6 +43,14 @@ NAMESPACE('chlk.activities.discipline', function(){
             function updateDisciplineItem(node, event){
                 clearTimeout(this._submitTimeout);
                 this._submitTimeout = setTimeout(function(){
+                    if(node.is(':checkbox')){
+                        var discInfoNode = node.parent('.discipline-info');
+                        var notesAreaNode = discInfoNode.find('.notes-area');
+                        if(discInfoNode.find('[name="disciplineTypeIds"]').getValue())
+                            notesAreaNode.removeAttr('readonly');
+                        else
+                            notesAreaNode.setAttr('readonly', 'true');
+                    }
                     this.updateDiscipline_(node);
                 }.bind(this), 1000);
             },
@@ -62,30 +70,32 @@ NAMESPACE('chlk.activities.discipline', function(){
                 });
             },
 
-            [[ria.dom.Dom]],
-            Array, function getDisciplines_(rowNode){
-                var res = [];
-                var disciplinesNodes = rowNode.find('[name="discipline"]').valueOf();
-                var len = disciplinesNodes.length, i, node;
-                for(i=0;i<len;i++){
-                    node = new ria.dom.Dom(disciplinesNodes[i]);
-                    if(node.find(':disabled').valueOf().length == 0) {
-                        var descNode = node.find('[name="description"]');
-                        var discTypesNode = node.find('[name="disciplineTypes"]');
-                        res.push({
-                            id: node.getData('id'),
-                            studentId: node.getData('student-id'),
-                            classId: node.getData('class-id'),
-                            date: node.getData('date'),
-                            description: descNode.getValue(),
-                            disciplineTypeIds: discTypesNode.getValue(),
-                            time: rowNode.find('[name="time"]').getValue()
-                        });
-                    }
-                }
-                this.prepareDisciplineTypeToolTip_(rowNode);
-                return res;
-            },
+//            [[ria.dom.Dom]],
+//            Array, function getDisciplines_(rowNode){
+//                var res = [];
+//                var disciplinesNodes = rowNode.find('[name="discipline"]').valueOf();
+//                var len = disciplinesNodes.length, i, node;
+//                for(i=0;i<len;i++){
+//                    node = new ria.dom.Dom(disciplinesNodes[i]);
+//                    if(node.find(':disabled').valueOf().length == 0) {
+//                        var descNode = node.find('[name="description"]');
+//                        var discTypesNode = node.find('[name="disciplineTypes"]');
+//                        res.push({
+//                            id: node.getData('id'),
+//                            studentId: node.getData('student-id'),
+//                            classId: node.getData('class-id'),
+//                            date: node.getData('date'),
+//                            description: descNode.getValue(),
+//                            disciplineTypeIds: discTypesNode.getValue(),
+//                            time: rowNode.find('[name="time"]').getValue()
+//                        });
+//                    }
+//                }
+//                this.prepareDisciplineTypeToolTip_(rowNode);
+//                return res;
+//            },
+
+
             [[ria.dom.Dom]],
             VOID, function prepareDisciplineTypeToolTip_(rowNode){
                 var row = rowNode.previous();

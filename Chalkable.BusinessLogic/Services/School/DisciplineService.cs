@@ -86,7 +86,12 @@ namespace Chalkable.BusinessLogic.Services.School
             MapperFactory.GetMapper<DisciplineReferral, ClassDiscipline>().Map(stiDiscipline, classDiscipline);
 
             if (classDiscipline.Id.HasValue)
-                   ConnectorLocator.DisciplineConnector.Update(stiDiscipline);
+            {
+                if(classDiscipline.Infractions == null || classDiscipline.Infractions.Count == 0)
+                    ConnectorLocator.DisciplineConnector.Delete(classDiscipline.Id.Value, classDiscipline.ClassId.Value, classDiscipline.Date);
+                else 
+                    ConnectorLocator.DisciplineConnector.Update(stiDiscipline);                
+            }
             else
             {               
                 stiDiscipline = ConnectorLocator.DisciplineConnector.Create(stiDiscipline);
@@ -94,9 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return classDiscipline;
         }
-
-
-
+        
         //TODO: needs test... security
         //public IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<Guid> gradeLevelIds = null)
         //{
