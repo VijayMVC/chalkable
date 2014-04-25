@@ -42,6 +42,17 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId, Number, String]],
+            ria.async.Future, function updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue) {
+                return this.get('Grading/UpdateStudentAverage', chlk.models.grading.ShortStudentAverageInfo, {
+                    classId: classId && classId.valueOf(),
+                    studentId: studentId && studentId.valueOf(),
+                    gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf(),
+                    averageId: averageId,
+                    averageValue: averageValue
+                });
+            },
+
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function applyAutoGrade(announcementId) {
                 return this.get('Grading/ApplyAutoGrade', chlk.models.announcement.StudentAnnouncements, {

@@ -4,6 +4,7 @@ REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl');
 REQUIRE('chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl');
 REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
+REQUIRE('chlk.templates.grading.StudentAverageTpl');
 
 REQUIRE('chlk.activities.lib.TemplatePage');
 
@@ -117,12 +118,17 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             function getScores(node){
-                var scores = this.getAllScores();
-                var parent = node.parent('.grade-value');
-                if(parent.getData('able-drop-student-score'))
-                    scores.concat(['Dropped', 'Dropped (fill all)']);
-                if(parent.getData('able-exempt-student-score'))
-                    scores.concat(['Exempt', 'Exempt (fill all)']);
+                var parent = node.parent('.grade-value'), scores;
+                if(parent.hasClass('avg-value-container')){
+                    scores = this.getStandardScores();
+                }else{
+                    scores = this.getAllScores();
+                    if(parent.getData('able-drop-student-score'))
+                        scores.concat(['Dropped', 'Dropped (fill all)']);
+                    if(parent.getData('able-exempt-student-score'))
+                        scores.concat(['Exempt', 'Exempt (fill all)']);
+                }
+
                 return scores;
             },
 
@@ -175,7 +181,20 @@ NAMESPACE('chlk.activities.grading', function () {
                 tpl.renderTo(container.setHTML(''));
             },
 
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.StudentAverageTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function updateAvgCell(tpl, model, msg_) {
+                var container = this.dom.find('.avg-value-container[data-student-id=' + model.getStudentId().valueOf()
+                    + '][data-average-id=' + model.getAverageId().valueOf() + ']');
+                tpl.options({
+                    gradingPeriodId: new chlk.models.id.GradingPeriodId(container.getData('grading-period-id')),
+                    ableDisplayAlphaGrades: !!container.getData('able-display-alpha-grades')
+                });
+                tpl.renderTo(container.setHTML(''));
+            },
+
             ArrayOf(String), 'allScores',
+
+            ArrayOf(String), 'standardScores',
 
             [[String, ria.dom.Dom]],
             ArrayOf(String), function getSuggestedValues(text, node){
@@ -238,14 +257,30 @@ NAMESPACE('chlk.activities.grading', function () {
                 new ria.dom.Dom().off('click.grade');
             },
 
-            [ria.mvc.DomEventBind('keydown', '.grade-autocomplete')],
+            [ria.mvc.DomEventBind('keydown', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeKeyDown(node, event){
-                if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && node.hasClass('error'))
-                    return false;
+                var list = this.dom.find('.autocomplete-list:visible');
+                if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
+                    if(node.hasClass('error')){
+                        return false;
+                    }else{
+                        if(list.exists()){
+                            if(list.find('.see-all').hasClass('hovered')){
+                                list.find('.see-all').trigger('click');
+                                return false;
+                            }
+                            var newValue = list.find('.hovered').getHTML();
+                            if(newValue)
+                                node.setValue(newValue);
+                            this.updateValue(true);
+                        }
+                        else
+                            this.updateValue(true);
+                    }
+                }
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
-                var list = this.dom.find('.autocomplete-list:visible');
                 if(isDown || isUp){
                     if(list.exists()){
                         var hovered = list.find('.hovered');
@@ -270,7 +305,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 return true;
             },
 
-            [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
+            [ria.mvc.DomEventBind('keyup', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeKeyUp(node, event){
                 var suggestions = [], cell = node.parent('.active-cell');
@@ -287,12 +322,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
-                        if(list.exists() && list.find('.see-all').hasClass('hovered')){
-                            list.find('.see-all').trigger('click');
-                            return false;
-                        }
-                        else
-                            this.updateValue(true);
+
                     }else{
                         if(value){
                             var text = node.getValue() ? node.getValue().trim() : '';
@@ -457,7 +487,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function gradingPopUpClick(node, event){
                 setTimeout(function(){
-                    node.parent('form').find('.grade-autocomplete').trigger('focus');
+                    node.parent('form').find('.value-input').trigger('focus');
                 }, 1)
             },
 
@@ -469,7 +499,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var value = text, isFill = false;
                 var cell = this.dom.find('.active-cell');
                 cell.find('.error').removeClass('error');
-                var input = cell.find('.grade-autocomplete');
+                var input = cell.find('.value-input');
                 if(text.toLowerCase().indexOf('fill') > -1){
                     isFill = true;
                     value = text.split('(fill all)')[0].trim();
@@ -521,7 +551,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
 
-                if(selectNext_){
+                if(selectNext_ && !activeCell.hasClass('avg-value-container')){
                     var nextCell = activeCell.next().find('.edit-cell');
                     setTimeout(function(){
                         if(nextCell.exists())
@@ -530,21 +560,33 @@ NAMESPACE('chlk.activities.grading', function () {
                             this.dom.trigger('click');
                     }.bind(this), 1);
                 }
+            },
 
-
+            OVERRIDE, VOID, function onModelWait_(msg_) {
+                BASE(msg_);
+                if(msg_ == chlk.activities.lib.DontShowLoader()){
+                    this.dom.find('.for-edit').setHTML('...');
+                }
             },
 
             [ria.mvc.DomEventBind('submit', '.grading-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradingFormSubmit(node, event){
-                var input = node.find('.grade-autocomplete');
+                var input = node.find('.value-input');
                 if(!input.hasClass('error')){
+                    var isAvg = node.hasClass('avg-form');
                     var activeCell = node.parent('.grade-value');
+                    this.dom.find('.autocomplete-list:visible').hide();
                     var model = this.getModelFromCell(activeCell);
                     this.updateFlagByModel(model, activeCell);
-                    activeCell.find('.grade-text').setHTML('...');
                     var form = activeCell.parent('.marking-period-container').find('.load-grading-period');
                     this.addTimeOut(form);
+                    if(isAvg){
+                        activeCell.removeClass('active-cell');
+                        activeCell.find('.grade-text').addClass('for-edit');
+                    }else{
+                        activeCell.find('.grade-text').setHTML('...');
+                    }
                 }else{
                     event.preventDefault();
                     return false;
@@ -565,13 +607,14 @@ NAMESPACE('chlk.activities.grading', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                var allScores = [];
+                var allScores = [], standardScores = [];
                 model.getAlternateScores().forEach(function(item){
                     allScores.push(item.getName());
                     allScores.push(item.getName() + ' (fill all)');
                 });
                 model.getAlphaGrades().forEach(function(item){
                     allScores.push(item.getName());
+                    standardScores.push(item.getName());
                     allScores.push(item.getName() + ' (fill all)');
                 });
 
@@ -581,27 +624,33 @@ NAMESPACE('chlk.activities.grading', function () {
 
                 allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
                 this.setAllScores(allScores);
+                this.setStandardScores(allScores);
                 var dom = this.dom;
                 var that = this;
                 new ria.dom.Dom().on('click.grade', function(doc, event){
-                    var dt = getDate();
-                    var popUp = dom.find('.chlk-pop-up-container.comment');
                     var node = new ria.dom.Dom(event.target);
-                    if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
+                    if(!node.isOrInside('.grading-comments-list')){
+                        dom.find('.grading-comments-list').hide();
+                    }
+
+                    var popUp = dom.find('.chlk-pop-up-container.comment');
+                    if(!node.hasClass('value-input') && !node.hasClass('arrow')
                         && !node.isOrInside('.chlk-pop-up-container.comment') && !node.isOrInside('.grading-input-popup')
                         && !node.isOrInside('.autocomplete-list')){
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
                                 popUp.hide();
-                                var parent = node.parent('.grade-value.gradable');
+                                var parent = (node.hasClass('grade-value') && node.hasClass('gradable')) ? node : node.parent('.grade-value.gradable');
 
                                 //TODO
                                 var activeCell = dom.find('.active-cell');
-                                if(activeCell.exists()){
+                                var isAvg = activeCell.hasClass('avg-value-container');
+                                if(activeCell.exists() && !isAvg){
                                     activeCell.find('form').trigger('submit');
                                 }
                                 activeCell.removeClass('active-cell');
-                                activeCell.find('.grading-form').remove();
+                                if(!isAvg)
+                                    activeCell.find('.grading-form').remove();
                                 if(parent.exists() && !node.hasClass('alert-flag')){
                                     if(!parent.hasClass('active-row')){
                                         var index = parent.getAttr('row-index');
@@ -609,10 +658,13 @@ NAMESPACE('chlk.activities.grading', function () {
                                         dom.find('[row-index=' + index + ']').addClass('active-row');
                                     }
                                     parent.addClass('active-cell');
-                                    that.addFormToActiveCell(parent);
-                                    node.parent('.marking-period-container').find('.comment-button').show();
+                                    if(!parent.hasClass('avg-value-container')){
+                                        that.addFormToActiveCell(parent);
+                                        node.parent('.marking-period-container').find('.comment-button').show();
+                                    }
+
                                     setTimeout(function(){
-                                        parent.find('input').trigger('focus');
+                                        parent.find('.value-input').trigger('focus');
                                     },1)
                                 }else{
                                     dom.find('.active-row').removeClass('active-row');

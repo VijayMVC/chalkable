@@ -49,15 +49,14 @@ NAMESPACE('chlk.models.grading', function () {
                     ? Msg.Avg : studentAverage.getAverageName();
             },
 
-            [[Number]],
             String, function displayGrade(grade){
                 return grade ? grade.toFixed(2) : '';
             },
 
-            [[chlk.models.grading.ShortStudentAverageInfo, Boolean]],
-            String, function displayAvgGradeValue(averageInfo, isAbleDisplayAlphaGrades_){
-                var alphaGrade = averageInfo.getAlphaGrade();
-                var res = this.displayGrade(averageInfo.getNumericAvg());
+            [[chlk.models.grading.ShortStudentAverageInfo, Boolean, Boolean]],
+            String, function displayAvgGradeValue(averageInfo, isAbleDisplayAlphaGrades_, original_){
+                var alphaGrade = original_ ? averageInfo.getCalculatedAlphaGrade() : averageInfo.getAlphaGrade();
+                var res = this.displayGrade(original_ ? averageInfo.getCalculatedAvg() : averageInfo.getNumericAvg());
                 if(res && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
                     res += '(' + alphaGrade + ')';
                 }

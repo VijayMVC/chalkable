@@ -17,6 +17,7 @@ REQUIRE('chlk.activities.grading.GradingClassSummaryGridPage');
 REQUIRE('chlk.activities.grading.GradingClassStandardsGridPage');
 REQUIRE('chlk.activities.grading.GradeBookReportDialog');
 REQUIRE('chlk.activities.grading.WorksheetReportDialog');
+REQUIRE('chlk.activities.grading.StudentAvgPopupDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
 REQUIRE('chlk.models.grading.SubmitGradeBookReportViewData');
@@ -155,6 +156,7 @@ NAMESPACE('chlk.controllers', function (){
             function summaryGridTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
+                this.getContext().getSession().set('currentClassId', classId_);
                 var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var alphaGrades = this.getContext().getSession().get('alphaGrades', []);
@@ -371,6 +373,27 @@ NAMESPACE('chlk.controllers', function (){
                 }
                 var res = this.getWorksheetReportInfo(model.getGradingPeriodId(), model.getClassId(), model.getStartDate(), model.getEndDate());
                 return this.UpdateView(chlk.activities.grading.WorksheetReportDialog, res, 'grid');
+            },
+
+            [[chlk.models.grading.ShortStudentAverageInfo]],
+            function updateStudentAvgAction(model){
+                this.getContext().getSession().set('studentAvgModel', model);
+                return this.ShadeView(chlk.activities.grading.StudentAvgPopupDialog, new ria.async.DeferredData(new chlk.models.Success));
+            },
+
+            function updateStudentAvgFromPopupAction(){
+                var model = this.getContext().getSession().get('studentAvgModel');
+                var result = this.gradingService
+                    .updateStudentAverage(
+                        this.getContext().getSession().get('currentClassId', null),
+                        model.getStudentId(),
+                        model.getGradingPeriodId(),
+                        model.getAverageId(),
+                        model.getAverageValue()
+                    )
+                    .attach(this.validateResponse_());
+                this.BackgroundCloseView(chlk.activities.grading.StudentAvgPopupDialog);
+                return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
             },
 
             function getWorksheetReportInfo(gradingPeriodId, classId, startDate, endDate){
