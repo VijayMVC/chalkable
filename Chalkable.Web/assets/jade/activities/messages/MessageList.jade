@@ -38,7 +38,7 @@
                     +GridRow()
                         div(class= item.isRead() ? "read" : "unread").item-container
                             .chk
-                                +Checkbox(item.getId().valueOf().toString(), false)(name='ch')
+                                +Checkbox('ch',false)(data-id=item.getId().valueOf())
                             .av
                                 .avatar-container.no-overflow
                                     if self.isInbox()

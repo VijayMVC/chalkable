@@ -12,7 +12,7 @@ NAMESPACE('chlk.activities.messages', function () {
 
             [ria.mvc.DomEventBind('click', '#delete-button, #mark-read-button, #mark-unread-button')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function deleteMessages(node, event){
+            Boolean, function changeMessagesState(node, event){
                 var s = "";
                 var first = true;
                 this.dom.find('[name=ch]:checked:visible').forEach(
@@ -22,7 +22,7 @@ NAMESPACE('chlk.activities.messages', function () {
                             first = false;
                         else
                             s += ",";
-                        s += element.getAttr("id");
+                        s += element.getData('id');
                     }
                 );
                 this.dom.find('[name=selectedIds]').setValue(s);
