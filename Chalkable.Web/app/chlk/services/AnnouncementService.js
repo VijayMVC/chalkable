@@ -120,7 +120,7 @@ NAMESPACE('chlk.services', function () {
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     maxscore: maxScore_,
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
@@ -135,7 +135,7 @@ NAMESPACE('chlk.services', function () {
                     announcementId:id.valueOf(),
                     content: content_,
                     attachments: attachments_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     annRecipients: recipients
                 });
             },
@@ -146,7 +146,7 @@ NAMESPACE('chlk.services', function () {
                     announcementId:id.valueOf(),
                     content: content_,
                     attachments: attachments_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     annRecipients: recipients
                 });
             },
@@ -166,7 +166,7 @@ NAMESPACE('chlk.services', function () {
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     maxscore: maxScore_,
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
