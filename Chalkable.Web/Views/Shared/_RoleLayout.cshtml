@@ -253,7 +253,7 @@
             var userClaims = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.USER_CLAIMS)');
             var alphaGrades = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALPHA_GRADES)');
             var alternateScores = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALTERNATE_SCORES)');
-            
+            var gradingComments = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADING_COMMMENTS)');
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
