@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<string> GetGradeBookComments(int schoolYearId, int teacherId);
         ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId);
         void PostGradebook(int classId, int? gradingPeriodId);
-        ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue);
+        ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, IList<ChalkableStudentAverageComment> comments);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -316,7 +316,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue)
+        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, IList<ChalkableStudentAverageComment> comments)
         {
             var studentAverage = new StudentAverage
                 {
@@ -325,6 +325,28 @@ namespace Chalkable.BusinessLogic.Services.School
                     GradingPeriodId = gradingPeriodId,
                     EnteredAverageValue = averageValue
                 };
+            if (comments != null)
+            {
+                studentAverage.Comments = new List<StudentAverageComment>();
+                foreach (var comment in comments)
+                {
+                    var stAvgComment = new StudentAverageComment
+                        {
+                            AverageId = averageId,
+                            StudentId = studentId,
+                            HeaderId = comment.HeaderId,
+                            HeaderText = comment.HeaderText,
+                            HeaderSequence = comment.HeaderSequence,
+                        };
+                    if (comment.GradingComment != null)
+                    {
+                        stAvgComment.CommentId = comment.GradingComment.Id;
+                        stAvgComment.CommentCode = comment.GradingComment.Code;
+                        stAvgComment.CommentText = comment.GradingComment.Comment;
+                    }
+                    studentAverage.Comments.Add(stAvgComment);
+                }
+            }
             studentAverage = ConnectorLocator.GradebookConnector.UpdateStudentAverage(classId, studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
         }
