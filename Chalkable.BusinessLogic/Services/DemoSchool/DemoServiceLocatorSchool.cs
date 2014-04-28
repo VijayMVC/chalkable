@@ -44,6 +44,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IAlternateScoreService alternateScoreService;
         private IGradingPeriodService gradingPeriodService;
         private IGradingStandardService gradingStandardService;
+        private IGradingCommentService gradingCommentService;
 
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
             : base(serviceLocatorMaster.Context)
@@ -127,5 +128,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ISyncService SyncService { get; private set; }
         public IGradingStandardService GradingStandardService { get { return gradingStandardService; } }
         public IReportingService ReportService { get; private set; }
+        public IGradingCommentService GradingCommentService { get { return gradingCommentService; } }
     }
 }

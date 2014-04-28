@@ -16,8 +16,9 @@ CREATE TABLE [dbo].[GradingScale](
 	[SchoolRef] [int] NOT NULL constraint FK_GradingScale_School foreign key references School(Id),
 	[Name] [varchar](20) NOT NULL,
 	[Description] [varchar](255) NOT NULL,
-	[HomeGradeToDisplay] [smallint] NULL
+	[HomeGradeToDisplay] [int] NULL
 )
+go
 
 alter table GradingScale
 add constraint UQ_GradingScale_SchoolRef_Name unique (SchoolRef, Name)
@@ -36,7 +37,7 @@ CREATE TABLE [dbo].[GradingScaleRange](
 GO
 
 CREATE TABLE [dbo].[ClassroomOption](
-	[SectionID] [int] NOT NULL primary key constraint FK_ClassroomOption_Class foreign key references Class(Id),
+	[Id] [int] NOT NULL primary key constraint FK_ClassroomOption_Class foreign key references Class(Id),
 	[DefaultActivitySortOrder] nvarchar(1) NOT NULL,
 	[GroupByCategory] [bit] NOT NULL,
 	[AveragingMethod] nvarchar(1) NOT NULL,

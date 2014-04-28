@@ -129,6 +129,7 @@
     <Compile Include="Services\DemoSchool\DemoPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStatisticService.cs" />
     <Compile Include="Services\DemoSchool\DemoInfractionService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingCommentService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoBackgroundTaskService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoApplicationUploadService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />

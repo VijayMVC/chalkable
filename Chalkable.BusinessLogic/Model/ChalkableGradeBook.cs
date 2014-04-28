@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Model
         public bool DisplayTotalPoints { get; set; }
         public bool IncludeWithdrawnStudents { get; set; }
 
-        public static ChalkableClassOptions Create(ClassroomOption classroomOption)
+        public static ChalkableClassOptions Create(StiConnector.Connectors.Model.ClassroomOption classroomOption)
         {
             return new ChalkableClassOptions
                 {
