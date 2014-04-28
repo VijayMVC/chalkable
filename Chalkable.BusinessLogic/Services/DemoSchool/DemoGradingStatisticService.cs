@@ -295,21 +295,52 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void PostGradebook(int classId, int? gradingPeriodId)
         {
-            throw new NotImplementedException();
+            var studentAverage = new StudentAverage
+            {
+                AverageId = averageId,
+                StudentId = studentId,
+                GradingPeriodId = gradingPeriodId,
+                EnteredAverageValue = averageValue
+            };
+            if (comments != null)
+            {
+                studentAverage.Comments = new List<StudentAverageComment>();
+                foreach (var comment in comments)
+                {
+                    var stAvgComment = new StudentAverageComment
+                    {
+                        AverageId = averageId,
+                        StudentId = studentId,
+                        HeaderId = comment.HeaderId,
+                        HeaderText = comment.HeaderText,
+                        HeaderSequence = comment.HeaderSequence,
+                    };
+                    if (comment.GradingComment != null)
+                    {
+                        stAvgComment.CommentId = comment.GradingComment.Id;
+                        stAvgComment.CommentCode = comment.GradingComment.Code;
+                        stAvgComment.CommentText = comment.GradingComment.Comment;
+                    }
+                    studentAverage.Comments.Add(stAvgComment);
+                }
+            }
+            studentAverage = Storage.StiGradeBookStorage.UpdateStudentAverage(classId, studentAverage);
+            return ChalkableStudentAverage.Create(studentAverage);
         }
 
-        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId,
-            string averageValue)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         private double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
         {
             var res = classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue).ToList();
             if (res.Count > 0)
                 return res.Average(classAnnType => classAnnType.Percentage * classAnnType.Avg.Value / 100);
             return null;
+        }
+
+
+        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, IList<ChalkableStudentAverageComment> comments)
+        {
+            throw new NotImplementedException();
         }
     }
 }

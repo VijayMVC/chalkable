@@ -8,6 +8,9 @@ namespace Chalkable.Data.School.Model
 {
     public class ClassroomOption
     {
+        public const string ID_FIELD = "Id";
+        public const string STANDARD_GRADING_SCALE_REF_FIELD = "StandardsGradingScaleRef";
+
         public int Id { get; set; }
         public string DefaultActivitySortOrder { get; set; }
         public bool GroupByCategory { get; set; }

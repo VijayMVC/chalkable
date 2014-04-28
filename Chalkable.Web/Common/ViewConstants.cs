@@ -9,6 +9,7 @@ namespace Chalkable.Web.Common
     {
         public const string CLASSES = "Classes";
         public const string CLASSES_ADV_DATA = "ClassesAdvancedData";
+        public const string CLASSES_ALPHA_GRADES_DATA = "ClassesAlphaGradesData";
         public const string CURRENT_PERSON = "CurrentPerson";
         public const string IS_DEV = "IsDeveloper";
         public const string MARKING_PERIOD = "MarkingPeriod";
@@ -22,7 +23,7 @@ namespace Chalkable.Web.Common
         public const string GRADE_LEVELS = "GradeLevels";
 
         public const string GRADING_COMMMENTS = "GradingComments";
-
+        
         public const string STUDENT_ROLE = "StudentRole";
         public const string TEACHER_ROLE = "TeacherRole";
         public const string ADMIN_GRADE_ROLE = "AdminGradeRole";

@@ -231,12 +231,14 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
         }
 
+        
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp, bool getAllAnnouncementTypes)
         {
             var classesAdvancedData = new List<object>();
             classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
             var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
-            
+            var allAlphaGrades = SchoolLocator.AlphaGradeService.GetAlphaGrades();
+      
             foreach (var classDetails in classDetailses)
             {
                 int classId = classDetails.Id;
@@ -245,7 +247,11 @@ namespace Chalkable.Web.Controllers
                 {
                     ClassId = classId,
                     Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>(),
-                    TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses)
+                    TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
+                    AlphaGrades = classDetails.GradingScaleRef.HasValue
+                                        ? SchoolLocator.AlphaGradeService.GetAlphaGradesForClass(classDetails.Id)
+                                        : allAlphaGrades,
+                    AlphaGradesForStandards = SchoolLocator.AlphaGradeService.GetAlphaGradesForClassStandards(classId)
                 });
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);

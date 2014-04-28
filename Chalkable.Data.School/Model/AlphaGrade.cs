@@ -9,6 +9,7 @@ namespace Chalkable.Data.School.Model
 {
     public class AlphaGrade
     {
+        public const string ID_FIELD = "Id";
         public const string SCHOOL_ID_FIELD = "SchoolRef";
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }

@@ -12,6 +12,7 @@ namespace Chalkable.Data.School.Model
         public const string GRADE_LEVEL_REF_FIELD = "GradeLevelRef";
         public const string ROOM_REF_FIELD = "RoomRef";
         public const string COURSE_REF_FIELD = "CourseRef";
+        public const string GRADING_SCALE_REF_FIELD = "GradingScaleRef";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
@@ -24,6 +25,7 @@ namespace Chalkable.Data.School.Model
         public int GradeLevelRef { get; set; }
         public int? RoomRef { get; set; }
         public int? SchoolRef { get; set; }
+        public int? GradingScaleRef { get; set; }
     }
 
     public class ClassDetails : Class
