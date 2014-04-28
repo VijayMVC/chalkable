@@ -73,7 +73,7 @@ namespace Chalkable.StiConnector.Connectors
             client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentialsBase64;
             client.Encoding = Encoding.UTF8;
 
-            var url = string.Format("{0}Api/{1}", baseUrl, "token");
+            var url = string.Format("{0}{1}", baseUrl, "token");
             Debug.WriteLine(REQ_ON_FORMAT, url);
             var x = typeof(TokenModel);
             var ser = new DataContractJsonSerializer(x);
