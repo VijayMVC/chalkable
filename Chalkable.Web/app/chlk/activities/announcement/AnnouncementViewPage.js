@@ -126,6 +126,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             function selectRow(row){
                 if(row.exists())
                     this.dom.find('.grades-individual').trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [row, parseInt(row.getAttr('index'), 10)]);
+                else
+                    this.setGrade(this.dom.find('.row.selected').find('.grade-input'));
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.grades-individual')],

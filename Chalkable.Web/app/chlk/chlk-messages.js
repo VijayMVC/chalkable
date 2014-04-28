@@ -78,7 +78,7 @@ var Msg = {
     Class: 'Class',
     Classes: 'Classes',
     Click: 'Click',
-    Code: 'Code',
+    Code: oneOrMany('Code'),
     Comment: 'Comment',
     Commented: 'Commented',
     Complete: 'Complete',

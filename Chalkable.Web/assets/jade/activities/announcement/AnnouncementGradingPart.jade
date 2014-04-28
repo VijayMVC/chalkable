@@ -68,6 +68,4 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                 each app, i in self.getApplications()
                     +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId()).announcement-item.application
                         +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74), i)
-                .standards-block
-                    +RenderWith(item, chlk.templates.announcement.AnnouncementViewStandardsTpl)
 

@@ -64,7 +64,10 @@ NAMESPACE('chlk.services', function () {
                     .then(function (data) {
                         if (!clazz_)
                             return data.data || null;
-                        return Serializer.deserialize(data.data, clazz_);
+                        var dt = getDate().getTime();
+                        var res = Serializer.deserialize(data.data, clazz_);
+                        //console.info('deserialize time', getDate().getTime() - dt);
+                        return res;
                         throw(new Exception(handler.getMessage()));
                     }, this);
             },
