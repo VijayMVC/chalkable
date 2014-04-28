@@ -108,6 +108,7 @@
     <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
+    <Compile Include="Services\DemoSchool\DemoClassroomOptionService.cs" />
     <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassPeriodService.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="Services\School\AttendanceReasonService.cs" />
     <Compile Include="Services\School\AttendanceService.cs" />
     <Compile Include="Services\School\CalendarDateService.cs" />
+    <Compile Include="Services\School\ClassroomOptionService.cs" />
     <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementAttachmentService.cs" />
