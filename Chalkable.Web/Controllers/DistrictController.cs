@@ -46,7 +46,7 @@ namespace Chalkable.Web.Controllers
                 }
                 return Json(true);
             }
-            return Json("Invalid credentials");
+            return new HttpUnauthorizedResult();
         }
 
         [RequireHttps]
