@@ -1,0 +1,15 @@
+value = self.getModel().displayAvgGradeValue()
+displayValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades())
+edited = self.getEnteredAvg() || self.getEnteredAlphaGrade()
+.grade-info
+    div(
+        data-tooltip=(edited ? Msg.Orig + " " + self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), true) : ""),
+        data-value=displayValue
+    ).grade-text.avg-text=displayValue
+    if edited
+        .edited=Msg.Edited.toLowerCase()
++ActionForm('grading', 'updateStudentAvg').grading-form.avg-form
+    input(name="averageValue", value=value, data-value=value).avg-value.value-input
+    +Hidden('averageid', self.getAverageId().valueOf())
+    +Hidden('studentid', self.getStudentId().valueOf())
+    +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
