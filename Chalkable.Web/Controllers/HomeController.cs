@@ -227,6 +227,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(classes, mp, getAllAnnouncementTypes);
             PrepareCommonViewData(mp);
+            PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
         }
 

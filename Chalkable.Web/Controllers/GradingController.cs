@@ -206,9 +206,27 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult UpdateStudentAverage(int classId, int gradingPeriodId, int studentId, int averageId, string averageValue)
+        public ActionResult UpdateStudentAverage(int classId, int gradingPeriodId, int studentId, int averageId, string averageValue
+            , IList<StudentAverageCommentViewData> codes)
         {
-            var res = SchoolLocator.GradingStatisticService.UpdateStudentAverage(classId, studentId, averageId, gradingPeriodId, averageValue);
+            IList<ChalkableStudentAverageComment> comments = null;
+            if (codes != null)
+                comments = codes.Select(x => new ChalkableStudentAverageComment
+                    {
+                        HeaderId = x.HeaderId,
+                        AverageId = averageId,
+                        StudentId = studentId,
+                        HeaderText = x.HeaderName,
+                        GradingComment = x.GradingComment == null ? null 
+                                        : new GradingComment
+                                            {
+                                                Comment = x.GradingComment.Comment,
+                                                Code = x.GradingComment.Code,
+                                                Id = x.GradingComment.Id
+                                            }
+                    }).ToList(); 
+            var res = SchoolLocator.GradingStatisticService.UpdateStudentAverage(classId, studentId, averageId, gradingPeriodId
+                , averageValue, comments ?? new List<ChalkableStudentAverageComment>());
             return Json(StudentAveragesViewData.Create(res));
         }
 
