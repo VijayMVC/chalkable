@@ -192,6 +192,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementId, String]],
+            ria.async.Future, function duplicateAnnouncement(id, classIds) {
+                return this.get('Announcement/DuplicateAnnouncement.json', Boolean, {
+                    announcementId: id.valueOf(),
+                    classIds: classIds
+                });
+            },
+
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function deleteAnnouncement(id) {
                 return this.post('Announcement/Delete.json', chlk.models.announcement.Announcement, {
@@ -301,6 +309,8 @@ NAMESPACE('chlk.services', function () {
                     announcementId: announcementId.valueOf(),
                     standardId: standardId.valueOf()
                 });
-            }
+            },
+
+
         ])
 });
