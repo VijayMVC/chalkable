@@ -45,6 +45,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IGradingPeriodService gradingPeriodService;
         private IGradingStandardService gradingStandardService;
         private IGradingCommentService gradingCommentService;
+        public IGradingScaleService gradingScaleService;
 
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
             : base(serviceLocatorMaster.Context)
@@ -86,7 +87,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             classAnnouncementTypeService = new DemoClassAnnouncementTypeService(this, storage);
             gradingStandardService = new DemoGradingStandardService(this, storage);
             InfractionService = new DemoInfractionService(this, storage);
-            StorageBlobService = new DemoStorageBlobService(this ,storage);
+            StorageBlobService = new DemoStorageBlobService(this ,storage);            
+            gradingCommentService = new DemoGradingCommentService(this, storage);
+            gradingScaleService = new DemoGradingScaleService(this, storage);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -129,5 +132,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IGradingStandardService GradingStandardService { get { return gradingStandardService; } }
         public IReportingService ReportService { get; private set; }
         public IGradingCommentService GradingCommentService { get { return gradingCommentService; } }
+        public IGradingScaleService GradingScaleService { get { return gradingScaleService; } }
     }
 }

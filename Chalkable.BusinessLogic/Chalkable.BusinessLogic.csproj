@@ -119,6 +119,7 @@
     <Compile Include="Services\DemoSchool\DemoDisciplineService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradeLevelService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingScaleService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentParentService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentAnnouncementService.cs" />
     <Compile Include="Services\DemoSchool\DemoStandardService.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
     <Compile Include="Services\School\GradingCommentService.cs" />
+    <Compile Include="Services\School\GradingScaleService.cs" />
     <Compile Include="Services\School\InfractionService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\GradingPeriodService.cs" />
