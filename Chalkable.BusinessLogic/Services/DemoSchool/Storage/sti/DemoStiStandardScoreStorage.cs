@@ -46,5 +46,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         {
             throw new NotImplementedException();
         }
+
+        public StudentAverage UpdateStudentAverage(int classId, StudentAverage studentAverage)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
