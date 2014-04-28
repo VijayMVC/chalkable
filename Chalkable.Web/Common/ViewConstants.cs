@@ -21,6 +21,8 @@ namespace Chalkable.Web.Common
         public const string APPLICATIONS = "Applications";
         public const string GRADE_LEVELS = "GradeLevels";
 
+        public const string GRADING_COMMMENTS = "GradingComments";
+
         public const string STUDENT_ROLE = "StudentRole";
         public const string TEACHER_ROLE = "TeacherRole";
         public const string ADMIN_GRADE_ROLE = "AdminGradeRole";
