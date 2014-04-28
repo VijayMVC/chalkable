@@ -292,6 +292,7 @@
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineSummaryViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\GradingClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingCommentViewData.cs" />
     <Compile Include="Models\GradingGridViewData.cs" />
     <Compile Include="Models\GradingPeriodViewData.cs" />
     <Compile Include="Models\GradingStandardClassSummaryViewData.cs" />
@@ -470,9 +471,8 @@
     <Content Include="fakeData\creditCardData.json" />
     <Content Include="fakeData\personFunds.json" />
     <Content Include="fakeData\teacherGradingGrid.json" />
-<Content Include="Views\Shared\_BasicDemoLayout.cshtml" />
-<Content Include="fakeData\seatingChart.json" />
-
+    <Content Include="Views\Shared\_BasicDemoLayout.cshtml" />
+    <Content Include="fakeData\seatingChart.json" />
     <Content Include="fakeData\seatingChart1.json" />
     <Content Include="fakeData\seatingChart2.json" />
     <Content Include="fakeData\seatingChart3.json" />

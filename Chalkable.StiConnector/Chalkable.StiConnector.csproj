@@ -96,6 +96,7 @@
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
     <Compile Include="Connectors\Model\StandardScore.cs" />
     <Compile Include="Connectors\Model\StiAttachment.cs" />
+    <Compile Include="Connectors\Model\StudentAverageComment.cs" />
     <Compile Include="Connectors\Model\StudentAverages.cs" />
     <Compile Include="Connectors\Model\User.cs" />
     <Compile Include="Connectors\Model\WorksheetReportParams.cs" />

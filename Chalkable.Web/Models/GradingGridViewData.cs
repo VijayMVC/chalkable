@@ -155,10 +155,11 @@ namespace Chalkable.Web.Models
         public decimal? EnteredAvg { get; set; }
         public string EnteredAlphaGrade { get; set; }
         public bool IsGradingPeriodAverage { get; set; }
+        public IList<StudentAverageCommentViewData> Codes { get; set; } 
 
         public static StudentAveragesViewData Create(ChalkableStudentAverage studentAverage)
         {
-            return new StudentAveragesViewData
+            var res = new StudentAveragesViewData
                 {
                     AverageId = studentAverage.AverageId,
                     CalculatedAlphaGrade = studentAverage.CalculatedAlphaGrade != null ? studentAverage.CalculatedAlphaGrade.Name : null,
@@ -168,6 +169,28 @@ namespace Chalkable.Web.Models
                     StudentId = studentAverage.StudentId,
                     AverageName = studentAverage.AverageName
                 };
+            if (studentAverage.Comments != null)
+                res.Codes = studentAverage.Comments.Select(StudentAverageCommentViewData.Create).ToList();
+            return res;
+        }
+    }
+
+    public class StudentAverageCommentViewData
+    {
+        public int HeaderId { get; set; }
+        public string HeaderName { get; set; }
+        public GradingCommentViewData GradingComment { get; set; }
+
+        public static StudentAverageCommentViewData Create(ChalkableStudentAverageComment studentAverageComment)
+        {
+            var res = new StudentAverageCommentViewData
+                {
+                    HeaderId = studentAverageComment.HeaderId,
+                    HeaderName = studentAverageComment.HeaderText,
+                };
+            if (studentAverageComment.GradingComment != null)
+                res.GradingComment = GradingCommentViewData.Create(studentAverageComment.GradingComment);
+            return res;
         }
     }
 

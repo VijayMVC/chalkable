@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -28,6 +25,7 @@ namespace Chalkable.BusinessLogic.Model
         public AlphaGrade CalculatedAlphaGrade { get; set; }
         public AlphaGrade EnteredAlphaGrade { get; set; }
         public bool IsGradingPeriodAverage { get; set; }
+        public IList<ChalkableStudentAverageComment> Comments { get; set; } 
 
         public static ChalkableStudentAverage Create(StudentAverage studentAverage)
         {
@@ -52,6 +50,39 @@ namespace Chalkable.BusinessLogic.Model
                         Id = studentAverage.EnteredAlphaGradeId.Value,
                         Name = studentAverage.EnteredAlphaGradeName
                     };
+            if (studentAverage.Comments != null)
+                res.Comments = studentAverage.Comments.Select(ChalkableStudentAverageComment.Create).ToList();
+            return res;
+        }
+    }
+
+    public class ChalkableStudentAverageComment
+    {
+        public int AverageId { get; set; }
+        public int StudentId { get; set; }
+        public GradingComment GradingComment { get; set; }
+        public int HeaderId { get; set; }
+        public short HeaderSequence { get; set; }
+        public string HeaderText { get; set; }
+
+        public static ChalkableStudentAverageComment Create(StudentAverageComment stcomment)
+        {
+            var res = new ChalkableStudentAverageComment
+                    {
+                        AverageId = stcomment.StudentId,
+                        HeaderId = stcomment.HeaderId,
+                        HeaderSequence = stcomment.HeaderSequence,
+                        HeaderText = stcomment.HeaderText,
+                    };
+            if (stcomment.CommentId.HasValue)
+            {
+                res.GradingComment = new GradingComment
+                    {
+                        Id = stcomment.CommentId.Value,
+                        Code = stcomment.CommentCode,
+                        Comment = stcomment.CommentText
+                    };
+            }
             return res;
         }
     }

@@ -1,8 +1,11 @@
 ﻿
+using System.Collections.Generic;
+
 namespace Chalkable.StiConnector.Connectors.Model
 {
     public class StudentAverage
     {
+
         /// <summary>
         /// Id of the average
         /// </summary>
@@ -27,6 +30,11 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// The numeric value of the calculated average.  This value cannot be updated.
         /// </summary>
         public decimal? CalculatedNumericAverage { get; set; }
+
+        /// <summary>
+        /// A list of comments for the average
+        /// </summary>
+        public IList<StudentAverageComment> Comments { get; set; }
 
         /// <summary>
         /// Id of the Alpha Grade for the manually entered average.  This value cannot be updated.
@@ -74,5 +82,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// Id of the student
         /// </summary>
         public int StudentId { get; set; }
+
     }
 }
