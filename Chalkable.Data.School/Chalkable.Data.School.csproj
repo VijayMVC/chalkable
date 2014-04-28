@@ -75,6 +75,7 @@
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassAnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineDataAccess.cs" />
+    <Compile Include="DataAccess\GradingCommentDataAccess.cs" />
     <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
     <Compile Include="DataAccess\GradingStatisticDataAccess.cs" />
     <Compile Include="DataAccess\GradingStyleDataAccess.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Model\ClassPerson.cs" />
     <Compile Include="Model\ClassStandard.cs" />
     <Compile Include="Model\Date.cs" />
+    <Compile Include="Model\GradingComment.cs" />
     <Compile Include="Model\Infraction.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\GradingPeriod.cs" />

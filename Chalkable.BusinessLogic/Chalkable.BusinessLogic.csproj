@@ -257,6 +257,7 @@
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
+    <Compile Include="Services\School\GradingCommentService.cs" />
     <Compile Include="Services\School\InfractionService.cs" />
     <Compile Include="Services\School\GradeLevelService.cs" />
     <Compile Include="Services\School\GradingPeriodService.cs" />
