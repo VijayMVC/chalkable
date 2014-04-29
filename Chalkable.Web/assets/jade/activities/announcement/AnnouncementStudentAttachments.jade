@@ -1,0 +1,12 @@
+#attach-file-area.announcement-item.attach-file-area
+    -console.log('gradable:' + self.isGradable())
+    if self.isGradable()
+        div.simple-gray-button.file Attach File
+            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+each attachment, i in self.getAnnouncementAttachments()
+    if attachment.isOwner()
+        .announcement-item.attachment
+            +ActionLink('announcement', 'viewAttachment', attachment.getId())
+                +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
+                .title
+                    div=attachment.getName()

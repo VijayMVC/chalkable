@@ -1,0 +1,59 @@
++ActionForm('message', 'do')
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('message', 'sendPage')#new-message-link
+                    span New message
+
+            .right
+                +ActionLink('message', 'page', true, true, self.getRole(), self.getKeyword())(class=self.isInbox() ? "pressed" : "") Inbox
+                +ActionLink('message', 'page', true, false, self.getRole(), self.getKeyword())(class=self.isInbox() ? "" : "pressed") Sent
+                input(name="role", type="hidden", value=self.getRole())
+                input(name="inbox", type="hidden", value=self.isInbox())
+                input(name="keyword", type="text", value=self.getKeyword())#keyword
+                +Button()(type="submit", submitType="search")#search-message-btn
+
+    .grid-container
+        input(name="inbox", type="hidden", value=self.isInbox().toString())
+        input(name="selectedIds", type="hidden")#selectedIds
+        +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword()])
+            +GridBody()
+                .action-bar.filter
+                    .container.panel-bg
+                        .left
+                            +Checkbox('checkboxall', false)
+                            +Button()(type="submit", , name="submitType", value="delete").plain-button#delete-button Delete
+                            if self.isInbox()
+                                |Mark:
+                                +Button()(type="submit", name="submitType", value="markAsRead").plain-button#mark-read-button Read
+                                +Button()(type="submit", name="submitType", value="markAsUnread").plain-button#mark-unread-button Unread
+                        .right
+                            |View:
+                            +ActionLink('message', 'page', true, self.isInbox(), '', self.getKeyword()) All
+                            +ActionLink('message', 'page', true, self.isInbox(), 'parent', self.getKeyword()) Parent
+                            +ActionLink('message', 'page', true, self.isInbox(), 'student', self.getKeyword()) Student
+                            +ActionLink('message', 'page', true, self.isInbox(), 'teacher', self.getKeyword()) Teacher
+                            +ActionLink('message', 'page', true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()) Admin
+                each item in self.getMessages().getItems()
+                    +GridRow()
+                        div(class= item.isRead() ? "read" : "unread").item-container
+                            .chk
+                                +Checkbox('ch',false)(data-id=item.getId().valueOf())
+                            .av
+                                .avatar-container.no-overflow
+                                    if self.isInbox()
+                                        +PersonImg(item.getSender(), 47)
+                                    else
+                                        +PersonImg(item.getRecipient(), 47)
+
+                            .item
+                                +ActionLink('message', 'viewPage', item.getId())
+                                    h2
+                                        if self.isInbox()
+                                            =item.getSender().getFirstName() + " " + item.getSender().getLastName()
+                                        else
+                                            =item.getRecipient().getFirstName()+ " "  + item.getRecipient().getLastName()
+                                        |, &nbsp;
+                                        small= item.getShortSubject()
+                                    p= item.getShortBody()
+                                    .sent= item.getSent().toString('dd/m/yy hh:min:ss')
