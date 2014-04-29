@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
@@ -217,16 +218,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 res.Created = dateNow;
                 if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
                     res.Title = res.DefaultTitle;
+                if (classId.HasValue)
+                {
+                    var activity = new Activity();
+                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
+                    activity = Storage.StiActivityStorage.CreateActivity(classId.Value, activity);
+                    if (CreateAnnouncementStorage(Context, Storage).Exists(activity.Id))
+                        throw new ChalkableException("Announcement with such activityId already exists");
+                    res.SisActivityId = activity.Id;
+                }
             }
             res = (AnnouncementDetails)PrepareReminderData(res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
-            //TODO : add gradingStyle to ClassAnnouncementtype
-            //if (res.ClassAnnouncementTypeRef.HasValue)
-            //{
-            //    var classAnnType = new ClassAnnouncementTypeDataAccess(unitOfWork).GetById(res.ClassAnnouncementTypeRef.Value);
-            //    classAnnType. 
-            //}
-           
             storage.Update(res);
             return res;
         }

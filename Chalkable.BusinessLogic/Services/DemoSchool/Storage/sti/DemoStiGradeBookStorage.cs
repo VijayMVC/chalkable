@@ -17,11 +17,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public Gradebook Calculate(int classId, int gradingPeriodId)
         {
-            return data.First(x => x.Value.SectionId == classId).Value;
+            var gb = data.First(x => x.Value.SectionId == classId).Value;
+            gb.Activities = Storage.StiActivityStorage.GetAll().Where(x => x.SectionId == classId);
+            var activityIds = gb.Activities.Select(x => x.Id).ToList();
+            gb.Scores = Storage.StiActivityScoreStorage.GetAll().Where(x => activityIds.Contains(x.ActivityId));
+            return gb;
         }
 
         public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType, int gradingPeriodId, int? standardId)
         {
+            var gradeBooks = data.Select(x => x.Value).ToList();
+
+            //if (classAnnouncementType.HasValue)
+            //{
+              //  gradeBooks = gradeBooks.Where(x => x.)
+            //}
+            //return data.Where(x => x.Value.SectionId == classId)
             throw new NotImplementedException();
         }
 
@@ -45,6 +56,39 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 Options = new ClassroomOption(),
                 Scores = new List<Score>(),
                 StudentAverages = new List<StudentAverage>()
+                {
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 1
+                    },
+
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 2
+                    },
+
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 3
+                    },
+
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 4
+                    }
+                }
             };
 
             var gb2 = new Gradebook()
@@ -52,8 +96,44 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 SectionId = 2,
                 Activities = new List<Activity>(),
                 Options = new ClassroomOption(),
-                Scores = new List<Score>(),
+                Scores = new List<Score>()
+                {
+                   
+                },
                 StudentAverages = new List<StudentAverage>()
+                {
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 1
+                    },
+
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 2
+                    },
+
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 3
+                    },
+
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = 4
+                    }
+                }
             };
 
             data.Add(GetNextFreeId(), gb1);

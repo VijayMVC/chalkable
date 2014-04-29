@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         bool CanAddStandard(int announcementId);
         bool IsEmpty();
         Dictionary<int, AnnouncementComplex> GetData();
+        bool Exists(int id);
     }
 
 
@@ -68,6 +69,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
             return exists;
         }
+
+        public bool Exists(int id)
+        {
+            return data.Count(x => x.Value.SisActivityId == id) > 0;
+        }
+
         public virtual AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
             /*
@@ -222,7 +229,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Gender = person.Gender,
                 IsScored = false,
                 Id = annId,
-                SisActivityId = annId,
                 PersonRef = userId,
                 ClassRef = classId,
                 ClassAnnouncementTypeRef = classAnnouncementTypeId,
