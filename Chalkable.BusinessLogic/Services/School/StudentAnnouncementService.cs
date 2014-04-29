@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
-                Comment = comment.Trim(),
+                Comment = comment !=null ? comment.Trim() : "",
                 Dropped = dropped,
                 Incomplete = incomplete,
                 Late = late,

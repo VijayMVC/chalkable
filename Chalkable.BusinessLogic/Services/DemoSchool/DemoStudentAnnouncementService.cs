@@ -23,18 +23,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         //TODO : needs testing 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
-                                            bool late, bool absent, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
+                                           bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            if (!string.IsNullOrEmpty(value) && value.Trim() != "")
+                exempt = false;
+            else value = null;
+
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
-                Comment = comment.Trim(),
+                Comment = comment != null ? comment.Trim() : "",
                 Dropped = dropped,
                 Incomplete = incomplete,
                 Late = late,
                 Exempt = exempt,
-                Absent = absent,
                 ActivityId = ann.SisActivityId.Value,
                 AnnouncementId = announcementId,
                 StudentId = studentId,
@@ -128,12 +131,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //    da.Update(sas);
             //    uow.Commit();
             //}
-            throw new NotImplementedException();
-        }
-
-        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment,
-            bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
-        {
             throw new NotImplementedException();
         }
 

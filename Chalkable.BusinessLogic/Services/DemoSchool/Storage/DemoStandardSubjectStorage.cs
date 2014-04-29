@@ -35,7 +35,44 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new System.NotImplementedException();
+            Add(new List<StandardSubject>
+            {
+                new StandardSubject()
+                {
+                    Id = 1,
+                    AdoptionYear = 2010,
+                    Name = "Math Standards",
+                    Description = "",
+                    IsActive = true
+                },
+
+                new StandardSubject()
+                {
+                    Id = 2,
+                    AdoptionYear = 2010,
+                    Name = "Reading Standards",
+                    Description = "",
+                    IsActive = true
+                },
+
+                new StandardSubject()
+                {
+                    Id = 3,
+                    AdoptionYear = 2010,
+                    Name = "Science Standards",
+                    Description = "",
+                    IsActive = true
+                },
+
+                new StandardSubject()
+                {
+                    Id = 4,
+                    AdoptionYear = 2100,
+                    Name = "Dance Standards",
+                    Description = "",
+                    IsActive = true
+                }
+            });
         }
     }
 }
