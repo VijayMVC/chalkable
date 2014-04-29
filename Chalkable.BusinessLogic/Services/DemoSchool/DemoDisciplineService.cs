@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return null;
         }
 
-        public ClassDiscipline SetClassDiscipline(ClassDiscipline classDiscipline)
+        public ClassDisciplineDetails SetClassDiscipline(ClassDiscipline classDiscipline)
         {
             if (!classDiscipline.ClassId.HasValue)
                 throw new ChalkableException("Invalid classId param");
@@ -71,7 +71,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 stiDiscipline = Storage.StiDisciplineStorage.Create(stiDiscipline);
                 MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>().Map(classDiscipline, stiDiscipline);
             }
-            return classDiscipline;
+            return new ClassDisciplineDetails
+            {
+                Date = classDiscipline.Date,
+                ClassId = classDiscipline.ClassId,
+                Description = classDiscipline.Description,
+                Id = classDiscipline.Id,
+                Infractions = classDiscipline.Infractions,
+                StudentId = classDiscipline.StudentId,
+                Class = ServiceLocator.ClassService.GetClassById(classDiscipline.ClassId.Value),
+                Student = ServiceLocator.PersonService.GetPerson(classDiscipline.StudentId)
+            };
         }
 
         public ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description)

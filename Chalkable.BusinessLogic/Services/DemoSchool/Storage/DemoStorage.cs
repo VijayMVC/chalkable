@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Runtime.Remoting.Messaging;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
-using Chalkable.Common;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
@@ -73,6 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStiSeatingChartStorage StiSeatingChartStorage { get; private set; }
         public DemoStiActivityScoreStorage StiActivityScoreStorage { get; private set; }
         public DemoStiInfractionStorage StiInfractionStorage { get; private set; }
+        public DemoStiActivityStorage StiActivityStorage { get; private set; }
 
 
         public UserContext Context { get; private set; }
@@ -155,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StiSeatingChartStorage = new DemoStiSeatingChartStorage(this);
             StiActivityScoreStorage = new DemoStiActivityScoreStorage(this);
             StiInfractionStorage = new DemoStiInfractionStorage(this);
-            
+            StiActivityStorage = new DemoStiActivityStorage(this);
             Setup();
         }
 
@@ -183,8 +178,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PeriodStorage.Setup();
             ClassPeriodStorage.Setup();
             StiDisciplineStorage.Setup();
-
-
+            StiGradeBookStorage.Setup();
+            StandardSubjectStorage.Setup();
+            StandardStorage.Setup();
+            ClassStorage.Setup();
+            ClasStandardStorage.Setup();
+            StiStandardScoreStorage.Setup();
             SchoolId = 1;
 
             SchoolStorage.Add(new Data.School.Model.School

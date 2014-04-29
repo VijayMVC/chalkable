@@ -1,6 +1,7 @@
 topData = self.getTopData()
 announcement = self.getAnnouncement()
 topItems = topData.getTopItems()
+-console.log(topItems[0].isDisabled())
 classId = announcement.getClassId() ? announcement.getClassId().valueOf() : null
 typeId = self.getSelectedTypeId()
 classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
@@ -25,6 +26,9 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                     ).action-button.announcement-type-button= item.getDescription()
         .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
             +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form
+            if announcement.getState()
+                .duplicate-btn-container
+                    +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
         .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))
         .choose-class(class=(classId ? 'x-hidden' : ''))
     +AddEditReminderForm(announcement, self.reminders)

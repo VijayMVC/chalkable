@@ -15,8 +15,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void Add(IList<AttendanceReason> reasons)
         {
-            foreach (var attendanceReason in reasons.Where(attendanceReason => !data.ContainsKey(attendanceReason.Id)))
+            foreach (var attendanceReason in reasons)
             {
+                attendanceReason.Id = GetNextFreeId();
                 data.Add(attendanceReason.Id, attendanceReason);
             }
         }
@@ -39,7 +40,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 new AttendanceReason
                 {
-                    Id = 1,
                     Code = "IL",
                     Name = "Illness",
                     Description = "",
@@ -49,7 +49,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 2,
                     Code = "SA",
                     Name = "School Activity",
                     Description = "",
@@ -59,7 +58,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 3,
                     Code = "FRE",
                     Name = "Family Reason(Excused)",
                     Description = "",
@@ -69,7 +67,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 4,
                     Code = "FRU",
                     Name = "Family Reason(Unexcused)",
                     Description = "",
@@ -79,7 +76,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 5,
                     Code = "OSS",
                     Name = "Out of School Suspension",
                     Description = "",
@@ -89,7 +85,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 6,
                     Code = "ISS",
                     Name = "In-School Suspension",
                     Description = "",
@@ -99,7 +94,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 7,
                     Code = "SK",
                     Name = "Skipping",
                     Description = "",
@@ -109,7 +103,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 8,
                     Code = "DD",
                     Name = "Doctor or Dentist",
                     Description = "",
@@ -119,7 +112,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 9,
                     Code = "IM",
                     Name = "Noncompliance",
                     Description = "",
@@ -129,7 +121,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 9,
                     Code = "MB",
                     Name = "Missed Bus",
                     Description = "",
@@ -139,7 +130,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 10,
                     Code = "LB",
                     Name = "Late Bus",
                     Description = "",
@@ -149,7 +139,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new AttendanceReason
                 {
-                    Id = 10,
                     Code = "EC",
                     Name = "Early Checkout",
                     Description = "",

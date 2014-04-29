@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -72,6 +73,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetClassDiscipline(ClassDisciplineInputModel discipline)
         {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
             IList<Infraction> infractions = null;
             if (discipline.InfractionsIds != null && discipline.InfractionsIds.Count > 0)
             {
@@ -87,8 +90,8 @@ namespace Chalkable.Web.Controllers
                     Infractions = infractions ?? new List<Infraction>(),
                     StudentId = discipline.StudentId
                 };
-            SchoolLocator.DisciplineService.SetClassDiscipline(classDisciplineModel);
-            return Json(true);
+            var res = SchoolLocator.DisciplineService.SetClassDiscipline(classDisciplineModel);
+            return Json(DisciplineView.Create(res, Context.UserLocalId.Value));
         }
 
 

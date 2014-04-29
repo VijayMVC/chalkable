@@ -62,7 +62,7 @@ NAMESPACE('chlk.services', function(){
 
             [[chlk.models.discipline.SetDisciplineModel]],
             ria.async.Future, function setDiscipline(discipline){
-                return this.post('Discipline/SetClassDiscipline.json', Boolean,{
+                return this.post('Discipline/SetClassDiscipline.json', chlk.models.discipline.Discipline,{
                     discipline: discipline.getPostData()
                 });
             },

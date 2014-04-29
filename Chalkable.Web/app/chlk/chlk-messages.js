@@ -104,6 +104,7 @@ var Msg = {
     Drop: 'Drop',
     Dropped: 'Dropped',
     Due: 'Due',
+    Duplicate: 'Duplicate',
     Edit: 'Edit',
     Edited: 'Edited',
     Error: 'Error',

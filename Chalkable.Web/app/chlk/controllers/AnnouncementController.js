@@ -15,6 +15,7 @@ REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
 REQUIRE('chlk.activities.common.attachments.AttachmentDialog');
 REQUIRE('chlk.activities.announcement.AddStandardsDialog');
+REQUIRE('chlk.activities.announcement.AddDuplicateAnnouncementDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.Reminder');
@@ -38,6 +39,7 @@ REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
 REQUIRE('chlk.models.announcement.AddStandardViewData');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.standard.StandardsListViewData');
+REQUIRE('chlk.models.announcement.AddDuplicateAnnouncementViewData');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
 
@@ -729,6 +731,29 @@ NAMESPACE('chlk.controllers', function (){
                     return this.BackgroundNavigate('feed', 'list', []);
                 }
             }, this);
+            return res;
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
+        function showDuplicateFormAction(announcementId, selectedClassId){
+            var classes = this.classService.getClassesForTopBar(false, true);
+            classes.forEach(function(item){
+                item.setDisabled(true);
+            });
+            var addDupAnnModel = new chlk.models.announcement.AddDuplicateAnnouncementViewData(announcementId
+                , classes, selectedClassId);
+            var res = new ria.async.DeferredData(addDupAnnModel);
+            return this.ShadeView(chlk.activities.announcement.AddDuplicateAnnouncementDialog, res);
+        },
+
+        [[chlk.models.announcement.AddDuplicateAnnouncementViewData]],
+        function duplicateAction(model){
+            var res = this.announcementService
+                .duplicateAnnouncement(model.getAnnouncementId(), model.getSelectedIds())
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId()]);
+                }, this);
             return res;
         },
 

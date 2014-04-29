@@ -190,6 +190,7 @@ NAMESPACE('chlk.controllers', function(){
                         var action = model.getAction() || 'list';
                         var params = JSON.parse(model.getParams()) || [];
                         return this.Redirect(controller, action, params);*/
+                        model.setId(data.getId());
                         return model;//model.getDisciplines()[0];
                     }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());

@@ -142,6 +142,9 @@ NAMESPACE('chlk.activities.discipline', function(){
                 var row = this.dom.find('.row[time=' + model.getTime() + ']');
                 if(row.exists()){
                     row.removeClass('saving').addClass('saved');
+                    row.parent().find('input[name=time]').filter(function(item){
+                        return item.getValue() == model.getTime()
+                    }).parent().find('[name=id]').setValue(model.getId() && model.getId().valueOf());
                 }
             },
 

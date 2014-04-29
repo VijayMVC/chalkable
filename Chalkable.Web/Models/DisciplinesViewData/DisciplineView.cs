@@ -33,6 +33,11 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 
         }
 
+        public static DisciplineView Create(ClassDisciplineDetails discipline, int currentPersonId, bool canEdit = false)
+        {
+            return  new DisciplineView(discipline, currentPersonId, canEdit);
+        }
+
         public static IList<DisciplineView> Create(IList<ClassDisciplineDetails> disciplines, int currentPersonId, bool canEdit = false)
         {
             return disciplines.Select(x => new DisciplineView(x, currentPersonId, canEdit)).ToList();
