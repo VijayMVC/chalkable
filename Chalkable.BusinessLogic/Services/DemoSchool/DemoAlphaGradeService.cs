@@ -56,12 +56,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AlphaGrade> GetAlphaGradesForClass(int classId)
         {
-            throw new NotImplementedException();
+            return Storage.AlphaGradeStorage.GetForClass(classId);
         }
 
         public IList<AlphaGrade> GetAlphaGradesForClassStandards(int classId)
         {
-            throw new NotImplementedException();
+            return Storage.AlphaGradeStorage.GetForClassStandarts(classId);
         }
     }
 }

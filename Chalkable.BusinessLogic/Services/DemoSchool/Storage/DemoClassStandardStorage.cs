@@ -35,7 +35,44 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new System.NotImplementedException();
+            Add(new List<ClassStandard>
+            {
+                new ClassStandard
+                {
+                    ClassRef = 1,
+                    StandardRef = 1
+                },
+
+                new ClassStandard
+                {
+                    ClassRef = 1,
+                    StandardRef = 8
+                },
+
+                 new ClassStandard
+                {
+                    ClassRef = 1,
+                    StandardRef = 9
+                },
+
+                new ClassStandard
+                {
+                    ClassRef = 2,
+                    StandardRef = 1
+                },
+
+                new ClassStandard
+                {
+                    ClassRef = 2,
+                    StandardRef = 8
+                },
+
+                 new ClassStandard
+                {
+                    ClassRef = 2,
+                    StandardRef = 9
+                }
+            });
         }
 
         public IList<ClassStandard> GetAll(int? classId)

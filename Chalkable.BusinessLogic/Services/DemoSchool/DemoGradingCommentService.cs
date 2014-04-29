@@ -1,36 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    //TODO : implementation 
-    public class DemoGradingCommentService : DemoSchoolServiceBase, IGradingCommentService
+    public class DemoGradingCommentService : BaseDemoStorage<int, GradingComment>, IGradingCommentService
     {
-        public DemoGradingCommentService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        public DemoGradingCommentService(IServiceLocator serviceLocator, DemoStorage demoStorage) : base(demoStorage)
         {
         }
 
         public void Add(IList<GradingComment> gradingComments)
         {
-            throw new NotImplementedException();
+            foreach (var gc in gradingComments)
+            {
+                gc.Id = GetNextFreeId();
+                data.Add(gc.Id, gc);
+            }
         }
 
         public void Edit(IList<GradingComment> gradingComments)
         {
-            throw new NotImplementedException();
+            foreach (var gc in gradingComments)
+            {
+                if (data.ContainsKey(gc.Id))
+                    data[gc.Id] = gc;
+            }
         }
 
-        public void Delete(IList<int> gradingCommentsIds)
+        public override void Setup()
         {
             throw new NotImplementedException();
         }
 
         public IList<GradingComment> GetGradingComments()
         {
-            throw new NotImplementedException();
+            return data.Select(x => x.Value).ToList();
         }
     }
 }
