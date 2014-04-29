@@ -781,7 +781,12 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void CopyAnnouncement(int id, IList<int> classIds)
         {
-            ConnectorLocator.ActivityConnector.CopyActivity(id, classIds);
+            var ann = GetAnnouncementById(id);
+            if(ann.State != AnnouncementState.Created)
+                throw new ChalkableException("Current announcement is not submited yet");
+            if(!ann.SisActivityId.HasValue)
+                throw new ChalkableException("Current announcement doesn't have activityId");
+            ConnectorLocator.ActivityConnector.CopyActivity(ann.SisActivityId.Value, classIds);
         }
     }
 }
