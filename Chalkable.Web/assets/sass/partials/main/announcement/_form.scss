@@ -245,6 +245,16 @@ BODY {
             .ann-form-container{
               padding: 9px 0 0 4px;
 
+              .duplicate-btn-container{
+                position: absolute !important;
+                bottom: -3px !important;
+                left: 400px !important;
+                A{
+                  font-weight: bold;
+                  font-size: 15px;
+                }
+              }
+
               .attachments-and-applications {
                 padding: 41px 0 30px;
               }
