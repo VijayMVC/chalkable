@@ -18,6 +18,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         public Gradebook Calculate(int classId, int gradingPeriodId)
         {
             var gb = data.First(x => x.Value.SectionId == classId).Value;
+            return PrepareGradeBook(classId, gb);
+        }
+
+        private Gradebook PrepareGradeBook(int classId, Gradebook gb)
+        {
             gb.Activities = Storage.StiActivityStorage.GetAll().Where(x => x.SectionId == classId);
             var activityIds = gb.Activities.Select(x => x.Id).ToList();
             gb.Scores = Storage.StiActivityScoreStorage.GetAll().Where(x => activityIds.Contains(x.ActivityId));
@@ -26,14 +31,36 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType, int gradingPeriodId, int? standardId)
         {
-            var gradeBooks = data.Select(x => x.Value).ToList();
+            var gradeBooks = data.Select(x => x.Value);
 
-            //if (classAnnouncementType.HasValue)
-            //{
-              //  gradeBooks = gradeBooks.Where(x => x.)
-            //}
-            //return data.Where(x => x.Value.SectionId == classId)
-            throw new NotImplementedException();
+            gradeBooks = gradeBooks.Where(x => x.SectionId == classId);
+
+            if (classAnnouncementType.HasValue)
+            {
+                gradeBooks = gradeBooks.Where(gb => gb.Activities.Count(x => x.CategoryId == classAnnouncementType.Value) > 0);
+            }
+
+            if (standardId.HasValue)
+            {
+                gradeBooks =
+                    gradeBooks.Where(
+                        gb =>
+                            gb.Activities.Count(x => x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value)) >
+                            0);
+            }
+
+
+
+
+            var gradeBook = gradeBooks.FirstOrDefault() ?? new Gradebook()
+            {
+                SectionId = classId,
+                Scores = new List<Score>(),
+                Options = new ClassroomOption(),
+                Activities = new List<Activity>(),
+                StudentAverages = new List<StudentAverage>()
+            };
+            return gradeBook;
         }
 
         public Gradebook GetBySectionAndGradingPeriod(int classId)
@@ -96,10 +123,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 SectionId = 2,
                 Activities = new List<Activity>(),
                 Options = new ClassroomOption(),
-                Scores = new List<Score>()
-                {
-                   
-                },
+                Scores = new List<Score>(),
                 StudentAverages = new List<StudentAverage>()
                 {
                     new StudentAverage()
