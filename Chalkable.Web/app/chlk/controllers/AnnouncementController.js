@@ -384,7 +384,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(announcement){
                     this.prepareAttachments(announcement);
-                    var alphaGrades = this.getContext().getSession().get('alphaGrades', []);
+                    var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
+                    var alphaGrades = classInfo.getAlphaGrades();
                     var alternateScores = this.getContext().getSession().get('alternateScores', []);
                     announcement.setAlphaGrades(alphaGrades);
                     announcement.setAlternateScores(alternateScores);
