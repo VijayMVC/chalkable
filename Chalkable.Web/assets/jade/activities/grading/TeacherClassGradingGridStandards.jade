@@ -1,0 +1,66 @@
+.class-grading.standards-grid
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'standardsGrid')(
+        selectedItemId=selectedId
+    ).classes-bar
+    .autocomplete-list
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left.no-border
+                .small-grey-buttons-block
+                    +ActionLink('grading', 'standards', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
+                    +ActionLink('grading', 'standardsGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
+            .center
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
+    .mps-container
+        .chlk-pop-up-container.popup-top.comment
+            .pop-up-triangle
+            div
+                h5=Msg.Add_comment
+                .text-container
+                    textarea.comment-value
+                    .grading-comments-list
+                a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
+                a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
+        each item,i in self.getItems()
+            gradingPeriod = item.getGradingPeriod()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
+                    mpName = gradingPeriod.getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                    a(href="javascript:").grey-button.comment-button=Msg.Comment
+                    .collapse
+                .mp-data
+                    .ann-types-container
+                        .dotted-container.name-container.with-horizontal-dots
+                            .type-name=Msg.Student(true)
+                            each student,i in item.getStudents()
+                                name = student.getStudentInfo().getDisplayName()
+                                div(row-index=i).student-name
+                                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
+                                    if student.isWithdrawn()
+                                        div(data-tooltip="Withdrawn").withdrawn
+                            .student-name
+                                .dotted-h=Msg.Avg
+                        +LeftRightToolbar()(
+                            needDots = true,
+                            roundedDots = true,
+                            padding = 77
+                        ).grid-toolbar.i-b.big-arrows
+                            each gradingItem in item.getGradingItems()
+                                .dotted-container.grade-container.with-horizontal-dots
+                                    title = gradingItem.getTitle()
+                                    div(data-tooltip=title, data-tooltip-type="overflow").type-name=title
+                                    each info,i in gradingItem.getItems()
+                                        div(
+                                            row-index=i,
+                                            data-student-id=info.getStudentId().valueOf(),
+                                            data-standard-id=info.getStandardId().valueOf(),
+                                            data-grading-period-id=gradingPeriod.getId().valueOf()
+                                            class=((self.getAlphaGrades() && self.getAlphaGrades().length) ? 'gradable' : '')
+                                        ).dotted-h.grade-value.letter
+                                            +RenderWith(info, chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl)
+                                    .dotted-h.grade-value=gradingItem.getAlphaGradeNameAvg()
