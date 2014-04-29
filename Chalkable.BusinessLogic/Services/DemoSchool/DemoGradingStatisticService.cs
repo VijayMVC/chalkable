@@ -295,6 +295,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void PostGradebook(int classId, int? gradingPeriodId)
         {
+            Storage.StiGradeBookStorage.PostGrades(classId, gradingPeriodId);
+        }
+
+        
+        private double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
+        {
+            var res = classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue).ToList();
+            if (res.Count > 0)
+                return res.Average(classAnnType => classAnnType.Percentage * classAnnType.Avg.Value / 100);
+            return null;
+        }
+
+
+        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, IList<ChalkableStudentAverageComment> comments)
+        {
             var studentAverage = new StudentAverage
             {
                 AverageId = averageId,
@@ -326,21 +341,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             studentAverage = Storage.StiGradeBookStorage.UpdateStudentAverage(classId, studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
-        }
-
-        
-        private double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
-        {
-            var res = classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue).ToList();
-            if (res.Count > 0)
-                return res.Average(classAnnType => classAnnType.Percentage * classAnnType.Avg.Value / 100);
-            return null;
-        }
-
-
-        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, IList<ChalkableStudentAverageComment> comments)
-        {
-            throw new NotImplementedException();
         }
     }
 }

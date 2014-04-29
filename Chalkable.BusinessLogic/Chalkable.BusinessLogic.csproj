@@ -195,8 +195,8 @@
     <Compile Include="Services\DemoSchool\Storage\sti\DemoStiActivityScoreStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\sti\StiSeatingChartStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\sti\DemoStiAttendanceStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiStandartScoreStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\sti\DemoStiGradeBookStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiStandardScoreStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\sti\DemoStiDisciplineStorage.cs" />
     <Compile Include="Services\Master\AccessControlService.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
