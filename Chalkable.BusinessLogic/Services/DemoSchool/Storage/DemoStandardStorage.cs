@@ -15,8 +15,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             foreach (var standard in standards)
             {
-                if (!data.ContainsKey(standard.Id))
-                    data[standard.Id] = standard;
+                standard.Id = GetNextFreeId();
+                data[standard.Id] = standard;
             }
         }
 
@@ -57,7 +57,119 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new System.NotImplementedException();
+            AddStandards(new List<Standard>
+            {
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Math 5",
+                    LowerGradeLevelRef = 7,
+                    UpperGradeLevelRef = 7,
+                    StandardSubjectRef = 1
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Reading -1",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 2
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Reading -2",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 2
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Reading -3",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 2
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Reading -4",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 2
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Grammar -1",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 2
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Grammar -2",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 2
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Science -1",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 3
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Science -2",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 3
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Science -1.1",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 3,
+                    ParentStandardRef = 8
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Science -1.2",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 3,
+                    ParentStandardRef = 8
+                },
+
+                new Standard
+                {
+                    IsActive = true,
+                    Name = "Dancing -1",
+                    LowerGradeLevelRef = 1,
+                    UpperGradeLevelRef = 14,
+                    StandardSubjectRef = 4
+                }
+
+            });  
         }
     }
 }
