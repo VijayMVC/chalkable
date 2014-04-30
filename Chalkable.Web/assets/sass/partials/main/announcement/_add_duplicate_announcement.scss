@@ -6,7 +6,7 @@
     left: -487px;
     top: 200px;
     background-color: #eaeaea;
-    min-height: 370px;
+    min-height: 346px;
     width: 674px;
     @include border-radius(5px);
     .header{
@@ -20,22 +20,53 @@
         font-size: 14px;
       }
       text-align: center;
-      border-bottom-color: #888888;
+      border-bottom: 1px solid #c4c4c4;
     }
     .add-duplicate-announcements-form{
-      margin-top: 20px;
 
       .main-container{
-        min-height: 340px;
+        min-height: 240px;
         font: normal 12px Arial;
         color: #9c9c9c;
         overflow-x: auto;
-        border-top-color: #ffffff;
-        border-bottom-color: #888888;
+        border-top: 1px solid #ffffff;
+        border-bottom: 1px solid #c4c4c4;
+
+        .classes-bar{
+          margin-top: 15px;
+          .second-container{
+            text-align: center;
+          }
+        }
+
+        .text-container{
+          text-align: center;
+
+          .tooltip-text{
+            background: url(images/announcement/choose-classes-to-duplicate-item.png) center no-repeat;
+            width: 650px;
+            height: 75px;
+          }
+
+          .note{
+            font-size: 14px;
+            .title{
+              display: inline-block;
+              margin-right: 5px;
+              font-weight: bold;
+              text-shadow: 1px -1px 0px white;
+            }
+            .text{
+              display: inline-block;
+              text-shadow: 1px -1px 0px white;
+            }
+          }
+        }
       }
       .buttons-container{
-        text-align: right;
-        margin: 10px 35px 10px 0px;
+        border-top: 1px solid #ffffff;
+        text-align: center;
+        padding: 7px 0px;
 
         .special-button2{
           >span{
