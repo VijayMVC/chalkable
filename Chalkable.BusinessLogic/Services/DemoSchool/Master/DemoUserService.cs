@@ -70,8 +70,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public static bool IsDemoUser(string login)
         {
-            var userLogin = login.Substring(login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase));
-            return IsDemoLogin(userLogin);
+            var index = login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase);
+            return IsDemoLogin(index != -1 ? login.Substring(index) : login);
         }
 
         public static User GetDemoUser(string roleName, string prefix)
