@@ -39,6 +39,7 @@ NAMESPACE('chlk.controllers', function (){
                  .then(function(res){
                     if (res.isSuccess()){
                         location.href = this.getContext().getSession().get('webSiteRoot');
+                        return ria.async.BREAK;
                     }
                  }, this);
          },
