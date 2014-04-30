@@ -27,7 +27,7 @@
                         +ActionForm('grading', 'loadGradingPeriodSummary').load-grading-period
                             +Hidden('classId', selectedId)
                             +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
-                    a(href="javascript:").grey-button.comment-button=Msg.Comment
+                    //a(href="javascript:").grey-button.comment-button=Msg.Comment
                     .collapse
                 div(data-grading-period-id=gradingPeriod.getId()).mp-data
                     if gradingPeriod.getId() == self.getGradingPeriodId()
