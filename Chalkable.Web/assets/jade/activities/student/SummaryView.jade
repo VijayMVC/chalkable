@@ -1,0 +1,35 @@
+user = self.getUser()
+gradeLevel = user.getGradeLevelNumber();
+statusData = self.getStatusData()
+.loader-container
+    .loader
+    +UserProfileTopBar(self, 'details')
+    .summary-view
+        #top-summary-panel
+            #avatar-photo-conainer
+                .img-container
+                    +PersonImg(user, 256)
+                    .grades-container
+                        p=Msg.Class_Of
+                            span=self.getAvatarTitle()
+                        .grade #{self.getSerial(user.getGradeLevelNumber())} #{Msg.Grade}
+            #student-info-panel
+                h1.display-name=user.getDisplayName() || user.getFullName()
+                .status
+                    div(class=statusData.status, data-tooltip=statusData.statusName)
+                    |#{user.getCurrentClassName()}
+                    if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
+                        |&nbsp;- #{user.getRoomName()}
+                .glance-container
+                    +GlanceBox(null, null, self.buildGradesGlanceBoxData())
+                    +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
+                    +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
+                    +GlanceBox(null, null, self.buildRankGlanceBoxData())
+        .today-work-panel
+            h2=Msg.Todays_work
+            .period-toolbar
+                +LeftRightToolbar(user.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered
+        .today-work-panel
+            h2.stats=Msg.Classes
+            .classes-tb
+                +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).centered

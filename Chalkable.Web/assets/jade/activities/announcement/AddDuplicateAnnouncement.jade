@@ -1,0 +1,15 @@
+-selectedClassId = self.getSelectedClassId()
+.dialog.add-duplicate-announcements
+    .header
+        h1 HOW TO DUPLICATE AN ITEM
+    +ActionForm('announcement', 'duplicate').add-duplicate-announcements-form
+        +Hidden('announcementId', self.getAnnouncementId() && self.getAnnouncementId().valueOf())
+        +Hidden('selectedIds', '')
+        .main-container
+            +LeftRightToolbar(self.getClasses(), chlk.templates.classes.TopBar)(
+                selectedItemId=selectedClassId && selectedClassId.valueOf(),
+                pressAfterClick=false
+            ).classes-bar
+        .buttons-container
+            +Button()(type="submit", disabled).special-button2.blue.add.add-duplicate-btn GOT IT
+
