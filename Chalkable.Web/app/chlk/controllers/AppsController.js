@@ -531,7 +531,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return new chlk.models.apps.AppGeneralInfoViewData.$createFromReviews(data);
-                })
+                });
             return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result, 'loadReviews');
         },
 
@@ -546,7 +546,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        return this.Redirect('apps', 'add', []);
+                        this.BackgroundNavigate('apps', 'add', []);
+                        return ria.async.BREAK;
                     }
                     else{
                         var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);

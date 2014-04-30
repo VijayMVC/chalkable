@@ -205,6 +205,7 @@ NAMESPACE('chlk.controllers', function (){
                }
                this.setNotAblePressSidebarButton(false);
            }
+
    ])
 
 });
