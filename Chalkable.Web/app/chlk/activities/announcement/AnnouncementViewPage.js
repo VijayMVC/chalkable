@@ -657,6 +657,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var container = row.find('.top-content');
                     container.addClass('loading');
                     row.find('.grading-input-popup').hide();
+                    var input = node.find('.grade-input');
+                    var value = (input.getValue() || '').toLowerCase();
+                    if(value == 'dropped' || value == 'exempt')
+                        input.setValue(input.getData('grade-value'));
                 }
                 return res;
             },
