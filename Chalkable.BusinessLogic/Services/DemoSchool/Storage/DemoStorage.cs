@@ -151,14 +151,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StiActivityScoreStorage = new DemoStiActivityScoreStorage(this);
             StiInfractionStorage = new DemoStiInfractionStorage(this);
             StiActivityStorage = new DemoStiActivityStorage(this);
+
             Setup();
         }
 
         private void Setup()
         {
-
-            AttendanceReasonStorage.Setup();
+            SchoolId = 1;
             AttendanceLevelReasonStorage.Setup();
+            AttendanceReasonStorage.Setup();
+            
             GradeLevelStorage.Setup();
             ClassStorage.Setup();
             MarkingPeriodClassStorage.Setup();
@@ -171,7 +173,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassAnnouncementTypeStorage.Setup();
             SchoolPersonStorage.Setup();
             ClassPersonStorage.Setup();
-
+            StiAttendanceStorage.Setup();
             StiInfractionStorage.Setup();
             InfractionStorage.Setup();
             DateStorage.Setup();
@@ -184,34 +186,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassStorage.Setup();
             ClasStandardStorage.Setup();
             StiStandardScoreStorage.Setup();
-            SchoolId = 1;
-
-            SchoolStorage.Add(new Data.School.Model.School
-            {
-                Id = 1,
-                IsActive = true,
-                IsPrivate = true,
-                Name = "SMITH"
-            });
-
-
-
-
-            
-
-            var currentDate = DateTime.Now;
-            
-            SchoolYearStorage.Add(1, 1, "Current School Year", "", new DateTime(currentDate.Year, 1, 1),
-                new DateTime(currentDate.Year, 12, 31));
-            //some init data
-
-            //person storage
-
-            
-
-
-            
-
+            StiSeatingChartStorage.Setup();
+            SchoolStorage.Setup();
+            SchoolYearStorage.Setup();
+            AlphaGradeStorage.Setup();
         }
     }
     

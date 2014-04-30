@@ -162,14 +162,8 @@
   }
 }
 
-.dialog-window{
-  background: #e7e7e7;
-  border: 1px solid #adadad;
-  border-radius: 4px;
-  @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
-  padding: 12px 17px;
-
-  &.new-style{
+.chlk-pop-up-container, #chlk-pop-up-container, .dialog-window{
+  .new-style, &.new-style{
     padding: 0;
 
     b{
@@ -195,33 +189,44 @@
         color: #407d9b;
       }
     }
+  }
+}
 
-    .buttons-bottom{
-      border-top: 1px solid #c4c4c4;
-      @include box-shadow(0 1px 0 white inset);
-      margin-top: 17px;
-      text-align: center;
+.dialog-window{
+  background: #e7e7e7;
+  border: 1px solid #adadad;
+  border-radius: 4px;
+  @include box-shadow(0 10px 25px rgba(0, 0, 0, 0.5));
+  padding: 12px 17px;
+}
 
-      .chlk-button{
-        padding: 7px;
-        height: auto;
-        margin: 5px 5px 9px;
-        font: normal 14px Arial;
+.buttons-bottom{
+  &:not(.no-border){
+    @include box-shadow(0 1px 0 white inset);
+    border-top: 1px solid #c4c4c4;
+  }
 
-        a{
-          line-height: 14px;
-        }
-      }
+  margin-top: 17px;
+  text-align: center;
 
-      BUTTON{
-        width: 77px;
-      }
+  .chlk-button{
+    padding: 7px;
+    height: auto;
+    margin: 5px 5px 9px;
+    font: normal 14px Arial;
 
-      .action-button{
-        width: 61px;
-        display: inline-block;
-
-      }
+    a{
+      line-height: 14px;
     }
+  }
+
+  BUTTON{
+    width: 77px;
+  }
+
+  .action-button{
+    width: 61px;
+    display: inline-block;
+
   }
 }

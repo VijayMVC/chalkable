@@ -17,17 +17,56 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public SeatingChart GetChart(int classId, int markingPeriodId)
         {
-            throw new NotImplementedException();
+            //todo: filter by marking period
+            return data.First(x => x.Value.SectionId == classId).Value;
         }
 
         public void UpdateChart(int classId, int markingPeriodId, SeatingChart seatingChart)
         {
-            throw new NotImplementedException();
+            //todo: filter by marking period
+            if (data.Count(x => x.Value.SectionId == classId) == 0)
+            {
+                data.Add(GetNextFreeId(), seatingChart);
+            }
+            var item = data.First(x => x.Value.SectionId == classId).Key;
+            data[item] = seatingChart;
         }
 
         public override void Setup()
         {
-            throw new NotImplementedException();
+
+            var seats = new List<Seat>();
+
+
+            for (var i = 0; i < 3; ++i)
+            {
+                for (var  j = 0; j < 3; ++j)
+                {
+                    seats.Add(new Seat()
+                    {
+                        Column = (byte?) (j + 1),
+                        Row = (byte?) (i + 1)
+                    });
+                }
+            }
+
+            seats[0].StudentId = 1196;
+
+            data.Add(GetNextFreeId(), new SeatingChart()
+            {
+                SectionId = 1,
+                Columns = 3,
+                Rows = 3,
+                Seats = seats
+            });
+
+            data.Add(GetNextFreeId(), new SeatingChart()
+            {
+                SectionId = 2,
+                Columns = 3,
+                Rows = 3,
+                Seats = seats
+            });
         }
     }
 }

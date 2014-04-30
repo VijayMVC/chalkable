@@ -31,6 +31,29 @@ NAMESPACE('chlk.templates.grading', function () {
 
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
+            Array, 'codes',
+
+            /*Array, function getCodes(){
+                var res = [{
+                    headerid: 1,
+                    headername: 'Q1 Com1',
+                    gradingcomment: {
+                        code: "PAS",
+                        comment: "- Can be passively defiant",
+                        id: 6
+                    }
+                }, {
+                    headerid: 2,
+                    headername: 'Q1 Com2',
+                    gradingcomment: {
+                        code: "DRT",
+                        comment: "- Distracts others",
+                        id: 7
+                    }
+                }];
+                return res;
+            },*/
+
             Boolean, 'ableDisplayAlphaGrades'
         ]);
 });

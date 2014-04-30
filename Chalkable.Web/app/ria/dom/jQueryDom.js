@@ -351,6 +351,9 @@ NAMESPACE('ria.dom', function () {
                     node.setValue(value);
                     node.setData('value', value);
                 }
+                if(this._dom.is('select')){
+                    this._dom.trigger('change');
+                }
                 return this;
             },
 

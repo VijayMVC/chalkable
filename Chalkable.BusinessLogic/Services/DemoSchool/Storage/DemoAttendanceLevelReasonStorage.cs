@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -30,6 +31,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     data[attendanceLevelReason.Id] = attendanceLevelReason;
             }
         }
+
+        public IList<AttendanceLevelReason> GetForAttendanceReason(int attendanceReasonId)
+        {
+            return data.Where(x => x.Value.AttendanceReasonRef == attendanceReasonId).Select(x => x.Value).ToList();
+        } 
 
         public override void Setup()
         {

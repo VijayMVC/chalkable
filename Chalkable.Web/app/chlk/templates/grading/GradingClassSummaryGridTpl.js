@@ -28,6 +28,9 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
             String, function getTooltipText(item){
                 var res = [];
                 if(item.isLate())

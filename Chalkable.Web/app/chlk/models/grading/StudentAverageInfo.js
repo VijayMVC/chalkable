@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.GradingPeriodId');
+REQUIRE('chlk.models.grading.AvgCodeHeaderViewData');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -31,6 +32,14 @@ NAMESPACE('chlk.models.grading', function () {
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
             String, 'averageValue',
+
+            String, 'oldValue',
+
+            //ArrayOf(chlk.models.grading.AvgCodeHeaderViewData), 'codes',
+
+            Array, 'codes',
+
+            String, 'codesString',
 
             function getNumericAvg(){
                 return this.getEnteredAvg() || this.getCalculatedAvg()

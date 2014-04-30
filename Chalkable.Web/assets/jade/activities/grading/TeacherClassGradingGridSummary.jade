@@ -16,6 +16,9 @@
                 +ActionLink('grading', "summaryGrid", selectedId).pressed=Msg.Item(true)
                 +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
     .mps-container
+        #codes-popup.chlk-pop-up-container.popup-top.codes.new-style
+            .pop-up-triangle
+            .codes-content
         .chlk-pop-up-container.popup-top.comment
             .pop-up-triangle
             div
@@ -47,7 +50,8 @@
                                 +Option('', Msg.All_categories , true)
                                 each item in self.getClassAnnouncementTypes()
                                     +Option(item.getId(), item.getName() , false)
-                    +ActionLink('grading', 'getGradeComments').grey-button.comment-button=Msg.Comment
+                    +ActionLink('grading', 'getGradeComments').grey-button.comment-button.gp-button=Msg.Comment
+                    +ActionLink('grading', 'getGradeComments').grey-button.codes-button.gp-button=Msg.Code(true)
                     .collapse
                 div(data-grading-period-id=gradingPeriod.getId()).mp-data
                     if gradingPeriod.getId() == self.getGradingPeriodId()

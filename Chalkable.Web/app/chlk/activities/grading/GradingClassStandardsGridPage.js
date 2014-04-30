@@ -274,7 +274,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         && !node.isOrInside('.autocomplete-list')){
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
-                                var parent = node.parent('.grade-value');
+                                var parent = node.parent('.grade-value.gradable');
                                 dom.find('.active-cell').removeClass('active-cell');
                                 if(parent.exists()){
                                     if(!parent.hasClass('active-row')){

@@ -57,11 +57,88 @@ BODY {
               }
             }
 
-            .chlk-pop-up-container.comment{
-              @include border-radius(3px);
-              padding: 8px 18px;
-              display: none;
+            .chlk-pop-up-container{
+              &.comment{
+                padding: 8px 18px;
+              }
 
+              &.comment, &.codes{
+                @include border-radius(3px);
+                display: none;
+              }
+
+              &.codes{
+                padding: 10px;
+                color: #333333;
+
+                h3{
+                  text-align: center;
+                  font: bold 18px Arial;
+                  margin-bottom: 20px;
+                }
+
+                .buttons-bottom{
+                  margin-top: 14px;
+
+                  .chlk-button{
+                    margin-bottom: 0;
+                  }
+                }
+
+                .row{
+                  &.header{
+                    font: bold 14px Arial;
+                    margin-bottom: 7px;
+                  }
+
+                  &:not(.header){
+                    margin-top: 4px;
+
+                    >DIV.name{
+                      font: normal 14px Arial;
+                    }
+                  }
+
+                  >DIV{
+                    display: inline-block;
+                    vertical-align: middle;
+
+                    &.check{
+                      width: 26px;
+                    }
+
+                    &.name{
+                      width: 93px;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    }
+
+                    &.code{
+                      width: 128px;
+
+                      .code-input{
+                        width: 82px;
+                        height: 10px;
+                      }
+                    }
+
+                    &.comment{
+                      width: 331px;
+
+                      .chzn-container{
+                        width: 322px !important;
+
+                        .chzn-single{
+                          height: 21px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            .chlk-pop-up-container.comment{
               h5{
                 font: normal 10px Georgia italic;
                 text-align: center;
@@ -78,7 +155,7 @@ BODY {
               }
             }
 
-            .comment-button{
+            .gp-button{
               display: none;
             }
 
@@ -589,6 +666,12 @@ BODY {
 
                             &:hover{
                               opacity: 1;
+                            }
+                          }
+
+                          &:not(.gradable){
+                            .edit-cell{
+                              display: none;
                             }
                           }
 

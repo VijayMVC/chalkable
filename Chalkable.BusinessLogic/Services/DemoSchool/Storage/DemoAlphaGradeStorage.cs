@@ -34,7 +34,146 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new NotImplementedException();
+            Add(new List<AlphaGrade>()
+            {
+                new AlphaGrade()
+                {
+                    Id = 1,
+                    SchoolRef = 1,
+                    Name = "A"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 2,
+                    SchoolRef = 1,
+                    Name = "B"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 3,
+                    SchoolRef = 1,
+                    Name = "C"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 4,
+                    SchoolRef = 1,
+                    Name = "D"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 5,
+                    SchoolRef = 1,
+                    Name = "F"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 6,
+                    SchoolRef = 1,
+                    Name = "E"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 7,
+                    SchoolRef = 1,
+                    Name = "S"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 8,
+                    SchoolRef = 1,
+                    Name = "N",
+                    Description = "No pass"
+
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 9,
+                    SchoolRef = 1,
+                    Name = "A+"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 10,
+                    SchoolRef = 1,
+                    Name = "A-"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 11,
+                    SchoolRef = 1,
+                    Name = "B+"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 12,
+                    SchoolRef = 1,
+                    Name = "B-"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 13,
+                    SchoolRef = 1,
+                    Name = "C+"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 14,
+                    SchoolRef = 1,
+                    Name = "C-"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 15,
+                    SchoolRef = 1,
+                    Name = "D+"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 16,
+                    SchoolRef = 1,
+                    Name = "D-"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 17,
+                    SchoolRef = 1,
+                    Name = "P",
+                    Description = "Pass"
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 18,
+                    SchoolRef = 1,
+                    Name = "Audit",
+                },
+
+                new AlphaGrade()
+                {
+                    Id = 19,
+                    SchoolRef = 1,
+                    Name = "I",
+                    Description = "Incomplete"
+                }
+
+            });
         }
 
         public IList<AlphaGrade> GetForClassStandarts(int classId)

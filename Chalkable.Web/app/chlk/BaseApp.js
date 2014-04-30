@@ -48,6 +48,7 @@ REQUIRE('chlk.models.grading.AlternateScore');
 REQUIRE('chlk.models.grading.AlphaGrade');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
 REQUIRE('chlk.models.people.ShortUserInfo');
+REQUIRE('chlk.models.grading.AvgComment');
 
 REQUIRE('chlk.templates.common.AlertsPopUpTpl');
 
@@ -100,6 +101,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'alphaGrades', ArrayOf(chlk.models.grading.AlphaGrade));
                 this.saveInSession(session, 'alternateScores', ArrayOf(chlk.models.grading.AlternateScore));
                 this.saveInSession(session, 'newNotifications', Number);
+                this.saveInSession(session, 'gradingComments', ArrayOf(chlk.models.grading.AvgComment));
 
                 window.gradeLevels.forEach(function(item){
                     var numberPart = parseInt(item.name, 10);

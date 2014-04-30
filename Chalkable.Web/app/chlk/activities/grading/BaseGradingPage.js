@@ -75,7 +75,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
                 new ria.dom.Dom(document).on('click.popup', function(node, event){
                     var target = new ria.dom.Dom(event.target);
-                    if(!target.isOrInside('.ann-grade-pop-up')){
+                    if(!target.isOrInside('.ann-grade-pop-up') && this.getCurrentMenu()){
                         this.getCurrentMenu().deactivate();
                     }
                 }.bind(this));

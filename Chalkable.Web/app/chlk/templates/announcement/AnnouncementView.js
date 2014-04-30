@@ -11,7 +11,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementView)],
         'AnnouncementView', EXTENDS(chlk.templates.announcement.Announcement), [
             Number, function getAutoGradeCount(){
-                return this.getStudentAnnouncements().getItems().filter(function(item){
+                return (this.getStudentAnnouncements().getItems() || []).filter(function(item){
                     return item.getState() == 0;
                 }).length;
             },

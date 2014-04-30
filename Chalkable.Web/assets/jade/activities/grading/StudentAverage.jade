@@ -11,5 +11,7 @@ edited = self.getEnteredAvg() || self.getEnteredAlphaGrade()
 +ActionForm('grading', 'updateStudentAvg').grading-form.avg-form
     input(name="averageValue", value=value, data-value=value).avg-value.value-input
     +Hidden('averageid', self.getAverageId().valueOf())
+    +Hidden('oldValue', value)
+    +Hidden('codesString', JSON.stringify(self.getCodes())).codes-text
     +Hidden('studentid', self.getStudentId().valueOf())
     +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())

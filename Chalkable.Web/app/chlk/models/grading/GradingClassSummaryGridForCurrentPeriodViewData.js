@@ -23,6 +23,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
-            ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores'
+            ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
+
+            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments'
         ]);
 });

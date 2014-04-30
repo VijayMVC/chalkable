@@ -43,7 +43,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new NotImplementedException();
+            Add(new Data.School.Model.School
+            {
+                Id = 1,
+                IsActive = true,
+                IsPrivate = true,
+                Name = "SMITH"
+            });
         }
     }
 }

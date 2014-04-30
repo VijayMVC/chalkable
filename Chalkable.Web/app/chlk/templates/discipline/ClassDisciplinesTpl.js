@@ -52,7 +52,7 @@ NAMESPACE('chlk.templates.discipline',function(){
             Array, function getGroupDisciplineTypes(discipline){
                 var res = [];
                 var disciplineTypes = this.getDisciplineTypes();
-                var selectedDisciplineTypes = discipline.getDisciplineTypes();
+                var selectedDisciplineTypes = discipline.getDisciplineTypes() || [];
                 for(var i = 0; i < disciplineTypes.length; i++){
                     res.push({
                         disciplineTypeData: disciplineTypes[i],

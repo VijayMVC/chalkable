@@ -5,11 +5,13 @@ REQUIRE('chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl');
 REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.grading.StudentAverageTpl');
+REQUIRE('chlk.templates.grading.AvgCodesPopupTpl');
 
 REQUIRE('chlk.activities.lib.TemplatePage');
 
 REQUIRE('chlk.models.common.Array');
 REQUIRE('chlk.models.announcement.ShortStudentAnnouncementViewData');
+REQUIRE('chlk.models.grading.AvgCodesPopupViewData');
 
 NAMESPACE('chlk.activities.grading', function () {
 
@@ -22,12 +24,14 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         'GradingClassSummaryGridPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
+            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
             [ria.mvc.DomEventBind('click', '.mp-title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function collapseClick(node, event){
                 var nodeT = new ria.dom.Dom(event.target);
                 var dom = this.dom;
-                if(!nodeT.hasClass('comment-button')){
+                if(!nodeT.hasClass('gp-button')){
                     var parent = node.parent('.marking-period-container');
 
                     var mpData = parent.find('.mp-data');
@@ -73,6 +77,28 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(!node.checked()){
                     var input = node.parent('form').find('.grade-autocomplete');
                     input.setValue(input.getData('grade-value'));
+                }
+            },
+
+            [ria.mvc.DomEventBind('change', '.codes-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function codesSelectChange(node, event, options_){
+                var option = node.find(':selected');
+                var code = option.getData('code');
+                node.parent('.row').find('.code-input').setValue(code);
+            },
+
+            [ria.mvc.DomEventBind('change', '.code-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function codeChange(node, event){
+                var select = node.parent('.row').find('.codes-select');
+                var option = select.find('[data-code=' + node.getValue().toUpperCase() + ']');
+                if(option.exists()){
+                    select.setValue(option.getAttr('value'));
+                    select.trigger('liszt:updated');
+                }else{
+                    select.setValue('');
+                    select.trigger('liszt:updated');
                 }
             },
 
@@ -435,6 +461,31 @@ NAMESPACE('chlk.activities.grading', function () {
                 }, 1)
             },
 
+            [ria.mvc.DomEventBind('click', '.codes-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function codesBtnClick(node, event){
+                var js = new ria.serialize.JsonSerializer();
+                var active = this.dom.find('.active-cell');
+                var text = active.find('.codes-text').getValue();
+                if(text && JSON.parse(text)){
+                    var res = JSON.parse(text);
+                    var headers = js.deserialize(res, ArrayOf(chlk.models.grading.AvgCodeHeaderViewData));
+                    var model = new chlk.models.grading.AvgCodesPopupViewData(headers, this.getGradingComments(), active.getData('student-name'),
+                        active.getData('grading-period-name'), active.getData('average-id'), parseInt(active.getAttr('row-index'), 10));
+                    var tpl = new chlk.templates.grading.AvgCodesPopupTpl();
+                    tpl.assign(model);
+                    var popUp = this.dom.find('.chlk-pop-up-container.codes');
+                    popUp.find('.codes-content').setHTML(tpl.render());
+
+                    var main = this.dom.parent('#main');
+                    var bottom = main.height() + main.offset().top - active.offset().top + 73;
+                    var left = active.offset().left - main.offset().left - 260;
+                    popUp.setCss('bottom', bottom);
+                    popUp.setCss('left', left);
+                    popUp.show();
+                }
+            },
+
             function setCommentByNode(node){
                 var popUp = node.parent('.chlk-pop-up-container');
                 var input = popUp.find('.comment-value');
@@ -467,6 +518,42 @@ NAMESPACE('chlk.activities.grading', function () {
                 }, 1);
                 var commentInput = cell.find('.comment-value');
                 commentInput.setValue(commentInput.getData('comment'));
+            },
+
+            [ria.mvc.DomEventBind('click', '.cancel-code')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelCodesBtnClick(node, event){
+                node.parent('.chlk-pop-up-container.codes').hide();
+            },
+
+            [ria.mvc.DomEventBind('click', '.save-codes')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function saveCodesBtnClick(node, event){
+                var popUp = node.parent('.chlk-pop-up-container.codes');
+                var res = [], o;
+                popUp.find('.row:not(.header)').forEach(function(item){
+                    var input = item.find('.code-input');
+                    var select = item.find('.codes-select');
+                    o = {
+                        headerId: input.getData('header-id'),
+                        headerName: input.getData('header-name'),
+                        gradingComment: {
+                            code: input.getValue(),
+                            id: parseInt(select.getValue(), 10),
+                            comment: select.find('option:selected').getHTML()
+                        }
+                    };
+                    res.push(o);
+                });
+                var averageId = node.getData('average-id');
+                var rowIndex = node.getData('row-index');
+                var cell = this.dom.find('.avg-value-container[row-index=' + rowIndex + '][data-average-id=' + averageId + ']');
+                cell.find('input[name=codesString]').setValue(JSON.stringify(res));
+                var input = cell.find('.value-input');
+                if(input.hasClass('error'))
+                    input.setValue('input').getData('value');
+                cell.find('form').trigger('submit');
+                popUp.hide();
             },
 
             [ria.mvc.DomEventBind('click', '.add-comment')],
@@ -608,6 +695,7 @@ NAMESPACE('chlk.activities.grading', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 var allScores = [], standardScores = [];
+                this.setGradingComments(model.getGradingComments());
                 model.getAlternateScores().forEach(function(item){
                     allScores.push(item.getName());
                     allScores.push(item.getName() + ' (fill all)');
@@ -633,12 +721,12 @@ NAMESPACE('chlk.activities.grading', function () {
                         dom.find('.grading-comments-list').hide();
                     }
 
-                    var popUp = dom.find('.chlk-pop-up-container.comment');
+                    var popUp = dom.find('.chlk-pop-up-container.comment, .chlk-pop-up-container.codes');
                     if(!node.hasClass('value-input') && !node.hasClass('arrow')
                         && !node.isOrInside('.chlk-pop-up-container.comment') && !node.isOrInside('.grading-input-popup')
-                        && !node.isOrInside('.autocomplete-list')){
+                        && !node.isOrInside('.autocomplete-list') && !node.isOrInside('.chlk-pop-up-container.codes')){
                             dom.find('.autocomplete-list').setHTML('').hide();
-                            if(!node.hasClass('comment-button')){
+                            if(!node.hasClass('gp-button')){
                                 popUp.hide();
                                 var parent = (node.hasClass('grade-value') && node.hasClass('gradable')) ? node : node.parent('.grade-value.gradable');
 
@@ -658,9 +746,16 @@ NAMESPACE('chlk.activities.grading', function () {
                                         dom.find('[row-index=' + index + ']').addClass('active-row');
                                     }
                                     parent.addClass('active-cell');
+                                    var mp = node.parent('.marking-period-container');
                                     if(!parent.hasClass('avg-value-container')){
                                         that.addFormToActiveCell(parent);
-                                        node.parent('.marking-period-container').find('.comment-button').show();
+                                        mp.find('.comment-button').show();
+                                        mp.find('.codes-button').hide();
+                                    }else{
+                                        var value = parent.find('.codes-text').getValue();
+                                        if(value && JSON.parse(value))
+                                            mp.find('.codes-button').show();
+                                        mp.find('.comment-button').hide();
                                     }
 
                                     setTimeout(function(){
@@ -668,7 +763,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                     },1)
                                 }else{
                                     dom.find('.active-row').removeClass('active-row');
-                                    dom.find('.comment-button').hide();
+                                    dom.find('.gp-button').hide();
                                 }
                             }
                     }

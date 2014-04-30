@@ -156,11 +156,13 @@ NAMESPACE('chlk.controllers', function (){
             function summaryGridTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
+                var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 this.getContext().getSession().set('currentClassId', classId_);
                 var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
-                var alphaGrades = this.getContext().getSession().get('alphaGrades', []);
+                var alphaGrades = classInfo.getAlphaGrades();
                 var alternateScores = this.getContext().getSession().get('alternateScores', []);
+                var gradingComments = this.getContext().getSession().get('gradingComments', []);
                 var result = this.gradingService
                     .getClassSummaryGrid(classId_)
                     .attach(this.validateResponse_())
@@ -170,6 +172,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.setTopData(topData);
                         model.setGradingPeriodId(gradingPeriod.getId());
                         model.setAlternateScores(alternateScores);
+                        model.setGradingComments(gradingComments);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
@@ -196,8 +199,9 @@ NAMESPACE('chlk.controllers', function (){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classes = this.classService.getClassesForTopBar(true);
+                var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
-                var alphaGrades = this.getContext().getSession().get('alphaGrades', []);
+                var alphaGrades = classInfo.getAlphaGradesForStandards();
                 var result = this.gradingService
                     .getClassStandardsGrid(classId_)
                     .attach(this.validateResponse_())
@@ -377,23 +381,31 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.grading.ShortStudentAverageInfo]],
             function updateStudentAvgAction(model){
+                if(parseFloat(model.getOldValue()) == parseFloat(model.getAverageValue()) || !model.getAverageValue())
+                    return this.updateStudentAvgFromModel(model);
+
                 this.getContext().getSession().set('studentAvgModel', model);
                 return this.ShadeView(chlk.activities.grading.StudentAvgPopupDialog, new ria.async.DeferredData(new chlk.models.Success));
             },
 
-            function updateStudentAvgFromPopupAction(){
-                var model = this.getContext().getSession().get('studentAvgModel');
+            function updateStudentAvgFromModel(model){
                 var result = this.gradingService
                     .updateStudentAverage(
                         this.getContext().getSession().get('currentClassId', null),
                         model.getStudentId(),
                         model.getGradingPeriodId(),
                         model.getAverageId(),
-                        model.getAverageValue()
+                        model.getAverageValue(),
+                        JSON.parse(model.getCodesString())
                     )
                     .attach(this.validateResponse_());
                 this.BackgroundCloseView(chlk.activities.grading.StudentAvgPopupDialog);
                 return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
+            },
+
+            function updateStudentAvgFromPopupAction(){
+                var model = this.getContext().getSession().get('studentAvgModel');
+                return this.updateStudentAvgFromModel(model);
             },
 
             function getWorksheetReportInfo(gradingPeriodId, classId, startDate, endDate){

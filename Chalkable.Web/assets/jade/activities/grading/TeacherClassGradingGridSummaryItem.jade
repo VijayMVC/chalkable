@@ -25,7 +25,7 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
             .edit-cell
 
 mixin StudentAverages(tpl)
-    each studentAvg in tpl.getStudentAverages()
+    each studentAvg, i in tpl.getStudentAverages()
         .dotted-container.grade-container.with-horizontal-dots.avgs-container
             text = tpl.getModel().displayAvgName(studentAvg)
             div(data-tooltip=text).type-name=text
@@ -37,8 +37,9 @@ mixin StudentAverages(tpl)
                     class=(i == tpl.getRowIndex() ? 'active-row' : ''),
                     data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
                     data-average-id=average.getAverageId(),
-                    data-student-id=average.getStudentId(),
-                    data-grading-period-id=self.getGradingPeriod().getId().valueOf()
+                    data-student-name=self.getStudents()[i].getStudentInfo().getDisplayName(),
+                    data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
+                    data-grading-period-name=self.getGradingPeriod().getName()
                 ).dotted-h.grade-value.gradable.avg-value-container
                     +RenderWith(average, chlk.templates.grading.StudentAverageTpl)(
                         ableDisplayAlphaGrades = self.isAbleDisplayAlphaGrades(),

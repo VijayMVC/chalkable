@@ -80,7 +80,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new NotImplementedException();
+            var currentDate = DateTime.Now;
+            Add(1, 1, "Current School Year", "", new DateTime(currentDate.Year, 1, 1),
+                new DateTime(currentDate.Year, 12, 31));
         }
     }
 }

@@ -42,14 +42,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId, Number, String]],
-            ria.async.Future, function updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue) {
-                return this.get('Grading/UpdateStudentAverage', chlk.models.grading.ShortStudentAverageInfo, {
+            [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId, Number, String, Object]],
+            ria.async.Future, function updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue, codes) {
+                return this.post('Grading/UpdateStudentAverage', chlk.models.grading.ShortStudentAverageInfo, {
                     classId: classId && classId.valueOf(),
                     studentId: studentId && studentId.valueOf(),
                     gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf(),
                     averageId: averageId,
-                    averageValue: averageValue
+                    averageValue: averageValue,
+                    codes: codes
                 });
             },
 

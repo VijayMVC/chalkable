@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         void Update(Announcement ann);
         Announcement GetAnnouncement(int announcementId, int roleId, int value);
         Announcement GetLastDraft(int i);
-        IList<Person> GetAnnouncementRecipientPersons(int announcementId, int i);
+        IList<Person> GetAnnouncementRecipientPersons(int announcementId, int userId);
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int i);
         bool Exists(string s);
         void ReorderAnnouncements(int id, int value, int personRef, int recipientId);
@@ -77,22 +77,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public virtual AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
-            /*
-        public int? RoleId { get; set; }
-        public int? ClassId { get; set; }
-        public int? MarkingPeriodId { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-        public DateTime? Now { get; set; }
-        public bool StarredOnly { get; set; }
-        public bool OwnedOnly { get; set; }
-        public bool GradedOnly { get; set; }
-        public bool AllSchoolItems { get; set; }
 
-        public IList<int> GradeLevelIds { get; set; }
-        public IList<int> SisActivitiesIds { get; set; } 
-
-             */
             var announcements = data.Select(x => x.Value);
 
 
@@ -100,9 +85,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 announcements = announcements.Where(x => x.Id == query.Id);
 
 
-            //person id is creator id
-            //if (query.PersonId.HasValue)
-                //announcements = announcements.Where(x => x.PersonRef == query.PersonId);
+            if (query.ClassId.HasValue)
+                announcements = announcements.Where(x => x.ClassRef == query.ClassId);
+
+            if (query.MarkingPeriodId.HasValue)
+            {
+                var mp = Storage.MarkingPeriodStorage.GetById(query.MarkingPeriodId.Value);
+                announcements = announcements.Where(x => x.Expires >= mp.StartDate && x.Expires <= mp.EndDate);
+            }
+
+            if (query.FromDate.HasValue)
+                announcements = announcements.Where(x => x.Expires >= query.FromDate);
+
+            if (query.ToDate.HasValue)
+                announcements = announcements.Where(x => x.Expires <= query.ToDate);
+            if (query.StarredOnly)
+                announcements = announcements.Where(x => x.Starred == true);
+            if (query.OwnedOnly)
+                announcements = announcements.Where(x => x.PersonRef == query.PersonId);
+
+            if (query.GradeLevelIds != null)
+                announcements = announcements.Where(x => query.GradeLevelIds.Contains(x.Id));
+
+            if (query.SisActivitiesIds != null)
+                announcements = announcements.Where(x => query.SisActivitiesIds.Contains(x.Id));
 
 
             if (query.Start > 0)
@@ -110,9 +116,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.Count > 0)
                 announcements = announcements.Take(query.Count);
 
-            //
-            //if (query.RoleId.HasValue)
-            //    announcements = announcements.Where(x => x.R)
             return new AnnouncementQueryResult
             {
                 Announcements = announcements.ToList(),
@@ -185,12 +188,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId)
         {
-
-   
-
             var annId = GetNextFreeId();
-
-
             var person = Storage.PersonStorage.GetById(userId);
             var gradeLevelRef = classId.HasValue ? Storage.ClassStorage.GetById(classId.Value).GradeLevelRef : (int?)null;
 
@@ -279,10 +277,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PersonId = userId,
                 Id = announcementId,
                 ClassId = classId
-                //announcement type,
-
-            }).Announcements.Where(x => x.State == state).Select(x => x.Id).ToList();
-            Delete(announcementsToDelete);
+            }).Announcements.Where(x => x.State == state);
+            if (announcementType.HasValue)
+                announcementsToDelete = announcementsToDelete.Where(x => x.ClassAnnouncementTypeRef == announcementType);
+            Delete(announcementsToDelete.Select(x => x.Id).ToList());
         }
 
         public void Update(Announcement ann)
@@ -317,9 +315,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public abstract Announcement GetAnnouncement(int announcementId, int roleId, int userId);
 
-        public Announcement GetLastDraft(int i)
+        public Announcement GetLastDraft(int userId)
         {
-            throw new NotImplementedException();
+            return GetAnnouncements(new AnnouncementsQuery
+            {
+                PersonId = userId,
+            }).Announcements.Where(x => x.State == AnnouncementState.Draft).OrderByDescending(x => x.Id).FirstOrDefault();
         }
 
         public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int i)
@@ -329,17 +330,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int count)
         {
-
-            // {Announcement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType}
-
             var announcements = GetAnnouncements(new AnnouncementsQuery
             {
                 PersonId = personId,
                 ClassId = classId,
-                Count = count
             }).Announcements.ToList();
             
-            return announcements.Select(x => x.Content).ToList();
+            return announcements.Where(x => x.ClassAnnouncementTypeRef == classAnnouncementType).Take(count).Select(x => x.Content).ToList();
 
         }
 
@@ -350,31 +347,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int personRef, int recipientClassId)
         {
-
-
-            /*
-            var announcements = GetAnnouncements(new AnnouncementsQuery
-            {
-                PersonId = personRef,
-                
-            })*/
-            /*
-             * with AnnView as
-               (
-                select a.Id, Row_Number() over(order by a.Expires, a.[Created]) as [Order]  
-                from Announcement a
-                join Class c on c.Id = a.ClassRef
-				where c.SchoolYearRef = @schoolYearId and a.ClassAnnouncementTypeRef = @classAnnType 
-                      and a.PersonRef = @ownerId and a.ClassRef = @classId
-               )
-update Announcement
-set [Order] = AnnView.[Order]
-from AnnView 
-where AnnView.Id = Announcement.Id
-select  1
-             */
-
-
         }
     }
 
@@ -437,27 +409,14 @@ select  1
         {
         }
 
-
-
-        /*public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
 
-            Select 
-	                vwAnnouncement.*,
-	                cast((case vwAnnouncement.PersonRef when @personId then 1 else 0 end) as bit) as IsOwner,
-	                ard.PersonRef as RecipientDataPersonId,
-	                ard.Starred as Starred,
-	                ROW_NUMBER() OVER(ORDER BY vwAnnouncement.Created desc) as RowNumber,
-	                --@starredCount as StarredCount,
-	 	                @allCount as AllCount
-                from 
-	                vwAnnouncement	
-	                left join (select * from AnnouncementRecipientData where AnnouncementRecipientData.PersonRef = @personId) ard
-			                on vwAnnouncement.Id = ard.AnnouncementRef
-                where
-	                (@id is not null  or [State] = 1) and
-	                (@id is null or vwAnnouncement.Id = @id)
-	                and (@classId is null or ClassRef = @classId)
+            var result = base.GetAnnouncements(query);
+            result.Announcements = result.Announcements.OrderByDescending(x => x.Id).ToList();
+            return result;
+            /*
+	             
 	                and ((@allSchoolItems = 1 and @roleId = 2) or vwAnnouncement.PersonRef = @personId 
 		                or (ClassAnnouncementTypeRef is null 
 			                and exists(select AnnouncementRecipient.Id from AnnouncementRecipient
@@ -466,28 +425,9 @@ select  1
 						                )
 			                )
 		                )			
-	                and (@roleId = 1 or (@schoolId is not null and SchoolRef = @schoolId))
-	                and (@staredOnly = 0 or Starred = 1)
-	                and (@ownedOnly = 0 or vwAnnouncement.PersonRef = @personId)
-	                and (@fromDate is null or Expires >= @fromDate)
-	                and (@toDate is null or Expires <= @toDate)
-	                and (@markingPeriodId is null or (Expires between @mpStartDate and @mpEndDate))
-	                and (@sisActivitiesIds is null or (SisActivityId is not null and SisActivityId in (select Id from @sisActivitiesIdsT)))
-	
-                order by Created desc				
-                OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
-                             *  var parameters = new Dictionary<string, object>
-                {
-                    {GRADED_ONLY_PARAM, query.GradedOnly},
-                    {ALL_SCHOOL_ITEMS_PARAM, query.AllSchoolItems},
-                    {"@sisActivitiesIds", query.SisActivitiesIds != null ? query.SisActivitiesIds.Select(x => x.ToString()).JoinString(",") : null}
-                };
-            return GetAnnouncementsComplex(GET_TEACHER_ANNOUNCEMENTS, parameters, query);
         }
-             
-            throw new System.NotImplementedException();
-        }*/
-
+         */    
+        }
 
         public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
         {
