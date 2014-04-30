@@ -386,11 +386,13 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(announcement){
                     this.prepareAttachments(announcement);
-                    var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
-                    var alphaGrades = classInfo.getAlphaGrades();
-                    var alternateScores = this.getContext().getSession().get('alternateScores', []);
-                    announcement.setAlphaGrades(alphaGrades);
-                    announcement.setAlternateScores(alternateScores);
+                    if(!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
+                        var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
+                        var alphaGrades = classInfo.getAlphaGrades();
+                        var alternateScores = this.getContext().getSession().get('alternateScores', []);
+                        announcement.setAlphaGrades(alphaGrades);
+                        announcement.setAlternateScores(alternateScores);
+                    }
                     var apps = announcement.getApplications() || [];
                     var gradeViewApps = apps.filter(function(app){
                         return app.getAppAccess().isVisibleInGradingView();
