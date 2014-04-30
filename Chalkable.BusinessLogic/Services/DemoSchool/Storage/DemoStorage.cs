@@ -189,6 +189,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StiSeatingChartStorage.Setup();
             SchoolStorage.Setup();
             SchoolYearStorage.Setup();
+            AlphaGradeStorage.Setup();
         }
     }
     
