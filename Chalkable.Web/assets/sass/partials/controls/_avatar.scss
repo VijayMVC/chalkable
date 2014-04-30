@@ -200,11 +200,11 @@
   position: relative;
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: 100% 100%;
+  background-size: cover;
   &:before{
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 100% 100%;
+    background-size: cover;
     content: " ";
     position: absolute;
     top: 0;

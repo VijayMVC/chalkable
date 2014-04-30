@@ -22,6 +22,13 @@ NAMESPACE('chlk.controls', function () {
                     node.off('error.load');
             },
 
+            function canShowAlert(person){
+                var user = this.getContext().getSession().get('currentPerson', null);
+                if(user.getRole().getName().toLowerCase() ==  'student' && user.getId() != person.getId())
+                    return false;
+                return true;
+            },
+
             String, 'alternativeSrc',
 
             String, 'defaultSrc',

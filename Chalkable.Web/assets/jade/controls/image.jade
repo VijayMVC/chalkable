@@ -7,7 +7,7 @@ mixin PersonImg(person, size, noAlerts)
         src = chlk.templates.ChlkTemplate.prototype.getPictureURL(person.getId(), size, size)
         isWoman = person.getGender().toLowerCase() == 'f';
         alternativeHref = joinUrls(window.scriptsRoot, 'Content/avatars/' + size + '/.no-avatar') + (isWoman ? '-female' : '') + '.png';
-        p = !noAlerts && person.showAlerts()
+        p = !noAlerts && person.showAlerts() && self.canShowAlert(person)
         div(style=p ? "overflow: visible" : "").avatar-wrapper
             if p
                 top = self.getAlertsAttributes(person)
