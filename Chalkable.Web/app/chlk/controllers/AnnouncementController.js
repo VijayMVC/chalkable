@@ -186,8 +186,7 @@ NAMESPACE('chlk.controllers', function (){
                             item.setLate(currentItem.isLate());
                         }
                     });
-                    announcement.getStudentAnnouncements().setCurrentItem(currentItem);
-                    return announcement;
+                    return new chlk.activities.announcement.UpdateAnnouncementItemViewModel(announcement, currentItem);
             }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, chlk.activities.lib.DontShowLoader());
         },

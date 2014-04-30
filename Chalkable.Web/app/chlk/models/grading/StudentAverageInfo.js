@@ -42,7 +42,7 @@ NAMESPACE('chlk.models.grading', function () {
             String, 'codesString',
 
             function getNumericAvg(){
-                return this.getEnteredAvg() || this.getCalculatedAvg()
+                return this.getEnteredAvg() || this.getEnteredAvg() == 0 ? this.getEnteredAvg()  : this.getCalculatedAvg()
             },
 
             function getAlphaGrade(){
@@ -53,7 +53,7 @@ NAMESPACE('chlk.models.grading', function () {
             String, function displayAvgGradeValue(isAbleDisplayAlphaGrades_, original_){
                 var alphaGrade = original_ ? this.getCalculatedAlphaGrade() : this.getAlphaGrade();
                 var res = this.displayGrade(original_ ? this.getCalculatedAvg() : this.getNumericAvg());
-                if(res && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
+                if(res && this.getNumericAvg() != 0 && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
                     res += '(' + alphaGrade + ')';
                 }
                 return res;

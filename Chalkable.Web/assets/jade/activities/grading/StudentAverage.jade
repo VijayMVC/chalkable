@@ -1,6 +1,6 @@
 value = self.getModel().displayAvgGradeValue()
 displayValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades())
-edited = self.getEnteredAvg() || self.getEnteredAlphaGrade()
+edited = self.getEnteredAvg() || self.getEnteredAvg() == 0 || self.getEnteredAlphaGrade()
 .grade-info
     div(
         data-tooltip=(edited ? Msg.Orig + " " + self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), true) : ""),

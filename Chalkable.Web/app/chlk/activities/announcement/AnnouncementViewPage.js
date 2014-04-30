@@ -16,6 +16,35 @@ NAMESPACE('chlk.activities.announcement', function () {
 
     var slideTimeout;
 
+    /** @class chlk.activities.announcement.UpdateAnnouncementItemViewModel*/
+    CLASS(
+        'UpdateAnnouncementItemViewModel', [
+            chlk.models.announcement.Announcement, 'announcement',
+
+            chlk.models.announcement.StudentAnnouncement, 'currentItem',
+
+            [[chlk.models.announcement.Announcement, chlk.models.announcement.StudentAnnouncement]],
+            function $(announcement_, currentItem_){
+                BASE();
+                if(announcement_)
+                    this.setAnnouncement(announcement_);
+                if(currentItem_)
+                    this.setCurrentItem(currentItem_);
+            }
+        ]);
+
+    /** @class chlk.activities.announcement.UpdateAnnouncementItemTpl*/
+    CLASS(
+        [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementView.jade')],
+        [ria.templates.ModelBind(chlk.activities.announcement.UpdateAnnouncementItemViewModel)],
+        'UpdateAnnouncementItemTpl', EXTENDS(chlk.templates.ChlkTemplate), [
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.Announcement, 'announcement',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.StudentAnnouncement, 'currentItem'
+        ]);
+
     /** @class chlk.activities.announcement.AnnouncementViewPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
@@ -311,10 +340,11 @@ NAMESPACE('chlk.activities.announcement', function () {
                 });
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            [ria.mvc.PartialUpdateRule(chlk.activities.announcement.UpdateAnnouncementItemTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateItem(allTpl, allModel, msg_) {
                 var tpl = new chlk.templates.announcement.StudentAnnouncementsTpl;
-                var model = allModel.getStudentAnnouncements();
+                var announcement = allModel.getAnnouncement();
+                var model = announcement.getStudentAnnouncements();
                 this.setStudentAnnouncements(model.getItems());
                 var gradedStudentCount = 0, sum = 0, numericGrade;
                 model.getItems().forEach(function(item){
@@ -334,7 +364,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     gradable: this.isAbleToGrade() // this.isGradable()
                 });
                 tpl.renderTo(this.dom.find('.student-announcements-top-panel').empty());
-                var itemModel = model.getCurrentItem();
+                var itemModel = allModel.getCurrentItem();
                 var itemTpl = new chlk.templates.announcement.StudentAnnouncement;
                 itemTpl.assign(itemModel);
                 itemTpl.options({
