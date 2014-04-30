@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Name = name,
                         WebSite = webSite,
                         User = user,
-                        DistrictRef = Guid.NewGuid()
+                        DistrictRef = user.Id
                     };
                 new DeveloperDataAccess(uow).Insert(res);
                 uow.Commit();

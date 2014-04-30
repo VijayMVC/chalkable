@@ -304,17 +304,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update())
             {
                 var userDa = new UserDataAccess(uow);
-                var id = Guid.NewGuid();
-                var districtRef = isDeveloper ? id : districtId;
                 var user = new User
                 {
-                    Id = id,
+                    Id = Guid.NewGuid(),
                     IsDeveloper = isDeveloper,
                     IsSysAdmin = isSysAdmin,
                     Login = login,
                     Password = PasswordMd5(password),
                     LocalId = localId,
-                    DistrictRef = districtRef,
+                    DistrictRef = districtId,
                     SisUserName = sisUserName
                 };
                 userDa.Insert(user);
