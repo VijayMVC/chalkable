@@ -661,6 +661,9 @@ NAMESPACE('chlk.activities.grading', function () {
             function gradingFormSubmit(node, event){
                 var input = node.find('.value-input');
                 if(!input.hasClass('error')){
+                    var value = (input.getValue() || '').toLowerCase();
+                    if(value == 'dropped' || value == 'exempt')
+                        input.setValue(input.getData('grade-value'));
                     var isAvg = node.hasClass('avg-form');
                     var activeCell = node.parent('.grade-value');
                     this.dom.find('.autocomplete-list:visible').hide();
