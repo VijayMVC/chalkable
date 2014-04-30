@@ -53,7 +53,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'gradable',
 
             Number, function getAutoGradeCount(){
-                return this.getItems().filter(function(item){
+                return (this.getItems() || []).filter(function(item){
                     return item.getState() == 0;
                 }).length;
             },

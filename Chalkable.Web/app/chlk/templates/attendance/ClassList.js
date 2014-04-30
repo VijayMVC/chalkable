@@ -52,7 +52,7 @@ NAMESPACE('chlk.templates.attendance', function () {
             },
 
             ArrayOf(chlk.models.attendance.ClassAttendance), function getPresentStudents(){
-                return this.getItems().filter(function(_){
+                return (this.getItems() || []).filter(function(_){
                     return _.getType() == chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf();
                 });
             },

@@ -36,9 +36,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
             function getLateReasons(){
-                return this.getReasons().filter(function(item){
+                return (this.getReasons() || []).filter(function(item){
                     var len;
-                    len = item.getAttendanceLevelReasons().filter(function(reason){
+                    len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
                         return reason.getLevel() == 'T'
                     }).length;
                     return !!len;
@@ -46,9 +46,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             },
 
             function getAbsentReasons(){
-                return this.getReasons().filter(function(item){
+                return (this.getReasons() || []).filter(function(item){
                     var len;
-                    len = item.getAttendanceLevelReasons().filter(function(reason){
+                    len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
                         return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
                             reason.getLevel() == 'H' || reason.getLevel() == 'HO';
                     }).length;

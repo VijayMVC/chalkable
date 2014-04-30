@@ -254,26 +254,29 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE(model);
 
                 var allScores = [];
-                this.setAbleDropStudentScore(model.isAbleDropStudentScore());
-                this.setAbleToExempt(model.isAbleToExempt());
-                model.getAlternateScores().forEach(function(item){
-                    allScores.push(item.getName());
-                    allScores.push(item.getName() + ' (fill all)');
-                });
-                model.getAlphaGrades().forEach(function(item){
-                    allScores.push(item.getName());
-                    allScores.push(item.getName() + ' (fill all)');
-                });
+                if(!this.getRole().isStudent()){
+                    this.setAbleDropStudentScore(model.isAbleDropStudentScore());
+                    this.setAbleToExempt(model.isAbleToExempt());
+                    model.getAlternateScores().forEach(function(item){
+                        allScores.push(item.getName());
+                        allScores.push(item.getName() + ' (fill all)');
+                    });
+                    model.getAlphaGrades().forEach(function(item){
+                        allScores.push(item.getName());
+                        allScores.push(item.getName() + ' (fill all)');
+                    });
 
-                allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
+                    allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
 
-                if(model.isAbleDropStudentScore()){
-                    allScores = allScores.concat(['Dropped', 'Dropped (fill all)']);
+                    if(model.isAbleDropStudentScore()){
+                        allScores = allScores.concat(['Dropped', 'Dropped (fill all)']);
+                    }
+                    if(model.isAbleToExempt()){
+                        allScores = allScores.concat(['Exempt', 'Exempt (fill all)']);
+                    }
+                    this.setAllScores(allScores);
                 }
-                if(model.isAbleToExempt()){
-                    allScores = allScores.concat(['Exempt', 'Exempt (fill all)']);
-                }
-                this.setAllScores(allScores);
+
 
                 this.setOwner(model.getOwner());
                 this.setMaxScore(model.getMaxScore());
