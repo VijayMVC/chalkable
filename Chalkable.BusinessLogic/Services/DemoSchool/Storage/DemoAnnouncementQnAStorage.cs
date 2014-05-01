@@ -33,18 +33,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (announcementQnAQuery.AnnouncementId.HasValue)
                 qnas = qnas.Where(x => x.AnnouncementRef == announcementQnAQuery.AnnouncementId);
 
-            //todo caller id
-
             if (announcementQnAQuery.AnswererId.HasValue)
             {
-                var personIds = new List<int>();
                 var announcementQnAComplexs = qnas as IList<AnnouncementQnAComplex> ?? qnas.ToList();
                 var announcementIds = announcementQnAComplexs.Select(x => x.AnnouncementRef);
-                foreach (var annId in announcementIds)
-                {
-                    var announcement = Storage.AnnouncementStorage.GetById(annId);
-                    personIds.Add(announcement.PersonRef);
-                }
+                var personIds = announcementIds.Select(annId => Storage.AnnouncementStorage.GetById(annId)).Select(announcement => announcement.PersonRef).ToList();
                 qnas = announcementQnAComplexs.Where(x => personIds.Contains(x.PersonRef));
             }
 
