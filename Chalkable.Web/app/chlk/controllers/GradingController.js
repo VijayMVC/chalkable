@@ -278,13 +278,11 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
-
             [[chlk.models.id.AnnouncementId]],
             function dropFromPopupAction(announcementId){
                 var result = this.announcementService.dropAnnouncement(announcementId);
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
-
 
             [[chlk.models.id.AnnouncementId]],
             function showChartAction(announcementId){
