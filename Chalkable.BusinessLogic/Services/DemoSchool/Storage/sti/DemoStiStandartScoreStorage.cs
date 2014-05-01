@@ -30,7 +30,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public StandardScore Update(int classId, int studentId, int standardId, int gradingPeriodId, StandardScore standardScore)
         {
-            throw new NotImplementedException();
+            if (data.Any(x => x.Value.StudentId == studentId && x.Value.SectionId == classId &&
+                              x.Value.StandardId == standardId && x.Value.GradingPeriodId == gradingPeriodId))
+            {
+                var item = data.First(x => x.Value.StudentId == studentId && x.Value.SectionId == classId &&
+                                           x.Value.StandardId == standardId &&
+                                           x.Value.GradingPeriodId == gradingPeriodId).Key;
+                data[item] = standardScore;
+            }
+            return standardScore;
         }
 
         public override void Setup()
