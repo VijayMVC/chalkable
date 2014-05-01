@@ -73,7 +73,7 @@ namespace Chalkable.StiImport.Services
             context.SetCurrentVersions(currentVersions);
             //Tables we need all data
             context.TablesToSync[typeof (User).Name] = null;
-            context.TablesToSync[typeof(Student).Name] = null;
+            //context.TablesToSync[typeof(Student).Name] = null;
             context.TablesToSync[typeof(Staff).Name] = null;
             context.TablesToSync[typeof(ScheduledTimeSlot).Name] = null;
             context.TablesToSync[typeof(Gender).Name] = null;
