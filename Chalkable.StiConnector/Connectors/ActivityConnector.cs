@@ -114,8 +114,11 @@ namespace Chalkable.StiConnector.Connectors
         {
             var url = string.Format(urlFormat + "/copy", id);
             var nvc = new NameValueCollection();
-            if(copyToSectionIds != null && copyToSectionIds.Count > 0)
-                nvc.Add("copyToSectionIds", copyToSectionIds.JoinString(","));
+            if (copyToSectionIds != null && copyToSectionIds.Count > 0)
+            {
+                for (int i = 0; i < copyToSectionIds.Count; i++)
+                    nvc.Add(string.Format("copyToSectionIds[{0}]", i), copyToSectionIds[i].ToString());    
+            }
             Post<Object>(url, null, nvc);
         }
     }
