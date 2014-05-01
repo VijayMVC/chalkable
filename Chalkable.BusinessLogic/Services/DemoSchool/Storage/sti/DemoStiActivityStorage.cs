@@ -22,7 +22,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         public Activity CreateActivity(int classId, Activity activity)
         {
             activity.SectionId = classId;
-            data.Add(GetNextFreeId(), activity);
+            activity.Id = GetNextFreeId();
+            data.Add(activity.Id, activity);
             return activity;
         }
     }
