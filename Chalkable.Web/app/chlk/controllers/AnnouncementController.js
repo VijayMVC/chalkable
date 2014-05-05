@@ -387,7 +387,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.prepareAttachments(announcement);
                     if(!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
                         var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
-                        var alphaGrades = classInfo.getAlphaGrades();
+                        var alphaGrades = classInfo ? classInfo.getAlphaGrades() : [];
                         var alternateScores = this.getContext().getSession().get('alternateScores', []);
                         announcement.setAlphaGrades(alphaGrades);
                         announcement.setAlternateScores(alternateScores);
