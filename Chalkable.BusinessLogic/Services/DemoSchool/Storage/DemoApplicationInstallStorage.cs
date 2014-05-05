@@ -70,17 +70,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var callerRoleId = Storage.Context.RoleId;
             var callerId = Storage.Context.UserLocalId;
 
-            var canInstalledForTeacher = hasTeacherMyApps || canAttach;
+            var canInstallForTeacher = hasTeacherMyApps || canAttach;
             var canInstallForStudent = hasStudentMyApps || canAttach;
 
             var canInstall = callerRoleId == CoreRoles.STUDENT_ROLE.Id || hasStudentMyApps ||
                              (callerRoleId == CoreRoles.TEACHER_ROLE.Id &&
-                              (canInstallForStudent || canInstalledForTeacher))
+                              (canInstallForStudent || canInstallForTeacher))
                              ||
                              ((callerRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id ||
                                callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id ||
                                callerRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id)
-                              && (hasAdminMyApps || canInstallForStudent || canInstalledForTeacher));
+                              && (hasAdminMyApps || canInstallForStudent || canInstallForTeacher));
 
             var schoolId = Storage.SchoolYearStorage.GetById(schoolYearId).SchoolRef;
 
@@ -112,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                     var sps =
                         Storage.SchoolPersonStorage.GetAll()
-                            .Where(x => (personRefs.Contains(x.PersonRef) && canInstallForStudent || x.PersonRef == callerId && canInstalledForTeacher) && x.SchoolRef == schoolId);
+                            .Where(x => (personRefs.Contains(x.PersonRef) && canInstallForStudent || x.PersonRef == callerId && canInstallForTeacher) && x.SchoolRef == schoolId);
 
                     personsForInstall.AddRange(sps.Select(schoolPerson => new KeyValuePair<int, int>(schoolPerson.PersonRef, schoolPerson.RoleRef)));
                 }
@@ -121,7 +121,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id)
                 {
                     var sps = Storage.SchoolPersonStorage.GetAll().Where(x =>
-                        (x.RoleRef == CoreRoles.TEACHER_ROLE.Id && canInstalledForTeacher) ||
+                        (x.RoleRef == CoreRoles.TEACHER_ROLE.Id && canInstallForTeacher) ||
                         (x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id || x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id ||
                          x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id) && hasAdminMyApps
                         || (x.RoleRef == CoreRoles.STUDENT_ROLE.Id && canInstallForStudent) && x.SchoolRef == schoolId)
@@ -155,10 +155,64 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     
             }
 
-            
+            if (departmentIds != null)
+            {
+                var personRefs = personsForInstall.Select(x => x.Key).ToList();
+     
+                var filtered =
+                    Storage.ClassPersonStorage.GetAll().Where(x =>
+                    {
+                        var cls = Storage.ClassStorage.GetById(x.ClassRef);
+                        return personRefs.Contains(x.PersonRef) && cls.ChalkableDepartmentRef != null && departmentIds.Contains(cls.ChalkableDepartmentRef.Value);
+                    }).Select(x =>
+                    {
+                        var chalkableDepartmentRef = Storage.ClassStorage.GetById(x.ClassRef).ChalkableDepartmentRef;
+                        return chalkableDepartmentRef != null ? new {PersonRef = x.PersonRef, DepartmentName = Storage.ChalkableDepartmentStorage.GetById(chalkableDepartmentRef.Value).Name} : new {PersonRef = x.PersonRef, DepartmentName = ""};
+                    });
+
+                result.AddRange(filtered.Select(x => new PersonsForApplicationInstall
+                {
+                    GroupId = x.DepartmentName,
+                    PersonId = x.PersonRef,
+                    Type = PersonsFroAppInstallTypeEnum.Department
+                }));
+            }
 
 
-            //todo departments gradelevels
+            if (classIds != null)
+            {
+                var ids = personsForInstall.Select(x => x.Key).ToList();
+                foreach (var classId in classIds)
+                {
+                    result.AddRange(
+                        Storage.ClassPersonStorage.GetAll()
+                            .Where(x => x.ClassRef == classId && ids.Contains(x.PersonRef))
+                            .Select(x => new PersonsForApplicationInstall()
+                            {
+                                GroupId = classId.ToString(),
+                                PersonId = x.PersonRef,
+                                Type = PersonsFroAppInstallTypeEnum.Class
+                            }));
+                }
+
+                if (callerRoleId != CoreRoles.TEACHER_ROLE.Id)
+                {
+                    foreach (var classId in classIds)
+                    {
+                        result.AddRange(
+                            Storage.ClassStorage.GetAll()
+                                .Where(x => x.Id == classId && x.TeacherRef != null && ids.Contains(x.TeacherRef.Value))
+                                .Select(x => new PersonsForApplicationInstall()
+                                {
+                                    GroupId = classId.ToString(),
+                                    PersonId = x.TeacherRef.Value,
+                                    Type = PersonsFroAppInstallTypeEnum.Class
+                                }));
+                    }
+                }
+
+
+            }
 
             if (personId.HasValue)
             {
@@ -191,52 +245,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
 
-            /*
-             * 
-            TYPES:
-            1 - department
-            2 - grade level
-            3 - class
+         
+
           
-            --insert by departments
-            if @departmentIds is not null
-            begin
-                Insert into @preResult ([type], groupId, PersonId)
-                select distinct 1, cast(d.Value as nvarchar(256)), sp.Id
-                from @localPersons as sp
-                join ClassPerson as csp on sp.Id = csp.PersonRef
-                join Class c on csp.ClassRef = c.Id
-                join @departmentIdsT d on c.ChalkableDepartmentRef = d.value
-
-
-                Insert into @preResult ([type], groupId, PersonId)
-                select distinct 1, cast(d.Value as nvarchar(256)), sp.Id
-                from @localPersons as sp
-                join Class c on c.TeacherRef = sp.Id
-                join @departmentIdsT d on c.ChalkableDepartmentRef = d.value
-            end
-            --insert by grade level
-          
-            --insert by class
-            if @classIds is not null
-            begin
-                Insert into @preResult
-                ([type], groupId, PersonId)
-                select distinct 3, cast(cc.Value as nvarchar(256)), sp.Id
-                from @localPersons as sp
-                join ClassPerson csp on csp.PersonRef = sp.Id
-                join @classIdsT cc on csp.ClassRef = cc.value
-
-                if @callerRoleId <> 2
-                begin
-                    Insert into @preResult ([type], groupId, PersonId)
-                    select distinct 3, cast(cc.Value as nvarchar(256)), sp.Id
-                    from @localPersons as sp
-                    join Class c on sp.Id = c.TeacherRef
-                    join @classIdsT cc on c.Id = cc.value
-                end
-            end
-*/
 
 
             if (gradeLevelIds != null)
