@@ -57,6 +57,7 @@ namespace Chalkable.Data.School.DataAccess
             var parameters = new Dictionary<string, object>();
             parameters.Add("@personId", query.PersonId);
             parameters.Add("@callerId", query.CallerId);
+            parameters.Add("@markingPeriodId", query.MarkingPeriodId);
 
             //string roleIdsS = "";
             //if (query.RoleIds != null && query.RoleIds.Count > 0)
@@ -73,7 +74,7 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("@classId", query.ClassId);
             parameters.Add("@callerRoleId", query.CallerRoleId);
             parameters.Add("@schoolId", schoolId);
-
+            
             string filter1 = null;
             string filter2 = null;
             string filter3 = null;
@@ -182,7 +183,7 @@ namespace Chalkable.Data.School.DataAccess
         public IEnumerable<int> GradeLevelIds { get; set; }
         public SortTypeEnum SortType { get; set; }
 
-        
+        public int? MarkingPeriodId { get; set; }
 
         public PersonQuery()
         {

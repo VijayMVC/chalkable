@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses);
         void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId);
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
-        IList<Person> GetStudents(int classId, bool? isEnrolled = null);
+        IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null);
     }
 
     public class ClassService : SchoolServiceBase, IClassService
@@ -268,7 +268,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Person> GetStudents(int classId, bool? isEnrolled = null)
+        public IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
         {
             IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
                 {
@@ -276,7 +276,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     CallerId = Context.UserLocalId,
                     CallerRoleId = Context.Role.Id,
                     Count = int.MaxValue,
-                    RoleId = CoreRoles.STUDENT_ROLE.Id
+                    RoleId = CoreRoles.STUDENT_ROLE.Id,
+                    MarkingPeriodId = markingPeriodId
                 });
             if (isEnrolled.HasValue)
             {
