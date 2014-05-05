@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public Gradebook Calculate(int classId, int gradingPeriodId)
         {
-            var gb = data.First(x => x.Value.SectionId == classId).Value;
+            var gb = data.First(x => x.Value.SectionId == classId && x.Value.StudentAverages.Select(y => y.GradingPeriodId).ToList().Contains(gradingPeriodId)).Value;
             return PrepareGradeBook(classId, gb);
         }
 
@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return gb;
         }
 
-        public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType, int gradingPeriodId, int? standardId)
+        public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType = null, int? gradingPeriodId = null, int? standardId = null)
         {
             var gradeBooks = data.Select(x => x.Value);
 
@@ -49,6 +49,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                             0);
             }
 
+            if (gradingPeriodId.HasValue)
+            {
+                gradeBooks =
+                    gradeBooks.Where(
+                        x => x.StudentAverages.Select(y => y.GradingPeriodId).ToList().Contains(gradingPeriodId));
+            }
+
 
 
 
@@ -63,115 +70,91 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return gradeBook;
         }
 
-        public Gradebook GetBySectionAndGradingPeriod(int classId)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<string> GetGradebookComments(int schoolYearId, int teacherId)
         {
-            throw new NotImplementedException();
+            return new List<string>();
         }
 
         public override void Setup()
         {
-
-            var gb1 = new Gradebook()
+            for (var i = 0; i < 4; ++i)
             {
-                SectionId = 1,
-                Activities = new List<Activity>(),
-                Options = new ClassroomOption(),
-                Scores = new List<Score>(),
-                StudentAverages = new List<StudentAverage>()
+                var gb1 = new Gradebook()
                 {
-                    new StudentAverage()
+                    SectionId = 1,
+                    Activities = new List<Activity>(),
+                    Options = new ClassroomOption(),
+                    Scores = new List<Score>(),
+                    StudentAverages = new List<StudentAverage>()
                     {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 1
-                    },
-
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 2
-                    },
-
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 3
-                    },
-
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 4
+                        new StudentAverage()
+                        {
+                            CalculatedNumericAverage = 100,
+                            EnteredNumericAverage = 100,
+                            IsGradingPeriodAverage = true,
+                            GradingPeriodId = i + 1
+                        }
                     }
-                }
-            };
+                };
 
-            var gb2 = new Gradebook()
-            {
-                SectionId = 2,
-                Activities = new List<Activity>(),
-                Options = new ClassroomOption(),
-                Scores = new List<Score>(),
-                StudentAverages = new List<StudentAverage>()
+                var gb2 = new Gradebook()
                 {
-                    new StudentAverage()
+                    SectionId = 2,
+                    Activities = new List<Activity>(),
+                    Options = new ClassroomOption(),
+                    Scores = new List<Score>(),
+                    StudentAverages = new List<StudentAverage>()
                     {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 1
-                    },
-
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 2
-                    },
-
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 3
-                    },
-
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = 4
+                        new StudentAverage()
+                        {
+                            CalculatedNumericAverage = 100,
+                            EnteredNumericAverage = 100,
+                            IsGradingPeriodAverage = true,
+                            GradingPeriodId = i + 1
+                        }
                     }
-                }
-            };
+                };
 
-            data.Add(GetNextFreeId(), gb1);
-            data.Add(GetNextFreeId(), gb2);
+                data.Add(GetNextFreeId(), gb1);
+                data.Add(GetNextFreeId(), gb2);
+            }
+         
+            
         }
 
         public StudentAverage UpdateStudentAverage(int classId, StudentAverage studentAverage)
         {
-            throw new NotImplementedException();
+            var gb = data.First(x => x.Value.SectionId == classId).Value;
+
+            var avgs = gb.StudentAverages.ToList();
+
+            var id = -1;
+
+            for (var i = 0; i < avgs.Count; ++i)
+            {
+                var avg = avgs[i];
+                if (avg.AverageId == studentAverage.AverageId)
+                {
+                    id = i;
+                    break;
+                }
+            }
+
+            if (id == -1)
+            {
+                avgs.Add(studentAverage);
+            }
+            else
+            {
+                avgs[id] = studentAverage;
+            }
+            gb.StudentAverages = avgs;
+
+            return studentAverage;
         }
 
         public void PostGrades(int classId, int? gradingPeriodId)
         {
-            throw new NotImplementedException();
         }
     }
 }

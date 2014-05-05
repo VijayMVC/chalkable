@@ -114,7 +114,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        public PaginatedList<AnnouncementAttachment> GetPaginatedList(int announcementId, int userId, int RoleId, int start, int count, bool needsAllAttachments)
+        public PaginatedList<AnnouncementAttachment> GetPaginatedList(int announcementId, int userId, int roleId, int start, int count, bool needsAllAttachments)
         {
 
             var attachments = GetAttachmentsQuery(new AnnouncementAttachmentQuery
@@ -124,7 +124,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Count = count,
                 NeedsAllAttachments = needsAllAttachments,
                 CallerId = userId,
-                RoleId = RoleId
+                RoleId = roleId
             });
             return new PaginatedList<AnnouncementAttachment>(attachments, start / count, count, data.Count);
         }
