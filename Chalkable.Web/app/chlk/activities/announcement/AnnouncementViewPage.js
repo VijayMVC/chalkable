@@ -309,7 +309,8 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 this.setOwner(model.getOwner());
                 this.setMaxScore(model.getMaxScore());
-                this.setStudentAnnouncements(model.getStudentAnnouncements().getItems());
+                this.setStudentAnnouncements(model.getStudentAnnouncements()
+                    ? model.getStudentAnnouncements().getItems() :[]);
                 this.setApplicationsInGradeView(model.getGradeViewApps());
                 this.setApplications(model.getApplications());
                 this.setAutoGradeApps(model.getAutoGradeApps());
