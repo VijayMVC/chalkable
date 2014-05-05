@@ -1,0 +1,32 @@
+.month-calendar-body
+    .day-names
+        div
+            p=Msg.Sunday
+        div
+            p=Msg.Monday
+        div
+            p=Msg.Tuesday
+        div
+            p=Msg.Wednesday
+        div
+            p=Msg.Thursday
+        div
+            p=Msg.Friday
+        div
+            p=Msg.Saturday
+    .items
+        each item in self.getCalendarItems()
+            +ActionLinkWithModel(self.prepareActionLinkModel(item))(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    ul
+                        if item.getMoreCount() != 0
+                            each discType in item.getDisciplineTypes()
+                                li=discType.getCount() + " " + discType.getName()
+                            li=item.getMoreCount() + "More"
+                        else
+                            each disc in item.getDisciplines()
+                                each discType in disc.getDisciplineTypes()
+                                    li=discType.getName() + ", " + disc.getPeriod().getSerialOrder()
+
