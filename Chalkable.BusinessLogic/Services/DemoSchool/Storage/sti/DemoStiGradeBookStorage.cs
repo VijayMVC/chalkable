@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return gb;
         }
 
-        public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType, int gradingPeriodId, int? standardId)
+        public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType = null, int? gradingPeriodId = null, int? standardId = null)
         {
             var gradeBooks = data.Select(x => x.Value);
 
@@ -63,14 +63,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return gradeBook;
         }
 
-        public Gradebook GetBySectionAndGradingPeriod(int classId)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<string> GetGradebookComments(int schoolYearId, int teacherId)
         {
-            throw new NotImplementedException();
+            return new List<string>();
         }
 
         public override void Setup()
@@ -166,12 +161,37 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public StudentAverage UpdateStudentAverage(int classId, StudentAverage studentAverage)
         {
-            throw new NotImplementedException();
+            var gb = data.First(x => x.Value.SectionId == classId).Value;
+
+            var avgs = gb.StudentAverages.ToList();
+
+            var id = -1;
+
+            for (var i = 0; i < avgs.Count; ++i)
+            {
+                var avg = avgs[i];
+                if (avg.AverageId == studentAverage.AverageId)
+                {
+                    id = i;
+                    break;
+                }
+            }
+
+            if (id == -1)
+            {
+                avgs.Add(studentAverage);
+            }
+            else
+            {
+                avgs[id] = studentAverage;
+            }
+            gb.StudentAverages = avgs;
+
+            return studentAverage;
         }
 
         public void PostGrades(int classId, int? gradingPeriodId)
         {
-            throw new NotImplementedException();
         }
     }
 }
