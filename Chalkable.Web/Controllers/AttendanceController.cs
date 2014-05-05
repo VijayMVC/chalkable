@@ -191,12 +191,12 @@ namespace Chalkable.Web.Controllers
                 throw new NoMarkingPeriodException();
             var seatingChart = SchoolLocator.AttendanceService.GetSeatingChart(classId, markingPeriod.Id);
             var attendances = ClassAttendanceList(d, classId);
-            var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
-            {
-                 ClassId = classId,
-                 RoleId = CoreRoles.STUDENT_ROLE.Id
-            });
-            //var students = SchoolLocator.ClassService.GetStudents(classId, null, markingPeriod.Id);
+            //var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            //{
+            //     ClassId = classId,
+            //     RoleId = CoreRoles.STUDENT_ROLE.Id
+            //});
+            var students = SchoolLocator.ClassService.GetStudents(classId, null, markingPeriod.Id);
             return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);
         }
 

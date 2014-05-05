@@ -214,7 +214,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.MarkingPeriodClassStorage.Delete(markingPeriodClasses);
         }
 
-        public IList<Person> GetStudents(int classId, bool? isEnrolled = null)
+        public IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
         {
             IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
             {
