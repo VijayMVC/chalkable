@@ -1,0 +1,241 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/images";
+
+$border-color: #a1a1a1;
+
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        &.profile{
+          .chlk-grid{
+            .row{
+              background: #ece1c1;
+
+              &.selected{
+                @include background(linear-gradient(top, #f3eedf, #e1d3a6));
+                @include box-shadow(0 0px 7px 1px #baa76e);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.grid-container.not-transparent{
+  .chlk-grid{
+    @include border-radius(5px);
+    overflow: hidden;
+  }
+}
+
+.chlk-grid{
+  .grid-focus{
+    position: absolute;
+    z-index: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  .row{
+    background: #eee;
+    padding: 5px 8px;
+    height: 69px;
+    border-top: 1px solid white !important;
+    border-bottom: 1px solid #d0d0d0;
+    cursor: pointer;
+    position: relative;
+
+    .avatar-wrapper{
+      z-index: 1000;
+    }
+
+
+    &.selected{
+
+      &:not(.fixed-bg){
+        @include background(linear-gradient(top, #eaeaea, #c7c7c7));
+      }
+
+      color: #276284;
+      z-index: 2;
+      @include box-shadow(0 0px 7px 1px #999);
+    }
+  }
+
+  .new-popup{
+    @include border-radius(5px);
+    @include box-shadow(inset 0 2px 4px 0px #fff);
+    background-color: #f8f8f8;
+    opacity: 0.8;
+  }
+
+  .load-all-popup{
+    width: 210px;
+    height: 93px;
+    left: 950px;
+    top: 500px;
+    text-align: center;
+
+    .outer-container.new-popup{
+      width: 100%;
+      height: 100%;
+
+    }
+    .inner-container{
+      position: absolute;
+      padding-top: 20px;
+      margin-left: 25px;
+      left: 0px;
+      top: 0px;
+      .title, .load-all-button{
+        position: relative;
+      }
+      .title{
+        text-shadow: 1px 1px 0 white;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .load-all-button{
+        .chlk-button{
+          font-weight: bold;
+          padding: 6px 15px 6px 15px;
+          BUTTON{
+            padding: 0px;
+          }
+        }
+        z-index: 1000;
+      }
+    }
+  }
+
+  .back-top, .load-all-popup{
+    position: fixed;
+    display: inline-block;
+    z-index: 100;
+  }
+  .back-top{
+    width: 72px;
+    height: 72px;
+    left: 1175px;
+    top: 511px;
+
+    .back-top-arrow{
+      display: inline-block;
+      width: 26px;
+      height: 20px;
+      position: absolute;
+      top: 24px;
+      background: url(images/people/user-grid-top-arrow.png) 0px 0px no-repeat;
+      z-index: 1000;
+      left: 23px;
+      cursor: pointer;
+    }
+    >A{
+      width: 100%;
+      display: block;
+      height: 100%;
+      text-align: center;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+  }
+}
+
+.grid{
+  font-size: 12px;
+  color: #565656;
+  position: relative;
+
+  .scroller{
+    overflow-x: auto;
+  }
+
+  .container{
+    display: table;
+    width:100%;
+    .head{
+      display: table-row;
+      @include border-radius(5px 5px 0 0);
+
+      .th{
+        display: table-cell;
+        text-align: center;
+        padding: 8px;
+
+        &:first-child{
+          @include border-radius(5px 0 0 0);
+        }
+
+        &:last-child{
+          @include border-radius(0 5px 0 0);
+        }
+
+        border: 1px solid $border-color;
+
+        &:not(:last-child){
+          border-right: none;
+        }
+      }
+    }
+
+    .body{
+      display: table-row-group;
+
+
+
+      .row{
+        display: table-row;
+
+
+
+
+
+
+        &:nth-child(even){
+          background-color: #fafafa;
+        }
+
+        .td{
+          padding: 2px 6px;
+          display: table-cell;
+          vertical-align: middle;
+
+          &.action-links{
+            A{
+              display: inline-block;
+              width:16px;
+              height: 16px;
+              vertical-align: middle;
+
+              &.profile{
+                background: url(images/controls/grid/report.png) 0 0 no-repeat;
+              }
+
+              &.view{
+                background: url(images/controls/grid/information.png) 0 0 no-repeat;
+              }
+
+              &.remove{
+                background: url(images/controls/grid/delete.gif) 0 0 no-repeat;
+              }
+
+              &.persons{
+                background: url(images/controls/grid/user.png) 0 0 no-repeat;
+              }
+
+              &.plugin{
+                background: url(images/controls/grid/plugin.gif) 0 0 no-repeat;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
