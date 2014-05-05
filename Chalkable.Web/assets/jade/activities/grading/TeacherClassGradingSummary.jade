@@ -1,0 +1,34 @@
+.class-grading
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
+        selectedItemId=selectedId
+    ).classes-bar
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left.no-border
+                .small-grey-buttons-block
+                    +ActionLink('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes.pressed
+                    +ActionLink('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid
+            .center
+                +ActionLink('grading', "summary", selectedId).pressed=Msg.Item(true)
+                +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
+    .mps-container
+        each gradingPeriod,i in self.getGradingPeriods()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                item = self.getCurrentGradingBox()
+                div(
+                    data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
+                ).mp-title
+                    mpName = gradingPeriod.getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                    .grading-selects
+                        +ActionForm('grading', 'loadGradingPeriodSummary').load-grading-period
+                            +Hidden('classId', selectedId)
+                            +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                    //a(href="javascript:").grey-button.comment-button=Msg.Comment
+                    .collapse
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    if gradingPeriod.getId() == self.getGradingPeriodId()
+                        +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)
