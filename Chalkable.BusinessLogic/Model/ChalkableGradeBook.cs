@@ -25,6 +25,8 @@ namespace Chalkable.BusinessLogic.Model
         public AlphaGrade CalculatedAlphaGrade { get; set; }
         public AlphaGrade EnteredAlphaGrade { get; set; }
         public bool IsGradingPeriodAverage { get; set; }
+        public bool Exempt { get; set; }
+        public bool MayBeExempt { get; set; }
         public IList<ChalkableStudentAverageComment> Comments { get; set; } 
 
         public static ChalkableStudentAverage Create(StudentAverage studentAverage)
@@ -36,7 +38,9 @@ namespace Chalkable.BusinessLogic.Model
                     CalculatedAvg = studentAverage.CalculatedNumericAverage, 
                     EnteredAvg = studentAverage.EnteredNumericAverage,
                     StudentId = studentAverage.StudentId,
-                    IsGradingPeriodAverage = studentAverage.IsGradingPeriodAverage
+                    IsGradingPeriodAverage = studentAverage.IsGradingPeriodAverage,
+                    Exempt = studentAverage.Exempt,
+                    MayBeExempt = studentAverage.MayBeExempt
                 };
             if (studentAverage.CalculatedAlphaGradeId.HasValue)
                 res.CalculatedAlphaGrade = new AlphaGrade
