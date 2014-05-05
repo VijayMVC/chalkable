@@ -1270,6 +1270,10 @@ BODY {
   .text-value, .grade-text{
     text-decoration: line-through;
   }
+
+  .grade-text{
+    color: #a0a0a0;
+  }
 }
 
 #chlk-dialogs {
