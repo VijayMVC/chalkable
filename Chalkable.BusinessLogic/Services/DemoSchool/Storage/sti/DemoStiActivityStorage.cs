@@ -37,6 +37,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             {
                 activity.Id = GetNextFreeId();
                 activity.SectionId = classId;
+
+                if (activity.Attachments == null)
+                    activity.Attachments = new List<ActivityAttachment>();
+
                 foreach (var attachment in activity.Attachments)
                 {
                     attachment.ActivityId = activity.Id;
