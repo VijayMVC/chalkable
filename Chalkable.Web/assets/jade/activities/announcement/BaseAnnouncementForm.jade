@@ -56,7 +56,8 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                         each standard in standards
                             .grey-button.same-on-hover
                                 span=standard.getName()
-                                +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
+                                if !disableDeleteBtn
+                                    +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
                     .title=Msg.Click_to_add_standard
                     +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
         .drop-down-container

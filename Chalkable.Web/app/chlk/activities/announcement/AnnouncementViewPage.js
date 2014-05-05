@@ -142,7 +142,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     }
 
 
-                    if(!value || (this.getSuggestedValues(value).length == 0 && Number.isNaN(value)))
+                    if(!value || (this.getSuggestedValues(value).length == 0 && Number.isNaN(Number.parseInt(value))))
                         value = '';
 
                     if(!checkOnly_)
@@ -309,7 +309,8 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 this.setOwner(model.getOwner());
                 this.setMaxScore(model.getMaxScore());
-                this.setStudentAnnouncements(model.getStudentAnnouncements().getItems());
+                this.setStudentAnnouncements(model.getStudentAnnouncements()
+                    ? model.getStudentAnnouncements().getItems() :[]);
                 this.setApplicationsInGradeView(model.getGradeViewApps());
                 this.setApplications(model.getApplications());
                 this.setAutoGradeApps(model.getAutoGradeApps());

@@ -51,6 +51,13 @@ mixin AnnouncementTooltip()
                         +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
                             userRole = self.getUserRole()
                         )
+                    if self.getStandards() && self.getStandards().length > 0
+                        .standards-container
+                            .title Standards:
+                            .standard-list
+                                each standard in self.getStandards()
+                                    .grey-button.same-on-hover
+                                        span=standard.getName()
             if self.getUserRole().isStudent()
                 .silver-panel.attachments-panel
                     .left-block.attachments

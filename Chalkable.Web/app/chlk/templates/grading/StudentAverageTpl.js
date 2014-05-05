@@ -29,8 +29,10 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'classId',
 
+            //[ria.templates.ModelPropertyBind],
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
+            [ria.templates.ModelPropertyBind],
             Array, 'codes',
 
             /*Array, function getCodes(){

@@ -233,6 +233,20 @@ $red-color: #842727;
         font-size: 14px;
         word-spacing: -1px;
       }
+
+      .standards-container{
+        .title{
+          font-weight: bold;
+          font-size: 15px;
+          text-shadow: 1px -1px 0px white;
+        }
+        .standard-list{
+          .grey-button{
+            padding: 7px 5px;
+            margin-right: 7px;
+          }
+        }
+      }
     }
 
     .left-block, .right-block{

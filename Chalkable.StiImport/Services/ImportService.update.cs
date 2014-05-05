@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
@@ -99,33 +98,14 @@ namespace Chalkable.StiImport.Services
 
         private void UpdatePersons()
         {
-            if (context.GetSyncResult<Person>().Updated == null)
-                return;
-            var persons = context.GetSyncResult<Person>().Updated;
-            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
-            var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
-            var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
-            IList<PersonInfo> pi = new List<PersonInfo>();
-            
-            foreach (var person in persons)
+            if (context.GetSyncResult<Person>().Updated != null)
             {
-                var hasMedicalAlert = false;
-                var isAllowedInetAccess = false;
-                string specialInstructions = "";
-                string spEdStatus = null;
-                if (students.ContainsKey(person.PersonID))
+                var persons = context.GetSyncResult<Person>().Updated;
+                IList<PersonInfo> pi = new List<PersonInfo>();
+                foreach (var person in persons)
                 {
-                    hasMedicalAlert = students[person.PersonID].HasMedicalAlert;
-                    isAllowedInetAccess = students[person.PersonID].IsAllowedInetAccess;
-                    specialInstructions = students[person.PersonID].SpecialInstructions;
-                    if (students[person.PersonID].SpEdStatusID.HasValue)
-                    {
-                        spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
-                    }
-                }
-                var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID);
-                var email = chalkablePerson.Email;
-                pi.Add(new PersonInfo
+                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID);
+                    pi.Add(new PersonInfo
                     {
                         Id = person.PersonID,
                         Active = true,
@@ -133,21 +113,51 @@ namespace Chalkable.StiImport.Services
                         BirthDate = person.DateOfBirth,
                         FirstName = person.FirstName,
                         LastName = person.LastName,
-                        Gender = person.GenderID.HasValue ? genders[person.GenderID.Value].Code : "U",
-                        HasMedicalAlert = hasMedicalAlert,
-                        IsAllowedInetAccess = isAllowedInetAccess,
-                        SpecialInstructions = specialInstructions,
-                        SpEdStatus = spEdStatus,
-                        Email = email,
+                        Gender = chalkablePerson.Gender,
+                        HasMedicalAlert = chalkablePerson.HasMedicalAlert,
+                        IsAllowedInetAccess = chalkablePerson.IsAllowedInetAccess,
+                        SpecialInstructions = chalkablePerson.SpecialInstructions,
+                        SpEdStatus = chalkablePerson.SpEdStatus,
+                        Email = chalkablePerson.Email,
                         PhotoModifiedDate = person.PhotoModifiedDate
                     });
-                if (person.PhotoModifiedDate.HasValue)
-                {
-                    if (!chalkablePerson.PhotoModifiedDate.HasValue || chalkablePerson.PhotoModifiedDate < person.PhotoModifiedDate)
-                        personsForImportPictures.Add(person);
+                    if (person.PhotoModifiedDate.HasValue)
+                    {
+                        if (!chalkablePerson.PhotoModifiedDate.HasValue || chalkablePerson.PhotoModifiedDate < person.PhotoModifiedDate)
+                            personsForImportPictures.Add(person);
+                    }
                 }
+                ServiceLocatorSchool.PersonService.Edit(pi);
             }
-            ServiceLocatorSchool.PersonService.Edit(pi);
+
+
+            if (context.GetSyncResult<Student>().Updated != null)
+            {
+                IList<PersonInfo> pi = new List<PersonInfo>();
+                var students = context.GetSyncResult<Student>().Updated;
+                var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
+                foreach (var student in students)
+                {
+                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(student.StudentID);
+                    pi.Add(new PersonInfo
+                    {
+                        Id = student.StudentID,
+                        Active = true,
+                        AddressRef = chalkablePerson.AddressRef,
+                        BirthDate = chalkablePerson.BirthDate,
+                        FirstName = chalkablePerson.FirstName,
+                        LastName = chalkablePerson.LastName,
+                        Gender = chalkablePerson.Gender,
+                        HasMedicalAlert = student.HasMedicalAlert,
+                        IsAllowedInetAccess = student.IsAllowedInetAccess,
+                        SpecialInstructions = student.SpecialInstructions,
+                        SpEdStatus = student.SpEdStatusID.HasValue ? spEdStatuses[student.SpEdStatusID.Value].Name : null,
+                        Email = chalkablePerson.Email,
+                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate
+                    });
+                }
+                ServiceLocatorSchool.PersonService.Edit(pi);
+            }
         }
 
         private void UpdateSchoolPersons()

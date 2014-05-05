@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using Chalkable.Common;
 using Chalkable.Common.Web;
 using Chalkable.StiConnector.Connectors.Model;
@@ -198,13 +196,13 @@ namespace Chalkable.StiConnector.Connectors
         }
         public User GetMe()
         {
-            var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users"); //"http://localhost/Api/chalkable/users/me"; //
+            var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users"); 
             return Call<User>(url); 
         }
 
         public byte[] GetPhoto(int personId)
         {
-            var url = string.Format("{0}persons/{1}/photo", BaseUrl, personId); //"http://localhost/Api/chalkable/users/me"; //
+            var url = string.Format("{0}persons/{1}/photo", BaseUrl, personId);
             return Download(url);
         }
     }

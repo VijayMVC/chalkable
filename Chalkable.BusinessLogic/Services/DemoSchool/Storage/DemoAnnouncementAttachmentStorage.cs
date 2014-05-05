@@ -83,34 +83,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (!query.NeedsAllAttachments)
                 attachments = attachments.Where(x => x.PersonRef == query.CallerId);
 
+            if (!string.IsNullOrEmpty(query.Filter))
+            {
+                var filters =
+                    query.Filter.Trim()
+                        .Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => x.ToLower())
+                        .ToList();
 
-            
-            return null;
+                attachments = attachments.Where(x => filters.Contains(x.Name.ToLower()));
+            }
 
-
-            /*  if (!string.IsNullOrEmpty(filter))
-           {
-               string[] sl = filter.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-               var filters = new List<string>();
-               if (sl.Length > 0)
-               {
-                   filters.Add("@filter1");
-                   res.Parameters.Add("@filter1", string.Format(FILTER_FORMAT, sl[0]));
-               }
-               if (sl.Length > 1)
-               {
-                   filters.Add("@filter2");
-                   res.Parameters.Add("@filter2", string.Format(FILTER_FORMAT, sl[1]));
-               }
-               if (sl.Length > 2)
-               {
-                   filters.Add("@filter3");
-                   res.Parameters.Add("@filter3", string.Format(FILTER_FORMAT, sl[2]));
-               }
-               res.Sql.AppendFormat(" and (LOWER(Name) like {0})", filters.JoinString(" or LOWER(Name) like "));
-           }
-        
-            }*/
+            return attachments.ToList();
         } 
 
         public void Add(AnnouncementAttachment annAtt)

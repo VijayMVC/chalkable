@@ -129,7 +129,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        return this.Forward('apps', 'add', []);
+                        return this.Redirect('apps', 'add', []);
                     }
                     else
                         return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
@@ -369,7 +369,7 @@ NAMESPACE('chlk.controllers', function (){
                 .createApp(devId, model.getName())
                 .attach(this.validateResponse_())
                 .then(function(){
-                    return this.Forward('apps', 'details', []);
+                    return this.Redirect('apps', 'details', []);
                 }, this);
         },
 
@@ -382,7 +382,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteApp(id)
                 .attach(this.validateResponse_())
                 .then(function(){
-                    return this.Forward('apps', 'details', []);
+                    return this.Redirect('apps', 'details', []);
                 }, this);
         },
 
@@ -391,7 +391,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.Application]],
         function updateApp(app) {
-            return this.Forward('apps', 'details', [app.getId().valueOf(), true]);
+            return this.Redirect('apps', 'details', [app.getId().valueOf(), true]);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -531,7 +531,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return new chlk.models.apps.AppGeneralInfoViewData.$createFromReviews(data);
-                })
+                });
             return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result, 'loadReviews');
         },
 
@@ -546,7 +546,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        return this.Forward('apps', 'add', []);
+                        this.BackgroundNavigate('apps', 'add', []);
+                        return ria.async.BREAK;
                     }
                     else{
                         var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);

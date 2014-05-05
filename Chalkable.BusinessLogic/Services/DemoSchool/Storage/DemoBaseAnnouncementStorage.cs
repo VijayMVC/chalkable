@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
+using Chalkable.Data.Common.SqlAzure.ImportExport;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -32,7 +33,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
     public abstract class DemoBaseAnnouncementStorage : BaseDemoStorage<int, AnnouncementComplex>, IDemoAnnouncementStorage
     {
-        //todo pass announcement dictionary 
         protected DemoBaseAnnouncementStorage(DemoStorage storage):base(storage)
         {
             if (storage.AnnouncementStorage != null && !storage.AnnouncementStorage.IsEmpty())
@@ -156,6 +156,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 QnACount = announcement.QnACount,
                 OwnerAttachmentsCount = announcement.OwnerAttachmentsCount,
                 PersonRef = announcement.PersonRef,
+                IsOwner = Storage.Context.UserLocalId == announcement.PersonRef,
                 PersonName = announcement.PersonName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
@@ -323,9 +324,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }).Announcements.Where(x => x.State == AnnouncementState.Draft).OrderByDescending(x => x.Id).FirstOrDefault();
         }
 
-        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int i)
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int userId)
         {
-            throw new NotImplementedException();
+            var annRecipients = Storage.AnnouncementRecipientStorage.GetList(announcementId);
+            var result = new List<Person>();
+            foreach (var announcementRecipient in annRecipients)
+            {
+                if (announcementRecipient.PersonRef.HasValue)
+                    result.Add(Storage.PersonStorage.GetPerson(new PersonQuery
+                    {
+                        PersonId = announcementRecipient.PersonRef
+                    }));
+            }
+            return result;
         }
 
         public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int count)
@@ -351,7 +362,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     }
 
 
-    public class DemoAnnouncementForAdminStorage:DemoBaseAnnouncementStorage, IDemoAnnouncementStorage
+    public class DemoAnnouncementForAdminStorage:DemoBaseAnnouncementStorage
     {
         public DemoAnnouncementForAdminStorage(DemoStorage storage)
             : base(storage)
@@ -369,7 +380,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
     }
 
-    public class DemoAnnouncementForStudentStorage : DemoBaseAnnouncementStorage, IDemoAnnouncementStorage
+    public class DemoAnnouncementForStudentStorage : DemoBaseAnnouncementStorage
     {
         public DemoAnnouncementForStudentStorage(DemoStorage storage)
             : base(storage)
@@ -402,7 +413,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
     }
 
-    public class DemoAnnouncementForTeacherStorage : DemoBaseAnnouncementStorage, IDemoAnnouncementStorage
+    public class DemoAnnouncementForTeacherStorage : DemoBaseAnnouncementStorage
     {
         public DemoAnnouncementForTeacherStorage(DemoStorage storage)
             : base(storage)
