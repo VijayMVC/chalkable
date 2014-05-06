@@ -19,7 +19,7 @@ mixin MyAppsIconLink(app, editable)
         +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).my-app-icon-link
             .app-list-item
                 .icon(class=editable ? "jiggly" : undefined)
-                    pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
+                    pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74, true)
                     img(src=pictureUrl)
                 .name=app.getName()
 .my-apps
