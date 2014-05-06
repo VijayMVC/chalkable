@@ -8,7 +8,7 @@ statusData = self.getStatusData()
         #top-summary-panel
             #avatar-photo-conainer
                 .img-container
-                    +PersonImg(user, 256)
+                    +PersonImg(user, 256, true)
                     .grades-container
                         p=Msg.Class_Of
                             span=self.getAvatarTitle()
