@@ -352,7 +352,7 @@ var Msg = {
     Discipline_MP: 'Discipline MP',
     Display_letter_grade: 'Display letter grade',
     Display_student_average: 'Display student average',
-    Display_total_points: 'Display_total_points',
+    Display_total_points: 'Display total points',
     Document_Attached: 'Document Attached',
     Dont_attach: 'Don\'t attach',
     Download_original: 'Download original',
