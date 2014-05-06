@@ -1,0 +1,61 @@
+// media queries
+
+@mixin MQ($canvas) {
+  @if $canvas == XXS {
+   @media only screen and (max-width: 20em) { @content; } //320px
+  }
+  @else if $canvas == XS {
+   @media only screen and (max-width: 30em) { @content; } //480px
+  }
+  @else if $canvas == S {
+   @media only screen and (max-width: 37.5em) { @content; } //600px
+  }
+  @else if $canvas == M {
+   @media only screen and (max-width: 48em) { @content; } //768px  
+  }
+  @else if $canvas == L {
+   @media only screen and (max-width: 64em) { @content; } //1024px
+  }
+  @else if $canvas == XL {
+   @media only screen and (min-width: 75em) { @content; } //1200px
+  }
+}
+
+// retina
+
+@mixin retina($image) {
+  @media
+  only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (   -moz-min-device-pixel-ratio: 2),
+  only screen and (     -o-min-device-pixel-ratio: 2/1),
+  only screen and (        min-device-pixel-ratio: 2),
+  only screen and (                min-resolution: 192dpi),
+  only screen and (                min-resolution: 2dppx) { 
+    background-image: url($image);
+  }
+}
+
+// user-select
+
+@mixin user-select($none) {
+  -webkit-user-select: $none;  
+  -moz-user-select: $none;     
+  -ms-user-select: $none;     
+  -o-user-select: $none;
+  user-select: $none; 
+}
+
+// calc ()
+
+@mixin calc($property, $expression) { 
+  #{$property}: -moz-calc(#{$expression}); 
+  #{$property}: -o-calc(#{$expression}); 
+  #{$property}: -webkit-calc(#{$expression}); 
+  #{$property}: calc(#{$expression}); 
+}
+
+@mixin transparent-item() {
+  background: transparent;
+  border: none !important;
+  @include box-shadow(none);
+}
