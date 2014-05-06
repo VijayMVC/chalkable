@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             Number, 'type',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'absentPreviousDay',
+
+            [ria.templates.ModelPropertyBind],
             String, 'level',
 
             [ria.templates.ModelPropertyBind],

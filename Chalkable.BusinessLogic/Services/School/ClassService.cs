@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Common;
@@ -285,6 +286,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var da = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
                     var cp = da.GetClassPersons(new ClassPersonQuery {ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId});
+                    //var studentSy = new StudentSchoolYearDataAccess(uow).GetAll(new AndQueryCondition
+                    //    {
+                    //        {StudentSchoolYear.STUDENT_FIELD_REF_FIELD, }
+                    //    });
                     res = res.Where(x => cp.Any(y => y.PersonRef == x.Id)).ToList();
                 }
             }

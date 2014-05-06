@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.Common;
+﻿using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -18,8 +13,20 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int SchoolYearRef { get; set; }
         public int GradeLevelRef { get; set; }
+        public StudentEnrollmentStatusEnum EnrollmentStatus { get; set; }
 
         [NotDbFieldAttr]
         public GradeLevel GradeLevel { get; set; }
+       
+        public bool IsEnrolled
+        {
+            get { return EnrollmentStatus == StudentEnrollmentStatusEnum.CurrentlyEnrolled; }
+        }
+    }
+
+    public enum StudentEnrollmentStatusEnum
+    {
+        CurrentlyEnrolled = 0,
+        PreviouslyEnrolled = 1
     }
 }

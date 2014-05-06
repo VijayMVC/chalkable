@@ -262,7 +262,8 @@ namespace Chalkable.StiImport.Services
                 {
                     GradeLevelRef = x.GradeLevelID.Value,
                     SchoolYearRef = x.AcadSessionID,
-                    StudentRef = x.StudentID
+                    StudentRef = x.StudentID,
+                    EnrollmentStatus = x.CurrentEnrollmentStatus == "C" ? StudentEnrollmentStatusEnum.CurrentlyEnrolled : StudentEnrollmentStatusEnum.PreviouslyEnrolled
                 }).ToList();
             ServiceLocatorSchool.SchoolYearService.AssignStudent(assignments);
         }

@@ -7,6 +7,6 @@ user = self.getUser()
             .person-info.standard-short-info
                 .avarar-container.standard-small-container
                     .img-container
-                        +PersonImg(user, 64)
+                        +PersonImg(user, 64, true)
                 h1.profile-person-name=user.getDisplayName()
             +AppsBudgetPanel(user.getAppsBudget(), self)
