@@ -226,7 +226,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             });
             if (isEnrolled.HasValue)
             {
-                var cp = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled });
+                var cp = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId });
                 res = res.Where(x => cp.Any(y => y.PersonRef == x.Id)).ToList();
             }
             return res;

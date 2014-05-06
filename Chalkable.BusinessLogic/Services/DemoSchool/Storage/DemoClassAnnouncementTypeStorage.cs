@@ -41,37 +41,37 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new ClassAnnouncementType
                 {
                     ClassRef = 1,
-                    Description = "Type 1",
+                    Description = "Announcement",
                     Gradable = true,
                     Id = GetNextFreeId(),
-                    Name = "Type 1",
+                    Name = "Announcement",
                     Percentage = 100
                 },
                 new ClassAnnouncementType
                 {
                     ClassRef = 1,
-                    Description = "Type 2",
+                    Description = "Task",
                     Gradable = true,
                     Id = GetNextFreeId(),
-                    Name = "Type 2",
+                    Name = "Task",
                     Percentage = 100
                 },
                 new ClassAnnouncementType
                 {
                     ClassRef = 2,
-                    Description = "Type 1",
+                    Description = "Announcement",
                     Gradable = true,
                     Id = GetNextFreeId(),
-                    Name = "Type 1",
+                    Name = "Announcement",
                     Percentage = 100
                 },
                 new ClassAnnouncementType
                 {
                     ClassRef = 2,
-                    Description = "Type 2",
+                    Description = "Task",
                     Gradable = true,
                     Id = GetNextFreeId(),
-                    Name = "Type 2",
+                    Name = "Task",
                     Percentage = 100
                 }
             };

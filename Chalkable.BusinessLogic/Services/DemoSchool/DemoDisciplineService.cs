@@ -9,6 +9,7 @@ using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
+using Infraction = Chalkable.Data.School.Model.Infraction;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -22,32 +23,41 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var classPeriod = ServiceLocator.ClassPeriodService.GetNearestClassPeriod(classId, date);
             if (classPeriod == null) return null;
+            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
+            if (mp == null) return null;
             var disciplineRefferals = Storage.StiDisciplineStorage.GetList(classId, date);
+            var options = ServiceLocator.ClassroomOptionService.GetById(classId);
             if (disciplineRefferals != null)
             {
                 IList<Person> students = new List<Person>();
                 if (personId.HasValue)
                 {
                     disciplineRefferals = disciplineRefferals.Where(x => x.StudentId == personId).ToList();
-                    students.Add(ServiceLocator.PersonService.GetPerson(personId.Value));
+                    var student = ServiceLocator.PersonService.GetPerson(personId.Value);
+                    var cp = ServiceLocator.ClassService.GetClassPerson(classId, student.Id);
+                    if ((cp.IsEnrolled || options.IncludeWithdrawnStudents) && cp.MarkingPeriodRef == mp.Id) students.Add(student);
                 }
-                else students = ServiceLocator.ClassService.GetStudents(classId);
+                else students = ServiceLocator.ClassService.GetStudents(classId
+                    , options.IncludeWithdrawnStudents ? (bool?)null : true, mp.Id);
                 var cClass = ServiceLocator.ClassService.GetClassById(classId);
-
                 var res = new List<ClassDisciplineDetails>();
                 foreach (var student in students)
                 {
-                    var discipline = new ClassDisciplineDetails { Class = cClass, Student = student };
+                    var discipline = new ClassDisciplineDetails
+                    {
+                        Class = cClass,
+                        Student = student,
+                        Infractions = new List<Infraction>()
+                    };
                     var discRefferal = disciplineRefferals.FirstOrDefault(x => x.StudentId == student.Id);
                     if (discRefferal != null)
                         MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>()
-                                     .Map(disciplineRefferals, discRefferal);
+                                     .Map(discipline, discRefferal);
                     else
                     {
                         discipline.Date = date;
                         discipline.ClassId = classId;
                         discipline.StudentId = student.Id;
-                        discipline.Infractions = Storage.InfractionStorage.GetAll();
                     }
                     res.Add(discipline);
                 }

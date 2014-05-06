@@ -269,7 +269,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new NotImplementedException();
+            Create(0, 1, DateTime.Today, 1195);
+            Create(1, 1, DateTime.Today, 1195);
+
+            Create(0, 2, DateTime.Today, 1195);
+            Create(1, 2, DateTime.Today, 1195);
         }
 
         public void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state)
