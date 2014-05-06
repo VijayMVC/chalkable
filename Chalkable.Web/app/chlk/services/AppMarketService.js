@@ -227,15 +227,7 @@ NAMESPACE('chlk.services', function () {
                         classids: this.arrayToCsv(classes),
                         roleIds: this.arrayToCsv(roles),
                         gradelevelids: this.arrayToCsv(gradeLevels)
-                    })
-                    .then(function(totalPrice){
-                        this.getContext().getSession().set('selectedAppTotalPrice', totalPrice);
-                        return totalPrice;
-                    }, this);
-            },
-
-            chlk.models.apps.AppTotalPrice, function getSelectedAppTotalPrice(){
-                return this.getContext().getSession().get('selectedAppTotalPrice', new chlk.models.apps.AppTotalPrice);
+                    });
             },
 
             [[chlk.models.id.SchoolPersonId]],
