@@ -31,6 +31,7 @@ namespace Chalkable.StiImport.Services
         {
             InsertSchools();
             InsertAddresses();
+            InsertSisUsers();
             InsertPersons();
             InsertSchoolPersons();
             InsertPhones();
@@ -96,15 +97,38 @@ namespace Chalkable.StiImport.Services
             }).ToList();
             ServiceLocatorSchool.AddressService.Add(addressInfos);
         }
+
+        private void InsertSisUsers()
+        {
+            var users = context.GetSyncResult<User>().All.Select(x=>new SisUser
+                {
+                    Id = x.UserID,
+                    IsDisabled = x.IsDisabled,
+                    IsSystem = x.IsSystem,
+                    LockedOut = x.LockedOut,
+                    UserName = x.UserName
+                }).ToList();
+            ServiceLocatorSchool.SisUserService.Add(users);
+        }
         
         private void InsertPersons()
         {
             int counter = 0;
             var persons = context.GetSyncResult<Person>().All;
             var ps = new List<PersonInfo>();
-            var users = context.GetSyncResult<User>().All.ToDictionary(x => x.UserID);
             var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
             var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
+            Dictionary<int, SisUser> sisUsers;
+            if (persons.Length > 20)
+            {
+                sisUsers = ServiceLocatorSchool.SisUserService.GetAll().ToDictionary(x=>x.Id);
+            }
+            else
+            {
+                var ids = students.Values.Select(x => x.UserID)
+                            .Union(staff.Values.Where(x => x.UserID.HasValue).Select(x => x.UserID.Value)).ToList();
+                sisUsers = ids.Select(ServiceLocatorSchool.SisUserService.GetById).ToDictionary(x => x.Id);
+            }
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
             var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
             foreach (var person in persons)
@@ -122,20 +146,15 @@ namespace Chalkable.StiImport.Services
 
                 if (students.ContainsKey(person.PersonID))
                 {
-                    userName = users[students[person.PersonID].UserID].UserName;
+                    userName = sisUsers[students[person.PersonID].UserID].UserName;
                     hasMedicalAlert = students[person.PersonID].HasMedicalAlert;
                     isAllowedInetAccess = students[person.PersonID].IsAllowedInetAccess;
                     specialInstructions = students[person.PersonID].SpecialInstructions;
                     if (students[person.PersonID].SpEdStatusID.HasValue)
-                    {
                         spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
-                    }
-                    
                 }
-                    
                 if (staff.ContainsKey(person.PersonID) && staff[person.PersonID].UserID.HasValue)
-                    userName = users[staff[person.PersonID].UserID.Value].UserName;
-
+                    userName = sisUsers[staff[person.PersonID].UserID.Value].UserName;
                 
                 ps.Add(new PersonInfo
                 {
@@ -181,7 +200,6 @@ namespace Chalkable.StiImport.Services
                     existsing.Add(sp);
                 }
             }
-
             foreach (var staffSchool in staff)
             {
                 if (!existsing.Any(x => x.PersonRef == staffSchool.StaffID && x.SchoolRef == staffSchool.SchoolID))

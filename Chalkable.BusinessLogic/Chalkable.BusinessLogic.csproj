@@ -121,6 +121,7 @@
     <Compile Include="Services\DemoSchool\DemoGradeLevelService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingScaleService.cs" />
+    <Compile Include="Services\DemoSchool\DemoSisUserService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentParentService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentAnnouncementService.cs" />
     <Compile Include="Services\DemoSchool\DemoStandardService.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Services\School\SchoolServiceBase.cs" />
     <Compile Include="Services\School\SchoolYearService.cs" />
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
+    <Compile Include="Services\School\SisUserService.cs" />
     <Compile Include="Services\School\StandardService.cs" />
     <Compile Include="Services\School\StudentAnnouncementService.cs" />
     <Compile Include="Services\School\StudentParentService.cs" />

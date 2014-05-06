@@ -53,6 +53,7 @@ namespace Chalkable.StiImport.Services
             DeletePhones();
             DeleteSchoolPersons();
             DeletePersons();
+            DeleteSisUsers();
             DeleteAddresses();
             DeleteSchools();
         }
@@ -313,6 +314,14 @@ namespace Chalkable.StiImport.Services
                 return;
             var ids = context.GetSyncResult<Person>().Deleted.Select(x => x.PersonID).ToList();
             ServiceLocatorSchool.PersonService.Delete(ids);
+        }
+
+        private void DeleteSisUsers()
+        {
+            if (context.GetSyncResult<User>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<User>().Deleted.Select(x => x.UserID).ToList();
+            ServiceLocatorSchool.SisUserService.Delete(ids);
         }
 
         private void DeleteAddresses()

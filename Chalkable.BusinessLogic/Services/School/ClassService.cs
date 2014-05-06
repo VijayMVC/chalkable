@@ -284,7 +284,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 using (var uow = Read())
                 {
                     var da = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
-                    var cp = da.GetClassPersons(new ClassPersonQuery {ClassId = classId, IsEnrolled = isEnrolled});
+                    var cp = da.GetClassPersons(new ClassPersonQuery {ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId});
                     res = res.Where(x => cp.Any(y => y.PersonRef == x.Id)).ToList();
                 }
             }

@@ -86,6 +86,7 @@
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
+    <Compile Include="DataAccess\SisUserDataAccess.cs" />
     <Compile Include="DataAccess\StandardDataAccess.cs" />
     <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Model\SchoolGradeLevel.cs" />
     <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
+    <Compile Include="Model\SisUser.cs" />
     <Compile Include="Model\Standard.cs" />
     <Compile Include="Model\StandardSubject.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />

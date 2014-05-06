@@ -36,6 +36,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void CreateSchoolUsers(IList<User> userInfos);
         void DeleteUsers(IList<int> localIds, Guid districtId);
         string PasswordMd5(string password);
+        void Edit(IList<User> users);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -50,6 +51,16 @@ namespace Chalkable.BusinessLogic.Services.Master
             var hash = new MD5CryptoServiceProvider().ComputeHash(bytes);
             var b64 = Convert.ToBase64String(hash);
             return b64;
+        }
+
+        public void Edit(IList<User> users)
+        {
+            using (var uow = Update())
+            {
+                var da = new UserDataAccess(uow);
+                da.Update(users);
+                uow.Commit();
+            }
         }
 
         public UserContext Login(string login, string password)

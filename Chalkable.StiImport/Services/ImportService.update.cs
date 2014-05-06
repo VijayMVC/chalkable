@@ -29,6 +29,7 @@ namespace Chalkable.StiImport.Services
         {
             UpdateSchools();
             UpdateAddresses();
+            UpdateSisUsers();
             UpdatePersons();
             UpdateSchoolPersons();
             UpdatePhones();
@@ -96,8 +97,24 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.AddressService.Edit(addresses);
         }
 
+        private void UpdateSisUsers()
+        {
+            if (context.GetSyncResult<User>().Updated == null)
+                return;
+            var users = context.GetSyncResult<User>().Updated.Select(x => new SisUser
+            {
+                Id = x.UserID,
+                IsDisabled = x.IsDisabled,
+                IsSystem = x.IsSystem,
+                LockedOut = x.LockedOut,
+                UserName = x.UserName
+            }).ToList();
+            ServiceLocatorSchool.SisUserService.Edit(users);
+        }
+
         private void UpdatePersons()
         {
+            
             if (context.GetSyncResult<Person>().Updated != null)
             {
                 var persons = context.GetSyncResult<Person>().Updated;
@@ -129,8 +146,7 @@ namespace Chalkable.StiImport.Services
                 }
                 ServiceLocatorSchool.PersonService.Edit(pi);
             }
-
-
+            
             if (context.GetSyncResult<Student>().Updated != null)
             {
                 IList<PersonInfo> pi = new List<PersonInfo>();
@@ -139,6 +155,7 @@ namespace Chalkable.StiImport.Services
                 foreach (var student in students)
                 {
                     var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(student.StudentID);
+                    var sisUser = ServiceLocatorSchool.SisUserService.GetById(student.UserID);
                     pi.Add(new PersonInfo
                     {
                         Id = student.StudentID,
@@ -153,7 +170,37 @@ namespace Chalkable.StiImport.Services
                         SpecialInstructions = student.SpecialInstructions,
                         SpEdStatus = student.SpEdStatusID.HasValue ? spEdStatuses[student.SpEdStatusID.Value].Name : null,
                         Email = chalkablePerson.Email,
-                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate
+                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
+                        SisUserName = sisUser.UserName
+                    });
+                }
+                ServiceLocatorSchool.PersonService.Edit(pi);
+            }
+
+            if (context.GetSyncResult<Staff>().Updated != null)
+            {
+                IList<PersonInfo> pi = new List<PersonInfo>();
+                var staff = context.GetSyncResult<Staff>().Updated;
+                foreach (var st in staff)
+                {
+                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(st.StaffID);
+                    var sisUser = st.UserID.HasValue ? ServiceLocatorSchool.SisUserService.GetById(st.UserID.Value) : null;
+                    pi.Add(new PersonInfo
+                    {
+                        Id = st.StaffID,
+                        Active = true,
+                        AddressRef = chalkablePerson.AddressRef,
+                        BirthDate = chalkablePerson.BirthDate,
+                        FirstName = chalkablePerson.FirstName,
+                        LastName = chalkablePerson.LastName,
+                        Gender = chalkablePerson.Gender,
+                        HasMedicalAlert = chalkablePerson.HasMedicalAlert,
+                        IsAllowedInetAccess = chalkablePerson.IsAllowedInetAccess,
+                        SpecialInstructions = chalkablePerson.SpecialInstructions,
+                        SpEdStatus = null,
+                        Email = chalkablePerson.Email,
+                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
+                        SisUserName = sisUser != null ? sisUser.UserName : string.Empty
                     });
                 }
                 ServiceLocatorSchool.PersonService.Edit(pi);
