@@ -493,6 +493,11 @@ BODY {
             .row{
               P {
                 width: 240px;
+
+                >SPAN{
+                  display: inline-block;
+                  vertical-align: middle;
+                }
               }
 
               >.right{
@@ -507,6 +512,14 @@ BODY {
               width: image-width('attendance/keyboard-suggestion.png');
               height: image-height('attendance/keyboard-suggestion.png');
               top: -21px;
+            }
+
+            .absent-yesterday{
+              width: 15px;
+              height: 15px;
+              background: url(images/attendance/absent-yesterday.png) center center no-repeat;
+              margin: 6px 10px;
+              position: absolute;
             }
 
             .student-attendance-container{

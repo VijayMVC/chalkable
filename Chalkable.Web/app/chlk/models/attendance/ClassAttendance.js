@@ -111,6 +111,9 @@ NAMESPACE('chlk.models.attendance', function () {
             [ria.serialize.SerializeProperty('studentid')],
             chlk.models.id.SchoolPersonId, 'studentId',
 
+            [ria.serialize.SerializeProperty('absentpreviousday')],
+            Boolean, 'absentPreviousDay',
+
             chlk.models.id.SchoolPersonId, function getStudentId(){
                 return this._studentId || (this.getStudent() ? this.getStudent().getId() : null);
             },
