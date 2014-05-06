@@ -8,10 +8,14 @@ NAMESPACE('chlk.templates', function () {
     CLASS(
         'ChlkTemplate', EXTENDS(chlk.templates.JadeTemplate), [
             [[Object, Number]],
-            String, function getPictureURL(id, sizeH_, sizeW_){
+            String, function getPictureURL(id, sizeH_, sizeW_, notDepartmentSpecific_){
                 if(!id)
                     return null;
-                var url = window.azurePictureUrl + window.school.districtid + '_' + id.valueOf();
+                var url = window.azurePictureUrl;
+                if (notDepartmentSpecific_ == null)
+                    url += window.school.districtid + ' ';
+                url += id.valueOf();
+
                 if (sizeH_ && sizeW_)
                     return url + '-' + sizeH_ + 'x' + sizeW_;
                 if (sizeH_)
