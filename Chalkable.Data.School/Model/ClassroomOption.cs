@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -11,6 +12,7 @@ namespace Chalkable.Data.School.Model
         public const string ID_FIELD = "Id";
         public const string STANDARD_GRADING_SCALE_REF_FIELD = "StandardsGradingScaleRef";
 
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string DefaultActivitySortOrder { get; set; }
         public bool GroupByCategory { get; set; }
