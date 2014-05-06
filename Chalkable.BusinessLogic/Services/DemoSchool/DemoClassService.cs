@@ -224,10 +224,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Count = int.MaxValue,
                 RoleId = CoreRoles.STUDENT_ROLE.Id
             });
+
             if (isEnrolled.HasValue)
             {
-                var cp = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId });
-                res = res.Where(x => cp.Any(y => y.PersonRef == x.Id)).ToList();
+                var classPersons = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId });
+                res = res.Where(x => classPersons.Any(y => y.PersonRef == x.Id)).ToList();
+                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+                var studentSys = Storage.StudentSchoolYearStorage.GetList(sy.Id, StudentEnrollmentStatusEnum.CurrentlyEnrolled);
+                res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
             }
             return res;
         }
