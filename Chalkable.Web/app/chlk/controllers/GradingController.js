@@ -356,7 +356,7 @@ NAMESPACE('chlk.controllers', function (){
                 var src = this.reportingService.submitGradeBookReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
                     model.getEndDate(), model.getReportType(), model.getOrderBy(), model.getIdToPrint(), model.getFormat(),
                     model.isDisplayLetterGrade(), model.isDisplayTotalPoints(), model.isDisplayStudentAverage(),
-                    model.isIncludeWithdrawnStudents(), model.isIncludeNonGradedActivities());
+                    model.isIncludeWithdrawnStudents(), model.isIncludeNonGradedActivities(), model.isSuppressStudentName());
                 this.BackgroundCloseView(chlk.activities.grading.GradeBookReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
                 return null;

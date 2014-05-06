@@ -33,6 +33,8 @@ NAMESPACE('chlk.models.grading', function () {
 
         Boolean, 'includeNonGradedActivities',
 
+        Boolean, 'suppressStudentName',
+
         String, 'submitType'
     ]);
 });

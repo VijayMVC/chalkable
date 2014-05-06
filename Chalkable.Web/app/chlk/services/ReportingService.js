@@ -29,10 +29,11 @@ NAMESPACE('chlk.services', function () {
         Boolean, 'includeNonGradedActivities',
 
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-                Number, Number, Number, Number, Boolean, Boolean, Boolean, Boolean, Boolean]],
+                Number, Number, Number, Number, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
             String, function submitGradeBookReport(classId, gradingPeriodId, startDate, endDate, reportType, orderBy,
                                                              idToPrint, format, displayLetterGrade_, displayTotalPoints_,
-                                                             displayStudentAverage_, includeWithdrawnStudents_, includeNonGradedActivities_) {
+                                                             displayStudentAverage_, includeWithdrawnStudents_, includeNonGradedActivities_,
+                                                             suppressStudentName_) {
                 return this.getUrl('Reporting/GradeBookReport.json', {
                     classId: classId.valueOf(),
                     gradingPeriodId: gradingPeriodId.valueOf(),
@@ -46,7 +47,8 @@ NAMESPACE('chlk.services', function () {
                     displayTotalPoints: displayTotalPoints_,
                     displayStudentAverage: displayStudentAverage_,
                     includeWithdrawnStudents: includeWithdrawnStudents_,
-                    includeNonGradedActivities: includeNonGradedActivities_
+                    includeNonGradedActivities: includeNonGradedActivities_,
+                    suppressStudentName: suppressStudentName_
                 });
             },
 
