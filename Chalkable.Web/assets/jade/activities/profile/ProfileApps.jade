@@ -7,7 +7,7 @@ mixin CounterBox(title, value, editable, controller, action)
 mixin AppIcon(app, chlkTplObj)
     .app-list-item
         .icon
-            pictureUrl = chlkTplObj.getPictureURL(app.getSmallPictureId(), 74, 74)
+            pictureUrl = chlkTplObj.getPictureURL(app.getSmallPictureId(), 74, 74, true)
         img(src=pictureUrl)
         .description
             .name=app.getName()

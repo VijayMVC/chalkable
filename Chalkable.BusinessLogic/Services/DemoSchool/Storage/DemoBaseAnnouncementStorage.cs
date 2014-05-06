@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     public interface IDemoAnnouncementStorage
     {
         AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
-        AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int i);
+        AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null);
         AnnouncementDetails GetDetails(int announcementId, int value, int id);
         Announcement GetById(int announcementId);
         void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state);
@@ -188,7 +188,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
-        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId)
+        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null)
         {
             var annId = GetNextFreeId();
             var person = Storage.PersonStorage.GetById(userId);
@@ -233,7 +233,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = classId,
                 ClassAnnouncementTypeRef = classAnnouncementTypeId,
                 Created = nowLocalDate,
-                Expires = DateTime.MinValue,
+                Expires = expiresDateTime.HasValue ? expiresDateTime.Value : DateTime.MinValue,
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
@@ -269,11 +269,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            Create(0, 1, DateTime.Today, 1195);
-            Create(1, 1, DateTime.Today, 1195);
+            Create(0, 1, DateTime.Today, 1195, DateTime.Now.AddDays(1));
+            Create(1, 1, DateTime.Today, 1195, DateTime.Now.AddDays(1));
 
-            Create(0, 2, DateTime.Today, 1195);
-            Create(1, 2, DateTime.Today, 1195);
+            Create(0, 2, DateTime.Today, 1195, DateTime.Now.AddDays(1));
+            Create(1, 2, DateTime.Today, 1195, DateTime.Now.AddDays(1));
         }
 
         public void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state)

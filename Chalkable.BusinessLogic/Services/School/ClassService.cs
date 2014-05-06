@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Common;
@@ -284,8 +285,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 using (var uow = Read())
                 {
                     var da = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
-                    var cp = da.GetClassPersons(new ClassPersonQuery {ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId});
-                    res = res.Where(x => cp.Any(y => y.PersonRef == x.Id)).ToList();
+                    var classPersons = da.GetClassPersons(new ClassPersonQuery {ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId});
+                    res = res.Where(x => classPersons.Any(y => y.PersonRef == x.Id)).ToList();
+                    //todo : maby move this to Getpersons procedure
+                    var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+                    var studentSys = new StudentSchoolYearDataAccess(uow).GetList(sy.Id, StudentEnrollmentStatusEnum.CurrentlyEnrolled);
+                    res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
                 }
             }
             return res;

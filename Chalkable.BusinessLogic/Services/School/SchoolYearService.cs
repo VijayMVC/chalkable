@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
         void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
-
+        
     }
 
     public class SchoolYearService : SchoolServiceBase, ISchoolYearService
@@ -109,6 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        //todo : add enrollmentStatus param 
         public void AssignStudent(int schoolYearId, int personId, int gradeLevelId)
         {
             if (!BaseSecurity.IsDistrict(Context))

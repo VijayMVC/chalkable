@@ -39,5 +39,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return GetAll(personId).Count(x => gradeLevelIds.Contains(x.GradeLevelRef)) > 0;
         }
+
+        public IList<StudentSchoolYear> GetList(int? schoolYearId, StudentEnrollmentStatusEnum? enrollmentStatus)
+        {
+            var ssYears = data.Select(x => x.Value);
+            if (schoolYearId.HasValue)
+                ssYears = ssYears.Where(x => x.SchoolYearRef == schoolYearId);
+            if (enrollmentStatus.HasValue)
+                ssYears = ssYears.Where(x => x.EnrollmentStatus == enrollmentStatus);
+            return ssYears.ToList();
+        }
     }
 }

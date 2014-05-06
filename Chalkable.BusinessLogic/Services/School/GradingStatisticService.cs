@@ -267,13 +267,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(annDetails, activity);
                 var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();
+                if (!stiGradeBook.Options.IncludeWithdrawnStudents)
+                    scores = scores.Where(x => !x.Withdrawn).ToList();
                 foreach (var score in scores)
                 {
+                    var student = students.FirstOrDefault(x => x.Id == score.StudentId);
+                    if(student == null) continue;
                     var stAnn = new StudentAnnouncementDetails
                     {
                         AnnouncementId = ann.Id,
                         ClassId = ann.ClassRef.Value,
-                        Student = students.First(x => x.Id == score.StudentId)
+                        Student = student,
                     };
                     MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
                     annDetails.StudentAnnouncements.Add(stAnn);
