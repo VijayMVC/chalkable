@@ -5,7 +5,7 @@ mixin ProfileInfoView(model)
     .info-view
         .title
             div(style="overflow: visible").avatar-container.with-border
-                +PersonImg(model, 128)
+                +PersonImg(model, 128, true)
             h1=model.getFullName()
         .sections
             .sections-info
@@ -51,7 +51,7 @@ mixin ProfileInfoForm(controller, model)
             .title
                 .avatar-block
                     .avatar-container.with-border
-                        +PersonImg(model, 128)
+                        +PersonImg(model, 128, true)
                     //button(type="button").simple-gray-button.file Upload
                         +FileUpload(controller, 'uploadPicture', [model.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block
