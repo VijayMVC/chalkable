@@ -39,7 +39,7 @@ NAMESPACE('chlk.controls', function () {
                 }
 
                 if(options.inCurrentMp){
-                    var mp = this.getContext().getSession().get('markingPeriod');
+                    var mp = this.getContext().getSession().get('gradingPeriod');
                     options.minDate = mp.getStartDate().getDate();
                     options.maxDate = mp.getEndDate().getDate();
                 }
@@ -59,9 +59,23 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id);
-                        this.reanimate_(node, options, value, activity, model)
+                        this.reanimate_(node, options, value, activity, model);
                         if(!value)
                             node.setValue('');
+                        node.off('change.datepiker');
+                        node.on('change.datepiker', function(node, event){
+                            var options = node.getData('options');
+                            if(options.minDate){
+                                var min = getDate(options.minDate);
+                                if(getDate(node.getValue()) < min)
+                                    node.setValue(new chlk.models.common.ChlkDate(min).format('mm/dd/yy'));
+                            }
+                            if(options.maxDate){
+                                var max = getDate(options.maxDate);
+                                if(getDate(node.getValue()) > max)
+                                    node.setValue(new chlk.models.common.ChlkDate(max).format('mm/dd/yy'));
+                            }
+                        })
                     }.bind(this));
             },
 
