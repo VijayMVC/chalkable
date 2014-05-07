@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<ClassroomOption> classroomOptions);
         void Edit(IList<ClassroomOption> classroomOptions);
         void Delete(IList<int> classroomOptionsIds);
-        ClassroomOption GetById(int classId);
+        ClassroomOption GetClassOption(int classId);
     }
 
     public class ClassroomOptionService : SchoolServiceBase, IClassroomOptionService
@@ -39,11 +39,11 @@ namespace Chalkable.BusinessLogic.Services.School
             Modify(da => da.Delete(classroomOptionsIds));
         }
 
-        public ClassroomOption GetById(int classId)
+        public ClassroomOption GetClassOption(int classId)
         {
             using (var uow = Read())
             {
-                return new ClassroomOptionDataAccess(uow).GetById(classId);
+                return new ClassroomOptionDataAccess(uow).GetByIdOrNull(classId);
             }
         }
 

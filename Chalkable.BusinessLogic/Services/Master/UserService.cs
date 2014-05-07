@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string login, string password);
         UserContext Login(string confirmationKey);
         UserContext LoginToDemo(string roleName, string demoPrefix);
-        UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime);
+        UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null);
         UserContext ReLogin(Guid id);
         User GetByLogin(string login);
         User GetById(Guid id);
@@ -124,7 +124,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         var district = ServiceLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
                         if (!district.SisDistrictId.HasValue)
                             throw new ChalkableException("There are no such district in Inow");
-                        res = SisLogIn(district.SisDistrictId.Value, Context.SisToken, Context.SisTokenExpires.Value);
+                        res = SisLogIn(district.SisDistrictId.Value, Context.SisToken, Context.SisTokenExpires.Value, Context.SchoolYearId);
                     }
                     uow.Commit();
                     return res;
@@ -134,7 +134,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime)
+        public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null)
         {
             using (var uow = Update())
             {
@@ -153,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         {User.LOCAL_ID, localId},
                         {User.DISTRICT_REF_FIELD, district.Id}
                     });
-                    res = Login(chlkUser, uow, iNowCl, iNowUser);
+                    res = Login(chlkUser, uow, iNowCl, iNowUser, acadSessionId);
                 }
                 uow.Commit();
                 return res;
@@ -161,7 +161,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
         
         private UserContext Login(User user, UnitOfWork uow, ConnectorLocator iNowConnector = null
-            , StiConnector.Connectors.Model.User iNowUser = null)
+            , StiConnector.Connectors.Model.User iNowUser = null, int? schoolYearId = null)
         {
             if (user == null) return null;
             
@@ -178,7 +178,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             if (user.IsSchoolUser)
             {
-                var su = user.SchoolUsers[0];
                 Guid? developerId = null;
                 if (user.District.IsDemoDistrict)
                 {
@@ -186,7 +185,17 @@ namespace Chalkable.BusinessLogic.Services.Master
                     if (developer != null) developerId = developer.Id;
                 }
                 user = SaveSisToken(user, uow, ref iNowConnector);
-                var res = new UserContext(user, CoreRoles.GetById(su.Role), user.District, su.School, developerId);
+                var su = user.SchoolUsers[0];
+                Data.School.Model.SchoolYear schoolYear = null;
+                if (user.DistrictRef.HasValue && schoolYearId.HasValue)
+                {
+                    var schoolL = ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
+                    schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
+                    su = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolYear.SchoolRef);
+                    if (su == null)
+                        throw new ChalkableException(string.Format("There is no school in current District with such schoolYearId : {0}", schoolYearId.Value));
+                }
+                var res = new UserContext(user, CoreRoles.GetById(su.Role), user.District, su.School, developerId, schoolYear);
                 if (iNowUser == null && iNowConnector != null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();          
                 if(iNowUser != null) res.Claims = iNowUser.Claims;

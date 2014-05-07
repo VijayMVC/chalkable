@@ -189,7 +189,7 @@ namespace Chalkable.Web.Controllers
             var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
             if(markingPeriod == null)
                 throw new NoMarkingPeriodException();
-            var classOptions = SchoolLocator.ClassroomOptionService.GetById(classId);
+            var classOptions = SchoolLocator.ClassroomOptionService.GetClassOption(classId);
             var seatingChart = SchoolLocator.AttendanceService.GetSeatingChart(classId, markingPeriod.Id);
             var attendances = ClassAttendanceList(d, classId);
             //var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
@@ -197,7 +197,7 @@ namespace Chalkable.Web.Controllers
             //     ClassId = classId,
             //     RoleId = CoreRoles.STUDENT_ROLE.Id
             //});
-            bool? enrolledStudents = !classOptions.IncludeWithdrawnStudents ? true : default(bool?);
+            bool? enrolledStudents = classOptions != null && !classOptions.IncludeWithdrawnStudents ? true : default(bool?);
             var students = SchoolLocator.ClassService.GetStudents(classId, enrolledStudents, markingPeriod.Id);
             return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);
         }

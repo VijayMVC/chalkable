@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
             if (mp == null) return null;
             var disciplineRefferals = ConnectorLocator.DisciplineConnector.GetList(classId, date);
-            var options = ServiceLocator.ClassroomOptionService.GetById(classId);
+            var options = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
             if (disciplineRefferals != null)
             {
                 IList<Person> students = new List<Person>();
@@ -52,10 +52,10 @@ namespace Chalkable.BusinessLogic.Services.School
                     disciplineRefferals = disciplineRefferals.Where(x => x.StudentId == personId).ToList();
                     var student = ServiceLocator.PersonService.GetPerson(personId.Value);
                     var cp = ServiceLocator.ClassService.GetClassPerson(classId, student.Id);
-                    if((cp.IsEnrolled || options.IncludeWithdrawnStudents) && cp.MarkingPeriodRef == mp.Id) students.Add(student);
+                    if((cp.IsEnrolled || (options != null && options.IncludeWithdrawnStudents)) && cp.MarkingPeriodRef == mp.Id) students.Add(student);
                 }
                 else students = ServiceLocator.ClassService.GetStudents(classId
-                    , options.IncludeWithdrawnStudents ? (bool?)null : true, mp.Id);
+                    , options != null && options.IncludeWithdrawnStudents ? (bool?)null : true, mp.Id);
                 var cClass = ServiceLocator.ClassService.GetClassById(classId);
                 var res = new List<ClassDisciplineDetails>();
                 foreach (var student in students)

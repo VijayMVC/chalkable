@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         }
 
 
-        public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime)
+        public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? schoolYearId)
         {
             throw new NotImplementedException();
         }

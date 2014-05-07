@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public ClassroomOption GetById(int classId)
+        public ClassroomOption GetClassOption(int classId)
         {
             throw new NotImplementedException();
         }

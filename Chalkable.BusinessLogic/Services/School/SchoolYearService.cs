@@ -146,10 +146,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public SchoolYear GetCurrentSchoolYear()
         {
-            var nowDate = Context.NowSchoolTime.Date;
             using (var uow = Read())
             {
                 var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
+                if (Context.SchoolYearId.HasValue)
+                    return da.GetById(Context.SchoolYearId.Value);
+                var nowDate = Context.NowSchoolTime.Date;
                 return da.GetByDate(nowDate);
             }
         }

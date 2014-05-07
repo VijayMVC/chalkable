@@ -41,13 +41,12 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(b.ToString(), conds);
         }
 
-        public MarkingPeriod GetLast(DateTime tillDate)
+        public MarkingPeriod GetLast(DateTime tillDate, int? schoolYearId)
         {
-            var q = Orm.SimpleSelect<MarkingPeriod>(
-                FilterBySchool(new AndQueryCondition
-                    {
-                        {MarkingPeriod.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual}
-                    }));
+            var conds = new AndQueryCondition {{MarkingPeriod.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual}};
+            if(schoolYearId.HasValue)
+                conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId.Value);
+            var q = Orm.SimpleSelect<MarkingPeriod>(FilterBySchool(conds));
             q.Sql.AppendFormat("order by {0}  desc", MarkingPeriod.END_DATE_FIELD);
             return ReadOneOrNull<MarkingPeriod>(q);
         }
@@ -73,16 +72,18 @@ namespace Chalkable.Data.School.DataAccess
             if (schoolYearId.HasValue)
                 conds = new AndQueryCondition {{MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId}};
             return SelectMany<MarkingPeriod>(conds);
-        } 
+        }
 
-        
-        public MarkingPeriod GetMarkingPeriod(DateTime date)
+
+        public MarkingPeriod GetMarkingPeriod(DateTime date, int? schoolYearId)
         {
             var conds = new AndQueryCondition
                 {
                     {MarkingPeriod.START_DATE_FIELD, "date1", date, ConditionRelation.LessEqual},
                     {MarkingPeriod.END_DATE_FIELD, "date2", date, ConditionRelation.GreaterEqual}
                 };
+            if(schoolYearId.HasValue)
+                conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId.Value);
             return SelectOneOrNull<MarkingPeriod>(conds);   
         }
 
@@ -102,7 +103,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<int> ids)
         {
-            SimpleDelete<MarkingPeriod>(ids.Select(x=>new MarkingPeriod{Id = x}).ToList());
+            SimpleDelete(ids.Select(x=>new MarkingPeriod{Id = x}).ToList());
         }
 
     }

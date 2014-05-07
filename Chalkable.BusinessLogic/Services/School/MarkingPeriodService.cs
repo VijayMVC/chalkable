@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
-                return  da.GetLast(tillDate ?? Context.NowSchoolTime);
+                return  da.GetLast(tillDate ?? Context.NowSchoolTime, Context.SchoolYearId);
             }
         }
 
@@ -77,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
-                var res = da.GetMarkingPeriod(date);
+                var res = da.GetMarkingPeriod(date, Context.SchoolYearId);
                 if (res != null)
                     return res;
                 if (useLastExisting)

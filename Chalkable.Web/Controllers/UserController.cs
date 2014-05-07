@@ -13,10 +13,16 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
-        public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime)
+        //TODO: remove this later 
+        public ActionResult EncryptPassword(string password)
+        {
+           return Json(MasterLocator.UserService.PasswordMd5(password));
+        }
+
+        public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime, int? acadSessionId)
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
-            var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime));
+            var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime, acadSessionId));
             if (context != null)
                return RedirectToHome(context.Role);
             return Redirect<HomeController>(x => x.Index());
