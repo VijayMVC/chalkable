@@ -39,6 +39,8 @@ namespace Chalkable.Web.Common
         public const string CURR_SCHOOL_YEAR_ID = "CurrentSchoolYearId";
         public const string REDIRECT_URL_KEY = "RedirectUrl";
 
+        public const string SERVER_TIME = "ServerTime";
+
         public const string ERROR_MESSAGE_KEY = "ErrorMessage";
         public const string DEMO_PREFIX_KEY = "DemoPrefix";
 
