@@ -187,7 +187,7 @@ NAMESPACE('chlk.services', function () {
 
 
                     var date = day.getDate().getDate();
-                    var today = new chlk.models.common.ChlkDate(new Date());
+                    var today = new chlk.models.common.ChlkDate(getDate());
                     day.setTodayClassName((today.format('mm-dd-yy') == day.getDate().format('mm-dd-yy')) ? 'today' : '');
                     day.setRole(isAdmin ? 'admin' : 'no-admin');
                     day.setAnnLimit(isAdmin ? 7 : 3);
