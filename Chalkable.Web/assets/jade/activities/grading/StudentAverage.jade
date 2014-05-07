@@ -10,6 +10,7 @@ div(
     data-exempt=self.isExempt(),
     data-student-id=self.getStudentId(),
     data-codes-string=JSON.stringify(self.getCodes())
+    class=(self.isExempt() ? 'letter' : '')
 ).grade-info
     if self.withCodes()
         .with-comment
