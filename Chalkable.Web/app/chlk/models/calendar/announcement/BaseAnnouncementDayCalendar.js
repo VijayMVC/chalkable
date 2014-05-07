@@ -22,7 +22,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
             VOID, function initItems_(dayItems){
                 var sunday = this.getCurrentDate()
                     , dayNumber = sunday.getDate().getDay()
-                    , today = new chlk.models.common.ChlkDate(new Date());
+                    , today = new chlk.models.common.ChlkDate(getDate());
                 if(dayNumber)
                     sunday = sunday.add(chlk.models.common.ChlkDateEnum.DAY, -dayNumber);
                 var max = 0, index = 0, len, item;

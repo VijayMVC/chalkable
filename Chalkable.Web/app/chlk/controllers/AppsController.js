@@ -568,7 +568,7 @@ NAMESPACE('chlk.controllers', function (){
                                     data.getState(),
                                     pictureUrl,
                                     5, //todo: pass rating,
-                                    new chlk.models.common.ChlkDate(new Date()),
+                                    new chlk.models.common.ChlkDate(getDate()),
                                     appReviews,
                                     analytics || new chlk.models.developer.HomeAnalytics()
                                );

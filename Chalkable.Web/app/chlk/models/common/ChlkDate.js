@@ -1,11 +1,23 @@
 REQUIRE('ria.serialize.IDeserializable');
 
+window.currentDate = new Date();
+
 function getDate(str,a,b){
     if(typeof str == "string" && str.length == 10 ){
         return new Date(str.replace(/-/g, '/'));
     }
     else{
-        return str ? ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str))  : (new Date());
+        if(str)
+            return ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str));
+        var serverTime = new Date(window.serverTime);
+        var now = new Date();
+        if(serverTime.getDate() == now.getDate() && serverTime.getMonth() == now.getMonth() && serverTime.getFullYear() == now.getFullYear())
+            return new Date();
+        var dt = new Date(serverTime.getTime() + now.getTime() - window.currentDate.getTime());
+        dt.setSeconds(now.getSeconds());
+        dt.setMinutes(now.getMinutes());
+        dt.setHours(now.getHours());
+        return dt;
     }
 }
 

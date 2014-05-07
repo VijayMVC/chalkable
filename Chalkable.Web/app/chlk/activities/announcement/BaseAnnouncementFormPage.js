@@ -25,7 +25,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '#expiresdate')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function dueDateChange(node, event){
-                var dt = new Date(node.getValue());
+                var dt = getDate(node.getValue());
                 if(!dt.valueOf())
                     node.setValue('');
             },
