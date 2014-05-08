@@ -165,8 +165,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             if (user == null) return null;
             
-            if (user.SchoolUsers.Count > 1)
-                throw new NotSupportedException(ChlkResources.ERR_MULTIPLE_SCHOOL_ARE_NOT_SUPPORTED);
             if (user.IsSysAdmin)
                 return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null);
             if (user.IsDeveloper)
