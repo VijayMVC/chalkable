@@ -33,8 +33,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                 tpl.renderTo(container);
                 var row = container.parent('.row');
                 row.find('.student-attendance-container').removeClass('active');
-                if(row.hasClass('selected'))
+                if(row.hasClass('selected') && !row.hasClass('reason-changed')){
                     this.showDropDown();
+                }
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.KEY_DOWN.valueOf(), '.chlk-grid')],
@@ -79,6 +80,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                     row_.find('input[name=type]').setValue(this._typesEnum.PRESENT.valueOf());
               //      row_.find('form').trigger('submit');
                 }else{
+                    console.info('rowSelect');
                     this.showDropDown();
                 }
             },
@@ -212,6 +214,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var selected = parent.find('.option.selected');
                 selected.removeClass('selected');
                 node.addClass('selected');
+                node.parent('.row').addClass('reason-changed');
                 this.updateReasons();
             },
 
@@ -234,6 +237,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function onStudentDeselect(grid, event, row, index){
                 row.find('.student-attendance-container').removeClass('active');
                 row.find('.combo-list').hide();
+                row.removeClass('reason-changed');
             },
 
             [[Object]],
@@ -251,7 +255,6 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [[chlk.models.attendance.ClassList]],
             VOID, function afterRefresh(model){
-                //this.showDropDown();
                 if(model.getItems().filter(function(item){
                     return item.getType() != this._typesEnum.NA.valueOf()
                 }.bind(this)).length == 0)
