@@ -36,6 +36,7 @@ namespace Chalkable.StiImport.Services
 
         public void Import()
         {
+            //TODO: begin transaction
             importedSchoolIds.Clear();
             personsForImportPictures.Clear();
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
@@ -44,6 +45,8 @@ namespace Chalkable.StiImport.Services
             ProcessUpdate();
             ProcessPictures();
             ProcessDelete();
+            UpdateVersion();
+            //TODO: end transaction
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
@@ -91,6 +94,10 @@ namespace Chalkable.StiImport.Services
             {
                 context.SetResult(syncResultBase);   
             }
+        }
+
+        public void UpdateVersion()
+        {
             var newVersions = new Dictionary<string, int>();
             foreach (var i in context.TablesToSync)
                 if (i.Value.HasValue)
