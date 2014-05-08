@@ -350,7 +350,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var gradedStudentCount = 0, sum = 0, numericGrade;
                 model.getItems().forEach(function(item){
                     numericGrade = item.getNumericGradeValue();
-                    if(numericGrade || item.getGradeValue()){
+                    if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
                         gradedStudentCount++;
                         sum += (numericGrade || 0);
                     }
@@ -514,11 +514,11 @@ NAMESPACE('chlk.activities.announcement', function () {
                     }
                     this.updateDropDown(suggestions, node);
                 }
-                var id = node.getData('id'), value = parseFloat(node.getValue());
+                var id = parseInt(node.parent('form').find('[name=studentid]').getValue(), 10), value = parseFloat(node.getValue());
                 if(value){
                     var maxValue = this.getMaxScore();
                     this.getStudentAnnouncements().forEach(function(item){
-                        if(item.getId().valueOf() == id){
+                        if(item.getStudentId().valueOf() == id){
                             item.setGradeValue(node.getValue());
 
                             var flag = node.parent('.grade-block').find('.alert-flag');

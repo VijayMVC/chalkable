@@ -117,17 +117,19 @@ NAMESPACE('chlk.controls', function () {
             VOID, function initScrollAction_(){
                 jQuery(window).scroll(function () {
                     var grid = this.getGrid();
-                    var backTopNode = jQuery(grid.find('.back-top').valueOf());
-                    var showAllButton = grid.find('.load-all-popup');
-                    if (jQuery(window).scrollTop() > 100) {
-                        this.showGoTopButton_(grid);
-                        backTopNode.fadeIn();
-                    } else {
-                        backTopNode.fadeOut();
+                    if(grid){
+                        var backTopNode = jQuery(grid.find('.back-top').valueOf());
+                        var showAllButton = grid.find('.load-all-popup');
+                        if (jQuery(window).scrollTop() > 100) {
+                            this.showGoTopButton_(grid);
+                            backTopNode.fadeIn();
+                        } else {
+                            backTopNode.fadeOut();
+                        }
+                        var scrollTop = this.getScrollTop() || 0;
+                        if(scrollTop && new ria.dom.Dom().scrollTop() < scrollTop)
+                            this.hideLoadAllPopUp_(this.getGrid());
                     }
-                    var scrollTop = this.getScrollTop() || 0;
-                    if(scrollTop && new ria.dom.Dom().scrollTop() < scrollTop)
-                        this.hideLoadAllPopUp_(this.getGrid());
                 }.bind(this));
             },
 
