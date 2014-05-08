@@ -235,6 +235,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Boolean, 'ableEdit',
 
+            Boolean, 'ableChangeDate',
+
             function prepareExpiresDateText(){
                 var now = getDate();
                 var days = 0;

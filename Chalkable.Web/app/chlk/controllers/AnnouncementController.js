@@ -195,6 +195,8 @@ NAMESPACE('chlk.controllers', function (){
         function addEditAction(model, isEdit){
             this.disableAnnouncementSaving(false);
             var announcement = model.getAnnouncement();
+            announcement.setAbleChangeDate(!isEdit || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
+
             var reminders = announcement.getAnnouncementReminders() || [];
             var remindersArray = [];
 
@@ -404,8 +406,8 @@ NAMESPACE('chlk.controllers', function (){
                         || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)){
                         announcement.setAbleToGrade(false);
                     }
-                    announcement.setAbleEdit(announcement.isAnnOwner()
-                        && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
+                    announcement.setAbleEdit(announcement.isAnnOwner());
+//                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
 
                     this.getContext().getSession().set('announcement', announcement);
 
