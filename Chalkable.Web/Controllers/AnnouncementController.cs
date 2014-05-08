@@ -102,7 +102,6 @@ namespace Chalkable.Web.Controllers
         public ActionResult Edit(int announcementId)
         {
             var viewData = PrepareFullAnnouncementViewData(announcementId, false);
-            viewData.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId);
             var res = new CreateAnnouncementViewData
                 {
                     Announcement = viewData,

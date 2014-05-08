@@ -17,10 +17,10 @@ namespace Chalkable.Web.Controllers
             {
                 annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
                 annDetails.GradingStudentsCount = annDetails.StudentAnnouncements.Count(x=>x.IsGraded);
+                var stAnns = annDetails.StudentAnnouncements.Where(x => x.NumericScore.HasValue && !x.Incomplete 
+                    && !x.Exempt && !x.Dropped && !x.Absent).ToList();
+                annDetails.Avg = stAnns.Count > 0 ? (int?) stAnns.Average(x => x.NumericScore.Value) : null;
             }
-            //if(CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
-            //    annDetails.AnnouncementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(annDetails.Id);
-            
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.UserLocalId.Value, attInfo);
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, announcementId);
@@ -47,6 +47,8 @@ namespace Chalkable.Web.Controllers
                 if (stAnnouncements.Count > 0 && annDetails.GradableType)
                     annViewData.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annDetails, attInfo);
             }
+            if(!isRead)
+                annViewData.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId);
             return annViewData;
         }
     }
