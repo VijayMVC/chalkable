@@ -93,7 +93,8 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function codeChange(node, event){
                 var select = node.parent('.row').find('.codes-select');
-                var option = select.find('[data-code=' + node.getValue().toUpperCase() + ']');
+                var value = node.getValue() ? node.getValue().toUpperCase() : '';
+                var option = select.find('[data-code=' + value + ']');
                 if(option.exists()){
                     select.setValue(option.getAttr('value'));
                     select.trigger('liszt:updated');
