@@ -128,7 +128,7 @@ namespace Chalkable.Web.Controllers
                 var context = serviceLocator.UserService.Login(login, password);
                 if (context != null)
                 {
-                    var accessTokenUri = string.Format(ACS_URL_FORMAT, SERVICE_NAMESPACE);
+                    var accessTokenUri = string.Format(ACS_URL_FORMAT, ConfigurationManager.AppSettings[SERVICE_NAMESPACE]);
                     var scope = ConfigurationManager.AppSettings[RELYING_PARTY_REALM];
                     return Json(new
                     {
@@ -137,7 +137,7 @@ namespace Chalkable.Web.Controllers
                     }, 5);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return Json(false);
             }
