@@ -195,8 +195,6 @@ NAMESPACE('chlk.controllers', function (){
         function addEditAction(model, isEdit){
             this.disableAnnouncementSaving(false);
             var announcement = model.getAnnouncement();
-            announcement.setAbleChangeDate(!isEdit || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
-
             var reminders = announcement.getAnnouncementReminders() || [];
             var remindersArray = [];
 

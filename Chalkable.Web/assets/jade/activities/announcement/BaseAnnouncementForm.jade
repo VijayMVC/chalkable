@@ -73,8 +73,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     inCurrentMp: true
                 },
                 placeholder=Msg.Due_date,
-                class='validate[required]',
-                disabled=announcement.isAbleChangeDate() ? undefined : 'disabled'
+                class='validate[required]'
             )#expiresdate
         if !isAdminAnnouncement
             .max-score-container
