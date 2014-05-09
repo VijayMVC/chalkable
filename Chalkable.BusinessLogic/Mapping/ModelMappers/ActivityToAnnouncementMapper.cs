@@ -54,10 +54,10 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                         MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttachment>().Map(annAtt, att);
                     }
                 }
-                annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
+                if (annDetails.AnnouncementStandards == null)
+                    annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
                 if (activity.Standards != null && activity.Standards.Any())
                 {
-                    //if (annDetails.AnnouncementStandards == null)
                     foreach (var activityStandard in activity.Standards)
                     {
                         var annStandard = annDetails.AnnouncementStandards.FirstOrDefault(x => x.StandardRef == activityStandard.Id);

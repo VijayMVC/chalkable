@@ -740,6 +740,12 @@ namespace Chalkable.BusinessLogic.Services.School
                             AnnouncementRef = announcementId,
                             StandardRef = standardId
                         });
+                if (ann.State == AnnouncementState.Created && ann.SisActivityId.HasValue)
+                {
+                    var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
+                    activity.Standards = activity.Standards.Concat(new [] {new ActivityStandard {Id = standardId}});
+                    ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
+                }
                 uow.Commit();
                 return new StandardDataAccess(uow).GetById(standardId);
             }
