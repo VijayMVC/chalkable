@@ -20,14 +20,14 @@ NAMESPACE('chlk.activities.apps', function () {
 
         'AppInfoPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
-            [ria.mvc.DomEventBind('click', 'input.price-checkbox')],
+            [ria.mvc.DomEventBind('change', 'input.price-checkbox')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleAppPaymentInfo(node, event){
                 var appPricing = this.dom.find('.prices');
                 appPricing.toggleClass(HIDDEN_CLASS, node.checked());
             },
 
-            [ria.mvc.DomEventBind('click', 'input.toggle-standarts')],
+            [ria.mvc.DomEventBind('change', 'input.toggle-standarts')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleStandarts(node, event){
                 var addStandartsBlock = this.dom.find('.add-standarts');
@@ -82,14 +82,14 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.onFormChange(node, event);
             },
 
-            [ria.mvc.DomEventBind('click', 'input[name=schoolFlatRateEnabled]')],
+            [ria.mvc.DomEventBind('change', 'input[name=schoolFlatRateEnabled]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleSchoolFlatRate(node, event){
                 var schoolFlatRate = this.dom.find('.school-flat-rate');
                 schoolFlatRate.toggleClass(HIDDEN_CLASS, !node.checked());
             },
 
-            [ria.mvc.DomEventBind('click', 'input[name=classFlatRateEnabled]')],
+            [ria.mvc.DomEventBind('change', 'input[name=classFlatRateEnabled]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleClassFlatRate(node, event){
                 var classFlatRate = this.dom.find('.class-flat-rate');
