@@ -241,18 +241,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public IList<Person> GetStudents(int classId)
-        {
-            return ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-            {
-                ClassId = classId,
-                CallerId = Context.UserLocalId,
-                CallerRoleId = Context.Role.Id,
-                Count = int.MaxValue,
-                RoleId = CoreRoles.STUDENT_ROLE.Id
-            });
-        }
-
         public IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
         {
             return GetClasses(new ClassQuery

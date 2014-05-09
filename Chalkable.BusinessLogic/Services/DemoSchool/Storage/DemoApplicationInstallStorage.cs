@@ -367,7 +367,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<ApplicationInstall> GetInstalled(int personId)
         {
             return
-                data.Where(x => x.Value.OwnerRef == personId || x.Value.PersonRef == personId && x.Value.Active)
+                data.Where(x => (x.Value.OwnerRef == personId || x.Value.PersonRef == personId) && x.Value.Active)
                     .Select(x => x.Value)
                     .ToList();
 
