@@ -186,6 +186,7 @@ NAMESPACE('chlk.controllers', function (){
                             item.setLate(currentItem.isLate());
                         }
                     });
+                    this.calculateGradesAvg(announcement);
                     this.getContext().getSession().set('announcement', announcement);
                     return new chlk.activities.announcement.UpdateAnnouncementItemViewModel(announcement, currentItem);
             }, this);
@@ -378,6 +379,23 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
+        function calculateGradesAvg(announcement){
+            var model = announcement.getStudentAnnouncements();
+            var gradedStudentCount = 0, sum = 0, numericGrade;
+            model.getItems().forEach(function(item){
+                numericGrade = item.getNumericGradeValue();
+                if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
+                    gradedStudentCount++;
+                    sum += (numericGrade || 0);
+                }
+            });
+            model.setGradedStudentCount(gradedStudentCount);
+            if(gradedStudentCount)
+                model.setClassAvg(Math.floor(sum / gradedStudentCount + 0.5));
+            else
+                model.setClassAvg(null);
+        },
+
         [[chlk.models.id.AnnouncementId]],
         function viewAction(announcementId) {
             this.getView().reset();
@@ -407,6 +425,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     announcement.setAbleEdit(announcement.isAnnOwner());
 //                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
+                    this.calculateGradesAvg(announcement);
 
                     this.getContext().getSession().set('announcement', announcement);
                     return new ria.async.DeferredData(announcement);

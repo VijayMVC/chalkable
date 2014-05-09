@@ -306,7 +306,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.setAllScores(allScores);
                 }
 
-
                 this.setOwner(model.getOwner());
                 this.setMaxScore(model.getMaxScore());
                 this.setStudentAnnouncements(model.getStudentAnnouncements()
@@ -347,17 +346,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var announcement = allModel.getAnnouncement();
                 var model = announcement.getStudentAnnouncements();
                 this.setStudentAnnouncements(model.getItems());
-                var gradedStudentCount = 0, sum = 0, numericGrade;
-                model.getItems().forEach(function(item){
-                    numericGrade = item.getNumericGradeValue();
-                    if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
-                        gradedStudentCount++;
-                        sum += (numericGrade || 0);
-                    }
-                });
-                model.setGradedStudentCount(gradedStudentCount);
-                if(gradedStudentCount)
-                    model.setClassAvg(Math.floor(sum / gradedStudentCount + 0.5));
 
                 tpl.assign(model);
                 tpl.options({
