@@ -1,0 +1,22 @@
+displayValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades())
+edited = self.getEnteredAvg() || self.getEnteredAvg() == 0 || self.getEnteredAlphaGrade()
+div(
+    data-isexempt= self.isExempt(),
+    data-calculated-avg= self.getCalculatedAvg(),
+    data-entered-avg= self.getEnteredAvg(),
+    data-calculated-alpha-grade= self.getCalculatedAlphaGrade(),
+    data-entered-alpha-grade= self.getEnteredAlphaGrade(),
+    data-may-be-exempt=self.isMayBeExempt(),
+    data-exempt=self.isExempt(),
+    data-student-id=self.getStudentId(),
+    data-codes-string=JSON.stringify(self.getCodes())
+    class=(self.isExempt() ? 'letter' : '')
+).grade-info
+    if self.withCodes()
+        .with-comment
+    div(
+        data-tooltip=(edited ? Msg.Orig + " " + self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), true) : ""),
+        data-value=displayValue
+    ).grade-text.avg-text=displayValue
+    if edited
+        .edited=Msg.Edited.toLowerCase()

@@ -1,0 +1,14 @@
+value = self.getModel().displayAvgGradeValue()
++ActionForm('grading', 'updateStudentAvg').grading-form.avg-form
+    input(name="averageValue", value=value, data-grade-value=value).avg-value.value-input
+    +Hidden('averageid', self.getAverageId().valueOf())
+    +Hidden('oldValue', value)
+    +Hidden('codesString', self.getCodesString()).codes-text
+    +Hidden('studentid', self.getStudentId().valueOf())
+    +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+    .grading-input-popup.chlk-pop-up-container.popup-bottom
+        .pop-up-triangle.big
+        if self.isMayBeExempt()
+            +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), addCallBack = true).with-value.exempt-checkbox
+        else
+            +Hidden('isexempt', self.isExempt())
