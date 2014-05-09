@@ -100,7 +100,7 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submit($target, event) {
                 $target.removeClass('cancelled-submit');
-                if ($target.hasClass('disabled'))
+                if ($target.hasClass('disabled') || $target.hasClass('working'))
                     return false;
                 var controller = $target.getData('controller');
                 if (controller) {
@@ -134,6 +134,8 @@ NAMESPACE('chlk.controls', function () {
                         $target.setData('submit-name', null);
                         $target.setData('submit-value', null);
                         $target.setData('submit-type', value);
+
+                        $target.addClass('working');
 
                         var isPublic = !!$target.getData('public');
                         setTimeout(function () {
