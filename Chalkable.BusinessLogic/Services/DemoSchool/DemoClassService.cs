@@ -225,14 +225,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 RoleId = CoreRoles.STUDENT_ROLE.Id
             });
 
+
+            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var enrollmentStatus = isEnrolled.HasValue && isEnrolled.Value
+                                      ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
+                                      : (StudentEnrollmentStatusEnum?)null;
+            var studentSys = Storage.StudentSchoolYearStorage.GetList(sy.Id, enrollmentStatus);
+            res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
             if (isEnrolled.HasValue)
             {
                 var classPersons = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId });
                 res = res.Where(x => classPersons.Any(y => y.PersonRef == x.Id)).ToList();
-                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-                var studentSys = Storage.StudentSchoolYearStorage.GetList(sy.Id, StudentEnrollmentStatusEnum.CurrentlyEnrolled);
-                res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
             }
+         
             return res;
         }
 

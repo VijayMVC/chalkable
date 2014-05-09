@@ -346,7 +346,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Content Include="app\api\chlk-post-message-api.js" />
+    <Content Include="Scripts\api\chlk-post-message-api.js" />
     <Content Include="Global.asax" />
     <Content Include="loaderio-5b599a813535f4cd31553b713ccbec90.html" />
     <Content Include="loaderio-e721e158fdd474be0e20e8973ea389f0.html" />
@@ -367,8 +367,8 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="app\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
