@@ -121,7 +121,7 @@ namespace Chalkable.StiImport.Services
                 IList<PersonInfo> pi = new List<PersonInfo>();
                 foreach (var person in persons)
                 {
-                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID);
+                    Data.School.Model.Person chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID);
                     pi.Add(new PersonInfo
                     {
                         Id = person.PersonID,

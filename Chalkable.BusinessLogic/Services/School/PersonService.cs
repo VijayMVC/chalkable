@@ -199,13 +199,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Person GetPerson(int id)
         {
-
-            return GetPersons(new PersonQuery
+            var res = GetPersons(new PersonQuery
                 {
                     PersonId = id,
                     Count = 1, 
                     Start = 0
-                }).Persons.First();
+                }).Persons.FirstOrDefault();
+            if (res == null) //in case if there is no corresponding school person
+                using (var uow = Read())
+                {
+                    res = new PersonDataAccess(uow, Context.SchoolLocalId).GetById(id);
+                }
+            return res;
         }
 
         public PersonDetails GetPersonDetails(int id)
