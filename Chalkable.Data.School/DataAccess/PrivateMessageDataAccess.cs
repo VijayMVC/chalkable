@@ -13,13 +13,14 @@ namespace Chalkable.Data.School.DataAccess
     {
         public PrivateMessageDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
+
         }
 
         private const string SENDER_PREFIX = "Sender";
         private const string RECIPIENT_PREFIX = "Recipient";
 
 
-        private DbQuery BuildGetMessagesQuery(IList<int> roles, string keyword, bool? read, int personId, bool isIncome)
+        private DbQuery BuildGetMessagesQuery(IList<int> roles, string keyword, bool? read, int personId, bool isIncome, int schoolId)
         {
 
             var field1 = "PrivateMessage_FromPersonRef";
@@ -35,7 +36,8 @@ namespace Chalkable.Data.School.DataAccess
             var b = new StringBuilder();
             b.AppendFormat(@"select vwPrivateMessage.* from vwPrivateMessage 
                              where {0} = @personId and {1} = 0", field1, field2);
-
+            b.AppendFormat(" and PrivateMessage_SenderSchoolRef = @schoolId and PrivateMessage_RecipientSchoolRef = @schoolId");
+            conds.Add("@schoolId", schoolId);
             if (isIncome && read.HasValue)
             {
                 b.Append(" and PrivateMessage_Read = @read");
@@ -111,15 +113,15 @@ namespace Chalkable.Data.School.DataAccess
         } 
 
         public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,
-                                                               int personId, int start, int count)
+                                                               int personId, int schoolId, int start, int count)
         {
-            var query = BuildGetMessagesQuery(roles, keyword, read, personId, true);
+            var query = BuildGetMessagesQuery(roles, keyword, read, personId, true, schoolId);
             return ReadPaginatedPrivateMessage(query, start, count);
         }
-        public PaginatedList<PrivateMessageDetails> GetOutComeMessage(IList<int> roles, string keyword, int personId,
+        public PaginatedList<PrivateMessageDetails> GetOutComeMessage(IList<int> roles, string keyword, int personId, int schoolId,
                                                                int start, int count)
         {
-            var query = BuildGetMessagesQuery(roles, keyword, null, personId, false);
+            var query = BuildGetMessagesQuery(roles, keyword, null, personId, false, schoolId);
             return ReadPaginatedPrivateMessage(query, start, count);
         } 
 
