@@ -1,0 +1,25 @@
+.districts
+    .action-bar.not-transparent
+        .container.panel-bg
+    +Grid('district', 'page', self).not-transparent
+        +GridHead()
+            .th Name
+            .th DB Name
+            .th SIS URL
+            .th SIS User name
+            .th SIS password
+            .th SIS system type
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getDbName()
+                    .td= item.getSisUrl()
+                    .td= item.getSisUserName()
+                    .td *
+                    .td= item.getSisSystemType()
+                    .td.action-links
+                        +ActionLink('schools', 'list', item.getId()) info
+                        +ActionLink('district', 'sync', item.getId()) sync
+
