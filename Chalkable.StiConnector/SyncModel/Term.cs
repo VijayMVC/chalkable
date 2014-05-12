@@ -9,9 +9,9 @@ namespace Chalkable.StiConnector.SyncModel
         public string Name { get; set; }
         public string Description { get; set; }
         public string StateCode { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public DateTime EndTime { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? EndTime { get; set; }
         public bool AreTranscriptsPosted { get; set; }
         public string ConnectEduTerm { get; set; }
         public byte Sequence { get; set; }

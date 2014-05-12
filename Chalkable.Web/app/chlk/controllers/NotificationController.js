@@ -19,7 +19,7 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.FeedService, 'feedService',
 
             function listNewAction() {
-                var result = this.notificationService.getNotifications()
+                var result = this.notificationService.getNotifications(0, 5)
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var res = new chlk.models.notification.NotificationList();
