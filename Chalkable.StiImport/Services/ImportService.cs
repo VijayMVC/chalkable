@@ -37,20 +37,29 @@ namespace Chalkable.StiImport.Services
         public void Import()
         {
             //TODO: begin transaction
+            Log.LogInfo("start import");
             importedSchoolIds.Clear();
             personsForImportPictures.Clear();
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+            Log.LogInfo("download data to sync");
             DownloadSyncData();
+            Log.LogInfo("process inserts");
             ProcessInsert();
+            Log.LogInfo("process updates");
             ProcessUpdate();
+            Log.LogInfo("process pictures");
             ProcessPictures();
+            Log.LogInfo("process deletes");
             ProcessDelete();
+            Log.LogInfo("update versions");
             UpdateVersion();
             //TODO: end transaction
+            Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
             }
+            Log.LogInfo("import is completed");
         }
 
         private void ProcessPictures()
@@ -85,9 +94,9 @@ namespace Chalkable.StiImport.Services
             foreach (var table in toSync)
             {
                 var type = context.Types[table.Key];
-                Debug.WriteLine("Start downloading " + table.Key);
+                Log.LogInfo("Start downloading " + table.Key);
                 var res = connectorLocator.SyncConnector.GetDiff(type, table.Value);
-                Debug.WriteLine("Table downloaded: " + table.Key);
+                Log.LogInfo("Table downloaded: " + table.Key);
                 results.Add((SyncResultBase)res);
             }
             foreach (var syncResultBase in results)

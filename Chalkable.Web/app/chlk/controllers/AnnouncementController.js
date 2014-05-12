@@ -264,39 +264,9 @@ NAMESPACE('chlk.controllers', function (){
             }).join(',');
             announcement.setApplicationsIds(applicationsIds);
 
-            /*var Serializer = new chlk.lib.serialize.ChlkJsonSerializer;
-            announcement.setStandards(Serializer.deserialize([{
-                standardid: 1,
-                parentstandardref: null,
-                name: "standard1",
-                description: "first standard",
-                standardsubjectref: 0,
-                lowergradelevelref: null,
-                uppergradelevelref: null,
-                isactive: false
-            }, {
-                standardid: 2,
-                parentstandardref: null,
-                name: "standard2",
-                description: "second standard",
-                standardsubjectref: 0,
-                lowergradelevelref: null,
-                uppergradelevelref: null,
-                isactive: false
-            }, {
-                standardid: 3,
-                parentstandardref: 1,
-                name: "standard3",
-                description: "third standard",
-                standardsubjectref: 0,
-                lowergradelevelref: null,
-                uppergradelevelref: null,
-                isactive: false
-            }], ArrayOf(chlk.models.standard.Standard)));*/
-
             this.saveStandardIds(announcement);
 
-            return new ria.async.DeferredData(model);
+            return model;
         },
 
         VOID, function saveStandardIds(announcement){
@@ -569,11 +539,13 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteApp(announcementAppId)
                 .attach(this.validateResponse_())
                 .then(function(model){
+                    model.setNeedButtons(true);
+                    model.setNeedDeleteButton(true);
                     var announcementForm = new chlk.models.announcement.AnnouncementForm();
                     announcementForm.setAnnouncement(model);
-                    return this.addEditAction(announcementForm, true);
+                    return this.addEditAction(announcementForm, true).getAnnouncement();
                 }, this);
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result);
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
         },
 
 

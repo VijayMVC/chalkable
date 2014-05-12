@@ -7,7 +7,7 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
     div(
         class= (parseInt(normalValue, 10) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : "") + (info.needStrikeThrough() ? ' dropped-value' : ''),
         data-id= info.getId(),
-        data-announcementid= info.getAnnouncementId(),
+        data-announcementid= parseInt(info.getAnnouncementId().valueOf(), 10),
         data-studentid= info.getStudentId(),
         data-dropped= info.isDropped(),
         data-islate= info.isLate(),
