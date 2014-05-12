@@ -10,7 +10,7 @@ mixin Paginator(controller, action, data, params)
                     label(for='current_page') Page
                     input(name='current_page', value=pagingData.pageIndex).page-value
                     span
-                        | of #{pagingData.totalPages}
+                        | of #{pagingData.totalPages || 1}
                     input(type="submit")
                     input(type="hidden", name="controller", value=controller).controller-name
                     input(type="hidden", name="action", value=action).action-name
@@ -18,5 +18,5 @@ mixin Paginator(controller, action, data, params)
             +ActionLinkWithPrepend(controller, action, params, pagingData.lastPageStart)(class = 'last-page' + (pagingData.hasNextPage ? '' : ' disabled'))
         .right-container
             SPAN
-                |Displaying #{pagingData.startText} - #{pagingData.end} of #{pagingData.totalCount}
+                |Displaying #{pagingData.startText} - #{pagingData.end} of #{pagingData.totalCount || 1}
         .clear
