@@ -69,7 +69,6 @@ NAMESPACE('chlk.controllers', function (){
                     };
                 phones.forEach(function(item){
                     var values = {
-                        id: item.getId().valueOf(),
                         type: item.getType(),
                         isPrimary: item.isIsPrimary(),
                         value: item.getValue()

@@ -12,6 +12,7 @@ namespace Chalkable.Web.Common
         public const string CLASSES_ALPHA_GRADES_DATA = "ClassesAlphaGradesData";
         public const string CURRENT_PERSON = "CurrentPerson";
         public const string IS_DEV = "IsDeveloper";
+        public const string CURRENT_USER_ROLE_ID = "CurrentUserRoleId";
         public const string MARKING_PERIOD = "MarkingPeriod";
         public const string GRADING_PERIOD = "GradingPeriod";
         public const string NEXT_MARKING_PERIOD = "NextMarkingPeriod";

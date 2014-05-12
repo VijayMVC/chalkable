@@ -69,7 +69,6 @@ mixin ProfileInfoForm(controller, model)
                         .section-data
                             .info-title=Msg.Cell
                             input(
-                            data-id=primaryPhone && model.getPrimaryPhone().getId().valueOf(),
                             data-type=2,
                             data-isPrimary=true,
                             value=primaryPhoneValue,
@@ -98,7 +97,6 @@ mixin ProfileInfoForm(controller, model)
                             input(
                             value=homePhone,
                             class="home-phone",
-                            data-id=model.getHomePhone() && model.getHomePhone().getId().valueOf(),
                             data-type=0,
                             data-isPrimary=false,
                             readonly

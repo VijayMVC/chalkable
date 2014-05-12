@@ -43,7 +43,6 @@ namespace Chalkable.Web.Controllers
         public ActionResult Developer(Guid? currentApplicationId)
         {
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
-            ViewData[ViewConstants.IS_DEV] = true;
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
             var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, false);
             if (applications.Count == 0)
@@ -51,7 +50,7 @@ namespace Chalkable.Web.Controllers
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.DEV_APP_INFO_URL;
             }
             ViewData[ViewConstants.NEEDS_TOUR] = false;
-
+            ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
             ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
             ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
@@ -127,6 +126,7 @@ namespace Chalkable.Web.Controllers
 
                 }
             }
+            ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;

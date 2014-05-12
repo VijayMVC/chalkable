@@ -1,4 +1,6 @@
-﻿@using Chalkable.Web.Common
+﻿@using Chalkable.Common
+@using Chalkable.Web.Common
+@using Chalkable.Web.Models.PersonViewDatas
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
@@ -65,7 +67,7 @@
    
 
         @{
-            var isDeveloper = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
+            var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
         }
         
@@ -74,7 +76,7 @@
     
 
         <div class="page 
-        @if (isDemoSchool || isDeveloper)
+        @if (isDemoSchool || isDeveloperSchool)
         {
             @:demo
         }
@@ -98,8 +100,15 @@
             
             
         </div>
-        @if (isDemoSchool || isDeveloper)
+        @if (isDemoSchool || isDeveloperSchool)
         {
+            var currentRoleId = (int) ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
+            var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
+            var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
+            var isAdmin = currentRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id
+                || currentRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id || currentRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id;
+            var isStudent = currentRoleId == CoreRoles.STUDENT_ROLE.Id;
+                
             <div id="demo-footer" class="top">
             @if (isDeveloper)
             {
@@ -126,12 +135,21 @@
 
             <div class="border"></div>
             <div id="roles-buttons">
-                @if (isDeveloper)
+                @if (isDeveloperSchool)
                 {
                     <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
-                >}<a class="demo-role-button" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
-                ><a class="demo-role-button" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
-                ><a class="demo-role-button" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
+                >}<a class="demo-role-button  @if (isStudent)
+                {
+                    @:active
+                }" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
+                ><a class="demo-role-button @if (isTeacher)
+                {
+                    @:active
+                }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
+                ><a class="demo-role-button @if (isAdmin)
+                {
+                    @:active
+                }" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
                 ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
                 ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
             </div>

@@ -55,13 +55,11 @@ NAMESPACE('chlk.activities.profile', function () {
                 var res = [];
 
                 res.push({
-                    id : primaryNode.getData('id'),
                     value: primaryNode.getValue(),
                     type : primaryNode.getData('type'),
                     isPrimary: true
                 });
                 res.push({
-                    id : homeNode.getData('id'),
                     value: homeNode.getValue(),
                     type : homeNode.getData('type'),
                     isPrimary: false
