@@ -214,21 +214,17 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var selected = parent.find('.option.selected');
                 selected.removeClass('selected');
                 node.addClass('selected');
-                node.parent('.row').addClass('reason-changed');
                 this.updateReasons();
             },
 
             VOID, function updateReasons(){
                 var option = this.dom.find('.option.selected:visible');
+                option.parent('.row').addClass('reason-changed');
                 var id = option.getData('id');
                 var grid = option.parent('.chlk-grid');
                 var form = option.parent('.student-attendance-form');
                 var row = option.parent('.row');
                 this.changeAttendance_(form.getData('person-id'), form.getData('type'), id);
-                //form.find('input[name=attendancereasonid]').setValue(id);
-                //form.setData('reason-id', id);
-        //        id && form.find('input[name=attendanceReasonDescription]').setValue(option.getHTML());
-//                form.trigger('submit');
                 grid.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
             },
 
