@@ -40,7 +40,7 @@ NAMESPACE('chlk.activities.person', function () {
             [ria.mvc.DomEventBind('keyup', '.people-search')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function filterKeyUp(node, event){
-                var value = node.getValue();
+                var value = node.getValue() || '';
                 if(value.length > 1){
                     this.submitFormWithStart(node);
                     this.dom.find('.people-search-img').addClass('opacity0');
