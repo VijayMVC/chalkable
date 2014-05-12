@@ -367,9 +367,19 @@ NAMESPACE('chlk.controllers', function (){
             var devId = this.getCurrentPerson().getId();
             return this.appsService
                 .createApp(devId, model.getName())
+                .catchError(function(error_){
+                    this.ShowMsgBox("App with this name already exists", "whoa.", [{
+                        text: 'Ok',
+                        controller: 'apps',
+                        action: 'general',
+                        params: [],
+                        color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                    }], 'center');
+                    return ria.async.BREAK;
+                }, this)
                 .attach(this.validateResponse_())
                 .then(function(){
-                    return this.Redirect('apps', 'details', []);
+                    return this.BackgroundNavigate('apps', 'details', []);
                 }, this);
         },
 
