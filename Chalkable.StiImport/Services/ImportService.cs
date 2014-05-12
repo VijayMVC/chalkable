@@ -37,20 +37,29 @@ namespace Chalkable.StiImport.Services
         public void Import()
         {
             //TODO: begin transaction
+            Log.LogInfo("start import");
             importedSchoolIds.Clear();
             personsForImportPictures.Clear();
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+            Log.LogInfo("download data to sync");
             DownloadSyncData();
+            Log.LogInfo("process inserts");
             ProcessInsert();
+            Log.LogInfo("process updates");
             ProcessUpdate();
+            Log.LogInfo("process pictures");
             ProcessPictures();
+            Log.LogInfo("process deletes");
             ProcessDelete();
+            Log.LogInfo("update versions");
             UpdateVersion();
             //TODO: end transaction
+            Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
             }
+            Log.LogInfo("import is completed");
         }
 
         private void ProcessPictures()
