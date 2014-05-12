@@ -544,6 +544,14 @@ BODY {
                         padding: 0;
                         margin: 0 3px 0 0;
                         letter-spacing: -1px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                      }
+
+                      &.calendar-items{
+                        >LI:first-child{
+                          margin-right: 20px;
+                        }
                       }
                     }
                   }
