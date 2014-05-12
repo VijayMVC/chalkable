@@ -29,7 +29,8 @@ mixin AnnouncementTooltip()
                 .left
                     +ActionLink('feed', 'list').back-button
                 .right
-                    +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
+                    if !self.getUserRole().isStudent()
+                        +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
         .announcement-details-panel
             .details-container.silver-panel
                 if self.getUserRole().isStudent()

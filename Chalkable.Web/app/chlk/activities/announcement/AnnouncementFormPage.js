@@ -84,6 +84,22 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            VOID, function doSaveTitle(tpl, model, msg_) {
+
+            },
+
+            [ria.mvc.DomEventBind('keydown', '#title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function titleKeyDown(node, event){
+                if(event.which == ria.dom.Keys.ENTER.valueOf()){
+                    var btn = this.dom.find('.save-title-btn');
+                    if(!btn.getAttr('disabled'))
+                        btn.trigger('click');
+                    return false;
+                }
+            },
+
             [ria.mvc.DomEventBind('keyup', '#title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleKeyUp(node, event){

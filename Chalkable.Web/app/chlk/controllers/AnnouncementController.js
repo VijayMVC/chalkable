@@ -589,7 +589,10 @@ NAMESPACE('chlk.controllers', function (){
                         return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
                     };break;
                 case 'saveTitle': this.announcementService
-                    .editTitle(model.getId(), model.getTitle());break;
+                    .editTitle(model.getId(), model.getTitle());
+                    res = new ria.async.DeferredData(new chlk.models.announcement.Announcement());
+                    return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
+                    break;
                 case 'checkTitle': var res = this.announcementService
                     .existsTitle(model.getTitle())
                     .then(function(success){
@@ -615,6 +618,7 @@ NAMESPACE('chlk.controllers', function (){
                             return this.ShadeLoader();
                     }
             }
+            return null;
         },
 
 
