@@ -22,27 +22,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-
-
-            var sys = Storage.SchoolYearStorage.GetAll();
-            foreach (var markingPeriod in markingPeriods)
-            {
-                var sy = sys.First(x => x.Id == markingPeriod.SchoolYearRef);
-                ValidateMarkingPeriodData(sy, markingPeriod.StartDate, markingPeriod.EndDate, markingPeriod.Id);
-            }
             return Storage.MarkingPeriodStorage.Update(markingPeriods);
-
-        }
-
-        private void ValidateMarkingPeriodData(SchoolYear sy, DateTime startDate,
-                                              DateTime endDate, int? id)
-        {
-            if (startDate > endDate)
-                throw new ChalkableException("Invalid date params. StartDate is bigger than EndDate");
-            if (Storage.MarkingPeriodStorage.IsOverlaped(sy.Id, startDate, endDate, id))
-                throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_CANT_OVERLAP);
-            if (!(sy.StartDate <= startDate && sy.EndDate >= endDate))
-                throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_INVALID_SCHOOL_YEAR);
         }
 
         public MarkingPeriod GetMarkingPeriodById(int id)

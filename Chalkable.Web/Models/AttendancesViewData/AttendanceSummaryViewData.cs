@@ -36,32 +36,34 @@ namespace Chalkable.Web.Models.AttendancesViewData
         {
 
             var res = new List<AbsentStatForMonthViewData>();
-
-            DateTime d = mp.StartDate;
-            while (d < mp.EndDate)
+            if (mp.StartDate.HasValue && mp.EndDate.HasValue)
             {
-                var atts = attendances.Where(
-                    x => x.Date.Month == d.Month && x.Date.Year == d.Year && x.IsAbsentOrLate).ToList();
-
-                var dic = new Dictionary<Pair<int, string>, int>();
-                foreach (var classAttendance in atts)
+                DateTime d = mp.StartDate.Value;
+                while (d < mp.EndDate)
                 {
-                    var p = new Pair<int, string>(classAttendance.Class.Id, classAttendance.Class.Name);
-                    if (!dic.ContainsKey(p))
-                        dic.Add(p, 0);
-                    dic[p] = dic[p] + 1;
-                }
-                var item = new AbsentStatForMonthViewData();
-                item.AbsentClasses = new List<AbsentStatForClassViewData>();
-                foreach (var pair in dic)
-                {
-                    var absentSt = AbsentStatForClassViewData.Create(pair.Key.First, pair.Key.Second, pair.Value);
-                    item.AbsentClasses.Add(absentSt);
-                }
-                item.Month = d;
-                res.Add(item);
+                    var atts = attendances.Where(
+                        x => x.Date.Month == d.Month && x.Date.Year == d.Year && x.IsAbsentOrLate).ToList();
 
-                d = d.AddMonths(1);
+                    var dic = new Dictionary<Pair<int, string>, int>();
+                    foreach (var classAttendance in atts)
+                    {
+                        var p = new Pair<int, string>(classAttendance.Class.Id, classAttendance.Class.Name);
+                        if (!dic.ContainsKey(p))
+                            dic.Add(p, 0);
+                        dic[p] = dic[p] + 1;
+                    }
+                    var item = new AbsentStatForMonthViewData();
+                    item.AbsentClasses = new List<AbsentStatForClassViewData>();
+                    foreach (var pair in dic)
+                    {
+                        var absentSt = AbsentStatForClassViewData.Create(pair.Key.First, pair.Key.Second, pair.Value);
+                        item.AbsentClasses.Add(absentSt);
+                    }
+                    item.Month = d;
+                    res.Add(item);
+
+                    d = d.AddMonths(1);
+                }    
             }
             return res;
         }

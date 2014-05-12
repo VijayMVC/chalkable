@@ -13,6 +13,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
             chlk.models.common.ChlkDate, 'created',
             chlk.models.common.ChlkDate, 'scheduled',
             chlk.models.common.ChlkDate, 'completed',
+            chlk.models.common.ChlkDate, 'started',
             [ria.serialize.SerializeProperty('taskstate')],
             chlk.models.bgtasks.BgTaskState, 'taskState',
             [ria.serialize.SerializeProperty('tasktype')],
