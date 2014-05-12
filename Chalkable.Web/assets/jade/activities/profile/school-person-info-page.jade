@@ -1,7 +1,6 @@
 .teacher-info.info-page.view-mode.loader-container
     .loader
-    -console.log(self.getUser())
-    +ProfileTopBar(self, 'info')
+    +UserProfileTopBar(self, 'info')
     +ProfileInfoView(self.getUser())
         //todo rewrite this
 
