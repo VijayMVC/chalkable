@@ -231,7 +231,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                         || fromPersonRole == CoreRoles.STUDENT_ROLE,
                         ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
                         MessageSubject = privateMessage.Subject,
-                        MessageSender = privateMessage.Sender
+                        SenderName = privateMessage.Sender.RoleRef == CoreRoles.STUDENT_ROLE.Id
+                                        ? privateMessage.Sender.FullName
+                                        : privateMessage.Sender.ShortSalutationName 
                     };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
                                                     NotificationType.Message, toPerson, null, null, null,
