@@ -7,7 +7,7 @@ namespace Chalkable.Web.Models
 {
     public class BackgroundTaskLogViewData
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public int Level { get; set; }
         public string Message { get; set; }
         public DateTime TimeStamp { get; set; }
@@ -16,7 +16,7 @@ namespace Chalkable.Web.Models
         {
             return new BackgroundTaskLogViewData
                        {
-                           Id = log.Id,
+                           Id = log.RowKey,
                            Level = log.Level,
                            Message = log.Message,
                            TimeStamp = log.Time
