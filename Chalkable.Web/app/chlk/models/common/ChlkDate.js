@@ -9,7 +9,7 @@ function getDate(str,a,b){
     else{
         if(str)
             return ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str));
-        var serverTime = new Date(window.serverTime);
+        var serverTime = new Date(window.serverTime.replace(/-/g, '/'));
         var now = new Date();
         if(serverTime.getDate() == now.getDate() && serverTime.getMonth() == now.getMonth() && serverTime.getFullYear() == now.getFullYear())
             return new Date();
