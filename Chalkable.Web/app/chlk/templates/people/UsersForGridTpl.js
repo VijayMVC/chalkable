@@ -10,6 +10,14 @@ NAMESPACE('chlk.templates.people', function () {
         [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
         'UsersForGridTpl', EXTENDS(chlk.templates.PaginatedList), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.people.User), 'items'
+            ArrayOf(chlk.models.people.User), 'items',
+
+            [[chlk.models.people.User]],
+            Boolean, function canViewInfo(user){
+                var currentRole = this.getUserRole();
+                var currentUser = this.getCurrentUser();
+                return !currentRole || !currentUser || currentUser.getId() == user.getId()
+                    || currentRole.isTeacher() || currentRole.isAdmin();
+            }
         ])
 });

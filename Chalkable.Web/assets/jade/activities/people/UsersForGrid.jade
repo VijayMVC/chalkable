@@ -1,7 +1,11 @@
 each item, i in self.getItems()
     -index = item.getIndex ? (item.getIndex() || i) : i;;
+    -console.log(self.getUserRole())
+    -console.log(self.getCurrentUser())
     .row(class=(index == 0 ? 'selected' : ''), index=index)
-        +ActionLink('user', 'infoByRole', item.getId(), item.getRole().getName()).left.image-container.white.shadow
+        +ActionLink('user', 'infoByRole', item.getId(), item.getRole().getName())(
+            disabled=self.canViewInfo(item) ? 'undefined' : 'disabled'
+        ).left.image-container.white.shadow
             +PersonImg(item, 47)
         p.left= item.getFullName()
         .right

@@ -16,7 +16,8 @@
                     label.people-search-close.opacity0
     .grid-container.loader-container
         +RenderWith(self.getModel(), chlk.templates.people.UsersGridTpl)(
-            userRole = self.getUserRole()
+            userRole = self.getUserRole(),
+            currentUser = self.getCurrentUser()
         )
 
 
