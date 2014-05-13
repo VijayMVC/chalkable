@@ -19,6 +19,14 @@ NAMESPACE('chlk.templates.people', function () {
             Number, 'start',
             Boolean, 'my',
 
+            OVERRIDE, chlk.models.common.Role, function getUserRole(){
+                return this.getModel().getCurrentUserRole();
+            },
+
+            OVERRIDE, chlk.models.people.User, function getCurrentUser(){
+                return this.getModel().getCurrentUser();
+            },
+
             String, function getTotalText(){
                 var users = this.getUsers();
                 var res = users.getTotalCount() + ' ';

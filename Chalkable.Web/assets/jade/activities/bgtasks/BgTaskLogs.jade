@@ -7,7 +7,7 @@
         +GridBody()
             each item in self.items.getItems()
                 +GridRow()
-                    .td= item.getId().valueOf()
+                    .td= item.getLevel().valueOf()
                     .td= item.getMessage()
                     .td= item.getTimeStamp() ? item.getTimeStamp().toString('dd/m/yy hh:min:ss') : ""
 

@@ -7,6 +7,9 @@ Button(type="submit", class="scroll-start-button x-hidden", name="submitType", v
     goTopButton = true, loadAllButtonTitle = 'LOAD ALL STUDENTS',
     loadAllPopUpTitle = 'Students',
     needGoToButton = true, needLoadAllButton = true).people-list
-    +RenderWith(self.getUsers(), chlk.templates.people.UsersForGridTpl)
+    +RenderWith(self.getUsers(), chlk.templates.people.UsersForGridTpl)(
+        userRole = self.getUserRole(),
+        currentUser = self.getCurrentUser()
+    )
 
 
