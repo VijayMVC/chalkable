@@ -3,6 +3,11 @@ REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.controls', function () {
 
+    chlk.controls.updateDatePicker = function (scope, node, value) {
+        var value = new chlk.models.common.ChlkDate(getDate(node.getValue()));
+        chlk.controls.DatePickerControl.prototype.updateDatePicker.call(scope, node, value, true);
+    };
+
     /** @class chlk.controls.DatePickerControl */
     CLASS(
         'DatePickerControl', EXTENDS(ria.mvc.DomControl), [
@@ -55,34 +60,41 @@ NAMESPACE('chlk.controls', function () {
                 return attrs;
             },
 
+            function updateDatePicker(node, value, options_, noClearValue_){
+                var options = options_ || node.getData('options');
+                this.reanimate_(node, options, value);
+                if(!value && !noClearValue_)
+                    node.setValue('');
+                node.off('change.datepiker');
+                node.on('change.datepiker', function(node, event){
+                    var options = node.getData('options');
+                    if(options.minDate){
+                        var min = getDate(options.minDate);
+                        if(getDate(node.getValue()) < min)
+                            node.setValue(new chlk.models.common.ChlkDate(min).format('mm/dd/yy'));
+                    }
+                    if(options.maxDate){
+                        var max = getDate(options.maxDate);
+                        if(getDate(node.getValue()) > max)
+                            node.setValue(new chlk.models.common.ChlkDate(max).format('mm/dd/yy'));
+                    }
+                })
+            },
+
             VOID, function queueReanimation_(id, options, value) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id);
-                        this.reanimate_(node, options, value, activity, model);
-                        if(!value)
-                            node.setValue('');
-                        node.off('change.datepiker');
-                        node.on('change.datepiker', function(node, event){
-                            var options = node.getData('options');
-                            if(options.minDate){
-                                var min = getDate(options.minDate);
-                                if(getDate(node.getValue()) < min)
-                                    node.setValue(new chlk.models.common.ChlkDate(min).format('mm/dd/yy'));
-                            }
-                            if(options.maxDate){
-                                var max = getDate(options.maxDate);
-                                if(getDate(node.getValue()) > max)
-                                    node.setValue(new chlk.models.common.ChlkDate(max).format('mm/dd/yy'));
-                            }
-                        })
+                        node.setData('options', options);
+                        this.updateDatePicker(node, value, options);
                     }.bind(this));
             },
 
-            [[ria.dom.Dom, Object, Object, ria.mvc.IActivity, Object]],
-            VOID, function reanimate_(node, options, value, activity, model) {
+            [[ria.dom.Dom, Object, Object]],
+            VOID, function reanimate_(node, options, value) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
                 node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value && value.getDate());
+                node.setData('control', this);
             }
         ]);
 });

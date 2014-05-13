@@ -22,8 +22,8 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/ListForWeekCalendar.jade')(this);
             },
 
-            [[chlk.models.common.ChlkDate]],
-            VOID, function addCalendar(date_)
+            [[chlk.models.common.ChlkDate, Boolean]],
+            VOID, function addCalendar(date_, needDatePickerUpdate_)
             {
                 if(this.getContext){
                     var calendarService = this.getContext().getService(chlk.services.CalendarService);
@@ -34,7 +34,12 @@ NAMESPACE('chlk.controls', function () {
                         var dom = new ria.dom.Dom('.announcement-week');
                         dom.setData('control', this);
                         dom.setData('date', date_ || null);
+                        var oldPicker = dom.find('#list-for-week-date');
+                        var scope = oldPicker.getData('control');
                         tpl.renderTo(dom.empty());
+                        if(needDatePickerUpdate_){
+                            chlk.controls.updateDatePicker(scope, dom.find('#list-for-week-date'), date_);
+                        }
                     }, this)
                 }
             },
@@ -44,8 +49,16 @@ NAMESPACE('chlk.controls', function () {
             function clickPrevNextBtn(node, event) {
                 var date = new chlk.models.common.ChlkDate(getDate(node.getData('date')));
                 new ria.dom.Dom('.announcement-week-loader').addClass('loading');
-                this.addCalendar(date);
+                this.addCalendar(date, true);
                 return false;
+            },
+
+            [ria.mvc.DomEventBind('change', '#list-for-week-date')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function dateChange(node, event) {
+                var date = new chlk.models.common.ChlkDate(getDate(node.getValue()));
+                new ria.dom.Dom('.announcement-week-loader').addClass('loading');
+                this.addCalendar(date, true);
             }
         ]);
 });
