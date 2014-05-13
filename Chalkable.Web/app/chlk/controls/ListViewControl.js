@@ -215,10 +215,10 @@ NAMESPACE('chlk.controls', function () {
             },
 
             VOID, function scrollToBottom_(){
-                jQuery('body').animate({ scrollTop: jQuery(document).height() }, 1000);
+                jQuery('body, html').animate({ scrollTop: jQuery(document).height() }, 1000);
             },
             VOID, function scrollToTop_(){
-                jQuery('body').animate({scrollTop: 0}, 1000);
+                jQuery('body, html').animate({scrollTop: 0}, 1000);
             },
 
             [ria.mvc.DomEventBind('click', '.back-top A,.back-top-arrow')],
