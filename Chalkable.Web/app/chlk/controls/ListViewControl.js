@@ -108,6 +108,7 @@ NAMESPACE('chlk.controls', function () {
                         if(this._loadAllButtonClicked){
                             this.scrollToBottom_();
                             this._loadAllButtonClicked = false;
+                            this.clearInterval_(this.getGrid());
                         }
                         if(isLastLoad){
                             this.hideLoadAllPopUp_(this.getGrid());
