@@ -1049,8 +1049,9 @@ BODY {
 .absent-late-page{
   margin-top: 24px;
 
+
   .highcharts-container{
-    top: 1px;
+    top: 13px;
     left: -32px;
   }
 
@@ -1060,6 +1061,9 @@ BODY {
 
   .chart-container{
     margin-bottom: 44px;
+    .wide-chart-bg{
+      top: 12px;
+    }
   }
 
   .student-with-picture{
