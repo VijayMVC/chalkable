@@ -139,6 +139,11 @@
     <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
     <Compile Include="Services\DemoSchool\DemoStorageBlobService.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassRoomOptionSorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoGradingScaleRangeStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoGradingScaleStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoBlobStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientDataStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoInfractionStorage.cs" />

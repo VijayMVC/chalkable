@@ -57,10 +57,8 @@ namespace Chalkable.Data.Common.Orm
             return primaryKeyFields;
         } 
 
-        private const string FULL_FIELD_NAME_FORMAT = "[{0}].[{1}]";
         private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
-        private const string ID_FIELD = "Id";
-
+        
         public static IList<string> FullFieldsNames(Type t)
         {
             return FullFieldsNames(t, t.Name);

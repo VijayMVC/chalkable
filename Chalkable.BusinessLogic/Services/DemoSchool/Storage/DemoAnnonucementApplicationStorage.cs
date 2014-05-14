@@ -6,18 +6,11 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementApplicationStorage:BaseDemoStorage<int ,AnnouncementApplication>
+    public class DemoAnnouncementApplicationStorage:BaseDemoIntStorage<AnnouncementApplication>
     {
         public DemoAnnouncementApplicationStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id, true)
         {
-        }
-
-        public void Add(AnnouncementApplication aa)
-        {
-            var id = GetNextFreeId();
-            aa.Id = id;
-            data.Add(aa.Id, aa);
         }
 
         public IList<AnnouncementApplication> GetAll(int announcementId, Guid applicationId, bool active)
@@ -27,12 +20,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     x =>
                         x.Value.AnnouncementRef == announcementId && x.Value.ApplicationRef == applicationId &&
                         x.Value.Active == active).Select(x => x.Value).ToList();
-        }
-
-        public void Update(AnnouncementApplication aa)
-        {
-            if (data.ContainsKey(aa.Id))
-                data[aa.Id] = aa;
         }
 
         public IList<AnnouncementApplication> GetAll(int announcementId, bool onlyActive)

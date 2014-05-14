@@ -5,10 +5,10 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoDistrictStorage: BaseDemoStorage<Guid ,District>
+    public class DemoDistrictStorage: BaseDemoGuidStorage<District>
     {
         public DemoDistrictStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id)
         {
         }
 

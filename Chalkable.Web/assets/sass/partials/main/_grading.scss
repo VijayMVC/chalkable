@@ -367,6 +367,11 @@ BODY {
                         display: inline-block;
                       }
                     }
+                    >A{
+                      &:nth-child(11n + 1):not(:nth-child(1)){
+                        margin-right: 0;
+                      }
+                    }
                   }
 
                   .students-line{
@@ -416,7 +421,7 @@ BODY {
                   margin: 0 8px 7px 0;
                   vertical-align: top;
 
-                  &:nth-child(11n + 1):not(:nth-child(1)), &:last-child{
+                  &:last-child{
                       margin-right: 0;
                   }
 

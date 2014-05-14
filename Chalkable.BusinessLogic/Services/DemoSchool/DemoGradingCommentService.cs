@@ -1,35 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoGradingCommentService : BaseDemoStorage<int, GradingComment>, IGradingCommentService
+    public class DemoGradingCommentService : BaseDemoIntStorage<GradingComment>, IGradingCommentService
     {
-        public DemoGradingCommentService(IServiceLocator serviceLocator, DemoStorage demoStorage) : base(demoStorage)
+        public DemoGradingCommentService(IServiceLocator serviceLocator, DemoStorage demoStorage) : base(demoStorage, x => x.Id, true)
         {
         }
 
-        public void Add(IList<GradingComment> gradingComments)
+        public new void Add(IList<GradingComment> gradingComments)
         {
-            foreach (var gc in gradingComments)
-            {
-                gc.Id = GetNextFreeId();
-                data.Add(gc.Id, gc);
-            }
+            base.Add(gradingComments);
         }
 
         public void Edit(IList<GradingComment> gradingComments)
         {
-            foreach (var gc in gradingComments)
-            {
-                if (data.ContainsKey(gc.Id))
-                    data[gc.Id] = gc;
-            }
+            Update(gradingComments);
         }
 
         public override void Setup()

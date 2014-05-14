@@ -7,32 +7,11 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAttendanceReasonStorage:BaseDemoStorage<int ,AttendanceReason>
+    public class DemoAttendanceReasonStorage:BaseDemoIntStorage<AttendanceReason>
     {
-        public DemoAttendanceReasonStorage(DemoStorage storage) : base(storage)
+        public DemoAttendanceReasonStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
-
-        public void Add(IList<AttendanceReason> reasons)
-        {
-            foreach (var attendanceReason in reasons)
-            {
-                if (!data.ContainsKey(attendanceReason.Id))
-                    data.Add(attendanceReason.Id, attendanceReason);
-            }
-        }
-
-        public void Update(IList<AttendanceReason> reasons)
-        {
-            foreach (var attendanceReason in reasons)
-            {
-                if (data.ContainsKey(attendanceReason.Id))
-                {
-                    data[attendanceReason.Id] =  attendanceReason;
-                }
-            }
-        }
-
 
         public override void Setup()
         {
@@ -171,7 +150,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     AttendanceLevelReasons = Storage.AttendanceLevelReasonStorage.GetForAttendanceReason(12)
                 }
             };
-
 
             Add(reasons);
         }

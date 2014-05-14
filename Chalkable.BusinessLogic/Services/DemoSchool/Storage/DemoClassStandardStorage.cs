@@ -5,19 +5,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassStandardStorage:BaseDemoStorage<int, ClassStandard>
+    public class DemoClassStandardStorage:BaseDemoIntStorage<ClassStandard>
     {
-        public DemoClassStandardStorage(DemoStorage storage) : base(storage)
+        public DemoClassStandardStorage(DemoStorage storage) : base(storage, null, true)
         {
-        }
-
-        public IList<ClassStandard> Add(IList<ClassStandard> classStandards)
-        {
-            foreach (var classStandard in classStandards)
-            {
-                data.Add(GetNextFreeId(), classStandard);
-            }
-            return classStandards;
         }
 
         public void Delete(IList<ClassStandard> classStandards)

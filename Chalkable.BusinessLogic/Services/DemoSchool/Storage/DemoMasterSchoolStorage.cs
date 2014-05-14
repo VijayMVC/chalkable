@@ -6,9 +6,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoMasterSchoolStorage:BaseDemoStorage<Guid, Data.Master.Model.School>
+    public class DemoMasterSchoolStorage:BaseDemoGuidStorage<Data.Master.Model.School>
     {
-        public DemoMasterSchoolStorage(DemoStorage storage) : base(storage)
+        public DemoMasterSchoolStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -17,31 +17,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new NotImplementedException();
         }
 
-        public void Add(Data.Master.Model.School school)
-        {
-            if (!data.ContainsKey(school.Id))
-                data[school.Id] = school;
-        }
-
         public Data.Master.Model.School GetByIdOrNull(Guid id)
         {
             return data.ContainsKey(id) ? data[id] : null;
-        }
-
-        public void Add(IList<Data.Master.Model.School> schools)
-        {
-            foreach (var school in schools)
-            {
-                Add(school);
-            }
-        }
-
-        public void Update(List<Data.Master.Model.School> schools)
-        {
-            foreach (var school in schools)
-            {
-                Update(school);
-            }
         }
 
         public static Data.Master.Model.School CreateMasterSchool(Guid id)
@@ -54,13 +32,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Name = "SMITH"
             };
         }
-
-        public void Update(Data.Master.Model.School school)
-        {
-            if (data.ContainsKey(school.Id))
-                data[school.Id] = school;
-        }
-
 
         public override void Setup()
         {

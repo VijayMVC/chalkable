@@ -7,10 +7,10 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
-    public class DemoStiGradeBookStorage:BaseDemoStorage<int, Gradebook>
+    public class DemoStiGradeBookStorage:BaseDemoIntStorage<Gradebook>
     {
         public DemoStiGradeBookStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, null, true)
         {
 
         }
@@ -115,8 +115,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                     }
                 };
 
-                data.Add(GetNextFreeId(), gb1);
-                data.Add(GetNextFreeId(), gb2);
+                Add(gb1);
+                Add(gb2);
             }
          
             

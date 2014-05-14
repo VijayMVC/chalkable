@@ -48,12 +48,15 @@ namespace Chalkable.BusinessLogic.Services
 
         public void DeleteBlob(string blobAddress)
         {
-            new BlobHelper().DeleteBlob(new Uri(blobAddress));
+            var bh = new BlobHelper();
+            bh.DeleteBlob(new Uri(blobAddress));
         }
 
         public void DeleteBlob(string containderName, string key)
         {
-            new BlobHelper().DeleteBlob(containderName, key);
+            var bh = new BlobHelper();
+            if (bh.Exists(containderName, key))
+                bh.DeleteBlob(containderName, key);
         }
     }
 }

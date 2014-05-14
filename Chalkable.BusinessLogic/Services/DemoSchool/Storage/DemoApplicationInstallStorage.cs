@@ -15,26 +15,11 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoApplicationInstallStorage:BaseDemoStorage<int, ApplicationInstall>
+    public class DemoApplicationInstallStorage:BaseDemoIntStorage<ApplicationInstall>
     {
         public DemoApplicationInstallStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id, true)
         {
-        }
-
-        public void Add(List<ApplicationInstall> appInstall)
-        {
-            foreach (var applicationInstall in appInstall)
-            {
-                Add(applicationInstall);
-            }
-        }
-
-        public void Add(ApplicationInstall appInstall)
-        {
-            appInstall.Id = GetNextFreeId();
-            appInstall.Active = true;
-            data[appInstall.Id] = appInstall;
         }
 
         public IList<ApplicationInstall> GetAll(int personId)
@@ -277,14 +262,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 }));
             }
             return result;
-        }
-
-
-        public void Update(ApplicationInstall appInst)
-        {
-            if (data.ContainsKey(appInst.Id))
-                data[appInst.Id] = appInst;
-
         }
 
         public IEnumerable<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int userId, int roleId)

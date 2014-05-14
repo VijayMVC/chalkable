@@ -6,9 +6,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStudentParentStorage:BaseDemoStorage<int, StudentParent>
+    public class DemoStudentParentStorage:BaseDemoIntStorage<StudentParent>
     {
-        public DemoStudentParentStorage(DemoStorage storage) : base(storage)
+        public DemoStudentParentStorage(DemoStorage storage) : base(storage, null, true)
         {
         }
 
@@ -17,10 +17,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var studentParent = new StudentParent
             {
                 ParentRef = parentId,
-                StudentRef = studentId
+                StudentRef = studentId,
+                Id = GetNextFreeId()
             };
  
-            data.Add(GetNextFreeId(), studentParent);
+            data.Add(studentParent.Id, studentParent);
             return studentParent;
         }
 

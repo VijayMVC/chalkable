@@ -5,9 +5,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassPersonStorage:BaseDemoStorage<int, ClassPerson>
+    public class DemoClassPersonStorage:BaseDemoIntStorage<ClassPerson>
     {
-        public DemoClassPersonStorage(DemoStorage storage) : base(storage)
+        public DemoClassPersonStorage(DemoStorage storage) : base(storage, null, true)
         {
         }
 
@@ -19,19 +19,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 var item = data.First(x => x.Value == classPerson);
                 data.Remove(item.Key);
-            }
-        }
-
-        public void Add(ClassPerson classPerson)
-        {
-            data.Add(GetNextFreeId(), classPerson);
-        }
-
-        public void Add(IList<ClassPerson> classPersons)
-        {
-            foreach (var classPerson in classPersons)
-            {
-                Add(classPerson);
             }
         }
 

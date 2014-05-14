@@ -350,20 +350,21 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function calculateGradesAvg(announcement){
-            var model = announcement.getStudentAnnouncements();
+            var studentAnnouncements = announcement.getStudentAnnouncements();
+            if (!studentAnnouncements) return;
+
             var gradedStudentCount = 0, sum = 0, numericGrade;
-            model.getItems().forEach(function(item){
+            var items = studentAnnouncements.getItems() || [];
+            items.forEach(function(item){
                 numericGrade = item.getNumericGradeValue();
                 if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
                     gradedStudentCount++;
                     sum += (numericGrade || 0);
                 }
             });
-            model.setGradedStudentCount(gradedStudentCount);
-            if(gradedStudentCount)
-                model.setClassAvg(Math.floor(sum / gradedStudentCount + 0.5));
-            else
-                model.setClassAvg(null);
+            studentAnnouncements.setGradedStudentCount(gradedStudentCount);
+            var classAvg = gradedStudentCount ? Math.floor(sum / gradedStudentCount + 0.5) : null;
+            studentAnnouncements.setClassAvg(classAvg);
         },
 
         [[chlk.models.id.AnnouncementId]],
@@ -476,14 +477,22 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
         },
 
+        function cancelDeleteAction(){
+            this.disableAnnouncementSaving(false);
+            return null;
+        },
+
         [[chlk.models.id.AnnouncementId, String]],
         function deleteAction(announcementId, typeName) {
             this.disableAnnouncementSaving(true);
-            return this.ShowMsgBox('You are about to delete this item.\n'+
+            this.ShowMsgBox('You are about to delete this item.\n'+
                     'All grades and attachments for this ' + typeName + ' will\n' +
                     'be gone forever.\n' +
                     'Are you sure?', 'whoa.', [{
                 text: "Cancel",
+                controller: 'announcement',
+                action: 'cancelDelete',
+                params:[],
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
             }, {
                 text: 'Delete',
@@ -492,6 +501,7 @@ NAMESPACE('chlk.controllers', function (){
                 params: [announcementId.valueOf()],
                 color: chlk.models.common.ButtonColor.RED.valueOf()
             }]);
+            return null;
         },
 
         [[chlk.models.id.AnnouncementId]],

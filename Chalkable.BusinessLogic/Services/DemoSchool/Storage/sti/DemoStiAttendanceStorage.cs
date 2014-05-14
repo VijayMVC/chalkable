@@ -7,10 +7,10 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
-    public class DemoStiAttendanceStorage:BaseDemoStorage<int, SectionAttendance>
+    public class DemoStiAttendanceStorage:BaseDemoIntStorage<SectionAttendance>
     {
         public DemoStiAttendanceStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, null, true)
         {
         }
 

@@ -7,28 +7,15 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassPeriodStorage:BaseDemoStorage<int, ClassPeriod>
+    public class DemoClassPeriodStorage:BaseDemoIntStorage<ClassPeriod>
     {
-        public DemoClassPeriodStorage(DemoStorage storage) : base(storage)
+        public DemoClassPeriodStorage(DemoStorage storage) : base(storage, null, true)
         {
         }
 
         public bool Exists(ClassPeriodQuery classPeriodQuery)
         {
             return GetClassPeriods(classPeriodQuery).Count > 0;
-        }
-
-        public void Add(ClassPeriod res)
-        {
-            data.Add(GetNextFreeId(), res);
-        }
-
-        public void Add(IList<ClassPeriod> classPeriods)
-        {
-            foreach (var classPeriod in classPeriods)
-            {
-                Add(classPeriod);
-            }
         }
 
         public void FullDelete(int periodId, int classId, int dayTypeId)

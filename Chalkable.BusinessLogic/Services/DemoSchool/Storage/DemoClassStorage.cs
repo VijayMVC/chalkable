@@ -9,38 +9,10 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoClassStorage:BaseDemoStorage<int , Class>
+    public class DemoClassStorage:BaseDemoIntStorage<Class>
     {
-        public DemoClassStorage(DemoStorage storage) : base(storage)
+        public DemoClassStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
-        }
-
-        public void Add(Class cClass)
-        {
-            if (!data.ContainsKey(cClass.Id))
-                data[cClass.Id] = cClass;
-        }
-
-        public void Add(IList<Class> classes)
-        {
-            foreach (var cls in classes)
-            {
-                Add(cls);
-            }
-        }
-
-        public void Update(Class cClass)
-        {
-            if (data.ContainsKey(cClass.Id))
-                data[cClass.Id] = cClass;
-        }
-
-        public void Update(IList<Class> classes)
-        {
-            foreach (var cls in classes)
-            {
-                Update(cls);
-            }
         }
 
         public override void Setup()

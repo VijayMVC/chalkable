@@ -7,9 +7,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoPhoneStorage: BaseDemoStorage<int, Phone>
+    public class DemoPhoneStorage: BaseDemoIntStorage<Phone>
     {
-        public DemoPhoneStorage(DemoStorage storage) : base(storage)
+        public DemoPhoneStorage(DemoStorage storage) : base(storage, null, true)
         {
         }
 
@@ -26,12 +26,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .First();
         }
 
-        public Phone Add(Phone phone)
-        {
-            data.Add(GetNextFreeId(), phone);
-            return phone;
-        }
-
         public void Update(Phone phone, string digitOnlyValue, int personId)
         {
             var phones =
@@ -44,42 +38,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public IList<Phone> Add(IList<Phone> phones)
-        {
-            foreach (var phone in phones)
-            {
-                Add(phone);
-            }
-            return phones;
-        }
-
-        public IList<Phone> Update(IList<Phone> phones)
-        {
-            foreach (var phone in phones)
-            {
-                var item = data.First(x => x.Value == phone);
-                data[item.Key] = phone;
-            }
-            return phones;
-        }
-
         public IList<Phone> GetAll(int personId)
         {
             return data.Where(x => x.Value.PersonRef == personId).Select(x => x.Value).ToList();
-        }
-
-        public void Delete(Phone phone)
-        {
-            var item = data.First(x => x.Value == phone);
-            Delete(item.Key);
-        }
-
-        public void Delete(IList<Phone> toList)
-        {
-            foreach (var phone in toList)
-            {
-                Delete(phone);
-            }
         }
 
         public override void Setup()

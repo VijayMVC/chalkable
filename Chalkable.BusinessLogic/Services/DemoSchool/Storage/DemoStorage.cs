@@ -61,7 +61,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoInfractionStorage InfractionStorage { get; private set; }
         public DemoAnnouncementRecipientDataStorage AnnouncementRecipientDataStorage{ get; private set; }
         public DemoBlobStorage BlobStorage { get; private set; }
-        
+        public DemoGradingScaleStorage GradingScaleStorage { get; private set; }
+        public DemoGradingScaleRangeStorage GradingScaleRangeStorage { get; private set; }
+        public DemoClassRoomOptionStorage ClassRoomOptionStorage { get; private set; }
 
         public DemoStiDisciplineStorage StiDisciplineStorage { get; private set; }
         public DemoStiStandardScoreStorage StiStandardScoreStorage { get; private set; }
@@ -72,13 +74,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStiInfractionStorage StiInfractionStorage { get; private set; }
         public DemoStiActivityStorage StiActivityStorage { get; private set; }
 
-
         public UserContext Context { get; private set; }
-
-
         public int SchoolId { get; private set; }
-
-       
 
         public void UpdateContext(UserContext context)
         {
@@ -157,6 +154,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementRecipientDataStorage = new DemoAnnouncementRecipientDataStorage(this);
             BlobStorage = new DemoBlobStorage(this);
 
+            GradingScaleRangeStorage = new DemoGradingScaleRangeStorage(this);
+            GradingScaleStorage = new DemoGradingScaleStorage(this);
             StiDisciplineStorage = new DemoStiDisciplineStorage(this);
             StiStandardScoreStorage = new DemoStiStandardScoreStorage(this);
             StiGradeBookStorage = new DemoStiGradeBookStorage(this);
@@ -165,7 +164,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StiActivityScoreStorage = new DemoStiActivityScoreStorage(this);
             StiInfractionStorage = new DemoStiInfractionStorage(this);
             StiActivityStorage = new DemoStiActivityStorage(this);
-
+            
             AnnouncementStorage = CreateAnnouncementStorage(Context, this);
             Setup();
         }
@@ -206,6 +205,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             SchoolYearStorage.Setup();
             AlphaGradeStorage.Setup();
             AnnouncementStorage.Setup();
+            GradingScaleStorage.Setup();
+            GradingScaleRangeStorage.Setup();
         }
     }
     

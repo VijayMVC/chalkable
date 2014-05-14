@@ -9,9 +9,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoPrivateMessageStorage:BaseDemoStorage<int ,PrivateMessage>
+    public class DemoPrivateMessageStorage:BaseDemoIntStorage<PrivateMessage>
     {
-        public DemoPrivateMessageStorage(DemoStorage storage) : base(storage)
+        public DemoPrivateMessageStorage(DemoStorage storage) : base(storage, x => x.Id, true)
         {
         }
 
@@ -91,12 +91,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return new PaginatedList<PrivateMessageDetails>(msgs.ToList(), start / count, count);
         }
 
-        public void Add(PrivateMessage message)
-        {
-            message.Id = GetNextFreeId();
-            data.Add(message.Id, message);
-        }
-
         public PrivateMessageDetails GetDetailsById(int id, int userLocalId)
         {
             var msg =
@@ -133,16 +127,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         x.Value.ToPersonRef == callerId && x.Value.DeletedByRecipient == false)
                     .Select(x => x.Value)
                     .ToList();
-        }
-
-        public void Update(IList<PrivateMessage> messages)
-        {
-            foreach (var privateMessage in messages)
-            {
-                if (data.ContainsKey(privateMessage.Id))
-                    data[privateMessage.Id] = privateMessage;
-
-            }          
         }
 
         public override void Setup()

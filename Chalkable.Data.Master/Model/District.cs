@@ -23,6 +23,7 @@ namespace Chalkable.Data.Master.Model
         public string ServerUrl { get; set; }
         public Guid? SisDistrictId { get; set; }
         public string SisRedirectUrl { get; set; }
+        public DateTime? LastSync { get; set; }
 
         [NotDbFieldAttr]
         public bool IsDemoDistrict { get; set; }

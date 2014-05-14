@@ -100,6 +100,20 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
 
+            [ria.mvc.DomEventBind('click', '.drawer-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function drawerIconClick(node, event){
+                var dropDown = this.dom.find('.new-item-dropdown');
+                if(!dropDown.is(':visible')){
+                    node.setCss("opacity", 1);
+                    this.dom.find('#list-last-button').trigger('click');
+
+                }else{
+                    node.setCss("opacity", 0.5);
+                    dropDown.addClass('x-hidden');
+                }
+            },
+
             [ria.mvc.DomEventBind('focus keydown keyup', '#content')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function showDropDown(node, event){

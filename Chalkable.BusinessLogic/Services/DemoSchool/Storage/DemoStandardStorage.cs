@@ -5,19 +5,15 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStandardStorage:BaseDemoStorage<int ,Standard>
+    public class DemoStandardStorage:BaseDemoIntStorage<Standard>
     {
-        public DemoStandardStorage(DemoStorage storage) : base(storage)
+        public DemoStandardStorage(DemoStorage storage) : base(storage, x => x.Id, true)
         {
         }
 
         public void AddStandards(IList<Standard> standards)
         {
-            foreach (var standard in standards)
-            {
-                standard.Id = GetNextFreeId();
-                data[standard.Id] = standard;
-            }
+            Add(standards);
         }
 
         public IList<Standard> GetStandarts(StandardQuery query)
@@ -44,15 +40,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
             return standards.ToList();
-        }
-
-        public void Update(IList<Standard> standards)
-        {
-            foreach (var standard in standards)
-            {
-                if (data.ContainsKey(standard.Id))
-                    data[standard.Id] = standard;
-            }
         }
 
         public override void Setup()

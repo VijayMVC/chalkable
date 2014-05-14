@@ -4,10 +4,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementRecipientDataStorage:BaseDemoStorage<int, AnnouncementRecipientData>
+    public class DemoAnnouncementRecipientDataStorage:BaseDemoIntStorage<AnnouncementRecipientData>
     {
         public DemoAnnouncementRecipientDataStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id)
         {
 
         }
@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     StarredAutomatically = starredAutomatically.HasValue && starredAutomatically.Value == 1,
 
                 };
-                data.Add(annRecipient.Id, annRecipient);
+                Add(annRecipient);
             }
         }
 

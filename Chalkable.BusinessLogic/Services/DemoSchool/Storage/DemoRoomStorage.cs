@@ -6,24 +6,15 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoRoomStorage:BaseDemoStorage<int, Room>
+    public class DemoRoomStorage:BaseDemoIntStorage<Room>
     {
-        public DemoRoomStorage(DemoStorage storage) : base(storage)
+        public DemoRoomStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
-
-        public void Add(Room room)
-        {
-            if (!data.ContainsKey(room.Id))
-                data.Add(room.Id, room);
-        }
-
+        
         public void AddRooms(IList<Room> rooms)
         {
-            foreach (var room in rooms)
-            {
-                Add(room);
-            }
+            Add(rooms);
         }
 
         public Room Edit(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber)
@@ -41,14 +32,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             var rooms = data.Select(x => x.Value).ToList().Skip(start).Take(count);
             return new PaginatedList<Room>(rooms, start / count, count, data.Count);
-        }
-
-        public void Update(IList<Room> rooms)
-        {
-            foreach (var room in rooms.Where(room => data.ContainsKey(room.Id)))
-            {
-                data[room.Id] = room;
-            }
         }
 
         public override void Setup()

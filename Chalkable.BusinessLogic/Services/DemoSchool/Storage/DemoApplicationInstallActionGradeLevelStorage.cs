@@ -9,26 +9,11 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoApplicationInstallActionGradeLevelStorage:BaseDemoStorage<int, ApplicationInstallActionGradeLevel>
+    public class DemoApplicationInstallActionGradeLevelStorage:BaseDemoIntStorage<ApplicationInstallActionGradeLevel>
     {
         public DemoApplicationInstallActionGradeLevelStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id, true)
         {
-        }
-
-        public void Add(List<ApplicationInstallActionGradeLevel> appInstall)
-        {
-            foreach (var applicationInstall in appInstall)
-            {
-                Add(applicationInstall);
-            }
-        }
-
-        public void Add(ApplicationInstallActionGradeLevel appInstall)
-        {
-            var id = GetNextFreeId();
-            appInstall.Id = id;
-            data[appInstall.Id] = appInstall;
         }
 
         public override void Setup()

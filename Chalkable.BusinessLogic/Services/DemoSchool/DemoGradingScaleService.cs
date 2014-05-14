@@ -15,27 +15,27 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void AddGradingScales(IList<GradingScale> gradingScales)
         {
-            throw new NotImplementedException();
+            Storage.GradingScaleStorage.Add(gradingScales);
         }
 
         public void EditGradingScales(IList<GradingScale> gradingScales)
         {
-            throw new NotImplementedException();
+            Storage.GradingScaleStorage.Edit(gradingScales);
         }
 
         public void DeleteGradingScales(IList<int> gradingScalesIds)
         {
-            throw new NotImplementedException();
+            Storage.GradingScaleStorage.Delete(gradingScalesIds);
         }
 
         public void AddGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            throw new NotImplementedException();
+            Storage.GradingScaleRangeStorage.Add(gradingScaleRanges);
         }
 
         public void EditGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            throw new NotImplementedException();
+            Storage.GradingScaleRangeStorage.Edit(gradingScaleRanges);
         }
 
         public void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleAlphaGradeIds)

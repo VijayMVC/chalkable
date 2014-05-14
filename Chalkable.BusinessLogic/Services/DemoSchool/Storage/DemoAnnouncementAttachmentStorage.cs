@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -21,9 +20,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public int? Id { get; set; }
     }
 
-    public class DemoAnnouncementAttachmentStorage:BaseDemoStorage<int, AnnouncementAttachment>
+    public class DemoAnnouncementAttachmentStorage:BaseDemoIntStorage<AnnouncementAttachment>
     {
-        public DemoAnnouncementAttachmentStorage(DemoStorage storage) : base(storage)
+        public DemoAnnouncementAttachmentStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -96,12 +95,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return attachments.ToList();
         } 
-
-        public void Add(AnnouncementAttachment annAtt)
-        {
-            if (!data.ContainsKey(annAtt.Id))
-                data[annAtt.Id] = annAtt;
-        }
 
         public IList<AnnouncementAttachment> GetList(int userId, int roleId, string name)
         {
