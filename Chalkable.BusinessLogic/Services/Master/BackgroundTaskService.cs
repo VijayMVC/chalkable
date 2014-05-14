@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
             public void Log(int level, string message)
             {
-                var now = DateTime.Now;
+                var now = DateTime.UtcNow;
                 items.Add(new BackgroundTaskLogItem
                     {
                         BackgroundTaskId = backgroundTaskId,

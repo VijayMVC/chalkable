@@ -54,12 +54,22 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("update versions");
             UpdateVersion();
             //TODO: end transaction
+            UpdateDistrictLastSync();
             Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
             }
             Log.LogInfo("import is completed");
+        }
+
+        private void UpdateDistrictLastSync()
+        {
+            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for import");
+            var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
+            d.LastSync = DateTime.UtcNow;
+            ServiceLocatorMaster.DistrictService.Update(d);
         }
 
         private void ProcessPictures()
