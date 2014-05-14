@@ -5,6 +5,7 @@ namespace Chalkable.Data.School.Model
 {
     public class Infraction
     {
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
