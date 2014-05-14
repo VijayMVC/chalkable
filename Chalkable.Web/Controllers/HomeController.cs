@@ -127,6 +127,10 @@ namespace Chalkable.Web.Controllers
                         ViewData[ViewConstants.IS_DEV] = true;
 
                 }
+                ViewData[ViewConstants.LAST_SYNC_DATE] = district.LastSync.HasValue 
+                    ? district.LastSync.Value.ToString("yyyy/MM/dd h:MM:ss")
+                    : "";
+
             }
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();

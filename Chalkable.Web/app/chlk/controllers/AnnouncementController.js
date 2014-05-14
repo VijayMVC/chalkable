@@ -477,14 +477,22 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
         },
 
+        function cancelDeleteAction(){
+            this.disableAnnouncementSaving(false);
+            return null;
+        },
+
         [[chlk.models.id.AnnouncementId, String]],
         function deleteAction(announcementId, typeName) {
             this.disableAnnouncementSaving(true);
-            return this.ShowMsgBox('You are about to delete this item.\n'+
+            this.ShowMsgBox('You are about to delete this item.\n'+
                     'All grades and attachments for this ' + typeName + ' will\n' +
                     'be gone forever.\n' +
                     'Are you sure?', 'whoa.', [{
                 text: "Cancel",
+                controller: 'announcement',
+                action: 'cancelDelete',
+                params:[],
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
             }, {
                 text: 'Delete',
@@ -493,6 +501,7 @@ NAMESPACE('chlk.controllers', function (){
                 params: [announcementId.valueOf()],
                 color: chlk.models.common.ButtonColor.RED.valueOf()
             }]);
+            return null;
         },
 
         [[chlk.models.id.AnnouncementId]],

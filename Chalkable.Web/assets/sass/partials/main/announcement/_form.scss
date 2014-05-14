@@ -615,25 +615,31 @@ BODY {
               }
             }
 
-            .new-item-dropdown{
-              .all-filles-icon{
-                position: absolute;
+            .left-block{
+              position: relative;
+              .drawer-icon{
                 background: url(images/announcement/all-files-icon.png) 0 0 no-repeat;
-                width: 10px;
-                right: 5px;
-                top: -22px;
+                width: 20px;
+                height: 20px;
+                right: 37px;
+                top: 93px;
+                position: absolute;
+                cursor: pointer;
+                opacity: 0.5;
               }
+            }
 
+            .new-item-dropdown{
               position: absolute;
               background: white;
-              width: 372px;
+              width: 375px;
               z-index: 999;
               border: 1px solid #a9a9a9;
               font-size: 14px;
               font-family: "Arial Narrow", Arial;
               color: #000;
               padding-left: 6px;
-              top: 294px;
+              top: 116px;
 
               >DIV{
                 height: 20px;
