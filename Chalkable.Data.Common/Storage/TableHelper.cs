@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Chalkable.Common;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Chalkable.Data.Common.Storage
@@ -39,7 +36,7 @@ namespace Chalkable.Data.Common.Storage
         {
             var t = GetTable();
             var rangeQuery = new TableQuery<T>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, key)).Take(start + count);
-            var res = t.ExecuteQuery(rangeQuery).Skip(start).ToList();
+            var res = t.ExecuteQuery(rangeQuery);
             return new PaginatedList<T>(res, start / count, count);
         }
 

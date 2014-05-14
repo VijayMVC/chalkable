@@ -69,9 +69,6 @@ namespace Chalkable.Data.Common.Storage
             var blobCl = GetBlobClient();
             var container = blobCl.GetContainerReference(containerAddress);
             container.CreateIfNotExists();
-            //BlobContainerPermissions permissions = new BlobContainerPermissions();
-            //permissions.
-            //container.SetPermissions();
             var blob = container.GetBlockBlobReference(BuildBlobAddress(containerAddress, key));
             blob.UploadFromStream(new MemoryStream(content));
         }
@@ -80,32 +77,36 @@ namespace Chalkable.Data.Common.Storage
         {
             var client = GetBlobClient();
             var blob = client.GetBlobReferenceFromServer(blobAddress);
-            if (!blob.Exists())
-                throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_NAME_NOT_EXISTS);
             blob.Delete();
         }
-        
-        public void DeleteBlob(string containderName, string key)
+
+        private CloudBlockBlob GetBlockBlob(string containerName, string key)
         {
             var client = GetBlobClient();
-            var container = client.GetContainerReference(containderName);
-            
-            if(!container.Exists())
+            var container = client.GetContainerReference(containerName);
+            if (!container.Exists())
                 throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_NAME_NOT_EXISTS);
+            var blob = container.GetBlockBlobReference(BuildBlobAddress(containerName, key));
+            return blob;
+        }
 
-            var blob = container.GetBlobReferenceFromServer(BuildBlobAddress(containderName, key));
+        public bool Exists(string containerName, string key)
+        {
+            var blob = GetBlockBlob(containerName, key);
+            return blob.Exists();
+        }
+        
+        public void DeleteBlob(string containerName, string key)
+        {
+            var blob = GetBlockBlob(containerName, key);
             if(!blob.Exists())
                 throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_ADDRESS_NOT_EXISTS);
             blob.Delete();
         }
         
-        public byte[] GetBlobContent(string containerAddress, string key)
+        public byte[] GetBlobContent(string containerName, string key)
         {
-            var blobCl = GetBlobClient();
-            var container = blobCl.GetContainerReference(containerAddress);
-            if (!container.Exists())
-                throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_NAME_NOT_EXISTS);
-            var blob = container.GetBlockBlobReference(BuildBlobAddress(containerAddress, key));
+            var blob = GetBlockBlob(containerName, key);
             if (!blob.Exists())
                 throw new BlobNotFoundException(ChlkResources.ERR_BLOB_WITH_ADDRESS_NOT_EXISTS);
 
