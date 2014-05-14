@@ -36,9 +36,7 @@ namespace Chalkable.Web.Controllers
             var schoolYearId = GetCurrentSchoolYearId();
             var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
             var sisUrl = district.SisRedirectUrl;
-            var url = string.Format(
-                    "{0}InformationNow/TokenLogin.aspx?Token={1}&AcadSessionId={2}"
-                    , sisUrl, Context.SisToken, schoolYearId);
+            var url = UrlTools.UrlCombine(sisUrl, string.Format("TokenLogin.aspx?Token={0}&AcadSessionId={1}", Context.SisToken, schoolYearId));
             return Redirect(url);
         }
 
