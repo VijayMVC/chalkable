@@ -6,18 +6,11 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementQnAStorage:BaseDemoStorage<int, AnnouncementQnAComplex>
+    public class DemoAnnouncementQnAStorage:BaseDemoIntStorage<AnnouncementQnAComplex>
     {
         public DemoAnnouncementQnAStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id, true)
         {
-        }
-
-        public void Add(AnnouncementQnAComplex annQnA)
-        {
-            annQnA.Id = GetNextFreeId();
-            if (!data.ContainsKey(annQnA.Id))
-                data[annQnA.Id] = annQnA;
         }
 
         public AnnouncementQnAQueryResult GetAnnouncementQnA(AnnouncementQnAQuery announcementQnAQuery)
@@ -46,12 +39,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 AnnouncementQnAs = qnas.ToList(),
                 Query = announcementQnAQuery
             };
-        }
-
-        public void Update(AnnouncementQnAComplex annQnA)
-        {
-            if (data.ContainsKey(annQnA.Id))
-                data[annQnA.Id] = annQnA;
         }
 
         public override void Setup()

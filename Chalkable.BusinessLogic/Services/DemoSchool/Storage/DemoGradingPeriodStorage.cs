@@ -6,33 +6,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoGradingPeriodStorage:BaseDemoStorage<int, GradingPeriod>
+    public class DemoGradingPeriodStorage:BaseDemoIntStorage<GradingPeriod>
     {
-        public DemoGradingPeriodStorage(DemoStorage storage) : base(storage)
+        public DemoGradingPeriodStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
-        }
-
-        public void Add(IList<GradingPeriod> gradingPeriods)
-        {
-            foreach (var gradingPeriod in gradingPeriods)
-            {
-                if (!data.ContainsKey(gradingPeriod.Id))
-                    data[gradingPeriod.Id] = gradingPeriod;
-            }
-        }
-
-        public void Update(IList<GradingPeriod> gradingPeriods)
-        {
-            foreach (var gradingPeriod in gradingPeriods)
-            {
-                data[gradingPeriod.Id] = gradingPeriod;
-            }
         }
 
         public override void Setup()
         {
-
-
             var currentYear = DateTime.Now.Year;
 
             var gpList = new List<GradingPeriod>

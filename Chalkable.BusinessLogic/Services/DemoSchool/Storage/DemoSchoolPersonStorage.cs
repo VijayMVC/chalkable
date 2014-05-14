@@ -4,9 +4,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoSchoolPersonStorage:BaseDemoStorage<int, SchoolPerson>
+    public class DemoSchoolPersonStorage:BaseDemoIntStorage<SchoolPerson>
     {
-        public DemoSchoolPersonStorage(DemoStorage storage) : base(storage)
+        public DemoSchoolPersonStorage(DemoStorage storage) : base(storage, null, true)
         {
 
         }
@@ -17,14 +17,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (roleId.HasValue)
                 persons = data.Where(x => x.Value.RoleRef == roleId);
             return persons.Select(x => x.Value).First();
-        }
-
-        public void Add(IList<SchoolPerson> assignments)
-        {
-            foreach (var schoolPerson in assignments)
-            {
-                data.Add(GetNextFreeId(), schoolPerson);
-            }
         }
 
         public bool Exists(int personId, int roleRef, int? schoolRef)

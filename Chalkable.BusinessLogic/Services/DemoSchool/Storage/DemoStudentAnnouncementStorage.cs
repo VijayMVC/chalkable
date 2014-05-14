@@ -6,37 +6,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStudentAnnouncementStorage:BaseDemoStorage<int, StudentAnnouncement>
+    public class DemoStudentAnnouncementStorage:BaseDemoIntStorage<StudentAnnouncement>
     {
-        public DemoStudentAnnouncementStorage(DemoStorage storage) : base(storage)
+        public DemoStudentAnnouncementStorage(DemoStorage storage) : base(storage, null, true)
         {
-        }
-
-        public void Add(StudentAnnouncement an)
-        {
-            data.Add(GetNextFreeId(), an);
-        }
-
-        public void Add(IList<StudentAnnouncement> studentAnnouncements)
-        {
-            foreach (var studentAnnouncement in studentAnnouncements)
-            {
-                Add(studentAnnouncement);
-            }
-        }
-
-        public void Update(StudentAnnouncement sa)
-        {
-            var studentAnnouncement = data.First(x => x.Value == sa);
-            data[studentAnnouncement.Key] = sa;
-        }
-
-        public void Update(IList<StudentAnnouncement> announcements)
-        {
-            foreach (var studentAnnouncement in announcements)
-            {
-                Update(studentAnnouncement);
-            }
         }
 
         public void Update(int announcementId, bool drop)

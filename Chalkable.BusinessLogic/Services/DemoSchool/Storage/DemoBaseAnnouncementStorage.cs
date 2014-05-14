@@ -34,9 +34,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     }
 
 
-    public abstract class DemoBaseAnnouncementStorage : BaseDemoStorage<int, AnnouncementComplex>, IDemoAnnouncementStorage
+    public abstract class DemoBaseAnnouncementStorage : BaseDemoIntStorage<AnnouncementComplex>, IDemoAnnouncementStorage
     {
-        protected DemoBaseAnnouncementStorage(DemoStorage storage):base(storage)
+        protected DemoBaseAnnouncementStorage(DemoStorage storage):base(storage, x => x.Id)
         {
             if (storage.AnnouncementStorage != null && !storage.AnnouncementStorage.IsEmpty())
             {
@@ -52,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         data[item.Key] = item.Value;
                     }
                 }
-                index = oldData.Count;
+                Index = oldData.Count;
             }
             storage.UpdateAnnouncementStorage(this);
         }

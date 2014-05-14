@@ -7,10 +7,10 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
-    public class DemoStiStandardScoreStorage:BaseDemoStorage<int, StandardScore>
+    public class DemoStiStandardScoreStorage:BaseDemoIntStorage<StandardScore>
     {
         public DemoStiStandardScoreStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, null, true)
         {
         }
 
@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public override void Setup()
         {
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 1,
                 GradingPeriodId = 1,
@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StandardId = 1
             });
 
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 1,
                 GradingPeriodId = 2,
@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StandardId = 1
             });
 
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 1,
                 GradingPeriodId = 3,
@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StandardId = 1
             });
 
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 1,
                 GradingPeriodId = 4,
@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StandardId = 1
             });
 
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 2,
                 GradingPeriodId = 1,
@@ -83,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StandardId = 1
             });
 
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 2,
                 GradingPeriodId = 2,
@@ -91,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StandardId = 1
             });
 
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 2,
                 GradingPeriodId = 3,
@@ -99,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StandardId = 1
             });
 
-            data.Add(GetNextFreeId(), new StandardScore
+            Add(new StandardScore
             {
                 SectionId = 2,
                 GradingPeriodId = 4,

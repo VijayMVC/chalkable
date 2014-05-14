@@ -5,9 +5,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoSchoolYearStorage:BaseDemoStorage<int, SchoolYear>
+    public class DemoSchoolYearStorage:BaseDemoIntStorage<SchoolYear>
     {
-        public DemoSchoolYearStorage(DemoStorage storage) : base(storage)
+        public DemoSchoolYearStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -58,24 +58,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Add(year);
             }
-        }
-
-        public IList<SchoolYear> Update(IList<SchoolYear> list)
-        {
-            foreach (var schoolYear in list)
-            {
-                if (data.ContainsKey(schoolYear.Id))
-                {
-                    data[schoolYear.Id] = schoolYear;
-                }
-            }
-            return list;
-        }
-
-        public void Add(SchoolYear schoolYear)
-        {
-            if (!data.ContainsKey(schoolYear.Id))
-                data[schoolYear.Id] = schoolYear;
         }
 
         public override void Setup()

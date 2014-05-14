@@ -6,22 +6,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoPeriodStorage:BaseDemoStorage<int, Period>
+    public class DemoPeriodStorage:BaseDemoIntStorage<Period>
     {
-        public DemoPeriodStorage(DemoStorage storage) : base(storage)
+        public DemoPeriodStorage(DemoStorage storage) : base(storage, x => x.Id, true)
         {
-        }
-
-        public void Add(Period period)
-        {
-            if (!data.ContainsKey(period.Id))
-                data[period.Id] = period;
-        }
-
-        public void Update(Period period)
-        {
-            if (data.ContainsKey(period.Id))
-                data[period.Id] = period;
         }
 
         public Period GetPeriodOrNull(int time, int schoolYearId)
@@ -40,23 +28,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return data.Where( x => x.Value.SchoolYearRef == schoolYearId).Select( x => x.Value).ToList();
         }
 
-        public void Add(IList<Period> periods)
-        {
-            foreach (var period in periods)
-            {
-                Add(period);
-            }
-        }
-
-        public IList<Period> Update(IList<Period> periods)
-        {
-            foreach (var period in periods)
-            {
-                Update(period);
-            }
-            return periods;
-        }
-
         public IList<Period> RegeneratePeriods(IList<Guid> markingPeriodIds, int? startTime, int? length, int? lengthBetweenPeriods, int? periodCount)
         {
             throw new NotImplementedException();
@@ -66,7 +37,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             Add(new Period
             {
-                Id = GetNextFreeId(),
                 StartTime = 615,
                 EndTime = 659,
                 Order = 1,
@@ -76,7 +46,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new Period
             {
-                Id = GetNextFreeId(),
                 StartTime = 663,
                 EndTime = 707,
                 Order = 2,
@@ -86,7 +55,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new Period
             {	
-                Id = GetNextFreeId(),
                 StartTime = 710,
                 EndTime = 740,
                 Order = 3,
@@ -96,7 +64,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new Period
             {	
-                Id = GetNextFreeId(),
                 StartTime = 744,
                 EndTime = 783,
                 Order = 4,
@@ -106,7 +73,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             	
             Add(new Period
             {
-                Id = GetNextFreeId(),
                 StartTime = 787,
                 EndTime = 826,
                 Order = 5,
@@ -116,7 +82,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new Period
             {	
-                Id = GetNextFreeId(),
                 StartTime = 830,
                 EndTime = 869,
                 Order = 6,
@@ -126,7 +91,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new Period
             {	
-                Id = GetNextFreeId(),
                 StartTime = 873,
                 EndTime = 912,
                 Order = 7,
@@ -136,7 +100,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new Period
             {	
-                Id = GetNextFreeId(),
                 StartTime = 916,
                 EndTime = 955,
                 Order = 8,
@@ -146,7 +109,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new Period
             {
-                Id = GetNextFreeId(),
                 StartTime = 959,
                 EndTime = 1000,
                 Order = 9,

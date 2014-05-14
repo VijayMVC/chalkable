@@ -6,9 +6,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoNotificationStorage:BaseDemoStorage<int, Notification>
+    public class DemoNotificationStorage:BaseDemoIntStorage<Notification>
     {
-        public DemoNotificationStorage(DemoStorage storage) : base(storage)
+        public DemoNotificationStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -59,28 +59,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             }
             return new PaginatedList<NotificationDetails>(nfDetails, notificationQuery.Start / notificationQuery.Count, notificationQuery.Count, data.Count);
-        }
-
-        public void Update(IList<Notification> notifications)
-        {
-            foreach (var notification in notifications)
-            {
-                var item = data.First(x => x.Value == notification);
-                data[item.Key] = notification;
-            }
-        }
-
-        public void Add(IList<Notification> notifications)
-        {
-            foreach (var notification in notifications)
-            {
-                Add(notification);
-            }
-        }
-
-        public void Add(Notification notification)
-        {
-            data.Add(GetNextFreeId(), notification);
         }
 
         public override void Setup()

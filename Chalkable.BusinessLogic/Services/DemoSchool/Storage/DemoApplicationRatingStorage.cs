@@ -6,21 +6,15 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoApplicationRatingStorage:BaseDemoStorage<Guid, ApplicationRating>
+    public class DemoApplicationRatingStorage:BaseDemoGuidStorage<ApplicationRating>
     {
-        public DemoApplicationRatingStorage(DemoStorage storage) : base(storage)
+        public DemoApplicationRatingStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
         public bool Exists(Guid applicationId, Guid userId)
         {
             return data.Count(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId) == 1;
-        }
-
-        public void Add(ApplicationRating appRating)
-        {
-            if (!data.ContainsKey(appRating.Id))
-                data[appRating.Id] = appRating;
         }
 
         public IList<ApplicationRating> GetAll(Guid applicationId)

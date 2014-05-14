@@ -5,9 +5,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementStandardStorage:BaseDemoStorage<int, AnnouncementStandard>
+    public class DemoAnnouncementStandardStorage:BaseDemoIntStorage<AnnouncementStandard>
     {
-        public DemoAnnouncementStandardStorage(DemoStorage storage) : base(storage)
+        public DemoAnnouncementStandardStorage(DemoStorage storage) : base(storage, null)
         {
         }
 

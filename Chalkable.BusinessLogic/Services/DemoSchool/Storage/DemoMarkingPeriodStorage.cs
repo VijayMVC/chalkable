@@ -5,9 +5,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoMarkingPeriodStorage : BaseDemoStorage<int, MarkingPeriod>
+
+    public class DemoMarkingPeriodStorage : BaseDemoIntStorage<MarkingPeriod>
     {
-        public DemoMarkingPeriodStorage(DemoStorage storage) : base(storage)
+        public DemoMarkingPeriodStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -24,12 +25,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public MarkingPeriod GetMarkingPeriod(DateTime date)
         {
             return data.Where(x => x.Value.StartDate >= date && date <= x.Value.EndDate).Select(x => x.Value).First();
-        }
-
-        public void Add(MarkingPeriod mp)
-        {
-            if (!data.ContainsKey(mp.Id))
-                data[mp.Id] = mp;
         }
 
         public bool IsOverlaped(int id, DateTime startDate, DateTime endDate, int? i)
@@ -50,12 +45,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public void Update(MarkingPeriod mp)
-        {
-            if (data.ContainsKey(mp.Id))
-                data[mp.Id] = mp;
-        }
-
         public void ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
         {
             throw new NotImplementedException();
@@ -69,24 +58,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.Where(x => x.Value.SchoolYearRef == mp.SchoolYearRef && x.Value.StartDate > mp.StartDate)
                     .Select(x => x.Value)
                     .First();
-        }
-
-        public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
-        {
-            foreach (var mp in markingPeriods)
-            {
-                Add(mp);
-            }
-            return markingPeriods;
-        }
-
-        public IList<MarkingPeriod> Update(IList<MarkingPeriod> markingPeriods)
-        {
-            foreach (var mp in markingPeriods)
-            {
-                Update(mp);
-            }
-            return markingPeriods;
         }
 
         public override void Setup()

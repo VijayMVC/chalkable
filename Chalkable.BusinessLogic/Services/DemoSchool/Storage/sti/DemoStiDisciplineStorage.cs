@@ -7,9 +7,9 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
-    public class DemoStiDisciplineStorage:BaseDemoStorage<int, DisciplineReferral>
+    public class DemoStiDisciplineStorage:BaseDemoIntStorage<DisciplineReferral>
     {
-        public DemoStiDisciplineStorage(DemoStorage storage) : base(storage)
+        public DemoStiDisciplineStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -20,15 +20,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public DisciplineReferral Create(DisciplineReferral stiDiscipline)
         {
-            if (!data.ContainsKey(stiDiscipline.Id))
-                data[stiDiscipline.Id] = stiDiscipline;
+            Add(stiDiscipline);
             return stiDiscipline;
-        }
-
-        public void Update(DisciplineReferral stiDiscipline)
-        {
-            if (data.ContainsKey(stiDiscipline.Id))
-                data[stiDiscipline.Id] = stiDiscipline;
         }
 
         public override void Setup()

@@ -7,10 +7,10 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoAnnouncementReminderStorage:BaseDemoStorage<int, AnnouncementReminder>
+    public class DemoAnnouncementReminderStorage:BaseDemoIntStorage<AnnouncementReminder>
     {
         public DemoAnnouncementReminderStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id)
         {
         }
 
@@ -22,39 +22,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .ToList();
         }
 
-        public void Add(AnnouncementReminder reminder)
-        {
-            if (!data.ContainsKey(reminder.Id))
-                data[reminder.Id] = reminder;
-        }
-
-        public void Delete(AnnouncementReminder reminder)
-        {
-            Delete(reminder.Id);
-        }
-
         public AnnouncementReminder GetById(int reminderId, int userId)
         {
             return data.Where(x => x.Value.Id == reminderId && x.Value.PersonRef == userId).Select(x => x.Value).First();
         }
 
-        public void Update(AnnouncementReminder reminder)
-        {
-            if (data.ContainsKey(reminder.Id))
-                data[reminder.Id] = reminder;
-        }
-
         public IList<AnnouncementReminder> GetRemindersToProcess(DateTime nowSchoolTime, int count)
         {
             throw new NotImplementedException();
-        }
-
-        public void Update(IList<AnnouncementReminder> annReminders)
-        {
-            foreach (var annReminder in annReminders)
-            {
-                Update(annReminder);
-            }
         }
 
         public void DeleteByAnnouncementId(int id)

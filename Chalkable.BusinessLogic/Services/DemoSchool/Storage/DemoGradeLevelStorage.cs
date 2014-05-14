@@ -6,9 +6,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoGradeLevelStorage:BaseDemoStorage<int, GradeLevel>
+    public class DemoGradeLevelStorage:BaseDemoIntStorage<GradeLevel>
     {
-        public DemoGradeLevelStorage(DemoStorage storage) : base(storage)
+        public DemoGradeLevelStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -16,29 +16,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             var schoolGradeLevels = Storage.SchoolGradeLevelStorage.GetAll(schoolId).Select(x => x.GradeLevelRef).ToList();
             return data.Where(x => schoolGradeLevels.Contains(x.Value.Id)).Select(x => x.Value).ToList();
-        }
-
-        public void Add(GradeLevel gradeLevel)
-        {
-            if (!data.ContainsKey(gradeLevel.Id))
-                data[gradeLevel.Id] = gradeLevel;
-        }
-
-        public void Add(IList<GradeLevel> gradeLevels)
-        {
-            foreach (var level in gradeLevels)
-            {
-                Add(level);
-            }
-        }
-
-        public void Update(IList<GradeLevel> gradeLevels)
-        {
-            foreach (var gradeLevel in gradeLevels)
-            {
-                if (data.ContainsKey(gradeLevel.Id))
-                    data[gradeLevel.Id] = gradeLevel;
-            }
         }
 
         public override void Setup()

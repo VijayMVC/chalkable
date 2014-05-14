@@ -7,33 +7,11 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoInfractionStorage:BaseDemoStorage<int, Infraction>
+    public class DemoInfractionStorage:BaseDemoIntStorage<Infraction>
     {
         public DemoInfractionStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, x => x.Id, true)
         {
-        }
-
-        public void Add(IList<Infraction> infractions)
-        {
-            foreach (var infraction in infractions)
-            {
-                if (!data.ContainsKey(infraction.Id))
-                {
-                    data[infraction.Id] = infraction;
-                }
-            }
-        }
-
-        public void Update(IList<Infraction> infractions)
-        {
-            foreach (var infraction in infractions)
-            {
-                if (data.ContainsKey(infraction.Id))
-                {
-                    data[infraction.Id] = infraction;
-                }
-            }
         }
 
         public IList<Infraction> GetAll(bool onlyActive)
@@ -53,7 +31,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Code = "FI",
                 Demerits = 0,
                 Description = "Fighting",
-                Id = GetNextFreeId(),
                 IsActive = true,
                 IsSystem = false,
                 Name = "Fighting"
@@ -64,7 +41,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Code = "DI",
                 Demerits = 0,
                 Description = "Disrespect",
-                Id = GetNextFreeId(),
                 IsActive = true,
                 IsSystem = false,
                 Name = "Disrespect"

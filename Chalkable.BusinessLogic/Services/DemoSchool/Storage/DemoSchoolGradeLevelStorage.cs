@@ -5,17 +5,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoSchoolGradeLevelStorage:BaseDemoStorage<int, SchoolGradeLevel>
+    public class DemoSchoolGradeLevelStorage:BaseDemoIntStorage<SchoolGradeLevel>
     {
-        public DemoSchoolGradeLevelStorage(DemoStorage storage) : base(storage)
+        public DemoSchoolGradeLevelStorage(DemoStorage storage) : base(storage, null, true)
         {
         }
-
-        public void Add(SchoolGradeLevel schoolGradeLevel)
-        {
-            data.Add(GetNextFreeId(), schoolGradeLevel);
-        }
-
+        
         public IList<SchoolGradeLevel> GetAll(int? schoolId)
         {
             return data.Where(x => x.Value.SchoolRef == schoolId).Select(x => x.Value).ToList();

@@ -7,10 +7,10 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
-    public class DemoStiSeatingChartStorage:BaseDemoStorage<int, KeyValuePair<int, SeatingChart>>
+    public class DemoStiSeatingChartStorage:BaseDemoIntStorage<KeyValuePair<int, SeatingChart>>
     {
         public DemoStiSeatingChartStorage(DemoStorage storage)
-            : base(storage)
+            : base(storage, null, true)
         {
 
         }
@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             //todo: filter by marking period
             if (data.Count(x => x.Value.Key == markingPeriodId && x.Value.Value.SectionId == classId) == 0)
             {
-                data.Add(GetNextFreeId(), new KeyValuePair<int, SeatingChart>(markingPeriodId, seatingChart));
+                Add(new KeyValuePair<int, SeatingChart>(markingPeriodId, seatingChart));
             }
             var item = data.First(x => x.Value.Value.SectionId == classId && x.Value.Key == markingPeriodId).Key;
             data[item] = new KeyValuePair<int, SeatingChart>(markingPeriodId, seatingChart);
@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
             seats[0].StudentId = 1196;
 
-            data.Add(GetNextFreeId(),new KeyValuePair<int, SeatingChart>(1, new SeatingChart()
+            Add(new KeyValuePair<int, SeatingChart>(1, new SeatingChart()
             {
                 SectionId = 1,
                 Columns = 3,
@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 Seats = seats
             }));
 
-            data.Add(GetNextFreeId(), new KeyValuePair<int, SeatingChart>(2, new SeatingChart()
+            Add(new KeyValuePair<int, SeatingChart>(2, new SeatingChart()
             {
                 SectionId = 1,
                 Columns = 3,
@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 Seats = seats
             }));
 
-            data.Add(GetNextFreeId(), new KeyValuePair<int, SeatingChart>(1, new SeatingChart()
+            Add(new KeyValuePair<int, SeatingChart>(1, new SeatingChart()
             {
                 SectionId = 2,
                 Columns = 3,
@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 Seats = seats
             }));
 
-            data.Add(GetNextFreeId(), new KeyValuePair<int, SeatingChart>(2, new SeatingChart()
+            Add(new KeyValuePair<int, SeatingChart>(2, new SeatingChart()
             {
                 SectionId = 2,
                 Columns = 3,

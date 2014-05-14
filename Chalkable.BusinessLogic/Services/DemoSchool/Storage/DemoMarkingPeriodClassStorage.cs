@@ -6,9 +6,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoMarkingPeriodClassStorage:BaseDemoStorage<int, MarkingPeriodClass>
+    public class DemoMarkingPeriodClassStorage:BaseDemoIntStorage<MarkingPeriodClass>
     {
-        public DemoMarkingPeriodClassStorage(DemoStorage storage) : base(storage)
+        public DemoMarkingPeriodClassStorage(DemoStorage storage) : base(storage, null, true)
         {
         }
 
@@ -38,19 +38,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 mpcs = mpcs.Where(x => x.MarkingPeriodRef == markingPeriodClassQuery.MarkingPeriodId);
 
             return mpcs.ToList();
-        }
-
-        public void Add(MarkingPeriodClass mpc)
-        {
-            data.Add(GetNextFreeId(), mpc);
-        }
-
-        public void Add(IList<MarkingPeriodClass> markingPeriodClasses)
-        {
-            foreach (var markingPeriodClass in markingPeriodClasses)
-            {
-                Add(markingPeriodClass);
-            }
         }
 
         public bool Exists(int? classId, int? markingPeriodId)

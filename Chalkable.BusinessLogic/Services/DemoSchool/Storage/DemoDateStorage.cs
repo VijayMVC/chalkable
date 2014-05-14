@@ -6,9 +6,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoDateStorage:BaseDemoStorage<int ,Date>
+    public class DemoDateStorage:BaseDemoIntStorage<Date>
     {
-        public DemoDateStorage(DemoStorage storage) : base(storage)
+        public DemoDateStorage(DemoStorage storage) : base(storage, null, true)
         {
         }
 
@@ -25,14 +25,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<Date> GetDates(DateQuery dateQuery)
         {
             return GetDatesFiltered(dateQuery);
-        }
-
-        public void Add(IList<Date> days)
-        {
-            foreach (var date in days)
-            {
-                Add(date);
-            }
         }
 
         public void Delete(DateQuery query)
@@ -73,22 +65,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return dates.ToList();
         }
-
-        public void Add(Date days)
-        {
-            data.Add(GetNextFreeId(), days);
-        }
-
-        public void Update(IList<Date> dates)
-        {
-            foreach (var date in dates)
-            {
-                var item = data.First(x => x.Value == date);
-                data[item.Key] = date;
-            }
-        }
-
-
 
         private void AddMonth(int year, int month)
         {
