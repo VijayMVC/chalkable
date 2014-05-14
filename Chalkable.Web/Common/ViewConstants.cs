@@ -37,6 +37,7 @@ namespace Chalkable.Web.Common
         public const string UNSHOWN_NOTIFICATIONS_COUNT = "UnshownNotificationsCount";
 
         public const string VERSION = "Version";
+        public const string LAST_SYNC_DATE = "LastSyncDate";
         public const string CURR_SCHOOL_YEAR_ID = "CurrentSchoolYearId";
         public const string REDIRECT_URL_KEY = "RedirectUrl";
 

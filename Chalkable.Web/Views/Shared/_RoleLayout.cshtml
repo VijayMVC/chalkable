@@ -58,7 +58,8 @@
         <input type="hidden" value=" ServerDbTime:  @ViewData.GetValueOrNull("CurrentServerDBDateTime")"/>
 
         <div id="page-header">
-            Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+            Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
+            Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
         </div>
 
         <div id="logout-block">
