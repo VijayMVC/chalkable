@@ -24,7 +24,7 @@
             div
                 h5=Msg.Add_comment
                 .text-container
-                    textarea.comment-value
+                    textarea(maxlength=500).comment-value
                     .grading-comments-list
                 a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
                 a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
