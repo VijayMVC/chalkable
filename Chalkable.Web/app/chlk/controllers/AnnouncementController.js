@@ -186,7 +186,7 @@ NAMESPACE('chlk.controllers', function (){
                             item.setLate(currentItem.isLate());
                         }
                     });
-                    this.calculateGradesAvg(announcement);
+                    announcement.calculateGradesAvg();
                     this.getContext().getSession().set('announcement', announcement);
                     return new chlk.activities.announcement.UpdateAnnouncementItemViewModel(announcement, currentItem);
             }, this);
@@ -349,24 +349,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
-        function calculateGradesAvg(announcement){
-            var studentAnnouncements = announcement.getStudentAnnouncements();
-            if (!studentAnnouncements) return;
-
-            var gradedStudentCount = 0, sum = 0, numericGrade;
-            var items = studentAnnouncements.getItems() || [];
-            items.forEach(function(item){
-                numericGrade = item.getNumericGradeValue();
-                if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
-                    gradedStudentCount++;
-                    sum += (numericGrade || 0);
-                }
-            });
-            studentAnnouncements.setGradedStudentCount(gradedStudentCount);
-            var classAvg = gradedStudentCount ? Math.floor(sum / gradedStudentCount + 0.5) : null;
-            studentAnnouncements.setClassAvg(classAvg);
-        },
-
         [[chlk.models.id.AnnouncementId]],
         function viewAction(announcementId) {
             this.getView().reset();
@@ -396,7 +378,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     announcement.setAbleEdit(announcement.isAnnOwner());
 //                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
-                    this.calculateGradesAvg(announcement);
+                    announcement.calculateGradesAvg();
 
                     this.getContext().getSession().set('announcement', announcement);
                     return new ria.async.DeferredData(announcement);
