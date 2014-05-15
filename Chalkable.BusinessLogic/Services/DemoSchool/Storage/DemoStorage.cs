@@ -153,6 +153,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage(this);
             AnnouncementRecipientDataStorage = new DemoAnnouncementRecipientDataStorage(this);
             BlobStorage = new DemoBlobStorage(this);
+            ClassRoomOptionStorage = new DemoClassRoomOptionStorage(this);
 
             GradingScaleRangeStorage = new DemoGradingScaleRangeStorage(this);
             GradingScaleStorage = new DemoGradingScaleStorage(this);
