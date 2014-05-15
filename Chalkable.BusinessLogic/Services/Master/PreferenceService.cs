@@ -356,6 +356,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Type = PreferenceTypeEnum.ShortText,
                 Value = "Returns announcement data"
             });
+
+            res.Add(Preference.API_DESCR_ANNOUNCEMENT_TYPE_LIST, new PreferenceInfo
+            {
+                Category = PreferenceCategoryEnum.ControllerDescriptions,
+                Type = PreferenceTypeEnum.LongText,
+                Value = "Returns announcement types for particular class"
+            });
            
             res.Add(Preference.API_DESCR_FEED_LIST, new PreferenceInfo
             {
