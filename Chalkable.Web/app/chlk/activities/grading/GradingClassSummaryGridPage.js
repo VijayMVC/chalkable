@@ -870,12 +870,15 @@ NAMESPACE('chlk.activities.grading', function () {
                 activeCell.removeClass('active-cell');
                 activeCell.find('.grade-info').removeClass('empty-grade');
                 activeCell.find('.grading-input-popup').hide();
-                var model = this.serializeFromForm(form);
+                var model;
                 if(submitCurrent_)
                     form.trigger('submit');
+                var value = form.find('.value-input').getValue();
                 var that = this;
                 activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
                     var cell = item.parent('.grade-value');
+                    var model = that.getModelFromCell(cell);
+                    model.setGradeValue(value);
                     that.addFormToActiveCell(cell, model);
                     cell.find('form').trigger('submit');
                 });
