@@ -1,3 +1,4 @@
+normalValue = self.getModel().getNormalValue()
 +ActionForm('announcement', 'updateAnnouncementGradeFromGrid').grading-form
     +Hidden('comment', self.getComment())(
         data-comment = self.getComment()
@@ -5,7 +6,7 @@
     +Hidden('id', self.getId())
     +Hidden('announcementid', self.getAnnouncementId())
     +Hidden('studentid', self.getStudentId())
-    input(value=self.getModel().getNormalValue(), name="gradevalue", data-grade-value=self.getGradeValue(),).grade-autocomplete.value-input
+    input(value=normalValue, name="gradevalue", data-grade-value=self.getGradeValue(),).grade-autocomplete.value-input
     .grading-input-popup.chlk-pop-up-container.popup-bottom
         .pop-up-triangle.big
         if self.isAbleDropStudentScore()
@@ -19,4 +20,4 @@
         else
             +Hidden('isexempt', self.isExempt())
         +Hidden('isabsent', self.isAbsent())
-        +LabeledCheckbox(Msg.Fill, 'fill', false)(addCallBack = true, containerClass = "fill-grade-container").fill-grade
+        +LabeledCheckbox(Msg.Fill, 'fill', false, (normalValue === "" || normalValue === null))(addCallBack = true, containerClass = "fill-grade-container").fill-grade

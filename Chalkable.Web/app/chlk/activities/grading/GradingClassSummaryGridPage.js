@@ -350,9 +350,11 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
+                    node.parent().find('.fill-grade').setAttr('disabled', true);
                 }
                 else{
                     node.removeClass('empty-grade');
+                    node.parent().find('.fill-grade').setAttr('disabled', false);
                 }
                 if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){

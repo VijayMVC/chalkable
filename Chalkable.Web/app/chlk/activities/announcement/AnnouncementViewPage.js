@@ -452,13 +452,15 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
-                var value = node.getValue();
+                var value = (node.getValue() || '').trim();
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
+                    node.parent().find('.fill-grade').setAttr('disabled', true);
                 }
                 else{
                     node.removeClass('empty-grade');
+                    node.parent().find('.fill-grade').setAttr('disabled', false);
                 }
                 if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
