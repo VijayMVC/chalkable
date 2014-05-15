@@ -4,6 +4,7 @@
         .x-window-body
             .general-info
                 +ActionForm('message', 'send')
+                    +Hidden('inbox', self.isInbox())
                     .x-form-field
                         label To:
                         +SearchBox(chlk.services.PersonService, "getPersons", chlk.templates.messages.RecipientAutoComplete)#recipientId(

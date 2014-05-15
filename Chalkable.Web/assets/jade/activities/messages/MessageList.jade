@@ -2,7 +2,7 @@
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .left
-                +ActionLink('message', 'sendPage')#new-message-link
+                +ActionLink('message', 'sendPage', self.isInbox())#new-message-link
                     span New message
 
             .right
@@ -47,7 +47,7 @@
                                         +PersonImg(item.getRecipient(), 47)
 
                             .item
-                                +ActionLink('message', 'viewPage', item.getId())
+                                +ActionLink('message', 'viewPage', item.getId(), self.isInbox())
                                     h2
                                         if self.isInbox()
                                             =item.getSender().getFirstName() + " " + item.getSender().getLastName()

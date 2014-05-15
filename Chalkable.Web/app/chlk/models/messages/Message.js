@@ -21,6 +21,7 @@ NAMESPACE('chlk.models.messages', function () {
             Boolean, 'deleteByRecipient',
             chlk.models.people.User, 'sender',
             chlk.models.people.User, 'recipient',
+            Boolean, 'inbox',
 
 
             String, function getShortSubject(){
@@ -30,9 +31,11 @@ NAMESPACE('chlk.models.messages', function () {
                 return buildShortText(this.getBody(), 70);
             },
 
-            [[String, String, chlk.models.people.User, chlk.models.common.ChlkDate]],
-            function $(body_, subject_, recipient_, sent_){
+            [[Boolean, String, String, chlk.models.people.User, chlk.models.common.ChlkDate]],
+            function $(inbox_, body_, subject_, recipient_, sent_){
                 BASE();
+                if(inbox_)
+                    this.setInbox(inbox_);
                 if(body_)
                     this.setBody(body_);
                 if(subject_)

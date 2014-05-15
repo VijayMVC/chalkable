@@ -7,7 +7,7 @@
     .wrapper
         .buttons-row
             +ActionLink('calendar', 'month').one-third-button.calendar(title="View Calendar") Calendar
-            +ActionLink('message', 'page').one-third-button.messages(title="View Messages") Messages
+            +ActionLink('message', 'page', false, true).one-third-button.messages(title="View Messages") Messages
             +ActionLink('students', 'my').one-third-button.people(title="View People") People
         .buttons-row
             +ActionLink('grading', 'summaryAll').one-third-button.statistic(title="View Grades") Grades
