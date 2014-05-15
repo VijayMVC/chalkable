@@ -37,6 +37,26 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'gradable',
 
             [ria.serialize.SerializeProperty('cangrade')],
-            Boolean, 'ableToGrade'
+            Boolean, 'ableToGrade',
+
+            function calculateGradesAvg(){
+                var studentAnnouncements = this.getStudentAnnouncements();
+                if (!studentAnnouncements)
+                    return null;
+
+                var gradedStudentCount = 0, sum = 0, numericGrade;
+                var items = studentAnnouncements.getItems() || [];
+                items.forEach(function(item){
+                    numericGrade = item.getNumericGradeValue();
+                    if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
+                        gradedStudentCount++;
+                        sum += (numericGrade || 0);
+                    }
+                });
+                studentAnnouncements.setGradedStudentCount && studentAnnouncements.setGradedStudentCount(gradedStudentCount);
+                var classAvg = gradedStudentCount ? Math.floor(sum / gradedStudentCount + 0.5) : null;
+                studentAnnouncements.setClassAvg && studentAnnouncements.setClassAvg(classAvg);
+                return classAvg;
+            }
         ]);
 });

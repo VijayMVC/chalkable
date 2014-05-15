@@ -57,6 +57,7 @@ mixin DisplayTotalPoints(model)
             .max-score.dotted-h
             each totalPoint, i in totalPoints
                 div(row-index=i).dotted-h.grade-value=totalPoint
+            .dotted-h.grade-value
 
 
 .ann-types-container
@@ -102,4 +103,4 @@ mixin DisplayTotalPoints(model)
                         class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (announcement.isGradable() ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
                     ).dotted-h.grade-value
                         +TeacherClassGradingGridSummaryCell(info, maxScore, announcement.isGradable())
-                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.getAvg()
+                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.calculateGradesAvg()
