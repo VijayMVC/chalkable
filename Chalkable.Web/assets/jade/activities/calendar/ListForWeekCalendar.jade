@@ -11,13 +11,6 @@ nextDate = items[6].getDate().add(chlk.models.common.ChlkDateEnum.DAY, 1).format
     .controls
         A(href="#", data-date=prevDate).left-btn.list-for-week-btn
         .week=text
-            +DatePicker('listforweekdate', items[firstIndex].getDate())(
-                data-options={
-                    showOtherMonths: true,
-                    selectOtherMonths: true
-                },
-                readonly
-            )#list-for-week-date
         A(href="#", data-date=nextDate).right-btn.list-for-week-btn
     .wrapper
         each item,i in items

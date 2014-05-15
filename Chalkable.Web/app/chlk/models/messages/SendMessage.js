@@ -11,7 +11,8 @@ NAMESPACE('chlk.models.messages', function () {
         'SendMessage', [
             chlk.models.id.SchoolPersonId, 'recipientId',
             String, 'subject',
-            String, 'body'
+            String, 'body',
+            Boolean, 'inbox'
         ]);
 });
 

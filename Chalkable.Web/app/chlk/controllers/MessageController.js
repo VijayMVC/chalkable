@@ -25,7 +25,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('messages')],
             [[Boolean, Boolean, String, String, Number]],
             function pageAction(postback_, inbox_, role_, keyword_, start_) {
-
+                inbox_ = inbox_ || false;
                 var result = this.getMessages_(inbox_, role_, keyword_, start_);
                 //this.CloseView(chlk.activities.messages.ViewDialog);
                 return postback_ ?
@@ -34,7 +34,6 @@ NAMESPACE('chlk.controllers', function (){
             },
             [[Boolean, String, String, Number]],
             ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_){
-                inbox_ = inbox_ !== false;
                 role_ = role_ || null;
                 keyword_ = keyword_ || null;
 
@@ -83,8 +82,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('messages')],
-            [[chlk.models.id.MessageId]],
-            function sendPageAction(replayOnId_)
+            [[Boolean, chlk.models.id.MessageId]],
+            function sendPageAction(isInbox, replayOnId_)
             {
                 var res;
                 if (replayOnId_) {
@@ -92,6 +91,7 @@ NAMESPACE('chlk.controllers', function (){
                     res.then(function(model){
                         if(this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId()){
                             model = new ria.async.DeferredData(new chlk.models.messages.Message(
+                                isInbox,
                                 model.getBody(),
                                 model.getSubject(),
                                 model.getSender(),
@@ -103,15 +103,16 @@ NAMESPACE('chlk.controllers', function (){
 
                 }
                 else
-                    res = new ria.async.DeferredData(new chlk.models.messages.Message());
+                    res = new ria.async.DeferredData(new chlk.models.messages.Message(isInbox));
                 return this.ShadeView(chlk.activities.messages.AddDialog, res);
             },
 
-            [[chlk.models.id.SchoolPersonId, String, String]],
-            function sendToPersonAction(personId, firstName, lastName)
+            [[Boolean, chlk.models.id.SchoolPersonId, String, String]],
+            function sendToPersonAction(isInbox, personId, firstName, lastName)
             {
 
                 var model = new ria.async.DeferredData(new chlk.models.messages.Message(
+                    isInbox,
                     null,
                     null,
                     new chlk.models.people.User(firstName, lastName, personId)
@@ -122,23 +123,25 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.messages.SendMessage]],
             function sendAction(model)
             {
-                this.messageService
+                this.view.getCurrent().close();
+                var result = this.messageService
                     .send(model)
                     .attach(this.validateResponse_())
                     .then(function(x){
-                        this.view.getCurrent().close();
-                        this.pageAction(true);
+                        return this.getMessages_(model.isInbox());
                     }, this);
+                return this.UpdateView(chlk.activities.messages.MessageListPage, result);
             },
 
             [chlk.controllers.SidebarButton('messages')],
-            [[chlk.models.id.MessageId]],
-            function viewPageAction(id)
+            [[chlk.models.id.MessageId, Boolean]],
+            function viewPageAction(id, isInbox)
             {
                 var res = this.getMessageFromSession(id)
                     .then(function(model){
                         var isReplay = this.getCurrentPerson().getId() == model.getRecipient().getId();
                         model.setReplay(isReplay);
+                        model.setInbox(isInbox);
                         if(isReplay && !model.isRead()){
                             return this.messageService.markAs(id.valueOf().toString(), true)
                                 .then(function(isRead){

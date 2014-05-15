@@ -27,6 +27,9 @@ NAMESPACE('chlk.templates.messages', function () {
             chlk.models.people.User, 'recipient',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'sent'
+            chlk.models.common.ChlkDate, 'sent',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inbox'
         ])
 });

@@ -34,12 +34,12 @@ NAMESPACE('chlk.controls', function () {
                         var dom = new ria.dom.Dom('.announcement-week');
                         dom.setData('control', this);
                         dom.setData('date', date_ || null);
-                        var oldPicker = dom.find('#list-for-week-date');
-                        var scope = oldPicker.getData('control');
+                        //var oldPicker = dom.find('#list-for-week-date');
+                        //var scope = oldPicker.getData('control');
                         tpl.renderTo(dom.empty());
-                        if(needDatePickerUpdate_){
-                            chlk.controls.updateDatePicker(scope, dom.find('#list-for-week-date'), date_);
-                        }
+                        //if(needDatePickerUpdate_){
+                        //    chlk.controls.updateDatePicker(scope, dom.find('#list-for-week-date'), date_);
+                        //}
                     }, this)
                 }
             },
