@@ -16,6 +16,7 @@ namespace Chalkable.Data.School.Model
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
+        public string ClassNumber { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int? CourseRef { get; set; }

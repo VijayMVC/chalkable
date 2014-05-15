@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-           using (var uow = Update())
+            using (var uow = Update())
             {
                 var da = new ClassDataAccess(uow, Context.SchoolLocalId);
                 da.Insert(classes);

@@ -421,6 +421,7 @@ namespace Chalkable.StiImport.Services
                     Description = course.FullName,
                     GradeLevelRef = glId.Value,
                     Id = course.CourseID,
+                    ClassNumber = course.FullSectionNumber,
                     Name = course.ShortName,
                     SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
                     SchoolYearRef = course.AcadSessionID,

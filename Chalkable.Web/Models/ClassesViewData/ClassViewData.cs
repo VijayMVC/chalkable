@@ -9,6 +9,7 @@ namespace Chalkable.Web.Models.ClassesViewData
     public class ClassViewData
     {
         public int Id { get; set; }
+        public string ClassNumber { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid? DepartmentId { get; set; }
@@ -20,6 +21,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         protected ClassViewData(ClassDetails classComplex)
         {
             Id = classComplex.Id;
+            ClassNumber = classComplex.ClassNumber;
             Name = classComplex.Name;
             Description = classComplex.Description;
             DepartmentId = classComplex.ChalkableDepartmentRef;
