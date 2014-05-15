@@ -1,4 +1,6 @@
-﻿using Chalkable.Data.School.Model;
+﻿using System;
+using System.Linq;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
@@ -12,6 +14,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public override void Setup()
         {
            
+        }
+
+        public ClassroomOption GetByClassId(int classId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

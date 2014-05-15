@@ -15,22 +15,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<ClassroomOption> classroomOptions)
         {
-            throw new NotImplementedException();
+            Storage.ClassRoomOptionStorage.Add(classroomOptions);
         }
 
         public void Edit(IList<ClassroomOption> classroomOptions)
         {
-            throw new NotImplementedException();
+            Storage.ClassRoomOptionStorage.Update(classroomOptions);
         }
 
         public void Delete(IList<int> classroomOptionsIds)
         {
-            throw new NotImplementedException();
+            Storage.ClassRoomOptionStorage.Delete(classroomOptionsIds);
         }
 
         public ClassroomOption GetClassOption(int classId)
         {
-            throw new NotImplementedException();
+            return Storage.ClassRoomOptionStorage.GetByClassId(classId);
         }
     }
 }

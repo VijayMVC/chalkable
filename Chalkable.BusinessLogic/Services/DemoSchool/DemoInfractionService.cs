@@ -3,8 +3,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
