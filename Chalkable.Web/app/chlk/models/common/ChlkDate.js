@@ -27,7 +27,9 @@ function formatDate(date, format){
 
 
 function getDateDiffInDays(begin, end){
-    return Math.ceil((end - begin)/1000/3600/24);
+    var b = new Date(begin.getFullYear(), begin.getMonth(), begin.getDate());
+    var e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+    return Math.ceil((e - b)/1000/3600/24);
 }
 
 NAMESPACE('chlk.models.common', function () {
