@@ -87,7 +87,7 @@ NAMESPACE('chlk.controllers', function (){
             function summaryTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
-                var classes = this.classService.getClassesForTopBar(true);
+                var classes = this.classService.getClassesForTopBar(true, true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var result = this.gradingService
                     .getClassSummary(classId_)
@@ -115,7 +115,7 @@ NAMESPACE('chlk.controllers', function (){
             function standardsTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
-                var classes = this.classService.getClassesForTopBar(true);
+                var classes = this.classService.getClassesForTopBar(true, true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var model = new chlk.models.grading.GradingClassSummary();
                 model.setTopData(topData);
@@ -158,7 +158,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 this.getContext().getSession().set('currentClassId', classId_);
-                var classes = this.classService.getClassesForTopBar(true);
+                var classes = this.classService.getClassesForTopBar(true, true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var alphaGrades = classInfo.getAlphaGrades();
                 var alternateScores = this.getContext().getSession().get('alternateScores', []);
@@ -198,7 +198,7 @@ NAMESPACE('chlk.controllers', function (){
             function standardsGridTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
-                var classes = this.classService.getClassesForTopBar(true);
+                var classes = this.classService.getClassesForTopBar(true, true);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var alphaGrades = classInfo.getAlphaGradesForStandards();
@@ -228,7 +228,7 @@ NAMESPACE('chlk.controllers', function (){
                                 item.setClassId(classId_);
                             });
                         });
-                        var classes = this.classService.getClassesForTopBar(true);
+                        var classes = this.classService.getClassesForTopBar(true, true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                         var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
                         model.setGradingPeriodId(gradingPeriod.getId());
@@ -247,7 +247,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getTeacherSummary(teacherId)
                     .attach(this.validateResponse_())
                     .then(function(items){
-                        var classes = this.classService.getClassesForTopBar(true);
+                        var classes = this.classService.getClassesForTopBar(true, true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, null);
                         var model = new chlk.models.grading.GradingTeacherClassSummaryViewDataList(topData, items);
                         return model;
@@ -263,7 +263,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getStudentSummary(studentId, classId_)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var classes = this.classService.getClassesForTopBar(true);
+                        var classes = this.classService.getClassesForTopBar(true, true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                         model.setTopData(topData);
                         return model;

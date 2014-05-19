@@ -131,11 +131,13 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.attendance.UpdateSeatingChart]],
         function saveFromSeatingChartAction(model){
-            this.attendanceService.postSeatingChart(model.getDate(), JSON.parse(model.getSeatingChartInfo()))
+            var result = this.attendanceService.postSeatingChart(model.getDate(), JSON.parse(model.getSeatingChartInfo()))
                 .then(function(model){
-                    this.getView().pop();
-                }, this);
-            return this.ShadeLoader();
+                    //this.getView().pop();
+                    return new chlk.models.attendance.SeatingChart();
+                });
+            //return this.ShadeLoader();
+            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'savedChart');
         },
 
         [[chlk.models.attendance.AdminAttendanceSummary, String, chlk.models.common.ChlkDate, chlk.models.id.MarkingPeriodId,

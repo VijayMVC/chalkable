@@ -69,6 +69,11 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.TemplateBind(chlk.templates.attendance.SeatingChartTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'SeatingChartPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'savedChart')],
+            VOID, function updateSeatingChart(tpl, model, msg_) {
+
+            },
+
             chlk.models.attendance.SeatingChart, 'model',
 
             Array, function getAttendances_(){
