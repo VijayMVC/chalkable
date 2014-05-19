@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     GradeLevelRef = 12,
                     CourseRef = 43,
                     ChalkableDepartmentRef = null,
-                    TeacherRef = 1195,
+                    PrimaryTeacherRef = 1195,
                     SchoolRef = 1,
                     SchoolYearRef = 1
                 },
@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     GradeLevelRef = 12,
                     CourseRef = 43,
                     ChalkableDepartmentRef = null,
-                    TeacherRef = 1195,
+                    PrimaryTeacherRef = 1195,
                     SchoolRef = 1,
                     SchoolYearRef = 1
                 }
@@ -98,7 +98,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 : (int?)null;
 
                 if (roleId == CoreRoles.TEACHER_ROLE.Id)
-                    classes = classes.Where(x => x.TeacherRef == query.PersonId);
+                    classes = classes.Where(x => x.PrimaryTeacherRef == query.PersonId);
 
                 if (roleId == CoreRoles.STUDENT_ROLE.Id)
                     classes = classes.Where(x => Storage.ClassPersonStorage.Exists(new ClassPersonQuery
@@ -138,8 +138,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 };
 
 
-                if (clsDetails.TeacherRef.HasValue)
-                    clsDetails.Teacher = Storage.PersonStorage.GetById(clsDetails.TeacherRef.Value);
+                if (clsDetails.PrimaryTeacherRef.HasValue)
+                    clsDetails.PrimaryTeacher = Storage.PersonStorage.GetById(clsDetails.PrimaryTeacherRef.Value);
                 clsDetails.GradeLevel = Storage.GradeLevelStorage.GetById(clsDetails.GradeLevelRef);
                 clsDetails.MarkingPeriodClasses = markingPeriodClasses.Where(x => x.ClassRef == clsDetails.Id).ToList();
                 classDetailsList.Add(clsDetails);
@@ -159,8 +159,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var classes = GetClassesComplex(new ClassQuery()).Classes;
 
             if (teacherRef.HasValue)
-                classes = classes.Where(x => x.TeacherRef == teacherRef).ToList();
-            return classes.Where(x => x.TeacherRef == teacherRef).Select(x => (Class)x).ToList();
+                classes = classes.Where(x => x.PrimaryTeacherRef == teacherRef).ToList();
+            return classes.Where(x => x.PrimaryTeacherRef == teacherRef).Select(x => (Class)x).ToList();
         }
 
         public bool Exists(List<int> gradeLevelIds, int teacherId)

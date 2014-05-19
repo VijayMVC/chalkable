@@ -15,7 +15,6 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activity.Date = ann.Expires;
             activity.CategoryId = ann.ClassAnnouncementTypeRef;
             activity.IsDropped = ann.Dropped;
-            activity.IsScored = ann.ClassAnnouncementTypeRef.HasValue;
             activity.MaxScore = ann.MaxScore;
             activity.WeightAddition = ann.WeightAddition;
             activity.WeightMultiplier = ann.WeightMultiplier;
@@ -26,8 +25,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activity.Unit = string.Empty;
             activity.MayBeExempt = ann.MayBeExempt;
             activity.IsScored = ann.IsScored;
-            if (ann.ClassRef.HasValue)
-                activity.SectionId = ann.ClassRef.Value;
+            activity.SectionId = ann.ClassRef;
 
             var annDetails = ann as AnnouncementDetails;
             if (annDetails != null)

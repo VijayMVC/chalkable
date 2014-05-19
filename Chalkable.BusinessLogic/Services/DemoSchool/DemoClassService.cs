@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 GradeLevelRef = gradeLevelId,
                 Name = name,
                 SchoolYearRef = schoolYearId,
-                TeacherRef = teacherId,
+                PrimaryTeacherRef = teacherId,
                 RoomRef = roomId,
                 SchoolRef = sy != null ? sy.SchoolRef : (int?)null
             };
@@ -137,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             cClass.Name = name;
             cClass.ChalkableDepartmentRef = chlkableDepartmentId;
             cClass.Description = description;
-            cClass.TeacherRef = teacherId;
+            cClass.PrimaryTeacherRef = teacherId;
             cClass.GradeLevelRef = gradeLevelId;
             Storage.ClassStorage.Update(cClass);
             return GetClassById(classId);
@@ -290,6 +290,27 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<ClassDetails> GetClasses(string filter)
         {
             return GetClasses(new ClassQuery {Filter = filter});
+        }
+
+
+        public void AddTeachers(IList<ClassTeacher> classTeachers)
+        {
+            Storage.ClassTeacherStorage.Add(classTeachers);
+        }
+
+        public void EditTeachers(IList<ClassTeacher> classTeachers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteTeachers(IList<Pair<int, int>> classTeachersIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<ClassTeacher> GetClassTeachersByClassId(int classId)
+        {
+            return Storage.ClassTeacherStorage.GetClassTeachers(classId, null);
         }
     }
 }

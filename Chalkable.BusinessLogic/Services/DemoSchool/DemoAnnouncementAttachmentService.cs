@@ -65,7 +65,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (ann.State != AnnouncementState.Draft)
             {
-                if (Context.UserLocalId == ann.PersonRef)
+                if (Context.UserLocalId == ann.PrimaryTeacherRef)
                     ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
                 else
                     ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserLocalId.Value);

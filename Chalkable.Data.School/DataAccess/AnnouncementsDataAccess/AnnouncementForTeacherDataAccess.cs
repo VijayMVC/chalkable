@@ -27,10 +27,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, int callerId)
         {
             dbQuery.Sql.Append(" and ");
-            dbQuery.Sql.Append(@" (Announcement.PersonRef = @callerId 
-                                        or (ClassAnnouncementTypeRef is null and Announcement.Id in (select ar.AnnouncementRef from AnnouncementRecipient ar 
-                                                                                                      where ar.ToAll = 1 or ar.PersonRef = @callerId or ar.RoleRef = @roleId))
-                                  )");
+            dbQuery.Sql.Append(@" (Announcement.ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @callerId))");
             dbQuery.Parameters.Add("callerId", callerId);
             dbQuery.Parameters.Add("@roleId", role);
         }

@@ -34,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoDayTypeStorage DayTypeStorage { get; private set; }
         public DemoClassStorage ClassStorage { get; private set; }
         public DemoClassPersonStorage ClassPersonStorage { get; private set; }
+        public DemoClassTeacherStorage ClassTeacherStorage { get; private set; }
         public DemoClassAnnouncementTypeStorage ClassAnnouncementTypeStorage{ get; private set; }
         public DemoCategoryStorage CategoryStorage { get; private set; }
         public DemoDateStorage DateStorage { get; private set; }
@@ -128,6 +129,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             DayTypeStorage = new DemoDayTypeStorage(this);
             ClassStorage = new DemoClassStorage(this);
             ClassPersonStorage = new DemoClassPersonStorage(this);
+            ClassTeacherStorage = new DemoClassTeacherStorage(this);
             ClassAnnouncementTypeStorage = new DemoClassAnnouncementTypeStorage(this);
             CategoryStorage = new DemoCategoryStorage(this);
             DateStorage = new DemoDateStorage(this);
@@ -188,6 +190,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassAnnouncementTypeStorage.Setup();
             SchoolPersonStorage.Setup();
             ClassPersonStorage.Setup();
+            ClassTeacherStorage.Setup();
             StiAttendanceStorage.Setup();
             StiInfractionStorage.Setup();
             InfractionStorage.Setup();

@@ -76,6 +76,7 @@
     <Compile Include="DataAccess\ClassAnnouncementTypeDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineDataAccess.cs" />
     <Compile Include="DataAccess\ClassroomOptionDataAccess.cs" />
+    <Compile Include="DataAccess\ClassTeacherDataAccess.cs" />
     <Compile Include="DataAccess\GradingCommentDataAccess.cs" />
     <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
     <Compile Include="DataAccess\GradingScaleDataAccess.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Model\ClassPerson.cs" />
     <Compile Include="Model\ClassroomOption.cs" />
     <Compile Include="Model\ClassStandard.cs" />
+    <Compile Include="Model\ClassTeacher.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\GradingComment.cs" />
     <Compile Include="Model\GradingScale.cs" />

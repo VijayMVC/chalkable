@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Security
     {
         public static bool CanCreateAnnouncementNotification(Announcement announcement, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || announcement.PersonRef == context.UserLocalId;
+            return BaseSecurity.IsSysAdmin(context) || announcement.IsOwner;
         }
 
         public static bool CanCreateSimpleNotification(Guid personId, UserContext context)

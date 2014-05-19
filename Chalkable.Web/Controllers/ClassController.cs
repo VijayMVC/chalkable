@@ -92,7 +92,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassGrading(int classId)
         {
             var classData = SchoolLocator.ClassService.GetClassById(classId);
-            var canCreateItem = SchoolLocator.Context.UserLocalId == classData.TeacherRef;
+            var canCreateItem = SchoolLocator.Context.UserLocalId == classData.PrimaryTeacherRef;
             var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
             return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
         }
