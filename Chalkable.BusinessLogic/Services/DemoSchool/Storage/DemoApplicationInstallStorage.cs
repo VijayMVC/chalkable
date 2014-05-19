@@ -327,7 +327,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new NotImplementedException();
         }
 
         public bool Exists(Guid applicationRef, int personId)

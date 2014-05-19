@@ -1,6 +1,7 @@
-mixin DemoRoleButton(name, notReady)
+mixin DemoRoleButton(name, title, notReady)
     a.demo-role-button(rolename=name)(attributes)
-        span=name
+
+        span #{title ? title : name}
             if notReady
                 span
             .mark.left
@@ -21,6 +22,6 @@ mixin DemoRoleButton(name, notReady)
 #roles-buttons
     +DemoRoleButton('Student')
     +DemoRoleButton('Teacher')
-    +DemoRoleButton('Admin')
-    +DemoRoleButton('Parent', true).coming
-    +DemoRoleButton('District', true).coming
+    +DemoRoleButton('AdminGrade', 'Admin')
+    +DemoRoleButton('Parent', null, true).coming
+    +DemoRoleButton('District', null, true).coming

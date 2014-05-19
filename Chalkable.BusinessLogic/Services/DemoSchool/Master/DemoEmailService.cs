@@ -60,7 +60,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             string url = string.Format(confirmUrlFormat, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
             mail.Body = string.Format(messageTemplate, person.FirstName, message ?? string.Empty, url, schoolName);
             SendMail(mail, sysEMail);
-            throw new NotImplementedException();
         }
 
         public void SendNotificationToPerson(Person person, string message)
