@@ -1,0 +1,25 @@
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        .db-maintenance{
+          .db-update-form{
+            label{
+              display: block;
+            }
+
+            textarea{
+              width: 100%;
+              height: 200px;
+              resize: vertical;
+            }
+
+            .submit-btn{
+              float: right;
+            }
+          }
+        }
+      }
+    }
+  }
+}
