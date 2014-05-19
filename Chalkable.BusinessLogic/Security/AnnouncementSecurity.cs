@@ -27,12 +27,7 @@ namespace Chalkable.BusinessLogic.Security
         }
 
 
-        public static bool IsReminderOwner(AnnouncementReminder announcementReminder, UserContext context)
-        {
-            return announcementReminder.PersonRef.HasValue &&
-                   announcementReminder.PersonRef.Value == context.UserLocalId ||
-                   announcementReminder.Announcement.IsOwner;
-        }
+       
 
         //public static bool CanModifyAnnouncementQnA(AnnouncementQnAComplex announcementQnA, UserContext context)
         //{

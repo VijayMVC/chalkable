@@ -16,12 +16,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this._handler = null;
             },
 
-            [ria.mvc.DomEventBind('click', '#add-reminder')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function addReminderClick(node, event){
-                this.dom.find('.new-reminder').removeClass('x-hidden');
-            },
-
             [ria.mvc.DomEventBind('change', '#expiresdate')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function dueDateChange(node, event){
@@ -30,24 +24,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.setValue('');
             },
 
-            [ria.mvc.DomEventBind('click', '#reminders-button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function showRemindersClick(node, event){
-                this.dom.find('.reminders-container').toggleClass('x-hidden');
-            },
-
             [ria.mvc.DomEventBind('click', 'form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formClick(node, event){
 
-            },
-
-            [ria.mvc.DomEventBind('click', '.remove-reminder')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function removeReminderClick(node, event){
-                setTimeout(function(){
-                    node.parent('.reminder').remove();
-                }, 10);
             },
 
             [ria.mvc.DomEventBind('submit', '.announcement-form>FORM')],
@@ -71,12 +51,6 @@ NAMESPACE('chlk.activities.announcement', function () {
             VOID, function addLoaderOnSubmitClick(node, event){
                 //this.addPartialRefreshLoader();
                 this.dom.find('#save-form-button').remove();
-            },
-
-            [ria.mvc.DomEventBind('change', '.reminder-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function inputChange(node, event){
-                this.addEditReminder(node);
             },
 
             /*[ria.mvc.DomEventBind('click', '#content')],

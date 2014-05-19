@@ -49,7 +49,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoApplicationInstallStorage ApplicationInstallStorage { get; private set; }
         public IDemoAnnouncementStorage AnnouncementStorage { get; private set; }
         public DemoAnnouncementQnAStorage AnnouncementQnAStorage { get; private set; }
-        public DemoAnnouncementReminderStorage AnnouncementReminderStorage { get; private set; }
         public DemoAnnouncementRecipientStorage AnnouncementRecipientStorage { get; private set; }
         public DemoAnnouncementStandardStorage AnnouncementStandardStorage{ get; private set; }
         public DemoDistrictStorage DistrictStorage { get; private set; }
@@ -102,7 +101,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStorage(UserContext context)
         {
             Context = context;
-            AnnouncementReminderStorage = new DemoAnnouncementReminderStorage(this);
             PrivateMessageStore = new DemoPrivateMessageStorage(this);
             SchoolYearStorage = new DemoSchoolYearStorage(this);
             InfractionStorage = new DemoInfractionStorage(this);

@@ -17,7 +17,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         void AddAnnouncementNewAttachmentNotification(int announcementId);
         void AddAnnouncementNewAttachmentNotificationToPerson(int announcementId, int fromPersonId);
-        void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement);
         void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId);
         void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId);
         void AddAnnouncementSetGradeNotificationToPerson(int announcement, int recipient);
@@ -109,21 +108,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotification(notification);
         }
 
-        public void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement)
-        {
-            if (!NotificationSecurity.CanCreateAnnouncementNotification(announcement, Context))
-                throw new ChalkableSecurityException();
-            var recipients = ServiceLocator.AnnouncementService.GetAnnouncementRecipientPersons(announcement.Id);
-            var notifications = new List<Notification>(); 
-            foreach (var schoolPerson in recipients)
-            {
-                if (!announcementReminder.PersonRef.HasValue || schoolPerson.Id == announcementReminder.PersonRef)
-                {
-                    notifications.Add(builder.BuildAnnouncementReminderNotification(announcement, schoolPerson));
-                }
-            }
-            AddNotifications(notifications);
-        }
 
         public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId)
         {

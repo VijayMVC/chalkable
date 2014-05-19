@@ -611,12 +611,6 @@ where AnnouncementRef = @id
 			  )
 		)
 
-select * from AnnouncementReminder
-where AnnouncementRef = @id and (@annExists = 1)
-	and (@callerRole = 1 or (@isOwner = 1 and PersonRef is null)
-	or (PersonRef is not null and @callerId = PersonRef))
-
-
 select aa.*
 --as AnnouncementApplicationId,
 --aa.AnnouncementRef as AnnouncementId,

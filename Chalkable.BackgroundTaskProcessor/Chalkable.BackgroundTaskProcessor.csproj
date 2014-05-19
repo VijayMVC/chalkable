@@ -94,7 +94,6 @@
     <Compile Include="BackupTaskHandler.cs" />
     <Compile Include="DatabaseUpdateTaskHandler.cs" />
     <Compile Include="ITaskHandler.cs" />
-    <Compile Include="ProcessRemindersTaskHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SisImportDataTaskHandler.cs" />
     <Compile Include="TaskProcessor.cs" />
