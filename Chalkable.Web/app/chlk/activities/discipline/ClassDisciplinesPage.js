@@ -42,15 +42,15 @@ NAMESPACE('chlk.activities.discipline', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             function updateDisciplineItem(node, event){
                 clearTimeout(this._submitTimeout);
+                if(node.is(':checkbox')){
+                    var discInfoNode = node.parent('.discipline-info');
+                    var notesAreaNode = discInfoNode.find('.notes-area');
+                    if(node.parent('.column').find('.change-discipline:checked').valueOf().length)
+                        notesAreaNode.removeAttr('disabled');
+                    else
+                        notesAreaNode.setAttr('disabled', 'true');
+                }
                 this._submitTimeout = setTimeout(function(){
-                    if(node.is(':checkbox')){
-                        var discInfoNode = node.parent('.discipline-info');
-                        var notesAreaNode = discInfoNode.find('.notes-area');
-                        if(discInfoNode.find('[name="disciplineTypeIds"]').getValue())
-                            notesAreaNode.removeAttr('readonly');
-                        else
-                            notesAreaNode.setAttr('readonly', 'true');
-                    }
                     this.updateDiscipline_(node);
                 }.bind(this), 1000);
             },
