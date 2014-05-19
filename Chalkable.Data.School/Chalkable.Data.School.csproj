@@ -68,7 +68,6 @@
     <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementRecipientDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
-    <Compile Include="DataAccess\AnnouncementReminderDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForStudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForTeacherDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationInstallDataAccess.cs" />
@@ -117,7 +116,6 @@
     <Compile Include="Model\AnnouncementQnA.cs" />
     <Compile Include="Model\AnnouncementRecipient.cs" />
     <Compile Include="Model\AnnouncementRecipientData.cs" />
-    <Compile Include="Model\AnnouncementReminder.cs" />
     <Compile Include="Model\AnnouncementStandard.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />

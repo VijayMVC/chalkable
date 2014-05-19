@@ -166,7 +166,6 @@
     <Compile Include="Controllers\CalendarControllers\AnnouncementCalendarController.cs" />
     <Compile Include="Controllers\AnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementQnAController.cs" />
-    <Compile Include="Controllers\AnnouncementReminderController.cs" />
     <Compile Include="Controllers\AnnouncementTypeController.cs" />
     <Compile Include="Controllers\BackgroundTaskController.cs" />
     <Compile Include="Controllers\BaseAnnouncementController.cs" />
@@ -226,7 +225,6 @@
     <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
-    <Compile Include="Models\AnnouncementReminderViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementDetailedViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />

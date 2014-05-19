@@ -16,7 +16,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IClassService classService;
         private ISchoolYearService schoolYearService;
         private IAnnouncementQnAService announcementQnAService;
-        private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
         private IPhoneService phoneService;
@@ -64,7 +63,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             gradeLevelService = new DemoGradeLevelService(this, storage);
             classService = new DemoClassService(this, storage);
             announcementQnAService = new DemoAnnouncementQnAService(this, storage);
-            announcementReminderService = new DemoAnnouncementReminderService(this, storage);
             announcementAttachmentService = new DemoAnnouncementAttachmentService(this, storage);
             phoneService = new DemoPhoneService(this, storage);
             privateMessageService = new DemoPrivateMessageService(this, storage);
@@ -104,7 +102,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
         public IAnnouncementQnAService AnnouncementQnAService { get { return announcementQnAService; } }
         public IAnnouncementService AnnouncementService { get { return announcementService; } }
-        public IAnnouncementReminderService AnnouncementReminderService { get { return announcementReminderService; } }
         public IAnnouncementAttachmentService AnnouncementAttachmentService { get { return announcementAttachmentService; } }
         public IPhoneService PhoneService { get { return phoneService; } }
         public IPrivateMessageService PrivateMessageService { get { return privateMessageService; } }

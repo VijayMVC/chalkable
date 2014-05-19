@@ -120,8 +120,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         private AnnouncementDetails ConvertToDetails(AnnouncementComplex announcement)
         {
             var announcementAttachments = Storage.AnnouncementAttachmentStorage.GetAll(announcement.Id);
-            var announcementReminders = Storage.AnnouncementReminderStorage.GetList(announcement.Id, announcement.PrimaryTeacherRef);
-
+            
             var announcementApplications= new List<AnnouncementApplication>();
             var announcementsQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
             {
@@ -161,7 +160,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Avg = announcement.Avg,
                 Title = announcement.Title,
                 AnnouncementAttachments = announcementAttachments,
-                AnnouncementReminders = announcementReminders,
                 AnnouncementApplications = announcementApplications,
                 AnnouncementQnAs = announcementsQnA,
                 AnnouncementStandards = announcementStandards,

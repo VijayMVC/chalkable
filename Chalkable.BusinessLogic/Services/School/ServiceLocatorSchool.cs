@@ -15,7 +15,6 @@ namespace Chalkable.BusinessLogic.Services.School
         ISchoolYearService SchoolYearService { get; }
         IAnnouncementQnAService AnnouncementQnAService { get; }
         IAnnouncementService AnnouncementService { get; }
-        IAnnouncementReminderService AnnouncementReminderService { get; }
         IAnnouncementAttachmentService AnnouncementAttachmentService { get; }
         IPhoneService PhoneService { get; }
         IPrivateMessageService PrivateMessageService { get; }
@@ -60,7 +59,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IClassService classService;
         private ISchoolYearService schoolYearService;
         private IAnnouncementQnAService announcementQnAService;
-        private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
         private IPhoneService phoneService;
@@ -107,7 +105,6 @@ namespace Chalkable.BusinessLogic.Services.School
             classService = new ClassService(this);
             schoolYearService = new SchoolYearService(this);
             announcementQnAService = new AnnouncementQnAService(this);
-            announcementReminderService = new AnnouncementReminderService(this);
             announcementService = new AnnouncementService(this);
             announcementAttachmentService = new AnnouncementAttachmentService(this);
             phoneService = new PhoneService(this);
@@ -152,7 +149,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
         public IAnnouncementQnAService AnnouncementQnAService{ get { return announcementQnAService; } }
         public IAnnouncementService AnnouncementService { get { return announcementService; } }
-        public IAnnouncementReminderService AnnouncementReminderService { get { return announcementReminderService; } }
         public IAnnouncementAttachmentService AnnouncementAttachmentService { get { return announcementAttachmentService; } }
         public IPhoneService PhoneService { get { return phoneService; } }
         public IPrivateMessageService PrivateMessageService { get { return privateMessageService; } }

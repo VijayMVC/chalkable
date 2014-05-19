@@ -106,6 +106,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return GetAnnouncements(false, start, count, null, null, onlyOwners);
         }
+        
         public IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
         {
             var q = new AnnouncementsQuery
@@ -387,6 +388,8 @@ namespace Chalkable.BusinessLogic.Services.School
       
         public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null)
         {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
@@ -413,7 +416,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     ann.Expires = announcement.ExpiresDate.Value;
 
                 ann = SetClassToAnnouncement(ann, classId, ann.Expires);
-                //ann = PreperingReminderData(uow, ann); //todo : remove this later 
                 //ann = ReCreateRecipients(uow, ann, recipients);
                 da.Update(ann);
                 var date = ann.Expires > DateTime.MinValue ? ann.Expires : ann.Created;
@@ -464,7 +466,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.SisActivityId = activity.Id;
                 }
             }
-            //res = (AnnouncementDetails)PreperingReminderData(unitOfWork, res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
             //TODO : add gradingStyle to ClassAnnouncementtype
             //if (res.ClassAnnouncementTypeRef.HasValue)
@@ -500,24 +501,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
-      
-        //private Announcement PreperingReminderData(UnitOfWork unitOfWork, Announcement announcement)
-        //{
-        //    var dateNow = Context.NowSchoolTime;
-        //    var expires = announcement.Expires;
-        //    var da = new AnnouncementReminderDataAccess(unitOfWork);
-        //    if (expires.Date >= Context.NowSchoolTime.Date)
-        //    {
-        //        var annReminders = da.GetList(announcement.Id, Context.UserLocalId ?? 0);
-        //        foreach (var reminder in annReminders)
-        //        {
-        //            reminder.RemindDate = reminder.Before.HasValue ? expires.AddDays(-reminder.Before.Value) : dateNow.Date;
-        //        }
-        //        da.Update(annReminders);
-        //    }
-        //    else da.DeleteByAnnouncementId(announcement.Id);
-        //    return announcement;
-        //}
+        
         private Announcement SetClassToAnnouncement(Announcement announcement, int? classId, DateTime expiresDate)
         {
             if (classId.HasValue)
@@ -534,6 +518,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return announcement;
         }
+       
         private Announcement ReCreateRecipients(UnitOfWork unitOfWork, Announcement announcement, IList<RecipientInfo> recipientInfos)
         {
             if (recipientInfos != null && BaseSecurity.IsAdminViewer(Context))
@@ -549,6 +534,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return announcement;
         }
+        
         private AnnouncementRecipient InternalAddAnnouncementRecipient(int announcementId, RecipientInfo recipientInfo)
         {
             var announcementRecipient = new AnnouncementRecipient
@@ -648,12 +634,6 @@ namespace Chalkable.BusinessLogic.Services.School
             var ann = GetAnnouncementById(id);
             if (ann.SisActivityId.HasValue)
             {
-                //using (var uow = Update())
-                //{
-                //    //ann.VisibleForStudent = visible;
-                //    //CreateAnnoucnementDataAccess(uow).Update(ann);
-                //    //uow.Commit();
-                //}
                 var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
                 activity.DisplayInHomePortal = visible;
                 ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
@@ -721,7 +701,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return announcement;
         }
 
-
         public bool Exists(string title)
         {
             using (var uow = Read())
@@ -729,7 +708,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return CreateAnnoucnementDataAccess(uow).Exists(title);
             }
         }
-
 
         public Standard AddAnnouncementStandard(int announcementId, int standardId)
         {
@@ -754,6 +732,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new StandardDataAccess(uow).GetById(standardId);
             }
         }
+        
         public Standard RemoveStandard(int announcementId, int standardId)
         {
             var ann = GetAnnouncementById(announcementId);

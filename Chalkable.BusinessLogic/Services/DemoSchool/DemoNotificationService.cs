@@ -78,22 +78,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AddNotification(notification);
         }
 
-        public void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement)
-        {
-            if (!NotificationSecurity.CanCreateAnnouncementNotification(announcement, Context))
-                throw new ChalkableSecurityException();
-            var recipients = ServiceLocator.AnnouncementService.GetAnnouncementRecipientPersons(announcement.Id);
-            var notifications = new List<Notification>(); 
-            foreach (var schoolPerson in recipients)
-            {
-                if (!announcementReminder.PersonRef.HasValue || schoolPerson.Id == announcementReminder.PersonRef)
-                {
-                    notifications.Add(builder.BuildAnnouncementReminderNotification(announcement, schoolPerson));
-                }
-            }
-            AddNotifications(notifications);
-        }
-
+        
         public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
