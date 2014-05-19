@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement GetAnnouncementById(int id);
         IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly);
         IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
-        IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false);
+        IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false);
         IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
 
@@ -53,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Person> GetAnnouncementRecipientPersons(int announcementId); 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
 
-        Announcement Star(int id, bool starred);
+        void SetComplete(int id, bool complete);
         Announcement SetVisibleForStudent(int id, bool visible);
 
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
@@ -106,19 +106,18 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return GetAnnouncements(false, start, count, null, null, onlyOwners);
         }
-        
-        public IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
+
+        public IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
         {
             var q = new AnnouncementsQuery
             {
-                StarredOnly = starredOnly,
+                Complete = complete,
                 Start = start,
                 Count = count,
                 ClassId = classId,
                 MarkingPeriodId = markingPeriodId,
                 OwnedOnly = ownerOnly,
             };
-            //return new PaginatedList<AnnouncementComplex>(res.Announcements, start / count, count, res.SourceCount);
             return GetAnnouncementsComplex(q);
         }
 
@@ -140,7 +139,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new NotImplementedException();
             //TODO: Looks shity....think about this method and whole approach
             if (activities == null)
-                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.StarredOnly);
+                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete);
             else
             {
                 if (query.ClassId.HasValue)
@@ -211,17 +210,17 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool starredOnly = false)
+        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false)
         {
             var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var end = count + start;
             start = start + 1;
             if (classId.HasValue)
-                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, starredOnly);
+                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
             return new List<Activity>();
         }
  
@@ -601,32 +600,16 @@ namespace Chalkable.BusinessLogic.Services.School
             return order;
         }
 
-        public Announcement Star(int id, bool starred)
+        public void SetComplete(int id, bool complete)
         {
+            if (!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
             var ann = GetAnnouncementById(id);
-            using (var uow = Update())
-            {
-                new AnnouncementRecipientDataDataAccess(uow)
-                    .Update(id, Context.UserLocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
-                uow.Commit();
-                return ann;
-            }
-            //if(!Context.UserLocalId.HasValue)
-            //    throw new UnassignedUserException();
-            //var ann = GetAnnouncementById(id);
-            //if(ann.State != AnnouncementState.Created)
-            //    throw new ChalkableException("Not created item can't be starred");
-            //if(!ann.SisActivityId.HasValue)
-            //    throw new ChalkableException("there are not such item in Inow");
-            //var activityStarring = new ActivityStarring
-            //    {
-            //        ActivityId = ann.SisActivityId.Value,
-            //        PersonId = Context.UserLocalId.Value,
-            //        Starred = starred
-            //    };
-            //var activity = ConnectorLocator.ActivityConnector.StarrActivity(activityStarring.ActivityId, activityStarring);
-            //MapperFactory.GetMapper<Announcement, Activity>().Map(ann, activity);
-            //return ann;
+            if (ann.State != AnnouncementState.Created)
+                throw new ChalkableException("Not created item can't be starred");
+            if (!ann.SisActivityId.HasValue)
+                throw new ChalkableException("there are not such item in Inow");
+            ConnectorLocator.ActivityConnector.CompleteActivity(ann.SisActivityId.Value, complete);
         }
 
         public Announcement SetVisibleForStudent(int id, bool visible)

@@ -92,8 +92,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             if (query.ToDate.HasValue)
                 announcements = announcements.Where(x => x.Expires <= query.ToDate);
-            if (query.StarredOnly)
-                announcements = announcements.Where(x => x.Starred == true);
+            if (query.Complete.HasValue)
+                announcements = announcements.Where(x => x.Complete);
             if (query.OwnedOnly)
                 announcements = announcements.Where(x => x.PrimaryTeacherRef == query.PersonId);
 
@@ -138,7 +138,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Id = announcement.Id,
                 SisActivityId = announcement.SisActivityId,
-                Starred = announcement.Starred,
+                Complete = announcement.Complete,
                 Subject = announcement.Subject,
                 StudentsCount = announcement.StudentsCount,
                 WeightAddition = announcement.WeightAddition,

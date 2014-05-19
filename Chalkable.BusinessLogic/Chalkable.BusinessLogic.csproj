@@ -145,7 +145,6 @@
     <Compile Include="Services\DemoSchool\Storage\DemoGradingScaleRangeStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoGradingScaleStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoBlobStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientDataStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoInfractionStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementApplicationStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionRoleStorage.cs" />

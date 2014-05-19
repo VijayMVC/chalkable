@@ -54,7 +54,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             QnACount = announcement.QnACount;
-            Starred = announcement.Starred ?? false;
+            Starred = announcement.Complete;
             State = (int)announcement.State;
             RecipientId = announcement.ClassRef;
             Content = announcement.Content;

@@ -240,10 +240,11 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementId, Boolean]],
-            ria.async.Future, function star(announcementId, starred_) {
-                this.setImportantCount(this.getImportantCount() + (starred_ ? 1 : -1));
-                return this.post('Announcement/Star', chlk.models.announcement.Announcement, {
-                    announcementId: announcementId.valueOf()
+            ria.async.Future, function star(announcementId, complete_) {
+                this.setImportantCount(this.getImportantCount() + (complete_ ? 1 : -1));
+                return this.post('Announcement/Complete', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    complete: complete_
                 });
             },
 

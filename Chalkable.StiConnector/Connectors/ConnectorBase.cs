@@ -161,9 +161,15 @@ namespace Chalkable.StiConnector.Connectors
         {
             Post<Object,Object>(url, null, null, HttpMethod.Delete);
         }
+
         public T Put<T>(string url, T obj)
         {
-            return Post<T,T>(url, obj, null, HttpMethod.Put);
+            return Put<T, T>(url, obj);
+        }
+
+        public TReturn Put<TReturn, TPutObj>(string url, TPutObj obj)
+        {
+            return Post<TReturn, TPutObj>(url, obj, null, HttpMethod.Put);
         }
 
         private static void ThrowWebException(WebException exception)

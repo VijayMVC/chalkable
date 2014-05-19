@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activity.MayBeExempt = ann.MayBeExempt;
             activity.IsScored = ann.IsScored;
             activity.SectionId = ann.ClassRef;
-
+            activity.Complete = ann.Complete;
             var annDetails = ann as AnnouncementDetails;
             if (annDetails != null)
             {

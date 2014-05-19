@@ -25,6 +25,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             ann.Title = activity.Name;
             ann.MayBeExempt = activity.MayBeExempt;
             ann.IsScored = activity.IsScored;
+            ann.Complete = activity.Complete;
             if (ann is AnnouncementComplex && activity.Attachments != null)
             {
                 var annC = ann as AnnouncementComplex;

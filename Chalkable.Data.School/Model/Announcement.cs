@@ -56,7 +56,8 @@ namespace Chalkable.Data.School.Model
         public int PrimaryTeacherRef { get; set; }
         [NotDbFieldAttr]
         public bool IsOwner { get; set; }
-       
+        [NotDbFieldAttr]
+        public bool Complete { get; set; }
     }
 
 
@@ -81,8 +82,7 @@ namespace Chalkable.Data.School.Model
         public int ApplicationCount { get; set; }
 
         public int? RecipientDataPersonId { get; set; }
-        public bool? Starred { get; set; }
-        
+       
         public bool IsDraft
         {
             get { return State == AnnouncementState.Draft; }

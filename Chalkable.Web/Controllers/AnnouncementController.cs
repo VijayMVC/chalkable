@@ -27,6 +27,13 @@ namespace Chalkable.Web.Controllers
             //if (classId.HasValue && !classAnnouncementTypeId.HasValue)
             //    throw new ChalkableException("Invalid method parameters");
 
+            //todo: rewrite this later
+            var draft = SchoolLocator.AnnouncementService.GetLastDraft();
+            if (draft != null && !classId.HasValue && !classAnnouncementTypeId.HasValue)
+            {
+                classAnnouncementTypeId = draft.ClassAnnouncementTypeRef;
+                classId = draft.ClassRef;
+            }
             if (!classAnnouncementTypeId.HasValue)
             {
                 if (SchoolLocator.Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
@@ -38,9 +45,7 @@ namespace Chalkable.Web.Controllers
             }
             else
             {
-                var draft = SchoolLocator.AnnouncementService.GetLastDraft();
-                if (draft != null && draft.ClassAnnouncementTypeRef != classAnnouncementTypeId &&
-                    !BaseSecurity.IsAdminViewer(SchoolLocator.Context))
+                if (draft != null && draft.ClassAnnouncementTypeRef != classAnnouncementTypeId)
                 {
                     draft.ClassAnnouncementTypeRef = classAnnouncementTypeId.Value;
                     SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);
@@ -138,14 +143,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Star(int announcementId, bool? star)
+        public ActionResult Complete(int announcementId, bool? complete)
         {
-            if (!star.HasValue)
+            if (!complete.HasValue)
             {
-                var prev = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId).Starred ?? false;
-                star = !prev;
+                var prev = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId).Complete;
+                complete = !prev;
             }
-            SchoolLocator.AnnouncementService.Star(announcementId, star.Value);
+            SchoolLocator.AnnouncementService.SetComplete(announcementId, complete.Value);
             return Json(true);
         }
 

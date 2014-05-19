@@ -38,11 +38,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return GetAnnouncements(false, start, count, null, null, onlyOwners);
         }
-        public IList<AnnouncementComplex> GetAnnouncements(bool starredOnly, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
+        public IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
         {
             var q = new AnnouncementsQuery
             {
-                StarredOnly = starredOnly,
+                Complete = complete,
                 Start = start,
                 Count = count,
                 ClassId = classId,
@@ -329,11 +329,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return order;
         }
 
-        public Announcement Star(int id, bool starred)
+        public void SetComplete(int id, bool complete)
         {
-            var ann = GetAnnouncementById(id);
-            Storage.AnnouncementRecipientDataStorage.Update(id, Context.UserLocalId ?? 0, starred, null, Context.NowSchoolTime.Date);
-            return ann;
+            throw new NotImplementedException();
         }
 
         public Announcement SetVisibleForStudent(int id, bool visible)

@@ -59,7 +59,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoApplicationInstallActionRoleStorage ApplicationInstallActionRoleStorage { get; private set; }
         public DemoAnnouncementApplicationStorage AnnouncementApplicationStorage { get; private set; }
         public DemoInfractionStorage InfractionStorage { get; private set; }
-        public DemoAnnouncementRecipientDataStorage AnnouncementRecipientDataStorage{ get; private set; }
         public DemoBlobStorage BlobStorage { get; private set; }
         public DemoGradingScaleStorage GradingScaleStorage { get; private set; }
         public DemoGradingScaleRangeStorage GradingScaleRangeStorage { get; private set; }
@@ -151,7 +150,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ApplicationInstallActionRoleStorage = new DemoApplicationInstallActionRoleStorage(this);
             StudentSchoolYearStorage = new DemoStudentSchoolYearStorage(this);
             AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage(this);
-            AnnouncementRecipientDataStorage = new DemoAnnouncementRecipientDataStorage(this);
             BlobStorage = new DemoBlobStorage(this);
             ClassRoomOptionStorage = new DemoClassRoomOptionStorage(this);
 

@@ -77,7 +77,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             parameters.Add("count", query.Count);
             parameters.Add("now", query.Now);
             parameters.Add("ownedOnly", query.OwnedOnly);
-            parameters.Add("staredOnly", query.StarredOnly);
             parameters.Add(SCHOOL_ID, schoolId);
             //parameters.Add();
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
@@ -213,7 +212,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition { {Announcement.STATE_FIELD, AnnouncementState.Draft}};
             var dbQuery = BuildSimpleAnnouncementQuery(personId);
             FilterBySchool(conds).BuildSqlWhere(dbQuery, "Announcement");
-            dbQuery.Sql.AppendFormat(" and Class.[{0}] = @{1})", Class.PRIMARY_TEACHER_REF_FIELD, "personId");
+            dbQuery.Sql.AppendFormat(" and Class.[{0}] in (select [{1}].[{2}] from [{1}] where [{1}].[{3}] =@{4})"
+                , Class.ID_FIELD, "ClassTeacher", ClassTeacher.CLASS_REF_FIELD, ClassTeacher.PERSON_REF_FIELD , "personId");
             dbQuery.Parameters.Add("personId", personId);
             Orm.OrderBy(dbQuery, "Announcement", Announcement.CREATED_FIELD, Orm.OrderType.Desc);
             return ReadOneOrNull<Announcement>(dbQuery);
@@ -291,7 +291,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime? Now { get; set; }
-        public bool StarredOnly { get; set; }
+        public bool? Complete { get; set; }
         public bool OwnedOnly { get; set; }
         public bool GradedOnly { get; set; }
         public bool AllSchoolItems { get; set; }

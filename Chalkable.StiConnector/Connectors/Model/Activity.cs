@@ -23,13 +23,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         public string Unit { get; set; }
         public decimal? WeightAddition { get; set; }
         public decimal? WeightMultiplier { get; set; }
-        public bool Starred { get; set; }
-    }
-
-    public class ActivityStarring
-    {
-        public int ActivityId { get; set; }
-        public int PersonId { get; set; }
-        public bool Starred { get; set; }
+        public bool Complete { get; set; }
     }
 }
