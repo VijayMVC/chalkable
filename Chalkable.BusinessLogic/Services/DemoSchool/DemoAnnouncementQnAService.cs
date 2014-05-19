@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 AnnouncementRef = announcementId,
                 AskerRef = Context.UserLocalId.Value,
+                ClassRef = ann.ClassRef,
                 Question = question,
                 QuestionTime = Context.NowSchoolTime,
                 State = AnnouncementQnAState.Asked,
@@ -45,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private bool CanEditAnswer(AnnouncementQnAComplex announcementQnA)
         {
             return BaseSecurity.IsSysAdmin(Context)
-                   && ((!announcementQnA.AnswererRef.HasValue && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value))
+                   || ((!announcementQnA.AnswererRef.HasValue && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value))
                         || announcementQnA.AnswererRef == Context.UserLocalId);
         }
 

@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var da = new ClassTeacherDataAccess(uow);
             return BaseSecurity.IsSysAdmin(Context)
-                   && ((!announcementQnA.AnswererRef.HasValue  && da.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value))
+                   || ((!announcementQnA.AnswererRef.HasValue  && da.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value))
                         || announcementQnA.AnswererRef == Context.UserLocalId);
         }
 
