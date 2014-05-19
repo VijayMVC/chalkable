@@ -8,7 +8,6 @@
             .left
                 A(class=self.isByLastName()?"":"pressed", data-value="false").action-button.first-last First name
                 A(class=self.isByLastName()?"pressed":"", data-value="true").action-button.first-last Last name
-                -console.log(self.isByLastName())
                 input(type="hidden", name="byLastName", value=(self.isByLastName() ? 'true' : 'false'))
             .right
                 input(placeholder='Filter list...', name="filter", value=self.getFilter()).people-search

@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     public interface IDemoAnnouncementStorage
     {
         AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
-        AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null);
+        AnnouncementDetails Create(int classAnnouncementTypeId, int classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null);
         AnnouncementDetails GetDetails(int announcementId, int value, int id);
         Announcement GetById(int announcementId);
         void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state);
@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         IList<Person> GetAnnouncementRecipientPersons(int announcementId, int userId);
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int i);
         bool Exists(string s);
-        void ReorderAnnouncements(int id, int value, int personRef, int recipientId);
+        void ReorderAnnouncements(int id, int value, int recipientId);
         bool CanAddStandard(int announcementId);
         bool IsEmpty();
         Dictionary<int, AnnouncementComplex> GetData();
@@ -61,16 +61,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public bool CanAddStandard(int announcementId)
         {
             var announcement = GetById(announcementId);
-
-            var exists = false;
-
-            if (announcement.ClassRef.HasValue)
-            {
-                var cls = Storage.ClassStorage.GetById(announcement.ClassRef.Value);
-                
-                exists = Storage.ClasStandardStorage.GetAll().Count(x => x.ClassRef == cls.Id || x.ClassRef == cls.CourseRef) > 0;
-            }
-            return exists;
+            var cls = Storage.ClassStorage.GetById(announcement.ClassRef);  
+            return Storage.ClasStandardStorage.GetAll().Count(x => x.ClassRef == cls.Id || x.ClassRef == cls.CourseRef) > 0;
         }
 
         public bool Exists(int id)
@@ -103,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.StarredOnly)
                 announcements = announcements.Where(x => x.Starred == true);
             if (query.OwnedOnly)
-                announcements = announcements.Where(x => x.PersonRef == query.PersonId);
+                announcements = announcements.Where(x => x.PrimaryTeacherRef == query.PersonId);
 
             if (query.GradeLevelIds != null)
                 announcements = announcements.Where(x => query.GradeLevelIds.Contains(x.Id));
@@ -128,7 +120,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         private AnnouncementDetails ConvertToDetails(AnnouncementComplex announcement)
         {
             var announcementAttachments = Storage.AnnouncementAttachmentStorage.GetAll(announcement.Id);
-            var announcementReminders = Storage.AnnouncementReminderStorage.GetList(announcement.Id, announcement.PersonRef);
+            var announcementReminders = Storage.AnnouncementReminderStorage.GetList(announcement.Id, announcement.PrimaryTeacherRef);
 
             var announcementApplications= new List<AnnouncementApplication>();
             var announcementsQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
@@ -154,12 +146,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 WeightMultiplier = announcement.WeightMultiplier,
                 QnACount = announcement.QnACount,
                 OwnerAttachmentsCount = announcement.OwnerAttachmentsCount,
-                PersonRef = announcement.PersonRef,
-                IsOwner = Storage.Context.UserLocalId == announcement.PersonRef,
-                PersonName = announcement.PersonName,
+                PrimaryTeacherRef = announcement.PrimaryTeacherRef,
+                IsOwner = Storage.Context.UserLocalId == announcement.PrimaryTeacherRef,
+                PrimaryTeacherName = announcement.PrimaryTeacherName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
-                Gender = announcement.Gender,
+                PrimaryTeacherGender = announcement.PrimaryTeacherGender,
                 ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeRef,
                 Created = announcement.Created,
                 Expires = announcement.Expires,
@@ -173,7 +165,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 AnnouncementApplications = announcementApplications,
                 AnnouncementQnAs = announcementsQnA,
                 AnnouncementStandards = announcementStandards,
-                Owner = Storage.PersonStorage.GetById(announcement.PersonRef),
+                Owner = Storage.PersonStorage.GetById(announcement.PrimaryTeacherRef),
                 ApplicationCount = announcement.ApplicationCount,
                 AttachmentsCount = announcement.AttachmentsCount,
                 StudentAnnouncements = Storage.StudentAnnouncementStorage.GetAll(announcement.Id),
@@ -186,11 +178,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
-        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null)
+        public AnnouncementDetails Create(int classAnnouncementTypeId, int classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null)
         {
             var annId = GetNextFreeId();
             var person = Storage.PersonStorage.GetById(userId);
-            var gradeLevelRef = classId.HasValue ? Storage.ClassStorage.GetById(classId.Value).GradeLevelRef : (int?)null;
+            var gradeLevelRef = Storage.ClassStorage.GetById(classId).GradeLevelRef;
 
             //todo: create admin announcements if it's admin
 
@@ -219,15 +211,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var announcement = new AnnouncementComplex
             {
-                ClassAnnouncementTypeName = classAnnouncementTypeId.HasValue ? Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name : "",
+                ClassAnnouncementTypeName = Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId).Name,
                 ChalkableAnnouncementType = classAnnouncementTypeId,
-                PersonName = person.FullName,
-                ClassName = classId.HasValue ? Storage.ClassStorage.GetById(classId.Value).Name : "",
+                PrimaryTeacherName = person.FullName,
+                ClassName = Storage.ClassStorage.GetById(classId).Name,
                 GradeLevelId = gradeLevelRef,
-                Gender = person.Gender,
+                PrimaryTeacherGender = person.Gender,
                 IsScored = false,
                 Id = annId,
-                PersonRef = userId,
+                PrimaryTeacherRef = userId,
                 ClassRef = classId,
                 ClassAnnouncementTypeRef = classAnnouncementTypeId,
                 Created = nowLocalDate,
@@ -277,11 +269,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             foreach (var announcementDetail in announcements)
             {
-                if (!announcementDetail.ClassRef.HasValue) continue;
-
+               
                 var activity = new Activity();
                 MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, announcementDetail);
-                activity = Storage.StiActivityStorage.CreateActivity(announcementDetail.ClassRef.Value, activity);
+                activity = Storage.StiActivityStorage.CreateActivity(announcementDetail.ClassRef, activity);
                 if (Exists(activity.Id))
                     throw new ChalkableException("Announcement with such activityId already exists");
                 data[announcementDetail.Id].SisActivityId = activity.Id;
@@ -307,7 +298,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             if (data.ContainsKey(ann.Id))
             {
-                data[ann.Id].PersonRef = ann.PersonRef;
                 data[ann.Id].Content = ann.Content;
                 data[ann.Id].Created = ann.Created;
                 data[ann.Id].Expires = ann.Expires;
@@ -375,7 +365,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return data.Count(x => x.Value.Title == s) > 0;
         }
 
-        public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int personRef, int recipientClassId)
+        public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int recipientClassId)
         {
         }
     }
@@ -426,7 +416,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .Select(x => x.AnnouncementRef);
 
             return
-                data.Where(x => x.Value.Id == announcementId && classRefs.Contains(x.Value.ClassRef.Value) || annRecipients.Contains(x.Value.Id))
+                data.Where(x => x.Value.Id == announcementId && classRefs.Contains(x.Value.ClassRef) || annRecipients.Contains(x.Value.Id))
                     .Select(x => x.Value)
                     .First();
         }
@@ -466,7 +456,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .Where(x => x.ToAll || x.PersonRef == userId || x.RoleRef == roleId).Select(x => x.AnnouncementRef);
 
             return
-                data.Where(x => x.Value.Id == announcementId && x.Value.PersonRef == userId || announcementRecipients.Contains(x.Value.Id))
+                data.Where(x => x.Value.Id == announcementId && x.Value.PrimaryTeacherRef == userId || announcementRecipients.Contains(x.Value.Id))
                     .Select(x => x.Value)
                     .First();
         }

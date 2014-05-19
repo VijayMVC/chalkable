@@ -153,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
             {
                 var teacherClasses = new ClassDataAccess(uow, Context.SchoolLocalId)
-                    .GetAll(new AndQueryCondition { { Class.TEACHER_REF_FIELD, schoolPersonId } });
+                    .GetAll(new AndQueryCondition { { Class.PRIMARY_TEACHER_REF_FIELD, schoolPersonId } });
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
                 var da = new ApplicationInstallActionClassesDataAccess(uow);
                 var appInstallAcClasses = new List<ApplicationInstallActionClasses>();

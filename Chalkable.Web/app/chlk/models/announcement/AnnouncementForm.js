@@ -14,6 +14,15 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'selectedTypeId',
             Array, 'reminders',
             chlk.models.announcement.AdminRecipients, 'adminRecipients',
-            String, 'adminRecipientId'
+            String, 'adminRecipientId',
+
+            [[chlk.models.classes.ClassesForTopBar, Boolean]],
+            function $create(classes, isDraft){
+                BASE();
+                if(classes){
+                    this.setTopData(classes);
+                }
+                this.setIsDraft(isDraft || false);
+            }
         ]);
 });

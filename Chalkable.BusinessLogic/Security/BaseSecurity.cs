@@ -36,12 +36,12 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool IsAdminEditorOrClassTeacher(Class c, UserContext context)
         {
-            return IsAdminEditor(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserLocalId == c.TeacherRef);
+            return IsAdminEditor(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserLocalId == c.PrimaryTeacherRef);
         }
 
         public static bool IsAdminViewerOrClassTeacher(Class c, UserContext context)
         {
-            return IsAdminViewer(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserLocalId == c.TeacherRef);
+            return IsAdminViewer(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.UserLocalId == c.PrimaryTeacherRef);
         }
 
         public static bool HasChalkableRole(UserContext context)

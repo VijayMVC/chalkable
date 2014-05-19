@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
             Student = ShortPersonViewData.Create(discipline.Student);
             DisciplineTypes = DisciplineTypeViewData.Create(discipline.Infractions.ToList());
             ClassName = discipline.Class.Name;
-            TeacherId = discipline.Class.TeacherRef;
+            TeacherId = discipline.Class.PrimaryTeacherRef;
             Editable = canEdit || currentPersonId == TeacherId;
             Description = discipline.Description;
             ClassId = discipline.ClassId;

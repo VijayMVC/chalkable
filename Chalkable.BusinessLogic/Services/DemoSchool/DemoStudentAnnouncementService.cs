@@ -56,8 +56,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (!ann.ClassRef.HasValue)
-                throw new ChalkableException("Announcement is not assigned to any class");
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
@@ -77,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 {
                     var stAnn = new StudentAnnouncementDetails
                     {
-                        ClassId = ann.ClassRef.Value,
+                        ClassId = ann.ClassRef,
                         Student = persons.First(x => x.Id == score.StudentId),
                         AnnouncementId = ann.Id
                     };

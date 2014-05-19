@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -13,7 +14,6 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         AnnouncementQnA AskQuestion(int announcementId, string question);
         AnnouncementQnA Answer(int announcementQnAId, string question, string answer);
-
         AnnouncementQnA EditAnswer(int announcementQnAId, string question);
         AnnouncementQnA EditQuestion(int announcementQnAId, string answer);
         void Delete(int announcementQnAId);
@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annQnA = new AnnouncementQnAComplex
                     {
                         AnnouncementRef = announcementId,
-                        PersonRef = Context.UserLocalId.Value,
+                        AskerRef = Context.UserLocalId.Value,
                         Question = question,
                         QuestionTime = Context.NowSchoolTime,
                         State = AnnouncementQnAState.Asked
@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 annQnA = da.GetAnnouncementQnA(new AnnouncementQnAQuery 
                                 {
                                     AnnouncementId = announcementId,
-                                    CallerId = annQnA.PersonRef
+                                    CallerId = annQnA.AskerRef
                                 }).AnnouncementQnAs.OrderByDescending(x=>x.Id).First();
                 ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
                 return annQnA;
@@ -65,16 +65,21 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementQnA Answer(int announcementQnAId, string question, string answer)
         {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = new AnnouncementQnADataAccess(uow);
                 var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                if (!CanEditAnswer(annQnA, uow))
                     throw new ChalkableSecurityException();
 
+                var answerer = new PersonDataAccess(uow, Context.SchoolLocalId).GetById(Context.UserLocalId.Value);
                 annQnA.State = AnnouncementQnAState.Answered;
                 annQnA.Question = question;
                 annQnA.Answer = answer;
+                annQnA.Answerer = answerer;
+                annQnA.AnswererRef = answerer.Id;
                 annQnA.AnsweredTime = Context.NowSchoolTime;
                 da.Update(annQnA);
                 uow.Commit();
@@ -89,7 +94,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementQnADataAccess(uow);
                 var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                if (!CanEditAnswer(annQnA, uow))
                     throw new ChalkableSecurityException();
 
                 annQnA.Answer = answer;
@@ -100,13 +105,21 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        private bool CanEditAnswer(AnnouncementQnAComplex announcementQnA, UnitOfWork uow)
+        {
+            var da = new ClassTeacherDataAccess(uow);
+            return BaseSecurity.IsSysAdmin(Context)
+                   && ((!announcementQnA.AnswererRef.HasValue  && da.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value))
+                        || announcementQnA.AnswererRef == Context.UserLocalId);
+        }
+
         public AnnouncementQnA EditQuestion(int announcementQnAId, string question)
         {
             using (var uow = Update())
             {
                 var da = new AnnouncementQnADataAccess(uow);
                 var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                if (!CanEditAnswer(annQnA, uow))
                     throw new ChalkableSecurityException();
 
                 
@@ -124,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementQnADataAccess(uow);
                 var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                if (!CanEditAnswer(annQnA, uow))
                     throw new ChalkableSecurityException();
 
                 da.Delete(annQnA.Id);
@@ -138,7 +151,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementQnADataAccess(uow);
                 var annQnA = GetAnnouncementQnA(announcementQnAId);
-                if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+                if (!CanEditAnswer(annQnA, uow))
                     throw new ChalkableSecurityException();
 
                 annQnA.State = AnnouncementQnAState.Unanswered;

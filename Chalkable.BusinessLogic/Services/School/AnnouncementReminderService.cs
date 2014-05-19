@@ -57,7 +57,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         RemindDate = remiderDateTime,
                         Announcement = ann
                     };
-                if (ann.PersonRef != Context.UserLocalId)
+                //todo: think about that
+                if (ann.PrimaryTeacherRef != Context.UserLocalId)
                     reminder.PersonRef = Context.UserLocalId;
                 da.Insert(reminder);
                 uow.Commit();

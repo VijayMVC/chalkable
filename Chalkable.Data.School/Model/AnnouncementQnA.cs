@@ -13,7 +13,8 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int AnnouncementRef { get; set; }
-        public int PersonRef { get; set; }
+        public int AskerRef { get; set; }
+        public int? AnswererRef { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
         public AnnouncementQnAState State { get; set; }
@@ -27,6 +28,7 @@ namespace Chalkable.Data.School.Model
 
     public class AnnouncementQnAComplex : AnnouncementQnA
     {
+        public int ClassRef { get; set; }
         private Person asker;
         public Person Asker
         {
@@ -34,12 +36,22 @@ namespace Chalkable.Data.School.Model
             set
             {
                 asker = value;
-                if (PersonRef == 0 && asker != null)
-                    PersonRef = asker.Id;
+                if (AskerRef == 0 && asker != null)
+                    AskerRef = asker.Id;
             }
         }
-        public Person Answerer { get; set; }
-        public bool IsOwner { get; set; }        
+        private Person answerer { get; set; }
+        public Person Answerer
+        {
+            get { return answerer; } 
+            set
+            {
+                answerer = value;
+                if (!AnswererRef.HasValue && answerer != null)
+                    AnswererRef = answerer.Id;
+            }
+        }
+        public bool IsOwner { get; set; }
     }
 
 

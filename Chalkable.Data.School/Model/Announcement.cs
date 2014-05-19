@@ -13,7 +13,6 @@ namespace Chalkable.Data.School.Model
     public class Announcement
     {
         public const string ID_FIELD = "Id";
-        public const string PERSON_REF_FIELD = "PersonRef";
         public const string CONTENT_FIELD = "Content";
         public const string CREATED_FIELD = "Created";
         public const string STATE_FIELD = "State";
@@ -22,10 +21,11 @@ namespace Chalkable.Data.School.Model
         public const string TITLE_FIELD = "Title";
         public const string SIS_ACTIVITY_ID_FIELD = "SisActivityId";
 
+        public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
+        
         [PrimaryKeyFieldAttr]
         [IdentityFieldAttr]
         public int Id { get; set; }
-        public int PersonRef { get; set; }
         public string Content { get; set; }
         public DateTime Created { get; set; }
         public DateTime Expires { get; set; }
@@ -33,7 +33,7 @@ namespace Chalkable.Data.School.Model
         public AnnouncementState State { get; set; }
         public GradingStyleEnum GradingStyle { get; set; }
         public string Subject { get; set; }
-        public int? ClassRef { get; set; }
+        public int ClassRef { get; set; }
         public int Order { get; set; }
         public bool Dropped { get; set; }
 
@@ -51,6 +51,12 @@ namespace Chalkable.Data.School.Model
         public int SchoolRef { get; set; }
 
         public virtual string Title { get; set; }
+
+        [NotDbFieldAttr]
+        public int PrimaryTeacherRef { get; set; }
+        [NotDbFieldAttr]
+        public bool IsOwner { get; set; }
+       
     }
 
 
@@ -58,9 +64,9 @@ namespace Chalkable.Data.School.Model
     {
         public string ClassAnnouncementTypeName { get; set; }
         public int? ChalkableAnnouncementType { get; set; }
-        public string PersonName { get; set; }
-        public string Gender { get; set; }
-
+        public string PrimaryTeacherGender { get; set; }
+        public string PrimaryTeacherName { get; set; }
+   
         public string ClassName { get; set; }
         public int? GradeLevelId { get; set; }
         
@@ -74,7 +80,6 @@ namespace Chalkable.Data.School.Model
         public int? Avg { get; set; }
         public int ApplicationCount { get; set; }
 
-        public bool IsOwner { get; set; }
         public int? RecipientDataPersonId { get; set; }
         public bool? Starred { get; set; }
         
@@ -85,21 +90,13 @@ namespace Chalkable.Data.School.Model
 
         public override string Title
         {
-            get
-            {
-                return !string.IsNullOrEmpty(base.Title) ? base.Title : DefaultTitle;
-            }
+            get { return !string.IsNullOrEmpty(base.Title) ? base.Title : DefaultTitle;}
             set { base.Title = value; }
         }
 
         public string DefaultTitle
         {
-            get
-            {
-                return ClassAnnouncementTypeRef.HasValue
-                    ? string.Format("{0} {1}", ClassAnnouncementTypeName, Order) 
-                    : null;
-            }
+            get { return string.Format("{0} {1}", ClassAnnouncementTypeName, Order); }
         }
 
         public bool Gradable
@@ -112,11 +109,8 @@ namespace Chalkable.Data.School.Model
         }
       
     }
-    //TODO: remove final grade status
     public class AnnouncementDetails : AnnouncementComplex
-    {
-        public int? FinalGradeStatus { get; set; }
-        
+    {   
         public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
         public IList<AnnouncementApplication> AnnouncementApplications { get; set; }
         public IList<AnnouncementAttachment> AnnouncementAttachments { get; set; }

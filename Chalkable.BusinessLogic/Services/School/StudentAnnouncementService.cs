@@ -51,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
-                Comment = comment !=null ? comment.Trim() : "",
+                Comment = comment,
                 Dropped = dropped,
                 Incomplete = incomplete,
                 Late = late,
@@ -74,8 +74,6 @@ namespace Chalkable.BusinessLogic.Services.School
             if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (!ann.ClassRef.HasValue)
-                throw new ChalkableException("Announcement is not assigned to any class");
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
@@ -88,14 +86,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 else
                 {
                     scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
-                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef.Value);
+                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)
                 {
                     var stAnn = new StudentAnnouncementDetails
                         {
-                            ClassId = ann.ClassRef.Value,
+                            ClassId = ann.ClassRef,
                             Student = persons.First(x=>x.Id == score.StudentId),
                             AnnouncementId = ann.Id
                         };

@@ -48,7 +48,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
                 ClassName = attendances.Class.Name,
                 //PeriodId = attendances.PeriodRef,//TODO: no data in INOW?
                 //PeriodOrder = attendances.ClassPeriod.Period.Order,
-                TeacherId = attendances.Class.TeacherRef,
+                TeacherId = attendances.Class.PrimaryTeacherRef,
                 Count = count
             };
         }

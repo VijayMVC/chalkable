@@ -186,11 +186,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     {
                         result.AddRange(
                             Storage.ClassStorage.GetAll()
-                                .Where(x => x.Id == classId && x.TeacherRef != null && ids.Contains(x.TeacherRef.Value))
+                                .Where(x => x.Id == classId && x.PrimaryTeacherRef != null && ids.Contains(x.PrimaryTeacherRef.Value))
                                 .Select(x => new PersonsForApplicationInstall()
                                 {
                                     GroupId = classId.ToString(),
-                                    PersonId = x.TeacherRef.Value,
+                                    PersonId = x.PrimaryTeacherRef.Value,
                                     Type = PersonsFroAppInstallTypeEnum.Class
                                 }));
                     }
@@ -246,13 +246,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
 
                 var teacherRefs = personsForInstall.Select(x => x.Key).ToList();
-                var classes = Storage.ClassStorage.GetAll().Where(x => x.TeacherRef != null && (gradeLevelIds.Contains(x.GradeLevelRef) && teacherRefs.Contains(x.TeacherRef.Value)));
+                var classes = Storage.ClassStorage.GetAll().Where(x => x.PrimaryTeacherRef != null && (gradeLevelIds.Contains(x.GradeLevelRef) && teacherRefs.Contains(x.PrimaryTeacherRef.Value)));
 
                 result.AddRange(classes.Select( x => new PersonsForApplicationInstall
                 {
                     Type = PersonsFroAppInstallTypeEnum.GradeLevel,
                     GroupId = Storage.GradeLevelStorage.GetById(x.GradeLevelRef).Number.ToString(),
-                    PersonId = x.TeacherRef.Value
+                    PersonId = x.PrimaryTeacherRef.Value
                 }));
             }
             return result;

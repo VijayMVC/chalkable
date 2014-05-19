@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 RemindDate = remiderDateTime,
                 Announcement = ann
             };
-            if (ann.PersonRef != Context.UserLocalId)
+            if (ann.PrimaryTeacherRef != Context.UserLocalId)
                 reminder.PersonRef = Context.UserLocalId;
             Storage.AnnouncementReminderStorage.Add(reminder);
             return reminder;

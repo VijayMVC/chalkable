@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         x.AnnouncementRef);
 
                 return Storage.ApplicationInstallStorage.Exists(x.ApplicationRef, personId)
-                       && announcement.PersonRef == personId
+                       && announcement.PrimaryTeacherRef == personId
                        || Storage.ClassPersonStorage.Exists(new ClassPersonQuery
                        {
                            ClassId = announcement.ClassRef,

@@ -139,14 +139,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         
         public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
 
-        public void ReorderAnnouncements(int schoolYearId, int announcementTypeId, int ownerId, int recipientId)
+        public void ReorderAnnouncements(int schoolYearId, int announcementTypeId, int classId)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {SCHOOL_YEAR_ID_PARAM, schoolYearId},
                     {"classAnnType", announcementTypeId},
-                    {OWNER_ID_PARAM, ownerId},
-                    {CLASS_ID_PARAM, recipientId}
+                    {CLASS_ID_PARAM, classId}
                 };
             using (ExecuteStoredProcedureReader(REORDER_PROCEDURE, parameters))
             {
@@ -186,10 +185,24 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public Announcement GetAnnouncement(int id, int roleId, int callerId)
+        private DbQuery BuildSimpleAnnouncementQuery(int? personId)
         {
             var dbQuery = new DbQuery();
-            dbQuery.Sql.Append("select Announcement.* from Announcement ");
+            var classTeacherSql = !personId.HasValue ? "0"
+                                  : string.Format(@"(select cast(case when count(*) > 0 then 1 else 0 end as bit)
+                                                     from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
+                                          "ClassTeacher" , ClassTeacher.PERSON_REF_FIELD, personId.Value, ClassTeacher.CLASS_REF_FIELD,
+                                          "Announcement", Announcement.CLASS_REF_FIELD);
+
+            dbQuery.Sql.AppendFormat(@"select Announcement.*, Class.[{2}] as {3}, {4} as IsOwner
+                                       from Announcement join Class on Class.[{0}] = Announcement.[{1}]",
+            Class.ID_FIELD, Announcement.CLASS_REF_FIELD, Class.PRIMARY_TEACHER_REF_FIELD, Announcement.PRIMARY_TEACHER_REF_FIELD, classTeacherSql);
+            return dbQuery;
+        }
+
+        public Announcement GetAnnouncement(int id, int roleId, int callerId)
+        {
+            var dbQuery = BuildSimpleAnnouncementQuery(callerId);
             FilterBySchool(new AndQueryCondition{{Announcement.ID_FIELD, id}}).BuildSqlWhere(dbQuery, "Announcement");
             BuildConditionForGetSimpleAnnouncement(dbQuery, roleId, callerId);
             return ReadOneOrNull<Announcement>(dbQuery);
@@ -199,20 +212,29 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public Announcement GetLastDraft(int personId)
         {
-            var conds = new AndQueryCondition
-                {
-                    {Announcement.PERSON_REF_FIELD, personId},
-                    {Announcement.STATE_FIELD, AnnouncementState.Draft}
-                };
-           var dbQuery = Orm.OrderedSelect(typeof (Announcement).Name, conds, Announcement.CREATED_FIELD, Orm.OrderType.Desc, 1);
-           return ReadOneOrNull<Announcement>(dbQuery);
+            var conds = new AndQueryCondition { {Announcement.STATE_FIELD, AnnouncementState.Draft}};
+            var dbQuery = BuildSimpleAnnouncementQuery(personId);
+            FilterBySchool(conds).BuildSqlWhere(dbQuery, "Announcement");
+            dbQuery.Sql.AppendFormat(" and Class.[{0}] = @{1})", Class.PRIMARY_TEACHER_REF_FIELD, "personId");
+            dbQuery.Parameters.Add("personId", personId);
+            Orm.OrderBy(dbQuery, "Announcement", Announcement.CREATED_FIELD, Orm.OrderType.Desc);
+            return ReadOneOrNull<Announcement>(dbQuery);
+        }
+
+        public IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds)
+        {
+            if (activitiesIds == null || activitiesIds.Count == 0) return new List<AnnouncementComplex>();
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append(@"select * from vwAnnouncement ");
+            dbQuery.Sql.AppendFormat("where SisActivityId in ({0})", activitiesIds.Select(x => x.ToString()).JoinString(","));
+            return ReadMany<AnnouncementComplex>(dbQuery);
         }
 
         public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int count)
         {
             var conds = new AndQueryCondition
                 {
-                    {Announcement.PERSON_REF_FIELD, personId},
+                    //{Announcement.PERSON_REF_FIELD, personId},
                     {Announcement.CLASS_REF_FIELD, classId},
                     {Announcement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType}
                 };

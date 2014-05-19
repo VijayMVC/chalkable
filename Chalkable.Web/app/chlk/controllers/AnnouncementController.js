@@ -303,17 +303,23 @@ NAMESPACE('chlk.controllers', function (){
                 .addAnnouncement(classId_, announcementTypeId_)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    var announcement = model.getAnnouncement();
-                    if(noDraft_){
-                        announcement.setClassId(classId_ || null);
-                        announcement.setAnnouncementTypeId(announcementTypeId_ || null);
+
+                    if(model && model.getAnnouncement()){
+                        var announcement = model.getAnnouncement();
+                        if(noDraft_){
+                            announcement.setClassId(classId_ || null);
+                            announcement.setAnnouncementTypeId(announcementTypeId_ || null);
+                        }
+                        if(!announcement.getClassId() || !announcement.getClassId().valueOf())
+                            announcement.setAnnouncementTypeId(null);
+                        if(date_){
+                            announcement.setExpiresDate(date_);
+                        }
+                        return this.addEditAction(model, false);
                     }
-                    if(!announcement.getClassId() || !announcement.getClassId().valueOf())
-                        announcement.setAnnouncementTypeId(null);
-                    if(date_){
-                        announcement.setExpiresDate(date_);
-                    }
-                    return this.addEditAction(model, false);
+                    var classes = this.classService.getClassesForTopBar(false, true);
+                    var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
+                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
                 },this);
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },

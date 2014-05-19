@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (announcementQnAQuery.Id.HasValue)
                 qnas = qnas.Where(x => x.Id == announcementQnAQuery.Id);
             if (announcementQnAQuery.AskerId.HasValue)
-                qnas = qnas.Where(x => x.PersonRef == announcementQnAQuery.AskerId);
+                qnas = qnas.Where(x => x.AskerRef == announcementQnAQuery.AskerId);
 
 
             if (announcementQnAQuery.AnnouncementId.HasValue)
@@ -30,8 +30,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 var announcementQnAComplexs = qnas as IList<AnnouncementQnAComplex> ?? qnas.ToList();
                 var announcementIds = announcementQnAComplexs.Select(x => x.AnnouncementRef);
-                var personIds = announcementIds.Select(annId => Storage.AnnouncementStorage.GetById(annId)).Select(announcement => announcement.PersonRef).ToList();
-                qnas = announcementQnAComplexs.Where(x => personIds.Contains(x.PersonRef));
+                var personIds = announcementIds.Select(annId => Storage.AnnouncementStorage.GetById(annId)).Select(announcement => announcement.PrimaryTeacherRef).ToList();
+                qnas = announcementQnAComplexs.Where(x => personIds.Contains(x.AskerRef));
             }
 
             return new AnnouncementQnAQueryResult

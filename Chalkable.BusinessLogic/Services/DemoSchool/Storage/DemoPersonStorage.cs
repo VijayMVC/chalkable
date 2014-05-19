@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 var classPersons = Storage.ClassPersonStorage.GetAll();
                 var classes = classPersons.Select(x => Storage.ClassStorage.GetById(x.ClassRef)).ToList();
-                var clsIds = classes.Where(x => x.TeacherRef == query.TeacherId).Select(x => x.Id).ToList();
+                var clsIds = classes.Where(x => x.PrimaryTeacherRef == query.TeacherId).Select(x => x.Id).ToList();
                 var personIds = classPersons.Where(x => clsIds.Contains(x.ClassRef)).Select(x => x.PersonRef).ToList();
                 persons = persons.Where(x => personIds.Contains(x.Id));
             }
@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         var teacherRef = Storage.ClassStorage.GetClassesComplex(new ClassQuery
                         {
                             ClassId = query.ClassId
-                        }).Classes.Select(x => x.TeacherRef).First();
+                        }).Classes.Select(x => x.PrimaryTeacherRef).First();
 
                         persons = persons.Where(x => x.Id == teacherRef);
                     }
