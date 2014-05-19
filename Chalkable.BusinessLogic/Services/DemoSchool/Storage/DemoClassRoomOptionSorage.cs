@@ -7,14 +7,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     public class DemoClassRoomOptionStorage:BaseDemoIntStorage<ClassroomOption>
     {
         public DemoClassRoomOptionStorage(DemoStorage storage)
-            : base(storage, x => x.Id, true)
+            : base(storage, x => x.Id)
         {
         }
-    
+
         public override void Setup()
         {
             Add(new ClassroomOption()
             {
+                Id = 1,
                 SeatingChartColumns = 3,
                 SeatingChartRows = 3,
                 AveragingMethod = "P",
@@ -25,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
             Add(new ClassroomOption()
             {
+                Id = 2,
                 SeatingChartColumns = 3,
                 SeatingChartRows = 3,
                 AveragingMethod = "P",
@@ -34,11 +36,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 DisplayStudentAverage = true
             });
 
-        }
-
-        public ClassroomOption GetByClassId(int classId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

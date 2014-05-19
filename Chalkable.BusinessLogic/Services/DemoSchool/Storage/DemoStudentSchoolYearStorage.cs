@@ -17,7 +17,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            throw new System.NotImplementedException();
+            Add(new StudentSchoolYear
+            {
+                SchoolYearRef = 1,
+                StudentRef = 1196
+            });
         }
 
 
