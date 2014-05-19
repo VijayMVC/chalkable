@@ -427,7 +427,7 @@ namespace Chalkable.StiImport.Services
                     Name = course.ShortName,
                     SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
                     SchoolYearRef = course.AcadSessionID,
-                    TeacherRef = course.PrimaryTeacherID,
+                    PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,
                     CourseRef = course.SectionOfCourseID
                 });   

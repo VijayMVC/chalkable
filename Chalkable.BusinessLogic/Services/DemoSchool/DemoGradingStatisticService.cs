@@ -147,8 +147,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     ClassName = ann.ClassName,
                     Title = ann.Title,
                     StudentAnnouncements = new List<StudentAnnouncementDetails>(),
-                    PersonRef = ann.PersonRef,
-                    IsOwner = ann.PersonRef == Context.UserLocalId
+                    PrimaryTeacherRef = ann.PrimaryTeacherRef,
+                    IsOwner = ann.PrimaryTeacherRef == Context.UserLocalId
                 };
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(annDetails, activity);
                 var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();
@@ -157,7 +157,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     var stAnn = new StudentAnnouncementDetails
                     {
                         AnnouncementId = ann.Id,
-                        ClassId = ann.ClassRef.Value,
+                        ClassId = ann.ClassRef,
                         Student = students.First(x => x.Id == score.StudentId)
                     };
                     MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);

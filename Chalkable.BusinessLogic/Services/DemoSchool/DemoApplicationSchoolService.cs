@@ -30,14 +30,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var anDa = new DemoAnnouncementForTeacherStorage(Storage);
                 var announcementApplication = Storage.AnnouncementApplicationStorage.GetById(announcementAppId.Value);
                 var ann = anDa.GetById(announcementApplication.AnnouncementRef);
-                if (ann.ClassRef.HasValue)
-                {
-
-                    var csp = Storage.ClassPersonStorage
+                var csp = Storage.ClassPersonStorage
                         .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
-                    res.AddRange(csp.Select(x => x.PersonRef));
-                }
-                res.Add(ann.PersonRef);
+                res.AddRange(csp.Select(x => x.PersonRef));
+                var c = new DemoClassStorage(Storage).GetById(ann.ClassRef);
+                if (Context.UserLocalId != c.PrimaryTeacherRef)
+                if(c.PrimaryTeacherRef.HasValue) res.Add(c.PrimaryTeacherRef.Value);
             }
             else
             {
@@ -77,7 +75,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
             var ann = new DemoAnnouncementForTeacherStorage(Storage)
                 .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserLocalId.Value);
-            if (Context.UserLocalId != ann.PersonRef)
+            var c = new DemoClassStorage(Storage).GetById(ann.ClassRef);
+            if (Context.UserLocalId != c.PrimaryTeacherRef)
                 throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
             aa.Active = true;
             Storage.AnnouncementApplicationStorage.Update(aa);
@@ -100,8 +99,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
                 Storage.AnnouncementApplicationStorage.Delete(announcementAppId);
                 var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                if (Context.UserLocalId != res.PersonRef)
-                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+                var c = new DemoClassStorage(Storage).GetById(res.ClassRef);
+                if (Context.UserLocalId != c.PrimaryTeacherRef)
+                   throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 return res;
             }
             catch

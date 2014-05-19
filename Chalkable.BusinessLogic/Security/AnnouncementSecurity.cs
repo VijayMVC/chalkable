@@ -18,12 +18,12 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanModifyAnnouncement(Announcement announcement, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || context.UserLocalId == announcement.PersonRef;
+            return BaseSecurity.IsSysAdmin(context) || announcement.IsOwner;
         }
 
         public static bool CanDeleteAnnouncement(Announcement announcement, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || announcement.PersonRef == context.UserLocalId;
+            return BaseSecurity.IsSysAdmin(context) || announcement.IsOwner;
         }
 
 
@@ -31,13 +31,13 @@ namespace Chalkable.BusinessLogic.Security
         {
             return announcementReminder.PersonRef.HasValue &&
                    announcementReminder.PersonRef.Value == context.UserLocalId ||
-                   announcementReminder.Announcement.PersonRef == context.UserLocalId;
+                   announcementReminder.Announcement.IsOwner;
         }
 
-        public static bool CanModifyAnnouncementQnA(AnnouncementQnAComplex announcementQnA, UserContext context)
-        {
-            return BaseSecurity.IsSysAdmin(context) || context.UserLocalId == announcementQnA.Answerer.Id;
-        }
+        //public static bool CanModifyAnnouncementQnA(AnnouncementQnAComplex announcementQnA, UserContext context)
+        //{
+        //    return BaseSecurity.IsSysAdmin(context) || context.UserLocalId == announcementQnA.Answerer.Id;
+        //}
 
         public static bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment, UserContext context)
         {

@@ -25,27 +25,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var annQnA = new AnnouncementQnAComplex
             {
                 AnnouncementRef = announcementId,
-                PersonRef = Context.UserLocalId.Value,
+                AskerRef = Context.UserLocalId.Value,
                 Question = question,
                 QuestionTime = Context.NowSchoolTime,
                 State = AnnouncementQnAState.Asked,
                 Asker = Storage.PersonStorage.GetById(Context.UserLocalId.Value),
-                Answerer = Storage.PersonStorage.GetById(ann.PersonRef)
+                Answerer = Storage.PersonStorage.GetById(ann.PrimaryTeacherRef)
             };
             Storage.AnnouncementQnAStorage.Add(annQnA);
             annQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
             {
                 AnnouncementId = announcementId,
-                CallerId = annQnA.PersonRef
+                CallerId = annQnA.AskerRef
             }).AnnouncementQnAs.OrderByDescending(x => x.Id).First();
             ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
             return annQnA;
         }
 
+        private bool CanEditAnswer(AnnouncementQnAComplex announcementQnA)
+        {
+            return BaseSecurity.IsSysAdmin(Context)
+                   && ((!announcementQnA.AnswererRef.HasValue && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value))
+                        || announcementQnA.AnswererRef == Context.UserLocalId);
+        }
+
         public AnnouncementQnA Answer(int announcementQnAId, string question, string answer)
         {
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+            if (!CanEditAnswer(annQnA))
                 throw new ChalkableSecurityException();
 
             annQnA.State = AnnouncementQnAState.Answered;
@@ -60,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public AnnouncementQnA EditAnswer(int announcementQnAId, string answer)
         {
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+            if (!CanEditAnswer(annQnA))
                 throw new ChalkableSecurityException();
 
             annQnA.Answer = answer;
@@ -72,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public AnnouncementQnA EditQuestion(int announcementQnAId, string question)
         {
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+            if (!CanEditAnswer(annQnA))
                 throw new ChalkableSecurityException();
 
 
@@ -85,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void Delete(int announcementQnAId)
         {
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+            if (!CanEditAnswer(annQnA))
                 throw new ChalkableSecurityException();
             Storage.AnnouncementQnAStorage.Delete(annQnA.Id);
         }
@@ -93,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public AnnouncementQnA MarkUnanswered(int announcementQnAId)
         {
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            if (!AnnouncementSecurity.CanModifyAnnouncementQnA(annQnA, Context))
+            if (!CanEditAnswer(annQnA))
                 throw new ChalkableSecurityException();
 
             annQnA.State = AnnouncementQnAState.Unanswered;

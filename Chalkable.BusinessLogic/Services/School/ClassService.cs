@@ -22,18 +22,23 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassDetails AddStudent(int classId, int personId, int markingPeriodId);
         void AddStudents(IList<ClassPerson> classPersons);
         void EditStudents(IList<ClassPerson> classPersons);
+        void AddTeachers(IList<ClassTeacher> classTeachers);
+        void EditTeachers(IList<ClassTeacher> classTeachers);
+        void DeleteTeachers(IList<Pair<int, int>> classTeachersIds);
         ClassDetails DeleteStudent(int classId, int personId);
         ClassDetails GetClassById(int id);
         IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
         IList<ClassDetails> GetClasses(string filter);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue);
         ClassPerson GetClassPerson(int classId, int personId);
-        
+        IList<ClassTeacher> GetClassTeachersByClassId(int classId); 
+
         void AssignClassToMarkingPeriod(int classId, int markingPeriodId);
         void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses);
         void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId);
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
         IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null);
+
     }
 
     public class ClassService : SchoolServiceBase, IClassService
@@ -67,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         GradeLevelRef = gradeLevelId,
                         Name = name,
                         SchoolYearRef = schoolYearId,
-                        TeacherRef = teacherId,
+                        PrimaryTeacherRef = teacherId,
                         RoomRef = roomId,
                         SchoolRef = sy != null ? sy.SchoolRef : (int?)null
                     };
@@ -163,7 +168,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 cClass.Name = name;
                 cClass.ChalkableDepartmentRef = chlkableDepartmentId;
                 cClass.Description = description;
-                cClass.TeacherRef = teacherId;
+                cClass.PrimaryTeacherRef = teacherId;
                 cClass.GradeLevelRef = gradeLevelId;
                 classDa.Update(cClass);
                 uow.Commit();
@@ -376,6 +381,52 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId).Delete(markingPeriodClasses);
                 uow.Commit();
+            }
+        }
+
+
+        public void AddTeachers(IList<ClassTeacher> classTeachers)
+        {
+            if(!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                new ClassTeacherDataAccess(uow).Insert(classTeachers);
+                uow.Commit();
+            }
+        }
+
+        public void EditTeachers(IList<ClassTeacher> classTeachers)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                new ClassTeacherDataAccess(uow).Update(classTeachers);
+                uow.Commit();
+            }
+        }
+
+        public void DeleteTeachers(IList<Pair<int, int>> classTeachersIds)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                new ClassTeacherDataAccess(uow).Delete(classTeachersIds);
+                uow.Commit();
+            }
+        }
+
+
+        public IList<ClassTeacher> GetClassTeachersByClassId(int classId)
+        {
+            using (var uow = Read())
+            {
+                return new ClassTeacherDataAccess(uow).GetAll(new AndQueryCondition
+                        {
+                            {ClassTeacher.CLASS_REF_FIELD, classId}
+                        });
             }
         }
     }

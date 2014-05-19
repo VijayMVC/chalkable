@@ -31,8 +31,6 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var isAdmin = BaseSecurity.IsAdminViewer(SchoolLocator.Context);
              var schoolYearId = GetCurrentSchoolYearId();
              var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, !isAdmin ? classId : null);
-             if (isAdmin)
-                 announcements = announcements.Where(x => !x.ClassRef.HasValue).ToList();
              if (schoolPersonId.HasValue)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, schoolPersonId);
@@ -105,7 +103,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  var announcements = anns.Where(x => x.Expires.Date == d.Day.Date).ToList();
                  var cPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
                  var annPeriods = AnnouncementPeriodViewData.Create(periods, cPeriods, d, announcements, rooms);
-                 var ann = announcements.Where(x => !x.ClassRef.HasValue || !x.GradableType).ToList();
+                 var ann = announcements.Where(x => !x.GradableType).ToList();
                  res.Add(AnnouncementCalendarWeekViewData.Create(d.Day, annPeriods, ann));
              }
              return Json(res, 6);
