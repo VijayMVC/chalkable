@@ -210,6 +210,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             GradingScaleStorage.Setup();
             GradingScaleRangeStorage.Setup();
             ClassRoomOptionStorage.Setup();
+            StudentSchoolYearStorage.Setup();
         }
     }
     

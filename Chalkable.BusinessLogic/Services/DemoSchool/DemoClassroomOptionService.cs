@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public ClassroomOption GetClassOption(int classId)
         {
-            return Storage.ClassRoomOptionStorage.GetByClassId(classId);
+            return Storage.ClassRoomOptionStorage.GetById(classId);
         }
     }
 }
