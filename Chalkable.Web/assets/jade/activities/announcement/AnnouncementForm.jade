@@ -31,7 +31,6 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                         +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
             .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))
             .choose-class(class=(classId ? 'x-hidden' : ''))
-        //+AddEditReminderForm(announcement, self.reminders)
     else
         +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'announcement', 'add')(
             selectedItemId=topData.getSelectedItemId(),

@@ -192,7 +192,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ann.Expires = announcement.ExpiresDate.Value;
 
             ann = SetClassToAnnouncement(ann, classId, ann.Expires);
-            ann = PrepareReminderData(ann); //todo : remove this later 
             //ann = ReCreateRecipients(CreateAnnouncementStorage(Context, Storage), ann);
             CreateAnnouncementStorage(Context, Storage).Update(ann);
 
@@ -222,7 +221,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     res.SisActivityId = activity.Id;
                 }
             }
-            res = (AnnouncementDetails)PrepareReminderData(res);
             res.GradingStyle = GradingStyleEnum.Numeric100;
             storage.Update(res);
             return res;
@@ -242,23 +240,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Submit(CreateAnnouncementStorage(Context, Storage), announcementId, null);
         }
       
-        private Announcement PrepareReminderData(Announcement announcement)
-        {
-            var dateNow = Context.NowSchoolTime;
-            var expires = announcement.Expires;
-
-            if (expires.Date >= Context.NowSchoolTime.Date)
-            {
-                var annReminders = Storage.AnnouncementReminderStorage.GetList(announcement.Id, Context.UserLocalId ?? 0);
-                foreach (var reminder in annReminders)
-                {
-                    reminder.RemindDate = reminder.Before.HasValue ? expires.AddDays(-reminder.Before.Value) : dateNow.Date;
-                }
-                Storage.AnnouncementReminderStorage.Update(annReminders);
-            }
-            else Storage.AnnouncementReminderStorage.DeleteByAnnouncementId(announcement.Id);
-            return announcement;
-        }
         private Announcement SetClassToAnnouncement(Announcement announcement, int? classId, DateTime expiresDate)
         {
             if (classId.HasValue)

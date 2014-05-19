@@ -116,7 +116,6 @@
     <Compile Include="Services\DemoSchool\DemoCalendarDateService.cs" />
     <Compile Include="Services\DemoSchool\DemoAttendanceService.cs" />
     <Compile Include="Services\DemoSchool\DemoAttendanceReasonService.cs" />
-    <Compile Include="Services\DemoSchool\DemoAnnouncementReminderService.cs" />
     <Compile Include="Services\DemoSchool\DemoDisciplineService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradeLevelService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
@@ -157,7 +156,6 @@
     <Compile Include="Services\DemoSchool\Storage\DemoDistrictStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementStandardStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementReminderStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementQnAStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoBaseAnnouncementStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallStorage.cs" />
@@ -232,7 +230,6 @@
     <Compile Include="Services\School\AlternateScoreService.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
-    <Compile Include="Services\School\AnnouncementReminderService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
     <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
     <Compile Include="Services\School\ApplicationSchoolService.cs" />
