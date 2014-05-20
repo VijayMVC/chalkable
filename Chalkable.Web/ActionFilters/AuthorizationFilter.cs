@@ -61,9 +61,10 @@ namespace Chalkable.Web.ActionFilters
             var context = controller.MasterLocator != null ? controller.MasterLocator.Context : null;
             if (context != null)
             {
+                var hasApiAccess = apiAccess || context.IsInternalApp;
                 if (context.IsOAuthUser)
                 {
-                    if (!apiAccess)
+                    if (!hasApiAccess)
                     {
                         filterContext.Result = controller.Json(new ChalkableSecurityException(ChlkResources.ERR_CANT_CALL_METHOD_AS_API));
                         return;    
