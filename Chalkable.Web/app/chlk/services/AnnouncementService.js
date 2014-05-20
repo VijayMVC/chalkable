@@ -37,11 +37,11 @@ NAMESPACE('chlk.services', function () {
             Number, 'importantCount',
 
             [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncements(pageIndex_, classId_, starredOnly_) {
+            ria.async.Future, function getAnnouncements(pageIndex_, classId_, complete_) {
                 return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.Announcement), {
                     start: pageIndex_|0,
                     classId: classId_ ? classId_.valueOf() : null,
-                    starredOnly: starredOnly_
+                    complete: complete_
                 });
 
             },
@@ -240,7 +240,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementId, Boolean]],
-            ria.async.Future, function star(announcementId, complete_) {
+            ria.async.Future, function checkItem(announcementId, complete_) {
                 this.setImportantCount(this.getImportantCount() + (complete_ ? 1 : -1));
                 return this.post('Announcement/Complete', chlk.models.announcement.Announcement, {
                     announcementId: announcementId.valueOf(),

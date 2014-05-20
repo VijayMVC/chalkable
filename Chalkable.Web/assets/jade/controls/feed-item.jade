@@ -5,8 +5,8 @@ mixin FeedItem(item, noDisabled)
         isAdminAnnouncement = item.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
         if isAdminAnnouncement
             -itemClasses.push('is-admin')
-        if item.isStarred()
-            -itemClasses.push('starred')
+        if item.isComplete()
+            -itemClasses.push('complete')
         if item.getApplicationsCount() > 0
             -itemClasses.push('app-icon')
         -itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
@@ -22,8 +22,7 @@ mixin FeedItem(item, noDisabled)
                             item.getGradingStudentsCount() + '") 16px center no-repeat'
                     )
             .bullet
-                if self.getUserRole().isStudent() || item.isAnnOwner()
-                    +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isStarred()).star
+                +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isComplete()).star
                 +ActionLink('announcement', 'view', item.getId())(class = !noDisabled ? 'disabled' : '').d-b.t-d.not-blue.announcement-link
                     .item-type
                         .attachment

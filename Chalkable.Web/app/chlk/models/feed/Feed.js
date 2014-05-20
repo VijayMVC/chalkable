@@ -9,19 +9,17 @@ NAMESPACE('chlk.models.feed', function () {
     CLASS(
         'Feed', EXTENDS(chlk.models.common.PageWithClasses), [
             [[ArrayOf(chlk.models.announcement.Announcement), chlk.models.classes.ClassesForTopBar, Boolean, Number]],
-            function $(items_, classes_, starredOnly_, newNotificationCount_){
+            function $(items_, classes_, completeOnly_, newNotificationCount_){
                 BASE(classes_);
                 if(items_)
                     this.setItems(items_);
-                if(starredOnly_)
-                    this.setStarredOnly(starredOnly_);
-                if(newNotificationCount_ || newNotificationCount_ == 0)
-                    this.setNewNotificationCount(newNotificationCount_);
+                if(completeOnly_)
+                    this.setCompleteOnly(completeOnly_);
             },
 
             ArrayOf(chlk.models.announcement.Announcement), 'items',
 
-            Boolean, 'starredOnly',
+            Boolean, 'completeOnly',
 
             Number, 'importantCount',
 

@@ -175,7 +175,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
-            Boolean, 'starred',
+            Boolean, 'complete',
 
             Number, 'state',
 

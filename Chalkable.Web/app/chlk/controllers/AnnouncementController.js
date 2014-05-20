@@ -744,10 +744,10 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.AnnouncementId, Boolean]],
-        function starAction(id, starred_)
+        function starAction(id, complete_)
         {
             this.announcementService
-                .star(id, starred_)
+                .checkItem(id, complete_)
                 .attach(this.validateResponse_());
             return null;
         },
