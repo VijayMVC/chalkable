@@ -23,6 +23,7 @@ namespace Chalkable.StiConnector.SyncModel
             Types = new Dictionary<string, Type>();
             
             RegisterType(typeof(School));
+            RegisterType(typeof(SchoolOption));
             RegisterType(typeof(User));
             RegisterType(typeof(Address));
             RegisterType(typeof(Person));

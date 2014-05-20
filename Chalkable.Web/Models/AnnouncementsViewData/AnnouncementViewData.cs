@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public DateTime Created { get; set; }
 
-        public bool Starred { get; set; }
+        public bool Complete { get; set; }
         public int State { get; set; }
         public AnnouncementState StateTyped { get; set; }
         public int QnACount { get; set; }
@@ -54,7 +54,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             QnACount = announcement.QnACount;
-            Starred = announcement.Complete;
+            Complete = announcement.Complete;
             State = (int)announcement.State;
             RecipientId = announcement.ClassRef;
             Content = announcement.Content;
