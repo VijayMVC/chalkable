@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Add(Guid districtId, int localId, string name);
         void Add(IList<SchoolInfo> schools, Guid districtId);
         void Edit(IList<SchoolInfo> schoolInfos, Guid districtId);
+        void Delete(IList<int> localIds, Guid districtId);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -116,6 +117,21 @@ namespace Chalkable.BusinessLogic.Services.Master
                         school.Name = si.Name;
                 }
                 da.Update(schools);
+                uow.Commit();
+            }
+        }
+
+        public void Delete(IList<int> localIds, Guid districtId)
+        {
+            if(!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var da = new SchoolDataAccess(uow);
+                var schools = da.GetSchools(districtId, 0, int.MaxValue).ToList();
+                schools = schools.Where(x => localIds.Contains(x.LocalId)).ToList();
+                da.Delete(schools.Select(x=>x.Id).ToList());
                 uow.Commit();
             }
         }

@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.Model;
 using ISchoolService = Chalkable.BusinessLogic.Services.School.ISchoolService;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -65,6 +66,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<Data.School.Model.School> GetSchools()
         {
             return Storage.SchoolStorage.GetAll();
+        }
+
+        public void AddSchoolOptions(IList<SchoolOption> schoolOptions)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void EditSchoolOptions(IList<SchoolOption> schoolOptions)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void DeleteSchoolOptions(IList<int> ids)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
