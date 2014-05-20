@@ -141,6 +141,7 @@
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoSchoolOptionStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoClassRoomOptionSorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoClassTeacherStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoGradingScaleRangeStorage.cs" />

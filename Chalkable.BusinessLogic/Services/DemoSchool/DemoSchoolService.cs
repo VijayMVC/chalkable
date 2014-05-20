@@ -70,17 +70,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void AddSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            throw new System.NotImplementedException();
+            Storage.SchoolOptionStorage.Add(schoolOptions);
         }
 
         public void EditSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            throw new System.NotImplementedException();
+            Storage.SchoolOptionStorage.Update(schoolOptions);
         }
 
         public void DeleteSchoolOptions(IList<int> ids)
         {
-            throw new System.NotImplementedException();
+            Storage.SchoolOptionStorage.Delete(ids);
         }
     }
 }
