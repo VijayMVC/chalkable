@@ -40,8 +40,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 615,
                 EndTime = 659,
                 Order = 1,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             Add(new Period
@@ -49,8 +49,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 663,
                 EndTime = 707,
                 Order = 2,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             Add(new Period
@@ -58,8 +58,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 710,
                 EndTime = 740,
                 Order = 3,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             Add(new Period
@@ -67,8 +67,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 744,
                 EndTime = 783,
                 Order = 4,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
             	
             Add(new Period
@@ -76,8 +76,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 787,
                 EndTime = 826,
                 Order = 5,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             Add(new Period
@@ -85,8 +85,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 830,
                 EndTime = 869,
                 Order = 6,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             Add(new Period
@@ -94,8 +94,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 873,
                 EndTime = 912,
                 Order = 7,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             Add(new Period
@@ -103,8 +103,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 916,
                 EndTime = 955,
                 Order = 8,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             Add(new Period
@@ -112,8 +112,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 StartTime = 959,
                 EndTime = 1000,
                 Order = 9,
-                SchoolRef = 1,
-                SchoolYearRef = 1
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
         }
     }

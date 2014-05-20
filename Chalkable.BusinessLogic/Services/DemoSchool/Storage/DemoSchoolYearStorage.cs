@@ -55,7 +55,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public override void Setup()
         {
             var currentDate = DateTime.Now;
-            Add(1, 1, "Current School Year", "", new DateTime(currentDate.Year, 1, 1),
+            Add(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.SchoolId, "Current School Year", "", 
+                new DateTime(currentDate.Year, 1, 1),
                 new DateTime(currentDate.Year, 12, 31));
         }
     }

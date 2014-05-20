@@ -20,59 +20,59 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 new GradingPeriod
                 {
-                    Id = 1,
+                    Id = DemoSchoolConstants.GradingPeriodQ1,
                     Name = "Quarter 1",
                     AllowGradePosting = false,
                     Code = "Q1",
                     Description = "",
-                    MarkingPeriodRef = 1,
+                    MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
                     SchoolAnnouncement = "",
                     StartDate = new DateTime(currentYear, 1, 21),
                     EndDate = new DateTime(currentYear, 3, 30),
                     EndTime = new DateTime(currentYear, 3, 30, 23, 59, 0),
-                    SchoolYearRef = 1
+                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 },
                 new GradingPeriod
                 {
-                    Id = 2,
+                    Id = DemoSchoolConstants.GradingPeriodQ2,
                     Name = "Quarter 2",
                     AllowGradePosting = false,
                     Code = "Q1",
                     Description = "",
-                    MarkingPeriodRef = 1,
+                    MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
                     SchoolAnnouncement = "",
                     StartDate = new DateTime(currentYear, 3, 30),
                     EndDate = new DateTime(currentYear, 5, 30),
                     EndTime = new DateTime(currentYear, 5, 30, 23, 59, 0),
-                    SchoolYearRef = 1
+                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 },
                 new GradingPeriod
                 {
-                    Id = 3,
+                    Id = DemoSchoolConstants.GradingPeriodQ3,
                     Name = "Quarter 3",
                     AllowGradePosting = false,
                     Code = "Q3",
                     Description = "",
-                    MarkingPeriodRef = 2,
+                    MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
                     SchoolAnnouncement = "",
                     StartDate = new DateTime(currentYear, 6, 30),
                     EndDate = new DateTime(currentYear, 8, 30),
                     EndTime = new DateTime(currentYear, 8, 30, 23, 59, 0),
-                    SchoolYearRef = 1
+                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 },
                 new GradingPeriod
                 {
-                    Id = 4,
+                    Id = DemoSchoolConstants.GradingPeriodQ4,
                     Name = "Quarter 4",
                     AllowGradePosting = false,
                     Code = "Q4",
                     Description = "",
-                    MarkingPeriodRef = 2,
+                    MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
                     SchoolAnnouncement = "",
                     StartDate = new DateTime(currentYear, 8, 30),
                     EndDate = new DateTime(currentYear, 10, 30),
                     EndTime = new DateTime(currentYear, 10, 30, 23, 59, 0),
-                    SchoolYearRef = 1
+                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 }
             };
 

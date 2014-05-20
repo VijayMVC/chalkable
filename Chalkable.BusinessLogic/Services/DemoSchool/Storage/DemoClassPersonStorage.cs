@@ -54,34 +54,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             Add(new ClassPerson
             {
-                ClassRef = 1,
-                MarkingPeriodRef = 1,
-                PersonRef = 1196,
-                SchoolRef = 1
+                ClassRef = DemoSchoolConstants.AlgebraClassId,
+                MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
+                PersonRef = DemoSchoolConstants.FirstStudentId,
+                SchoolRef = DemoSchoolConstants.SchoolId
             });
 
             Add(new ClassPerson
             {
-                ClassRef = 1,
-                MarkingPeriodRef = 2,
-                PersonRef = 1196,
-                SchoolRef = 1
+                ClassRef = DemoSchoolConstants.AlgebraClassId,
+                MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
+                PersonRef = DemoSchoolConstants.FirstStudentId,
+                SchoolRef = DemoSchoolConstants.SchoolId
             });
 
             Add(new ClassPerson
             {
-                ClassRef = 2,
-                MarkingPeriodRef = 1,
-                PersonRef = 1196,
-                SchoolRef = 1
+                ClassRef = DemoSchoolConstants.GeometryClassId,
+                MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
+                PersonRef = DemoSchoolConstants.FirstStudentId,
+                SchoolRef = DemoSchoolConstants.SchoolId
             });
 
             Add(new ClassPerson
             {
-                ClassRef = 2,
-                MarkingPeriodRef = 2,
-                PersonRef = 1196,
-                SchoolRef = 1
+                ClassRef = DemoSchoolConstants.GeometryClassId,
+                MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
+                PersonRef = DemoSchoolConstants.FirstStudentId,
+                SchoolRef = DemoSchoolConstants.SchoolId
             });
         }
     }

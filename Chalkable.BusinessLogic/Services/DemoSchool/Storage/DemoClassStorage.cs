@@ -21,27 +21,27 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 new Class
                 {
-                    Id = 1,
+                    Id = DemoSchoolConstants.GeometryClassId,
                     Name = "Geometry",
                     Description = "Geometry",
                     GradeLevelRef = 12,
                     CourseRef = 43,
                     ChalkableDepartmentRef = null,
-                    PrimaryTeacherRef = 1195,
-                    SchoolRef = 1,
-                    SchoolYearRef = 1
+                    PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
+                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 },
                 new Class
                 {
-                    Id = 2,
+                    Id = DemoSchoolConstants.AlgebraClassId,
                     Name = "Algebra",
                     Description = "Algebra",
                     GradeLevelRef = 12,
                     CourseRef = 43,
                     ChalkableDepartmentRef = null,
-                    PrimaryTeacherRef = 1195,
-                    SchoolRef = 1,
-                    SchoolYearRef = 1
+                    PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
+                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 }
             };
 
@@ -94,7 +94,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
 
                 var roleId = query.PersonId.HasValue
-                ? Storage.SchoolPersonStorage.GetRoleId(query.PersonId.Value, Storage.SchoolId)
+                ? Storage.SchoolPersonStorage.GetRoleId(query.PersonId.Value, DemoSchoolConstants.SchoolId)
                 : (int?)null;
 
                 if (roleId == CoreRoles.TEACHER_ROLE.Id)

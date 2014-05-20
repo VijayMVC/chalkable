@@ -74,7 +74,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStiActivityStorage StiActivityStorage { get; private set; }
 
         public UserContext Context { get; private set; }
-        public int SchoolId { get; private set; }
 
         public void UpdateContext(UserContext context)
         {
@@ -170,7 +169,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void Setup()
         {
-            SchoolId = 1;
             AttendanceLevelReasonStorage.Setup();
             AttendanceReasonStorage.Setup();
             

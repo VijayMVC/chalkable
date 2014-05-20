@@ -17,56 +17,56 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new AlphaGrade()
                 {
                     Id = 1,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "A"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 2,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "B"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 3,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "C"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 4,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "D"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 5,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "F"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 6,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "E"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 7,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "S"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 8,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "N",
                     Description = "No pass"
 
@@ -75,63 +75,63 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new AlphaGrade()
                 {
                     Id = 9,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "A+"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 10,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "A-"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 11,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "B+"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 12,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "B-"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 13,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "C+"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 14,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "C-"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 15,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "D+"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 16,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "D-"
                 },
 
                 new AlphaGrade()
                 {
                     Id = 17,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "P",
                     Description = "Pass"
                 },
@@ -139,14 +139,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new AlphaGrade()
                 {
                     Id = 18,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "Audit",
                 },
 
                 new AlphaGrade()
                 {
                     Id = 19,
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "I",
                     Description = "Incomplete"
                 }

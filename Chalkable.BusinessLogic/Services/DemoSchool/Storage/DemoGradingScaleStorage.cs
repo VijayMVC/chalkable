@@ -18,17 +18,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScale()
                 {
                     Name = "K-3 Grade Scale",
-                    SchoolRef = 1
+                    SchoolRef = DemoSchoolConstants.SchoolId
                 },
                 new GradingScale()
                 {
                     Name = "Grades 4-5",
-                    SchoolRef = 1
+                    SchoolRef = DemoSchoolConstants.SchoolId
                 },
                 new GradingScale()
                 {
                     Name = "Upper School",
-                    SchoolRef = 1,
+                    SchoolRef = DemoSchoolConstants.SchoolId,
                     HomeGradeToDisplay = 0
                 }
             });

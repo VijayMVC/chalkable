@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 new ClassAnnouncementType
                 {
-                    ClassRef = 1,
+                    ClassRef = DemoSchoolConstants.AlgebraClassId,
                     Description = "Announcement",
                     Gradable = true,
                     Id = GetNextFreeId(),
@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new ClassAnnouncementType
                 {
-                    ClassRef = 1,
+                    ClassRef = DemoSchoolConstants.AlgebraClassId,
                     Description = "Task",
                     Gradable = true,
                     Id = GetNextFreeId(),
@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new ClassAnnouncementType
                 {
-                    ClassRef = 2,
+                    ClassRef = DemoSchoolConstants.GeometryClassId,
                     Description = "Announcement",
                     Gradable = true,
                     Id = GetNextFreeId(),
@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 },
                 new ClassAnnouncementType
                 {
-                    ClassRef = 2,
+                    ClassRef = DemoSchoolConstants.GeometryClassId,
                     Description = "Task",
                     Gradable = true,
                     Id = GetNextFreeId(),

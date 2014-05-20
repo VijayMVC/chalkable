@@ -55,30 +55,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
            Add(new MarkingPeriodClass
            {
-               SchoolRef = 1,
-               MarkingPeriodRef = 1,
-               ClassRef = 1
+               SchoolRef = DemoSchoolConstants.SchoolId,
+               MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
+               ClassRef = DemoSchoolConstants.AlgebraClassId
            });
 
            Add(new MarkingPeriodClass
            {
-               SchoolRef = 1,
-               MarkingPeriodRef = 1,
-               ClassRef = 2
+               SchoolRef = DemoSchoolConstants.SchoolId,
+               MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
+               ClassRef = DemoSchoolConstants.GeometryClassId
            });
 
            Add(new MarkingPeriodClass
            {
-               SchoolRef = 1,
-               MarkingPeriodRef = 2,
-               ClassRef = 1
+               SchoolRef = DemoSchoolConstants.SchoolId,
+               MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
+               ClassRef = DemoSchoolConstants.AlgebraClassId
            });
 
            Add(new MarkingPeriodClass
            {
-               SchoolRef = 1,
-               MarkingPeriodRef = 2,
-               ClassRef = 2
+               SchoolRef = DemoSchoolConstants.SchoolId,
+               MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
+               ClassRef = DemoSchoolConstants.GeometryClassId
            });
         }
 

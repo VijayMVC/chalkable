@@ -54,19 +54,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     PersonRef = 1197,
                     RoleRef = 5,
-                    SchoolRef = 1
+                    SchoolRef = DemoSchoolConstants.SchoolId
                 },
                 new SchoolPerson
                 {
                     PersonRef = 1196,
                     RoleRef = 3,
-                    SchoolRef = 1
+                    SchoolRef = DemoSchoolConstants.SchoolId
                 },
                 new SchoolPerson
                 {
                     PersonRef = 1195,
                     RoleRef = 2,
-                    SchoolRef = 1
+                    SchoolRef = DemoSchoolConstants.SchoolId
                 }
             };
 

@@ -170,8 +170,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Gender = "M",
                 FirstName = "ROCKY",
                 LastName = "STEIN",
-                Id = 1195,
-                RoleRef = 2
+                Id = DemoSchoolConstants.TeacherId,
+                RoleRef = CoreRoles.TEACHER_ROLE.Id
             });
 
             Add(new Person
@@ -179,11 +179,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 BirthDate = new DateTime(1998, 11, 27),
                 Active = true,
                 Email = PreferenceService.Get("demoschool" + CoreRoles.STUDENT_ROLE.LoweredName).Value,
-                Id = 1196,
+                Id = DemoSchoolConstants.FirstStudentId,
                 FirstName = "KAYE",
                 LastName = "BURGESS",
                 Gender = "F",
-                RoleRef = 3
+                RoleRef = CoreRoles.STUDENT_ROLE.Id
             });
 
             Add(new Person
@@ -191,11 +191,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Active = true,
                 Salutation = "Mr.",
                 Email = PreferenceService.Get("demoschool" + CoreRoles.ADMIN_GRADE_ROLE.LoweredName).Value,
-                Id = 1197,
+                Id = DemoSchoolConstants.AdminId,
                 FirstName = "rosteradmin",
                 LastName = "rosteradmin",
                 Gender = null,
-                RoleRef = 5
+                RoleRef = CoreRoles.ADMIN_GRADE_ROLE.Id
             });
             
         }

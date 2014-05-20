@@ -258,11 +258,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
-            var ann1 = Create(0, 1, DateTime.Today, 1195, DateTime.Now.AddDays(1));
-            var ann2 = Create(1, 1, DateTime.Today, 1195, DateTime.Now.AddDays(1));
+            var ann1 = Create(0, DemoSchoolConstants.AlgebraClassId, DateTime.Today, 1195, DateTime.Now.AddDays(1));
+            var ann2 = Create(1, DemoSchoolConstants.AlgebraClassId, DateTime.Today, 1195, DateTime.Now.AddDays(1));
 
-            var ann3 = Create(0, 2, DateTime.Today, 1195, DateTime.Now.AddDays(1));
-            var ann4 = Create(1, 2, DateTime.Today, 1195, DateTime.Now.AddDays(1));
+            var ann3 = Create(0, DemoSchoolConstants.GeometryClassId, DateTime.Today, 1195, DateTime.Now.AddDays(1));
+            var ann4 = Create(1, DemoSchoolConstants.GeometryClassId, DateTime.Today, 1195, DateTime.Now.AddDays(1));
 
             var announcements = new List<AnnouncementDetails>() {ann1, ann2, ann3, ann4};
 

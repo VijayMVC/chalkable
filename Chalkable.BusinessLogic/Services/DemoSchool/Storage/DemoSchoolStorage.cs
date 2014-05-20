@@ -10,7 +10,7 @@
         {
             Add(new Data.School.Model.School
             {
-                Id = 1,
+                Id = DemoSchoolConstants.SchoolId,
                 IsActive = true,
                 IsPrivate = true,
                 Name = "SMITH"

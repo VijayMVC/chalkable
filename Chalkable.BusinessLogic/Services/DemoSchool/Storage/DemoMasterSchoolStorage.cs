@@ -28,13 +28,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 DistrictRef = id,
                 Id = id,
-                LocalId = 1,
+                LocalId = DemoSchoolConstants.SchoolId,
                 Name = "SMITH"
             };
         }
 
         public override void Setup()
         {
+            if (!Storage.Context.SchoolLocalId.HasValue)
+                throw new Exception("Context doesn't have valid school local id");
             var schoolId = Storage.Context.SchoolId.Value;
             Add(new List<Data.Master.Model.School>{CreateMasterSchool(schoolId)});
 

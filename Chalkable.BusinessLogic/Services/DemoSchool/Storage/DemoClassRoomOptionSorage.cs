@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             Add(new ClassroomOption()
             {
-                Id = 1,
+                Id = DemoSchoolConstants.AlgebraClassId,
                 SeatingChartColumns = 3,
                 SeatingChartRows = 3,
                 AveragingMethod = "P",
@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
             Add(new ClassroomOption()
             {
-                Id = 2,
+                Id = DemoSchoolConstants.GeometryClassId,
                 SeatingChartColumns = 3,
                 SeatingChartRows = 3,
                 AveragingMethod = "P",

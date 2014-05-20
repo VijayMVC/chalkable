@@ -126,38 +126,38 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             Add(new ClassPeriod
             {
-                ClassRef = 1,
+                ClassRef = DemoSchoolConstants.AlgebraClassId,
                 DayTypeRef = 19,
-                PeriodRef = 1,
-                SchoolRef = 1,
-                Period = Storage.PeriodStorage.GetById(1)
+                PeriodRef = DemoSchoolConstants.FirstPeriodId,
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.FirstPeriodId)
             });
 
             Add(new ClassPeriod
             {
-                ClassRef = 2,
+                ClassRef = DemoSchoolConstants.GeometryClassId,
                 DayTypeRef = 19,
-                PeriodRef = 2,
-                SchoolRef = 1,
-                Period = Storage.PeriodStorage.GetById(2)
+                PeriodRef = DemoSchoolConstants.SecondPeriodId,
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.SecondPeriodId)
             });
 
             Add(new ClassPeriod
             {
-                ClassRef = 1,
+                ClassRef = DemoSchoolConstants.AlgebraClassId,
                 DayTypeRef = 20,
-                PeriodRef = 1,
-                SchoolRef = 1,
-                Period = Storage.PeriodStorage.GetById(1)
+                PeriodRef = DemoSchoolConstants.FirstPeriodId,
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.FirstPeriodId)
             });
 
             Add(new ClassPeriod
             {
-                ClassRef = 2,
+                ClassRef = DemoSchoolConstants.GeometryClassId,
                 DayTypeRef = 20,
-                PeriodRef = 2,
-                SchoolRef = 1,
-                Period = Storage.PeriodStorage.GetById(2)
+                PeriodRef = DemoSchoolConstants.SecondPeriodId,
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.SecondPeriodId)
             });
         }
     }

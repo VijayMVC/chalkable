@@ -66,25 +66,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             Add(new MarkingPeriod
             {
-                Id = 1,
+                Id = DemoSchoolConstants.FirstMarkingPeriodId,
                 Name = "Semester 1",
                 Description = "",
                 StartDate = new DateTime(currentYear, 1, 21),
                 EndDate = new DateTime(currentYear, 5, 30),
-                SchoolRef = 1,
-                SchoolYearRef = 1,
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
                 WeekDays = 62
             });
 
             Add(new MarkingPeriod
             {
-                Id = 2,
+                Id = DemoSchoolConstants.SecondMarkingPeriodId,
                 Name = "Semester 2",
                 Description = "",
                 StartDate = new DateTime(currentYear, 6, 30),
                 EndDate = new DateTime(currentYear, 10, 30),
-                SchoolRef = 1,
-                SchoolYearRef = 1,
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
                 WeekDays = 62
             });
         }

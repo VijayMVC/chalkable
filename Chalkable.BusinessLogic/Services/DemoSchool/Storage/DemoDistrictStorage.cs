@@ -31,6 +31,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public override void Setup()
         {
+            if (!Storage.Context.DistrictId.HasValue)
+                throw new Exception("Context doesn't have valid district id");
             var districtId = Storage.Context.DistrictId.Value;
             data.Add(districtId, CreateDemoDistrict(districtId));
         }
