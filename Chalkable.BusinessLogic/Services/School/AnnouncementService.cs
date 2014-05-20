@@ -325,10 +325,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteAnnouncement (int announcementId)
         {
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var announcement = da.GetById(announcementId);
+                var announcement = da.GetAnnouncement(announcementId, Context.RoleId, Context.UserLocalId.Value);
                 if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
                     throw new ChalkableSecurityException();
 
