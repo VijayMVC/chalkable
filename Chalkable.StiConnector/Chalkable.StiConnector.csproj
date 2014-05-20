@@ -146,6 +146,7 @@
     <Compile Include="SyncModel\ScheduledTimeSlot.cs" />
     <Compile Include="SyncModel\School.cs" />
     <Compile Include="SyncModel\SchoolGradeLevel.cs" />
+    <Compile Include="SyncModel\SchoolOption.cs" />
     <Compile Include="SyncModel\SectionStaff.cs" />
     <Compile Include="SyncModel\SectionTerm.cs" />
     <Compile Include="SyncModel\SpEdStatus.cs" />

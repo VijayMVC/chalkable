@@ -15,6 +15,7 @@ using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using School = Chalkable.StiConnector.SyncModel.School;
+using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 
@@ -88,6 +89,8 @@ namespace Chalkable.StiImport.Services
             DeleteSisUsers();
             Log.LogInfo("delete addresses");
             DeleteAddresses();
+            Log.LogInfo("delete schoolsOptions");
+            DeleteSchoolsOptions();
             Log.LogInfo("delete schools");
             DeleteSchools();
         }
@@ -376,6 +379,14 @@ namespace Chalkable.StiImport.Services
                 return;
             var ids = context.GetSyncResult<Address>().Deleted.Select(x => x.AddressID).ToList();
             ServiceLocatorSchool.AddressService.Delete(ids);
+        }
+
+        private void DeleteSchoolsOptions()
+        {
+            if (context.GetSyncResult<SchoolOption>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<SchoolOption>().Deleted.Select(x => x.SchoolID).ToList();
+            ServiceLocatorSchool.SchoolService.DeleteSchoolOptions(ids);
         }
 
         private void DeleteSchools()

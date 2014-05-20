@@ -18,6 +18,7 @@ using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using School = Chalkable.StiConnector.SyncModel.School;
+using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 
@@ -29,6 +30,8 @@ namespace Chalkable.StiImport.Services
         {
             Log.LogInfo("update schools");
             UpdateSchools();
+            Log.LogInfo("update schoolsOptions");
+            UpdateSchoolsOptions();
             Log.LogInfo("update adresses");
             UpdateAddresses();
             Log.LogInfo("update sis users");
@@ -94,7 +97,7 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("update grading comments");
             UpdateGradingComments();
         }
-        
+
         private void UpdateSchools()
         {
             if (context.GetSyncResult<School>().Updated == null)
@@ -107,6 +110,38 @@ namespace Chalkable.StiImport.Services
                     Name = x.Name
                 }).ToList();
             ServiceLocatorSchool.SchoolService.Edit(schools);
+        }
+
+        private void UpdateSchoolsOptions()
+        {
+            if(context.GetSyncResult<SchoolOption>().Updated == null)
+                return;
+            var res = context.GetSyncResult<SchoolOption>().Updated.Select(schoolOption => new Data.School.Model.SchoolOption
+            {
+                Id = schoolOption.SchoolID,
+                AllowDualEnrollment = schoolOption.AllowDualEnrollment,
+                AllowScoreEntryForUnexcused = schoolOption.AllowScoreEntryForUnexcused,
+                AllowSectionAverageModification = schoolOption.AllowSectionAverageModification,
+                AveragingMethod = schoolOption.AveragingMethod,
+                BaseHoursOffset = schoolOption.BaseHoursOffset,
+                BaseMinutesOffset = schoolOption.BaseMinutesOffset,
+                CategoryAveraging = schoolOption.CategoryAveraging,
+                CompleteStudentScheduleDefinition = schoolOption.CompleteStudentScheduleDefinition,
+                DefaultCombinationIndex = schoolOption.DefaultCombinationIndex,
+                DisciplineOverwritesAttendance = schoolOption.DisciplineOverwritesAttendance,
+                EarliestPaymentDate = schoolOption.EarliestPaymentDate,
+                IncludeReportCardCommentsInGradebook = schoolOption.IncludeReportCardCommentsInGradebook,
+                LockCategories = schoolOption.LockCategories,
+                MergeRostersForAttendance = schoolOption.MergeRostersForAttendance,
+                NextReceiptNumber = schoolOption.NextReceiptNumber,
+                ObservesDst = schoolOption.ObservesDst,
+                StandardsCalculationMethod = schoolOption.StandardsCalculationMethod,
+                StandardsCalculationRule = schoolOption.StandardsCalculationRule,
+                StandardsCalculationWeightMaximumValues = schoolOption.StandardsCalculationWeightMaximumValues,
+                StandardsGradingScaleRef = schoolOption.StandardsGradingScaleID,
+                TimeZoneName = schoolOption.TimeZoneName
+            }).ToList();
+            ServiceLocatorSchool.SchoolService.EditSchoolOptions(res);
         }
 
         private void UpdateAddresses()

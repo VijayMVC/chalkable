@@ -4,26 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chalkable.Data.School.Model
+namespace Chalkable.StiConnector.SyncModel
 {
     public class SchoolOption
     {
-        public int Id { get; set; }
+        public int SchoolID { get; set; }
         public bool AllowSectionAverageModification { get; set; }
         public DateTime? EarliestPaymentDate { get; set; }
         public int? NextReceiptNumber { get; set; }
-        public int? DefaultCombinationIndex { get; set; }
+        public short? DefaultCombinationIndex { get; set; }
         public string TimeZoneName { get; set; }
-        public int? BaseHoursOffset { get; set; }
-        public int? BaseMinutesOffset { get; set; }
+        public short? BaseHoursOffset { get; set; }
+        public short? BaseMinutesOffset { get; set; }
         public bool? ObservesDst { get; set; }
+        public Guid RowVersion { get; set; }
+        public Guid DistrictGuid { get; set; }
         public bool AllowScoreEntryForUnexcused { get; set; }
         public bool DisciplineOverwritesAttendance { get; set; }
         public bool AllowDualEnrollment { get; set; }
         public string CompleteStudentScheduleDefinition { get; set; }
         public string AveragingMethod { get; set; }
         public bool CategoryAveraging { get; set; }
-        public int? StandardsGradingScaleRef { get; set; }
+        public int? StandardsGradingScaleID { get; set; }
         public string StandardsCalculationMethod { get; set; }
         public string StandardsCalculationRule { get; set; }
         public bool StandardsCalculationWeightMaximumValues { get; set; }
