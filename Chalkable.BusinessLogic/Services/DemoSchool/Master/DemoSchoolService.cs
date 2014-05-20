@@ -74,6 +74,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             Storage.MasterSchoolStorage.Update(schools);
         }
 
+        public void Delete(IList<int> localIds, Guid districtId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Add(IList<Data.Master.Model.School> schools)
         {
             if (!BaseSecurity.IsSysAdmin(Context))

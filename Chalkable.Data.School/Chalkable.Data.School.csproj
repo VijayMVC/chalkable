@@ -84,6 +84,7 @@
     <Compile Include="DataAccess\InfractionDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
+    <Compile Include="DataAccess\SchoolOptionDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
     <Compile Include="DataAccess\SisUserDataAccess.cs" />
     <Compile Include="DataAccess\StandardDataAccess.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Model\DayType.cs" />
     <Compile Include="Model\School.cs" />
     <Compile Include="Model\SchoolGradeLevel.cs" />
+    <Compile Include="Model\SchoolOption.cs" />
     <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
     <Compile Include="Model\SisUser.cs" />
