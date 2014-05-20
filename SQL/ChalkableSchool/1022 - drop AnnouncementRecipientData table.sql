@@ -157,7 +157,7 @@ where
 Select 
 	vwAnnouncement.*,
 	--cast((case vwAnnouncement.PrimaryTeacherRef when @personId then 1 else 0 end) as bit) as IsOwner,
-	(select count(*) from ClassTeacher where PersonRef = @personId and ClassTeacher.ClassRef = vwAnnouncement.ClassRef) as IsOwner,
+	cast((case when (select count(*) from ClassTeacher where PersonRef = @personId and ClassTeacher.ClassRef = vwAnnouncement.ClassRef) >= 1 then 1 else 0 end) as bit)  as IsOwner,
 	ROW_NUMBER() OVER(ORDER BY vwAnnouncement.Created desc) as RowNumber,
  	@allCount as AllCount
 from 

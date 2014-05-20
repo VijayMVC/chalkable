@@ -81,7 +81,6 @@ namespace Chalkable.Data.School.Model
         public int? Avg { get; set; }
         public int ApplicationCount { get; set; }
 
-        public int? RecipientDataPersonId { get; set; }
        
         public bool IsDraft
         {
