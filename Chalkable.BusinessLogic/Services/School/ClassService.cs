@@ -370,9 +370,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
-
-
         public void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
@@ -384,12 +381,11 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
         public void AddTeachers(IList<ClassTeacher> classTeachers)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
-            using (var uow = Read())
+            using (var uow = Update())
             {
                 new ClassTeacherDataAccess(uow).Insert(classTeachers);
                 uow.Commit();
@@ -400,7 +396,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
-            using (var uow = Read())
+            using (var uow = Update())
             {
                 new ClassTeacherDataAccess(uow).Update(classTeachers);
                 uow.Commit();
@@ -411,7 +407,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
-            using (var uow = Read())
+            using (var uow = Update())
             {
                 new ClassTeacherDataAccess(uow).Delete(classTeachers);
                 uow.Commit();

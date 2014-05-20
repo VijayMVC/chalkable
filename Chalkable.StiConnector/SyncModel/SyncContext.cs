@@ -62,6 +62,8 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(GradingScale));
             RegisterType(typeof(GradingScaleRange));
             RegisterType(typeof(GradingComment));
+            RegisterType(typeof(SectionStaff));
+            RegisterType(typeof(UserSchool));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

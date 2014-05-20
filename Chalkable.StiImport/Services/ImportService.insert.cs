@@ -217,35 +217,47 @@ namespace Chalkable.StiImport.Services
         private void InsertSchoolPersons()
         {
             var existsing = ServiceLocatorSchool.SchoolPersonService.GetAll();
-            var students = context.GetSyncResult<StudentSchool>().All;
-            var staff = context.GetSyncResult<StaffSchool>().All;
+            var students = context.GetSyncResult<Student>().All;
+            var staff = context.GetSyncResult<Staff>().All;
+            var userSchools = context.GetSyncResult<UserSchool>().All;
             IList<SchoolPerson> assignments = new List<SchoolPerson>();
-            foreach (var studentSchool in students)
+            foreach (var us in userSchools)
             {
-                if (!existsing.Any(x => x.PersonRef == studentSchool.StudentID && x.SchoolRef == studentSchool.SchoolID))
+                var student = students.FirstOrDefault(x => x.UserID == us.UserID);
+                int? personId = null;
+                int? role = null;
+                if (student != null)
                 {
-                    var sp = new SchoolPerson
-                        {
-                            RoleRef = CoreRoles.STUDENT_ROLE.Id,
-                            SchoolRef = studentSchool.SchoolID,
-                            PersonRef = studentSchool.StudentID
-                        };
-                    assignments.Add(sp);
-                    existsing.Add(sp);
+                    personId = student.StudentID;
+                    role = CoreRoles.STUDENT_ROLE.Id;
                 }
-            }
-            foreach (var staffSchool in staff)
-            {
-                if (!existsing.Any(x => x.PersonRef == staffSchool.StaffID && x.SchoolRef == staffSchool.SchoolID))
+                else
                 {
-                    var sp = new SchoolPerson
-                        {
-                            RoleRef = CoreRoles.TEACHER_ROLE.Id,
-                            SchoolRef = staffSchool.SchoolID,
-                            PersonRef = staffSchool.StaffID
-                        };
-                    assignments.Add(sp);
-                    existsing.Add(sp);
+                    var teacher = staff.FirstOrDefault(x => x.UserID == us.UserID);
+                    if (teacher != null)
+                    {
+                        personId = teacher.StaffID;
+                        role = CoreRoles.TEACHER_ROLE.Id;
+                    }
+                }
+                if (role.HasValue)
+                {
+                    if (!existsing.Any(x => x.PersonRef == personId.Value && x.SchoolRef == us.SchoolID))
+                    {
+                        var sp = new SchoolPerson
+                            {
+                                RoleRef = role.Value,
+                                SchoolRef = us.SchoolID,
+                                PersonRef = personId.Value
+                            };
+                        assignments.Add(sp);
+                        existsing.Add(sp);
+                    }
+                }
+                else
+                {
+                    var msg = string.Format("User {0} from school {1} doesn't refer to any person", us.UserID, us.SchoolID);
+                    Log.LogWarning(msg);
                 }
             }
             ServiceLocatorSchool.PersonService.AsssignToSchool(assignments);
