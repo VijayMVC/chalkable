@@ -236,6 +236,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.addClass('with-grid-focus');
             },
 
+            [ria.mvc.DomEventBind('click', '.back-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function backClick(node, event){
+                history.back();
+                return false;
+            },
+
             [ria.mvc.DomEventBind('blur', '.disabled-grade')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeBlur(node, event){
@@ -445,6 +452,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 return true;
             },
 
+            /*[ria.mvc.DomEventBind('click', '.row.selected')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeInputBlur(node, event){
+                var target = new ria.dom.Dom(event.target);
+                if(!node.is('.grade-autocomplete') && !node.isOrInside('.action-link'))
+                    this.setGrade(node);
+            },*/
+
             [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeKeyUp(node, event){
@@ -475,6 +490,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                             var parsed = parseFloat(text);
                             if(!Number.isNaN(parsed)){
                                 node.removeClass('error');
+                                node.removeClass('not-equals');
                                 if(text && parsed != text){
                                     node.addClass('error');
                                 }else{
@@ -488,7 +504,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                                     node.removeClass('error');
                                     var p = false;
                                     suggestions.forEach(function(item){
-                                        if(item == node.getValue())
+                                        if(item.toLowerCase() == node.getValue().toLowerCase())
                                             p = true;
                                     });
                                     if(p){

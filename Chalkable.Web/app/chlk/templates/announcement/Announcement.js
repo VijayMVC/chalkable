@@ -157,7 +157,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'starred',
+            Boolean, 'complete',
 
             [ria.templates.ModelPropertyBind],
             Number, 'state',

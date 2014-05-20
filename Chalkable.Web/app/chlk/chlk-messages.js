@@ -126,6 +126,7 @@ var Msg = {
     Icon: oneOrMany('Icon'),
     Id: 'Id',
     Import: 'Import',
+    Important: 'Important',
     Incomplete: 'Incomplete',
     Include: 'Include',
     Item: oneOrMany('Item'),

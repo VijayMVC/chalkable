@@ -518,8 +518,9 @@ TEXTAREA.animated-textarea{
   @include box-shadow(0 1px 0 0 #9abbcb inset, 0 1px 2px 0px #999);
   border: 1px solid #29596e;
 
-  &:hover{
-    @include background(linear-gradient(top, #457d97, #1f566d));
+  &:hover, &.pressed{
+    @include box-shadow(0 1px 2px 0px #999);
+    @include background(linear-gradient(top, #265f75, #3688a4));
   }
 }
 
@@ -536,7 +537,7 @@ TEXTAREA.animated-textarea{
   font-size: 11px;
   text-align: center;
 
-  &:not(.same-on-hover):hover{
+  &:not(.same-on-hover):hover, &.pressed{
     @include background(linear-gradient(top, #e5e5e5, #d0d0d0));
   }
 

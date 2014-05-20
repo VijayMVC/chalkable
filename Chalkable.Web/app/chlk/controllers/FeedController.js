@@ -34,23 +34,21 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.GradeLevelService, 'gradeLevelService',
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
-        function listAction(postback_, starredOnly_, classId_, pageIndex_) {
-            starredOnly_ = starredOnly_ != false;
+        function listAction(postback_, completeOnly_, classId_, pageIndex_) {
+            completeOnly_ = completeOnly_ != false;
             var result = this
-                .getFeedItems(postback_, starredOnly_, classId_, pageIndex_)
+                .getFeedItems(postback_, completeOnly_, classId_, pageIndex_)
                 .attach(this.validateResponse_());
-            return postback_
-                    ? this.UpdateView(chlk.activities.feed.FeedListPage, result)
-                    : this.PushView(chlk.activities.feed.FeedListPage, result);
+            return this.PushOrUpdateView(chlk.activities.feed.FeedListPage, result);
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
-        function getFeedItems(postback_, starredOnly_, classId_, pageIndex_){
+        function getFeedItems(postback_, completeOnly_, classId_, pageIndex_){
             return this.announcementService
-                .getAnnouncements(pageIndex_ | 0, classId_, starredOnly_)
+                .getAnnouncements(pageIndex_ | 0, classId_, completeOnly_)
                 .attach(this.validateResponse_())
                 .then(function(feedItems){
-                    if(!postback_ && starredOnly_ && feedItems.length == 0)
+                    if(!postback_ && completeOnly_ && feedItems.length == 0)
                         return this.getFeedItems(postback_, false, classId_, pageIndex_);
 
                     var classes = this.classService.getClassesForTopBar(true);
@@ -59,7 +57,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.feed.Feed(
                         feedItems,
                         classBarItemsMdl,
-                        starredOnly_,
+                        completeOnly_,
                         this.getNewNotificationCount_()
                     );
                 }, this);

@@ -17,7 +17,7 @@ NAMESPACE('chlk.activities.feed', function () {
                     var ic = this.dom.find('#importan-count');
                     var current = parseInt(ic.getHTML(), 10) || 0;
                     var feedItem = node.parent('.feed-item');
-                    if (feedItem.getAttr("class").indexOf("starred") != -1)
+                    if (feedItem.getAttr("class").indexOf("complete") != -1)
                     {
                         ic.setHTML("" + (current+1));
                     }
