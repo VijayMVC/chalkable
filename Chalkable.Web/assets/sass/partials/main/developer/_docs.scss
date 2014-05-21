@@ -1,0 +1,60 @@
+@import "compass/css3/transition";
+BODY {
+  DIV.page {
+     #content {
+
+       .developer-docs-page{
+         margin-left: -18px;
+       }
+
+       &.developer-docs {
+         DIV.page {
+           #content {
+             padding-left: 297px;
+
+             #dev-docs{
+               display: block;
+             }
+
+
+
+
+           }
+         }
+       }
+    }
+  }
+
+  &.developer-docs{
+    .ribbon{
+     position: absolute;
+     top: 0;
+     left: 267px;
+     width: 105px;
+     height: 58px;
+     display: block;
+     background: url(images/developer/ribbon.png) 0 0 no-repeat;
+   }
+
+    overflow-y:hidden;
+
+   #dev-docs{
+    width: 100%;
+    min-width: 1000px;
+    margin-top: -11px;
+    border: none;
+    overflow: visible;
+   }
+
+   #content-wrapper{
+     display: none;
+     width: 100% !important;
+   }
+
+
+   #logout-block{
+     right: 17px;
+   }
+
+  }
+}
