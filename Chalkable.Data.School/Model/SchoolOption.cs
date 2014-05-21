@@ -1,9 +1,11 @@
 ﻿using System;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
     public class SchoolOption
     {
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public bool AllowSectionAverageModification { get; set; }
         public DateTime? EarliestPaymentDate { get; set; }
