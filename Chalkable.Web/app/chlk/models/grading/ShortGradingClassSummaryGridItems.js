@@ -3,6 +3,8 @@ REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
 REQUIRE('chlk.models.grading.StudentAverageInfo');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
+REQUIRE('chlk.models.id.StandardId');
+REQUIRE('chlk.models.id.AnnouncementTypeGradingId');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -17,6 +19,10 @@ NAMESPACE('chlk.models.grading', function () {
 
             [ria.serialize.SerializeProperty('gradingperiod')],
             chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
+
+            chlk.models.id.StandardId, 'standardId',
+
+            chlk.models.id.AnnouncementTypeGradingId, 'categoryId',
 
             Number, 'avg',
 

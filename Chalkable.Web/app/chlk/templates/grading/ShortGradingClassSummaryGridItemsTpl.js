@@ -20,6 +20,12 @@ NAMESPACE('chlk.templates.grading', function () {
             chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.StandardId, 'standardId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementTypeGradingId, 'categoryId',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'avg',
 
             [ria.templates.ModelPropertyBind],

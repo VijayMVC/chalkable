@@ -145,6 +145,8 @@ NAMESPACE('chlk.controllers', function (){
                     .getClassSummaryGridForPeriod(model.getClassId(), model.getGradingPeriodId(), model.getStandardId(), model.getCategoryId(), model.isNotCalculateGrid())
                     .then(function(newModel){
                         newModel.setAutoUpdate(model.isAutoUpdate());
+                        newModel.setCategoryId(model.getCategoryId());
+                        newModel.setStandardId(model.getStandardId());
                         return newModel;
                     })
                     .attach(this.validateResponse_());
@@ -297,14 +299,15 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
-            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
-            function postGradeBookAction(classId, gradingPeriodId){
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId]],
+            function postGradeBookAction(classId, gradingPeriodId, standardId_, categoryId_){
                 var res = this.gradingService.postGradeBook(classId, gradingPeriodId)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        var model = new chlk.models.grading.GradingSummaryGridSubmitViewData(classId, gradingPeriodId, true);
+                        var model = new chlk.models.grading.GradingSummaryGridSubmitViewData(classId, gradingPeriodId, true, false, standardId_, categoryId_);
                         this.BackgroundNavigate('grading', 'loadGradingPeriodGridSummary', [model]);
                     }, this);
+                return null;
             },
 
             [[chlk.models.grading.Final]],
