@@ -82,5 +82,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             Storage.SchoolOptionStorage.Delete(ids);
         }
+
+        public SchoolOption GetSchoolOption()
+        {
+            if(!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException(); 
+            return Storage.SchoolOptionStorage.GetById(Context.SchoolLocalId.Value);
+        }
     }
 }

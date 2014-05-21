@@ -21,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddSchoolOptions(IList<SchoolOption> schoolOptions);
         void EditSchoolOptions(IList<SchoolOption> schoolOptions);
         void DeleteSchoolOptions(IList<int> ids);
+        SchoolOption GetSchoolOption();
     }
 
     public class SchoolService : SchoolServiceBase, ISchoolService
@@ -106,6 +107,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new SchoolOptionDataAccess(uow);
                 modify(da);
                 uow.Commit();
+            }
+        }
+
+        public SchoolOption GetSchoolOption()
+        {
+            if(!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
+
+            using (var uow = Read())
+            {
+                return new SchoolOptionDataAccess(uow).GetByIdOrNull(Context.SchoolLocalId.Value);
             }
         }
     }
