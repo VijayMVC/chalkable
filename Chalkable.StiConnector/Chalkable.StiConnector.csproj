@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connectors\ActivityAttachmentsConnector.cs" />
+    <Compile Include="Connectors\ActivityCategoryConnnector.cs" />
     <Compile Include="Connectors\ActivityConnector.cs" />
     <Compile Include="Connectors\ActivityScoreConnector.cs" />
     <Compile Include="Connectors\AttachmentConnector.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Connectors\LinkConnector.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
+    <Compile Include="Connectors\Model\ActivityCategory.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\ClassroomOption.cs" />
     <Compile Include="Connectors\Model\DisciplineReferral.cs" />

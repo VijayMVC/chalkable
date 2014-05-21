@@ -686,6 +686,8 @@ NAMESPACE('chlk.controllers', function (){
                 var apps = this.getContext().getSession().get('AnnouncementApplications', []);
                 if((!model.getAttachments() || !model.getAttachments().length) && (!apps.length) && !model.getContent()){
                         this.ShowMsgBox('You should fill in Assignment\nor add attachment or application', 'whoa.');
+                        res = new ria.async.DeferredData(new chlk.models.announcement.Announcement());
+                        this.BackgroundUpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
                         return false;
                 }else{
                     res = this.announcementService

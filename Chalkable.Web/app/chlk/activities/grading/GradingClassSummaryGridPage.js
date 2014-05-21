@@ -362,7 +362,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     }else{
                         if(value){
                             var text = node.getValue() ? node.getValue().trim() : '';
-                            var parsed = parseInt(text,10);
+                            var parsed = parseFloat(text);
                             if(parsed || parsed == 0){
                                 node.removeClass('error');
                                 if(parsed != text){
@@ -384,7 +384,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 setTimeout(function(cell){
                     var node = cell.find('.grade-autocomplete');
-                    var numericValue = parseInt(node.getValue(), 10);
+                    var numericValue = parseFloat(node.getValue());
                     if(numericValue == node.getValue()){
                         var model = this.getModelFromCell(cell);
                         this.updateFlagByModel(model, cell);
@@ -680,7 +680,22 @@ NAMESPACE('chlk.activities.grading', function () {
                     var isAvg = node.hasClass('avg-form');
                     var activeCell = node.parent('.grade-value');
                     this.dom.find('.autocomplete-list:visible').hide();
-                    var model = this.getModelFromCell(activeCell);
+                    var model = this.getModelFromCell(activeCell), p = false;
+
+                    if(isAvg){
+                        p = (input.getValue() || '') == (input.getData('grade-value').toString() || '');
+                    }else{
+                        var resModel = this.serializeFromForm(node);
+                        p = (model.getGradeValue() || '') == (resModel.getGradeValue() || '') &&
+                            this.getBooleanValue(model.isDropped()) == this.getBooleanValue(resModel.isDropped()) &&
+                            this.getBooleanValue(model.isLate()) == this.getBooleanValue(resModel.isLate()) &&
+                            this.getBooleanValue(model.isExempt()) == this.getBooleanValue(resModel.isExempt()) &&
+                            this.getBooleanValue(model.isIncomplete()) == this.getBooleanValue(resModel.isIncomplete());
+                    }
+                    if(p){
+                        event.preventDefault();
+                        return false;
+                    }
 
                     var form = activeCell.parent('.marking-period-container').find('.load-grading-period');
                     if(isAvg){
