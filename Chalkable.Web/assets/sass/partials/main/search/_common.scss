@@ -18,8 +18,10 @@ ul.ui-autocomplete{
         font-weight: normal;
         width: 160px;
         border: 0;
-        height: 70px;
+        min-height: 70px;
         padding: 0;
+        overflow: hidden;
+        word-break: break-all;
 
         >div.site-search-person, >div.site-search-class, >div.site-search-attachment, >div.site-search-announcement{
           margin-top: 10px;
