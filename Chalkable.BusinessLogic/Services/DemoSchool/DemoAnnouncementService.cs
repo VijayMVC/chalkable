@@ -331,6 +331,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void SetComplete(int id, bool complete)
         {
+            //var ann = Storage.AnnouncementStorage
             throw new NotImplementedException();
         }
 

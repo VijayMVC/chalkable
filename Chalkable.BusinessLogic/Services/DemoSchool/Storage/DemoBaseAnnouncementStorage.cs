@@ -93,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.ToDate.HasValue)
                 announcements = announcements.Where(x => x.Expires <= query.ToDate);
             if (query.Complete.HasValue)
-                announcements = announcements.Where(x => x.Complete);
+                announcements = announcements.Where(x => x.Complete == query.Complete);
             if (query.OwnedOnly)
                 announcements = announcements.Where(x => x.PrimaryTeacherRef == query.PersonId);
 

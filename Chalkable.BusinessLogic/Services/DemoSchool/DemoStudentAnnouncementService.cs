@@ -38,6 +38,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Incomplete = incomplete,
                 Late = late,
                 Exempt = exempt,
+                NumericScore = int.Parse(value),
                 ActivityId = ann.SisActivityId.Value,
                 AnnouncementId = announcementId,
                 StudentId = studentId,
