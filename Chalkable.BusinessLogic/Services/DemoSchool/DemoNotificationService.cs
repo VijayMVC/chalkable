@@ -82,9 +82,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            var authors = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery { ClassId = ann.ClassRef, RoleId = CoreRoles.TEACHER_ROLE.Id });
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
-            var notification = builder.BuildAnnouncementQnToAuthorNotifiaction(annQnA, ann);
-            AddNotification(notification);
+            IList<Notification> notifications = authors.Select(author => builder.BuildAnnouncementQnToAuthorNotifiaction(annQnA, ann, author)).ToList();
+            AddNotifications(notifications);
         }
 
         public void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId)

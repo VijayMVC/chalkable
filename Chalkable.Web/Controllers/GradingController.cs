@@ -152,7 +152,6 @@ namespace Chalkable.Web.Controllers
         }
 
         
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentSummary(int studentId, int? classId)
         {

@@ -173,10 +173,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  null, null, new { AnnouncementTitle = announcement.Title });
         }
 
-        public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement)
+        public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement, Person answerer)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR,
-                                                 NotificationType.Question, announcementQnA.Answerer, announcement, null, null, null, 
+                                                 NotificationType.Question, answerer, announcement, null, null, null, 
                                                  announcementQnA.Asker, new
                                                      {
                                                          AnnouncementTypeName = announcement.ClassAnnouncementTypeName,

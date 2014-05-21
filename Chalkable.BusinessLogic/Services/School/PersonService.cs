@@ -23,8 +23,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
-        Person GetPerson(int id);
         PersonDetails GetPersonDetails(int id);
+        Person GetPerson(int id);
         void ActivatePerson(int id);
         Person EditEmail(int id, string email, out string error);
 

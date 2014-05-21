@@ -23,7 +23,7 @@ namespace Chalkable.Web.Models
                 AnnouncementId = announcementQnA.AnnouncementRef,
                 IsOwner = announcementQnA.IsOwner,
                 Question = AnnouncementMessageViewData.Create(announcementQnA, false),
-                Answer = AnnouncementMessageViewData.Create(announcementQnA, true),
+                Answer = announcementQnA.Answerer != null ? AnnouncementMessageViewData.Create(announcementQnA, true) : null,
                 State = (int)announcementQnA.State
             };
         }
