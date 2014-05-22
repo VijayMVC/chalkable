@@ -25,6 +25,8 @@ namespace Chalkable.StiImport.Services
     {
         private void ProcessDelete()
         {
+            Log.LogInfo("delete schoolsOptions");
+            DeleteSchoolsOptions();
             Log.LogInfo("delete grading comments");
             DeleteGradingComments();
             Log.LogInfo("delete class room options");
@@ -89,8 +91,6 @@ namespace Chalkable.StiImport.Services
             DeleteSisUsers();
             Log.LogInfo("delete addresses");
             DeleteAddresses();
-            Log.LogInfo("delete schoolsOptions");
-            DeleteSchoolsOptions();
             Log.LogInfo("delete schools");
             DeleteSchools();
         }

@@ -30,8 +30,6 @@ namespace Chalkable.StiImport.Services
         {
             Log.LogInfo("update schools");
             UpdateSchools();
-            Log.LogInfo("update schoolsOptions");
-            UpdateSchoolsOptions();
             Log.LogInfo("update adresses");
             UpdateAddresses();
             Log.LogInfo("update sis users");
@@ -96,6 +94,8 @@ namespace Chalkable.StiImport.Services
             UpdateClassroomOptions();
             Log.LogInfo("update grading comments");
             UpdateGradingComments();
+            Log.LogInfo("update schoolsOptions");
+            UpdateSchoolsOptions();
         }
 
         private void UpdateSchools()
