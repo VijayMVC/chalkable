@@ -2,8 +2,8 @@ displayValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrade
 edited = self.getEnteredAvg() || self.getEnteredAvg() == 0 || self.getEnteredAlphaGrade()
 div(
     data-isexempt= self.isExempt(),
-    data-calculated-avg= self.getCalculatedAvg(),
-    data-entered-avg= self.getEnteredAvg(),
+    data-calculated-avg= self.getCalculatedAvg() == null ? null : self.getCalculatedAvg().toString(),
+    data-entered-avg= self.getEnteredAvg() == null ? null : self.getEnteredAvg().toString(),
     data-calculated-alpha-grade= self.getCalculatedAlphaGrade(),
     data-entered-alpha-grade= self.getEnteredAlphaGrade(),
     data-may-be-exempt=self.isMayBeExempt(),

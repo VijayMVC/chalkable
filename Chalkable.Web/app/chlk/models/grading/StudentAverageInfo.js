@@ -56,9 +56,9 @@ NAMESPACE('chlk.models.grading', function () {
                     this.setAverageId(averageId_);
                 if(gradingPeriodId_)
                     this.setGradingPeriodId(gradingPeriodId_);
-                if(calculatedAvg_)
+                if(calculatedAvg_ || calculatedAvg_ == 0)
                     this.setCalculatedAvg(calculatedAvg_);
-                if(enteredAvg_)
+                if(enteredAvg_ || enteredAvg_ == 0)
                     this.setEnteredAvg(enteredAvg_);
                 if(calculatedAlphaGrade_)
                     this.setCalculatedAlphaGrade(calculatedAlphaGrade_);

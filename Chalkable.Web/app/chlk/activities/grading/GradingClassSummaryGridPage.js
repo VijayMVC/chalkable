@@ -816,8 +816,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     model = new chlk.models.grading.ShortStudentAverageInfo(
                         cell.getData('average-id'),
                         new chlk.models.id.GradingPeriodId(cell.getData('grading-period-id')),
-                        node.getData('calculated-avg'),
-                        node.getData('entered-avg'),
+                        parseFloat(node.getData('calculated-avg')),
+                        parseFloat(node.getData('entered-avg')),
                         node.getData('calculated-alpha-grade'),
                         node.getData('entered-alpha-grade'),
                         this.getBooleanValue(node.getData('may-be-exempt')),
