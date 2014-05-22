@@ -1,0 +1,7 @@
+mixin Checkbox(name, val, isReadOnly)
+    -attributes.checked = val;
+    -attributes.disabled = isReadOnly
+    -attributes = self.prepareData(attributes, val);
+    +Hidden(name, false)(data-value=val, class="hidden-checkbox", id=attributes.id + '-hidden')
+    input(name = name, type="checkbox")(attributes)
+
