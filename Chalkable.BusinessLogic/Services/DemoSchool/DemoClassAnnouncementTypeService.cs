@@ -14,6 +14,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(IList<int> classesIds, bool all = true)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true)
         {
             var res = Storage.ClassAnnouncementTypeStorage.GetAll(classId);

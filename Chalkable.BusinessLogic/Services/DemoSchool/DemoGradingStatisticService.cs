@@ -174,11 +174,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.StiGradeBookStorage.GetGradebookComments(schoolYearId, teacherId);
         }
 
-        public ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId)
+        public TeacherClassGrading GetClassGradingSummary(int classId, int gradingPeriodId)
         {
             var gradeBook = ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriodId);
             var gradedCAnnTypes = ServiceLocator.ClassAnnouncementTypeService.CalculateAnnouncementTypeAvg(classId, gradeBook.Announcements);
-            return new ClassGradingSummary
+            return new TeacherClassGrading
             {
                 Announcements = gradeBook.Announcements,
                 AnnouncementTypes = gradedCAnnTypes,
@@ -235,6 +235,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             studentAverage = Storage.StiGradeBookStorage.UpdateStudentAverage(classId, studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
+        }
+
+        public IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
