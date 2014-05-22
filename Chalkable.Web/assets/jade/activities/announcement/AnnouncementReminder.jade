@@ -1,0 +1,9 @@
+before = self.getBefore();
+isWeek = before && before % 7 == 0;
+inputValue = isWeek ? before / 7 : before;
+div(data-id = self.getId().valueOf(), data-value = before).reminder
+    input(value = inputValue).reminder-input
+    +Select().reminder-select
+        +Option(7, Msg.Week(true), isWeek)
+        +Option(1, Msg.Day(true), !isWeek)
+    +ActionLink('announcement', 'removeReminder', self.getId()).remove-btn.remove-reminder
