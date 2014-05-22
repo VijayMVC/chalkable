@@ -127,7 +127,7 @@ $star-size: 18px;
   background: url(images/feed/item-bg.png) 0 top repeat-x;
   @include border-radius(7px);
 
-  &.complete{
+  &:not(.complete){
     .attachment{
       .animated-header, p.animated{
         opacity: 0.7;
