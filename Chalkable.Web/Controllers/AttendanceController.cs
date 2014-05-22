@@ -176,6 +176,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult AttendanceSummary(DateTime? date)
         {
             return FakeJson("~/fakeData/attendanceSummary.json");
+            
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SEATING_CHART, true, CallType.Get, new[] { AppPermissionType.Attendance })]

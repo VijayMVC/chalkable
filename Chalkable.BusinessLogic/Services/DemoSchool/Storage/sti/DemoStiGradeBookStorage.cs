@@ -92,7 +92,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                             CalculatedNumericAverage = 100,
                             EnteredNumericAverage = 100,
                             IsGradingPeriodAverage = true,
-                            GradingPeriodId = i + 1
+                            GradingPeriodId = i + 1,
+                            StudentId = DemoSchoolConstants.FirstStudentId
+                        },
+                        new StudentAverage()
+                        {
+                            CalculatedNumericAverage = 100,
+                            EnteredNumericAverage = 100,
+                            IsGradingPeriodAverage = true,
+                            GradingPeriodId = i + 1,
+                            StudentId = DemoSchoolConstants.SecondStudentId
+                        },
+                        new StudentAverage()
+                        {
+                            CalculatedNumericAverage = 100,
+                            EnteredNumericAverage = 100,
+                            IsGradingPeriodAverage = true,
+                            GradingPeriodId = i + 1,
+                            StudentId = DemoSchoolConstants.ThirdStudentId
                         }
                     }
                 };
@@ -110,7 +127,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                             CalculatedNumericAverage = 100,
                             EnteredNumericAverage = 100,
                             IsGradingPeriodAverage = true,
-                            GradingPeriodId = i + 1
+                            GradingPeriodId = i + 1,
+                            StudentId = DemoSchoolConstants.FirstStudentId
+                        },
+
+                        new StudentAverage()
+                        {
+                            CalculatedNumericAverage = 100,
+                            EnteredNumericAverage = 100,
+                            IsGradingPeriodAverage = true,
+                            GradingPeriodId = i + 1,
+                            StudentId = DemoSchoolConstants.SecondStudentId
+                        },
+
+                        new StudentAverage()
+                        {
+                            CalculatedNumericAverage = 100,
+                            EnteredNumericAverage = 100,
+                            IsGradingPeriodAverage = true,
+                            GradingPeriodId = i + 1,
+                            StudentId = DemoSchoolConstants.ThirdStudentId
                         }
                     }
                 };
@@ -155,6 +191,35 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         public void PostGrades(int classId, int? gradingPeriodId)
         {
+        }
+
+        public IEnumerable<SectionGradesSummary> GetSectionGradesSummary(List<int> classesIds, int gradingPeriodId)
+        {
+            var res = new List<SectionGradesSummary>();
+
+            foreach (var classId in classesIds)
+            {
+                var gb = GetBySectionAndGradingPeriod(classId, null, gradingPeriodId);
+                var ss = new SectionGradesSummary()
+                {
+                    SectionId = gb.SectionId
+                };
+                var students = new List<StudentSectionGradesSummary>();
+                foreach (var studentAvg in gb.StudentAverages)
+                {
+                   students.Add(new StudentSectionGradesSummary
+                   {
+                       SectionId = gb.SectionId,
+                       Average = studentAvg.CalculatedNumericAverage,
+                       Exempt = false,
+                       StudentId = studentAvg.StudentId
+                   });
+                }
+                ss.Students = students;
+
+                res.Add(ss);
+            }
+            return res;
         }
     }
 }
