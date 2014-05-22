@@ -144,7 +144,7 @@ namespace Chalkable.BusinessLogic.Model
         {
             return studentSectionGrades.Select(x => new ShortStudentClassGradesSummary
                 {
-                    Student = students.FirstOrDefault(student=>student.Id == x.StudentId),
+                    Student = students.First(student=>student.Id == x.StudentId),
                     ClassId = x.SectionId,
                     Avg = x.Average,
                     Exempt = x.Exempt
