@@ -11,11 +11,11 @@ div(class = noComplete ? "no-complete" : "").feed-container
             .left
                 .i-b
                     if self.completeOnly
-                        BUTTON.grey-button.pressed.done-undone-button=Msg.Important
-                        +ActionLinkButton('feed', 'list', true, false, selectedId, 0).blue-button.done-undone-button.no-action-link-styles=Msg.All
+                        BUTTON.grey-button.blue-on-active.pressed.done-undone-button=Msg.Important
+                        +ActionLinkButton('feed', 'list', true, false, selectedId, 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.All
                     else
-                        +ActionLinkButton('feed', 'list', true, true, selectedId, 0).grey-button.done-undone-button.no-action-link-styles=Msg.Important
-                        BUTTON.blue-button.done-undone-button.pressed=Msg.All
+                        +ActionLinkButton('feed', 'list', true, true, selectedId, 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.Important
+                        BUTTON.grey-button.blue-on-active.done-undone-button.pressed=Msg.All
             .right
                 .notification-btn-container
                     .feed-notifications Notifications

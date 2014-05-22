@@ -31,6 +31,7 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate]],
         function showMonthDayPopUpAction(date) {
             var result = this.calendarService
@@ -43,6 +44,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, Number]],
         function showDayPopUpAction(date, periodNumber) {
             var result = this.calendarService
@@ -56,6 +58,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
         },
 
+        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, Number]],
         function showWeekBarPopUpAction(date, periodNumber_) {
             var result = this.calendarService

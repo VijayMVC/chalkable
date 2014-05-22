@@ -127,7 +127,7 @@ $star-size: 18px;
   background: url(images/feed/item-bg.png) 0 top repeat-x;
   @include border-radius(7px);
 
-  &.complete{
+  &:not(.complete){
     .attachment{
       .animated-header, p.animated{
         opacity: 0.7;
@@ -157,7 +157,7 @@ $star-size: 18px;
   &.complete {
     DIV.bullet {
       a.star {
-        background-position: center top;
+        background-position: center -36px;
       }
     }
   }
@@ -277,7 +277,7 @@ $star-size: 18px;
   }
 
   a.star {
-    background: url(images/feed/done-undone.png) center -36px no-repeat;
+    background: url(images/feed/done-undone.png) center top no-repeat;
     position: absolute;
     top: 50%;
     left: 14px;
