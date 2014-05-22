@@ -20,19 +20,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             Add(new StudentSchoolYear
             {
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                StudentRef = DemoSchoolConstants.FirstStudentId
+                StudentRef = DemoSchoolConstants.FirstStudentId,
+                GradeLevel = Storage.GradeLevelStorage.GetById(12),
+                GradeLevelRef = 12
             });
 
             Add(new StudentSchoolYear
             {
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                StudentRef = DemoSchoolConstants.SecondStudentId
+                StudentRef = DemoSchoolConstants.SecondStudentId,
+                GradeLevel = Storage.GradeLevelStorage.GetById(12),
+                GradeLevelRef = 12
             });
 
             Add(new StudentSchoolYear
             {
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                StudentRef = DemoSchoolConstants.ThirdStudentId
+                StudentRef = DemoSchoolConstants.ThirdStudentId,
+                GradeLevel = Storage.GradeLevelStorage.GetById(12),
+                GradeLevelRef = 12
             });
         }
 
