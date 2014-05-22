@@ -216,22 +216,5 @@ namespace Chalkable.StiConnector.Connectors
         }
     }
 
-    public class AttendanceConnector : ConnectorBase
-    {
-        public AttendanceConnector(ConnectorLocator locator) : base(locator)
-        {
-        }
 
-        public SectionAttendance GetSectionAttendance(DateTime date, int sectionId)
-        {
-            return Call<SectionAttendance>(string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString(Constants.DATE_FORMAT)));
-        }
-
-        public void SetSectionAttendance(int acadSessionId, DateTime date, int sectionId, SectionAttendance sectionAttendance)
-        {
-            string url = string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString(Constants.DATE_FORMAT));
-            Post(url, sectionAttendance);
-                        
-        }
-    }
 }

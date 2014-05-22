@@ -14,13 +14,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true)
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(IList<int> classesIds, bool all = true)
         {
-            var res = Storage.ClassAnnouncementTypeStorage.GetAll(classId);
+            var res = Storage.ClassAnnouncementTypeStorage.GetAll().Where(x => classesIds.Contains(x.ClassRef)).ToList();
             if (!all)
                 res = res.Where(x => x.Percentage > 0).ToList();
             return res;
+        }
 
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true)
+        {
+            return GetClassAnnouncementTypes(new List<int> {classId}, all);
         }
 
         public void Add(IList<ClassAnnouncementType> classAnnouncementTypes)

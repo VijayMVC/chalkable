@@ -232,24 +232,24 @@ namespace Chalkable.Web.Controllers
             //} 
             var executionResult = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
-            PrepareClassesAdvancedData(classes, mp, getAllAnnouncementTypes);
+            PrepareClassesAdvancedData(classes, mp);
             PrepareCommonViewData(mp);
             PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
         }
 
         
-        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp, bool getAllAnnouncementTypes)
+        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp)
         {
             var classesAdvancedData = new List<object>();
-            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
+            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id)).ToList();
             var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
             var allAlphaGrades = SchoolLocator.AlphaGradeService.GetAlphaGrades();
-      
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailses.Select(x => x.Id).ToList());
             foreach (var classDetails in classDetailses)
             {
                 int classId = classDetails.Id;
-                var typesByClasses = AnnouncementTypeController.GetTypesByClass(SchoolLocator, classId);
+                var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
                 classesAdvancedData.Add(new
                 {
                     ClassId = classId,

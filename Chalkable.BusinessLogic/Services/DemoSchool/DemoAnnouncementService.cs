@@ -329,10 +329,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return order;
         }
 
-        public void SetComplete(int id, bool complete)
+        public void SetComplete(int announcementId, bool complete)
         {
-            //var ann = Storage.AnnouncementStorage
-            throw new NotImplementedException();
+            if (!Context.UserLocalId.HasValue)
+                throw new Exception("User local id doesn't have a valid value");
+            CreateAnnouncementStorage(Context, Storage).SetComplete(announcementId, Context.UserLocalId.Value, complete);
         }
 
         public Announcement SetVisibleForStudent(int id, bool visible)

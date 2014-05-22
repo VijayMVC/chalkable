@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -26,9 +27,10 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ChalkableGradeBook> GetGradeBooks(int classId);
         ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true);
         IList<string> GetGradeBookComments(int schoolYearId, int teacherId);
-        ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId);
+        TeacherClassGrading GetClassGradingSummary(int classId, int gradingPeriodId);
         void PostGradebook(int classId, int? gradingPeriodId);
         ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, bool exempt, IList<ChalkableStudentAverageComment> comments);
+        IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -294,11 +296,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return ConnectorLocator.GradebookConnector.GetGradebookComments(schoolYearId, teacherId);
         }
         
-        public ClassGradingSummary GetClassGradingSummary(int classId, int gradingPeriodId)
+        public TeacherClassGrading GetClassGradingSummary(int classId, int gradingPeriodId)
         {
             var gradeBook = ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriodId);
             var gradedCAnnTypes = ServiceLocator.ClassAnnouncementTypeService.CalculateAnnouncementTypeAvg(classId, gradeBook.Announcements);
-            return new ClassGradingSummary
+            return new TeacherClassGrading
                 {
                     Announcements = gradeBook.Announcements,
                     AnnouncementTypes = gradedCAnnTypes,
@@ -355,6 +357,27 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             studentAverage = ConnectorLocator.GradebookConnector.UpdateStudentAverage(classId, studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
+        }
+
+
+        public IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId)
+        {
+            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            var classesDetails = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId);
+            var classesIds = classesDetails.Select(x => x.Id).ToList();
+            var stiSectionsGrades = ConnectorLocator.GradebookConnector.GetSectionGradesSummary(classesIds, gradingPeriodId);
+            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+                {
+                    RoleId = CoreRoles.STUDENT_ROLE.Id,
+                    TeacherId = teacherId
+                });
+            var res = new List<ShortClassGradesSummary>();
+            foreach (var sectionGrades in stiSectionsGrades)
+            {
+                var classesDetail = classesDetails.FirstOrDefault(x => x.Id == sectionGrades.SectionId);
+                res.Add(ShortClassGradesSummary.Create(sectionGrades, classesDetail, students));
+            }
+            return res;
         }
     }
 }

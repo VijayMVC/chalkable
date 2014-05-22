@@ -12,5 +12,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public int SectionId { get; set; }
+        public int? Percentage { get; set; }
     }
 }

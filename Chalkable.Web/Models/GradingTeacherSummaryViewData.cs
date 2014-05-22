@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -19,47 +20,52 @@ namespace Chalkable.Web.Models
 
         public IList<ShortStudentGradingViewData> AllStudents { get; set; }
 
-        public static IList<GradingTeacherClassSummaryViewData> Create(IList<StudentGradeAvgPerClass> studentClassStats, IList<ClassDetails> classes)
+        public static IList<GradingTeacherClassSummaryViewData> Create(IList<ShortClassGradesSummary> classGradesSummaries)
         {
-            return classes.Select(x => Create(x, studentClassStats)).ToList();
+            return classGradesSummaries.Select(Create).ToList();
         }
-        public static GradingTeacherClassSummaryViewData Create(ClassDetails classDetails, IList<StudentGradeAvgPerClass> studentClassStats)
+        public static GradingTeacherClassSummaryViewData Create(ShortClassGradesSummary classGradesSummary)
         {
-            var res = new GradingTeacherClassSummaryViewData {Class = ClassViewData.Create(classDetails)};
-            studentClassStats = studentClassStats.Where(x => x.ClassRef == classDetails.Id)
-                                                 .OrderBy(x => x.Avg)
+            var res = new GradingTeacherClassSummaryViewData {Class = ClassViewData.Create(classGradesSummary.Class)};
+            var studentsGrades = classGradesSummary.Students.OrderBy(x => x.Avg)
                                                  .ThenBy(x => x.Student.LastName)
-                                                 .ThenBy(x => x.Student.FirstName).ToList();     
-            var well = new List<StudentGradeAvgPerClass>();
-            var trouble = new List<StudentGradeAvgPerClass>();
-            foreach (var studentStats in studentClassStats)
+                                                 .ThenBy(x => x.Student.FirstName).ToList();
+            var well = new List<ShortStudentClassGradesSummary>();
+            var trouble = new List<ShortStudentClassGradesSummary>();
+            foreach (var studentGrades in studentsGrades)
             {
-                if(studentStats.Avg <= BAD_GRADE)
-                    trouble.Add(studentStats);
-                else well.Add(studentStats);
+                if (studentGrades.Avg <= BAD_GRADE)
+                    trouble.Add(studentGrades);
+                else well.Add(studentGrades);
             }
-            int skip = well.Count - DEFAUL_STUDENTS_COUNT > 0 ? well.Count - DEFAUL_STUDENTS_COUNT : 0; 
-            res.AllStudents = ShortStudentGradingViewData.Create(studentClassStats);
-            res.Trouble = ShortStudentGradingViewData.Create(trouble.Take(DEFAUL_STUDENTS_COUNT));
-            res.Well = ShortStudentGradingViewData.Create(well.Skip(skip).Take(DEFAUL_STUDENTS_COUNT));
+            int skip = well.Count - DEFAUL_STUDENTS_COUNT > 0 ? well.Count - DEFAUL_STUDENTS_COUNT : 0;
+            res.AllStudents = ShortStudentGradingViewData.Create(studentsGrades);
+            res.Trouble = ShortStudentGradingViewData.Create(trouble.Take(DEFAUL_STUDENTS_COUNT).ToList());
+            res.Well = ShortStudentGradingViewData.Create(well.Skip(skip).Take(DEFAUL_STUDENTS_COUNT).ToList());
             return res;
         }
     }
 
     public class ShortStudentGradingViewData : ShortPersonViewData
     {
-        public int? Avg { get; set; }
+        public decimal? Avg { get; set; }
+        public bool Exempt { get; set; }
         protected ShortStudentGradingViewData(Person person) : base(person)
         {
         }
 
-        public static ShortStudentGradingViewData Create(StudentGradeAvg studentGradeAvg)
+        public static ShortStudentGradingViewData Create(ShortStudentClassGradesSummary studentClassGrades)
         {
-            return new ShortStudentGradingViewData(studentGradeAvg.Student) { Avg = studentGradeAvg.Avg };
+            return new ShortStudentGradingViewData(studentClassGrades.Student)
+                {
+                    Avg = studentClassGrades.Avg,
+                    Exempt = studentClassGrades.Exempt
+                };
         }
-        public static IList<ShortStudentGradingViewData> Create(IEnumerable<StudentGradeAvgPerClass> studentGradeAvgs)
+
+        public static IList<ShortStudentGradingViewData> Create(IList<ShortStudentClassGradesSummary> studentsClassGrades)
         {
-            return studentGradeAvgs.Select(Create).ToList();
+            return studentsClassGrades.Select(Create).ToList();
         }
     }
 }

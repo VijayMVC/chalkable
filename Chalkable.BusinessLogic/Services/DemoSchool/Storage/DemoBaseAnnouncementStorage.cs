@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
+using Chalkable.BusinessLogic.Services.DemoSchool.Models;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.SqlAzure.ImportExport;
@@ -31,6 +32,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         Dictionary<int, AnnouncementComplex> GetData();
         bool Exists(int id);
         void Setup();
+        void SetComplete(int announcementId, int userId, bool complete);
     }
 
 
@@ -93,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.ToDate.HasValue)
                 announcements = announcements.Where(x => x.Expires <= query.ToDate);
             if (query.Complete.HasValue)
-                announcements = announcements.Where(x => x.Complete == query.Complete);
+                announcements = announcements.Where(x => Storage.AnnouncementCompleteStorage.GetComplete(x.Id, Storage.Context.UserLocalId.Value) == query.Complete.Value);
             if (query.OwnedOnly)
                 announcements = announcements.Where(x => x.PrimaryTeacherRef == query.PersonId);
 
@@ -138,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Id = announcement.Id,
                 SisActivityId = announcement.SisActivityId,
-                Complete = announcement.Complete,
+                Complete = Storage.AnnouncementCompleteStorage.GetComplete(announcement.Id, Storage.Context.UserLocalId.Value),
                 Subject = announcement.Subject,
                 StudentsCount = announcement.StudentsCount,
                 WeightAddition = announcement.WeightAddition,
@@ -278,6 +280,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
             
+        }
+
+        public void SetComplete(int announcementId, int userId, bool complete)
+        {
+            Storage.AnnouncementCompleteStorage.SetComplete
+                (new AnnouncementComplete
+                {
+                    AnnouncementId = announcementId,
+                    Complete = complete,
+                    UserId = userId
+                });
         }
 
         public void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state)

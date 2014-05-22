@@ -32,8 +32,6 @@ namespace Chalkable.StiImport.Services
         {
             Log.LogInfo("insert schools");
             InsertSchools();
-            Log.LogInfo("insert schoolsOptions");
-            InsertSchoolsOptions();
             Log.LogInfo("insert addresses");
             InsertAddresses();
             Log.LogInfo("insert sis users");
@@ -98,6 +96,8 @@ namespace Chalkable.StiImport.Services
             InsertClassroomOptions();
             Log.LogInfo("insert grading comments");
             InsertGradingComments();
+            Log.LogInfo("insert schoolsOptions");
+            InsertSchoolsOptions();
         }
 
         private void InsertSchools()
