@@ -110,11 +110,45 @@ namespace Chalkable.BusinessLogic.Model
         }
     }
 
-    public class ClassGradingSummary
+    public class TeacherClassGrading
     {
         public double? Avg { get; set; }
         public IList<AnnouncementDetails> Announcements { get; set; }
         public IList<GradedClassAnnouncementType> AnnouncementTypes { get; set; }
         public GradingPeriod GradingPeriod { get; set; }
+    }
+
+    public class ShortClassGradesSummary
+    {
+        public ClassDetails Class { get; set; }
+        public IList<ShortStudentClassGradesSummary> Students { get; set; } 
+
+        public static ShortClassGradesSummary Create(SectionGradesSummary sectionGrades, ClassDetails cClass, IList<Person> studentsInfo)
+        {
+            return new ShortClassGradesSummary
+                {
+                    Class = cClass,
+                    Students = ShortStudentClassGradesSummary.Create(sectionGrades.Students.ToList(), studentsInfo)
+                };
+        }
+    }
+
+    public class ShortStudentClassGradesSummary
+    {
+        public Person Student { get; set; }
+        public int ClassId { get; set; }
+        public bool Exempt { get; set; }
+        public decimal? Avg { get; set; }
+
+        public static IList<ShortStudentClassGradesSummary> Create(IList<StudentSectionGradesSummary> studentSectionGrades, IList<Person> students)
+        {
+            return studentSectionGrades.Select(x => new ShortStudentClassGradesSummary
+                {
+                    Student = students.FirstOrDefault(student=>student.Id == x.StudentId),
+                    ClassId = x.SectionId,
+                    Avg = x.Average,
+                    Exempt = x.Exempt
+                }).ToList();
+        }
     }
 }
