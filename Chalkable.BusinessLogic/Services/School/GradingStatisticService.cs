@@ -363,7 +363,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId)
         {
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            var classesDetails = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId);
+            var classesDetails = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0, int.MaxValue);
             var classesIds = classesDetails.Select(x => x.Id).ToList();
             var stiSectionsGrades = ConnectorLocator.GradebookConnector.GetSectionGradesSummary(classesIds, gradingPeriodId);
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
