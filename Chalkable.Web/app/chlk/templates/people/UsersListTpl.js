@@ -27,13 +27,16 @@ NAMESPACE('chlk.templates.people', function () {
                 return this.getModel().getCurrentUser();
             },
 
+            String, function getRoleText(){
+                if(this.getUserRole().isStudent() && !this.isMy())
+                    return Msg.Teacher(users.getTotalCount()!=1);
+                else
+                    return Msg.Student(users.getTotalCount()!=1);
+            },
+
             String, function getTotalText(){
                 var users = this.getUsers();
-                var res = users.getTotalCount() + ' ';
-                if(this.getUserRole().isStudent() && !this.isMy())
-                    res += Msg.Teacher(users.getTotalCount()!=1);
-                else
-                    res += Msg.Student(users.getTotalCount()!=1);
+                var res = users.getTotalCount() + ' ' + this.getRoleText();
                 return res;
             }
         ])
