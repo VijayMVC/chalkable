@@ -56,6 +56,14 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
             Post<Object, Object>(string.Format(url_format + "/postgrades", sectionId), new Object(), nvc);
         }
+
+        public IList<SectionGradesSummary> GetSectionGradesSummary(IList<int> sectionIds, int gradingPeriodId)
+        {
+            var nvc = new NameValueCollection {{"gradingPeriodId", gradingPeriodId.ToString()}};
+            for (int i = 0; i < sectionIds.Count; i++)
+                nvc.Add(string.Format("sectionIds[{0}]", i.ToString()), sectionIds[i].ToString());
+            return Call<IList<SectionGradesSummary>>(string.Format("{0}chalkable/grades/summary", BaseUrl), nvc);
+        }
         
     }
 }

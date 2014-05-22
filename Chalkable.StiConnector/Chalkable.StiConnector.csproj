@@ -79,6 +79,7 @@
     <Compile Include="Connectors\ActivityConnector.cs" />
     <Compile Include="Connectors\ActivityScoreConnector.cs" />
     <Compile Include="Connectors\AttachmentConnector.cs" />
+    <Compile Include="Connectors\AttendanceConnector.cs" />
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\DisciplineConnector.cs" />
@@ -96,6 +97,8 @@
     <Compile Include="Connectors\Model\Seat.cs" />
     <Compile Include="Connectors\Model\SeatingChart.cs" />
     <Compile Include="Connectors\Model\SectionAttendance.cs" />
+    <Compile Include="Connectors\Model\SectionAttendanceSummary.cs" />
+    <Compile Include="Connectors\Model\SectionGradesSummary.cs" />
     <Compile Include="Connectors\Model\StandardScore.cs" />
     <Compile Include="Connectors\Model\StiAttachment.cs" />
     <Compile Include="Connectors\Model\StudentAverageComment.cs" />
