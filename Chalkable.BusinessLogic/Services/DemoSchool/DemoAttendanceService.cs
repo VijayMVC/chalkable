@@ -88,7 +88,29 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AttendanceSummary GetAttendanceSummary(int teacherId, int gradingPeriodId)
         {
-            throw new NotImplementedException();
+            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
+            //var classTeachers = ServiceLocator.ClassService.GetClassTeachers(null, teacherId);
+            //var classesIds = classes.Where(x => classTeachers.Any(y => y.ClassRef == x.Id)).Select(x => x.Id).ToList();
+            var classesIds = classes.Select(x => x.Id).ToList();
+            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            {
+                RoleId = CoreRoles.STUDENT_ROLE.Id,
+                TeacherId = teacherId
+            });
+            var sectionsAttendanceSummary = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
+            var res = new AttendanceSummary();
+            var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
+            var studentAtts = new List<StudentSectionAttendanceSummary>();
+            foreach (var sectionAttendanceSummary in sectionsAttendanceSummary)
+            {
+                dailySectionAttendances.AddRange(sectionAttendanceSummary.Days);
+                studentAtts.AddRange(sectionAttendanceSummary.Students);
+            }
+            res.DaysStat = DailyAttendanceSummary.Create(dailySectionAttendances);
+            studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
+            res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
+            return res;
         }
 
         private string LevelToClassRoomLevel(string level)

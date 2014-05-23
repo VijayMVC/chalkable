@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
@@ -30,38 +31,38 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new ClassAnnouncementType
                 {
                     ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    Description = "Announcement",
+                    Description = "Academic Achievement",
                     Gradable = true,
                     Id = GetNextFreeId(),
-                    Name = "Announcement",
-                    Percentage = 100
+                    Name = "Academic Achievement",
+                    Percentage = 50
                 },
                 new ClassAnnouncementType
                 {
                     ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    Description = "Task",
+                    Description = "Academic Practice",
                     Gradable = true,
                     Id = GetNextFreeId(),
                     Name = "Task",
-                    Percentage = 100
+                    Percentage = 50
                 },
                 new ClassAnnouncementType
                 {
                     ClassRef = DemoSchoolConstants.GeometryClassId,
-                    Description = "Announcement",
+                    Description = "Academic Achievement",
                     Gradable = true,
                     Id = GetNextFreeId(),
-                    Name = "Announcement",
-                    Percentage = 100
+                    Name = "Academic Achievement",
+                    Percentage = 50
                 },
                 new ClassAnnouncementType
                 {
                     ClassRef = DemoSchoolConstants.GeometryClassId,
-                    Description = "Task",
+                    Description = "Academic Practice",
                     Gradable = true,
                     Id = GetNextFreeId(),
-                    Name = "Task",
-                    Percentage = 100
+                    Name = "Academic Practice",
+                    Percentage = 50
                 }
             };
 
