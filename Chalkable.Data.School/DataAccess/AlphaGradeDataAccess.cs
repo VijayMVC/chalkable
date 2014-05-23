@@ -18,8 +18,19 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<int> ids)
         {
-            SimpleDelete<AlphaGrade>(ids.Select(x=> new AlphaGrade{Id = x}).ToList());
+            SimpleDelete(ids.Select(x=> new AlphaGrade{Id = x}).ToList());
         }
+
+        public IList<AlphaGrade> GetList()
+        {
+            var sql = @"select AlphaGrade.* from AlphaGrade
+                        join GradingScaleRange on GradingScaleRange.[{0}] = AlphaGrade.[{1}]";
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(sql, GradingScaleRange.ALPHA_GRADE_REF_FIELD, AlphaGrade.ID_FIELD);
+            var conds = FilterBySchool(new AndQueryCondition());
+            conds.BuildSqlWhere(dbQuery, "AlphaGrade");
+            return ReadMany<AlphaGrade>(dbQuery);
+        } 
 
         public IList<AlphaGrade> GetForClass(int classId)
         {
