@@ -239,7 +239,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId)
         {
-            throw new NotImplementedException();
+            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            var classesDetails = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, (int?)gradingPeriod.MarkingPeriodRef, (int?)teacherId);
+            var classesIds = classesDetails.Select(x => x.Id).ToList();
+
+
+            var stiSectionsGrades = Storage.StiGradeBookStorage.GetSectionGradesSummary(classesIds, gradingPeriodId);
+            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            {
+                RoleId = CoreRoles.STUDENT_ROLE.Id,
+                TeacherId = teacherId
+            });
+            var res = new List<ShortClassGradesSummary>();
+            foreach (var sectionGrade in stiSectionsGrades)
+            {
+                var classesDetail = classesDetails.FirstOrDefault(x => x.Id == sectionGrade.SectionId);
+                res.Add(ShortClassGradesSummary.Create(sectionGrade, classesDetail, students));
+            }
+            return res;
         }
     }
 }

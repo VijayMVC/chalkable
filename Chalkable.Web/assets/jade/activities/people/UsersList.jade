@@ -17,7 +17,8 @@
     .grid-container.loader-container
         +RenderWith(self.getModel(), chlk.templates.people.UsersGridTpl)(
             userRole = self.getUserRole(),
-            currentUser = self.getCurrentUser()
+            currentUser = self.getCurrentUser(),
+            rolesText = self.getRoleText()
         )
 
 

@@ -61,11 +61,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.SchoolYearId.HasValue)
                 classes = classes.Where(x => x.SchoolYearRef == query.SchoolYearId);
             if (query.MarkingPeriodId.HasValue)
-                classes =
-                    classes.Where(
-                        x =>
-                            x.Id == query.ClassId &&
-                            Storage.MarkingPeriodClassStorage.Exists(query.ClassId, query.MarkingPeriodId));
+                classes = classes.Where(x => Storage.MarkingPeriodClassStorage.Exists(x.Id, query.MarkingPeriodId));
 
             string filter1 = null;
             string filter2 = null;

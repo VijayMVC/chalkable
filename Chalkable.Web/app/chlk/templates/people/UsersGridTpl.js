@@ -6,5 +6,7 @@ NAMESPACE('chlk.templates.people', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/people/UsersGrid.jade')],
         [ria.templates.ModelBind(chlk.models.people.UsersList)],
-        'UsersGridTpl', EXTENDS(chlk.templates.people.UsersListTpl), [])
+        'UsersGridTpl', EXTENDS(chlk.templates.people.UsersListTpl), [
+            String, 'rolesText'
+        ])
 });
