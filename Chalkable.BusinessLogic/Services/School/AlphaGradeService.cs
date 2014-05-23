@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new AlphaGradeDataAccess(uow, Context.SchoolLocalId).GetAll();
+                return new AlphaGradeDataAccess(uow, Context.SchoolLocalId).GetList();
             }
         }
 

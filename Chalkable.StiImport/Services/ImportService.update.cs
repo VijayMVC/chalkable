@@ -466,7 +466,8 @@ namespace Chalkable.StiImport.Services
                     SchoolYearRef = course.AcadSessionID,
                     PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,
-                    CourseRef = course.SectionOfCourseID
+                    CourseRef = course.SectionOfCourseID,
+                    GradingScaleRef = course.GradingScaleID
                 });   
             }
             ServiceLocatorSchool.ClassService.Edit(classes);
