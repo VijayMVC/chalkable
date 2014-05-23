@@ -1,3 +1,5 @@
+REQUIRE('chlk.models.common.ChlkDate');
+
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
 
@@ -7,6 +9,8 @@ NAMESPACE('chlk.models.attendance', function () {
             [ria.serialize.SerializeProperty('studentcount')],
             Number, 'studentCount',
 
-            String, 'summary'
+            String, 'summary',
+
+            chlk.models.common.ChlkDate, 'date'
         ]);
 });

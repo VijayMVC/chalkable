@@ -10,6 +10,11 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.SummaryPage)],
         'SummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                this.dom.addClass('refreshed');
+            },
+
             [ria.mvc.DomEventBind('click', '.absent-late-button:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function buttonClick(node, event){

@@ -32,8 +32,24 @@ NAMESPACE('chlk.templates.attendance', function () {
             [[chlk.models.attendance.AbsentLateSummaryItem]],
             Object, function getChartOptions(data){
                 var stats = data.getStat(), names = [], series = [];
-                stats.forEach(function(item){
-                    names.push(item.getSummary());
+                var len = stats.length, notEmpty = [0], lastDate;
+
+                if(len > 7){
+                    for(var i = 0; i < 6; i ++){
+                        notEmpty.push(Math.floor((i * len) / 6 + 0.5));
+                    }
+                    notEmpty.push(len - 1);
+                }
+
+                stats.forEach(function(item, index){
+                    var summary = item.getSummary();
+                    if(len > 7 && notEmpty.indexOf(index) > -1){
+                        var dt = item.getDate();
+                        if(lastDate && summary.split(' ').length == 1 && (lastDate.format('M') != dt.format('M')))
+                            summary = dt.format('M') + ' ' + summary;
+                        lastDate = dt;
+                    }
+                    names.push(len <= 7 || notEmpty.indexOf(index) > -1 ? summary : '');
                     series.push(item.getStudentCount());
                 });
 

@@ -1059,8 +1059,15 @@ BODY {
     margin-bottom: 19px;
   }
 
+  .processed{
+    .chart-label{
+      width: 90px;
+    }
+  }
+
   .chart-container{
     margin-bottom: 44px;
+
     .wide-chart-bg{
       top: 12px;
     }

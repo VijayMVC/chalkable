@@ -194,6 +194,9 @@ NAMESPACE('chlk.controls', function () {
                 options.chart.renderTo = node.valueOf()[0];
                 charts[id] = new Highcharts.Chart(options);
                 node.setData('chart', charts[id]);
+                setTimeout(function(node){
+                    node.addClass('processed');
+                }.bind(this, node), 1);
             }
         ]);
 });
