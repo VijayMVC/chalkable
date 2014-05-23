@@ -1,4 +1,6 @@
-﻿namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
+﻿using Chalkable.BusinessLogic.Services.DemoSchool.Common;
+
+namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoSchoolStorage:BaseDemoIntStorage<Data.School.Model.School>
     {

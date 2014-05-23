@@ -1,4 +1,4 @@
-﻿namespace Chalkable.BusinessLogic.Services.DemoSchool
+﻿namespace Chalkable.BusinessLogic.Services.DemoSchool.Common
 {
     class DemoSchoolConstants
     {
@@ -12,6 +12,21 @@
         public const int GradingPeriodQ2 = 2;
         public const int GradingPeriodQ3 = 3;
         public const int GradingPeriodQ4 = 4;
+
+        public const int GradeLevel1 = 1;
+        public const int GradeLevel2 = 2;
+        public const int GradeLevel3 = 3;
+        public const int GradeLevel4 = 4;
+        public const int GradeLevel5 = 5;
+        public const int GradeLevel6 = 6;
+        public const int GradeLevel7 = 7;
+        public const int GradeLevel8 = 8;
+        public const int GradeLevel9 = 9;
+        public const int GradeLevel10 = 10;
+        public const int GradeLevel11 = 11;
+        public const int GradeLevel12 = 12;
+
+
 
         public const int FirstPeriodId = 1;
         public const int SecondPeriodId = 2;
