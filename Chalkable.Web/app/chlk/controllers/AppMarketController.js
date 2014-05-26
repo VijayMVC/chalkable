@@ -350,6 +350,11 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
+        function cancelAppDeleteAction(){
+            var result = new ria.async.DeferredData(new chlk.models.Success());
+            return this.UpdateView(chlk.activities.apps.MyAppsPage, result, chlk.activities.lib.DontShowLoader());
+        },
+
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppDeletePostData]],
         function tryToUninstallAction(data){
@@ -371,7 +376,9 @@ NAMESPACE('chlk.controllers', function (){
 
                 return this.ShowMsgBox(msgTitle, 'just checking.', [{
                     text: 'CANCEL',
-                    color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                    color: chlk.models.common.ButtonColor.GREEN.valueOf(),
+                    controller: 'appmarket',
+                    action: 'cancelAppDelete'
                 }, {
                     text: 'UNINSTALL',
                     controller: 'appmarket',
