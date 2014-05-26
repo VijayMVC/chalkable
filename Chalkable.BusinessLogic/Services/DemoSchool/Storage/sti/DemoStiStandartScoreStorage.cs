@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
@@ -41,71 +42,56 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return standardScore;
         }
 
-        public override void Setup()
+
+        private void AddStandardScores(int sectionId, int gradingPeriodId, int standardId)
         {
             Add(new StandardScore
             {
-                SectionId = 1,
-                GradingPeriodId = 1,
-                StudentId = 1196,
-                StandardId = 1
+                SectionId = sectionId,
+                GradingPeriodId = gradingPeriodId,
+                StudentId = DemoSchoolConstants.FirstStudentId,
+                StandardId = standardId,
+                ComputedScore = 100,
+                ComputedScoreAlphaGradeName = "A",
+                EnteredScoreAlphaGradeName = "A"
             });
 
             Add(new StandardScore
             {
-                SectionId = 1,
-                GradingPeriodId = 2,
-                StudentId = 1196,
-                StandardId = 1
+                SectionId = sectionId,
+                GradingPeriodId = gradingPeriodId,
+                StudentId = DemoSchoolConstants.SecondStudentId,
+                StandardId = standardId,
+                ComputedScore = 100,
+                ComputedScoreAlphaGradeName = "A",
+                EnteredScoreAlphaGradeName = "A"
             });
 
             Add(new StandardScore
             {
-                SectionId = 1,
-                GradingPeriodId = 3,
-                StudentId = 1196,
-                StandardId = 1
+                SectionId = sectionId,
+                GradingPeriodId = gradingPeriodId,
+                StudentId = DemoSchoolConstants.ThirdStudentId,
+                StandardId = standardId,
+                ComputedScore = 100,
+                ComputedScoreAlphaGradeName = "A",
+                EnteredScoreAlphaGradeName = "A"
             });
+        }
 
-            Add(new StandardScore
+        public override void Setup()
+        {
+            for (var i = 0; i < 4; ++i)
             {
-                SectionId = 1,
-                GradingPeriodId = 4,
-                StudentId = 1196,
-                StandardId = 1
-            });
+                AddStandardScores(DemoSchoolConstants.AlgebraClassId, i + 1, DemoSchoolConstants.MathStandard1);
+                AddStandardScores(DemoSchoolConstants.AlgebraClassId, i + 1, DemoSchoolConstants.MathStandard2);
+                AddStandardScores(DemoSchoolConstants.AlgebraClassId, i + 1, DemoSchoolConstants.MathStandard3);
 
-            Add(new StandardScore
-            {
-                SectionId = 2,
-                GradingPeriodId = 1,
-                StudentId = 1196,
-                StandardId = 1
-            });
+                AddStandardScores(DemoSchoolConstants.GeometryClassId, i + 1, DemoSchoolConstants.MathStandard1);
+                AddStandardScores(DemoSchoolConstants.GeometryClassId, i + 1, DemoSchoolConstants.MathStandard2);
+                AddStandardScores(DemoSchoolConstants.GeometryClassId, i + 1, DemoSchoolConstants.MathStandard3);
+            }
 
-            Add(new StandardScore
-            {
-                SectionId = 2,
-                GradingPeriodId = 2,
-                StudentId = 1196,
-                StandardId = 1
-            });
-
-            Add(new StandardScore
-            {
-                SectionId = 2,
-                GradingPeriodId = 3,
-                StudentId = 1196,
-                StandardId = 1
-            });
-
-            Add(new StandardScore
-            {
-                SectionId = 2,
-                GradingPeriodId = 4,
-                StudentId = 1196,
-                StandardId = 1
-            });
         }
     }
 }

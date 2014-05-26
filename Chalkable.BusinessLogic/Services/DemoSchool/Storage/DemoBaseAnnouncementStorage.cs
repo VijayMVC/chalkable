@@ -276,6 +276,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             foreach (var announcementDetail in announcements)
             {
                 announcementDetail.IsScored = true;
+                announcementDetail.State = AnnouncementState.Created;
                 var activity = new Activity();
                 MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, announcementDetail);
                 activity = Storage.StiActivityStorage.CreateActivity(announcementDetail.ClassRef, activity);

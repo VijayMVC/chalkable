@@ -30,37 +30,37 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new ClassStandard
                 {
                     ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    StandardRef = 1
+                    StandardRef = DemoSchoolConstants.MathStandard1
                 },
 
                 new ClassStandard
                 {
                     ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    StandardRef = 8
+                    StandardRef = DemoSchoolConstants.MathStandard2
                 },
 
                  new ClassStandard
                 {
                     ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    StandardRef = 9
+                    StandardRef = DemoSchoolConstants.MathStandard3
                 },
 
                 new ClassStandard
                 {
                     ClassRef = DemoSchoolConstants.GeometryClassId,
-                    StandardRef = 1
+                    StandardRef = DemoSchoolConstants.MathStandard1
                 },
 
                 new ClassStandard
                 {
                     ClassRef = DemoSchoolConstants.GeometryClassId,
-                    StandardRef = 8
+                    StandardRef = DemoSchoolConstants.MathStandard2
                 },
 
                  new ClassStandard
                 {
                     ClassRef = DemoSchoolConstants.GeometryClassId,
-                    StandardRef = 9
+                    StandardRef = DemoSchoolConstants.MathStandard3
                 }
             });
         }

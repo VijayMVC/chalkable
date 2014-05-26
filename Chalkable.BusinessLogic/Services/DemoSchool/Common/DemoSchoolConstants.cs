@@ -2,7 +2,12 @@
 {
     class DemoSchoolConstants
     {
-        
+        public const int MathStandard1 = 1;
+        public const int MathStandard2 = 2;
+        public const int MathStandard3 = 3;
+
+        public const int ScienceStandardSubject = 3;
+
         public const int AlgebraAcademicAchievementId = 0;
         public const int AlgebraAcademicPracticeId = 1;
 

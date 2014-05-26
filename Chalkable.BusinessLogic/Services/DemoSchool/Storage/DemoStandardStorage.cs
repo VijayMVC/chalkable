@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -7,7 +8,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoStandardStorage:BaseDemoIntStorage<Standard>
     {
-        public DemoStandardStorage(DemoStorage storage) : base(storage, x => x.Id, true)
+        public DemoStandardStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
 
@@ -48,113 +49,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 new Standard
                 {
+                    Id = DemoSchoolConstants.MathStandard1,
                     IsActive = true,
-                    Name = "Math 5",
-                    LowerGradeLevelRef = 7,
-                    UpperGradeLevelRef = 7,
-                    StandardSubjectRef = 1
+                    Name = "Math 1",
+                    LowerGradeLevelRef = DemoSchoolConstants.GradeLevel10,
+                    UpperGradeLevelRef = DemoSchoolConstants.GradeLevel10,
+                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject
                 },
 
                 new Standard
                 {
+                    Id = DemoSchoolConstants.MathStandard2,
                     IsActive = true,
-                    Name = "Reading -1",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 2
+                    Name = "Math 2",
+                    LowerGradeLevelRef = DemoSchoolConstants.GradeLevel11,
+                    UpperGradeLevelRef = DemoSchoolConstants.GradeLevel11,
+                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject
                 },
 
                 new Standard
                 {
+                    Id = DemoSchoolConstants.MathStandard3,
                     IsActive = true,
-                    Name = "Reading -2",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 2
+                    Name = "Math 3",
+                    LowerGradeLevelRef = DemoSchoolConstants.GradeLevel12,
+                    UpperGradeLevelRef = DemoSchoolConstants.GradeLevel12,
+                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject
                 },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Reading -3",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 2
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Reading -4",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 2
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Grammar -1",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 2
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Grammar -2",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 2
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Science -1",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 3
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Science -2",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 3
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Science -1.1",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 3,
-                    ParentStandardRef = 8
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Science -1.2",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 3,
-                    ParentStandardRef = 8
-                },
-
-                new Standard
-                {
-                    IsActive = true,
-                    Name = "Dancing -1",
-                    LowerGradeLevelRef = 1,
-                    UpperGradeLevelRef = 14,
-                    StandardSubjectRef = 4
-                }
 
             });  
         }
