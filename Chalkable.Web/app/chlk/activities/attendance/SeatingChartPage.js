@@ -314,9 +314,17 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.removeClass('dragging-on');
                 if(activeDragging){
                     if($( ".droppable" )[0])
-                        $( ".droppable" ).droppable( "destroy" );
+                        try{
+                            $( ".droppable" ).droppable( "destroy" );
+                        }catch(e){
+
+                        }
                     if($( ".draggable" )[0])
-                        $( ".draggable" ).draggable( "destroy" );
+                        try{
+                            $( ".draggable" ).draggable( "destroy" );
+                        }catch(e){
+
+                        }
                     activeDragging = false;
                 }
                 setTimeout(function(){

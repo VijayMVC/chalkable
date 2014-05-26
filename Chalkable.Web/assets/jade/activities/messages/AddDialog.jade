@@ -3,7 +3,7 @@
     .bg-middle
         .x-window-body
             .general-info
-                +ActionForm('message', 'send')
+                +ActionForm('message', 'send')#add-message-form
                     +Hidden('inbox', self.isInbox())
                     .x-form-field
                         label To:

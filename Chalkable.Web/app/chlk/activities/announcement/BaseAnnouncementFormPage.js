@@ -88,12 +88,18 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('focus keydown keyup', '#content')],
+            [ria.mvc.DomEventBind('focus', '[name=maxscore]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function aaaa(node, event){
+                console.info('maxscore');
+            },
+
+            [ria.mvc.DomEventBind('click keydown keyup', '#content')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function showDropDown(node, event){
                 if(this.dom.find('[name=announcementtypeid]').getValue() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()){
                     var dropDown = this.dom.find('.new-item-dropdown');
-                    if(!node.getValue() && !dropDown.is(':visible')){
+                    if(!node.getValue() && !dropDown.is(':visible')){console.info(node.is(':focus'), event);
                         this.dom.find('#list-last-button').trigger('click');
                     }else{
                         if(event.type == 'keydown'){

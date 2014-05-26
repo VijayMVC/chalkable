@@ -107,7 +107,7 @@ NAMESPACE('chlk.controls', function () {
 
                     var $form = jQuery($target.valueOf()[0]);
 
-                    if(!$target.getData('submit-skip') && this.isOnlySubmitValidate()) {
+                    if(!$target.getData('submit-skip') && (this.isOnlySubmitValidate() || $form.attr('onlySubmitValidate'))) {
                         $form.validationEngine('attach', {
                             onSuccess: function(form, status){
                                 $form.validationEngine('detach');

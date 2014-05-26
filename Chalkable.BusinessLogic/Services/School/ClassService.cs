@@ -31,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetClasses(string filter);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue);
         ClassPerson GetClassPerson(int classId, int personId);
+        IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled); 
         IList<ClassTeacher> GetClassTeachers(int? classId, int? teacherId); 
 
         void AssignClassToMarkingPeriod(int classId, int markingPeriodId);
@@ -420,6 +421,19 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new ClassTeacherDataAccess(uow).GetClassTeachers(classId, teacherId);
+            }
+        }
+
+
+        public IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled)
+        {
+            using (var uow = Read())
+            {
+                return new ClassPersonDataAccess(uow, Context.SchoolLocalId).GetClassPersons(new ClassPersonQuery
+                    {
+                        PersonId = personId,
+                        IsEnrolled = isEnrolled
+                    });
             }
         }
     }
