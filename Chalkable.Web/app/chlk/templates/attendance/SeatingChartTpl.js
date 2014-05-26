@@ -36,7 +36,7 @@ NAMESPACE('chlk.templates.attendance', function () {
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
             Boolean, function isScheduledInMp(){
-                return this.getSeatingList() && this.getNotSeatingStudents();
+                return !!this.getSeatingList() && !!this.getNotSeatingStudents();
             },
 
             function getLateReasons(){
