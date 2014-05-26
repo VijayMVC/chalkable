@@ -91,14 +91,18 @@ namespace Chalkable.BusinessLogic.Services.School
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)
                 {
-                    var stAnn = new StudentAnnouncementDetails
-                        {
-                            ClassId = ann.ClassRef,
-                            Student = persons.First(x=>x.Id == score.StudentId),
-                            AnnouncementId = ann.Id
-                        };
-                    MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);    
-                    res.Add(stAnn);
+                    var student = persons.FirstOrDefault(x => x.Id == score.StudentId);
+                    if (student != null)
+                    {
+                        var stAnn = new StudentAnnouncementDetails
+                            {
+                                ClassId = ann.ClassRef,
+                                Student = student,
+                                AnnouncementId = ann.Id
+                            };
+                        MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);    
+                        res.Add(stAnn);    
+                    }
                 }
                 return res;
 

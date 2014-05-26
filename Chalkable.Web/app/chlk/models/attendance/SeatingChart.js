@@ -38,7 +38,8 @@ NAMESPACE('chlk.models.attendance', function () {
                 posted1 =  items && items.length > 0
                     && items.filter(function(item){return item.isPosted()}).length > 0;
 
-                this.getSeatingList().forEach(function(items){
+                var seatingList = this.getSeatingList();
+                seatingList && seatingList.forEach(function(items){
                     items.forEach(function(item){
                         if(item.getInfo() && item.getInfo().isPosted())
                             len++;

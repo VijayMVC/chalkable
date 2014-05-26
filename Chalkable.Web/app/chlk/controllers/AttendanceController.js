@@ -256,6 +256,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.BackgroundNavigate('attendance', 'summary', []);
             var result = this.attendanceService.getSeatingChartInfo(classId, date_)
                 .then(function(model){
+                    if(!model)
+                        model = new chlk.models.attendance.SeatingChart();
                     return this.prepareSeatingData(model, classId, date_);
                 }, this);
             return this.PushView(chlk.activities.attendance.SeatingChartPage, result);

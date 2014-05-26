@@ -191,10 +191,6 @@ namespace Chalkable.Web.Controllers
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
-            //TODO : get finalizedClasses 
-            //var finalizedClasses = SchoolLocator.FinalGradeService.GetFinalizedClasses(mp.Id);
-            //PrepareJsonData(finalizedClasses.Select(x => x.Id), ViewConstants.FINALIZED_CLASSES_IDS);
-
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId.Value);
             var now = SchoolLocator.Context.NowSchoolTime;
             //if (classes.Count > 0)

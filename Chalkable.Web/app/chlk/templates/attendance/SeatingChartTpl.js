@@ -35,6 +35,10 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
+            Boolean, function isScheduledInMp(){
+                return this.getSeatingList() && this.getNotSeatingStudents();
+            },
+
             function getLateReasons(){
                 return (this.getReasons() || []).filter(function(item){
                     var len;
@@ -62,7 +66,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                     rows: this.getRows(),
                     classId: this.getTopData().getSelectedItemId().valueOf()
                 }, seatsList = [];
-                this.getSeatingList().forEach(function(items){
+                this.getSeatingList() && this.getSeatingList().forEach(function(items){
                     var seatings = [];
                     items.forEach(function(item){
                         seatings.push({
@@ -80,7 +84,7 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             Object, function getMinData(){
                 var rows = 0, columns = 0;
-                this.getSeatingList().forEach(function(items){
+                this.getSeatingList() && this.getSeatingList().forEach(function(items){
                     items.forEach(function(item){
                         if(item.getInfo()){
                             if(item.getColumn() > columns)

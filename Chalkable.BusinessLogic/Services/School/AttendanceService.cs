@@ -154,6 +154,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
         {
             var seatingChart = ConnectorLocator.SeatingChartConnector.GetChart(classId, markingPeriodId);
+            if (seatingChart == null) return null;
             return SeatingChartInfo.Create(seatingChart);
         }
 
