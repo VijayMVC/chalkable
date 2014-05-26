@@ -165,6 +165,11 @@ namespace Chalkable.Web.Controllers
             personView.DisplayName = person.FullName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId);
+            
+            //todo: move this logic to getClass stored procedure later
+            var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
+            classes = classes.Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             PrepareCommonViewData(mp);
         }           

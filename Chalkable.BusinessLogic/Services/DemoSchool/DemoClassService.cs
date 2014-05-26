@@ -276,6 +276,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             
         }
 
+        public IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled)
+        {
+            return Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
+                {
+                    PersonId = personId,
+                    IsEnrolled = isEnrolled
+                }).ToList();
+        }
+
         public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue)
         {
             var res = GetClassesQueryResult(new ClassQuery
