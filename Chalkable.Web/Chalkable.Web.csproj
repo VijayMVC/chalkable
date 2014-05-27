@@ -325,6 +325,7 @@
     <Compile Include="Models\RoomViewData.cs" />
     <Compile Include="Models\ScheduleSectionViewData.cs" />
     <Compile Include="Models\SchoolsViewData\SchoolInfoViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\SchoolOptionViewData.cs" />
     <Compile Include="Models\SchoolsViewData\SchoolPeopleViewData.cs" />
     <Compile Include="Models\SchoolsViewData\SchoolViewData.cs" />
     <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
