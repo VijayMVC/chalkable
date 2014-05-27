@@ -231,6 +231,8 @@ namespace Chalkable.Web.Controllers
             //        }
             //    }
             //} 
+            var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
+            PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
             var executionResult = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(classes, mp);
