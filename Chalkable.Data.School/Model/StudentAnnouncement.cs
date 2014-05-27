@@ -32,6 +32,11 @@ namespace Chalkable.Data.School.Model
         public bool Withdrawn { get; set; }
         public bool OverMaxScore { get; set; }
 
+        public bool IsUnexcusedAbsent
+        {
+            get { return Absent && string.IsNullOrEmpty(AbsenceCategory) && AbsenceCategory.ToLower() == "u"; }
+        }
+        
         //TODO : remove this later
         public StudentAnnouncementStateEnum State { get { return StudentAnnouncementStateEnum.Manual; } }
 
