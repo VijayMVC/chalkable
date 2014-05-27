@@ -1,0 +1,85 @@
+.dialog{
+  &.add-duplicate-announcements{
+    z-index: 10001;
+    position: absolute;
+    margin-left: 50%;
+    left: -487px;
+    top: 200px;
+    background-color: #eaeaea;
+    min-height: 346px;
+    width: 674px;
+    @include border-radius(5px);
+    .header{
+      h1{
+        font-size: 18px;
+        font-weight: bold;
+        padding-top: 22px;
+        padding-bottom: 10px;
+      }
+      span{
+        font-size: 14px;
+      }
+      text-align: center;
+      border-bottom: 1px solid #c4c4c4;
+    }
+    .add-duplicate-announcements-form{
+
+      .main-container{
+        min-height: 240px;
+        font: normal 12px Arial;
+        color: #9c9c9c;
+        overflow-x: auto;
+        border-top: 1px solid #ffffff;
+        border-bottom: 1px solid #c4c4c4;
+
+        .classes-bar{
+          margin-top: 15px;
+          .second-container{
+            text-align: center;
+          }
+        }
+
+        .text-container{
+          text-align: center;
+
+          .tooltip-text{
+            background: url(images/announcement/choose-classes-to-duplicate-item.png) center no-repeat;
+            width: 650px;
+            height: 75px;
+          }
+
+          .note{
+            font-size: 14px;
+            .title{
+              display: inline-block;
+              margin-right: 5px;
+              font-weight: bold;
+              text-shadow: 1px -1px 0px white;
+            }
+            .text{
+              display: inline-block;
+              text-shadow: 1px -1px 0px white;
+            }
+          }
+        }
+      }
+      .buttons-container{
+        border-top: 1px solid #ffffff;
+        text-align: center;
+        padding: 7px 0px;
+
+        .special-button2{
+          >span{
+            >span{
+              >button{
+                font-size: 14px;
+                padding-left: 6px;
+                padding-right: 6px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
