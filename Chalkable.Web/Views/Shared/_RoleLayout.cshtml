@@ -245,7 +245,8 @@
                 return parseJsonToObj(json) || [];
             }
 
-            var school = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL)'); 
+            var school = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL)');
+            var schoolOptions = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL_OPTIONS)');
             var newNotifications = parseInt('@ViewData.GetValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT)', 10) || 0;
             var azurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.AZURE_PICTURE_URL)';
 
