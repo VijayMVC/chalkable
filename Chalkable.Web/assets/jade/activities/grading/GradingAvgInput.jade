@@ -3,6 +3,7 @@ value = self.getModel().displayAvgGradeValue()
     input(name="averageValue", value=value, data-grade-value=value).avg-value.value-input
     +Hidden('averageid', self.getAverageId().valueOf())
     +Hidden('oldValue', value)
+    +Hidden('isComment').is-comment
     +Hidden('oldExempt', self.isExempt())
     +Hidden('codesString', self.getCodesString()).codes-text
     +Hidden('studentid', self.getStudentId().valueOf())

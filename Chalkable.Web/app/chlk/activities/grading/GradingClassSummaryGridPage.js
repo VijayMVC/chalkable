@@ -559,6 +559,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var rowIndex = node.getData('row-index');
                 var cell = this.dom.find('.avg-value-container[row-index=' + rowIndex + '][data-average-id=' + averageId + ']');
                 cell.find('input[name=codesString]').setValue(JSON.stringify(res));
+                cell.find('.is-comment').setValue(true);
                 var input = cell.find('.value-input');
                 if(input.hasClass('error'))
                     input.setValue('input').getData('grade-value');
@@ -683,7 +684,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     var model = this.getModelFromCell(activeCell), p = false;
 
                     if(isAvg){
-                        p = (input.getValue() || '') == (input.getData('grade-value').toString() || '');
+                        p = ((input.getValue() || '') == (input.getData('grade-value').toString() || '')) && !node.find('.is-comment').getValue();
                     }else{
                         var resModel = this.serializeFromForm(node);
                         p = (model.getGradeValue() || '') == (resModel.getGradeValue() || '') &&
@@ -828,7 +829,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         new chlk.models.id.SchoolPersonId(node.getData('student-id')),
                         JSON.stringify(node.getData('codes-string'))
                     );
-                else
+                else{
                     var grade = cell.find('.grade-text').getData('grade-value');
                     grade = grade ? grade.toString() : '';
                     model = new chlk.models.announcement.ShortStudentAnnouncementViewData(
@@ -843,6 +844,8 @@ NAMESPACE('chlk.activities.grading', function () {
                         node.getData('comment'),
                         grade
                     );
+                }
+
                 return model;
             },
 
