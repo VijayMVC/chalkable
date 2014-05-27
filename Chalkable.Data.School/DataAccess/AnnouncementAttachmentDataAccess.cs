@@ -94,18 +94,20 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (CoreRoles.TEACHER_ROLE.Id == roleId)
             {
-                res.Sql.Append(@" and (exists(select * from ClassTeacher 
+                res.Sql.Append(@" and exists(select * from ClassTeacher 
                                              where (ClassTeacher.PersonRef = @callerId or AnnouncementAttachment.PersonRef = ClassTeacher.PersonRef)
-                                                    and ClassTeacher.ClassRef = Announcement.ClassRef))");
+                                                    and ClassTeacher.ClassRef = Announcement.ClassRef)");
                 return res;
 
             }
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
             {
                 res.Sql.Append(@" and (AnnouncementAttachment.PersonRef = @callerId 
-                                   or (Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
-                                       Announcement.ClassRef in (select ct.ClassRef from ClassTeacher ct where ct.PersonRef = AnnouncementAttachment.PersonRef)
-                                )");
+                                       or (
+                                            Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
+                                            and Announcement.ClassRef in (select ct.ClassRef from ClassTeacher ct where ct.PersonRef = AnnouncementAttachment.PersonRef)
+                                          )
+                                       )");
                 return res;
             }
             return null;

@@ -49,7 +49,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.messages.SendMessage]],
             ria.async.Future, function send(model) {
-                return this.get('PrivateMessage/Send.json', null,{
+                return this.post('PrivateMessage/Send.json', null,{
                     personId: model.getRecipientId().valueOf(),
                     subject: model.getSubject(),
                     body: model.getBody()
