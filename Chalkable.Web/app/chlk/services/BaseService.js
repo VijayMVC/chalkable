@@ -92,6 +92,8 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders(this.prepareDefaultHeaders({"Content-Type": "application/json; charset=utf-8"}))
                     .run()
                     .then(function (data) {
+                        if (!clazz)
+                            return data.data || null;
                         return Serializer.deserialize(data.data, clazz);
                     }, this);
             },
