@@ -697,6 +697,9 @@ NAMESPACE('chlk.activities.grading', function () {
                         return false;
                     }
 
+                    if(!node.getData('able-drop'))
+                        node.find('.dropped-hidden').setValue(false);
+
                     var form = activeCell.parent('.marking-period-container').find('.load-grading-period');
                     if(isAvg){
                         activeCell.removeClass('active-cell');
