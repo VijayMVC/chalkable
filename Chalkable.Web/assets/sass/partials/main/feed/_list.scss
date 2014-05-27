@@ -22,19 +22,19 @@ $star-size: 18px;
     .feed-notifications {
       .new-notification-count{
         background-color: red;
-        @include border-radius(5px);
+        @include border-radius(2px);
         width: auto;
-        padding: 0px 2px 0px 2px;
+        padding: 0px 1px;
         color: white;
         position: absolute;
-        font-weight: bold;
-        top: -8px;
-        left: -7px;
+        top: 2px;
+        right: 104px;
+        text-shadow: none;
+        font-size: 11px;
       }
 
-      background: url(images/icons/new-notifications.png) 0% 50% no-repeat;
-      margin: 8px 5px 0px 7px;
-      padding: 0px 3px 0px 26px;
+      background: url(images/icons/new-notifications.png) 15px 5px no-repeat;
+      padding: 6px 13px 10px 43px;
       color: #828285;
       font-size: 12px;
       border: 0 none;
@@ -43,6 +43,8 @@ $star-size: 18px;
       outline: 0 none;
       float: right;
       position: relative;
+      text-shadow: 1px 1px 0 white;
+
       a{
         position: absolute;
         top: 0;
