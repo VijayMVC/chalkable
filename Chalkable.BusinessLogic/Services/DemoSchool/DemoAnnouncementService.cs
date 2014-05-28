@@ -110,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public AnnouncementDetails CreateAnnouncement(int classAnnouncementTypeId, int classId)
+        public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId)
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();

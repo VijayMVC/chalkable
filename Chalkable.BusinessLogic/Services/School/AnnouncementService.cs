@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementService
     {
-        AnnouncementDetails CreateAnnouncement(int classAnnouncementTypeId, int classId);
+        AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId);
         AnnouncementDetails GetAnnouncementDetails(int announcementId);
         void DeleteAnnouncement(int announcementId);
         void DeleteAnnouncements(int classId, int? announcementType, AnnouncementState state);
@@ -273,7 +273,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public AnnouncementDetails CreateAnnouncement(int classAnnouncementTypeId, int classId)
+        public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId)
         {
             if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
