@@ -136,8 +136,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             , IList<AnnouncementComplex> anns, IList<Person> students)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
-                                                          && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
+                                                           && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
             var annsDetails = new List<AnnouncementDetails>();
+            var classTeachers = ServiceLocator.ClassService.GetClassTeachers(stiGradeBook.SectionId, null);
             foreach (var activity in activities)
             {
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
@@ -148,17 +149,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     Title = ann.Title,
                     StudentAnnouncements = new List<StudentAnnouncementDetails>(),
                     PrimaryTeacherRef = ann.PrimaryTeacherRef,
-                    IsOwner = ann.PrimaryTeacherRef == Context.UserLocalId
+                    IsOwner = classTeachers.Any(x => x.PersonRef == Context.UserLocalId)
                 };
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(annDetails, activity);
                 var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();
+                if (!stiGradeBook.Options.IncludeWithdrawnStudents)
+                    scores = scores.Where(x => !x.Withdrawn).ToList();
                 foreach (var score in scores)
                 {
+                    var student = students.FirstOrDefault(x => x.Id == score.StudentId);
+                    if (student == null) continue;
                     var stAnn = new StudentAnnouncementDetails
                     {
                         AnnouncementId = ann.Id,
                         ClassId = ann.ClassRef,
-                        Student = students.First(x => x.Id == score.StudentId)
+                        Student = student,
                     };
                     MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
                     annDetails.StudentAnnouncements.Add(stAnn);

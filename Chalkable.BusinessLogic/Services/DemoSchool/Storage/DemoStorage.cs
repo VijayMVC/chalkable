@@ -173,6 +173,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void Setup()
         {
+            SchoolOptionStorage.Setup();
             AttendanceLevelReasonStorage.Setup();
             AttendanceReasonStorage.Setup();
             

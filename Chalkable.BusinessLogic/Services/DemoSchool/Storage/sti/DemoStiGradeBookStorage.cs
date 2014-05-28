@@ -39,15 +39,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             if (classAnnouncementType.HasValue)
             {
                 gradeBooks = gradeBooks.Where(gb => gb.Activities.Count(x => x.CategoryId == classAnnouncementType.Value) > 0);
+
             }
 
             if (standardId.HasValue)
             {
-                gradeBooks =
-                    gradeBooks.Where(
-                        gb =>
-                            gb.Activities.Count(x => x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value)) >
-                            0);
+                gradeBooks = gradeBooks
+                    .Where(gb => gb.Activities.Count(x => x.Standards != null && x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value)) > 0);
             }
 
             if (gradingPeriodId.HasValue)
@@ -58,16 +56,52 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             }
 
 
-
-
-            var gradeBook = gradeBooks.FirstOrDefault() ?? new Gradebook()
+            var gbOld = gradeBooks.FirstOrDefault();
+            
+            var gradeBook = new Gradebook()
             {
                 SectionId = classId,
-                Scores = new List<Score>(),
-                Options = new ClassroomOption(),
-                Activities = new List<Activity>(),
-                StudentAverages = new List<StudentAverage>()
+                Scores = gbOld != null ? gbOld.Scores : new List<Score>(),
+                Options = gbOld != null ? gbOld.Options : new ClassroomOption(),
+                Activities = gbOld != null ? gbOld.Activities : new List<Activity>(),
+                StudentAverages = gbOld != null ? gbOld.StudentAverages : new List<StudentAverage>()
+                {
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = gradingPeriodId,
+                        StudentId = DemoSchoolConstants.FirstStudentId
+                    },
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = gradingPeriodId,
+                        StudentId = DemoSchoolConstants.SecondStudentId
+                    },
+                    new StudentAverage()
+                    {
+                        CalculatedNumericAverage = 100,
+                        EnteredNumericAverage = 100,
+                        IsGradingPeriodAverage = true,
+                        GradingPeriodId = gradingPeriodId,
+                        StudentId = DemoSchoolConstants.ThirdStudentId
+                    }
+                }
             };
+
+
+            if (classAnnouncementType.HasValue)
+            {
+                gradeBook.Activities = gradeBook.Activities.Where(x => x.CategoryId == classAnnouncementType.Value);
+            }
+            if (standardId.HasValue)
+            {
+                gradeBook.Activities = gradeBook.Activities.Where(x => x.Standards != null && x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value));
+            }
             return gradeBook;
         }
 
