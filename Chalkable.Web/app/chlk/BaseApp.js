@@ -102,6 +102,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'alternateScores', ArrayOf(chlk.models.grading.AlternateScore));
                 this.saveInSession(session, 'newNotifications', Number);
                 this.saveInSession(session, 'gradingComments', ArrayOf(chlk.models.grading.AvgComment));
+                this.saveInSession(session, 'schoolOptions', chlk.models.school.SchoolOption);
 
                 window.gradeLevels = window.gradeLevels || [];
                 window.gradeLevels.forEach(function(item){
