@@ -101,7 +101,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
 
-        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime created, int personId)
+        public AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime created, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {

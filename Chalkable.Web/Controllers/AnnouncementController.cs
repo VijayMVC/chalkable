@@ -51,12 +51,12 @@ namespace Chalkable.Web.Controllers
                     SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);
                 }
             }
-            if (classAnnouncementTypeId.HasValue && classId.HasValue)
-                return Json(CreateAnnouncement(classAnnouncementTypeId.Value, classId.Value));
+            if (classId.HasValue)
+                return Json(CreateAnnouncement(classAnnouncementTypeId, classId.Value));
             return Json(null, 7);
         }
 
-        private CreateAnnouncementViewData CreateAnnouncement(int classAnnouncementTypeId, int classId)
+        private CreateAnnouncementViewData CreateAnnouncement(int? classAnnouncementTypeId, int classId)
         {
             var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnouncementTypeId, classId);
             var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);

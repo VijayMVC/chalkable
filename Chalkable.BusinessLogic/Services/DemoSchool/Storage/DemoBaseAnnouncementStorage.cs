@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     public interface IDemoAnnouncementStorage
     {
         AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
-        AnnouncementDetails Create(int classAnnouncementTypeId, int classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null);
+        AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null);
         AnnouncementDetails GetDetails(int announcementId, int value, int id);
         Announcement GetById(int announcementId);
         void Delete(int? announcementId, int? userId, int? classId, int? announcementType, AnnouncementState? state);
@@ -179,7 +179,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
-        public AnnouncementDetails Create(int classAnnouncementTypeId, int classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null)
+        public AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null)
         {
             var annId = GetNextFreeId();
             var person = Storage.PersonStorage.GetById(userId);
@@ -212,7 +212,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var announcement = new AnnouncementComplex
             {
-                ClassAnnouncementTypeName = Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId).Name,
+                ClassAnnouncementTypeName = classAnnouncementTypeId.HasValue ? Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name : null,
                 ChalkableAnnouncementType = classAnnouncementTypeId,
                 PrimaryTeacherName = person.FullName,
                 ClassName = Storage.ClassStorage.GetById(classId).Name,
