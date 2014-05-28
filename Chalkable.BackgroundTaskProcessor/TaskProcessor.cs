@@ -45,14 +45,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 }
                 catch (Exception ex)
                 {
-                    while (ex != null)
-                    {
-                        Trace.TraceError(ex.Message);
-                        Trace.TraceError(ex.StackTrace);
-                        log.LogError(ex.Message);
-                        log.LogError(ex.StackTrace);
-                        ex = ex.InnerException;
-                    }
+                    log.LogException(ex);
                     sl.BackgroundTaskService.Complete(task.Id, false);
                 }    
             }

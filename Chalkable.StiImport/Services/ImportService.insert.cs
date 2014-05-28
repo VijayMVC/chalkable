@@ -58,6 +58,8 @@ namespace Chalkable.StiImport.Services
             InsertDays();
             Log.LogInfo("insert rooms");
             InsertRooms();
+            Log.LogInfo("insert grading scales");
+            InsertGradingScales();
             Log.LogInfo("insert courses");
             InsertCourses();
             Log.LogInfo("insert class teachers");
@@ -88,8 +90,6 @@ namespace Chalkable.StiImport.Services
             InsertAlternateScores();
             Log.LogInfo("insert infractions");
             InsertInfractions();
-            Log.LogInfo("insert grading scales");
-            InsertGradingScales();
             Log.LogInfo("insert scale ranges");
             InsertGradingScaleRanges();
             Log.LogInfo("insert classroom options");

@@ -77,6 +77,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public IFundService FundService { get { return fundService; } }
         public IDeveloperService DeveloperService { get { return developerService; } }
+        public IDbService DbService 
+        { 
+            get
+            {
+                throw new NotImplementedException();
+            } 
+        }
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
 

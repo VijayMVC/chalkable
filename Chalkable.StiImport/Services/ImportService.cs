@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 
@@ -30,37 +30,73 @@ namespace Chalkable.StiImport.Services
         {
             ConnectionInfo = connectionInfo;
             Log = log;
-            ServiceLocatorMaster = ServiceLocatorFactory.CreateMasterSysAdmin();
+            
+            var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin" };
+            var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null);
+            ServiceLocatorMaster = new ImportServiceLocatorMaster(cntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
         public void Import()
         {
-            //TODO: begin transaction
             Log.LogInfo("start import");
             importedSchoolIds.Clear();
             personsForImportPictures.Clear();
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             Log.LogInfo("download data to sync");
             DownloadSyncData();
-            Log.LogInfo("process inserts");
-            ProcessInsert();
-            Log.LogInfo("process updates");
-            ProcessUpdate();
+
+            var masterDb = (ImportDbService) ServiceLocatorMaster.DbService;
+            var schoolDb = (ImportDbService) ServiceLocatorSchool.SchoolDbService;
+            Log.LogInfo("begin master transaction");
+            masterDb.BeginTransaction();
+            Log.LogInfo("begin school transaction");
+            schoolDb.BeginTransaction();
+            bool schoolCommited = false;
+            try
+            {
+                SyncDb();
+                Log.LogInfo("commit school db");
+                schoolDb.CommitAll();
+                schoolCommited = true;
+                Log.LogInfo("commit master db");
+                masterDb.CommitAll();
+            }
+            catch (Exception ex)
+            {
+                Log.LogException(ex);
+                if (!schoolCommited)
+                {
+                    Log.LogInfo("rollback school db");
+                    schoolDb.Rollback();    
+                }
+                else
+                    Log.LogInfo("!!!!!!!!school is commited not master is going to rollback!!!!!!!!!!!!!!!!!!!!!");//TODO.....
+                Log.LogInfo("rollback master db");
+                masterDb.Rollback();
+                throw;
+            }
             Log.LogInfo("process pictures");
             ProcessPictures();
-            Log.LogInfo("process deletes");
-            ProcessDelete();
-            Log.LogInfo("update versions");
-            UpdateVersion();
-            //TODO: end transaction
-            UpdateDistrictLastSync();
             Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
             }
             Log.LogInfo("import is completed");
+        }
+
+        private void SyncDb()
+        {
+            Log.LogInfo("process inserts");
+            ProcessInsert();
+            Log.LogInfo("process updates");
+            ProcessUpdate();
+            Log.LogInfo("process deletes");
+            ProcessDelete();
+            Log.LogInfo("update versions");
+            UpdateVersion();
+            UpdateDistrictLastSync();
         }
 
         private void UpdateDistrictLastSync()
@@ -82,9 +118,7 @@ namespace Chalkable.StiImport.Services
                 if (content != null)
                     ServiceLocatorMaster.PersonPictureService.UploadPicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID ,content);
                 else
-                {
                     ServiceLocatorMaster.PersonPictureService.DeletePicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID);
-                }
             }
         }
 

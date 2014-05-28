@@ -48,12 +48,9 @@ namespace Chalkable.BusinessLogic.Services
         {
             var admin = new User {Id = Guid.Empty, Login = "Virtual system admin"};
             var context = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null);
-            //var context = new UserContext(Guid.Empty, null, null, "Virtual system admin", null, null, null, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
             var serviceLocator = new ServiceLocatorMaster(context);
             return serviceLocator;
         }
-
-      
         
         public static IServiceLocatorSchool CreateSchoolLocator(SchoolUser schoolUser)
         {
@@ -67,8 +64,6 @@ namespace Chalkable.BusinessLogic.Services
             var role = CoreRoles.GetById(schoolUser.Role);
             //TODO: how to get SIS token for OAuth
             return new UserContext(user, role, user.District, school, null);
-            //var context = new UserContext(schoolUser.UserRef, schoolUser.School.DistrictRef, schoolUser.SchoolRef, user.Login, 
-            //                               user.District.TimeZone, user.District.ServerUrl, schoolUser.School.LocalId, role, null, user.LocalId, null, null);
         }
 
         public static IServiceLocatorSchool CreateSchoolLocator(UserContext context)

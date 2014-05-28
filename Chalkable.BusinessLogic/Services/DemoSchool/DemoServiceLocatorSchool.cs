@@ -1,4 +1,5 @@
-﻿using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+﻿using System;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.BusinessLogic.Services.School.Notifications;
@@ -136,5 +137,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IGradingScaleService GradingScaleService { get { return gradingScaleService; } }
         public IClassroomOptionService ClassroomOptionService { get { return classroomOptionService; } }
         public ISisUserService SisUserService { get { return sisUserService; } }
+        public IDbService SchoolDbService
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

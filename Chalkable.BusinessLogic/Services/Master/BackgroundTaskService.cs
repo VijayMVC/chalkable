@@ -79,6 +79,16 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Log(LEVEL_ERROR, message);
             }
 
+            public void LogException(Exception ex)
+            {
+                while (ex != null)
+                {
+                    LogError(ex.Message);
+                    LogError(ex.StackTrace);
+                    ex = ex.InnerException;
+                }
+            }
+
             public List<BackgroundTaskLogItem> Items { get { return items; } }
 
             public void Flush()

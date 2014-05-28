@@ -8,8 +8,8 @@ namespace Chalkable.Data.Common
 {
     public class UnitOfWork : IDisposable
     {
-        public SqlConnection Connection { get; private set; }
-        public SqlTransaction Transaction { get; private set; }
+        protected SqlConnection Connection { get; private set; }
+        protected SqlTransaction Transaction { get; set; }
 
         public UnitOfWork(string connectionString, bool beginTransaction)
         {
@@ -19,16 +19,27 @@ namespace Chalkable.Data.Common
                 Transaction = Connection.BeginTransaction();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (Connection.State != ConnectionState.Closed)
                 Connection.Close();
         }
 
-        public void Commit()
+        public virtual void Commit()
         {
             if (Transaction != null)
                 Transaction.Commit();
+            else
+                throw new Exception("Transaction wasn't started");
+        }
+
+        public void Rollback()
+        {
+            if (Transaction != null)
+            {
+                Transaction.Rollback();
+                Transaction = null;
+            }
             else
                 throw new Exception("Transaction wasn't started");
         }

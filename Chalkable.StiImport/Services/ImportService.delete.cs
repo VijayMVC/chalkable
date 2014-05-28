@@ -33,8 +33,6 @@ namespace Chalkable.StiImport.Services
             DeleteClassroomOptions();
             Log.LogInfo("delete scale ranges");
             DeleteGradingScaleRanges();
-            Log.LogInfo("delete grading scales");
-            DeleteGradingScales();
             Log.LogInfo("delete infractions");
             DeleteInfractions();
             Log.LogInfo("delete alternate scores");
@@ -65,6 +63,8 @@ namespace Chalkable.StiImport.Services
             DeleteClassTeachers();
             Log.LogInfo("delete courses");
             DeleteCourses();
+            Log.LogInfo("delete grading scales");
+            DeleteGradingScales();
             Log.LogInfo("delete rooms");
             DeleteRooms();
             Log.LogInfo("delete days");

@@ -30,15 +30,15 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
-            var cl = ConnectorLocator.Create("Chalkable", "gT9qF5yV8", "http://208.83.95.80:8210/API/");
-            //69E2AA38-EC70-45E8-AA99-4406CF6D4BA8	69e2aa38-ec70-45e8-aa99-4406cf6d4ba8			Chalkable	gT9qF5yV8	0	Central Standard Time	v8xjnk8au1.database.windows.net	69E2AA38-EC70-45E8-AA99-4406CF6D4BA8	http://208.83.95.80:8210/InformationNow/	NULL
-
-            var r = cl.SyncConnector.GetDiff(typeof(Person), null) as SyncResult<Person>;
-            var s = r.All.Where(x => x.PhotoModifiedDate.HasValue).First();
-            Debug.WriteLine(s.PersonID);
-            var photo = cl.UsersConnector.GetPhoto(s.PersonID);
-            Assert.Null(photo);
+            var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
+            //var cl = ConnectorLocator.Create("Chalkable", "t7Nn2Jr9F", "http://208.83.95.80:8215/API/");
+            
+            var sss = cl.SyncConnector.GetDiff(typeof(SectionStaff), null) as SyncResult<SectionStaff>;
+            var ss = sss.All.Where(x => x.SectionID == 725);
+            foreach (var sectionStaff in ss)
+            {
+                Debug.WriteLine(sectionStaff.StaffID + " " + sectionStaff.IsPrimary);
+            }
         }
     }
 }

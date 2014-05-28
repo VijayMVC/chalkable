@@ -48,6 +48,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradingScaleService GradingScaleService { get; }
         IClassroomOptionService ClassroomOptionService { get; }
         ISisUserService SisUserService { get; }
+        IDbService SchoolDbService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -93,6 +94,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradingScaleService gradingScaleService;
         private IClassroomOptionService classroomOptionService;
         private ISisUserService sisUserService;
+        private IDbService schoolDbService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -139,6 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingScaleService = new GradingScaleService(this);
             classroomOptionService = new ClassroomOptionService(this);
             sisUserService = new SisUserService(this);
+            schoolDbService = new DbService(this.Context.SchoolConnectionString);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -183,5 +186,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradingScaleService GradingScaleService { get { return gradingScaleService; } }
         public IClassroomOptionService ClassroomOptionService { get { return classroomOptionService; } }
         public ISisUserService SisUserService { get { return sisUserService; } }
+        public IDbService SchoolDbService
+        {
+            get { return schoolDbService; }
+            protected set { schoolDbService = value; }
+        }
     }
 }

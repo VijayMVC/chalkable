@@ -216,6 +216,7 @@
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\EmailService.cs" />
     <Compile Include="Services\Master\FundService.cs" />
+    <Compile Include="Services\MasterDbService.cs" />
     <Compile Include="Services\Master\PictureServices\ApplicationPictureService.cs" />
     <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
     <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
