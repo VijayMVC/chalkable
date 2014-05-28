@@ -17,12 +17,12 @@
                         input(type="text",name="subject", value=self.subject ? "Re: " + self.subject : "", class="validate[required]")
                     .x-form-field
                         label Body:
-                        textarea(type="text",name="body")
+                        textarea(type="text",name="body",class="validate[required]")
 
                     if self.body
                         .x-form-field
                             label= 'send: ' + self.sent.toString('dd/m/yy hh:min:ss')
-                            textarea(type="text",name="prev")
+                            textarea(type="text",name="prev",class="validate[required]")
                                 =self.body
 
                     .form-buttons
