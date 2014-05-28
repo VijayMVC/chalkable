@@ -767,23 +767,11 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function fillGradeClick(node, event){
                 var form = node.parent('form');
-                /*var values = {
-                    gradevalue: form.find('input[name=gradevalue]').getValue(),
-                    dropped: form.find('input[name=dropped]').checked(),
-                    isexempt: form.find('input[name=isexempt]').checked(),
-                    isabsent: form.find('input[name=isabsent]').checked(),
-                    islate: form.find('input[name=islate]').checked(),
-                    isincomplete: form.find('input[name=isincomplete]').checked()
-                };*/
                 form.trigger('submit');
-                var value = form.find('input[name=gradevalue]').getValue();
-                if(value)
+                var input = form.find('input[name=gradevalue]');
+                var value = input.getValue();
+                if(value  && !input.hasClass('error') && value.toLowerCase() != 'dropped' && value.toLowerCase() != 'exempt')
                     this.dom.find('.empty-grade-form').forEach(function(form){
-                        /*for(var i in values){
-                            if(values.hasOwnProperty(i)){
-                                form.find('input[type!=hidden][name=' + i + ']').setValue(values[i]);
-                            }
-                        }*/
                         form.find('input[name=gradevalue]').setValue(value);
                         form.trigger('submit');
                     })

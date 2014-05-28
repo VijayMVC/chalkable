@@ -936,7 +936,10 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function fillGradeClick(node, event){
                 var activeCell = node.parent('.active-cell');
-                this.fillAll(activeCell, true);
+                var input = activeCell.find('input[name=gradevalue]');
+                var value = input.getValue();
+                if(value && !input.hasClass('error') && value.toLowerCase() != 'dropped' && value.toLowerCase() != 'exempt')
+                    this.fillAll(activeCell, true);
             },
 
             [ria.mvc.DomEventBind('click', '.post-gradebook-button')],
