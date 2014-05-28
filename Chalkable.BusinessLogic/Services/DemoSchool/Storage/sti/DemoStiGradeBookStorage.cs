@@ -43,11 +43,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
             if (standardId.HasValue)
             {
-                gradeBooks =
-                    gradeBooks.Where(
-                        gb =>
-                            gb.Activities.Count(x => x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value)) >
-                            0);
+                gradeBooks = gradeBooks
+                    .Where(gb => gb.Activities.Count(x => x.Standards != null && x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value)) > 0);
             }
 
             if (gradingPeriodId.HasValue)
