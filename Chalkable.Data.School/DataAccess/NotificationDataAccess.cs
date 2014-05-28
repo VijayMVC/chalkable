@@ -24,8 +24,6 @@ namespace Chalkable.Data.School.DataAccess
                 res.Add(Notification.SHOWN_FIELD, query.Shown);
             if(query.Type.HasValue)
                 res.Add(Notification.TYPE_FIELD, query.Type);
-            if(query.ClassPeriodRef.HasValue)
-                res.Add(Notification.CLASS_PERIOD_REF_FIELD, query.ClassPeriodRef);
             return res;
         } 
 
@@ -66,7 +64,6 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     typeof (Notification),
                     typeof (Announcement),
-                    typeof (ClassAnnouncementType),
                     typeof (MarkingPeriod)
                 };
             b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
@@ -95,7 +92,6 @@ namespace Chalkable.Data.School.DataAccess
             if (res.Type == NotificationType.Announcement || res.Type == NotificationType.Question || res.Type == NotificationType.ItemToGrade)
             {
                 res.Announcement = reader.Read<Announcement>(true);
-                res.AnnouncementType = reader.Read<ClassAnnouncementType>(true);
             }
             if (res.Type == NotificationType.MarkingPeriodEnding)
                 res.MarkingPeriod = reader.Read<MarkingPeriod>(true);
