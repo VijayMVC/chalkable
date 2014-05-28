@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.feed.Feed');
+REQUIRE('chlk.templates.feed.NotificationsCount');
 REQUIRE('chlk.templates.announcement.FeedItemTpl');
 
 NAMESPACE('chlk.activities.feed', function () {
@@ -8,6 +9,8 @@ NAMESPACE('chlk.activities.feed', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.feed.Feed)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.feed.Feed, null, null, ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.feed.NotificationsCount, 'notifications', '.feed-notifications', ria.mvc.PartialUpdateRuleActions.Replace)],
         'FeedListPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.DomEventBind('click', 'a.star')],
@@ -47,6 +50,11 @@ NAMESPACE('chlk.activities.feed', function () {
                     clone.find('.announcement-link').removeClass('disabled').trigger('click');
                 }, 301);
                 return false;
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                this.dom.find('#stop-notifications-interval').trigger('click');
+                BASE();
             }
 
         ]);

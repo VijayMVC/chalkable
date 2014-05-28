@@ -1,5 +1,7 @@
 normalValue = self.getModel().getNormalValue()
-+ActionForm('announcement', 'updateAnnouncementGradeFromGrid').grading-form
++ActionForm('announcement', 'updateAnnouncementGradeFromGrid')(
+    data-able-drop=self.isAbleDropStudentScore()
+).grading-form
     +Hidden('comment', self.getComment())(
         data-comment = self.getComment()
     ).comment-value
@@ -12,7 +14,7 @@ normalValue = self.getModel().getNormalValue()
         if self.isAbleDropStudentScore()
             +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), addCallBack = true).with-value.dropped-checkbox
         else
-            +Hidden('dropped', false)
+            +Hidden('dropped', self.isDropped()).dropped-hidden
         +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), addCallBack = true).with-value
         +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), addCallBack = true).with-value
         if self.isAbleExemptStudentScore()

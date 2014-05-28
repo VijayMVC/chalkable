@@ -55,15 +55,29 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             using (var uow = Read())
             {
                 var da = new NotificationDataAccess(uow);
-                return da.GetPaginatedNotificationsDetails(new NotificationQuery
+
+                var notifications = da.GetPaginatedNotificationsDetails(new NotificationQuery
                     {
                         PersonId = Context.UserLocalId, 
                         Start = start, 
                         Count = count
                     });
+                var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement != null)
+                                   .Select(x => x.Announcement.ClassRef)
+                                   .ToList();
+                var classAnnouncementTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+                foreach (var notification in notifications)
+                {
+                    if (notification.Announcement != null)
+                    {
+                        var classAnnType = classAnnouncementTypes.First(x => x.ClassRef == notification.Announcement.ClassRef);
+                        notification.AnnouncementType = classAnnType;
+                    }
+                }
+                return notifications;
             }
         }
-
+        
         public IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null)
         {
             throw new NotImplementedException();

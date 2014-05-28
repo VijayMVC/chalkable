@@ -15,6 +15,8 @@ NAMESPACE('chlk.models.feed', function () {
                     this.setItems(items_);
                 if(completeOnly_)
                     this.setCompleteOnly(completeOnly_);
+                if(newNotificationCount_)
+                    this.setNewNotificationCount(newNotificationCount_);
             },
 
             ArrayOf(chlk.models.announcement.Announcement), 'items',

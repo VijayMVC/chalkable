@@ -2,6 +2,7 @@ REQUIRE('chlk.models.id.NotificationId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.ShortUserInfo');
+REQUIRE('chlk.models.common.ActionLinkModel');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.MessageId');
 REQUIRE('chlk.models.id.MarkingPeriodId');

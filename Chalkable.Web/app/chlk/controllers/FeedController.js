@@ -2,6 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.FeedService');
 REQUIRE('chlk.services.FundsService');
+REQUIRE('chlk.services.NotificationService');
 REQUIRE('chlk.activities.feed.FeedListPage');
 REQUIRE('chlk.activities.admin.HomePage');
 REQUIRE('chlk.services.GradeLevelService');
@@ -10,9 +11,9 @@ REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.id.ClassId');
 
-
-
 NAMESPACE('chlk.controllers', function (){
+
+    var notificationsInterval;
 
     /** @class chlk.controllers.FeedController*/
     CLASS(
@@ -31,6 +32,9 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.FundsService, 'fundsService',
 
         [ria.mvc.Inject],
+        chlk.services.NotificationService, 'notificationService',
+
+        [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
@@ -44,6 +48,14 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function getFeedItems(postback_, completeOnly_, classId_, pageIndex_){
+            if(!notificationsInterval)
+                notificationsInterval = setInterval(function(){
+                    var result = this.notificationService.getUnShownNotificationCount().then(function(data){
+                        this.setNewNotificationCount_(data);
+                        return new chlk.models.feed.Feed(null, null, null, data);
+                    }, this);
+                    this.BackgroundUpdateView(chlk.activities.feed.FeedListPage, result, 'notifications');
+                }.bind(this), 5000);
             return this.announcementService
                 .getAnnouncements(pageIndex_ | 0, classId_, completeOnly_)
                 .attach(this.validateResponse_())
@@ -61,6 +73,11 @@ NAMESPACE('chlk.controllers', function (){
                         this.getNewNotificationCount_()
                     );
                 }, this);
+        },
+
+        function stopNotificationsIntervalAction(update_, gradeLevels_) {
+            clearInterval(notificationsInterval);
+            notificationsInterval = null;
         },
 
         [[Boolean, String]],
