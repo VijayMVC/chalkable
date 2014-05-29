@@ -141,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingScaleService = new GradingScaleService(this);
             classroomOptionService = new ClassroomOptionService(this);
             sisUserService = new SisUserService(this);
-            schoolDbService = new DbService(this.Context.SchoolConnectionString);
+            schoolDbService = new DbService(Context != null ? Context.SchoolConnectionString : null);
         }
 
         public IPersonService PersonService { get { return personService; } }

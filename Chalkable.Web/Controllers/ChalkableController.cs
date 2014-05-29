@@ -99,6 +99,7 @@ namespace Chalkable.Web.Controllers
                 return MasterLocator.Context;
             }
         }
+
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
