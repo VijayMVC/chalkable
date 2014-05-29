@@ -123,7 +123,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult GradingPeriodFinalGrade(int classId, int gradingPeriodId)
+        public ActionResult GradingPeriodFinalGrade(int classId, int gradingPeriodId, int? averageId)
         {
             //todo: implementation
             return Json(new GradingPeriodFinalGradeViewData());

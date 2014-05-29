@@ -26,6 +26,7 @@ namespace Chalkable.Web.Models
     public class GradingPeriodFinalGradeViewData
     {
         public GradingPeriod GradingPeriod { get; set; }
+        public ShortAverageViewData CurrentAverage { get; set; }
         public IList<ShortAverageViewData> Averages { get; set; }
         public IList<StudentFinalGradeViewData> StudentFinalGrades { get; set; }
     }
@@ -33,6 +34,7 @@ namespace Chalkable.Web.Models
     public class StudentFinalGradeViewData
     {
         public ShortPersonViewData Student { get; set; }
+        public StudentAveragesViewData CurrentStudentAverage { get; set; }
         public IList<StudentAveragesViewData> StudentAverages { get; set; }
         public IList<StudentGradingByTypeStatsViewData> StatsByType { get; set; }
         public StudentFinalAttendanceSummaryViewData Attendance { get; set; }
