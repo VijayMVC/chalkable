@@ -71,7 +71,7 @@ namespace Chalkable.StiImport.Services
                     schoolDb.Rollback();    
                 }
                 else
-                    Log.LogInfo("!!!!!!!!school is commited not master is going to rollback!!!!!!!!!!!!!!!!!!!!!");//TODO.....
+                    Log.LogInfo("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");//TODO.....
                 Log.LogInfo("rollback master db");
                 masterDb.Rollback();
                 throw;
