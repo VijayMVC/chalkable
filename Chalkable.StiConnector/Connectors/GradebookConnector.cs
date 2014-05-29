@@ -49,6 +49,15 @@ namespace Chalkable.StiConnector.Connectors
             return Put(url, studentAverage);
         }
 
+        public IList<StudentAverage> GetStudentAverages(int sectionId, int? gradingPeriodId)
+        {
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/averages/students", sectionId);
+            var nvc = new NameValueCollection();
+            if(gradingPeriodId.HasValue)
+                nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
+            return Call<IList<StudentAverage>>(url, nvc);
+        } 
+
         public void PostGrades(int sectionId, int? gradingPeriodId)
         {
             var nvc = new NameValueCollection();

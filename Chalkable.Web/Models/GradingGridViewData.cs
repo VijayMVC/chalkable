@@ -145,10 +145,14 @@ namespace Chalkable.Web.Models
         } 
     }
 
-    public class StudentAveragesViewData
+    public class ShortAverageViewData
     {
         public int AverageId { get; set; }
-        public string AverageName { get; set; }
+        public string AverageName { get; set; }        
+    }
+
+    public class StudentAveragesViewData : ShortAverageViewData
+    {
         public decimal? CalculatedAvg { get; set; }
         public string CalculatedAlphaGrade { get; set; }
         public int StudentId { get; set; }

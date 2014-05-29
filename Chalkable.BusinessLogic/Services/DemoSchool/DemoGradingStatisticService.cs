@@ -263,5 +263,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             return res;
         }
+
+
+        public IList<ChalkableStudentAverage> GetStudentAverages(int classId, int? averageId, int? gradingPeriodId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

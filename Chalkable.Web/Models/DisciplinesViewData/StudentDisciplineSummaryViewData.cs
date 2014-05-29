@@ -5,6 +5,14 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.DisciplinesViewData
 {
+
+    public class DisciplineTypeSummaryViewData
+    {
+        public DisciplineTypeViewData Type { get; set; }
+        public int Count { get; set; }
+    }
+
+
     public class StudentDisciplineSummaryViewData
     {
         public PersonViewData Student { get; set; }

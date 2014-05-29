@@ -107,6 +107,28 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        
+        [AuthorizationFilter("Teacher")]
+        public ActionResult GetStudentAverages(int classId, int gradingPeriodId, int averageId)
+        {
+            var studentAverages = SchoolLocator.GradingStatisticService.GetStudentAverages(classId, averageId, gradingPeriodId);
+            return Json(studentAverages.Select(StudentAveragesViewData.Create).ToList());
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult FinalGrade(int classId)
+        {
+            //todo: implementation
+            return Json(new FinalGradesViewData());
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult GradingPeriodFinalGrade(int classId, int gradingPeriodId)
+        {
+            //todo: implementation
+            return Json(new GradingPeriodFinalGradeViewData());
+        }
+
         [AuthorizationFilter("Teacher")]
         public ActionResult ClassStandardGrid(int classId)
         {
