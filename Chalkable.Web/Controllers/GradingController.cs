@@ -118,15 +118,36 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult FinalGrade(int classId)
         {
-            //todo: implementation
-            return Json(new FinalGradesViewData());
+            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var date = Context.NowSchoolTime.Date;
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, date);
+            GradingPeriodFinalGradeViewData gradingPeriodFinalGrade = null;
+            if (currentGradingPeriod != null)
+                gradingPeriodFinalGrade = GetGradingPeriodFinalGrade(classId, currentGradingPeriod, null);
+            return Json(FinalGradesViewData.Create(gradingPeriods, gradingPeriodFinalGrade));
         }
 
         [AuthorizationFilter("Teacher")]
         public ActionResult GradingPeriodFinalGrade(int classId, int gradingPeriodId, int? averageId)
         {
-            //todo: implementation
-            return Json(new GradingPeriodFinalGradeViewData());
+            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            return Json(GetGradingPeriodFinalGrade(classId, gradingPeriod, averageId));
+        }
+
+        private GradingPeriodFinalGradeViewData GetGradingPeriodFinalGrade(int classId, GradingPeriodDetails gradingPeriod, int? averageId)
+        {
+            if(!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
+            var gradebook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod.Id);
+            //var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.SchoolLocalId.Value, gradingPeriod.Id);
+            var staverage = gradebook.Averages.FirstOrDefault(x => !averageId.HasValue || x.AverageId == averageId);
+            ChalkableAverage average = null;
+            if (staverage != null)
+            {
+                average = new ChalkableAverage {AverageId = staverage.AverageId, AverageName = staverage.AverageName};
+            }
+            return GradingPeriodFinalGradeViewData.Create(gradebook,  average);
         }
 
         [AuthorizationFilter("Teacher")]

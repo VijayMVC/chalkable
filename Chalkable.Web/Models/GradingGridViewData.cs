@@ -148,7 +148,20 @@ namespace Chalkable.Web.Models
     public class ShortAverageViewData
     {
         public int AverageId { get; set; }
-        public string AverageName { get; set; }        
+        public string AverageName { get; set; }      
+  
+        public static ShortAverageViewData Create(ChalkableAverage average)
+        {
+            return new ShortAverageViewData
+                {
+                    AverageId = average.AverageId,
+                    AverageName = average.AverageName
+                };
+        }
+        public static IList<ShortAverageViewData> Create(IList<ChalkableAverage> averages)
+        {
+            return averages.Select(Create).ToList();
+        }
     }
 
     public class StudentAveragesViewData : ShortAverageViewData
@@ -181,6 +194,11 @@ namespace Chalkable.Web.Models
                 res.Codes = studentAverage.Comments.Select(StudentAverageCommentViewData.Create).ToList();
             return res;
         }
+
+        public static IList<StudentAveragesViewData> Create(IList<ChalkableStudentAverage> studentAverages)
+        {
+            return studentAverages.Select(Create).ToList();
+        } 
     }
 
     public class StudentAverageCommentViewData
