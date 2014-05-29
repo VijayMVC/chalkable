@@ -254,7 +254,7 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<SectionStaff>().Deleted == null)
                 return;
-            var teachers = context.GetSyncResult<SectionStaff>().All.Select(x => new ClassTeacher
+            var teachers = context.GetSyncResult<SectionStaff>().Deleted.Select(x => new ClassTeacher
             {
                 ClassRef = x.SectionID,
                 PersonRef = x.StaffID

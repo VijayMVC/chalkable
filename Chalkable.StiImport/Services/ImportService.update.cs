@@ -477,7 +477,7 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<SectionStaff>().Updated == null)
                 return;
-            var teachers = context.GetSyncResult<SectionStaff>().All.Select(x => new ClassTeacher
+            var teachers = context.GetSyncResult<SectionStaff>().Updated.Select(x => new ClassTeacher
             {
                 ClassRef = x.SectionID,
                 IsCertified = x.IsCertified,
