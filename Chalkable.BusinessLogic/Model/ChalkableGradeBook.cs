@@ -15,10 +15,18 @@ namespace Chalkable.BusinessLogic.Model
         public ChalkableClassOptions Options { get; set; }
     }
 
-    public class ChalkableStudentAverage
+    public class ChalkableAverage
     {
         public int AverageId { get; set; }
         public string AverageName { get; set; }
+        public static ChalkableAverage Create(int id, string name)
+        {
+            return new ChalkableAverage {AverageId = id, AverageName = name};
+        }
+    }
+
+    public class ChalkableStudentAverage : ChalkableAverage
+    {
         public decimal? CalculatedAvg { get; set; }
         public decimal? EnteredAvg { get; set; }
         public int StudentId { get; set; }

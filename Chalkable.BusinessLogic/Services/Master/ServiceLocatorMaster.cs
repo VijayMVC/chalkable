@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             fundRequestPictureService = new FundRequestPictureService(this);
             developerService = new DeveloperService(this);
             applicationPictureService = new ApplicationPictureService(this);
-            dbService = new DbService(Context.MasterConnectionString);
+            dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
         }
 
         public IUserService UserService { get { return userService; } }
