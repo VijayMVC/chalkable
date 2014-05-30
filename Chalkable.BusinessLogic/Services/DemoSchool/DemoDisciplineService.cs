@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
                 else students = ServiceLocator.ClassService.GetStudents(classId
                     , options != null && options.IncludeWithdrawnStudents ? (bool?)null : true, mp.Id);
-                var cClass = ServiceLocator.ClassService.GetClassById(classId);
+                var cClass = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var res = new List<ClassDisciplineDetails>();
                 foreach (var student in students)
                 {
@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Id = classDiscipline.Id,
                 Infractions = classDiscipline.Infractions,
                 StudentId = classDiscipline.StudentId,
-                Class = ServiceLocator.ClassService.GetClassById(classDiscipline.ClassId.Value),
+                Class = ServiceLocator.ClassService.GetClassDetailsById(classDiscipline.ClassId.Value),
                 Student = ServiceLocator.PersonService.GetPerson(classDiscipline.StudentId)
             };
         }

@@ -128,7 +128,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
              IList<ClassDetails> classes = new List<ClassDetails>();
              if (classId.HasValue)
-                 classes.Add(locator.ClassService.GetClassById(classId.Value));
+                 classes.Add(locator.ClassService.GetClassDetailsById(classId.Value));
              else
                  classes = locator.ClassService.GetClasses(null, null, teacherId ?? studentId);
 

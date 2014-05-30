@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ClassInfo(int classId)
         {
-            var classData = SchoolLocator.ClassService.GetClassById(classId);
+            var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var classGeneralPeriod = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(classId, SchoolLocator.Context.NowSchoolTime);
             Room room = null;
             if (classGeneralPeriod != null)
@@ -44,7 +44,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ClassSummary(int classId)
         {
-            var c = SchoolLocator.ClassService.GetClassById(classId);
+            var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var currentDateTime = SchoolLocator.Context.NowSchoolTime;
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(currentDateTime, true);
             if (mp == null)
@@ -91,7 +91,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ClassGrading(int classId)
         {
-            var classData = SchoolLocator.ClassService.GetClassById(classId);
+            var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var canCreateItem = SchoolLocator.Context.UserLocalId == classData.PrimaryTeacherRef;
             var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
             return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
@@ -100,7 +100,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ClassSchedule(int classId, DateTime? day)
         {
-            var clazz = SchoolLocator.ClassService.GetClassById(classId);
+            var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, day, classId, null, GetCurrentSchoolYearId());
             return Json(ClassScheduleViewData.Create(clazz, schedule), 13);
         }
@@ -109,7 +109,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassApps(int classId)
         {
             throw new NotImplementedException();
-            //var c = SchoolLocator.ClassService.GetClassById(classId);
+            //var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
             //if (!BaseSecurity.IsAdminViewerOrClassTeacher(c, Context))
             //    return Json(ClassViewData.Create(c));
             //decimal balance = MasterLocator.FundService.GetClassBalance(classId); 
@@ -129,7 +129,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ClassAttendance(int classId)
         {
-            var c = SchoolLocator.ClassService.GetClassById(classId);
+            var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
             return Json(ClassAttendanceSummaryViewData.Create(c)); //TODO: create ClassAttendanceSummaryViewData 
         }
 

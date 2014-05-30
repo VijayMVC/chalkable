@@ -90,6 +90,7 @@
     <Compile Include="Model\BlobInfo.cs" />
     <Compile Include="Model\ChalkableAnnouncementType.cs" />
     <Compile Include="Model\ChalkableGradeBook.cs" />
+    <Compile Include="Model\ClaimInfo.cs" />
     <Compile Include="Model\ClassAttendance.cs" />
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\GradingStandardInfo.cs" />

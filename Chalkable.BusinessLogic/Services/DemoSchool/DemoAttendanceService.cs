@@ -11,7 +11,7 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoAttendanceService : DemoSisConnectedService, IAttendanceService
+    public class DemoAttendanceService : DemoSchoolServiceBase, IAttendanceService
     {
         public DemoAttendanceService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
         {
@@ -129,7 +129,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
             if (sa != null)
             {
-                var clazz = ServiceLocator.ClassService.GetClassById(classId);
+                var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var persons = ServiceLocator.ClassService.GetStudents(classId);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)

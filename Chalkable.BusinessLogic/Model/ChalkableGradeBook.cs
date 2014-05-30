@@ -150,13 +150,20 @@ namespace Chalkable.BusinessLogic.Model
 
         public static IList<ShortStudentClassGradesSummary> Create(IList<StudentSectionGradesSummary> studentSectionGrades, IList<Person> students)
         {
-            return studentSectionGrades.Select(x => new ShortStudentClassGradesSummary
-                {
-                    Student = students.First(student=>student.Id == x.StudentId),
-                    ClassId = x.SectionId,
-                    Avg = x.Average,
-                    Exempt = x.Exempt
-                }).ToList();
+            var res = new List<ShortStudentClassGradesSummary>();
+            foreach (var studentSectionGrade in studentSectionGrades)
+            {
+                var student = students.FirstOrDefault(x=>x.Id == studentSectionGrade.StudentId);
+                if(student != null)
+                    res.Add(new ShortStudentClassGradesSummary
+                            {
+                                Student = student,
+                                ClassId = studentSectionGrade.SectionId,
+                                Avg = studentSectionGrade.Average,
+                                Exempt = studentSectionGrade.Exempt
+                            });
+            }
+            return res;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
@@ -88,7 +89,7 @@ namespace Chalkable.Web.Controllers
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.UserId);
 
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            PrepareTeacherJsonData(mp, false);
+            PrepareTeacherJsonData(mp);
             return View();
         }
 
@@ -139,6 +140,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
+
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
 
             ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = SchoolLocator.NotificationService.GetUnshownNotifications().Count;
@@ -187,60 +189,29 @@ namespace Chalkable.Web.Controllers
             PrepareCommonViewData(mp);
         }
 
-        private void PrepareTeacherJsonData(MarkingPeriod mp, bool getAllAnnouncementTypes)
+        private void PrepareTeacherJsonData(MarkingPeriod mp)
         {
             if (!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
+
+            PrepareCommonViewData(mp);
+
             var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
+            if (!CanTeahcerViewChalkable()) return;
+            
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId.Value);
-            var now = SchoolLocator.Context.NowSchoolTime;
-            //if (classes.Count > 0)
-            //{
-            //    MarkingPeriod currentMp = mp;
-            //    if(mp.StartDate > now || mp.EndDate < now)
-            //        currentMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(now);
-            //    if (currentMp != null)
-            //    {
-            //        var cp = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(null, now);
-            //        if (cp != null)
-            //        {
-            //            var minutes = (int) (now - now.Date).TotalMinutes;
-            //            if (cp.Period.StartTime - minutes <= 5)
-            //            {
-            //                SchoolLocator.CalendarDateService.GetCalendarDateByDate(now);
-            //                var attQuery = new ClassAttendanceQuery
-            //                    {
-            //                        MarkingPeriodId = currentMp.Id,
-            //                        ClassId = cp.ClassRef,
-            //                        FromTime = cp.Period.StartTime,
-            //                        ToTime = cp.Period.EndTime,
-            //                        FromDate = now.Date,
-            //                        ToDate = now.Date
-            //                    };
-            //                var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(attQuery);
-            //                //check is it tour now or demo school
-            //                if (attendances.Any(x => x.Type == AttendanceTypeEnum.NotAssigned))
-            //                {
-            //                    ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.ATTENDANCE_CLASS_LIST_URL_FORMAT, cp.ClassRef);
-            //                }
-            //            }
-            //        }
-            //    }
-            //} 
             var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
             PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
             var executionResult = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(classes, mp);
-            PrepareCommonViewData(mp);
             PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
         }
-
         
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp)
         {
@@ -265,6 +236,12 @@ namespace Chalkable.Web.Controllers
                 });
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);
+        }
+
+        private bool CanTeahcerViewChalkable()
+        {
+            return ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM, ClaimInfo.VIEW_LOOKUP})
+                   || ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN, ClaimInfo.VIEW_LOOKUP});
         }
     }
 }

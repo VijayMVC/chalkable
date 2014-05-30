@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Security;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Newtonsoft.Json;
 
@@ -123,7 +124,7 @@ namespace Chalkable.Web.Authentication
                 if (!string.IsNullOrEmpty(userPermissionData))
                 {
                     var serializer = new JavaScriptSerializer();
-                    cntx.Claims = serializer.Deserialize<IList<StiConnector.Connectors.Model.Claim>>(userPermissionData);
+                    cntx.Claims = serializer.Deserialize<IList<ClaimInfo>>(userPermissionData);
                 }
                 return new ChalkablePrincipal(cntx);
             }

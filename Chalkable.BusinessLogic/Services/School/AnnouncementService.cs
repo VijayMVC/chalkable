@@ -507,7 +507,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (classId.HasValue)
             {
-                var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate);
+                var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate.Date);
                 if (mp == null)
                     throw new NoMarkingPeriodException();
                 var mpc = ServiceLocator.MarkingPeriodService.GetMarkingPeriodClass(classId.Value, mp.Id);

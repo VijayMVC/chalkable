@@ -60,9 +60,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
             return new PaginatedList<NotificationDetails>(nfDetails, notificationQuery.Start / notificationQuery.Count, notificationQuery.Count, data.Count);
         }
-
-        public override void Setup()
-        {
-        }
     }
 }

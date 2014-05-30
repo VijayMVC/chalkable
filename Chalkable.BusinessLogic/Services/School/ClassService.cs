@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditTeachers(IList<ClassTeacher> classTeachers);
         void DeleteTeachers(IList<ClassTeacher> classTeachers);
         ClassDetails DeleteStudent(int classId, int personId);
-        ClassDetails GetClassById(int id);
+        ClassDetails GetClassDetailsById(int id);
         IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
         IList<ClassDetails> GetClasses(string filter);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue);
@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId);
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
         IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null);
-
+        Class GetById(int id);
     }
 
     public class ClassService : SchoolServiceBase, IClassService
@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                 da.Insert(cClass);
                 uow.Commit();
-                return GetClassById(classId);
+                return GetClassDetailsById(classId);
             }
         }
 
@@ -119,7 +119,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            var c = GetClassById(classId);
+            var c = GetClassDetailsById(classId);
             if(!c.SchoolYearRef.HasValue)
                 throw new ChalkableException("school year is not assigned for this class");
             using (var uow = Update())
@@ -174,7 +174,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 classDa.Update(cClass);
                 uow.Commit();
             }
-            return GetClassById(classId);
+            return GetClassDetailsById(classId);
         }
 
 
@@ -209,7 +209,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 });    
                 uow.Commit();
             }
-            return GetClassById(classId);
+            return GetClassDetailsById(classId);
         }
 
         public void AddStudents(IList<ClassPerson> classPersons)
@@ -251,10 +251,10 @@ namespace Chalkable.BusinessLogic.Services.School
                     });
                 uow.Commit();
             }
-            return GetClassById(classId);
+            return GetClassDetailsById(classId);
         }
 
-        public ClassDetails GetClassById(int id)
+        public ClassDetails GetClassDetailsById(int id)
         {
             return GetClasses(new ClassQuery {ClassId = id, Count = 1}).First();
         }
@@ -303,6 +303,15 @@ namespace Chalkable.BusinessLogic.Services.School
                  }
              }                 
             return res;
+        }
+
+        public Class GetById(int id)
+        {
+            using (var uow = Read())
+            {
+                return new ClassDataAccess(uow, Context.SchoolLocalId)
+                    .GetById(id);
+            }
         }
 
         public IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
@@ -30,10 +27,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             var item = data.First(x => x.Value.ActivityId == activityId && x.Value.StudentId == studentId);
             data[item.Key] = score;
             return score;
-        }
-
-        public override void Setup()
-        {
         }
     }
 }

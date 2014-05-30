@@ -36,6 +36,7 @@ NAMESPACE('chlk.models.people', function () {
         MAINTAIN_STUDENT_AVERAGES: 'Maintain Student Averages',
         RECONCILE_GRADE_BOOK: 'Reconcile GradeBook',
         VIEW_CLASSROOM: 'View Classroom',
+        VIEW_CLASSROOM_ADMIN: 'View Classroom (Admin)',
         MAINTAIN_GRADING: 'Maintain Grading',
         VIEW_GRADING: 'View Grading',
         MAINTAIN_LOOKUP: 'Maintain Lookup',

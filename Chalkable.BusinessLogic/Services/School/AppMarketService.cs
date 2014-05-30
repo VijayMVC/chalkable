@@ -68,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ApplicationInstall> ListInstalledForClass(int classId)
         {
-            var clazz = ServiceLocator.ClassService.GetClassById(classId);
+            var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
             if (!BaseSecurity.IsAdminViewerOrClassTeacher(clazz, Context))
                 throw new ChalkableSecurityException();
             using (var uow = Read())

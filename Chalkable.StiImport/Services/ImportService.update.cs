@@ -453,7 +453,7 @@ namespace Chalkable.StiImport.Services
                     Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
                     continue;
                 }
-                var current = ServiceLocatorSchool.ClassService.GetClassById(course.CourseID);
+                var current = ServiceLocatorSchool.ClassService.GetById(course.CourseID);
                 classes.Add(new Class
                 {
                     ChalkableDepartmentRef = current.ChalkableDepartmentRef,

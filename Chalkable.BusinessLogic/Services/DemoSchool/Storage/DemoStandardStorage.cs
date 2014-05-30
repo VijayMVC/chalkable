@@ -12,11 +12,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        public void AddStandards(IList<Standard> standards)
-        {
-            Add(standards);
-        }
-
         public IList<Standard> GetStandarts(StandardQuery query)
         {
             var standards = data.Select(x => x.Value);
@@ -41,43 +36,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
             return standards.ToList();
-        }
-
-        public override void Setup()
-        {
-            AddStandards(new List<Standard>
-            {
-                new Standard
-                {
-                    Id = DemoSchoolConstants.MathStandard1,
-                    IsActive = true,
-                    Name = "Math 1",
-                    LowerGradeLevelRef = DemoSchoolConstants.GradeLevel10,
-                    UpperGradeLevelRef = DemoSchoolConstants.GradeLevel10,
-                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject
-                },
-
-                new Standard
-                {
-                    Id = DemoSchoolConstants.MathStandard2,
-                    IsActive = true,
-                    Name = "Math 2",
-                    LowerGradeLevelRef = DemoSchoolConstants.GradeLevel11,
-                    UpperGradeLevelRef = DemoSchoolConstants.GradeLevel11,
-                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject
-                },
-
-                new Standard
-                {
-                    Id = DemoSchoolConstants.MathStandard3,
-                    IsActive = true,
-                    Name = "Math 3",
-                    LowerGradeLevelRef = DemoSchoolConstants.GradeLevel12,
-                    UpperGradeLevelRef = DemoSchoolConstants.GradeLevel12,
-                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject
-                },
-
-            });  
         }
     }
 }

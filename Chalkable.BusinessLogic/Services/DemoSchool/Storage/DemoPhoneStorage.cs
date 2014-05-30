@@ -42,9 +42,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.Where(x => x.Value.PersonRef == personId).Select(x => x.Value).ToList();
         }
-
-        public override void Setup()
-        {
-        }
     }
 }

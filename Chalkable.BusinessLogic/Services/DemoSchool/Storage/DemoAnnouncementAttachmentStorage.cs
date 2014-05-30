@@ -140,11 +140,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 AnnouncementId = announcementId
             });
         }
-
-        public override void Setup()
-        {
-        }
-
-      
     }
 }

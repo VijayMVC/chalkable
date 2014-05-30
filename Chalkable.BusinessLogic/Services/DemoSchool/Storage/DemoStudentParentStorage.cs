@@ -46,9 +46,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Add(studentId, parentId);
             }
         }
-
-        public override void Setup()
-        {
-        }
     }
 }
