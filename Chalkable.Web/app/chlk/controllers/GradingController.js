@@ -150,7 +150,7 @@ NAMESPACE('chlk.controllers', function (){
                         var schoolOptions = this.getContext().getSession().get('schoolOptions', null);
                         newModel.setSchoolOptions(schoolOptions);
                         return newModel;
-                    }.bind(this))
+                    }, this)
                     .attach(this.validateResponse_());
                 return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, model.isAutoUpdate() ? chlk.activities.lib.DontShowLoader() : null);
             },

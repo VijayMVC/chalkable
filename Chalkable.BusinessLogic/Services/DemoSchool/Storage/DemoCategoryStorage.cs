@@ -19,10 +19,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var categories = data.Select(x => x.Value).ToList();
             return new PaginatedList<Category>(categories, start / count, count, categories.Count);
         }
-
-        public override void Setup()
-        {
-            
-        }
     }
 }

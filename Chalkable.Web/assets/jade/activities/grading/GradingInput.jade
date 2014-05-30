@@ -8,7 +8,7 @@ normalValue = self.getModel().getNormalValue()
     +Hidden('id', self.getId())
     +Hidden('announcementid', self.getAnnouncementId())
     +Hidden('studentid', self.getStudentId())
-    input(value=normalValue, name="gradevalue", data-grade-value=self.getGradeValue(),).grade-autocomplete.value-input
+    input(value=normalValue, name="gradevalue", data-grade-value=self.getGradeValue()).grade-autocomplete.value-input
     .grading-input-popup.chlk-pop-up-container.popup-bottom
         .pop-up-triangle.big
         if self.isAbleDropStudentScore() || self.isDropped()

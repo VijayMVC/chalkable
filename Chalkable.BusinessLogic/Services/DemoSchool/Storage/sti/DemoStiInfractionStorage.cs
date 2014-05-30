@@ -9,10 +9,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             : base(storage, x => x.Id)
         {
         }
-
-        public override void Setup()
-        {
-            
-        }
     }
 }

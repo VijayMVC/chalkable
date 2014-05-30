@@ -15,7 +15,7 @@ using Chalkable.StiConnector.Connectors.Model;
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
 
-    public class DemoGradingStatisticService : DemoSisConnectedService, IGradingStatisticService
+    public class DemoGradingStatisticService : DemoSchoolServiceBase, IGradingStatisticService
     {
         public DemoGradingStatisticService(IServiceLocatorSchool serviceLocator, DemoStorage storage): base(serviceLocator, storage)
         {

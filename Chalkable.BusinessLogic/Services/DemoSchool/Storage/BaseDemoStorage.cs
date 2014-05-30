@@ -56,7 +56,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
         public abstract TKey GetNextFreeId();
-        public abstract void Setup();
 
         public TValue ModifyValue(TKey key, TValue value, string defaultName = "Id")
         {

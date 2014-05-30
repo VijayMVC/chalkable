@@ -15,9 +15,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.OrderByDescending(x => x.Value.Id).First(x => x.Value.ApplicationRef == id && x.Value.OwnerRef == userId).Value;
         }
-
-        public override void Setup()
-        {
-        }
     }
 }

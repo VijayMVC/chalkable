@@ -60,34 +60,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .Select(x => x.Value)
                     .First();
         }
-
-        public override void Setup()
-        {
-            var currentYear = DateTime.Now.Year;
-
-            Add(new MarkingPeriod
-            {
-                Id = DemoSchoolConstants.FirstMarkingPeriodId,
-                Name = "Semester 1",
-                Description = "",
-                StartDate = new DateTime(currentYear, 1, 21),
-                EndDate = new DateTime(currentYear, 5, 30),
-                SchoolRef = DemoSchoolConstants.SchoolId,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                WeekDays = 62
-            });
-
-            Add(new MarkingPeriod
-            {
-                Id = DemoSchoolConstants.SecondMarkingPeriodId,
-                Name = "Semester 2",
-                Description = "",
-                StartDate = new DateTime(currentYear, 6, 30),
-                EndDate = new DateTime(currentYear, 10, 30),
-                SchoolRef = DemoSchoolConstants.SchoolId,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                WeekDays = 62
-            });
-        }
-}
+    }   
 }

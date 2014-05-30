@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Edit(IList<ClassAnnouncementType> classAnnouncementTypes)
         {
-            Storage.ClassAnnouncementTypeStorage.Edit(classAnnouncementTypes);
+            Storage.ClassAnnouncementTypeStorage.Update(classAnnouncementTypes);
         }
 
         public void Delete(IList<int> ids)

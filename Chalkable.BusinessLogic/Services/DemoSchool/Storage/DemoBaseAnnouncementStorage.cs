@@ -96,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.ToDate.HasValue)
                 announcements = announcements.Where(x => x.Expires <= query.ToDate);
             if (query.Complete.HasValue)
-                announcements = announcements.Where(x => Storage.AnnouncementCompleteStorage.GetComplete(x.Id, Storage.Context.UserLocalId.Value) == query.Complete.Value);
+                announcements = announcements.Where(x => Storage.AnnouncementCompleteStorage.GetComplete(x.Id, Storage.Context.UserLocalId.Value) == query.Complete);
             if (query.OwnedOnly)
                 announcements = announcements.Where(x => x.PrimaryTeacherRef == query.PersonId);
 
@@ -137,11 +137,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Standard = Storage.StandardStorage.GetById(x.StandardRef)
                 }).ToList();
 
+            var isComplete = Storage.AnnouncementCompleteStorage.GetComplete(announcement.Id,
+                Storage.Context.UserLocalId.Value);
+
             return new AnnouncementDetails
             {
                 Id = announcement.Id,
                 SisActivityId = announcement.SisActivityId,
-                Complete = Storage.AnnouncementCompleteStorage.GetComplete(announcement.Id, Storage.Context.UserLocalId.Value),
+                Complete = isComplete.HasValue && isComplete.Value,
                 Subject = announcement.Subject,
                 StudentsCount = announcement.StudentsCount,
                 WeightAddition = announcement.WeightAddition,
@@ -259,9 +262,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return data.ContainsKey(announcementId) ? data[announcementId] : null;
         }
 
-        public override void Setup()
+        public void Setup()
         {
-            var ann1 = Create(DemoSchoolConstants.AlgebraAcademicAchievementId, DemoSchoolConstants.AlgebraClassId,
+            /*var ann1 = Create(DemoSchoolConstants.AlgebraAcademicAchievementId, DemoSchoolConstants.AlgebraClassId,
                 DateTime.Today, DemoSchoolConstants.TeacherId, DateTime.Now.AddDays(1));
             var ann2 = Create(DemoSchoolConstants.AlgebraAcademicPracticeId, DemoSchoolConstants.AlgebraClassId,
                 DateTime.Today, DemoSchoolConstants.TeacherId, DateTime.Now.AddDays(1));
@@ -285,9 +288,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 if (Exists(activity.Id))
                     throw new ChalkableException("Announcement with such activityId already exists");
                 data[announcementDetail.Id].SisActivityId = activity.Id;
-            }
-
-            
+            }*/
         }
 
         public void SetComplete(int announcementId, int userId, bool complete)

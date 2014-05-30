@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (standards.Any(IsInvalidStandardModel))
                 throw new ChalkableException("Invalid params. LowerGradeLevelId can not be greater than upperGradeLevelId");
 
-            Storage.StandardStorage.AddStandards(standards);
+            Storage.StandardStorage.Add(standards);
         }
 
         public void EditStandard(IList<Standard> standards)

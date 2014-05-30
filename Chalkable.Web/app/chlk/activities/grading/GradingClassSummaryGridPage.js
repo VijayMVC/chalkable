@@ -307,10 +307,8 @@ NAMESPACE('chlk.activities.grading', function () {
                             var newValue = list.find('.hovered').getHTML();
                             if(newValue)
                                 node.setValue(newValue);
-                            this.updateValue(true);
                         }
-                        else
-                            this.updateValue(true);
+                        this.setItemValue(node.getValue(), node, true);
                     }
                 }
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
@@ -454,21 +452,23 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function commentBtnClick(node, event){
                 var active = this.dom.find('.active-cell');
-                var popUp = this.dom.find('.chlk-pop-up-container.comment');
-                var main = this.dom.parent('#main');
-                var bottom = main.height() + main.offset().top - active.offset().top + 73;
-                var left = active.offset().left - main.offset().left - 54;
-                popUp.setCss('bottom', bottom);
-                popUp.setCss('left', left);
-                var comment = active.find('.comment-value').getValue();
-                popUp.find('textarea').setValue(comment);
-                popUp.show();
-                popUp.find('.grading-comments-list').show();
-                if(comment)
-                    popUp.find('.grading-comments-list').hide();
-                setTimeout(function(){
-                    popUp.find('.comment-value').trigger('focus');
-                }, 1)
+                //if(active.find('.value-input').getValue()){
+                    var popUp = this.dom.find('.chlk-pop-up-container.comment');
+                    var main = this.dom.parent('#main');
+                    var bottom = main.height() + main.offset().top - active.offset().top + 73;
+                    var left = active.offset().left - main.offset().left - 54;
+                    popUp.setCss('bottom', bottom);
+                    popUp.setCss('left', left);
+                    var comment = active.find('.comment-value').getValue();
+                    popUp.find('textarea').setValue(comment);
+                    popUp.show();
+                    popUp.find('.grading-comments-list').show();
+                    if(comment)
+                        popUp.find('.grading-comments-list').hide();
+                    setTimeout(function(){
+                        popUp.find('.comment-value').trigger('focus');
+                    }, 1);
+                //}
             },
 
             [ria.mvc.DomEventBind('click', '.codes-button')],
@@ -615,7 +615,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [[ria.dom.Dom, String, Boolean]],
             function setItemState_(node, stateName, selectNext_){
-                node.setValue(node.getData('value'));
+                node.setValue(node.getData('grade-value'));
                 node.parent('form').find('[name=' + stateName +']').setValue(true);
                 this.updateValue(selectNext_);
             },
@@ -691,7 +691,8 @@ NAMESPACE('chlk.activities.grading', function () {
                             this.getBooleanValue(model.isDropped()) == this.getBooleanValue(resModel.isDropped()) &&
                             this.getBooleanValue(model.isLate()) == this.getBooleanValue(resModel.isLate()) &&
                             this.getBooleanValue(model.isExempt()) == this.getBooleanValue(resModel.isExempt()) &&
-                            this.getBooleanValue(model.isIncomplete()) == this.getBooleanValue(resModel.isIncomplete());
+                            this.getBooleanValue(model.isIncomplete()) == this.getBooleanValue(resModel.isIncomplete()) &&
+                            (model.getComment() || "") == (resModel.getComment() || "");
                     }
                     if(p){
                         event.preventDefault();
