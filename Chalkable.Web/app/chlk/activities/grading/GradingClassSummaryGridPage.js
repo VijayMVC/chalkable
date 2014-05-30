@@ -307,10 +307,8 @@ NAMESPACE('chlk.activities.grading', function () {
                             var newValue = list.find('.hovered').getHTML();
                             if(newValue)
                                 node.setValue(newValue);
-                            this.updateValue(true);
                         }
-                        else
-                            this.updateValue(true);
+                        this.setItemValue(node.getValue(), node, true);
                     }
                 }
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
@@ -617,7 +615,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [[ria.dom.Dom, String, Boolean]],
             function setItemState_(node, stateName, selectNext_){
-                node.setValue(node.getData('value'));
+                node.setValue(node.getData('grade-value'));
                 node.parent('form').find('[name=' + stateName +']').setValue(true);
                 this.updateValue(selectNext_);
             },
