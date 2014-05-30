@@ -39,11 +39,30 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function listAction(postback_, completeOnly_, classId_, pageIndex_) {
+
+            if(!this.canViewFeed()){
+                var text  = 'You don\'t have permission (View Lookup, View Classroom or View Classroom (Admin)). ' +
+                    'Without those permissions user cann\'t use chalkable. ';
+                return this.ShowMsgBox(text, 'Error.', [{
+                    text: 'LOG OUT',
+                    controller: 'account',
+                    action: 'logout'
+                }]);
+            }
+
             completeOnly_ = completeOnly_ != false;
             var result = this
                 .getFeedItems(postback_, completeOnly_, classId_, pageIndex_)
                 .attach(this.validateResponse_());
             return this.PushOrUpdateView(chlk.activities.feed.FeedListPage, result);
+        },
+
+
+        Boolean, function canViewFeed(){
+            var res = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM)
+            || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN);
+            return res && (!this.userInRole(chlk.models.common.RoleEnum.TEACHER)
+                            || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_LOOKUP));
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],

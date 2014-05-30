@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -68,7 +69,7 @@ namespace Chalkable.BusinessLogic.Services
         [Ignore]
         public string OAuthApplication{ get; set; }
         [Ignore]
-        public IList<StiConnector.Connectors.Model.Claim> Claims { get; set; } 
+        public IList<ClaimInfo> Claims { get; set; } 
 
         public UserContext()
         {

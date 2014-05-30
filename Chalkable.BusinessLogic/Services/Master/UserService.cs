@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
@@ -196,11 +197,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var res = new UserContext(user, CoreRoles.GetById(su.Role), user.District, su.School, developerId, schoolYear);
                 if (iNowUser == null && iNowConnector != null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();          
-                if(iNowUser != null) res.Claims = iNowUser.Claims;
+                if(iNowUser != null) res.Claims = ClaimInfo.Create(iNowUser.Claims);
 
                 if (user.IsDemoUser)
                 {
-                    res.Claims = DemoUserService.GetDemoClaims();
+                    res.Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims());
                 }
                 return res;
             }
