@@ -122,44 +122,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return rooms;
         }
-
-        public override void Setup()
-        {
-            Add(new ClassPeriod
-            {
-                ClassRef = DemoSchoolConstants.AlgebraClassId,
-                DayTypeRef = 19,
-                PeriodRef = DemoSchoolConstants.FirstPeriodId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
-                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.FirstPeriodId)
-            });
-
-            Add(new ClassPeriod
-            {
-                ClassRef = DemoSchoolConstants.GeometryClassId,
-                DayTypeRef = 19,
-                PeriodRef = DemoSchoolConstants.SecondPeriodId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
-                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.SecondPeriodId)
-            });
-
-            Add(new ClassPeriod
-            {
-                ClassRef = DemoSchoolConstants.AlgebraClassId,
-                DayTypeRef = 20,
-                PeriodRef = DemoSchoolConstants.FirstPeriodId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
-                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.FirstPeriodId)
-            });
-
-            Add(new ClassPeriod
-            {
-                ClassRef = DemoSchoolConstants.GeometryClassId,
-                DayTypeRef = 20,
-                PeriodRef = DemoSchoolConstants.SecondPeriodId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
-                Period = Storage.PeriodStorage.GetById(DemoSchoolConstants.SecondPeriodId)
-            });
-        }
     }
 }

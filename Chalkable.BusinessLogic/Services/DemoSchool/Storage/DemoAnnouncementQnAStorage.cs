@@ -40,9 +40,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Query = announcementQnAQuery
             };
         }
-
-        public override void Setup()
-        {
-        }
     }
 }

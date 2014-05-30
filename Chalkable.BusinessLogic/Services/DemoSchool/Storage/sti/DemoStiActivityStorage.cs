@@ -14,10 +14,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         {
         }
 
-        public override void Setup()
-        {
-        }
-
         public Activity CreateActivity(int classId, Activity activity)
         {
             activity.SectionId = classId;

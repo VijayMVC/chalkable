@@ -110,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return new List<string>();
         }
 
-        public override void Setup()
+        public void Setup()
         {
             for (var i = 0; i < 4; ++i)
             {

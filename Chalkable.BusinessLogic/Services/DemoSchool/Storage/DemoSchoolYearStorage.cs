@@ -52,13 +52,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.First(x =>  date >= x.Value.StartDate && date <= x.Value.EndDate).Value;
         }
-
-        public override void Setup()
-        {
-            var currentDate = DateTime.Now;
-            Add(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.SchoolId, "Current School Year", "", 
-                new DateTime(currentDate.Year, 1, 1),
-                new DateTime(currentDate.Year, 12, 31));
-        }
     }
 }

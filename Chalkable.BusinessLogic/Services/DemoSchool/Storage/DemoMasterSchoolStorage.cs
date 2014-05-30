@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
-        public override void Setup()
+        public void AddMasterSchool()
         {
             if (!Storage.Context.SchoolLocalId.HasValue)
                 throw new Exception("Context doesn't have valid school local id");

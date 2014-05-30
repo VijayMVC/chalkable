@@ -27,32 +27,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.Count(x => x.Value.SchoolYearRef == schoolYearId) > 0;
         }
-
-        public override void Setup()
-        {
-            Add(new DayType
-            {
-                Id = 1,
-                Name = "M",
-                Number = 0,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-
-            Add(new DayType
-            {
-                Id = 2,
-                Name = "TTh",
-                Number = 1,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-
-            Add(new DayType
-            {
-                Id = 3,
-                Name = "WF",
-                Number = 2,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-        }
     }
 }

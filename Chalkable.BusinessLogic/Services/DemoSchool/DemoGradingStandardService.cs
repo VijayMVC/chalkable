@@ -9,7 +9,7 @@ using Chalkable.StiConnector.Connectors.Model;
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
    
-    public class DemoGradingStandardService : DemoSisConnectedService, IGradingStandardService
+    public class DemoGradingStandardService : DemoSchoolServiceBase, IGradingStandardService
     {
         public DemoGradingStandardService(IServiceLocatorSchool serviceLocator, DemoStorage storage)
             : base(serviceLocator, storage)

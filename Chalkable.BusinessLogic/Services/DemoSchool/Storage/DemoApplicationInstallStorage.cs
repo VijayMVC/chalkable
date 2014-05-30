@@ -318,10 +318,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }).ToList();
         }
 
-        public override void Setup()
-        {
-        }
-
         public bool Exists(Guid applicationRef, int personId)
         {
             return data.Count(x => x.Value.ApplicationRef == applicationRef && x.Value.PersonRef == personId) > 0;
@@ -335,7 +331,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .ToList();
 
         }
-
     
         public IList<ApplicationInstall> GetAll(Guid applicationId, bool personId)
         {

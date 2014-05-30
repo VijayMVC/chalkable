@@ -26,10 +26,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value).ToList();
         }
-
-        public override void Setup()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

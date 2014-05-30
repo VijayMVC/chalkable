@@ -21,36 +21,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 infractions = infractions.Where(x => x.IsActive == true);
             return infractions.ToList();
         }
-
-        public override void Setup()
-        {
-            var infractions = new List<Infraction>();
-            
-            var infr1 = new Infraction
-            {
-                Code = "FI",
-                Demerits = 0,
-                Description = "Fighting",
-                IsActive = true,
-                IsSystem = false,
-                Name = "Fighting"
-            };
-
-            var infr2 = new Infraction
-            {
-                Code = "DI",
-                Demerits = 0,
-                Description = "Disrespect",
-                IsActive = true,
-                IsSystem = false,
-                Name = "Disrespect"
-            };
-
-            infractions.Add(infr1);
-            infractions.Add(infr2);
-
-            Add(infractions);
-
-        }
     }
 }

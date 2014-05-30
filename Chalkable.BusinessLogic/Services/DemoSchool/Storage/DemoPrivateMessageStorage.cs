@@ -128,9 +128,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .Select(x => x.Value)
                     .ToList();
         }
-
-        public override void Setup()
-        {
-        }
     }
 }

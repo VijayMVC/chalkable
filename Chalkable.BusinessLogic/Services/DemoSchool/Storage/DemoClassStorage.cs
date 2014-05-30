@@ -16,40 +16,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        public override void Setup()
-        {
-            var classes = new List<Class>
-            {
-                new Class
-                {
-                    Id = DemoSchoolConstants.GeometryClassId,
-                    Name = "Geometry",
-                    Description = "Geometry",
-                    GradeLevelRef = 12,
-                    CourseRef = 43,
-                    ChalkableDepartmentRef = null,
-                    PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
-                    SchoolRef = DemoSchoolConstants.SchoolId,
-                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-                },
-                new Class
-                {
-                    Id = DemoSchoolConstants.AlgebraClassId,
-                    Name = "Algebra",
-                    Description = "Algebra",
-                    GradeLevelRef = 12,
-                    CourseRef = 43,
-                    ChalkableDepartmentRef = null,
-                    PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
-                    SchoolRef = DemoSchoolConstants.SchoolId,
-                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-                }
-            };
-
-
-            Add(classes);
-        }
-
         public ClassQueryResult GetClassesComplex(ClassQuery query)
         {
             var classes = data.Select(x => x.Value);

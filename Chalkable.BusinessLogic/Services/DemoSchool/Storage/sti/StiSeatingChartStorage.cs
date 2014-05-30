@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             data[item] = new KeyValuePair<int, SeatingChart>(markingPeriodId, seatingChart);
         }
 
-        public override void Setup()
+        public void Setup()
         {
 
             var seats = new List<Seat>();

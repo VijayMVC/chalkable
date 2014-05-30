@@ -18,9 +18,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 res.Add(data[person.AddressRef.Value]);
             return res;
         }
-
-        public override void Setup()
-        {
-        }
     }
 }
