@@ -23,9 +23,9 @@ NAMESPACE('chlk.services', function () {
                 return this.post('User/LogOut.json', chlk.models.common.SimpleResult, {});
             },
 
-//            ria.async.Future, function redirectToINOW(){
-//                return this.post('User/RedirectToINow.json', chlk.models.common.SimpleResult,{});
-//            },
+            ria.async.Future, function redirectToINOW(){
+                return this.post('User/RedirectToINow.aspx', Object,{});
+            },
 
             [[String,String,String]],
             ria.async.Future, function changePassword(oldPassword, newPassword, newPasswordConfirmation) {

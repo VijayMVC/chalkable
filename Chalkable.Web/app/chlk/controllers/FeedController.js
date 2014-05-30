@@ -40,14 +40,17 @@ NAMESPACE('chlk.controllers', function (){
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function listAction(postback_, completeOnly_, classId_, pageIndex_) {
 
+            //todo : think about go to inow part
             if(!this.canViewFeed()){
-                var text  = 'It looks like you don\'t have the correct permissions defined in iNow (View Lookup, View Classroom or View Classroom (Admin)). ' +
-                    'Without those permissions you cannot use Chalkable. Please contact your administrator for more information.';
+                var text  = 'It looks like you don\'t have the correct permissions defined in iNow \n' +
+                    '(View Lookup, View Classroom or View Classroom (Admin)).\n' +
+                    'Without those permissions you cannot use Chalkable.  \n' +
+                    'Please contact your administrator for more information. \n';
                 return this.ShowMsgBox(text, 'Error.', [{
                     text: 'LOG OUT',
                     controller: 'account',
                     action: 'logout'
-                }]);
+                }], 'center');
             }
 
             completeOnly_ = completeOnly_ != false;
