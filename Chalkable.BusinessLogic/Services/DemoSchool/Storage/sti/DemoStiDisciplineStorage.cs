@@ -22,32 +22,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             Add(stiDiscipline);
             return stiDiscipline;
         }
-
-        public override void Setup()
-        {
-            Create(new DisciplineReferral
-            {
-                Date = DateTime.Now.Date,
-                Id = GetNextFreeId(),
-                Infractions = Storage.StiInfractionStorage.GetAll(),
-                StudentId = DemoSchoolConstants.FirstStudentId
-            });
-
-            Create(new DisciplineReferral
-            {
-                Date = DateTime.Now.Date,
-                Id = GetNextFreeId(),
-                Infractions = Storage.StiInfractionStorage.GetAll(),
-                StudentId = DemoSchoolConstants.SecondStudentId
-            });
-
-            Create(new DisciplineReferral
-            {
-                Date = DateTime.Now.Date,
-                Id = GetNextFreeId(),
-                Infractions = Storage.StiInfractionStorage.GetAll(),
-                StudentId = DemoSchoolConstants.ThirdStudentId
-            });
-        }
     }
 }

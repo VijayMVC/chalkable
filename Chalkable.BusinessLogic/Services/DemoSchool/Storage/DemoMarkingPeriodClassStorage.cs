@@ -52,37 +52,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return mpc.ToList().Count > 0;
         }
 
-        public override void Setup()
-        {
-           Add(new MarkingPeriodClass
-           {
-               SchoolRef = DemoSchoolConstants.SchoolId,
-               MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
-               ClassRef = DemoSchoolConstants.AlgebraClassId
-           });
-
-           Add(new MarkingPeriodClass
-           {
-               SchoolRef = DemoSchoolConstants.SchoolId,
-               MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
-               ClassRef = DemoSchoolConstants.GeometryClassId
-           });
-
-           Add(new MarkingPeriodClass
-           {
-               SchoolRef = DemoSchoolConstants.SchoolId,
-               MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
-               ClassRef = DemoSchoolConstants.AlgebraClassId
-           });
-
-           Add(new MarkingPeriodClass
-           {
-               SchoolRef = DemoSchoolConstants.SchoolId,
-               MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
-               ClassRef = DemoSchoolConstants.GeometryClassId
-           });
-        }
-
         public new void Delete(IList<MarkingPeriodClass> markingPeriodClasses)
         {
             foreach (var mpc in markingPeriodClasses)

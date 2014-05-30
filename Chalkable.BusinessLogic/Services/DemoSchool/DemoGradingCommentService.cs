@@ -23,11 +23,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Update(gradingComments);
         }
 
-        public override void Setup()
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<GradingComment> GetGradingComments()
         {
             return data.Select(x => x.Value).ToList();

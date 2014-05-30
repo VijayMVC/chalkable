@@ -29,36 +29,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return GetClassTeachers(classId, teacherId).Count > 0;
         }
 
-        public override void Setup()
-        {
-            Add(new ClassTeacher
-            {
-                ClassRef = DemoSchoolConstants.AlgebraClassId,
-                PersonRef = DemoSchoolConstants.TeacherId,
-                IsPrimary = true
-            });
-
-            Add(new ClassTeacher
-            {
-                ClassRef = DemoSchoolConstants.AlgebraClassId,
-                PersonRef = DemoSchoolConstants.TeacherId,
-                IsPrimary = true
-            });
-
-            Add(new ClassTeacher
-            {
-                ClassRef = DemoSchoolConstants.GeometryClassId,
-                PersonRef = DemoSchoolConstants.TeacherId,
-                IsPrimary = true
-            });
-
-            Add(new ClassTeacher
-            {
-                ClassRef = DemoSchoolConstants.GeometryClassId,
-                PersonRef = DemoSchoolConstants.TeacherId,
-                IsPrimary = true
-            });
-
-        }
     }
 }

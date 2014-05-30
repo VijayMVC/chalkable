@@ -23,48 +23,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public override void Setup()
-        {
-            Add(new List<ClassStandard>
-            {
-                new ClassStandard
-                {
-                    ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    StandardRef = DemoSchoolConstants.MathStandard1
-                },
-
-                new ClassStandard
-                {
-                    ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    StandardRef = DemoSchoolConstants.MathStandard2
-                },
-
-                 new ClassStandard
-                {
-                    ClassRef = DemoSchoolConstants.AlgebraClassId,
-                    StandardRef = DemoSchoolConstants.MathStandard3
-                },
-
-                new ClassStandard
-                {
-                    ClassRef = DemoSchoolConstants.GeometryClassId,
-                    StandardRef = DemoSchoolConstants.MathStandard1
-                },
-
-                new ClassStandard
-                {
-                    ClassRef = DemoSchoolConstants.GeometryClassId,
-                    StandardRef = DemoSchoolConstants.MathStandard2
-                },
-
-                 new ClassStandard
-                {
-                    ClassRef = DemoSchoolConstants.GeometryClassId,
-                    StandardRef = DemoSchoolConstants.MathStandard3
-                }
-            });
-        }
-
         public IList<ClassStandard> GetAll(int? classId)
         {
             var items = data.Select(x => x.Value);

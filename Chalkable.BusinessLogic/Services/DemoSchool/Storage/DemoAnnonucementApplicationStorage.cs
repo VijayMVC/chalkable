@@ -51,9 +51,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
             return announcementApplications.ToList();
         }
-
-        public override void Setup()
-        {
-        }
     }
 }

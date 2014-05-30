@@ -19,19 +19,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var schoolGradeLevels = Storage.SchoolGradeLevelStorage.GetAll(schoolId).Select(x => x.GradeLevelRef).ToList();
             return data.Where(x => schoolGradeLevels.Contains(x.Value.Id)).Select(x => x.Value).ToList();
         }
-
-        public override void Setup()
-        {
-            for (var lvl = DemoSchoolConstants.GradeLevel1; lvl <= DemoSchoolConstants.GradeLevel12; ++lvl)
-            {
-                Add(new GradeLevel
-                {
-                    Description = "",
-                    Id = lvl,
-                    Name = lvl.ToString(CultureInfo.InvariantCulture),
-                    Number = lvl
-                });
-            }
-        }
     }
 }

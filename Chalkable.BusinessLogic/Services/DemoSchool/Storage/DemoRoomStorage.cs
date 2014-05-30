@@ -33,9 +33,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var rooms = data.Select(x => x.Value).ToList().Skip(start).Take(count);
             return new PaginatedList<Room>(rooms, start / count, count, data.Count);
         }
-
-        public override void Setup()
-        {
-        }
     }
 }

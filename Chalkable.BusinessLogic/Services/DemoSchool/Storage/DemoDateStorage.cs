@@ -94,7 +94,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        public override void Setup()
+        public void AddDates()
         {
             var currentYear = DateTime.Now.Year;
             for(var i = 1; i <= 12; ++i)

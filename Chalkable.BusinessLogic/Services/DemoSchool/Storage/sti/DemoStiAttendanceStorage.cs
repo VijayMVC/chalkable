@@ -23,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
             if (data.Count(x => x.Value.SectionId == classId && x.Value.Date == ds) == 0)
             {
+                //todo: rewrite this
                 return new SectionAttendance()
                 {
                     SectionId = classId,
@@ -53,11 +54,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 };
             }
            return data.First(x => x.Value.SectionId == classId && x.Value.Date == ds).Value;
-        }
-
-        public override void Setup()
-        {
-           
         }
 
         public void SetSectionAttendance(int schoolYearId, DateTime date, int classId, SectionAttendance sa)

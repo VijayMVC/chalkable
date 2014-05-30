@@ -11,11 +11,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        
-        public override void Setup()
-        {
-        }
-
         public void SetComplete(AnnouncementComplete complete)
         {
             if (data.Count(x => x.Value.AnnouncementId == complete.AnnouncementId && x.Value.UserId == complete.UserId) == 0)
@@ -26,11 +21,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             data[item] = complete;
         }
 
-        public bool GetComplete(int announcementId, int userId)
+        public bool? GetComplete(int announcementId, int userId)
         {
             if (data.Count(x => x.Value.AnnouncementId == announcementId && x.Value.UserId == userId) == 0)
             {
-                return false;
+                return (bool?)false;
             }
             return data.First(x => x.Value.AnnouncementId == announcementId && x.Value.UserId == userId).Value.Complete;
         }

@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .Select(x => x.Value.RoleRef).First();
         }
 
-        public void Delete(IList<SchoolPerson> schoolPersons)
+        public new void Delete(IList<SchoolPerson> schoolPersons)
         {
             foreach (var schoolPerson in schoolPersons)
             {
@@ -45,33 +45,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                 Delete(item.Key);
             }
-        }
-
-        public override void Setup()
-        {
-            var sps = new List<SchoolPerson>
-            {
-                new SchoolPerson
-                {
-                    PersonRef = 1197,
-                    RoleRef = 5,
-                    SchoolRef = DemoSchoolConstants.SchoolId
-                },
-                new SchoolPerson
-                {
-                    PersonRef = 1196,
-                    RoleRef = 3,
-                    SchoolRef = DemoSchoolConstants.SchoolId
-                },
-                new SchoolPerson
-                {
-                    PersonRef = 1195,
-                    RoleRef = 2,
-                    SchoolRef = DemoSchoolConstants.SchoolId
-                }
-            };
-
-            Add(sps);
         }
     }
 }

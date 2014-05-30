@@ -10,10 +10,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAlternateScoreStorage(DemoStorage storage) : base(storage, x => x.Id)
         {
         }
-
-        public override void Setup()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

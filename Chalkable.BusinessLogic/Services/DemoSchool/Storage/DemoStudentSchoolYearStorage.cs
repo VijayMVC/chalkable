@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
@@ -15,34 +14,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.Where(x => x.Value.StudentRef == personId).Select(x => x.Value).ToList();
         }
-
-        public override void Setup()
-        {
-            Add(new StudentSchoolYear
-            {
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                StudentRef = DemoSchoolConstants.FirstStudentId,
-                GradeLevel = Storage.GradeLevelStorage.GetById(DemoSchoolConstants.GradeLevel12),
-                GradeLevelRef = DemoSchoolConstants.GradeLevel12
-            });
-
-            Add(new StudentSchoolYear
-            {
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                StudentRef = DemoSchoolConstants.SecondStudentId,
-                GradeLevel = Storage.GradeLevelStorage.GetById(DemoSchoolConstants.GradeLevel12),
-                GradeLevelRef = DemoSchoolConstants.GradeLevel12
-            });
-
-            Add(new StudentSchoolYear
-            {
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                StudentRef = DemoSchoolConstants.ThirdStudentId,
-                GradeLevel = Storage.GradeLevelStorage.GetById(DemoSchoolConstants.GradeLevel12),
-                GradeLevelRef = DemoSchoolConstants.GradeLevel12
-            });
-        }
-
 
         public bool Exists(IList<int> gradeLevelIds, int personId)
         {
