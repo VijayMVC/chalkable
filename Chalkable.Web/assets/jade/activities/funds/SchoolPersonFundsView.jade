@@ -1,0 +1,100 @@
+mixin RadioButtonsList(listName, defaultVal)
+    -attributes['data-name'] = escape(listName);
+    .radiobutton-group(attributes)
+        +Hidden(listName, defaultVal)
+        block
+
+mixin RadioButton(name, val, text, checked, isReadOnly)
+    .chlk-radio-button(attributes)
+        +Hidden(name, false)(data-value=val, class="hidden-radio-button")
+        input(name = name, type="radio", value = val, checked=checked, disabled=isReadOnly)
+        label(for=name)=text
+
+mixin RadioButtonWithModel(name, model)
+    +RadioButton(name, model.method, model.title, model.checked, model.readOnly)
+
+mixin RadioButtonsListWithModel(name, list)
+    +RadioButtonsList(name, null)
+        each item in list
+            +RadioButtonWithModel(name, item)
+
+
+mixin PayPalContainer(amount)
+    +ActionForm('funds', 'payPal').funds-payment-form.pay-pal-form(attributes)
+        +Hidden('amount', amount)
+        +Button()(type="submit").blue-gradient-btn
+            span Add Credits via
+            span.amount-btn-text= '$' + amount
+            span.pay-pal-btn-text PayPal
+        .funds-payment-form-title
+            .credit-card-icon.pay-pal-1icon
+            .text You'll be redirected to secure Paypal form
+
+mixin SendMessageContainer(data)
+    -isTeacher = data.getUserRole().isTeacher()
+    -isStudent = data.getUserRole().isStudent()
+    -console.log(isStudent)
+    -console.log(isTeacher)
+    -persons = data.getSendToPersons()
+    -index = 0
+    .funds-payment-form.send-message-form(attributes)
+        +Button().blue-gradient-btn Send Message
+        if (isTeacher || isStudent) && persons.length > 0
+            .funds-payment-form-title
+                .send-message-icon
+                .text
+                     span We'll send a request message to
+                     span.send-to-text= ' ' + (isStudent ? 'your parent' : persons[0].getDisplayName())
+            if  isTeacher
+                .persons-select-list
+                    +Select('persons', null, null)
+                        each person in persons
+                            +Option(person.getId(), String.format("{0} - {1}",person.getDisplayName(), person.getEmail()), index == 0)
+                            -index++
+
+mixin TransactionResultView(transactionSuccess, balance)
+    .funds-transaction-result-view
+        if transactionSuccess == true
+            .transaction-success-view
+                .text=Msg.Add_Credit_Transaction_Success(balance)
+                .redirect-link Add more funds
+        else
+            .transaction-fail-view
+                .text=Msg.Add_Credit_Transaction_Fail
+                .redirect-link Try again
+
+.funds-view.school-person-funds-view.apps-funds
+    +AppMarketToolbar(null, null, null)
+    .summary-info
+        .balance
+            h1='Your Balance: $' + self.getCurrentBalance()
+    .buy-credit-container.funds-container
+        .title Buy Credit
+        .separator
+        .buy-credit-info.inner-container
+            .amount-container
+                .title Amount:
+                +RadioButtonsList('amount_radio_grup', null)
+                    +RadioButton('amount_radio_btn', 10, '$10', true, false)
+                    +RadioButton('amount_radio_btn', 20, '$20', false, false)
+                    +RadioButton('amount_radio_btn', 50, '$50', false, false)
+                    +RadioButton('amount_radio_btn', 100, '$100', false, false)
+                    +RadioButton('amount_radio_btn', '', 'Other', false, false)#amount-others
+                    .chlk-radio-button.other-field.x-hidden
+                        lable $
+                        input(placeholder="Other").funds-text-field#other-input-field
+            .method-container
+                .title Method:
+                +RadioButtonsListWithModel('method', self.prepareMethodObjList())
+            div(class=self.showTransactionResultForm() ? 'x-hidden' : '').action-forms
+                .add-credit-card-container
+                    +RenderWith(self.getCreditCardInfo(), chlk.templates.funds.CreditCardTpl)
+                +PayPalContainer(10).x-hidden
+                +SendMessageContainer(self).x-hidden
+            if self.showTransactionResultForm()
+                +TransactionResultView(self.isTransactionSuccess(), self.getCurrentBalance())
+    .funds-history-container.funds-container
+        .title History
+        .separator
+        .inner-container.funds-history-grid
+            +RenderWith(self.getFundsHistory(), chlk.templates.funds.FundsHistoryTpl)
