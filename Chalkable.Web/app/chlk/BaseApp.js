@@ -94,7 +94,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.NEXT_MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.FINALIZED_CLASS_IDS);
-                this.saveInSession(session, ChlkSessionConstants.CURRENT_CHLK_PERSON, chlk.models.people.User, 'currentPerson');
+                this.saveInSession(session, ChlkSessionConstants.CURRENT_CHLK_PERSON, chlk.models.people.User, ChlkSessionConstants.CURRENT_PERSON);
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, ChlkSessionConstants.AZURE_PICTURE_URL);
                 this.saveInSession(session, ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, chlk.models.id.SchoolYearId);
