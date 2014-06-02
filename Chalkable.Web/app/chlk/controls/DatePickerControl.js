@@ -44,9 +44,9 @@ NAMESPACE('chlk.controls', function () {
                 }
 
                 if(options.inCurrentMp){
-                    var mp = this.getContext().getSession().get('gradingPeriod');
-                    options.minDate = mp.getStartDate().getDate();
-                    options.maxDate = mp.getEndDate().getDate();
+                    var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
+                    options.minDate = gp.getStartDate().getDate();
+                    options.maxDate = gp.getEndDate().getDate();
                 }
 
                 if(options.calendarCls){

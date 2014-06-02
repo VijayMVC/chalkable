@@ -18,7 +18,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getBackups(start_ || 0, 10)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        this.getContext().getSession().set('listBackups', model);
+                        this.getContext().getSession().set(ChlkSessionConstants.DB_LIST_BACKUPS, model);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.storage.DbMaintenancePage, result);
@@ -50,7 +50,7 @@ NAMESPACE('chlk.controllers', function (){
                     .backup()
                     .attach(this.validateResponse_())
                     .then(function(success){
-                        return this.getContext().getSession().get('listBackups');
+                        return this.getContext().getSession().get(ChlkSessionConstants.DB_LIST_BACKUPS);
                     }, this);
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             },
@@ -61,7 +61,7 @@ NAMESPACE('chlk.controllers', function (){
                     .restore(ticks)
                     .attach(this.validateResponse_())
                     .then(function(success){
-                        return this.getContext().getSession().get('listBackups');
+                        return this.getContext().getSession().get(ChlkSessionConstants.DB_LIST_BACKUPS);
                     }, this);
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             }

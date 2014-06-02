@@ -46,12 +46,12 @@ NAMESPACE('chlk.services', function () {
 
             [[Boolean]],
             ria.async.Future, function getDevApps(refresh_) {
-                var apps = this.getContext().getSession().get('dev-apps') || [];
+                var apps = this.getContext().getSession().get(ChlkSessionConstants.DEV_APPS) || [];
 
                 return apps.length == 0 || refresh_
                     ? this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {})
                           .then(function(data){
-                                this.getContext().getSession().set('dev-apps', data.getItems());
+                                this.getContext().getSession().set(ChlkSessionConstants.DEV_APPS, data.getItems());
                                 return data.getItems();
                     }, this)
                     : new ria.async.DeferredData(apps);
@@ -59,17 +59,17 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.apps.Application]],
             function switchApp(app){
-                this.getContext().getSession().set('currentAppId', app.getId());
-                this.getContext().getSession().set('currentApp', app);
+                this.getContext().getSession().set(ChlkSessionConstants.CURRENT_APP_ID, app.getId());
+                this.getContext().getSession().set(ChlkSessionConstants.CURRENT_APP, app);
                 return app;
             },
 
             function getCurrentAppId(){
-                return this.getContext().getSession().get('currentAppId');
+                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_APP_ID);
             },
 
             function getCurrentApp(){
-                return this.getContext().getSession().get('currentApp');
+                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_APP);
             },
 
             [[chlk.models.id.AppId, Boolean]],

@@ -62,8 +62,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[Boolean, String, Number, chlk.models.common.ChlkDate, String]],
         function summaryAdminAction(update_, gradeLevels_, currentPage_, date_, types_) {
-            var markingPeriod = this.getContext().getSession().get('markingPeriod', null), //TODO: use method getCurrentMarkingPeriod
-                currentSchoolYearId = this.getContext().getSession().get('currentSchoolYearId', null), //TODO: use method getCurrentSchoolYearId
+            var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD, null), //TODO: use method getCurrentMarkingPeriod
+                currentSchoolYearId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null), //TODO: use method getCurrentSchoolYearId
                 fromMarkingPeriodId = markingPeriod.getId(),
                 toMarkingPeriodId = markingPeriod.getId();
             var res = ria.async.wait([
@@ -87,7 +87,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.attendance.AdminAttendanceSummary]],
         function updateSummaryAdminAction(model) {
-            var markingPeriod = this.getContext().getSession().get('markingPeriod', null);
+            var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD, null);
             var renderNow = model.isRenderNow(),
                 renderDay = model.isRenderDay(),
                 renderMp = model.isRenderMp(),
@@ -170,7 +170,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
-                    model.setReasons(this.getContext().getSession().get('attendanceReasons', []));
+                    model.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
                     model.setAbleEdit(this.userIsAdmin() || this.userInRole(chlk.models.common.RoleEnum.TEACHER));
                     if(controller_)
                         model.setController(controller_);
@@ -215,7 +215,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Boolean, Boolean]],
         function sortStudentsAction(byLastName, isProfile_){
-            var model = this.getContext().getSession().get('attendancePageData');
+            var model = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_PAGE_DATA);
             model.getItems().sort(function(item1, item2){
                 var sortField1 = "";
                 var sortField2 = "";
@@ -245,7 +245,7 @@ NAMESPACE('chlk.controllers', function (){
             model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE));
             model.setTopData(topModel);
             model.setDate(date_);
-            model.setReasons(this.getContext().getSession().get('attendanceReasons', []));
+            model.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
             return model;
         },
 
@@ -345,7 +345,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(items){
                     date_ = date_ || new chlk.models.common.ChlkDate(getDate());
-                    this.getContext().getSession().set('attendanceData', items);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTENDANCE_DATA, items);
                     var classes = this.getClassForAttendances_();
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes);
                     var model = new chlk.models.attendance.ClassList(
@@ -354,11 +354,11 @@ NAMESPACE('chlk.controllers', function (){
                         items,
                         date_,
                         true,
-                        this.getContext().getSession().get('attendanceReasons', []),
+                        this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []),
                         this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE),
                         this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                     );
-                    this.getContext().getSession().set('attendancePageData', model);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTENDANCE_PAGE_DATA, model);
                     return model;
                 }, this);
 

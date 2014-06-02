@@ -23,7 +23,7 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function canShowAlert(person){
-                var user = this.getContext().getSession().get('currentPerson', null);
+                var user = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
                 if(user.getRole().getName().toLowerCase() ==  'student' && user.getId() != person.getId())
                     return false;
                 return true;

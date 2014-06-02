@@ -41,7 +41,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getMessages(start_ | 0, null, inbox_, role_, keyword_)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        this.getContext().getSession().set('currentMessages', model.getItems());
+                        this.getContext().getSession().set(ChlkSessionConstants.CURRENT_MESSAGES, model.getItems());
                         return this.convertModel(model, inbox_, role_, keyword_);
                     }, this);
             },
@@ -89,7 +89,7 @@ NAMESPACE('chlk.controllers', function (){
                 if (replayOnId_) {
                     res = this.getMessageFromSession(replayOnId_);
                     res.then(function(model){
-                        if(this.getContext().getSession().get('currentPerson').getId() == model.getRecipient().getId()){
+                        if(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId() == model.getRecipient().getId()){
                             model = new ria.async.DeferredData(new chlk.models.messages.Message(
                                 isInbox,
                                 model.getBody(),
@@ -156,7 +156,7 @@ NAMESPACE('chlk.controllers', function (){
 
             function getMessageFromSession(id)
             {
-                var res = this.getContext().getSession().get('currentMessages', []).
+                var res = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_MESSAGES, []).
                     filter(function(message){
                         return message.getId() == id;
                     })[0];

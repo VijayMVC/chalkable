@@ -93,7 +93,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getClassSummary(classId_)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var gradingPeriod = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, {});
                         model.setTopData(topData);
                         model.setGradingPeriodId(gradingPeriod.getId());
                         return model;
@@ -129,7 +129,7 @@ NAMESPACE('chlk.controllers', function (){
                             });
                         });
                         model.setSummaryPart(new chlk.models.grading.GradingClassSummaryPart(result));
-                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var gradingPeriod = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, {});
                         model.setGradingPeriodId(gradingPeriod.getId());
                         model.setAction('standards');
                         model.setGridAction('standardsGrid');
@@ -147,7 +147,7 @@ NAMESPACE('chlk.controllers', function (){
                         newModel.setAutoUpdate(model.isAutoUpdate());
                         newModel.setCategoryId(model.getCategoryId());
                         newModel.setStandardId(model.getStandardId());
-                        var schoolOptions = this.getContext().getSession().get('schoolOptions', null);
+                        var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                         newModel.setSchoolOptions(schoolOptions);
                         return newModel;
                     }, this)
@@ -161,23 +161,23 @@ NAMESPACE('chlk.controllers', function (){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
-                this.getContext().getSession().set('currentClassId', classId_);
+                this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CLASS_ID, classId_);
                 var classes = this.classService.getClassesForTopBar(true, true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var alphaGrades = classInfo.getAlphaGrades();
-                var alternateScores = this.getContext().getSession().get('alternateScores', []);
-                var gradingComments = this.getContext().getSession().get('gradingComments', []);
+                var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
+                var gradingComments = this.getContext().getSession().get(ChlkSessionConstants.GRADING_COMMENTS, []);
                 var result = this.gradingService
                     .getClassSummaryGrid(classId_)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var gradingPeriod = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, {});
                         model.setAlphaGrades(alphaGrades);
                         model.setTopData(topData);
                         model.setGradingPeriodId(gradingPeriod.getId());
                         model.setAlternateScores(alternateScores);
                         model.setGradingComments(gradingComments);
-                        var schoolOptions = this.getContext().getSession().get('schoolOptions', null);
+                        var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                         model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                         return model;
                     }, this);
@@ -212,7 +212,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getClassStandardsGrid(classId_)
                     .attach(this.validateResponse_())
                     .then(function(items){
-                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var gradingPeriod = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, {});
                         var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.standard.StandardGradings,
                             gradingPeriod.getId(), topData, null, items, alphaGrades);
                         return model;
@@ -225,7 +225,7 @@ NAMESPACE('chlk.controllers', function (){
             function summaryStudentAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
-                var studentId = this.getContext().getSession().get('currentPerson').getId();
+                var studentId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId();
                 var result = this.gradingService
                     .getStudentsClassSummary(studentId, classId_)
                     .then(function(model){
@@ -236,7 +236,7 @@ NAMESPACE('chlk.controllers', function (){
                         });
                         var classes = this.classService.getClassesForTopBar(true, true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
-                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var gradingPeriod = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, {});
                         model.setGradingPeriodId(gradingPeriod.getId());
                         model.setClazz(this.classService.getClassById(classId_));
                         model.setTopData(topData);
@@ -248,7 +248,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('statistic')],
             function summaryAllTeacherAction(){
-                var teacherId = this.getContext().getSession().get('currentPerson').getId();
+                var teacherId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId();
                 var result = this.gradingService
                     .getTeacherSummary(teacherId)
                     .attach(this.validateResponse_())
@@ -264,7 +264,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId, Boolean]],
             function summaryAllStudentAction(classId_, update_){
-                var studentId = this.getContext().getSession().get('currentPerson').getId();
+                var studentId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId();
                 var result = this.gradingService
                     .getStudentSummary(studentId, classId_)
                     .attach(this.validateResponse_())
@@ -390,14 +390,14 @@ NAMESPACE('chlk.controllers', function (){
                         && (!model.isExempt() || model.isOldExempt()))
                     return this.updateStudentAvgFromModel(model);
 
-                this.getContext().getSession().set('studentAvgModel', model);
+                this.getContext().getSession().set(ChlkSessionConstants.STUDENT_AVG_MODEL, model);
                 return this.ShadeView(chlk.activities.grading.StudentAvgPopupDialog, new ria.async.DeferredData(new chlk.models.Success));
             },
 
             function updateStudentAvgFromModel(model){
                 var result = this.gradingService
                     .updateStudentAverage(
-                        this.getContext().getSession().get('currentClassId', null),
+                        this.getContext().getSession().get(ChlkSessionConstants.CURRENT_CLASS_ID, null),
                         model.getStudentId(),
                         model.getGradingPeriodId(),
                         model.getAverageId(),
@@ -411,7 +411,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function updateStudentAvgFromPopupAction(){
-                var model = this.getContext().getSession().get('studentAvgModel');
+                var model = this.getContext().getSession().get(ChlkSessionConstants.STUDENT_AVG_MODEL);
                 return this.updateStudentAvgFromModel(model);
             },
 

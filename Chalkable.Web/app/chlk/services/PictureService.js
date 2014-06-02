@@ -10,7 +10,7 @@ NAMESPACE('chlk.services', function () {
         'PictureService', EXTENDS(chlk.services.BaseService), [
             [[chlk.models.id.PictureId, Number, Number]],
             String, function getPictureUrl(id, width_, height_) {
-                var prefix = this.getContext().getSession().get('azurePictureUrl');
+                var prefix = this.getContext().getSession().get(ChlkSessionConstants.AZURE_PICTURE_URL);
                 var suffix = "";
                 if (width_){
                     suffix =  height_ ? "-" + width_ + "x" + height_ : "-" + width_ + "x" + width_;

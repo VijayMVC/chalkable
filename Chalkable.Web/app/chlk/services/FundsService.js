@@ -69,10 +69,10 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.funds.CreditCardInfo]],
             VOID, function setCardDataToSession_(creditCardData){
-                this.getContext().getSession().set('creditCardData', creditCardData);
+                this.getContext().getSession().set(ChlkSessionConstants.CREDIT_CARD_DATA, creditCardData);
             },
             chlk.models.funds.CreditCardInfo, function getCardFromSession_(){
-                return this.getContext().getSession().get('creditCardData');
+                return this.getContext().getSession().get(ChlkSessionConstants.CREDIT_CARD_DATA);
             }
         ])
 });
