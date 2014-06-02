@@ -69,23 +69,26 @@ namespace Chalkable.Web.ActionFilters
                         filterContext.Result = controller.Json(new ChalkableSecurityException(ChlkResources.ERR_CANT_CALL_METHOD_AS_API));
                         return;    
                     }
-                    if (permissions == null)
+                    if (!context.IsInternalApp)
                     {
-                        filterContext.Result = controller.Json(new ChalkableSecurityException(ChlkResources.ERR_REQUIRED_PERMISSIONS_NOT_SET_FOR_METHOD));
-                        return;    
-                    }
-                    if (context.AppPermissions == null)
-                    {
-                        filterContext.Result = controller.Json(new ChalkableSecurityException(ChlkResources.ERR_METHOD_CALLED_DOESNT_HAVE_PERMISSIONS));
-                        return;
-                    }
-                    foreach (var appPermissionType in permissions)
-                    {
-                        if (context.AppPermissions.All(x => x != appPermissionType))
+                        if (permissions == null)
                         {
-                            filterContext.Result = controller.Json(new ChalkableSecurityException(string.Format(ChlkResources.ERR_METHOD_CALLER_DOES_NOT_HAVE_PERMISSION, appPermissionType)));
+                            filterContext.Result = controller.Json(new ChalkableSecurityException(ChlkResources.ERR_REQUIRED_PERMISSIONS_NOT_SET_FOR_METHOD));
                             return;
                         }
+                        if (context.AppPermissions == null)
+                        {
+                            filterContext.Result = controller.Json(new ChalkableSecurityException(ChlkResources.ERR_METHOD_CALLED_DOESNT_HAVE_PERMISSIONS));
+                            return;
+                        }
+                        foreach (var appPermissionType in permissions)
+                        {
+                            if (context.AppPermissions.All(x => x != appPermissionType))
+                            {
+                                filterContext.Result = controller.Json(new ChalkableSecurityException(string.Format(ChlkResources.ERR_METHOD_CALLER_DOES_NOT_HAVE_PERMISSION, appPermissionType)));
+                                return;
+                            }
+                        }    
                     }
                 }
 
