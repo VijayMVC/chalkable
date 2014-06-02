@@ -28,9 +28,9 @@ NAMESPACE('chlk.controllers', function (){
 
 
             [[chlk.models.common.PaginatedList, Number, Boolean, String]],
-            chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_){
+            chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_, rolesText_){
                 return new chlk.models.people.UsersList(this.prepareUsers(users, null)
-                    , byLastName, selectedIndex, filter_, null, this.getCurrentRole(), this.getCurrentPerson());
+                    , byLastName, selectedIndex, filter_, null, this.getCurrentRole(), this.getCurrentPerson(), rolesText_);
             },
 
             [[chlk.models.common.PaginatedList, Number]],

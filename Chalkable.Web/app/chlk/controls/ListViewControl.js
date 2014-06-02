@@ -212,7 +212,7 @@ NAMESPACE('chlk.controls', function () {
                 configs.currentStart = 0;
                 form.find('[name=count]').setValue(configs.totalCount);
                 this._loadAllButtonClicked = true;
-                this.scrollAction_(grid);
+                this.scrollAction_(grid, true);
             },
 
             VOID, function scrollToBottom_(){
@@ -228,8 +228,8 @@ NAMESPACE('chlk.controls', function () {
                 this.scrollToTop_();
             },
 
-            [[ria.dom.Dom]],
-            VOID, function scrollAction_(grid){
+            [[ria.dom.Dom, Boolean]],
+            VOID, function scrollAction_(grid, loadAll_){
                 //todo: trigger form submit
                 var configs = this.getConfigs();
                 var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
@@ -248,6 +248,8 @@ NAMESPACE('chlk.controls', function () {
                     var dom = new ria.dom.Dom('.chlk-grid');
                     methodRef.invokeOn(serviceIns, params)
                         .then(function(model){
+                            if(loadAll_)
+                                dom.find('.row').remove();
                             if(Array.isArray(model)){
                                 if(!model.length || model.length < configs.pageSize)
                                     this.clearInterval_(grid);
@@ -264,6 +266,8 @@ NAMESPACE('chlk.controls', function () {
                         }, this);
                 }else{
                     form.find('[name=start]').setValue(configs.currentStart);
+                    if(loadAll_)
+                        grid.find('.row').remove();
                     jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();
                 }
             },

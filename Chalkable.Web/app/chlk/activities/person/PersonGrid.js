@@ -71,14 +71,6 @@ NAMESPACE('chlk.activities.person', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function closeSearchClick(node, event){
                 this.clearSearch();
-            },
-
-            OVERRIDE, VOID, function onPartialRender_(model, msg_){
-                BASE(model, msg_);
-                if(model.getUsers){
-                    var count = model.getUsers().getTotalCount();
-                    this.dom.find('.total-count').setHTML( count + ' ' + Msg.Person(count != 1));
-                }
             }
         ]);
 });
