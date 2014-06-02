@@ -104,8 +104,9 @@ NAMESPACE('chlk.controllers', function (){
             function updateListAction(model){
                 var isScroll = model.isScroll(),
                     start = model.getStart();
-                var result, isStudent = this.getCurrentRole().isStudent();
+                var result, isStudent = this.getCurrentRole().isStudent(), rolesText;
                 if(isStudent && !model.isMy()){
+                    rolesText = Msg.Teacher(users.getTotalCount()!=1);
                     result = this.teacherService
                         .getTeachers(
                             model.getClassId(),
@@ -116,6 +117,7 @@ NAMESPACE('chlk.controllers', function (){
                         )
                         .attach(this.validateResponse_());
                 }else{
+                    rolesText = Msg.Student(users.getTotalCount()!=1);
                     result = this.studentService
                         .getStudents(
                             model.getClassId(),
@@ -130,7 +132,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 result.then(function(usersData){
                     if(isScroll)  return this.prepareUsers(usersData, start);
-                    return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter());
+                    return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter(), rolesText);
                 }, this);
                 return this.UpdateView(chlk.activities.person.ListPage, result, isScroll ? chlk.activities.lib.DontShowLoader() : '');
             },
