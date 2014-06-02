@@ -25,7 +25,7 @@ NAMESPACE('chlk.services', function () {
             ria.mvc.IContext, 'context',
 
             String, function getServiceRoot(){
-                return this.getContext().getSession().get('siteRoot');
+                return this.getContext().getSession().get(ChlkSessionConstants.SITE_ROOT);
             },
 
             [[String]],

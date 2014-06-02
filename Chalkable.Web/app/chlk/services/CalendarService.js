@@ -48,14 +48,14 @@ NAMESPACE('chlk.services', function () {
                     gradeLevelIds : gradeLevels_ && gradeLevels_.toString(),
                     schoolPersonId : schoolPersonId_ && schoolPersonId_.valueOf()
                 }).then(function(model){
-                    this.getContext().getSession().set('monthCalendarData', model);
+                    this.getContext().getSession().set(ChlkSessionConstants.MONTH_CALENDAR_DATA, model);
                     return this.prepareMonthData(model, date_);
                 }, this);
             },
 
             [[chlk.models.common.ChlkDate]],
             ria.async.Future, function getMonthDayInfo(date){
-                var monthCalendarData = this.getContext().getSession().get('monthCalendarData', []), res = null;
+                var monthCalendarData = this.getContext().getSession().get(ChlkSessionConstants.MONTH_CALENDAR_DATA, []), res = null;
                 monthCalendarData.forEach(function(day){
                     if(day.getDate().isSameDay(date))
                         res = day;
@@ -65,7 +65,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.common.ChlkDate, Number]],
             ria.async.Future, function getDayPopupInfo(date, periodNumber){
-                var dayCalendarData = this.getContext().getSession().get('dayCalendarData', []), res = null;
+                var dayCalendarData = this.getContext().getSession().get(ChlkSessionConstants.DAY_CALENDAR_DATA, []), res = null;
                 dayCalendarData.forEach(function(day){
                     if(day.getDate().isSameDay(date))
                         res = day;
@@ -76,7 +76,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.common.ChlkDate, Number]],
             ria.async.Future, function getWeekDayInfo(date, periodNumber_){
-                var weekCalendarData = this.getContext().getSession().get('weekCalendarData', []), res = null;
+                var weekCalendarData = this.getContext().getSession().get(ChlkSessionConstants.WEEK_CALENDAR_DATA, []), res = null;
                 weekCalendarData.forEach(function(day){
                     if(day.getDate().isSameDay(date))
                         res = day;
@@ -106,7 +106,7 @@ NAMESPACE('chlk.services', function () {
             },
             [[ArrayOf(chlk.models.calendar.announcement.DayItem)]],
             function saveDayCalendarDataInSession(model){
-                this.getContext().getSession().set('dayCalendarData', model);
+                this.getContext().getSession().set(ChlkSessionConstants.DAY_CALENDAR_DATA, model);
             },
 
             [[chlk.models.common.ChlkDate, String]],
@@ -132,7 +132,7 @@ NAMESPACE('chlk.services', function () {
             //PREPARING INFO
 
             chlk.models.common.Role, function getCurrentRole(){
-                return this.getContext().getSession().get('role');
+                return this.getContext().getSession().get(ChlkSessionConstants.USER_ROLE);
             },
 
             [[chlk.models.common.RoleEnum]],
@@ -149,7 +149,7 @@ NAMESPACE('chlk.services', function () {
             [[ArrayOf(chlk.models.calendar.announcement.MonthItem), chlk.models.common.ChlkDate]],
             chlk.models.calendar.announcement.Month, function prepareMonthData(days, date_){
                 var isAdmin = this.userIsAdmin();
-                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
                 var mpStartDate = markingPeriod.getStartDate();
                 var mpEndDate = markingPeriod.getEndDate();
                 days.forEach(function(day){
@@ -277,8 +277,8 @@ NAMESPACE('chlk.services', function () {
                 startArray.forEach(function (item){pushEmptyPeriods(item,  0, item.getAnnouncementPeriods(), data[index]);});
                 endArray.forEach(function (item){pushEmptyPeriods(item, 0, item.getAnnouncementPeriods(), data[index]);});
                 var res = startArray.concat(data).concat(endArray);
-                this.getContext().getSession().set('weekCalendarData', res);
-                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                this.getContext().getSession().set(ChlkSessionConstants.WEEK_CALENDAR_DATA, res);
+                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
                 var startDate = markingPeriod.getStartDate();
                 var endDate = markingPeriod.getEndDate();
                 return new chlk.models.calendar.announcement.Week(date_, startDate, endDate, res);
@@ -287,7 +287,7 @@ NAMESPACE('chlk.services', function () {
 
             [[ArrayOf(chlk.models.calendar.announcement.DayItem), chlk.models.common.ChlkDate]],
             chlk.models.calendar.announcement.Day, function prepareDayData(days, date_){
-                var markingPeriod = this.getContext().getSession().get('markingPeriod');
+                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
                 var startDate = markingPeriod.getStartDate();
                 var endDate = markingPeriod.getEndDate();
                 return new chlk.models.calendar.announcement.Day(date_, startDate, endDate, days);

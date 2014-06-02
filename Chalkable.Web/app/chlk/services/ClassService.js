@@ -30,7 +30,7 @@ NAMESPACE('chlk.services', function () {
                     //return withAll_ ? res1 : res;
                 var classes = window.classesToFilter;
                 if(forCurrentMp_){
-                    var mpId = this.getContext().getSession().get('markingPeriod').getId().valueOf();
+                    var mpId = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD).getId().valueOf();
                     classes = window.classesToFilter.filter(function(item){
                         return item.markingperiodsid.indexOf(mpId) > -1
                     })

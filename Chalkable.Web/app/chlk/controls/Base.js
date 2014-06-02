@@ -7,7 +7,7 @@ NAMESPACE('chlk.controls', function () {
     CLASS(
         'Base', EXTENDS(ria.mvc.DomControl), [
             chlk.models.common.Role, function getUserRole(){
-                return this.getContext().getSession().get('role');
+                return this.getContext().getSession().get(ChlkSessionConstants.USER_ROLE);
             }
         ]);
 });

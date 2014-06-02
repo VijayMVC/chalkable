@@ -288,9 +288,9 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(app){
-                    var apps = this.getContext().getSession().get('AnnoucementApplications', []);
+                    var apps = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_APPLICATIONS, []);
                     apps.push(app);
-                    this.getContext().getSession().set('AnnoucementApplications', apps);
+                    this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_APPLICATIONS, apps);
                     app.setCurrentModeUrl(app.getEditUrl());
                     return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
                 }, this);

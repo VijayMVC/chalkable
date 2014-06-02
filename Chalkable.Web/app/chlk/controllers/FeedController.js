@@ -112,7 +112,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(result){
                     var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
                     var gradeLevelsBarMdl = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
-                    var markingPeriod = this.getContext().getSession().get('markingPeriod', null); //todo: move to base controller
+                    var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD, null); //todo: move to base controller
 
                     var model = result[0];
                     model.prepareBaseInfo(gradeLevelsBarMdl, markingPeriod.getName(), result[1], gradeLevels_);

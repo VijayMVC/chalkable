@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IGradingPeriodService
     {
         IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null);
-        GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime tillDate);
+        GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date, bool useLastExisting = true);
         GradingPeriodDetails GetGradingPeriodById(int id);
         void Add(IList<GradingPeriod> gradingPeriods);
         void Edit(IList<GradingPeriod> gradingPeriods);
@@ -80,19 +80,22 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
-        
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
+
+        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date, bool useLastExisting = true)
         {
             using (var uow = Update())
             {
                 var da = new GradingPeriodDataAccess(uow);
-                var grPeriods = da.GetGradingPeriodsDetails(new GradingPeriodQuery
+                var gradingPeriodQuery = new GradingPeriodQuery
                     {
                         FromDate = date,
-                        ToDate = date,
                         SchoolYearId = schoolYearId
-                    });
-                return grPeriods.FirstOrDefault();
+                    };
+                var gps = da.GetGradingPeriodsDetails(gradingPeriodQuery);
+                var res = gps.FirstOrDefault(x => x.EndDate <= date);
+                if (res == null && useLastExisting)
+                    res = gps.OrderByDescending(x => x.StartDate).FirstOrDefault();
+                return res;
             }
         }
 

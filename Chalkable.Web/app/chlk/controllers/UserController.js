@@ -148,11 +148,11 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.people.UserProfileViewData]],
             VOID, function setUserToSession(userProfileData){
-                this.getContext().getSession().set('userModel', userProfileData.getUser());
+                this.getContext().getSession().set(ChlkSessionConstants.USER_MODEL, userProfileData.getUser());
             },
 
             chlk.models.people.UserProfileViewData,  function getUserFromSession(){
-                return this.getContext().getSession().get('userModel');
+                return this.getContext().getSession().get(ChlkSessionConstants.USER_MODEL);
             },
 
             [[chlk.models.id.SchoolPersonId, Object]],

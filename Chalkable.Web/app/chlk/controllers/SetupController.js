@@ -79,7 +79,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.SchoolPersonId]],
             function helloAction(personId_){
                 var result = this.teacherService
-                    .getInfo(personId_ || this.getContext().getSession().get('currentPerson').getId())
+                    .getInfo(personId_ || this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId())
                     .attach(this.validateResponse_())
                     .then(function(model){
                         return this.prepareProfileData(model);
@@ -136,7 +136,7 @@ NAMESPACE('chlk.controllers', function (){
                             return b.getValue() > a.getValue();
                         });
                         result[0].setNextClassNumber(++index);
-                        this.getContext().getSession().set('settingsModel', result[0]);
+                        this.getContext().getSession().set(ChlkSessionConstants.SETTINGS_MODEL, result[0]);
                         sum+=(result[0].getAttendance() || 0);
                         sum+=(result[0].getParticipation() || 0);
                         sum+=(result[0].getDiscipline() || 0);

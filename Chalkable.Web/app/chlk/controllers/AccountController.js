@@ -44,10 +44,6 @@ NAMESPACE('chlk.controllers', function (){
                  }, this);
          },
 
-         function goToInowAction(){
-             return this.accountService.redirectToINOW();
-         },
-
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],

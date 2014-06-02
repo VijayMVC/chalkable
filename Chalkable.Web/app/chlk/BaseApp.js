@@ -90,21 +90,21 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
                 window.currentChlkPerson.claims = window.userClaims;
-                this.saveInSession(session, 'markingPeriod', chlk.models.schoolYear.MarkingPeriod);
-                this.saveInSession(session, 'gradingPeriod', chlk.models.schoolYear.GradingPeriod);
-                this.saveInSession(session, 'nextMarkingPeriod', chlk.models.schoolYear.MarkingPeriod);
-                this.saveInSession(session, 'finalizedClassesIds');
-                this.saveInSession(session, 'currentChlkPerson', chlk.models.people.User, 'currentPerson');
+                this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.NEXT_MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.FINALIZED_CLASS_IDS);
+                this.saveInSession(session, ChlkSessionConstants.CURRENT_CHLK_PERSON, chlk.models.people.User, ChlkSessionConstants.CURRENT_PERSON);
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
-                this.saveInSession(session, 'azurePictureUrl');
-                this.saveInSession(session, 'currentSchoolYearId', chlk.models.id.SchoolYearId);
-                this.saveInSession(session, 'attendanceReasons', ArrayOf(chlk.models.attendance.AttendanceReason));
-                this.saveInSession(session, 'userClaims', ArrayOf(chlk.models.people.Claim));
-                this.saveInSession(session, 'alphaGrades', ArrayOf(chlk.models.grading.AlphaGrade));
-                this.saveInSession(session, 'alternateScores', ArrayOf(chlk.models.grading.AlternateScore));
-                this.saveInSession(session, 'newNotifications', Number);
-                this.saveInSession(session, 'gradingComments', ArrayOf(chlk.models.grading.AvgComment));
-                this.saveInSession(session, 'schoolOptions', chlk.models.school.SchoolOption);
+                this.saveInSession(session, ChlkSessionConstants.AZURE_PICTURE_URL);
+                this.saveInSession(session, ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, chlk.models.id.SchoolYearId);
+                this.saveInSession(session, ChlkSessionConstants.ATTENDANCE_REASONS, ArrayOf(chlk.models.attendance.AttendanceReason));
+                this.saveInSession(session, ChlkSessionConstants.USER_CLAIMS, ArrayOf(chlk.models.people.Claim));
+                this.saveInSession(session, ChlkSessionConstants.ALPHA_GRADES, ArrayOf(chlk.models.grading.AlphaGrade));
+                this.saveInSession(session, ChlkSessionConstants.ALTERNATE_SCORES, ArrayOf(chlk.models.grading.AlternateScore));
+                this.saveInSession(session, ChlkSessionConstants.NEW_NOTIFICATIONS, Number);
+                this.saveInSession(session, ChlkSessionConstants.GRADING_COMMENTS, ArrayOf(chlk.models.grading.AvgComment));
+                this.saveInSession(session, ChlkSessionConstants.SCHOOL_OPTIONS, chlk.models.school.SchoolOption);
 
                 window.gradeLevels = window.gradeLevels || [];
                 window.gradeLevels.forEach(function(item){
@@ -115,7 +115,7 @@ NAMESPACE('chlk', function (){
                     }
                     item.fullText = numberPart ? item.name + item.serialPart : item.name.trim();
                 });
-                this.saveInSession(session, 'gradeLevels', ArrayOf(chlk.models.grading.GradeLevel));
+                this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();
                 var serviceRoot = "/";
@@ -145,7 +145,7 @@ NAMESPACE('chlk', function (){
             },
 
             function getCurrentPerson(){
-                return this.getContext().getSession().get('currentPerson', null);
+                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
             },
 
             OVERRIDE, ria.async.Future, function onStart_() {

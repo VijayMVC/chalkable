@@ -162,7 +162,7 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function getGradeComments() {
                 return this.get('Grading/GetGridComments', Array, {
-                    schoolYearId: this.getContext().getSession().get('currentSchoolYearId', null).valueOf()
+                    schoolYearId: this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null).valueOf()
                 });
             },
 

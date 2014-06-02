@@ -13,14 +13,14 @@ NAMESPACE('chlk.services', function () {
             [[Number]],
             ria.async.Future, function getCategories(pageIndex_) {
 
-                var cachedCategories = this.getContext().getSession().get('cachedCategories');
+                var cachedCategories = this.getContext().getSession().get(ChlkSessionConstants.CACHED_APP_CATEGORIES);
 
                 return cachedCategories ? ria.async.DeferredData(cachedCategories)
                                         : this.getPaginatedList('Category/List.json', chlk.models.apps.AppCategory, {
                                             start: pageIndex_|0
                                         })
                                         .then(function(data){
-                                            this.getContext().getSession().set('cachedCategories', data);
+                                            this.getContext().getSession().set(ChlkSessionConstants.CACHED_APP_CATEGORIES, data);
                                             return data;
                                         }, this);
             },
@@ -33,7 +33,7 @@ NAMESPACE('chlk.services', function () {
                         description: description
                     })
                     .then(function(data){
-                        this.getContext().getSession().set('cachedCategories', null);
+                        this.getContext().getSession().set(ChlkSessionConstants.CACHED_APP_CATEGORIES, null);
                     }, this);
             },
 
@@ -46,7 +46,7 @@ NAMESPACE('chlk.services', function () {
                         description: description
                     })
                     .then(function(data){
-                        this.getContext().getSession().set('cachedCategories', null);
+                        this.getContext().getSession().set(ChlkSessionConstants.CACHED_APP_CATEGORIES, null);
                     }, this);
             },
 
@@ -65,7 +65,7 @@ NAMESPACE('chlk.services', function () {
                         categoryId: id.valueOf()
                     })
                     .then(function(data){
-                        this.getContext().getSession().set('cachedCategories', null);
+                        this.getContext().getSession().set(ChlkSessionConstants.CACHED_APP_CATEGORIES, null);
                     }, this);
             },
             [[chlk.models.id.AppCategoryId]],
