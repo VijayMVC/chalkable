@@ -64,8 +64,9 @@ NAMESPACE('chlk.controllers', function (){
         Boolean, function canViewFeed(){
             var res = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM)
             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN);
-            return res && (!this.userInRole(chlk.models.common.RoleEnum.TEACHER)
-                            || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_LOOKUP));
+            return (res && (!this.userInRole(chlk.models.common.RoleEnum.TEACHER)
+                            || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_LOOKUP)))
+                    || this.userInRole(chlk.models.common.RoleEnum.STUDENT);
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],

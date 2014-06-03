@@ -47,18 +47,18 @@ NAMESPACE('chlk.templates.profile', function(){
                         , [userId], isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ADDRESS))
                 ];
                 if(isStudentController){
-                    res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId]));
+                    res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId], true));
                 }
                 if(controller == this._teacherControllerName || controller == this._studentControllerName){
-                    res.push(this.createActionLinkModel_(controller, 'schedule', 'Schedule', pressedLinkName, [userId]));
+                    res.push(this.createActionLinkModel_(controller, 'schedule', 'Schedule', pressedLinkName, [userId], true));
                 }
                 if(isStudentController){
                     res.push(this.createActionLinkModel_(controller, 'attendance', 'Attendance'
-                        , pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_ATTENDANCE)));
+                        , pressedLinkName, [null, userId], true));//!this.hasUserPermission_(permissionEnum.VIEW_ATTENDANCE)));
                     res.push(this.createActionLinkModel_(controller, 'discipline', 'Discipline'
-                        , pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_DISCIPLINE)));
+                        , pressedLinkName, [null, userId], true));//!this.hasUserPermission_(permissionEnum.VIEW_DISCIPLINE)));
                 }
-                res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId]));
+                res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId], true));
                 return res;
                 //return this.getModel().getActionLinksData(); // todo : rewrite this method
             }
