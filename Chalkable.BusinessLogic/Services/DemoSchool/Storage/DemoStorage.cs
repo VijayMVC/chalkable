@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
@@ -192,12 +194,27 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddTeacher();
             PrepareStudents();
 
+            AddAttendances();
+
             AnnouncementStorage.Setup();
             StiGradeBookStorage.Setup();
             StiStandardScoreStorage.Setup();
             StiSeatingChartStorage.Setup();
 
             
+        }
+
+        private void AddAttendances()
+        {
+            var gp = GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery()
+            {
+                SchoolYearId = DemoSchoolConstants.CurrentSchoolYearId,
+                FromDate = Context.NowSchoolTime.Date
+            }).FirstOrDefault();
+
+            if (gp == null) return;
+            for (var classId = DemoSchoolConstants.AlgebraClassId; classId <= DemoSchoolConstants.PreCalculusClassId; ++classId)
+                StiAttendanceStorage.GenerateSectionAttendanceForClass(classId, gp.StartDate, gp.EndDate);
         }
 
         private void AddClasses()
@@ -319,6 +336,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 LastName = lastName,
                 Gender = gender,
                 RoleRef = CoreRoles.STUDENT_ROLE.Id
+            });
+
+
+            SchoolPersonStorage.Add(new SchoolPerson
+            {
+                PersonRef = id,
+                RoleRef = CoreRoles.STUDENT_ROLE.Id,
+                SchoolRef = DemoSchoolConstants.SchoolId
             });
 
             StudentSchoolYearStorage.Add(new StudentSchoolYear
