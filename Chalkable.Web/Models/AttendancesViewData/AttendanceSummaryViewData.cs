@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
@@ -19,12 +20,12 @@ namespace Chalkable.Web.Models.AttendancesViewData
             var alerts = new List<string>();
             res.Absent = new ShortAttendanceSummaryViewData
                 {
-                    Stat = ShortAttendanceStatViewData.Create(attendanceSummary.DaysStat, AttendanceTypeEnum.Absent),
+                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Absent),
                     Students = ShortStudentAttendanceViewData.Create(attendanceSummary.Students, alerts, AttendanceTypeEnum.Absent)
                 };
             res.Late = new ShortAttendanceSummaryViewData
                 {
-                    Stat = ShortAttendanceStatViewData.Create(attendanceSummary.DaysStat, AttendanceTypeEnum.Tardies),
+                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Tardies),
                     Students = ShortStudentAttendanceViewData.Create(attendanceSummary.Students, alerts, AttendanceTypeEnum.Tardies)
                 };
             return res;
@@ -34,8 +35,23 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
     public class ShortAttendanceSummaryViewData
     {
-        public IList<ShortAttendanceStatViewData> Stat { get; set; }
+        public IList<ClassAttendanceStatViewData> ClassesStats { get; set; }
         public IList<ShortStudentAttendanceViewData> Students { get; set; }
+    }
+
+    public class ClassAttendanceStatViewData
+    {
+        public ShortClassViewData Class { get; set; }
+        public IList<ShortAttendanceStatViewData> DayStats { get; set; }
+ 
+        public static IList<ClassAttendanceStatViewData> Create(IList<ClassDailyAttendanceSummary> classDailyAttendances, AttendanceTypeEnum type)
+        {
+            return classDailyAttendances.Select(x => new ClassAttendanceStatViewData()
+                {
+                    Class = ShortClassViewData.Create(x.Class),
+                    DayStats = ShortAttendanceStatViewData.Create(x.DailyAttendances, type)
+                }).ToList();
+        }
     }
 
     public class ShortAttendanceStatViewData

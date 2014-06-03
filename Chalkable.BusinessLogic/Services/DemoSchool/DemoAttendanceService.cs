@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 dailySectionAttendances.AddRange(sectionAttendanceSummary.Days);
                 studentAtts.AddRange(sectionAttendanceSummary.Students);
             }
-            res.DaysStat = DailyAttendanceSummary.Create(dailySectionAttendances);
+            res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
             studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
             res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
             return res;

@@ -6,24 +6,36 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.ClassesViewData
 {
-    public class ClassViewData
+    public class ShortClassViewData
     {
         public int Id { get; set; }
-        public string ClassNumber { get; set; }
         public string Name { get; set; }
+        public string ClassNumber { get; set; }
         public string Description { get; set; }
+        
+        protected ShortClassViewData(Class cClass)
+        {
+            Id = cClass.Id;
+            Name = cClass.Name;
+            Description = cClass.Description;
+            ClassNumber = cClass.ClassNumber;
+        }
+
+        public static ShortClassViewData Create(Class cClass)
+        {
+            return new ShortClassViewData(cClass);
+        }
+    }
+
+    public class ClassViewData : ShortClassViewData
+    {
         public Guid? DepartmentId { get; set; }
         public GradeLevelViewData GradeLevel { get; set; }
         public ShortPersonViewData Teacher { get; set; }
         public IList<int> MarkingPeriodsId { get; set; }
         
-
-        protected ClassViewData(ClassDetails classComplex)
+        protected ClassViewData(ClassDetails classComplex) : base(classComplex)
         {
-            Id = classComplex.Id;
-            ClassNumber = classComplex.ClassNumber;
-            Name = classComplex.Name;
-            Description = classComplex.Description;
             DepartmentId = classComplex.ChalkableDepartmentRef;
             GradeLevel =  GradeLevelViewData.Create(classComplex.GradeLevel);
             if (classComplex.PrimaryTeacherRef.HasValue && classComplex.PrimaryTeacher != null)
@@ -33,8 +45,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             }
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
         }
-        private ClassViewData() {}
-
+        
         public static ClassViewData Create(ClassDetails classComplex)
         {
            return new ClassViewData(classComplex);
@@ -46,7 +57,7 @@ namespace Chalkable.Web.Models.ClassesViewData
 
         public static ClassViewData Create(int id, string name)
         {
-            return  new ClassViewData{Id = id, Name = name};
+            return new ClassViewData(new ClassDetails {Id = id, Name = name});
         }
     }
 }

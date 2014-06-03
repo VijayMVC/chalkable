@@ -94,7 +94,7 @@ namespace Chalkable.BusinessLogic.Model
 
     public class AttendanceSummary
     {
-        public IList<DailyAttendanceSummary> DaysStat { get; set; }
+        public IList<ClassDailyAttendanceSummary> ClassesDaysStat { get; set; }
         public IList<StudentAttendanceSummary> Students { get; set; }
     }
 
@@ -104,15 +104,42 @@ namespace Chalkable.BusinessLogic.Model
         public DateTime Date { get; set; }
         public int Tardies { get; set; }
 
-        public static IList<DailyAttendanceSummary> Create(IList<DailySectionAttendanceSummary> dailySectionAttendances)
+        public static DailyAttendanceSummary Create(DateTime date, int tardies, decimal absences)
         {
-            return dailySectionAttendances.GroupBy(x => x.Date).Select(x => new DailyAttendanceSummary
-                {
-                    Absences = x.Sum(y => y.Absences),
-                    Tardies = x.Sum(y => y.Tardies),
-                    Date = x.Key
-                }).ToList();
+            return new DailyAttendanceSummary {Absences = absences, Tardies = tardies, Date = date};
+        }
+    }
+
+    public class ClassDailyAttendanceSummary
+    {
+        public Class Class { get; set; }
+        public IList<DailyAttendanceSummary> DailyAttendances { get; set; }
+
+        public static IList<ClassDailyAttendanceSummary> Create(IList<DailySectionAttendanceSummary> dailySectionAttendances, IList<ClassDetails> classes)
+        {
+            var res = new List<ClassDailyAttendanceSummary>();
+            var sectionAttensDic = dailySectionAttendances.GroupBy(x => x.SectionId).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var kv in sectionAttensDic)
+            {
+                var cClass = classes.FirstOrDefault(c => c.Id == kv.Key);
+                if(cClass != null)
+                    res.Add(Create(kv.Value, cClass));
+            }
+            return res;
         } 
+
+        public static ClassDailyAttendanceSummary Create(IList<DailySectionAttendanceSummary> dailySectionAttendances, Class cClass)
+        {
+            var res = new ClassDailyAttendanceSummary {Class = cClass, DailyAttendances = new List<DailyAttendanceSummary>()};
+            var dateAttsDic = dailySectionAttendances.Where(x => x.SectionId == cClass.Id).GroupBy(x => x.Date)
+                                                     .ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var kv in dateAttsDic)
+            {
+                var att = kv.Value.First();
+                res.DailyAttendances.Add(DailyAttendanceSummary.Create(kv.Key, att.Tardies, att.Absences));
+            }
+            return res;
+        }
     }
 
     public class StudentAttendanceSummary
