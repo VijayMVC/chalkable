@@ -6,7 +6,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models
 {
-    public class GradingPeriodViewData
+    public class ShortGradingPeriodViewData
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,11 +17,31 @@ namespace Chalkable.Web.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime EndTime { get; set; }
+        
+        protected ShortGradingPeriodViewData(GradingPeriod gradingPeriod)
+        {
+            Id = gradingPeriod.Id;
+            Name = gradingPeriod.Name;
+            Code = gradingPeriod.Code;
+            Description = gradingPeriod.Description;
+            MarkingPeriodId = gradingPeriod.MarkingPeriodRef;
+            SchoolYearId = gradingPeriod.SchoolYearRef;
+            StartDate = gradingPeriod.StartDate;
+            EndDate = gradingPeriod.EndDate;
+            EndTime = gradingPeriod.EndTime;
+        }
+        public static ShortGradingPeriodViewData Create(GradingPeriod gradingPeriod)
+        {
+            return new ShortGradingPeriodViewData(gradingPeriod);
+        }
+    }
+    
+    public class GradingPeriodViewData : ShortGradingPeriodViewData
+    {
         public string SchoolAnnouncement { get; set; }
         public bool AllowGradePosting { get; set; } 
-
-
-        private GradingPeriodViewData(GradingPeriod gradingPeriod)
+        
+        private GradingPeriodViewData(GradingPeriod gradingPeriod) : base(gradingPeriod)
         {
             Id = gradingPeriod.Id;
             Name = gradingPeriod.Name;
@@ -36,7 +56,7 @@ namespace Chalkable.Web.Models
             AllowGradePosting = gradingPeriod.AllowGradePosting;
         }
 
-        public static GradingPeriodViewData Create(GradingPeriod gradingPeriod)
+        public new static GradingPeriodViewData Create(GradingPeriod gradingPeriod)
         {
             return new GradingPeriodViewData(gradingPeriod);
         }
