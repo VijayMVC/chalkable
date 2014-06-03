@@ -197,7 +197,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddAttendances();
 
             AnnouncementStorage.Setup();
-            StiGradeBookStorage.Setup();
             StiStandardScoreStorage.Setup();
             StiSeatingChartStorage.Setup();
 
@@ -216,6 +215,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             for (var classId = DemoSchoolConstants.AlgebraClassId; classId <= DemoSchoolConstants.PreCalculusClassId; ++classId)
                 StiAttendanceStorage.GenerateSectionAttendanceForClass(classId, gp.StartDate, gp.EndDate);
         }
+
+        private void AddGradeBookForClass(int classId, int gradingPeriodId)
+        {
+            var studentAverages = ClassPersonStorage.GetClassPersons(new ClassPersonQuery()
+            {
+                ClassId = classId
+            }).Select(x => x.PersonRef).Distinct().Select(x => new StudentAverage()
+            {
+                CalculatedNumericAverage = 100,
+                EnteredNumericAverage = 100,
+                IsGradingPeriodAverage = true,
+                GradingPeriodId = gradingPeriodId,
+                StudentId = x
+            });
+            StiGradeBookStorage.Add(new Gradebook()
+            {
+                SectionId = 1,
+                Activities = new List<Activity>(),
+                Options = new Chalkable.StiConnector.Connectors.Model.ClassroomOption(),
+                Scores = new List<Score>(),
+                StudentAverages = studentAverages
+            });
+        }
+
 
         private void AddClasses()
         {
@@ -1696,13 +1719,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 DisplayStudentAverage = true
             });
 
-            AddClassStandard(DemoSchoolConstants.AlgebraClassId, DemoSchoolConstants.MathStandard1);
-            AddClassStandard(DemoSchoolConstants.AlgebraClassId, DemoSchoolConstants.MathStandard2);
-            AddClassStandard(DemoSchoolConstants.AlgebraClassId, DemoSchoolConstants.MathStandard3);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard1);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard2);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard3);
 
-            AddClassStandard(DemoSchoolConstants.GeometryClassId, DemoSchoolConstants.MathStandard1);
-            AddClassStandard(DemoSchoolConstants.GeometryClassId, DemoSchoolConstants.MathStandard2);
-            AddClassStandard(DemoSchoolConstants.GeometryClassId, DemoSchoolConstants.MathStandard3);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard1);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard2);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard3);
+
+            for(var gp = DemoSchoolConstants.GradingPeriodQ1; gp <= DemoSchoolConstants.GradingPeriodQ4; ++gp)
+                AddGradeBookForClass(id, gp);
 
         }
 
