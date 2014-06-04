@@ -2,6 +2,7 @@
 {
     class DemoSchoolConstants
     {
+        
         public const int MathStandard1 = 1;
         public const int MathStandard2 = 2;
         public const int MathStandard3 = 3;
@@ -52,6 +53,8 @@
 
         public const int AlgebraClassId = 1;
         public const int GeometryClassId = 2;
+        public const int PhysicsClassId = 3;
+        public const int PreCalculusClassId = 4;
 
 
 

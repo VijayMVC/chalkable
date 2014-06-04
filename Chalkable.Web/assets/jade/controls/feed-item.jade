@@ -22,7 +22,9 @@ mixin FeedItem(item, noDisabled)
                             item.getGradingStudentsCount() + '") 16px center no-repeat'
                     )
             .bullet
-                +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isComplete()).star
+                +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isComplete())(
+                    data-tooltip=item.isComplete() ? Msg.Mark_as_ToDo : Msg.Mark_as_done
+                ).star
                 +ActionLink('announcement', 'view', item.getId())(class = !noDisabled ? 'disabled' : '').d-b.t-d.not-blue.announcement-link
                     .item-type
                         .attachment

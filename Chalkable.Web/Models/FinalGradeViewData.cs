@@ -134,7 +134,8 @@ namespace Chalkable.Web.Models
             var dicDateAnns = announcements.GroupBy(x => x.Expires).ToDictionary(x => x.Key, x => x.ToList());
             foreach (var dateAnn in dicDateAnns)
             {
-                var stAnns = studentAnnouncements.Where(x => announcements.Any(y => y.Id == x.AnnouncementId)).ToList();
+                var anns = dateAnn.Value;
+                var stAnns = studentAnnouncements.Where(x => anns.Any(y => y.Id == x.AnnouncementId)).ToList();
                 var stIds = stAnns.GroupBy(x => x.StudentId).Select(x => x.Key).ToList();
                 var item = new StudentGradingStatsViewData
                     {

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
@@ -187,26 +189,78 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         private void Setup()
         {
             PrepareGeneralData();
-
-            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
+            AddClasses();
             AddAdmin();
             AddTeacher();
+            PrepareStudents();
+
+            AddAttendances();
 
             AnnouncementStorage.Setup();
-            StiGradeBookStorage.Setup();
             StiStandardScoreStorage.Setup();
             StiSeatingChartStorage.Setup();
 
-            PrepareStudents();
+            
+        }
+
+        private void AddAttendances()
+        {
+            var gp = GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery()
+            {
+                SchoolYearId = DemoSchoolConstants.CurrentSchoolYearId,
+                FromDate = Context.NowSchoolTime.Date
+            }).FirstOrDefault();
+
+            if (gp == null) return;
+            for (var classId = DemoSchoolConstants.AlgebraClassId; classId <= DemoSchoolConstants.PreCalculusClassId; ++classId)
+                StiAttendanceStorage.GenerateSectionAttendanceForClass(classId, gp.StartDate, gp.EndDate);
+        }
+
+        private void AddGradeBookForClass(int classId, int gradingPeriodId)
+        {
+            var studentAverages = ClassPersonStorage.GetClassPersons(new ClassPersonQuery()
+            {
+                ClassId = classId
+            }).Select(x => x.PersonRef).Distinct().Select(x => new StudentAverage()
+            {
+                CalculatedNumericAverage = 100,
+                EnteredNumericAverage = 100,
+                IsGradingPeriodAverage = true,
+                GradingPeriodId = gradingPeriodId,
+                StudentId = x
+            });
+            StiGradeBookStorage.Add(new Gradebook()
+            {
+                SectionId = classId,
+                Activities = new List<Activity>(),
+                Options = new Chalkable.StiConnector.Connectors.Model.ClassroomOption(),
+                Scores = new List<Score>(),
+                StudentAverages = studentAverages
+            });
+        }
+
+
+        private void AddClasses()
+        {
+            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.FirstMarkingPeriodId);
+            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.SecondMarkingPeriodId);
+
+            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.FirstMarkingPeriodId);
+            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.SecondMarkingPeriodId);
+
+            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.FirstMarkingPeriodId);
+            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.SecondMarkingPeriodId);
+
+            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.FirstMarkingPeriodId);
+            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12,
+                DemoSchoolConstants.SecondMarkingPeriodId);
         }
 
         private void PrepareStudents()
@@ -226,39 +280,29 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 "JAMEL", "HARRIS", "M",
                 DemoSchoolConstants.GradeLevel12, new DateTime(1998, 6, 4));
 
-            AddStudentToClass(DemoSchoolConstants.FirstStudentId, DemoSchoolConstants.AlgebraClassId,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddStudentToClass(DemoSchoolConstants.FirstStudentId, DemoSchoolConstants.AlgebraClassId,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-            AddStudentToClass(DemoSchoolConstants.FirstStudentId, DemoSchoolConstants.GeometryClassId,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddStudentToClass(DemoSchoolConstants.FirstStudentId, DemoSchoolConstants.GeometryClassId,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-
-            AddStudentToClass(DemoSchoolConstants.SecondStudentId, DemoSchoolConstants.AlgebraClassId,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddStudentToClass(DemoSchoolConstants.SecondStudentId, DemoSchoolConstants.AlgebraClassId,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-            AddStudentToClass(DemoSchoolConstants.SecondStudentId, DemoSchoolConstants.GeometryClassId,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddStudentToClass(DemoSchoolConstants.SecondStudentId, DemoSchoolConstants.GeometryClassId,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-
-            AddStudentToClass(DemoSchoolConstants.ThirdStudentId, DemoSchoolConstants.AlgebraClassId,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddStudentToClass(DemoSchoolConstants.ThirdStudentId, DemoSchoolConstants.AlgebraClassId,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-            AddStudentToClass(DemoSchoolConstants.ThirdStudentId, DemoSchoolConstants.GeometryClassId,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddStudentToClass(DemoSchoolConstants.ThirdStudentId, DemoSchoolConstants.GeometryClassId,
-                DemoSchoolConstants.SecondMarkingPeriodId);
+            AddStudentsToClasses();
 
             
+
+            
+        }
+
+        private void AddStudentsToClasses()
+        {
+
+            for (var cls = DemoSchoolConstants.AlgebraClassId; cls <= DemoSchoolConstants.PreCalculusClassId; ++cls)
+            {
+                AddStudentToClass(DemoSchoolConstants.FirstStudentId, cls, DemoSchoolConstants.FirstMarkingPeriodId);
+                AddStudentToClass(DemoSchoolConstants.FirstStudentId, cls, DemoSchoolConstants.SecondMarkingPeriodId);
+
+
+                AddStudentToClass(DemoSchoolConstants.SecondStudentId, cls, DemoSchoolConstants.FirstMarkingPeriodId);
+                AddStudentToClass(DemoSchoolConstants.SecondStudentId, cls, DemoSchoolConstants.SecondMarkingPeriodId);
+
+
+                AddStudentToClass(DemoSchoolConstants.ThirdStudentId, cls, DemoSchoolConstants.FirstMarkingPeriodId);
+                AddStudentToClass(DemoSchoolConstants.ThirdStudentId, cls, DemoSchoolConstants.SecondMarkingPeriodId);
+            }
         }
 
         private void AddAdmin()
@@ -315,6 +359,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 LastName = lastName,
                 Gender = gender,
                 RoleRef = CoreRoles.STUDENT_ROLE.Id
+            });
+
+
+            SchoolPersonStorage.Add(new SchoolPerson
+            {
+                PersonRef = id,
+                RoleRef = CoreRoles.STUDENT_ROLE.Id,
+                SchoolRef = DemoSchoolConstants.SchoolId
             });
 
             StudentSchoolYearStorage.Add(new StudentSchoolYear
@@ -746,9 +798,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Description = "",
                     MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
                     SchoolAnnouncement = "",
-                    StartDate = new DateTime(currentYear, 1, 21),
-                    EndDate = new DateTime(currentYear, 3, 30),
-                    EndTime = new DateTime(currentYear, 3, 30, 23, 59, 0),
+                    StartDate = new DateTime(currentYear, 1, 1),
+                    EndDate = new DateTime(currentYear, 3, 31),
+                    EndTime = new DateTime(currentYear, 3, 31, 23, 59, 0),
                     SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 },
                 new GradingPeriod
@@ -760,9 +812,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Description = "",
                     MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
                     SchoolAnnouncement = "",
-                    StartDate = new DateTime(currentYear, 3, 30),
-                    EndDate = new DateTime(currentYear, 5, 30),
-                    EndTime = new DateTime(currentYear, 5, 30, 23, 59, 0),
+                    StartDate = new DateTime(currentYear, 4, 1),
+                    EndDate = new DateTime(currentYear, 6, 30),
+                    EndTime = new DateTime(currentYear, 6, 30, 23, 59, 0),
                     SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 },
                 new GradingPeriod
@@ -774,9 +826,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Description = "",
                     MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
                     SchoolAnnouncement = "",
-                    StartDate = new DateTime(currentYear, 6, 30),
-                    EndDate = new DateTime(currentYear, 8, 30),
-                    EndTime = new DateTime(currentYear, 8, 30, 23, 59, 0),
+                    StartDate = new DateTime(currentYear, 7, 1),
+                    EndDate = new DateTime(currentYear, 9, 30),
+                    EndTime = new DateTime(currentYear, 9, 30, 23, 59, 0),
                     SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 },
                 new GradingPeriod
@@ -788,9 +840,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Description = "",
                     MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
                     SchoolAnnouncement = "",
-                    StartDate = new DateTime(currentYear, 8, 30),
-                    EndDate = new DateTime(currentYear, 10, 30),
-                    EndTime = new DateTime(currentYear, 10, 30, 23, 59, 0),
+                    StartDate = new DateTime(currentYear, 10, 1),
+                    EndDate = new DateTime(currentYear, 12, 31),
+                    EndTime = new DateTime(currentYear, 12, 31, 23, 59, 0),
                     SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
                 }
             };
@@ -1667,13 +1719,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 DisplayStudentAverage = true
             });
 
-            AddClassStandard(DemoSchoolConstants.AlgebraClassId, DemoSchoolConstants.MathStandard1);
-            AddClassStandard(DemoSchoolConstants.AlgebraClassId, DemoSchoolConstants.MathStandard2);
-            AddClassStandard(DemoSchoolConstants.AlgebraClassId, DemoSchoolConstants.MathStandard3);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard1);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard2);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard3);
 
-            AddClassStandard(DemoSchoolConstants.GeometryClassId, DemoSchoolConstants.MathStandard1);
-            AddClassStandard(DemoSchoolConstants.GeometryClassId, DemoSchoolConstants.MathStandard2);
-            AddClassStandard(DemoSchoolConstants.GeometryClassId, DemoSchoolConstants.MathStandard3);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard1);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard2);
+            AddClassStandard(id, DemoSchoolConstants.MathStandard3);
+
+            for(var gp = DemoSchoolConstants.GradingPeriodQ1; gp <= DemoSchoolConstants.GradingPeriodQ4; ++gp)
+                AddGradeBookForClass(id, gp);
 
         }
 

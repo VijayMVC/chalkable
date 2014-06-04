@@ -37,11 +37,11 @@ NAMESPACE('chlk.services', function () {
             Number, 'importantCount',
 
             [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncements(pageIndex_, classId_, complete_) {
+            ria.async.Future, function getAnnouncements(pageIndex_, classId_, importantOnly_) {
                 return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.Announcement), {
                     start: pageIndex_|0,
                     classId: classId_ ? classId_.valueOf() : null,
-                    complete: complete_
+                    complete: importantOnly_ ? false : null
                 });
 
             },

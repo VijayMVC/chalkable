@@ -28,7 +28,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
             foreach (var item in items)
             {
-
                 sa.StudentAttendance.Add(new StudentSectionAttendance
                 {
                     Category = item.Category,
@@ -40,8 +39,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     StudentId = item.PersonRef
                 });
             }
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            Storage.StiAttendanceStorage.SetSectionAttendance(sy.Id, date, classId, sa);
+            Storage.StiAttendanceStorage.SetSectionAttendance(date, classId, sa);
         }
 
         public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
@@ -90,8 +88,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
-            //var classTeachers = ServiceLocator.ClassService.GetClassTeachers(null, teacherId);
-            //var classesIds = classes.Where(x => classTeachers.Any(y => y.ClassRef == x.Id)).Select(x => x.Id).ToList();
             var classesIds = classes.Select(x => x.Id).ToList();
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
             {
@@ -107,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 dailySectionAttendances.AddRange(sectionAttendanceSummary.Days);
                 studentAtts.AddRange(sectionAttendanceSummary.Students);
             }
-            res.DaysStat = DailyAttendanceSummary.Create(dailySectionAttendances);
+            res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
             studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
             res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
             return res;

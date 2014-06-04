@@ -9,6 +9,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -138,7 +139,7 @@ namespace Chalkable.Web.Controllers
         {
             var res = PrepareFullAnnouncementViewData(announcementId, true, true);
             //if (res.SystemType != SystemAnnouncementType.Admin)
-            //    MixPanelService.OpenedAnnouncement(SchoolLocator.Context., res.AnnouncementTypeName, res.Title, res.SchoolPersonName);
+            MixPanelService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
             return Json(res, 7);
         }
 
@@ -212,22 +213,19 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef, AnnouncementState.Draft);
 
+            if (res.State == AnnouncementState.Created)
+                MixPanelService.CreatedNewItem(Context.Login, res.ClassAnnouncementTypeName, res.ClassName, res.ApplicationCount, res.AttachmentsCount);
 
-            //TODO: mixpanelService
-            // var submittedAnn = SchoolLocator.AnnouncementService.GetAnnouncementDetails(res.Id);
-            //if (res.StateTyped == AnnouncementState.Created)
-            //    MixPanelService.CreatedNewItem(SchoolLocator.Context.UserName, submittedAnn.AnnouncementTypeName, submittedAnn.ClassName, submittedAnn.ApplicationCount.Value, submittedAnn.AttachmentsCount.Value);
-
-            //if (submittedAnn.ApplicationCount.Value > 0)
-            //{
-            //    var apps = res.AnnouncementApplications.Select(x => x.Application.Name).ToList();
-            //    MixPanelService.AttachedApp(SchoolLocator.Context.UserName, apps);
-            //}
-            //if (submittedAnn.AttachmentsCount.Value > 0)
-            //{
-            //    var docs = res.AnnouncementAttachments.Select(x => x.Name).ToList();
-            //    MixPanelService.AttachedDocument(ServiceLocator.Context.UserName, docs);
-            //}
+            if (res.ApplicationCount > 0)
+            {
+                var apps = res.AnnouncementApplications.Select(x => x.Id.ToString()).ToList();
+                MixPanelService.AttachedApp(Context.Login, apps);
+            }
+            if (res.AttachmentsCount > 0)
+            {
+                var docs = res.AnnouncementAttachments.Select(x => x.Name).ToList();
+                MixPanelService.AttachedDocument(Context.Login, docs);
+            }
             return Json(true, 5);
         }
 

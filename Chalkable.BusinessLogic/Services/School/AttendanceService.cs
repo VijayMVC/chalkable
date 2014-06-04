@@ -126,8 +126,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
-            //var classTeachers = ServiceLocator.ClassService.GetClassTeachers(null, teacherId);
-            //var classesIds = classes.Where(x => classTeachers.Any(y => y.ClassRef == x.Id)).Select(x => x.Id).ToList();
             var classesIds = classes.Select(x => x.Id).ToList();
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
                 {
@@ -143,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 dailySectionAttendances.AddRange(sectionAttendanceSummary.Days);
                 studentAtts.AddRange(sectionAttendanceSummary.Students);
             }
-            res.DaysStat = DailyAttendanceSummary.Create(dailySectionAttendances);
+            res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
             studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
             res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
             return res;

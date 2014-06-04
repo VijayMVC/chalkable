@@ -13,7 +13,7 @@ NAMESPACE('chlk.templates', function () {
                     return null;
                 var url = window.azurePictureUrl;
                 if (notDepartmentSpecific_ == null)
-                    url += window.school.districtid + ' ';
+                    url += window.school.districtid + '_';
                 url += id.valueOf();
 
                 if (sizeH_ && sizeW_)

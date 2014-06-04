@@ -246,9 +246,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
+        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
         {
-            return GetClasses(new ClassQuery
+            var res =  GetClassesQueryResult(new ClassQuery
                 {
                     SchoolYearId = schoolYearId,
                     MarkingPeriodId = markingPeriodId,
@@ -256,6 +256,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     Start = start,
                     Count = count
                 });
+            return new PaginatedList<ClassDetails>(res.Classes, start / count, count, res.SourceCount);
         }
 
         private IList<ClassDetails> GetClasses(ClassQuery query)
@@ -292,13 +293,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue)
         {
-            var res = GetClassesQueryResult(new ClassQuery
-                {
-                    SchoolYearId = schoolYearId,
-                    Start = start,
-                    Count = count
-                });
-            return new PaginatedList<ClassDetails>(res.Classes, start / count, count, res.SourceCount);
+            return GetClasses(schoolYearId, null, null, start, count);
         }
 
         public IList<ClassDetails> GetClasses(string filter)

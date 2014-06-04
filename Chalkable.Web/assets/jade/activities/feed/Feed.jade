@@ -3,14 +3,14 @@ div(class = noComplete ? "no-complete" : "").feed-container
     topData = self.getTopData();
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.completeOnly])(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.importantOnly])(
         selectedItemId=selectedId
         ).classes-bar
     .action-bar.not-transparent
         .container.panel-bg
             .left
                 .i-b
-                    if self.completeOnly
+                    if self.importantOnly
                         BUTTON.grey-button.blue-on-active.pressed.done-undone-button=Msg.Important
                         +ActionLinkButton('feed', 'list', true, false, selectedId || '', 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.All
                     else
@@ -33,7 +33,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 method = "getAnnouncements",
                 tpl = chlk.templates.announcement.FeedItemTpl,
                 pageSize = 10,
-                paramsPrepend = [selectedId, self.completeOnly]
+                paramsPrepend = [selectedId, self.importantOnly]
             )
                 each item in self.items
                     +FeedItem(item)

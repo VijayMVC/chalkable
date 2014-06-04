@@ -433,6 +433,8 @@ var Msg = {
     Lose_Changes: 'Lose Changes',
     Max_score: 'Max score',
     Mark_all_Present: 'Mark all Present',
+    Mark_as_done: 'Mark as done',
+    Mark_as_ToDo: 'Mark as ToDo',
     Marking_Period: oneOrMany('Marking Period'),
     Marking_Period_shortcut: 'Mp',
     min: oneOrMany('min'),
