@@ -62,20 +62,19 @@
             Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
             Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
         </div>
-
-        <div id="logout-block">
-            @Html.ActionLink("Go to INOW", "RedirectToINow", "User", null, new {style = "visibility: hidden;"})
-        </div>
-   
-
-        @{
+        
+         @{
             var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
         }
         
         
-
-    
+        @if (!isDemoSchool && !isDeveloperSchool)
+        {
+            <div id="logout-block">
+                @Html.ActionLink("Go to INOW", "RedirectToINow", "User", null, new {style = "visibility: hidden;"})
+            </div>
+        }
 
         <div class="page 
         @if (isDemoSchool || isDeveloperSchool)
