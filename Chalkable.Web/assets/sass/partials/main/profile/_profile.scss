@@ -370,9 +370,9 @@ BODY {
             h1{
               font-size: 30px;
               font-weight: bold;
+              text-shadow: 0 0.3px 0 white;
               color: #543D0D;
               font-family: Arial;
-              text-shadow: 0 0.3px 0 white;
             }
 
             input{
@@ -622,13 +622,18 @@ BODY {
                 @include box-shadow(none);
                 border: none;
               }
-
-              h1{
+              .short-info{
+                color: #543D0D;
+                font-family: Arial;
                 position: relative;
                 left: 15px;
-                top: -35px;
+                top: -20px;
+                display: inline-block;
+                .grade-level{
+                  top: 10px;
+                  position: relative;
+                }
               }
-
               .sections{
                 font-size: 14px;
                 .sections-info{

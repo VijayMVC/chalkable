@@ -7,7 +7,11 @@ mixin ProfileInfoView(model)
             div(style="overflow: visible").avarar-container.standard-small-container
                 div(style="overflow: visible").img-container
                     +PersonImg(model, 128, true)
-            h1=model.getFullName()
+            .short-info
+                h1=model.getFullName()
+                -console.log(model.getGradeLevel())
+                if model.getGradeLevel && model.getGradeLevel() && model.getGradeLevel().getName()
+                    .grade-level= 'Grade: ' + model.getGradeLevel().getName()
         .sections
             .sections-info
                 .section-title=model.getRole().getName()
