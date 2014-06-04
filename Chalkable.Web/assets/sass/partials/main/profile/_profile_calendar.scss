@@ -1,0 +1,74 @@
+BODY {
+  DIV.page{
+    >DIV#content{
+      DIV#content-wrapper.profile{
+        #main{
+          .profile-calendar{
+            font-family: Pacifico;
+            .profile-info{
+
+              .profile-drop-down-container{
+                color: #957633 !important;
+                  .chzn-container{
+                    min-width: 90px;
+                    color: #957633 !important;
+                    top: -2px;
+
+                    .chzn-single, .chzn-drop{
+                      border: none;
+                      background-image: none;
+                      white-space: nowrap;
+                      text-shadow: none;
+                      text-transform: uppercase;
+                      font-family: Pacifico;
+                      font-size: 19px;
+                      background: transparent;
+                      background-color: #F5E9BD;
+                      box-shadow: none;
+
+                    }
+                    .chzn-single{
+                      border-top-left-radius: 7px;
+                      border-top-right-radius: 7px;
+                      border-bottom-right-radius: 0px;
+                      border-bottom-left-radius: 0px;
+                      b{
+                         background: url(images/profile/down-arrow.png) right center no-repeat;
+                      }
+                      span{
+                        color: #957633 !important;
+                      }
+                    }
+                    .chzn-drop{
+                      border-top-left-radius: 0px;
+                      border-top-right-radius: 0px;
+                      border-bottom-right-radius: 7px;
+                      border-bottom-left-radius: 7px;
+                    }
+                  }
+              }
+              .glance-section{
+                text-align: center;
+                margin-top: 35px;
+              }
+            }
+
+            &.student-discipline-view{
+              .profile-info{
+                .person-info{
+                  label{
+                    display: block;
+                    font-size: 18px !important;
+                    position: relative;
+                    left: 90px;
+                    top: -34px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
