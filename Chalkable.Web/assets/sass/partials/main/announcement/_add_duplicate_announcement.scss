@@ -78,6 +78,24 @@
               }
             }
           }
+          &.cancel{
+            border: 1px solid #a4a4a4;
+            margin-right: 10px;
+            @include border-radius(4px);
+            @include background(linear-gradient(top, #ffffff,#dadada));
+            @include box-shadow(rgba(0, 0, 0, 0.4) 0 0 3px, white 0px 1px 0px 0px inset);
+
+            min-height: 30px;
+            span{
+              min-height: 30px;
+              span{
+                min-height: 30px;
+                button{
+                  color: #3a3a3a;
+                }
+              }
+            }
+          }
         }
       }
     }
