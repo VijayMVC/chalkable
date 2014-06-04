@@ -38,8 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.StiImport", "Chal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.MixPanel", "Chalkable.MixPanel\Chalkable.MixPanel.csproj", "{A0F02AE8-991B-4080-A49A-9428F2B87181}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mixpanel.NET", "Mixpanel.NET\src\Mixpanel.NET\Mixpanel.NET.csproj", "{352023D1-2498-44E2-B2A8-340FA959FEDE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,14 +166,6 @@ Global
 		{A0F02AE8-991B-4080-A49A-9428F2B87181}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0F02AE8-991B-4080-A49A-9428F2B87181}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
 		{A0F02AE8-991B-4080-A49A-9428F2B87181}.Staging|Any CPU.Build.0 = Staging|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.QA|Any CPU.ActiveCfg = Staging|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.QA|Any CPU.Build.0 = Staging|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
-		{352023D1-2498-44E2-B2A8-340FA959FEDE}.Staging|Any CPU.Build.0 = Staging|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
