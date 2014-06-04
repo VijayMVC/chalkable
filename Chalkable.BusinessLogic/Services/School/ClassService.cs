@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteTeachers(IList<ClassTeacher> classTeachers);
         ClassDetails DeleteStudent(int classId, int personId);
         ClassDetails GetClassDetailsById(int id);
-        IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
+        PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
         IList<ClassDetails> GetClasses(string filter);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue);
         ClassPerson GetClassPerson(int classId, int personId);
@@ -314,9 +314,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
+        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
         {
-            return GetClasses(new ClassQuery
+            var  res = GetClassesQueryResult(new ClassQuery
                 {
                     SchoolYearId = schoolYearId,
                     MarkingPeriodId = markingPeriodId,
@@ -324,6 +324,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Start = start,
                     Count = count
                 });
+            return new PaginatedList<ClassDetails>(res.Classes, start / count, count, res.SourceCount);
         }
 
         private IList<ClassDetails> GetClasses(ClassQuery query)
@@ -357,13 +358,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue)
         {
-            var res = GetClassesQueryResult(new ClassQuery
-                {
-                    SchoolYearId = schoolYearId,
-                    Start = start,
-                    Count = count
-                });
-            return new PaginatedList<ClassDetails>(res.Classes, start / count, count, res.SourceCount);
+            return GetClasses(schoolYearId, null, null, start, count);
         }
 
         public IList<ClassDetails> GetClasses(string filter)
