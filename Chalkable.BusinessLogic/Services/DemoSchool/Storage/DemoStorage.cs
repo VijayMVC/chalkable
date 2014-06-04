@@ -231,7 +231,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
             StiGradeBookStorage.Add(new Gradebook()
             {
-                SectionId = 1,
+                SectionId = classId,
                 Activities = new List<Activity>(),
                 Options = new Chalkable.StiConnector.Connectors.Model.ClassroomOption(),
                 Scores = new List<Score>(),

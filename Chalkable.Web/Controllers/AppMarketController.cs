@@ -10,6 +10,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
@@ -61,15 +62,18 @@ namespace Chalkable.Web.Controllers
             var appinstallAction = SchoolLocator.AppMarketService.Install(applicationId, personId, roleIds, classids, departmentids, gradelevelids, schoolyearId, Context.NowSchoolTime);
             try
             {
+                if (departmentids == null) departmentids = new GuidList();
+                if (gradelevelids == null) gradelevelids = new IntList();
+                if (classids == null) classids = new IntList();
+
                 string description = ChlkResources.APP_WAS_BOUGHT;
                 //todo: person payment
                 // MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, description);   
-                //TODO: mix panel
-                //var classNames = appinstallAction.ApplicationInstallActionClasses.Select(x => x.Class.Name).ToList();
+                var classes = classids.Select(x => x.ToString()).ToList();
                 ////var departments = appinstallAction.ApplicationInstallActionDepartments.Select(x => x.ChalkableDepartment.Name).ToList();//TODO: fix after DB remapping
-                //List<string> departments = new List<string>();
-                //var gradeLevels = appinstallAction.ApplicationInstallActionGradeLevels.Select(x => x.GradeLevel.Name).ToList();
-                //MixPanelService.BoughtApp(locator.Context.UserName, appinstallAction.Application.Name, classNames, departments, gradeLevels);
+                var gradeLevels = gradelevelids.Select(x => x.ToString()).ToList();
+                var departments = departmentids.Select(x => x.ToString()).ToList();
+                MixPanelService.BoughtApp(Context.Login, applicationId.ToString(), classes, departments, gradeLevels);
             }
             catch (Exception)
             {

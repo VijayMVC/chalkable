@@ -5,10 +5,12 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ChalkableApiExplorerViewData;
+using Chalkable.Web.Tools;
 
 namespace Chalkable.Web.Controllers
 {
@@ -124,15 +126,14 @@ namespace Chalkable.Web.Controllers
         public ActionResult UpdateInfo(Guid developerId, string name, string websiteLink, string email)
         {
             var res = MasterLocator.DeveloperService.Edit(developerId, name, email, websiteLink);
-            //TODO: mix panel 
-            //MixPanelService.ChangedEmail(ServiceLocator.Context.UserName, email);
-            //if (ServiceLocator.Context.RoleNameLowered == CoreRoles.DEVELOPER_ROLE.LoweredName)
-            //{
-            //    var timeZoneId = ServiceLocator.Context.TimeZoneId;
-            //    var ip = RequestHelpers.GetClientIpAddress(Request);
-            //    MixPanelService.IdentifyDeveloper(developer.Email, developer.DisplayName,
-            //        string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
-            //}
+            MixPanelService.ChangedEmail(Context.Login, email);
+            if (Context.Role.LoweredName == CoreRoles.DEVELOPER_ROLE.LoweredName)
+            {
+                var timeZoneId = Context.SchoolTimeZoneId;
+                var ip = RequestHelpers.GetClientIpAddress(Request);
+                MixPanelService.IdentifyDeveloper(res.Email, res.DisplayName,
+                    string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
+            }
             return Json(DeveloperViewData.Create(res));
         }
 
