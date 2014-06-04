@@ -3,9 +3,6 @@ mixin AbsentLatePage(data, header)
         .panel-header=header
         .chart-block.relative
             .wide-chart-bg
-            +Chart()(
-                data-options=self.getChartOptions(data)
-            )
     .students-container.relative
         items = self.getGroupedStudents(data.getStudents())
         each item,i in items
