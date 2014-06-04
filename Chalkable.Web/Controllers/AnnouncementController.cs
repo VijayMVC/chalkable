@@ -213,8 +213,7 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef, AnnouncementState.Draft);
 
-            if (res.State == AnnouncementState.Created)
-                MixPanelService.CreatedNewItem(Context.Login, res.ClassAnnouncementTypeName, res.ClassName, res.ApplicationCount, res.AttachmentsCount);
+            MixPanelService.CreatedNewItem(Context.Login, res.ClassAnnouncementTypeName, res.ClassName, res.ApplicationCount, res.AttachmentsCount);
 
             if (res.ApplicationCount > 0)
             {
