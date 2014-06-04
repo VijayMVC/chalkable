@@ -23,12 +23,12 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<AlphaGrade> GetList()
         {
-            var sql = @"select AlphaGrade.* from AlphaGrade
-                        join GradingScaleRange on GradingScaleRange.[{0}] = AlphaGrade.[{1}]";
             var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat(sql, GradingScaleRange.ALPHA_GRADE_REF_FIELD, AlphaGrade.ID_FIELD);
-            var conds = FilterBySchool(new AndQueryCondition());
+            dbQuery.Sql.AppendFormat("select AlphaGrade.* from AlphaGrade");
+            var conds = FilterBySchool(null);
             conds.BuildSqlWhere(dbQuery, "AlphaGrade");
+            dbQuery.Sql.AppendFormat("and exists(select * from GradingScaleRange where GradingScaleRange.[{0}]=AlphaGrade.[{1}])"
+                , GradingScaleRange.ALPHA_GRADE_REF_FIELD, AlphaGrade.ID_FIELD);
             return ReadMany<AlphaGrade>(dbQuery);
         } 
 
