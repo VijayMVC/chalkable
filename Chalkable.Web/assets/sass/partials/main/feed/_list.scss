@@ -159,7 +159,7 @@ $star-size: 18px;
   &.complete {
     DIV.bullet {
       a.star {
-        background-position: center -36px;
+        background-position: center top;
       }
     }
   }
@@ -279,7 +279,7 @@ $star-size: 18px;
   }
 
   a.star {
-    background: url(images/feed/done-undone.png) center top no-repeat;
+    background: url(images/feed/done-undone.png) center -36px no-repeat;
     position: absolute;
     top: 50%;
     left: 14px;

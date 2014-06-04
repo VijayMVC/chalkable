@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.feed', function () {
             ArrayOf(chlk.models.announcement.Announcement), 'items',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'completeOnly',
+            Boolean, 'importantOnly',
 
             [ria.templates.ModelPropertyBind],
             Number, 'importantCount',

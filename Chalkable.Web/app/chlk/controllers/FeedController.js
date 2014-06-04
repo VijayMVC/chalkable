@@ -38,7 +38,7 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.GradeLevelService, 'gradeLevelService',
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
-        function listAction(postback_, completeOnly_, classId_, pageIndex_) {
+        function listAction(postback_, importantOnly_, classId_, pageIndex_) {
 
             //todo : think about go to inow part
             if(!this.canViewFeed()){
@@ -53,9 +53,8 @@ NAMESPACE('chlk.controllers', function (){
                 }], 'center');
             }
 
-            completeOnly_ = completeOnly_ != false;
             var result = this
-                .getFeedItems(postback_, completeOnly_, classId_, pageIndex_)
+                .getFeedItems(postback_, importantOnly_, classId_, pageIndex_)
                 .attach(this.validateResponse_());
             return this.PushOrUpdateView(chlk.activities.feed.FeedListPage, result);
         },
@@ -70,7 +69,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
-        function getFeedItems(postback_, completeOnly_, classId_, pageIndex_){
+        function getFeedItems(postback_, importantOnly_, classId_, pageIndex_){
             if(!notificationsInterval)
                 notificationsInterval = setInterval(function(){
                     var result = this.notificationService.getUnShownNotificationCount().then(function(data){
@@ -80,10 +79,10 @@ NAMESPACE('chlk.controllers', function (){
                     this.BackgroundUpdateView(chlk.activities.feed.FeedListPage, result, 'notifications');
                 }.bind(this), 5000);
             return this.announcementService
-                .getAnnouncements(pageIndex_ | 0, classId_, completeOnly_)
+                .getAnnouncements(pageIndex_ | 0, classId_, importantOnly_)
                 .attach(this.validateResponse_())
                 .then(function(feedItems){
-                    if(!postback_ && completeOnly_ && feedItems.length == 0)
+                    if(!postback_ && importantOnly_ && feedItems.length == 0)
                         return this.getFeedItems(postback_, false, classId_, pageIndex_);
 
                     var classes = this.classService.getClassesForTopBar(true);
@@ -92,7 +91,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.feed.Feed(
                         feedItems,
                         classBarItemsMdl,
-                        completeOnly_,
+                        importantOnly_,
                         this.getNewNotificationCount_()
                     );
                 }, this);
