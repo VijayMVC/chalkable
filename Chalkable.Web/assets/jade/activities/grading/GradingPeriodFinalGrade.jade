@@ -13,7 +13,7 @@ gradingPeriod = self.getGradingPeriod()
         if gradingPeriod.isAblePostGradeBook()
             +ActionLinkButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId()).message-button.blue-gradient-btn.post-gradebook-button.no-loading=Msg.Post
         .gp-triangle
-div(class = (self.isAvgChanged() ? "opened" : "")).gp-data
+div(class = (self.isAvgChanged() ? "opened slided" : "")).gp-data
     items = self.getStudentFinalGrades()
     isAbleDisplayAlphaGrades = true
     +ListView(items)(

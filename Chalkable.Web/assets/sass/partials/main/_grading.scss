@@ -1358,7 +1358,9 @@ BODY {
     }
   }
   .gp-data{
-    overflow: hidden;
+    &:not(.slided){
+      overflow: hidden;
+    }
 
     &:not(.opened){
       height: 0;

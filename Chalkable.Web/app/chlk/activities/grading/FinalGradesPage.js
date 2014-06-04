@@ -87,6 +87,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     var parent = node.parent('.big-grading-period-container');
 
                     var gpData = parent.find('.gp-data');
+                    gpData.removeClass('slided');
 
                     if(parent.hasClass('open')){
                         jQuery(gpData.valueOf()).animate({
@@ -101,6 +102,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     }else{
                         var items = this.dom.find('.big-grading-period-container.open');
                         var itemsGp = items.find('.gp-data');
+                        itemsGp.removeClass('slided');
                         jQuery(itemsGp.valueOf()).animate({height: 0}, 500);
                         if(gpData.hasClass('with-data')){
                             gpData.removeClass('with-data');
@@ -139,6 +141,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     height: (annContainer.height() + parseInt(annContainer.getCss('margin-bottom'), 10))
                 }, 500, function(){
                     container.setCss('height', 'auto');
+                    container.addClass('slided');
                 });
             },
 
@@ -389,6 +392,7 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             OVERRIDE, VOID, function onStop_() {
+                BASE();
                 document.removeEventListener('click', this.documentClickHandler, true);
             },
 

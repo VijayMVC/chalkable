@@ -142,7 +142,7 @@ NAMESPACE('chlk.templates.grading', function () {
                         borderRadius: 2,
                         useHTML: true,
                         positioner: function (labelWidth, labelHeight, point) {
-                            return { x: point.plotX - jQuery('.chart-text').width()/2 + 30, y: point.plotY - jQuery('.chart-text').height() - 15 };
+                            return { x: point.plotX - jQuery('.chart-text:visible').width()/2 + 30, y: point.plotY - jQuery('.chart-text:visible').height() - 15 };
                         },
                         style: {
                             display: 'none'
