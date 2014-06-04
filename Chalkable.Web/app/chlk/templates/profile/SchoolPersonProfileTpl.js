@@ -42,7 +42,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var isStudentController = controller == this._studentControllerName;
                 var res = [
-                    this.createActionLinkModel_(controller, 'details', 'Now', pressedLinkName, [userId]),
+                    this.createActionLinkModel_(controller, 'details', 'Now', pressedLinkName, [userId], true),
                     this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName
                         , [userId], isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ADDRESS))
                 ];
