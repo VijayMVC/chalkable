@@ -9,7 +9,6 @@ mixin ProfileInfoView(model)
                     +PersonImg(model, 128, true)
             .short-info
                 h1=model.getFullName()
-                -console.log(model.getGradeLevel())
                 if model.getGradeLevel && model.getGradeLevel() && model.getGradeLevel().getName()
                     .grade-level= 'Grade: ' + model.getGradeLevel().getName()
         .sections
