@@ -10,8 +10,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassAnnouncementTypeService
     {
+        ClassAnnouncementType GetClassAnnouncementType(int id);
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(IList<int> classesIds, bool all = true); 
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true);
+        ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName);
         void Add(IList<ClassAnnouncementType> classAnnouncementTypes);
         void Edit(IList<ClassAnnouncementType> classAnnouncementTypes);
         void Delete(IList<int> ids);
@@ -38,6 +40,19 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
+        public ClassAnnouncementType GetClassAnnouncementType(int id)
+        {
+            var activityCategory = ConnectorLocator.ActivityCategoryConnnector.GetById(id);
+            return BuildClassAnnouncementTypes(new List<ActivityCategory> {activityCategory}).First();
+        }
+
+        public ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName)
+        {
+            return string.IsNullOrEmpty(classAnnouncementTypeName)
+                    ? null 
+                    : ChalkableAnnouncementType.All.FirstOrDefault(x => x.Keywords.Split(',').Any(y => classAnnouncementTypeName.ToLower().Contains(y)));
+        }
+
         private IList<ClassAnnouncementType> BuildClassAnnouncementTypes(IList<ActivityCategory> activityCategories)
         {
             var announcementTypes = activityCategories.Select(x => new ClassAnnouncementType
@@ -49,10 +64,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 Name = x.Name,
                 Percentage = (x.Percentage ?? 0)
             }).ToList();
-            var chalkableTypes = ChalkableAnnouncementType.All;
             foreach (var classAnnouncementType in announcementTypes)
             {
-                var ct = chalkableTypes.FirstOrDefault(x => x.Keywords.Split(',').Any(y => classAnnouncementType.Name.ToLower().Contains(y)));
+                var ct = GetChalkableAnnouncementTypeByAnnTypeName(classAnnouncementType.Name);
                 if (ct != null)
                     classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
             }
@@ -93,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
         {
-            var classAnnTypes = GetClassAnnouncementTypes(classId, false);
+            var classAnnTypes = GetClassAnnouncementTypes(classId);
             var res = new List<GradedClassAnnouncementType>();
             foreach (var classAnnouncementType in classAnnTypes)
             {
@@ -113,5 +127,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return res;
         }
+
     }
 }

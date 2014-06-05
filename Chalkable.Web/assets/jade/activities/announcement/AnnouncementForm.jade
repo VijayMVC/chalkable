@@ -1,3 +1,16 @@
+mixin AnnouncementTypeToolBar(types, announcement, typeId)
+    each item in types
+        BUTTON(
+        class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
+        data-typeid=item.getId(),
+        data-typename=item.getName(),
+        type = announcement.getState() ? "button" : "submit",
+        name="submitType",
+        value="save"
+        ).action-button.announcement-type-button= item.getDescription()
+
+
+
 topData = self.getTopData()
 announcement = self.getAnnouncement()
 topItems = topData.getTopItems()
@@ -15,15 +28,7 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
             ).classes-bar
             .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
                 .container.panel-bg.overflow-hidden
-                    each item in classes
-                        BUTTON(
-                            class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
-                            data-typeid=item.getId(),
-                            data-typename=item.getName(),
-                            type = announcement.getState() ? "button" : "submit",
-                            name="submitType",
-                            value="save"
-                        ).action-button.announcement-type-button= item.getDescription()
+                    +AnnouncementTypeToolBar(classes, announcement, typeId)
             .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
                 +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form
                 if announcement.getState()

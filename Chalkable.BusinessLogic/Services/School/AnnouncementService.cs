@@ -233,6 +233,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (ann != null)
                 {
                     MapperFactory.GetMapper<AnnouncementComplex, Activity>().Map(ann, activity);
+                    var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(ann.ClassAnnouncementTypeName);
+                    ann.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?) null;
                     res.Add(ann);       
                 }
             }
@@ -302,6 +304,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
+                    var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(res.ClassAnnouncementTypeName);
+                    res.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;
                     if (Context.Role == CoreRoles.TEACHER_ROLE)
                     {
                         //TODO: rewrite this later 

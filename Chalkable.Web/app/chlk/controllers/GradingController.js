@@ -144,6 +144,7 @@ NAMESPACE('chlk.controllers', function (){
             function loadGradingPeriodFinalGradesSummaryAction(model){
                 if(!model.getClassId() || !model.getGradingPeriodId())
                     return null;
+                var avgChanged = (this.gradingService.getFinalGradeGPInfo().getGradingPeriod().getId() == model.getGradingPeriodId()) && model.getAverageId()
                 var result = this.gradingService
                     .getFinalGradesForPeriod(model.getClassId(), model.getGradingPeriodId(), model.getAverageId())
                     .then(function(resModel){
@@ -152,11 +153,11 @@ NAMESPACE('chlk.controllers', function (){
                         var index = model.getSelectedIndex();
                         if(index || index == 0)
                             resModel.setSelectedIndex(index);
-                        resModel.setAvgChanged(!!model.getAverageId());
+                        resModel.setAvgChanged(!!avgChanged);
                         return resModel;
                     }, this)
                     .attach(this.validateResponse_());
-                return this.UpdateView(chlk.activities.grading.FinalGradesPage, result, model.getAverageId() ? 'average-change' : 'load-gp');
+                return this.UpdateView(chlk.activities.grading.FinalGradesPage, result, avgChanged ? 'average-change' : 'load-gp');
             },
 
             [chlk.controllers.SidebarButton('statistic')],

@@ -25,5 +25,10 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add(string.Format("sectionIds[{0}]", i), sectionIds[i].ToString());   
             return Call<IList<ActivityCategory>>(string.Format("{0}activities/categories", BaseUrl), nvc);
         }
+
+        public ActivityCategory GetById(int activityCategoryId)
+        {
+            return Call<ActivityCategory>(string.Format("{0}activities/categories/{1}", BaseUrl, activityCategoryId));
+        }
     }
 }

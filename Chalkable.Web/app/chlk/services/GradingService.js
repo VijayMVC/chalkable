@@ -139,8 +139,9 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Number]],
             ria.async.Future, function getFinalGradesForPeriod(classId, gradingPeriodId, averageId_) {
-                if(averageId_){
-                    var gp = this.getFinalGradeGPInfo(), currentStudentAvg;
+                var gp = this.getFinalGradeGPInfo();
+                if(averageId_ && gradingPeriodId == gp.getGradingPeriod().getId()){
+                    var currentStudentAvg;
                     var currentAvg = gp.getAverages().filter(function(item){return averageId_ == item.getAverageId()})[0];
                     gp.setCurrentAverage(currentAvg);
                     gp.getStudentFinalGrades().forEach(function(item){
