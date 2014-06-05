@@ -1,20 +1,13 @@
 mixin AnnouncementTypeToolBar(types, announcement, typeId)
-    if types.length > 5
-        //todo : comboBox
-        .title Type:
-        +Select('submitType').types-combo
-            each item in types
-                +Option(item.getId(), item.getDescription(), typeId==item.getId())
-    else
-        each item in types
-            BUTTON(
-                class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
-                data-typeid=item.getId(),
-                data-typename=item.getName(),
-                type = announcement.getState() ? "button" : "submit",
-                name="submitType",
-                value="save"
-            ).action-button.announcement-type-button= item.getDescription()
+    each item in types
+        BUTTON(
+        class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
+        data-typeid=item.getId(),
+        data-typename=item.getName(),
+        type = announcement.getState() ? "button" : "submit",
+        name="submitType",
+        value="save"
+        ).action-button.announcement-type-button= item.getDescription()
 
 
 
