@@ -92,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         SchoolYearId = schoolYearId
                     };
                 var gps = da.GetGradingPeriodsDetails(gradingPeriodQuery);
-                var res = gps.FirstOrDefault(x => x.EndDate <= date);
+                var res = gps.FirstOrDefault(x => x.EndDate >= date);
                 if (res == null && useLastExisting)
                     res = gps.OrderByDescending(x => x.StartDate).FirstOrDefault();
                 return res;
