@@ -4,39 +4,43 @@ mixin ProfileInfoView(model)
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-view
         .title
-            div(style="overflow: visible").avatar-container.with-border
-                +PersonImg(model, 128, true)
-            h1=model.getFullName()
+            div(style="overflow: visible").avarar-container.standard-small-container
+                div(style="overflow: visible").img-container
+                    +PersonImg(model, 128, true)
+            .short-info
+                h1=model.getFullName()
+                if model.getGradeLevel && model.getGradeLevel() && model.getGradeLevel().getName()
+                    .grade-level= 'Grade: ' + model.getGradeLevel().getName()
         .sections
             .sections-info
-                .section-title.pacifico=model.getRole().getName()
-                div
-                    .section-data
-                        .info-title=Msg.Email
-                        .data-info.low-font-size
-                            input(type="text", value=model.getEmail())
-                    .section-data
-                        .info-title=Msg.Cell
-                        .data-info.big-font-size=primaryPhone
-                    .section-data
-                        .info-title=Msg.Birthday
-                        .data-info.low-font-size=model.getBirthDateText()
-                    .section-data.gender-box
+                .section-title=model.getRole().getName()
+                .info
+                    .section-data.left
+                        .info-title=Msg.Email.toUpperCase()
+                        .data-info=model.getEmail()
+                    if primaryPhone
+                        .section-data.right
+                            .info-title=Msg.CellPhone.toUpperCase()
+                            .data-info=primaryPhone
+                    .section-data.left
+                        .info-title=Msg.Birthday.toUpperCase()
+                        .data-info=model.getBirthDateText()
+                    //.section-data.gender-box
                         div(class=model.getGender() ? model.getGender().toLowerCase() : '').gender-img-box
                         p=model.getGenderFullText()
             .sections-info
-                .section-title.pacifico=Msg.Home
-                div
-                    .section-data
-                        .info-title=Msg.Home_Phone
-                        .data-info.big-font-size=homePhone
-                    .section-data
-                        if address
-                            .info-title=Msg.Home_Address
-                                .data-info.low-font-size=address.getValue()
-
+                .section-title=Msg.Home
+                .info
+                    if address
+                        .section-data.left
+                            .info-title=Msg.Home_Address.toUpperCase()
+                            .data-info=address.getValue()
+                    if homePhone
+                        .section-data.right
+                            .info-title=Msg.Home_Phone.toUpperCase()
+                            .data-info=homePhone
             block
-        .sections-info.other-section
+        //.sections-info.other-section
             .section-title.pacifico=Msg.Other(true)
         if model.isAbleEdit()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit

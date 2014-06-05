@@ -258,6 +258,7 @@ namespace Chalkable.Web.Models
         public static ShortAnnouncementGradeViewData Create(AnnouncementComplex announcement, 
             IList<StudentAnnouncementDetails> studentAnnouncements, IList<int> studentIds)
         {
+            studentAnnouncements = studentAnnouncements.Where(x => x.AnnouncementId == announcement.Id).ToList();
             return new ShortAnnouncementGradeViewData(announcement)
                 {
                     StudentAnnouncements = ShortStudentsAnnouncementsViewData.Create(studentAnnouncements, studentIds)

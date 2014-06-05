@@ -73,6 +73,7 @@ var Msg = {
     Card: 'Card',
     Category: 'Category',
     Cell: 'Cell',
+    CellPhone: 'CellPhone',
     Check: 'Check',
     CheckIn: 'Check-in',
     Class: 'Class',

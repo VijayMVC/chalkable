@@ -77,9 +77,9 @@ NAMESPACE('chlk.controllers', function (){
                     phonesValue.push(values);
                     if(item.isIsPrimary() && !model.getPrimaryPhone()){
                         model.setPrimaryPhone(item);
-                    }else{
-                        if(!model.getHomePhone())
-                            model.setHomePhone(item);
+                    }
+                    if(item.isHomePhone() && !model.getHomePhone()){
+                        model.setHomePhone(item);
                     }
                 });
                 model.setPhonesValue(JSON.stringify(phonesValue));

@@ -365,10 +365,14 @@ BODY {
           }
 
           .info-page{
-
+            text-shadow: 0 1px 0 white;
 
             h1{
               font-size: 30px;
+              font-weight: bold;
+              text-shadow: 0 0.3px 0 white;
+              color: #543D0D;
+              font-family: Arial;
             }
 
             input{
@@ -610,6 +614,65 @@ BODY {
                   top: -6px;
                 }
 
+              }
+            }
+
+            .info-view{
+              .avarar-container.standard-small-container{
+                @include box-shadow(none);
+                border: none;
+              }
+              .short-info{
+                color: #543D0D;
+                font-family: Arial;
+                position: relative;
+                left: 15px;
+                top: -20px;
+                display: inline-block;
+                .grade-level{
+                  top: 10px;
+                  position: relative;
+                }
+              }
+              .sections{
+                font-size: 14px;
+                .sections-info{
+                  display: block;
+                  width: auto;
+                  margin: 15px 0px;
+                  >.section-title{
+                    color: #866121;
+                    text-shadow: 0.4px 0px 0 #BD9856;
+                    font-size: 20px;
+                    margin-left: 5px;
+                  }
+                  >.info{
+                    padding: 15px 0px 5px 10px;
+                    @include border-radius(7px);
+                    background-color: #EED699;
+                    @include box-shadow(1px 1px 1px 0px #ccb36e inset, 1px 1px 0px 0px white);
+                    width: auto;
+                    .section-data{
+                      margin: 0px 0px 15px 0px;
+                      display: inline-block;
+                      &.left{
+                        width: 550px;
+                        float: none;
+                      }
+                      &.right{
+                        float: none;
+                      }
+                      .info-title{
+                        font-size: 13px;
+                        color: #B08A44;
+                        margin-bottom: 4px;
+                      }
+                      .data-info{
+                        color: #8F6C36;
+                      }
+                    }
+                  }
+                }
               }
             }
 

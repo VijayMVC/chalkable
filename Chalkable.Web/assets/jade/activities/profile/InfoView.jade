@@ -50,7 +50,7 @@ mixin ProfileInfoView(model)
                         each address in addresses
                             .data-info.low-font-size=address.getValue()
             block
-        .sections-info.other-section
+        //.sections-info.other-section
             .section-title.pacifico=Msg.Other(true)
         if model.isAbleEdit()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit

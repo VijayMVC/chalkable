@@ -8,7 +8,6 @@ mixin ProfileTopBar(tplObj, pressedActionName)
 
 //requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
 mixin UserProfileTopBar(tplObj, pressedActionName)
-    -console.info('user')
     +ProfileTopBar(tplObj, pressedActionName)
         .right
             +ActionLink('settings', 'dashboard').settings Settings
