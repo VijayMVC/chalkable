@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
         {
-            var classAnnTypes = GetClassAnnouncementTypes(classId, false);
+            var classAnnTypes = GetClassAnnouncementTypes(classId);
             var res = new List<GradedClassAnnouncementType>();
             foreach (var classAnnouncementType in classAnnTypes)
             {
