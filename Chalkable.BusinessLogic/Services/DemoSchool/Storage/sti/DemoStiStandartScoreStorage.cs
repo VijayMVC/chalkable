@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         private void AddStandardScores(int sectionId, int gradingPeriodId, int standardId)
         {
-            Add(new StandardScore
+            /*Add(new StandardScore
             {
                 SectionId = sectionId,
                 GradingPeriodId = gradingPeriodId,
@@ -76,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 ComputedScore = 100,
                 ComputedScoreAlphaGradeName = "A",
                 EnteredScoreAlphaGradeName = "A"
-            });
+            });*/
         }
 
         public void Setup()

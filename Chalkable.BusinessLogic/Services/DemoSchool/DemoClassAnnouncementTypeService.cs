@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.Common.Orm;
@@ -58,5 +59,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }).ToList();
         }
 
+
+        public ClassAnnouncementType GetClassAnnouncementType(int id)
+        {
+            return Storage.ClassAnnouncementTypeStorage.GetById(id);
+        }
+
+
+        public ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName)
+        {
+            return string.IsNullOrEmpty(classAnnouncementTypeName)
+                    ? null
+                    : ChalkableAnnouncementType.All.FirstOrDefault(x => x.Keywords.Split(',').Any(y => classAnnouncementTypeName.ToLower().Contains(y)));
+
+        }
     }
 }

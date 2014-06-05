@@ -1,7 +1,20 @@
 BODY {
-  DIV.page{
+  DIV.page.demo-index{
     >DIV#content {
+      #main-top{
+        background: none !important;
+      }
+
+
+      #main-wrapper{
+        background: none !important;
+      }
+
+      #footer{
+        background: none !important;
+      }
       #main {
+        background: none !important;
         >SPAN.demo{
           background: url(images/register/demo-bg.png) 0 0 no-repeat;
           position: relative;

@@ -66,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 Activities = gbOld != null ? gbOld.Activities : new List<Activity>(),
                 StudentAverages = gbOld != null ? gbOld.StudentAverages : new List<StudentAverage>()
                 {
-                    new StudentAverage()
+                    /*new StudentAverage()
                     {
                         CalculatedNumericAverage = 100,
                         EnteredNumericAverage = 100,
@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                         IsGradingPeriodAverage = true,
                         GradingPeriodId = gradingPeriodId,
                         StudentId = DemoSchoolConstants.ThirdStudentId
-                    }
+                    }*/
                 }
             };
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -28,6 +29,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+
+        private const string DEMO_USER_PREFIX = "demo_user_";
 
         private static bool IsDemoLogin(string userLogin)
         {
@@ -61,9 +64,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 {PreferenceService.Get("demoschool" + CoreRoles.ADMIN_VIEW_ROLE.LoweredName).Value, CoreRoles.ADMIN_VIEW_ROLE.LoweredName},
             };
 
+            var userLogin = login.Substring(login.IndexOf(DEMO_USER_PREFIX, StringComparison.InvariantCultureIgnoreCase));
+            var prefix = login.Substring(0, login.IndexOf(DEMO_USER_PREFIX, StringComparison.InvariantCultureIgnoreCase));
 
-            var userLogin = login.Substring(login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase));
-            var prefix = login.Substring(0, login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase));
             if (userRoles.ContainsKey(userLogin))
             {
                 var role = userRoles[userLogin];
@@ -74,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public static bool IsDemoUser(string login)
         {
-            var index = login.IndexOf("user", StringComparison.InvariantCultureIgnoreCase);
+            var index = login.IndexOf(DEMO_USER_PREFIX, StringComparison.InvariantCultureIgnoreCase);
             return IsDemoLogin(index != -1 ? login.Substring(index) : login);
         }
 
@@ -93,12 +96,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
             var localIds = new Dictionary<string, int>
             {
-                {CoreRoles.TEACHER_ROLE.LoweredName, 1195},
-                {CoreRoles.STUDENT_ROLE.LoweredName, 1196},
-                {CoreRoles.ADMIN_GRADE_ROLE.LoweredName, 1197},
-                {CoreRoles.ADMIN_EDIT_ROLE.LoweredName, 1198},
-                {CoreRoles.ADMIN_VIEW_ROLE.LoweredName, 1199},
-                
+                {CoreRoles.TEACHER_ROLE.LoweredName, DemoSchoolConstants.TeacherId},
+                {CoreRoles.STUDENT_ROLE.LoweredName, DemoSchoolConstants.Student1},
+                {CoreRoles.ADMIN_GRADE_ROLE.LoweredName, DemoSchoolConstants.AdminGradeId},
+                {CoreRoles.ADMIN_EDIT_ROLE.LoweredName, DemoSchoolConstants.AdminEditId},
+                {CoreRoles.ADMIN_VIEW_ROLE.LoweredName, DemoSchoolConstants.AdminViewId}
             };
 
             var district = DemoDistrictStorage.CreateDemoDistrict(Guid.Parse(prefix));

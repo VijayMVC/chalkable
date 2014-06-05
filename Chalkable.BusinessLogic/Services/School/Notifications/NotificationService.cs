@@ -35,7 +35,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
     {
         NotificationBuilder builder;
 
-
         public NotificationService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
             builder = new NotificationBuilder(serviceLocator);
@@ -65,12 +64,17 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement != null)
                                    .Select(x => x.Announcement.ClassRef)
                                    .ToList();
-                var classAnnouncementTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+                IList<ClassAnnouncementType> classAnnouncementTypes = null;
+                if(Context.Role != CoreRoles.STUDENT_ROLE)
+                    classAnnouncementTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+                
                 foreach (var notification in notifications)
                 {
-                    if (notification.Announcement != null)
+                    if (notification.Announcement != null && notification.Announcement.ClassAnnouncementTypeRef.HasValue)
                     {
-                        var classAnnType = classAnnouncementTypes.First(x => x.ClassRef == notification.Announcement.ClassRef);
+                        var classAnnType = classAnnouncementTypes != null 
+                            ? classAnnouncementTypes.First(x => x.Id == notification.Announcement.ClassAnnouncementTypeRef)
+                            : new ClassAnnouncementType{Id = notification.Announcement.ClassAnnouncementTypeRef.Value};
                         notification.AnnouncementType = classAnnType;
                     }
                 }

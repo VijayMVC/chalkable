@@ -113,7 +113,7 @@ NAMESPACE('chlk.controls', function () {
                 }
                 var res = {};
                 if(!attrs.noExtends){
-                    if(!options.xAxis.dateTimeLabelFormats)
+                    if(!options.xAxis || !options.xAxis.dateTimeLabelFormats)
                         defaultConfigs.xAxis.labels= {
                             formatter: function(){
                                 return '<div class="chart-label">' + this.value + '</div>';

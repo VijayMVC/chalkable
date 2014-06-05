@@ -3,6 +3,7 @@
     class DemoSchoolConstants
     {
         
+
         public const int MathStandard1 = 1;
         public const int MathStandard2 = 2;
         public const int MathStandard3 = 3;
@@ -45,10 +46,19 @@
         public const int SecondPeriodId = 2;
 
         public const int TeacherId = 1195;
-        public const int AdminId = 1197;
-        public const int FirstStudentId = 1196;
-        public const int SecondStudentId = 1198;
-        public const int ThirdStudentId = 1199;
+        public const int AdminGradeId = 1197;
+        public const int AdminEditId = 1198;
+        public const int AdminViewId = 1199;
+        public const int Student1 = 1;
+        public const int Student2 = 2;
+        public const int Student3 = 3;
+        public const int Student4 = 4;
+        public const int Student5 = 5;
+        public const int Student6 = 6;
+        public const int Student7 = 7;
+        public const int Student8 = 8;
+        public const int Student9 = 9;
+        public const int Student10 = 10;
 
 
         public const int AlgebraClassId = 1;
