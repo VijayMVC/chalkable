@@ -53,7 +53,6 @@ namespace Chalkable.Data.School.DataAccess
                                QuestionPerson.Id as QuestionPerson_Id
                         from [Notification]
                         left join Announcement on Announcement.Id  = [Notification].AnnouncementRef
-                        left join ClassAnnouncementType on ClassAnnouncementType.Id = Announcement.ClassAnnouncementTypeRef
                         left join MarkingPeriod on MarkingPeriod.Id = [Notification].MarkingPeriodRef
                         left join vwPrivateMessage on vwPrivateMessage.PrivateMessage_Id = [Notification].PrivateMessageRef
                         join vwPerson toPerson on toPerson.Id = [Notification].PersonRef

@@ -58,5 +58,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }).ToList();
         }
 
+
+        public ClassAnnouncementType GetClassAnnouncementType(int id)
+        {
+            return Storage.ClassAnnouncementTypeStorage.GetById(id);
+        }
     }
 }

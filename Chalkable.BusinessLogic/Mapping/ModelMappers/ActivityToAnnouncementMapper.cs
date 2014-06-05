@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             ann.WeightAddition = activity.WeightAddition;
             ann.WeightMultiplier = activity.WeightMultiplier;
             ann.Dropped = activity.IsDropped;
-            ann.ClassAnnouncementTypeRef = activity.CategoryId.Value;
+            ann.ClassAnnouncementTypeRef = activity.CategoryId;
             ann.VisibleForStudent = activity.DisplayInHomePortal;
             ann.Title = activity.Name;
             ann.MayBeExempt = activity.MayBeExempt;
