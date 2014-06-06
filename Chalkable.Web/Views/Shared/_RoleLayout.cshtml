@@ -22,7 +22,7 @@
 
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
-    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
     {
         ChlkHelpers.GoogleAnalytics();
         ChlkHelpers.Olark();
@@ -64,17 +64,19 @@
         </div>
         
          @{
-            var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-            var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
+             var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
+             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
         }
         
         
+        
+        <div id="logout-block">
         @if (!isDemoSchool && !isDeveloperSchool)
         {
-            <div id="logout-block">
-                @Html.ActionLink("Go to INOW", "RedirectToINow", "User", null, new {style = "visibility: hidden;"})
-            </div>
+            @Html.ActionLink("Go to INOW", "RedirectToINow", "User", null, new { style = "visibility: hidden;" })
         }
+        </div>
+        
 
         <div class="page 
         @if (isDemoSchool || isDeveloperSchool)
@@ -103,7 +105,7 @@
         </div>
         @if (isDemoSchool || isDeveloperSchool)
         {
-            var currentRoleId = (int) ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
+            var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
             var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
             var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
             var isAdmin = currentRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id
@@ -140,15 +142,15 @@
                 {
                     <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
                 >}<a class="demo-role-button  @if (isStudent)
-                {
+                                              {
                     @:active
                 }" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
                 ><a class="demo-role-button @if (isTeacher)
-                {
+                                            {
                     @:active
                 }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
                 ><a class="demo-role-button @if (isAdmin)
-                {
+                                            {
                     @:active
                 }" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
                 ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
