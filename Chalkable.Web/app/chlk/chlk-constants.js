@@ -42,5 +42,7 @@ var ChlkSessionConstants = {
     ANNOUNCEMENT: 'announcement',
     STANDARD_IDS: 'StandardsIds',
     DONT_SAVE: 'noSave',
-    USER_MODEL: 'userModel'
+    USER_MODEL: 'userModel',
+    DEMO_SCHOOL: 'DEMO_SCHOOL',
+    DEMO_SCHOOL_PICTURE_DISTRICT: 'DEMO_SCHOOL_PICTURE_DISTRICT'
 };

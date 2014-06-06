@@ -361,15 +361,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 4, 4));
             AddStudentAddress(DemoSchoolConstants.Student9, new Address());
 
-            AddStudent(DemoSchoolConstants.Student9,
-               BuildDemoEmail(DemoSchoolConstants.Student9, districtRef),
-               "ROSARIO", "HAWKINS", "M",
-               DemoSchoolConstants.GradeLevel12, new DateTime(1998, 10, 8));
-            AddStudentAddress(DemoSchoolConstants.Student9, new Address());
-
             AddStudent(DemoSchoolConstants.Student10,
-              BuildDemoEmail(DemoSchoolConstants.Student9, districtRef),
-              "MOLLIE", "pAUL", "F",
+              BuildDemoEmail(DemoSchoolConstants.Student10, districtRef),
+              "MOLLIE", "PAUL", "F",
               DemoSchoolConstants.GradeLevel12, new DateTime(1998, 4, 4));
             AddStudentAddress(DemoSchoolConstants.Student10, new Address
             {
