@@ -66,6 +66,7 @@
          @{
              var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
              var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
+             var demoSchoolPictureDistrictRef = ViewData.GetValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
         }
         
         
@@ -105,6 +106,7 @@
         </div>
         @if (isDemoSchool || isDeveloperSchool)
         {
+            
             var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
             var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
             var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
@@ -279,6 +281,8 @@
             var alphaGrades = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALPHA_GRADES)');
             var alternateScores = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALTERNATE_SCORES)');
             var gradingComments = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADING_COMMMENTS)');
+            var DEMO_SCHOOL = JSON.parse('@isDemoSchool.ToString().ToLowerInvariant()');
+            var DEMO_SCHOOL_PICTURE_DISTRICT = '@demoSchoolPictureDistrictRef';
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

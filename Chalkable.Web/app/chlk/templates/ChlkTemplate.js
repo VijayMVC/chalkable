@@ -12,8 +12,11 @@ NAMESPACE('chlk.templates', function () {
                 if(!id)
                     return null;
                 var url = window.azurePictureUrl;
+
+                var districtId = this.isDemoSchool() ? window.DEMO_SCHOOL_PICTURE_DISTRICT : window.school.districtid;
+
                 if (notDepartmentSpecific_ == null)
-                    url += window.school.districtid + '_';
+                    url += districtId + '_';
                 url += id.valueOf();
 
                 if (sizeH_ && sizeW_)
@@ -21,6 +24,10 @@ NAMESPACE('chlk.templates', function () {
                 if (sizeH_)
                     return url + '-' + sizeH_ + 'x' + sizeH_;
                 return url;
+            },
+
+            Boolean, function isDemoSchool(){
+                return !!window.DEMO_SCHOOL || false;
             },
 
             [[Number]],

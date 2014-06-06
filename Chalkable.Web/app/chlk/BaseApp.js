@@ -51,6 +51,8 @@ REQUIRE('chlk.models.people.ShortUserInfo');
 REQUIRE('chlk.models.grading.AvgComment');
 REQUIRE('chlk.models.school.SchoolOption');
 
+REQUIRE('chlk.models.id.SchoolId');
+
 
 REQUIRE('chlk.templates.common.AlertsPopUpTpl');
 
@@ -105,6 +107,11 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.NEW_NOTIFICATIONS, Number);
                 this.saveInSession(session, ChlkSessionConstants.GRADING_COMMENTS, ArrayOf(chlk.models.grading.AvgComment));
                 this.saveInSession(session, ChlkSessionConstants.SCHOOL_OPTIONS, chlk.models.school.SchoolOption);
+                this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL, Boolean);
+                this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
+
+
+
 
                 window.gradeLevels = window.gradeLevels || [];
                 window.gradeLevels.forEach(function(item){
