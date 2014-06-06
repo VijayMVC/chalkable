@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.attendance.StudentSummaryItem');
-REQUIRE('chlk.models.attendance.AttendanceStatItem');
+REQUIRE('chlk.models.attendance.AttendanceSummaryStatItem');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -7,7 +7,8 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.AbsentLateSummaryItem*/
     CLASS(
         'AbsentLateSummaryItem', [
-            ArrayOf(chlk.models.attendance.AttendanceStatItem), 'stat',
+            [ria.serialize.SerializeProperty('classesstats')],
+            ArrayOf(chlk.models.attendance.AttendanceSummaryStatItem), 'classesStats',
 
             ArrayOf(chlk.models.attendance.StudentSummaryItem), 'students'
         ]);

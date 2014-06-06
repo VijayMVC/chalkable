@@ -87,9 +87,6 @@ NAMESPACE('chlk.templates.grading', function () {
                     });
                 });
 
-                //categories.sort(function(a,b){return a.getDate() > b.getDate()});
-                //categories = categories.map(function(item){return item.format('M d')});
-
                 return {
                     backgroundColor: 'transparent',
                     chart: {
@@ -154,18 +151,6 @@ NAMESPACE('chlk.templates.grading', function () {
                     plotOptions: {
                         area: {
                             fillOpacity: 0.5
-                        },
-                        series: {
-                            events: {
-                                mouseOver: function() {
-                                    var node = new ria.dom.Dom('.legend-item[data-index=' + this.index + ']:visible');
-                                    this.changeLineOpacity(node);
-                                },
-                                mouseOut: function() {
-                                    var node = new ria.dom.Dom('.legend-item[data-index=' + this.index + ']:visible');
-                                    this.changeLineOpacity(node, false);
-                                }
-                            }
                         }
                     },
 

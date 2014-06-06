@@ -11,6 +11,18 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.attendance.AttendanceSummary, 'summary',
 
+            [[Number, Number]],
+            String, function getColor(i, opacity_){
+                var colors =  ['rgba(204, 0, 0, 1)', 'rgba(204, 102, 0, 1)', 'rgba(0, 204, 204, 1)',
+                    'rgba(102, 204, 0, 1)', 'rgba(102, 0, 204, 1)', 'rgba(204, 204, 0, 1)',
+                    'rgba(0, 102, 204, 1)', 'rgba(0, 51, 0, 1)', 'rgba(255, 51, 153, 1)',
+                    'rgba(102, 51, 0, 1)', 'rgba(0, 102, 102, 1)'];
+                var color = colors[i % colors.length];
+                if(opacity_)
+                    color = color.replace(/, 1\)/, ', ' + opacity_.toString() + ')');
+                return color;
+            },
+
             [[ArrayOf(chlk.models.attendance.StudentSummaryItem)]],
             ArrayOf(Array), function getGroupedStudents(students){
                 var res = [], res1=[];
@@ -31,43 +43,42 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             [[chlk.models.attendance.AbsentLateSummaryItem]],
             Object, function getChartOptions(data){
-                var stats = data.getStat(), names = [], series = [];
-                var len = stats.length, notEmpty = [0], lastDate;
+                var classesInfo = data.getClassesStats();
+                var series = [];
+                classesInfo.forEach(function(type, i){
+                    var data = [], sTooltips = {};
+                    type.getDayStats().forEach(function(item, i){
+                        var time = item.getDate().getDate().getTime();
+                        data.push([time, item.getStudentCount() || 0]);
+                    });
 
-                if(len > 7){
-                    for(var i = 0; i < 6; i ++){
-                        notEmpty.push(Math.floor((i * len) / 6 + 0.5));
-                    }
-                    notEmpty.push(len - 1);
-                }
-
-                stats.forEach(function(item, index){
-                    var summary = item.getSummary();
-                    if(len > 7 && notEmpty.indexOf(index) > -1){
-                        var dt = item.getDate();
-                        if(lastDate && summary.split(' ').length == 1 && (lastDate.format('M') != dt.format('M')))
-                            summary = dt.format('M') + ' ' + summary;
-                        lastDate = dt;
-                    }
-                    names.push(len <= 7 || notEmpty.indexOf(index) > -1 ? summary : '');
-                    series.push(item.getStudentCount());
+                    series.push({
+                        name: '',
+                        marker: {
+                            enabled: false
+                        },
+                        color: 'rgba(193,193,193,0.5)',
+                        data: data
+                    });
                 });
 
                 return {
                     chart: {
-                        type: 'area',
                         width: 704,
                         height: 179
                     },
                     xAxis: {
-                        categories: names
+                        type: 'datetime',
+                        dateTimeLabelFormats: {
+                           day: '%b %e'
+                        }
                     },
-                    colors: ['#d8d8d8'],
 
-                    series: [{
-                        name: '',
-                        data: series
-                    }]
+                    yAxis: {
+                        min: 0
+                    },
+
+                    series: series
                 }
             }
         ])

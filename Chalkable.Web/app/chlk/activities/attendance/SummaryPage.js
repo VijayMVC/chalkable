@@ -15,6 +15,70 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.addClass('refreshed');
             },
 
+            [[ria.dom.Dom, Boolean]],
+            VOID, function changeLineOpacity(node, needOpacity){
+                var color = needOpacity ? 'rgba(193,193,193,0.5)' : node.getData('color');
+                var index = node.getData('index');
+                var chart = this.dom.find('.main-chart:visible').getData('chart');
+                chart.series[index].graph && chart.series[index].graph.attr({ stroke: color });
+                chart.series[index].update(this.getSerieConfigs_(!needOpacity, color));
+            },
+
+            [[Boolean, String]],
+            function getSerieConfigs_(enabled, color_){
+                return enabled ? {
+                    marker : {
+                        enabled: true,
+                        symbol: 'circle',
+                        radius: 3,
+                        fillColor: '#ffffff',
+                        lineWidth: 2,
+                        lineColor: color_,
+                        states: {
+                            hover: {
+                                radius: 6,
+                                lineWidth: 2,
+                                enabled: true
+                            }
+                        }
+                    },
+                    color: color_,
+                    zIndex: 10,
+                    enableMouseTracking: true
+                } : {
+                    marker : {
+                        enabled: false,
+                        states: {
+                            hover: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    color: "#c1c1c1",
+                    zIndex: 1,
+                    enableMouseTracking: true
+                };
+            },
+
+            [ria.mvc.DomEventBind('mouseover mouseleave', '.legend-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function itemTypeHover(node, event){
+                var needOpacity = event.type == 'mouseleave';
+                this.changeLineOpacity(node, needOpacity);
+            },
+
+            [ria.mvc.DomEventBind('seriemouseover seriemouseleave', '.main-chart')],
+            [[ria.dom.Dom, ria.dom.Event, Object, Object]],
+            VOID, function chartHover(node, event, chart_, hEvent_){
+                var needOpacity = event.type == 'seriemouseleave';
+                var item = node.parent('.chart-container').find('.legend-item[data-index=' + chart_.index + ']:visible');
+                if(needOpacity)
+                    item.removeClass('hovered');
+                else
+                    item.addClass('hovered');
+                this.changeLineOpacity(item, needOpacity);
+            },
+
             [ria.mvc.DomEventBind('click', '.absent-late-button:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function buttonClick(node, event){

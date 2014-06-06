@@ -1049,6 +1049,30 @@ BODY {
 .absent-late-page{
   margin-top: 24px;
 
+  .wide-chart-bg{
+    position: relative;
+  }
+
+  .chart-top-legend {
+    text-align: right;
+    float: right;
+    width: 500px;
+    margin-top: -26px;
+
+    .legend-item {
+      margin-right: 13px;
+      margin-bottom: 0;
+    }
+  }
+
+  h2{
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #2f7790;
+    text-shadow: 0 1px 0 white;
+    margin: 10px 0 0 9px;
+  }
+
 
   .highcharts-container{
     top: 13px;
@@ -1066,10 +1090,13 @@ BODY {
   }
 
   .chart-container{
-    margin-bottom: 44px;
+    margin-bottom: 67px;
+    overflow: visible;
 
     .wide-chart-bg{
       top: 12px;
+      height: auto;
+      background-position: 0px 10px;
     }
   }
 
