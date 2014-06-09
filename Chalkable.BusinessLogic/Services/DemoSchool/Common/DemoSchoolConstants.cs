@@ -40,7 +40,9 @@
         public const int GradeLevel11 = 11;
         public const int GradeLevel12 = 12;
 
-
+        public const int GradingScale1 = 1;
+        public const int GradingScale2 = 2;
+        public const int GradingScale3 = 3;
 
         public const int FirstPeriodId = 1;
         public const int SecondPeriodId = 2;

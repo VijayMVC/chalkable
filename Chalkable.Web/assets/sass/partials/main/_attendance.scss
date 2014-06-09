@@ -1262,6 +1262,7 @@ BODY {
   }
 }
 
+
 .seating-chart-people{
   background: rgba(242, 242, 242, 0.9);
   position: fixed;
@@ -1270,6 +1271,10 @@ BODY {
   right: 0;
   z-index: 100;
   display: none;
+
+  &.demo{
+    bottom: 90px;
+  }
 
   .alerts-icon{
     display: none;
