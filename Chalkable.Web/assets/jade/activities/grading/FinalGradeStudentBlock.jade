@@ -120,10 +120,22 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                                 div(data-tooltip="The suggested grade is the system calculated average determined by your iNow settings Blah") ?
             .disciplines-block
                 h2=Msg.Discipline
-                
+                if self.getDisciplines()
+                    items = self.getSortedDisciplines()
+                    +LeftRightToolbar(items)(
+                        itemsCount = 1
+                        needDots = false
+                    ).disciplines-toolbar.big-arrows
+                        each block in items
+                            .disciplines-items-block
+                                each discipline in block
+                                    .discipline-item
+                                        .count=discipline.getCount()
+                                        name = discipline.getType().getName()
+                                        div(data-tooltip=name, data-tooltip-type="overflow").description=name
         .comments-notes-block
             .notes-block
-                TEXTAREA(value=avg.getNote()).notes-textarea
+                TEXTAREA.notes-textarea=avg.getNote()
                 .saving-text #{Msg.Saving.toLowerCase()}...
             .comments-block
                 each header in avg.getCodes()

@@ -1502,6 +1502,55 @@ BODY {
           }
         }
       }
+
+      .disciplines-block{
+        .disciplines-toolbar{
+          margin: 20px 10px 0 22px;
+        }
+
+        .lr-toolbar.big-arrows .arrow{
+          width: 20px;
+          top: -5px;
+          bottom: -4px;
+          background-size: 34% auto;
+        }
+
+        .disciplines-items-block{
+          display: inline-block;
+          width: 155px;
+          vertical-align: top;
+          margin-right: 30px;
+        }
+
+        .discipline-item{
+          height: 37px;
+          padding-left: 22px;
+
+          >DIV{
+            display: inline-block;
+            vertical-align: top;
+          }
+
+          .count{
+            background: url(images/grading/discipline-tooltip.png) 0 0 no-repeat;
+            width: 37px;
+            height: 30px;
+            text-align: center;
+            font: bold 12px/26px Arial;
+            text-indent: -3px;
+          }
+
+          .description{
+            color: #3d3d3d;
+            text-shadow: 1px 1px 0 white;
+            margin-left: 10px;
+            font: bold 13px/26px Arial;
+            width: 88px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
     }
 
     .comments-notes-block{

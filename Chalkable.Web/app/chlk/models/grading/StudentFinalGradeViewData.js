@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.grading', function () {
 
         chlk.models.attendance.StudentFinalAttendanceSummaryViewData, 'attendance',
 
-        ArrayOf(chlk.models.discipline.DisciplineTypeSummaryViewData), 'discipline',
+        ArrayOf(chlk.models.discipline.DisciplineTypeSummaryViewData), 'disciplines',
 
         [ria.serialize.SerializeProperty('statsbytype')],
         ArrayOf(chlk.models.grading.StudentGradingByTypeStatsViewData), 'statsByType'
