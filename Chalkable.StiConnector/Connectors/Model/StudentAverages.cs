@@ -79,6 +79,12 @@ namespace Chalkable.StiConnector.Connectors.Model
         public bool MayBeExempt { get; set; }
 
         /// <summary>
+        /// A grading period note.  This note will print on the report card.  There is only one note per grading period.
+        /// This note will be the same for all averages withing a grading period.
+        /// </summary>
+        public string ReportCardNote { get; set; }
+
+        /// <summary>
         /// Id of the student
         /// </summary>
         public int StudentId { get; set; }
