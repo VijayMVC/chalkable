@@ -83,8 +83,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 persons = persons.Where(x => x.Id == query.CallerId || x.RoleRef == CoreRoles.STUDENT_ROLE.Id);
             }
+
+
+            
             if (!string.IsNullOrEmpty(query.Filter))
-                persons = persons.Where(x => x.FullName.Contains(query.Filter));
+            {
+                var filter = query.Filter.ToLowerInvariant();
+                persons = persons.Where(x => x.FullName.ToLowerInvariant().Contains(filter));
+            }
+                
             
             if (query.GradeLevelIds != null)
             {
