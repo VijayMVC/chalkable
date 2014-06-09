@@ -26,6 +26,9 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class HomeController : ChalkableController
     {
+
+        private const string DEMO_PICTURE_DISTRICT_REF = "99a2b309-b2f2-451d-a733-55ffb9548245";
+
         public ActionResult Index()
         {
             return View();
@@ -63,6 +66,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
             ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
             ViewData[ViewConstants.DEMO_PREFIX_KEY] = Context.UserId.ToString();
+            ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
 
             if (Context.DistrictId.HasValue)
             {
@@ -129,6 +133,7 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
                     ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.Id.ToString();
+                    ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
                     if (Context.DeveloperId != null)
                         ViewData[ViewConstants.IS_DEV] = true;
 

@@ -107,7 +107,7 @@ namespace Chalkable.Web.Models
     public class TotalAttendanceViewData
     {
         public int LateCount { get; set; }
-        public int PercentCount { get; set; }
+        public int PresentCount { get; set; }
         public int AbsentCount { get; set; }
 
         public static TotalAttendanceViewData Create(FinalStudentAttendance studentAttendance)
@@ -116,7 +116,7 @@ namespace Chalkable.Web.Models
                 {
                     AbsentCount = (int) studentAttendance.Absenses,
                     LateCount = studentAttendance.Tardies,
-                    PercentCount = (int) studentAttendance.Presents,
+                    PresentCount = (int) studentAttendance.Presents,
                 };
         }
     }

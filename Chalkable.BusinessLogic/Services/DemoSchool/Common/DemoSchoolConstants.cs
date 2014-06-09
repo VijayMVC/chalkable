@@ -49,16 +49,16 @@
         public const int AdminGradeId = 1197;
         public const int AdminEditId = 1198;
         public const int AdminViewId = 1199;
-        public const int Student1 = 1;
-        public const int Student2 = 2;
-        public const int Student3 = 3;
-        public const int Student4 = 4;
-        public const int Student5 = 5;
-        public const int Student6 = 6;
-        public const int Student7 = 7;
-        public const int Student8 = 8;
-        public const int Student9 = 9;
-        public const int Student10 = 10;
+        public const int Student1 = 19;
+        public const int Student2 = 227;
+        public const int Student3 = 1141;
+        public const int Student4 = 245;
+        public const int Student5 = 2285;
+        public const int Student6 = 10;
+        public const int Student7 = 1163;
+        public const int Student8 = 672;
+        public const int Student9 = 1147;
+        public const int Student10 = 218;
 
 
         public const int AlgebraClassId = 1;
