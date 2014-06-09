@@ -1,0 +1,18 @@
+.grid
+    +Hidden('announcementIds', self.getAnnouncementIds())
+    .row.header
+        .cell
+            +Checkbox('allchecks', true).all-checkboxes
+        .cell= Msg.Date
+        .cell= Msg.Category
+        .cell= Msg.Activity
+    each announcement in self.getAnnouncements()
+        .row
+            div(data-id=announcement.getId().valueOf()).cell
+                +Checkbox('announcementId', true)
+            .cell
+                .text=announcement.getExpiresDate().format('mm/dd/yy')
+            .cell
+                .text=announcement.getAnnouncementTypeName()
+            .cell
+                .text=announcement.getTitle()
