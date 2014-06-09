@@ -22,6 +22,9 @@ NAMESPACE('chlk.templates.grading', function () {
             chlk.models.attendance.StudentFinalAttendanceSummaryViewData, 'attendance',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.discipline.DisciplineTypeSummaryViewData), 'discipline',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.StudentGradingByTypeStatsViewData), 'statsByType',
 
             Boolean, 'selected',

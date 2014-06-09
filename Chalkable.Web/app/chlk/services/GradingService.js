@@ -44,7 +44,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId, Number, String, Boolean, Object, String]],
-            ria.async.Future, function updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, notes) {
+            ria.async.Future, function updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, note) {
                 return this.post('Grading/UpdateStudentAverage', chlk.models.grading.ShortStudentAverageInfo, {
                     classId: classId && classId.valueOf(),
                     studentId: studentId && studentId.valueOf(),
@@ -53,13 +53,13 @@ NAMESPACE('chlk.services', function () {
                     averageValue: averageValue,
                     exempt: exempt_,
                     codes: codes,
-                    notes: notes
+                    note: note
                 });
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId, Number, String, Boolean, Object, String]],
-            ria.async.Future, function updateStudentAverageFromFinalPage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, notes) {
-                var res =  this.updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, notes)
+            ria.async.Future, function updateStudentAverageFromFinalPage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, note) {
+                var res =  this.updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, note)
                     .then(function(model){
                         var gp = this.getFinalGradeGPInfo();
                         var currentModel = gp.getStudentFinalGrades().filter(function(item){return model.getStudentId() == item.getStudent().getId()})[0];
