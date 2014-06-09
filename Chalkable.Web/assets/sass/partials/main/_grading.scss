@@ -1505,7 +1505,7 @@ BODY {
 
       .disciplines-block{
         .disciplines-toolbar{
-          margin: 20px 10px 0 22px;
+          margin: 20px 10px 0 0px;
         }
 
         .lr-toolbar.big-arrows .arrow{
@@ -1517,7 +1517,7 @@ BODY {
 
         .disciplines-items-block{
           display: inline-block;
-          width: 155px;
+          width: 177px;
           vertical-align: top;
           margin-right: 30px;
         }
@@ -1545,7 +1545,7 @@ BODY {
             text-shadow: 1px 1px 0 white;
             margin-left: 10px;
             font: bold 13px/26px Arial;
-            width: 88px;
+            width: 110px;
             overflow: hidden;
             text-overflow: ellipsis;
           }
