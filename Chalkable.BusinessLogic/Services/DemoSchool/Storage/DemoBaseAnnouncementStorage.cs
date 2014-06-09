@@ -214,7 +214,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var announcement = new AnnouncementComplex
             {
-                ClassAnnouncementTypeName = classAnnouncementTypeId.HasValue ? Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name : null,
+                ClassAnnouncementTypeName = classAnnouncementTypeId.HasValue ? Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name : "",
                 ChalkableAnnouncementType = classAnnouncementTypeId,
                 PrimaryTeacherName = person.FullName,
                 ClassName = Storage.ClassStorage.GetById(classId).Name,
