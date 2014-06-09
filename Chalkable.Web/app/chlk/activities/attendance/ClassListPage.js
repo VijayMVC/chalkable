@@ -360,6 +360,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var attendancesNode = this.dom.find('input[name="attendancesJson"]');
                 attendancesNode.setValue(JSON.stringify(this.getAttendances_()));
                 this._needPopUp = false;
+                node.parent('form').trigger('submit');
             }
         ]);
 });

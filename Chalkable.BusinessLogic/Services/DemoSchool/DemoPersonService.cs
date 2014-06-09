@@ -243,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public IList<StudentHealsCondition> GetStudentHealsConditions(int studentId)
+        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
             return Storage.StudentHealthConditionStorage.GetByStudentId(studentId);
         }

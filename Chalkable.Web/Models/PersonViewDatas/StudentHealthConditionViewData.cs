@@ -6,7 +6,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
-    public class StudentHealsConditionViewData
+    public class StudentHealthConditionViewData
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -15,9 +15,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string MedicationType { get; set; }
         public bool IsAlert { get; set; }
 
-        public static StudentHealsConditionViewData Create(StudentHealsCondition condition)
+        public static StudentHealthConditionViewData Create(StudentHealthCondition condition)
         {
-            return new StudentHealsConditionViewData
+            return new StudentHealthConditionViewData
                 {
                     Id = condition.Id,
                     Name = condition.Name,
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 };
         }
 
-        public static IList<StudentHealsConditionViewData> Create(IList<StudentHealsCondition> conditions)
+        public static IList<StudentHealthConditionViewData> Create(IList<StudentHealthCondition> conditions)
         {
             return conditions.Select(Create).ToList();
         }

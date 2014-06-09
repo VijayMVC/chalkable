@@ -31,7 +31,7 @@ selectedId = topData.getSelectedItemId()
                     data-params=selectedId ? [selectedId.valueOf()] : null
                 )#attendance-date.tb-date-picker
                 +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
-            +ActionForm('attendance', 'setClassAttendanceList').save-attendances-form
+            +ActionForm('attendance', 'setClassAttendanceListFromSeatingChart').save-attendances-form
                 +Hidden('date', self.getDate().format('mm/dd/yy'))
                 +Hidden('classId', selectedId.valueOf()).class-id
                 +Hidden('attendancesJson').attendances-json
@@ -50,7 +50,7 @@ div(class=showButtons ? 'can-post' : '').page-content
             .grey-button.add-remove-students=Msg.Add_remove_students
             .right.right-container.save-attendances-buttons
                 if showButtons
-                    BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                    A#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
                     +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), false, true)#all-present-link=Msg.Mark_all_Present
             .black-arrow.add=Msg.Add_your_students
             .seating-chart-container

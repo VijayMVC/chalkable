@@ -370,18 +370,22 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListAction(model){
-            if(model.getSubmitType() == 'submit' || !model.isClassList())
-                var result = this.attendanceService.setAttendance(model)
-                    .attach(this.validateResponse_())
-                    .then(function(res){
-                        if(model.isClassList()){
-                            this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
-                        }else{
-                            return new chlk.models.attendance.SeatingChart();
-                        }
-                    }, this);
-            if(model.isClassList())
-                return null;
+            this.attendanceService.setAttendance(model)
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    this.BackgroundNavigate('attendance', 'classList', [model.getClassId(), model.getDate(), true]);
+                }, this);
+            return null;
+        },
+
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.attendance.SetClassListAttendance]],
+        function setClassAttendanceListFromSeatingChartAction(model){
+            var result = this.attendanceService.setAttendance(model)
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    return new chlk.models.attendance.SeatingChart();
+                }, this);
             return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'saved');
         },
 

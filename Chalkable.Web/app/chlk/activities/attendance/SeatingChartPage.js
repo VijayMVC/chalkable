@@ -280,6 +280,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.find('.attendances-json').setValue(JSON.stringify(this.getAttendances_()));
                 this.dom.find('.save-attendances-form').trigger('submit');
                 node.setHTML('SAVING....');
+                node.parent('form').trigger('submit');
             },
 
             Boolean, 'ableRePost',

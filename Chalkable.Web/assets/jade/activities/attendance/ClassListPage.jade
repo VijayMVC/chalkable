@@ -45,7 +45,7 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                 .top.panel-bg
                     +SummaryInfo(self.getPresentStudents().length, items.length)
                     if self.canPost()
-                        BUTTON(href="javascript:", name="submitType", value="submit", type="submit", id="submit-attendance-button").chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                        A#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
                     if(self.getItems().length > 0 && self.canPost())
                         +ActionLinkWithPrepend('attendance', 'markAll',
                             [selectedId.valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)

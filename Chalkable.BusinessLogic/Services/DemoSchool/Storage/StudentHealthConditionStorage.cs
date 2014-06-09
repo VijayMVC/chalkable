@@ -4,7 +4,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStudentHealthConditionStorage:BaseDemoIntStorage<StudentHealsCondition>
+    public class DemoStudentHealthConditionStorage : BaseDemoIntStorage<StudentHealthCondition>
     {
         public DemoStudentHealthConditionStorage(DemoStorage storage)
             : base(storage, x => x.Id)
@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        public IList<StudentHealsCondition> GetByStudentId(int studentId)
+        public IList<StudentHealthCondition> GetByStudentId(int studentId)
         {
             return data.Select(x => x.Value).ToList();
         } 
