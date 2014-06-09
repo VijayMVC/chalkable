@@ -207,7 +207,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue,bool exempt, IList<ChalkableStudentAverageComment> comments)
+        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue,bool exempt, IList<ChalkableStudentAverageComment> comments, string note)
         {
             var studentAverage = new StudentAverage
             {
@@ -238,6 +238,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     studentAverage.Comments.Add(stAvgComment);
                 }
             }
+            if (note != null)
+                studentAverage.ReportCardNote = note;
             studentAverage = Storage.StiGradeBookStorage.UpdateStudentAverage(classId, studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
         }

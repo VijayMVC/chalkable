@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         TeacherClassGrading GetClassGradingSummary(int classId, int gradingPeriodId);
         void PostGradebook(int classId, int? gradingPeriodId);
         IList<ChalkableStudentAverage> GetStudentAverages(int classId, int? averageId, int? gradingPeriodId); 
-        ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, bool exempt, IList<ChalkableStudentAverageComment> comments);
+        ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, bool exempt, IList<ChalkableStudentAverageComment> comments, string note);
         IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId);
         FinalGradeInfo GetFinalGrade(int classId, int gradingPeriodId);
     }
@@ -326,7 +326,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, bool exempt, IList<ChalkableStudentAverageComment> comments)
+        public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, bool exempt, IList<ChalkableStudentAverageComment> comments, string note)
         {
             var studentAverage = new StudentAverage
                 {
@@ -358,6 +358,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     studentAverage.Comments.Add(stAvgComment);
                 }
             }
+            if (note != null)
+                studentAverage.ReportCardNote = note;
             studentAverage = ConnectorLocator.GradebookConnector.UpdateStudentAverage(classId, studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
         }
