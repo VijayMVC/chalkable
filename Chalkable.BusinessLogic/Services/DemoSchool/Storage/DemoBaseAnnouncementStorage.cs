@@ -32,7 +32,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         bool IsEmpty();
         Dictionary<int, AnnouncementComplex> GetData();
         bool Exists(int id);
-        void Setup();
         void SetComplete(int announcementId, int userId, bool complete);
     }
 

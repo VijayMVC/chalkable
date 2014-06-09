@@ -5,6 +5,26 @@
         
 
 
+        public const int AlphaGrade_A = 1;
+        public const int AlphaGrade_B = 2;
+        public const int AlphaGrade_C = 3;
+        public const int AlphaGrade_D = 4;
+        public const int AlphaGrade_F = 5;
+        public const int AlphaGrade_E = 6;
+        public const int AlphaGrade_S = 7;
+        public const int AlphaGrade_NoPass = 8;
+        public const int AlphaGrade_Aplus = 9;
+        public const int AlphaGrade_Aminus = 10;
+        public const int AlphaGrade_Bplus = 11;
+        public const int AlphaGrade_Bminus = 12;
+        public const int AlphaGrade_Cplus = 13;
+        public const int AlphaGrade_Cminus = 14;
+        public const int AlphaGrade_Dplus = 15;
+        public const int AlphaGrade_Dminus = 16;
+        public const int AlphaGrade_Pass = 17;
+        public const int AlphaGrade_Audit = 18;
+        public const int AlphaGrade_Incomplete = 19;
+
         public const int AR_Illness = 1;
         public const int AR_SchoolActivity = 2;
         public const int AR_FamilyReasonExcused = 3;

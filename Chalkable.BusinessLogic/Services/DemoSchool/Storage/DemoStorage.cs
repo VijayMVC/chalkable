@@ -194,7 +194,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddTeacher();
             PrepareStudents();
             AddAttendances();
-            AnnouncementStorage.Setup();
             StiStandardScoreStorage.Setup();
         }
 
@@ -390,10 +389,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 RoleId = CoreRoles.STUDENT_ROLE.Id
             }).Persons.Select(x => x.Id);
+            var enumerable = studentIds as int[] ?? studentIds.ToArray();
 
             for (var cls = DemoSchoolConstants.AlgebraClassId; cls <= DemoSchoolConstants.PreCalculusClassId; ++cls)
             {
-                foreach (var studentId in studentIds)
+                
+                foreach (var studentId in enumerable)
                 {
                     AddStudentToClass(studentId, cls, DemoSchoolConstants.FirstMarkingPeriodId);
                     AddStudentToClass(studentId, cls, DemoSchoolConstants.SecondMarkingPeriodId);    
@@ -551,7 +552,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale1,
-                    AlphaGradeRef = 6,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_E,
                     LowValue = 84.50m,
                     HighValue = 100.0m,
                     AveragingEquivalent = 100,
@@ -559,7 +560,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale1,
-                    AlphaGradeRef = 7,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_S,
                     LowValue = 69.50m,
                     HighValue = 84.49999m,
                     AveragingEquivalent = 84,
@@ -567,7 +568,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale1,
-                    AlphaGradeRef = 8,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_NoPass,
                     LowValue = 0.0m,
                     HighValue = 69.499999m,
                     AveragingEquivalent = 69,
@@ -575,7 +576,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 1,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_A,
                     LowValue = 93.50m,
                     HighValue = 96.49999m,
                     AveragingEquivalent = 96,
@@ -583,7 +584,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 2,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_B,
                     LowValue = 83.50m,
                     HighValue = 86.49999m,
                     AveragingEquivalent = 86,
@@ -591,7 +592,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 3,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_C,
                     LowValue = 73.50m,
                     HighValue = 76.49999m,
                     AveragingEquivalent = 76,
@@ -599,7 +600,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 4,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_D,
                     LowValue = 63.50m,
                     HighValue = 66.49999m,
                     AveragingEquivalent = 66,
@@ -607,7 +608,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 4,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_D,
                     LowValue = 63.50m,
                     HighValue = 66.49999m,
                     AveragingEquivalent = 66,
@@ -615,7 +616,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 5,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_F,
                     LowValue = 0.0m,
                     HighValue = 60.49999m,
                     AveragingEquivalent = 60,
@@ -623,7 +624,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 9,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Aplus,
                     LowValue = 96.5m,
                     HighValue = 100.00m,
                     AveragingEquivalent = 100,
@@ -632,7 +633,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 10,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Aminus,
                     LowValue = 90.5m,
                     HighValue = 93.49999m,
                     AveragingEquivalent = 93,
@@ -641,7 +642,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 11,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Bplus,
                     LowValue = 86.5m,
                     HighValue = 90.49999m,
                     AveragingEquivalent = 90,
@@ -650,7 +651,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 12,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Bminus,
                     LowValue = 80.5m,
                     HighValue = 83.49999m,
                     AveragingEquivalent = 83,
@@ -659,7 +660,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 13,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Cplus,
                     LowValue = 76.5m,
                     HighValue = 80.49999m,
                     AveragingEquivalent = 80,
@@ -668,7 +669,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 14,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Cminus,
                     LowValue = 70.5m,
                     HighValue = 73.49999m,
                     AveragingEquivalent = 73,
@@ -677,7 +678,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 15,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Dplus,
                     LowValue = 66.5m,
                     HighValue = 70.49999m,
                     AveragingEquivalent = 70,
@@ -686,7 +687,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale2,
-                    AlphaGradeRef = 16,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Dminus,
                     LowValue = 60.5m,
                     HighValue = 63.49999m,
                     AveragingEquivalent = 63,
@@ -695,7 +696,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 1,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_A,
                     LowValue = 93.0m,
                     HighValue = 97.49999m,
                     AveragingEquivalent = 95,
@@ -704,7 +705,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 2,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_B,
                     LowValue = 83.0m,
                     HighValue = 86.49999m,
                     AveragingEquivalent = 85,
@@ -713,7 +714,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 3,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_C,
                     LowValue = 73.0m,
                     HighValue = 76.49999m,
                     AveragingEquivalent = 75,
@@ -722,7 +723,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 4,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_D,
                     LowValue = 63.0m,
                     HighValue = 66.49999m,
                     AveragingEquivalent = 65,
@@ -731,7 +732,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 5,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_F,
                     LowValue = 1.0m,
                     HighValue = 59.49999m,
                     AveragingEquivalent = 50,
@@ -740,7 +741,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 6,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_E,
                     LowValue = 0.05m,
                     HighValue = 0.06m,
                     AveragingEquivalent = 0,
@@ -749,7 +750,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 7,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_S,
                     LowValue = 0.03m,
                     HighValue = 0.04m,
                     AveragingEquivalent = 0,
@@ -758,7 +759,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 8,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_NoPass,
                     LowValue = 0.00m,
                     HighValue = 0.02m,
                     AveragingEquivalent = 0,
@@ -767,7 +768,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 9,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Aplus,
                     LowValue = 98.00m,
                     HighValue = 110.00m,
                     AveragingEquivalent = 100,
@@ -776,7 +777,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 10,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Aminus,
                     LowValue = 90.00m,
                     HighValue = 92.9999m,
                     AveragingEquivalent = 91,
@@ -785,7 +786,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 11,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Bplus,
                     LowValue = 87.00m,
                     HighValue = 89.9999m,
                     AveragingEquivalent = 88,
@@ -794,7 +795,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 12,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Bminus,
                     LowValue = 80.00m,
                     HighValue = 82.9999m,
                     AveragingEquivalent = 81,
@@ -803,7 +804,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 13,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Cplus,
                     LowValue = 77.00m,
                     HighValue = 79.9999m,
                     AveragingEquivalent = 78,
@@ -812,7 +813,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 14,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Cminus,
                     LowValue = 70.00m,
                     HighValue = 72.9999m,
                     AveragingEquivalent = 71,
@@ -821,7 +822,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 15,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Dplus,
                     LowValue = 67.00m,
                     HighValue = 69.9999m,
                     AveragingEquivalent = 68,
@@ -830,7 +831,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 16,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Dminus,
                     LowValue = 60.00m,
                     HighValue = 62.9999m,
                     AveragingEquivalent = 61,
@@ -839,7 +840,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 17,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Pass,
                     LowValue = 00.70m,
                     HighValue = 00.8m,
                     AveragingEquivalent = 61,
@@ -848,7 +849,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 new GradingScaleRange()
                 {
                     GradingScaleRef = DemoSchoolConstants.GradingScale3,
-                    AlphaGradeRef = 19,
+                    AlphaGradeRef = DemoSchoolConstants.AlphaGrade_Incomplete,
                     LowValue = 00.90m,
                     HighValue = 0.99999m,
                     AveragingEquivalent = 50,
@@ -1482,56 +1483,56 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 new AlphaGrade()
                 {
-                    Id = 1,
+                    Id = DemoSchoolConstants.AlphaGrade_A,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "A"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 2,
+                    Id = DemoSchoolConstants.AlphaGrade_B,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "B"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 3,
+                    Id = DemoSchoolConstants.AlphaGrade_C,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "C"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 4,
+                    Id = DemoSchoolConstants.AlphaGrade_D,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "D"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 5,
+                    Id = DemoSchoolConstants.AlphaGrade_F,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "F"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 6,
+                    Id = DemoSchoolConstants.AlphaGrade_E,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "E"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 7,
+                    Id = DemoSchoolConstants.AlphaGrade_S,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "S"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 8,
+                    Id = DemoSchoolConstants.AlphaGrade_NoPass,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "N",
                     Description = "No pass"
@@ -1540,63 +1541,63 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                 new AlphaGrade()
                 {
-                    Id = 9,
+                    Id = DemoSchoolConstants.AlphaGrade_Aplus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "A+"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 10,
+                    Id = DemoSchoolConstants.AlphaGrade_Aminus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "A-"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 11,
+                    Id = DemoSchoolConstants.AlphaGrade_Bplus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "B+"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 12,
+                    Id = DemoSchoolConstants.AlphaGrade_Bminus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "B-"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 13,
+                    Id = DemoSchoolConstants.AlphaGrade_Cplus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "C+"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 14,
+                    Id = DemoSchoolConstants.AlphaGrade_Cminus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "C-"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 15,
+                    Id = DemoSchoolConstants.AlphaGrade_Dplus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "D+"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 16,
+                    Id = DemoSchoolConstants.AlphaGrade_Dminus,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "D-"
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 17,
+                    Id = DemoSchoolConstants.AlphaGrade_Pass,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "P",
                     Description = "Pass"
@@ -1604,14 +1605,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                 new AlphaGrade()
                 {
-                    Id = 18,
+                    Id = DemoSchoolConstants.AlphaGrade_Audit,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "Audit",
                 },
 
                 new AlphaGrade()
                 {
-                    Id = 19,
+                    Id = DemoSchoolConstants.AlphaGrade_Incomplete,
                     SchoolRef = DemoSchoolConstants.SchoolId,
                     Name = "I",
                     Description = "Incomplete"
