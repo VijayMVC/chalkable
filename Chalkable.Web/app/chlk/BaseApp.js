@@ -39,6 +39,7 @@ REQUIRE('chlk.controls.MaskedInputControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
+REQUIRE('chlk.models.common.AlertInfo');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 REQUIRE('chlk.models.attendance.AttendanceReason');
 REQUIRE('chlk.models.id.SchoolYearId');
@@ -207,13 +208,15 @@ NAMESPACE('chlk', function (){
                             node = jQuery(this),
                             offset = node.offset();
                         var o = {
-                            isallowedinetaccess: !!node.data('allowedinetaccess'),
-                            hasmedicalalert: !!node.data('withmedicalalert'),
-                            specialinstructions: node.data('specialinstructions'),
-                            spedstatus: node.data('spedstatus')
+//                            isallowedinetaccess: !!node.data('allowedinetaccess'),
+//                            hasmedicalalert: !!node.data('withmedicalalert'),
+//                            specialinstructions: node.data('specialinstructions'),
+//                            spedstatus: node.data('spedstatus')
+                            alerts: node.data('stringalerts')
                         };
                         var js = new ria.serialize.JsonSerializer();
-                        var model = js.deserialize(o, chlk.models.people.ShortUserInfo);
+                        //var model = new chlk.models.common.Alerts.$create(o.stringAlerts);
+                        var model = js.deserialize(o, chlk.models.common.Alerts);
                         var tpl = chlk.templates.common.AlertsPopUpTpl();
                         tpl.assign(model);
                         tooltip.html(tpl.render());

@@ -82,8 +82,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult Info(int personId)
         {
             var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
-            var stHealsConditions = SchoolLocator.PersonService.GetStudentHealsConditions(personId);
-            res.HealsConditions = StudentHealsConditionViewData.Create(stHealsConditions);
+            var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(personId);
+            res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             //parents functionality are not implemanted yet
             //var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
             //res.Parents = StudentParentViewData.Create(studentParents);
