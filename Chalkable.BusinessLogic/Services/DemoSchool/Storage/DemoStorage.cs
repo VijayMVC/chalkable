@@ -90,6 +90,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStiInfractionStorage StiInfractionStorage { get; private set; }
         public DemoStiActivityStorage StiActivityStorage { get; private set; }
 
+        public DemoStudentHealthConditionStorage StudentHealthConditionStorage { get; private set; }
+
         public UserContext Context { get; private set; }
 
         public void UpdateContext(UserContext context)
@@ -170,6 +172,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassRoomOptionStorage = new DemoClassRoomOptionStorage(this);
             SchoolOptionStorage = new DemoSchoolOptionStorage(this);
             AnnouncementCompleteStorage = new DemoAnnouncementCompleteStorage(this);
+            StudentHealthConditionStorage = new DemoStudentHealthConditionStorage(this);
 
             GradingScaleRangeStorage = new DemoGradingScaleRangeStorage(this);
             GradingScaleStorage = new DemoGradingScaleStorage(this);
@@ -466,6 +469,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Infractions = StiInfractionStorage.GetAll(),
                 StudentId = id
             });
+
+
+            //todo add health conditions
         }
 
         private void AddStudentToClass(int studentId, int classId, int markingPeriodId)
