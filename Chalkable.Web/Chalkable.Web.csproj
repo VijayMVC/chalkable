@@ -314,6 +314,7 @@
     <Compile Include="Models\PersonViewDatas\PersonSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ShortPersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentGradingViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentHealsConditionViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherInfoViewData.cs" />

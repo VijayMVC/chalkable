@@ -28,9 +28,11 @@ namespace Chalkable.BusinessLogic.Services.School
         void ActivatePerson(int id);
         Person EditEmail(int id, string email, out string error);
 
+        IList<StudentHealsCondition> GetStudentHealsConditions(int studentId);
+
     }
-    
-    public class PersonService : SchoolServiceBase, IPersonService
+
+    public class PersonService : SisConnectedService, IPersonService
     {
         public PersonService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -327,6 +329,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 new SchoolPersonDataAccess(uow).Delete(schoolPersons);
                 uow.Commit();
             }
+        }
+
+
+        public IList<StudentHealsCondition> GetStudentHealsConditions(int studentId)
+        {
+            var healsConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
+            return healsConditions.Select(x => new StudentHealsCondition
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    IsAlert = x.IsAlert,
+                    MedicationType = x.MedicationType,
+                    Treatment = x.Treatment
+                }).ToList();
         }
     }
 

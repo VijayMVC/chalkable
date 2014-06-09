@@ -122,7 +122,6 @@ namespace Chalkable.Data.School.Model
         public IList<StudentSchoolYear> StudentSchoolYears { get; set; }
     }
 
-
     public class StudentHealsCondition
     {
         public int Id { get; set; }

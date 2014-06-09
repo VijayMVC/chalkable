@@ -244,5 +244,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             person.FirstLoginDate = Context.NowSchoolTime;
             Storage.PersonStorage.Update(person);
         }
+
+
+        public IList<StudentHealsCondition> GetStudentHealsConditions(int studentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
