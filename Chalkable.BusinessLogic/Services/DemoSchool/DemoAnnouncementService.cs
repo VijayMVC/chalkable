@@ -384,7 +384,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 {
                     if (string.IsNullOrEmpty(title))
                         throw new ChalkableException("Title parameter is empty");
-                    var c = new DemoClassStorage(Storage).GetById(announcement.ClassRef);
+                    var c = Storage.ClassStorage.GetById(announcement.ClassRef);
                     if (c.PrimaryTeacherRef != Context.UserLocalId)
                         throw new ChalkableSecurityException();
                     if (existsTitleAction(CreateAnnouncementStorage(Context, Storage), title))
