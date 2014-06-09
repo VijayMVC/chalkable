@@ -1,0 +1,87 @@
+student = self.getStudent()
+selected = self.isSelected()
+avg = self.getModel().getCurrentStudentAverage()
+div(index=self.getIndex(), class=(selected ? "selected" : ""), data-student-id=student.getId().valueOf()).row.fixed-bg
+    +ActionForm('grading', 'updateStudentAvgFromFinalPage').grading-form.avg-form.update-grade-form
+        .top-content
+            +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
+                +PersonImg(student, 47)
+            .i-b.name-block
+                p= student.getFullName()
+            div(id = "grade-container-" + self.getStudent().getId()).i-b.grade-block
+                value = avg.displayAvgGradeValue(false, true)
+                +Hidden('notes', avg.getNotes())
+                +Hidden('averageid', avg.getAverageId().valueOf())
+                +Hidden('oldValue', value)
+                +Hidden('isComment').is-comment
+                +Hidden('oldExempt', avg.isExempt())
+                +Hidden('codesString', avg.getCodesString()).codes-text
+                +Hidden('studentid', avg.getStudentId().valueOf())
+                +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+                displayValue = avg.displayAvgGradeValue()
+                .grade-triangle
+                .not-selected.i-b.text-value=displayValue
+                .i-b.selected
+                    .input-container
+                        .text-value=value
+                        if value
+                            .letters=Msg.Avg
+                    .input-container.grade
+                        INPUT(
+                            type="text",
+                            autofill="off",
+                            value=displayValue,
+                            name="averageValue",
+                            data-grade-value=displayValue
+                        ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus
+                        .letters=Msg.Direct
+                        if avg.isMayBeExempt()
+                            .grading-input-popup.chlk-pop-up-container.popup-bottom
+                                .pop-up-triangle.big
+                                +LabeledCheckbox(Msg.Exempt, 'isexempt', avg.isExempt())(data-value=avg.isExempt(), addCallBack = true).with-value.exempt-checkbox
+                        else
+                            +Hidden('isexempt', avg.isExempt())
+div(class=(selected ? "opened" : "")).attachments-container.z-10
+    .attachments-container-2
+        .avgs-block
+            each item in self.getStudentAverages()
+                div(
+                    class=item.getAverageId() == avg.getAverageId() ? "selected" : "",
+                    data-id=item.getAverageId().valueOf()
+                ).avg-item=item.getAverageName()
+        .grades-block
+            h2=Msg.Grade(true)
+                .chart-top-legend
+                    each stat,i in self.getStatsByType()
+                        statId = stat.getClassAnnouncementTypeId().valueOf()
+                        div(
+                            data-color=self.getColor(i),
+                            data-opacity-color=self.getColor(i, 0.2),
+                            data-index=i,
+                            data-id=statId
+                        ).legend-item
+                            div(style="background:" + self.getColor(i) + ";").box
+                            .name=self.getClassAnnouncementTypeName(stat)
+                .clear-right
+            .grading-chart-part.relative
+                .chart-bg2
+                .chart-container-1
+                    +Chart()(
+                        data-options = self.getChartOptions()
+                    ).relative.main-chart
+        .comments-notes-block
+            .notes-block
+                TEXTAREA(value=avg.getNotes()).notes-textarea
+                .saving-text #{Msg.Saving.toLowerCase()}...
+            .comments-block
+                each header in avg.getCodes()
+                    +Select('select-' + header.headerid)(
+                        data-header-id = header.headerid,
+                        data-header-name = header.headername
+                    ).codes-select
+                        +Option('', '')
+                        each comment in self.getGradingComments()
+                            +Option(comment.getId().valueOf(), comment.getCode() + ' ' + comment.getComment(), header.gradingcomment && comment.getId() == header.gradingcomment.id)(
+                                data-code=comment.getCode(),
+                                data-comment=comment.getComment()
+                            )
