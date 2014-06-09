@@ -22,7 +22,7 @@ NAMESPACE('chlk.templates.grading', function () {
             chlk.models.attendance.StudentFinalAttendanceSummaryViewData, 'attendance',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.discipline.DisciplineTypeSummaryViewData), 'discipline',
+            ArrayOf(chlk.models.discipline.DisciplineTypeSummaryViewData), 'disciplines',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.StudentGradingByTypeStatsViewData), 'statsByType',
@@ -34,6 +34,18 @@ NAMESPACE('chlk.templates.grading', function () {
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
             ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
+            function getSortedDisciplines(){
+                var res = [], d = [], len = this.getDisciplines().length;
+                this.getDisciplines().forEach(function(item, i){
+                    d.push(item);
+                    if(i % 3 == 2 || i == len - 1){
+                        res.push(d);
+                        d = [];
+                    }
+                });
+                return res;
+            },
 
             [[Number, Number]],
             String, function getColor(i, opacity_){
