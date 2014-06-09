@@ -1734,8 +1734,96 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Name = "Disrespect"
             };
 
+            var infr3 = new Infraction
+            {
+                Code = "CHEAT",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "D - Cheating on assignment or test"
+            };
+
+            var infr4 = new Infraction
+            {
+                Code = "DISR",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "D - Disrespect to a staff member"
+            };
+
+            var infr5 = new Infraction
+            {
+                Code = "XDRPT",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "D - Extreme disruption of class"
+            };
+
+            var infr6 = new Infraction
+            {
+                Code = "Unif",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "D - Uniform violation 3x times in one quarter"
+            };
+
+            var infr7 = new Infraction
+            {
+                Code = "INACT",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "S - Inappropriate contact with another student"
+            };
+
+            var infr8 = new Infraction
+            {
+                Code = "LIE",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "D - Lying to teacher or staff member"
+            };
+
+            var infr9 = new Infraction
+            {
+                Code = "DEFI",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "D - Repeated disobedience or defiance"
+            };
+
+            var infr10 = new Infraction
+            {
+                Code = "STEAL",
+                Demerits = 0,
+                Description = "",
+                IsActive = true,
+                IsSystem = false,
+                Name = "D - Stealing form aonther student or teacher"
+            };
+
             infractions.Add(infr1);
             infractions.Add(infr2);
+            infractions.Add(infr3);
+            infractions.Add(infr4);
+            infractions.Add(infr5);
+            infractions.Add(infr6);
+            infractions.Add(infr7);
+            infractions.Add(infr8);
+            infractions.Add(infr9);
+            infractions.Add(infr10);
 
             InfractionStorage.Add(infractions);
         }
