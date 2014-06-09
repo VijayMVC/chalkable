@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.attendance', function () {
             Number, 'lateCount',
 
             [ria.serialize.SerializeProperty('percentcount')],
-            Number, 'percentCount',
+            Number, 'presentCount',
 
             [ria.serialize.SerializeProperty('absentcount')],
             Number, 'absentCount',

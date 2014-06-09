@@ -174,7 +174,8 @@ namespace Chalkable.Web.Models
         public bool IsGradingPeriodAverage { get; set; }
         public bool IsExempt { get; set; }
         public bool MayBeExempt { get; set; }
-        public IList<StudentAverageCommentViewData> Codes { get; set; } 
+        public IList<StudentAverageCommentViewData> Codes { get; set; }
+        public string Note { get; set; }
 
         public static StudentAveragesViewData Create(ChalkableStudentAverage studentAverage)
         {
@@ -188,7 +189,8 @@ namespace Chalkable.Web.Models
                     StudentId = studentAverage.StudentId,
                     AverageName = studentAverage.AverageName,
                     IsExempt = studentAverage.Exempt,
-                    MayBeExempt = studentAverage.MayBeExempt
+                    MayBeExempt = studentAverage.MayBeExempt,
+                    Note = studentAverage.Note
                 };
             if (studentAverage.Comments != null)
                 res.Codes = studentAverage.Comments.Select(StudentAverageCommentViewData.Create).ToList();

@@ -1413,6 +1413,97 @@ BODY {
       }
     }
 
+    .center-block{
+      margin-top: -15px;
+
+      h2{
+        margin: 40px 0 5px 0;
+        text-align: center;
+      }
+
+      >DIV{
+        display: inline-block;
+        vertical-align: top;
+        width: 33%;
+      }
+
+      .attendance-block{
+        .attendance-item{
+          padding: 11px 0 0 30px;
+
+          .chart{
+            height: 21px;
+            width: 170px;
+            @include box-shadow(0 1px 0 white, inset 0 1px 2px grey);
+            @include border-radius(11px);
+            background: #2f7790;
+            overflow: hidden;
+
+            >DIV{
+              display: inline-block;
+              vertical-align: top;
+              height: 100%;
+              cursor: pointer;
+
+              &:first-child{
+                @include border-radius(10px 0 0 10px);
+              }
+
+              &.present{
+                background: #2f7790;
+              }
+
+              &.late{
+                background: #e07400;
+              }
+
+              &.absent{
+                background: #9a4545;
+              }
+            }
+          }
+
+          .name{
+            color: #3d3d3d;
+            text-shadow: 0 1px 0 white;
+            font: bold 14px Arial;
+            margin-bottom: 9px;
+          }
+        }
+      }
+
+      .suggested-block{
+        .grade-container{
+          margin: 39px 0;
+          text-align: center;
+
+          .grade{
+            display: inline-block;
+            position: relative;
+
+            font: bold 40px Arial;
+
+            .circle{
+              position: absolute;
+              font: normal 11px Arial;
+              background: #fff;
+              padding: 7px;
+              border-radius: 12px;
+              right: -21px;
+              top: 8px;
+              cursor: pointer;
+
+              >DIV{
+                position: absolute;
+                top: 0px;
+                left: 3px;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .comments-notes-block{
       padding: 30px;
 
