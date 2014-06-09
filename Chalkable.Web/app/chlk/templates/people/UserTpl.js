@@ -90,6 +90,9 @@ NAMESPACE('chlk.templates.people', function () {
             Boolean, 'selected',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.common.Alerts, 'alertsInfo',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'demoUser'
         ])
 });
