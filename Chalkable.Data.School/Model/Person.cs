@@ -121,4 +121,15 @@ namespace Chalkable.Data.School.Model
         public IList<Phone> Phones { get; set; }
         public IList<StudentSchoolYear> StudentSchoolYears { get; set; }
     }
+
+
+    public class StudentHealsCondition
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool IsAlert { get; set; }
+        public string MedicationType { get; set; }
+        public string Treatment { get; set; }
+    }
 }
