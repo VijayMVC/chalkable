@@ -90,6 +90,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStiInfractionStorage StiInfractionStorage { get; private set; }
         public DemoStiActivityStorage StiActivityStorage { get; private set; }
 
+        public DemoStudentHealthConditionStorage StudentHealthConditionStorage { get; private set; }
+
         public UserContext Context { get; private set; }
 
         public void UpdateContext(UserContext context)
@@ -170,6 +172,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassRoomOptionStorage = new DemoClassRoomOptionStorage(this);
             SchoolOptionStorage = new DemoSchoolOptionStorage(this);
             AnnouncementCompleteStorage = new DemoAnnouncementCompleteStorage(this);
+            StudentHealthConditionStorage = new DemoStudentHealthConditionStorage(this);
 
             GradingScaleRangeStorage = new DemoGradingScaleRangeStorage(this);
             GradingScaleStorage = new DemoGradingScaleStorage(this);
@@ -236,25 +239,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void AddClasses()
         {
-            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.SecondMarkingPeriodId);
-
-            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.FirstMarkingPeriodId);
-            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12,
-                DemoSchoolConstants.SecondMarkingPeriodId);
+            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12);
+            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12);
+            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12);
+            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12);
         }
 
         private string BuildDemoEmail(int studentId, string districtId)
@@ -481,6 +469,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Infractions = StiInfractionStorage.GetAll(),
                 StudentId = id
             });
+
+
+            //todo add health conditions
         }
 
         private void AddStudentToClass(int studentId, int classId, int markingPeriodId)
@@ -1827,7 +1818,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             InfractionStorage.Add(infractions);
         }
 
-        private void AddClass(int id, string name, int gradeLevelRef, int markingPeriodRef)
+        private void AddClass(int id, string name, int gradeLevelRef)
         {
             ClassStorage.Add(new Class
             {
@@ -1845,7 +1836,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             MarkingPeriodClassStorage.Add(new MarkingPeriodClass
             {
                 SchoolRef = DemoSchoolConstants.SchoolId,
-                MarkingPeriodRef = markingPeriodRef,
+                MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
+                ClassRef = id
+            });
+
+            MarkingPeriodClassStorage.Add(new MarkingPeriodClass
+            {
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
                 ClassRef = id
             });
 
@@ -1855,7 +1853,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = id,
                 Description = "Academic Achievement",
                 Gradable = true,
-                Id = DemoSchoolConstants.AlgebraAcademicAchievementId,
                 Name = "Academic Achievement",
                 Percentage = 50
             });
@@ -1865,7 +1862,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = id,
                 Description = "Academic Practice",
                 Gradable = true,
-                Id = DemoSchoolConstants.AlgebraAcademicPracticeId,
                 Name = "Task",
                 Percentage = 50
             });

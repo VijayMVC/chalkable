@@ -44,11 +44,7 @@
 
         public const int ScienceStandardSubject = 3;
 
-        public const int AlgebraAcademicAchievementId = 0;
-        public const int AlgebraAcademicPracticeId = 1;
 
-        public const int GeometryAcademicAchievementId = 2;
-        public const int GeometryAcademicPracticeId = 3;
 
         public const int SchoolId = 1;
         public const int CurrentSchoolYearId = 1;

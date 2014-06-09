@@ -6,7 +6,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoClassAnnouncementTypeStorage:BaseDemoIntStorage<ClassAnnouncementType>
     {
-        public DemoClassAnnouncementTypeStorage(DemoStorage storage) : base(storage, x => x.Id)
+        public DemoClassAnnouncementTypeStorage(DemoStorage storage) : base(storage, x => x.Id, true)
         {
         }
 

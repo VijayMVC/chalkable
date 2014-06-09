@@ -248,7 +248,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<StudentHealsCondition> GetStudentHealsConditions(int studentId)
         {
-            throw new NotImplementedException();
+            return Storage.StudentHealthConditionStorage.GetByStudentId(studentId);
         }
     }
 }

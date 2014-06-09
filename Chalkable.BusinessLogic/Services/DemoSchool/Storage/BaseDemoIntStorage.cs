@@ -9,6 +9,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     {
         protected BaseDemoIntStorage(DemoStorage storage, Func<TValue, int> keyField, bool autoIncrement = false) : base(storage, keyField, autoIncrement)
         {
+            Index = 1;
         }
 
         public override int GetNextFreeId()
