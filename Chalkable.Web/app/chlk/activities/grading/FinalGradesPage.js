@@ -14,7 +14,6 @@ NAMESPACE('chlk.activities.grading', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.FinalGradesTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingPeriodFinalGradeTpl, 'average-change', '.big-grading-period-container.open')],
         'FinalGradesPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingPeriodFinalGradeTpl, 'average-change')],
             VOID, function updateGradingPeriodPartByAverage(tpl, model, msg_) {
@@ -233,7 +232,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 clearTimeout(notesTimeout);
                 notesTimeout = setTimeout(function(){
                     var row = this.dom.find('.row.selected');
-                    row.find('input[name=notes]').setValue(node.getValue());
+                    row.find('input[name=note]').setValue(node.getValue());
                     this.submitForm(row.find('form'), true);
                     node.parent('.attachments-container').addClass('loading');
                 }.bind(this), 1000);

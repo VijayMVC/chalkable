@@ -45,7 +45,7 @@ NAMESPACE('chlk.templates.grading', function () {
             Array, 'codes',
 
             [ria.templates.ModelPropertyBind],
-            String, 'notes',
+            String, 'note',
 
             Boolean, function withCodes(){
                 var codes = this.getCodes();

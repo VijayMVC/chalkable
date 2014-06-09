@@ -452,7 +452,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getAverageValue(),
                         model.isExempt(),
                         model.getCodesString() ? JSON.parse(model.getCodesString()) : null,
-                        model.getNotes()
+                        model.getNote()
                     )
                     .attach(this.validateResponse_());
                 return this.UpdateView(chlk.activities.grading.FinalGradesPage, result, chlk.activities.lib.DontShowLoader());
@@ -468,7 +468,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getAverageValue(),
                         model.isExempt(),
                         JSON.parse(model.getCodesString()),
-                        model.getNotes()
+                        model.getNote()
                     )
                     .attach(this.validateResponse_());
                 this.BackgroundCloseView(chlk.activities.grading.StudentAvgPopupDialog);

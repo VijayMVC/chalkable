@@ -42,7 +42,7 @@ NAMESPACE('chlk.models.grading', function () {
 
             String, 'averageValue',
 
-            String, 'notes',
+            String, 'note',
 
             String, 'oldValue',
 
