@@ -977,9 +977,12 @@ BODY {
 
 .hidden-students-block{
   height: 0;
-  overflow: hidden;
   @include transition-duration("0.5s");
   @include transition-property("all");
+
+  &.height-0{
+    overflow: hidden;
+  }
 }
 
 .visible-block{

@@ -41,6 +41,8 @@ mixin AbsentLatePage(data, header)
                                 .img-container
                                     +ActionLink('user', 'infoByRole', student.getId(), 'student')
                                         +PersonImg(student, 128)
+        if !items.length
+            .no-items-text=Msg.No_attendance_issues
 
 .attendance-summary
     topData = self.getTopData();

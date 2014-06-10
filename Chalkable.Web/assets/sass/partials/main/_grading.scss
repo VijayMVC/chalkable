@@ -431,12 +431,6 @@ BODY {
                   }
                 }
 
-                .no-grades{
-                  font: bold 22px/60px 'Reenie Beanie';
-                  text-align: center;
-                  height: 60px;
-                }
-
                 .all-button{
                   width: 58px;
                   height: 54px;
@@ -1653,4 +1647,10 @@ BODY {
     position: absolute;
     top: 18px;
     left: 23px;
+}
+
+.no-items-text{
+  font: bold 22px/60px 'Reenie Beanie';
+  text-align: center;
+  height: 60px;
 }

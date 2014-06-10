@@ -459,6 +459,7 @@ var Msg = {
     No_class_scheduled: function(date){
         return String.format('No class scheduled on {0}', date);
     },
+    No_attendance_issues: 'No attendance issues',
     No_check_in : 'No check-in',
     No_data: 'No data',
     No_grades_yet: 'No grades yet',

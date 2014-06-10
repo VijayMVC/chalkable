@@ -25,6 +25,7 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             [[ArrayOf(chlk.models.attendance.StudentSummaryItem)]],
             ArrayOf(Array), function getGroupedStudents(students){
+                if(!students.length) return [];
                 var res = [], res1=[];
                 students.forEach(function(item, index){
                     if(index && index % 18 == 0){
