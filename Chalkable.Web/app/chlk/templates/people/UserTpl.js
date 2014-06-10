@@ -87,6 +87,12 @@ NAMESPACE('chlk.templates.people', function () {
             Number, 'index',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'selected'
+            Boolean, 'selected',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.Alerts, 'alertsInfo',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'demoUser'
         ])
 });

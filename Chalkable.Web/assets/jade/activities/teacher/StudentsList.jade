@@ -5,9 +5,9 @@
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'students', "my", [])(
         selectedItemId=selectedId ? selectedId.valueOf() : ""
     ).classes-bar
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            if !selectedId || !selectedId.valueOf()
+    if !selectedId || !selectedId.valueOf()
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
                 .right
                     +ActionLink('students', 'my')(class=self.isMy() ? "pressed" : "")
                         =self.getUserRole().isStudent() ? Msg.Classmates :Msg.My_Students

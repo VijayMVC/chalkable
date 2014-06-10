@@ -136,10 +136,19 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = new AttendanceSummary();
             var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
             var studentAtts = new List<StudentSectionAttendanceSummary>();
+            var sectionStSet = new HashSet<Pair<int, int>>();
             foreach (var sectionAttendanceSummary in sectionsAttendanceSummary)
             {
                 dailySectionAttendances.AddRange(sectionAttendanceSummary.Days);
-                studentAtts.AddRange(sectionAttendanceSummary.Students);
+                foreach (var student in sectionAttendanceSummary.Students)
+                {
+                    var pair = new Pair<int, int>(student.SectionId, student.StudentId);
+                    if (!sectionStSet.Contains(pair))
+                    {
+                        sectionStSet.Add(pair);
+                        studentAtts.Add(student); 
+                    }
+                }
             }
             res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
             studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();

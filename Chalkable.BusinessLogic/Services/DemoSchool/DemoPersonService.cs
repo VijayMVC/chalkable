@@ -196,17 +196,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             error = null;
             if (!(CanChangeEmail(res)))
                 throw new ChalkableSecurityException();
-            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
             if (res.Email != email)
             {
                 if (Storage.PersonStorage.Exists(email, res.Id))
                     error = "There is user with that email in Chalkable";
                 else
                 {
-                    ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
                     res.Email = email;
                     Storage.PersonStorage.Update(res);
-                    ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(res, email);
                 }
             }
             return res;
@@ -246,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public IList<StudentHealsCondition> GetStudentHealsConditions(int studentId)
+        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
             return Storage.StudentHealthConditionStorage.GetByStudentId(studentId);
         }

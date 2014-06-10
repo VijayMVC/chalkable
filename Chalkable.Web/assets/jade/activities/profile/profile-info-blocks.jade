@@ -43,7 +43,7 @@ mixin ProfileInfoView(model)
             block
         //.sections-info.other-section
             .section-title.pacifico=Msg.Other(true)
-        if model.isAbleEdit()
+        if model.isAbleEdit() && !model.isDemoUser()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
 
 mixin ProfileInfoForm(controller, model)

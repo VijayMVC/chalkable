@@ -13,10 +13,7 @@ mixin PersonImg(person, size, needAlerts)
                 top = self.getAlertsAttributes(person)
                 div(
                     class=(size < 128 ? "small" : ""),
-                    data-allowedinetaccess = person.isAllowedInetAccess(),
-                    data-withmedicalalert = person.isWithMedicalAlert(),
-                    data-specialinstructions = person.getSpecialInstructions(),
-                    data-spedstatus = person.getSpedStatus()
+                     data-stringalerts=person.getAlertsInfo().getStringAlerts()
                 ).alerts-icon.no-tooltip
             div(attributes)(class="person-avatar-" + (isWoman ? "w" : "m") + "-" + size, style = "background-image: url(" + src + ")")
 

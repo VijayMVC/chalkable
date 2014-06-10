@@ -212,7 +212,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void ChangeUserLogin(Guid id, string login)
         {
-            throw new NotImplementedException();
+            
         }
 
 

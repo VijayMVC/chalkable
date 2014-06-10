@@ -171,7 +171,7 @@ namespace Chalkable.BusinessLogic.Model
                 Absences = x.Absences,
                 Tardies = x.Tardies,
                 Class = classes.First(c=>c.Id == x.SectionId),
-                
+                StudentId = x.StudentId
             }).ToList();
         } 
     }

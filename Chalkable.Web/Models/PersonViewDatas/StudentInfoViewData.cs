@@ -10,7 +10,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IdNameViewData<int> GradeLevel { get; set; } //todo remove this later 
         public IList<IdNameViewData<int>> GradeLevels { get; set; }
         public IList<StudentParentViewData> Parents { get; set; }
-        public IList<StudentHealsConditionViewData> HealsConditions { get; set; } 
+        public IList<StudentHealthConditionViewData> HealthConditions { get; set; } 
         protected StudentInfoViewData(PersonDetails student):base(student)
         {
             GradeLevels = student.StudentSchoolYears.Select(x => IdNameViewData<int>.Create(x.GradeLevelRef, x.GradeLevel.Name)).ToList();

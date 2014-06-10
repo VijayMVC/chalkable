@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.Role');
+REQUIRE('chlk.models.common.AlertInfo');
 
 NAMESPACE('chlk.models.people', function () {
     "use strict";
@@ -56,6 +57,21 @@ NAMESPACE('chlk.models.people', function () {
                 var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
                     || this.getSpecialInstructions() || this.getSpedStatus();
                 return !!res;
+            },
+
+            READONLY, chlk.models.common.Alerts, 'alertsInfo',
+            chlk.models.common.Alerts, function getAlertsInfo(){
+                var res = [];
+                var commonNS = chlk.models.common;
+                if (this.isAllowedInetAccess())
+                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.INTERNET_ACCESS_ALERT, Msg.Alert_Internet_access_text));
+                if(this.isWithMedicalAlert())
+                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, Msg.Alert_Medical_text));
+                if(this.getSpecialInstructions())
+                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, Msg.Alert_Special_text));
+                if(this.getSpedStatus())
+                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPED_STATUS_ALERT, Msg.Alert_Sped_text));
+                return new chlk.models.common.Alerts(res);
             },
 
             [[String, String, chlk.models.id.SchoolPersonId]],

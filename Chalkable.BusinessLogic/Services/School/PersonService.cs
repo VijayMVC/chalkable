@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void ActivatePerson(int id);
         Person EditEmail(int id, string email, out string error);
 
-        IList<StudentHealsCondition> GetStudentHealsConditions(int studentId);
+        IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
 
     }
 
@@ -332,10 +332,10 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<StudentHealsCondition> GetStudentHealsConditions(int studentId)
+        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
             var healsConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
-            return healsConditions.Select(x => new StudentHealsCondition
+            return healsConditions.Select(x => new StudentHealthCondition
                 {
                     Id = x.Id,
                     Name = x.Name,
