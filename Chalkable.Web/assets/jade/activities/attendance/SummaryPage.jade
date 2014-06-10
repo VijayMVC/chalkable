@@ -33,13 +33,14 @@ mixin AbsentLatePage(data, header)
                                 .chlk-pop-up-container.popup-top
                                     .pop-up-triangle
                                     .info-container
-                                        h1=student.getDisplayName()
+                                        +ActionLink('user', 'infoByRole', student.getId(), 'student')
+                                            h1=student.getDisplayName()
                                         .stats
                                             each stat in info.getStatByClass()
                                                 p #{stat.getClassName()}: #{stat.getValue()}
-                                        a(href="javascript:").grey-button=Msg.Parent_info
                                 .img-container
-                                    +PersonImg(student, 128)
+                                    +ActionLink('user', 'infoByRole', student.getId(), 'student')
+                                        +PersonImg(student, 128)
 
 .attendance-summary
     topData = self.getTopData();
