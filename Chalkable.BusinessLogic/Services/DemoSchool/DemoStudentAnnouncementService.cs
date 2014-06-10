@@ -30,19 +30,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 exempt = false;
             else value = null;
 
+            var numScore = Storage.AlphaGradeStorage.GetAll().FirstOrDefault(x => x.Name.ToLowerInvariant() == value);
+
+            var numericScore = 0;
+
+            if (numScore != null)
+            {
+                var gs =
+                    Storage.GradingScaleRangeStorage.GetAll().FirstOrDefault(x => x.AlphaGradeRef == numScore.Id);
+
+                if (gs != null)
+                {
+                    numericScore = gs.AveragingEquivalent;
+                }
+            }
+
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
-                Comment = comment != null ? comment.Trim() : "",
+                Comment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "",
                 Dropped = dropped,
                 Incomplete = incomplete,
                 Late = late,
                 Exempt = exempt,
-                NumericScore = int.Parse(value),
+                ScoreValue = value,
+                NumericScore = numericScore,
                 ActivityId = ann.SisActivityId.Value,
                 AnnouncementId = announcementId,
                 StudentId = studentId,
-                ScoreValue = value,
             };
             var score = new Score();
             MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, stAnn);
