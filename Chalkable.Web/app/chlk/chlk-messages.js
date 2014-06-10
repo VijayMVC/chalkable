@@ -205,6 +205,7 @@ var Msg = {
     Title: 'Title',
     To: 'To',
     Today: 'Today',
+    ToDo: 'ToDo',
     Tomorrow: 'Tomorrow',
     Total: 'Total',
     Type: 'Type',
