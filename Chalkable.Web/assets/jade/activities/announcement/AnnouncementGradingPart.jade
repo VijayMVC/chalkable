@@ -1,0 +1,70 @@
+mixin AppAttachmentBlock(item, pictureHref, i)
+    +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        .title
+            div=item.getName()
+
+autoCount = self.getAutoGradeCount()
+studentAnnouncements = self.getItems()
+selectedIndex = autoCount ? null : 0
+gradingStyle = self.getGradingStyle()
+getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
+
+.silver-panel.student-announcements-top-panel
+    +RenderWith(self.getModel(), chlk.templates.announcement.StudentAnnouncementsTpl)
++ListView(self)(
+    selectedIndex = selectedIndex
+).grades-individual.people-list
+    items = self.getSortedStudentAnnouncements()
+    if autoCount > 0
+        div(class=(autoCount == 1 ? 'double' : '')).grid-modal
+            div Accept auto-grades from #{self.getAutoGradeApps().length == 1 ? self.getAutoGradeApps()[0] : 'apps'}#
+    each item, i in items
+        readonly = self.isReadonly() || (!self.getSchoolOptions().isAllowScoreEntryForUnexcused() && item.isUnExcusedAbsent())
+        .row(class=(i == selectedIndex ? 'selected ' : ' ') + (item.getState() == 0 ? 'z-0' : 'z-10') + (self.isGradable() && !readonly ? '' : ' readonly') + (item.needStrikeThrough() ? ' dropped-value' : ''), index=i).fixed-bg
+            +Hidden('readonly', readonly)
+            +Hidden('gradingStyle', gradingStyle)
+            .top-content(id = "top-content-" + item.getStudentInfo().getId().valueOf())
+                value = item.getGradeValue()
+                lbl = 'A - F'
+                student = item.getStudentInfo();
+                owner = self.getOwner()
+                alertsEnum = chlk.models.grading.AlertsEnum
+                +ActionForm('announcement', 'updateAnnouncementGrade')(class = (item.isEmptyGrade() ? "empty-grade-form" : "")).update-grade-form
+                    +Hidden('id', item.getId())
+                    +Hidden('announcementid', item.getAnnouncementId())
+                    +Hidden('studentid', student.getId())
+                    +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
+                        +PersonImg(student, 47)
+                    .i-b.name-block
+                        p= student.getFullName()
+                        if !readonly
+                            SPAN.container
+                                SPAN.comment-grade
+                                    +ActionLink('grading', 'getGradeComments').comment-text=(item.getComment() ? Msg.Commented : Msg.Comment)
+                                    .small-pop-up
+                                        .container
+                                            .triangle
+                                            div
+                                                div
+                                                    +PersonImg(owner, 24)
+                                                div
+                                                    +TextArea(name="comment", maxlength=500).comment-input=item.getComment()
+                                                    .grading-comments-list
+                                                    span.enter=Msg.Enter_when_done
+                    div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
+                        +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
+                            userRole = self.getUserRole()
+                            maxScore = self.getMaxScore()
+                            ableDropStudentScore = self.isAbleDropStudentScore()
+                            ableToExempt = self.isAbleToExempt(),
+                            readonly = !self.isGradable()
+                        )
+        .attachments-container.z-10
+            .attachments-container-2
+                each attachment, i in item.getAttachments()
+                    +ActionLink('announcement', 'viewAttachment', attachment.getId()).announcement-item.attachment
+                        +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)
+                each app, i in self.getApplications()
+                    +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId()).announcement-item.application
+                        +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i)
+
