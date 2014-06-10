@@ -18,5 +18,5 @@ mixin Paginator(controller, action, data, params)
             +ActionLinkWithPrepend(controller, action, params, pagingData.lastPageStart)(class = 'last-page' + (pagingData.hasNextPage ? '' : ' disabled'))
         .right-container
             SPAN
-                |Displaying #{pagingData.startText} - #{pagingData.end} of #{pagingData.totalCount || 1}
+                |Displaying #{pagingData.startText} - #{pagingData.end} of #{pagingData.totalCount || 0}
         .clear
