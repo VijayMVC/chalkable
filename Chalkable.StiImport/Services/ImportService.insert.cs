@@ -72,8 +72,6 @@ namespace Chalkable.StiImport.Services
             InsertClassStandard();
             Log.LogInfo("insert marking period classes");
             InsertMarkingPeriodClasses();
-            Log.LogInfo("insert class announcement types");
-            InsertClassAnnouncementTypes();
             Log.LogInfo("insert periods");
             InsertPeriods();
             Log.LogInfo("insert class periods");
@@ -552,29 +550,6 @@ namespace Chalkable.StiImport.Services
                     SchoolRef = mps.First(y=>y.Id == x.TermID).SchoolRef
                 }).ToList();
             ServiceLocatorSchool.ClassService.AssignClassToMarkingPeriod(cts);
-        }
-
-        private void InsertClassAnnouncementTypes()
-        {
-            var types = context.GetSyncResult<ActivityCategory>().All.Select(x => new ClassAnnouncementType
-            {
-                Id = x.ActivityCategoryID,
-                ClassRef = x.SectionID,
-                Description = x.Description,
-                Gradable = true,
-                Name = x.Name,
-                Percentage = (int)(x.Percentage ?? 0)//TODO: use decimal?
-            }).ToList();
-            var chalkableTypes = ChalkableAnnouncementType.All;
-            foreach (var classAnnouncementType in types)
-            {
-                var ct =
-                    chalkableTypes.FirstOrDefault(
-                        x => x.Keywords.Split(',').Any(y => classAnnouncementType.Name.ToLower().Contains(y)));
-                if (ct != null)
-                    classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
-            }
-            ServiceLocatorSchool.ClassAnnouncementTypeService.Add(types);
         }
 
         private void InsertPeriods()

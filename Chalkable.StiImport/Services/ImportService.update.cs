@@ -70,8 +70,6 @@ namespace Chalkable.StiImport.Services
             UpdateClassStandard();
             Log.LogInfo("update marking period classes");
             UpdateMarkingPeriodClasses();
-            Log.LogInfo("update announcment types");
-            UpdateClassAnnouncementTypes();
             Log.LogInfo("update periods");
             UpdatePeriods();
             Log.LogInfo("update class periods");
@@ -387,7 +385,7 @@ namespace Chalkable.StiImport.Services
                 StartDate = x.StartDate,
                 AllowGradePosting = x.AllowGradePosting,
                 Code = x.Code,
-                EndTime = x.EndDate,
+                EndTime = x.EndTime,
                 MarkingPeriodRef = x.TermID,
                 SchoolAnnouncement = x.SchoolAnnouncement
             }).ToList();
@@ -529,31 +527,6 @@ namespace Chalkable.StiImport.Services
         private void UpdateMarkingPeriodClasses()
         {
             //TODO: no way to update. delete or insert only
-        }
-
-        private void UpdateClassAnnouncementTypes()
-        {
-            if (context.GetSyncResult<ActivityCategory>().Updated == null)
-                return;
-            var types = context.GetSyncResult<ActivityCategory>().Updated.Select(x => new ClassAnnouncementType
-            {
-                Id = x.ActivityCategoryID,
-                ClassRef = x.SectionID,
-                Description = x.Description,
-                Gradable = true,
-                Name = x.Name,
-                Percentage = (int)(x.Percentage ?? 0)//TODO: use decimal?
-            }).ToList();
-            var chalkableTypes = ChalkableAnnouncementType.All;
-            foreach (var classAnnouncementType in types)
-            {
-                var ct =
-                    chalkableTypes.FirstOrDefault(
-                        x => x.Keywords.Split(',').Any(y => classAnnouncementType.Name.ToLower().Contains(y)));
-                if (ct != null)
-                    classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
-            }
-            ServiceLocatorSchool.ClassAnnouncementTypeService.Edit(types);
         }
 
         private void UpdatePeriods()

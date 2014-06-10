@@ -49,8 +49,6 @@ namespace Chalkable.StiImport.Services
             DeleteClassPeriods();
             Log.LogInfo("delete periods");
             DeletePeriods();
-            Log.LogInfo("delete class announcement types");
-            DeleteClassAnnouncementTypes();
             Log.LogInfo("delete marking period classes");
             DeleteMarkingPeriodClasses();
             Log.LogInfo("delete class standards");
@@ -200,14 +198,6 @@ namespace Chalkable.StiImport.Services
                 return;
             var ids = context.GetSyncResult<TimeSlot>().Deleted.Select(x => x.TimeSlotID).ToList();
             ServiceLocatorSchool.PeriodService.Delete(ids);
-        }
-
-        private void DeleteClassAnnouncementTypes()
-        {
-            if (context.GetSyncResult<ActivityCategory>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<ActivityCategory>().Deleted.Select(x => x.ActivityCategoryID).ToList();
-            ServiceLocatorSchool.ClassAnnouncementTypeService.Delete(ids);
         }
 
         private void DeleteMarkingPeriodClasses()
