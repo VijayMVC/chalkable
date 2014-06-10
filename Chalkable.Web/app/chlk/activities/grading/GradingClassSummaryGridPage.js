@@ -409,7 +409,8 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.see-all')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function seeAllClick(node, event){
-                this.updateDropDown(this.getScores(node), this.dom.find('.active-cell'), true);
+                var cell = this.dom.find('.active-cell');
+                this.updateDropDown(this.getScores(cell.find('.value-input')), cell, true);
                 return false;
             },
 
@@ -751,7 +752,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
                 allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
                 this.setAllScores(allScores);
-                this.setStandardScores(allScores);
+                this.setStandardScores(standardScores);
                 var dom = this.dom;
                 var that = this;
                 new ria.dom.Dom().on('click.grade', function(doc, event){
