@@ -60,7 +60,8 @@ namespace Chalkable.Web.Controllers
                 AttendanceReasonRef = attendanceReasonId,
                 ClassRef = classId,
                 Date = date,
-                PersonRef = x.Id
+                PersonRef = x.Id,
+                Level = level
             }).ToList());
             return Json(true);
         }

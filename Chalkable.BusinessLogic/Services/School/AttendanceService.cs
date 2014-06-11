@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     ClassroomLevel = LevelToClassRoomLevel(item.Level),
                     ReasonId = (short)(item.AttendanceReasonRef.HasValue ? item.AttendanceReasonRef.Value : 0),
                     SectionId = classId,
-                    StudentId = item.PersonRef
+                    StudentId = item.PersonRef,
                 });
             }
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();

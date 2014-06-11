@@ -151,16 +151,14 @@ namespace Chalkable.Web.Controllers
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId);
             var schoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
-            var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
-                        {
-                            ClassId = classId,
-                            RoleId = CoreRoles.STUDENT_ROLE.Id
-                        });
+            var classRoomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId);
+            var students = SchoolLocator.ClassService.GetStudents(classId, classRoomOption != null ? classRoomOption.IncludeWithdrawnStudents : default(bool?));
             var res = new List<StandardGradingGridViewData>();
             foreach (var gradingPeriod in gradingPeriods)
             {
-                var gs = gradingStandards.Where(x => gradingPeriod.Id== x.GradingPeriodId).ToList();
-                res.Add(StandardGradingGridViewData.Create(gradingPeriod, gs, students));
+                var gs = gradingStandards.Where(x => gradingPeriod.Id == x.GradingPeriodId).ToList();
+                var currentStudents = students.Where(x => gs.Any(y => y.StudentId == x.Id)).ToList();
+                res.Add(StandardGradingGridViewData.Create(gradingPeriod, gs, currentStudents));
             }
             return Json(res);
         }
