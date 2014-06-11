@@ -35,6 +35,14 @@ NAMESPACE('chlk.activities.feed', function () {
                 return false;
             },
 
+            /*[ria.mvc.DomEventBind('click', '.notifications-link:not(.disabled)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function notificationsClick(node, event){
+                setTimeout(function(){
+                    node.addClass('disabled');
+                }, 1);
+            },*/
+
             function stopInterval(){
                 this.dom.find('#stop-notifications-interval').trigger('click');
             },

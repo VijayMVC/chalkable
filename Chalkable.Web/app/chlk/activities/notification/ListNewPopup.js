@@ -11,5 +11,10 @@ NAMESPACE('chlk.activities.notification', function () {
         [chlk.activities.lib.isTopLeftPosition(false)],
         [ria.mvc.ActivityGroup('ListNewPopup')],
         [ria.mvc.TemplateBind(chlk.templates.notification.ListNewPopupTpl)],
-        'ListNewPopup', EXTENDS(chlk.activities.lib.TemplatePopup), []);
+        'ListNewPopup', EXTENDS(chlk.activities.lib.TemplatePopup), [
+            /*OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                model.getTarget().removeClass('disabled');
+            }*/
+        ]);
 });
