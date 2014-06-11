@@ -53,6 +53,10 @@ NAMESPACE('ria.dom', function () {
                 return !!this._dom.valueOf()[0];
             },
 
+            String, function getSelector() {
+                return this._dom.selector;
+            },
+
             /* DatePicker */
             [[Object, Date]],
             SELF, function datepicker(options, value_){
