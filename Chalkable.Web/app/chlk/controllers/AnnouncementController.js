@@ -686,31 +686,24 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_());
             else{
                 var apps = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_APPLICATIONS, []);
-                if((!model.getAttachments() || !model.getAttachments().length) && (!apps.length) && !model.getContent()){
-                        this.ShowMsgBox('You should fill in Assignment\nor add attachment or application', 'whoa.');
-                        res = new ria.async.DeferredData(new chlk.models.announcement.Announcement());
-                        this.BackgroundUpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
-                        return false;
-                }else{
-                    res = this.announcementService
-                        .submitAnnouncement(
-                        model.getId(),
-                        model.getClassId(),
-                        model.getAnnouncementTypeId(),
-                        model.getTitle(),
-                        model.getContent(),
-                        model.getExpiresDate(),
-                        model.getAttachments(),
-                        model.getApplicationsIds(),
-                        model.getMarkingPeriodId(),
-                        model.getMaxScore(),
-                        model.getWeightAddition(),
-                        model.getWeightMultiplier(),
-                        model.isHiddenFromStudents(),
-                        model.isAbleDropStudentScore()
-                    )
-                    .attach(this.validateResponse_());
-                }
+                res = this.announcementService
+                    .submitAnnouncement(
+                    model.getId(),
+                    model.getClassId(),
+                    model.getAnnouncementTypeId(),
+                    model.getTitle(),
+                    model.getContent(),
+                    model.getExpiresDate(),
+                    model.getAttachments(),
+                    model.getApplicationsIds(),
+                    model.getMarkingPeriodId(),
+                    model.getMaxScore(),
+                    model.getWeightAddition(),
+                    model.getWeightMultiplier(),
+                    model.isHiddenFromStudents(),
+                    model.isAbleDropStudentScore()
+                )
+                .attach(this.validateResponse_());
             }
             res && res.then(function(){
                 if(isEdit)

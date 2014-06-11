@@ -89,7 +89,8 @@ mixin DisplayTotalPoints(model)
         each announcement in self.getGradingItems()
             maxScore = announcement.getMaxScore()
             div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
-                div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
+                +ActionLink('announcement', 'view', announcement.getId())
+                    div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
                 .time=announcement.getExpiresDate().format('M d')
                 .max-score.dotted-h=maxScore
                 studentItems = announcement.getStudentAnnouncements().getItems()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
@@ -192,12 +193,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         private void Setup()
         {
             PrepareGeneralData();
-            AddClasses();
             AddAdmin();
             AddTeacher();
             PrepareStudents();
+            AddStudentsToClasses();
+            AddClasses();
+
+            
             AddAttendances();
-            StiStandardScoreStorage.Setup();
         }
 
         private void AddAttendances()
@@ -243,6 +246,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12);
             AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12);
             AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12);
+            
         }
 
         private string BuildDemoEmail(int studentId, string districtId)
@@ -357,12 +361,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Country = "USA",
                 CountyId = 220
             });
-
-            AddStudentsToClasses();
-
-            
-
-            
         }
 
         private void AddStudentAddress(int studentId, Address address)
@@ -483,6 +481,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PersonRef = studentId,
                 SchoolRef = DemoSchoolConstants.SchoolId
             });
+
+
+            var standards = StandardStorage.GetAll().Select(x => x.Id).ToList();
+
+            var gradingPeriods = GradingPeriodStorage.GetAll().Select(x => x.Id).ToList();
+
+
+            foreach (var gp in gradingPeriods)
+            {
+                foreach (var standardId in standards)
+                {
+                    StiStandardScoreStorage.Add(new StandardScore
+                    {
+                        SectionId = classId,
+                        GradingPeriodId = gp,
+                        StudentId = studentId,
+                        StandardId = standardId,
+                    });
+                }
+            }
         }
 
         private void PrepareGeneralData()
@@ -1914,6 +1932,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             for(var gp = DemoSchoolConstants.GradingPeriodQ1; gp <= DemoSchoolConstants.GradingPeriodQ4; ++gp)
                 AddGradeBookForClass(id, gp);
+            AnnouncementStorage.AddDemoAnnouncementsForClass(id);
 
 
             AddSeatingChartForClass(DemoSchoolConstants.FirstMarkingPeriodId, id);
@@ -1921,6 +1940,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
+        
         private void AddSeatingChartForClass(int mpId, int classId)
         {
 

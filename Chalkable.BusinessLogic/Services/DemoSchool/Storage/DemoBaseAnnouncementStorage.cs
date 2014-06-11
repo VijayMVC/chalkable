@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Models;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.SqlAzure.ImportExport;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -33,6 +33,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         Dictionary<int, AnnouncementComplex> GetData();
         bool Exists(int id);
         void SetComplete(int announcementId, int userId, bool complete);
+        void AddDemoAnnouncementsForClass(int classId);
+        AnnouncementDetails SubmitAnnouncement(int? classId, AnnouncementDetails res);
     }
 
 
@@ -58,7 +60,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
             storage.UpdateAnnouncementStorage(this);
         }
-
 
         public bool CanAddStandard(int announcementId)
         {
@@ -136,6 +137,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Standard = Storage.StandardStorage.GetById(x.StandardRef)
                 }).ToList();
 
+
+            if (Storage.Context.UserLocalId == null) throw new Exception("Context user local id is null");
+
             var isComplete = Storage.AnnouncementCompleteStorage.GetComplete(announcement.Id,
                 Storage.Context.UserLocalId.Value);
 
@@ -183,6 +187,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime nowLocalDate, int userId, DateTime? expiresDateTime = null)
         {
+            if (Storage.Context.SchoolLocalId == null) throw new Exception("Context school local id is null");
+
             var annId = GetNextFreeId();
             var person = Storage.PersonStorage.GetById(userId);
             var gradeLevelRef = Storage.ClassStorage.GetById(classId).GradeLevelRef;
@@ -261,33 +267,47 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return data.ContainsKey(announcementId) ? data[announcementId] : null;
         }
 
-        public void Setup()
+        public void AddDemoAnnouncementsForClass(int classId)
         {
-            /*var ann1 = Create(DemoSchoolConstants.AlgebraAcademicAchievementId, DemoSchoolConstants.AlgebraClassId,
-                DateTime.Today, DemoSchoolConstants.TeacherId, DateTime.Now.AddDays(1));
-            var ann2 = Create(DemoSchoolConstants.AlgebraAcademicPracticeId, DemoSchoolConstants.AlgebraClassId,
-                DateTime.Today, DemoSchoolConstants.TeacherId, DateTime.Now.AddDays(1));
+            var types = Storage.ClassAnnouncementTypeStorage.GetAll(classId);
 
-            var ann3 = Create(DemoSchoolConstants.GeometryAcademicAchievementId, DemoSchoolConstants.GeometryClassId,
-                DateTime.Today, DemoSchoolConstants.TeacherId, DateTime.Now.AddDays(1));
-            var ann4 = Create(DemoSchoolConstants.GeometryAcademicPracticeId, DemoSchoolConstants.GeometryClassId,
-                DateTime.Today, DemoSchoolConstants.TeacherId, DateTime.Now.AddDays(1));
-
-            var announcements = new List<AnnouncementDetails>() {ann1, ann2, ann3, ann4};
-
-            foreach (var announcementDetail in announcements)
+            foreach (var classAnnouncementType in types)
             {
+                var classRef = classAnnouncementType.ClassRef;
+                var announcementType = classAnnouncementType.Id;
+                var announcementDetail = Create(announcementType, classRef, DateTime.Today, DemoSchoolConstants.TeacherId,
+                    DateTime.Now.AddDays(1));
                 announcementDetail.IsScored = true;
-                announcementDetail.State = AnnouncementState.Created;
                 if (announcementDetail.AnnouncementStandards == null)
                     announcementDetail.AnnouncementStandards = new List<AnnouncementStandardDetails>();
-                var activity = new Activity();
-                MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, announcementDetail);
-                activity = Storage.StiActivityStorage.CreateActivity(announcementDetail.ClassRef, activity);
-                if (Exists(activity.Id))
-                    throw new ChalkableException("Announcement with such activityId already exists");
-                data[announcementDetail.Id].SisActivityId = activity.Id;
-            }*/
+
+                SubmitAnnouncement(classId, announcementDetail);
+            }
+        }
+
+        public AnnouncementDetails SubmitAnnouncement(int? classId, AnnouncementDetails res)
+        {
+            var dateNow = Storage.Context.NowSchoolTime.Date;
+
+            if (res.State == AnnouncementState.Draft)
+            {
+                res.State = AnnouncementState.Created;
+                res.Created = dateNow;
+                if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
+                    res.Title = res.DefaultTitle;
+                if (classId.HasValue)
+                {
+                    var activity = new Activity();
+                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
+                    activity = Storage.StiActivityStorage.CreateActivity(classId.Value, activity);
+                    if (Exists(activity.Id))
+                        throw new ChalkableException("Announcement with such activityId already exists");
+                    res.SisActivityId = activity.Id;
+                }
+            }
+            res.GradingStyle = GradingStyleEnum.Numeric100;
+            Update(res);
+            return res;
         }
 
         public void SetComplete(int announcementId, int userId, bool complete)
@@ -454,19 +474,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var result = base.GetAnnouncements(query);
             result.Announcements = result.Announcements.OrderByDescending(x => x.Id).ToList();
-            return result;
-            /*
-	             
-	                and ((@allSchoolItems = 1 and @roleId = 2) or vwAnnouncement.PersonRef = @personId 
-		                or (ClassAnnouncementTypeRef is null 
-			                and exists(select AnnouncementRecipient.Id from AnnouncementRecipient
-						                where AnnouncementRef = vwAnnouncement.Id  and (ToAll = 1 or PersonRef = @personId 
-							                or (RoleRef = @roleId and (@roleId <> 2 or GradeLevelRef is null or GradeLevelRef in (select Id from @gradeLevelsT))))
-						                )
-			                )
-		                )			
-        }
-         */    
+            return result; 
         }
 
         public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)

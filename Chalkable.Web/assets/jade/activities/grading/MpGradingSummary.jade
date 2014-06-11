@@ -1,7 +1,9 @@
 div(data-index=self.getIndex()).ann-type-container
     itemDescription = self.getItemDescription()
+    -console.log(self.getToolTipText)
+    -console.log(self.getToolTipText())
     div(
-        data-tooltip=(self.getUserRole().isStudent() ? "My avg: " :"Avg: ") + (self.avg ? self.avg : 0) + (self.getPercent ? ("  Worth " + (self.percent ? self.percent : 0) + "%") : "")
+        data-tooltip=self.getToolTipText()
     ).type-name=itemDescription.getName()
     announcements = self.getAnnouncements()
     each announcement, i in announcements
