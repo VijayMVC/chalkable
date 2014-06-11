@@ -1,0 +1,10 @@
+mixin LabeledCheckbox(text, name, val, isReadOnly)
+    div(class=(attributes.containerClass + (attributes.withInput ? ' with-input' : ''))).labeled-checkbox
+        attributes = self.prepareData(attributes)
+        +Checkbox(name + (attributes.withInput ? '-checkbox' : ''), val, isReadOnly)(attributes).checkbox
+        if attributes.withInput
+            input(placeholder=attributes.placeholder, name=name).label-input
+        else
+            label(for=attributes.id)=text
+
+
