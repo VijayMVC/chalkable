@@ -93,7 +93,7 @@ namespace Chalkable.StiConnector.Connectors
             {
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
-                throw new Exception(msg);
+                throw new Exception(ex.Message + Environment.NewLine + msg);
             }
             finally
             {

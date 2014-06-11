@@ -15,6 +15,16 @@ using System.Configuration;
 
 namespace Chalkable.StiConnector.Connectors
 {
+    class WebClientGZip : WebClient
+    {
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            HttpWebRequest request = base.GetWebRequest(address) as HttpWebRequest;
+            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            return request;
+        }
+    }
+
     public class ConnectorBase
     {
         private const string STI_APPLICATION_KEY = "sti.application.key";
@@ -27,7 +37,7 @@ namespace Chalkable.StiConnector.Connectors
 
         protected WebClient InitWebClient()
         {
-            var client = new WebClient();
+            var client = new WebClientGZip();
             InitHeaders(client.Headers);
             client.Encoding = Encoding.UTF8;
             client.Headers.Add("Content-Type", "application/json");
@@ -38,11 +48,12 @@ namespace Chalkable.StiConnector.Connectors
         {
             headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
             headers["ApplicationKey"] = string.Format("chalkable {0}", ConfigurationManager.AppSettings[STI_APPLICATION_KEY]);
+            //headers["Accept-Encoding"] = "gzip, deflate";
         }
 
         public T Call<T>(string url, NameValueCollection parameters = null)
         {
-
+            
             var client = InitWebClient();
             MemoryStream stream = null;
             try
