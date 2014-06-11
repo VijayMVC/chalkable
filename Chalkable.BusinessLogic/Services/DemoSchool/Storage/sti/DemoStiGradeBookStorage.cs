@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
@@ -57,6 +58,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
 
             var gbOld = gradeBooks.FirstOrDefault();
+
+
+            var defaultStudentAvgs = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery()
+            {
+                ClassId = classId
+            }).Select(x => new StudentAverage()
+            {
+                CalculatedNumericAverage = 100,
+                EnteredNumericAverage = 100,
+                IsGradingPeriodAverage = true,
+                GradingPeriodId = gradingPeriodId,
+                StudentId = x.PersonRef
+            });
             
             var gradeBook = new Gradebook()
             {
@@ -64,35 +78,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 Scores = gbOld != null ? gbOld.Scores : new List<Score>(),
                 Options = gbOld != null ? gbOld.Options : new ClassroomOption(),
                 Activities = gbOld != null ? gbOld.Activities : new List<Activity>(),
-                StudentAverages = gbOld != null ? gbOld.StudentAverages : new List<StudentAverage>()
-                {
-                    /*new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = gradingPeriodId,
-                        StudentId = DemoSchoolConstants.FirstStudentId
-                    },
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = gradingPeriodId,
-                        StudentId = DemoSchoolConstants.SecondStudentId
-                    },
-                    new StudentAverage()
-                    {
-                        CalculatedNumericAverage = 100,
-                        EnteredNumericAverage = 100,
-                        IsGradingPeriodAverage = true,
-                        GradingPeriodId = gradingPeriodId,
-                        StudentId = DemoSchoolConstants.ThirdStudentId
-                    }*/
-                }
+                StudentAverages = gbOld != null ? gbOld.StudentAverages : defaultStudentAvgs
             };
-
 
             if (classAnnouncementType.HasValue)
             {

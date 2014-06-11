@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
@@ -40,58 +36,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 data[item] = standardScore;
             }
             return standardScore;
-        }
-
-
-        private void AddStandardScores(int sectionId, int gradingPeriodId, int standardId)
-        {
-            /*Add(new StandardScore
-            {
-                SectionId = sectionId,
-                GradingPeriodId = gradingPeriodId,
-                StudentId = DemoSchoolConstants.FirstStudentId,
-                StandardId = standardId,
-                ComputedScore = 100,
-                ComputedScoreAlphaGradeName = "A",
-                EnteredScoreAlphaGradeName = "A"
-            });
-
-            Add(new StandardScore
-            {
-                SectionId = sectionId,
-                GradingPeriodId = gradingPeriodId,
-                StudentId = DemoSchoolConstants.SecondStudentId,
-                StandardId = standardId,
-                ComputedScore = 100,
-                ComputedScoreAlphaGradeName = "A",
-                EnteredScoreAlphaGradeName = "A"
-            });
-
-            Add(new StandardScore
-            {
-                SectionId = sectionId,
-                GradingPeriodId = gradingPeriodId,
-                StudentId = DemoSchoolConstants.ThirdStudentId,
-                StandardId = standardId,
-                ComputedScore = 100,
-                ComputedScoreAlphaGradeName = "A",
-                EnteredScoreAlphaGradeName = "A"
-            });*/
-        }
-
-        public void Setup()
-        {
-            for (var i = 0; i < 4; ++i)
-            {
-                AddStandardScores(DemoSchoolConstants.AlgebraClassId, i + 1, DemoSchoolConstants.MathStandard1);
-                AddStandardScores(DemoSchoolConstants.AlgebraClassId, i + 1, DemoSchoolConstants.MathStandard2);
-                AddStandardScores(DemoSchoolConstants.AlgebraClassId, i + 1, DemoSchoolConstants.MathStandard3);
-
-                AddStandardScores(DemoSchoolConstants.GeometryClassId, i + 1, DemoSchoolConstants.MathStandard1);
-                AddStandardScores(DemoSchoolConstants.GeometryClassId, i + 1, DemoSchoolConstants.MathStandard2);
-                AddStandardScores(DemoSchoolConstants.GeometryClassId, i + 1, DemoSchoolConstants.MathStandard3);
-            }
-
         }
     }
 }

@@ -203,27 +203,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var res = GetAnnouncementDetails(announcementId);
             if (!AnnouncementSecurity.CanModifyAnnouncement(res, Context))
                 throw new ChalkableSecurityException();
-            var dateNow = Context.NowSchoolTime.Date;
             SetClassToAnnouncement(res, classId, res.Expires);
-            if (res.State == AnnouncementState.Draft)
-            {
-                res.State = AnnouncementState.Created;
-                res.Created = dateNow;
-                if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
-                    res.Title = res.DefaultTitle;
-                if (classId.HasValue)
-                {
-                    var activity = new Activity();
-                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
-                    activity = Storage.StiActivityStorage.CreateActivity(classId.Value, activity);
-                    if (CreateAnnouncementStorage(Context, Storage).Exists(activity.Id))
-                        throw new ChalkableException("Announcement with such activityId already exists");
-                    res.SisActivityId = activity.Id;
-                }
-            }
-            res.GradingStyle = GradingStyleEnum.Numeric100;
-            storage.Update(res);
-            return res;
+            return storage.SubmitAnnouncement(classId, res);
         }
 
         public void SubmitAnnouncement(int announcementId, int recipientId)
