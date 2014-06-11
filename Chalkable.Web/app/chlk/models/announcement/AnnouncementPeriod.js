@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.period.Period');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -17,6 +18,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.common.ChlkDate, 'date',
 
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements'
+            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+
+            chlk.models.id.ClassId, 'selectedClassId'
         ]);
 });

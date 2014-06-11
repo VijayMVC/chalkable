@@ -19,7 +19,7 @@
             announcements = item.getAnnouncements()
             itemsArr = item.getItemsArray()
             disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !itemsArr.length
-            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'))(
+            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'), self.getTopData().getSelectedItemId())(
                 class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName() + (disablePopUp ? ' disabled' : ''))
             ).gradient-cnt.item
                 div

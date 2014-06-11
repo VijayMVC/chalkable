@@ -278,9 +278,9 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set(ChlkSessionConstants.STANDARD_IDS, standardsIds);
         },
 
-        [[chlk.models.common.ChlkDate, Boolean]],
-        function addViaCalendarAction(date_, noDraft_){
-            return this.addAction(null, null, date_, noDraft_);
+        [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
+        function addViaCalendarAction(date_, noDraft_, classId_){
+            return this.addAction(classId_, null, date_, noDraft_);
         },
 
         [chlk.controllers.SidebarButton('add-new')],

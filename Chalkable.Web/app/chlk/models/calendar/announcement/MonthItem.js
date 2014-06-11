@@ -2,6 +2,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.schoolYear.ScheduleSection');
 REQUIRE('chlk.models.announcement.Announcement');
 REQUIRE('chlk.models.Popup');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.calendar.announcement', function () {
     "use strict";
@@ -33,6 +34,8 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
             String, 'className',
 
-            Array, 'itemsArray'
+            Array, 'itemsArray',
+
+            chlk.models.id.ClassId, 'selectedClassId'
         ]);
 });

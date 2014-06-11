@@ -11,7 +11,10 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
         'MonthCalendarBodyTpl', EXTENDS(chlk.templates.calendar.announcement.BaseCalendarBodyTpl),[
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items'
+            ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.classes.ClassesForTopBar, 'topData'
 
     ]);
 });

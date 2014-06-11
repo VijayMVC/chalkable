@@ -28,7 +28,7 @@ mixin TooltipWithOverflow(text)
                                 +TooltipWithOverflow(item.getAnnouncementTypeName()).item-title
                                 +TooltipWithOverflow(item.getClassName()).classname-under
     if !self.getUserRole().isStudent()
-        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm/dd/yy'), true).ann-button.plus-ann
+        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann
 
 
 
