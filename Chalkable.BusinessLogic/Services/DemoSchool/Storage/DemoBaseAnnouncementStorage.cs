@@ -97,6 +97,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 announcements = announcements.Where(x => x.Expires <= query.ToDate);
             if (query.Complete.HasValue)
                 announcements = announcements.Where(x => Storage.AnnouncementCompleteStorage.GetComplete(x.Id, Storage.Context.UserLocalId.Value) == query.Complete);
+
+
+            foreach (var announcementComplex in announcements)
+            {
+                var complete = Storage.AnnouncementCompleteStorage.GetComplete(announcementComplex.Id, Storage.Context.UserLocalId.Value);
+                announcementComplex.Complete = complete.HasValue && complete.Value;
+            }
             if (query.OwnedOnly)
                 announcements = announcements.Where(x => x.PrimaryTeacherRef == query.PersonId);
 
