@@ -39,6 +39,12 @@ NAMESPACE('chlk.activities.messages', function () {
                         element.setAttr("checked", node.is(":checked"));
                     }
                 );
+            },
+
+            [ria.mvc.DomEventBind('click', '.unread')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function clickUnRead(node, event){
+                node.removeClass('unread').addClass('read');
             }
 
         ]);
