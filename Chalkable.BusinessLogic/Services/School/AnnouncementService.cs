@@ -264,6 +264,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                          ( x.Subject != null && x.Subject.ToLower().Contains(word))
                                          || (x.ClassName.ToLower().Contains(word))
                                          || ("all".Contains(word))
+                                         || string.IsNullOrEmpty(x.ClassAnnouncementTypeName) 
                                          || x.ClassAnnouncementTypeName.ToLower().Contains(word)
                                          || x.Title != null && x.Title.ToLower().Contains(word)
                                          || x.Content != null && x.Content.ToLower().Contains(word)
