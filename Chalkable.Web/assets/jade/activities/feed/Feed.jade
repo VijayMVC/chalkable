@@ -11,7 +11,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
             .left
                 .i-b
                     if self.importantOnly
-                        BUTTON.grey-button.blue-on-active.pressed.done-undone-button=Msg.Important
+                        BUTTON.grey-button.blue-on-active.pressed.done-undone-button=Msg.ToDo
                         +ActionLinkButton('feed', 'list', true, false, selectedId || '', 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.All
                     else
                         +ActionLinkButton('feed', 'list', true, true, selectedId || '', 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.ToDo
