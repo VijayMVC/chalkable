@@ -1,0 +1,36 @@
+mixin LeftRightToolbar(data, tplClass, controller, action, params)
+    configs = self.prepareData(attributes, data, controller, action, params)
+    attributes = self.processAttrs(attributes, configs)
+    .lr-toolbar(attributes)
+        .A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
+        .first-container
+            .second-container
+                if data && tplClass
+                    each item,i in data
+                        if item.setPressed && item.getId
+                            id = item.getId().valueOf();
+                            if configs.multiple
+                                -item.setPressed(!id && !configs.selectedIds.length || configs.selectedIds.indexOf(id) > -1);
+                            else
+                                -item.setPressed(configs.selectedItemId == id || (!id && !configs.selectedItemId));
+                        -item.setDisabled && item.setDisabled(!configs.pressAfterClick);
+                        -item.setIndex && item.setIndex(i);
+                        if controller
+                            -item.setController(controller);
+                            -item.setAction(action);
+                            -item.setParams(params || []);
+                        else
+                            -item.setController && item.setController(null);
+                        +RenderWith(item, tplClass)(
+                            userRole = self.getUserRole()
+                        )
+                else
+                    .third-container
+                        block
+        .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
+        if(configs.needDots)
+            div(class=attributes.roundedDots ? "rounded" : "").paginator
+                if configs.dots
+                    each dot,i in configs.dots
+                        A(index=i, class=dot ? "current" : "")
+
