@@ -24,8 +24,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             Id = person.Id;
             DisplayName = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.FullName : person.ShortSalutationName; //TODO: think about this
             FullName = person.FullName;
-            FirstName = person.FirstName;
-            LastName = person.LastName;
+            FirstName = person.CapitilizedFirstName;
+            LastName = person.CapitilizedLastName;
             Gender = person.Gender;
             if (person.RoleRef > 0)
             {

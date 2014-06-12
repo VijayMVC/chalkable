@@ -8,6 +8,7 @@ var ChlkSessionConstants = {
     CURRENT_CHLK_PERSON: 'currentChlkPerson',
     CURRENT_PERSON: 'currentPerson',
     AZURE_PICTURE_URL: 'azurePictureUrl',
+    DEMO_AZURE_PICTURE_URL: 'demoAzurePictureUrl',
     CURRENT_SCHOOL_YEAR_ID: 'currentSchoolYearId',
     CURRENT_CLASS_ID: 'currentClassId',
     ATTENDANCE_REASONS: 'attendanceReasons',

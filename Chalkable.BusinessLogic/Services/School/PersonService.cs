@@ -287,7 +287,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanChangeEmail(Person person)
         {
             return BaseSecurity.IsAdminEditorOrCurrentPerson(person.Id, Context)
-                   || (Context.Role == CoreRoles.TEACHER_ROLE && person.RoleRef == CoreRoles.STUDENT_ROLE.Id);
+                   || (Context.Role == CoreRoles.TEACHER_ROLE);
         }
 
         public void ActivatePerson(int id)
@@ -334,8 +334,10 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
-            var healsConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
-            return healsConditions.Select(x => new StudentHealthCondition
+            if (Context.Role != CoreRoles.STUDENT_ROLE)
+            {
+                var healsConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
+                return healsConditions.Select(x => new StudentHealthCondition
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -343,7 +345,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     IsAlert = x.IsAlert,
                     MedicationType = x.MedicationType,
                     Treatment = x.Treatment
-                }).ToList();
+                }).ToList();   
+            }
+            return new List<StudentHealthCondition>();
         }
     }
 

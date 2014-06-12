@@ -118,5 +118,17 @@ namespace Chalkable.Common
             return "" + number + "th";
         }
 
+
+        public static string CapitalizeFirstLetter(this string s)
+        {
+            if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(s.Trim())) return s;
+            if (s.Length == 1) return s.ToUpper();
+
+            s = s.ToLower();
+            var charts = s.ToCharArray();
+            var index = s.IndexOf(charts.First(char.IsLetter));
+            charts[index] = char.ToUpper(charts[index]);
+            return new string(charts);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -43,6 +44,19 @@ namespace Chalkable.Data.School.Model
         public string SpEdStatus { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
 
+
+        [NotDbFieldAttr]
+        public string CapitilizedFirstName
+        {
+            get { return FirstName.CapitalizeFirstLetter(); }
+        }
+
+        [NotDbFieldAttr]
+        public string CapitilizedLastName
+        {
+            get { return LastName.CapitalizeFirstLetter(); }
+        }
+
         [NotDbFieldAttr]
         public string FullName
         {
@@ -52,9 +66,9 @@ namespace Chalkable.Data.School.Model
                 {
                     var res = "";
                     if (HasFirstName)
-                        res += FirstName + " ";
+                        res += CapitilizedFirstName + " ";
                     if (HasLastName)
-                        res += LastName;
+                        res += CapitilizedLastName;
                     return res;
                 }
                 return Email;
@@ -68,7 +82,7 @@ namespace Chalkable.Data.School.Model
         [NotDbFieldAttr]
         public string ShortSalutationName
         {
-            get { return GetSalutation + (HasLastName ? LastName : FirstName); }
+            get { return GetSalutation + (HasLastName ? CapitilizedLastName : CapitilizedFirstName); }
         }
 
         private string GetSalutation

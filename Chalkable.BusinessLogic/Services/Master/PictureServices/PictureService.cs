@@ -34,7 +34,14 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
             return (new BlobHelper()).GetBlobsRelativeAddress(PICTURE_CONTAINER_NAME);
         }
 
+        public static string GeDemoPicturesRelativeAddress()
+        {
+            return (new BlobHelper()).GetBlobsRelativeAddress(DEMO_PICTURE_CONTAINER_NAME);
+        }
+
         private const string PICTURE_CONTAINER_NAME = "pictureconteiner";
+        private const string DEMO_PICTURE_CONTAINER_NAME = "demopicturecontainer";
+
         private string PictureName(string baseName, int? height, int? width)
         {
             var name = baseName;

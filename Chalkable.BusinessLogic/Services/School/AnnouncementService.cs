@@ -245,6 +245,16 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             //TODO : rewrite impl for better performance
             var anns = GetAnnouncements(new AnnouncementsQuery()).Announcements;
+            var classesIds = anns.GroupBy(x => x.ClassRef).Select(x => x.Key).ToList();
+            var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classesIds);
+            foreach (var ann in anns)
+            {
+                if (!ann.ClassAnnouncementTypeRef.HasValue) continue;
+                var classAnnType = classAnnTypes.FirstOrDefault(x => x.Id == ann.ClassAnnouncementTypeRef);
+                if (classAnnType == null) continue;
+                ann.ClassAnnouncementTypeName = classAnnType.Name;
+                ann.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
+            }
             IList<AnnouncementComplex> res = new List<AnnouncementComplex>();
             if (!string.IsNullOrEmpty(filter))
             {

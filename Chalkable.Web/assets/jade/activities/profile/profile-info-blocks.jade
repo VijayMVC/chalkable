@@ -22,9 +22,10 @@ mixin ProfileInfoView(model)
                         .section-data.right
                             .info-title=Msg.CellPhone.toUpperCase()
                             .data-info=primaryPhone
-                    .section-data.left
-                        .info-title=Msg.Birthday.toUpperCase()
-                        .data-info=model.getBirthDateText()
+                    if model.getBirthDateText()
+                        .section-data.left
+                            .info-title=Msg.Birthday.toUpperCase()
+                            .data-info=model.getBirthDateText()
                     //.section-data.gender-box
                         div(class=model.getGender() ? model.getGender().toLowerCase() : '').gender-img-box
                         p=model.getGenderFullText()
