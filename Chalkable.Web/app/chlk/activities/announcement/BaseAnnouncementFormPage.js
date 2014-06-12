@@ -88,18 +88,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('focus', '[name=maxscore]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function aaaa(node, event){
-                console.info('maxscore');
-            },
-
             [ria.mvc.DomEventBind('click keydown keyup', '#content')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function showDropDown(node, event){
                 if(this.dom.find('[name=announcementtypeid]').getValue() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()){
                     var dropDown = this.dom.find('.new-item-dropdown');
-                    if(!node.getValue() && !dropDown.is(':visible')){console.info(node.is(':focus'), event);
+                    if(!node.getValue() && !dropDown.is(':visible')){
                         this.dom.find('#list-last-button').trigger('click');
                     }else{
                         if(event.type == 'keydown'){
@@ -133,9 +127,9 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {
                 BASE(model, msg_);
-                if(model.getClass() == chlk.models.announcement.LastMessages){
+                /*if(model.getClass() == chlk.models.announcement.LastMessages){
                     this.dom.find('#content').trigger('focus');
-                }
+                }*/
 
                 if(model.getClass() == chlk.models.announcement.Reminder){
                     var parent = this.dom.find('.new-reminder');
