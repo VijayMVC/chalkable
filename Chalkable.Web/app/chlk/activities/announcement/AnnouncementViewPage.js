@@ -558,7 +558,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('click', '.grade-autocomplete, .grading-input-popup')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function gradeClick(node, event){
+            function gradeInputClick(node, event){
                 this.hideDropDown();
             },
 
