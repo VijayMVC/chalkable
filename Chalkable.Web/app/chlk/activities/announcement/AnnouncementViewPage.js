@@ -246,7 +246,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('blur', '.disabled-grade')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeBlur(node, event){
-                node.removeClass('with-grid-focus');
+                //node.removeClass('with-grid-focus');
             },
 
             [ria.mvc.DomEventBind('click', '.grading-input-popup .labeled-checkbox')],

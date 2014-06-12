@@ -85,7 +85,7 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             String, function getGradeInputClass(){
                 var normalValue = this.getNormalValue();
-                return this.isGradeDisabled() ? "disabled-grade" : "with-grid-focus" + ((!normalValue && normalValue != 0) ? " empty-grade" : "") +
+                return this.isGradeDisabled() ? "disabled-grade" : "" + ((!normalValue && normalValue != 0) ? " empty-grade" : "") +
                     (this.isEmptyGrade() ? " able-fill-all" : "");
             },
 

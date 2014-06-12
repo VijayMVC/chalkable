@@ -385,7 +385,9 @@ NAMESPACE('chlk.controls', function () {
                     if(row.exists()){
                         var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
                         if(focusNode.exists()){
-                            focusNode.valueOf()[0].focus()
+                            focusNode.trigger('focus');
+                            if(focusNode.hasClass('select-text') && focusNode.getValue())
+                                focusNode.valueOf()[0].setSelectionRange(0, focusNode.getValue().length);
                         }else{
                             node.find('.grid-focus').valueOf()[0].focus();
                         }
