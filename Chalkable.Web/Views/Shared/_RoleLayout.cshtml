@@ -253,6 +253,7 @@
             var schoolOptions = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL_OPTIONS)');
             var newNotifications = parseInt('@ViewData.GetValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT)', 10) || 0;
             var azurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.AZURE_PICTURE_URL)';
+            var demoAzurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.DEMO_AZURE_PICTURE_URL)';
 
             var USER_ROLE_EXT = '@ViewData.GetValueOrNull("Rolename")';
             var currentSchoolYearId = '@ViewData.GetValueOrNull(ViewConstants.CURR_SCHOOL_YEAR_ID)';

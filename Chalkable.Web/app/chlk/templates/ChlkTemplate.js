@@ -11,7 +11,7 @@ NAMESPACE('chlk.templates', function () {
             String, function getPictureURL(id, sizeH_, sizeW_, notDepartmentSpecific_){
                 if(!id)
                     return null;
-                var url = window.azurePictureUrl;
+                var url = this.isDemoSchool() ? window.demoAzurePictureUrl : window.azurePictureUrl;
 
                 var districtId = this.isDemoSchool() ? window.DEMO_SCHOOL_PICTURE_DISTRICT : window.school.districtid;
 

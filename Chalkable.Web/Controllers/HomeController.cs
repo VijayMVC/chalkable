@@ -37,9 +37,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult SysAdmin()
         {
-            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             var sysUser = MasterLocator.UserService.GetById(Context.UserId);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(SysAdminViewData.Create(sysUser), ViewConstants.CURRENT_PERSON);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MixPanelService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
@@ -57,6 +57,7 @@ namespace Chalkable.Web.Controllers
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.DEV_APP_INFO_URL;
             }
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
             ViewData[ViewConstants.NEEDS_TOUR] = false;
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
@@ -145,6 +146,7 @@ namespace Chalkable.Web.Controllers
             }
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
