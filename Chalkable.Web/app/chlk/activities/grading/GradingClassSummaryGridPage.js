@@ -285,6 +285,12 @@ NAMESPACE('chlk.activities.grading', function () {
                 return true;
             },
 
+            [ria.mvc.DomEventBind('click', '.value-input, .grading-input-popup')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeClick(node, event){
+                this.hideDropDown();
+            },
+
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom().off('click.grading_popup');
@@ -344,15 +350,20 @@ NAMESPACE('chlk.activities.grading', function () {
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
-                var value = (node.getValue() || '').trim();
+                var value = (node.getValue() || '').trim(), fillItem = node.parent().find('.fill-grade');
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
-                    node.parent().find('.fill-grade').setAttr('disabled', true);
                 }
                 else{
                     node.removeClass('empty-grade');
-                    node.parent().find('.fill-grade').setAttr('disabled', false);
+                }
+                switch(value.toLowerCase()){
+                    case Msg.Dropped.toLowerCase():
+                    case Msg.Exempt.toLowerCase():
+                    case Msg.Incomplete.toLowerCase():
+                    case Msg.Late.toLowerCase(): fillItem.setAttr('disabled', true);break;
+                    default: value ? fillItem.setAttr('disabled', false) : fillItem.setAttr('disabled', true);
                 }
                 if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
@@ -677,8 +688,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     var value = (input.getValue() || '').toLowerCase();
                     if(value == 'dropped' || value == 'exempt')
                         input.setValue(input.getData('grade-value'));
-                    if(input.getValue() != input.getData('grade-value'))
-                        node.find('.dropped-checkbox').setValue(false);
+                    /*if(input.getValue() != input.getData('grade-value'))
+                        node.find('.dropped-checkbox').setValue(false);*/
                     var isAvg = node.hasClass('avg-form');
                     var activeCell = node.parent('.grade-value');
                     this.dom.find('.autocomplete-list:visible').hide();

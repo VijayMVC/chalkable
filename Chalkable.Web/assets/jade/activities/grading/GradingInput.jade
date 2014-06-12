@@ -22,4 +22,4 @@ normalValue = self.getModel().getNormalValue()
         else
             +Hidden('isexempt', self.isExempt())
         +Hidden('isabsent', self.isAbsent())
-        +LabeledCheckbox(Msg.Fill, 'fill', false, (normalValue === "" || normalValue === null))(addCallBack = true, containerClass = "fill-grade-container").fill-grade
+        +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(addCallBack = true, containerClass = "fill-grade-container").fill-grade

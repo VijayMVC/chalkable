@@ -2,7 +2,7 @@ normalValue = self.getNormalValue()
 itemCls = (self.isDropped() ? 'dropped' :'')
 selectedCls = (!self.isReadonly() ? 'not-selected' : '')
 maxScore = self.getMaxScore()
-div(class=self.getAttachments().length ? "" : "no-attachments").grade-triangle
+div(class=self.getAttachments() && self.getAttachments().length ? "" : "no-attachments").grade-triangle
 div(class=self.getModel().getAlertClass(maxScore, true), data-tooltip=self.getModel().getTooltipText(maxScore, true)).alert-flag
 div(class=selectedCls + ' ' + itemCls).i-b.text-value=normalValue
 div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
@@ -36,4 +36,4 @@ div(class="selected " + itemCls, rowIndex=i, recId=self.getId()).i-b
 
                 else
                     +Hidden('isexempt', self.isExempt())
-                +LabeledCheckbox(Msg.Fill, 'fill', false, (normalValue === "" || normalValue === null))(containerClass = "fill-grade-container").fill-grade
+                +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(containerClass = "fill-grade-container").fill-grade

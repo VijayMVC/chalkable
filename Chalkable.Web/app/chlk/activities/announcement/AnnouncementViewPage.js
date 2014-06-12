@@ -471,11 +471,17 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
-                    node.parent().find('.fill-grade').setAttr('disabled', true);
                 }
                 else{
                     node.removeClass('empty-grade');
-                    node.parent().find('.fill-grade').setAttr('disabled', false);
+                }
+                var fillItem = node.parent().find('.fill-grade');
+                switch(value.toLowerCase()){
+                    case Msg.Dropped.toLowerCase():
+                    case Msg.Exempt.toLowerCase():
+                    case Msg.Incomplete.toLowerCase():
+                    case Msg.Late.toLowerCase(): fillItem.setAttr('disabled', true);break;
+                    default: value ? fillItem.setAttr('disabled', false) : fillItem.setAttr('disabled', true);
                 }
                 if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
@@ -548,6 +554,12 @@ NAMESPACE('chlk.activities.announcement', function () {
             Boolean, function gradeMouseDown(node, event){
                 node.parent().find('.grading-input-popup').show();
                 return false;
+            },
+
+            [ria.mvc.DomEventBind('click', '.grade-autocomplete, .grading-input-popup')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeInputClick(node, event){
+                this.hideDropDown();
             },
 
             OVERRIDE, VOID, function onStop_() {
@@ -672,8 +684,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var value = (input.getValue() || '').toLowerCase();
                     if(value == 'dropped' || value == 'exempt')
                         input.setValue(input.getData('grade-value'));
-                    if(input.getValue() != input.getData('grade-value'))
-                        node.find('.dropped-checkbox').setValue(false);
                     if(!node.getData('able-drop')){
                         node.find('.dropped-checkbox').setValue(false);
                         node.find('.dropped-hidden').setValue(false);

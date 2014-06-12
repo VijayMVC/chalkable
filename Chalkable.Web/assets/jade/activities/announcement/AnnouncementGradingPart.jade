@@ -29,7 +29,10 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                 student = item.getStudentInfo();
                 owner = self.getOwner()
                 alertsEnum = chlk.models.grading.AlertsEnum
-                +ActionForm('announcement', 'updateAnnouncementGrade')(class = (item.isEmptyGrade() ? "empty-grade-form" : "")).update-grade-form
+                +ActionForm('announcement', 'updateAnnouncementGrade')(
+                    class = (item.isEmptyGrade() ? "empty-grade-form" : ""),
+                    data-able-drop=self.isAbleDropStudentScore()
+                ).update-grade-form
                     +Hidden('id', item.getId())
                     +Hidden('announcementid', item.getAnnouncementId())
                     +Hidden('studentid', student.getId())
