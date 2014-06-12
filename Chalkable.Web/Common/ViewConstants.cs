@@ -33,6 +33,8 @@ namespace Chalkable.Web.Common
         public const string ADMIN_VIEW_ROLE = "AdminViewRole";
 
         public const string AZURE_PICTURE_URL = "AzurePictureUrl";
+        public const string DEMO_AZURE_PICTURE_URL = "DemoAzurePictureUrl";
+
         public const string CROCODOC_API_URL = "CrocodocApiUrl";
         public const string NEEDS_TOUR = "NeedsTour";
         public const string UNSHOWN_NOTIFICATIONS_COUNT = "UnshownNotificationsCount";

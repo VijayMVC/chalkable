@@ -101,6 +101,7 @@ NAMESPACE('chlk', function (){
 
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, ChlkSessionConstants.AZURE_PICTURE_URL);
+                this.saveInSession(session, ChlkSessionConstants.DEMO_AZURE_PICTURE_URL);
                 this.saveInSession(session, ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, chlk.models.id.SchoolYearId);
                 this.saveInSession(session, ChlkSessionConstants.ATTENDANCE_REASONS, ArrayOf(chlk.models.attendance.AttendanceReason));
                 this.saveInSession(session, ChlkSessionConstants.USER_CLAIMS, ArrayOf(chlk.models.people.Claim));
