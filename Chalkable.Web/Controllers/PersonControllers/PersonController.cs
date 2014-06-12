@@ -130,7 +130,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = SchoolLocator.PersonService.EditEmail(personId, email, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
                 return Json(new { data = errorMessage, success = false });
-            ReLogOn(res);
+            //ReLogOn(res);
             return Json(PersonViewData.Create(res));
         }
 

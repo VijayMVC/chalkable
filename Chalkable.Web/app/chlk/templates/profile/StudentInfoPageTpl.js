@@ -14,8 +14,9 @@ NAMESPACE('chlk.templates.profile', function () {
                 var res = BASE();
                 var user = this.getModel().getUser();
                 user.setAbleEdit(user.isAbleEdit()
-                    && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ADDRESS)
-                    && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_PERSON));
+//                    && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_ADDRESS)
+//                    && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_PERSON)
+                );
                 return res;
             }
         ])

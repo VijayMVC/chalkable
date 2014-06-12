@@ -89,7 +89,7 @@ NAMESPACE('chlk.controllers', function (){
                 var roleId = currentPerson.getRole().getId();
 
                 //todo: rewrite
-                var isAbleToEdit = (roleId != chlk.models.common.RoleEnum.STUDENT.valueOf() && model.getId() == currentPerson.getId())
+                var isAbleToEdit = (model.getId() == currentPerson.getId())
                     || roleId == chlk.models.common.RoleEnum.ADMINEDIT.valueOf()
                     || roleId == chlk.models.common.RoleEnum.ADMINGRADE.valueOf();
                 model.setAbleEdit(isAbleToEdit);

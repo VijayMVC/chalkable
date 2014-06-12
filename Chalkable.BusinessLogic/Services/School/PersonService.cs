@@ -287,7 +287,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanChangeEmail(Person person)
         {
             return BaseSecurity.IsAdminEditorOrCurrentPerson(person.Id, Context)
-                   || (Context.Role == CoreRoles.TEACHER_ROLE && person.RoleRef == CoreRoles.STUDENT_ROLE.Id);
+                   || (Context.Role == CoreRoles.TEACHER_ROLE);
         }
 
         public void ActivatePerson(int id)
