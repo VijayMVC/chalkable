@@ -19,6 +19,7 @@ mixin AnnouncementTooltip()
     applications = self.getApplications()
     gradeViewApps = self.getGradeViewApps()
     grade = self.getGrade()
+    hasGrade = self.isDropped() || grade || grade == 0
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
     +FeedItem(self).animated-item
@@ -33,7 +34,7 @@ mixin AnnouncementTooltip()
                         +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
         .announcement-details-panel
             .details-container.silver-panel
-                if self.getUserRole().isStudent()
+                if self.getUserRole().isStudent() && hasGrade
                     +AnnouncementTooltip().comment-grade-container
                         .comment=self.getComment() || Msg.Your_grade + ":"
                         .grade-value= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
