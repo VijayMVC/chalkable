@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
             var ann = new DemoAnnouncementForTeacherStorage(Storage)
                 .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserLocalId.Value);
-            var c = new DemoClassStorage(Storage).GetById(ann.ClassRef);
+            var c = Storage.ClassStorage.GetById(ann.ClassRef);
             if (Context.UserLocalId != c.PrimaryTeacherRef)
                 throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
             aa.Active = true;

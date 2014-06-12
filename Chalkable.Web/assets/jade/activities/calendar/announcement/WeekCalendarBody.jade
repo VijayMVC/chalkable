@@ -32,7 +32,7 @@ mixin TooltipWithOverflow(text)
                                             .course-icon
                                                 +ClassImg(null, 24, 48).avatar.course-icon
                                             .text-container
-                                                +TooltipWithOverflow(anns[0].getAnnouncementTypeName()).typename
+                                                +TooltipWithOverflow(anns[0].getTitle()).typename
                                                 +TooltipWithOverflow(anns[0].getClassName()).title
                                 if anns.length > 1
                                     li

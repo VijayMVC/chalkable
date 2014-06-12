@@ -1,3 +1,8 @@
+mixin TooltipWithOverflow(text)
+    -attributes['data-tooltip'] = text
+    -attributes['data-tooltip-type'] = 'overflow'
+    p(attributes)=text
+
 mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params)
     .chlk-calendar(attributes)
         .header

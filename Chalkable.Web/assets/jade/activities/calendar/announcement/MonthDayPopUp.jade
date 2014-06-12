@@ -1,8 +1,3 @@
-mixin TooltipWithOverflow(text)
-    -attributes['data-tooltip'] = text
-    -attributes['data-tooltip-type'] = 'overflow'
-    p(attributes)=text
-
 .calendar-popup
     announcements = self.getAnnouncements();
     items = self.getItems();
@@ -25,7 +20,7 @@ mixin TooltipWithOverflow(text)
                     li(class="announcement-type-" + item.getChalkableAnnouncementType().valueOf()).items
                         +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-item
                             div
-                                +TooltipWithOverflow(item.getAnnouncementTypeName()).item-title
+                                +TooltipWithOverflow(item.getTitle()).item-title
                                 +TooltipWithOverflow(item.getClassName()).classname-under
     if !self.getUserRole().isStudent()
         +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann

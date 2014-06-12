@@ -170,7 +170,7 @@ NAMESPACE('chlk.services', function () {
                         }
                         else{
                             var showSubject = title !== null && typeId == typesEnum.ADMIN || typeId == typesEnum.ANNOUNCEMENT;
-                            itemsObject[typeName] = showSubject ? title + ' ' + typeName : typeName;
+                            itemsObject[typeName] = showSubject ? title + ' ' + typeName : title || typeName;
                         }
                     }
 
