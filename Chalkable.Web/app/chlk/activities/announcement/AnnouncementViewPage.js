@@ -684,8 +684,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var value = (input.getValue() || '').toLowerCase();
                     if(value == 'dropped' || value == 'exempt')
                         input.setValue(input.getData('grade-value'));
-                    if(input.getValue() != input.getData('grade-value'))
-                        node.find('.dropped-checkbox').setValue(false);
                     if(!node.getData('able-drop')){
                         node.find('.dropped-checkbox').setValue(false);
                         node.find('.dropped-hidden').setValue(false);
