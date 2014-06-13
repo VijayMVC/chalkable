@@ -109,5 +109,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
             }
         }
+
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

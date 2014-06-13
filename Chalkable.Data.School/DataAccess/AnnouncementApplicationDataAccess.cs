@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -11,6 +13,18 @@ namespace Chalkable.Data.School.DataAccess
         public AnnouncementApplicationDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsbyAnnIds(IList<int> announcementIds)
+        {
+            var tableName = "AnnouncementApplication";
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(@"select * from [{0}]", tableName);
+            if (announcementIds != null && announcementIds.Count > 0)
+                dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName,AnnouncementApplication.ANNOUNCEMENT_REF_FIELD,
+                                         announcementIds.Select(x => x.ToString()).JoinString(","));
+            return ReadMany<AnnouncementApplication>(dbQuery);
+        } 
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive)
         {

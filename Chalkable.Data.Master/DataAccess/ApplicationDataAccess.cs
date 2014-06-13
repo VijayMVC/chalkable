@@ -280,6 +280,17 @@ namespace Chalkable.Data.Master.DataAccess
             SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
             base.Delete(id);
         }
+
+        public IList<Application> GetByIds(IList<Guid> ids)
+        {
+            var tableName = "Application";
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(@"select * from [{0}]", tableName);
+            if (ids != null && ids.Count > 0)
+                dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName, Application.ID_FIELD
+                    , ids.Select(x => "'" + x.ToString() + "'").JoinString(","));
+            return ReadMany<Application>(dbQuery);
+        } 
     }
 
     public class ApplicationQuery
