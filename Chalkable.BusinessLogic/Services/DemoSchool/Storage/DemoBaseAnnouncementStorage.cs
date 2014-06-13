@@ -246,13 +246,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 SchoolRef = Storage.Context.SchoolLocalId.Value,
                 QnACount = 0,
                 StudentsCount = persons.Count,
-                Order = 0,
+                Order = annId,
                 AttachmentsCount = 0,
                 ApplicationCount = 0,
                 OwnerAttachmentsCount = 0,
                 StudentsCountWithAttachments = 0
             };
             
+
             data[announcement.Id] = announcement;
             return ConvertToDetails(announcement);
         }

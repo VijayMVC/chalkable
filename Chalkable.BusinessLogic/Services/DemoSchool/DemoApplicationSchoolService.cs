@@ -6,11 +6,8 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
