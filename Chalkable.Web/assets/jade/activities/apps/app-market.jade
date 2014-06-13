@@ -3,7 +3,7 @@ mixin AppIconLink(app)
     +ActionLink('appmarket', 'details', appId).app-icon-link
         .app-list-item
             .icon
-                pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74, true)
+                pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
                 img(src=pictureUrl)
             .description
                 .name=app.getName()

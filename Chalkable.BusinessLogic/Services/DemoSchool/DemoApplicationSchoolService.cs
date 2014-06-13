@@ -6,11 +6,8 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -108,6 +105,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
             }
+        }
+
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds)
+        {
+            return
+                Storage.AnnouncementApplicationStorage.GetAll()
+                    .Where(x => announcementIds.Contains(x.AnnouncementRef))
+                    .ToList();
         }
     }
 }

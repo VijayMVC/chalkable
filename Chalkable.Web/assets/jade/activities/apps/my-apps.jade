@@ -6,7 +6,7 @@ mixin MyAppsIconLink(app, editable)
 
             .app-list-item
                 .icon(class=editable ? "jiggly" : undefined)
-                    pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74, true)
+                    pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
                     img(src=pictureUrl)
                 .name=app.getName()
                 Button(type="submit").close-btn
@@ -19,7 +19,7 @@ mixin MyAppsIconLink(app, editable)
         +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).my-app-icon-link
             .app-list-item
                 .icon(class=editable ? "jiggly" : undefined)
-                    pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74, true)
+                    pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
                     img(src=pictureUrl)
                 .name=app.getName()
 .my-apps

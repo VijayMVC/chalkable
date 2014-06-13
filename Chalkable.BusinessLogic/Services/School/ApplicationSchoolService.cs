@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
         void AttachAppToAnnouncement(int announcementAppId);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
+        IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId);
 
@@ -158,6 +159,15 @@ namespace Chalkable.BusinessLogic.Services.School
             catch
             {
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
+            }
+        }
+
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds)
+        {
+            using (var uow = Read())
+            {
+                return new AnnouncementApplicationDataAccess(uow).GetAnnouncementApplicationsbyAnnIds(announcementIds);
             }
         }
     }

@@ -157,6 +157,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Context.Role.Id == CoreRoles.STUDENT_ROLE.Id && application.HasStudentMyApps;
         }
 
+
+
+        public IList<Application> GetApplicationsByIds(IList<Guid> ids)
+        {
+            using (var uow = Read())
+            {
+                return new ApplicationDataAccess(uow).GetByIds(ids);
+            }
+        }
     }
 
 }

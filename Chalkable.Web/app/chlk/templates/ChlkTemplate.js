@@ -26,6 +26,18 @@ NAMESPACE('chlk.templates', function () {
                 return url;
             },
 
+            [[Object, Number]],
+            String, function getAppPictureURL(id, sizeH_, sizeW_){
+                if(!id)
+                    return null;
+                var url = window.azurePictureUrl + id.valueOf();
+                if (sizeH_ && sizeW_)
+                    return url + '-' + sizeH_ + 'x' + sizeW_;
+                if (sizeH_)
+                    return url + '-' + sizeH_ + 'x' + sizeH_;
+                return url;
+            },
+
             Boolean, function isDemoSchool(){
                 return !!window.DEMO_SCHOOL || false;
             },

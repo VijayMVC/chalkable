@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -74,13 +75,14 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ApplicationsCount = announcement.ApplicationCount;
             WasAnnouncementTypeGraded = wasAnnouncementTypeGraded;
             ShowGradingIcon = StudentsCount > 0 && StudentsCountWithAttachments * 4 > StudentsCount || GradingStudentsCount > 0;
-            //ApplicationName = announcement.ApplicationName;
         }
 
 
-        public static AnnouncementViewData Create(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null)
+        public static AnnouncementViewData Create(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null, string applicationName = null)
         {
             var res = new AnnouncementViewData(announcement, wasAnnouncementTypeGraded);
+            if (!string.IsNullOrEmpty(applicationName))
+                res.ApplicationName = applicationName;
             return res;
         }
 
@@ -88,5 +90,18 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             return announcements.Select(x => Create(x)).ToList();
         }
+
+        public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements
+            , IList<AnnouncementApplication> annApps, IList<Application> applications)
+        {
+            var res = new List<AnnouncementViewData>();
+            foreach (var ann in announcements)
+            {
+                var app = applications.FirstOrDefault(a=> annApps.Any(annApp=>annApp.ApplicationRef == a.Id && annApp.AnnouncementRef == ann.Id));
+                var appName = app != null ? app.Name : null;
+                res.Add(Create(ann, null, appName));
+            }
+            return res;
+        } 
     }
 }
