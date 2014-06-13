@@ -53,7 +53,7 @@ NAMESPACE('chlk.controllers', function (){
                         case 1: str = 'st';break;
                         case 2: str = 'n&#100;';break;
                         case 3: str = 'r&#100;';break;
-                        default: str = 'st';
+                        default: str = 'th';
                     }
                     res = 'M d' + str + ' yy';
                 }
