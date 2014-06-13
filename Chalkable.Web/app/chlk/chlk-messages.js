@@ -490,6 +490,7 @@ var Msg = {
     Right_now: 'Right now',
     Room_number: 'Room number',
     Room_shortcut: 'RM',
+    Save_to_Working_filter: 'Save to working filter',
     Search_api: 'Search for an api method or parameter to view its call tree...',
     Scores_exceeds: 'Score exceeds maximum points allowed',
     School_Avg: 'School Avg.',
