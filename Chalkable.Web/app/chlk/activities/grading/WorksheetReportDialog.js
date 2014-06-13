@@ -20,14 +20,25 @@ NAMESPACE('chlk.activities.grading', function(){
             [ria.mvc.DomEventBind('change', '.all-checkboxes')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function allAnnouncementsChange(node, event){
-                node.parent('form')
+                var value = node.checked(), jNode;
+                jQuery(node.valueOf()).parents('form')
                     .find('.grid-container')
                     .find('.row:not(.header)')
                     .find('[type=checkbox]')
-                    .forEach(function(item){
-                        if(item.checked() != node.checked())
-                            item.trigger('click');
+                    .each(function(index, item){
+                        jNode = jQuery(this);
+                        if(!!item.getAttribute('checked') != !!value){
+                            value ? item.setAttribute('checked', 'checked') : item.removeAttribute('checked');
+                            var node = jNode.parent().find('.hidden-checkbox');
+                            node.val(value);
+                            node.data('value', value);
+                        }
                     });
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.WorksheetReportGridTpl, 'stop')],
+            function stopWorking(tpl, model, msg){
+                this.dom.find('.report-form').removeClass('working');
             },
 
             [ria.mvc.DomEventBind('submit', 'form')],
@@ -40,6 +51,10 @@ NAMESPACE('chlk.activities.grading', function(){
                         if(item.checked()){
                             res.push(item.parent('.cell').getData('id'));
                         }
+                });
+                this.dom.find('.blank-columns').find('.checkbox').forEach(function(item){
+                    if(!item.checked())
+                        item.parent().find('.label-input').setValue('');
                 });
                 node.find('[name=announcementIds]').setValue(res.join(','));
             }
