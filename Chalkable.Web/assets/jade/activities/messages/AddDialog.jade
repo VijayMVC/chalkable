@@ -1,0 +1,29 @@
+.dialog.add-message
+    .bg-top
+    .bg-middle
+        .x-window-body
+            .general-info
+                +ActionForm('message', 'send')(onlySubmitValidate=true).send-message-form
+                    +Hidden('inbox', self.isInbox())
+                    .x-form-field.send-to-container
+                        label To:
+                        +SearchBox(chlk.services.PersonService, "getPersons", chlk.templates.messages.RecipientAutoComplete)#recipientId(
+                        name="recipientId",
+                        value=self.recipient ? self.recipient.getFirstName()+ ' ' + self.recipient.getLastName() : "",
+                        default-value=self.recipient ? self.recipient.getId() : "",
+                        class="validate[required]")
+                    .x-form-field.subject-container
+                        label Subject:
+                        input(type="text",name="subject", value=self.subject ? "Re: " + self.subject : "", class="validate[required]")
+                    .x-form-field.body-container
+                        label Body:
+                        textarea(type="text",name="body", class="validate[required]")
+
+                    if self.body
+                        .x-form-field
+                            label= 'send: ' + self.sent.toString('dd/m/yy hh:min:ss')
+                            textarea(type="text",name="prev",class="validate[required]")=self.body
+                    .form-buttons
+                        +Button()(type="submit", name="submitType", value ="submit").special-button.blue-button.submit-btn#submitbtn=Msg.Send_message.toUpperCase()
+                        +Button.special-button.cancel-button.close=Msg.Cancel
+    .bg-bottom
