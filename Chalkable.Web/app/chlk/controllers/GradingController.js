@@ -418,6 +418,16 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.grading.SubmitWorksheetReportViewData]],
             function submitWorksheetReportAction(model){
+                var len = 0;
+                    for(var i= 1; i <=5; i++)
+                        if(model['getTitle' + i]() && model['getTitle' + i]().trim())
+                            len++;
+                if(model.getAnnouncementIds().split(',').length + len > 8){
+                    this.ShowMsgBox(Msg.Worksheet_report_msg, 'fyi.', [{
+                        text: Msg.GOT_IT.toUpperCase()
+                    }]);
+                    return this.UpdateView(chlk.activities.grading.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData), 'stop');
+                }
                 if(model.getSubmitType() == 'submit'){
                     var src = this.reportingService.submitWorksheetReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
                         model.getEndDate(), model.getIdToPrint(), model.getAnnouncementIds(), model.getTitle1(), model.getTitle2(), model.getTitle3(),

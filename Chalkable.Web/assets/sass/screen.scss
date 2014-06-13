@@ -38,6 +38,10 @@ h1,h2,h3,h4,h5,h6,strong {
   color: #2f424b;
 }
 
+.report-iframe{
+  display: none;
+}
+
 @font-face {
     font-family: 'Jrhand';
     src: url('fonts/jrhand-webfont.eot');

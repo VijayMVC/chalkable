@@ -135,7 +135,8 @@ NAMESPACE('chlk.controls', function () {
                         $target.setData('submit-value', null);
                         $target.setData('submit-type', value);
 
-                        $target.addClass('working');
+                        if(!$target.hasClass('no-working'))
+                            $target.addClass('working');
 
                         var isPublic = !!$target.getData('public');
                         setTimeout(function () {
