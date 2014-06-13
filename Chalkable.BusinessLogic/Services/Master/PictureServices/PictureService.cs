@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
         {
             var name = baseName;
             if (height.HasValue && width.HasValue)
-                name += "-" + height + "x" + width;
+                name += "-" + width + "x" + height;
             return name;
         }
 
