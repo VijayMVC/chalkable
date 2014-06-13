@@ -26,7 +26,7 @@ NAMESPACE('chlk.lib.mvc', function () {
 
             [[String]],
             function submitToIFrame(src){
-                var iframe = new ria.dom.Dom('<iframe>');
+                var iframe = new ria.dom.Dom('<iframe class="report-iframe">');
                 iframe.setAttr('src', src);
                 iframe.appendTo('body');
                 iframe.on('load', function(node, event){
