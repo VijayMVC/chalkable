@@ -161,7 +161,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public IList<Application> GetApplicationsByIds(IList<Guid> ids)
         {
-            throw new NotImplementedException();
+            using (var uow = Read())
+            {
+                return new ApplicationDataAccess(uow).GetByIds(ids);
+            }
         }
     }
 

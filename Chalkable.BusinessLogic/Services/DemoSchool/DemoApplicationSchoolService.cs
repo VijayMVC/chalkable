@@ -110,7 +110,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds)
         {
-            throw new NotImplementedException();
+            return
+                Storage.AnnouncementApplicationStorage.GetAll()
+                    .Where(x => announcementIds.Contains(x.AnnouncementRef))
+                    .ToList();
         }
     }
 }
