@@ -6,7 +6,7 @@
     .report-buttons.panel-bg
         +ActionLink('grading', 'gradeBookReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Grade_Book_Report
         a(href="javascript:").report-button.pressed=Msg.Worksheet_Report
-    +ActionForm('grading', 'submitWorksheetReport')
+    +ActionForm('grading', 'submitWorksheetReport').report-form
         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
         +Hidden('classId', self.getClassId().valueOf())
         TABLE.report-table
@@ -51,10 +51,10 @@
                 TD(colspan="3").item-1.blank-columns
                     h3=Msg.Blank_columns
                     +LabeledCheckbox('', 'title1', false)(withInput = true, placeholder = Msg.Insert_title)
-                    +LabeledCheckbox('', 'title2', false)(withInput = true, placeholder = Msg.Insert_title)
-                    +LabeledCheckbox('', 'title3', false)(withInput = true, placeholder = Msg.Insert_title)
                     +LabeledCheckbox('', 'title4', false)(withInput = true, placeholder = Msg.Insert_title)
+                    +LabeledCheckbox('', 'title2', false)(withInput = true, placeholder = Msg.Insert_title)
                     +LabeledCheckbox('', 'title5', false)(withInput = true, placeholder = Msg.Insert_title)
+                    +LabeledCheckbox('', 'title3', false)(withInput = true, placeholder = Msg.Insert_title)
             TR
                 TD.item-3
                     h3=Msg.Include
