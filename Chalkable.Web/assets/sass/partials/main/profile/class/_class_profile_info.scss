@@ -1,0 +1,43 @@
+BODY {
+  DIV.page{
+    >DIV#content{
+      DIV#content-wrapper.profile{
+        #main{
+
+          .class-profile{
+            &.class-info{
+
+              .top-panel{
+                padding: 0 0 7px 7px;
+                .info{
+                  margin: 39px 0 24px -10px;
+                  font-size: 36px;
+                }
+              }
+
+              .detail-info{
+                text-shadow: 0 1px 1px white;
+                white-space: normal;
+                margin-left: 11px;
+                .section{
+                  margin-bottom: 15px;
+                  margin-top: 20px;
+
+                  .title{
+                    font: bold 16px Arial;
+                    color: #4D1F09;
+                  }
+                  .value{
+                    font: normal 17px Arial;
+                    margin-top: 6px;
+                    color: #957633 !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
