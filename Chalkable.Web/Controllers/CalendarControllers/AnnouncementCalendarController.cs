@@ -96,13 +96,19 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var periods = SchoolLocator.PeriodService.GetPeriods(schoolYearId);
              if (!BaseSecurity.IsAdminViewer(SchoolLocator.Context))
                  classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(schoolYearId, null, null, null, null, null, studentId, teacherId);
-                 
+
+             IList<AnnouncementPeriodViewData> annPeriods = null;
              foreach (var d in days)
              {
-                 if (!d.DayTypeRef.HasValue) continue;
                  var announcements = anns.Where(x => x.Expires.Date == d.Day.Date).ToList();
-                 var cPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
-                 var annPeriods = AnnouncementPeriodViewData.Create(periods, cPeriods, d, announcements, rooms);
+                 if (d.DayTypeRef.HasValue)
+                 {
+                     var cPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
+                     annPeriods = AnnouncementPeriodViewData.Create(periods, cPeriods, d, announcements, rooms);    
+                 }
+                 else
+                     annPeriods = AnnouncementPeriodViewData.Create(periods, new List<ClassPeriod>(), d, announcements, rooms);
+                 
                  var ann = announcements.Where(x => !x.GradableType).ToList();
                  res.Add(AnnouncementCalendarWeekViewData.Create(d.Day, annPeriods, ann));
              }
