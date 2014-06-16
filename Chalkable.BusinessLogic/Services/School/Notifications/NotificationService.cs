@@ -42,24 +42,33 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public IList<Notification> GetUnshownNotifications()
         {
+            if(!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Read())
             {
                 var da = new NotificationDataAccess(uow);
-                return da.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.UserLocalId});
+                return da.GetNotifications(new NotificationQuery
+                    {
+                        Shown = false, 
+                        PersonId = Context.UserLocalId, 
+                        SchoolId = Context.SchoolLocalId.Value
+                    });
             }
         }
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
         {
+            if (!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
+
             using (var uow = Read())
             {
-                var da = new NotificationDataAccess(uow);
-
-                var notifications = da.GetPaginatedNotificationsDetails(new NotificationQuery
+                var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(new NotificationQuery
                     {
                         PersonId = Context.UserLocalId, 
                         Start = start, 
-                        Count = count
+                        Count = count,
+                        SchoolId = Context.SchoolLocalId.Value
                     });
                 var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement != null)
                                    .Select(x => x.Announcement.ClassRef)
@@ -84,10 +93,18 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public void MarkAsShown(int[] notificationIds)
         {
+            if (!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
+
             using (var uow = Update())
             {
                 var da = new NotificationDataAccess(uow);
-                var notifications = da.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.UserLocalId });
+                var notifications = da.GetNotifications(new NotificationQuery
+                        {
+                            Shown = false, 
+                            PersonId = Context.UserLocalId,
+                            SchoolId = Context.SchoolLocalId.Value
+                        });
                 foreach (var notificationId in notificationIds)
                 {
                     var notification = notifications.FirstOrDefault(x => x.Id == notificationId);

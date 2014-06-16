@@ -89,6 +89,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new ClassPeriodDataAccess(uow, Context.SchoolLocalId)
                             .GetClassPeriods(new ClassPeriodQuery
                                 {
+                                    SchoolYearId = schoolYearId,
                                     MarkingPeriodId = markingPeriodId,
                                     ClassIds = classIds,
                                     PeriodId = periodId,

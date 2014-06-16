@@ -68,6 +68,10 @@ namespace Chalkable.Data.School.DataAccess
             b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
             var res = new DbQuery(b, new Dictionary<string, object>());
             conds.BuildSqlWhere(res, tables[0].Name);
+            res.Sql.AppendFormat(
+                " and (toPerson.[{0}] =@{0} and (QuestionPerson.[{0}] is null or QuestionPerson.[{0}] =@{0}))"
+                , SchoolPerson.SCHOOL_REF_FIELD);
+            res.Parameters.Add(SchoolPerson.SCHOOL_REF_FIELD, query.SchoolId);
             return res;
         }
 
@@ -140,7 +144,8 @@ namespace Chalkable.Data.School.DataAccess
         public int Count { get; set; }
         public NotificationType? Type { get; set; }
         public int? ClassPeriodRef { get; set; }
-        
+        public int SchoolId { get; set; }
+
         public NotificationQuery()
         {
             Start = 0;
