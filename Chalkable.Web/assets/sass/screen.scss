@@ -515,6 +515,11 @@ BODY {
       }
     }
   }
+
+  ul.ui-menu{
+    max-height: 315px;
+    overflow: scroll;
+  }
 }
 
 .black-arrow{

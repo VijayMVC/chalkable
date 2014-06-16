@@ -45,7 +45,9 @@ NAMESPACE('chlk.services', function () {
             [[String]],
             ria.async.Future, function getPersons(filter_) {
                 return this.getPaginatedList('Person/GetPersons.json', chlk.models.people.User, {
-                    filter: filter_
+                    filter: filter_,
+                    start: 0,
+                    count: 10000
                 })
                 .then(function(model){return model.getItems();});
             },
