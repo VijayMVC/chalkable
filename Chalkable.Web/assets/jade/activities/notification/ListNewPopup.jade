@@ -5,7 +5,7 @@
                 .image
                     if item.getType() == chlk.models.notification.NotificationTypeEnum.MESSAGE
                         .notification-person
-                            +ActionLink('message', 'page', item.getPrivateMessageId().valueOf())#notification-action
+                            +ActionLink('message', 'page')#notification-action
                                 +PersonImg(item.getPerson(), 47)
                             span Message
                     if item.getType() == chlk.models.notification.NotificationTypeEnum.QUESTION
