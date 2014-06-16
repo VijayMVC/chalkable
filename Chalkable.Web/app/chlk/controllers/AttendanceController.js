@@ -305,7 +305,7 @@ NAMESPACE('chlk.controllers', function (){
                         var curRow = seatingList[curRowIndex];
                         var len = curRow.length;
                         for(var curColIndex = len + 1; curColIndex <= columns; curColIndex++){
-                            newRow.push({
+                            curRow.push({
                                 row: curRowIndex,
                                 column: curColIndex
                             });
