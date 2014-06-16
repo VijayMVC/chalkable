@@ -492,7 +492,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), '.final-grid')],
             [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Number]],
             function deSelectStudent(node, event, row, index){
-                node.find('.attachments-container:eq(' + index + ')').slideUp(250);
+                node.find('.attachments-container:eq(' + index + ')').slideUp(250).removeClass('opened');
                 row.find('.grade-triangle').removeClass('down');
                 row.find('.grading-form').trigger('submit');
             }
