@@ -21,8 +21,8 @@
 
                     if self.body
                         .x-form-field
-                            label= 'send: ' + self.sent.toString('dd/m/yy hh:min:ss')
-                            textarea(type="text",name="prev",class="validate[required]")=self.body
+                            label= 'sent: ' + self.sent.toUSADateTimeFormat()
+                            textarea(type="text",name="prev",class="validate[required]", readonly="readonly")=self.body
                     .form-buttons
                         +Button()(type="submit", name="submitType", value ="submit").special-button.blue-button.submit-btn#submitbtn=Msg.Send_message.toUpperCase()
                         +Button.special-button.cancel-button.close=Msg.Cancel

@@ -73,6 +73,8 @@ NAMESPACE('chlk.models.common', function () {
                 date_ && this.setDate(date_);
                 this._STANDART_FORMAT = 'mm-dd-yy'
                 this._DEFAULT_FORMAT = 'm-dd-yy';
+                this._USA_DATE_FORMAT = 'm/dd/yy';
+                this._USA_DATE_TIME_FORMAT = 'm/dd/yy hh:min:ss tt'
             },
 
             [[String]],
@@ -113,6 +115,10 @@ NAMESPACE('chlk.models.common', function () {
 
             String, function toStandardFormat(){
                 return this.format(this._STANDART_FORMAT);
+            },
+
+            String, function toUSADateTimeFormat(){
+                return this.format(this._USA_DATE_TIME_FORMAT);
             },
 
             [[SELF]],
