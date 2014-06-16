@@ -1,4 +1,5 @@
 displayValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades())
+originalValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), true)
 edited = self.getEnteredAvg() || self.getEnteredAvg() == 0 || self.getEnteredAlphaGrade()
 div(
     data-isexempt= self.isExempt(),
@@ -14,8 +15,9 @@ div(
 ).grade-info
     if self.withCodes()
         .with-comment
+    -console.log(originalValue)
     div(
-        data-tooltip=(edited ? Msg.Orig + " " + self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), true) : ""),
+        data-tooltip=(edited && originalValue ? Msg.Orig + " " + originalValue : ""),
         data-value=displayValue
     ).grade-text.avg-text=displayValue
     if edited
