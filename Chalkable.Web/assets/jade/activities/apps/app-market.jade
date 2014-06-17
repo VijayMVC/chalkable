@@ -18,10 +18,8 @@ mixin AppIconLink(app)
                     +ActionLink('appmarket', 'details', item.getAppId())(title=item.getPicture().getTitle())
                         img(src=item.getPicture().getPictureUrl())
 
-
-
     +ActionForm('appmarket', 'list')#app-market-filter
-        +Hidden('start',self.apps.getPageIndex()) * self.apps.getPageSize())
+        +Hidden('start', self.apps.getPageIndex())
         +Hidden('totalCount', self.apps.getTotalCount())
         +Hidden('pageSize', self.apps.getPageSize())
         +Hidden('scroll', 0)
