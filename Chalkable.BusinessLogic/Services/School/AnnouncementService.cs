@@ -298,6 +298,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annDa = CreateAnnoucnementDataAccess(uow);
                 var nowLocalDate = Context.NowSchoolTime;
                 var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId.Value);
+                if (res.ClassAnnouncementTypeRef.HasValue)
+                {
+                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
+                    res.ClassAnnouncementTypeName = classAnnType.Name;
+                    res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
+                }
                 uow.Commit();
                 return res;
             }
@@ -448,8 +454,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
-                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res); 
+                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
+                }
+                else if (res.ClassAnnouncementTypeRef.HasValue)
+                {
+                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
+                    res.ClassAnnouncementTypeName = classAnnType.Name;
+                    res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
                 }
                 return res;
             }                
