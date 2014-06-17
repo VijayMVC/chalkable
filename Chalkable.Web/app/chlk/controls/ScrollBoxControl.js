@@ -18,6 +18,11 @@ NAMESPACE('chlk.controls', function () {
             String, 'totalCountField',
             Number, 'scrollOffset',
 
+            function $(){
+                BASE();
+                this._stopScroll = false;
+            },
+
             [[Object]],
             Object, function processAttrs(attributes) {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
@@ -33,40 +38,49 @@ NAMESPACE('chlk.controls', function () {
                     .onActivityRefreshed(function (activity, model) {
                         this.update(jQuery('#'+attributes.id));
                     }.bind(this));
+
+
+                this.context.getDefaultView().getCurrent()
+                    .addRefreshCallback(function (activity, model) {
+                        this._stopScroll = false;
+                        this.update(jQuery('#'+attributes.id));
+                }.bind(this));
                 return attributes;
             },
 
             [[Object]],
             VOID, function update(node){
                 var formId = this.getFormId();
-                var that = this;
                 var scrollField = 'input[name=' + this.getMustScrollField() + ']';
                 var pageSizeField = 'input[name=' + this.getPageSizeField() + ']';
-                var actualCountField = 'input[name=' + this.getActualCountField() + ']';
                 var startField = 'input[name=' + this.getStartField() + ']';
                 var totalCountField = 'input[name=' + this.getTotalCountField() + ']';
                 var scrollOffset = this.getScrollOffset();
+                this._stopScroll = false;
 
                 jQuery(window).scroll(function(){
-                    if  (jQuery(window).scrollTop() + scrollOffset >= jQuery(document).height() - jQuery(window).height()){
-                        jQuery('#' + formId).parent().find('.scrollbox-loader').removeClass('x-hidden');
-                        jQuery('#' + formId).find(scrollField).val(1);
+                    if  (!this._stopScroll && (jQuery(window).scrollTop() + scrollOffset >= jQuery(document).height() - jQuery(window).height())){
 
-                        var start = jQuery('#' + formId).find(startField).val() | 0;
-                        var pageSize = jQuery('#' + formId).find(pageSizeField).val() | 0;
-                        var actualCount = jQuery('#' + formId).find(actualCountField).val() | 0;
-                        var totalCount = jQuery('#' + formId).find(totalCountField).val() | 0;
+                        var jForm = jQuery('#' + formId);
+                        jForm.parent().find('.scrollbox-loader').removeClass('x-hidden');
+                        jForm.find(scrollField).val(1);
+
+                        var start = jForm.find(startField).val() | 0;
+                        var pageSize = jForm.find(pageSizeField).val() | 0;
+                        var totalCount = jForm.find(totalCountField).val() | 0;
+                        this._stopScroll = true;
 
                         if (start < totalCount){
-                            jQuery('#' + formId).find(startField).val(start + pageSize);
-                            jQuery('#' + formId).trigger('submit');
+                            jForm.find(startField).val(start + pageSize);
+                            jForm.trigger('submit');
                         }
                         else{
-                            jQuery('#' + formId).parent().find('.scrollbox-loader').addClass('x-hidden');
+                            jForm.parent().find('.scrollbox-loader').addClass('x-hidden');
                             return false;
                         }
+
                     }
-                });
+                }.bind(this));
             }
         ]);
 });
