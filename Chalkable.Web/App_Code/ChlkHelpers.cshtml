@@ -1,0 +1,207 @@
+﻿@using System.Configuration
+@using System.Web.Mvc
+@using System.Web.Mvc.Html;
+@using Chalkable.Web.Extensions
+
+@helper MixPanel()
+{
+    <!-- start Mixpanel -->
+    <script type="text/javascript">
+        (function (e, b) {
+            if (!b.__SV) {
+                var a, f, i, g; window.mixpanel = b; a = e.createElement("script"); a.type = "text/javascript"; a.async = !0; a.src = ("https:" === e.location.protocol ? "https:" : "http:") + "//cdn.mxpnl.com/libs/mixpanel-2.2.min.js"; f = e.getElementsByTagName("script")[0]; f.parentNode.insertBefore(a, f); b._i = []; b.init = function (a, e, d) {
+                    function f(b, h) { var a = h.split("."); 2 == a.length && (b = b[a[0]], h = a[1]); b[h] = function () { b.push([h].concat(Array.prototype.slice.call(arguments, 0))) } } var c = b; "undefined" !== typeof d ? c = b[d] =
+                        [] : d = "mixpanel"; c.people = c.people || []; c.toString = function (b) { var a = "mixpanel"; "mixpanel" !== d && (a += "." + d); b || (a += " (stub)"); return a }; c.people.toString = function () { return c.toString(1) + ".people (stub)" }; i = "disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.increment".split(" "); for (g = 0; g < i.length; g++) f(c, i[g]); b._i.push([a, e, d])
+                };
+                b.__SV = 1.2;
+            }
+        })(document, window.mixpanel || []);
+        mixpanel.init("@ConfigurationManager.AppSettings["mixpanel-token"]");
+    </script>
+}
+
+
+@helper Olark()
+{
+      <script type='text/javascript'>/*{literal}<![CDATA[*/window.olark || (function (i) { var e = window, h = document, a = e.location.protocol == "https:" ? "https:" : "http:", g = i.name, b = "load"; (function () { e[g] = function () { (c.s = c.s || []).push(arguments) }; var c = e[g]._ = {}, f = i.methods.length; while (f--) { (function (j) { e[g][j] = function () { e[g]("call", j, arguments) } })(i.methods[f]) } c.l = i.loader; c.i = arguments.callee; c.f = setTimeout(function () { if (c.f) { (new Image).src = a + "//" + c.l.replace(".js", ".png") + "&" + escape(e.location.href) } c.f = null }, 20000); c.p = { 0: +new Date }; c.P = function (j) { c.p[j] = new Date - c.p[0] }; function d() { c.P(b); e[g](b) } e.addEventListener ? e.addEventListener(b, d, false) : e.attachEvent("on" + b, d); (function () { function l(j) { j = "head"; return ["<", j, "></", j, "><", z, ' onl' + 'oad="var d=', B, ";d.getElementsByTagName('head')[0].", y, "(d.", A, "('script')).", u, "='", a, "//", c.l, "'", '"', "></", z, ">"].join("") } var z = "body", s = h[z]; if (!s) { return setTimeout(arguments.callee, 100) } c.P(1); var y = "appendChild", A = "createElement", u = "src", r = h[A]("div"), G = r[y](h[A](g)), D = h[A]("iframe"), B = "document", C = "domain", q; r.style.display = "none"; s.insertBefore(r, s.firstChild).id = g; D.frameBorder = "0"; D.id = g + "-loader"; if (/MSIE[ ]+6/.test(navigator.userAgent)) { D.src = "javascript:false" } D.allowTransparency = "true"; G[y](D); try { D.contentWindow[B].open() } catch (F) { i[C] = h[C]; q = "javascript:var d=" + B + ".open();d.domain='" + h.domain + "';"; D[u] = q + "void(0);" } try { var H = D.contentWindow[B]; H.write(l()); H.close() } catch (E) { D[u] = q + 'd.write("' + l().replace(/"/g, String.fromCharCode(92) + '"') + '");d.close();' } c.P(2) })() })() })({ loader: (function (a) { return "static.olark.com/jsclient/loader0.js?ts=" + (a ? a[1] : (+new Date)) })(document.cookie.match(/olarkld=([0-9]+)/)), name: "olark", methods: ["configure", "extend", "declare", "identify"] });
+          /* custom configuration goes here (www.olark.com&frasl;documentation) */
+          olark.identify('7960-903-10-2178');/*]]>{/literal}*/</script>
+}
+
+@helper LinkedIn(object linkedInId)
+{
+     <!-- <script type="text/javascript" src="https://platform.linkedin.com/in.js">
+        api_key: @linkedInId
+    </script>-->
+}
+
+@helper RenderSiteRoot(UrlHelper Url)
+{
+    if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        <script type="text/javascript">
+            var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
+
+            if (_ == null) _ = '';
+            var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">var WEB_SITE_ROOT = window.location.href.toString().match(/http?s:\/\/[^\/]+/) + '@Url.Content("~/")';</script>
+    } 
+}
+
+
+@helper WebKitAutofill()
+{
+    <script type="text/javascript">
+        function hideURLbar() {
+            window.scrollTo(0, 0);
+            addEventListener("load", function () { setTimeout(hideURLbar, 0); }, false);
+        }
+
+        $(window).load(function () {
+            if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
+                $('input:-webkit-autofill').each(function () {
+                    var text = $(this).val();
+                    var name = $(this).attr('name');
+                    $(this).after(this.outerHTML).remove();
+                    $('input[name=' + name + ']').val(text);
+                });
+            }
+        });
+    </script>
+}
+
+
+@helper Facebook()
+{
+     <script type="text/javascript">
+         (function (d, s, id) {
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) return;
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+             fjs.parentNode.insertBefore(js, fjs);
+         }(document, 'script', 'facebook-jssdk'));
+
+     </script>
+}
+
+
+@helper GoogleAnalytics()
+{
+    if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-25952076-1']);
+            _gaq.push(['_setDomainName', 'chalkable.com']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+    }
+}
+
+
+@helper RenderPageMetadata()
+{
+    <meta property="fb:page_id" content="www.facebook.com/chalkable" />
+    <meta property="og:image" content="https://chalkable.com/Content/images/index/slider_imgs/admin_attend.jpg" />
+    <meta property="og:description" content="Chalkable is an app store for school and a platform to make those apps work."/>
+    <meta property="og:title" content="Chalkable"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta itemprop="name" content="Chalkable">
+    <meta itemprop="description" content="I just signed up for Chalkable to get amazing apps into my school. Check it out for yourself.">
+}
+
+@helper RenderSignInForm(UrlHelper Url, System.Web.Mvc.HtmlHelper Html)
+{
+   <div id="toppanel">
+       <div id="panel">
+           <div class="tab">
+               <button id="close" class="toplogin closer">Close</button>		
+           </div>
+            <div class="content clearfix">
+            <section class="signinarea">
+                <div id="formContainer">
+                   <form id="login" action="@Url.Content("~/User/LogOn")" method="post">
+                   <div class = "sign-in-errors">
+                      @Html.ValidationMessage("ValidationError")
+                   </div>
+                   <ul id="form" class="signinformclass">
+                      <h3 class="signintitle">Sign in</h3>
+                      <li>
+                         <label class="signinformlabel">Email
+                         </label>
+                         <div>
+                            <input id="UserName" name="UserName" type="email" spellcheck="false" class="fieldtext validate[required,custom[email]]"
+                               value="" autofocus="autofocus" tabindex="1" required />
+                         </div>
+                         <p class="instruct index">
+                         </p>
+                      </li>
+                      <li>
+                         <label class="signinformlabel" id="title4" >Password
+                         </label>
+                         <div class="the-password">
+                            <input id="Password" name="Password" type="password" class="pw field-password validate[required]"
+                               value="" maxlength="25" tabindex="2" onkeyup="" required />
+                         </div>
+                      </li>
+                      <li>
+                         <fieldset>
+                            <div>
+                               <div class="fake-input checkbox">
+                                  <span><input id="RememberMe" name="remember" type="checkbox" value="true"><input name="remember" type="hidden" value="false"></span>
+                               </div>
+                            </div>
+                         </fieldset>
+                      </li>
+                      <li>
+                         <p class="stayin">Stay signed in</p>
+                      </li>
+                      <li class="signin_button_container">
+                          <a href="#" class="sign_in_button" tabindex="3"></a>
+                         <p class="forgot"> <a href="#" id="flipToRecover" class="flipLink"> Forgot Password?</a> </p>
+                      </li>
+                   </ul>
+                   <input type="submit" tabindex="3" style="visibility:hidden;"/>
+                   </form>
+                   <form id="recover" action="@Url.Content("~/Account/ResetPassword")" method="post">
+                   <ul id="form" class="signinformclass">
+                      <h3 class="signintitle">Forgot Password</h3>
+                      <li>
+                         <label class="signinformlabel">Email </label>
+                         <div>
+                            <input id="recovery-email" type="email" name="email" spellcheck="false" class="fieldtext validate[required,custom[email]]" value="" maxlength="60" tabindex="2" required/>
+                         </div>
+                         <p class="instruct index">	</p>
+                      </li>
+                      <li class="signin_button_container recovery">
+                         <a href="#" class="email_me_button">Email Me</a>
+                         <p class="forgot recovery"> <a href="#" id="flipToLogin" class="flipLink">↩ Go Back</a> </p>
+                      </li>
+                   </ul>
+                   <input type="submit" value="Recover" style="visibility: hidden" />
+                   </form>
+                </div>
+             </section>
+          </div>
+       </div>
+    </div>
+}  
+
+
+
+@helper RenderChlkCopyrightYear(){
+    <div id="footer">&copy; <script type="text/javascript">var dt = new Date(); document.write(dt.getFullYear());</script> Chalkable</div>
+}    
