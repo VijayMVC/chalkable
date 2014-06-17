@@ -38,8 +38,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date, int? personId)
         {
-            var classPeriod = ServiceLocator.ClassPeriodService.GetNearestClassPeriod(classId, date);
-            if (classPeriod == null) return null;
+            //var classPeriod = ServiceLocator.ClassPeriodService.GetNearestClassPeriod(classId, date);
+            //if (classPeriod == null) return null;
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
             if (mp == null) return null;
             var disciplineRefferals = ConnectorLocator.DisciplineConnector.GetList(classId, date);
