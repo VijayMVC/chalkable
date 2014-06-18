@@ -69,6 +69,14 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.developer.PayPalSettingsPage, new ria.async.DeferredData(paypalSettings));
             },
 
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DEVELOPER
+            ])],
+            function viewChangePasswordAction(){
+                var changePasswordInfo = new chlk.models.account.ChangePassword();
+                return this.PushView(chlk.activities.settings.ChangePasswordPage, new ria.async.DeferredData(changePasswordInfo));
+            },
+
 
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER

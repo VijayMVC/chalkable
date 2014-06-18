@@ -3,7 +3,7 @@ REQUIRE('chlk.templates.developer.PayPalSettingsTpl');
 
 NAMESPACE('chlk.activities.developer', function () {
 
-    /** @class chlk.activities.developer.DeveloperDocsPage*/
+    /** @class chlk.activities.developer.PayPalSettingsPage*/
 
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
