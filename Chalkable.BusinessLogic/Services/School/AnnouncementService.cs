@@ -321,8 +321,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
-                    var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(res.ClassAnnouncementTypeName);
-                    res.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;
+                    var chlkAnnType =
+                        ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(
+                            res.ClassAnnouncementTypeName);
+                    res.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?) null;
                     if (Context.Role == CoreRoles.TEACHER_ROLE)
                     {
                         //TODO: rewrite this later 
@@ -330,7 +332,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         foreach (var annAtt in atts)
                         {
                             annAtt.PersonRef = Context.UserLocalId.Value;
-                            if (string.IsNullOrEmpty(annAtt.Uuid) && ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
+                            if (string.IsNullOrEmpty(annAtt.Uuid) &&
+                                ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
                             {
                                 var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(annAtt.SisAttachmentId.Value);
                                 annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Name, content).uuid;
@@ -339,6 +342,13 @@ namespace Chalkable.BusinessLogic.Services.School
                         }
                     }
                 }
+                else if(res.ClassAnnouncementTypeRef.HasValue)
+                {
+                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
+                    res.ClassAnnouncementTypeName = classAnnType.Name;
+                    res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
+                }
+
                 uow.Commit();
                 return res;
             }
@@ -438,8 +448,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     ann.Expires = announcement.ExpiresDate.Value;
 
                 ann = SetClassToAnnouncement(ann, classId, ann.Expires);
-                //ann = ReCreateRecipients(uow, ann, recipients);
                 da.Update(ann);
+
                 var date = ann.Expires > DateTime.MinValue ? ann.Expires : ann.Created;
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(date);
                 if(ann.ClassAnnouncementTypeRef.HasValue)
