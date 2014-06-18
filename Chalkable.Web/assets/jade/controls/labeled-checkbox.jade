@@ -5,6 +5,6 @@ mixin LabeledCheckbox(text, name, val, isReadOnly)
         if attributes.withInput
             input(placeholder=attributes.placeholder, name=name).label-input
         else
-            label(for=attributes.id)=text
+            label(for=attributes.id, data-tooltip=text, data-tooltip-type="overflow")=text
 
 

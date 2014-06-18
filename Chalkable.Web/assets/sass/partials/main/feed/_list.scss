@@ -137,6 +137,16 @@ $star-size: 18px;
     }
   }
 
+  &.complete{
+    text-decoration: line-through;
+
+    DIV.item-type DIV.attachment{
+      p, h2, div{
+        text-shadow: none;
+      }
+    }
+  }
+
 
   &.animated-item{
     DIV.item-type{
