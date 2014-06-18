@@ -1,0 +1,22 @@
+mixin Paginator(controller, action, data, params)
+    params = params || [];
+    pagingData = self.preparePaginationData(data, params)
+    .paginator-container
+        .left-container
+            +ActionLinkWithPrepend(controller, action, params, 0)(class = 'first-page' + (pagingData.hasPreviousPage ? '' : ' disabled'))
+            +ActionLinkWithPrepend(controller, action, params, pagingData.prevPageStart)(class =  'prev-page' + (pagingData.hasPreviousPage ? '' : ' disabled'))
+            .info-container
+                form
+                    label(for='current_page') Page
+                    input(name='current_page', value=pagingData.pageIndex).page-value
+                    span
+                        | of #{pagingData.totalPages || 1}
+                    input(type="submit")
+                    input(type="hidden", name="controller", value=controller).controller-name
+                    input(type="hidden", name="action", value=action).action-name
+            +ActionLinkWithPrepend(controller, action, params, pagingData.nextPageStart)(class = 'next-page' + (pagingData.hasNextPage ? '' : ' disabled'))
+            +ActionLinkWithPrepend(controller, action, params, pagingData.lastPageStart)(class = 'last-page' + (pagingData.hasNextPage ? '' : ' disabled'))
+        .right-container
+            SPAN
+                |Displaying #{pagingData.startText} - #{pagingData.end} of #{pagingData.totalCount || 0}
+        .clear
