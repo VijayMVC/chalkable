@@ -23,15 +23,16 @@ mixin MyAppsIconLink(app, editable)
                     img(src=pictureUrl)
                 .name=app.getName()
 .my-apps
-    .action-bar.not-transparent
+    .action-bar.not-transparent.buttons
         .container.panel-bg.buttons-toolbar
             personId = self.getPersonId()
-            if self.isEditable()
-                +ActionLink('appmarket', 'myApps', false).edit.toolbar-btn Done
-            else
-                +ActionLink('appmarket', 'myApps', true).edit.toolbar-btn Edit
+            .left.no-border
+                if self.isEditable()
+                    +ActionLink('appmarket', 'myApps', false).edit.toolbar-btn Done
+                else
+                    +ActionLink('appmarket', 'myApps', true).edit.toolbar-btn Edit
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
-            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn.pressed My Apps
             +ActionLink('funds', 'view').toolbar-btn App Funds
             +ActionForm('', '')
                 +SearchBox(chlk.services.AppMarketService, "getMyAppsByFilter",

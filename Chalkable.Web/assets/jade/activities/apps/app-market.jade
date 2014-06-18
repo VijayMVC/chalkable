@@ -10,7 +10,7 @@ mixin AppIconLink(app)
                 .shortdesc=app.getShortDescription()
 
 .app-market
-    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels, true)
     .app-screenshots-panel
         +Carousel()
             each item, index in self.getMarketScreenshots()
