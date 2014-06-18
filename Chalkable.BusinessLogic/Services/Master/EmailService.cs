@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         void SendInviteToPerson(Person person, string confirmationKey, string message, string messageTemplate);
         void SendResettedPasswordToPerson(Person person, string confirmationKey);
+        void SendResettedPasswordToDeveloper(Developer developer, string confirmationKey);
         void SendNotificationToPerson(Person person, string message);
         void SendMailToFriend(string fromMail, string toMail, string message, string subject = null);
         void SendApplicationEmailToDeveloper(Application application);
@@ -31,26 +32,38 @@ namespace Chalkable.BusinessLogic.Services.Master
         public EmailService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
-        private const string confirmUrlFormat = "{0}/Home/Confirm?key={1}";
+        private const string confirmUrlFormat = "{0}/User/Confirm?key={1}";
         public void SendResettedPasswordToPerson(Person person, string confirmationKey)
         {
-            var personMail = person.Email;
-            var fromEmail = PreferenceService.GetTyped<EmailInfo>(Preference.FORGOTPASSWORD_SYSTEM_EMAIL);
+            var bodyTemplate = PreferenceService.Get(Preference.RESETTED_PASSWORD_EMAIL_BODY).Value;
+            var url = string.Format(confirmUrlFormat, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
+            var body = string.Format(bodyTemplate, person.FirstName, person.LastName, url);
+            SendResettedPassword(person.Email, body);
+            person.LastPasswordReset = DateTime.UtcNow;
+        }
+        
+        public void SendResettedPasswordToDeveloper(Developer developer, string confirmationKey)
+        {
+            var bodyTemplate = PreferenceService.Get(Preference.RESETTED_PASSWORD_EMAIL_BODY).Value;
+            var url = string.Format(confirmUrlFormat, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
+            var body = string.Format(bodyTemplate, developer.DisplayName, "", url);
+            SendResettedPassword(developer.Email, body);
+        }
 
+        private void SendResettedPassword(string email, string body)
+        {
+            var fromEmail = PreferenceService.GetTyped<EmailInfo>(Preference.FORGOTPASSWORD_SYSTEM_EMAIL);
             var mail = PrepareMailToSysadmins(fromEmail);
-            if (EmailTools.IsValidEmailAddress(personMail))
-                mail.To.Add(personMail);
+            if (EmailTools.IsValidEmailAddress(email))
+                mail.To.Add(email);
             else
             {
-                Trace.TraceWarning(ChlkResources.ERR_EMAIL_INVALID, personMail);
+                Trace.TraceWarning(ChlkResources.ERR_EMAIL_INVALID, email);
                 return;
             }
             mail.Subject = ChlkResources.EMAIL_CHALKABLE_PASSWORD_RESET;
-            var bodyTemplate = PreferenceService.Get(Preference.RESETTED_PASSWORD_EMAIL_BODY).Value;
-            var url = string.Format(confirmUrlFormat, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
-            mail.Body = string.Format(bodyTemplate, person.FirstName, person.LastName, url);
+            mail.Body = body;
             SendMail(mail, fromEmail);
-            person.LastPasswordReset = DateTime.UtcNow;
         }
 
         public void SendChangedEmailToPerson(Person person, string newEmail)
@@ -220,6 +233,5 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
- 
     }
 }
