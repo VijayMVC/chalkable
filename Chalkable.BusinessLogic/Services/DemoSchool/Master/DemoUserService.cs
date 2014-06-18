@@ -215,6 +215,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             
         }
 
+        public bool ResetPassword(string email)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public User GetSysAdmin()
         {

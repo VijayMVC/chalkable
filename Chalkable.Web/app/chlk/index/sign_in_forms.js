@@ -54,7 +54,7 @@ $(document).ready(function () {
         if (!form.validationEngine('validate')) { return; }
         var value = form.find('input[name=email]').val();
         form.find('input[type=submit]').attr('disabled', true);
-        jQuery.getJSON(WEB_SITE_ROOT + 'Account/ResetPassword.json', { email: value }, function (response, data) {
+        jQuery.getJSON(WEB_SITE_ROOT + 'User/ResetPassword.json', { email: value }, function (response, data) {
             form.find('input[type=submit]').attr('disabled', false);
         });
         return false;

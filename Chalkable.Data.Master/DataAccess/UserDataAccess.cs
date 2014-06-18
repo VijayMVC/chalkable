@@ -95,7 +95,7 @@ namespace Chalkable.Data.Master.DataAccess
         public User GetUser(string confirmationKey)
         {
             var conds = new AndQueryCondition();
-            if(string.IsNullOrEmpty(confirmationKey))
+            if(!string.IsNullOrEmpty(confirmationKey))
                 conds.Add(User.CONFIRMATION_KEY_FIELD, confirmationKey);
             return GetUser(conds);
         }

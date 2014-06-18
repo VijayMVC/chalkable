@@ -25,6 +25,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public void SendResettedPasswordToDeveloper(Developer developer, string confirmationKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SendChangedEmailToPerson(Person person, string newEmail)
         {
             var sysEMail = PreferenceService.GetTyped<EmailInfo>(Preference.SYSTEM_EMAIL);

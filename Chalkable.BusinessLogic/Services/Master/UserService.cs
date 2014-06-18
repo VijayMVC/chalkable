@@ -33,6 +33,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void AssignUserToSchool(IList<SchoolUser> schoolUsers);
         void ChangePassword(string login, string newPassword);
         void ChangeUserLogin(Guid id, string login);
+        bool ResetPassword(string email);
         User GetSysAdmin();
         void CreateSchoolUsers(IList<User> userInfos);
         void DeleteUsers(IList<int> localIds, Guid districtId);
@@ -82,10 +83,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new UserDataAccess(uow);
                 var user = da.GetUser(confirmationKey);
+                var districtId = user.DistrictRef;
+                if (user.IsSchoolUser)
+                    throw new NotImplementedException();
                 var res = Login(user, uow);
                 if (res != null)
                 {
                     user.ConfirmationKey = null;
+                    user.DistrictRef = districtId;
                     da.Update(user);
                 }
                 uow.Commit();
@@ -385,6 +390,43 @@ namespace Chalkable.BusinessLogic.Services.Master
                 new UserDataAccess(uow).Delete(localIds, districtId);
                 uow.Commit();
             }
+        }
+
+
+        public bool ResetPassword(string email)
+        {
+            var user = GetByLogin(email);
+            if (user != null)
+            {
+                var key = GenerateConfirmationKey();
+                if (user.IsDeveloper)
+                {
+                    var developer = ServiceLocator.DeveloperService.GetDeveloperById(user.Id);
+                    ServiceLocator.EmailService.SendResettedPasswordToDeveloper(developer, key);
+                }
+                else if (user.IsSchoolUser && user.SchoolUsers.Count > 0 && user.LocalId.HasValue)
+                {
+                    var schoolId = user.SchoolUsers.First().SchoolRef;
+                    var person = ServiceLocator.SchoolServiceLocator(schoolId).PersonService.GetPerson(user.LocalId.Value);
+                    ServiceLocator.EmailService.SendResettedPasswordToPerson(person, key);
+                } else
+                    throw new NotImplementedException();
+
+                using (var uow = Update())
+                {
+                    user.ConfirmationKey = key;
+                    new UserDataAccess(uow).Update(user);
+                    uow.Commit();
+                }
+                return true;
+            }
+            return false;
+        }
+        private string GenerateConfirmationKey()
+        {
+            var confirmatioKey = Guid.NewGuid().ToString();
+            confirmatioKey = confirmatioKey.Replace("-", "");
+            return confirmatioKey;
         }
     }
 }
