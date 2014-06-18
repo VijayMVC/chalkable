@@ -1,0 +1,26 @@
+.day-calendar-body
+    .day-names.day
+        each item,i in self.getItems()
+            div(class=item.getTodayClassName()).day
+                if(item.getDate().getDate().getDay())
+                    p=item.getDate().format('DD')
+    .items
+        each item in self.getItems()
+            div(class = item.getTodayClassName()).gradient-cnt.item.week-day.day
+                ul
+                    items = item.getCalendarDayItems() || [];
+                    each calendarDayItem,i in items
+                        period = calendarDayItem.getAnnouncementClassPeriods()[0];
+                        +ActionLink('calendar', 'showDayPopUp', item.getDate().format('mm-dd-yy'), i)(class = period && self.isMainCalendar() ? "" : "disabled").period-item.day
+                            if(item.getDate().getDate().getDay() == 0)
+                                .period-info=(i+1)
+                                span.time=calendarDayItem.getPeriod().displayPeriodTimeRange()
+                            else
+                                li
+                                    if(period)
+                                        clazz = period.getClassPeriod().getClazz();
+                                        .course-icon
+                                            +ClassImg(clazz.getCourse(), 45, 80)
+                                        .p-container
+                                            p.title.day-title
+                                                span=clazz.getName()

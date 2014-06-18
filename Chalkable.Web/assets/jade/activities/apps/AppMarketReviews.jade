@@ -1,0 +1,32 @@
+app = self
+appRating = app.getApplicationRating()
+
+a.review-link User Ratings
++Rating("appRating", appRating.getAverage(), false).all
+a.write-review-btn Write a review
+.add-review.x-hidden
+    +ActionForm('appmarket', 'writeReview')#submit-review-form
+        +Hidden('appId', app.getId().valueOf())
+        .review-area
+            textarea.review-text(placeholder="Write a review", name="reviewText")
+            .review-container
+                +Rating('newRating', 0, true)
+                .rating-hint
+        .btns
+            +Button()(type="button", class="special-button blue-button submit-review-btn") Submit
+            span.cancel-btn Cancel
+.user-reviews
+    .rating-roles.x-hidden
+        each item in appRating.getRoleRatings()
+            .rating-role-item
+                role = item.getRole()
+                .rolename=role.getName()
+                .app-rating
+                    +Rating('role-' + role.getName(), item.getRating())
+                    .personcount=item.getPersonCount()
+    .rating-persons
+        each item in appRating.getPersonRatings()
+            .rating-person-item
+                person = item.getPerson()
+                p=item.getReview() + ' - ' + person.getFullName()
+                    +Rating('person-rating-' + person.getId().valueOf(), item.getRating())
