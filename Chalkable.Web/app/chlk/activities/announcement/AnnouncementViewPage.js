@@ -497,7 +497,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                             if(!Number.isNaN(parsed)){
                                 node.removeClass('error');
                                 node.removeClass('not-equals');
-                                if(text && parsed != text){
+                                if(text && parsed != text || parsed > 9999.99 || parsed < -9999.99){
                                     node.addClass('error');
                                 }else{
                                     this.hideDropDown();

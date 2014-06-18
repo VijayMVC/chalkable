@@ -374,7 +374,7 @@ NAMESPACE('chlk.activities.grading', function () {
                             var parsed = parseFloat(text);
                             if(parsed || parsed == 0){
                                 node.removeClass('error');
-                                if(parsed != text){
+                                if(parsed != text || parsed > 9999.99 || parsed < -9999.99){
                                     node.addClass('error');
                                 }else{
                                     this.hideDropDown();
