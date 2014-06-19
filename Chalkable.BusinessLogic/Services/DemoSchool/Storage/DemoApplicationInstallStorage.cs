@@ -254,34 +254,46 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IEnumerable<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int userId, int roleId)
         {
 
-
-            var appInstalls =
-                Storage.ApplicationInstallStorage.GetAll().Where(x => x.ApplicationRef == applicationId && x.Active).ToList();
-
-            var csps = Storage.ClassPersonStorage.GetAll().ToList();
-            var classes = Storage.ClassStorage.GetAll().ToList();
-            var classPersons = from cls in classes
-                join csp in csps on cls.Id equals csp.ClassRef
-                join appInst in appInstalls on new {csp.PersonRef, cls.SchoolYearRef} equals
-                    new {appInst.PersonRef, SchoolYearRef = (int?) appInst.SchoolYearRef} into cspJoined
-                from cspj in cspJoined.DefaultIfEmpty()
-                group cspj by new {cls.Id, cls.Name}
-                into grouped
-                select
-                    new
-                    {
-                        ClassId = grouped.Key.Id,
-                        ClassName = grouped.Key.Name,
-                        NotInstalledStudentCount = grouped.Count()
-                    };
-
-
-            return classPersons.Select(x => new StudentCountToAppInstallByClass
+            var classes = Storage.ClassStorage.GetClassesComplex(new ClassQuery
             {
-                ClassId = x.ClassId,
-                ClassName = x.ClassName,
-                NotInstalledStudentCount = x.NotInstalledStudentCount
+                CallerRoleId = roleId,
+                CallerId = userId,
+                SchoolYearId = schoolYearId
             });
+            var csps = Storage.ClassPersonStorage.GetAll().Where(cp=>classes.Classes.Any(c=>c.Id == cp.ClassRef)).ToList();
+            var appInstalls = Storage.ApplicationInstallStorage.GetAll()
+                .Where(x => x.ApplicationRef == applicationId && x.Active && x.SchoolYearRef == schoolYearId).ToList();
+
+            return classes.Classes.Select(c => new StudentCountToAppInstallByClass
+                {
+                    ClassId = c.Id,
+                    ClassName = c.Name,
+                    NotInstalledStudentCount = csps.Count(cp=>cp.ClassRef == c.Id && appInstalls.All(install=>install.PersonRef != cp.PersonRef))
+                }).ToList();
+
+
+            //var classPersons = from cls in classes
+            //    join csp in csps on cls.Id equals csp.ClassRef
+            //    join appInst in appInstalls on new {csp.PersonRef, cls.SchoolYearRef} equals
+            //        new {appInst.PersonRef, SchoolYearRef = (int?) appInst.SchoolYearRef} into cspJoined
+            //    from cspj in cspJoined.DefaultIfEmpty()
+            //    group cspj by new {cls.Id, cls.Name}
+            //    into grouped
+            //    select
+            //        new
+            //        {
+            //            ClassId = grouped.Key.Id,
+            //            ClassName = grouped.Key.Name,
+            //            NotInstalledStudentCount = grouped.Count()
+            //        };
+
+
+            //return classPersons.Select(x => new StudentCountToAppInstallByClass
+            //{
+            //    ClassId = x.ClassId,
+            //    ClassName = x.ClassName,
+            //    NotInstalledStudentCount = x.NotInstalledStudentCount
+            //});
         }
 
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int userId, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
