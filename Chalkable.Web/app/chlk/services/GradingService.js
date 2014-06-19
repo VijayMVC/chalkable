@@ -61,9 +61,16 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function updateStudentAverageFromFinalPage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, note) {
                 var res =  this.updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, note)
                     .then(function(model){
-                        var gp = this.getFinalGradeGPInfo();
+                        var gp = this.getFinalGradeGPInfo(), curIndex = 0;
                         var currentModel = gp.getStudentFinalGrades().filter(function(item){return model.getStudentId() == item.getStudent().getId()})[0];
                         currentModel.setCurrentStudentAverage(model);
+                        setTimeout(function(){
+                            currentModel.getStudentAverages().forEach(function(item, index){
+                                if(item.getAverageId() == model.getAverageId())
+                                    curIndex = index;
+                            });
+                            currentModel.getStudentAverages()[curIndex] = model;
+                        }, 1);
                         return currentModel;
                     }, this);
                 return res;

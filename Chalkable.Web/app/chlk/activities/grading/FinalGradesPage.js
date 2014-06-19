@@ -30,8 +30,10 @@ NAMESPACE('chlk.activities.grading', function () {
                 var color = needOpacity ? 'rgba(193,193,193,0.5)' : node.getData('color');
                 var index = node.getData('index');
                 var chart = this.dom.find('.main-chart:visible').getData('chart');
-                chart.series[index].graph && chart.series[index].graph.attr({ stroke: color });
-                chart.series[index].update(this.getSerieConfigs_(!needOpacity, color));
+                if(chart){
+                     chart.series[index].graph && chart.series[index].graph.attr({ stroke: color });
+                    chart.series[index].update(this.getSerieConfigs_(!needOpacity, color));
+                }
             },
 
             [[Boolean, String]],
@@ -294,11 +296,12 @@ NAMESPACE('chlk.activities.grading', function () {
             Boolean, function submitFormEvent(node, event){
                 var input = node.find('.grade-input');
                 if(node.hasClass('no-loading')){
-                    node.removeClass('no-loading')
+                    node.removeClass('no-loading');
                     if(input.hasClass('error'))
                         input.setValue(input.getData('grade-value'));
                     return true;
                 }
+                var checkbox = node.find('.exempt-checkbox');
                 if(node.find('.grade-input').hasClass('error'))
                     return false;
                 var row = node.parent('.row');
@@ -306,16 +309,20 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(container.hasClass('loading'))
                     return false;
                 row.find('.grading-input-popup').hide();
-                var value = (input.getValue() || '').toLowerCase();
+                var value = (input.getValue() || '').toLowerCase(), wasExempt = false;
                 if(value == 'exempt'){
-                    input.setValue(input.getData('grade-value'));
-                    node.find('.exempt-checkbox').setValue(true);
+                    checkbox.setValue(true);
+                    value = "";
+                    wasExempt = true;
                 }else{
-                    node.find('.exempt-checkbox').setValue(false);
+                    if(!!checkbox.getData('value') == checkbox.checked())
+                        checkbox.setValue(false);
                 }
-                var checkbox = node.find('.exempt-checkbox');
-                if((input.getValue() || '') == (input.getData('grade-value') || '') && (!checkbox.exists() || checkbox.getData('value') == checkbox.checked()))
+
+                if((value || '') == (input.getData('grade-value') || '') && (!checkbox.exists() || !!checkbox.getData('value') == checkbox.checked()))
                     return false;
+                if(wasExempt)
+                    input.setValue('');
                 container.addClass('loading');
                 return true;
             },
