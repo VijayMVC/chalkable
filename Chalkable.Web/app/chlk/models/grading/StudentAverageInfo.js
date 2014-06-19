@@ -87,9 +87,9 @@ NAMESPACE('chlk.models.grading', function () {
                 return this.getEnteredAlphaGrade() || this.getCalculatedAlphaGrade()
             },
 
-            [[Boolean, Boolean]],
-            String, function displayAvgGradeValue(isAbleDisplayAlphaGrades_, original_){
-                if(this.isExempt() && !original_)
+            [[Boolean, Boolean, Boolean]],
+            String, function displayAvgGradeValue(isAbleDisplayAlphaGrades_, original_, noText_){
+                if(this.isExempt() && !original_ && !noText_)
                     return Msg.Exempt;
                 var alphaGrade = original_ ? this.getCalculatedAlphaGrade() : this.getAlphaGrade();
                 var res = this.displayGrade(original_ ? this.getCalculatedAvg() : this.getNumericAvg());
