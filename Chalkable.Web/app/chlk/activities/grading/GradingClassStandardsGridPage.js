@@ -21,6 +21,18 @@ NAMESPACE('chlk.activities.grading', function () {
                 tpl.renderTo(container);
             },
 
+            [ria.mvc.DomEventBind('click', '.cancel-comment')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelBtnClick(node, event){
+                node.parent('.chlk-pop-up-container.comment').hide();
+                var cell = this.dom.find('.active-cell');
+                setTimeout(function(){
+                    cell.find('input').trigger('focus');
+                }, 1);
+                var commentInput = cell.find('.comment-value');
+                commentInput.setValue(commentInput.getData('comment'));
+            },
+
             [ria.mvc.DomEventBind('click', '.comment-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function commentBtnClick(node, event){
@@ -269,11 +281,13 @@ NAMESPACE('chlk.activities.grading', function () {
                 new ria.dom.Dom().on('click.grade', function(doc, event){
 
                     var node = new ria.dom.Dom(event.target);
+                    var popUp = dom.find('.chlk-pop-up-container.comment');
                     if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
                         && !node.isOrInside('.chlk-pop-up-container.comment')
                         && !node.isOrInside('.autocomplete-list')){
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
+                                popUp.hide();
                                 var parent = node.parent('.grade-value.gradable');
                                 dom.find('.active-cell').removeClass('active-cell');
                                 if(parent.exists()){
