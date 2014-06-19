@@ -125,7 +125,7 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                     +LeftRightToolbar(items)(
                         itemsCount = 1
                         needDots = false
-                    ).disciplines-toolbar.big-arrows
+                    )(class=self.getDisciplines().length ? "" : "empty").disciplines-toolbar.big-arrows
                         each block in items
                             .disciplines-items-block
                                 each discipline in block
