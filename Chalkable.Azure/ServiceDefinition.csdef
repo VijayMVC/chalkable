@@ -25,7 +25,7 @@
       <Import moduleName="Diagnostics" />
     </Imports>
   </WorkerRole>
-  <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="Small">
+  <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="ExtraSmall">
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
