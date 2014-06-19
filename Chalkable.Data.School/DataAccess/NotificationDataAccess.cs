@@ -71,6 +71,8 @@ namespace Chalkable.Data.School.DataAccess
             res.Sql.AppendFormat(
                 " and (toPerson.[{0}] =@{0} and (QuestionPerson.[{0}] is null or QuestionPerson.[{0}] =@{0}))"
                 , SchoolPerson.SCHOOL_REF_FIELD);
+            res.Sql.AppendFormat(" and PrivateMessage_SenderSchoolRef = @{0} and PrivateMessage_RecipientSchoolRef = @{0}"
+                , SchoolPerson.SCHOOL_REF_FIELD);
             res.Parameters.Add(SchoolPerson.SCHOOL_REF_FIELD, query.SchoolId);
             return res;
         }
@@ -129,7 +131,7 @@ namespace Chalkable.Data.School.DataAccess
         public PaginatedList<NotificationDetails> GetPaginatedNotificationsDetails(NotificationQuery query)
         {
             var innerQuery = BuildGetNotificationDetailsDbQuery(query);
-            var orderBy = "Notification_" + Notification.CREATED_FIELD;
+            var orderBy = new List<string> {"Notification_" + Notification.CREATED_FIELD, "Notification_" + Notification.ID_FIELD};
             var q = Orm.PaginationSelect(innerQuery, orderBy, Orm.OrderType.Desc, query.Start, query.Count);
             return ReadPaginatedResult(q, query.Start, query.Count, ReadListNotifcationDetails);
         }
