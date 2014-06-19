@@ -120,7 +120,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                     {
                         Id = id,
                         UserId = Context.UserId,
-                        Role = Context.Role.Id
+                        Role = Context.Role.Id,
+                        DeveloperId = Context.DeveloperId,
                     });
             }
         }
