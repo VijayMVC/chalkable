@@ -32,7 +32,7 @@ div(index=self.getIndex(), class=(selected ? "selected" : ""), data-student-id=s
                             autofill="off",
                             value=displayValue,
                             name="averageValue",
-                            data-grade-value=displayValue
+                            data-grade-value=avg.displayAvgGradeValue(false, false, true)
                         ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus
                         .letters=Msg.Direct
                         if avg.isMayBeExempt()

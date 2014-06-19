@@ -12,7 +12,7 @@ mixin AnnouncementTooltip()
             .white.comment-triangle
 
 .announcement-view.not-transparent
-    isReadonly = !self.isAnnOwner()
+    isReadonly = !self.isAbleToGrade()
     studentAnnouncements = false
     studentAnnouncementsInfo = self.getStudentAnnouncements()
     applications = self.getApplications()

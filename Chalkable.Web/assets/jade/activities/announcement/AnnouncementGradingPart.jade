@@ -44,23 +44,24 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                             SPAN.container
                                 SPAN.comment-grade
                                     +ActionLink('grading', 'getGradeComments').comment-text=(item.getComment() ? Msg.Commented : Msg.Comment)
-                                    .small-pop-up
-                                        .container
-                                            .triangle
-                                            div
+                                    if !readonly
+                                        .small-pop-up
+                                            .container
+                                                .triangle
                                                 div
-                                                    +PersonImg(owner, 24)
-                                                div
-                                                    +TextArea(name="comment", maxlength=500).comment-input=item.getComment()
-                                                    .grading-comments-list
-                                                    span.enter=Msg.Enter_when_done
+                                                    div
+                                                        +PersonImg(owner, 24)
+                                                    div
+                                                        +TextArea(name="comment", maxlength=500).comment-input=item.getComment()
+                                                        .grading-comments-list
+                                                        span.enter=Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                             userRole = self.getUserRole()
                             maxScore = self.getMaxScore()
                             ableDropStudentScore = self.isAbleDropStudentScore()
                             ableToExempt = self.isAbleToExempt(),
-                            readonly = !self.isGradable()
+                            readonly = readonly
                         )
         .attachments-container.z-10
             .attachments-container-2
