@@ -88,6 +88,7 @@ NAMESPACE('chlk.controls', function () {
                 //this.setConfigs(configs);
                 //this.setCurrentIndex(0);
 
+                console.info(configs);
                 return configs;
             },
 
@@ -202,7 +203,7 @@ NAMESPACE('chlk.controls', function () {
                     prevButton.removeClass(configs.disabledClass);
                     hasLeft = true;
                 }
-                if (index_ == configs.pagesCount - 1) {
+                if ((index_ == configs.pagesCount - 1 ) || !configs.pagesCount) {
                     nextButton.addClass(configs.disabledClass);
                 } else {
                     nextButton.removeClass(configs.disabledClass);

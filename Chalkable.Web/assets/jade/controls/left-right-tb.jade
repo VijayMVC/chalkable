@@ -2,7 +2,7 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
     configs = self.prepareData(attributes, data, controller, action, params)
     attributes = self.processAttrs(attributes, configs)
     .lr-toolbar(attributes)
-        .A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
+        A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
         .first-container
             .second-container
                 if data && tplClass
@@ -27,7 +27,8 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
                 else
                     .third-container
                         block
-        .A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
+        -console.info(configs.disableNextButton, configs.disableNextButton ? configs.disabledClass : "")
+        A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)
             div(class=attributes.roundedDots ? "rounded" : "").paginator
                 if configs.dots

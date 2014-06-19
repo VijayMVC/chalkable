@@ -1519,6 +1519,12 @@ BODY {
       }
 
       .disciplines-block{
+        &.empty{
+          .arrow{
+            display: none;
+          }
+        }
+
         .disciplines-toolbar{
           margin: 20px 10px 0 0px;
         }
