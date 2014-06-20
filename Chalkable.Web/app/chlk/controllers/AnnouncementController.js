@@ -338,7 +338,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
                 });
-            if (pageIndex_)
+            if (pageIndex_ || pageIndex_ == 0)
                 return this.UpdateView(chlk.activities.apps.AttachAppDialog, result);
             else
                 return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);

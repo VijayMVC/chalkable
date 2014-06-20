@@ -39,13 +39,12 @@ namespace Chalkable.Web.Controllers
             var installedApp = SchoolLocator.AppMarketService.ListInstalled(personId, true);
             var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
 
-            var res = InstalledApplicationViewData.Create(appInstallations, sp, installedApp, hasMyAppDic)
-                .Where(x => x.Name.ToLower().Contains(filter))
-                .Skip(st)
-                .Take(cnt)
-                .ToList();
-
+            var res = InstalledApplicationViewData.Create(appInstallations, sp, installedApp, hasMyAppDic);
+            if (!string.IsNullOrEmpty(filter))
+                res = res.Where(x => x.Name.ToLower().Contains(filter)).ToList();
+            
             var totalCount = res.Count;
+            res = res.Skip(st).Take(cnt).ToList();
             var appsList = new PaginatedList<InstalledApplicationViewData>(res, st/cnt, cnt, totalCount);
             return Json(appsList);
         }
