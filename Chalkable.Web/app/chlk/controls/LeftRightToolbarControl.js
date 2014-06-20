@@ -203,7 +203,8 @@ NAMESPACE('chlk.controls', function () {
                     prevButton.removeClass(configs.disabledClass);
                     hasLeft = true;
                 }
-                if ((index_ == configs.pagesCount - 1 ) || !configs.pagesCount) {
+                var thirdContainer = secondContainer.find('.third-container');
+                if ((index_ == configs.pagesCount - 1 ) || !configs.pagesCount || (thirdContainer.exists() && thirdContainer.width() == secondContainer.width() - left)) {
                     nextButton.addClass(configs.disabledClass);
                 } else {
                     nextButton.removeClass(configs.disabledClass);

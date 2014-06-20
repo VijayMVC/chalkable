@@ -582,6 +582,14 @@ BODY {
                       display: inline-block;
                     }
 
+                    .lr-toolbar{
+                      .dotted-container:nth-child(5n+6):last-child{
+                        .dotted-h.grade-value .grading-input-popup{
+                          left: -77px;
+                        }
+                      }
+                    }
+
                     .ann-type-container{
                       display: table-cell;
                       height: 288px;
