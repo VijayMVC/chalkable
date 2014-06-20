@@ -1,0 +1,37 @@
+mixin SchoolPersonSettings()
+    .settings
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                block
+        .general
+            //.preferences
+                .block
+                    .header SMS
+                    .fields
+                        .field
+                            +Checkbox('ch1', false)
+                            label Announcements
+
+                        .field
+                            +Checkbox('ch1', false)
+                            label Private messages
+
+                        .field
+                            +Checkbox('ch1', false)
+                            label Notifications
+
+                .block
+                    .header Email
+                    .fields
+                        .field
+                            +Checkbox('ch1', false)
+                            label Announcements
+
+                        .field
+                            +Checkbox('ch1', false)
+                            label Private messages
+
+                        .field
+                            +Checkbox('ch1', false)
+                            label Notifications
+            +ResetPasswordBlock(true)

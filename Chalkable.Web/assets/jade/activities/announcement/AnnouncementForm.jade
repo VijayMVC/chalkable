@@ -1,0 +1,44 @@
+mixin AnnouncementTypeToolBar(types, announcement, typeId)
+    each item in types
+        BUTTON(
+        class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
+        data-typeid=item.getId(),
+        data-typename=item.getName(),
+        type = announcement.getState() ? "button" : "submit",
+        name="submitType",
+        value="save"
+        ).action-button.announcement-type-button= item.getDescription()
+
+
+
+topData = self.getTopData()
+announcement = self.getAnnouncement()
+topItems = topData.getTopItems()
+classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
+typeId = self.getSelectedTypeId()
+classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+
+.announcement-form.loader-container
+    .loader
+    if announcement
+        +ActionForm('announcement', 'save')(onlySubmitValidate=true)
+            +LeftRightToolbar(topItems, chlk.templates.classes.TopBar)(
+                selectedItemId=topData.getSelectedItemId(),
+                pressAfterClick=!announcement.getState()
+            ).classes-bar
+            .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
+                .container.panel-bg.overflow-hidden
+                    +AnnouncementTypeToolBar(classes, announcement, typeId)
+            .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
+                +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form
+                if announcement.getState()
+                    .duplicate-btn-container
+                        +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+            .choose-type(class=(classId && !typeId ? '' : 'x-hidden'))
+            .choose-class(class=(classId ? 'x-hidden' : ''))
+    else
+        +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'announcement', 'add')(
+            selectedItemId=topData.getSelectedItemId(),
+            pressAfterClick=true
+        ).classes-bar
+        .choose-class(class=(classId ? 'x-hidden' : ''))
