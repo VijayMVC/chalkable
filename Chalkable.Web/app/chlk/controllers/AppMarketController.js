@@ -152,7 +152,7 @@ NAMESPACE('chlk.controllers', function (){
             var isEdit = isEdit_ ? isEdit_ : false;
             var currentPersonId = this.getCurrentPerson().getId();
             var result = this.appMarketService
-                .getMyApps(currentPersonId, isEdit)
+                .getMyApps(currentPersonId, isEdit, 0, null, 10000)
                 .attach(this.validateResponse_())
                 .then(function(apps){
                     return new chlk.models.apps.MyAppsViewData(apps, isEdit, currentPersonId);
@@ -348,6 +348,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(result){
                     return this.BackgroundNavigate('appmarket', 'myApps', [false]);
                 }, this);
+            return this.ShadeLoader();
         },
 
         function cancelAppDeleteAction(){
@@ -388,6 +389,7 @@ NAMESPACE('chlk.controllers', function (){
                 }], 'center');
 
             }
+            return this.ShadeLoader();
         },
 
         [[chlk.models.apps.AppReviewPostData]],
