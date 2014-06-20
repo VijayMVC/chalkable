@@ -79,7 +79,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                         result = message;
                     }
                     else
-                        throw new ChalkableException(string.Format("authorize message is null for [{0}] [{1}] [{2}] [{3}] [{4}] [{5}]", accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken));
+                    {
+                        var msg = string.Format("authorize message is null for [{0}] [{1}] [{2}] [{3}] [{4}] [{5}]",
+                                                accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken);
+                        throw new ChalkableException(msg);
+                    }
+                        
                 }
                 else
                     throw new ChalkableException(string.Format("authorize http request is null for [{0}] [{1}] [{2}] [{3}] [{4}] [{5}]", accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken));
