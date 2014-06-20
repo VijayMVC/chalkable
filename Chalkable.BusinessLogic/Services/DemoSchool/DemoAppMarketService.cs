@@ -77,7 +77,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
 
-            var persons = Storage.ApplicationInstallStorage.GetPersonsForApplicationInstall(applicationId, Context.UserLocalId.Value, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
+            var persons = Storage.ApplicationInstallStorage.GetPersonsForApplicationInstall(applicationId, Context.UserLocalId.Value, personId
+                                                , roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
                                                , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
             var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
             var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);

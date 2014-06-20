@@ -76,20 +76,21 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[chlk.models.id.SchoolPersonId, Number, String]],
-            ria.async.Future, function getInstalledApps(personId, start_, filter_) {
+            [[chlk.models.id.SchoolPersonId, Number, String, Number]],
+            ria.async.Future, function getInstalledApps(personId, start_, filter_, count_) {
                 return this
                     .getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
                         personId: personId.valueOf(),
                         start: start_ | 0,
-                        filter: filter_ || ""
+                        filter: filter_ || "",
+                        count: count_
                     })
             },
 
-            [[chlk.models.id.SchoolPersonId, Boolean, Number, String]],
-            ria.async.Future, function getMyApps(personId, forEdit, start_, filter_) {
+            [[chlk.models.id.SchoolPersonId, Boolean, Number, String, Number]],
+            ria.async.Future, function getMyApps(personId, forEdit, start_, filter_, count_) {
                 return this
-                    .getInstalledApps(personId, start_, filter_)
+                    .getInstalledApps(personId, start_, filter_, count_)
                     .then(function(data){
 
                         var apps = data && data.getItems() || [];
