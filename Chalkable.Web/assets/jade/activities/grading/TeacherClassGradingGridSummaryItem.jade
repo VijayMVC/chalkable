@@ -5,7 +5,7 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
         -normalValue= numericV.toFixed(2) + '(' + info.getGradeValue() + ')'
 
     div(
-        class= (parseInt(normalValue, 10) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : "") + (info.needStrikeThrough() ? ' dropped-value' : ''),
+        class= (!Number.isNaN(parseInt(normalValue, 10)) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : "") + (info.needStrikeThrough() ? ' dropped-value' : ''),
         data-id= info.getId(),
         data-announcementid= parseInt(info.getAnnouncementId().valueOf(), 10),
         data-studentid= info.getStudentId(),
