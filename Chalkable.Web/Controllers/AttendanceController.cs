@@ -19,7 +19,8 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AttendanceController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetAttendance(SetClassAttendanceViewData data)
         {
             SchoolLocator.AttendanceService.SetClassAttendances(data.Date, data.ClassId, data.Items.Select(x=>new ClassAttendance
@@ -129,7 +130,8 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ATTENDANCE_STUDENT_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ATTENDANCE_STUDENT_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentAttendanceSummary(Guid personId, Guid markingPeriodId)
         {
             throw new NotImplementedException();
