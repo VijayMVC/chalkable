@@ -482,6 +482,8 @@
     <Content Include="fakeData\seatingChart1.json" />
     <Content Include="fakeData\seatingChart2.json" />
     <Content Include="fakeData\seatingChart3.json" />
+    <Content Include="Views\Home\Terms.cshtml" />
+    <Content Include="Views\Home\Faq.cshtml" />
     <None Include="Web.qa.config">
       <SubType>Designer</SubType>
       <DependentUpon>Web.config</DependentUpon>
