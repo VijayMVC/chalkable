@@ -16,7 +16,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         private ApplicationTotalPriceViewData(Application application, ApplicationTotalPriceInfo priceInfo): base(application)
         {
             TotalPrice = priceInfo.TotalPrice;
-            TotalPersonsCount = priceInfo.ApplicationInstallCountInfo.FirstOrDefault(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+            TotalPersonsCount = priceInfo.TotalCount;
+                // priceInfo.ApplicationInstallCountInfo.FirstOrDefault(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
         }
         public static ApplicationTotalPriceViewData Create(Application application, ApplicationTotalPriceInfo priceInfo)
         {

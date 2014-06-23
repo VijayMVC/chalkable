@@ -231,7 +231,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
             var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
-            var cnt = priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+            var cnt = priceData.TotalCount;//ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
             var budgetBalance = 0; // todo : implement fund service ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserId);
             return (budgetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
@@ -253,18 +253,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var isForAll = !(schoolPerson.HasValue || (roleids != null && roleids.Count > 0) || (classids != null && classids.Count > 0) ||
                                    (gradelevelids != null && gradelevelids.Count > 0) || (departmentids != null && departmentids.Count > 0));
-            var r = GetPersonsForApplicationInstallCount(applicationId, schoolPerson, roleids, classids, departmentids, gradelevelids).ToList();
-            var totalPrice = GetApplicationTotalPrice(applicationId, r, isForAll);
-            return ApplicationTotalPriceInfo.Create(totalPrice, r);
+            //var r = GetPersonsForApplicationInstallCount(applicationId, schoolPerson, roleids, classids, departmentids, gradelevelids).ToList();
+
+            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            var persons = GetPersonsForApplicationInstall(app, schoolPerson, roleids, classids, departmentids, gradelevelids);
+            var totalPrice = GetApplicationTotalPrice(app, persons, isForAll);
+            var totalCount = persons.GroupBy(x => x.PersonId).Select(x => x.Key).Count();
+            return ApplicationTotalPriceInfo.Create(totalPrice, totalCount);
         }
 
-        private decimal GetApplicationTotalPrice(Guid applicationId, IEnumerable<PersonsForApplicationInstallCount> applicationInstallCount, bool isForAll)
+        private decimal GetApplicationTotalPrice(Application app, IEnumerable<PersonsForApplicationInstall> applicationInstallCount, bool isForAll)
         {
-            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+
             decimal totalPrice = 0;
             if (app.Price != 0)
             {
-                var totalCount = applicationInstallCount.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+                var totalCount = applicationInstallCount.GroupBy(x => x.PersonId).Select(x => x.Key).Count();
                 if (BaseSecurity.IsAdminViewer(Context))
                 {
                     totalPrice = app.Price * totalCount;
@@ -272,20 +276,38 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
                 if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 {
-                    var countPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Class).ToList();
-                    var totalInClassCount = countPerClassComplex.Sum(x => x.Count);
-                    foreach (var countComplex in countPerClassComplex)
+                    var personstPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Class).ToList();
+                    //var totalInClassCount = countPerClassComplex.Sum(x => x.Count);
+                    var personids = new HashSet<int>();
+                    var classPersonsDic = personstPerClassComplex.GroupBy(x => x.GroupId).ToDictionary(x => x.Key, x => x.ToList());
+                    foreach (var classPersons in classPersonsDic)
                     {
-                        decimal price = countComplex.Count.Value * app.Price;
+                        var notAddPersons = classPersons.Value.Where(x => !personids.Contains(x.PersonId)).Select(x => x.PersonId).ToList();
+                        foreach (var notAddPerson in notAddPersons)
+                            personids.Add(notAddPerson);
+
+                        decimal price = notAddPersons.Count * app.Price;
                         totalPrice += app.PricePerClass.HasValue && price > app.PricePerClass.Value ? app.PricePerClass.Value : price;
                     }
-                    totalPrice += app.Price * (totalCount - totalInClassCount.Value);
+                    var otherPersons = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Person)
+                                                              .GroupBy(x => x.PersonId).Count();
+                    totalPrice += app.Price * otherPersons;
                     return totalPrice;
                 }
                 return totalCount * app.Price;
             }
             return totalPrice;
         }
+
+        private IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Application app, int? personId, IList<int> roleIds,
+                                                         IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds)
+        {
+            var sy = Storage.SchoolYearStorage.GetByDate(Context.NowSchoolTime.Date);
+            return Storage.ApplicationInstallStorage.GetPersonsForApplicationInstall(app.Id, Context.UserLocalId ?? 0
+                                                   , personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
+        }
+
 
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds,
                                                           IList<Guid> departmentIds, IList<int> gradeLevelIds)

@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.StiImport", "Chal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.MixPanel", "Chalkable.MixPanel\Chalkable.MixPanel.csproj", "{A0F02AE8-991B-4080-A49A-9428F2B87181}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentACS", "FluentACS\FluentACS.csproj", "{7257F961-4BFD-4D2C-9521-A4C711C90476}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -166,6 +168,14 @@ Global
 		{A0F02AE8-991B-4080-A49A-9428F2B87181}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0F02AE8-991B-4080-A49A-9428F2B87181}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
 		{A0F02AE8-991B-4080-A49A-9428F2B87181}.Staging|Any CPU.Build.0 = Staging|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.QA|Any CPU.Build.0 = Release|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.Staging|Any CPU.ActiveCfg = Release|Any CPU
+		{7257F961-4BFD-4D2C-9521-A4C711C90476}.Staging|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -50,10 +50,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetWorksheetReport(WorksheetReportInputModel inputModel)
         {
-            
-            var anns = ServiceLocator.AnnouncementService.GetAnnouncements(inputModel.StartDate, inputModel.EndDate);
-            anns = anns.Where(x => x.SisActivityId.HasValue && inputModel.AnnouncementIds.Contains(x.Id)).ToList();
-            var activityIds = anns.Select(x => x.SisActivityId.Value).ToArray();
+            int[] activityIds = new int[10];
+            if (inputModel.AnnouncementIds != null && inputModel.AnnouncementIds.Count > 0)
+            {
+                var anns = ServiceLocator.AnnouncementService.GetAnnouncements(inputModel.StartDate, inputModel.EndDate);
+                anns = anns.Where(x => x.SisActivityId.HasValue && inputModel.AnnouncementIds.Contains(x.Id)).ToList();
+                activityIds = anns.Select(x => x.SisActivityId.Value).ToArray();    
+            }
             var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
             var stiModel = new WorksheetReportParams
                 {

@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
-using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 

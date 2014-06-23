@@ -59,11 +59,11 @@ namespace Chalkable.Web.Controllers
         {
             return Confirm(key, AfterConfirmAction);
         }
-
+        
         public ActionResult ChangePassword(string oldPassword, string newPassword, string newPasswordConfirmation)
         {
             var login = Context.Login;
-            if (MasterLocator.UserService.Login(login, oldPassword) != null)
+            if (string.IsNullOrEmpty(oldPassword) || MasterLocator.UserService.Login(login, oldPassword) != null)
             {
                 if (newPassword == newPasswordConfirmation)
                 {
@@ -74,6 +74,12 @@ namespace Chalkable.Web.Controllers
                 return Json(new ChalkableException("new password and confirmation dont't match"));
             }
             return Json(new ChalkableException("old password is incorrect"));
+        }
+        
+        public ActionResult ResetPassword(string email)
+        {
+            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            return Json(serviceLocator.UserService.ResetPassword(email));
         }
    
         private ActionResult AfterConfirmAction(UserContext context)
@@ -98,7 +104,7 @@ namespace Chalkable.Web.Controllers
             {
                 InitServiceLocators(context);
                 MixPanelService.UserLoggedInForFirstTime(context.Login, "", "", Context.SchoolId.ToString(), 
-                    DateTime.UtcNow.ConvertFromUtc(Context.SchoolTimeZoneId), Context.SchoolTimeZoneId, Context.Role.Name);
+                        DateTime.UtcNow.ConvertFromUtc(Context.SchoolTimeZoneId), Context.SchoolTimeZoneId, Context.Role.Name);
                 return redirectAction(context);
             }
             return Redirect<HomeController>(c => c.Index());
