@@ -103,7 +103,46 @@ BODY {
           .announcement-form{
             .action-bar{
               .container{
-                overflow: hidden;
+
+                .chzn-container{
+                  width: 229px !important;
+
+                  .chzn-results{
+                    max-height: 510px;
+
+                    li:not(.last-child){
+                      border-bottom: 1px solid #dadada;
+                    }
+
+                    li{
+                      color: #848484;
+                      background: #f2f2f2;
+                      padding: 9px 10px;
+
+                      &.highlighted{
+                        @include background(linear-gradient(top, #ffffff, #fafafa));
+                      }
+                    }
+                  }
+
+                  .chzn-single{
+                    color: #26647e;
+                    font-size: 17px;
+                    font-weight: bold;
+
+                    >SPAN{
+                      text-align: left;
+                      text-indent: 4px;
+                    }
+                  }
+                }
+
+                .type-text{
+                  display: inline-block;
+                  margin: 7px 14px;
+                  vertical-align: middle;
+                  color: #959595;
+                }
               }
             }
 

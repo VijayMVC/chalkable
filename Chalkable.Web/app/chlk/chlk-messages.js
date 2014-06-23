@@ -208,7 +208,7 @@ var Msg = {
     ToDo: 'ToDo',
     Tomorrow: 'Tomorrow',
     Total: 'Total',
-    Type: 'Type',
+    Type: oneOrMany('Type'),
     Yesterday: 'Yesterday',
     Your_Vs_Your_Class: 'Your Vs Your Class',
     Usually: 'Usually',

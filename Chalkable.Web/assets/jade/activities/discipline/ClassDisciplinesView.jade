@@ -20,7 +20,7 @@ redirectData = self.getRedirectData()
     .people-list-container.not-transparent
         .top.panel-bg
             span.total-count=self.getTotalText()
-        .action-bar.buttons.filter
+        //.action-bar.buttons.filter
             .container.panel-bg
                 .left
                     +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'])(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
