@@ -66,7 +66,7 @@ $(document).ready(function () {
     });
 
 
-    $('#developer-signup').on('submit.dev-signup', function () {
+    $('#sign-up-form').on('submit.dev-signup', function () {
         var form = jQuery(this);
         if (!form.validationEngine('validate')) { return; }
         var options = {
@@ -75,16 +75,18 @@ $(document).ready(function () {
             dataType: "json",
             data: form.serialize(),
             success: function (response) {
+                form.find('input[type=submit]').prop('disabled', false);
                 if (response.Success == true) {
-                    form.off('submit.dev-signup');
-                    window.location.href = WEB_SITE_ROOT + 'Home/Developer.aspx';
+                    form.parents('#dev-signup-form').find('.close').trigger('click');
                 }
                 else {
-                    jQuery('.sign-in-errors').html(response.data.message || '');
+                    var text = response.data && response.data.message || '';
+                    if(text != '') $('#email2').validationEngine('showPrompt',text, 'red','topRight', false);
                 }
             }.bind(this)
         };
         jQuery.ajax(options);
+        form.find('input[type=submit]').prop('disabled', true);
         return false;
     });
 });

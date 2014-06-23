@@ -210,7 +210,7 @@ var Msg = {
     Total: 'Total',
     Type: oneOrMany('Type'),
     Yesterday: 'Yesterday',
-    Your_Vs_Your_Class: 'Your Vs Your Class',
+    You_Vs_Your_Class: 'You Vs Your Class',
     Usually: 'Usually',
     Value: 'Value',
     Week: oneOrMany('Week'),
