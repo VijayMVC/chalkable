@@ -22,12 +22,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult TeacherSummary(int teacherId)
         {
-            //return FakeJson("~/fakeData/gradingSummary.json");
-            //var schoolYearId = GetCurrentSchoolYearId();
-            //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentsGradePerClass(teacherId, schoolYearId);
-            //gradingStats = gradingStats.Where(x => x.Avg.HasValue).ToList();
-            //var classes = SchoolLocator.ClassService.GetClasses(null, null, teacherId);
-            //return Json(GradingTeacherClassSummaryViewData.Create(gradingStats, classes), 6);
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, Context.NowSchoolTime.Date);
             var classesGradesSummary = SchoolLocator.GradingStatisticService.GetClassesGradesSummary(teacherId, gradingPeriod.Id);
@@ -48,9 +42,6 @@ namespace Chalkable.Web.Controllers
                 gradingSummary = SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, currentGradingPeriod.Id);
             }
             return Json(ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary));
-            //return FakeJson("~/fakeData/gradingClassSummary.json");
-            //var teacherId = Context.UserLocalId;
-            //return Json(ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), teacherId), 7);
         }
 
         [AuthorizationFilter("Teacher")]
@@ -212,16 +203,16 @@ namespace Chalkable.Web.Controllers
         }
 
         //TODO: duplicate part of announcement/read data. for API compatibility only
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_LIST_ITEMS, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        /*[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_LIST_ITEMS, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult ItemGradesList(int announcementId)
         {
             var annView = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(annView.AnnouncementAttachments);
             var res = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annView, attachmentsInfo);
             return Json(res);
-        }
+        }*/
 
-        public ActionResult ApplyAutoGrade(int announcementId)
+        /*public ActionResult ApplyAutoGrade(int announcementId)
         {
             SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, true);
             return ItemGradesList(announcementId);
@@ -231,10 +222,11 @@ namespace Chalkable.Web.Controllers
         {
             SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, false);
             return ItemGradesList(announcementId);
-        }
+        }*/
 
         //TODO: do we need this in API still?
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        //[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        [AuthorizationFilter("Teacher")]
         public ActionResult UpdateItem(int announcementId, int studentId, string gradeValue, string extraCredits
             , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late)
         {
@@ -269,7 +261,7 @@ namespace Chalkable.Web.Controllers
             return Json(StudentAveragesViewData.Create(res));
         }
 
-        [AuthorizationFilter("Teacher ,AdminGrade, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        /*[AuthorizationFilter("Teacher ,AdminGrade, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
         {
             //var res = SchoolLocator.StudentAnnouncementService.SetAutoGrade(studentAnnouncementId, value, applicationId);
@@ -284,6 +276,6 @@ namespace Chalkable.Web.Controllers
             var attachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(res.AnnouncementId, 0, 1000).ToList();
             var attc = AttachmentLogic.PrepareAttachmentsInfo(attachments.Where(x => x.PersonRef == res.StudentId).ToList());
             return Json(StudentAnnouncementViewData.Create(res, attc));
-        }
+        }*/
     }
 }

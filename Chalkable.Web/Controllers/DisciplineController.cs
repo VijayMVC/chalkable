@@ -15,7 +15,8 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class DisciplineController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult List(DateTime? date, int? start, int? count)
         {
             return FakeJson("~/fakeData/disciplineList.json");
@@ -30,7 +31,8 @@ namespace Chalkable.Web.Controllers
             //return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Summary(DateTime? date, IntList gradeLevelIds)
         {
             return FakeJson("~/fakeData/adminDisciplines.json");
@@ -63,7 +65,8 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST_STUDENT_DISCIPLINE, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST_STUDENT_DISCIPLINE, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult ListStudentDiscipline(int? schoolYearId, int schoolPersonId, DateTime? date)
         {
             return FakeJson("~/fakeData/studentDisciplines.json");

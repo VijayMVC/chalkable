@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models;
 using Chalkable.Web.Models.AttendancesViewData;
 
 namespace Chalkable.Web.Controllers

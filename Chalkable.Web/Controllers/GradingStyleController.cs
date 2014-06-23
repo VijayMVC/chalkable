@@ -15,7 +15,8 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class GradingStyleController:ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_STYLE_LIST, true, CallType.Get, new[] { AppPermissionType.Grade })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_STYLE_LIST, true, CallType.Get, new[] { AppPermissionType.Grade })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult List()
         {
             return Json(GradingStyleLogic.GetGradingStyleMapper(SchoolLocator));
