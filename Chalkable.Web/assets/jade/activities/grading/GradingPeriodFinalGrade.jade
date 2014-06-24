@@ -1,0 +1,28 @@
+selectedIndex = self.getSelectedIndex()
+gradingPeriod = self.getGradingPeriod()
++ActionForm('grading', 'loadGradingPeriodFinalGradesSummary').load-grading-period
+    +Hidden('classId', self.getClassId())
+    +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+    +Hidden('selectedIndex', selectedIndex).selected-value
+    .gp-title-block
+        .grading-selects.no-loading
+            +Select('averageId').avg-select
+                each item in self.getAverages()
+                    +Option(item.getAverageId().valueOf(), item.getAverageName(), item.getAverageId() == self.getCurrentAverage().getAverageId())
+        .gp-title=gradingPeriod.getFinalTitleText()
+        if gradingPeriod.isAblePostGradeBook()
+            +ActionLinkButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId()).message-button.blue-gradient-btn.post-gradebook-button.no-loading=Msg.Post
+        .gp-triangle
+div(class = (self.isAvgChanged() ? "opened slided" : "")).gp-data
+    items = self.getStudentFinalGrades()
+    isAbleDisplayAlphaGrades = true
+    +ListView(items)(
+        selectedIndex = selectedIndex
+    ).grades-individual.people-list.final-grid
+        each item, i in items
+            +RenderWith(item, chlk.templates.grading.FinalGradeStudentBlockTpl)(
+                selected = selectedIndex == i,
+                index = i,
+                gradingPeriodId = gradingPeriod.getId(),
+                gradingComments = self.getGradingComments()
+            )
