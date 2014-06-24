@@ -40,9 +40,9 @@ input[type=submit][disabled] {
 
 header[role='banner'] {
   height: 70px;
-  background: $blue image-url('header_bg.jpg') repeat-x;
+  background: $blue url('images/header_bg.jpg') repeat-x;
   @include background-size(252px 70px);
-  @include retina('header_bg@2x.jpg');
+  @include retina('images/header_bg@2x.jpg');
   @include box-shadow(0 1px 2px rgba(black, .3));
   position: relative;
   z-index: 2;
@@ -52,11 +52,11 @@ header[role='banner'] {
       display: inline-block;
       width: 180px;
       height: 30px;
-      background: image-url('logo.png') no-repeat;
+      background: url('images/logo.png') no-repeat;
       text-indent: 120%;
       overflow: hidden;
       white-space: nowrap;
-      @include retina('logo@2x.png');
+      @include retina('images/logo@2x.png');
       @include background-size(180px 30px);
       margin-top: 14px;
       @include MQ(XS) {
@@ -145,9 +145,9 @@ header[role='banner'] {
     right: 0;
     width: 50px;
     height: 40px;
-    background: image-url('list.png') no-repeat center center;
+    background: url('images/list.png') no-repeat center center;
     @include background-size(30px 19px);
-    @include retina('list@2x.png');
+    @include retina('images/list@2x.png');
     background-color: $blue;
     top: 50%;
     @include translateY(-50%);
@@ -167,7 +167,7 @@ header[role='banner'] {
 
 #tagline {
   height: 600px;
-  background: image-url('bg_img_xl.jpg') no-repeat center center;
+  background: url('images/bg_img_xl.jpg') no-repeat center center;
   background-size: cover;
   .taglineMessage {
     text-align: center;
@@ -230,7 +230,7 @@ header[role='banner'] {
   }
 
   @include MQ(L) {
-    background-image: image-url('bg_img_l.jpg');
+    background-image: url('images/bg_img_l.jpg');
     height: 400px;
     .taglineMessage {
       h1 {
@@ -255,7 +255,7 @@ header[role='banner'] {
   }
 
   @include MQ(XS) {
-    background-image: image-url('bg_img_xs.jpg');
+    background-image: url('images/bg_img_xs.jpg');
     .taglineMessage {
       p {
         width: 100%;
@@ -501,12 +501,12 @@ footer {
         width: 25px;
         height: 25px;
         display: inline-block;
-        background: image-url('x.png') no-repeat;
+        background: url('images/x.png') no-repeat;
         position: absolute;
         right: 10px;
         top: 14px;
         cursor: pointer;
-        @include retina('x@2x.png');
+        @include retina('images/x@2x.png');
         @include background-size(25px 25px);
       }
     }
