@@ -109,6 +109,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                             body.css('padding-bottom', height);
                         }
                     }, 1);
+                }else{
+                    this.stopDragging();
                 }
             },
 
