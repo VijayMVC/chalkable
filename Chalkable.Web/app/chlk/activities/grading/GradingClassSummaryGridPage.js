@@ -723,8 +723,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     }else{
                         this.updateFlagByModel(model, activeCell);
                         activeCell.find('.grade-text').setHTML('...');
-                        this.addTimeOut(form);
                     }
+                    this.addTimeOut(form);
                 }else{
                     event.preventDefault();
                     return false;
