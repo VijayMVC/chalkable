@@ -341,7 +341,8 @@ NAMESPACE('chlk.controllers', function (){
                 .uninstallApps(ids)
                 .attach(this.validateResponse_())
                 .then(function(result){
-                    return this.BackgroundNavigate('appmarket', 'myApps', [false]);
+                    return this.BackgroundNavigate('appmarket', 'myApps');
+                    //return this.Redirect('appmarket', 'myApps', [false]);
                 }, this);
             return this.ShadeLoader();
         },

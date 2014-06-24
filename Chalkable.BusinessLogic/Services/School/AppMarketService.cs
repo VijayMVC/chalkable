@@ -28,6 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ApplicationInstall GetInstallationById(int applicationInstallId);
         bool IsPersonForInstall(Guid applicationId);
         void Uninstall(int applicationInstallationId);
+        void Uninstall(IList<int> applicationInstallIds);
         bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds);
 
         IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds);
@@ -281,17 +282,26 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Uninstall(int applicationInstallationId)
         {
+            Uninstall(new List<int> {applicationInstallationId});
+        }
+
+        public void Uninstall(IList<int> applicationInstallIds)
+        {
             using (var uow = Update())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var appInst = da.GetById(applicationInstallationId);
-                if (!ApplicationSecurity.CanUninstall(Context, appInst))
-                    throw new ChalkableSecurityException();
-                appInst.Active = false;
-                da.Update(appInst);
+                var appInstalls = da.GetByIds(applicationInstallIds);
+                foreach (var applicationInstall in appInstalls)
+                {
+                    if (!ApplicationSecurity.CanUninstall(Context, applicationInstall))
+                        throw new ChalkableSecurityException();
+                    applicationInstall.Active = false;
+                }
+                da.Update(appInstalls);
                 uow.Commit();
             }
         }
+
 
         public bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds)
         {
@@ -393,5 +403,8 @@ namespace Chalkable.BusinessLogic.Services.School
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }
         }
+
+
+
     }
 }

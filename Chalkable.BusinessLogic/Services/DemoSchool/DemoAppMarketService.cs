@@ -219,12 +219,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Uninstall(int applicationInstallationId)
         {
-            var appInst = Storage.ApplicationInstallStorage.GetById(applicationInstallationId);
-            if (!ApplicationSecurity.CanUninstall(Context, appInst))
-                throw new ChalkableSecurityException();
-            appInst.Active = false;
-            Storage.ApplicationInstallStorage.Update(appInst);
+            Uninstall(new List<int> {applicationInstallationId});
         }
+
+        public void Uninstall(IList<int> applicationInstallIds)
+        {
+            foreach (var applicationInstallId in applicationInstallIds)
+            {
+                var appInst = Storage.ApplicationInstallStorage.GetById(applicationInstallId);
+                if (!ApplicationSecurity.CanUninstall(Context, appInst))
+                    throw new ChalkableSecurityException();
+                appInst.Active = false;
+                Storage.ApplicationInstallStorage.Update(appInst);
+            }
+        }
+
 
         public bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds)
         {
@@ -318,5 +327,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.ApplicationInstallStorage.GetPersonsForApplicationInstallCount(applicationId, Context.UserLocalId ?? 0, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
         }
+
     }
 }

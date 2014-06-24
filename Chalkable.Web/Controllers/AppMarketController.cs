@@ -86,10 +86,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
         public ActionResult Uninstall(IntList applicationInstallIds)
         {
-            foreach (var applicationInstallId in applicationInstallIds)
-            {
-                SchoolLocator.AppMarketService.Uninstall(applicationInstallId);
-            }
+            SchoolLocator.AppMarketService.Uninstall(applicationInstallIds);
             return Json(true);
         }
 
