@@ -294,17 +294,17 @@ namespace Chalkable.Data.Common.Orm
             return PaginationSelect(SimpleSelect<T>(queryCondition), orderColumn, orderType, start, count);
         }
 
-        public static DbQuery PaginationSelect(DbQuery innerSelect, IList<string> orderColumns, OrderType orderType, int start, int count)
+        public static DbQuery PaginationSelect(DbQuery innerSelect, IDictionary<string, OrderType> order, int start, int count)
         {
             var b = new StringBuilder();
             b.AppendFormat("select count(*) as AllCount from ({0}) x;", innerSelect.Sql);
             b.AppendFormat("select x.* from ({0}) x ", innerSelect.Sql);
-            var orderBy = "x.[Id]";
-            if (orderColumns != null && orderColumns.Count > 0)
+            var orderBy = string.Format("x.[Id] {0}", orederTypesMap[OrderType.Asc]);
+            if (order != null && order.Count > 0)
             {
-                orderBy = orderColumns.Select(x => string.Format("x.[{0}]", x)).JoinString(",");
+                orderBy = order.Select(x => string.Format("x.[{0}] {1}", x.Key, orederTypesMap[x.Value])).JoinString(",");
             }
-            b.AppendFormat(" order by {0} {1}", orderBy, orederTypesMap[orderType]);
+            b.AppendFormat(" order by {0}", orderBy);
             b.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
             innerSelect.Sql = b;
             return innerSelect;
@@ -312,7 +312,7 @@ namespace Chalkable.Data.Common.Orm
 
         public static DbQuery PaginationSelect(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
         {
-            return PaginationSelect(innerSelect, new List<string> {orderColumn}, orderType, start, count);
+            return PaginationSelect(innerSelect, new Dictionary<string, OrderType>{{orderColumn, orderType}}, start, count);
         }
 
     }
