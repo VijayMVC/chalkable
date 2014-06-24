@@ -31,12 +31,12 @@ namespace Chalkable.Web.ActionFilters
                 throw new NotSupportedException(ChlkResources.ERR_TRACE_UNSUPPORTED_CONTROLLER);
             string message = string.Format(traceFmt, filterContext.RouteData.Values[actionKey], filterContext.RouteData.Values[controllerKey]);
 
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendLine(message);
             builder.AppendLine(paramsStr);
             var reqParams = filterContext.HttpContext.Request.Params;
             ParameterBuilder(builder, filterContext.ActionParameters, reqParams);
-           // Trace.TraceInformation(builder.ToString());
+            Trace.TraceInformation(builder.ToString());
             base.OnActionExecuting(filterContext);
         }
 
