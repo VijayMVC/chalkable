@@ -29,6 +29,8 @@ namespace Chalkable.StiConnector.Connectors
     {
         private const string STI_APPLICATION_KEY = "sti.application.key";
         
+        private const string ERROR_FORMAT = "Error calling : '{0}' ;\n ErrorMessage : {1}";
+        private const string REQUEST_TIME_MSG_FORMAT = "Request on : '{0}' \n Time : {1}";
         protected ConnectorLocator locator;
         public ConnectorBase(ConnectorLocator locator)
         {
@@ -59,7 +61,13 @@ namespace Chalkable.StiConnector.Connectors
             try
             {
                 client.QueryString = parameters ?? new NameValueCollection();
+                var startTime = DateTime.Now;
                 var data = client.DownloadData(url);
+                var endTime = DateTime.Now;
+                var time = endTime - startTime;
+                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
+
                 Debug.WriteLine(Encoding.UTF8.GetString(data));
                 stream = new MemoryStream(data);
 
@@ -75,6 +83,7 @@ namespace Chalkable.StiConnector.Connectors
                     return default(T);
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
+                Trace.TraceError(string.Format(ERROR_FORMAT, url, msg));
                 throw new Exception(msg);
             }
             finally
@@ -98,8 +107,14 @@ namespace Chalkable.StiConnector.Connectors
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
                 writer.Flush();
-                
-                return client.UploadData(url, httpMethod.Method, stream.ToArray());
+
+                var startTime = DateTime.Now;
+                var res = client.UploadData(url, httpMethod.Method, stream.ToArray());
+                var time = DateTime.Now - startTime; 
+                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
+
+                return res;
             }
             catch (WebException ex)
             {
@@ -108,6 +123,7 @@ namespace Chalkable.StiConnector.Connectors
                     return null;
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
+                Trace.TraceError(ERROR_FORMAT, url, msg);
                 throw new Exception(msg);
             }
             finally
@@ -123,8 +139,15 @@ namespace Chalkable.StiConnector.Connectors
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             try
             {
+
                 client.QueryString = optionalParams ?? new NameValueCollection();
+                
+                var startTime = DateTime.Now;
                 var res = client.DownloadData(url);
+                var time = DateTime.Now - startTime;
+                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
+
                 var type = client.ResponseHeaders[HttpResponseHeader.ContentType];
                 Debug.WriteLine(type);
                 return res;
@@ -136,6 +159,7 @@ namespace Chalkable.StiConnector.Connectors
                     (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
                     return null;
                 var msg = reader.ReadToEnd();
+                Trace.TraceError(string.Format(ERROR_FORMAT, url, msg));
                 throw new Exception(msg);
             }
         }
