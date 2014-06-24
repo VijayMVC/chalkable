@@ -529,7 +529,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>11603</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:8080/chalkable2/</IISUrl>
+          <IISUrl>https://localhost/chalkable/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
