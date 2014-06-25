@@ -69,7 +69,7 @@ namespace Chalkable.Web.Models
                 IList<StudentAnnouncementDetails> stAnns = gradeBook.Announcements.Select(a => a.StudentAnnouncements.First(
                                                                             stAnn => stAnn.StudentId == student.Id)).ToList();
                 studentFinalGrade.StatsByType = StudentGradingByTypeStatsViewData.Create(gradeBook.Announcements, stAnns);
-                var currentStAttendance = finalGrade.Attendances.First(x => x.StudentId == student.Id);
+                var currentStAttendance = finalGrade.Attendances.FirstOrDefault(x => x.StudentId == student.Id);
                 studentFinalGrade.Attendance = FinalStudentAttendanceViewData.Create(currentStAttendance, finalGrade.Attendances);
                 var disciplines = finalGrade.Disciplines.Where(x => x.StudentId == student.Id).ToList();
                 studentFinalGrade.Disciplines = disciplines.Select(x => new DisciplineTypeSummaryViewData
@@ -98,7 +98,7 @@ namespace Chalkable.Web.Models
                 };
             return new FinalStudentAttendanceViewData
                 {
-                    TotalStudentAttendance = TotalAttendanceViewData.Create(currentStattendance),
+                    TotalStudentAttendance = currentStattendance != null ? TotalAttendanceViewData.Create(currentStattendance) : null,
                     TotalClassAttendance = TotalAttendanceViewData.Create(classAttendance)
                 };
         }
