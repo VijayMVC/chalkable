@@ -1,7 +1,7 @@
 mixin AnnouncementTypeToolBar(types, announcement, typeId)
     if types.length > 6
         SPAN.type-text #{Msg.Type} :
-        +Select('typeid')(disabled = !!announcement.getState())#type-select
+        +Select('typeid')#type-select
             each item in types
                 +Option(item.getId(), item.getName(), typeId==item.getId())(
                     data-typeid=item.getId(),
@@ -18,7 +18,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
             class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
             data-typeid=item.getId(),
             data-typename=item.getName(),
-            type = announcement.getState() ? "button" : "submit",
+            type = "submit",
             name="submitType",
             value="save"
             ).action-button.announcement-type-button= item.getDescription()

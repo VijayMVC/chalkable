@@ -688,8 +688,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     var value = (input.getValue() || '').toLowerCase();
                     if(value == 'dropped' || value == 'exempt')
                         input.setValue(input.getData('grade-value'));
-                    /*if(input.getValue() != input.getData('grade-value'))
-                        node.find('.dropped-checkbox').setValue(false);*/
+
                     var isAvg = node.hasClass('avg-form');
                     var activeCell = node.parent('.grade-value');
                     this.dom.find('.autocomplete-list:visible').hide();
