@@ -199,12 +199,8 @@ namespace Chalkable.StiImport.Services
             }
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
             var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
-            int logFrequency = persons.Length / 100 > 100 ? 1000 : 100;
             foreach (var person in persons)
             {
-                counter++;
-                if (counter % logFrequency == 0)
-                    Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
                 var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
                 //TODO: what about admins? probably will be resolved by API
                 var userName = string.Empty;
@@ -246,7 +242,20 @@ namespace Chalkable.StiImport.Services
                 if (person.PhotoModifiedDate.HasValue)
                     personsForImportPictures.Add(person);
             }
-            ServiceLocatorSchool.PersonService.Add(ps);
+            //int logFrequency = 1000;//persons.Length / 100 > 100 ? 1000 : 100;
+            //todo: reqrite this later 
+            int personInsertFrequesncy = 1000;
+            Log.LogWarning("Start persons insterting to Db");
+            while (counter < ps.Count)
+            {
+                var personsForInsert = ps.Skip(counter).Take(personInsertFrequesncy).ToList();
+                ServiceLocatorSchool.PersonService.Add(personsForInsert);
+                if (counter % personInsertFrequesncy == 0)
+                    Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
+
+                counter += personInsertFrequesncy;
+            }
+            
         }
 
         private void InsertSchoolPersons()
