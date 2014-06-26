@@ -35,7 +35,8 @@ namespace Chalkable.Data.Common.Storage
         public PaginatedList<T> GetByPartKey(string key, int start, int count)
         {
             var t = GetTable();
-            var rangeQuery = new TableQuery<T>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, key)).Take(start + count);
+            var tableQuery = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, key);
+            var rangeQuery = new TableQuery<T>().Where(tableQuery).Take(start + count);
             var res = t.ExecuteQuery(rangeQuery);
             return new PaginatedList<T>(res, start / count, count);
         }

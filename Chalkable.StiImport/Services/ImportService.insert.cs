@@ -199,10 +199,11 @@ namespace Chalkable.StiImport.Services
             }
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
             var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
+            int logFrequency = persons.Length / 100 > 100 ? 1000 : 100;
             foreach (var person in persons)
             {
                 counter++;
-                if (counter % 100 == 0)
+                if (counter % logFrequency == 0)
                     Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
                 var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
                 //TODO: what about admins? probably will be resolved by API
