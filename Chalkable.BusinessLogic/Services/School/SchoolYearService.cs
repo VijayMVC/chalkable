@@ -152,7 +152,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (Context.SchoolYearId.HasValue)
                     return da.GetById(Context.SchoolYearId.Value);
                 var nowDate = Context.NowSchoolTime.Date;
-                return da.GetByDate(nowDate);
+                var res = da.GetByDate(nowDate);
+                return res ?? da.GetLast(nowDate);
             }
         }
         public IList<SchoolYear> GetSortedYears()

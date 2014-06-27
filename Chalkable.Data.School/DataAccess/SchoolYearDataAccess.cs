@@ -25,6 +25,15 @@ namespace Chalkable.Data.School.DataAccess
             return SelectOneOrNull<SchoolYear>(conds);
         }
 
+        public SchoolYear GetLast(DateTime tillDate)
+        {
+            var conds = new AndQueryCondition { { SchoolYear.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual } };
+            var q = Orm.SimpleSelect<SchoolYear>(FilterBySchool(conds));
+            q.Sql.AppendFormat("order by {0}  desc", SchoolYear.END_DATE_FIELD);
+            return ReadOneOrNull<SchoolYear>(q);
+        }
+
+
         public bool Exists(string name)
         {
             var conds = new AndQueryCondition { { SchoolYear.NAME_FIELD, name } };
