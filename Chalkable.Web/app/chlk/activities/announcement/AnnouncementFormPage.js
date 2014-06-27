@@ -92,7 +92,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateTitle(tpl, model, msg_) {
-                if(!model.isData()){
+                if(!model.isData() && this.dom.find('#title').getValue()){
                     this.dom.find('.save-title-btn').setAttr('disabled', false);
                     this.dom.find('.title-block').removeClass('exists');
                 }else{

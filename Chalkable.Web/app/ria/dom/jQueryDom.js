@@ -335,7 +335,11 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, SELF, function setAllAttrs(obj) {},
             [[String, Object]],
             OVERRIDE, SELF, function setAttr(name, value) {
-                this._dom[0] && this._dom[0].setAttribute && this._dom[0].setAttribute(name, value);
+                this._dom[0] && this._dom.each(function(){
+                    if(this.setAttribute ){
+                        value ? this.setAttribute(name, value) : this.removeAttribute(name);
+                    }
+                });
                 return this;
             },
 
