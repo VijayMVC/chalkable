@@ -202,13 +202,11 @@ NAMESPACE('chlk.activities.grading', function () {
                 form.trigger('submit');
             },
 
-            [ria.mvc.DomEventBind('change', '.codes-select')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function codesChange(node, event, selected_){
+            function updateCodes(node){
                 var res = [], o;
-                var container = node.parent('.comments-block');
+                var container = node.parent('.comments-notes-block');
                 container.find('.codes-select').forEach(function(select){
-                    var option = select.find(':selected')
+                    var option = select.find(':selected');
                     var code = option.getData('code');
                     o = {
                         headerId: select.getData('header-id'),
@@ -229,6 +227,12 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.submitForm(row.find('form'), true);
             },
 
+            [ria.mvc.DomEventBind('change', '.codes-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function codesChange(node, event, selected_){
+                this.updateCodes(node);
+            },
+
             [ria.mvc.DomEventBind('input propertychange', '.notes-textarea')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function notesChange(node, event){
@@ -236,7 +240,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 notesTimeout = setTimeout(function(){
                     var row = this.dom.find('.row.selected');
                     row.find('input[name=note]').setValue(node.getValue());
-                    this.submitForm(row.find('form'), true);
+                    this.updateCodes(node);
                     node.parent('.attachments-container').addClass('loading');
                 }.bind(this), 1000);
             },
