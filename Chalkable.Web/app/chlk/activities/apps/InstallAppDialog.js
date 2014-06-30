@@ -46,13 +46,14 @@ NAMESPACE('chlk.activities.apps', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('click', 'input[type=checkbox]')],
+            [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleInstallGroups(node, event){
                 var groupType = node.getAttr('install-group');
 
                 var installGroups = this.dom.find('input[install-group]:checked:not(:disabled)');
                 var isInstallBtnEnabled = installGroups.count() > 0;
+                var event = chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf();
 
                 if (isInstallBtnEnabled) {
                     this.dom.find('.chlk-button').removeAttr('disabled');
@@ -68,10 +69,10 @@ NAMESPACE('chlk.activities.apps', function () {
                     || groupType == chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER){
                     this.dom.find('input[install-group]:not(:disabled)').filter(function(elem){
                         return elem.getAttr('install-group') != node.getAttr('install-group');
-                    }).removeAttr('checked');
+                    }).trigger(event, [false]);
                 }else{
-                    this.dom.find('input[install-group=5]').removeAttr('checked');
-                    this.dom.find('input[install-group=6]').removeAttr('checked');
+                    this.dom.find('input[install-group=5]').trigger(event, [false]);
+                    this.dom.find('input[install-group=6]').trigger(event, [false]);
                 }
             }
         ]);
