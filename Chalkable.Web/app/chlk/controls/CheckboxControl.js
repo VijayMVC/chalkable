@@ -2,6 +2,11 @@ REQUIRE('chlk.controls.Base');
 
 NAMESPACE('chlk.controls', function () {
 
+    /** @class chlk.controls.CheckBoxEvents */
+    ENUM('CheckBoxEvents', {
+        CHANGE_VALUE: 'changevalue'
+    });
+
     /** @class chlk.controls.CheckboxControl */
     CLASS(
         'CheckboxControl', EXTENDS(chlk.controls.Base), [
@@ -34,11 +39,18 @@ NAMESPACE('chlk.controls', function () {
                 node.on('change.check', function(){
                     var lastValue = hidden.getData('value');
                     var newValue = !lastValue;
-                    hidden.setData('value', newValue);
-                    hidden.setValue(newValue);
-                    newValue ? node.setAttr('checked', 'checked') : node.removeAttr('checked');
+                    node.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [newValue]);
                 });
                 hidden.setData('value', value || false);
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), '.checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Boolean]],
+            VOID, function changeValue(node, event, value) {
+                var hidden = node.parent().find('.hidden-checkbox');
+                hidden.setData('value', value);
+                hidden.setValue(value);
+                value ? node.setAttr('checked', 'checked') : node.removeAttr('checked');
             }
         ]);
 });
