@@ -207,7 +207,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetOauthCode(string applicationUrl)
         {
             //TODO: check if app is installed??
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, MasterLocator.Context.Login);
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
             return Json(authorizationCode);
             

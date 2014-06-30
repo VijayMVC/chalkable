@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.MixPanel;
@@ -59,7 +58,7 @@ namespace Chalkable.Web.Controllers
                 if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || roleName == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
                 apiRoles.Add(roleName);
                 var context = MasterLocator.UserService.LoginToDemo(roleName, Context.UserId.ToString());
-                var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, MasterLocator);
+                var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, context.SchoolYearId, MasterLocator);
                 result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
             }
             return Json(result, 8);

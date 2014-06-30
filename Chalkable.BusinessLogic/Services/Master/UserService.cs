@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.Common;
@@ -105,7 +106,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var demoUser = GetDemoUser(roleName, demoPrefix);
                 if (demoUser != null)
                     demoUser.OriginalPassword = PreferenceService.Get(Preference.DEMO_USER_PASSWORD).Value;
-                var res = Login(demoUser, uow);
+                int schoolYearId = DemoSchoolConstants.CurrentSchoolYearId;
+                var res = Login(demoUser, uow, null, null, schoolYearId);
                 uow.Commit();
                 return res;
             }

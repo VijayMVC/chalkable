@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services.Master;
+﻿using Chalkable.BusinessLogic.Services.Master;
 using WindowsAzure.Acs.Oauth2;
 
 namespace Chalkable.Tests.Services.Master
@@ -14,7 +9,14 @@ namespace Chalkable.Tests.Services.Master
         {
         }
 
-        public string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId, string clientSecret, string userName, string scope)
+
+        public string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId, string clientSecret, string userName,
+                                     int? schoolYear, string scope)
+        {
+            return null;
+        }
+
+        public string GetAuthorizationCode(string clientId, string userName, int? schoolYear, string scope = null)
         {
             return null;
         }
@@ -34,10 +36,5 @@ namespace Chalkable.Tests.Services.Master
             return;
         }
 
-
-        public string GetAuthorizationCode(string clientId, string userName, string scope)
-        {
-            return null;
-        }
     }
 }

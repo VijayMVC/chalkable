@@ -109,11 +109,16 @@ namespace Chalkable.Web.Controllers
             bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
             if (isAuthenticatedByToken)
             {
-                var user = ServiceLocatorFactory.CreateMasterSysAdmin().UserService.GetByLogin(User.Identity.Name);
+                var sl = User.Identity.Name.Split('\n');
+                var userName = sl[0];
+                int? schoolYearId = null;
+                if (sl.Length > 1)
+                    schoolYearId = int.Parse(sl[1]);
+                var user = ServiceLocatorFactory.CreateMasterSysAdmin().UserService.GetByLogin(userName);
                 InitServiceLocators(user);
                 var claims = (User.Identity as ClaimsIdentity).Claims;
                 var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value;
-
+                SchoolLocator.Context.SchoolYearId = schoolYearId;
                 SchoolLocator.Context.IsOAuthUser = true;
                 SchoolLocator.Context.SisToken = user.SisToken;
                 SchoolLocator.Context.SisTokenExpires = user.SisTokenExpires;

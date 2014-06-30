@@ -12,9 +12,9 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IAccessControlService
     {
         string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, string scope);
+            string clientSecret, string userName, int? schoolYear, string scope);
 
-        string GetAuthorizationCode(string clientId, string userName, string scope = null);
+        string GetAuthorizationCode(string clientId, string userName, int? schoolYear, string scope = null);
         ApplicationRegistration GetApplication(string clientId);
         bool RegisterApplication(string clientId, string appSecretKey, string appUrl, string appName);
         void RemoveApplication(string clientId);
@@ -111,9 +111,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
         public string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, string scope)
+            string clientSecret, string userName, int? schoolYearId, string scope)
         {
-            var authorizationCode = GetAuthorizationCode(clientId, userName, scope);
+            var authorizationCode = GetAuthorizationCode(clientId, userName, schoolYearId, scope);
             var response = Authorize(new Uri(accessTokenUrl), clientId, clientSecret, scope, new Uri(redirectUrl), authorizationCode);
             if (response != null)
                 return response.AccessToken;
@@ -121,10 +121,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                 , accessTokenUrl, redirectUrl, clientId, authorizationCode));
         }
 
-        public string GetAuthorizationCode(string clientId, string userName, string scope = null)
+        public string GetAuthorizationCode(string clientId, string userName, int? schoolYearId, string scope = null)
         {
             if (string.IsNullOrEmpty(scope))
                 scope = ConfigurationManager.AppSettings[API_EXPLORER_SCOPE];//TODO: this is wrong approach
+            if (schoolYearId.HasValue)
+                userName = userName + Environment.NewLine + schoolYearId;
             return regService.GetAuthorizationCode(clientId,
                  new AuthorizationServerIdentity
                  {

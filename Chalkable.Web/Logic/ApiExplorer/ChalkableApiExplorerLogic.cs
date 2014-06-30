@@ -286,25 +286,16 @@ namespace Chalkable.Web.Logic
         private const string API_EXPLORER_SCOPE = "api.explorer.scope";
 
 
-        public static string GetAccessTokenFor(string userName, IServiceLocatorMaster locator)
+        public static string GetAccessTokenFor(string userName, int? schoolYearId, IServiceLocatorMaster locator)
         {
-            try
-            {
-                var clientId = ConfigurationManager.AppSettings[API_EXPLORER_CLIENT_ID];
-                var clientSecret = ConfigurationManager.AppSettings[API_EXPLORER_SECRET];
-                var redirectUri = ConfigurationManager.AppSettings[API_EXPLORER_REDIRECT_URI];
-                var accessTokenUri = string.Format(ACS_URL_FORMAT,
-                                          ConfigurationManager.AppSettings[SERVICE_NAMESPACE]);
+            var clientId = ConfigurationManager.AppSettings[API_EXPLORER_CLIENT_ID];
+            var clientSecret = ConfigurationManager.AppSettings[API_EXPLORER_SECRET];
+            var redirectUri = ConfigurationManager.AppSettings[API_EXPLORER_REDIRECT_URI];
+            var accessTokenUri = string.Format(ACS_URL_FORMAT,
+                                      ConfigurationManager.AppSettings[SERVICE_NAMESPACE]);
 
-                var scope = ConfigurationManager.AppSettings[API_EXPLORER_SCOPE];
-                return locator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, scope);
-
-            }
-            catch (Exception)
-            {
-
-                return "";
-            }
+            var scope = ConfigurationManager.AppSettings[API_EXPLORER_SCOPE];
+            return locator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, schoolYearId, scope);
         }
 
         private static bool IsNullableType(ParameterInfo param)

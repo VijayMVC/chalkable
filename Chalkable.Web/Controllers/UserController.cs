@@ -141,7 +141,7 @@ namespace Chalkable.Web.Controllers
                     return Json(new
                     {
                         token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId,
-                                                           clientSecret, login, scope)
+                                                           clientSecret, login, context.SchoolYearId, scope)
                     }, 5);
                 }
             }
