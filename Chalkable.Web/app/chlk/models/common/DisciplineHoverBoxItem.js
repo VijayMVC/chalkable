@@ -4,9 +4,9 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.DisciplineHoverBoxItem*/
     CLASS(
         'DisciplineHoverBoxItem', [
-            Number, 'count',
+            Number, 'total',
 
-            [ria.serialize.SerializeProperty('disciplinename')],
-            String, 'disciplineName'
+            [ria.serialize.SerializeProperty('disciplinetype')],
+            chlk.models.common.NameId, 'disciplineType'
         ]);
 });

@@ -73,10 +73,14 @@ BODY {
                 padding: 21px 18px 0px;
                 position: relative;
 
-                IMG, .avatar-wrapper>div{
+                IMG, .avatar-wrapper>div:not(.alerts-icon){
                   border-width: 0px;
                   width: 201px;
                   height: 167px;
+                  position: relative;
+                  background-repeat: no-repeat;
+                  background-position: center center;
+                  background-size: cover;
                 }
                 IMG{
                   background: none;

@@ -9,9 +9,10 @@ mixin GlanceBox(controller, action, data, color, converter)
                 if data.items
                     .details
                         each item, i in data.items
-                            summary = (item.getSummaryMethod || item.data.getSummary)();
-                            summary = converter ? converter(summary) : summary;
-                            div #{self.getShortText((item.getTotalMethod || item.data.getTotal)(), summary)}
+                            summary = (item.getSummaryMethod || item.data.getSummary)()
+                            summary = converter ? converter(summary) : summary
+                            text = self.getShortText((item.getTotalMethod || item.data.getTotal)(), summary)
+                            div(data-tooltip = text, data-tooltip-type = "overflow") #{text}
 
 
 

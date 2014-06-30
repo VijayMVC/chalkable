@@ -9,6 +9,10 @@ NAMESPACE('chlk.models.common', function () {
         'HoverBox', [
 
             Number, 'title',
+
+            [ria.serialize.SerializeProperty('ispassing')],
+            Boolean, 'passing',
+
             ArrayOf(THoverItem), 'hover'
         ]);
 });

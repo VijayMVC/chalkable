@@ -54,8 +54,8 @@ NAMESPACE('chlk.templates.student', function () {
 
             Object, function buildDisciplineGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getDisciplineBox()
-                    , function(item){ return item.getCount}
-                    , function(item){ return item.getDisciplineName}
+                    , function(item){ return item.getTotal}
+                    , function(item){ return item.getDisciplineType().getName}
                     , Msg.Discipline);
             },
 
@@ -70,13 +70,14 @@ NAMESPACE('chlk.templates.student', function () {
             Object, function buildGlanceBoxData_(boxData, getTotalMethod, getSummaryMethod, title){
                 var items = [];
                 var hoverItems = boxData.getHover();
-                for(var i = 0; i < hoverItems.length; i++){
-                    items.push({
-                        data: hoverItems[i],
-                        getTotalMethod: getTotalMethod(hoverItems[i]),
-                        getSummaryMethod: getSummaryMethod(hoverItems[i])
-                    });
-                }
+                if(hoverItems)
+                    for(var i = 0; i < hoverItems.length; i++){
+                        items.push({
+                            data: hoverItems[i],
+                            getTotalMethod: getTotalMethod(hoverItems[i]),
+                            getSummaryMethod: getSummaryMethod(hoverItems[i])
+                        });
+                    }
                 return {
                     value: boxData.getTitle(),
                     items: items,

@@ -102,6 +102,9 @@
 
     >DIV{
       font: normal 11px Arial;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
