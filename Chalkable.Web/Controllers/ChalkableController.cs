@@ -109,7 +109,7 @@ namespace Chalkable.Web.Controllers
             bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
             if (isAuthenticatedByToken)
             {
-                var sl = User.Identity.Name.Split('\n');
+                var sl = User.Identity.Name.Split(new []{Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
                 var userName = sl[0];
                 int? schoolYearId = null;
                 if (sl.Length > 1)
@@ -196,10 +196,9 @@ namespace Chalkable.Web.Controllers
 
         protected int GetCurrentSchoolYearId()
         {
-            var currentYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            if (currentYear != null)
-                return currentYear.Id;
-            throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            return Context.SchoolYearId.Value;
         }
 
         protected int NowTimeInMinutes

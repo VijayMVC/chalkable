@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
-using Chalkable.Data.Common.Orm;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -204,8 +204,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ChalkableGradeBook> GetGradeBooks(int classId)
         {
             var stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId);
-            var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            var gradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            var gradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
             return GetGradeBooks(classId, gradingPeriods, stiGradeBook);
         }
 
@@ -262,6 +263,8 @@ namespace Chalkable.BusinessLogic.Services.School
             foreach (var activity in activities)
             {
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
+                if (ann == null)
+                    throw new ChalkableException(string.Format("No announcements with sis activity id = {0}", activity.Id));
                 var annDetails = new AnnouncementDetails
                 {
                     Id = ann.Id,

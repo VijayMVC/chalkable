@@ -193,15 +193,18 @@ namespace Chalkable.BusinessLogic.Services.Master
                 user = SaveSisToken(user, uow, ref iNowConnector);
                 var su = user.SchoolUsers[0];
                 Data.School.Model.SchoolYear schoolYear = null;
-                if (user.DistrictRef.HasValue && schoolYearId.HasValue)
+                if (user.DistrictRef.HasValue)
                 {
                     
                     var schoolL = user.District.IsDemoDistrict ? ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]) : 
                         ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
-                    schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
+                    if (schoolYearId.HasValue)
+                        schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
+                    else
+                        schoolYear = schoolL.SchoolYearService.GetCurrentSchoolYear();
                     su = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolYear.SchoolRef);
                     if (su == null)
-                        throw new ChalkableException(string.Format("There is no school in current District with such schoolYearId : {0}", schoolYearId.Value));
+                        throw new ChalkableException(string.Format("There is no school in current District with such schoolYearId : {0}", schoolYearId.Value));    
                 }
                 var res = new UserContext(user, CoreRoles.GetById(su.Role), user.District, su.School, developerId, schoolYear);
                 if (iNowUser == null && iNowConnector != null)

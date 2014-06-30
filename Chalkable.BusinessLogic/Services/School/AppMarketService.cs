@@ -88,11 +88,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
         {
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                return da.GetInstalledByAppId(applicationId, sy.Id);
+                return da.GetInstalledByAppId(applicationId, Context.SchoolYearId.Value);
             }
         }
 

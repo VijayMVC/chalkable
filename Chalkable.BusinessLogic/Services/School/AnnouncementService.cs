@@ -212,15 +212,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false)
         {
-            var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            if (!Context.UserLocalId.HasValue)
+                throw new ChalkableException("Current User is has no inow id");
             var end = count + start;
             start = start + 1;
             if (classId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(schoolYear.Id, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
             return new List<Activity>();
         }
  

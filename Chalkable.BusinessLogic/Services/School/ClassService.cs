@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Common;
@@ -122,6 +121,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var c = GetClassDetailsById(classId);
             if(!c.SchoolYearRef.HasValue)
                 throw new ChalkableException("school year is not assigned for this class");
+            if (!c.SchoolRef.HasValue)
+                throw new ChalkableException(string.Format("Class {0} is not assigned to any school. Looks like it's a general course", c.Name));
             using (var uow = Update())
             {
                 var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
@@ -195,11 +196,13 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-
+            
             using (var uow = Update())
             {
                 var classPersonDa = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
                 var cClass = new ClassDataAccess(uow, Context.SchoolLocalId).GetById(classId);
+                if (!cClass.SchoolRef.HasValue)
+                    throw new ChalkableException(string.Format("Class {0} is not assigned to any school. Looks like it's a general course", cClass.Name));
                 classPersonDa.Insert(new ClassPerson
                 {
                     PersonRef = personId,
@@ -277,6 +280,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
         {
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
             IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
                 {
                     ClassId = classId,
@@ -289,11 +294,10 @@ namespace Chalkable.BusinessLogic.Services.School
              using (var uow = Read())
              {
                  //todo : maybe move this to Getpersons procedure
-                 var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
                  var enrollentStatus = isEnrolled.HasValue && isEnrolled.Value 
                                            ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
                                            : (StudentEnrollmentStatusEnum?) null;
-                 var studentSys = new StudentSchoolYearDataAccess(uow).GetList(sy.Id, enrollentStatus);
+                 var studentSys = new StudentSchoolYearDataAccess(uow).GetList(Context.SchoolYearId.Value, enrollentStatus);
                  res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
                  if (isEnrolled.HasValue)
                  {
