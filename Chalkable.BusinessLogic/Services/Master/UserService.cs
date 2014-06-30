@@ -195,7 +195,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Data.School.Model.SchoolYear schoolYear = null;
                 if (user.DistrictRef.HasValue && schoolYearId.HasValue)
                 {
-                    var schoolL = ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
+                    
+                    var schoolL = user.District.IsDemoDistrict ? ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]) : 
+                        ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
                     schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
                     su = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolYear.SchoolRef);
                     if (su == null)
