@@ -33,9 +33,9 @@ namespace Chalkable.Web.Controllers
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
-            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
-            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, Context.NowSchoolTime.Date);
+            var syId = GetCurrentSchoolYearId();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolTime.Date);
             TeacherClassGrading gradingSummary = null;
             if (currentGradingPeriod != null)
             {
@@ -64,12 +64,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummaryGrids(int classId)
         {
-            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var syId = GetCurrentSchoolYearId();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var standards = SchoolLocator.StandardService.GetStandards(classId, null, null);
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var date = Context.NowSchoolTime.Date;
-            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, date);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, date);
             ChalkableGradeBook gradeBook = null;
             if(currentGradingPeriod != null)
                 gradeBook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);
@@ -109,10 +109,10 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult FinalGrade(int classId)
         {
-            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(sy.Id);
+            var syId = GetCurrentSchoolYearId();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var date = Context.NowSchoolTime.Date;
-            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(sy.Id, date);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, date);
             GradingPeriodFinalGradeViewData gradingPeriodFinalGrade = null;
             if (currentGradingPeriod != null)
                 gradingPeriodFinalGrade = GetGradingPeriodFinalGrade(classId, currentGradingPeriod, null);
@@ -140,8 +140,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassStandardGrid(int classId)
         {
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId);
-            var schoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
+            var schoolYearId = GetCurrentSchoolYearId();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId);
             var classRoomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId);
             var students = SchoolLocator.ClassService.GetStudents(classId, classRoomOption != null ? classRoomOption.IncludeWithdrawnStudents : default(bool?));
             var res = new List<StandardGradingGridViewData>();
@@ -160,8 +160,8 @@ namespace Chalkable.Web.Controllers
         {
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId);
             var anns = SchoolLocator.AnnouncementService.GetAnnouncements(false, 0, int.MaxValue, classId);
-            var schoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
+            var schoolYearId = GetCurrentSchoolYearId();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId);
             var res = new List<GradingStandardClassSummaryViewData>();
             var annSts = SchoolLocator.AnnouncementService.GetAnnouncementStandards(classId);
             foreach (var gradingPeriod in gradingPeriods)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -73,8 +74,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     StudentId = item.PersonRef,
                 });
             }
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            ConnectorLocator.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            ConnectorLocator.AttendanceConnector.SetSectionAttendance(Context.SchoolYearId.Value, date, classId, sa);
         }
 
         private string LevelToClassRoomLevel(string level)

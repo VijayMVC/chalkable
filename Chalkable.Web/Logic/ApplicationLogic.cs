@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ApplicationsViewData;
@@ -72,9 +71,11 @@ namespace Chalkable.Web.Logic
             }
             if (maseterLocator.Context.Role == CoreRoles.TEACHER_ROLE)
             {
-                var schoolYear = schoolLocator.SchoolYearService.GetCurrentSchoolYear();
-                var classes = schoolLocator.ClassService.GetClasses(schoolYear.Id, null, schoolLocator.Context.UserLocalId);
-                var studentCountToAppInstall = schoolLocator.AppMarketService.GetStudentCountToAppInstallByClass(schoolYear.Id, application.Id);
+                if (!schoolLocator.Context.SchoolYearId.HasValue)
+                    throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+
+                var classes = schoolLocator.ClassService.GetClasses(schoolLocator.Context.SchoolYearId.Value, null, schoolLocator.Context.UserLocalId);
+                var studentCountToAppInstall = schoolLocator.AppMarketService.GetStudentCountToAppInstallByClass(schoolLocator.Context.SchoolYearId.Value, application.Id);
                 foreach (var clazz in classes)
                 {
                     var studentCountView = studentCountToAppInstall.FirstOrDefault(x => x.ClassId == clazz.Id);
