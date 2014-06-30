@@ -119,26 +119,28 @@
             {
                 <div id="dev-apps-list"></div>
             }
-            else
+            else if (!isDeveloperSchool)
             {
                 <div id="fb">
                     <h>Don't be shy</h>
                     <div class="fb-like" data-href="https://chalkable.com" data-layout="button_count" data-send="true" data-width="55" data-show-faces="true"></div>
                     <a id="principal"></a>
                 </div>
-                    <div class="border demo-end"></div>
-                    <div class="demo-end">
-                        <h>Demo</h>
-                        <div id="demo-end-container"></div>
-                    </div>
+                <div class="border demo-end"></div>
+                <div class="demo-end">
+                    <h>Demo</h>
+                    <div id="demo-end-container"></div>
+                </div>
                 <div class="border"></div>
                 <div>
                     <h>Sign up</h>
                     <div id="demo-sign-up-container"></div>
                 </div>
+                
+                <div class="border"></div>
             }
 
-            <div class="border"></div>
+            
             <div id="roles-buttons">
                 @if (isDeveloperSchool)
                 {
