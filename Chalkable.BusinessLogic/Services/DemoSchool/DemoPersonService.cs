@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
@@ -246,6 +247,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
             return Storage.StudentHealthConditionStorage.GetByStudentId(studentId);
+        }
+
+        public StudentSummeryInfo GetStudentSummaryInfo(int studentId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

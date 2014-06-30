@@ -28,22 +28,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
         }
 
-        public static StudentSummaryViewData Create(Person person, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
-            , IList<DisciplineTotalPerType> disciplineTotal, IDictionary<string, int> attendanceTotal, 
-            string currentAttendanceType, IList<AnnouncementsClassPeriodViewData> announcementsClassPeriods
-            , int maxPeriodNumber, IList<StudentAnnouncementGrade> lastGrades, IGradingStyleMapper mapper, IList<StudentGradingRank> studentsRanks)
+        public static StudentSummaryViewData Create(StudentSummeryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes)
         {
-            var currentStudentRanks = studentsRanks.Where(x => x.StudentId == person.Id).ToList();
-            var res = new StudentSummaryViewData(person, room)
+            var res = new StudentSummaryViewData(studentSummary.StudentInfo, room)
                 {
-                    PeriodSection = announcementsClassPeriods,
                     ClassesSection = ClassViewData.Create(classes),
-                    AttendanceBox = StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>.Create(attendanceTotal),
-                    DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(disciplineTotal),
-                    GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(lastGrades, mapper),
-                    RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(currentStudentRanks, studentsRanks),
-                    CurrentAttendanceType = currentAttendanceType,
-                    MaxPeriodNumber = maxPeriodNumber
+                    AttendanceBox = StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>.Create(studentSummary.DailyAbsence),
+                    DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
+                    //GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(lastGrades, mapper),
+                    RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank),
                 };
             if (currentClass != null)
             {
@@ -60,39 +53,36 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public bool IsPassing { get; set; }
         
-        public static StudentHoverBoxViewData<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
+        public static StudentHoverBoxViewData<StudentSummeryRankViewData> Create(ClassRankInfo rankInfo)
         {
             var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();
-            res.Hover = StudentSummeryRankViewData.Create(currentStudentRanks, allStudentsRanks);
-            if (res.Hover.Count > 0)
-            {
-                var rank = res.Hover.First().Rank;
-                res.IsPassing = rank > 50;
-                res.Title = rank.HasValue ? rank.ToString() : "";
-            }
+            var rank = rankInfo.Rank;
+            res.IsPassing = rank > 50;
+            res.Title = rank.HasValue ? rank.ToString() : "";
             return res;
         }
 
-        public static StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> Create(IList<DisciplineTotalPerType> disciplineTotalPerTypes)
+        public static StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> Create(IList<InfractionSummaryInfo> infractionSummaryInfos, int totalDisciplineOccurrences)
         {
             var res = new StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>
                 {
-                    Hover = DisciplineTotalPerTypeViewData.Create(disciplineTotalPerTypes).OrderByDescending(x => x.Total).ToList(),
-                    Title = disciplineTotalPerTypes.Sum(x => x.Total).ToString()
+                    Hover = DisciplineTotalPerTypeViewData.Create(infractionSummaryInfos).OrderByDescending(x => x.Total).ToList(),
+                    Title = totalDisciplineOccurrences.ToString()
                 };
             return res;
         }
 
-        public static StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> attDic)
+        public static StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> Create(DailyAbsenceSummaryInfo dailyAbsenceSummary)
         {
-            var totalAbsentsAndLates = attDic.Where(x => ClassAttendance.IsAbsentOrLateLevel(x.Key)).Sum(x => x.Value);
+           // var totalAbsentsAndLates = attDic.Where(x => ClassAttendance.IsAbsentOrLateLevel(x.Key)).Sum(x => x.Value);
             var res = new StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>
                 {
-                    Hover = AttendanceTotalPerTypeViewData.Create(attDic),
-                    Title = totalAbsentsAndLates.ToString()
+                    //Hover = AttendanceTotalPerTypeViewData.Create(attDic),
+                    Title = dailyAbsenceSummary.Absences.ToString()
                 };
             return res;
         }
+
         public static  StudentHoverBoxViewData<StudentSummeryGradeViewData> Create(IList<StudentAnnouncementGrade> studentAnnouncements, IGradingStyleMapper mapper)
         {
             var firstStudentAn = studentAnnouncements.FirstOrDefault();
@@ -142,12 +132,12 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int Total { get; set; }
 
         public static IList<DisciplineTotalPerTypeViewData> Create(
-            IList<DisciplineTotalPerType> disciplineTotalPerTypes)
+            IList<InfractionSummaryInfo> disciplineTotalPerTypes)
         {
            return disciplineTotalPerTypes.Select(x => new DisciplineTotalPerTypeViewData
                 {
-                    DisciplineType = DisciplineTypeViewData.Create(x.DisciplineType),
-                    Total = x.Total
+                    DisciplineType = DisciplineTypeViewData.Create(x.Infraction),
+                    Total = x.Occurrences
                 }).ToList();
         }
     }

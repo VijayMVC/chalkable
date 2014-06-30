@@ -26,6 +26,32 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Summary(int schoolPersonId)
         {
+            if (!Context.SchoolId.HasValue)
+                throw new UnassignedUserException();
+
+            if (SchoolLocator.Context.UserLocalId != schoolPersonId &&
+                SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
+            {
+                var student = SchoolLocator.PersonService.GetPerson(schoolPersonId);
+                return Json(ShortPersonViewData.Create(student));
+            }
+            var studentSummaryInfo = SchoolLocator.PersonService.GetStudentSummaryInfo(schoolPersonId);
+            var classes = SchoolLocator.ClassService.GetClasses(Context.SchoolYearId, null, Context.UserLocalId);
+            var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
+
+            var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
+            Room currentRoom = null;
+            ClassDetails currentClass = null;
+            if (currentClassPeriod != null)
+            {
+                currentClass = classes.First(x => x.Id == currentClassPeriod.ClassRef);
+                if (currentClass.RoomRef.HasValue)
+                    currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
+
+            }
+            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classes);
+            return Json(res);
+
             throw new NotImplementedException();
             //if (!Context.SchoolId.HasValue)
             //    throw new UnassignedUserException();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -30,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
 
+        StudentSummeryInfo GetStudentSummaryInfo(int studentId);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -348,6 +350,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 }).ToList();   
             }
             return new List<StudentHealthCondition>();
+        }
+
+        public StudentSummeryInfo GetStudentSummaryInfo(int studentId)
+        {
+            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
+            var student = GetPerson(studentId);
+            var infractions = ServiceLocator.InfractionService.GetInfractions();
+            return StudentSummeryInfo.Create(student, nowDashboard, infractions);
         }
     }
 

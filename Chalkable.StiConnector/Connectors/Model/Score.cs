@@ -1,7 +1,10 @@
-﻿namespace Chalkable.StiConnector.Connectors.Model
+﻿using System;
+
+namespace Chalkable.StiConnector.Connectors.Model
 {
     public class Score
     {
+        public DateTime? ActivityDate { get; set; }
         public string AbsenceCategory { get; set; }
         public bool Absent { get; set; }
         public int ActivityId { get; set; }
