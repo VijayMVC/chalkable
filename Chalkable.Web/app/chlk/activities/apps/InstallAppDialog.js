@@ -68,10 +68,10 @@ NAMESPACE('chlk.activities.apps', function () {
                     || groupType == chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER){
                     this.dom.find('input[install-group]:not(:disabled)').filter(function(elem){
                         return elem.getAttr('install-group') != node.getAttr('install-group');
-                    }).setAttr('checked', false);
+                    }).removeAttr('checked');
                 }else{
-                    this.dom.find('input[install-group=5]').setAttr('checked', false);
-                    this.dom.find('input[install-group=6]').setAttr('checked', false);
+                    this.dom.find('input[install-group=5]').removeAttr('checked');
+                    this.dom.find('input[install-group=6]').removeAttr('checked');
                 }
             }
         ]);
