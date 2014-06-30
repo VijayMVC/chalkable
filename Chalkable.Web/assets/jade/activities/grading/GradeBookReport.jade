@@ -1,0 +1,81 @@
+.dialog-window.report-window
+    .close.close-btn.dark
+    -console.info(self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat());
+    date = new chlk.models.common.ChlkDate(getDate())
+    h1=Msg.Create_Report
+    .report-buttons.panel-bg
+        a(href="javascript:").report-button.pressed=Msg.Grade_Book_Report
+        +ActionLink('grading', 'worksheetReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Worksheet_Report
+    +ActionForm('grading', 'submitGradeBookReport')
+        +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+        +Hidden('classId', self.getClassId().valueOf())
+        TABLE.report-table
+            TR
+                TD.item-3
+                    h3=Msg.Start_date
+                    +DatePicker('startDate', self.getStartDate() || date)(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            calendarCls: 'for-dialog',
+                            minDate: self.getStartDate().getDate(),
+                            maxDate: self.getEndDate().getDate()
+                        },
+                        class="validate[required]"
+                    )
+                TD.item-3
+                    h3=Msg.End_date
+                    +DatePicker('endDate', self.getEndDate() || date)(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            calendarCls: 'for-dialog',
+                            minDate: self.getStartDate().getDate(),
+                            maxDate: self.getEndDate().getDate()
+                        },
+                        class="validate[required]"
+                    )
+                TD.item-3
+            TR
+                TD.item-3
+                    h3=Msg.Report_type
+                    +Select('reportType').report-type
+                        +Option(0, Msg.Summary, true)
+                        +Option(1, Msg.Detail, false)
+                TD.item-3
+                    h3=Msg.Order_by
+                    +Select('orderBy').order-by
+                        +Option(1, Msg.Student_ID, true)
+                        +Option(2, Msg.Section_average, false)
+                        +Option(0, Msg.Student_display_name, false)
+                TD.item-3
+                    h3=Msg.ID_to_print
+                    +Select('idToPrint').id-to-print
+                        +Option(1, Msg.Student_Number, true)
+                        +Option(2, Msg.State_ID_number, false)
+                        +Option(3, Msg.Alt_student_number, false)
+                        +Option(4, Msg.SS_number, false)
+                        +Option(0, Msg.None, false)
+            TR
+                TD.item-3
+                    h3=Msg.Option(true)
+                    +LabeledCheckbox(Msg.Display_letter_grade, 'displayLetterGrade', false)
+                    +LabeledCheckbox(Msg.Suppress_student_name, 'suppressStudentName', false)
+                    +LabeledCheckbox(Msg.Display_total_points, 'displayTotalPoints', false)
+                    +LabeledCheckbox(Msg.Display_student_average, 'displayStudentAverage', false)
+                TD.item-3
+                    h3=Msg.Include
+                    +LabeledCheckbox(Msg.Withdrawn_students, 'includeWithdrawnStudents', false)
+                    +LabeledCheckbox(Msg.Non_graded_activities, 'includeNonGradedActivities', false)
+                TD.item-3
+                    h3=Msg.Format
+                    +Select('format').format
+                        +Option(0, "PDF", true)
+                        +Option(1, "CSV", false)
+                        +Option(2, "Excel", false)
+                        +Option(3, "HTML", false)
+                        +Option(4, "TIFF", false)
+                        +Option(5, "XML (" + Msg.With_report_data + ")", false)
+        .report-bottom
+            BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

@@ -1,0 +1,40 @@
+mixin FeedItem(item, noDisabled)
+    itemClasses = attributes.class || []
+        -itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
+        -itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
+        isAdminAnnouncement = item.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
+        if isAdminAnnouncement
+            -itemClasses.push('is-admin')
+        if item.isComplete()
+            -itemClasses.push('complete')
+        if item.getApplicationsCount() > 0
+            -itemClasses.push('app-icon')
+        -itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
+        div(class=itemClasses.join(' ')).feed-item
+            if !self.getUserRole().isStudent()
+                .grades
+                    a(
+                        data-tooltip = Msg.Item_Ready_to_be_Graded,
+                        href = "javascript:void(0);",
+                        style = 'background: url("http://1.chart.apis.google.com/chart?chf=bg,s,67676700&chbh=10,4,10' +
+                            '&chs=35x40&cht=bvg&chco=9d9d9d,9d9d9d&chma=5,10,5,0&chds=0,' + item.getStudentsCount() +
+                            ',0,' + item.getStudentsCount() + '&chd=t:' + item.getStudentsWithAttachmentsCount() + '|' +
+                            item.getGradingStudentsCount() + '") 16px center no-repeat'
+                    )
+            .bullet
+                +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isComplete())(
+                    data-tooltip=item.isComplete() ? Msg.Done : Msg.ToDo
+                ).star
+                +ActionLink('announcement', 'view', item.getId())(class = !noDisabled ? 'disabled' : '').d-b.t-d.not-blue.announcement-link
+                    .item-type
+                        .attachment
+                            div(class="announcement-type-" + item.getChalkableAnnouncementType()).icon.blue
+                            div(
+                                data-tooltip=item.getAnnouncementTypeName() + (isAdminAnnouncement ?
+                                    ' ' + Msg.Announcement : '')
+                            ).icon.black
+                            h2.animated-header=item.getTitle()
+                            p.animated=item.getShortContent()
+                            .animated=item.getExpiresDate().toString('m/d/y')
+                            div(data-tooltip=Msg.Document_Attached).attachment-icon
+                            div(data-tooltip=(item.getApplicationsCount() == 1 ? item.getApplicationName() : Msg.Application(true)) + ' ' + Msg.Attached).apps-icon
