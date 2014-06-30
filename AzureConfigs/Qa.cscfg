@@ -3,7 +3,7 @@
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=http;AccountName=chalkableqa;AccountKey=dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableqa;AccountKey=dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="D8884B835CF2696D0C37B56D161C1BA40CB2A708" thumbprintAlgorithm="sha1" />
@@ -12,13 +12,13 @@
   <Role name="Chalkable.BackgroundTaskProcessor">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=http;AccountName=chalkableqa;AccountKey=dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableqa;AccountKey=dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==" />
     </ConfigurationSettings>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=http;AccountName=chalkableqa;AccountKey=dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableqa;AccountKey=dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
