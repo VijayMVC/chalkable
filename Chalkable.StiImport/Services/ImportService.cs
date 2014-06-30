@@ -45,10 +45,6 @@ namespace Chalkable.StiImport.Services
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             Log.LogInfo("download data to sync");
             DownloadSyncData();
-
-            ServiceLocatorMaster = new ImportServiceLocatorMaster(ServiceLocatorMaster.Context);
-            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(ServiceLocatorSchool.Context.DistrictId.Value, null);
-
             var masterDb = (ImportDbService) ServiceLocatorMaster.DbService;
             var schoolDb = (ImportDbService) ServiceLocatorSchool.SchoolDbService;
             Log.LogInfo("begin master transaction");

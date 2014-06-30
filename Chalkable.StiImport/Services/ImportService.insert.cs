@@ -242,20 +242,7 @@ namespace Chalkable.StiImport.Services
                 if (person.PhotoModifiedDate.HasValue)
                     personsForImportPictures.Add(person);
             }
-            //int logFrequency = 1000;//persons.Length / 100 > 100 ? 1000 : 100;
-            //todo: reqrite this later 
-            int personInsertFrequesncy = 1000;
-            Log.LogWarning("Start persons insterting to Db");
-            while (counter < ps.Count)
-            {
-                var personsForInsert = ps.Skip(counter).Take(personInsertFrequesncy).ToList();
-                ServiceLocatorSchool.PersonService.Add(personsForInsert);
-                if (counter % personInsertFrequesncy == 0)
-                    Log.LogWarning(string.Format(ChlkResources.USERS_PROCESSED, counter));
-
-                counter += personInsertFrequesncy;
-            }
-            
+            ServiceLocatorSchool.PersonService.Add(ps);
         }
 
         private void InsertSchoolPersons()
