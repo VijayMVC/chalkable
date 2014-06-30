@@ -77,7 +77,8 @@ $(document).ready(function () {
             success: function (response) {
                 form.find('input[type=submit]').prop('disabled', false);
                 if (response.Success == true) {
-                    form.parents('#dev-signup-form').find('.close').trigger('click');
+                    var role = response.data.Role.toLowerCase();
+                    window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 }
                 else {
                     var text = response.data && response.data.message || '';
