@@ -19,6 +19,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string PersonGender { get; set; }
         public int? ClassId { get; set; }
         public string ClassName { get; set; }
+        public string FullClassName { get; set; }
         public bool Dropped { get; set; }
         public bool IsOwner { get; set; }
         public DateTime? ExpiresDate { get; set; }
@@ -45,6 +46,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             PersonGender = announcement.PrimaryTeacherGender;
             ClassId = announcement.ClassRef;
             ClassName = announcement.ClassName;
+            FullClassName = announcement.FullClassName;
             Dropped = announcement.Dropped;
             ExpiresDate = announcement.Expires == DateTime.MinValue ? (DateTime?)null : announcement.Expires;
             Order = announcement.Order;

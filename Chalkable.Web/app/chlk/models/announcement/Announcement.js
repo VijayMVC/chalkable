@@ -102,7 +102,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('class')],
             Object, 'clazz',
 
-            [ria.serialize.SerializeProperty('classname')],
+            [ria.serialize.SerializeProperty('fullclassname')],
             String, 'className',
 
             String, 'comment',

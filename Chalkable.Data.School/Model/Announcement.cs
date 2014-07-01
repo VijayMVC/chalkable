@@ -69,6 +69,7 @@ namespace Chalkable.Data.School.Model
         public string PrimaryTeacherName { get; set; }
    
         public string ClassName { get; set; }
+        public string FullClassName { get; set; }
         public int? GradeLevelId { get; set; }
         
         
