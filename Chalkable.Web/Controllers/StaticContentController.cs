@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common.Exceptions;
+using Chalkable.Web.Tools;
 
 namespace Chalkable.Web.Controllers
 {
