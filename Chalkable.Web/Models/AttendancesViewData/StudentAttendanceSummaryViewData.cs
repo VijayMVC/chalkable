@@ -28,4 +28,19 @@ namespace Chalkable.Web.Models.AttendancesViewData
             return res;
         }
     }
+
+    public class AttendanceTotalPerTypeViewData
+    {
+        public string Level { get; set; }
+        public int AttendanceCount { get; set; }
+
+        public static IList<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> atteDic)
+        {
+            return atteDic.Select(x => new AttendanceTotalPerTypeViewData
+                {
+                    AttendanceCount = x.Value,
+                    Level = x.Key
+                }).ToList();
+        }
+    }
 }

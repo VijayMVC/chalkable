@@ -19,8 +19,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string CurrentAttendanceType { get; set; }
         public int MaxPeriodNumber { get; set; }
         public IList<AnnouncementsClassPeriodViewData> PeriodSection { get; set; }
-        public IList<ClassViewData> ClassesSection { get; set; } 
-        public StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> AttendanceBox { get; set; }
+        public IList<ClassViewData> ClassesSection { get; set; }
+        public StudentHoverBoxViewData<TotalAbsencesPerClassViewData> AttendanceBox { get; set; }
         public StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
@@ -33,7 +33,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             var res = new StudentSummaryViewData(studentSummary.StudentInfo, room)
                 {
                     ClassesSection = ClassViewData.Create(classes),
-                    AttendanceBox = StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>.Create(studentSummary.DailyAttendance),
+                    AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance, studentSummary.Attendances, classes),
                     DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
                     GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(studentSummary.StudentAnnouncements),
                     RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank),
@@ -72,11 +72,12 @@ namespace Chalkable.Web.Models.PersonViewDatas
             return res;
         }
 
-        public static StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> Create(DailyAbsenceSummaryInfo dailyAbsenceSummary)
+        public static StudentHoverBoxViewData<TotalAbsencesPerClassViewData> Create(DailyAbsenceSummaryInfo dailyAbsenceSummary
+            , IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
-            var res = new StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>
+            var res = new StudentHoverBoxViewData<TotalAbsencesPerClassViewData>
                 {
-                    //Hover = AttendanceTotalPerTypeViewData.Create(attDic),
+                    Hover = TotalAbsencesPerClassViewData.Create(attendances, classDetailses),
                 };
             if (dailyAbsenceSummary != null && dailyAbsenceSummary.Absences != null)
                 res.Title = dailyAbsenceSummary.Absences.ToString();
@@ -142,18 +143,26 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
     }
 
-    public class AttendanceTotalPerTypeViewData
+    public class TotalAbsencesPerClassViewData
     {
-        public string Level { get; set; }
-        public int AttendanceCount { get; set; }
+        public decimal Absences { get; set; }
+        public ShortClassViewData Class { get; set; }
 
-        public static IList<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> attTypeDic)
+        public static IList<TotalAbsencesPerClassViewData> Create(IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
-            return attTypeDic.Select(x => new AttendanceTotalPerTypeViewData
+            var atts = attendances.OrderByDescending(x=>x.Absences).Take(5);
+            var res = new List<TotalAbsencesPerClassViewData>();
+            foreach (var classAttendanceSummary in atts)
+            {
+
+                var c = classDetailses.First(x => x.Id == classAttendanceSummary.ClassId);
+                res.Add(new TotalAbsencesPerClassViewData
                 {
-                    AttendanceCount = x.Value,
-                    Level = x.Key
-                }).ToList();
+                    Absences = classAttendanceSummary.Absences,
+                    Class = ShortClassViewData.Create(c)
+                });
+            }
+            return res;
         }
     }
 

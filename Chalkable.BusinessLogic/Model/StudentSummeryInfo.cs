@@ -16,7 +16,9 @@ namespace Chalkable.BusinessLogic.Model
         public int TotalDisciplineOccurrences { get; set; }
         public IList<InfractionSummaryInfo> InfractionSummaries { get; set; }
         public IList<StudentAnnouncementGrade> StudentAnnouncements { get; set; }
- 
+
+        public IList<ClassAttendanceSummary> Attendances { get; set; } 
+
         public static StudentSummeryInfo Create(Person student, NowDashboard nowDashboard, IList<Data.School.Model.Infraction> infractions)
         {
             var res = new StudentSummeryInfo
@@ -25,7 +27,8 @@ namespace Chalkable.BusinessLogic.Model
                     ClassRank = ClassRankInfo.Create(nowDashboard.ClassRank),
                     TotalDisciplineOccurrences = nowDashboard.Infractions.Sum(x=>x.Occurrences),
                     InfractionSummaries = InfractionSummaryInfo.Create(nowDashboard.Infractions.ToList(), infractions),
-                    StudentAnnouncements = new List<StudentAnnouncementGrade>()
+                    StudentAnnouncements = new List<StudentAnnouncementGrade>(),
+                    Attendances = ClassAttendanceSummary.Create(nowDashboard.SectionAttendance.ToList())
                 };
             if (nowDashboard.DailyAttendance == null)
                 nowDashboard.DailyAttendance = new DailyAbsenceSummary {Absences = 0, Tardies = 0};
@@ -80,8 +83,20 @@ namespace Chalkable.BusinessLogic.Model
         } 
     }
 
-    public class ShortGradeInfo
+    public class ClassAttendanceSummary
     {
-        
+        public int ClassId { get; set; }
+        public decimal Absences { get; set; }
+        public int Tardies { get; set; }
+
+        public static IList<ClassAttendanceSummary> Create(IList<SectionAbsenceSummary> absences)
+        {
+            return absences.Select(x => new ClassAttendanceSummary()
+                {
+                    ClassId = x.SectionId,
+                    Absences = x.Absences ?? 0,
+                    Tardies = x.Tardies ?? 0
+                }).ToList();
+        }
     }
 }
