@@ -9,10 +9,6 @@ statusData = self.getStatusData()
             #avatar-photo-conainer
                 .img-container
                     +PersonImg(user, 256, true)
-                    .grades-container
-                        p=Msg.Class_Of
-                            span=self.getAvatarTitle()
-                        .grade #{self.getSerial(user.getGradeLevelNumber())} #{Msg.Grade}
             #student-info-panel
                 h1.display-name=user.getDisplayName() || user.getFullName()
                 .status
@@ -21,14 +17,14 @@ statusData = self.getStatusData()
                     if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
                         |&nbsp;- #{user.getRoomName()}
                 .glance-container
-                    if self.getUser().getGradesBox()
-                        +GlanceBox(null, null, self.buildGradesGlanceBoxData())
+                    if self.getUser().getRankBox()
+                        +GlanceBox(null, null, self.buildRankGlanceBoxData())
                     if self.getUser().getAttendanceBox()
                         +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert)
                     if self.getUser().getDisciplineBox()
                         +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
-                    if self.getUser().getRankBox()
-                        +GlanceBox(null, null, self.buildRankGlanceBoxData())
+                    if self.getUser().getGradesBox()
+                        +GlanceBox(null, null, self.buildGradesGlanceBoxData())
         if user.getPeriodSection()
             .today-work-panel
                 h2=Msg.Todays_work
@@ -38,4 +34,4 @@ statusData = self.getStatusData()
             .today-work-panel
                 h2.stats=Msg.Classes
                 .classes-tb
-                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).centered
+                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class)(hideArrows).centered

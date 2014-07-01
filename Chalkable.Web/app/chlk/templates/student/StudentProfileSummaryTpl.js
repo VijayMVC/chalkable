@@ -28,7 +28,7 @@ NAMESPACE('chlk.templates.student', function () {
             Object, function getStatusData(){
                 var attType =this.getCurrentAttendanceType();
                 var res = {};
-                if(attType == chlk.models.attendance.AttendanceTypeEnum.NA){
+                if(!attType || attType == chlk.models.attendance.AttendanceTypeEnum.NA){
                     res.statusName = 'No attendance taken';
                     res.status = 'not-assigned';
                 }else{
@@ -42,7 +42,7 @@ NAMESPACE('chlk.templates.student', function () {
                 return this.buildGlanceBoxData_(this.getUser().getRankBox()
                     , function(item){ return item.getRank; }
                     , function(item){ return  item.getMarkingPeriodName; }
-                    , Msg.Recent);
+                    , Msg.Percentile, true);
             },
 
             Object, function buildAttendanceGlanceBoxData(){
@@ -63,11 +63,11 @@ NAMESPACE('chlk.templates.student', function () {
                 return this.buildGlanceBoxData_(this.getUser().getGradesBox()
                     , function(item){ return item.getGrade}
                     , function(item){ return item.getAnnouncementTypeName}
-                    , Msg.Percentile);
+                    , Msg.Recent);
             },
 
-            [[Object, Function, Function, String]],
-            Object, function buildGlanceBoxData_(boxData, getTotalMethod, getSummaryMethod, title){
+            [[Object, Function, Function, String, Boolean]],
+            Object, function buildGlanceBoxData_(boxData, getTotalMethod, getSummaryMethod, title, noHover_){
                 var items = [];
                 var hoverItems = boxData.getHover();
                 if(hoverItems)
@@ -80,7 +80,7 @@ NAMESPACE('chlk.templates.student', function () {
                     }
                 return {
                     value: boxData.getTitle(),
-                    items: items,
+                    items: noHover_ ? null : items,
                     title: title
                 };
             }

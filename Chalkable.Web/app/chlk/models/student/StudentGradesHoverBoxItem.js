@@ -5,7 +5,7 @@ NAMESPACE('chlk.models.student', function(){
     /**@class chlk.models.student.StudentGradesHoverBoxItem*/
     CLASS('StudentGradesHoverBoxItem', [
 
-        Number, 'grade',
+        String, 'grade',
         [ria.serialize.SerializeProperty('gradingstyle')],
         Number, 'gradingStyle',
         [ria.serialize.SerializeProperty('announcementtypeid')],

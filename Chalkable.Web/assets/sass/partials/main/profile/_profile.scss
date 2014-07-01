@@ -52,6 +52,13 @@ BODY {
             background: white;
           }
 
+          .student-profile-summary-page{
+            .summary-view{
+              margin: 36px 0 0 0;
+              padding: 0;
+            }
+          }
+
           .summary-view{
             margin: 0 -28px;
             padding: 16px 11px 0 13px;
@@ -59,12 +66,10 @@ BODY {
 
             .lr-toolbar {
               margin-bottom: 40px;
-              margin-left: 14px;
-              width: 671px;
             }
 
             #avatar-photo-conainer{
-              width: 268px;
+              width: 262px;
 
               .img-container{
                 background: url(images/profile/avatar-frame.png) no-repeat;
@@ -85,58 +90,7 @@ BODY {
                 IMG{
                   background: none;
                 }
-                .grades-container{
-                  &:hover{
-                    P{
-                      opacity: 0;
-                    }
-
-                    .grade{
-                      opacity: 1;
-                    }
-                  }
-
-                  P, DIV{
-                    margin-top: 3px;
-                    font-size: 29px;
-                    color: #D8D5CA !important;
-                    text-shadow: 0 -2px 0px #B1AFA6, 0 2px 0px white;
-                    font-weight: normal;
-                    word-spacing: -4px;
-                    letter-spacing: 1px;
-                    text-align: center;
-                    opacity: 1;
-                    @include transition-property("all");
-                    @include transition-duration("0.8s");
-
-                    &.grade{
-                      position: absolute;
-                      word-spacing: 0px;
-                      top: 198px;
-                      left: 0;
-                      right: 0;
-                      opacity: 0;
-                      width: 238px;
-                      font-size: 25px;
-                    }
-
-                    SPAN{
-                      font-size: 33px;
-                      letter-spacing: 3px;
-                      display: inline-block;
-                      margin-left: 12px;
-                    }
-                  }
-                }
               }
-            }
-          }
-
-          .class-link:hover{
-            color: #2F7790 !important;
-
-            IMG{
-              margin-top: -45px;
             }
           }
 
@@ -148,11 +102,14 @@ BODY {
             vertical-align: top;
             position: relative;
             z-index: 100;
-            width: 75px;
-            height: 82px;
+            width: 84px;
+            height: 85px;
+            background: rgba(238,224,180,1);
+            border-radius: 5px;
+            @include box-shadow(inset 0 1px 0 white);
 
             &:not(:last-child){
-              margin-right: 10px;
+              margin-right: 14px;
             }
 
             .announcement-box {
@@ -212,7 +169,7 @@ BODY {
 
             .class-img{
               height: 35px;
-              margin: 11px 17px 0;
+              margin: 13px 20px 0;
               width: 45px;
               overflow: hidden;
 
@@ -227,11 +184,11 @@ BODY {
               display: inline-block;
               width: 67px;
               overflow: hidden;
-              font-family: Georgia;
-              font-size: 12px;
-              font-style: italic;
+              font: normal 13px Arial;
               text-shadow: 0 1px 1px #f2e6c0;
               white-space: nowrap;
+              color: #40220f;
+              margin-top: 12px;
             }
           }
 
@@ -355,12 +312,11 @@ BODY {
           }
 
           #student-info-panel{
-            width: 426px;
+            width: 405px;
             overflow: visible;
 
             .glance-container {
-              margin-left: -14px;
-              margin-top: 25px;
+              margin-top: 42px;
             }
           }
 
@@ -689,15 +645,17 @@ BODY {
             }
           }
 
-          h1, h2, .status{
+          h1, h2{
             font-family: Pacifico;
             font-weight: normal;
             color: $color;
           }
 
           .status{
-            font-size: 24px;
+            font: normal 24px Jrhand !important;
             padding: 0;
+            color: #532f18;
+            text-transform: none !important;
 
             #show-buttons-popup{
               margin-left: 10px;
@@ -711,7 +669,7 @@ BODY {
               width: 10px;
               vertical-align: middle;
               @include border-radius(5px);
-              margin: 0 13px 5px 8px;
+              margin: 0 11px 5px 5px;
               position: relative;
 
               .tooltip-announcement{
@@ -757,17 +715,20 @@ BODY {
             }
           }
 
-          h2, .status{
-            font-size: 24px;
+          h2{
+            font: bold 17px Arial;
+            text-transform: uppercase;
           }
 
           h2:not(.no-line){
-            background: url(images/profile/header-line.png) 0 36px no-repeat;
+            height: 28px;
+            border-bottom: 1px solid #bfaa69;
+            box-shadow: 0 1px 0 #f1e4bb;
           }
 
           h1{
-            font-size: 48px;
-            margin: 0 0 -11px;
+            font: bold 36px Arial;
+            margin: 23px 0 14px 0;
             white-space: nowrap;
           }
 
@@ -878,6 +839,34 @@ BODY {
           }
         }
       }
+    }
+  }
+}
+
+.student-profile-summary-page{
+  margin-top: 11px;
+
+  .avatar-wrapper .alerts-icon{
+    top: -38px;
+    right: -35px;
+  }
+
+  .today-work-panel{
+    margin-top: 24px;
+  }
+
+  .classes-tb{
+    margin-top: 17px;
+  }
+
+  .lr-toolbar{
+    margin: 0 -37px;
+
+    &.big-arrows .arrow{
+      top: -4px;
+      bottom: 10px;
+      width: 21px;
+      background-size: 34% auto;
     }
   }
 }

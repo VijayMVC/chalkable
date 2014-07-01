@@ -197,26 +197,29 @@ NAMESPACE('chlk.controls', function () {
                 var left = (configs.padding - width) * index_;
                 secondContainer.setCss('left', left);
                 var hasLeft = false, hasRight = false;
-                if (index_ == 0) {
-                    prevButton.addClass(configs.disabledClass);
-                } else {
-                    prevButton.removeClass(configs.disabledClass);
-                    hasLeft = true;
-                }
-                var thirdContainer = secondContainer.find('.third-container');
-                if ((index_ == configs.pagesCount - 1 ) || !configs.pagesCount || (thirdContainer.exists() && thirdContainer.width() == secondContainer.width() - left)) {
-                    nextButton.addClass(configs.disabledClass);
-                } else {
-                    nextButton.removeClass(configs.disabledClass);
-                    hasRight = true;
-                }
-                var interval = setInterval(function(){
-                    var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
-                    if(curLeft > left - eps && curLeft < left + eps){
-                        toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft_, index_, hasLeft, hasRight]);
-                        clearInterval(interval);
+                if(toolbar.is(':visible')){
+                    if (index_ == 0) {
+                        prevButton.addClass(configs.disabledClass);
+                    } else {
+                        prevButton.removeClass(configs.disabledClass);
+                        hasLeft = true;
                     }
-                }, 10)
+                    var thirdContainer = secondContainer.find('.third-container');
+                    if ((index_ == configs.pagesCount - 1 ) || !configs.pagesCount || (thirdContainer.exists() && thirdContainer.width() == secondContainer.width() - left)) {
+                        nextButton.addClass(configs.disabledClass);
+                    } else {
+                        nextButton.removeClass(configs.disabledClass);
+                        hasRight = true;
+                    }
+                    var interval = setInterval(function(){
+                        var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
+                        if(curLeft > left - eps && curLeft < left + eps){
+                            toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft_, index_, hasLeft, hasRight]);
+                            clearInterval(interval);
+                        }
+                    }, 10)
+                }
+
             }
         ]);
 });

@@ -314,6 +314,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     return false;
                 row.find('.grading-input-popup').hide();
                 var value = (input.getValue() || '').toLowerCase(), wasExempt = false;
+                if(value == 'exempt' && (!checkbox.exists() || checkbox.getData('value')))
+                    return false;
                 if(value == 'exempt'){
                     checkbox.setValue(true);
                     value = "";
