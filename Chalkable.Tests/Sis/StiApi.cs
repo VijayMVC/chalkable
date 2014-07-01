@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Transactions;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
@@ -38,6 +40,31 @@ namespace Chalkable.Tests.Sis
 
             var schools = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
             Debug.WriteLine(schools.Count());
+        }
+
+        [Test]
+        public void TransactionScopeTest()
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                var cs = @"Data Source=.\sqlexpress;Initial Catalog=xxx;UID=sa;Pwd=mc_z631";
+                using (SqlConnection connection1 = new SqlConnection(cs))
+                {
+                    connection1.Open();
+
+                    SqlCommand command1 = new SqlCommand("insert into test (id) values (1)", connection1);
+                    command1.ExecuteNonQuery();
+                }
+                using (SqlConnection connection1 = new SqlConnection(cs))
+                {
+                    connection1.Open();
+
+                    SqlCommand command1 = new SqlCommand("insert into test (id) values (2)", connection1);
+                    command1.ExecuteNonQuery();
+                }
+
+                scope.Complete();
+            }
         }
     }
 }

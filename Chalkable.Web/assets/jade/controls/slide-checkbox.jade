@@ -3,7 +3,7 @@ mixin SlideCheckbox(name, val, isReadOnly)
     -attributes.id = null
     .slide-checkbox(attributes)
         -attributes.id = id
-        attributes = self.prepareAttributes(attributes)
+        -attributes = self.prepareData(attributes, val)
         .wrapper
             -attributes.checked = val
             +Checkbox(name, val)(attributes)
