@@ -367,14 +367,14 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 scores = scores.OrderByDescending(x => x.ActivityDate).Take(5).ToList();
                 var activityDates = scores.Select(x => x.ActivityDate).ToList();
-                var anns = ServiceLocator.AnnouncementService.GetAnnouncements(activityDates.Min().Value, activityDates.Max().Value);
+                var anns = ServiceLocator.AnnouncementService.GetAnnouncements(activityDates.Last().Value, activityDates.First().Value);
                 foreach (var score in scores)
                 {
                     var ann = anns.FirstOrDefault(x => x.SisActivityId == score.ActivityId);
                     if (ann != null)
                     {
                         var studentAnn = new StudentAnnouncementGrade {Announcement = ann};
-                        MapperFactory.GetMapper<StudentAnnouncementGrade, Score>().Map(studentAnn, score);
+                        MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnn, score);
                         res.StudentAnnouncements.Add(studentAnn);
                     }
                 }
