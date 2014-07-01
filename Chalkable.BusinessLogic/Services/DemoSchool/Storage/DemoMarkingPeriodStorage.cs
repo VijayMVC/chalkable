@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public MarkingPeriod GetMarkingPeriod(DateTime date)
         {
-            return data.Where(x => x.Value.StartDate >= date && date <= x.Value.EndDate).Select(x => x.Value).First();
+            return data.Where(x => x.Value.StartDate <= date && date >= x.Value.EndDate).Select(x => x.Value).First();
         }
 
         public bool IsOverlaped(int id, DateTime startDate, DateTime endDate, int? i)
