@@ -8,6 +8,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         public string AbsenceCategory { get; set; }
         public bool Absent { get; set; }
         public int ActivityId { get; set; }
+        public string ActivityName { get; set; }
         public int? AlphaGradeId { get; set; }
         public int? AlternateScoreId { get; set; }
         public string Comment { get; set; }

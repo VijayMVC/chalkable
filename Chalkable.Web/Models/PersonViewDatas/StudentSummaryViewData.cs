@@ -84,7 +84,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             return res;
         }
 
-        public static  StudentHoverBoxViewData<StudentSummeryGradeViewData> Create(IList<StudentAnnouncementGrade> studentAnnouncements)
+        public static  StudentHoverBoxViewData<StudentSummeryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
         {
             var firstStudentAn = studentAnnouncements.FirstOrDefault();
             var res = new StudentHoverBoxViewData<StudentSummeryGradeViewData>
@@ -166,23 +166,20 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
     }
 
-
     public class StudentSummeryGradeViewData
     {
         public string Grade { get; set; }
-        public int? AnnouncementTypeId { get; set; }
-        public string AnnouncmentTypeName { get; set; }
-        public static StudentSummeryGradeViewData Create(StudentAnnouncementGrade studentAnnouncement)
+        public string AnnouncmentTitle { get; set; }
+        public static StudentSummeryGradeViewData Create(StudentAnnouncement studentAnnouncement)
         {
             var res = new StudentSummeryGradeViewData
             {
                 Grade = studentAnnouncement.ScoreValue,
-                AnnouncementTypeId = studentAnnouncement.Announcement.ChalkableAnnouncementType,
-                AnnouncmentTypeName = studentAnnouncement.Announcement.ClassAnnouncementTypeName
+                AnnouncmentTitle = studentAnnouncement.AnnouncementTitle
             };
             return res;
         }
-        public static IList<StudentSummeryGradeViewData> Create(IList<StudentAnnouncementGrade> studentAnnouncements)
+        public static IList<StudentSummeryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
         {
             return studentAnnouncements.Select(Create).ToList();
         }

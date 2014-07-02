@@ -360,24 +360,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
             var student = GetPerson(studentId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
-            var res = StudentSummeryInfo.Create(student, nowDashboard, infractions);
-            var scores = nowDashboard.Scores.Where(x => !string.IsNullOrEmpty(x.ScoreValue)).ToList();
-            if (scores.Count > 0)
-            {
-                scores = scores.OrderByDescending(x => x.ActivityDate).Take(5).ToList();
-                var activityDates = scores.Select(x => x.ActivityDate).ToList();
-                var anns = ServiceLocator.AnnouncementService.GetAnnouncements(activityDates.Last().Value, activityDates.First().Value);
-                foreach (var score in scores)
-                {
-                    var ann = anns.FirstOrDefault(x => x.SisActivityId == score.ActivityId);
-                    if (ann != null)
-                    {
-                        var studentAnn = new StudentAnnouncementGrade {Announcement = ann};
-                        MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnn, score);
-                        res.StudentAnnouncements.Add(studentAnn);
-                    }
-                }
-            }
+            var res = StudentSummeryInfo.Create(student, nowDashboard, infractions, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
     }

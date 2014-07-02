@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -15,11 +16,12 @@ namespace Chalkable.BusinessLogic.Model
         public DailyAbsenceSummaryInfo DailyAttendance { get; set; }
         public int TotalDisciplineOccurrences { get; set; }
         public IList<InfractionSummaryInfo> InfractionSummaries { get; set; }
-        public IList<StudentAnnouncementGrade> StudentAnnouncements { get; set; }
+        public IList<StudentAnnouncement> StudentAnnouncements { get; set; }
 
         public IList<ClassAttendanceSummary> Attendances { get; set; } 
 
-        public static StudentSummeryInfo Create(Person student, NowDashboard nowDashboard, IList<Data.School.Model.Infraction> infractions)
+        public static StudentSummeryInfo Create(Person student, NowDashboard nowDashboard
+            , IList<Data.School.Model.Infraction> infractions, IMapper  mapper)
         {
             var res = new StudentSummeryInfo
                 {
@@ -27,12 +29,20 @@ namespace Chalkable.BusinessLogic.Model
                     ClassRank = ClassRankInfo.Create(nowDashboard.ClassRank),
                     TotalDisciplineOccurrences = nowDashboard.Infractions.Sum(x=>x.Occurrences),
                     InfractionSummaries = InfractionSummaryInfo.Create(nowDashboard.Infractions.ToList(), infractions),
-                    StudentAnnouncements = new List<StudentAnnouncementGrade>(),
+                    StudentAnnouncements = new List<StudentAnnouncement>(),
                     Attendances = ClassAttendanceSummary.Create(nowDashboard.SectionAttendance.ToList())
                 };
             if (nowDashboard.DailyAttendance == null)
                 nowDashboard.DailyAttendance = new DailyAbsenceSummary {Absences = 0, Tardies = 0};
             res.DailyAttendance = DailyAbsenceSummaryInfo.Create(nowDashboard.DailyAttendance);
+
+            var scores = nowDashboard.Scores.Where(x => !string.IsNullOrEmpty(x.ScoreValue)).ToList();
+            foreach (var score in scores)
+            {
+                var studentAnn = new StudentAnnouncement();
+                mapper.Map(studentAnn, score);
+                res.StudentAnnouncements.Add(studentAnn);
+            }              
             return res;
         }
     }

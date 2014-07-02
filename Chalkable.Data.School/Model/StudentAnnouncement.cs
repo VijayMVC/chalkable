@@ -14,6 +14,7 @@ namespace Chalkable.Data.School.Model
     public class StudentAnnouncement
     {
         public int AnnouncementId { get; set; }
+        public string AnnouncementTitle { get; set; }
         public int ActivityId { get; set; }
         public int StudentId { get; set; }
         public string Comment { get; set; }
