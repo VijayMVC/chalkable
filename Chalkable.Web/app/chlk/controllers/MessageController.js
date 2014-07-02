@@ -42,7 +42,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         this.getContext().getSession().set(ChlkSessionConstants.CURRENT_MESSAGES, model.getItems());
-                        return this.convertModel(model, inbox_, role_, keyword_);
+                        return this.convertModel(model, inbox_, role_, keyword_, start_ || 0);
                     }, this);
             },
 
@@ -61,7 +61,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(res){
                     res = res.attach(this.validateResponse_())
                         .then(function(x){
-                            return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                            return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), model.getStart());
                         }, this);
                 }else{
                     res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
@@ -69,14 +69,15 @@ NAMESPACE('chlk.controllers', function (){
                 return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
             },
 
-            [[chlk.models.common.PaginatedList, Boolean, String, String]],
-            function convertModel(list_, inbox_, role_, keyword_)
+            [[chlk.models.common.PaginatedList, Boolean, String, String, Number]],
+            function convertModel(list_, inbox_, role_, keyword_, start_)
             {
                 var result = new chlk.models.messages.MessageList();
                 result.setMessages(list_);
                 result.setInbox(inbox_);
                 result.setRole(role_);
                 result.setKeyword(keyword_);
+                result.setStart(start_);
 
                 return new ria.async.DeferredData(result);
             },
