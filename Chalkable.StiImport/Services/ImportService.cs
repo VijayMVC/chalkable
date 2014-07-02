@@ -54,12 +54,12 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("begin school transaction");
             schoolDb.BeginTransaction();*/
             //bool schoolCommited = false;
-            using (TransactionScope scope = new TransactionScope())
+            /*using (TransactionScope scope = new TransactionScope())
             {
-                SyncDb();
+                
                 scope.Complete();
-            }
-
+            }*/
+            SyncDb();
 
             /*try
             {
