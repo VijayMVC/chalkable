@@ -1,0 +1,109 @@
+@import "compass/css3/border-radius";
+
+.glance-container{
+  .glance-box:not(:first-child){
+    margin-left: 20px;
+  }
+}
+
+.glance-box {
+  text-decoration: none;
+  >DIV{
+    //position: relative;
+    @include transition-property("all");
+    @include transition-duration("0.2s");
+    @include transition-delay("0.3s");
+  }
+  color: #957633;
+  display: inline-block;
+  vertical-align: top;
+  width: 84px;
+  height: 99px;
+  border: 1px solid #b3a066;
+  @include box-shadow(0 1px 1px #b3a066);
+  background: rgba(240, 233, 212, 0.5);
+  border-radius: 5px;
+  text-align: center;
+  overflow: hidden;
+
+  &.hover-action-box{
+    >DIV{
+      &:hover{
+        margin-top: -69px;
+
+        .details{
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .glance-title{
+    text-align: center;
+    font: normal 14px Arial;
+    text-shadow: 1px 0px 0px #cdc4b4;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 0 3px;
+    color: #40220f;
+    margin: 6px 0 0 0;
+    &.f-13{
+      font-size: 13px;
+    }
+  }
+
+  .value{
+    width: 56px;
+    height: 56px;
+    margin: 12px auto 1px;
+    font: bold 22px Helvetica, Arial;
+    color: #fff;
+    text-shadow: 0px 1px 1px grey;
+    line-height: 56px;
+    background: #3d9350;
+    @include border-radius(33px);
+    overflow: hidden;
+
+    &:not(:first-child){
+      margin-left: 20px;
+    }
+    &.large{
+      font-size: 36px;
+    }
+    &.small{
+      font-size: 26px;
+    }
+    &.red{
+      background: #800000;
+    }
+    &.brown {
+      background: #8b6e2f;
+    }
+  }
+
+  .details{
+    @include transition-property("all");
+    @include transition-duration("0.2s");
+    @include transition-delay("0.3s");
+
+    margin: 0 auto 10px;
+    display: inline-block;
+    background: url(images/profile/glance-details-bg.png) 0 0 no-repeat;
+    height: 58px;
+    width: 57px;
+    padding: 13px 3px 3px 3px;
+    overflow: hidden;
+    opacity: 0;
+    color: #957633;
+
+    >DIV{
+      font: normal 11px Arial;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+}
+
