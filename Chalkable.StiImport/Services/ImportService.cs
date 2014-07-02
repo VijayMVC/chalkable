@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
@@ -53,12 +54,12 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("begin school transaction");
             schoolDb.BeginTransaction();*/
             //bool schoolCommited = false;
-            /*using (TransactionScope scope = new TransactionScope())
+            using (TransactionScope scope = new TransactionScope())
             {
-                
+                SyncDb();
                 scope.Complete();
-            }*/
-            SyncDb();
+            }
+
 
             /*try
             {
@@ -146,9 +147,9 @@ namespace Chalkable.StiImport.Services
             {
                 var type = context.Types[table.Key];
                 Log.LogInfo("Start downloading " + table.Key);
-                var res = connectorLocator.SyncConnector.GetDiff(type, table.Value);
-                Log.LogInfo("Table downloaded: " + table.Key);
-                results.Add((SyncResultBase)res);
+                var res = (SyncResultBase)connectorLocator.SyncConnector.GetDiff(type, table.Value);
+                Log.LogInfo("Table downloaded: " + table.Key + " " + res.RowCount);
+                results.Add(res);
             }
             foreach (var syncResultBase in results)
             {
@@ -165,6 +166,19 @@ namespace Chalkable.StiImport.Services
                     newVersions.Add(i.Key, i.Value.Value);
                 }
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
+        }
+
+        private void ProcessByParts<T>(IList<T> source, Action<IList<T>> processor, int count, string logMsg)
+        {
+            for (int i = 0; i < source.Count; i += count)
+            {
+                var l = source.Skip(i).Take(count).ToList();
+                if (logMsg != null)
+                    Log.LogInfo(string.Format("starting {0} {1} {2}", logMsg, i, l.Count));
+                processor(l);
+                if (logMsg != null)
+                    Log.LogInfo(string.Format("finished {0} {1} {2}", logMsg, i, l.Count));
+            }
         }
     }
 

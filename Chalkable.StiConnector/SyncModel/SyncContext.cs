@@ -100,6 +100,7 @@ namespace Chalkable.StiConnector.SyncModel
     {
         public int CurrentVersion { get; set; }
         public abstract string Name { get; }
+        public abstract int RowCount { get; }
     }
 
     public class SyncResult<T> : SyncResultBase
@@ -120,5 +121,20 @@ namespace Chalkable.StiConnector.SyncModel
 
 
         public override string Name { get { return typeof (T).Name; } }
+
+        public override int RowCount
+        {
+            get 
+            { 
+                var res = 0;
+                if (All != null)
+                    res += All.Length;
+                if (Updated != null)
+                    res += Updated.Length;
+                if (Deleted != null)
+                    res += Deleted.Length;
+                return res;
+            }
+        }
     }
 }

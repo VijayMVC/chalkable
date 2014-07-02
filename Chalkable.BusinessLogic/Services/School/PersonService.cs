@@ -94,7 +94,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
-            //TODO: need cross db transaction handling
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);

@@ -176,12 +176,12 @@ namespace Chalkable.StiImport.Services
                     LockedOut = x.LockedOut,
                     UserName = x.UserName
                 }).ToList();
-            ServiceLocatorSchool.SisUserService.Add(users);
+            ProcessByParts(users, ServiceLocatorSchool.SisUserService.Add, 1000, "Sis Users");
+            //ServiceLocatorSchool.SisUserService.Add(users);
         }
         
         private void InsertPersons()
         {
-            int counter = 0;
             var persons = context.GetSyncResult<Person>().All;
             var ps = new List<PersonInfo>();
             var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
@@ -242,7 +242,8 @@ namespace Chalkable.StiImport.Services
                 if (person.PhotoModifiedDate.HasValue)
                     personsForImportPictures.Add(person);
             }
-            ServiceLocatorSchool.PersonService.Add(ps);
+            ProcessByParts(ps, ServiceLocatorSchool.PersonService.Add, 1000, "Persons");
+            //ServiceLocatorSchool.PersonService.Add(ps);
         }
 
         private void InsertSchoolPersons()
@@ -291,7 +292,8 @@ namespace Chalkable.StiImport.Services
                     Log.LogWarning(msg);
                 }
             }
-            ServiceLocatorSchool.PersonService.AsssignToSchool(assignments);
+            ProcessByParts(assignments, ServiceLocatorSchool.PersonService.AsssignToSchool, 1000, "School Persons");
+            //ServiceLocatorSchool.PersonService.AsssignToSchool(assignments);
         }
 
         private void InsertPhones()
