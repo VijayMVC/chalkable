@@ -47,8 +47,8 @@ NAMESPACE('chlk.templates.student', function () {
 
             Object, function buildAttendanceGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getAttendanceBox()
-                    , function(item){ return item.getAttendanceCount}
-                    , function(item){ return item.getType}
+                    , function(item){ return item.getAbsences}
+                    , function(item){ return item.getClazz().getName}
                     , Msg.Attendance);
             },
 
@@ -62,7 +62,7 @@ NAMESPACE('chlk.templates.student', function () {
             Object, function buildGradesGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getGradesBox()
                     , function(item){ return item.getGrade}
-                    , function(item){ return item.getAnnouncementTypeName}
+                    , function(item){ return item.getAnnouncementTitle}
                     , Msg.Recent);
             },
 
