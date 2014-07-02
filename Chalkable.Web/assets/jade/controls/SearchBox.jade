@@ -1,0 +1,4 @@
+mixin SearchBox(service, method, tpl)
+    -self.initialize(attributes, service, method, tpl, [].slice.call(arguments, 3));
+    input(attributes, type="text", search-box="search-box")
+    input(id=attributes.id + '-hidden', name=attributes.name, type="hidden")
