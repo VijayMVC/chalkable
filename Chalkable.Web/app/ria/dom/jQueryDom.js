@@ -469,7 +469,7 @@ NAMESPACE('ria.dom', function () {
 
             [[Number]],
             OVERRIDE, function scrollTop(top_) {
-                return top_ ? this._dom.scrollTop(top_) : this._dom.scrollTop();
+                return top_ || top_ == 0 ? this._dom.scrollTop(top_) : this._dom.scrollTop();
             },
 
             /* Form */

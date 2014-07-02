@@ -862,6 +862,10 @@ BODY {
   .lr-toolbar{
     margin: 0 -37px;
 
+    .first-container{
+      margin: 0 34px 0 35px;
+    }
+
     &.big-arrows .arrow{
       top: -4px;
       bottom: 10px;
