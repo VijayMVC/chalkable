@@ -6,9 +6,9 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.AttendanceHoverBoxItem*/
     CLASS(
         'AttendanceHoverBoxItem', [
-            Number, 'type',
+            Number, 'absences',
 
-            [ria.serialize.SerializeProperty('attendancecount')],
-            Number, 'attendanceCount'
+            [ria.serialize.SerializeProperty('class')],
+            chlk.models.classes.Class, 'clazz'
         ]);
 });

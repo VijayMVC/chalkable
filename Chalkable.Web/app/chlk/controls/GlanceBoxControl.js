@@ -25,6 +25,15 @@ NAMESPACE('chlk.controls', function () {
                     }
                 }*/
                 return res;
+            },
+
+            [ria.mvc.DomEventBind('mouseout', '.glance-box.hover-action-box')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function glanceLeave(node, event) {
+                var nodeT = new ria.dom.Dom(event.target);
+                if(nodeT.hasClass('glance-box')){
+                    node.find('.details-container').scrollTop(0);
+                }
             }
 
         ]);

@@ -10,8 +10,8 @@ NAMESPACE('chlk.models.student', function(){
         Number, 'gradingStyle',
         [ria.serialize.SerializeProperty('announcementtypeid')],
         Number, 'announcementTypeId',
-        [ria.serialize.SerializeProperty('announcmenttypename')],
-        String, 'announcementTypeName',
+        [ria.serialize.SerializeProperty('announcmenttitle')],
+        String, 'announcementTitle',
 
         String, function getMappedGrade(){
             return this.getGrade(); //todo mapping ...

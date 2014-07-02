@@ -1,4 +1,4 @@
-mixin GlanceBox(controller, action, data, color, converter)
+mixin GlanceBox(controller, action, data, color, converter, useTooltip, inverse)
     if controller
         +ActionLink(controller, action).glance-box.hover-action-box
     else
@@ -7,12 +7,23 @@ mixin GlanceBox(controller, action, data, color, converter)
                 .value(class=self.getValueClass(data.value) + color ? ' ' + color : '') #{data.value}
                 p.glance-title #{data.title}
                 if data.items
-                    .details
-                        each item, i in data.items
-                            summary = (item.getSummaryMethod || item.data.getSummary)()
-                            summary = converter ? converter(summary) : summary
-                            text = self.getShortText((item.getTotalMethod || item.data.getTotal)(), summary)
-                            div(data-tooltip = text, data-tooltip-type = "overflow") #{text}
+                    .details-container
+                        .details
+                            each item, i in data.items
+                                summary = (item.getSummaryMethod || item.data.getSummary)()
+                                summary = converter ? converter(summary) : summary
+                                total = (item.getTotalMethod || item.data.getTotal)()
+                                if useTooltip
+                                    .glance-item
+                                        if inverse
+                                            div(data-tooltip=summary, data-tooltip-type="overflow").summary=summary
+                                            div(data-tooltip=total, data-tooltip-type="overflow").total=total
+                                        else
+                                            div(data-tooltip=total, data-tooltip-type="overflow").total=total
+                                            div(data-tooltip=summary, data-tooltip-type="overflow").summary=summary
+                                else
+                                    text = self.getShortText(total, summary)
+                                    div(data-tooltip=text, data-tooltip-type="overflow")=text
 
 
 
