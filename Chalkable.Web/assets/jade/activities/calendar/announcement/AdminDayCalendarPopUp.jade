@@ -1,0 +1,24 @@
+clazz = self.getClazz()
+teacher = clazz.getTeacher()
+.admin-day-calendar-popup
+    .calendar-popup
+        .class-name
+            h3.day-day
+                +ActionLink('class', 'details', clazz.getId())=clazz.getName()
+        .info
+            .img-box
+                if teacher
+                    +ActionLink('teacher', 'info', teacher.getId())
+                        +PersonImg(teacher, 40)
+            .title-holder
+                p.day-down.teacher-name
+                    if teacher
+                        +ActionLink('teacher', 'info', teacher.getId())=teacher.getDisplayName()
+                div
+                    p.day-down
+                        +ActionLink('class', 'details', clazz.getId())="RM " + self.getRoomNumber()
+                    p.day-down
+                        +ActionLink('class', 'details', clazz.getId())="Period " + self.getPeriod().getOrder()
+        div.popup-footer
+            p.day-down
+                +ActionLink('class', 'details', clazz.getId())= self.getStudentsCount() + " students"
