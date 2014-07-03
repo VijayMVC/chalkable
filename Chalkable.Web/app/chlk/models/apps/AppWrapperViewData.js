@@ -44,9 +44,6 @@ NAMESPACE('chlk.models.apps', function () {
                             var msg = !hasMyAppsView ? 'this app does not have a My Apps view for you.' : 'this app is not installed for you.';
                             this.setErrorMessage(msg);
                         }
-                        else{
-                            buttons.push(chlk.models.common.attachments.ToolbarButton('new-tab-id', 'New Tab', app.getCurrentModeUrl(), true));
-                        }
                     }break;
                 }
                 BASE(fullUrl, buttons);
