@@ -1,0 +1,27 @@
+mixin ProfileResetPasswordBlock()
+    .block
+        .header Password
+        .fields
+            +Button().special-button.yellow-button#changePasswordLink(href='javascript:')
+                |Change Password
+        div.x-hidden#changePasswordForm
+            +ActionForm('account', 'changePassword')#info-edit-form.with-ok
+                .title
+                    .name-block
+                        input(name="oldPassword", type="password", class="validate[required] padding-1-3", placeholder=Msg.Old_Password)
+                        input(name="newPassword", id="newPassword", type="password", class="validate[required] padding-1-3", placeholder=Msg.New_Password)
+                        input(name="newPasswordConfirmation", id="newPasswordConfirmation", type="password", class="validate[required, equals[newPassword]] padding-1-3", placeholder=Msg.New_Password_Confirm)
+                br
+                .section-buttons
+                    +Button()(type="submit").special-button.yellow-button#submit-pwd-button=Msg.Save
+                    +Button()(type="button").special-button.settings.cancel-button#cancell-edit-pwd-button=Msg.Cancel
+
+mixin SchoolPersonSettings()
+    -console.info('SchoolPersonSettings')
+    .settings
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                block
+        .general
+            -console.info('SchoolPersonSettings')
+            +ProfileResetPasswordBlock(true)
