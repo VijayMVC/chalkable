@@ -16,7 +16,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         public int GradeLevelNumber { get; set; }
         public string CurrentClassName { get; set; }
-        public string CurrentAttendanceType { get; set; }
+        public string CurrentAttendanceLevel { get; set; }
         public int MaxPeriodNumber { get; set; }
         public IList<AnnouncementsClassPeriodViewData> PeriodSection { get; set; }
         public IList<ClassViewData> ClassesSection { get; set; }
@@ -43,6 +43,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 res.GradeLevelNumber = currentClass.GradeLevel.Number;
                 res.CurrentClassName = currentClass.Name;
             }
+            res.CurrentAttendanceLevel = studentSummary.CurrentAttendanceLevel;
             return res;
         }
 

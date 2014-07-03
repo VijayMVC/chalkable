@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Model
     {
         public Person StudentInfo { get; set; }
         public ClassRankInfo ClassRank { get; set; }
+        public string CurrentAttendanceLevel { get; set; }
         public DailyAbsenceSummaryInfo DailyAttendance { get; set; }
         public int TotalDisciplineOccurrences { get; set; }
         public IList<InfractionSummaryInfo> InfractionSummaries { get; set; }
@@ -30,7 +31,8 @@ namespace Chalkable.BusinessLogic.Model
                     TotalDisciplineOccurrences = nowDashboard.Infractions.Sum(x=>x.Occurrences),
                     InfractionSummaries = InfractionSummaryInfo.Create(nowDashboard.Infractions.ToList(), infractions),
                     StudentAnnouncements = new List<StudentAnnouncement>(),
-                    Attendances = ClassAttendanceSummary.Create(nowDashboard.SectionAttendance.ToList())
+                    Attendances = ClassAttendanceSummary.Create(nowDashboard.SectionAttendance.ToList()),
+                    CurrentAttendanceLevel = nowDashboard.CurrentAttendanceStatus
                 };
             if (nowDashboard.DailyAttendance == null)
                 nowDashboard.DailyAttendance = new DailyAbsenceSummary {Absences = 0, Tardies = 0};

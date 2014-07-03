@@ -16,7 +16,14 @@ NAMESPACE('chlk.templates.student', function () {
                 this._converter = new chlk.converters.attendance.AttendanceTypeToNameConverter();
             },
 
-            Number, function getCurrentAttendanceType(){return this.getUser().getCurrentAttendanceType();},
+            String, function getCurrentAttendanceLevel(){
+                return this.getUser().getCurrentAttendanceLevel();
+            },
+
+            Number, function getCurrentAttendanceType(){
+                return this.getUser().getCurrentAttendanceType();
+            },
+
             String, function getAttendanceTypeName(){
                 return this._converter.convert(this.getCurrentAttendanceType());
             },
@@ -28,7 +35,7 @@ NAMESPACE('chlk.templates.student', function () {
             Object, function getStatusData(){
                 var attType =this.getCurrentAttendanceType();
                 var res = {};
-                if(!attType || attType == chlk.models.attendance.AttendanceTypeEnum.NA){
+                if(attType == chlk.models.attendance.AttendanceTypeEnum.NA.valueOf()){
                     res.statusName = 'No attendance taken';
                     res.status = 'not-assigned';
                 }else{
