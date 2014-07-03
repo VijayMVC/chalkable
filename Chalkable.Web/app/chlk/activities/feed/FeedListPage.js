@@ -5,6 +5,8 @@ REQUIRE('chlk.templates.announcement.FeedItemTpl');
 
 NAMESPACE('chlk.activities.feed', function () {
 
+    var interval;
+
     /** @class chlk.activities.feed.FeedListPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
@@ -49,6 +51,15 @@ NAMESPACE('chlk.activities.feed', function () {
 
             OVERRIDE, VOID, function onStop_() {
                 this.stopInterval();
+                interval = setInterval(function(){
+                    var item = new ria.dom.Dom('.moving-wrapper');
+                    if(!item.exists())
+                        clearInterval(interval);
+                    if(!new ria.dom.Dom('.announcement-view-page').exists()){
+                        item.remove();
+                        clearInterval(interval);
+                    }
+                }, 1000);
                 BASE();
             }
 
