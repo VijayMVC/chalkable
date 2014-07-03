@@ -42,6 +42,7 @@ namespace Chalkable.StiImport.Services
         public void Import()
         {
             Log.LogInfo("start import");
+            Log.Flush();
             importedSchoolIds.Clear();
             personsForImportPictures.Clear();
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
@@ -163,7 +164,7 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
         }
 
-        /*private void ProcessByParts<T>(IList<T> source, Action<IList<T>> processor, int count, string logMsg)
+        private void ProcessByParts<T>(IList<T> source, Action<IList<T>> processor, int count, string logMsg)
         {
             for (int i = 0; i < source.Count; i += count)
             {
@@ -174,7 +175,7 @@ namespace Chalkable.StiImport.Services
                 if (logMsg != null)
                     Log.LogInfo(string.Format("finished {0} {1} {2}", logMsg, i, l.Count));
             }
-        }*/
+        }
     }
 
     public class SisConnectionInfo
