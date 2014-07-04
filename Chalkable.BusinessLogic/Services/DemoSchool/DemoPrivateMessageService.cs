@@ -32,7 +32,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Subject = subject,
                 FromPersonRef = Context.UserLocalId.Value,
                 ToPersonRef = toPersonId,
-                Sent = Context.NowSchoolTime
+                Sent = Context.NowSchoolTime,
+                DeletedByRecipient = false,
+                DeletedBySender = false
             };
 
             Storage.PrivateMessageStorage.Add(message);

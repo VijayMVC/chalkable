@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                     var fromPersonIdsFiltered = persons.Where(x => roles.Contains(x.RoleRef)).Select(x => x.Id).ToList();
 
-                    msgs = msgs.Where(x => fromPersonIdsFiltered.Contains(x.FromPersonRef));
+                    msgs = msgs.Where(x => fromPersonIdsFiltered.Contains(x.FromPersonRef) && !x.DeletedByRecipient);
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     var persons = toPersonIds.Select(toPersonId => Storage.PersonStorage.GetById(toPersonId)).ToList();
 
                     var toPersonIdsFiltered = persons.Where(x => roles.Contains(x.RoleRef)).Select(x => x.Id).ToList();
-                    msgs = msgs.Where(x => toPersonIdsFiltered.Contains(x.ToPersonRef));
+                    msgs = msgs.Where(x => toPersonIdsFiltered.Contains(x.ToPersonRef) &&  !x.DeletedBySender);
                 }
             }
             
