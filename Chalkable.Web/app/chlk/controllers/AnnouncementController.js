@@ -449,14 +449,25 @@ NAMESPACE('chlk.controllers', function (){
             });
 
             if (attachments.length == 1){
-                var attachmentUrl = attachments[0].getUrl();
+                var attachmentUrl, res;
                 var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
                     "download-attachment",
                     "Download Attachment",
                     "/AnnouncementAttachment/DownloadAttachment.json?needsDownload=true&announcementAttachmentId=" + attachments[0].getId().valueOf()
                 );
-                var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton], attachments[0].getType());
-                return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, new ria.async.DeferredData(attachmentViewData));
+                if(attachments[0].getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
+                    attachmentUrl = attachments[0].getUrl();
+                    var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton], attachments[0].getType());
+                    res = new ria.async.DeferredData(attachmentViewData);
+                }else{
+                    res = this.announcementService.startViewSession(attachmentId)
+                        .then(function(session){
+                            attachmentUrl = 'https://crocodoc.com/view/' + session;
+                            return new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton], attachments[0].getType());
+                        });
+                }
+
+                return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
             }
             return null;
         },

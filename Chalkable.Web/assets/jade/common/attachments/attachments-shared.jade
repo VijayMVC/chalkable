@@ -20,7 +20,8 @@ mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type)
         .iframe-wrap
             if type == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE
                 .picture-container
-                    img(src=url)
+                    .picture-container-2
+                        img(src=url)
             else
                 iframe(src=url)
                     attributes.class

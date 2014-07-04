@@ -85,10 +85,6 @@ NAMESPACE('chlk.controls', function () {
                     configs.params = params_ || [];
                 }
 
-                //this.setConfigs(configs);
-                //this.setCurrentIndex(0);
-
-                console.info(configs);
                 return configs;
             },
 

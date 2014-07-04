@@ -23,7 +23,7 @@ NAMESPACE('chlk.activities.apps', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateItem(allTpl, allModel, msg_) {
-                console.info(jQuery('form.working'));
+
             },
 
             [ria.mvc.DomEventBind('change', 'input.price-checkbox')],

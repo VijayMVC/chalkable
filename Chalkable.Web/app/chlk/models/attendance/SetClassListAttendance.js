@@ -15,12 +15,11 @@ NAMESPACE('chlk.models.attendance', function () {
 
         Number, 'type',
         [[Number]],
-        VOID, function setType(type){console.info('setType', type);
+        VOID, function setType(type){
             if(type && type > 0){
                 this.type = type;
                 var level = this._mapper.mapBack(new chlk.models.attendance.AttendanceTypeEnum(type));
                 this.level = level;
-                console.info('setType', level, this.getLevel());
             }
         },
 
