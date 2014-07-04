@@ -58,7 +58,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     attachments.Where(
                         x => 
                         {
-                            var announcement = Storage.AnnouncementStorage.GetData()[x.AnnouncementRef];
+                            var announcement = Storage.AnnouncementStorage.GetById(x.AnnouncementRef);
                             return x.PersonRef == query.CallerId ||x.PersonRef == announcement.PrimaryTeacherRef || announcementRefs.Contains(x.AnnouncementRef);
                         });
                 return attachments.ToList();

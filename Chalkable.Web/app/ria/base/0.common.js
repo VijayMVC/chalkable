@@ -36,13 +36,22 @@ ria.__API = ria.__API || {};
     /**
      * Inherit from given class
      * @param {Function} superClass
+     * @param {String} [name_]
      * @return {Object}
      */
-    ria.__API.inheritFrom = function (superClass) {
-        function InheritanceProxyClass() {}
+    ria.__API.inheritFrom = function (superClass, name_) {
+        _DEBUG && console.warn('ria.__API.inheritFrom is deprecated');
+
+        var InheritanceProxyClass = function () { };
+
+        if (_DEBUG) {
+            InheritanceProxyClass = new Function ("return function " + (name_ || '') + "() { }")();
+        }
 
         InheritanceProxyClass.prototype = superClass.prototype;
-        return new InheritanceProxyClass();
+        var object = new InheritanceProxyClass();
+        object.__proto__ = superClass.prototype;
+        return object;
     };
 
     /**
@@ -51,9 +60,15 @@ ria.__API = ria.__API || {};
      * @param {Function} superClass
      */
     ria.__API.extend = function (subClass, superClass) {
-        subClass.prototype = ria.__API.inheritFrom(superClass);
-        subClass.prototype.constructor = subClass;
+        var InheritanceProxyClass = function () { this.constructor = subClass };
 
+        if (_DEBUG) {
+            InheritanceProxyClass = new Function ("subClass", "return function " + (subClass.name || '') + "() { this.constructor = subClass }")(subClass);
+        }
+
+        InheritanceProxyClass.prototype = superClass.prototype;
+        subClass.prototype = new InheritanceProxyClass();
+        subClass.prototype.__proto__ = superClass.prototype;
         subClass.super_ = superClass.prototype;
     };
 
@@ -63,11 +78,38 @@ ria.__API = ria.__API || {};
      * @param {Object} second
      */
     ria.__API.extendWithDefault = function (first, second){
+        !_RELEASE && console.warn('Function ria.__API.extendWithDefault is deprecated. Use ria.__API.merge instead');
+
         for(var prop in second){
             if(!first.hasOwnProperty(prop))
                 first[prop] = second[prop];
         }
         return first;
+    };
+
+
+    /**
+     * Merges the content of all passed objects. Properties of first obj have grater priority
+     * @param {Object} first
+     * @param {Object} second...
+     */
+    ria.__API.merge = function me(first, second) {
+        var al = arguments.length;
+        if (al < 2) {
+            return first || {};
+        }
+
+        first = first || {};
+        second = second || {};
+
+        var result = {};
+        Object.keys(second).forEach(function (_) { result[_] = second[_]; });
+        Object.keys(first).forEach(function (_) { result[_] = first[_]; });
+
+        if (al == 2)
+            return result;
+
+        return me.apply(this, [result].concat([].slice.call(arguments, 2)));
     };
 
     /**
@@ -77,15 +119,16 @@ ria.__API = ria.__API || {};
      * @return {Object}
      */
     ria.__API.getInstanceOf = function (ctor, name_) {
-        var f = function InstanceOfProxy() {
-            this.constructor = ctor;
-        };
+        var f = function () { this.constructor = ctor; };
 
-        if (ria.__CFG.prettyStackTraces)
-            f = new Function('ctor', 'return ' + f.toString().replace('InstanceOfProxy', name_))(ctor);
+        if (_DEBUG) {
+            f = new Function("ctor", "return function " + (ctor.name || '') + "() { this.constructor = ctor; }")(ctor);
+        }
 
         f.prototype = ctor.prototype;
-        return new f();
+        var object = new f();
+        object.__proto__ = ctor.prototype;
+        return object;
     };
 
     /**

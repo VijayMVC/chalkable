@@ -4,6 +4,10 @@
 (function () {
     "use strict";
 
+    ria.__SYNTAX.toSingleVarName = function (name) {
+        return (name || '').replace(/[^a-z0-9_$]/gi, '_');
+    };
+
     ria.__SYNTAX.isValidIdentifierName = function (name) {
         return /^[$_a-z]([$_a-z0-9])*$/i.test(name);
     };
@@ -55,7 +59,8 @@
             isAbstract: false,
             isFinal: false,
             isOverride: false,
-            isReadonly: false
+            isReadonly: false,
+            isUnSafe: false
         };
 
         while (!tkz.eot() && tkz.check(ria.__SYNTAX.Tokenizer.ModifierToken)) {
@@ -64,6 +69,7 @@
                 case ria.__SYNTAX.Modifiers.FINAL: flags.isFinal = true; break;
                 case ria.__SYNTAX.Modifiers.OVERRIDE: flags.isOverride = true; break;
                 case ria.__SYNTAX.Modifiers.READONLY: flags.isReadonly = true; break;
+                case ria.__SYNTAX.Modifiers.UNSAFE: flags.isUnSafe = true; break;
             }
         }
 

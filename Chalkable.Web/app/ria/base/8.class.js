@@ -39,6 +39,8 @@
 
         this.genericTypes = gt.concat(genericTypes);
         this.baseSpecs = bs.concat((baseSpecs || []).filter(function (_) { return !ria.__API.isGeneralizedType(_); } ));
+
+        this.__precalc = [];
     }
 
     ClassDescriptor.prototype.addProperty = function (name, ret, anns, getter, setter) {
@@ -124,10 +126,10 @@
      */
     ria.__API.property = function (clazz, name, propType_, anns_, getter, setter) {
         //noinspection JSUndefinedPropertyAssignment
-        getter.__META = new ria.__API.MethodDescriptor('', propType_, [], []);
+        getter.__META = new ria.__API.MethodDescriptor(_DEBUG ? 'getter of ' + name : '', propType_, [], []);
         if (setter)
         { //noinspection JSUndefinedPropertyAssignment
-            setter.__META = new ria.__API.MethodDescriptor('', undefined, [propType_], ['value']);
+            setter.__META = new ria.__API.MethodDescriptor(_DEBUG ? 'setter of ' + name : '', undefined, [propType_], ['value']);
         }
         clazz.__META.addProperty(name, propType_, anns_, getter, setter);
     };
@@ -163,9 +165,11 @@
         _DEBUG && Object.freeze(impl);
     };
 
-    function ProtectedMethodProxy() {
+    var ProtectedMethodProxy = function () {
         throw Error('Can NOT call protected methods');
-    }
+    };
+
+    var __slice = function (arr, start, end) { return [].slice.call(arr, start, end); };
 
     /**
      * @param {Object} instance
@@ -175,20 +179,20 @@
      * @return {Object}
      */
     ria.__API.init = function (instance, clazz, ctor, args) {
-        args = ria.__API.clone(args);
+        var __META = clazz.__META;
 
-        if (clazz.__META.isAbstract)
-            throw Error('Can NOT instantiate abstract class ' + clazz.__META.name);
+        if (__META.isAbstract)
+            throw Error('Can NOT instantiate abstract class ' + __META.name);
 
         if (!(instance instanceof clazz))
-            instance = ria.__API.getInstanceOf(clazz, clazz.__META.name.split('.').pop());
+            instance = ria.__API.getInstanceOf(clazz);
 
-        var genericTypes = clazz.__META.genericTypes || [],
-            genericTypesLength = genericTypes.length - clazz.__META.baseSpecs.length,
-            ownGenericSpecs = args.slice(0, genericTypesLength),
-            genericSpecs = clazz.__META.baseSpecs.concat(ownGenericSpecs);
+        var genericTypes = __META.genericTypes || [],
+            genericTypesLength = genericTypes.length - __META.baseSpecs.length,
+            ownGenericSpecs = __slice(args, 0, genericTypesLength),
+            genericSpecs = __META.baseSpecs.concat(ownGenericSpecs);
 
-        args = args.slice(genericTypesLength);
+        args = __slice(args, genericTypesLength);
 
         if (_DEBUG) {
             ria.__API.OF.apply(clazz, ownGenericSpecs);
@@ -196,46 +200,143 @@
 
         var publicInstance = instance;
         if (_DEBUG) {
-            instance = ria.__API.getInstanceOf(clazz, clazz.__META.name.split('.').pop());
+            instance = ria.__API.getInstanceOf(clazz);
             publicInstance.__PROTECTED = instance;
         }
 
-        for(var k in instance) {
-            //noinspection UnnecessaryLocalVariableJS,JSUnfilteredForInLoop
-            var name_ = k;
-            var f_ = instance[name_];
+        var __pre = __META.__precalc;
+        for(var i = 0 ; i < __pre.length;) {
+            var name_ = __pre[i],
+                f_ = __pre[i+1],
+                meta_ = f_.__META;
 
-            // TODO: skip all ctors
-            if (typeof f_ === 'function' && !(/^\$.*/.test(name_)) && name_ !== 'constructor') {
-                instance[name_] = f_.bind(instance);
-                if (ria.__CFG.enablePipelineMethodCall && f_.__META) {
-                    var fn = ria.__API.getPipelineMethodCallProxyFor(f_, f_.__META, instance, genericTypes, genericSpecs);
-                    if (_DEBUG) {
-                        Object.defineProperty(instance, name_, { writable : false, configurable: false, value: fn });
-                        if (f_.__META.isProtected())
-                            fn = ProtectedMethodProxy;
-                    }
+            if (!_RELEASE) {
+                var fn = ria.__API.getPipelineMethodCallProxyFor(f_, meta_, instance, genericTypes, genericSpecs);
+                if (_DEBUG) {
+                    Object.defineProperty(instance, name_, { writable : false, configurable: false, enumerable: false, value: fn });
+                    if (meta_.isProtected())
+                        fn = ProtectedMethodProxy;
+
+                    Object.defineProperty(publicInstance, name_, { writable : false, configurable: false, enumerable: false, value: fn });
+                } else {
                     publicInstance[name_] = fn;
-                    _DEBUG && Object.defineProperty(publicInstance, name_, { writable : false, configurable: false, value: fn });
                 }
+            } else {
+                instance[name_] = f_.bind(instance);
             }
 
-            if (_DEBUG && /^\$.*/.test(name_)) {
-                instance[name_] = publicInstance[name_] = undefined;
+            i+=2;
+        }
+
+        if (_DEBUG) {
+            instance.$ = publicInstance.$ = undefined;
+            for(var name in __META.ctors) {
+                if (__META.ctors.hasOwnProperty(name)) {
+                    Object.defineProperty(publicInstance, name, { writable : false, configurable: false, enumerable: false, value: undefined });
+                    Object.defineProperty(instance, name, { writable : false, configurable: false, enumerable: false, value: undefined });
+                }
             }
         }
 
-        if (ria.__CFG.enablePipelineMethodCall && ctor.__META) {
+        if (!_RELEASE && ctor.__META) {
             ctor = ria.__API.getPipelineMethodCallProxyFor(ctor, ctor.__META, instance, genericTypes, genericSpecs);
         }
 
-        instance.__SPECS = {};
+        var specs = instance.__SPECS = {};
         genericTypes.forEach(function (_, index) {
-            instance.__SPECS[_.name] = genericSpecs[index];
+            specs[_.name] = genericSpecs[index];
         });
 
-        if (_DEBUG) for(var name in clazz.__META.properties) {
-            if (clazz.__META.properties.hasOwnProperty(name)) {
+        if (_DEBUG) for(var name in __META.properties) {
+            if (__META.properties.hasOwnProperty(name)) {
+                instance[name] = null;
+            }
+        }
+
+        ctor.apply(instance, args);
+
+        _DEBUG && Object.seal(instance);
+        _DEBUG && Object.freeze(publicInstance);
+
+        return publicInstance;
+    };
+
+    /**
+     * @param {Object} instance
+     * @param {Function} clazz
+     * @param {Function} ctor
+     * @param {Arguments} args
+     * @return {Object}
+     */
+    ria.__API.initUnSafe = function (instance, clazz, ctor, args) {
+        var __META = clazz.__META;
+
+        if (__META.isAbstract)
+            throw Error('Can NOT instantiate abstract class ' + __META.name);
+
+        if (!(instance instanceof clazz))
+            instance = ria.__API.getInstanceOf(clazz);
+
+        var genericTypes = __META.genericTypes || [],
+            genericTypesLength = genericTypes.length - __META.baseSpecs.length,
+            ownGenericSpecs = __slice(args, 0, genericTypesLength),
+            genericSpecs = __META.baseSpecs.concat(ownGenericSpecs);
+
+        args = __slice(args, genericTypesLength);
+
+        if (_DEBUG) {
+            ria.__API.OF.apply(clazz, ownGenericSpecs);
+        }
+
+        var publicInstance = instance;
+        if (_DEBUG) {
+            instance = ria.__API.getInstanceOf(clazz);
+            publicInstance.__PROTECTED = instance;
+        }
+
+        if (!_RELEASE) {
+            var __pre = __META.__precalc;
+            for(var i = 0 ; i < __pre.length;) {
+                var name_ = __pre[i],
+                    f_ = __pre[i + 1],
+                    meta_ = f_.__META;
+
+                var fn = ria.__API.getPipelineMethodCallProxyFor(f_, meta_, instance, genericTypes, genericSpecs);
+                if (_DEBUG) {
+                    Object.defineProperty(instance, name_, { writable: false, configurable: false, enumerable: false, value: fn });
+                    if (meta_.isProtected())
+                        fn = ProtectedMethodProxy;
+
+                    Object.defineProperty(publicInstance, name_, { writable: false, configurable: false, enumerable: false, value: fn });
+                } else {
+                    publicInstance[name_] = fn;
+                }
+
+                i += 2;
+            }
+
+            if (ctor.__META) {
+                ctor = ria.__API.getPipelineMethodCallProxyFor(ctor, ctor.__META, instance, genericTypes, genericSpecs);
+            }
+        }
+
+        if (_DEBUG) {
+            instance.$ = publicInstance.$ = undefined;
+            for(var name in __META.ctors) {
+                if (__META.ctors.hasOwnProperty(name)) {
+                    Object.defineProperty(publicInstance, name, { writable : false, configurable: false, enumerable: false, value: undefined });
+                    Object.defineProperty(instance, name, { writable : false, configurable: false, enumerable: false, value: undefined });
+                }
+            }
+        }
+
+        var specs = instance.__SPECS = {};
+        genericTypes.forEach(function (_, index) {
+            specs[_.name] = genericSpecs[index];
+        });
+
+        if (_DEBUG) for(var name in __META.properties) {
+            if (__META.properties.hasOwnProperty(name)) {
                 instance[name] = null;
             }
         }
@@ -250,7 +351,9 @@
 
     function StaticScope() {}
     var staticScopeInstance = new StaticScope();
-    Object.freeze(staticScopeInstance);
+    _DEBUG && Object.freeze(staticScopeInstance);
+
+    var refId = Math.floor(Math.random() * 1000)+ 10000;
 
     ria.__API.compile = function(clazz) {
         for(var k in clazz) if (clazz.hasOwnProperty(k)) {
@@ -259,13 +362,41 @@
 
             // TODO: skip all ctors
             if (typeof f_ === 'function' && ria.__API.isDelegate(f_)) {
-                if (ria.__CFG.enablePipelineMethodCall && f_.__META) {
+                if (!_RELEASE && f_.__META) {
                     clazz[name_] = ria.__API.getPipelineMethodCallProxyFor(f_, f_.__META, staticScopeInstance);
                 } else {
                     clazz[name_] = f_.bind(staticScopeInstance);
                 }
             }
         }
+
+        var __META = clazz.__META,
+            proto = clazz.prototype,
+            __pre = __META.__precalc = [];
+
+        outer: for (var name_ in proto) {
+            var f_ = proto[name_];
+            if (typeof f_ == "function") {
+                if (f_ == __META.defCtor.impl) {
+                    continue outer;
+                }
+
+                for(var n_ in __META.ctors) {
+                    if (f_ == __META.ctors[n_].impl)
+                        continue outer;
+                }
+
+                if (name_ == 'constructor')
+                    continue outer;
+
+                //if (f_.__META instanceof ria.__API.MethodDescriptor)
+                __pre.push(name_, f_);
+            }
+        }
+
+        //console.info(clazz, __pre);
+
+        clazz.__REF_ID = (refId++).toString(36);
 
         _DEBUG && Object.freeze(clazz);
     };
@@ -282,23 +413,32 @@
         function ClassBase() { return ria.__API.init(this, ClassBase, ClassBase.prototype.$, arguments); }
         ria.__API.clazz(ClassBase, 'Class', null, [], []);
 
-        ClassBase.prototype.$ = function () {
-            this.__hashCode = Math.random().toString(36);
-            _DEBUG && Object.defineProperty(this, 'hashCode', {writable: false, configurable: false});
-        };
-        ria.__API.ctor('$', ClassBase, ClassBase.prototype.$, [], [], []);
+        ria.__API.ctor('$', ClassBase, ClassBase.prototype.$ = function () {
+            if (!this.__hashCode) {
+                var hc = Math.random().toString(36);
+                if (_DEBUG) {
+                    Object.defineProperty(this, '__hashCode', {writable: false, configurable: false, value: hc});
+                } else {
+                    this.__hashCode = hc;
+                }
+            }
+        }, [], [], []);
 
-        ClassBase.prototype.getClass = function () { return ria.__API.getConstructorOf(this); };
-        ria.__API.method(ClassBase, ClassBase.prototype.getClass, 'getClass', Function, [], [], []);
+        ria.__API.method(ClassBase, ClassBase.prototype.getClass = function () {
+            return ria.__API.getConstructorOf(this);
+        }, 'getClass', Function, [], [], []);
 
-        ClassBase.prototype.getHashCode = function () { return this.__hashCode; };
-        ria.__API.method(ClassBase, ClassBase.prototype.getHashCode, 'getHashCode', String, [], [], []);
+        ria.__API.method(ClassBase, ClassBase.prototype.getHashCode = function () {
+            return this.__hashCode;
+        }, 'getHashCode', String, [], [], []);
 
-        ClassBase.prototype.equals = function (other) { return this.getHashCode() === other.getHashCode(); };
-        ria.__API.method(ClassBase, ClassBase.prototype.equals, 'equals', Boolean, [ClassBase], ['other'], []);
+        ria.__API.method(ClassBase, ClassBase.prototype.equals = function (other) {
+            return other && this.getHashCode() === other.getHashCode();
+        }, 'equals', Boolean, [ClassBase], ['other'], []);
 
-        ClassBase.prototype.getSpecsOf = function (name) { return this.__SPECS[name]; };
-        ria.__API.method(ClassBase, ClassBase.prototype.getSpecsOf, 'equals', null, [String], ['name'], []);
+        ria.__API.method(ClassBase, ClassBase.prototype.getSpecsOf = function (name) {
+            return this.__SPECS[name];
+        }, 'getSpecsOf', null, [String], ['name'], []);
 
         ria.__API.compile(ClassBase);
         return ClassBase;

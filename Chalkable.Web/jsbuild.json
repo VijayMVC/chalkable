@@ -1,25 +1,18 @@
 {
 	"version": "3.0",
-    "appDir": "app",
-    "assetsDir": "assets",
 
     "options": {
-        "uglifyjs": {
-            "mangle": false,
-            "mangle_options_": {},
-            "squeeze": false,
-            "squeeze_options_": {
-                "make_seqs": true,
-                "dead_code": true,
-                "no_warnings": false,
-                "extra": false
-            },
-            "beautify": true
-        },
-        "gcc": {
-          "cmd": "goog-cc.cmd --compilation_level SIMPLE_OPTIMIZATIONS"
-        }
-    },
+		"uglifyjs": {
+			"output": {
+				"beautify": false
+			},
+			"compress": {
+				"dead_code": true
+			},
+			"mangle": {
+			}
+		}
+	},
 
     "modules": [{
         "name": "SysAdmin",

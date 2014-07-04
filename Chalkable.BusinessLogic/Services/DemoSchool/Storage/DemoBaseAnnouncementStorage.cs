@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web.WebSockets;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Models;
@@ -445,6 +446,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAnnouncementForStudentStorage(DemoStorage storage)
             : base(storage)
         {
+        }
+
+        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        {
+            var announcementsResult = base.GetAnnouncements(query);
+            var announcements = announcementsResult.Announcements;
+            announcements = announcements.Where(x => x.VisibleForStudent).OrderByDescending(x => x.Id).ToList();
+            announcementsResult.Announcements = announcements;
+            return announcementsResult;
         }
 
         public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)

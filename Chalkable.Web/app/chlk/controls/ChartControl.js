@@ -93,7 +93,7 @@ NAMESPACE('chlk.controls', function () {
 
     /** @class chlk.controls.ChartControl */
     CLASS(
-        'ChartControl', EXTENDS(ria.mvc.DomControl), [
+        'ChartControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/chart.jade')(this);

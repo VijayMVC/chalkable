@@ -10,7 +10,7 @@ NAMESPACE('chlk.controls', function () {
 
     /** @class chlk.controls.DatePickerControl */
     CLASS(
-        'DatePickerControl', EXTENDS(ria.mvc.DomControl), [
+        'DatePickerControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/date-picker.jade')(this);

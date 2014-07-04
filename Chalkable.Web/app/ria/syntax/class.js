@@ -232,7 +232,11 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         if (token instanceof ria.__SYNTAX.Tokenizer.VoidToken)
             return undefined;
 
-        ria.__API.Assert(true, 'This should never assert this');
+        // In case of raw types: Date, Event, RegEx
+        if (token instanceof ria.__SYNTAX.Tokenizer.FunctionToken)
+            return token.value;
+
+        ria.__SYNTAX.Assert(false, 'This should never assert this');
         return undefined;
     }
 
@@ -284,6 +288,10 @@ ria.__SYNTAX = ria.__SYNTAX || {};
 
     function validateMethodDeclaration(def, method, FakeSelf, parentGenericTypes, parentGenericSpecs) {
         var parentMethod = method.__BASE_META;
+
+        if (method.flags.isUnSafe) {
+            throw Error('Mathod cannot be marked with UNSAFE. Method: "' + method.name + '"');
+        }
 
         if (method.flags.isOverride && isStaticMethod(method.name)) {
             throw Error('Override on static method are not supported. Method: "' + method.name + '"');
@@ -342,6 +350,10 @@ ria.__SYNTAX = ria.__SYNTAX || {};
             if (setterDef) throw Error('There is no ability to add setter to READONLY property ' + property.name + ' in ' + def.name + ' class');
         } else if (!isSameFlags(property, setterDef)) {
             throw Error('The flags of setter ' + setterName + ' should be the same with property flags');
+        }
+
+        if (property.flags.isUnSafe) {
+            throw Error('Property cannot be marked with UNSAFE. Property: "' + property.name + '"');
         }
 
         processedMethods.push(getterName);
@@ -545,7 +557,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         if (isStaticMethod(method.name)) {
             impl = ClassProxy[method.name] = addSelfAndBaseBody(method.body.value, ClassProxy);
             impl.__META = new ria.__API.MethodDescriptor(
-                method.name,
+                ClassProxy.__META.name + '.' + method.name,
                 method.retType ? method.retType.value : null,
                 method.argsTypes.map(function (_) { return _.value }),
                 method.argsNames);
@@ -629,7 +641,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         var processedMethods = [];
 
         var $$Def = def.methods.filter(function (_1) { return _1.name == '$$'}).pop();
-        var $$ = $$Def ? $$Def.body.value : ria.__API.init;
+        var $$ = $$Def ? $$Def.body.value : def.flags.isUnSafe ? ria.__API.initUnSafe : ria.__API.init;
         processedMethods.push('$$');
 
         var ClassProxy = function ClassProxy() {
@@ -643,6 +655,12 @@ ria.__SYNTAX = ria.__SYNTAX || {};
                 global.SELF = _old_SELF;
             }
         };
+
+        if (_DEBUG) {
+            ClassProxy = new Function("global, className, Exception, $$",
+                "return " + ClassProxy.toString().replace(/ClassProxy/g, ria.__SYNTAX.toSingleVarName(className))
+            )(global, className, Exception, $$);
+        }
 
         ria.__API.clazz(ClassProxy, name,
             def.base.value,
@@ -713,7 +731,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
 
     function BaseIsUndefined() { throw Error('BASE is supported only on method with OVERRIDE'); }
 
-    if (ria.__CFG.enablePipelineMethodCall) {
+    if (_DEBUG) {
         ria.__API.addPipelineMethodCallStage('CallInit',
             function (body, meta, scope, callSession, genericTypes, genericSpecs) {
                 callSession.__OLD_SELF = global.SELF;

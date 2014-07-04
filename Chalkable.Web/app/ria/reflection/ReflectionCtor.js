@@ -10,6 +10,10 @@ NS('ria.reflection', function () {
     CLASS(FINAL,
         'ReflectionCtor', EXTENDS(ria.reflection.Reflector), [
 
+            function DROP_CACHE() {
+                cache = {};
+            },
+
             // $$ - instance factory
             function $$(instance, Clazz, ctor, args) {
                 args = ria.__API.clone(args);
@@ -20,7 +24,7 @@ NS('ria.reflection', function () {
                 if (!ria.__API.isClassConstructor(clazz))
                     throw new ria.reflection.Exception('ReflectionFactory works only on CLASS');
 
-                var name = ria.__API.getIdentifierOfType(ria.__API.specify(clazz, specs)) + '#' + ctorName;
+                var name = ria.__API.getIdentifierOfType(ria.__API.specify(clazz, specs)) + '@' + clazz.__REF_ID + '#' + ctorName;
                 if (cache.hasOwnProperty(name))
                     return cache[name];
 

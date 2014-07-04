@@ -11,41 +11,62 @@ NAMESPACE('ria.async', function () {
     /** @class ria.async.Timer */
     CLASS(
         'Timer', IMPLEMENTS(ria.async.ICancelable), [
-            [[Number, ria.async.TimerDelegate]],
-            function $(duration, handler, scope_) {
+            [[Number, ria.async.TimerDelegate, Object, Boolean]],
+            function $(duration, handler, scope_, canceled_) {
                 BASE();
+
+                this._interval = Math.max(duration, 1);
+                this._stopOnNext = false;
+                this._handler = handler;
+                this._scope = scope_;
+                this._timer = null;
+                canceled_ || this.start_(handler, scope_);
+            },
+
+            function start_(handler, scope_) {
                 var me = this;
-                var lastCall = new Date();
-                this.cleaner = clearInterval.bind(window);
-                this.timer = setInterval(function () {
-                    handler.call(scope_, me, -(lastCall.getTime() - (lastCall = new Date).getTime() ));
-                }, duration < 0 ? 0 : duration);
+                var lastCall = new Date().getTime();
+
+                this._timer = setTimeout(function event_() {
+                    me._stopOnNext || setTimeout(event_, me._interval);
+                    var lag = -(lastCall - (lastCall = new Date().getTime()));
+                    try {
+                        handler.call(scope_, me, lag);
+                    } catch (e) {
+                        setTimeout(function () { throw new Exception('Timer handler failed', e) }, 1);
+                    }
+
+                }, this._interval);
+
+                /*setInterval(function () {
+                    var lag = -(lastCall.getTime() - (lastCall = new Date).getTime());
+                    console.info('ria.async.Timer', 'lag', lag);
+                    handler.call(scope_, me, lag);
+                }, duration < 0 ? 0 : duration);*/
             },
 
             VOID, function cancel() {
-                this.timer && this.cleaner.call(window, this.timer);
-                this.timer = null;
+                this._timer && clearTimeout(this._timer);
+                this._timer = null;
+            },
+
+            VOID, function restart() {
+                this.cancel();
+                this.start_(this._handler, this._scope);
             },
 
             [[Number, ria.async.TimerDelegate]],
             function $once(duration, handler, scope_) {
                 BASE();
-                var me = this;
-                var lastCall = new Date();
-                this.cleaner = clearTimeout;
-                this.timer = setTimeout(function () {
-                    this.timer = null;
-                    handler.call(scope_, me, -(lastCall.getTime() - (lastCall = new Date).getTime() ));
-                }, duration < 0 ? 0 : duration);
-            }
 
-            /*
+                this._interval = Math.max(duration, 1);
+                this._stopOnNext = true;
+                this.start_(handler, scope_);
+            },
+
             [[ria.async.TimerDelegate, Array, Object]],
-            VOID, function RUN(handler, args_, scope_) {
-                ria.__API.defer(scope_ || window, handler, args_ || []);
+            VOID, function DEFER(handler, args_, scope_) {
+                ria.__API.defer(scope_ || _GLOBAL, handler, args_ || []);
             }
-
-            ria.async.Timer.RUN(function () {})
-            */
         ]);
 });

@@ -13,6 +13,7 @@ NAMESPACE('ria.async', function () {
           , counter = 0
           , size = futures.length + 1
           , results = []
+          , resolved = []
           , complete = false;
 
         futures.unshift(ria.async.DeferredAction()); // just in case futures are empty or all resolved :)
@@ -25,6 +26,7 @@ NAMESPACE('ria.async', function () {
 
                 counter++;
                 results[index] = data;
+                resolved[index] = true;
 
                 if (counter == size) {
                     complete = true;
@@ -32,8 +34,15 @@ NAMESPACE('ria.async', function () {
                 } else {
                     completer.progress(counter);
                 }
-            }).catchError(function (e) {
-                if (complete) return ;
+            })
+            .complete(function () {
+                if (resolved[index] || complete) return;
+
+                complete = true;
+                completer.cancel();
+            })
+            .catchError(function (e) {
+                if (complete) throw e;
 
                 complete = true;
                 completer.completeError(e);

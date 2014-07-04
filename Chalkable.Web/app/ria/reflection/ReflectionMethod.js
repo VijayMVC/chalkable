@@ -10,6 +10,10 @@ NS('ria.reflection', function () {
     CLASS(
         FINAL, 'ReflectionMethod', EXTENDS(ria.reflection.Reflector), [
 
+            function DROP_CACHE() {
+                cache = {};
+            },
+
             // $$ - instance factory
             function $$(instance, Clazz, ctor, args) {
                 args = ria.__API.clone(args);
@@ -20,7 +24,7 @@ NS('ria.reflection', function () {
                 if (!ria.__API.isClassConstructor(clazz))
                     throw new ria.reflection.Exception('ReflectionFactory works only on CLASS');
 
-                var name = ria.__API.getIdentifierOfType(ria.__API.specify(clazz, specs)) + '#' + methodName;
+                var name = ria.__API.getIdentifierOfType(ria.__API.specify(clazz, specs)) + '@' + clazz.__REF_ID + '#' + methodName;
                 if (cache.hasOwnProperty(name))
                     return cache[name];
 
@@ -64,7 +68,7 @@ NS('ria.reflection', function () {
                     instance = instance.__PROTECTED || instance;
                 }
 
-                if (ria.__CFG.enablePipelineMethodCall && impl.__META) {
+                if (!_RELEASE && impl.__META) {
                     var genericTypes = this.clazz.__META.genericTypes;
                     var genericSpecs = this.clazz.__META.genericTypes.map(function (type, index) {
                         if (this.clazz.__META.baseSpecs.length > index)

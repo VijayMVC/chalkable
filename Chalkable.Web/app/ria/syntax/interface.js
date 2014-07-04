@@ -58,6 +58,9 @@ ria.__SYNTAX = ria.__SYNTAX || {};
         if (def.flags.isReadonly)
             throw Error('Interface can NOT be marked with READONLY');
 
+        if (def.flags.isUnSafe)
+            throw Error('Interface can NOT be marked with UNSAFE');
+
         // throw Error if any annotations;
         if (def.annotations.length != 0)
             throw Error('Annotation are not supported on interfaces');
@@ -99,7 +102,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
                 if(isStaticMethod(method.name))
                     throw Error('Interface static methods are not supported');
 
-                if (method.flags.isAbstract || method.flags.isOverride || method.flags.isReadonly || method.flags.isFinal )
+                if (method.flags.isAbstract || method.flags.isOverride || method.flags.isReadonly || method.flags.isFinal || method.flags.isUnSafe)
                     throw Error('Interface method can NOT be marked with ABSTRACT, OVERRIDE, READONLY or FINAL');
 
                 if (method.annotations.length)
@@ -111,7 +114,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
              * @param {PropertyDescriptor} property
              */
             function (property) {
-                if (property.flags.isAbstract || property.flags.isOverride || property.flags.isFinal )
+                if (property.flags.isAbstract || property.flags.isOverride || property.flags.isFinal || property.flags.isUnSafe )
                     throw Error('Interface property can NOT be marked with ABSTRACT, OVERRIDE or FINAL');
 
                 if (property.annotations.length)
@@ -129,30 +132,34 @@ ria.__SYNTAX = ria.__SYNTAX || {};
             throw Error('Anonymous classes from interfaces are not supported');
 
             // TODO: update to tokenizer
-            var members = ria.__SYNTAX.parseMembers([].slice.call(arguments));
+            /*var members = ria.__SYNTAX.parseMembers([].slice.call(arguments));
             var flags = {isFinal: true };
             var properties = members.filter(function (_1) { return _1 instanceof ria.__SYNTAX.PropertyDescriptor });
             var methods = members.filter(function (_1) { return _1 instanceof ria.__SYNTAX.MethodDescriptor });
             var def = new ria.__SYNTAX.ClassDescriptor('$AnonymousClass', ria.__API.Class, [InterfaceProxy], flags, [], properties, methods);
             var impl = ria.__SYNTAX.buildClass('$AnonymousClass', def);
-            return impl();
+            return impl();*/
+        }
+
+        if (_DEBUG) {
+            InterfaceProxy = new Function("return " + InterfaceProxy.toString().replace('InterfaceProxy', ria.__SYNTAX.toSingleVarName(name)))();
         }
 
         var methods = def.methods.map(
-            /**
-             * @param {MethodDescriptor} method
-             */
-            function (method) {
-                method.argsTypes = processSelf(method.argsTypes, InterfaceProxy);
-                method.retType = processSelf(method.retType, InterfaceProxy);
+        /**
+         * @param {MethodDescriptor} method
+         */
+        function (method) {
+            method.argsTypes = processSelf(method.argsTypes, InterfaceProxy);
+            method.retType = processSelf(method.retType, InterfaceProxy);
 
-                return [
-                    method.name,
-                    method.retType ? method.retType.value : null,
-                    method.argsTypes.map(function (_) { return _.value; }),
-                    method.argsNames
-                ];
-            });
+            return [
+                method.name,
+                method.retType ? method.retType.value : null,
+                method.argsTypes.map(function (_) { return _.value; }),
+                method.argsNames
+            ];
+        });
 
         def.properties.forEach(
             /**
@@ -201,7 +208,7 @@ ria.__SYNTAX = ria.__SYNTAX || {};
 
     ria.__SYNTAX.INTERFACE = INTERFACE;
 
-    if (ria.__CFG.enablePipelineMethodCall && ria.__CFG.checkedMode) {
+    if (false) {
         ria.__API.addPipelineMethodCallStage('BeforeCall',
             function (body, meta, scope, args, result, callSession) {
                 // TODO: wrap args into proxy if it's ifc
