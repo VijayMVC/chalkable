@@ -380,6 +380,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setCurrentUser(this.getCurrentPerson());
                     if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_GRADES)
                         || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADING)
+                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM)
                         || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)){
                         announcement.setAbleToGrade(false);
                     }
