@@ -1,4 +1,6 @@
-﻿namespace Chalkable.Web.Tools
+﻿using System.Configuration;
+
+namespace Chalkable.Web.Tools
 {
     public class CompilerHelper
     {
@@ -18,8 +20,10 @@
         {
             get
             {
-                var res = "https://az374501.vo.msecnd.net/static-" + Version;
-                //var res = "https://127.0.0.1:444";
+                var res = ConfigurationManager.AppSettings["ScriptsRoot"];
+                var includeVersion = bool.Parse(ConfigurationManager.AppSettings["ScriptsRootIncludeVersion"]);
+                if (includeVersion)
+                    res += Version;
                 return res;
             }
         }
