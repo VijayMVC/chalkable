@@ -363,6 +363,7 @@ NAMESPACE('chlk.controllers', function (){
                         color: chlk.models.common.ButtonColor.GREEN.valueOf()
                     }]
                 );
+                return null;
             }
             else{
                 var additionalMsg = '';
