@@ -77,7 +77,7 @@ NAMESPACE('chlk.controllers', function (){
                         .getStudents(classId_, null, !isStudent && isMy, true, 0, 10)
                         .attach(this.validateResponse_());
                 }
-                result.then(function(users){
+                result = result.then(function(users){
                         var usersModel = this.prepareUsersModel(users, 0, true);
                         var classes = this.classService.getClassesForTopBar(true);
                         var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
