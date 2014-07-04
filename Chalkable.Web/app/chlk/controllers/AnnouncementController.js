@@ -378,10 +378,9 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setGradeViewApps(gradeViewApps);
                     announcement.prepareExpiresDateText();
                     announcement.setCurrentUser(this.getCurrentPerson());
-                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_GRADES)
-                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADING)
-                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM)
-                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)){
+                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADING)
+                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)
+                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)){
                         announcement.setAbleToGrade(false);
                     }
                     announcement.setAbleEdit(announcement.isAnnOwner());
@@ -449,14 +448,25 @@ NAMESPACE('chlk.controllers', function (){
             });
 
             if (attachments.length == 1){
-                var attachmentUrl = attachments[0].getUrl();
+                var attachmentUrl, res;
                 var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
                     "download-attachment",
                     "Download Attachment",
                     "/AnnouncementAttachment/DownloadAttachment.json?needsDownload=true&announcementAttachmentId=" + attachments[0].getId().valueOf()
                 );
-                var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton], attachments[0].getType());
-                return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, new ria.async.DeferredData(attachmentViewData));
+                if(attachments[0].getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
+                    attachmentUrl = attachments[0].getUrl();
+                    var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton], attachments[0].getType());
+                    res = new ria.async.DeferredData(attachmentViewData);
+                }else{
+                    res = this.announcementService.startViewSession(attachmentId)
+                        .then(function(session){
+                            attachmentUrl = 'https://crocodoc.com/view/' + session;
+                            return new chlk.models.common.attachments.BaseAttachmentViewData(attachmentUrl, [downloadAttachmentButton], attachments[0].getType());
+                        });
+                }
+
+                return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
             }
             return null;
         },
@@ -658,7 +668,7 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_());
                 if(form_){
-                    res.then(function(model){
+                    res = res.then(function(model){
                         form_.getAnnouncement().setTitle(model.getTitle());
                         form_.getAnnouncement().setCanAddStandard(model.isCanAddStandard());
                         form_.getAnnouncement().setStandards(model.getStandards());

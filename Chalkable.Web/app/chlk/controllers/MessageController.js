@@ -89,7 +89,7 @@ NAMESPACE('chlk.controllers', function (){
                 var res;
                 if (replayOnId_) {
                     res = this.getMessageFromSession(replayOnId_);
-                    res.then(function(model){
+                    res = res.then(function(model){
                         if(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId() == model.getRecipient().getId()){
                             model = new ria.async.DeferredData(new chlk.models.messages.Message(
                                 isInbox,
