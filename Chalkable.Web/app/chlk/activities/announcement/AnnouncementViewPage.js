@@ -588,7 +588,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             function setItemState_(node, stateName){
                 var form = node.parent('form');
                 var input = form.find('.grade-input');
-                input.setValue(stateName == 'isexempt' ? '' : input.getData('value'));
+                input.setValue(stateName == 'isexempt' ? '' : input.getData('grade-value'));
                 this.changeGradingCheckBox_(form, stateName, true);
             },
 
