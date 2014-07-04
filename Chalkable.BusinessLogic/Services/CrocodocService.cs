@@ -26,9 +26,9 @@ namespace Chalkable.BusinessLogic.Services
     {
         private const string TOKEN = "token";
         private const string UUID = "uuid";
-        private const string ADMIN = "ADMIN";
-        private const string USER = "USER";
-        private const string EDITABLE = "EDITABLE";
+        private const string ADMIN = "admin";
+        private const string USER = "user";
+        private const string EDITABLE = "editable";
         private const string SESSION_CREATE = "session/create";
         private const string DOCUMENT_UPLOAD = "document/upload";
 
@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services
                     {USER, string.Format("{0},{1}", model.PersonId, model.PersonName)},
                     {ADMIN, model.IsOwner.ToString().ToLower()}
                 };
-            var str = Encoding.ASCII.GetString(wc.UploadValues(UrlTools.UrlCombine(StrorageUrl, SESSION_CREATE), nameValue));
+            var str = Encoding.ASCII.GetString(wc.UploadValues(UrlTools.UrlCombine(CrocodocApiUrl, SESSION_CREATE), nameValue));
             return Deserialize<StartSessionResponse>(str);
         }
 
