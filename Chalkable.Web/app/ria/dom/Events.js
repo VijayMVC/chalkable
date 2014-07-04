@@ -6,8 +6,11 @@ NAMESPACE('ria.dom', function () {
     "use strict";
 
     function def(data, def) {
-        return ria.__API.extendWithDefault(data || {}, def);
+        return ria.__API.merge(data || {}, def);
     }
+
+	var window = _GLOBAL;
+    var Node = _BROWSER ? _GLOBAL.Node : Object;
 
     /** @class ria.dom.Events */
     CLASS(

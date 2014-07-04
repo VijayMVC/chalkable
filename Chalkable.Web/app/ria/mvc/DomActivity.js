@@ -120,9 +120,10 @@ NAMESPACE('ria.mvc', function () {
                 this.dom.appendTo(this._domAppendTo);
             },
 
-            OVERRIDE, VOID, function onStop_(){
-                BASE();
-                this._domAppendTo.remove(this.dom.empty());
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRender_(data, msg_) {
+                BASE(data, msg_);
+                this.dom.removeClass('loading');
             },
 
             [[String]],
@@ -130,6 +131,11 @@ NAMESPACE('ria.mvc', function () {
                 BASE(msg_);
 
                 this.dom.find('FORM.working').removeClass('working');
+            },
+
+            OVERRIDE, VOID, function onStop_(){
+                BASE();
+                this._domAppendTo.remove(this.dom.empty());
             }
         ]);
 });

@@ -34,7 +34,10 @@ NAMESPACE('ria.async', function () {
         VOID, function FutureCompleteDelegate(){});
 
     var __futuresPool = [],
-        __uncaughtErrorHandler = DefaultErrorHandler;
+        __uncaughtErrorHandler = function (e) {
+            if (_DEBUG) console.error(e.toString());
+            else throw e;
+        };
 
     /** @class ria.async.Future */
     CLASS(
@@ -48,7 +51,7 @@ NAMESPACE('ria.async', function () {
                 var fromPool = __futuresPool.pop();
                 if (fromPool) {
                     var ctor = FutureImpl_.prototype.$;
-                    if (ria.__CFG.enablePipelineMethodCall && ctor.__META) {
+                    if (!_RELEASE && ctor.__META) {
                         ctor = ria.__API.getPipelineMethodCallProxyFor(ctor, ctor.__META, fromPool, [], []);
                     }
 
@@ -59,7 +62,7 @@ NAMESPACE('ria.async', function () {
                 }
 
                 if (ctorCalled == SELF.prototype.$fromData) {
-                    ria.__API.defer(null, instance.finish, [delayArgs[0]], delayArgs[1]|0);
+                    ria.__API.defer(instance, instance.finish, [delayArgs[0]], delayArgs[1]|0);
                 }
 
                 return instance.getWrapper();
@@ -142,6 +145,51 @@ NAMESPACE('ria.async', function () {
     /** @class ria.async.FutureImpl */
     var FutureImpl_ = CLASS(
         'FutureImpl_', EXTENDS(ria.async.Future), [
+
+            /* UNSAFE CLASS INITIALIZER */
+            OVERRIDE, function $$(instance, clazz, ctor, args) {
+                var genericTypes = [],
+                    genericSpecs = [];
+
+                var __META = clazz.__META;
+
+                if (!(instance instanceof clazz))
+                    instance = ria.__API.getInstanceOf(clazz);
+
+                if (!_RELEASE) {
+                    var __pre = __META.__precalc;
+                    for(var i = 0 ; i < __pre.length;) {
+                        var name_ = __pre[i],
+                            f_ = __pre[i+1],
+                            meta_ = f_.__META;
+
+                        var fn = ria.__API.getPipelineMethodCallProxyFor(f_, meta_, instance, genericTypes, genericSpecs);
+                        if (_DEBUG) {
+                            Object.defineProperty(instance, name_, { writable : false, configurable: false, enumerable: false, value: fn });
+                        } else {
+                            instance[name_] = fn;
+                        }
+
+                        i+=2;
+                    }
+
+                    if (ctor.__META) {
+                        ctor = ria.__API.getPipelineMethodCallProxyFor(ctor, ctor.__META, instance, genericTypes, genericSpecs);
+                    }
+                }
+
+                if (_DEBUG) for(var name in clazz.__META.properties) {
+                    if (clazz.__META.properties.hasOwnProperty(name)) {
+                        instance[name] = null;
+                    }
+                }
+
+                ctor.apply(instance, args);
+
+                _DEBUG && Object.seal(instance);
+
+                return instance;
+            },
 
             [[ria.async.ICancelable]],
             function $(canceler_) {

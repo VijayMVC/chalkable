@@ -17,13 +17,19 @@ REQUIRE('ria.dom.Events');
 NAMESPACE('ria.dom', function () {
     "use strict";
 
+	var window = _GLOBAL,
+		global = _BROWSER ? _GLOBAL.document : null;
+
+    var Node = _BROWSER ? window.Node : Object;
+    var Event = _BROWSER ? window.Event : Object;
+
     function toCamelCase(str) {
         return str.replace(/(\-[a-z])/g, function($1){
             return $1.substring(1).toUpperCase();
         });
     }
 
-    var addWheelListener = function(window,document) {
+    var addWheelListener = _BROWSER ? function(window,document) {
 
         var prefix = "", _addEventListener, onwheel, support;
 
@@ -37,8 +43,8 @@ NAMESPACE('ria.dom', function () {
 
         // detect available wheel event
         support = "onwheel" in document.createElement("div") ? "wheel" : // Modern browsers support "wheel"
-                  document.onmousewheel !== undefined ? "mousewheel" : // Webkit and IE support at least "mousewheel"
-                  "DOMMouseScroll"; // let's assume that remaining browsers are older Firefox
+                document.onmousewheel !== undefined ? "mousewheel" : // Webkit and IE support at least "mousewheel"
+            	"DOMMouseScroll"; // let's assume that remaining browsers are older Firefox
 
         function addWheelListener ( elem, callback, useCapture ) {
             _addWheelListener( elem, support, callback, useCapture );
@@ -85,16 +91,17 @@ NAMESPACE('ria.dom', function () {
         }
 
         return addWheelListener;
-    }(window, document);
+    }(window, global) : null;
 
 
-    var global = ('undefined' !== typeof window ? window.document : null),
-        docElem = global.documentElement,
+    if (_BROWSER) {
+    var docElem = global.documentElement,
         __find = function (s, n) {
             return n.querySelectorAll(s);
         },
         __is = docElem ? (docElem.webkitMatchesSelector || docElem.mozMatchesSelector
             || docElem.oMatchesSelector || docElem.msMatchesSelector) : function () { return false };
+    }
 
     function checkEventHandlerResult(event, result) {
         if (result === false) {
@@ -163,7 +170,8 @@ NAMESPACE('ria.dom', function () {
     };
 
     var GID_ = new Date().getTime(),
-        DomImpl_ = null;
+        DomImpl_ = null,
+        HandlerId = Math.floor(Math.random() * 1000) + 10000;
 
     /** @class ria.dom.Dom */
     CLASS(
@@ -222,16 +230,17 @@ NAMESPACE('ria.dom', function () {
                     selector = undefined;
                 }
 
-                var hid = handler_.__domEventHandlerId = handler_.__domEventHandlerId || (Math.random().toString(36).slice(2));
+                var hid = handler_.__domEventHandlerId = handler_.__domEventHandlerId || (++HandlerId).toString(36);
 
                 this._dom.forEach(function(element){
                     events.forEach(function(evt){
 
                         element.__domEvents = element.__domEvents || {};
-                        if (element.__domEvents[evt + hid])
+                        var eventId = evt + ':' + hid + '@' + (selector || '');
+                        if (element.__domEvents[eventId])
                             return ;
 
-                        var h = element.__domEvents[evt + hid] = function (e) {
+                        var h = element.__domEvents[eventId] = function (e) {
                             var target = new ria.dom.Dom(e.target);
                             if(selector === undefined)
                                 return checkEventHandlerResult(e, handler_(target, e));
@@ -281,11 +290,12 @@ NAMESPACE('ria.dom', function () {
                             return ;
                         }
 
+                        var eventId = evt + ':' + hid + '@' + (selector || '');
                         var h;
-                        if (h = element.__domEvents[evt + hid])
+                        if (h = element.__domEvents[eventId])
                             element.removeEventListener(evt, h, 'change select focus blur'.search(evt) >= 0);
 
-                        delete element.__domEvents[evt + hid];
+                        delete element.__domEvents[eventId];
                     })
                 });
                 return this;
@@ -387,46 +397,50 @@ NAMESPACE('ria.dom', function () {
 
             [[SELF]],
             SELF, function removeSelf() {
-                this._dom.forEach(function(element){ element.parentNode.removeChild(element); });
+                this._dom.forEach(function(element){ element.parentNode && element.parentNode.removeChild(element); });
                 return this;
             },
 
-            [[SELF]],
-            Boolean, function areEquals(el){
-                var val1 = this.valueOf(), val2 = el.valueOf(), len = val1.length;
-                if(len != val2.valueOf().length)
+            OVERRIDE, Boolean, function equals(other) {
+                if (!(other instanceof ria.dom.Dom))
                     return false;
-                for(var i = 0; i < len; i++){
-                    if(val1[i] != val2[i])
-                        return false;
-                }
-                return true;
+
+                if (this.count() != other.count())
+                    return false;
+
+                var others = other.valueOf();
+                return this._dom.every(function(el) { return others.indexOf(el) >= 0; });
+            },
+
+            [[SELF]],
+            Boolean, function areEquals(el) {
+                _DEBUG && console.info('Method areEquals is deprecated. Consider using equals() instead');
+                return this.equals(el);
             },
 
             // reference https://github.com/julienw/dollardom
 
             [[String]],
-            SELF, function descendants(selector__) {},
+            SELF, function descendants(selector_) {
+                var dom = this._dom;
+                try {
+                    this._dom = [].concat.apply([], dom.map(function (element) {
+                        return [].slice.call(element.childNodes);
+                    }));
+                    return this.filter(function ($node) {
+                        return selector_ ? $node.is(selector_) : true;
+                    });
+                } finally {
+                    this._dom = dom;
+                }
+            },
 
             [[String]],
             SELF, function parent(selector_) {
-                if(selector_){
-                    var parents = new ria.dom.Dom(selector_);
-                    if(parents.count() == 0)
-                        return null;
-                    if(parents.count() == 1)
-                        if(parents.contains(this)){
-                            return parents;
-                        }else{
-                            return null;
-                        }
-
-                    return parents.filter(function(parent) {
-                        return parent.contains(this);
-                    }.bind(this));
-                }
-
-                return new ria.dom.Dom(this._dom.map(function (_) { return _.parentNode }));
+                var me = this;
+                return selector_
+                    ? ria.dom.Dom(selector_).filter(function ($node) { return $node.contains(me); })
+                    : ria.dom.Dom(this._dom.map(function (_) { return _.parentNode }));
             },
 
             Object, function offset() {
@@ -466,7 +480,7 @@ NAMESPACE('ria.dom', function () {
             [[String]],
             SELF, function first(selector_) {
                 if (!selector_)
-                    return new ria.dom.Dom(this.valueOf().shift());
+                    return new ria.dom.Dom(this.valueOf().slice(0,1));
 
                 throw new Exception('not implemented');
             },
@@ -474,7 +488,7 @@ NAMESPACE('ria.dom', function () {
             [[String]],
             SELF, function last(selector_) {
                 if (!selector_)
-                    return new ria.dom.Dom(this.valueOf().pop());
+                    return new ria.dom.Dom(this.valueOf().reverse().slice(0,1));
 
                 throw new Exception('not implemented');
             },
@@ -726,27 +740,27 @@ NAMESPACE('ria.dom', function () {
             [[ria.dom.DomIterator]],
             SELF, function filter(iterator) {
                 var old = this._dom, scope = this;
-
-                var filtered = this._dom.filter(function (_) {
-                    scope._dom = [_];
-                    return iterator(scope);
-                });
-
-                this._dom = old;
-                return new ria.dom.Dom(filtered);
+                try {
+                    return new ria.dom.Dom(this._dom.filter(function (_) {
+                        scope._dom = [_];
+                        return iterator(scope);
+                    }));
+                } finally {
+                    this._dom = old;
+                }
             },
 
             [[ria.dom.DomIterator]],
             Array, function map(iterator) {
                 var old = this._dom, scope = this;
-
-                var mapped = this._dom.map(function (_) {
-                    scope._dom = [_];
-                    return iterator(scope);
-                });
-
-                this._dom = old;
-                return mapped;
+                try {
+                    return this._dom.map(function (_) {
+                        scope._dom = [_];
+                        return iterator(scope);
+                    });
+                } finally {
+                    this._dom = old;
+                }
             },
 
             Number, function count() {
@@ -772,6 +786,52 @@ NAMESPACE('ria.dom', function () {
     /** @class ria.dom.SimpleDom */
     CLASS(
         'SimpleDom', EXTENDS(ria.dom.Dom), [
+
+            /* UNSAFE CLASS INITIALIZER */
+            OVERRIDE, function $$(instance, clazz, ctor, args) {
+                var genericTypes = [],
+                    genericSpecs = [];
+
+                var __META = clazz.__META;
+
+                if (!(instance instanceof clazz))
+                    instance = ria.__API.getInstanceOf(clazz);
+
+                if (!_RELEASE) {
+                    var __pre = __META.__precalc;
+                    for(var i = 0 ; i < __pre.length;) {
+                        var name_ = __pre[i],
+                            f_ = __pre[i+1],
+                            meta_ = f_.__META;
+
+                        var fn = ria.__API.getPipelineMethodCallProxyFor(f_, meta_, instance, genericTypes, genericSpecs);
+                        if (_DEBUG) {
+                            Object.defineProperty(instance, name_, { writable : false, configurable: false, enumerable: false, value: fn });
+                        } else {
+                            instance[name_] = fn;
+                        }
+
+                        i+=2;
+                    }
+
+                    if (ctor.__META) {
+                        ctor = ria.__API.getPipelineMethodCallProxyFor(ctor, ctor.__META, instance, genericTypes, genericSpecs);
+                    }
+                }
+
+                if (_DEBUG) for(var name in clazz.__META.properties) {
+                    if (clazz.__META.properties.hasOwnProperty(name)) {
+                        instance[name] = null;
+                    }
+                }
+
+                ctor.apply(instance, args);
+
+                _DEBUG && Object.seal(instance);
+
+                return instance;
+            },
+
             function $(dom_) {
                 dom_ ? BASE(dom_) : BASE();
             }
@@ -780,7 +840,7 @@ NAMESPACE('ria.dom', function () {
     ria.dom.Dom.SET_IMPL(ria.dom.SimpleDom);
 
     ria.dom.setDomImpl = function (impl) {
-        console.warn('ria.dom.setDomImpl is deprecated. User ria.dom.Dom.SET_IMPL() instead');
+        _DEBUG && console.warn('ria.dom.setDomImpl is deprecated. User ria.dom.Dom.SET_IMPL() instead');
         ria.dom.Dom.SET_IMPL(impl);
     };
 });

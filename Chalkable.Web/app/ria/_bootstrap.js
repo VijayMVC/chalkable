@@ -9,6 +9,9 @@
 var ria = {};
 var _DEBUG = true;
 var _RELEASE = false;
+var _BROWSER = true;
+var _NODE = false;
+var _GLOBAL = window;
 
 (function () {
     "use strict";
@@ -69,15 +72,15 @@ var _RELEASE = false;
 
         for(var prefix in libs) if (libs.hasOwnProperty(prefix)) {
             if (path.substr(0, prefix.length) == prefix) {
-                path = libs[prefix] + path;
+                path = libs[prefix] + path.substring(prefix.length);
                 break;
             }
         }
 
-        path = path.replace(/^~\//gi, root);
-        path = path.replace(/^\.\//gi, appDir);
+        if (root)   path = path.replace(/^~\//gi, root);
+        if (appDir) path = path.replace(/^\.\//gi, appDir);
 
-        if (!path.match(/^\//i))
+        if (!path.match(/^\//i) && appDir)
             path = appDir + path;
 
         return path.replace(/\/\//gi, '/');

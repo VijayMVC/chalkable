@@ -126,10 +126,10 @@
      */
     ria.__API.property = function (clazz, name, propType_, anns_, getter, setter) {
         //noinspection JSUndefinedPropertyAssignment
-        getter.__META = new ria.__API.MethodDescriptor('', propType_, [], []);
+        getter.__META = new ria.__API.MethodDescriptor(_DEBUG ? 'getter of ' + name : '', propType_, [], []);
         if (setter)
         { //noinspection JSUndefinedPropertyAssignment
-            setter.__META = new ria.__API.MethodDescriptor('', undefined, [propType_], ['value']);
+            setter.__META = new ria.__API.MethodDescriptor(_DEBUG ? 'setter of ' + name : '', undefined, [propType_], ['value']);
         }
         clazz.__META.addProperty(name, propType_, anns_, getter, setter);
     };
@@ -204,44 +204,19 @@
             publicInstance.__PROTECTED = instance;
         }
 
-        var epmc = ria.__CFG.enablePipelineMethodCall;
-        /*for(var name_ in instance) {
-            var f_ = instance[name_];
-
-            // TODO: skip all ctors
-            if (typeof f_ === 'function' && name_[0] != '$' && name_ !== 'constructor') {
-                instance[name_] = f_.bind(instance);
-                if (epmc && f_.__META) {
-                    var fn = ria.__API.getPipelineMethodCallProxyFor(f_, f_.__META, instance, genericTypes, genericSpecs);
-                    if (_DEBUG) {
-                        Object.defineProperty(instance, name_, { writable : false, configurable: false, value: fn });
-                        if (f_.__META.isProtected())
-                            fn = ProtectedMethodProxy;
-                    }
-                    publicInstance[name_] = fn;
-                    _DEBUG && Object.defineProperty(publicInstance, name_, { writable : false, configurable: false, value: fn });
-                }
-            }
-
-            if (_DEBUG && name_[0] == '$') {
-                instance[name_] = publicInstance[name_] = undefined;
-            }
-        }*/
-
         var __pre = __META.__precalc;
         for(var i = 0 ; i < __pre.length;) {
             var name_ = __pre[i],
                 f_ = __pre[i+1],
                 meta_ = f_.__META;
 
-            if (epmc) {
+            if (!_RELEASE) {
                 var fn = ria.__API.getPipelineMethodCallProxyFor(f_, meta_, instance, genericTypes, genericSpecs);
                 if (_DEBUG) {
                     Object.defineProperty(instance, name_, { writable : false, configurable: false, enumerable: false, value: fn });
                     if (meta_.isProtected())
                         fn = ProtectedMethodProxy;
-                }
-                if (_DEBUG) {
+
                     Object.defineProperty(publicInstance, name_, { writable : false, configurable: false, enumerable: false, value: fn });
                 } else {
                     publicInstance[name_] = fn;
@@ -263,8 +238,96 @@
             }
         }
 
-        if (epmc && ctor.__META) {
+        if (!_RELEASE && ctor.__META) {
             ctor = ria.__API.getPipelineMethodCallProxyFor(ctor, ctor.__META, instance, genericTypes, genericSpecs);
+        }
+
+        var specs = instance.__SPECS = {};
+        genericTypes.forEach(function (_, index) {
+            specs[_.name] = genericSpecs[index];
+        });
+
+        if (_DEBUG) for(var name in __META.properties) {
+            if (__META.properties.hasOwnProperty(name)) {
+                instance[name] = null;
+            }
+        }
+
+        ctor.apply(instance, args);
+
+        _DEBUG && Object.seal(instance);
+        _DEBUG && Object.freeze(publicInstance);
+
+        return publicInstance;
+    };
+
+    /**
+     * @param {Object} instance
+     * @param {Function} clazz
+     * @param {Function} ctor
+     * @param {Arguments} args
+     * @return {Object}
+     */
+    ria.__API.initUnSafe = function (instance, clazz, ctor, args) {
+        var __META = clazz.__META;
+
+        if (__META.isAbstract)
+            throw Error('Can NOT instantiate abstract class ' + __META.name);
+
+        if (!(instance instanceof clazz))
+            instance = ria.__API.getInstanceOf(clazz);
+
+        var genericTypes = __META.genericTypes || [],
+            genericTypesLength = genericTypes.length - __META.baseSpecs.length,
+            ownGenericSpecs = __slice(args, 0, genericTypesLength),
+            genericSpecs = __META.baseSpecs.concat(ownGenericSpecs);
+
+        args = __slice(args, genericTypesLength);
+
+        if (_DEBUG) {
+            ria.__API.OF.apply(clazz, ownGenericSpecs);
+        }
+
+        var publicInstance = instance;
+        if (_DEBUG) {
+            instance = ria.__API.getInstanceOf(clazz);
+            publicInstance.__PROTECTED = instance;
+        }
+
+        if (!_RELEASE) {
+            var __pre = __META.__precalc;
+            for(var i = 0 ; i < __pre.length;) {
+                var name_ = __pre[i],
+                    f_ = __pre[i + 1],
+                    meta_ = f_.__META;
+
+                var fn = ria.__API.getPipelineMethodCallProxyFor(f_, meta_, instance, genericTypes, genericSpecs);
+                if (_DEBUG) {
+                    Object.defineProperty(instance, name_, { writable: false, configurable: false, enumerable: false, value: fn });
+                    if (meta_.isProtected())
+                        fn = ProtectedMethodProxy;
+
+                    Object.defineProperty(publicInstance, name_, { writable: false, configurable: false, enumerable: false, value: fn });
+                } else {
+                    publicInstance[name_] = fn;
+                }
+
+                i += 2;
+            }
+
+            if (ctor.__META) {
+                ctor = ria.__API.getPipelineMethodCallProxyFor(ctor, ctor.__META, instance, genericTypes, genericSpecs);
+            }
+        }
+
+        if (_DEBUG) {
+            instance.$ = publicInstance.$ = undefined;
+            for(var name in __META.ctors) {
+                if (__META.ctors.hasOwnProperty(name)) {
+                    Object.defineProperty(publicInstance, name, { writable : false, configurable: false, enumerable: false, value: undefined });
+                    Object.defineProperty(instance, name, { writable : false, configurable: false, enumerable: false, value: undefined });
+                }
+            }
         }
 
         var specs = instance.__SPECS = {};
@@ -290,6 +353,8 @@
     var staticScopeInstance = new StaticScope();
     _DEBUG && Object.freeze(staticScopeInstance);
 
+    var refId = Math.floor(Math.random() * 1000)+ 10000;
+
     ria.__API.compile = function(clazz) {
         for(var k in clazz) if (clazz.hasOwnProperty(k)) {
             var name_ = k;
@@ -297,7 +362,7 @@
 
             // TODO: skip all ctors
             if (typeof f_ === 'function' && ria.__API.isDelegate(f_)) {
-                if (ria.__CFG.enablePipelineMethodCall && f_.__META) {
+                if (!_RELEASE && f_.__META) {
                     clazz[name_] = ria.__API.getPipelineMethodCallProxyFor(f_, f_.__META, staticScopeInstance);
                 } else {
                     clazz[name_] = f_.bind(staticScopeInstance);
@@ -330,6 +395,8 @@
         }
 
         //console.info(clazz, __pre);
+
+        clazz.__REF_ID = (refId++).toString(36);
 
         _DEBUG && Object.freeze(clazz);
     };

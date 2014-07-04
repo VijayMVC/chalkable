@@ -93,7 +93,7 @@ NAMESPACE('chlk.controls', function () {
 
     /** @class chlk.controls.ChartControl */
     CLASS(
-        'ChartControl', EXTENDS(ria.mvc.DomControl), [
+        'ChartControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/chart.jade')(this);
@@ -189,15 +189,15 @@ NAMESPACE('chlk.controls', function () {
                 });
             },
 
-            VOID, function queueReanimationCustom_(id, options) {
+            VOID, function queueReanimation_(id, options) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        this.reanimateCustom_(ria.dom.Dom('#' + id), id, options, activity, model)
+                        this.reanimate_(ria.dom.Dom('#' + id), id, options, activity, model)
                     }.bind(this));
             },
 
             [[ria.dom.Dom, String, Object, ria.mvc.IActivity, Object]],
-            VOID, function reanimateCustom_(node, id, options, activity, model) {
+            VOID, function reanimate_(node, id, options, activity, model) {
                 var container = node.find('.third-container');
                 if(container.exists())
                     node = container;

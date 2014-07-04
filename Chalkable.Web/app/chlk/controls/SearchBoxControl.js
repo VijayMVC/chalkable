@@ -34,25 +34,25 @@ NAMESPACE('chlk.controls', function () {
                 var ref = ria.reflection.ReflectionClass(service);
                 var methodRef = ref.getMethodReflector(method);
                 var stub = function () { return methodRef.invokeOn(serviceIns, [].concat(prependArgs, ria.__API.clone(arguments))); };
-                this.queueReanimationCustom_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf().toString() : null, stub, tpl, attrs);
+                this.queueReanimation_(attrs.id, attrs["default-value"] ? attrs["default-value"].valueOf().toString() : null, stub, tpl, attrs);
             },
 
             [[String, String, Function, ClassOf(ria.templates.Template), Object]],
-            VOID, function queueReanimationCustom_(id, defaultValue_, serviceF, tpl, attrs) {
+            VOID, function queueReanimation_(id, defaultValue_, serviceF, tpl, attrs) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id);
                         if(node.exists() && !node.hasClass('search-box-processed')){
                             if (defaultValue_)
                                 ria.dom.Dom('#' + id + '-hidden').setValue(defaultValue_);
-                            this.reanimateCustom_(node, serviceF, tpl, attrs, activity, model);
+                            this.reanimate_(node, serviceF, tpl, attrs, activity, model);
                             node.addClass('search-box-processed');
                         }
                     }.bind(this));
             },
 
             [[ria.dom.Dom, Function, ClassOf(ria.templates.Template), Object, ria.mvc.IActivity, Object]],
-            VOID, function reanimateCustom_(node, serviceF, tplClass, attrs, activity, model) {
+            VOID, function reanimate_(node, serviceF, tplClass, attrs, activity, model) {
                 var id = node.getAttr("id");
                 var tpl = new tplClass();
 

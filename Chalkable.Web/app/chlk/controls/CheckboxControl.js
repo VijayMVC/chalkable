@@ -51,6 +51,14 @@ NAMESPACE('chlk.controls', function () {
                 hidden.setData('value', value);
                 hidden.setValue(value);
                 value ? node.setAttr('checked', 'checked') : node.removeAttr('checked');
+            },
+
+            [[ria.dom.Dom, Object]],
+            VOID, function SET_VALUE(dom, value) {
+                dom.setValue(value);
+                var node = dom.parent().find('.hidden-checkbox');
+                node.setValue(value);
+                node.setData('value', value);
             }
         ]);
 });

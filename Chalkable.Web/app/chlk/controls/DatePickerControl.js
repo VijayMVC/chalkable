@@ -10,7 +10,7 @@ NAMESPACE('chlk.controls', function () {
 
     /** @class chlk.controls.DatePickerControl */
     CLASS(
-        'DatePickerControl', EXTENDS(ria.mvc.DomControl), [
+        'DatePickerControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/date-picker.jade')(this);
@@ -55,14 +55,14 @@ NAMESPACE('chlk.controls', function () {
                     }
                 }
 
-                this.queueReanimationCustom_(attrs.id, options, value);
+                this.queueReanimation_(attrs.id, options, value);
 
                 return attrs;
             },
 
             function updateDatePicker(node, value, options_, noClearValue_){
                 var options = options_ || node.getData('options');
-                this.reanimateCustom_(node, options, value);
+                this.reanimate_(node, options, value);
                 if(!value && !noClearValue_)
                     node.setValue('');
                 node.off('change.datepiker');
@@ -81,7 +81,7 @@ NAMESPACE('chlk.controls', function () {
                 })
             },
 
-            VOID, function queueReanimationCustom_(id, options, value) {
+            VOID, function queueReanimation_(id, options, value) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id);
@@ -91,7 +91,7 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[ria.dom.Dom, Object, Object]],
-            VOID, function reanimateCustom_(node, options, value) {
+            VOID, function reanimate_(node, options, value) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
                 node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value && value.getDate());
                 node.setData('control', this);
