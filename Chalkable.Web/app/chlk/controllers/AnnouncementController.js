@@ -658,7 +658,7 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_());
                 if(form_){
-                    res.then(function(model){
+                    res = res.then(function(model){
                         form_.getAnnouncement().setTitle(model.getTitle());
                         form_.getAnnouncement().setCanAddStandard(model.isCanAddStandard());
                         form_.getAnnouncement().setStandards(model.getStandards());
