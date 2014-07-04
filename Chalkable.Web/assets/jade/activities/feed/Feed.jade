@@ -1,24 +1,27 @@
-noStarred = self.starredOnly && !self.items.length
-div(class = noStarred ? "no-starred" : "").feed-container
+noComplete = self.completeOnly && !self.items.length
+div(class = noComplete ? "no-complete" : "").feed-container
     topData = self.getTopData();
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.starredOnly])(
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.importantOnly])(
         selectedItemId=selectedId
         ).classes-bar
     .action-bar.not-transparent
         .container.panel-bg
             .left
                 .i-b
-                    +ActionLink('feed', 'list', true, !self.starredOnly, selectedId, 0)(class=self.starredOnly ? 'pr' : 'unpr')
-                        span#importan-count= self.importantCount
+                    if self.importantOnly
+                        BUTTON.grey-button.blue-on-active.pressed.done-undone-button=Msg.ToDo
+                        +ActionLinkButton('feed', 'list', true, false, selectedId || '', 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.All
+                    else
+                        +ActionLinkButton('feed', 'list', true, true, selectedId || '', 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.ToDo
+                        BUTTON.grey-button.blue-on-active.done-undone-button.pressed=Msg.All
             .right
                 .notification-btn-container
-                    .feed-notifications Notifications
-                        if self.getNewNotificationCount() > 0
-                            .new-notification-count=self.getNewNotificationCount()
-                        +ActionLink('notification', 'listNew')
-    if noStarred
+                    .feed-notifications
+                        +RenderWith(self.getModel(), chlk.templates.feed.NotificationsCount)
+    +ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
+    if noComplete
         label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
         label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
     else
@@ -30,7 +33,7 @@ div(class = noStarred ? "no-starred" : "").feed-container
                 method = "getAnnouncements",
                 tpl = chlk.templates.announcement.FeedItemTpl,
                 pageSize = 10,
-                paramsPrepend = [selectedId, self.starredOnly]
+                paramsPrepend = [selectedId, self.importantOnly]
             )
                 each item in self.items
                     +FeedItem(item)

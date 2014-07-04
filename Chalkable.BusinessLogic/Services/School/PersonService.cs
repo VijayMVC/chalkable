@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
+using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -23,14 +27,17 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
-        Person GetPerson(int id);
         PersonDetails GetPersonDetails(int id);
+        Person GetPerson(int id);
         void ActivatePerson(int id);
         Person EditEmail(int id, string email, out string error);
 
+        IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
+
+        StudentSummeryInfo GetStudentSummaryInfo(int studentId);
     }
-    
-    public class PersonService : SchoolServiceBase, IPersonService
+
+    public class PersonService : SisConnectedService, IPersonService
     {
         public PersonService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -87,7 +94,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
-            //TODO: need cross db transaction handling
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
@@ -117,7 +123,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         HasMedicalAlert = x.HasMedicalAlert,
                         IsAllowedInetAccess = x.IsAllowedInetAccess,
                         SpecialInstructions = x.SpecialInstructions,
-                        SpEdStatus = x.SpEdStatus
+                        SpEdStatus = x.SpEdStatus,
+                        PhotoModifiedDate = x.PhotoModifiedDate
                     }).ToList();
                 da.Insert(ps);                
                 uow.Commit();
@@ -198,12 +205,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Person GetPerson(int id)
         {
-            return GetPersons(new PersonQuery
+            var res = GetPersons(new PersonQuery
                 {
                     PersonId = id,
                     Count = 1, 
                     Start = 0
-                }).Persons.First();
+                }).Persons.FirstOrDefault();
+            if (res == null) //in case if there is no corresponding school person
+                using (var uow = Read())
+                {
+                    res = new PersonDataAccess(uow, Context.SchoolLocalId).GetById(id);
+                }
+            return res;
         }
 
         public PersonDetails GetPersonDetails(int id)
@@ -232,7 +245,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     HasMedicalAlert = x.HasMedicalAlert,
                     IsAllowedInetAccess = x.IsAllowedInetAccess,
                     SpecialInstructions = x.SpecialInstructions,
-                    SpEdStatus = x.SpEdStatus
+                    SpEdStatus = x.SpEdStatus,
+                    PhotoModifiedDate = x.PhotoModifiedDate
                 }).ToList();
 
                 da.Update(res);
@@ -277,7 +291,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanChangeEmail(Person person)
         {
             return BaseSecurity.IsAdminEditorOrCurrentPerson(person.Id, Context)
-                   || (Context.Role == CoreRoles.TEACHER_ROLE && person.RoleRef == CoreRoles.STUDENT_ROLE.Id);
+                   || (Context.Role == CoreRoles.TEACHER_ROLE);
         }
 
         public void ActivatePerson(int id)
@@ -320,6 +334,35 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
+
+
+        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
+        {
+            if (Context.Role != CoreRoles.STUDENT_ROLE)
+            {
+                var healsConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
+                return healsConditions.Select(x => new StudentHealthCondition
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+                    IsAlert = x.IsAlert,
+                    MedicationType = x.MedicationType,
+                    Treatment = x.Treatment
+                }).ToList();   
+            }
+            return new List<StudentHealthCondition>();
+        }
+
+        public StudentSummeryInfo GetStudentSummaryInfo(int studentId)
+        {
+            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
+            var student = GetPerson(studentId);
+            var infractions = ServiceLocator.InfractionService.GetInfractions();
+            var res = StudentSummeryInfo.Create(student, nowDashboard, infractions, MapperFactory.GetMapper<StudentAnnouncement, Score>());
+            return res;
+        }
     }
 
     public class PersonInfo
@@ -340,5 +383,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
+        public DateTime? PhotoModifiedDate { get; set; }
     }
 }

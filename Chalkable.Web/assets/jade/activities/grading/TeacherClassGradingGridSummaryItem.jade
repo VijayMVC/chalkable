@@ -1,9 +1,13 @@
 mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
     normalValue = info.getNormalValue()
+    -numericV = parseFloat(normalValue)
+    if info.getGradeValue() && Number.isNaN(parseInt(info.getGradeValue(), 10)) && numericV
+        -normalValue= numericV.toFixed(2) + '(' + info.getGradeValue() + ')'
+
     div(
-        class= (parseInt(normalValue, 10) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : ""),
+        class= (!Number.isNaN(parseInt(normalValue, 10)) ? '' : 'letter ') + (info.isEmptyGrade() ? "empty-grade" : "") + (info.needStrikeThrough() ? ' dropped-value' : ''),
         data-id= info.getId(),
-        data-announcementid= info.getAnnouncementId(),
+        data-announcementid= parseInt(info.getAnnouncementId().valueOf(), 10),
         data-studentid= info.getStudentId(),
         data-dropped= info.isDropped(),
         data-islate= info.isLate(),
@@ -20,9 +24,46 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
         if gradable
             .edit-cell
 
+mixin StudentAverages(tpl)
+    each studentAvg, i in tpl.getStudentAverages()
+        .dotted-container.grade-container.with-horizontal-dots.avgs-container
+            text = tpl.getModel().displayAvgName(studentAvg)
+            div(data-tooltip=text).type-name=text
+            .time
+            .max-score.dotted-h
+            each average,i in studentAvg.getAverages()
+                div(
+                    row-index=i,
+                    class=(i == tpl.getRowIndex() ? 'active-row' : ''),
+                    data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
+                    data-average-id=average.getAverageId(),
+                    data-student-name=self.getStudents()[i].getStudentInfo().getDisplayName(),
+                    data-student-id=average.getStudentId().valueOf(),
+                    data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
+                    data-grading-period-name=self.getGradingPeriod().getName()
+                ).dotted-h.grade-value.gradable.avg-value-container
+                    +RenderWith(average, chlk.templates.grading.StudentAverageTpl)(
+                        ableDisplayAlphaGrades = self.isAbleDisplayAlphaGrades(),
+                        gradingPeriodId = self.getGradingPeriod().getId()
+                    )
+            .dotted-h.grade-value=tpl.getModel().displayGrade(studentAvg.getTotalAverage())
+
+mixin DisplayTotalPoints(model)
+    -totalPoints = model.getTotalPoints()
+    if totalPoints && model.isAbleDisplayTotalPoints()
+        .dotted-container.grade-container.with-horizontal-dots
+            div(data-tooltip=Msg.Total_Points).type-name= Msg.Total_Points
+            .time
+            .max-score.dotted-h
+            each totalPoint, i in totalPoints
+                div(row-index=i).dotted-h.grade-value=totalPoint
+            .dotted-h.grade-value
+
+
 .ann-types-container
     .dotted-container.name-container.with-horizontal-dots
         .type-name=Msg.Student(true)
+            +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
         .time
         .student-name
             .max-score.dotted-h
@@ -34,27 +75,34 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
                     div(data-tooltip="Withdrawn").withdrawn
         .student-name
             .dotted-h=Msg.Avg
+            if self.getGradingPeriod().isAblePostGradeBook()
+                +ActionLinkButton('grading','postGradeBook', self.getClassId(), self.getGradingPeriod().getId(), self.getStandardId(), self.getCategoryId()).message-button.blue-gradient-btn.post-gradebook-button Post
     +LeftRightToolbar()(
         needDots = true,
         roundedDots = true,
         padding = 77
     ).grid-toolbar.i-b.big-arrows
-        .dotted-container.grade-container.with-horizontal-dots.avgs-container
-            +RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
+        if self.isAbleDisplayStudentAverage()
+            //+RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
+            +StudentAverages(self)
+        +DisplayTotalPoints(self)
         each announcement in self.getGradingItems()
             maxScore = announcement.getMaxScore()
             div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
-                div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
+                +ActionLink('announcement', 'view', announcement.getId())
+                    div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
                 .time=announcement.getExpiresDate().format('M d')
                 .max-score.dotted-h=maxScore
-                each info,i in announcement.getStudentAnnouncements().getItems()
+                studentItems = announcement.getStudentAnnouncements().getItems()
+                each info,i in studentItems
+                    gradable = announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent())
                     div(
                         row-index=i
                         data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                         data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
-                        data-gradable= announcement.isGradable(),
+                        data-gradable= gradable,
                         data-max-score= maxScore,
-                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (announcement.isGradable() ? ' gradable' : '')
+                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
                     ).dotted-h.grade-value
-                        +TeacherClassGradingGridSummaryCell(info, maxScore, announcement.isGradable())
-                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.getAvg()
+                        +TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
+                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.calculateGradesAvg()

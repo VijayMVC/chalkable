@@ -54,7 +54,7 @@ $(document).ready(function () {
         if (!form.validationEngine('validate')) { return; }
         var value = form.find('input[name=email]').val();
         form.find('input[type=submit]').attr('disabled', true);
-        jQuery.getJSON(WEB_SITE_ROOT + 'Account/ResetPassword.json', { email: value }, function (response, data) {
+        jQuery.getJSON(WEB_SITE_ROOT + 'User/ResetPassword.json', { email: value }, function (response, data) {
             form.find('input[type=submit]').attr('disabled', false);
         });
         return false;
@@ -66,7 +66,7 @@ $(document).ready(function () {
     });
 
 
-    $('#developer-signup').on('submit.dev-signup', function () {
+    $('#sign-up-form').on('submit.dev-signup', function () {
         var form = jQuery(this);
         if (!form.validationEngine('validate')) { return; }
         var options = {
@@ -75,16 +75,19 @@ $(document).ready(function () {
             dataType: "json",
             data: form.serialize(),
             success: function (response) {
+                form.find('input[type=submit]').prop('disabled', false);
                 if (response.Success == true) {
-                    form.off('submit.dev-signup');
-                    window.location.href = WEB_SITE_ROOT + 'Home/Developer.aspx';
+                    var role = response.data.Role.toLowerCase();
+                    window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 }
                 else {
-                    jQuery('.sign-in-errors').html(response.data.message || '');
+                    var text = response.data && response.data.message || '';
+                    if(text != '') $('#email2').validationEngine('showPrompt',text, 'red','topRight', false);
                 }
             }.bind(this)
         };
         jQuery.ajax(options);
+        form.find('input[type=submit]').prop('disabled', true);
         return false;
     });
 });

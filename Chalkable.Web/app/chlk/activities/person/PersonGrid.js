@@ -5,6 +5,8 @@ REQUIRE('chlk.templates.people.UsersGridTpl');
 
 NAMESPACE('chlk.activities.person', function () {
 
+    var timeout;
+
     /** @class chlk.activities.person.PersonGrid */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
@@ -25,6 +27,7 @@ NAMESPACE('chlk.activities.person', function () {
             [[ria.dom.Dom]],
             VOID, function submitFormWithStart(node){
                 var form = node.parent('form');
+                form.removeClass('working');
                 form.find('[name=start]').setValue(0);
                 form.trigger('submit');
             },
@@ -40,9 +43,12 @@ NAMESPACE('chlk.activities.person', function () {
             [ria.mvc.DomEventBind('keyup', '.people-search')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function filterKeyUp(node, event){
-                var value = node.getValue();
+                var value = node.getValue() || '';
+                clearTimeout(timeout);
                 if(value.length > 1){
-                    this.submitFormWithStart(node);
+                    timeout = setTimeout(function(){
+                        this.submitFormWithStart(node);
+                    }.bind(this), 500);
                     this.dom.find('.people-search-img').addClass('opacity0');
                     this.dom.find('.people-search-close').removeClass('opacity0');
                 }else{
@@ -65,14 +71,6 @@ NAMESPACE('chlk.activities.person', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function closeSearchClick(node, event){
                 this.clearSearch();
-            },
-
-            OVERRIDE, VOID, function onPartialRender_(model, msg_){
-                BASE(model, msg_);
-                if(model.getUsers){
-                    var count = model.getUsers().getTotalCount();
-                    this.dom.find('.total-count').setHTML( count + ' ' + Msg.Person(count != 1));
-                }
             }
         ]);
 });

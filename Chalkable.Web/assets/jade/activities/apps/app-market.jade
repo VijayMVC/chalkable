@@ -3,14 +3,14 @@ mixin AppIconLink(app)
     +ActionLink('appmarket', 'details', appId).app-icon-link
         .app-list-item
             .icon
-                pictureUrl = self.getPictureURL(app.getSmallPictureId(), 74, 74)
+                pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
                 img(src=pictureUrl)
             .description
                 .name=app.getName()
                 .shortdesc=app.getShortDescription()
 
 .app-market
-    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels)
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels, true)
     .app-screenshots-panel
         +Carousel()
             each item, index in self.getMarketScreenshots()
@@ -18,10 +18,8 @@ mixin AppIconLink(app)
                     +ActionLink('appmarket', 'details', item.getAppId())(title=item.getPicture().getTitle())
                         img(src=item.getPicture().getPictureUrl())
 
-
-
     +ActionForm('appmarket', 'list')#app-market-filter
-        +Hidden('start',self.apps.getPageIndex()) * self.apps.getPageSize())
+        +Hidden('start', self.apps.getPageIndex())
         +Hidden('totalCount', self.apps.getTotalCount())
         +Hidden('pageSize', self.apps.getPageSize())
         +Hidden('scroll', 0)

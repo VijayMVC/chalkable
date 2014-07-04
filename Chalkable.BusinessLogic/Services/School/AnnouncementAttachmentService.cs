@@ -89,11 +89,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 atts = da.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
                 if(CoreRoles.TEACHER_ROLE != Context.Role)
-                    ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
+                    ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(atts.Last()), content);
                 
                 if (ann.State != AnnouncementState.Draft)
                 {
-                    if (Context.UserLocalId == ann.PersonRef)
+                    if (ann.IsOwner)
                         ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
                     else
                         ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserLocalId.Value);
@@ -101,6 +101,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return ann;
         }
+
+        private string GenerateKeyForBlob(AnnouncementAttachment announcementAttachment)
+        {
+            var res = announcementAttachment.Id.ToString();
+            if (Context.DistrictId.HasValue)
+                return string.Format("{0}_{1}", res, Context.DistrictId.Value);
+            return res;
+        }
+
 
         public void DeleteAttachment(int announcementAttachmentId)
         {
@@ -113,7 +122,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 da.Delete(annAtt.Id);
                 if(!annAtt.SisAttachmentId.HasValue)
-                    ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString());
+                    ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(annAtt));
                 else
                 {
                     if(!Context.UserLocalId.HasValue)
@@ -183,7 +192,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var att = GetAttachmentById(announcementAttachmentId);
             var content = att.SisAttachmentId.HasValue 
                                  ? ConnectorLocator.AttachmentConnector.GetAttachmentContent(att.SisAttachmentId.Value)
-                                 : ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
+                                 : ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(att));
             return AttachmentContentInfo.Create(att, content);
         }
        

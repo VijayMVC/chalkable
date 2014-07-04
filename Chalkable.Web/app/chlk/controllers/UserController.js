@@ -28,8 +28,9 @@ NAMESPACE('chlk.controllers', function (){
 
 
             [[chlk.models.common.PaginatedList, Number, Boolean, String]],
-            chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_){
-                return new chlk.models.people.UsersList(this.prepareUsers(users, null), byLastName, selectedIndex, filter_);
+            chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_, rolesText_){
+                return new chlk.models.people.UsersList(this.prepareUsers(users, null)
+                    , byLastName, selectedIndex, filter_, null, this.getCurrentRole(), this.getCurrentPerson(), rolesText_);
             },
 
             [[chlk.models.common.PaginatedList, Number]],
@@ -52,7 +53,7 @@ NAMESPACE('chlk.controllers', function (){
                         case 1: str = 'st';break;
                         case 2: str = 'n&#100;';break;
                         case 3: str = 'r&#100;';break;
-                        default: str = 'st';
+                        default: str = 'th';
                     }
                     res = 'M d' + str + ' yy';
                 }
@@ -69,7 +70,6 @@ NAMESPACE('chlk.controllers', function (){
                     };
                 phones.forEach(function(item){
                     var values = {
-                        id: item.getId().valueOf(),
                         type: item.getType(),
                         isPrimary: item.isIsPrimary(),
                         value: item.getValue()
@@ -77,9 +77,9 @@ NAMESPACE('chlk.controllers', function (){
                     phonesValue.push(values);
                     if(item.isIsPrimary() && !model.getPrimaryPhone()){
                         model.setPrimaryPhone(item);
-                    }else{
-                        if(!model.getHomePhone())
-                            model.setHomePhone(item);
+                    }
+                    if(item.isHomePhone() && !model.getHomePhone()){
+                        model.setHomePhone(item);
                     }
                 });
                 model.setPhonesValue(JSON.stringify(phonesValue));
@@ -89,7 +89,7 @@ NAMESPACE('chlk.controllers', function (){
                 var roleId = currentPerson.getRole().getId();
 
                 //todo: rewrite
-                var isAbleToEdit = (roleId != chlk.models.common.RoleEnum.STUDENT.valueOf() && model.getId() == currentPerson.getId())
+                var isAbleToEdit = (model.getId() == currentPerson.getId())
                     || roleId == chlk.models.common.RoleEnum.ADMINEDIT.valueOf()
                     || roleId == chlk.models.common.RoleEnum.ADMINGRADE.valueOf();
                 model.setAbleEdit(isAbleToEdit);
@@ -148,11 +148,14 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.people.UserProfileViewData]],
             VOID, function setUserToSession(userProfileData){
-                this.getContext().getSession().set('userModel', userProfileData.getUser());
+                var isDemoUser = this.getContext().getSession().get(ChlkSessionConstants.DEMO_SCHOOL);
+                var user = userProfileData.getUser();
+                user.setDemoUser(isDemoUser);
+                this.getContext().getSession().set(ChlkSessionConstants.USER_MODEL, userProfileData.getUser());
             },
 
             chlk.models.people.UserProfileViewData,  function getUserFromSession(){
-                return this.getContext().getSession().get('userModel');
+                return this.getContext().getSession().get(ChlkSessionConstants.USER_MODEL);
             },
 
             [[chlk.models.id.SchoolPersonId, Object]],

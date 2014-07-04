@@ -16,38 +16,18 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this._handler = null;
             },
 
-            [ria.mvc.DomEventBind('click', '#add-reminder')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function addReminderClick(node, event){
-                this.dom.find('.new-reminder').removeClass('x-hidden');
-            },
-
             [ria.mvc.DomEventBind('change', '#expiresdate')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function dueDateChange(node, event){
-                var dt = new Date(node.getValue());
+                var dt = getDate(node.getValue());
                 if(!dt.valueOf())
                     node.setValue('');
-            },
-
-            [ria.mvc.DomEventBind('click', '#reminders-button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function showRemindersClick(node, event){
-                this.dom.find('.reminders-container').toggleClass('x-hidden');
             },
 
             [ria.mvc.DomEventBind('click', 'form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formClick(node, event){
 
-            },
-
-            [ria.mvc.DomEventBind('click', '.remove-reminder')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function removeReminderClick(node, event){
-                setTimeout(function(){
-                    node.parent('.reminder').remove();
-                }, 10);
             },
 
             [ria.mvc.DomEventBind('submit', '.announcement-form>FORM')],
@@ -73,12 +53,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('#save-form-button').remove();
             },
 
-            [ria.mvc.DomEventBind('change', '.reminder-input')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function inputChange(node, event){
-                this.addEditReminder(node);
-            },
-
             /*[ria.mvc.DomEventBind('click', '#content')],
              [[ria.dom.Dom, ria.dom.Event]],
              VOID, function focusContent(node, event){
@@ -100,7 +74,21 @@ NAMESPACE('chlk.activities.announcement', function () {
             },
 
 
-            [ria.mvc.DomEventBind('focus keydown keyup', '#content')],
+            [ria.mvc.DomEventBind('click', '.drawer-icon')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function drawerIconClick(node, event){
+                var dropDown = this.dom.find('.new-item-dropdown');
+                if(!dropDown.is(':visible')){
+                    node.setCss("opacity", 1);
+                    this.dom.find('#list-last-button').trigger('click');
+
+                }else{
+                    node.setCss("opacity", 0.5);
+                    dropDown.addClass('x-hidden');
+                }
+            },
+
+            [ria.mvc.DomEventBind('click keydown keyup', '#content')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function showDropDown(node, event){
                 if(this.dom.find('[name=announcementtypeid]').getValue() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()){
@@ -139,9 +127,9 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {
                 BASE(model, msg_);
-                if(model.getClass() == chlk.models.announcement.LastMessages){
+                /*if(model.getClass() == chlk.models.announcement.LastMessages){
                     this.dom.find('#content').trigger('focus');
-                }
+                }*/
 
                 if(model.getClass() == chlk.models.announcement.Reminder){
                     var parent = this.dom.find('.new-reminder');

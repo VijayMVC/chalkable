@@ -23,7 +23,17 @@ NAMESPACE('chlk.models.classes', function () {
             [ria.serialize.SerializeProperty('markingperiodsid')],
             ArrayOf(chlk.models.id.MarkingPeriodId), 'markingPeriodsId',
 
+            [ria.serialize.SerializeProperty('classnumber')],
+            String, 'classNumber',
+
             String, 'name',
+
+            READONLY, String, 'fullClassName',
+            String, function getFullClassName(){
+                var classNumber = this.getClassNumber();
+                if(classNumber) return classNumber + " " + this.getName();
+                return this.getName();
+            },
 
             chlk.models.people.User, 'teacher',
 

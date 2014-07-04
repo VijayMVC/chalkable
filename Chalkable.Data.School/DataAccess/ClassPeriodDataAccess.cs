@@ -120,7 +120,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 dbQuery.Parameters.Add("teacherId", query.TeacherId);
                 dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in (select [{2}].[{4}] from [{2}] where [{2}].[{3}] = @teacherId)"
-                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "Class", Class.TEACHER_REF_FIELD, Class.ID_FIELD);
+                    , classPeriodTName, ClassPeriod.CLASS_REF_FIELD, "ClassTeacher", ClassTeacher.PERSON_REF_FIELD, ClassTeacher.CLASS_REF_FIELD);
             }
 
             if (query.SchoolYearId.HasValue)

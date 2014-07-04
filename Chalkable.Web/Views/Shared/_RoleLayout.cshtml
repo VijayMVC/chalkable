@@ -1,4 +1,6 @@
-﻿@using Chalkable.Web.Common
+﻿@using Chalkable.Common
+@using Chalkable.Web.Common
+@using Chalkable.Web.Models.PersonViewDatas
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
@@ -20,7 +22,7 @@
 
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
-    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
     {
         ChlkHelpers.GoogleAnalytics();
         ChlkHelpers.Olark();
@@ -28,6 +30,7 @@
     @ChlkHelpers.RenderSiteRoot(Url)
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autosize-min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autoresize.min.js")"></script>
@@ -41,7 +44,7 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.validate.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/api/chlk-post-message-api.js")"></script>
+    <script type="text/javascript" src="~/Scripts/api/chlk-post-message-api.js"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.signaturepad.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.quicksand.js")"></script>
@@ -56,25 +59,28 @@
         <input type="hidden" value=" ServerDbTime:  @ViewData.GetValueOrNull("CurrentServerDBDateTime")"/>
 
         <div id="page-header">
-            Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+            Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
+            Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
         </div>
-
-        <div id="logout-block">
-            @Html.ActionLink("Go to INOW", "RedirectToINow", "User", null, new {style = "visibility: hidden;"})
-        </div>
-   
-
-        @{
-            var isDeveloper = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-            var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
+        
+         @{
+             var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
+             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
+             var demoSchoolPictureDistrictRef = ViewData.GetValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
         }
         
         
-
-    
+        
+        <div id="logout-block">
+        @if (!isDemoSchool && !isDeveloperSchool)
+        {
+            @Html.ActionLink("Go to INOW", "RedirectToINow", "User", null, new { style = "visibility: hidden;" })
+        }
+        </div>
+        
 
         <div class="page 
-        @if (isDemoSchool || isDeveloper)
+        @if (isDemoSchool || isDeveloperSchool)
         {
             @:demo
         }
@@ -98,40 +104,59 @@
             
             
         </div>
-        @if (isDemoSchool || isDeveloper)
+        @if (isDemoSchool || isDeveloperSchool)
         {
+            
+            var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
+            var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
+            var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
+            var isAdmin = currentRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id
+                || currentRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id || currentRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id;
+            var isStudent = currentRoleId == CoreRoles.STUDENT_ROLE.Id;
+                
             <div id="demo-footer" class="top">
             @if (isDeveloper)
             {
                 <div id="dev-apps-list"></div>
             }
-            else
+            else if (!isDeveloperSchool)
             {
                 <div id="fb">
                     <h>Don't be shy</h>
                     <div class="fb-like" data-href="https://chalkable.com" data-layout="button_count" data-send="true" data-width="55" data-show-faces="true"></div>
                     <a id="principal"></a>
                 </div>
-                    <div class="border demo-end"></div>
-                    <div class="demo-end">
-                        <h>Demo</h>
-                        <div id="demo-end-container"></div>
-                    </div>
+                <div class="border demo-end"></div>
+                <div class="demo-end">
+                    <h>Demo</h>
+                    <div id="demo-end-container"></div>
+                </div>
                 <div class="border"></div>
                 <div>
                     <h>Sign up</h>
                     <div id="demo-sign-up-container"></div>
                 </div>
+                
+                <div class="border"></div>
             }
 
-            <div class="border"></div>
+            
             <div id="roles-buttons">
-                @if (isDeveloper)
+                @if (isDeveloperSchool)
                 {
                     <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
-                >}<a class="demo-role-button" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
-                ><a class="demo-role-button" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
-                ><a class="demo-role-button" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
+                >}<a class="demo-role-button  @if (isStudent)
+                                              {
+                    @:active
+                }" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
+                ><a class="demo-role-button @if (isTeacher)
+                                            {
+                    @:active
+                }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
+                ><a class="demo-role-button @if (isAdmin)
+                                            {
+                    @:active
+                }" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
                 ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
                 ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
             </div>
@@ -145,6 +170,7 @@
             <div class="tooltip-content"></div>
             <div class="tooltip-triangle"></div>
         </div>
+        <div class="alerts-pop-up"></div>
         @RenderSection("MixPanelTracking", false)
         
 <script type="text/json" id="application-value" class="valuable-script">
@@ -225,12 +251,15 @@
                 return parseJsonToObj(json) || [];
             }
 
-            var school = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL)'); 
+            var school = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL)');
+            var schoolOptions = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL_OPTIONS)');
             var newNotifications = parseInt('@ViewData.GetValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT)', 10) || 0;
             var azurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.AZURE_PICTURE_URL)';
+            var demoAzurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.DEMO_AZURE_PICTURE_URL)';
 
             var USER_ROLE_EXT = '@ViewData.GetValueOrNull("Rolename")';
-            var currentSchoolYearId = '@ViewData.GetValueOrNull("CurrentSchoolYearId")';
+            var currentSchoolYearId = '@ViewData.GetValueOrNull(ViewConstants.CURR_SCHOOL_YEAR_ID)';
+            var serverTime = '@ViewData.GetValueOrNull(ViewConstants.SERVER_TIME)';
             var currentChlkPerson = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.CURRENT_PERSON)');
             var classesToFilter = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES)');
             var classesAdvancedData = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES_ADV_DATA)');
@@ -239,7 +268,9 @@
             classesAdvancedData && classesAdvancedData.forEach(function (el) {
                 classesInfo[el.classid] = {
                     mask: el.mask,
-                    typesByClass: el.typesbyclass
+                    typesByClass: el.typesbyclass,
+                    alphaGrades: el.alphagrades,
+                    alphaGradesForStandards: el.alphagradesforstandards
                 };
             });
 
@@ -248,11 +279,13 @@
             var gradingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.GRADING_PERIOD)');
             var finalizedClassesIds = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.FINALIZED_CLASSES_IDS)'); 
             var attendanceReasons = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ATTENDANCE_REASONS)');
-            var gradeLevels = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADE_LEVELS)');
+            var gradeLevels = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADE_LEVELS)') || [];
             var userClaims = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.USER_CLAIMS)');
             var alphaGrades = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALPHA_GRADES)');
             var alternateScores = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALTERNATE_SCORES)');
-            
+            var gradingComments = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADING_COMMMENTS)');
+            var DEMO_SCHOOL = JSON.parse('@isDemoSchool.ToString().ToLowerInvariant()');
+            var DEMO_SCHOOL_PICTURE_DISTRICT = '@demoSchoolPictureDistrictRef';
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
@@ -303,7 +336,7 @@
             })(roleAppScript);
         </script>
     }
-    
+    @ChlkHelpers.MixPanel() 
     @RenderSection("BottomScripts", false)
     
     

@@ -22,7 +22,7 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.AccountService, 'accountService',
 
         [[chlk.models.account.ChangePassword]],
-        function teacherChangePasswordAction(model){
+        function changePasswordAction(model){
             return this.accountService
                 .changePassword(model.getOldPassword(), model.getNewPassword(), model.getNewPasswordConfirmation())
                 .attach(this.validateResponse_())
@@ -39,6 +39,7 @@ NAMESPACE('chlk.controllers', function (){
                  .then(function(res){
                     if (res.isSuccess()){
                         location.href = this.getContext().getSession().get('webSiteRoot');
+                        return ria.async.BREAK;
                     }
                  }, this);
          },

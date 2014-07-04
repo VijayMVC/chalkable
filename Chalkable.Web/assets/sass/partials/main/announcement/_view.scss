@@ -51,7 +51,7 @@ $red-color: #842727;
   }
 
   .z-10{
-    z-index: 10;
+    //z-index: 10;
 
     &.selected{
       z-index: 11;
@@ -233,6 +233,23 @@ $red-color: #842727;
         font-size: 14px;
         word-spacing: -1px;
       }
+      p{
+        white-space: pre-wrap;
+      }
+
+      .standards-container{
+        .title{
+          font-weight: bold;
+          font-size: 15px;
+          text-shadow: 1px -1px 0px white;
+        }
+        .standard-list{
+          .grey-button{
+            padding: 7px 5px;
+            margin-right: 7px;
+          }
+        }
+      }
     }
 
     .left-block, .right-block{
@@ -381,271 +398,268 @@ $red-color: #842727;
     .grades-individual{
       position: relative;
 
-      .attachments-container{
-        display: none;
 
-        .announcement-item{
-          margin: 32px 0;
+    }
+  }
+}
 
-          &:nth-child(3n - 2){
-            margin-left: 39px;
-          }
+.people-list{
+  .attachments-container{
+    display: none;
 
-          &:not(:last-child){
-            margin-right: 32px;
-          }
+    .announcement-item{
+      margin: 32px 0;
 
-          &+.standards-block{
-            margin-top: -17px;
-          }
+      &:nth-child(3n - 2){
+        margin-left: 39px;
+      }
+
+      &:not(:last-child){
+        margin-right: 32px;
+      }
+
+      &+.standards-block{
+        margin-top: -17px;
+      }
+    }
+  }
+
+  .standards-block{
+    margin: 15px 11px 12px;
+  }
+
+  .standard-item{
+    display: inline-block;
+    float: right;
+    margin-left: 10px;
+  }
+
+  .grey-input{
+    width: 56px;
+    height: 21px;
+    line-height: 21px;
+    border: 1px solid #BCBCBC;
+    text-align: center;
+    @include border-radius(3px);
+
+    &.error{
+      border: 1px solid red;
+    }
+  }
+
+  .letters{
+    font-size: 10px;
+    color: #5F5F5F;
+    font-family: Arial;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  .row{
+
+    .top-content{
+      &.loading{
+        background: url(images/loaders/horizontal-small.gif) right 26px no-repeat;
+      }
+    }
+
+    &.selected:not(.readonly){
+      .name-block{
+        SPAN.container{
+          display: inline;
         }
       }
 
-      .standards-block{
-        margin: 15px 11px 12px;
-      }
-
-      .standard-item{
-        display: inline-block;
-        float: right;
-        margin-left: 10px;
-      }
-
-      .grey-input{
-        width: 56px;
-        height: 21px;
-        line-height: 21px;
-        border: 1px solid #BCBCBC;
-        text-align: center;
-        @include border-radius(3px);
-      }
-
-      .letters{
-        font-size: 10px;
-        color: #5F5F5F;
-        font-family: Arial;
-        letter-spacing: 1px;
-        text-align: center;
-      }
-
-      .row{
-
-        .top-content{
-          &.loading{
-            background: url(images/loaders/horizontal-small.gif) right 26px no-repeat;
-          }
+      .grade-block{
+        .selected{
+          display: block;
         }
 
-        &.selected:not(.readonly){
-          .name-block{
-            SPAN.container{
-              display: inline;
-            }
-          }
-
-          .grade-block{
-            .selected{
-              display: block;
-            }
-
-            .not-selected{
-              display: none;
-            }
-
-            .comment-icon{
-              display: none;
-            }
-          }
-        }
-
-        .alerts-pop-up{
+        .not-selected{
           display: none;
-          top: 72px;
-          right: -45px;
-          width: 166px;
-          padding: 0;
-
-          .alerts-pop-up-content{
-            overflow: hidden;
-            @include border-radius(6px);
-
-            .alerts-pop-up-item{
-              font: normal 12px Georgia italic;
-              color: #7c7c7c;
-              text-shadow: 0 1px 0 white;
-              padding: 10px 14px 14px;
-
-              &:not(:last-child) {
-                border-bottom: 1px solid #d7d7d7;
-              }
-
-              &.disabled{
-                color: #ababab;
-              }
-
-              &:hover{
-                background: #fafafa;
-              }
-            }
-          }
         }
 
-        .name-block, .grade-block{
-          vertical-align: middle;
+        .comment-icon{
+          display: none;
         }
+      }
+    }
 
-        .name-block{
-          margin-left: 10px;
+    .name-block, .grade-block{
+      vertical-align: middle;
+    }
 
-          p{
-            padding: 20px 0 2px 0;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            max-width: 328px;
+    .name-block{
+      margin-left: 10px;
+
+      p{
+        padding: 20px 0 2px 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 328px;
+      }
+
+      span.container{
+        font-size: 11px;
+        display: none;
+        position: absolute;
+        letter-spacing: 1px;
+        word-spacing: 8px;
+
+        .comment-grade{
+          position: relative;
+
+          .grading-comments-list{
+            margin: -20px 0 0 3px;
+            width: 303px;
+            z-index: 1;
           }
 
-          span.container{
-            font-size: 11px;
-            display: none;
+          .small-pop-up{
+            top: 28px;
+            left: -58px;
             position: absolute;
-            letter-spacing: 1px;
-            word-spacing: 8px;
+            border: 1px solid #b9b9b9;
+            @include border-radius(5px);
+            z-index: 100;
 
-            .comment-grade{
-              position: relative;
+            >DIV.container{
+              .triangle{
+                left: 70px;
+                top: -15px;
+                width: 26px;
+                height: 16px;
+                background: url(images/common/window-triangle-top.png) 0 0 no-repeat;
+              }
 
-              .small-pop-up{
-                top: 28px;
-                left: -10px;
-                position: absolute;
-                border: 1px solid #b9b9b9;
-                @include border-radius(5px);
-                z-index: 100;
+              >DIV{
+                display: table-row;
 
-                >DIV.container{
-                  >DIV{
-                    display: table-row;
+                >DIV{
+                  display: table-cell;
+                  vertical-align: top;
+                  IMG{
+                    width: 32px;
+                    height: 32px;
+                    background-repeat: no-repeat;
+                    background-position: 3px 2px;
+                  }
 
-                    >DIV{
-                      display: table-cell;
-                      vertical-align: top;
-                      IMG{
-                        width: 32px;
-                        height: 32px;
-                        background-repeat: no-repeat;
-                        background-position: 3px 2px;
-                      }
-
-                      TEXTAREA{
-                        width: 230px;
-                        margin: 2px 0 10px 5px;
-                      }
-                    }
+                  TEXTAREA{
+                    width: 297px;
+                    margin: 7px 3px 17px 3px;
+                    height: 39px;
                   }
                 }
               }
             }
-
-            a, SPAN{
-              text-decoration: none;
-              cursor: pointer;
-              color: #787878;
-            }
-
-            SPAN.dot{
-              position: relative;
-              top: -2px;
-              font-size: 20px;
-            }
           }
         }
 
-        .grade-block{
-          height: 25px;
-          overflow: visible;
+        a, SPAN{
+          text-decoration: none;
+          cursor: pointer;
+          color: #787878;
+        }
+
+        SPAN.dot{
           position: relative;
-          width: 175px;
-          padding-right: 45px;
-          margin-top: 13px;
+          top: -2px;
+          font-size: 20px;
+        }
+      }
+    }
+
+    .grade-block{
+      height: 25px;
+      overflow: visible;
+      position: relative;
+      width: 175px;
+      padding-right: 45px;
+      margin-top: 13px;
+
+      .text-value{
+        font-family: 'Reenie Beanie';
+        color: $red-color;
+        font-size: 40px;
+        display: block;
+        padding-left: 90px;
+        margin-top: -9px;
+        width: 60px;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .grade-triangle{
+        position: absolute;
+        right: 0;
+        top: 5px;
+        width: 24px;
+        height: 24px;
+        background: url(images/grading/student-arrow.png) center center no-repeat;
+        //border-top: 9px solid transparent;
+        //border-left: 10px solid #a5a5a5;
+        //border-bottom: 9px solid transparent;
+        @include transition-property("all");
+        @include transition-duration("0.5s");
+
+        &:not(.down){
+          @include transform(rotate(-90deg));
+        }
+      }
+
+      .alert-flag{
+        top: -24px;
+        right: 6px;
+      }
+
+      .selected{
+        display: none;
+        text-align: right;
+        margin-top: -9px;
+
+        .input-container{
+          margin-left: 6px;
+          position: relative;
+          display: inline-block;
+          width: 80px;
+          text-align: center;
+          vertical-align: top;
+          height: 41px;
 
           .text-value{
-            font-family: 'Reenie Beanie';
-            color: $red-color;
-            font-size: 40px;
-            display: block;
-            padding-left: 90px;
-            margin-top: -9px;
-            width: 60px;
-            text-align: center;
-          }
-
-          .grade-triangle{
-            position: absolute;
-            right: 0;
-            top: 5px;
-            width: 24px;
-            height: 24px;
-            background: url(images/grading/student-arrow.png) center center no-repeat;
-            //border-top: 9px solid transparent;
-            //border-left: 10px solid #a5a5a5;
-            //border-bottom: 9px solid transparent;
-            @include transition-property("all");
-            @include transition-duration("0.5s");
-
-            &:not(.down){
-              @include transform(rotate(-90deg));
-            }
-          }
-
-          .alert-flag{
-            top: -24px;
-            right: 6px;
-          }
-
-          .selected{
-            display: none;
-            text-align: right;
-            margin-top: -9px;
-
-            .input-container{
-              margin-left: 6px;
-              position: relative;
-              display: inline-block;
-              width: 80px;
-              text-align: center;
-              vertical-align: top;
-            }
-
-            .grading-input{
-              background: white;
-              text-align: center;
-              overflow: hidden;
-              vertical-align: middle;
-              margin: 10px 0 4px;
-
-              &.error{
-                border: 1px solid red;
-              }
-            }
-
-            .letters{
-              position: absolute;
-              display: block;
-              left: 26px;
-              bottom: -10px;
-            }
-          }
-
-          .comment-icon{
-            display: inline-block;
-            position: absolute;
-            height: 9px;
-            width: 11px;
-            right: -9px;
-            bottom: -5px;
-            background: url(images/grading/comment-icon.png) 0 0 no-repeat;
+            padding: 0;
           }
         }
+
+        .grading-input{
+          background: white;
+          text-align: center;
+          overflow: hidden;
+          vertical-align: middle;
+          margin: 10px 0 4px;
+
+          &.error{
+            border: 1px solid red;
+          }
+        }
+
+        .letters{
+          position: absolute;
+          display: block;
+          left: 26px;
+          bottom: -10px;
+        }
+      }
+
+      .comment-icon{
+        display: inline-block;
+        position: absolute;
+        height: 9px;
+        width: 11px;
+        right: -9px;
+        bottom: -5px;
+        background: url(images/grading/comment-icon.png) 0 0 no-repeat;
       }
     }
   }

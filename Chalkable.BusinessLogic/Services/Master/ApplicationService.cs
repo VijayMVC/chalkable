@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
             , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
 
+        IList<Application> GetApplicationsByIds(IList<Guid> ids);
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
         ApplicationRating WriteReview(Guid applicationId, int rating, string review);
@@ -82,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         {
                             Id = id,
                             UserId = Context.UserId,
-                            Role = Context.Role.Id
+                            Role = Context.Role.Id,
                         });
             }
         }
@@ -182,6 +183,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return new ApplicationRatingDataAccess(uow).Exists(applicationId, Context.UserId);
+            }
+        }
+
+
+        public IList<Application> GetApplicationsByIds(IList<Guid> ids)
+        {
+            using (var uow = Read())
+            {
+                return new ApplicationDataAccess(uow).GetByIds(ids);
             }
         }
     }

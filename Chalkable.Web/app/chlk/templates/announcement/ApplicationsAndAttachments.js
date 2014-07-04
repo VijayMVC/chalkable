@@ -31,7 +31,7 @@ NAMESPACE('chlk.templates.announcement', function () {
                         item.getOrder(),
                         chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION,
                         item.getName(),
-                        that.getPictureURL(item.getSmallPictureId(), 74, 74),
+                        that.getPictureURL(item.getSmallPictureId(), 74, 74, true),
                         item.getUrl(),
                         item.getEditUrl(),
                         item.getGradingViewUrl(),

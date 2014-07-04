@@ -28,7 +28,7 @@ NAMESPACE('chlk.templates.student', function () {
             Object, function getStatusData(){
                 var attType =this.getCurrentAttendanceType();
                 var res = {};
-                if(attType == chlk.models.attendance.AttendanceTypeEnum.NA){
+                if(!attType || attType == chlk.models.attendance.AttendanceTypeEnum.NA){
                     res.statusName = 'No attendance taken';
                     res.status = 'not-assigned';
                 }else{
@@ -42,44 +42,45 @@ NAMESPACE('chlk.templates.student', function () {
                 return this.buildGlanceBoxData_(this.getUser().getRankBox()
                     , function(item){ return item.getRank; }
                     , function(item){ return  item.getMarkingPeriodName; }
-                    , Msg.Recent);
+                    , Msg.Percentile, true);
             },
 
             Object, function buildAttendanceGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getAttendanceBox()
-                    , function(item){ return item.getAttendanceCount}
-                    , function(item){ return item.getType}
+                    , function(item){ return item.getAbsences}
+                    , function(item){ return item.getClazz().getName}
                     , Msg.Attendance);
             },
 
             Object, function buildDisciplineGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getDisciplineBox()
-                    , function(item){ return item.getCount}
-                    , function(item){ return item.getDisciplineName}
+                    , function(item){ return item.getTotal}
+                    , function(item){ return item.getDisciplineType().getName}
                     , Msg.Discipline);
             },
 
             Object, function buildGradesGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getGradesBox()
                     , function(item){ return item.getGrade}
-                    , function(item){ return item.getAnnouncementTypeName}
-                    , Msg.Percentile);
+                    , function(item){ return item.getAnnouncementTitle}
+                    , Msg.Recent);
             },
 
-            [[Object, Function, Function, String]],
-            Object, function buildGlanceBoxData_(boxData, getTotalMethod, getSummaryMethod, title){
+            [[Object, Function, Function, String, Boolean]],
+            Object, function buildGlanceBoxData_(boxData, getTotalMethod, getSummaryMethod, title, noHover_){
                 var items = [];
                 var hoverItems = boxData.getHover();
-                for(var i = 0; i < hoverItems.length; i++){
-                    items.push({
-                        data: hoverItems[i],
-                        getTotalMethod: getTotalMethod(hoverItems[i]),
-                        getSummaryMethod: getSummaryMethod(hoverItems[i])
-                    });
-                }
+                if(hoverItems)
+                    for(var i = 0; i < hoverItems.length; i++){
+                        items.push({
+                            data: hoverItems[i],
+                            getTotalMethod: getTotalMethod(hoverItems[i]),
+                            getSummaryMethod: getSummaryMethod(hoverItems[i])
+                        });
+                    }
                 return {
                     value: boxData.getTitle(),
-                    items: items,
+                    items: noHover_ ? null : items,
                     title: title
                 };
             }

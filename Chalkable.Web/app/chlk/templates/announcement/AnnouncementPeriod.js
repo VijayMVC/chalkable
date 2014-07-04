@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.common.ChlkDate, 'date',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'roomNumber'
+            Number, 'roomNumber',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'selectedClassId'
         ])
 });

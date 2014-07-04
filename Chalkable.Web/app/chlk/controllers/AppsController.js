@@ -129,7 +129,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        return this.Forward('apps', 'add', []);
+                        return this.Redirect('apps', 'add', []);
                     }
                     else
                         return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
@@ -288,9 +288,9 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(app){
-                    var apps = this.getContext().getSession().get('AnnoucementApplications', []);
+                    var apps = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_APPLICATIONS, []);
                     apps.push(app);
-                    this.getContext().getSession().set('AnnoucementApplications', apps);
+                    this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_APPLICATIONS, apps);
                     app.setCurrentModeUrl(app.getEditUrl());
                     return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
                 }, this);
@@ -365,12 +365,23 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.Application]],
         function createDeveloperAction(model){
             var devId = this.getCurrentPerson().getId();
-            return this.appsService
+            this.appsService
                 .createApp(devId, model.getName())
+                .catchError(function(error_){
+                    this.ShowMsgBox("App with this name already exists", "whoa.", [{
+                        text: 'Ok',
+                        controller: 'apps',
+                        action: 'general',
+                        params: [],
+                        color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                    }], 'center');
+                    return ria.async.BREAK;
+                }, this)
                 .attach(this.validateResponse_())
-                .then(function(){
-                    return this.Forward('apps', 'details', []);
+                .then(function(model){
+                    return this.BackgroundNavigate('apps', 'details', []);
                 }, this);
+            return this.ShadeLoader();
         },
 
         [chlk.controllers.AccessForRoles([
@@ -382,7 +393,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteApp(id)
                 .attach(this.validateResponse_())
                 .then(function(){
-                    return this.Forward('apps', 'details', []);
+                    return this.Redirect('apps', 'details', []);
                 }, this);
         },
 
@@ -391,7 +402,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.Application]],
         function updateApp(app) {
-            return this.Forward('apps', 'details', [app.getId().valueOf(), true]);
+            return this.BackgroundNavigate('apps', 'details', [app.getId().valueOf(), true]);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -513,9 +524,16 @@ NAMESPACE('chlk.controllers', function (){
                  )
                  .attach(this.validateResponse_())
                  .then(function(newApp){
+                     if(newApp.getMessage()){
+                         this.getView().pop();
+                         this.ShowMsgBox(newApp.getMessage(), null, [{
+                            text: 'Ok'
+                         }], 'center');
+                         return this.BackgroundUpdateView(chlk.activities.apps.AppInfoPage, new ria.async.DeferredData(new chlk.models.Success()), chlk.activities.lib.DontShowLoader())
+                     }
                      return this.updateApp(newApp);
                  }, this);
-             return result;
+             return this.ShadeLoader();
         },
 
 
@@ -531,7 +549,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return new chlk.models.apps.AppGeneralInfoViewData.$createFromReviews(data);
-                })
+                });
             return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result, 'loadReviews');
         },
 
@@ -546,7 +564,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        return this.Forward('apps', 'add', []);
+                        this.BackgroundNavigate('apps', 'add', []);
+                        return ria.async.BREAK;
                     }
                     else{
                         var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);
@@ -567,7 +586,7 @@ NAMESPACE('chlk.controllers', function (){
                                     data.getState(),
                                     pictureUrl,
                                     5, //todo: pass rating,
-                                    new chlk.models.common.ChlkDate(new Date()),
+                                    new chlk.models.common.ChlkDate(getDate()),
                                     appReviews,
                                     analytics || new chlk.models.developer.HomeAnalytics()
                                );

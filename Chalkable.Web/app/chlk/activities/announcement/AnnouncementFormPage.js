@@ -62,6 +62,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('#title').setValue(this.dom.find('.title-text').getHTML());
             },
 
+            [ria.mvc.DomEventBind('change', '.announcement-types-combo')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function typesComboClick(node, event){
+
+            },
+
             [ria.mvc.DomEventBind('click', '.announcement-type-button:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function typeClick(node, event){
@@ -73,14 +79,41 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
             },
 
+            [ria.mvc.DomEventBind('change', '#type-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function typeSelect(node, event, selected_){
+                var option = node.find(':selected');
+                var typeId = option.getData('typeid');
+                var typeName = option.getData('typename');
+                this.dom.find('input[name=announcementtypeid]').setValue(typeId);
+                this.dom.find('input[name=announcementtypename]').setValue(typeName);
+                this.dom.find('#announcement-type-btn').trigger('click');
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateTitle(tpl, model, msg_) {
-                if(!model.isData()){
+                if(!model.isData() && this.dom.find('#title').getValue()){
                     this.dom.find('.save-title-btn').setAttr('disabled', false);
                     this.dom.find('.title-block').removeClass('exists');
                 }else{
                     this.dom.find('.save-title-btn').setAttr('disabled', true);
                     this.dom.find('.title-block').addClass('exists');
+                }
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            VOID, function doSaveTitle(tpl, model, msg_) {
+
+            },
+
+            [ria.mvc.DomEventBind('keydown', '#title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function titleKeyDown(node, event){
+                if(event.which == ria.dom.Keys.ENTER.valueOf()){
+                    var btn = this.dom.find('.save-title-btn');
+                    if(!btn.getAttr('disabled'))
+                        btn.trigger('click');
+                    return false;
                 }
             },
 
@@ -112,8 +145,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
                         var titleBlock = dom.find('.title-block');
                         titleBlock.removeClass('active');
-                        var text = titleBlock.find('#title').text();
-                        if(titleBlock.hasClass('exists') || text == '' || text == null || text == undefined){
+                        var text = titleBlock.find('#title').getValue();
+                        if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == '' || text == null || text == undefined)){
                             titleBlock.removeClass('exists');
                             titleBlock.find('#title').setValue(titleBlock.find('.title-text').getHTML());
                         }

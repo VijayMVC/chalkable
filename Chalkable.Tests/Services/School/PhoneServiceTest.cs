@@ -18,7 +18,6 @@ namespace Chalkable.Tests.Services.School
             var digitValue = "+3809363236";
 
             //add phone security check
-            var phoneId = 1;
             AssertForDeny(sl => sl.PhoneService.Add(digitValue, FirstSchoolContext.FirstStudent.Id, phoneNumber, PhoneType.Home, true), FirstSchoolContext
                 , SchoolContextRoles.AdminGrade | SchoolContextRoles.AdminEditor | SchoolContextRoles.FirstParent
                 | SchoolContextRoles.Checkin | SchoolContextRoles.FirstTeacher | SchoolContextRoles.SecondStudent);

@@ -19,7 +19,8 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AttendanceController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetAttendance(SetClassAttendanceViewData data)
         {
             SchoolLocator.AttendanceService.SetClassAttendances(data.Date, data.ClassId, data.Items.Select(x=>new ClassAttendance
@@ -60,7 +61,8 @@ namespace Chalkable.Web.Controllers
                 AttendanceReasonRef = attendanceReasonId,
                 ClassRef = classId,
                 Date = date,
-                PersonRef = x.Id
+                PersonRef = x.Id,
+                Level = level
             }).ToList());
             return Json(true);
         }
@@ -128,7 +130,8 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ATTENDANCE_STUDENT_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance })]
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ATTENDANCE_STUDENT_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentAttendanceSummary(Guid personId, Guid markingPeriodId)
         {
             throw new NotImplementedException();
@@ -175,7 +178,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         public ActionResult AttendanceSummary(DateTime? date)
         {
-            return FakeJson("~/fakeData/attendanceSummary.json");
+            if(!Context.UserLocalId.HasValue)
+                throw new UnassignedUserException();
+            var schoolYearId = GetCurrentSchoolYearId();
+            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date ?? Context.NowSchoolTime.Date);
+            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.UserLocalId.Value, gradingPeriod.Id);
+            return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary));
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SEATING_CHART, true, CallType.Get, new[] { AppPermissionType.Attendance })]
@@ -186,15 +194,17 @@ namespace Chalkable.Web.Controllers
 
         private AttendanceSeatingChartViewData GetSeatingChart(DateTime? date, int classId) {
             var d = (date ?? Context.NowSchoolTime).Date;
-            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
+            var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d, true);
+            if(markingPeriod == null)
+                throw new NoMarkingPeriodException();
             var seatingChart = SchoolLocator.AttendanceService.GetSeatingChart(classId, markingPeriod.Id);
-            var attendances = ClassAttendanceList(d, classId);
-            var students = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            if (seatingChart != null)
             {
-                ClassId = classId,
-                RoleId = CoreRoles.STUDENT_ROLE.Id
-            });
-            return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);
+                var attendances = ClassAttendanceList(d, classId);
+                var students = SchoolLocator.ClassService.GetStudents(classId, true, markingPeriod.Id);
+                return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);               
+            }
+            return null;
         }
 
         [AuthorizationFilter("Teacher")]

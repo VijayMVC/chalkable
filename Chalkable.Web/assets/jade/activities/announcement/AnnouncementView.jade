@@ -12,12 +12,13 @@ mixin AnnouncementTooltip()
             .white.comment-triangle
 
 .announcement-view.not-transparent
-    isNotStudent = true
-    isReadonly = !self.isAnnOwner()
+    isReadonly = !self.isAbleToGrade()
     studentAnnouncements = false
     studentAnnouncementsInfo = self.getStudentAnnouncements()
     applications = self.getApplications()
     gradeViewApps = self.getGradeViewApps()
+    grade = self.getGrade()
+    hasGrade = self.isDropped() || grade || grade == 0
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
     +FeedItem(self).animated-item
@@ -28,21 +29,29 @@ mixin AnnouncementTooltip()
                 .left
                     +ActionLink('feed', 'list').back-button
                 .right
-                    +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
+                    if !self.getUserRole().isStudent()
+                        +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
         .announcement-details-panel
             .details-container.silver-panel
-                if self.getUserRole().isStudent()
+                if self.getUserRole().isStudent() && hasGrade
                     +AnnouncementTooltip().comment-grade-container
                         .comment=self.getComment() || Msg.Your_grade + ":"
-                        .grade-value= self.isDropped() ? Msg.Dropped : (self.getGrade() || '')
+                        .grade-value= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
                 if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
                     +AnnouncementTooltip().make-visible-container
                         .comment This item is hidden from students.
                         +ActionLink('announcement', 'makeVisible', self.getId()).make-visible-btn Make visible
                 br
                 .left-block
-                    +ActionLink('teachers', 'info', self.getOwner().getId())(data-tooltip=self.getOwner().getFullName()).image-container
-                        +PersonImg(self.getOwner(), 47)
+                    if self.getUserRole().isStudent()
+                        a(data-tooltip=self.getOwner().getFullName(),
+                        ).image-container
+                            +PersonImg(self.getOwner(), 47)
+                    else
+                        +ActionLink('teachers', 'info', self.getOwner().getId())(
+                            data-tooltip=self.getOwner().getFullName(),
+                        ).image-container
+                            +PersonImg(self.getOwner(), 47)
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()
@@ -50,6 +59,13 @@ mixin AnnouncementTooltip()
                         +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
                             userRole = self.getUserRole()
                         )
+                    if self.getStandards() && self.getStandards().length > 0
+                        .standards-container
+                            .title Standards:
+                            .standard-list
+                                each standard in self.getStandards()
+                                    .grey-button.same-on-hover
+                                        span=standard.getName()
             if self.getUserRole().isStudent()
                 .silver-panel.attachments-panel
                     .left-block.attachments
@@ -59,12 +75,11 @@ mixin AnnouncementTooltip()
                                 userRole = self.getUserRole()
                             )
             .questions-and-answers.silver-panel
-                -console.log(self.getModel().getCurrentUser())
                 +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
                     userRole = self.getUserRole()
                 )
-            .grading-part
-                if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length
+            div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
+                if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
                     +Hidden('maxScore', self.getMaxScore())#max-score
                     +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
                         autoGradeApps = self.getAutoGradeApps(),

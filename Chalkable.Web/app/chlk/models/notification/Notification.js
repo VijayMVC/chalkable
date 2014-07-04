@@ -2,6 +2,7 @@ REQUIRE('chlk.models.id.NotificationId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.ShortUserInfo');
+REQUIRE('chlk.models.common.ActionLinkModel');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.MessageId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
@@ -87,7 +88,7 @@ NAMESPACE('chlk.models.notification', function () {
                 switch (this.getType()){
                     //case notificationTypeEnum.SIMPLE: return new actionModelCl('announcement', 'view', [this.getAnnouncementId().valueOf()]);
                     case notificationTypeEnum.ANNOUNCEMENT: return new this.createActionModel_('announcement', 'view', [this.getAnnouncementId().valueOf()]);
-                    case notificationTypeEnum.MESSAGE: return new this.createActionModel_('message', 'page', [null, true]);
+                    case notificationTypeEnum.MESSAGE: return new this.createActionModel_('message', 'page', [false, true]);
                     case notificationTypeEnum.QUESTION: return new this.createActionModel_('announcement', 'view', [this.getAnnouncementId().valueOf()]);
 
                     case notificationTypeEnum.ITEM_TO_GRADE: return new this.createActionModel_('grades', 'view', [this.getAnnouncementId().valueOf()]);

@@ -96,6 +96,10 @@ NAMESPACE('ria.dom', function () {
                 return !!this._dom.valueOf()[0];
             },
 
+            String, function getSelector() {
+                return this._dom.selector;
+            },
+
             /* DatePicker */
             [[Object, Date]],
             SELF, function datepicker(options, value_){
@@ -239,6 +243,21 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            OVERRIDE, SELF, function insertBefore(dom) {
+                VALIDATE_ARG('dom', [SELF, String, Node], dom);
+
+                if(typeof dom == "string")
+                    dom = new SELF(dom);
+
+                var dest = dom instanceof Node ? dom : dom.valueOf().shift();
+                if(dest){
+                    VALIDATE_ARG('dom', [Node], dest);
+
+                    this._dom.insertBefore(dest);
+                }
+                return this;
+            },
+
             SELF, function appendChild(dom) {
                 VALIDATE_ARG('dom', [SELF, String, Node], dom);
 
@@ -350,7 +369,7 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, Object, function getAllAttrs() {},
             [[String]],
             OVERRIDE, Object, function getAttr(name) {
-                return this._dom.attr(name) || null;
+                return this._dom[0] && this._dom[0].getAttribute ? this._dom[0].getAttribute(name) || null : null;
             },
             OVERRIDE, Object, function getValue() {
                 return this._dom.val() || null;
@@ -359,7 +378,11 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, SELF, function setAllAttrs(obj) {},
             [[String, Object]],
             OVERRIDE, SELF, function setAttr(name, value) {
-                this._dom.attr(name, value);
+                this._dom[0] && this._dom.each(function(){
+                    if(this.setAttribute ){
+                        value ? this.setAttribute(name, value) : this.removeAttribute(name);
+                    }
+                });
                 return this;
             },
 
@@ -374,6 +397,14 @@ NAMESPACE('ria.dom', function () {
             [[Object]],
             OVERRIDE, SELF, function setValue(value) {
                 this._dom.val(value);
+                if(this.getAttr('type') == 'checkbox'){
+                    var node = this.parent().find('.hidden-checkbox');
+                    node.setValue(value);
+                    node.setData('value', value);
+                }
+                if(this._dom.is('select')){
+                    this._dom.trigger('change');
+                }
                 return this;
             },
 
@@ -484,22 +515,22 @@ NAMESPACE('ria.dom', function () {
 
             [[Number]],
             OVERRIDE, function scrollTop(top_) {
-                return top_ ? this._dom.scrollTop(top_) : this._dom.scrollTop();
+                return top_ || top_ == 0 ? this._dom.scrollTop(top_) : this._dom.scrollTop();
             },
 
             /* Form */
 
-            Object, function serialize(){
+            Object, function serialize(noArray_){
                 var o = {};
-                var array = this.dom.serializeArray();
-                array.forEach(function() {
-                    if (o[this.name] !== undefined) {
-                        if (!o[this.name].push) {
-                            o[this.name] = [o[this.name]];
+                var array = this._dom.serializeArray();
+                array.forEach(function(item) {
+                    if (o[item.name] !== undefined && !noArray_) {
+                        if (!o[item.name].push) {
+                            o[item.name] = [o[item.name]];
                         }
-                        o[this.name].push(this.value || '');
+                        o[item.name].push(item.value || '');
                     } else {
-                        o[this.name] = this.value || '';
+                        o[item.name] = item.value || '';
                     }
                 });
                 return o;

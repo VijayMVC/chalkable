@@ -11,8 +11,21 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.attendance.AttendanceSummary, 'summary',
 
+            [[Number, Number]],
+            String, function getColor(i, opacity_){
+                var colors =  ['rgba(204, 0, 0, 1)', 'rgba(204, 102, 0, 1)', 'rgba(0, 204, 204, 1)',
+                    'rgba(102, 204, 0, 1)', 'rgba(102, 0, 204, 1)', 'rgba(204, 204, 0, 1)',
+                    'rgba(0, 102, 204, 1)', 'rgba(0, 51, 0, 1)', 'rgba(255, 51, 153, 1)',
+                    'rgba(102, 51, 0, 1)', 'rgba(0, 102, 102, 1)'];
+                var color = colors[i % colors.length];
+                if(opacity_)
+                    color = color.replace(/, 1\)/, ', ' + opacity_.toString() + ')');
+                return color;
+            },
+
             [[ArrayOf(chlk.models.attendance.StudentSummaryItem)]],
             ArrayOf(Array), function getGroupedStudents(students){
+                if(!students.length) return [];
                 var res = [], res1=[];
                 students.forEach(function(item, index){
                     if(index && index % 18 == 0){
@@ -31,27 +44,42 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             [[chlk.models.attendance.AbsentLateSummaryItem]],
             Object, function getChartOptions(data){
-                var stats = data.getStat(), names = [], series = [];
-                stats.forEach(function(item){
-                    names.push(item.getSummary());
-                    series.push(item.getStudentCount());
+                var classesInfo = data.getClassesStats();
+                var series = [];
+                classesInfo.forEach(function(type, i){
+                    var data = [], sTooltips = {};
+                    type.getDayStats().forEach(function(item, i){
+                        var time = item.getDate().getDate().getTime();
+                        data.push([time, item.getStudentCount() || 0]);
+                    });
+
+                    series.push({
+                        name: '',
+                        marker: {
+                            enabled: false
+                        },
+                        color: 'rgba(193,193,193,0.5)',
+                        data: data
+                    });
                 });
 
                 return {
                     chart: {
-                        type: 'area',
                         width: 704,
                         height: 179
                     },
                     xAxis: {
-                        categories: names
+                        type: 'datetime',
+                        dateTimeLabelFormats: {
+                           day: '%b %e'
+                        }
                     },
-                    colors: ['#d8d8d8'],
 
-                    series: [{
-                        name: '',
-                        data: series
-                    }]
+                    yAxis: {
+                        min: 0
+                    },
+
+                    series: series
                 }
             }
         ])

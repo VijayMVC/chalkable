@@ -15,13 +15,25 @@
             .center
                 +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
                 +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
     .mps-container
+        .chlk-pop-up-container.popup-top.comment
+            .pop-up-triangle
+            div
+                h5=Msg.Add_comment
+                .text-container
+                    textarea(maxlength=500).comment-value
+                    .grading-comments-list
+                a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
+                a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
         each item,i in self.getItems()
             gradingPeriod = item.getGradingPeriod()
-            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+            currentGp = (gradingPeriod.getId() == self.getGradingPeriodId())
+            div(class=currentGp ? "open" : "", data-index=i).marking-period-container
                 div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
                     mpName = gradingPeriod.getName()
                     span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                    a(href="javascript:").grey-button.comment-button=Msg.Comment
                     .collapse
                 .mp-data
                     .ann-types-container
@@ -33,8 +45,6 @@
                                     div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
                                     if student.isWithdrawn()
                                         div(data-tooltip="Withdrawn").withdrawn
-                            .student-name
-                                .dotted-h=Msg.Avg
                         +LeftRightToolbar()(
                             needDots = true,
                             roundedDots = true,
@@ -45,16 +55,11 @@
                                     title = gradingItem.getTitle()
                                     div(data-tooltip=title, data-tooltip-type="overflow").type-name=title
                                     each info,i in gradingItem.getItems()
-                                        normalValue = info.getGradeValue()
-                                        div(row-index=i, class=(parseInt(normalValue, 10) ? '' : 'letter')).dotted-h.grade-value
-                                            .value=normalValue
-                                            .edit-cell
-                                            +ActionForm('grading', 'updateStandardGradeFromGrid')
-                                                +Hidden('standardid', info.getStandardId())
-                                                +Hidden('gradeid', info.getGradeId())
-                                                +Hidden('classid', info.getClassId())
-                                                +Hidden('gradingperiodid', info.getGradingPeriodId())
-                                                if item.getStudents()[i]
-                                                    +Hidden('studentid', item.getStudents()[i].getStudentInfo().getId())
-                                                input(value=normalValue, name="gradevalue").grade-autocomplete
-                                    .dotted-h.grade-value=gradingItem.getAlphaGradeNameAvg()
+                                        div(
+                                            row-index=i,
+                                            data-student-id=info.getStudentId().valueOf(),
+                                            data-standard-id=info.getStandardId().valueOf(),
+                                            data-grading-period-id=gradingPeriod.getId().valueOf()
+                                            class=((self.getAlphaGrades() && self.getAlphaGrades().length) ? 'gradable' : '')
+                                        ).dotted-h.grade-value.letter
+                                            +RenderWith(info, chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl)

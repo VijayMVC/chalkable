@@ -67,7 +67,13 @@ NAMESPACE('chlk.activities.attendance', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.SeatingChartTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'SeatingChartPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'savedChart')],
+            VOID, function updateSeatingChart(tpl, model, msg_) {
+
+            },
+
             chlk.models.attendance.SeatingChart, 'model',
 
             Array, function getAttendances_(){
@@ -103,6 +109,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                             body.css('padding-bottom', height);
                         }
                     }, 1);
+                }else{
+                    this.stopDragging();
                 }
             },
 
@@ -208,7 +216,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 setEmptyBoxHtml(parent);
                 var container = new ria.dom.Dom('.seating-chart-people')
                     .find('.people-container');
-                clone.insertAfter(container.find('.student-block:last'))
+                clone.insertBefore(container.find('#submit-chart'))
                     .removeClass('droppable')
                     .removeClass('ui-droppable');
                 jQuery(clone.valueOf()).draggable(draggableOptions);
@@ -233,20 +241,31 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var rows = this.dom.find('.seating-row').count();
                 var columns = this.dom.find('.seating-row:eq(0)').find('.student-block[data-index]').count();
                 var classId = this.dom.find('.class-id').getValue();
-                var seatingList = [];
+                var seatingList = [], minRows = 0, minColumns = 0;
                 this.dom.find('.seating-row').forEach(function(items){
                     var seatings = [];
                     items.find('.student-block[data-index]').forEach(function(node){
-                        var node2 = node.find('.image-container');
+                        var node2 = node.find('.image-container'),
+                            row = node.getData('row'),
+                            column = node.getData('column');
                         seatings.push({
                             index: node.getData('index'),
-                            row: node.getData('row'),
-                            column: node.getData('column'),
+                            row: row,
+                            column: column,
                             studentId: node2.exists() ? node2.getData('id') : null
-                        })
+                        });
+                        if(node2.exists()){
+                            if(row > minRows)
+                                minRows = row;
+                            if(column > minColumns)
+                                minColumns = column;
+                        }
                     });
                     seatingList.push(seatings);
                 }.bind(this));
+
+                this.dom.find('#min-rows').setValue(minRows);
+                this.dom.find('#min-columns').setValue(minColumns);
 
                 var res = {
                     rows: rows,
@@ -263,6 +282,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.find('.attendances-json').setValue(JSON.stringify(this.getAttendances_()));
                 this.dom.find('.save-attendances-form').trigger('submit');
                 node.setHTML('SAVING....');
+                node.parent('form').trigger('submit');
             },
 
             Boolean, 'ableRePost',
@@ -296,8 +316,18 @@ NAMESPACE('chlk.activities.attendance', function () {
                     chart.hide();
                 this.dom.removeClass('dragging-on');
                 if(activeDragging){
-                    $( ".droppable" ).droppable( "destroy" );
-                    $( ".draggable" ).draggable( "destroy" );
+                    if($( ".droppable" )[0])
+                        try{
+                            $( ".droppable" ).droppable( "destroy" );
+                        }catch(e){
+
+                        }
+                    if($( ".draggable" )[0])
+                        try{
+                            $( ".draggable" ).draggable( "destroy" );
+                        }catch(e){
+
+                        }
                     activeDragging = false;
                 }
                 setTimeout(function(){

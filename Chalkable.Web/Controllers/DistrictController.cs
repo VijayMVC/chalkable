@@ -14,7 +14,6 @@ namespace Chalkable.Web.Controllers
     {
         public ActionResult Register(DistrictRegisterViewData data)
         {
-            //http://sandbox.sti-k12.com/chalkable/api/chalkale/linkstatus?LinkKey=[LinkKeyGuid]
             string name = data.DistrictGuid.ToString();
             string timeZone = data.DistrictTimeZone ?? "UTC";
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
@@ -32,21 +31,22 @@ namespace Chalkable.Web.Controllers
                     throw new Exception("The link keys do not match.");
                 if (district == null)
                 {
-                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.SisUserName, data.SisPassword, timeZone);
+                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.RedirectUrl, data.SisUserName, data.SisPassword, timeZone);
                 }
                 else
                 {
                     district.Name = name;
-                    if (!string.IsNullOrEmpty(data.Password))
-                        district.SisPassword = data.Password;
+                    if (!string.IsNullOrEmpty(data.SisPassword))
+                        district.SisPassword = data.SisPassword;
                     district.SisUrl = data.ApiUrl;
                     district.SisUserName = data.SisUserName;
                     district.TimeZone = timeZone;
+                    district.SisRedirectUrl = data.RedirectUrl;
                     sl.DistrictService.Update(district);
                 }
                 return Json(true);
             }
-            return Json("Invalid credentials");
+            return new HttpUnauthorizedResult();
         }
 
         [RequireHttps]

@@ -417,11 +417,9 @@ namespace WindowsAzure.Acs.Oauth2
                     ServiceIdentityId = serviceIdentity.Id,
                     Permissions = scope
                 };
-
                 client.AddToDelegations(delegation);
                 client.SaveChanges();
             }
-
             return delegation.AuthorizationCode;
         }
     }

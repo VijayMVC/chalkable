@@ -14,4 +14,22 @@
             .center
                 +ActionLink('grading', "summary", selectedId).pressed=Msg.Item(true)
                 +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
-    p Not implemented yet
+                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+    .mps-container
+        each gradingPeriod,i in self.getGradingPeriods()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                item = self.getCurrentGradingBox()
+                div(
+                    data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
+                ).mp-title
+                    mpName = gradingPeriod.getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                    .grading-selects
+                        +ActionForm('grading', 'loadGradingPeriodSummary').load-grading-period
+                            +Hidden('classId', selectedId)
+                            +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                    //a(href="javascript:").grey-button.comment-button=Msg.Comment
+                    .collapse
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    if gradingPeriod.getId() == self.getGradingPeriodId()
+                        +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)

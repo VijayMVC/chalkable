@@ -9,6 +9,12 @@
       background: url(images/demo/demo-bg.png) 0 0 repeat;
       height: 79px;
 
+      .your-app-name{
+        width: 247px;
+        height: 129px;
+        margin-top: -129px;
+        background: url(images/app/your-app-name.png) center center no-repeat;
+      }
 
       .add, .cancel{
         margin-top: 8px;

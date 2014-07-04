@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Developer GetDeveloperByDictrict(Guid districtId);
         Developer GetDeveloperById(Guid developerId);
         IList<Developer> GetDevelopers();
-        Developer Add(string login, string password, string name, string webSite, Guid districtId);
+        Developer Add(string login, string password, string name, string webSite);
         Developer Edit(Guid developerId, string name, string email, string webSite);
     }
     public class DeveloperService : MasterServiceBase, IDeveloperService
@@ -61,18 +61,18 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public Developer Add(string login, string password, string name, string webSite, Guid districtId)
+        public Developer Add(string login, string password, string name, string webSite)
         {
             using (var uow = Update())
             {
-                var user = ServiceLocator.UserService.CreateDeveloperUser(login, password, districtId); // security here 
+                var user = ServiceLocator.UserService.CreateDeveloperUser(login, password); // security here 
                 var res = new Developer
                     {
                         Id = user.Id,
                         Name = name,
-                        DistrictRef = districtId,
                         WebSite = webSite,
-                        User = user
+                        User = user,
+                        DistrictRef = user.Id
                     };
                 new DeveloperDataAccess(uow).Insert(res);
                 uow.Commit();

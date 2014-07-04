@@ -1,40 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 {
-    public class PersonPictureService : PictureService
+    public interface IPersonPictureService
+    {
+        void UploadPicture(Guid districtId, int personId, byte[] content);
+        void DeletePicture(Guid districtId, int personId);
+    }
+
+    public class PersonPictureService : PictureService, IPersonPictureService
     {
         public PersonPictureService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)
         {
-            supportedSizes.Add(new PictureSize { Height = 24, Width = 24 });
-            supportedSizes.Add(new PictureSize { Height = 40, Width = 40 });
-            supportedSizes.Add(new PictureSize { Height = 47, Width = 47 });
-            supportedSizes.Add(new PictureSize { Height = 64, Width = 64 });
-            supportedSizes.Add(new PictureSize { Height = 128, Width = 128 });
-            supportedSizes.Add(new PictureSize { Height = 256, Width = 256 });
+            SupportedSizes.Add(new PictureSize { Height = 24, Width = 24 });
+            SupportedSizes.Add(new PictureSize { Height = 40, Width = 40 });
+            SupportedSizes.Add(new PictureSize { Height = 47, Width = 47 });
+            SupportedSizes.Add(new PictureSize { Height = 64, Width = 64 });
+            SupportedSizes.Add(new PictureSize { Height = 70, Width = 70 });
+            SupportedSizes.Add(new PictureSize { Height = 128, Width = 128 });
+            SupportedSizes.Add(new PictureSize { Height = 256, Width = 256 });
         }
 
-        public override void UploadPicture(Guid id, byte[] content)
+        public void UploadPicture(Guid districtId, int personId, byte[] content)
         {
-            if (!(BaseSecurity.IsAdminEditor(Context)
-                || (Context.Role == CoreRoles.TEACHER_ROLE && Context.UserId == id)))
+            if (!(BaseSecurity.IsAdminEditor(Context)))
                 throw new ChalkableSecurityException();
-            base.UploadPicture(id, content);
+            base.UploadPicture(GenerateKeyForBlob(districtId, personId), content);
         }
-        public override void DeletePicture(Guid id)
+        public void DeletePicture(Guid districtId, int personId)
         {
-            if (!(BaseSecurity.IsAdminEditor(Context)
-                || (Context.Role == CoreRoles.TEACHER_ROLE && Context.UserId == id)))
+            if (!(BaseSecurity.IsAdminEditor(Context)))
                 throw new ChalkableSecurityException();
-            base.DeletePicture(id);
+            base.DeletePicture(GenerateKeyForBlob(districtId, personId));
         }
+
+        private string GenerateKeyForBlob(Guid districtId, int personId)
+        {
+            return string.Format("{0}_{1}", districtId, personId);
+        }
+        
     }
 }

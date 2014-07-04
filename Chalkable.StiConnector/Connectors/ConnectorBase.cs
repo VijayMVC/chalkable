@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using Chalkable.Common;
 using Chalkable.Common.Web;
 using Chalkable.StiConnector.Connectors.Model;
@@ -17,10 +15,22 @@ using System.Configuration;
 
 namespace Chalkable.StiConnector.Connectors
 {
+    class WebClientGZip : WebClient
+    {
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            HttpWebRequest request = base.GetWebRequest(address) as HttpWebRequest;
+            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            return request;
+        }
+    }
+
     public class ConnectorBase
     {
         private const string STI_APPLICATION_KEY = "sti.application.key";
         
+        private const string ERROR_FORMAT = "Error calling : '{0}' ;\n ErrorMessage : {1}";
+        private const string REQUEST_TIME_MSG_FORMAT = "Request on : '{0}' \n Time : {1}";
         protected ConnectorLocator locator;
         public ConnectorBase(ConnectorLocator locator)
         {
@@ -29,7 +39,7 @@ namespace Chalkable.StiConnector.Connectors
 
         protected WebClient InitWebClient()
         {
-            var client = new WebClient();
+            var client = new WebClientGZip();
             InitHeaders(client.Headers);
             client.Encoding = Encoding.UTF8;
             client.Headers.Add("Content-Type", "application/json");
@@ -40,17 +50,24 @@ namespace Chalkable.StiConnector.Connectors
         {
             headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
             headers["ApplicationKey"] = string.Format("chalkable {0}", ConfigurationManager.AppSettings[STI_APPLICATION_KEY]);
+            headers["Accept-Encoding"] = "gzip, deflate";
         }
 
         public T Call<T>(string url, NameValueCollection parameters = null)
         {
-
+            
             var client = InitWebClient();
             MemoryStream stream = null;
             try
             {
                 client.QueryString = parameters ?? new NameValueCollection();
+                var startTime = DateTime.Now;
                 var data = client.DownloadData(url);
+                var endTime = DateTime.Now;
+                var time = endTime - startTime;
+                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
+
                 Debug.WriteLine(Encoding.UTF8.GetString(data));
                 stream = new MemoryStream(data);
 
@@ -66,6 +83,7 @@ namespace Chalkable.StiConnector.Connectors
                     return default(T);
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
+                Trace.TraceError(string.Format(ERROR_FORMAT, url, msg));
                 throw new Exception(msg);
             }
             finally
@@ -75,13 +93,13 @@ namespace Chalkable.StiConnector.Connectors
             }
         }
 
-        public T Post<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null) 
+        public byte[] Download<TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null,
+                                     HttpMethod httpMethod = null)
         {
             httpMethod = httpMethod ?? HttpMethod.Post;
-            var client = InitWebClient();           
+            var client = InitWebClient();
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             var stream = new MemoryStream();
-            MemoryStream stream2 = null;
             try
             {
                 client.QueryString = optionalParams ?? new NameValueCollection();
@@ -89,27 +107,82 @@ namespace Chalkable.StiConnector.Connectors
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
                 writer.Flush();
-                var data = client.UploadData(url, httpMethod.Method, stream.ToArray());
-                if (data != null && data.Length > 0)
-                {
-                    stream2 = new MemoryStream(data);
-                    return serializer.Deserialize<T>(new JsonTextReader(new StreamReader(stream2)));
-                }
-                return default(T);
+
+                var startTime = DateTime.Now;
+                var res = client.UploadData(url, httpMethod.Method, stream.ToArray());
+                var time = DateTime.Now - startTime; 
+                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
+
+                return res;
             }
             catch (WebException ex)
             {
+                if (ex.Response is HttpWebResponse &&
+                    (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                    return null;
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
+                Trace.TraceError(ERROR_FORMAT, url, msg);
                 throw new Exception(msg);
             }
             finally
             {
                 stream.Dispose();
-                if(stream2 != null)
-                    stream2.Dispose();
             }
         }
+
+        public byte[] Download(string url, NameValueCollection optionalParams = null)
+        {
+            
+            var client = InitWebClient();
+            Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
+            try
+            {
+
+                client.QueryString = optionalParams ?? new NameValueCollection();
+                
+                var startTime = DateTime.Now;
+                var res = client.DownloadData(url);
+                var time = DateTime.Now - startTime;
+                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
+
+                var type = client.ResponseHeaders[HttpResponseHeader.ContentType];
+                Debug.WriteLine(type);
+                return res;
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                if (ex.Response is HttpWebResponse &&
+                    (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                    return null;
+                var msg = reader.ReadToEnd();
+                Trace.TraceError(string.Format(ERROR_FORMAT, url, msg));
+                throw new Exception(msg);
+            }
+        }
+
+        public TReturn Post<TReturn, TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
+        {
+            var data = Download(url, obj, optionalParams, httpMethod);
+            if (data != null && data.Length > 0)
+            {
+                using (var stream2 = new MemoryStream(data))
+                {
+                    var serializer = new JsonSerializer();
+                    return serializer.Deserialize<TReturn>(new JsonTextReader(new StreamReader(stream2)));
+                }
+            }
+            return default(TReturn);
+        }
+
+        public T Post<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
+        {
+            return Post<T, T>(url, obj, optionalParams, httpMethod);
+        }
+
 
         public T PostWithFile<T>(string url, string fileName, byte[] fileContent, NameValueCollection parameters, HttpMethod method = null)
         {
@@ -121,11 +194,17 @@ namespace Chalkable.StiConnector.Connectors
 
         public void Delete(string url) 
         {
-            Post<Object>(url, null, null, HttpMethod.Delete);
+            Post<Object,Object>(url, null, null, HttpMethod.Delete);
         }
+
         public T Put<T>(string url, T obj)
         {
-            return Post(url, obj, null, HttpMethod.Put);
+            return Put<T, T>(url, obj);
+        }
+
+        public TReturn Put<TReturn, TPutObj>(string url, TPutObj obj)
+        {
+            return Post<TReturn, TPutObj>(url, obj, null, HttpMethod.Put);
         }
 
         private static void ThrowWebException(WebException exception)
@@ -161,27 +240,16 @@ namespace Chalkable.StiConnector.Connectors
         }
         public User GetMe()
         {
-            var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users"); //"http://localhost/Api/chalkable/users/me"; //
+            var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users"); 
             return Call<User>(url); 
         }
-    }
 
-    public class AttendanceConnector : ConnectorBase
-    {
-        public AttendanceConnector(ConnectorLocator locator) : base(locator)
+        public byte[] GetPhoto(int personId)
         {
-        }
-
-        public SectionAttendance GetSectionAttendance(DateTime date, int sectionId)
-        {
-            return Call<SectionAttendance>(string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString(Constants.DATE_FORMAT)));
-        }
-
-        public void SetSectionAttendance(int acadSessionId, DateTime date, int sectionId, SectionAttendance sectionAttendance)
-        {
-            string url = string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString(Constants.DATE_FORMAT));
-            Post(url, sectionAttendance);
-                        
+            var url = string.Format("{0}persons/{1}/photo", BaseUrl, personId);
+            return Download(url);
         }
     }
+
+
 }

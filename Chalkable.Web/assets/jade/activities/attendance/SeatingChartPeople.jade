@@ -1,11 +1,12 @@
-.seating-chart-people
+.seating-chart-people(class=self.isDemoSchool() ? "demo" : undefined)
     .x-close-btn.close-people.absolute
     .people-container
-        each item in self.getNotSeatingStudents()
-            .student-block.draggable
-                +RenderWith(item, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)(
-                    smallPicture = true
-                )
-        BUTTON(type="submit")#submit-chart.chlk-button.blue-gradient-btn=Msg.Save.toUpperCase()
+        if self.getNotSeatingStudents()
+            each item in self.getNotSeatingStudents()
+                .student-block.draggable
+                    +RenderWith(item, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)(
+                        smallPicture = true
+                    )
+            BUTTON(type="submit")#submit-chart.chlk-button.blue-gradient-btn=Msg.Save.toUpperCase()
 
 

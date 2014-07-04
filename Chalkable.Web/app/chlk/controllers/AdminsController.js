@@ -38,7 +38,7 @@ NAMESPACE('chlk.controllers', function (){
             ])],
 
             function peopleAction(){
-                var gradeLevels = this.getContext().getSession().get('gradeLevels');
+                var gradeLevels = this.getContext().getSession().get(ChlkSessionConstants.GRADE_LEVELS);
                 var roles = this.accountService.getSchoolRoles();
                 var res = this.adminService
                     .getUsers(null, null, null, true, 0)

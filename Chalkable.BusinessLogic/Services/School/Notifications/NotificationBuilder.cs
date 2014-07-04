@@ -173,10 +173,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  null, null, new { AnnouncementTitle = announcement.Title });
         }
 
-        public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement)
+        public Notification BuildAnnouncementQnToAuthorNotifiaction(AnnouncementQnAComplex announcementQnA, AnnouncementComplex announcement, Person answerer)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR,
-                                                 NotificationType.Question, announcementQnA.Answerer, announcement, null, null, null, 
+                                                 NotificationType.Question, answerer, announcement, null, null, null, 
                                                  announcementQnA.Asker, new
                                                      {
                                                          AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
@@ -231,7 +231,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                         || fromPersonRole == CoreRoles.STUDENT_ROLE,
                         ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
                         MessageSubject = privateMessage.Subject,
-                        MessageSender = privateMessage.Sender
+                        SenderName = privateMessage.Sender.RoleRef == CoreRoles.STUDENT_ROLE.Id
+                                        ? privateMessage.Sender.FullName
+                                        : privateMessage.Sender.ShortSalutationName 
                     };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
                                                     NotificationType.Message, toPerson, null, null, null,

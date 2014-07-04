@@ -30,7 +30,10 @@ NAMESPACE('chlk.templates.messages', function () {
             Boolean, 'replay',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'sent'
+            chlk.models.common.ChlkDate, 'sent',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inbox'
         ])
 });
 

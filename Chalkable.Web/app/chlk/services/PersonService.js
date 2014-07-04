@@ -38,14 +38,16 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId, Number]],
             String, function getPictureURL(personId, size_){
-                var url = window.azurePictureUrl + personId.valueOf();
+                var url = window.azurePictureUrl + window.school.districtid + '_' + personId.valueOf();
                 return size_ ? (url + '-' + size_ + 'x' + size_): url;
             },
 
             [[String]],
             ria.async.Future, function getPersons(filter_) {
                 return this.getPaginatedList('Person/GetPersons.json', chlk.models.people.User, {
-                    filter: filter_
+                    filter: filter_,
+                    start: 0,
+                    count: 10000
                 })
                 .then(function(model){return model.getItems();});
             },

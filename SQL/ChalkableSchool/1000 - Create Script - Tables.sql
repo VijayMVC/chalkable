@@ -664,3 +664,4 @@ go
 
 drop table StudentAnnouncement
 go
+

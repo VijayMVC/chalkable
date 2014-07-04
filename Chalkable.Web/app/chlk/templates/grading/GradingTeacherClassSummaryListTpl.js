@@ -24,10 +24,10 @@ NAMESPACE('chlk.templates.grading', function () {
                         right = lastRight + interval;
                     lastRight = right;
                     student.setRight(right);
-                    if(well.filter(function(item){return item.getId() == student.getId()}).length)
+                    if((well || []).filter(function(item){return item.getId() == student.getId()}).length)
                         student.setWellTroubleType(chlk.models.grading.StudentWellTroubleEnum.WELL);
                     else
-                        if(trouble.filter(function(item){return item.getId() == student.getId()}).length)
+                        if((trouble || []).filter(function(item){return item.getId() == student.getId()}).length)
                             student.setWellTroubleType(chlk.models.grading.StudentWellTroubleEnum.TROUBLE);
                         else
                             student.setWellTroubleType(chlk.models.grading.StudentWellTroubleEnum.NORMALL);

@@ -31,33 +31,40 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
-        [[chlk.models.common.ChlkDate]],
-        function showMonthDayPopUpAction(date) {
+        [chlk.controllers.SidebarButton('calendar')],
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+        function showMonthDayPopUpAction(date, classId_) {
             var result = this.calendarService
                 .getMonthDayInfo(date)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                    if(classId_)
+                        model.setSelectedClassId(classId_);
                     return model;
                 });
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
         },
 
-        [[chlk.models.common.ChlkDate, Number]],
-        function showDayPopUpAction(date, periodNumber) {
+        [chlk.controllers.SidebarButton('calendar')],
+        [[chlk.models.common.ChlkDate, Number, chlk.models.id.ClassId]],
+        function showDayPopUpAction(date, periodNumber, classId_) {
             var result = this.calendarService
                 .getDayPopupInfo(date, periodNumber)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     model.setDate(date);
+                    if(classId_)
+                        model.setSelectedClassId(classId_);
                     return model;
                 });
             return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
         },
 
-        [[chlk.models.common.ChlkDate, Number]],
-        function showWeekBarPopUpAction(date, periodNumber_) {
+        [chlk.controllers.SidebarButton('calendar')],
+        [[chlk.models.common.ChlkDate, Number, chlk.models.id.ClassId]],
+        function showWeekBarPopUpAction(date, periodNumber_, classId_) {
             var result = this.calendarService
                 .getWeekDayInfo(date, periodNumber_)
                 .attach(this.validateResponse_())
@@ -65,6 +72,8 @@ NAMESPACE('chlk.controllers', function (){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     if(periodNumber_ >= 0)
                         model.setDate(date);
+                    if(classId_)
+                        model.setSelectedClassId(classId_);
                     return model;
                 });
             if(periodNumber_ >= 0)

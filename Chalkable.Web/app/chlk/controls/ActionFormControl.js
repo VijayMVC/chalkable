@@ -100,14 +100,14 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submit($target, event) {
                 $target.removeClass('cancelled-submit');
-                if ($target.hasClass('disabled'))
+                if ($target.hasClass('disabled') || $target.hasClass('working'))
                     return false;
                 var controller = $target.getData('controller');
                 if (controller) {
 
                     var $form = jQuery($target.valueOf()[0]);
 
-                    if(!$target.getData('submit-skip') && this.isOnlySubmitValidate()) {
+                    if(!$target.getData('submit-skip') && (this.isOnlySubmitValidate() || $form.attr('onlySubmitValidate'))) {
                         $form.validationEngine('attach', {
                             onSuccess: function(form, status){
                                 $form.validationEngine('detach');
@@ -134,6 +134,9 @@ NAMESPACE('chlk.controls', function () {
                         $target.setData('submit-name', null);
                         $target.setData('submit-value', null);
                         $target.setData('submit-type', value);
+
+                        if(!$target.hasClass('no-working'))
+                            $target.addClass('working');
 
                         var isPublic = !!$target.getData('public');
                         setTimeout(function () {

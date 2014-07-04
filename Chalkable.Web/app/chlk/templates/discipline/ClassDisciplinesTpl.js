@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.discipline',function(){
             [ria.templates.ModelPropertyBind],
             String, 'filter',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ablePostDiscipline',
+
             String, function getTotalText(){
                 var disciplines = this.getDisciplines();
                 var res = disciplines.length + ' ' + Msg.Student(disciplines.length != 1);
@@ -36,10 +39,20 @@ NAMESPACE('chlk.templates.discipline',function(){
             },
 
             [[chlk.models.discipline.Discipline]],
+            String, function getSelectedTypeIds(discipline){
+                var selectedDisciplineTypes = discipline.getDisciplineTypes();
+                var res = [];
+                for(var i = 0; i < selectedDisciplineTypes.length; i++){
+                    res.push(selectedDisciplineTypes[i].getId().valueOf());
+                }
+                return res.join(',');
+            },
+
+            [[chlk.models.discipline.Discipline]],
             Array, function getGroupDisciplineTypes(discipline){
                 var res = [];
                 var disciplineTypes = this.getDisciplineTypes();
-                var selectedDisciplineTypes = discipline.getDisciplineTypes();
+                var selectedDisciplineTypes = discipline.getDisciplineTypes() || [];
                 for(var i = 0; i < disciplineTypes.length; i++){
                     res.push({
                         disciplineTypeData: disciplineTypes[i],

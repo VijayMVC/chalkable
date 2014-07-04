@@ -32,14 +32,7 @@ NAMESPACE('chlk.controls', function () {
             text: ''
         },
         xAxis: {
-            categories: [],
-            lineWidth:0,
-            labels: {
-                formatter: function(){
-                    return '<div class="chart-label">' + this.value + '</div>';
-                },
-                useHTML: true
-            }
+            lineWidth:0
         },
         yAxis: {
             title: {
@@ -120,6 +113,13 @@ NAMESPACE('chlk.controls', function () {
                 }
                 var res = {};
                 if(!attrs.noExtends){
+                    if(!options.xAxis || !options.xAxis.dateTimeLabelFormats)
+                        defaultConfigs.xAxis.labels= {
+                            formatter: function(){
+                                return '<div class="chart-label">' + this.value + '</div>';
+                            },
+                            useHTML: true
+                        }
                     jQuery.extend(true, res, defaultConfigs,options);
                     var interval = res.yAxis.tickInterval;
                     if(interval && !res.yAxis.max){
@@ -138,7 +138,17 @@ NAMESPACE('chlk.controls', function () {
                 }else{
                     res = options;
                 }
-                this.queueReanimationCustom_(attrs.id, res);
+                res.plotOptions.series = {
+                    events: {
+                        mouseOver: function(event) {
+                            new ria.dom.Dom('#' + attrs.id).trigger('seriemouseover', [this, event]);
+                        },
+                        mouseOut: function(event) {
+                            new ria.dom.Dom('#' + attrs.id).trigger('seriemouseleave', [this, event]);
+                        }
+                    }
+                };
+                this.queueReanimation_(attrs.id, res);
                 delete attrs['data-options'];
                 return attrs;
             },
@@ -194,6 +204,9 @@ NAMESPACE('chlk.controls', function () {
                 options.chart.renderTo = node.valueOf()[0];
                 charts[id] = new Highcharts.Chart(options);
                 node.setData('chart', charts[id]);
+                setTimeout(function(node){
+                    node.addClass('processed');
+                }.bind(this, node), 1);
             }
         ]);
 });

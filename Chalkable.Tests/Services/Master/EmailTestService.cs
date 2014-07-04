@@ -56,6 +56,11 @@ namespace Chalkable.Tests.Services.Master
             return;
         }
 
+        public void SendResettedPasswordToDeveloper(Developer developer, string confirmationKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SendNotificationToPerson(Person person, string message)
         {
             return;

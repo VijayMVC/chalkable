@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.grading.ShortGradingClassSummaryGridItems');
 REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.models.schoolYear.GradingPeriod');
 
 NAMESPACE('chlk.templates.grading', function () {
     "use strict";
@@ -16,7 +17,7 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.announcement.ShortAnnouncementViewData), 'gradingItems',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.NameId, 'gradingPeriod',
+            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
 
             [ria.templates.ModelPropertyBind],
             Number, 'avg',
@@ -25,6 +26,21 @@ NAMESPACE('chlk.templates.grading', function () {
             Number, 'rowIndex',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'autoUpdate'
+            Boolean, 'autoUpdate',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayAlphaGrades',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayStudentAverage',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean , 'ableDisplayTotalPoints',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(Number), 'totalPoints'
         ]);
 });

@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.grading.StudentWithAvg');
+REQUIRE('chlk.models.school.SchoolOption');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -15,6 +16,8 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('gradingitems')],
             ArrayOf(TItem), 'gradingItems',
 
-            Number, 'avg'
+            Number, 'avg',
+
+            chlk.models.school.SchoolOption, 'schoolOptions'
         ]);
 });

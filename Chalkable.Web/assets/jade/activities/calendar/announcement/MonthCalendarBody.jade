@@ -19,7 +19,7 @@
             announcements = item.getAnnouncements()
             itemsArr = item.getItemsArray()
             disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !itemsArr.length
-            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'))(
+            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'), self.getTopData().getSelectedItemId())(
                 class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName() + (disablePopUp ? ' disabled' : ''))
             ).gradient-cnt.item
                 div
@@ -27,17 +27,18 @@
                     .space
                     max = 7;
                     if announcements.length > 0
-                        ul(class=item.getRole()).day-announcements
+                        ul(class=item.getRole()).day-announcements.calendar-items
                             each announcement,i in announcements
                                 if i < item.getAnnLimit() || announcements.length <= item.getAnnLimit()
-                                    li.items=announcement.getTitle()
+                                    li(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").items=announcement.getTitle()
                             if announcements.length > item.getAnnLimit()
                                 li +#{announcements.length - item.getAnnLimit() + 1} more
-                    ul.day-items
+                    ul(class=(announcements.length > 0 ? '' : 'calendar-items')).day-items
                         announcementsLen = announcements.length > 3 ? 3 : announcements.length;
                         maxLen = max - announcementsLen;
                         each annItem,i in itemsArr
+                            -console.info(annItem)
                             if i < maxLen || itemsArr.length <= maxLen
-                                li=annItem.title
+                                li(data-tooltip=annItem.title, data-tooltip-type="overflow")=annItem.title
                             if itemsArr.length > maxLen
                                 li +#{itemsArr.length - maxLen + 1} more

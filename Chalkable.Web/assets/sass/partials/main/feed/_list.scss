@@ -22,19 +22,19 @@ $star-size: 18px;
     .feed-notifications {
       .new-notification-count{
         background-color: red;
-        @include border-radius(5px);
+        @include border-radius(2px);
         width: auto;
-        padding: 0px 2px 0px 2px;
+        padding: 0px 1px;
         color: white;
         position: absolute;
-        font-weight: bold;
-        top: -8px;
-        left: -7px;
+        top: 2px;
+        right: 104px;
+        text-shadow: none;
+        font-size: 11px;
       }
 
-      background: url(images/icons/new-notifications.png) 0% 50% no-repeat;
-      margin: 8px 5px 0px 7px;
-      padding: 0px 3px 0px 26px;
+      background: url(images/icons/new-notifications.png) 15px 5px no-repeat;
+      padding: 6px 13px 10px 43px;
       color: #828285;
       font-size: 12px;
       border: 0 none;
@@ -43,6 +43,8 @@ $star-size: 18px;
       outline: 0 none;
       float: right;
       position: relative;
+      text-shadow: 1px 1px 0 white;
+
       a{
         position: absolute;
         top: 0;
@@ -55,38 +57,36 @@ $star-size: 18px;
   .action-bar{
     .container{
       .i-b{
-        .pr, .unpr{
-          overflow: hidden;
-          width: 188px;
-          height: 31px;
-          margin-left: 5px;
-          color: #ffffff;
-          &:hover{
-            color: #ffff00;
+        BUTTON.done-undone-button{
+          width: 83px;
+        }
+
+        .done-undone-button{
+          vertical-align: middle;
+          padding: 5px;
+          height: auto;
+          width: 67px;
+          margin: 2px 3px;
+          font: normal 14px Arial;
+          cursor: pointer;
+          @include border-radius(6px);
+          font: normal 13px Arial;
+
+          &.blue-button{
+            .action-link{
+              color: white;
+              text-shadow: none;
+            }
           }
 
-          span{
-            text-shadow: none;
-            font: normal 11px arial,tahoma,verdana,helvetica;
-            font-weight: bold;
+          &:first-child{
+            margin-left: 3px;
+          }
 
-            width: 20px;
-            display: inline-block;
-            text-align: center;
-            margin-bottom: 6px;
-            vertical-align: middle;
-          }
-        }
-        .pr{
-          background: url(images/feed/rocket-sprite.png) 0px 0px no-repeat;
-          span{
-            margin-left: 27px;
-          }
-        }
-        .unpr{
-          background: url(images/feed/rocket-sprite.png) 0px -31px no-repeat;
-          span{
-            margin-left: 34px;
+          .action-link{
+            line-height: 11px;
+            height: auto;
+            font: normal 13px Arial;
           }
         }
       }
@@ -129,6 +129,25 @@ $star-size: 18px;
   background: url(images/feed/item-bg.png) 0 top repeat-x;
   @include border-radius(7px);
 
+  &:not(.complete){
+    .attachment{
+      .animated-header, p.animated{
+        opacity: 1;
+      }
+    }
+  }
+
+  &.complete{
+    text-decoration: line-through;
+
+    DIV.item-type DIV.attachment{
+      p, h2, div{
+        text-shadow: none;
+      }
+    }
+  }
+
+
   &.animated-item{
     DIV.item-type{
       DIV.attachment{
@@ -148,10 +167,15 @@ $star-size: 18px;
     width: 643px;
   }
 
-  &.starred {
+  &.complete {
+    .attachment{
+      .animated-header, p.animated{
+        opacity: 0.6;
+      }
+    }
     DIV.bullet {
       a.star {
-        background-position: 0 top;
+        background-position: center top;
       }
     }
   }
@@ -271,13 +295,13 @@ $star-size: 18px;
   }
 
   a.star {
-    background: url(images/feed/star.png) 0px bottom no-repeat;
+    background: url(images/feed/done-undone.png) center -36px no-repeat;
     position: absolute;
     top: 50%;
-    left: ($stared-width - $star-size) / 2;
-    margin-top: -1 * $star-size / 2;
-    width: $star-size;
-    height: $star-size;
+    left: 14px;
+    margin-top: -12px;
+    width: 25px;
+    height: 26px;
   }
 
   DIV.item-type {

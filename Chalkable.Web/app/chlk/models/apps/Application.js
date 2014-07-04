@@ -23,6 +23,8 @@ NAMESPACE('chlk.models.apps', function () {
         'Application', [
             chlk.models.id.AppId, 'id',
 
+            String, 'message',
+
             [ria.serialize.SerializeProperty('isinternal')],
             Boolean, 'internal',
 

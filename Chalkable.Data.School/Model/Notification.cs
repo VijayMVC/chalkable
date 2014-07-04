@@ -10,7 +10,6 @@ namespace Chalkable.Data.School.Model
         public const string SHOWN_FIELD = "Shown";
         public const string CREATED_FIELD = "Created";
         public const string PERSON_REF_FIELD = "PersonRef";
-        public const string CLASS_PERIOD_REF_FIELD = "ClassPeriodRef";
 
 
         [IdentityFieldAttr]

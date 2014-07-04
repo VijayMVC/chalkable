@@ -544,6 +544,15 @@ BODY {
                         padding: 0;
                         margin: 0 3px 0 0;
                         letter-spacing: -1px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                      }
+
+                      &.calendar-items{
+                        >LI:first-child{
+                          margin-right: 20px;
+                        }
                       }
                     }
                   }
@@ -577,7 +586,7 @@ BODY {
                         }
 
                         >SPAN.time {
-                          font-size: 8pt;
+                          font-size: 7pt;
                           color: #aaa;
                           top: 38px;
                           position: absolute;
@@ -684,6 +693,7 @@ BODY {
                           height: 40px;
                           position: relative;
                           text-shadow: #415a67 1px 1px 1px;
+                          width: 91px;
 
                           P{
                             display: block;

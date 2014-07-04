@@ -17,6 +17,9 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<AlphaGrade> GetAlphaGrades();
+
+        IList<AlphaGrade> GetAlphaGradesForClass(int classId);
+        IList<AlphaGrade> GetAlphaGradesForClassStandards(int classId);
     }
 
     public class AlphaGradeService : SchoolServiceBase, IAlphaGradeService
@@ -53,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new AlphaGradeDataAccess(uow, Context.SchoolLocalId).GetAll();
+                return new AlphaGradeDataAccess(uow, Context.SchoolLocalId).GetList();
             }
         }
 
@@ -77,6 +80,22 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 new AlphaGradeDataAccess(uow, null).Update(alphaGrades);
                 uow.Commit();
+            }
+        }
+        
+        public IList<AlphaGrade> GetAlphaGradesForClass(int classId)
+        {
+            using (var uow = Read())
+            {
+                return new AlphaGradeDataAccess(uow, Context.SchoolLocalId).GetForClass(classId);
+            }
+        }
+
+        public IList<AlphaGrade> GetAlphaGradesForClassStandards(int classId)
+        {
+            using (var uow = Read())
+            {
+                return new AlphaGradeDataAccess(uow, Context.SchoolLocalId).GetForClassStandards(classId); 
             }
         }
     }

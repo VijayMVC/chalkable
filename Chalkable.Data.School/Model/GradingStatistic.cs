@@ -22,6 +22,7 @@ namespace Chalkable.Data.School.Model
 
     public class StudentGradeAvgPerClass : StudentGradeAvg
     {
+        public bool Exempt { get; set; }
         public int ClassRef { get; set; }
     }
 

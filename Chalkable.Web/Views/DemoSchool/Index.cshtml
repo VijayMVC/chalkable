@@ -3,7 +3,7 @@
 @model IList<RoleViewData>
 
 @{
-    Layout = "~/Views/Shared/_RoleLayout.cshtml";
+    Layout = "~/Views/Shared/_BasicDemoLayout.cshtml";
     ViewBag.Title = "Demo";
 }
 
@@ -15,7 +15,7 @@
         var demoPrefix = '@ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY)';
         
         jQuery(document).ready(function () {
-            if (thisBrowser.isIE) {
+            /*if (thisBrowser.isIE) {
                 var ffIcon = joinUrls(WEB_SITE_ROOT, "/Content/images/common/firefox-icon.png");
                 var chrIcon = joinUrls(WEB_SITE_ROOT, "/Content/images/common/chrome-icon.png");
                 var ieIcon = joinUrls(WEB_SITE_ROOT, "/Content/images/common/ie-icon.png");
@@ -34,7 +34,7 @@
                     height: 245,
                     close: true
                 });
-            };
+            };*/
 
             jQuery('body').addClass('login');
             jQuery('.demo').animate({

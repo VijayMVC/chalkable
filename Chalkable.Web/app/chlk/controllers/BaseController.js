@@ -94,7 +94,7 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            chlk.models.common.Role, function getCurrentRole(){
-               return this.getContext().getSession().get('role');
+               return this.getContext().getSession().get(ChlkSessionConstants.USER_ROLE);
            },
 
            function ShadeLoader(){
@@ -132,29 +132,29 @@ NAMESPACE('chlk.controllers', function (){
 
            [[Number]],
            VOID, function setNewNotificationCount_(value){
-               this.getContext().getSession().set('newNotifications', value);
+               this.getContext().getSession().set(ChlkSessionConstants.NEW_NOTIFICATIONS, value);
            },
            Number, function getNewNotificationCount_(){
-               return this.getContext().getSession().get('newNotifications');
+               return this.getContext().getSession().get(ChlkSessionConstants.NEW_NOTIFICATIONS);
            },
 
            chlk.models.people.User, function getCurrentPerson(){
-               return this.getContext().getSession().get('currentPerson');
+               return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
            },
            [chlk.models.people.User],
            VOID, function updateCurrentPerson(user){
-               this.getContext().getSession().set('currentPerson', user);
+               this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PERSON, user);
            },
 
            chlk.models.schoolYear.MarkingPeriod, function getCurrentMarkingPeriod(){
-               return this.getContext().getSession().get('markingPeriod');
+               return this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
            },
            chlk.models.id.SchoolYearId, function getCurrentSchoolYearId(){
-               return this.getContext().getSession().get('currentSchoolYearId');
+               return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID);
            },
 
            ArrayOf(chlk.models.people.Claim), function getUserClaims_(){
-                return this.getContext().getSession().get('userClaims');
+                return this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS);
            },
            [[chlk.models.people.UserPermissionEnum]],
            Boolean, function hasUserPermission_(userPermission){
@@ -166,7 +166,7 @@ NAMESPACE('chlk.controllers', function (){
            OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state){
                var ref = new ria.reflection.ReflectionClass(this.getClass());
 
-               var role = this.getContext().getSession().get('role');
+               var role = this.getContext().getSession().get(ChlkSessionConstants.USER_ROLE);
                var roleAction = toCamelCase(state.getAction()) + role.getRoleName() + 'Action';
                var method = ref.getMethodReflector(roleAction);
 
@@ -205,6 +205,7 @@ NAMESPACE('chlk.controllers', function (){
                }
                this.setNotAblePressSidebarButton(false);
            }
+
    ])
 
 });

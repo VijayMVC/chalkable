@@ -17,7 +17,9 @@ namespace Chalkable.StiConnector.Connectors
         public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires)
         {
             Token = token;
-            BaseUrl = baseUrl + "Api/";
+            if (!baseUrl.EndsWith("/"))
+                baseUrl += "/";
+            BaseUrl = baseUrl;
             TokenExpires = tokenExpires;
             InitServices();
         }
@@ -37,6 +39,9 @@ namespace Chalkable.StiConnector.Connectors
             StandardScoreConnector = new StandardScoreConnector(this);
             SeatingChartConnector = new SeatingChartConnector(this);
             LinkConnector = new LinkConnector(this);
+            DisciplineConnector = new DisciplineConnector(this);
+            ActivityCategoryConnnector = new ActivityCategoryConnnector(this);
+            StudentConnector = new StudentConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -52,6 +57,9 @@ namespace Chalkable.StiConnector.Connectors
         public StandardScoreConnector StandardScoreConnector { get; private set; }
         public SeatingChartConnector SeatingChartConnector { get; private set; }
         public LinkConnector LinkConnector { get; private set; }
+        public DisciplineConnector DisciplineConnector { get; private set; }
+        public ActivityCategoryConnnector ActivityCategoryConnnector { get; private set; }
+        public StudentConnector StudentConnector { get; private set; }
 
         public class TokenModel
         {
@@ -69,7 +77,7 @@ namespace Chalkable.StiConnector.Connectors
             client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentialsBase64;
             client.Encoding = Encoding.UTF8;
 
-            var url = string.Format("{0}Api/{1}", baseUrl, "token");
+            var url = string.Format("{0}{1}", baseUrl, "token");
             Debug.WriteLine(REQ_ON_FORMAT, url);
             var x = typeof(TokenModel);
             var ser = new DataContractJsonSerializer(x);
@@ -85,7 +93,7 @@ namespace Chalkable.StiConnector.Connectors
             {
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
-                throw new Exception(msg);
+                throw new Exception(ex.Message + Environment.NewLine + msg);
             }
             finally
             {

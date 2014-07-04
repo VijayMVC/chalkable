@@ -15,7 +15,6 @@ namespace Chalkable.BusinessLogic.Services.School
         ISchoolYearService SchoolYearService { get; }
         IAnnouncementQnAService AnnouncementQnAService { get; }
         IAnnouncementService AnnouncementService { get; }
-        IAnnouncementReminderService AnnouncementReminderService { get; }
         IAnnouncementAttachmentService AnnouncementAttachmentService { get; }
         IPhoneService PhoneService { get; }
         IPrivateMessageService PrivateMessageService { get; }
@@ -31,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradingStyleService GradingStyleService { get; }
         IStudentAnnouncementService StudentAnnouncementService { get; }
         IClassAnnouncementTypeService ClassAnnouncementTypeService { get; }
-        IDisciplineTypeService DisciplineTypeService { get; }
+        IInfractionService InfractionService { get; }
         IApplicationSchoolService ApplicationSchoolService { get; }
         IDisciplineService DisciplineService { get; }
         IGradingStatisticService GradingStatisticService { get; }
@@ -44,6 +43,12 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradingPeriodService GradingPeriodService { get; }
         ISyncService SyncService { get; }
         IGradingStandardService GradingStandardService { get; }
+        IReportingService ReportService { get; }
+        IGradingCommentService GradingCommentService { get; }
+        IGradingScaleService GradingScaleService { get; }
+        IClassroomOptionService ClassroomOptionService { get; }
+        ISisUserService SisUserService { get; }
+        IDbService SchoolDbService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
@@ -55,7 +60,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IClassService classService;
         private ISchoolYearService schoolYearService;
         private IAnnouncementQnAService announcementQnAService;
-        private IAnnouncementReminderService announcementReminderService;
         private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
         private IPhoneService phoneService;
@@ -72,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
         private IClassAnnouncementTypeService classClassAnnouncementTypeService;
-        private IDisciplineTypeService disciplineTypeService;
+        private IInfractionService infractionService;
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
         private IGradingStatisticService gradingStatisticService;
@@ -85,6 +89,12 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradingPeriodService gradingPeriodService;
         private ISyncService syncService;
         private IGradingStandardService gradingStandardService;
+        private IReportingService reportService;
+        private IGradingCommentService gradingCommentService;
+        private IGradingScaleService gradingScaleService;
+        private IClassroomOptionService classroomOptionService;
+        private ISisUserService sisUserService;
+        private IDbService schoolDbService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -97,7 +107,6 @@ namespace Chalkable.BusinessLogic.Services.School
             classService = new ClassService(this);
             schoolYearService = new SchoolYearService(this);
             announcementQnAService = new AnnouncementQnAService(this);
-            announcementReminderService = new AnnouncementReminderService(this);
             announcementService = new AnnouncementService(this);
             announcementAttachmentService = new AnnouncementAttachmentService(this);
             phoneService = new PhoneService(this);
@@ -114,7 +123,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingStyleService = new GradingStyleService(this);
             studentAnnouncementService = new StudentAnnouncementService(this);
             classClassAnnouncementTypeService = new ClassClassAnnouncementTypeService(this);
-            disciplineTypeService = new DisciplineTypeService(this);
+            infractionService = new InfractionService(this);
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DisciplineService(this);
             gradingStatisticService = new GradingStatisticService(this);
@@ -127,6 +136,12 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingPeriodService = new GradingPeriodService(this);
             syncService = new SyncService(this);
             gradingStandardService = new GradingStandardService(this);
+            reportService = new ReportingService(this);
+            gradingCommentService = new GradingCommentService(this);
+            gradingScaleService = new GradingScaleService(this);
+            classroomOptionService = new ClassroomOptionService(this);
+            sisUserService = new SisUserService(this);
+            schoolDbService = new DbService(Context != null ? Context.SchoolConnectionString : null);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -137,7 +152,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
         public IAnnouncementQnAService AnnouncementQnAService{ get { return announcementQnAService; } }
         public IAnnouncementService AnnouncementService { get { return announcementService; } }
-        public IAnnouncementReminderService AnnouncementReminderService { get { return announcementReminderService; } }
         public IAnnouncementAttachmentService AnnouncementAttachmentService { get { return announcementAttachmentService; } }
         public IPhoneService PhoneService { get { return phoneService; } }
         public IPrivateMessageService PrivateMessageService { get { return privateMessageService; } }
@@ -154,7 +168,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
         public IClassAnnouncementTypeService ClassAnnouncementTypeService { get { return classClassAnnouncementTypeService; } }
-        public IDisciplineTypeService DisciplineTypeService { get { return disciplineTypeService; } }
+        public IInfractionService InfractionService { get { return infractionService; } }
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
         public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }
@@ -166,7 +180,16 @@ namespace Chalkable.BusinessLogic.Services.School
         public IAlternateScoreService AlternateScoreService { get { return alternateScoreService; } }
         public IGradingPeriodService GradingPeriodService { get { return gradingPeriodService; } }
         public ISyncService SyncService { get { return syncService; } }
-        public IGradingStandardService GradingStandardService { get { return gradingStandardService; }
+        public IGradingStandardService GradingStandardService { get { return gradingStandardService; } }
+        public IReportingService ReportService { get { return reportService; } }
+        public IGradingCommentService GradingCommentService { get { return gradingCommentService; } }
+        public IGradingScaleService GradingScaleService { get { return gradingScaleService; } }
+        public IClassroomOptionService ClassroomOptionService { get { return classroomOptionService; } }
+        public ISisUserService SisUserService { get { return sisUserService; } }
+        public IDbService SchoolDbService
+        {
+            get { return schoolDbService; }
+            protected set { schoolDbService = value; }
         }
     }
 }

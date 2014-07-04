@@ -4,7 +4,13 @@ NAMESPACE('chlk.controls', function () {
 
     var lastClickedNode = null;
 
-    chlk.controls.getActionLinkControlLastNode = function () { return lastClickedNode; };
+    var lastClickedNodeSelector = null;
+
+    chlk.controls.getActionLinkControlLastNode = function () {
+        if(!lastClickedNode.exists() || !lastClickedNode.is(':visible'))
+            lastClickedNode = new ria.dom.Dom(lastClickedNodeSelector);
+        return lastClickedNode;
+    };
 
     function s (x) {
         if (x === undefined || x === null)
@@ -70,6 +76,7 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function onActionLinkClick(node, event) {
                 lastClickedNode = node;
+                lastClickedNodeSelector = node.getSelector();
 
                 var link = node.getData('link');
                 var args = this.parseLink_(link);

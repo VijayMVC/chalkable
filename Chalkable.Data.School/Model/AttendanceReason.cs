@@ -29,8 +29,8 @@ namespace Chalkable.Data.School.Model
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
-        public int AttendanceReasonRef { get; set; }
         public string Level { get; set; }
+        public int AttendanceReasonRef { get; set; }
         public bool IsDefault { get; set; }
 
         [NotDbFieldAttr]

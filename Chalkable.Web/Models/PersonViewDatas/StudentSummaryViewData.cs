@@ -19,8 +19,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string CurrentAttendanceType { get; set; }
         public int MaxPeriodNumber { get; set; }
         public IList<AnnouncementsClassPeriodViewData> PeriodSection { get; set; }
-        public IList<ClassViewData> ClassesSection { get; set; } 
-        public StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> AttendanceBox { get; set; }
+        public IList<ClassViewData> ClassesSection { get; set; }
+        public StudentHoverBoxViewData<TotalAbsencesPerClassViewData> AttendanceBox { get; set; }
         public StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
@@ -28,22 +28,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
         }
 
-        public static StudentSummaryViewData Create(Person person, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
-            , IList<DisciplineTotalPerType> disciplineTotal, IDictionary<string, int> attendanceTotal, 
-            string currentAttendanceType, IList<AnnouncementsClassPeriodViewData> announcementsClassPeriods
-            , int maxPeriodNumber, IList<StudentAnnouncementGrade> lastGrades, IGradingStyleMapper mapper, IList<StudentGradingRank> studentsRanks)
+        public static StudentSummaryViewData Create(StudentSummeryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes)
         {
-            var currentStudentRanks = studentsRanks.Where(x => x.StudentId == person.Id).ToList();
-            var res = new StudentSummaryViewData(person, room)
+            var res = new StudentSummaryViewData(studentSummary.StudentInfo, room)
                 {
-                    PeriodSection = announcementsClassPeriods,
                     ClassesSection = ClassViewData.Create(classes),
-                    AttendanceBox = StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>.Create(attendanceTotal),
-                    DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(disciplineTotal),
-                    GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(lastGrades, mapper),
-                    RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(currentStudentRanks, studentsRanks),
-                    CurrentAttendanceType = currentAttendanceType,
-                    MaxPeriodNumber = maxPeriodNumber
+                    AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance, studentSummary.Attendances, classes),
+                    DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
+                    GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(studentSummary.StudentAnnouncements),
+                    RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank),
                 };
             if (currentClass != null)
             {
@@ -60,49 +53,47 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public bool IsPassing { get; set; }
         
-        public static StudentHoverBoxViewData<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
+        public static StudentHoverBoxViewData<StudentSummeryRankViewData> Create(ClassRankInfo rankInfo)
         {
             var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();
-            res.Hover = StudentSummeryRankViewData.Create(currentStudentRanks, allStudentsRanks);
-            if (res.Hover.Count > 0)
-            {
-                var rank = res.Hover.First().Rank;
-                res.IsPassing = rank > 50;
-                res.Title = rank.HasValue ? rank.ToString() : "";
-            }
+            var rank = rankInfo.Rank;
+            res.IsPassing = rank > 50;
+            res.Title = rank.HasValue ? rank.ToString() : "";
             return res;
         }
 
-        public static StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> Create(IList<DisciplineTotalPerType> disciplineTotalPerTypes)
+        public static StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> Create(IList<InfractionSummaryInfo> infractionSummaryInfos, int totalDisciplineOccurrences)
         {
             var res = new StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>
                 {
-                    Hover = DisciplineTotalPerTypeViewData.Create(disciplineTotalPerTypes).OrderByDescending(x => x.Total).ToList(),
-                    Title = disciplineTotalPerTypes.Sum(x => x.Total).ToString()
+                    Hover = DisciplineTotalPerTypeViewData.Create(infractionSummaryInfos).OrderByDescending(x => x.Total).ToList(),
+                    Title = totalDisciplineOccurrences.ToString()
                 };
             return res;
         }
 
-        public static StudentHoverBoxViewData<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> attDic)
+        public static StudentHoverBoxViewData<TotalAbsencesPerClassViewData> Create(DailyAbsenceSummaryInfo dailyAbsenceSummary
+            , IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
-            var totalAbsentsAndLates = attDic.Where(x => ClassAttendance.IsAbsentOrLateLevel(x.Key)).Sum(x => x.Value);
-            var res = new StudentHoverBoxViewData<AttendanceTotalPerTypeViewData>
+            var res = new StudentHoverBoxViewData<TotalAbsencesPerClassViewData>
                 {
-                    Hover = AttendanceTotalPerTypeViewData.Create(attDic),
-                    Title = totalAbsentsAndLates.ToString()
+                    Hover = TotalAbsencesPerClassViewData.Create(attendances, classDetailses),
                 };
+            if (dailyAbsenceSummary != null && dailyAbsenceSummary.Absences != null)
+                res.Title = dailyAbsenceSummary.Absences.ToString();
             return res;
         }
-        public static  StudentHoverBoxViewData<StudentSummeryGradeViewData> Create(IList<StudentAnnouncementGrade> studentAnnouncements, IGradingStyleMapper mapper)
+
+        public static  StudentHoverBoxViewData<StudentSummeryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
         {
             var firstStudentAn = studentAnnouncements.FirstOrDefault();
             var res = new StudentHoverBoxViewData<StudentSummeryGradeViewData>
             {
-                Hover = StudentSummeryGradeViewData.Create(studentAnnouncements, mapper),
+                Hover = StudentSummeryGradeViewData.Create(studentAnnouncements),
             };
-            if (firstStudentAn != null)
+            if (firstStudentAn != null && !string.IsNullOrEmpty(firstStudentAn.ScoreValue))
             {
-                res.Title = mapper.Map(firstStudentAn.Announcement.GradingStyle, firstStudentAn.NumericScore).ToString();
+                res.Title = firstStudentAn.ScoreValue;
                 res.IsPassing = firstStudentAn.NumericScore >= 65;
             }
             return res;
@@ -142,54 +133,55 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int Total { get; set; }
 
         public static IList<DisciplineTotalPerTypeViewData> Create(
-            IList<DisciplineTotalPerType> disciplineTotalPerTypes)
+            IList<InfractionSummaryInfo> disciplineTotalPerTypes)
         {
            return disciplineTotalPerTypes.Select(x => new DisciplineTotalPerTypeViewData
                 {
-                    DisciplineType = DisciplineTypeViewData.Create(x.DisciplineType),
-                    Total = x.Total
+                    DisciplineType = DisciplineTypeViewData.Create(x.Infraction),
+                    Total = x.Occurrences
                 }).ToList();
         }
     }
 
-    public class AttendanceTotalPerTypeViewData
+    public class TotalAbsencesPerClassViewData
     {
-        public string Level { get; set; }
-        public int AttendanceCount { get; set; }
+        public decimal Absences { get; set; }
+        public ShortClassViewData Class { get; set; }
 
-        public static IList<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> attTypeDic)
+        public static IList<TotalAbsencesPerClassViewData> Create(IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
-            return attTypeDic.Select(x => new AttendanceTotalPerTypeViewData
+            var atts = attendances.OrderByDescending(x=>x.Absences).Take(5);
+            var res = new List<TotalAbsencesPerClassViewData>();
+            foreach (var classAttendanceSummary in atts)
+            {
+
+                var c = classDetailses.First(x => x.Id == classAttendanceSummary.ClassId);
+                res.Add(new TotalAbsencesPerClassViewData
                 {
-                    AttendanceCount = x.Value,
-                    Level = x.Key
-                }).ToList();
+                    Absences = classAttendanceSummary.Absences,
+                    Class = ShortClassViewData.Create(c)
+                });
+            }
+            return res;
         }
     }
-
 
     public class StudentSummeryGradeViewData
     {
-        public int? Grade { get; set; }
-        public int GradingStyle { get; set; }
-        public int? AnnouncementTypeId { get; set; }
-        public string AnnouncmentTypeName { get; set; }
-        public static StudentSummeryGradeViewData Create(StudentAnnouncementGrade studentAnnouncement, IGradingStyleMapper gradingMapper)
+        public string Grade { get; set; }
+        public string AnnouncmentTitle { get; set; }
+        public static StudentSummeryGradeViewData Create(StudentAnnouncement studentAnnouncement)
         {
-            var gradingStyle = studentAnnouncement.Announcement.GradingStyle;
             var res = new StudentSummeryGradeViewData
             {
-                GradingStyle = (int)gradingStyle,
-                Grade = gradingMapper.Map(gradingStyle, studentAnnouncement.NumericScore),
-                AnnouncementTypeId = studentAnnouncement.Announcement.ChalkableAnnouncementType,
-                AnnouncmentTypeName = studentAnnouncement.Announcement.ClassAnnouncementTypeName
+                Grade = studentAnnouncement.ScoreValue,
+                AnnouncmentTitle = studentAnnouncement.AnnouncementTitle
             };
             return res;
         }
-        public static IList<StudentSummeryGradeViewData> Create(IList<StudentAnnouncementGrade> studentAnnouncements, IGradingStyleMapper mapper)
+        public static IList<StudentSummeryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
         {
-            var res = studentAnnouncements.Select(x => Create(x, mapper));
-            return res.ToList();
+            return studentAnnouncements.Select(Create).ToList();
         }
     }
 }

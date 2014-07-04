@@ -4,12 +4,18 @@ using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
 using AlphaGrade = Chalkable.StiConnector.SyncModel.AlphaGrade;
 using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
+using ClassroomOption = Chalkable.StiConnector.SyncModel.ClassroomOption;
 using DayType = Chalkable.StiConnector.SyncModel.DayType;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
+using GradingComment = Chalkable.StiConnector.SyncModel.GradingComment;
 using GradingPeriod = Chalkable.StiConnector.SyncModel.GradingPeriod;
+using GradingScale = Chalkable.StiConnector.SyncModel.GradingScale;
+using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
+using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using School = Chalkable.StiConnector.SyncModel.School;
+using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 
@@ -19,32 +25,116 @@ namespace Chalkable.StiImport.Services
     {
         private void ProcessDelete()
         {
+            Log.LogInfo("delete schoolsOptions");
+            DeleteSchoolsOptions();
+            Log.LogInfo("delete grading comments");
+            DeleteGradingComments();
+            Log.LogInfo("delete class room options");
+            DeleteClassroomOptions();
+            Log.LogInfo("delete scale ranges");
+            DeleteGradingScaleRanges();
+            Log.LogInfo("delete infractions");
+            DeleteInfractions();
+            Log.LogInfo("delete alternate scores");
             DeleteAlternateScores();
+            Log.LogInfo("delete alpha grades");
             DeleteAlphaGrades();
+            Log.LogInfo("delete attendance level reasons");
             DeleteAttendanceLevelReasons();
+            Log.LogInfo("delete attendance reasons");
             DeleteAttendanceReasons();
+            Log.LogInfo("delete class persons");
             DeleteClassPersons();
+            Log.LogInfo("delete class periods");
             DeleteClassPeriods();
+            Log.LogInfo("delete periods");
             DeletePeriods();
-            DeleteClassAnnouncementTypes();
+            Log.LogInfo("delete marking period classes");
             DeleteMarkingPeriodClasses();
+            Log.LogInfo("delete class standards");
             DeleteClassStandard();
+            Log.LogInfo("delete standards");
             DeleteStandards();
+            Log.LogInfo("delete standard subjects");
             DeleteStandardSubject();
+            Log.LogInfo("delete class teachers");
+            DeleteClassTeachers();
+            Log.LogInfo("delete courses");
             DeleteCourses();
+            Log.LogInfo("delete grading scales");
+            DeleteGradingScales();
+            Log.LogInfo("delete rooms");
             DeleteRooms();
+            Log.LogInfo("delete days");
             DeleteDays();
+            Log.LogInfo("delete day types");
             DeleteDayTypes();
+            Log.LogInfo("delete grading periods");
             DeleteGradingPeriods();
+            Log.LogInfo("delete marking periods");
             DeleteMarkingPeriods();
+            Log.LogInfo("delete grading");
             DeleteStudentSchoolYears();
+            Log.LogInfo("school years");
             DeleteSchoolYears();
+            Log.LogInfo("delete grading level");
             DeleteGradeLevels();
+            Log.LogInfo("delete phones");
             DeletePhones();
+            Log.LogInfo("delete school persons");
             DeleteSchoolPersons();
+            Log.LogInfo("delete perons");
             DeletePersons();
+            Log.LogInfo("delete sis users");
+            DeleteSisUsers();
+            Log.LogInfo("delete addresses");
             DeleteAddresses();
+            Log.LogInfo("delete schools");
             DeleteSchools();
+        }
+
+        private void DeleteGradingComments()
+        {
+            if (context.GetSyncResult<GradingComment>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<GradingComment>().Deleted.Select(x => x.GradingCommentID).ToList();
+            ServiceLocatorSchool.GradingCommentService.Delete(ids);
+        }
+
+        private void DeleteClassroomOptions()
+        {
+            if (context.GetSyncResult<ClassroomOption>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<ClassroomOption>().Deleted.Select(x => x.SectionID).ToList();
+            ServiceLocatorSchool.ClassroomOptionService.Delete(ids);
+        }
+
+        private void DeleteGradingScaleRanges()
+        {
+            if (context.GetSyncResult<GradingScaleRange>().Deleted == null)
+                return;
+            var gsr = context.GetSyncResult<GradingScaleRange>().Deleted.Select(x => new Data.School.Model.GradingScaleRange
+            {
+                AlphaGradeRef = x.AlphaGradeID,
+                GradingScaleRef = x.GradingScaleID
+            }).ToList();
+            ServiceLocatorSchool.GradingScaleService.DeleteGradingScaleRanges(gsr);
+        }
+
+        private void DeleteGradingScales()
+        {
+            if (context.GetSyncResult<GradingScale>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<GradingScale>().Deleted.Select(x => x.GradingScaleID).ToList();
+            ServiceLocatorSchool.GradingScaleService.DeleteGradingScales(ids);
+        }
+
+        private void DeleteInfractions()
+        {
+            if (context.GetSyncResult<Infraction>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<Infraction>().Deleted.Select(x => x.InfractionID).ToList();
+            ServiceLocatorSchool.InfractionService.Delete(ids);
         }
 
         private void DeleteAlternateScores()
@@ -110,14 +200,6 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.PeriodService.Delete(ids);
         }
 
-        private void DeleteClassAnnouncementTypes()
-        {
-            if (context.GetSyncResult<ActivityCategory>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<ActivityCategory>().Deleted.Select(x => x.ActivityCategoryID).ToList();
-            ServiceLocatorSchool.ClassAnnouncementTypeService.Delete(ids);
-        }
-
         private void DeleteMarkingPeriodClasses()
         {
             if (context.GetSyncResult<SectionTerm>().Deleted == null)
@@ -156,6 +238,18 @@ namespace Chalkable.StiImport.Services
                 return;
             var ids = context.GetSyncResult<StandardSubject>().Deleted.Select(x => x.StandardSubjectID).ToList();
             ServiceLocatorSchool.StandardService.DeleteStandardSubjects(ids);
+        }
+
+        private void DeleteClassTeachers()
+        {
+            if (context.GetSyncResult<SectionStaff>().Deleted == null)
+                return;
+            var teachers = context.GetSyncResult<SectionStaff>().Deleted.Select(x => new ClassTeacher
+            {
+                ClassRef = x.SectionID,
+                PersonRef = x.StaffID
+            }).ToList();
+            ServiceLocatorSchool.ClassService.DeleteTeachers(teachers);
         }
 
         private void DeleteCourses()
@@ -241,11 +335,11 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<PersonTelephone>().Deleted == null)
                 return;
-            var phones = context.GetSyncResult<PersonTelephone>().Deleted;
-            foreach (var phone in phones)
-            {
-                ServiceLocatorSchool.PhoneService.Delete(phone.TelephoneNumber, phone.PersonID);
-            }
+            var phones = context.GetSyncResult<PersonTelephone>().Deleted.Select(x=>new Phone
+                {
+                    
+                }).ToList();
+            ServiceLocatorSchool.PhoneService.Delete(phones);
         }
 
         private void DeleteSchoolPersons()
@@ -261,12 +355,28 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.PersonService.Delete(ids);
         }
 
+        private void DeleteSisUsers()
+        {
+            if (context.GetSyncResult<User>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<User>().Deleted.Select(x => x.UserID).ToList();
+            ServiceLocatorSchool.SisUserService.Delete(ids);
+        }
+
         private void DeleteAddresses()
         {
             if (context.GetSyncResult<Address>().Deleted == null)
                 return;
             var ids = context.GetSyncResult<Address>().Deleted.Select(x => x.AddressID).ToList();
             ServiceLocatorSchool.AddressService.Delete(ids);
+        }
+
+        private void DeleteSchoolsOptions()
+        {
+            if (context.GetSyncResult<SchoolOption>().Deleted == null)
+                return;
+            var ids = context.GetSyncResult<SchoolOption>().Deleted.Select(x => x.SchoolID).ToList();
+            ServiceLocatorSchool.SchoolService.DeleteSchoolOptions(ids);
         }
 
         private void DeleteSchools()

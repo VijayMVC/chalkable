@@ -134,14 +134,14 @@ namespace Chalkable.Data.School.DataAccess
 //            ExecuteNonQueryParametrized(sql, parameters);
 //        }
 
-        public void Delete(QueryCondition annCondition, QueryCondition classCondition)
+        public void Delete(QueryCondition annCondition, QueryCondition classCondition, bool notInClassStandard)
         {
             var cStandardDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, classCondition);
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat(@"delete from AnnouncementStandard ");
             annCondition.BuildSqlWhere(dbQuery, "AnnouncementStandard");
-            dbQuery.Sql.AppendFormat(" and AnnouncementStandard.[{0}] in ({1})"
-                , AnnouncementStandard.STANDARD_REF_FIELD, cStandardDbQuery.Sql);
+            dbQuery.Sql.AppendFormat(" and AnnouncementStandard.[{0}] {2} in ({1})"
+                , AnnouncementStandard.STANDARD_REF_FIELD, cStandardDbQuery.Sql, notInClassStandard ? "not" : "");
             foreach (var parameter in cStandardDbQuery.Parameters)
                 dbQuery.Parameters.Add(parameter);
             ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);

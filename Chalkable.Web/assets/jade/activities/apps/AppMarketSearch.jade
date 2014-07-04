@@ -2,7 +2,7 @@ li(data-title = self.name, data-value = self.id.valueOf(), style="background: wh
     div.app-market-search
         +ActionLink('appmarket', 'details', self.id).app-market-search-item
             .img-container
-                +Image(src=self.getPictureURL(self.smallPictureId, 74)).app-icon
+                +Image(src=self.getAppPictureURL(self.smallPictureId, 74)).app-icon
             .app-name
                 div=self.name
 

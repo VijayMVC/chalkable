@@ -60,6 +60,14 @@ NAMESPACE('chlk.services', function(){
                 });
             },
 
+            [[chlk.models.discipline.SetDisciplineModel]],
+            ria.async.Future, function setDiscipline(discipline){
+                return this.post('Discipline/SetClassDiscipline.json', chlk.models.discipline.Discipline,{
+                    discipline: discipline.getPostData()
+                });
+            },
+
+
             [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
             ria.async.Future, function getStudentDisciplineSummary(personId, markingPeriodId){
                 return this.get('Discipline/StudentDisciplineSummary.json', chlk.models.discipline.StudentDisciplineSummary ,{

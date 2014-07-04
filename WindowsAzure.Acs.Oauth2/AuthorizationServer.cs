@@ -134,7 +134,8 @@ namespace WindowsAzure.Acs.Oauth2
         /// <returns>A <see cref="ViewResult"/>.</returns>
         public virtual ActionResult Index()
         {
-            OAuthMessage message = ParseIncomingRequest(HttpContext);
+            throw new NotImplementedException();
+            /*OAuthMessage message = ParseIncomingRequest(HttpContext);
 
             string errorCode = "";
             string errorDescription = "";
@@ -147,7 +148,7 @@ namespace WindowsAzure.Acs.Oauth2
             {
                 return Index_Post(new AuthorizationServerViewModel { Authorize = true });
             }
-            return View("_AuthorizationServer", BuildModel(message));
+            return View("_AuthorizationServer", BuildModel(message));*/
         }
 
         /// <summary>
@@ -158,7 +159,8 @@ namespace WindowsAzure.Acs.Oauth2
         [HttpPost, ActionName("Index")]
         public virtual ActionResult Index_Post(AuthorizationServerViewModel model)
         {
-            var message = TempData[OauthMessageKey] as OAuthMessage;
+            throw new NotImplementedException();
+            /*var message = TempData[OauthMessageKey] as OAuthMessage;
 
             if (model.Authorize)
             {
@@ -175,7 +177,7 @@ namespace WindowsAzure.Acs.Oauth2
             else
             {
                 return Redirect(message.GetErrorResponseUri(OAuthConstants.ErrorCode.AccessDenied, "The end user has denied consent to access the requested resource"));
-            }
+            }*/
         }
     }
 }

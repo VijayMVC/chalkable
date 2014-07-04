@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models
             GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
         {
             var res = new StudentAnnouncementsViewData {GradingStyle = (int) gradingStyle};
-            CalculateClassAvg(res, items);
+            //CalculateClassAvg(res, items);
             res.Items = StudentAnnouncementViewData.Create(items, attachments);
             return res;
         }
@@ -48,7 +48,7 @@ namespace Chalkable.Web.Models
             int? classAvg = 0;
             foreach (var studentAnnouncement in items)
             {
-                if (studentAnnouncement.NumericScore.HasValue && studentAnnouncement.State == StudentAnnouncementStateEnum.Manual)
+                if (IncludeToAvg(studentAnnouncement))
                 {
                     classAvg += studentAnnouncement.NumericScore.Value;
                     count++;
@@ -59,6 +59,11 @@ namespace Chalkable.Web.Models
             res.GradedStudentCount = count;
         }
 
+        private static bool IncludeToAvg(StudentAnnouncementDetails item)
+        {
+            return item.NumericScore.HasValue && !item.Incomplete && !item.Exempt && !item.Dropped && !item.Absent
+                && item.State == StudentAnnouncementStateEnum.Manual;
+        }
     }
 
     public class ShortStudentAnnouncementViewData
@@ -71,6 +76,7 @@ namespace Chalkable.Web.Models
         public bool IsIncomplete { get; set; }
         public bool IsLate { get; set; }
         public bool IsAbsent { get; set; }
+        public bool IsUnexcusedAbsent { get; set; }
         public int AnnouncementId { get; set; }
         public string Comment { get; set; }
         public string ExtraCredits { get; set; }
@@ -80,6 +86,7 @@ namespace Chalkable.Web.Models
         protected ShortStudentAnnouncementViewData(StudentAnnouncement studentAnnouncement)
         {
             IsAbsent = studentAnnouncement.Absent;
+            IsUnexcusedAbsent = studentAnnouncement.IsUnexcusedAbsent;
             IsExempt = studentAnnouncement.Exempt;
             IsIncomplete = studentAnnouncement.Incomplete;
             IsLate = studentAnnouncement.Late;

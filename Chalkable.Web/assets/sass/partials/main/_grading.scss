@@ -10,6 +10,12 @@ BODY {
               }
             }
 
+            .empty-grade-form{
+              .comment-grade{
+                display: none;
+              }
+            }
+
             .class-grading{
               .mps-container .marking-period-container .mp-data .ann-types-container {
                 margin-bottom: -30px;
@@ -57,11 +63,88 @@ BODY {
               }
             }
 
-            .chlk-pop-up-container.comment{
-              @include border-radius(3px);
-              padding: 8px 18px;
-              display: none;
+            .chlk-pop-up-container{
+              &.comment{
+                padding: 8px 18px;
+              }
 
+              &.comment, &.codes{
+                @include border-radius(3px);
+                display: none;
+              }
+
+              &.codes{
+                padding: 10px;
+                color: #333333;
+
+                h3{
+                  text-align: center;
+                  font: bold 18px Arial;
+                  margin-bottom: 20px;
+                }
+
+                .buttons-bottom{
+                  margin-top: 14px;
+
+                  .chlk-button{
+                    margin-bottom: 0;
+                  }
+                }
+
+                .row{
+                  &.header{
+                    font: bold 14px Arial;
+                    margin-bottom: 7px;
+                  }
+
+                  &:not(.header){
+                    margin-top: 4px;
+
+                    >DIV.name{
+                      font: normal 14px Arial;
+                    }
+                  }
+
+                  >DIV{
+                    display: inline-block;
+                    vertical-align: middle;
+
+                    &.check{
+                      width: 26px;
+                    }
+
+                    &.name{
+                      width: 93px;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    }
+
+                    &.code{
+                      width: 128px;
+
+                      .code-input{
+                        width: 82px;
+                        height: 10px;
+                      }
+                    }
+
+                    &.comment{
+                      width: 331px;
+
+                      .chzn-container{
+                        width: 322px !important;
+
+                        .chzn-single{
+                          height: 21px;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            .chlk-pop-up-container.comment{
               h5{
                 font: normal 10px Georgia italic;
                 text-align: center;
@@ -78,7 +161,7 @@ BODY {
               }
             }
 
-            .comment-button{
+            .gp-button{
               display: none;
             }
 
@@ -138,7 +221,7 @@ BODY {
                 margin: 35px 0 54px -12px;
 
                 .chart-container-1{
-                  height: 172px;
+                  height: 20px;
                   margin-bottom: 20px;
                   overflow: hidden;
                 }
@@ -290,6 +373,11 @@ BODY {
                         display: inline-block;
                       }
                     }
+                    >A{
+                      &:nth-child(11n + 1):not(:nth-child(1)){
+                        margin-right: 0;
+                      }
+                    }
                   }
 
                   .students-line{
@@ -339,7 +427,7 @@ BODY {
                   margin: 0 8px 7px 0;
                   vertical-align: top;
 
-                  &:nth-child(11n + 1):not(:nth-child(1)), &:last-child{
+                  &:last-child{
                       margin-right: 0;
                   }
 
@@ -347,12 +435,6 @@ BODY {
                     width: 49px;
                     height: 49px;
                   }
-                }
-
-                .no-grades{
-                  font: bold 22px/60px 'Reenie Beanie';
-                  text-align: center;
-                  height: 60px;
                 }
 
                 .all-button{
@@ -400,6 +482,7 @@ BODY {
                 &:not(.open){
                   .mp-data{
                     visibility: hidden;
+                    opacity: 0;
                     height: 0;
                   }
                 }
@@ -444,10 +527,7 @@ BODY {
                   }
 
                   .grading-selects{
-                    position: absolute;
                     display: none;
-                    top: 18px;
-                    left: 23px;
 
                     .chzn-container{
                       width: 121px !important;
@@ -502,6 +582,14 @@ BODY {
                       display: inline-block;
                     }
 
+                    .lr-toolbar{
+                      .dotted-container:nth-child(5n+6):last-child{
+                        .dotted-h.grade-value .grading-input-popup{
+                          left: -77px;
+                        }
+                      }
+                    }
+
                     .ann-type-container{
                       display: table-cell;
                       height: 288px;
@@ -537,6 +625,13 @@ BODY {
                         margin-right: 1px;
                         height: 47px;
                         line-height: 46px;
+                      }
+
+                      .post-gradebook-button{
+                        position: absolute;
+                        top: 7px;
+                        left: 70px;
+                        padding: 0px 20px 0px 20px;
                       }
 
                       .dotted-h{
@@ -577,7 +672,7 @@ BODY {
                             top: 0;
                             bottom: 1px;
                             background: url(images/grading/edit-cell.png) center center no-repeat, #eeeeee;
-                            z-index: 0;
+                            z-index: 1;
                             opacity: 0;
 
                             &:hover{
@@ -585,7 +680,13 @@ BODY {
                             }
                           }
 
-                          .grade-autocomplete{
+                          &:not(.gradable){
+                            .edit-cell{
+                              display: none;
+                            }
+                          }
+
+                          .grade-autocomplete, .avg-value{
                             position: absolute;
                             left: -1px;
                             right: 0px;
@@ -597,6 +698,7 @@ BODY {
                             display: none;
                             text-align: center;
                             z-index: 3;
+                            height: 36px;
 
                             &.error{
                               border-color: #d16060;
@@ -604,7 +706,7 @@ BODY {
                           }
 
                           &.active-cell{
-                            .grade-autocomplete{
+                            .grade-autocomplete, .avg-value{
                               display: block;
                             }
 
@@ -620,6 +722,13 @@ BODY {
 
                             .pop-up-triangle{
                               display: none;
+                            }
+                          }
+
+                          &.top-popup{
+                            .grading-input-popup{
+                              top: auto;
+                              bottom: 47px;
                             }
                           }
                         }
@@ -683,7 +792,8 @@ BODY {
                       min-width: 77px;
 
                       .type-name{
-                        margin: 5px 0 -1px 0;
+                        height: 30px;
+                        margin: 5px 0 -11px 0;
                       }
 
                       &.transparent-container{
@@ -838,6 +948,24 @@ BODY {
   }
 }
 
+.grade-info{
+  width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .edited{
+    font: normal 10px Arial italic;
+    text-align: left;
+    position: absolute;
+    color: #b1b1b1;
+    text-shadow: 0 1px 0 white;
+    padding-left: 13px;
+    bottom: 1px;
+    left: 18px;
+    background: url(images/grading/edited-avg.png) 0 center no-repeat;
+  }
+}
+
 .ann-grade-pop-up{
   z-index: 10;
   //top: -17px;
@@ -874,4 +1002,691 @@ BODY {
     display: block;
     font: normal 14px Arial;
   }
+}
+
+.grading-comments-list{
+  position: absolute;
+  background: white;
+  width: 148px;
+  margin-top: -4px;
+  box-shadow: 0 0 3px #aaa;
+
+  .item {
+    padding: 4px 8px;
+    font: bold 12px Arial;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-shadow: none;
+    cursor: pointer;
+
+    &.selected{
+      background: #26647e;
+      color: white;
+    }
+
+    &:first-child {
+      padding-top: 11px;
+    }
+
+    &:last-child {
+      padding-bottom: 10px;
+    }
+  }
+}
+
+.report-link{
+  position: absolute;
+  width: 27px;
+  height: 23px;
+  background: url(images/icons/printer-icon.png) center center no-repeat;
+  right: 10px;
+}
+
+.grade-book-report-dialog, .worksheet-report-dialog{
+  width: 628px;
+
+  .grid-container{
+    @include border-radius(5px);
+    margin-top: 19px;
+    overflow: hidden;
+    @include box-shadow(0 1px 1px 1px #dfdfdf);
+    width: 561px;
+
+    .grid{
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+
+      .row{
+        display: table-row;
+
+        .grade-block{
+          margin-top: 27px;
+        }
+
+        &:nth-child(2n){
+          background: #fff;
+        }
+
+        &:nth-child(2n+1){
+          background: #eaf1f4;
+        }
+
+        &.header{
+          background: #2f7790;
+          color: white;
+
+          .cell{
+            font: bold 14px/29px Arial;
+            padding-top: 1px;
+          }
+        }
+
+        .cell{
+          display: table-cell;
+          border: 1px solid #cccccc;
+          font: bold 14px/25px Arial;
+          padding-left: 7px;
+          vertical-align: middle;
+
+          &:first-child{
+            border-left: none;
+            padding-top: 3px;
+            line-height: 14px;
+            width: 20px;
+          }
+
+          .text{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          &:nth-child(2){
+            width: 93px;
+
+            .text{
+              width: 86px;
+            }
+          }
+
+          &:nth-child(3){
+            width: 145px;
+
+            .text{
+              width: 138px;
+            }
+          }
+
+          &:nth-child(4){
+            .text{
+              width: 265px
+            }
+          }
+
+          &:last-child{
+            border-right: none;
+          }
+        }
+
+        &:first-child{
+          .cell{
+            border-top: none;
+          }
+        }
+
+        &:last-child{
+          .cell{
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+
+  .dialog-window{
+    padding: 0;
+    margin-top: 166px;
+    background: #eaeaea;
+
+    h1{
+      text-align: center;
+      font: bold 18px Arial;
+      margin: 14px 0 11px;
+    }
+
+    .chzn-container-single .chzn-single SPAN{
+      text-align: left;
+      padding-left: 7px;
+      color: #8f8f8f;
+      font: bold 14px/26px Arial;
+    }
+    .chzn-container .chzn-results li{
+      padding-left: 10px;
+
+      &.highlighted{
+        border: 1px solid #043d53;
+        @include box-shadow(inset 0 1px 1px 0 #96c3d8);
+        @include background(linear-gradient(top, #4c9cbc, #096485));
+        color: white;
+        line-height: 23px;
+        @include border-radius(3px);
+        text-shadow: none;
+        padding: 0 0 0 10px;
+      }
+    }
+
+    h3{
+      font: normal 14px Arial;
+      color: #757575;
+      padding: 11px 5px 7px;
+    }
+
+    .report-table{
+      margin: 0 29px;
+      width: 579px;
+
+      td{
+        vertical-align: top;
+
+        &.item-3{
+          width: 190px;
+        }
+
+        &.item-2{
+          width: 285px;
+        }
+
+        &.item-1{
+          width: 570px;
+        }
+
+        &.blank-columns{
+          padding-top: 8px;
+        }
+      }
+    }
+
+    .report-bottom{
+      border-top: 1px solid #c4c4c4;
+      @include box-shadow(0 1px 0 white inset);
+      margin-top: 20px;
+      text-align: center;
+
+      BUTTON{
+        padding: 7px;
+        height: auto;
+        width: 77px;
+        margin: 12px 5px;
+        font: normal 14px Arial;
+      }
+    }
+
+    SELECT{
+      width: 181px;
+    }
+
+    .hasDatepicker{
+      width: 166px;
+      background-position: 156px center;
+      padding-bottom: 2px;
+      margin-bottom: 5px;
+    }
+
+    .labeled-checkbox{
+      .checkbox{
+        +label{
+          width: 155px;
+        }
+
+        &:not(:checked){
+          +label{
+            background: #f5f5f5;
+            border-top: solid 1px white;
+            @include box-shadow(0 1px 1px #ccc);
+          }
+        }
+      }
+
+      &.with-input{
+
+      }
+    }
+
+    .report-buttons{
+      a{
+        display: inline-block;
+        width: 312px;
+        font: normal 13px/35px Arial;
+        text-align: center;
+        border-top: 1px solid #d9d9d9;
+        border-bottom: 1px solid #fff;
+        color: #828282;
+        text-shadow: 1px 1px 0 white;
+
+        &:hover, &.pressed{
+          color: #2f7790;
+          @include background(linear-gradient(top, #f6f6f6,#d8d8d8));
+        }
+
+        &:first-child{
+          border-right: 1px solid #c3c3c3;
+        }
+
+        &:last-child{
+          border-left: 1px solid #fff;
+        }
+      }
+    }
+  }
+}
+
+.dropped-value{
+  .text-value, .grade-text{
+    text-decoration: line-through;
+  }
+
+  .grade-text{
+    color: #a0a0a0;
+  }
+}
+
+#chlk-dialogs {
+  >DIV{
+    &.student-avg-popup-dialog{
+      position: fixed;
+      width: 472px;
+      top: 80px;
+      left: 411px;
+    }
+  }
+}
+
+.standards-grid{
+  .marking-period-container:not(.open){
+    .comment-button{
+      display: none;
+    }
+  }
+}
+
+.no-applications{
+  .no-attachments{
+    display: none;
+  }
+}
+
+.big-grading-period-container{
+  @include border-radius(5px);
+  background: #c5c5c5;
+  padding: 4px;
+  margin: 35px 0;
+  @include box-shadow(0 1px 0 white, inset 0 1px 0 #909090);
+
+  .grading-selects, .post-gradebook-button{
+    opacity: 0;
+  }
+
+  .grading-selects, .post-gradebook-button, .gp-triangle{
+    @include transition-property("all");
+    @include transition-duration("0.5s");
+  }
+
+  &.open{
+    .grading-selects, .post-gradebook-button{
+      opacity: 1;
+    }
+
+    .gp-triangle{
+      opacity: 0;
+    }
+  }
+
+  .gp-title-block{
+    height: 60px;
+    text-align: center;
+    @include border-radius(5px);
+    @include box-shadow(inset 0 1px 0 white, 0 1px 0 #b2b2b2);
+    @include background(linear-gradient(top, #f6f6f6, #e5e5e5));
+    cursor: pointer;
+    position: relative;
+
+    .grading-selects{
+      top: 14px;
+      left: 17px;
+    }
+
+    .post-gradebook-button{
+      padding: 0px 21px;
+      position: absolute;
+      right: 38px;
+      top: 14px;
+      z-index: 10;
+      text-transform: uppercase;
+      font: bold 12px Arial;
+    }
+
+    .gp-title{
+      font: bold 14px/60px Arial;
+      color: #757575;
+      display: inline-block;
+    }
+    .gp-triangle{
+      position: absolute;
+      background: url(images/grading/gp-triangle.png) 0 0 no-repeat;
+      width: 24px;
+      height: 24px;
+      top: 18px;
+      right: 17px;
+    }
+  }
+  .gp-data{
+    &:not(.slided){
+      overflow: hidden;
+    }
+
+    &:not(.opened){
+      height: 0;
+    }
+  }
+
+  .attachments-container{
+    background: url(images/grading/attachments-bg.png);
+
+    &:not(.loading){
+      .saving-text{
+        visibility: hidden;
+      }
+    }
+
+    .chart-text{
+      background: white;
+      border-radius: 3px;
+      //overflow: hidden;
+      //text-overflow: ellipsis;
+      padding: 3px;
+      width: auto;
+      height: auto;
+      position: relative;
+      @include box-shadow(0 0 4px 0px grey);
+
+      .triangle{
+        background: url(images/grading/chart-triangle.png) center 0 no-repeat;
+        left: 0;
+        right: 0;
+        bottom: -10px;
+        width: auto;
+      }
+    }
+
+    .chart-top-legend{
+      margin: -9px 10px 0 0;
+      float: right;
+      width: 430px;
+      text-align: right;
+
+      .legend-item{
+        margin-right: 13px;
+      }
+    }
+
+    .grades-block{
+      h2{
+        min-height: 61px;
+      }
+    }
+
+    .center-block{
+      margin-top: -15px;
+
+      h2{
+        margin: 40px 0 5px 0;
+        text-align: center;
+      }
+
+      >DIV{
+        display: inline-block;
+        vertical-align: top;
+        width: 33%;
+      }
+
+      .attendance-block{
+        .attendance-item{
+          padding: 11px 0 0 30px;
+
+          .chart{
+            height: 21px;
+            width: 170px;
+            @include box-shadow(0 1px 0 white, inset 0 1px 2px grey);
+            @include border-radius(11px);
+            background: #2f7790;
+            overflow: hidden;
+
+            >DIV{
+              display: inline-block;
+              vertical-align: top;
+              height: 100%;
+              cursor: pointer;
+
+              &:first-child{
+                @include border-radius(10px 0 0 10px);
+              }
+
+              &.present{
+                background: #2f7790;
+              }
+
+              &.late{
+                background: #e07400;
+              }
+
+              &.absent{
+                background: #9a4545;
+              }
+            }
+          }
+
+          .name{
+            color: #3d3d3d;
+            text-shadow: 0 1px 0 white;
+            font: bold 14px Arial;
+            margin-bottom: 9px;
+          }
+        }
+      }
+
+      .suggested-block{
+        .grade-container{
+          margin: 39px 0;
+          text-align: center;
+
+          .grade{
+            display: inline-block;
+            position: relative;
+
+            font: bold 40px Arial;
+
+            .circle{
+              position: absolute;
+              font: normal 11px Arial;
+              background: #fff;
+              padding: 7px;
+              border-radius: 12px;
+              right: -21px;
+              top: 8px;
+              cursor: pointer;
+
+              >DIV{
+                position: absolute;
+                top: 0px;
+                left: 3px;
+              }
+            }
+          }
+        }
+      }
+
+      .disciplines-block{
+        &.empty{
+          .arrow{
+            display: none;
+          }
+        }
+
+        .disciplines-toolbar{
+          margin: 20px 10px 0 0px;
+        }
+
+        .lr-toolbar.big-arrows .arrow{
+          width: 20px;
+          top: -5px;
+          bottom: -4px;
+          background-size: 34% auto;
+        }
+
+        .disciplines-items-block{
+          display: inline-block;
+          width: 177px;
+          vertical-align: top;
+          margin-right: 30px;
+        }
+
+        .discipline-item{
+          height: 37px;
+          padding-left: 22px;
+
+          >DIV{
+            display: inline-block;
+            vertical-align: top;
+          }
+
+          .count{
+            background: url(images/grading/discipline-tooltip.png) 0 0 no-repeat;
+            width: 37px;
+            height: 30px;
+            text-align: center;
+            font: bold 12px/26px Arial;
+            text-indent: -3px;
+          }
+
+          .description{
+            color: #3d3d3d;
+            text-shadow: 1px 1px 0 white;
+            margin-left: 10px;
+            font: bold 13px/26px Arial;
+            width: 110px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
+
+    .comments-notes-block{
+      padding: 30px;
+
+      >DIV{
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .notes-block{
+        width: 324px;
+
+        .notes-textarea{
+          width: 281px;
+          height: 62px;
+        }
+
+        .saving-text{
+          font-size: 11px;
+          margin-left: 2px;
+          color: #9a9a9a;
+        }
+      }
+
+      SELECT{
+        width: 275px;
+      }
+
+      .comments-block{
+        width: 275px;
+      }
+
+      .chzn-container:nth-child(2){
+        margin-bottom: 20px;
+      }
+    }
+
+    h2{
+      margin: 40px 0 0 26px;
+      font-size: 16px;
+      text-transform: uppercase;
+      color: #2f7790;
+      text-shadow: 0 1px 0 white;
+
+      DIV{
+        text-transform: none;
+      }
+    }
+
+    &.opened{
+      display: block;
+    }
+
+    .chart-bg2{
+      height: 128px;
+      background-position: 17px 0;
+    }
+
+    .chart-container{
+      overflow: visible;
+      height: 156px;
+    }
+
+    .avgs-block{
+      .avg-item{
+        display: inline-block;
+        height: 40px;
+        width: 100px;
+        padding: 0 8px;
+        background: #d7d7d7;
+        border: 1px solid #c2c2c2;
+        border-width: 0 1px 1px 0;
+        vertical-align: top;
+        font: normal 14px/40px Arial;
+        color: #383838;
+        text-shadow: 0 1px 0 white;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        cursor: pointer;
+
+        &.selected{
+          background: #2f7790;
+          border-bottom-color: #143f4e;
+          border-right-color: #2f7790;
+          color: #fff;
+          text-shadow: 0 1px 0 #173b48;
+
+          &:last-child{
+            border-right-color: #143f4e;
+          }
+        }
+      }
+    }
+  }
+}
+
+.grading-selects{
+    position: absolute;
+    top: 18px;
+    left: 23px;
+}
+
+.no-items-text{
+  font: bold 22px/60px 'Reenie Beanie';
+  text-align: center;
+  height: 60px;
 }

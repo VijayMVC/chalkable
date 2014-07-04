@@ -34,6 +34,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'chalkableAnnouncementType',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'ableToGrade',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'adminAnnouncement',
 
             [ria.templates.ModelPropertyBind],
@@ -157,7 +160,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'starred',
+            Boolean, 'complete',
 
             [ria.templates.ModelPropertyBind],
             Number, 'state',

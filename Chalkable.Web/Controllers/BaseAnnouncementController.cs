@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
-using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
-using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -20,13 +17,17 @@ namespace Chalkable.Web.Controllers
             {
                 annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
                 annDetails.GradingStudentsCount = annDetails.StudentAnnouncements.Count(x=>x.IsGraded);
+                //var stAnns = annDetails.StudentAnnouncements.Where(x => x.NumericScore.HasValue && !x.Incomplete 
+                //    && !x.Exempt && !x.Dropped && !x.Absent).ToList();
+                //annDetails.Avg = stAnns.Count > 0 ? (int?) stAnns.Average(x => x.NumericScore.Value) : null;
             }
-            //if(CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
-            //    annDetails.AnnouncementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(annDetails.Id);
-            
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
             var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.UserLocalId.Value, attInfo);
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, announcementId);
+            if (annViewData.Applications.Count > 0)
+                annViewData.ApplicationName = annViewData.Applications.Count == 1
+                                                  ? annViewData.Applications.First().Name
+                                                  : annViewData.Applications.Count.ToString();
             if (isRead && annDetails.State == AnnouncementState.Created)
             {
                 var ids = new HashSet<Guid>();
@@ -50,6 +51,8 @@ namespace Chalkable.Web.Controllers
                 if (stAnnouncements.Count > 0 && annDetails.GradableType)
                     annViewData.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annDetails, attInfo);
             }
+            if(!isRead)
+                annViewData.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId);
             return annViewData;
         }
     }

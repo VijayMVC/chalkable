@@ -10,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -30,8 +31,6 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var isAdmin = BaseSecurity.IsAdminViewer(SchoolLocator.Context);
              var schoolYearId = GetCurrentSchoolYearId();
              var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, !isAdmin ? classId : null);
-             if (isAdmin)
-                 announcements = announcements.Where(x => !x.ClassRef.HasValue).ToList();
              if (schoolPersonId.HasValue)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, schoolPersonId);
@@ -50,6 +49,14 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end);
              var listDayAnnouncements = AnnouncementByDateViewData.Create(dates, anns);
              return Json(listDayAnnouncements);
+         }
+
+         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+         public ActionResult ListByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
+         {
+             var query = new AnnouncementsQuery {FromDate = startDate, ToDate = endDate, ClassId = classId};
+             var anns = SchoolLocator.AnnouncementService.GetAnnouncementsComplex(query);
+             return Json(AnnouncementShortViewData.Create(anns));
          }
         
 
@@ -89,14 +96,20 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var periods = SchoolLocator.PeriodService.GetPeriods(schoolYearId);
              if (!BaseSecurity.IsAdminViewer(SchoolLocator.Context))
                  classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(schoolYearId, null, null, null, null, null, studentId, teacherId);
-                 
+
+             IList<AnnouncementPeriodViewData> annPeriods = null;
              foreach (var d in days)
              {
-                 if (!d.DayTypeRef.HasValue) continue;
                  var announcements = anns.Where(x => x.Expires.Date == d.Day.Date).ToList();
-                 var cPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
-                 var annPeriods = AnnouncementPeriodViewData.Create(periods, cPeriods, d, announcements, rooms);
-                 var ann = announcements.Where(x => !x.ClassRef.HasValue || !x.GradableType).ToList();
+                 if (d.DayTypeRef.HasValue)
+                 {
+                     var cPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
+                     annPeriods = AnnouncementPeriodViewData.Create(periods, cPeriods, d, announcements, rooms);    
+                 }
+                 else
+                     annPeriods = AnnouncementPeriodViewData.Create(periods, new List<ClassPeriod>(), d, announcements, rooms);
+                 
+                 var ann = announcements.Where(x => !x.GradableType).ToList();
                  res.Add(AnnouncementCalendarWeekViewData.Create(d.Day, annPeriods, ann));
              }
              return Json(res, 6);
@@ -121,7 +134,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
              IList<ClassDetails> classes = new List<ClassDetails>();
              if (classId.HasValue)
-                 classes.Add(locator.ClassService.GetClassById(classId.Value));
+                 classes.Add(locator.ClassService.GetClassDetailsById(classId.Value));
              else
                  classes = locator.ClassService.GetClasses(null, null, teacherId ?? studentId);
 

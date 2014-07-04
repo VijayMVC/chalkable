@@ -25,43 +25,47 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             ann.Title = activity.Name;
             ann.MayBeExempt = activity.MayBeExempt;
             ann.IsScored = activity.IsScored;
-
+            ann.Complete = activity.Complete;
             if (ann is AnnouncementComplex && activity.Attachments != null)
             {
                 var annC = ann as AnnouncementComplex;
                 annC.AttachmentsCount = activity.Attachments.Count();
+                annC.ClassAnnouncementTypeName = activity.CategoryName;
+                //annC.Starred = activity.Starred;
             }
-
-            if (ann is AnnouncementDetails && activity.Attachments != null && activity.Attachments.Any())
+            if (ann is AnnouncementDetails)
             {
                 var annDetails = ann as AnnouncementDetails;
-                if (annDetails.AnnouncementAttachments == null)
-                    annDetails.AnnouncementAttachments = new List<AnnouncementAttachment>();
-                foreach (var att in activity.Attachments)
+                if (activity.Attachments != null && activity.Attachments.Any())
                 {
-                    var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.AttachmentId);
-                    if (annAtt == null)
-                    {
-                        annAtt = new AnnouncementAttachment
-                        {
-                            AnnouncementRef = annDetails.Id,
-                            SisAttachmentId = att.AttachmentId
-                        };
-                        annDetails.AnnouncementAttachments.Add(annAtt);
-                    }
-                    MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttachment>().Map(annAtt, att);
-                }
 
+                    if (annDetails.AnnouncementAttachments == null)
+                        annDetails.AnnouncementAttachments = new List<AnnouncementAttachment>();
+                    foreach (var att in activity.Attachments)
+                    {
+                        var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.AttachmentId);
+                        if (annAtt == null)
+                        {
+                            annAtt = new AnnouncementAttachment
+                            {
+                                AnnouncementRef = annDetails.Id,
+                                SisAttachmentId = att.AttachmentId
+                            };
+                            annDetails.AnnouncementAttachments.Add(annAtt);
+                        }
+                        MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttachment>().Map(annAtt, att);
+                    }
+                }
+                if (annDetails.AnnouncementStandards == null)
+                    annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
                 if (activity.Standards != null && activity.Standards.Any())
                 {
-                    if (annDetails.AnnouncementStandards == null)
-                        annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
                     foreach (var activityStandard in activity.Standards)
                     {
                         var annStandard = annDetails.AnnouncementStandards.FirstOrDefault(x => x.StandardRef == activityStandard.Id);
                         if (annStandard == null)
                         {
-                            annStandard = new AnnouncementStandardDetails() { AnnouncementRef = annDetails.Id };
+                            annStandard = new AnnouncementStandardDetails { AnnouncementRef = annDetails.Id };
                             annDetails.AnnouncementStandards.Add(annStandard);
                         }
                         annStandard.StandardRef = activityStandard.Id;
@@ -72,6 +76,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                     }
                 }
             }
+            
         }
     }
 

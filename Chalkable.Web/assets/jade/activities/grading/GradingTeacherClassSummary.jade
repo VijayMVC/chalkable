@@ -1,5 +1,8 @@
 mixin StudentGradingItem(student)
-    -attributes['data-tooltip'] = student.getFullName() + '<br/>' + student.getAvg() + '%'
+    tooltipText = student.getFullName() + '<br/>'
+    if student.getAvg() || student.getAvg() == 0
+        tooltipText = tooltipText + student.getAvg().toFixed(2) + '%'
+    -attributes['data-tooltip'] = tooltipText
     -attributes['studentId'] = student.getId().valueOf()
     +ActionLink('students', 'info', student.getId())(attributes).image-container.white.student-item
         +PersonImg(student, 47)
@@ -16,13 +19,13 @@ topItems = topData.getTopItems()
         students = self.getPreparedStudents(item.getAllStudents(), item.getWell(), item.getTrouble())
         typeEnum = chlk.models.grading.StudentWellTroubleEnum
         .class-block
-            h2.with-line=item.getClazz().getName()
+            h2.with-line=item.getClazz().getFullClassName()
                 a(href="javascript:").show-less
                     span –
                     |#{Msg.Show_less}
             .students-block.with-line
                 if trouleCount == 0 && wellCount == 0 && restCount == 0
-                    .no-grades=Msg.No_grades_yet
+                    .no-items-text=Msg.No_grades_yet
                 else
                     each student in item.getTrouble()
                         +StudentGradingItem(student).trouble

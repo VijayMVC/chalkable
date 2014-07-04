@@ -1,11 +1,11 @@
-mixin AppMarketToolbar(balance, categories, gradelevels)
-    .action-bar.not-transparent
+mixin AppMarketToolbar(balance, categories, gradelevels, isStore)
+    .action-bar.not-transparent.buttons
         .container.panel-bg.buttons-toolbar
             if balance
                 .user-balance= "$" + balance
-            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
+            +ActionLink('appmarket', 'list')(class = isStore ? "pressed" : "").app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
-            +ActionLink('funds', 'view').toolbar-btn App Funds
+            +ActionLink('funds', 'view')(class = isStore ? "" : "pressed").toolbar-btn App Funds
             +ActionForm('', '')
                 +SearchBox(chlk.services.AppMarketService, "getAppsByFilter",
                 chlk.templates.apps.AppMarketSearchBoxTpl)#app-market-searchbox.market-search-box(name="appMarketSearch", triggerBtnId="app-market-search-btn")

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -18,31 +15,87 @@ namespace Chalkable.BusinessLogic.Model
         public ChalkableClassOptions Options { get; set; }
     }
 
-    public class ChalkableStudentAverage
+    public class ChalkableAverage
     {
         public int AverageId { get; set; }
         public string AverageName { get; set; }
-        public decimal? AvgValue { get; set; }
-        public int StudentId { get; set; }
-        public AlphaGrade AlphaGrade { get; set; }
-        public bool IsGradingPeriodAverage { get; set; }
+        public static ChalkableAverage Create(int id, string name)
+        {
+            return new ChalkableAverage {AverageId = id, AverageName = name};
+        }
+    }
 
-        public static ChalkableStudentAverage Create(StudentAverages studentAverages)
+    public class ChalkableStudentAverage : ChalkableAverage
+    {
+        public decimal? CalculatedAvg { get; set; }
+        public decimal? EnteredAvg { get; set; }
+        public int StudentId { get; set; }
+        public AlphaGrade CalculatedAlphaGrade { get; set; }
+        public AlphaGrade EnteredAlphaGrade { get; set; }
+        public bool IsGradingPeriodAverage { get; set; }
+        public bool Exempt { get; set; }
+        public bool MayBeExempt { get; set; }
+        public IList<ChalkableStudentAverageComment> Comments { get; set; }
+        public string Note { get; set; }
+
+
+        public static ChalkableStudentAverage Create(StudentAverage studentAverage)
         {
             var res = new ChalkableStudentAverage
                 {
-                    AverageId = studentAverages.AverageId,
-                    AverageName = studentAverages.AverageName,
-                    AvgValue = studentAverages.Score,
-                    StudentId = studentAverages.StudentId,
-                    IsGradingPeriodAverage = studentAverages.IsGradingPeriodAverage
+                    AverageId = studentAverage.AverageId,
+                    AverageName = studentAverage.AverageName,
+                    CalculatedAvg = studentAverage.CalculatedNumericAverage, 
+                    EnteredAvg = studentAverage.EnteredNumericAverage,
+                    StudentId = studentAverage.StudentId,
+                    IsGradingPeriodAverage = studentAverage.IsGradingPeriodAverage,
+                    Exempt = studentAverage.Exempt,
+                    MayBeExempt = studentAverage.MayBeExempt,
+                    Note = studentAverage.ReportCardNote
                 };
-            if (studentAverages.AlphaGradeId.HasValue)
-            {
-                res.AlphaGrade = new AlphaGrade
+            if (studentAverage.CalculatedAlphaGradeId.HasValue)
+                res.CalculatedAlphaGrade = new AlphaGrade
                     {
-                        Id = studentAverages.AlphaGradeId.Value,
-                        Name = studentAverages.AlphaGradeName
+                        Id = studentAverage.CalculatedAlphaGradeId.Value,
+                        Name = studentAverage.CalculatedAlphaGradeName
+                    };
+            if (studentAverage.EnteredAlphaGradeId.HasValue)
+                res.EnteredAlphaGrade = new AlphaGrade
+                    {
+                        Id = studentAverage.EnteredAlphaGradeId.Value,
+                        Name = studentAverage.EnteredAlphaGradeName
+                    };
+            if (studentAverage.Comments != null)
+                res.Comments = studentAverage.Comments.Select(ChalkableStudentAverageComment.Create).ToList();
+            return res;
+        }
+    }
+
+    public class ChalkableStudentAverageComment
+    {
+        public int AverageId { get; set; }
+        public int StudentId { get; set; }
+        public GradingComment GradingComment { get; set; }
+        public int HeaderId { get; set; }
+        public short HeaderSequence { get; set; }
+        public string HeaderText { get; set; }
+
+        public static ChalkableStudentAverageComment Create(StudentAverageComment stcomment)
+        {
+            var res = new ChalkableStudentAverageComment
+                    {
+                        AverageId = stcomment.StudentId,
+                        HeaderId = stcomment.HeaderId,
+                        HeaderSequence = stcomment.HeaderSequence,
+                        HeaderText = stcomment.HeaderText,
+                    };
+            if (stcomment.CommentId.HasValue)
+            {
+                res.GradingComment = new GradingComment
+                    {
+                        Id = stcomment.CommentId.Value,
+                        Code = stcomment.CommentCode,
+                        Comment = stcomment.CommentText
                     };
             }
             return res;
@@ -56,7 +109,7 @@ namespace Chalkable.BusinessLogic.Model
         public bool DisplayTotalPoints { get; set; }
         public bool IncludeWithdrawnStudents { get; set; }
 
-        public static ChalkableClassOptions Create(ClassroomOption classroomOption)
+        public static ChalkableClassOptions Create(StiConnector.Connectors.Model.ClassroomOption classroomOption)
         {
             return new ChalkableClassOptions
                 {
@@ -68,11 +121,52 @@ namespace Chalkable.BusinessLogic.Model
         }
     }
 
-    public class ClassGradingSummary
+    public class TeacherClassGrading
     {
         public double? Avg { get; set; }
         public IList<AnnouncementDetails> Announcements { get; set; }
         public IList<GradedClassAnnouncementType> AnnouncementTypes { get; set; }
         public GradingPeriod GradingPeriod { get; set; }
+    }
+
+    public class ShortClassGradesSummary
+    {
+        public ClassDetails Class { get; set; }
+        public IList<ShortStudentClassGradesSummary> Students { get; set; } 
+
+        public static ShortClassGradesSummary Create(SectionGradesSummary sectionGrades, ClassDetails cClass, IList<Person> studentsInfo)
+        {
+            return new ShortClassGradesSummary
+                {
+                    Class = cClass,
+                    Students = ShortStudentClassGradesSummary.Create(sectionGrades.Students.ToList(), studentsInfo)
+                };
+        }
+    }
+
+    public class ShortStudentClassGradesSummary
+    {
+        public Person Student { get; set; }
+        public int ClassId { get; set; }
+        public bool Exempt { get; set; }
+        public decimal? Avg { get; set; }
+
+        public static IList<ShortStudentClassGradesSummary> Create(IList<StudentSectionGradesSummary> studentSectionGrades, IList<Person> students)
+        {
+            var res = new List<ShortStudentClassGradesSummary>();
+            foreach (var studentSectionGrade in studentSectionGrades)
+            {
+                var student = students.FirstOrDefault(x=>x.Id == studentSectionGrade.StudentId);
+                if(student != null)
+                    res.Add(new ShortStudentClassGradesSummary
+                            {
+                                Student = student,
+                                ClassId = studentSectionGrade.SectionId,
+                                Avg = studentSectionGrade.Average,
+                                Exempt = studentSectionGrade.Exempt
+                            });
+            }
+            return res;
+        }
     }
 }

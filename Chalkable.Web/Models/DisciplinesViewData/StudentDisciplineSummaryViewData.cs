@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.DisciplinesViewData
 {
+
+    public class DisciplineTypeSummaryViewData
+    {
+        public DisciplineTypeViewData Type { get; set; }
+        public int Count { get; set; }
+    }
+
+
     public class StudentDisciplineSummaryViewData
     {
         public PersonViewData Student { get; set; }
@@ -32,7 +37,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
             //        stDic.Add(discipline.Student.Id, discipline.Student);
             //        stDiscTypeDic.Add(discipline.Student.Id, new List<ClassDisciplineTypeDetails>());
             //    }
-            //    stDiscTypeDic[discipline.Student.Id].AddRange(discipline.DisciplineTypes);
+            //    stDiscTypeDic[discipline.Student.Id].AddRange(discipline.Infractions);
             //}
             //return stDiscTypeDic.Select(x => new StudentDisciplineSummaryViewData(stDic[x.Key])
             //{
@@ -42,10 +47,10 @@ namespace Chalkable.Web.Models.DisciplinesViewData
             //}).ToList();
         }
 
-        private static string BuildSummary(IEnumerable<ClassDisciplineTypeDetails> disciplineTypes)
-        {
-            var dic = disciplineTypes.GroupBy(x => x.DisciplineType.Name).ToDictionary(x => x.Key, x => x.Count());
-            return dic.Select(x => string.Format("{0} {1}", x.Key, x.Value)).JoinString(",");
-        }
+        //private static string BuildSummary(IEnumerable<ClassDisciplineTypeDetails> disciplineTypes)
+        //{
+        //    var dic = disciplineTypes.GroupBy(x => x.DisciplineType.Name).ToDictionary(x => x.Key, x => x.Count());
+        //    return dic.Select(x => string.Format("{0} {1}", x.Key, x.Value)).JoinString(",");
+        //}
     }
 }

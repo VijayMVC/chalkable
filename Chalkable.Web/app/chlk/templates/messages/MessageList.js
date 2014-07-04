@@ -15,7 +15,8 @@ NAMESPACE('chlk.templates.messages', function () {
             [ria.templates.ModelPropertyBind],
             String, 'role',
             [ria.templates.ModelPropertyBind],
-            String, 'keyword'
-
+            String, 'keyword',
+            [ria.templates.ModelPropertyBind],
+            Number, 'start'
         ])
 });

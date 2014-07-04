@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
         void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears);
-
+        
     }
 
     public class SchoolYearService : SchoolServiceBase, ISchoolYearService
@@ -109,6 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        //todo : add enrollmentStatus param 
         public void AssignStudent(int schoolYearId, int personId, int gradeLevelId)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -145,11 +146,14 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public SchoolYear GetCurrentSchoolYear()
         {
-            var nowDate = Context.NowSchoolTime.Date;
             using (var uow = Read())
             {
                 var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
-                return da.GetByDate(nowDate);
+                if (Context.SchoolYearId.HasValue)
+                    return da.GetById(Context.SchoolYearId.Value);
+                var nowDate = Context.NowSchoolTime.Date;
+                var res = da.GetByDate(nowDate);
+                return res ?? da.GetLast(nowDate);
             }
         }
         public IList<SchoolYear> GetSortedYears()

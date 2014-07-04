@@ -9,8 +9,9 @@ BODY {
     float: right;
     padding-right: 25px;
     padding-left: 25px;
-    margin-top: 10px;
-    margin-right: 20px;
+    margin: 10px 20px 0 2px;
+    color: white;
+    text-shadow: none;
   }
 
   #all-present-link{
@@ -493,6 +494,11 @@ BODY {
             .row{
               P {
                 width: 240px;
+
+                >SPAN{
+                  display: inline-block;
+                  vertical-align: middle;
+                }
               }
 
               >.right{
@@ -507,6 +513,14 @@ BODY {
               width: image-width('attendance/keyboard-suggestion.png');
               height: image-height('attendance/keyboard-suggestion.png');
               top: -21px;
+            }
+
+            .absent-yesterday{
+              width: 15px;
+              height: 15px;
+              background: url(images/attendance/absent-yesterday.png) center center no-repeat;
+              margin: 6px 10px;
+              position: absolute;
             }
 
             .student-attendance-container{
@@ -963,9 +977,12 @@ BODY {
 
 .hidden-students-block{
   height: 0;
-  overflow: hidden;
   @include transition-duration("0.5s");
   @include transition-property("all");
+
+  &.height-0{
+    overflow: hidden;
+  }
 }
 
 .visible-block{
@@ -1036,8 +1053,33 @@ BODY {
 .absent-late-page{
   margin-top: 24px;
 
+  .wide-chart-bg{
+    position: relative;
+  }
+
+  .chart-top-legend {
+    text-align: right;
+    float: right;
+    width: 500px;
+    margin-top: -26px;
+
+    .legend-item {
+      margin-right: 13px;
+      margin-bottom: 0;
+    }
+  }
+
+  h2{
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #2f7790;
+    text-shadow: 0 1px 0 white;
+    margin: 10px 0 0 9px;
+  }
+
+
   .highcharts-container{
-    top: 1px;
+    top: 13px;
     left: -32px;
   }
 
@@ -1045,8 +1087,21 @@ BODY {
     margin-bottom: 19px;
   }
 
+  .processed{
+    .chart-label{
+      width: 90px;
+    }
+  }
+
   .chart-container{
-    margin-bottom: 44px;
+    margin-bottom: 67px;
+    overflow: visible;
+
+    .wide-chart-bg{
+      top: 12px;
+      height: auto;
+      background-position: 0px 10px;
+    }
   }
 
   .student-with-picture{
@@ -1108,6 +1163,10 @@ BODY {
           .remove-red-btn{
             display: block;
             z-index: 20;
+          }
+
+          .alerts-icon{
+            display: none;
           }
         }
       }
@@ -1207,6 +1266,7 @@ BODY {
   }
 }
 
+
 .seating-chart-people{
   background: rgba(242, 242, 242, 0.9);
   position: fixed;
@@ -1215,6 +1275,14 @@ BODY {
   right: 0;
   z-index: 100;
   display: none;
+
+  &.demo{
+    bottom: 90px;
+  }
+
+  .alerts-icon{
+    display: none;
+  }
 
   .people-container{
     min-height: 102px;

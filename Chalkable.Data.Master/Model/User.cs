@@ -17,6 +17,7 @@ namespace Chalkable.Data.Master.Model
 
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
+        public int? LocalId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         [NotDbFieldAttr]
@@ -28,19 +29,24 @@ namespace Chalkable.Data.Master.Model
         {
             get { return DistrictRef.HasValue && SchoolUsers != null && SchoolUsers.Count > 0; }
         }
-
+        [NotDbFieldAttr]
+        public bool IsDemoUser { get; set; }
         public bool IsSysAdmin { get; set;}
         public bool IsDeveloper { get; set; }
         public string ConfirmationKey { get; set; }
-        public int? LocalId { get; set; }
+        public string SisUserName { get; set; }
         public Guid? DistrictRef { get; set; }
         [NotDbFieldAttr]
         public District District { get; set; }
-        public string SisUserName { get; set; }
         public string SisToken { get; set; }
         public DateTime? SisTokenExpires { get; set; }
+        [NotDbFieldAttr]
+        public bool IsSisUser
+        {
+            get { return !string.IsNullOrEmpty(SisUserName); }
+        }
     }
-
+    
     public class School
     {
         public const string ID_FIELD = "Id";
@@ -49,8 +55,8 @@ namespace Chalkable.Data.Master.Model
      
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
-        public string Name { get; set; }
         public Guid DistrictRef { get; set; }
+        public string Name { get; set; }
         public int LocalId { get; set; }
         [NotDbFieldAttr]
         public District District { get; set; }
@@ -64,8 +70,8 @@ namespace Chalkable.Data.Master.Model
 
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
-        public Guid UserRef { get; set; }
         public Guid SchoolRef { get; set; }
+        public Guid UserRef { get; set; }
         public int Role { get; set; }
         [DataEntityAttr]
         public User User { get; set; }

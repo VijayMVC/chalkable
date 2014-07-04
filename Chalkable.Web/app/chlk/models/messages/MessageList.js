@@ -13,6 +13,7 @@ NAMESPACE('chlk.models.messages', function () {
         'MessageList', [
             chlk.models.common.PaginatedList, 'messages',
             Boolean, 'inbox',
+            Number, 'start',
             String, 'role',
             String, 'keyword',
             String, 'selectedIds',

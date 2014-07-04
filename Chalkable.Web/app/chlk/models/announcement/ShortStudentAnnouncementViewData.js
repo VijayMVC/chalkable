@@ -1,6 +1,7 @@
 
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
+REQUIRE('chlk.models.school.SchoolOption');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -33,6 +34,9 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [ria.serialize.SerializeProperty('isabsent')],
             Boolean, 'absent',
+
+            [ria.serialize.SerializeProperty('isunexcusedabsent')],
+            Boolean, 'unExcusedAbsent',
 
             [ria.serialize.SerializeProperty('isincomplete')],
             Boolean, 'incomplete',
@@ -70,6 +74,10 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setComment(comment_);
                 if(gradeValue_)
                     this.setGradeValue(gradeValue_);
+            },
+
+            Boolean, function needStrikeThrough(){
+                return this.isDropped() && !!this.getGradeValue()
             },
 
             [[Number, Boolean]],
@@ -126,7 +134,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, function getNormalValue(){
                 var value = this.getGradeValue();
-                if(this.isDropped())
+                if(this.isDropped() && !this.getGradeValue())
                     return Msg.Dropped;
                 if(this.isExempt())
                     return Msg.Exempt;
@@ -135,11 +143,11 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Boolean, function isEmptyGrade(){
                 return !this.getGradeValue() &&
-                        !this.isDropped() &&
-                        !this.isExempt() &&
-                        !this.isLate() &&
-                        !this.isAbsent() &&
-                        !this.isIncomplete()
+                    !this.isDropped() &&
+                    !this.isExempt() &&
+                    !this.isLate() &&
+                    !this.isAbsent() &&
+                    !this.isIncomplete()
             }
         ]);
 });

@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PrivateMessageDetails SendMessage(int toPersonId, string subject, string body)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.UserLocalId.HasValue || !Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
@@ -52,7 +52,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                 da.Insert(message);
                 uow.Commit();
-                message = da.GetOutComeMessage(null, null, Context.UserLocalId.Value, 0, int.MaxValue).First();
+                message = da.GetOutComeMessage(null, null, Context.UserLocalId.Value, Context.SchoolLocalId.Value, 0, int.MaxValue)
+                            .OrderByDescending(x=>x.Id).First();
                 //TODO: notification sending 
                 ServiceLocator.NotificationService.AddPrivateMessageNotification(message.Id);
                 return da.GetDetailsById(message.Id, Context.UserLocalId.Value);
@@ -61,6 +62,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
         {
+            if(!Context.UserLocalId.HasValue || !Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Read())
             {
                 var da = new PrivateMessageDataAccess(uow);
@@ -69,9 +72,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 switch (type)
                 {
                     case PrivateMessageType.Income:
-                        return da.GetIncomeMessages(rolesIds, keyword, read, Context.UserLocalId ?? 0, start, count);
+                        return da.GetIncomeMessages(rolesIds, keyword, read, Context.UserLocalId ?? 0, Context.SchoolLocalId.Value, start, count);
                     case PrivateMessageType.Outcome:
-                        return da.GetOutComeMessage(rolesIds, keyword, Context.UserLocalId ?? 0, start, count);
+                        return da.GetOutComeMessage(rolesIds, keyword, Context.UserLocalId ?? 0, Context.SchoolLocalId.Value, start, count);
                     default:
                         throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
                 }    

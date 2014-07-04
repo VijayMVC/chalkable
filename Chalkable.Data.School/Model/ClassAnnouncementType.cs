@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.Model
         public string Name { get; set; }
         public string Description { get; set; }
         public bool Gradable { get; set; }
-        public int Percentage { get; set; }
+        public decimal Percentage { get; set; }
         public int ClassRef { get; set; }
         public int? ChalkableAnnouncementTypeRef { get; set; }
     }

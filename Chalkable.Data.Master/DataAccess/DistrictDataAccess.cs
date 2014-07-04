@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
@@ -13,17 +12,7 @@ namespace Chalkable.Data.Master.DataAccess
         public DistrictDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-        public IList<District> GetDistricts(bool? demo, bool? usedDemo)
-        {
-            var conds = new AndQueryCondition();
-            if (demo.HasValue)
-                conds.Add(District.DEMO_PREFIX_FIELD, null, demo.Value ? ConditionRelation.NotEqual : ConditionRelation.Equal);
-            if (usedDemo.HasValue)
-                conds.Add(District.LAST_USED_DEMO_FIELD, null, usedDemo.Value ? ConditionRelation.NotEqual : ConditionRelation.Equal);
-            return SelectMany<District>(conds);
-        }
-
+        
         public IDictionary<string, int> CalcServersLoading()
         {
             var res = Settings.Servers.ToDictionary(server => server, server => 0);
@@ -73,13 +62,5 @@ namespace Chalkable.Data.Master.DataAccess
             var sql = string.Format("drop database [{0}]", name);
             ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
         }
-
-        public IList<District> GetDistrictsToDelete(DateTime expires)
-        {
-            var sql = string.Format(@"Select * from District d where [{0}] is not null and [{1}] <= @{1} and 
-                            not exists(select * from Developer where DistrictRef = d.id)", District.DEMO_PREFIX_FIELD, District.LAST_USED_DEMO_FIELD);
-            return ReadMany<District>(new DbQuery(sql, new Dictionary<string, object> { { District.LAST_USED_DEMO_FIELD, expires } }));
-        }
-
     }
 }

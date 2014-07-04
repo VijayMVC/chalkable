@@ -9,7 +9,7 @@
 
 // fonts
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,700);
 
 // style 
 
@@ -208,6 +208,12 @@ header[role='banner'] {
           @include background(linear-gradient(top, lighten(#4bdb7a, 10%), #37c967));
         }
       }
+
+      &.developers{
+        margin-right: 20px;
+      }
+
+
     }
     .signup {
       margin: 1em auto 0;
@@ -275,12 +281,17 @@ header[role='banner'] {
         height: auto;
 
         &.move-left {
-            @include animation(move-left .8s);
+          @include animation(move-left .8s);
         }
       }
 
     }
     .description {
+
+      &.terms{
+        width: 100% !important;
+      }
+
       position: absolute;
       left: 0;
       top: 50%;
@@ -336,6 +347,24 @@ header[role='banner'] {
         padding-left: 4.6%;
       }
     }
+
+    &.terms {
+      background: #fff;
+      figure {
+        left: 0;
+        right: auto;
+
+        .move-right {
+          @include animation(move-right .8s);
+        }
+      }
+      .description {
+        left: auto;
+        right: 0;
+        padding-right: 0;
+      }
+    }
+
     @include MQ(L) {
       .description {
         h1 {
@@ -437,7 +466,7 @@ footer {
   }
 }
 
-#login {
+#login, #dev-signup-form {
   display: none;
 
   position: absolute;
@@ -495,7 +524,7 @@ footer {
       input {
         width: 100%;
         border: 1px solid #c8c7c3;
-        padding: .6em .4em;
+        padding: .6em 1em;
         border-radius: 4px;
         font-size: 1em;
         @include box-shadow(inset 0 1px 3px rgba(black, .1));
@@ -519,6 +548,15 @@ footer {
       }
       p.forgotPassword {
         font-size: .8125em;
+      }
+      p.stay-logged-in {
+        input {
+          width: auto;
+        }
+
+        label {
+          display: inline-block;
+        }
       }
     }
     footer {
@@ -546,88 +584,22 @@ footer {
 
 // animations
 
-@-moz-keyframes move-right {
+@include keyframes(move-right) {
   0% {
-    -moz-transform: translateX(-100%);
-    transform: translateX(-100%); }
+    @include translateX(-100%);
+  }
 
   100% {
-    -moz-transform: translateX(0);
-    transform: translateX(0); } }
+    @include translateX(0);
+  }
+}
 
-@-webkit-keyframes move-right {
+@include keyframes(move-left) {
   0% {
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%); }
+    @include translateX(100%);
+  }
 
   100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0); } }
-
-@-o-keyframes move-right {
-  0% {
-    -o-transform: translateX(-100%);
-    transform: translateX(-100%); }
-
-  100% {
-    -o-transform: translateX(0);
-    transform: translateX(0); } }
-
-@-ms-keyframes move-right {
-  0% {
-    -ms-transform: translateX(-100%);
-    transform: translateX(-100%); }
-
-  100% {
-    -ms-transform: translateX(0);
-    transform: translateX(0); } }
-
-@keyframes move-right {
-  0% {
-    transform: translateX(-100%); }
-
-  100% {
-    transform: translateX(0); } }
-
-@-moz-keyframes move-left {
-  0% {
-    -moz-transform: translateX(100%);
-    transform: translateX(100%); }
-
-  100% {
-    -moz-transform: translateX(0);
-    transform: translateX(0); } }
-
-@-webkit-keyframes move-left {
-  0% {
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%); }
-
-  100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0); } }
-
-@-o-keyframes move-left {
-  0% {
-    -o-transform: translateX(100%);
-    transform: translateX(100%); }
-
-  100% {
-    -o-transform: translateX(0);
-    transform: translateX(0); } }
-
-@-ms-keyframes move-left {
-  0% {
-    -ms-transform: translateX(100%);
-    transform: translateX(100%); }
-
-  100% {
-    -ms-transform: translateX(0);
-    transform: translateX(0); } }
-
-@keyframes move-left {
-  0% {
-    transform: translateX(100%); }
-
-  100% {
-    transform: translateX(0); } }
+    @include translateX(0);
+  }
+}

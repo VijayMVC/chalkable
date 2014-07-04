@@ -28,6 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ApplicationInstall GetInstallationById(int applicationInstallId);
         bool IsPersonForInstall(Guid applicationId);
         void Uninstall(int applicationInstallationId);
+        void Uninstall(IList<int> applicationInstallIds);
         bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds);
 
         IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds);
@@ -68,7 +69,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ApplicationInstall> ListInstalledForClass(int classId)
         {
-            var clazz = ServiceLocator.ClassService.GetClassById(classId);
+            var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
             if (!BaseSecurity.IsAdminViewerOrClassTeacher(clazz, Context))
                 throw new ChalkableSecurityException();
             using (var uow = Read())
@@ -87,11 +88,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
         {
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                return da.GetInstalledByAppId(applicationId, sy.Id);
+                return da.GetInstalledByAppId(applicationId, Context.SchoolYearId.Value);
             }
         }
 
@@ -153,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
             {
                 var teacherClasses = new ClassDataAccess(uow, Context.SchoolLocalId)
-                    .GetAll(new AndQueryCondition { { Class.TEACHER_REF_FIELD, schoolPersonId } });
+                    .GetAll(new AndQueryCondition { { Class.PRIMARY_TEACHER_REF_FIELD, schoolPersonId } });
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
                 var da = new ApplicationInstallActionClassesDataAccess(uow);
                 var appInstallAcClasses = new List<ApplicationInstallActionClasses>();
@@ -281,24 +283,33 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Uninstall(int applicationInstallationId)
         {
+            Uninstall(new List<int> {applicationInstallationId});
+        }
+
+        public void Uninstall(IList<int> applicationInstallIds)
+        {
             using (var uow = Update())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var appInst = da.GetById(applicationInstallationId);
-                if (!ApplicationSecurity.CanUninstall(Context, appInst))
-                    throw new ChalkableSecurityException();
-                appInst.Active = false;
-                da.Update(appInst);
+                var appInstalls = da.GetByIds(applicationInstallIds);
+                foreach (var applicationInstall in appInstalls)
+                {
+                    if (!ApplicationSecurity.CanUninstall(Context, applicationInstall))
+                        throw new ChalkableSecurityException();
+                    applicationInstall.Active = false;
+                }
+                da.Update(appInstalls);
                 uow.Commit();
             }
         }
+
 
         public bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds)
         {
             if (!Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
             var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
-            var cnt = priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+            var cnt = priceData.TotalCount;//priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
             var bugetBalance = 0; // todo : implement fund service ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserId);
             return (bugetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
@@ -324,18 +335,22 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var isForAll = !(schoolPerson.HasValue || (roleids != null && roleids.Count > 0) || (classids != null && classids.Count > 0) ||
                                    (gradelevelids != null && gradelevelids.Count > 0) || (departmentids != null && departmentids.Count > 0));
-            var r = GetPersonsForApplicationInstallCount(applicationId, schoolPerson, roleids, classids, departmentids, gradelevelids).ToList();
-            var totalPrice = GetApplicationTotalPrice(applicationId, r, isForAll);
-            return ApplicationTotalPriceInfo.Create(totalPrice, r);
+            //var r = GetPersonsForApplicationInstallCount(applicationId, schoolPerson, roleids, classids, departmentids, gradelevelids).ToList();
+
+            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            var persons = GetPersonsForApplicationInstall(app, schoolPerson, roleids, classids, departmentids, gradelevelids);
+            var totalPrice = GetApplicationTotalPrice(app, persons, isForAll);
+            var totalCount = persons.GroupBy(x => x.PersonId).Select(x => x.Key).Count();
+            return ApplicationTotalPriceInfo.Create(totalPrice, totalCount);
         }
 
-        private decimal GetApplicationTotalPrice(Guid applicationId, IEnumerable<PersonsForApplicationInstallCount> applicationInstallCount, bool isForAll)
+        private decimal GetApplicationTotalPrice(Application app, IEnumerable<PersonsForApplicationInstall> applicationInstallCount, bool isForAll)
         {
-            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+
             decimal totalPrice = 0;
             if (app.Price != 0)
             {
-                var totalCount = applicationInstallCount.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+                var totalCount = applicationInstallCount.GroupBy(x=>x.PersonId).Select(x=>x.Key).Count();
                 if (BaseSecurity.IsAdminViewer(Context))
                 {
                     totalPrice = app.Price * totalCount;
@@ -343,19 +358,38 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 {
-                    var countPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Class).ToList();
-                    var totalInClassCount = countPerClassComplex.Sum(x => x.Count);
-                    foreach (var countComplex in countPerClassComplex)
+                    var personsPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Class).ToList();
+                    //var totalInClassCount = countPerClassComplex.Sum(x => x.Count);
+                    var personids = new HashSet<int>();
+                    var classPersonsDic = personsPerClassComplex.GroupBy(x => x.GroupId).ToDictionary(x => x.Key, x => x.ToList());
+                    foreach (var classPersons in classPersonsDic)
                     {
-                        decimal price = countComplex.Count.Value * app.Price;
+                        var notAddPersons = classPersons.Value.Where(x => !personids.Contains(x.PersonId)).Select(x=>x.PersonId).ToList();
+                        foreach (var notAddPerson in notAddPersons)
+                            personids.Add(notAddPerson);
+                        
+                        decimal price = notAddPersons.Count * app.Price;
                         totalPrice += app.PricePerClass.HasValue && price > app.PricePerClass.Value ? app.PricePerClass.Value : price;
                     }
-                    totalPrice += app.Price * (totalCount - totalInClassCount.Value);
+                    var otherPersons = applicationInstallCount.GroupBy(x=>x.PersonId).Count(x => !personids.Contains(x.Key));
+                    totalPrice += app.Price * otherPersons;
                     return totalPrice;
                 }
                 return totalCount * app.Price;
             }
             return totalPrice;
+        }
+
+        private IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Application app, int? personId, IList<int> roleIds,
+                                                                 IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds)
+        {
+            using (var uow = Read())
+            {
+                var da = new ApplicationInstallDataAccess(uow);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolTime.Date);
+                return da.GetPersonsForApplicationInstall(app.Id, Context.UserLocalId.Value, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
+            }
         }
 
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds,
@@ -370,5 +404,8 @@ namespace Chalkable.BusinessLogic.Services.School
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }
         }
+
+
+
     }
 }

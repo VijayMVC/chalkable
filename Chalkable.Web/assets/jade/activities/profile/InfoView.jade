@@ -19,8 +19,8 @@ mixin ProfileTopBar(actionLinksData, model)
 mixin ProfileInfoView(model)
     .info-view
         .title
-            .avatar-container.with-border
-                +PersonImg(model, 128)
+            div(style="overflow: visible").avatar-container.with-border
+                +PersonImg(model, 128, true)
             h1=model.getFullName()
         .sections
             .sections-info
@@ -50,7 +50,7 @@ mixin ProfileInfoView(model)
                         each address in addresses
                             .data-info.low-font-size=address.getValue()
             block
-        .sections-info.other-section
+        //.sections-info.other-section
             .section-title.pacifico=Msg.Other(true)
         if model.isAbleEdit()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
@@ -61,9 +61,9 @@ mixin ProfileInfoForm(controller, submitAction, pictureUploadAction,  model)
         +ActionForm(controller, submitAction)#info-edit-form.with-ok
             .title
                 .avatar-block
-                    .avatar-container.with-border
-                        +PersonImg(model, 128)
-                    button(type="button").simple-gray-button.file Upload
+                    div(style="overflow: visible").avatar-container.with-border
+                        +PersonImg(model, 128, true)
+                    //button(type="button").simple-gray-button.file Upload
                         +FileUpload(controller, pictureUploadAction, [model.getId().valueOf()])#add-attachment.simple-gray-button
                 .name-block
                     input(name="firstname", value=model.getFirstName(), class="validate[required]")

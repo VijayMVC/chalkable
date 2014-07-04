@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services
 {
@@ -34,6 +36,10 @@ namespace Chalkable.BusinessLogic.Services
         public int? SchoolLocalId { get; set; }
         public Guid? DeveloperId { get; set; }
         public int? UserLocalId { get; set; }
+        public int? SchoolYearId { get; set; }
+        public DateTime? SchoolYearStartDate { get; set; }
+        public DateTime? SchoolYearEndDate { get; set; }
+
         [Ignore]
         public string SisToken { get; set; }
         
@@ -43,7 +49,15 @@ namespace Chalkable.BusinessLogic.Services
         [Ignore]
         public DateTime NowSchoolTime
         {
-            get { return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC"); }
+            get
+            {
+                var res = DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC");
+                if (SchoolYearEndDate.HasValue && res > SchoolYearEndDate)
+                    return SchoolYearEndDate.Value;
+                if (SchoolYearStartDate.HasValue && res < SchoolYearStartDate)
+                    return SchoolYearStartDate.Value;
+                return res;
+            }
         }
 
         [Ignore]
@@ -55,14 +69,14 @@ namespace Chalkable.BusinessLogic.Services
         [Ignore]
         public string OAuthApplication{ get; set; }
         [Ignore]
-        public IList<StiConnector.Connectors.Model.Claim> Claims { get; set; } 
+        public IList<ClaimInfo> Claims { get; set; } 
 
         public UserContext()
         {
             MasterConnectionString = Settings.MasterConnectionString;     
         }
 
-        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId) : this()
+        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, SchoolYear schoolYear = null) : this()
         {
             UserId = user.Id;
             Login = user.Login;
@@ -77,12 +91,18 @@ namespace Chalkable.BusinessLogic.Services
                 DistrictId = district.Id;
                 SchoolTimeZoneId = district.TimeZone;
                 DistrictServerUrl = district.ServerUrl;
-                SisUrl = district.SisUrl; //"http://localhost/"; // "http://sandbox.sti-k12.com/Chalkable/"; //
+                SisUrl = district.SisUrl; //"http://localhost/"; //"http://sandbox.sti-k12.com/Chalkable/"; //
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;
                     SchoolId = school.Id;
                     SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, DistrictServerUrl, DistrictId);
+                }
+                if (schoolYear != null)
+                {
+                    SchoolYearId = schoolYear.Id;
+                    SchoolYearStartDate = schoolYear.StartDate;
+                    SchoolYearEndDate = schoolYear.EndDate;
                 }
             }
         }

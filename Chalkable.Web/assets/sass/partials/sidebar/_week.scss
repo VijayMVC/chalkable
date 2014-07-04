@@ -65,6 +65,14 @@
 
     >DIV.week{
       cursor : pointer;
+
+      >INPUT{
+        position: absolute;
+        left: 37px;
+        width: 143px;
+        top: -2px;
+        opacity: 0;
+      }
     }
 
     > A {

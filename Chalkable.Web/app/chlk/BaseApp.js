@@ -39,6 +39,7 @@ REQUIRE('chlk.controls.MaskedInputControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
+REQUIRE('chlk.models.common.AlertInfo');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 REQUIRE('chlk.models.attendance.AttendanceReason');
 REQUIRE('chlk.models.id.SchoolYearId');
@@ -47,7 +48,14 @@ REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.grading.AlternateScore');
 REQUIRE('chlk.models.grading.AlphaGrade');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
+REQUIRE('chlk.models.people.ShortUserInfo');
+REQUIRE('chlk.models.grading.AvgComment');
+REQUIRE('chlk.models.school.SchoolOption');
 
+REQUIRE('chlk.models.id.SchoolId');
+
+
+REQUIRE('chlk.templates.common.AlertsPopUpTpl');
 
 REQUIRE('chlk.AppApiHost');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
@@ -85,20 +93,28 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
                 window.currentChlkPerson.claims = window.userClaims;
-                this.saveInSession(session, 'markingPeriod', chlk.models.schoolYear.MarkingPeriod);
-                this.saveInSession(session, 'gradingPeriod', chlk.models.schoolYear.GradingPeriod);
-                this.saveInSession(session, 'nextMarkingPeriod', chlk.models.schoolYear.MarkingPeriod);
-                this.saveInSession(session, 'finalizedClassesIds');
-                this.saveInSession(session, 'currentChlkPerson', chlk.models.people.User, 'currentPerson');
-                this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
-                this.saveInSession(session, 'azurePictureUrl');
-                this.saveInSession(session, 'currentSchoolYearId', chlk.models.id.SchoolYearId);
-                this.saveInSession(session, 'attendanceReasons', ArrayOf(chlk.models.attendance.AttendanceReason));
-                this.saveInSession(session, 'userClaims', ArrayOf(chlk.models.people.Claim));
-                this.saveInSession(session, 'alphaGrades', ArrayOf(chlk.models.grading.AlphaGrade));
-                this.saveInSession(session, 'alternateScores', ArrayOf(chlk.models.grading.AlternateScore));
-                this.saveInSession(session, 'newNotifications', Number);
+                this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.NEXT_MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.FINALIZED_CLASS_IDS);
+                this.saveInSession(session, ChlkSessionConstants.CURRENT_CHLK_PERSON, chlk.models.people.User, ChlkSessionConstants.CURRENT_PERSON);
 
+                this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
+                this.saveInSession(session, ChlkSessionConstants.AZURE_PICTURE_URL);
+                this.saveInSession(session, ChlkSessionConstants.DEMO_AZURE_PICTURE_URL);
+                this.saveInSession(session, ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, chlk.models.id.SchoolYearId);
+                this.saveInSession(session, ChlkSessionConstants.ATTENDANCE_REASONS, ArrayOf(chlk.models.attendance.AttendanceReason));
+                this.saveInSession(session, ChlkSessionConstants.USER_CLAIMS, ArrayOf(chlk.models.people.Claim));
+                this.saveInSession(session, ChlkSessionConstants.ALPHA_GRADES, ArrayOf(chlk.models.grading.AlphaGrade));
+                this.saveInSession(session, ChlkSessionConstants.ALTERNATE_SCORES, ArrayOf(chlk.models.grading.AlternateScore));
+                this.saveInSession(session, ChlkSessionConstants.NEW_NOTIFICATIONS, Number);
+                this.saveInSession(session, ChlkSessionConstants.GRADING_COMMENTS, ArrayOf(chlk.models.grading.AvgComment));
+                this.saveInSession(session, ChlkSessionConstants.SCHOOL_OPTIONS, chlk.models.school.SchoolOption);
+                this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL, Boolean);
+                this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
+
+
+                window.gradeLevels = window.gradeLevels || [];
                 window.gradeLevels.forEach(function(item){
                     var numberPart = parseInt(item.name, 10);
                     if(numberPart){
@@ -107,7 +123,7 @@ NAMESPACE('chlk', function (){
                     }
                     item.fullText = numberPart ? item.name + item.serialPart : item.name.trim();
                 });
-                this.saveInSession(session, 'gradeLevels', ArrayOf(chlk.models.grading.GradeLevel));
+                this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();
                 var serviceRoot = "/";
@@ -137,7 +153,7 @@ NAMESPACE('chlk', function (){
             },
 
             function getCurrentPerson(){
-                return this.getContext().getSession().get('currentPerson', null);
+                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
             },
 
             OVERRIDE, ria.async.Future, function onStart_() {
@@ -147,21 +163,27 @@ NAMESPACE('chlk', function (){
                 //TODO Remove jQuery
                 jQuery(document).on('mouseover mousemove', '[data-tooltip]', function(e){
                     if(!jQuery(this).data('wasClick')){
-                        var node = jQuery(this),
-                            tooltip = jQuery('#chlk-tooltip-item'),
-                            offset = node.offset(),
-                            showTooltip = true;
-                        var value = node.data('tooltip');
-                        var type = node.data('tooltip-type');
-                        if(type == "overflow"){
-                            showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
-                        }
-                        if(value && showTooltip){
-                            tooltip.show();
-                            tooltip.find('.tooltip-content').html(node.data('tooltip'));
-                            tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
-                                .css('top', offset.top - tooltip.height());
-                            e.stopPropagation();
+                        var target = jQuery(e.target),
+                            tooltip = jQuery('#chlk-tooltip-item');
+                        if(target.hasClass('no-tooltip') || target.parents('.no-tooltip')[0]){
+                            tooltip.hide();
+                            tooltip.find('.tooltip-content').html('');
+                        }else{
+                            var node = jQuery(this),
+                                offset = node.offset(),
+                                showTooltip = true;
+                            var value = node.data('tooltip');
+                            var type = node.data('tooltip-type');
+                            if(type == "overflow"){
+                                showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
+                            }
+                            if(value && showTooltip){
+                                tooltip.show();
+                                tooltip.find('.tooltip-content').html(node.data('tooltip'));
+                                tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
+                                    .css('top', offset.top - tooltip.height());
+                                e.stopPropagation();
+                            }
                         }
                     }
 
@@ -178,6 +200,45 @@ NAMESPACE('chlk', function (){
                     var tooltip = jQuery('#chlk-tooltip-item');
                     tooltip.hide();
                     tooltip.find('.tooltip-content').html('');
+                });
+
+                jQuery(document).on('mouseover mousemove', '.alerts-icon', function(e){
+                    if(!jQuery(this).data('wasClick')){
+                        var tooltip = jQuery('.alerts-pop-up'),
+                            node = jQuery(this),
+                            offset = node.offset();
+                        var o = {
+//                            isallowedinetaccess: !!node.data('allowedinetaccess'),
+//                            hasmedicalalert: !!node.data('withmedicalalert'),
+//                            specialinstructions: node.data('specialinstructions'),
+//                            spedstatus: node.data('spedstatus')
+                            alerts: node.data('stringalerts')
+                        };
+                        var js = new ria.serialize.JsonSerializer();
+                        //var model = new chlk.models.common.Alerts.$create(o.stringAlerts);
+                        var model = js.deserialize(o, chlk.models.common.Alerts);
+                        var tpl = chlk.templates.common.AlertsPopUpTpl();
+                        tpl.assign(model);
+                        tooltip.html(tpl.render());
+                        tooltip.show();
+                        tooltip.css('left', offset.left + node.width() + 20)
+                            .css('top', offset.top - (tooltip.height() - node.height()) / 2);
+                        e.stopPropagation();
+                    }
+
+                });
+
+                jQuery(document).on('mouseleave click', '.alerts-icon', function(e){
+                    if(e.type == "click"){
+                        var node = jQuery(this);
+                        node.data('wasClick', true);
+                        setTimeout(function(){
+                            node.data('wasClick', null);
+                        }, 100)
+                    }
+                    var tooltip = jQuery('.alerts-pop-up');
+                    tooltip.hide();
+                    tooltip.html('');
                 });
 
                  jQuery(document).on('click', '.demo-role-button:not(.coming)', function(){

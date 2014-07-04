@@ -12,11 +12,12 @@ namespace Chalkable.Data.School.Model
 
         [PrimaryKeyFieldAttr]
         public DateTime Day { get; set; }
-        public bool IsSchoolDay { get; set; }
+        public int? DayTypeRef { get; set; }
         [PrimaryKeyFieldAttr]
         public int SchoolYearRef { get; set; }
+        public bool IsSchoolDay { get; set; }
         public int SchoolRef { get; set; }
-        public int? DayTypeRef { get; set; }
+        
         [NotDbFieldAttr]
         public DayType DayType { get; set; }
     }

@@ -16,9 +16,27 @@
 
   label{
     cursor: pointer;
-    font-size: 13px;
     background: #DEDEDE;
     color: #444;
+    padding-left: 24px;
+  }
+
+  &.with-input{
+    height: 27px;
+    width: 265px;
+    margin-right: 0;
+    margin-bottom: 10px;
+
+    &:nth-child(2n){
+      margin-right: 7px;
+    }
+
+    .checkbox{
+      margin: 7px 3px;
+    }
+  }
+
+  label, .label-input{
     overflow: hidden;
     text-overflow: ellipsis;
     position: absolute;
@@ -27,11 +45,23 @@
     right: 0;
     bottom: 0;
     border-radius: 5px;
-    padding-left: 24px;
     line-height: 25px;
     display: inline-block;
     text-align: left;
+    font-size: 13px;
+    white-space: nowrap;
   }
+
+  .label-input{
+    padding-left: 29px;
+    background: #ffffff;
+    color: #cccccc;
+    @include box-shadow(0 0 0 1px #e5e5e5);
+    border: 1px solid #dedede;
+    width: 238px;
+    height: 15px;
+  }
+
   .checkbox{
     position: relative;
     z-index: 1;
@@ -47,6 +77,11 @@
         padding-left: 23px;
         text-shadow: none;
       }
+
+      & + .label-input{
+        border: 1px solid #888888;
+        color: #000;
+      }
     }
 
     &:disabled{
@@ -55,6 +90,7 @@
         box-shadow: none;
         border: 0;
         color: #444;
+        opacity: 0.5;
       }
     }
   }

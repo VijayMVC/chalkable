@@ -1,11 +1,11 @@
-mixin ResetPasswordBlock()
+mixin ProfileResetPasswordBlock()
     .block
         .header Password
         .fields
             +Button().special-button.yellow-button#changePasswordLink(href='javascript:')
                 |Change Password
         div.x-hidden#changePasswordForm
-            +ActionForm('account', 'teacherChangePassword')#info-edit-form.with-ok
+            +ActionForm('account', 'changePassword')#info-edit-form.with-ok
                 .title
                     .name-block
                         input(name="oldPassword", type="password", class="validate[required] padding-1-3", placeholder=Msg.Old_Password)
@@ -17,39 +17,11 @@ mixin ResetPasswordBlock()
                     +Button()(type="button").special-button.settings.cancel-button#cancell-edit-pwd-button=Msg.Cancel
 
 mixin SchoolPersonSettings()
+    -console.info('SchoolPersonSettings')
     .settings
         .action-bar.not-transparent.buttons
             .container.panel-bg
                 block
         .general
-            .preferences
-                .block
-                    .header SMS
-                    .fields
-                        .field
-                            +Checkbox('ch1', false)
-                            label Announcements
-
-                        .field
-                            +Checkbox('ch1', false)
-                            label Private messages
-
-                        .field
-                            +Checkbox('ch1', false)
-                            label Notifications
-
-                .block
-                    .header Email
-                    .fields
-                        .field
-                            +Checkbox('ch1', false)
-                            label Announcements
-
-                        .field
-                            +Checkbox('ch1', false)
-                            label Private messages
-
-                        .field
-                            +Checkbox('ch1', false)
-                            label Notifications
-            +ResetPasswordBlock()
+            -console.info('SchoolPersonSettings')
+            +ProfileResetPasswordBlock(true)

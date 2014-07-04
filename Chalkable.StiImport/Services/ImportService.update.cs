@@ -7,12 +7,18 @@ using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
 using AlphaGrade = Chalkable.StiConnector.SyncModel.AlphaGrade;
 using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
+using ClassroomOption = Chalkable.StiConnector.SyncModel.ClassroomOption;
 using DayType = Chalkable.StiConnector.SyncModel.DayType;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
+using GradingComment = Chalkable.StiConnector.SyncModel.GradingComment;
 using GradingPeriod = Chalkable.StiConnector.SyncModel.GradingPeriod;
+using GradingScale = Chalkable.StiConnector.SyncModel.GradingScale;
+using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
+using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using School = Chalkable.StiConnector.SyncModel.School;
+using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 
@@ -22,32 +28,72 @@ namespace Chalkable.StiImport.Services
     {
         private void ProcessUpdate()
         {
+            Log.LogInfo("update schools");
             UpdateSchools();
+            Log.LogInfo("update adresses");
             UpdateAddresses();
+            Log.LogInfo("update sis users");
+            UpdateSisUsers();
+            Log.LogInfo("update persons");
             UpdatePersons();
+            Log.LogInfo("update school persons");
             UpdateSchoolPersons();
+            Log.LogInfo("update phones");
             UpdatePhones();
+            Log.LogInfo("update grade levels");
             UpdateGradeLevels();
+            Log.LogInfo("update school years");
             UpdateSchoolYears();
+            Log.LogInfo("update student school years");
             UpdateStudentSchoolYears();
+            Log.LogInfo("update marking periods");
             UpdateMarkingPeriods();
+            Log.LogInfo("update grading periods");
             UpdateGradingPeriods();
+            Log.LogInfo("update day types");
             UpdateDayTypes();
+            Log.LogInfo("update days");
             UpdateDays();
+            Log.LogInfo("update rooms");
             UpdateRooms();
+            Log.LogInfo("update grading scales");
+            UpdateGradingScales();
+            Log.LogInfo("update courses");
             UpdateCourses();
+            Log.LogInfo("update class teachers");
+            UpdateClassTeachers();
+            Log.LogInfo("update standard subjects");
             UpdateStandardSubject();
+            Log.LogInfo("update standards");
             UpdateStandards();
+            Log.LogInfo("update class standards");
             UpdateClassStandard();
+            Log.LogInfo("update marking period classes");
             UpdateMarkingPeriodClasses();
-            UpdateClassAnnouncementTypes();
+            Log.LogInfo("update periods");
             UpdatePeriods();
+            Log.LogInfo("update class periods");
             UpdateClassPeriods();
+            Log.LogInfo("update class persons");
             UpdateClassPersons();
+            Log.LogInfo("update attendance reasons");
             UpdateAttendanceReasons();
+            Log.LogInfo("update attendance level reasons");
             UpdateAttendanceLevelReasons();
+            Log.LogInfo("update alpha grades");
             UpdateAlphaGrades();
+            Log.LogInfo("update alternate scores");
             UpdateAlternateScores();
+            Log.LogInfo("update infractions");
+            UpdateInfractions();
+            Log.LogInfo("update scale ranges");
+            UpdateGradingScaleRanges();
+            Log.LogInfo("update classroom options");
+            UpdateClassroomOptions();
+            Log.LogInfo("update grading comments");
+            UpdateGradingComments();
+            Log.LogInfo("update schoolsOptions");
+            UpdateSchoolsOptions();
         }
 
         private void UpdateSchools()
@@ -62,6 +108,38 @@ namespace Chalkable.StiImport.Services
                     Name = x.Name
                 }).ToList();
             ServiceLocatorSchool.SchoolService.Edit(schools);
+        }
+
+        private void UpdateSchoolsOptions()
+        {
+            if(context.GetSyncResult<SchoolOption>().Updated == null)
+                return;
+            var res = context.GetSyncResult<SchoolOption>().Updated.Select(schoolOption => new Data.School.Model.SchoolOption
+            {
+                Id = schoolOption.SchoolID,
+                AllowDualEnrollment = schoolOption.AllowDualEnrollment,
+                AllowScoreEntryForUnexcused = schoolOption.AllowScoreEntryForUnexcused,
+                AllowSectionAverageModification = schoolOption.AllowSectionAverageModification,
+                AveragingMethod = schoolOption.AveragingMethod,
+                BaseHoursOffset = schoolOption.BaseHoursOffset,
+                BaseMinutesOffset = schoolOption.BaseMinutesOffset,
+                CategoryAveraging = schoolOption.CategoryAveraging,
+                CompleteStudentScheduleDefinition = schoolOption.CompleteStudentScheduleDefinition,
+                DefaultCombinationIndex = schoolOption.DefaultCombinationIndex,
+                DisciplineOverwritesAttendance = schoolOption.DisciplineOverwritesAttendance,
+                EarliestPaymentDate = schoolOption.EarliestPaymentDate,
+                IncludeReportCardCommentsInGradebook = schoolOption.IncludeReportCardCommentsInGradebook,
+                LockCategories = schoolOption.LockCategories,
+                MergeRostersForAttendance = schoolOption.MergeRostersForAttendance,
+                NextReceiptNumber = schoolOption.NextReceiptNumber,
+                ObservesDst = schoolOption.ObservesDst,
+                StandardsCalculationMethod = schoolOption.StandardsCalculationMethod,
+                StandardsCalculationRule = schoolOption.StandardsCalculationRule,
+                StandardsCalculationWeightMaximumValues = schoolOption.StandardsCalculationWeightMaximumValues,
+                StandardsGradingScaleRef = schoolOption.StandardsGradingScaleID,
+                TimeZoneName = schoolOption.TimeZoneName
+            }).ToList();
+            ServiceLocatorSchool.SchoolService.EditSchoolOptions(res);
         }
 
         private void UpdateAddresses()
@@ -79,37 +157,39 @@ namespace Chalkable.StiImport.Services
                     Id = x.AddressID,
                     Latitude = x.Latitude,
                     Longitude = x.Longitude,
-                    PostalCode = x.PostalCode
+                    PostalCode = x.PostalCode,
+                    StreetNumber = x.StreetNumber,
+                    State = x.State
                 }).ToList();
             ServiceLocatorSchool.AddressService.Edit(addresses);
         }
 
+        private void UpdateSisUsers()
+        {
+            if (context.GetSyncResult<User>().Updated == null)
+                return;
+            var users = context.GetSyncResult<User>().Updated.Select(x => new SisUser
+            {
+                Id = x.UserID,
+                IsDisabled = x.IsDisabled,
+                IsSystem = x.IsSystem,
+                LockedOut = x.LockedOut,
+                UserName = x.UserName
+            }).ToList();
+            ServiceLocatorSchool.SisUserService.Edit(users);
+        }
+
         private void UpdatePersons()
         {
-            if (context.GetSyncResult<Person>().Updated == null)
-                return;
-            var persons = context.GetSyncResult<Person>().Updated;
-            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
-            var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
-            var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
-            IList<PersonInfo> pi = new List<PersonInfo>();
-            foreach (var person in persons)
+            
+            if (context.GetSyncResult<Person>().Updated != null)
             {
-                var hasMedicalAlert = false;
-                var isAllowedInetAccess = false;
-                string specialInstructions = "";
-                string spEdStatus = null;
-                if (students.ContainsKey(person.PersonID))
+                var persons = context.GetSyncResult<Person>().Updated;
+                IList<PersonInfo> pi = new List<PersonInfo>();
+                foreach (var person in persons)
                 {
-                    hasMedicalAlert = students[person.PersonID].HasMedicalAlert;
-                    isAllowedInetAccess = students[person.PersonID].IsAllowedInetAccess;
-                    specialInstructions = students[person.PersonID].SpecialInstructions;
-                    if (students[person.PersonID].SpEdStatusID.HasValue)
-                    {
-                        spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
-                    }
-                }
-                pi.Add(new PersonInfo
+                    Data.School.Model.Person chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID);
+                    pi.Add(new PersonInfo
                     {
                         Id = person.PersonID,
                         Active = true,
@@ -117,14 +197,81 @@ namespace Chalkable.StiImport.Services
                         BirthDate = person.DateOfBirth,
                         FirstName = person.FirstName,
                         LastName = person.LastName,
-                        Gender = person.GenderID.HasValue ? genders[person.GenderID.Value].Code : "U",
-                        HasMedicalAlert = hasMedicalAlert,
-                        IsAllowedInetAccess = isAllowedInetAccess,
-                        SpecialInstructions = specialInstructions,
-                        SpEdStatus = spEdStatus    
+                        Gender = chalkablePerson.Gender,
+                        HasMedicalAlert = chalkablePerson.HasMedicalAlert,
+                        IsAllowedInetAccess = chalkablePerson.IsAllowedInetAccess,
+                        SpecialInstructions = chalkablePerson.SpecialInstructions,
+                        SpEdStatus = chalkablePerson.SpEdStatus,
+                        Email = chalkablePerson.Email,
+                        PhotoModifiedDate = person.PhotoModifiedDate
                     });
+                    if (person.PhotoModifiedDate.HasValue)
+                    {
+                        if (!chalkablePerson.PhotoModifiedDate.HasValue || chalkablePerson.PhotoModifiedDate < person.PhotoModifiedDate)
+                            personsForImportPictures.Add(person);
+                    }
+                }
+                ServiceLocatorSchool.PersonService.Edit(pi);
             }
-            ServiceLocatorSchool.PersonService.Edit(pi);
+            
+            if (context.GetSyncResult<Student>().Updated != null)
+            {
+                IList<PersonInfo> pi = new List<PersonInfo>();
+                var students = context.GetSyncResult<Student>().Updated;
+                var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
+                foreach (var student in students)
+                {
+                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(student.StudentID);
+                    var sisUser = ServiceLocatorSchool.SisUserService.GetById(student.UserID);
+                    pi.Add(new PersonInfo
+                    {
+                        Id = student.StudentID,
+                        Active = true,
+                        AddressRef = chalkablePerson.AddressRef,
+                        BirthDate = chalkablePerson.BirthDate,
+                        FirstName = chalkablePerson.FirstName,
+                        LastName = chalkablePerson.LastName,
+                        Gender = chalkablePerson.Gender,
+                        HasMedicalAlert = student.HasMedicalAlert,
+                        IsAllowedInetAccess = student.IsAllowedInetAccess,
+                        SpecialInstructions = student.SpecialInstructions,
+                        SpEdStatus = student.SpEdStatusID.HasValue ? spEdStatuses[student.SpEdStatusID.Value].Name : null,
+                        Email = chalkablePerson.Email,
+                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
+                        SisUserName = sisUser.UserName
+                    });
+                }
+                ServiceLocatorSchool.PersonService.Edit(pi);
+            }
+
+            if (context.GetSyncResult<Staff>().Updated != null)
+            {
+                IList<PersonInfo> pi = new List<PersonInfo>();
+                var staff = context.GetSyncResult<Staff>().Updated;
+                foreach (var st in staff)
+                {
+                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(st.StaffID);
+                    var sisUser = st.UserID.HasValue ? ServiceLocatorSchool.SisUserService.GetById(st.UserID.Value) : null;
+                    pi.Add(new PersonInfo
+                    {
+                        Id = st.StaffID,
+                        Active = true,
+                        AddressRef = chalkablePerson.AddressRef,
+                        BirthDate = chalkablePerson.BirthDate,
+                        FirstName = chalkablePerson.FirstName,
+                        LastName = chalkablePerson.LastName,
+                        Gender = chalkablePerson.Gender,
+                        HasMedicalAlert = chalkablePerson.HasMedicalAlert,
+                        IsAllowedInetAccess = chalkablePerson.IsAllowedInetAccess,
+                        SpecialInstructions = chalkablePerson.SpecialInstructions,
+                        SpEdStatus = null,
+                        Email = chalkablePerson.Email,
+                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
+                        SisUserName = sisUser != null ? sisUser.UserName : string.Empty
+                    });
+                }
+                ServiceLocatorSchool.PersonService.Edit(pi);
+            }
         }
 
         private void UpdateSchoolPersons()
@@ -199,7 +346,8 @@ namespace Chalkable.StiImport.Services
                 {
                     SchoolYearRef = x.AcadSessionID,
                     StudentRef = x.StudentID,
-                    GradeLevelRef = x.GradeLevelID.Value
+                    GradeLevelRef = x.GradeLevelID.Value,
+                    EnrollmentStatus = x.CurrentEnrollmentStatus == "C" ? StudentEnrollmentStatusEnum.CurrentlyEnrolled : StudentEnrollmentStatusEnum.PreviouslyEnrolled
                 }).ToList();
             ServiceLocatorSchool.SchoolYearService.EditStudentSchoolYears(ssy);
         }
@@ -237,7 +385,7 @@ namespace Chalkable.StiImport.Services
                 StartDate = x.StartDate,
                 AllowGradePosting = x.AllowGradePosting,
                 Code = x.Code,
-                EndTime = x.EndDate,
+                EndTime = x.EndTime,
                 MarkingPeriodRef = x.TermID,
                 SchoolAnnouncement = x.SchoolAnnouncement
             }).ToList();
@@ -290,10 +438,55 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateCourses()
         {
-            //TODO: need to solve GL problem
+            if (context.GetSyncResult<Course>().Updated == null)
+                return;
+            var courses = context.GetSyncResult<Course>().Updated.ToList();
+            var classes = new List<Class>();
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
+            foreach (var course in courses)
+            {
+                var glId = course.MaxGradeLevelID ?? course.MinGradeLevelID;
+                if (!glId.HasValue)
+                {
+                    Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
+                    continue;
+                }
+                var current = ServiceLocatorSchool.ClassService.GetById(course.CourseID);
+                classes.Add(new Class
+                {
+                    ChalkableDepartmentRef = current.ChalkableDepartmentRef,
+                    Description = course.FullName,
+                    GradeLevelRef = glId.Value,
+                    Id = course.CourseID,
+                    ClassNumber = course.FullSectionNumber,
+                    Name = course.ShortName,
+                    SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
+                    SchoolYearRef = course.AcadSessionID,
+                    PrimaryTeacherRef = course.PrimaryTeacherID,
+                    RoomRef = course.RoomID,
+                    CourseRef = course.SectionOfCourseID,
+                    GradingScaleRef = course.GradingScaleID
+                });   
+            }
+            ServiceLocatorSchool.ClassService.Edit(classes);
         }
 
-        public void UpdateStandardSubject()
+        private void UpdateClassTeachers()
+        {
+            if (context.GetSyncResult<SectionStaff>().Updated == null)
+                return;
+            var teachers = context.GetSyncResult<SectionStaff>().Updated.Select(x => new ClassTeacher
+            {
+                ClassRef = x.SectionID,
+                IsCertified = x.IsCertified,
+                IsHighlyQualified = x.IsHighlyQualified,
+                IsPrimary = x.IsPrimary,
+                PersonRef = x.StaffID
+            }).ToList();
+            ServiceLocatorSchool.ClassService.EditTeachers(teachers);
+        }
+
+        private void UpdateStandardSubject()
         {
             if (context.GetSyncResult<StandardSubject>().Updated == null)
                 return;
@@ -336,31 +529,6 @@ namespace Chalkable.StiImport.Services
             //TODO: no way to update. delete or insert only
         }
 
-        private void UpdateClassAnnouncementTypes()
-        {
-            if (context.GetSyncResult<ActivityCategory>().Updated == null)
-                return;
-            var types = context.GetSyncResult<ActivityCategory>().Updated.Select(x => new ClassAnnouncementType
-            {
-                Id = x.ActivityCategoryID,
-                ClassRef = x.SectionID,
-                Description = x.Description,
-                Gradable = true,
-                Name = x.Name,
-                Percentage = (int)(x.Percentage ?? 0)//TODO: use decimal?
-            }).ToList();
-            var chalkableTypes = ChalkableAnnouncementType.All;
-            foreach (var classAnnouncementType in types)
-            {
-                var ct =
-                    chalkableTypes.FirstOrDefault(
-                        x => x.Keywords.Split(',').Any(y => classAnnouncementType.Name.ToLower().Contains(y)));
-                if (ct != null)
-                    classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
-            }
-            ServiceLocatorSchool.ClassAnnouncementTypeService.Edit(types);
-        }
-
         private void UpdatePeriods()
         {
             if (context.GetSyncResult<TimeSlot>().Updated == null)
@@ -388,7 +556,19 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateClassPersons()
         {
-            //TODO: no way to update. delete or insert only
+            if (context.GetSyncResult<StudentScheduleTerm>().Updated == null)
+                return;
+            var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
+            var studentSchedules = context.GetSyncResult<StudentScheduleTerm>().Updated
+                .Select(x => new ClassPerson
+                {
+                    ClassRef = x.SectionID,
+                    PersonRef = x.StudentID,
+                    MarkingPeriodRef = x.TermID,
+                    SchoolRef = mps.First(y => y.Id == x.TermID).SchoolRef,
+                    IsEnrolled = x.IsEnrolled
+                }).ToList();
+            ServiceLocatorSchool.ClassService.EditStudents(studentSchedules);
         }
 
         private void UpdateAttendanceReasons()
@@ -451,6 +631,101 @@ namespace Chalkable.StiImport.Services
                 PercentOfMaximumScore = x.PercentOfMaximumScore
             }).ToList();
             ServiceLocatorSchool.AlternateScoreService.EditAlternateScores(alternateScores);
+        }
+
+        private void UpdateInfractions()
+        {
+            if (context.GetSyncResult<Infraction>().Updated == null)
+                return;
+            var infractions = context.GetSyncResult<Infraction>().Updated.Select(x => new Data.School.Model.Infraction
+            {
+                Code = x.Code,
+                Demerits = x.Demerits,
+                Description = x.Description,
+                Id = x.InfractionID,
+                IsActive = x.IsActive,
+                IsSystem = x.IsSystem,
+                Name = x.Name,
+                NCESCode = x.NCESCode,
+                SIFCode = x.SIFCode,
+                StateCode = x.StateCode
+            }).ToList();
+            ServiceLocatorSchool.InfractionService.Edit(infractions);
+        }
+
+        private void UpdateGradingScales()
+        {
+            if (context.GetSyncResult<GradingScale>().Updated == null)
+                return;
+            var gs = context.GetSyncResult<GradingScale>().Updated.Select(x => new Data.School.Model.GradingScale
+            {
+                Id = x.GradingScaleID,
+                Description = x.Description,
+                HomeGradeToDisplay = x.HomeGradeToDisplay,
+                Name = x.Name,
+                SchoolRef = x.SchoolID
+            }).ToList();
+            ServiceLocatorSchool.GradingScaleService.EditGradingScales(gs);
+        }
+
+        private void UpdateGradingScaleRanges()
+        {
+            if (context.GetSyncResult<GradingScaleRange>().Updated == null)
+                return;
+            var gsr = context.GetSyncResult<GradingScaleRange>().Updated.Select(x => new Data.School.Model.GradingScaleRange
+            {
+                AlphaGradeRef = x.AlphaGradeID,
+                AveragingEquivalent = x.AveragingEquivalent,
+                AwardGradCredit = x.AwardGradCredit,
+                GradingScaleRef = x.GradingScaleID,
+                HighValue = x.HighValue,
+                IsPassing = x.IsPassing,
+                LowValue = x.LowValue
+            }).ToList();
+            ServiceLocatorSchool.GradingScaleService.EditGradingScaleRanges(gsr);
+        }
+
+        private void UpdateClassroomOptions()
+        {
+            if (context.GetSyncResult<ClassroomOption>().Updated == null)
+                return;
+            var cro = context.GetSyncResult<ClassroomOption>().Updated.Select(x => new Data.School.Model.ClassroomOption()
+            {
+                Id = x.SectionID,
+                DefaultActivitySortOrder = x.DefaultActivitySortOrder,
+                GroupByCategory = x.GroupByCategory,
+                AveragingMethod = x.AveragingMethod,
+                CategoryAveraging = x.CategoryAveraging,
+                IncludeWithdrawnStudents = x.IncludeWithdrawnStudents,
+                DisplayStudentAverage = x.DisplayStudentAverage,
+                DisplayTotalPoints = x.DisplayTotalPoints,
+                RoundDisplayedAverages = x.RoundDisplayedAverages,
+                DisplayAlphaGrade = x.DisplayAlphaGrade,
+                DisplayStudentNames = x.DisplayStudentNames,
+                DisplayMaximumScore = x.DisplayMaximumScore,
+                StandardsGradingScaleRef = x.StandardsGradingScaleID,
+                StandardsCalculationMethod = x.StandardsCalculationMethod,
+                StandardsCalculationRule = x.StandardsCalculationRule,
+                StandardsCalculationWeightMaximumValues = x.StandardsCalculationWeightMaximumValues,
+                DefaultStudentSortOrder = x.DefaultStudentSortOrder,
+                SeatingChartRows = x.SeatingChartRows,
+                SeatingChartColumns = x.SeatingChartColumns
+            }).ToList();
+            ServiceLocatorSchool.ClassroomOptionService.Edit(cro);
+        }
+
+        private void UpdateGradingComments()
+        {
+            if (context.GetSyncResult<GradingComment>().Updated == null)
+                return;
+            var gc = context.GetSyncResult<GradingComment>().Updated.Select(x => new Data.School.Model.GradingComment
+            {
+                Code = x.Code,
+                Comment = x.Comment,
+                Id = x.GradingCommentID,
+                SchoolRef = x.SchoolID
+            }).ToList();
+            ServiceLocatorSchool.GradingCommentService.Edit(gc);
         }
     }
 }

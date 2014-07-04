@@ -14,6 +14,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'announcementTypeId',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.school.SchoolOption, 'schoolOptions',
+
+            [ria.templates.ModelPropertyBind],
             String, 'announcementTitle',
 
             [ria.templates.ModelPropertyBind],
@@ -53,7 +56,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'gradable',
 
             Number, function getAutoGradeCount(){
-                return this.getItems().filter(function(item){
+                return (this.getItems() || []).filter(function(item){
                     return item.getState() == 0;
                 }).length;
             },

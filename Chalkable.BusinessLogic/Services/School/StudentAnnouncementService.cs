@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
-using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -44,10 +38,14 @@ namespace Chalkable.BusinessLogic.Services.School
                                             bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            if (!string.IsNullOrEmpty(value) && value.Trim() != "")
+                exempt = false;
+            else value = null;
+            
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
-                Comment = comment.Trim(),
+                Comment = comment,
                 Dropped = dropped,
                 Incomplete = incomplete,
                 Late = late,
@@ -70,8 +68,6 @@ namespace Chalkable.BusinessLogic.Services.School
             if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (!ann.ClassRef.HasValue)
-                throw new ChalkableException("Announcement is not assigned to any class");
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
@@ -84,19 +80,23 @@ namespace Chalkable.BusinessLogic.Services.School
                 else
                 {
                     scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
-                    persons = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery { ClassId = ann.ClassRef });
+                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)
                 {
-                    var stAnn = new StudentAnnouncementDetails
-                        {
-                            ClassId = ann.ClassRef.Value,
-                            Student = persons.First(x=>x.Id == score.StudentId),
-                            AnnouncementId = ann.Id
-                        };
-                    MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);    
-                    res.Add(stAnn);
+                    var student = persons.FirstOrDefault(x => x.Id == score.StudentId);
+                    if (student != null)
+                    {
+                        var stAnn = new StudentAnnouncementDetails
+                            {
+                                ClassId = ann.ClassRef,
+                                Student = student,
+                                AnnouncementId = ann.Id
+                            };
+                        MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);    
+                        res.Add(stAnn);    
+                    }
                 }
                 return res;
 

@@ -27,6 +27,12 @@ NAMESPACE('chlk.templates.classes', function () {
             String, 'name',
 
             [ria.templates.ModelPropertyBind],
+            String, 'classNumber',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'fullClassName',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.people.User, 'teacher'
         ])
 });

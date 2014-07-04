@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStandard(int id);
         void DeleteStandards(IList<int> ids);
         Standard GetStandardById(int id);
-        IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
+        IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
@@ -56,22 +56,13 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
-            if (standards.Any(IsInvalidStandardModel))
-                throw new ChalkableException("Invalid params. LowerGradeLevelId can not be greater than upperGradeLevelId");
-            
             using (var uow = Update())
             {
                 new StandardDataAccess(uow).Insert(standards);
                 uow.Commit();
             }
         }
-
-        private bool IsInvalidStandardModel(Standard standard)
-        {
-            return standard.LowerGradeLevelRef.HasValue && standard.UpperGradeLevelRef.HasValue
-                   && standard.LowerGradeLevelRef > standard.UpperGradeLevelRef;
-        }
-
+        
         public void DeleteStandard(int id)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
@@ -91,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Standard> GetStandardes(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
+        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
         {
             using (var uow = Read())
             {

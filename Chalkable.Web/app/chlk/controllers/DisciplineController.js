@@ -81,10 +81,11 @@ NAMESPACE('chlk.controllers', function(){
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var classes = this.classService.getClassesForTopBar(false);
+                        var classes = this.getClassForDisciplines_();
                         var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
                         return new chlk.models.discipline.ClassDisciplinesViewData(
-                            classBarData, classId_, result[0], result[1], date_, true
+                            classBarData, classId_, result[0], result[1], date_, true,
+                            this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE)
                         );
                     }, this);
 
@@ -106,10 +107,16 @@ NAMESPACE('chlk.controllers', function(){
                     .attach(this.validateResponse_())
                     .then(function(data){
                         date_ = date_ || new chlk.models.common.ChlkDate(getDate());
-                        var classes = this.classService.getClassesForTopBar(false);
+                        var classes = this.getClassForDisciplines_();
                         var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
                         return new ria.async.DeferredData(new chlk.models.discipline.PaginatedListByDateModel(classBarData, data, date_));
                     }, this);
+            },
+
+            Array, function getClassForDisciplines_(){
+                var canGetAttForClasses = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE)
+                    || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN);
+                return this.classService.getClassesForTopBar(false, false, !canGetAttForClasses);
             },
 
             [[chlk.models.discipline.DisciplineInputModel]],
@@ -171,17 +178,20 @@ NAMESPACE('chlk.controllers', function(){
                         }, this);
             },
 
-            [[chlk.models.discipline.SetDisciplineListModel]],
-            function setDisciplinesAction(model){
+            [[chlk.models.discipline.SetDisciplineModel]],
+            function setDisciplineAction(model){
+//                var disciplines = model.getDisciplines();
+//                var disc = disciplines.length > 0 ? disciplines[0] : null;
                 var result = this.disciplineService
-                    .setDisciplines(model)
+                    .setDiscipline(model)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         /*var controller = model.getController() || 'discipline';
                         var action = model.getAction() || 'list';
                         var params = JSON.parse(model.getParams()) || [];
                         return this.Redirect(controller, action, params);*/
-                        return model.getDisciplines()[0];
+                        model.setId(data.getId());
+                        return model;//model.getDisciplines()[0];
                     }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },

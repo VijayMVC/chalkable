@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Transactions;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
@@ -12,7 +15,7 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void ReportTest()
         {
-            var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://sandbox.sti-k12.com/chalkable/");
+            var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
             var obj = new ReportConnector.ProgressReportParams
             {
                 AcadSessionId = 18,
@@ -29,22 +32,39 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
-            //var cl = ConnectorLocator.Create("administrator", "qwertyui1234", "http://208.83.95.80:8210/");
-        
-            Debug.WriteLine(DateTime.Now.Ticks);
-            var r = cl.SyncConnector.GetDiff(typeof(GradingPeriod), null) as SyncResult<GradingPeriod>;
-            Debug.WriteLine(DateTime.Now.Ticks);
-            foreach (var item in r.All)
+            //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
+            var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
+            //var cl = ConnectorLocator.Create("Chalkable", "b1Yn9Rz2X", "http://qa-external.stiinformationnow.com:8220/API/");
+            //var cl = ConnectorLocator.Create("Chalkable", "Fp6Gs0Ck7", "http://208.83.95.80:8216/api/");
+
+
+            var schools = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
+            Debug.WriteLine(schools.Count());
+        }
+
+        [Test]
+        public void TransactionScopeTest()
+        {
+            using (TransactionScope scope = new TransactionScope())
             {
+                var cs = @"Data Source=.\sqlexpress;Initial Catalog=xxx;UID=sa;Pwd=mc_z631";
+                using (SqlConnection connection1 = new SqlConnection(cs))
+                {
+                    connection1.Open();
 
-                //(id, code, name, description, markingperiodref, schoolyearref, startdate, enddate, endtime, schoolannouncement, allowgradeposting)
-                var s = string.Format("({0}, '{1}', '{2}', '{3}', {4}, {5}, '{6}', '{7}', '{8}', '{9}', {10}),", 
-                    item.GradingPeriodID, item.Code, item.Name, item.Description, item.TermID, item.AcadSessionID, item.StartDate, item.EndDate, item.EndTime, item.SchoolAnnouncement, (item.AllowGradePosting ? 1 : 0));
+                    SqlCommand command1 = new SqlCommand("insert into test (id) values (1)", connection1);
+                    command1.ExecuteNonQuery();
+                }
+                using (SqlConnection connection1 = new SqlConnection(cs))
+                {
+                    connection1.Open();
 
-                Debug.WriteLine(s);
+                    SqlCommand command1 = new SqlCommand("insert into test (id) values (2)", connection1);
+                    command1.ExecuteNonQuery();
+                }
+
+                scope.Complete();
             }
-            Assert.NotNull(r);
         }
     }
 }

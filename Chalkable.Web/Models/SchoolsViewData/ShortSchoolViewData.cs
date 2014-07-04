@@ -18,7 +18,7 @@ namespace Chalkable.Web.Models.SchoolsViewData
             Name = school.Name;
             DistrictId = school.DistrictRef;
             if (school.District != null)
-                DemoPrefix = school.District.DemoPrefix;
+                DemoPrefix = school.District.Id.ToString();
             
         }
         public static ShortSchoolViewData Create(School school)

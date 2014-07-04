@@ -21,12 +21,5 @@ namespace Chalkable.Web.Controllers
                 res = res.Where(x => x.StartDate <= tillDate).ToList();
             return Json(MarkingPeriodViewData.Create(res));
         }
-
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit")]
-        public ActionResult ChangeWeekDays(IntList markingPeriodIds, int weekDays)
-        {
-            var res = SchoolLocator.MarkingPeriodService.ChangeWeekDays(markingPeriodIds, weekDays);
-            return Json(res);
-        }
     }
 }

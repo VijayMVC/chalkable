@@ -19,15 +19,17 @@ namespace Chalkable.Web.Controllers
     public class FeedController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_FEED_LIST, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-        public ActionResult List(int? start, int? count, bool? starredOnly, int? classId)
+        public ActionResult List(int? start, int? count, bool? complete, int? classId)
         {
-            if (!SchoolLocator.Context.SchoolId.HasValue)
-                throw new UnassignedUserException();
             start = start ?? 0;
             count = count ?? 10;
-            var list = SchoolLocator.AnnouncementService.GetAnnouncements(starredOnly ?? false, start.Value, count.Value, 
+            var list = SchoolLocator.AnnouncementService.GetAnnouncements(complete, start.Value, count.Value, 
                 classId, null, BaseSecurity.IsAdminViewer(SchoolLocator.Context));
-            return Json(list.Select(x => AnnouncementViewData.Create(x)).ToList());
+
+            var annsIdsWithApp = list.Where(x => x.ApplicationCount == 1).Select(x=>x.Id).ToList();
+            var annApps = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(annsIdsWithApp);
+            var apps = MasterLocator.ApplicationService.GetApplicationsByIds(annApps.Select(x => x.ApplicationRef).ToList());
+            return Json(AnnouncementViewData.Create(list, annApps, apps));
             //Json(list.Transform(x => AnnouncementViewData.Create(x)));
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -76,7 +75,7 @@ namespace Chalkable.Tests.Services
             {
                 using (var uow = new UnitOfWork(chalkableConnection, true))
                 {
-                    var districts = new DistrictDataAccess(uow).GetDistricts(null, null);
+                    var districts = new DistrictDataAccess(uow).GetAll();
                     uow.Commit();
                     foreach (var district in districts)
                     {

@@ -11,7 +11,7 @@ NAMESPACE('chlk.models.grading', function () {
         GENERIC('TItem'),
         'GradingClassSummaryGridForCurrentPeriodViewData', EXTENDS(chlk.models.common.PageWithClassesAndGradingPeriodsViewData), [
             [ria.serialize.SerializeProperty('gradingperiods')],
-            ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
+            ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
             [ria.serialize.SerializeProperty('classannouncementtypes')],
             ArrayOf(chlk.models.common.NameId), 'classAnnouncementTypes',
@@ -23,6 +23,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
-            ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores'
+            ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
+
+            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments'
         ]);
 });

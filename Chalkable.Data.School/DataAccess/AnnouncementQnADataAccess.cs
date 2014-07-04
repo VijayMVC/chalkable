@@ -61,14 +61,17 @@ namespace Chalkable.Data.School.DataAccess
         private static Person ReadAnnouncementQnAPerson(DbDataReader reader, string prefix)
         {
             var template = prefix + "{0}";
-            return new Person
-                {
-                    Id = SqlTools.ReadInt32(reader, string.Format(template, Person.ID_FIELD)),
-                    FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
-                    LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
-                    Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
-                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
-                };
+            var personId = SqlTools.ReadInt32Null(reader, string.Format(template, Person.ID_FIELD));
+            if(personId.HasValue)
+                return new Person
+                    {
+                        Id = personId.Value,
+                        FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
+                        LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
+                        Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
+                        RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
+                    };
+            return null;
         } 
     }
 

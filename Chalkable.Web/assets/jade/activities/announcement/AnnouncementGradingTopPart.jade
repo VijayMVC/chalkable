@@ -1,12 +1,13 @@
 autoCount = self.getAutoGradeCount()
 .auto-grade-buttons.right
-    +ActionLinkButton('announcement', 'applyAutoGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.green
+    //do not delete this commented code ... we will need this later
+    //+ActionLinkButton('announcement', 'applyAutoGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.green
         =Msg.Auto_grade
-    +ActionLinkButton('announcement', 'applyManualGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.red
+    //+ActionLinkButton('announcement', 'applyManualGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.red
         =Msg.Grade_manually
 div(data-tooltip=Msg.Class_Avg).class-avg=self.getClassAvg()
 //self.getGrade(self.getClassAvg())
-div(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowToStudents()}").show-student-grades
+div(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowToStudents()}").show-student-grades.x-hidden
     .chlk-pop-up-container.popup-top
         .pop-up-triangle
         .show-student-grades-container

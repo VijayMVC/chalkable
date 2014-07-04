@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -19,6 +20,11 @@ namespace Chalkable.Data.School.Model
         public const string ADDRESS_REF_FIELD = "AddressRef";
         public const string EMAIL_FIELD = "Email";
 
+        public const string HAS_MEDICAL_ALERT_FIELD = "HasMedicalAlert";
+        public const string IS_ALLOWED_INET_ACCESS_FIELD = "IsAllowedInetAccess";
+        public const string SPECIAL_INSTRUCTIONS_FIELD = "SpecialInstructions";
+        public const string SP_ED_STATUS_FIELD = "SpEdStatus";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -36,6 +42,20 @@ namespace Chalkable.Data.School.Model
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
+        public DateTime? PhotoModifiedDate { get; set; }
+
+
+        [NotDbFieldAttr]
+        public string CapitilizedFirstName
+        {
+            get { return FirstName.CapitalizeFirstLetter(); }
+        }
+
+        [NotDbFieldAttr]
+        public string CapitilizedLastName
+        {
+            get { return LastName.CapitalizeFirstLetter(); }
+        }
 
         [NotDbFieldAttr]
         public string FullName
@@ -46,9 +66,9 @@ namespace Chalkable.Data.School.Model
                 {
                     var res = "";
                     if (HasFirstName)
-                        res += FirstName + " ";
+                        res += CapitilizedFirstName + " ";
                     if (HasLastName)
-                        res += LastName;
+                        res += CapitilizedLastName;
                     return res;
                 }
                 return Email;
@@ -62,7 +82,7 @@ namespace Chalkable.Data.School.Model
         [NotDbFieldAttr]
         public string ShortSalutationName
         {
-            get { return GetSalutation + (HasLastName ? LastName : FirstName); }
+            get { return GetSalutation + (HasLastName ? CapitilizedLastName : CapitilizedFirstName); }
         }
 
         private string GetSalutation
@@ -114,5 +134,15 @@ namespace Chalkable.Data.School.Model
         }
         public IList<Phone> Phones { get; set; }
         public IList<StudentSchoolYear> StudentSchoolYears { get; set; }
+    }
+
+    public class StudentHealthCondition
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public bool IsAlert { get; set; }
+        public string MedicationType { get; set; }
+        public string Treatment { get; set; }
     }
 }

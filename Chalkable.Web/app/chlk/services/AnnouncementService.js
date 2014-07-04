@@ -37,11 +37,11 @@ NAMESPACE('chlk.services', function () {
             Number, 'importantCount',
 
             [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncements(pageIndex_, classId_, starredOnly_) {
+            ria.async.Future, function getAnnouncements(pageIndex_, classId_, importantOnly_) {
                 return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.Announcement), {
                     start: pageIndex_|0,
                     classId: classId_ ? classId_.valueOf() : null,
-                    starredOnly: starredOnly_
+                    complete: importantOnly_ ? false : null
                 });
 
             },
@@ -120,7 +120,7 @@ NAMESPACE('chlk.services', function () {
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     maxscore: maxScore_,
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
@@ -135,18 +135,18 @@ NAMESPACE('chlk.services', function () {
                     announcementId:id.valueOf(),
                     content: content_,
                     attachments: attachments_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     annRecipients: recipients
                 });
             },
 
             [[chlk.models.id.AnnouncementId, String,String, String, chlk.models.common.ChlkDate,  String]],
             ria.async.Future, function submitAdminAnnouncement(id, recipients,title_, content_, expiresdate_, attachments_) {
-                return this.get('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
+                return this.post('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId:id.valueOf(),
                     content: content_,
                     attachments: attachments_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     annRecipients: recipients
                 });
             },
@@ -158,7 +158,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function submitAnnouncement(id, classId_, announcementTypeId_, title_, content_
                 , expiresdate_, attachments_, applications_, markingPeriodId_, maxScore_, weightAddition_, weighMultiplier_
                 , hideFromStudent_, canDropStudentScore_) {
-                return this.get('Announcement/SubmitAnnouncement.json', Boolean, {
+                return this.post('Announcement/SubmitAnnouncement.json', Boolean, {
                     announcementid:id.valueOf(),
                     classannouncementtypeid:announcementTypeId_,
                     classId: classId_ ? classId_.valueOf() : null,
@@ -166,7 +166,7 @@ NAMESPACE('chlk.services', function () {
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,
-                    expiresdate: expiresdate_,
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
                     maxscore: maxScore_,
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
@@ -189,6 +189,14 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function editAnnouncement(id) {
                 return this.get('Announcement/Edit.json', chlk.models.announcement.AnnouncementForm, {
                     announcementId: id.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, String]],
+            ria.async.Future, function duplicateAnnouncement(id, classIds) {
+                return this.get('Announcement/DuplicateAnnouncement.json', Boolean, {
+                    announcementId: id.valueOf(),
+                    classIds: classIds
                 });
             },
 
@@ -232,10 +240,11 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementId, Boolean]],
-            ria.async.Future, function star(announcementId, starred_) {
-                this.setImportantCount(this.getImportantCount() + (starred_ ? 1 : -1));
-                return this.post('Announcement/Star', chlk.models.announcement.Announcement, {
-                    announcementId: announcementId.valueOf()
+            ria.async.Future, function checkItem(announcementId, complete_) {
+                this.setImportantCount(this.getImportantCount() + (complete_ ? 1 : -1));
+                return this.post('Announcement/Complete', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    complete: complete_
                 });
             },
 
@@ -301,6 +310,8 @@ NAMESPACE('chlk.services', function () {
                     announcementId: announcementId.valueOf(),
                     standardId: standardId.valueOf()
                 });
-            }
+            },
+
+
         ])
 });

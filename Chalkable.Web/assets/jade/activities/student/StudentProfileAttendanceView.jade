@@ -23,7 +23,7 @@ calendar = self.getAttendanceCalendar()
                 .person-info.standard-short-info
                     .avarar-container.standard-small-container
                         .img-container
-                            +PersonImg(summaryInfo, 64)
+                            +PersonImg(summaryInfo, 64, true)
                     h1.profile-person-name=summaryInfo.getDisplayName()
                 h2.mp-conteiner.profile-drop-down-container
                     +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())

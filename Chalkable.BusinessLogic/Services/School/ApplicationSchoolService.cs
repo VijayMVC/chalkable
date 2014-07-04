@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
         void AttachAppToAnnouncement(int announcementAppId);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
+        IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId);
 
@@ -41,13 +42,13 @@ namespace Chalkable.BusinessLogic.Services.School
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var announcementApplication = da.GetById(announcementAppId.Value);
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);
-                    if (ann.ClassRef.HasValue)
-                    {
                         var csp = new ClassPersonDataAccess(uow, Context.SchoolLocalId)
                             .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
                         res.AddRange(csp.Select(x=>x.PersonRef));
-                    }
-                    res.Add(ann.PersonRef);
+
+                    //TODO: think about this
+                    var teacherId = new ClassDataAccess(uow, Context.SchoolLocalId).GetById(ann.ClassRef).PrimaryTeacherRef; 
+                    if(teacherId.HasValue) res.Add(teacherId.Value);
                 }
                 else
                 {
@@ -106,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var aa = da.GetById(announcementAppId);
                 var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
                     .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserLocalId.Value);
-                if (Context.UserLocalId != ann.PersonRef)
+                if (!ann.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Active = true;
                 da.Update(aa);
@@ -150,7 +151,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     da.Delete(announcementAppId);
                     uow.Commit();
                     var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                    if (Context.UserLocalId != res.PersonRef)
+                    if (!res.IsOwner)
                         throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                     return res;
                 }
@@ -158,6 +159,15 @@ namespace Chalkable.BusinessLogic.Services.School
             catch
             {
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
+            }
+        }
+
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds)
+        {
+            using (var uow = Read())
+            {
+                return new AnnouncementApplicationDataAccess(uow).GetAnnouncementApplicationsbyAnnIds(announcementIds);
             }
         }
     }

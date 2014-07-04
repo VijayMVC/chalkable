@@ -57,10 +57,8 @@ namespace Chalkable.Data.Common.Orm
             return primaryKeyFields;
         } 
 
-        private const string FULL_FIELD_NAME_FORMAT = "[{0}].[{1}]";
         private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
-        private const string ID_FIELD = "Id";
-
+        
         public static IList<string> FullFieldsNames(Type t)
         {
             return FullFieldsNames(t, t.Name);
@@ -296,15 +294,25 @@ namespace Chalkable.Data.Common.Orm
             return PaginationSelect(SimpleSelect<T>(queryCondition), orderColumn, orderType, start, count);
         }
 
-        public static DbQuery PaginationSelect(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
+        public static DbQuery PaginationSelect(DbQuery innerSelect, IDictionary<string, OrderType> order, int start, int count)
         {
             var b = new StringBuilder();
             b.AppendFormat("select count(*) as AllCount from ({0}) x;", innerSelect.Sql);
             b.AppendFormat("select x.* from ({0}) x ", innerSelect.Sql);
-            b.AppendFormat(" order by x.{0} {1}", orderColumn, orederTypesMap[orderType]);
+            var orderBy = string.Format("x.[Id] {0}", orederTypesMap[OrderType.Asc]);
+            if (order != null && order.Count > 0)
+            {
+                orderBy = order.Select(x => string.Format("x.[{0}] {1}", x.Key, orederTypesMap[x.Value])).JoinString(",");
+            }
+            b.AppendFormat(" order by {0}", orderBy);
             b.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
             innerSelect.Sql = b;
             return innerSelect;
+        }
+
+        public static DbQuery PaginationSelect(DbQuery innerSelect, string orderColumn, OrderType orderType, int start, int count)
+        {
+            return PaginationSelect(innerSelect, new Dictionary<string, OrderType>{{orderColumn, orderType}}, start, count);
         }
 
     }

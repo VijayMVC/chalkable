@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 
@@ -13,12 +14,16 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
+        //TODO: remove this later 
+        public ActionResult EncryptPassword(string password)
+        {
+           return Json(MasterLocator.UserService.PasswordMd5(password));
+        }
 
-
-        public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime)
+        public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime, int? acadSessionId)
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
-            var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime));
+            var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime, acadSessionId));
             if (context != null)
                return RedirectToHome(context.Role);
             return Redirect<HomeController>(x => x.Index());
@@ -27,11 +32,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult RedirectToINow()
         {
+            if (!Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for redirect to SIS");
             var schoolYearId = GetCurrentSchoolYearId();
-            var sisUrl = Context.SisUrl;
-            var url = string.Format(
-                    "{0}InformationNow/TokenLogin.aspx?Token={1}&AcadSessionId={2}"
-                    , sisUrl, Context.SisToken, schoolYearId);
+            var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
+            var sisUrl = district.SisRedirectUrl;
+            var url = UrlTools.UrlCombine(sisUrl, string.Format("TokenLogin.aspx?Token={0}&AcadSessionId={1}", Context.SisToken, schoolYearId));
             return Redirect(url);
         }
 
@@ -53,20 +59,27 @@ namespace Chalkable.Web.Controllers
         {
             return Confirm(key, AfterConfirmAction);
         }
-
+        
         public ActionResult ChangePassword(string oldPassword, string newPassword, string newPasswordConfirmation)
         {
             var login = Context.Login;
-            if (MasterLocator.UserService.Login(login, oldPassword) != null)
+            if (string.IsNullOrEmpty(oldPassword) || MasterLocator.UserService.Login(login, oldPassword) != null)
             {
                 if (newPassword == newPasswordConfirmation)
                 {
                     MasterLocator.UserService.ChangePassword(login, newPassword);
+                    MixPanelService.ChangedPassword(Context.Login);
                     return Json(true);
                 }
                 return Json(new ChalkableException("new password and confirmation dont't match"));
             }
             return Json(new ChalkableException("old password is incorrect"));
+        }
+        
+        public ActionResult ResetPassword(string email)
+        {
+            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            return Json(serviceLocator.UserService.ResetPassword(email));
         }
    
         private ActionResult AfterConfirmAction(UserContext context)
@@ -90,6 +103,8 @@ namespace Chalkable.Web.Controllers
             if (context != null)
             {
                 InitServiceLocators(context);
+                MixPanelService.UserLoggedInForFirstTime(context.Login, "", "", Context.SchoolId.ToString(), 
+                        DateTime.UtcNow.ConvertFromUtc(Context.SchoolTimeZoneId), Context.SchoolTimeZoneId, Context.Role.Name);
                 return redirectAction(context);
             }
             return Redirect<HomeController>(c => c.Index());
@@ -98,7 +113,12 @@ namespace Chalkable.Web.Controllers
         protected UserContext LogOn(bool remember, Func<IUserService, UserContext> logOnAction)
         {
             var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var context = logOnAction(serviceLocator.UserService);
+            return LogOn(remember, serviceLocator.UserService, logOnAction);
+        }
+
+        protected UserContext LogOn(bool remember, IUserService userService, Func<IUserService, UserContext> logOnAction)
+        {
+            var context = logOnAction(userService);
             if (context != null)
                 ChalkableAuthentication.SignIn(context, remember);
             return context;
@@ -116,16 +136,16 @@ namespace Chalkable.Web.Controllers
                 var context = serviceLocator.UserService.Login(login, password);
                 if (context != null)
                 {
-                    var accessTokenUri = string.Format(ACS_URL_FORMAT, SERVICE_NAMESPACE);
+                    var accessTokenUri = string.Format(ACS_URL_FORMAT, ConfigurationManager.AppSettings[SERVICE_NAMESPACE]);
                     var scope = ConfigurationManager.AppSettings[RELYING_PARTY_REALM];
                     return Json(new
                     {
                         token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId,
-                                                           clientSecret, login, scope)
+                                                           clientSecret, login, context.SchoolYearId, scope)
                     }, 5);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return Json(false);
             }

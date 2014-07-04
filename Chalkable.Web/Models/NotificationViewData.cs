@@ -95,7 +95,7 @@ namespace Chalkable.Web.Models
             //    res.ApplcicationName = notification.Application.Name;
             //    res.ApplicationIcon47Url = AppTools.BuildIconUrl(notification.Application, true);
             //}
-            if (notification.AnnouncementRef.HasValue)
+            if (notification.AnnouncementRef.HasValue && notification.AnnouncementType != null)
             {
                 res.AnnouncementType = notification.AnnouncementType.Id;
                 res.AnnouncementTypeName = notification.AnnouncementType.Name;

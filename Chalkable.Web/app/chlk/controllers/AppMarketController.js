@@ -152,7 +152,7 @@ NAMESPACE('chlk.controllers', function (){
             var isEdit = isEdit_ ? isEdit_ : false;
             var currentPersonId = this.getCurrentPerson().getId();
             var result = this.appMarketService
-                .getMyApps(currentPersonId, isEdit)
+                .getMyApps(currentPersonId, isEdit, 0, null, 10000)
                 .attach(this.validateResponse_())
                 .then(function(apps){
                     return new chlk.models.apps.MyAppsViewData(apps, isEdit, currentPersonId);
@@ -265,16 +265,13 @@ NAMESPACE('chlk.controllers', function (){
                     installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
                         new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
                         chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
-                        app.isInstalledOnlyForCurrentUser(),
-                        "Just me"
+                        app.isInstalledOnlyForCurrentUser(), Msg.Just_me
                     ));
-
                     var installedCount = 0;
 
                     installedForGroups = installedForGroups.map(function(item){
-                        if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL
-                            && this.userInRole(chlk.models.common.RoleEnum.TEACHER))
-                            item.setDescription('Whole School');
+                        if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL && this.userIsAdmin())
+                            item.setDescription(Msg.Whole_School);
                         if (item.isInstalled()) ++installedCount;
                         return item;
                     }, this);
@@ -284,9 +281,7 @@ NAMESPACE('chlk.controllers', function (){
                             return item.getGroupType() != chlk.models.apps.AppInstallGroupTypeEnum.ALL;
                         });
                     }
-
                     app.setInstalledForGroups(installedForGroups);
-
 
                     return new chlk.models.apps.AppMarketInstallViewData(app, installedCount == installedForGroups.length);
                 }, this);
@@ -296,37 +291,46 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
-            var totalAppPrice = this.appMarketService.getSelectedAppTotalPrice().getTotalPrice() || 0;
-
-            this.appMarketService
-                .getPersonBalance(this.getCurrentPerson().getId())
-                .attach(this.validateResponse_())
-                .then(function(personBalance){
-                    var userBalance = personBalance.getBalance();
-                    if (totalAppPrice > userBalance){
-                       return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error');
-                    }
-                    return this.appMarketService
-                        .installApp(
-                            appInstallData.getAppId(),
-                            this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
-                            this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
-                            this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
-                            this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
-                            appInstallData.getCurrentPerson()
-                        )
-                        .attach(this.validateResponse_())
-                        .then(function(result){
-                            var title = result ? "Installation successful" : "Error while installing app.";
-                               return this.ShowMsgBox(title, '', [{
-                                   text: 'Ok',
-                                   controller: 'appmarket',
-                                   action: 'myApps',
-                                   params: [],
-                                   color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                               }], 'center');
-                        }, this);
-                }, this);
+            var res = ria.async.wait([
+                this.appMarketService.getApplicationTotalPrice(
+                    appInstallData.getAppId(),
+                    this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
+                    this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
+                    this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
+                    this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
+                    appInstallData.getCurrentPerson()
+                ),
+                this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
+            ])
+            .attach(this.validateResponse_())
+            .then(function(res){
+                var totalAppPrice = res[0].getTotalPrice() || 0;
+                var personBalance = res[1];
+                var userBalance = personBalance.getBalance();
+                if (totalAppPrice > userBalance){
+                   return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error');
+                }
+                return this.appMarketService
+                    .installApp(
+                        appInstallData.getAppId(),
+                        this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
+                        this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
+                        this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
+                        this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
+                        appInstallData.getCurrentPerson()
+                    )
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var title = result ? "Installation successful" : "Error while installing app.";
+                           return this.ShowMsgBox(title, '', [{
+                               text: 'Ok',
+                               controller: 'appmarket',
+                               action: 'myApps',
+                               params: [],
+                               color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                           }], 'center');
+                    }, this);
+            }, this);
 
         },
 
@@ -337,8 +341,15 @@ NAMESPACE('chlk.controllers', function (){
                 .uninstallApps(ids)
                 .attach(this.validateResponse_())
                 .then(function(result){
-                    return this.BackgroundNavigate('appmarket', 'myApps', [false]);
+                    return this.BackgroundNavigate('appmarket', 'myApps');
+                    //return this.Redirect('appmarket', 'myApps', [false]);
                 }, this);
+            return this.ShadeLoader();
+        },
+
+        function cancelAppDeleteAction(){
+            var result = new ria.async.DeferredData(new chlk.models.Success());
+            return this.UpdateView(chlk.activities.apps.MyAppsPage, result, chlk.activities.lib.DontShowLoader());
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -362,7 +373,9 @@ NAMESPACE('chlk.controllers', function (){
 
                 return this.ShowMsgBox(msgTitle, 'just checking.', [{
                     text: 'CANCEL',
-                    color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                    color: chlk.models.common.ButtonColor.GREEN.valueOf(),
+                    controller: 'appmarket',
+                    action: 'cancelAppDelete'
                 }, {
                     text: 'UNINSTALL',
                     controller: 'appmarket',
@@ -372,6 +385,7 @@ NAMESPACE('chlk.controllers', function (){
                 }], 'center');
 
             }
+            return this.ShadeLoader();
         },
 
         [[chlk.models.apps.AppReviewPostData]],

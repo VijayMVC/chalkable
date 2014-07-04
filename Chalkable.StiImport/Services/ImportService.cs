@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
-using School = Chalkable.StiConnector.SyncModel.School;
+using System.Transactions;
 
 namespace Chalkable.StiImport.Services
 {
@@ -17,8 +18,10 @@ namespace Chalkable.StiImport.Services
         private const string DEF_USER_PASS = "Qwerty1@";
         private const string DESCR_WORK = "Work";
         private const string DESCR_CELL = "cell";
-        private const string IMG = "image";
         private const string UNKNOWN_ROOM_NUMBER = "Unknown number";
+        private IList<int> importedSchoolIds = new List<int>();
+        private ConnectorLocator connectorLocator;
+        private IList<Person> personsForImportPictures = new List<Person>();
 
         protected IServiceLocatorMaster ServiceLocatorMaster { get; set; }
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
@@ -29,27 +32,105 @@ namespace Chalkable.StiImport.Services
         {
             ConnectionInfo = connectionInfo;
             Log = log;
-            ServiceLocatorMaster = ServiceLocatorFactory.CreateMasterSysAdmin();
-            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);    
+            
+            var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin" };
+            var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null);
+            ServiceLocatorMaster = new ServiceLocatorMaster(cntx);
+            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
         public void Import()
         {
+            Log.LogInfo("start import");
+            importedSchoolIds.Clear();
+            personsForImportPictures.Clear();
+            connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+            Log.LogInfo("download data to sync");
             DownloadSyncData();
-            ProcessInsert();
-            ProcessUpdate();
-            ProcessDelete();
+            //var masterDb = (ImportDbService) ServiceLocatorMaster.DbService;
+            //var schoolDb = (ImportDbService) ServiceLocatorSchool.SchoolDbService;
+            /*Log.LogInfo("begin master transaction");
+            masterDb.BeginTransaction();
+            Log.LogInfo("begin school transaction");
+            schoolDb.BeginTransaction();*/
+            //bool schoolCommited = false;
+            SyncDb();
+
+            /*try
+            {
+                SyncDb();
+                Log.LogInfo("commit school db");
+                schoolDb.CommitAll();
+                schoolCommited = true;
+                Log.LogInfo("commit master db");
+                masterDb.CommitAll();
+            }
+            catch (Exception ex)
+            {
+                Log.LogException(ex);
+                if (!schoolCommited)
+                {
+                    Log.LogInfo("rollback school db");
+                    schoolDb.Rollback();    
+                }
+                else
+                    Log.LogInfo("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");//TODO.....
+                Log.LogInfo("rollback master db");
+                masterDb.Rollback();
+                throw;
+            }*/
+            Log.LogInfo("process pictures");
+            ProcessPictures();
+            Log.LogInfo("setting link status");
+            foreach (var importedSchoolId in importedSchoolIds)
+            {
+                connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            }
+            Log.LogInfo("import is completed");
         }
-        
+
+        private void SyncDb()
+        {
+            Log.LogInfo("process inserts");
+            ProcessInsert();
+            Log.LogInfo("process updates");
+            ProcessUpdate();
+            Log.LogInfo("process deletes");
+            ProcessDelete();
+            Log.LogInfo("update versions");
+            UpdateVersion();
+            UpdateDistrictLastSync();
+        }
+
+        private void UpdateDistrictLastSync()
+        {
+            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for import");
+            var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
+            d.LastSync = DateTime.UtcNow;
+            ServiceLocatorMaster.DistrictService.Update(d);
+        }
+
+        private void ProcessPictures()
+        {
+            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for import");
+            foreach (var person in personsForImportPictures)
+            {
+                var content = connectorLocator.UsersConnector.GetPhoto(person.PersonID);
+                if (content != null)
+                    ServiceLocatorMaster.PersonPictureService.UploadPicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID ,content);
+                else
+                    ServiceLocatorMaster.PersonPictureService.DeletePicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID);
+            }
+        }
+
         public void DownloadSyncData()
         {
             context = new SyncContext();
             var currentVersions = ServiceLocatorSchool.SyncService.GetVersions();
             context.SetCurrentVersions(currentVersions);
-            //We need all user to match with persons
-            context.TablesToSync[typeof (User).Name] = null;
-            context.TablesToSync[typeof(Student).Name] = null;
-            context.TablesToSync[typeof(Staff).Name] = null;
+            //Tables we need all data
             context.TablesToSync[typeof(ScheduledTimeSlot).Name] = null;
             context.TablesToSync[typeof(Gender).Name] = null;
             context.TablesToSync[typeof(SpEdStatus).Name] = null;
@@ -57,19 +138,22 @@ namespace Chalkable.StiImport.Services
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();
             
-            var cl = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             foreach (var table in toSync)
             {
                 var type = context.Types[table.Key];
-                Debug.WriteLine("Start downloading " + table.Key);
-                var res = cl.SyncConnector.GetDiff(type, table.Value);
-                Debug.WriteLine("Table downloaded: " + table.Key);
-                results.Add((SyncResultBase)res);
+                Log.LogInfo("Start downloading " + table.Key);
+                var res = (SyncResultBase)connectorLocator.SyncConnector.GetDiff(type, table.Value);
+                Log.LogInfo("Table downloaded: " + table.Key + " " + res.RowCount);
+                results.Add(res);
             }
             foreach (var syncResultBase in results)
             {
                 context.SetResult(syncResultBase);   
             }
+        }
+
+        public void UpdateVersion()
+        {
             var newVersions = new Dictionary<string, int>();
             foreach (var i in context.TablesToSync)
                 if (i.Value.HasValue)
@@ -78,6 +162,19 @@ namespace Chalkable.StiImport.Services
                 }
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
         }
+
+        /*private void ProcessByParts<T>(IList<T> source, Action<IList<T>> processor, int count, string logMsg)
+        {
+            for (int i = 0; i < source.Count; i += count)
+            {
+                var l = source.Skip(i).Take(count).ToList();
+                if (logMsg != null)
+                    Log.LogInfo(string.Format("starting {0} {1} {2}", logMsg, i, l.Count));
+                processor(l);
+                if (logMsg != null)
+                    Log.LogInfo(string.Format("finished {0} {1} {2}", logMsg, i, l.Count));
+            }
+        }*/
     }
 
     public class SisConnectionInfo

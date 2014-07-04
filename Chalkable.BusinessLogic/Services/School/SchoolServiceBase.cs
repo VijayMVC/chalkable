@@ -15,16 +15,16 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             ServiceLocator = serviceLocator;
         }
+
         protected UnitOfWork Read()
         {
-            return new UnitOfWork(ServiceLocator.Context.SchoolConnectionString, false);
+            return ServiceLocator.SchoolDbService.GetUowForRead();
         }
 
         protected UnitOfWork Update()
         {
-            return new UnitOfWork(ServiceLocator.Context.SchoolConnectionString, true);
+            return ServiceLocator.SchoolDbService.GetUowForUpdate();
         }
-
     }
 
     public class SisConnectedService : SchoolServiceBase

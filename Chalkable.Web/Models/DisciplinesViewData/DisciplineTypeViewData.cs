@@ -7,22 +7,20 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 {
     public class DisciplineTypeViewData
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public Guid Id { get; set; }
-        public int Score { get; set; }
 
-        public static DisciplineTypeViewData Create(DisciplineType disciplineType)
+        public static DisciplineTypeViewData Create(Infraction infraction)
         {
             return new DisciplineTypeViewData
             {
-                Id = disciplineType.Id,
-                Name = disciplineType.Name,
-                Score = disciplineType.Score,
+                Id = infraction.Id,
+                Name = infraction.Name,
             };
         }
-        public static IList<DisciplineTypeViewData> Create(IList<DisciplineType> disciplineTypes)
+        public static IList<DisciplineTypeViewData> Create(IList<Infraction> infractions)
         {
-            return disciplineTypes.Select(Create).ToList();
+            return infractions.Select(Create).ToList();
         }
     }
 }

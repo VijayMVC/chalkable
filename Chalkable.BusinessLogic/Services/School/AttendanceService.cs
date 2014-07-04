@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -15,7 +16,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items);
         SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
         void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
-
+        AttendanceSummary GetAttendanceSummary(int teacherId, int gradingPeriodId);
+        
         //TODO: OLD!!!!
         IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null);
         StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut);
@@ -69,11 +71,12 @@ namespace Chalkable.BusinessLogic.Services.School
                     ClassroomLevel = LevelToClassRoomLevel(item.Level),
                     ReasonId = (short)(item.AttendanceReasonRef.HasValue ? item.AttendanceReasonRef.Value : 0),
                     SectionId = classId,
-                    StudentId = item.PersonRef
+                    StudentId = item.PersonRef,
                 });
             }
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            ConnectorLocator.AttendanceConnector.SetSectionAttendance(sy.Id, date, classId, sa);
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            ConnectorLocator.AttendanceConnector.SetSectionAttendance(Context.SchoolYearId.Value, date, classId, sa);
         }
 
         private string LevelToClassRoomLevel(string level)
@@ -92,7 +95,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
             if (sa != null)
             {
-                var clazz = ServiceLocator.ClassService.GetClassById(classId);
+                var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var persons = ServiceLocator.ClassService.GetStudents(classId);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
@@ -110,7 +113,8 @@ namespace Chalkable.BusinessLogic.Services.School
                             Class = clazz,
                             Student = student,
                             Category = ssa.Category,
-                            IsPosted = sa.IsPosted
+                            IsPosted = sa.IsPosted,
+                            AbsentPreviousDay = ssa.AbsentPreviousDay
                         });
                     }
                 }
@@ -119,10 +123,56 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        
+
+        public AttendanceSummary GetAttendanceSummary(int teacherId, int gradingPeriodId)
+        {
+            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
+            var classesIds = classes.Select(x => x.Id).ToList();
+            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+                {
+                    RoleId = CoreRoles.STUDENT_ROLE.Id,
+                    TeacherId = teacherId
+                });
+            var sectionsAttendanceSummary = ConnectorLocator.AttendanceConnector.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
+            var res = new AttendanceSummary();
+            var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
+            var studentAtts = new List<StudentSectionAttendanceSummary>();
+            var sectionStSet = new HashSet<Pair<int, int>>();
+            var sectionDaySet = new HashSet<Pair<int, DateTime>>();
+            foreach (var sectionAttendanceSummary in sectionsAttendanceSummary)
+            {
+
+                foreach (var dailySectionAtt in sectionAttendanceSummary.Days)
+                {
+                    var pair = new Pair<int, DateTime>(dailySectionAtt.SectionId, dailySectionAtt.Date);
+                    if (!sectionDaySet.Contains(pair))
+                    {
+                        sectionDaySet.Add(pair);
+                        dailySectionAttendances.Add(dailySectionAtt);
+                    }
+                }
+                foreach (var student in sectionAttendanceSummary.Students)
+                {
+                    var pair = new Pair<int, int>(student.SectionId, student.StudentId);
+                    if (!sectionStSet.Contains(pair))
+                    {
+                        sectionStSet.Add(pair);
+                        studentAtts.Add(student); 
+                    }
+                }
+            }
+            res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
+            studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
+            res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
+            return res;
+
+        }
+
         public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
         {
             var seatingChart = ConnectorLocator.SeatingChartConnector.GetChart(classId, markingPeriodId);
+            if (seatingChart == null) return null;
             return SeatingChartInfo.Create(seatingChart);
         }
 

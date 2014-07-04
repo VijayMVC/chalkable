@@ -1,5 +1,4 @@
 ﻿using System;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 
@@ -16,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IBackgroundTaskService BackgroundTaskService { get; }
         IPreferenceService PreferenceService { get; }
         IChalkableDepartmentService ChalkableDepartmentService { get; }
-        IPictureService PersonPictureService { get; }
+        IPersonPictureService PersonPictureService { get; }
         IPictureService CourseIconService { get; }
         IPictureService DepartmentIconService { get; }
         IPictureService FundRequestPictureService { get; }
@@ -28,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IEmailService EmailService { get; }
         IFundService FundService { get; }
         IDeveloperService DeveloperService { get; }
+        IDbService DbService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IBackgroundTaskService backgroundTaskService;
         private IPreferenceService preferenceService;
         private IChalkableDepartmentService chalkableDepartmentService;
-        private IPictureService personPictureService;
+        private IPersonPictureService personPictureService;
         private IPictureService courseIconService;
         private IPictureService departmentIconService;
         private IPictureService fundRequestPictureService;
@@ -50,6 +50,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IEmailService emailService;
         private IFundService fundService;
         private IDeveloperService developerService;
+        private IDbService dbService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -71,6 +72,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             fundRequestPictureService = new FundRequestPictureService(this);
             developerService = new DeveloperService(this);
             applicationPictureService = new ApplicationPictureService(this);
+            dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -79,7 +81,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IBackgroundTaskService BackgroundTaskService { get { return backgroundTaskService; } }
         public IPreferenceService PreferenceService { get { return preferenceService; } }
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
-        public IPictureService PersonPictureService { get { return personPictureService; } }
+        public IPersonPictureService PersonPictureService { get { return personPictureService; } }
         public IPictureService CourseIconService { get { return courseIconService; } }
         public IPictureService DepartmentIconService { get { return departmentIconService; } }
         public IApplicationService ApplicationService { get { return applicationService; } }
@@ -101,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
 
-        public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, Guid? schoolId)
+        public virtual IServiceLocatorSchool SchoolServiceLocator(Guid districtId, Guid? schoolId)
         {
             if (Context.DistrictId != districtId || Context.SchoolId != schoolId)
             {
@@ -119,6 +121,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             var school = SchoolService.GetById(schoolId);
             return SchoolServiceLocator(school.DistrictRef, schoolId);
+        }
+
+        public IDbService DbService
+        {
+            get { return dbService; } 
+            protected set { dbService = value; }
         }
         
     }

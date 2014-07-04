@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Reflection;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 
 namespace Chalkable.Data.Common
@@ -51,11 +53,67 @@ namespace Chalkable.Data.Common
             var q = Orm.Orm.SimpleInsert(obj);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
-
         
         protected void SimpleInsert<T>(IList<T> objs)
         {
-            ModifyList(objs, SimpleInsert, Orm.Orm.SimpleListInsert);
+            if (objs.Count > 0)
+            {
+                //TODO: move query build to orm
+                var t = typeof(T);
+                var fields = Orm.Orm.Fields(t, false);
+                var keyCount = Orm.Orm.GetPrimaryKeyFields(t).Count;
+                if ((fields.Count + keyCount) * objs.Count > MAX_PARAMETER_NUMBER)
+                {
+                    var table = new DataTable();
+                    var props = new PropertyInfo[fields.Count];
+                    var isEnum = new bool[fields.Count];
+                    for (int i = 0; i < fields.Count; i++)
+                    {
+                        props[i] = t.GetProperty(fields[i]);
+                        var pt = Nullable.GetUnderlyingType(props[i].PropertyType) ?? props[i].PropertyType;
+                        isEnum[i] = pt.IsEnum;
+                        if (isEnum[i])
+                            pt = typeof (int);
+                        table.Columns.Add(fields[i], pt);
+                    }
+                    foreach (var obj in objs)
+                    {
+                        var ps = new object[fields.Count];
+                        for (int i = 0; i < fields.Count; i++)
+                        {
+                            var fieldValue = props[i].GetValue(obj);
+                            if (isEnum[i] && fieldValue != null)
+                                ps[i] = (int) fieldValue;
+                            else
+                                ps[i] = fieldValue ?? DBNull.Value;
+                        }
+                        table.Rows.Add(ps);
+                    }
+                    var f = fields.Select(x => "[" + x + "]").JoinString(",");
+                    var sql = string.Format("INSERT INTO [{0}]({1}) SELECT {1} FROM @t", t.Name, f);
+                    Trace.WriteLine("execute batch " + sql);
+                    using (var c = unitOfWork.GetTextCommand(sql))
+                    {
+                        c.CommandTimeout = 10 + objs.Count;
+                        c.Parameters.Add(
+                           new SqlParameter
+                           {
+                               ParameterName = "@t",
+                               SqlDbType = SqlDbType.Structured,
+                               TypeName = "T" + t.Name,
+                               Value = table,
+                           });
+
+                        c.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    var q = Orm.Orm.SimpleListInsert(objs);
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+                }
+            }
+
         }
 
         protected void SimpleUpdate<T>(T obj)
@@ -74,7 +132,8 @@ namespace Chalkable.Data.Common
             if (objs.Count > 0)
             {
                 var fields = Orm.Orm.Fields<T>();
-                if (fields.Count * objs.Count > MAX_PARAMETER_NUMBER)
+                var keyCount = Orm.Orm.GetPrimaryKeyFields(typeof (T)).Count;
+                if ((fields.Count + keyCount) * objs.Count > MAX_PARAMETER_NUMBER)
                 {
                     var list1 = objs.Take(objs.Count / 2).ToList();
                     modifyAction(list1);
@@ -104,8 +163,18 @@ namespace Chalkable.Data.Common
         {
             if (objs.Count > 0)
             {
-                var q = Orm.Orm.SimpleDelete(objs);
-                ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+                var keyCount = Orm.Orm.GetPrimaryKeyFields(typeof(T)).Count;
+                if (keyCount*objs.Count > MAX_PARAMETER_NUMBER)
+                {
+                    var list1 = objs.Take(objs.Count / 2).ToList();
+                    SimpleDelete(list1);
+                    SimpleDelete(objs.Skip(list1.Count).ToList());
+                }
+                else
+                {
+                    var q = Orm.Orm.SimpleDelete(objs);
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);    
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.settings.TeacherSettingsTpl');
 REQUIRE('chlk.activities.settings.SchoolPersonPage');
+REQUIRE('chlk.templates.settings.ChangePasswordTpl');
 
 NAMESPACE('chlk.activities.settings', function () {
 

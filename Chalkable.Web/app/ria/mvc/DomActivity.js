@@ -123,7 +123,13 @@ NAMESPACE('ria.mvc', function () {
             OVERRIDE, VOID, function onStop_(){
                 BASE();
                 this._domAppendTo.remove(this.dom.empty());
-            }
+            },
 
+            [[String]],
+            OVERRIDE, VOID, function onModelComplete_(msg_) {
+                BASE(msg_);
+
+                this.dom.find('FORM.working').removeClass('working');
+            }
         ]);
 });

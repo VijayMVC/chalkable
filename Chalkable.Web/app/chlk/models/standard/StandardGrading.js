@@ -24,6 +24,8 @@ NAMESPACE('chlk.models.standard', function () {
             chlk.models.id.ClassId, 'classId',
 
             [ria.serialize.SerializeProperty('gradevalue')],
-            String, 'gradeValue'
+            String, 'gradeValue',
+
+            String, 'comment'
         ]);
 });

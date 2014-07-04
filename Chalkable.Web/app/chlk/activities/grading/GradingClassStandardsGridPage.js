@@ -1,4 +1,5 @@
 REQUIRE('chlk.templates.grading.GradingClassStandardsGridTpl');
+REQUIRE('chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl');
 REQUIRE('chlk.activities.common.InfoByMpPage');
 REQUIRE('chlk.models.grading.GradingClassSummary');
 
@@ -10,6 +11,59 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassStandardsGridTpl)],
         'GradingClassStandardsGridPage', EXTENDS(chlk.activities.common.InfoByMpPage), [
             Array, 'allScores',
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl)],
+            VOID, function updateGrade(tpl, model, msg_) {
+                var container = this.dom.find('.grade-value[data-student-id=' + model.getStudentId().valueOf() +
+                    '][data-standard-id=' + model.getStandardId().valueOf() +
+                    '][data-grading-period-id=' + model.getGradingPeriodId().valueOf() + ']');
+                container.empty();
+                tpl.renderTo(container);
+            },
+
+            [ria.mvc.DomEventBind('click', '.cancel-comment')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function cancelBtnClick(node, event){
+                node.parent('.chlk-pop-up-container.comment').hide();
+                var cell = this.dom.find('.active-cell');
+                setTimeout(function(){
+                    cell.find('input').trigger('focus');
+                }, 1);
+                var commentInput = cell.find('.comment-value');
+                commentInput.setValue(commentInput.getData('comment'));
+            },
+
+            [ria.mvc.DomEventBind('click', '.comment-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentBtnClick(node, event){
+                var active = this.dom.find('.active-cell');
+                var popUp = this.dom.find('.chlk-pop-up-container.comment');
+                var main = this.dom.parent('#main');
+                var bottom = main.height() + main.offset().top - active.offset().top + 73;
+                var left = active.offset().left - main.offset().left - 54;
+                popUp.setCss('bottom', bottom);
+                popUp.setCss('left', left);
+                var comment = active.find('.comment-value').getValue();
+                popUp.find('textarea').setValue(comment);
+                popUp.show();
+                setTimeout(function(){
+                    popUp.find('.comment-value').trigger('focus');
+                }, 1)
+            },
+
+            [ria.mvc.DomEventBind('click', '.add-comment')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addCommentBtnClick(node, event){
+                var cell = this.dom.find('.active-cell');
+                var commentInput = cell.find('.comment-value');
+                var comment = node.parent('.chlk-pop-up-container').find('textarea').getValue();
+                commentInput.setValue(comment).setData('comment', comment);
+                node.parent('.chlk-pop-up-container.comment').hide();
+                setTimeout(function(){
+                    cell.find('input').trigger('focus');
+                }, 1);
+                this.setValue(cell, true);
+            },
 
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.AFTER_RENDER.valueOf(), '.grid-toolbar')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -40,10 +94,29 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('keydown', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeKeyDown(node, event){
+                var list = this.dom.find('.autocomplete-list:visible'),
+                    cell = node.parent('.active-cell');
+                if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
+                    if(!node.hasClass('error') && !node.hasClass('blocked')){
+                        if(list.exists()){
+                            if(list.find('.see-all').hasClass('hovered')){
+                                list.find('.see-all').trigger('click');
+                                return false;
+                            }
+                            var hovered = list.find('.hovered');
+                            if(hovered.exists()){
+                                node.setValue(hovered.getHTML());
+                                node.parent('form').find('input[name=gradeid]').setValue(hovered.getData('id'));
+                            }
+                        }
+                        this.setValue(cell);
+
+                    }
+                }
+
                 setTimeout(function(node, event){
                     var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                     var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
-                    var list = this.dom.find('.autocomplete-list:visible');
                     if((isDown || isUp) && list.exists()){
                         var hovered = list.find('.hovered');
                         if(hovered.exists()){
@@ -62,14 +135,12 @@ NAMESPACE('chlk.activities.grading', function () {
                         }
                     }
                 }.bind(this, node, event), 10);
-
-
                 return true;
             },
 
             [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function gradeKeyUp(node, event){
+            Boolean, function gradeKeyUp(node, event){
                 var suggestions = [], cell = node.parent('.active-cell');
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
@@ -84,21 +155,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 if(!isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
-                        if(!node.hasClass('error') && !node.hasClass('blocked')){
-                            if(list.exists()){
-                                if(list.find('.see-all').hasClass('hovered')){
-                                    list.find('.see-all').trigger('click');
-                                    return false;
-                                }
-                                var hovered = list.find('hovered');
-                                if(hovered.exists()){
-                                    node.setValue(hovered.getHTML());
-                                    node.parent('form').find('input[name=gradeid]').setValue(hovered.getData('id'));
-                                }
-                            }
-                            this.setValue(cell);
-
-                        }
                         return false;
                     }else{
                         var text = node.getValue() ? node.getValue().trim() : '';
@@ -122,14 +178,14 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                     this.updateDropDown(suggestions, node);
                 }
+                return true;
             },
 
             function setValue(node, isComment_){
                 var activeCell = node;
-                node.find('.value').setHTML(node.find('.grade-autocomplete').getValue());
                 activeCell.find('form').trigger('submit');
                 var nextCell = activeCell.next().find('.edit-cell');
-                if(nextCell.exists())
+                if(nextCell.exists() && !isComment_)
                     nextCell.trigger('click');
                 else
                     this.dom.trigger('click');
@@ -225,11 +281,14 @@ NAMESPACE('chlk.activities.grading', function () {
                 new ria.dom.Dom().on('click.grade', function(doc, event){
 
                     var node = new ria.dom.Dom(event.target);
+                    var popUp = dom.find('.chlk-pop-up-container.comment');
                     if(!node.hasClass('grade-autocomplete') && !node.hasClass('arrow')
+                        && !node.isOrInside('.chlk-pop-up-container.comment')
                         && !node.isOrInside('.autocomplete-list')){
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('comment-button')){
-                                var parent = node.parent('.grade-value');
+                                popUp.hide();
+                                var parent = node.parent('.grade-value.gradable');
                                 dom.find('.active-cell').removeClass('active-cell');
                                 if(parent.exists()){
                                     if(!parent.hasClass('active-row')){
@@ -238,16 +297,27 @@ NAMESPACE('chlk.activities.grading', function () {
                                         dom.find('[row-index=' + index + ']').addClass('active-row');
                                     }
                                     parent.addClass('active-cell');
+                                    //node.parent('.marking-period-container').find('.comment-button').show();
                                     setTimeout(function(){
                                         parent.find('input').trigger('focus');
                                     },1)
                                 }else{
                                     dom.find('.active-row').removeClass('active-row');
-                                    dom.find('.comment-button').hide();
+                                    //dom.find('.comment-button').hide();
                                 }
                             }
                     }
                 });
+            },
+
+            [ria.mvc.DomEventBind('submit', '.grade-container form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function submitForm(node, event){
+                var res = !node.find('input[name="gradevalue"]').hasClass('error');
+                if(!res)
+                    return false;
+                node.parent().find('.value').setHTML('...');
+                return true;
             }
         ]);
 });

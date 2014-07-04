@@ -24,7 +24,7 @@ NAMESPACE('chlk.services', function () {
             },
 
 //            ria.async.Future, function redirectToINOW(){
-//                return this.post('User/RedirectToINow.json', chlk.models.common.SimpleResult,{});
+//                return this.post('User/RedirectToINow.aspx', Object,{});
 //            },
 
             [[String,String,String]],

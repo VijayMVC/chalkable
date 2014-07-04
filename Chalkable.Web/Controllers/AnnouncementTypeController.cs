@@ -3,6 +3,8 @@ using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Enums;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -12,7 +14,7 @@ namespace Chalkable.Web.Controllers
     public class AnnouncementTypeController : ChalkableController
     {
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_TYPE_LIST, true, CallType.Get, new[] {AppPermissionType.Announcement})]
         public ActionResult List(int classId)
         {
             var list = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);

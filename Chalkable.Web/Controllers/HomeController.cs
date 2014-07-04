@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -25,35 +26,68 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class HomeController : ChalkableController
     {
+
+        private const string DEMO_PICTURE_DISTRICT_REF = "99a2b309-b2f2-451d-a733-55ffb9548245";
+
         public ActionResult Index()
         {
             return View();
         }
       
+        public ActionResult Terms()
+        {
+            return View();
+        }
+
+        public ActionResult Faq()
+        {
+            return View();
+        }
+
         [AuthorizationFilter("SysAdmin")]
         public ActionResult SysAdmin()
         {
-            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             var sysUser = MasterLocator.UserService.GetById(Context.UserId);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(SysAdminViewData.Create(sysUser), ViewConstants.CURRENT_PERSON);
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MixPanelService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
             return View();
         }
 
         [AuthorizationFilter("Developer")]
         public ActionResult Developer(Guid? currentApplicationId)
         {
-            var prefDemoSchool = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value).DemoPrefix;
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
-            ViewData[ViewConstants.IS_DEV] = true;
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
             var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, false);
             if (applications.Count == 0)
             {
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.DEV_APP_INFO_URL;
             }
+            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
+            ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
             ViewData[ViewConstants.NEEDS_TOUR] = false;
-            PrepareCommonViewData();
+            ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
+            ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
+            ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
+            ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
+            ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
+            ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
+            ViewData[ViewConstants.DEMO_PREFIX_KEY] = Context.UserId.ToString();
+            ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
+
+            if (Context.DistrictId.HasValue)
+            {
+                var district = DemoDistrictStorage.CreateDemoDistrict(Context.DistrictId.Value);
+                var school = DemoMasterSchoolStorage.CreateMasterSchool(Context.DistrictId.Value);
+                school.District = district;
+                PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
+            }
+
+
             PrepareJsonData(BaseApplicationViewData.Create(applications), ViewConstants.APPLICATIONS);
             if (applications.Count > 0)
             {
@@ -62,7 +96,8 @@ namespace Chalkable.Web.Controllers
                 var res = ApplicationController.PrepareAppInfo(MasterLocator, app, true, true);
                 PrepareJsonData(res, ViewConstants.DEFAULT_APPLICATION, 6);
             }
-            //TODO: mix panel
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MixPanelService.IdentifyDeveloper(developer.Email, developer.DisplayName, DateTime.UtcNow, "UTC", ip);
             return View();
         }
 
@@ -73,7 +108,7 @@ namespace Chalkable.Web.Controllers
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.UserId);
 
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            PrepareTeacherJsonData(mp, false);
+            PrepareTeacherJsonData(mp);
             return View();
         }
 
@@ -81,6 +116,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult Admin(bool? redirectToSetup)
         {
             PrepareAdminJsonData();
+            
             return View();
         }
 
@@ -100,26 +136,33 @@ namespace Chalkable.Web.Controllers
                 var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
                 school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
-                if (!string.IsNullOrEmpty(district.DemoPrefix))
+                if (district.IsDemoDistrict)
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
                     ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.DemoPrefix;
-
-
+                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.Id.ToString();
+                    ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
                     if (Context.DeveloperId != null)
                         ViewData[ViewConstants.IS_DEV] = true;
 
                 }
+                ViewData[ViewConstants.LAST_SYNC_DATE] = district.LastSync.HasValue 
+                    ? district.LastSync.Value.ToString("yyyy/MM/dd h:MM:ss")
+                    : "";
+
             }
+            ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
+            ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
+
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
 
             ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = SchoolLocator.NotificationService.GetUnshownNotifications().Count;
@@ -128,7 +171,7 @@ namespace Chalkable.Web.Controllers
                 PrepareJsonData(MarkingPeriodViewData.Create(markingPeriod), ViewConstants.MARKING_PERIOD);
                 var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolTime.Date);
                 if (gradingPeriod != null)
-                    PrepareJsonData(GradingPeriodViewData.Create(gradingPeriod), ViewConstants.GRADING_PERIOD);
+                    PrepareJsonData(ShortGradingPeriodViewData.Create(gradingPeriod), ViewConstants.GRADING_PERIOD);
 
                 var nextmp = SchoolLocator.MarkingPeriodService.GetNextMarkingPeriodInYear(markingPeriod.Id);
                 if (nextmp != null)
@@ -145,9 +188,16 @@ namespace Chalkable.Web.Controllers
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.FullName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
-            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId);
+            //todo: move this logic to getClass stored procedure later
+            var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
+            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId)
+                                       .Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             PrepareCommonViewData(mp);
+
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MixPanelService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.SchoolId.ToString(), "", person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }           
 
         private void PrepareAdminJsonData()
@@ -161,88 +211,70 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(GradeLevelViewData.Create(gradeLevels), ViewConstants.GRADE_LEVELS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             PrepareCommonViewData(mp);
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MixPanelService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.SchoolId.ToString(), person.FirstLoginDate, Context.SchoolTimeZoneId, "Admin", ip);
         }
 
-        private void PrepareTeacherJsonData(MarkingPeriod mp, bool getAllAnnouncementTypes)
+        private void PrepareTeacherJsonData(MarkingPeriod mp)
         {
             if (!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
+
+            PrepareCommonViewData(mp);
+
             var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
-            //TODO : get finalizedClasses 
-            //var finalizedClasses = SchoolLocator.FinalGradeService.GetFinalizedClasses(mp.Id);
-            //PrepareJsonData(finalizedClasses.Select(x => x.Id), ViewConstants.FINALIZED_CLASSES_IDS);
-
+            if (!CanTeacherViewChalkable()) return;
+            
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId.Value);
-            var now = SchoolLocator.Context.NowSchoolTime;
-            //if (classes.Count > 0)
-            //{
-            //    MarkingPeriod currentMp = mp;
-            //    if(mp.StartDate > now || mp.EndDate < now)
-            //        currentMp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(now);
-            //    if (currentMp != null)
-            //    {
-            //        var cp = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(null, now);
-            //        if (cp != null)
-            //        {
-            //            var minutes = (int) (now - now.Date).TotalMinutes;
-            //            if (cp.Period.StartTime - minutes <= 5)
-            //            {
-            //                SchoolLocator.CalendarDateService.GetCalendarDateByDate(now);
-            //                var attQuery = new ClassAttendanceQuery
-            //                    {
-            //                        MarkingPeriodId = currentMp.Id,
-            //                        ClassId = cp.ClassRef,
-            //                        FromTime = cp.Period.StartTime,
-            //                        ToTime = cp.Period.EndTime,
-            //                        FromDate = now.Date,
-            //                        ToDate = now.Date
-            //                    };
-            //                var attendances = SchoolLocator.AttendanceService.GetClassAttendanceDetails(attQuery);
-            //                //check is it tour now or demo school
-            //                if (attendances.Any(x => x.Type == AttendanceTypeEnum.NotAssigned))
-            //                {
-            //                    ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.ATTENDANCE_CLASS_LIST_URL_FORMAT, cp.ClassRef);
-            //                }
-            //            }
-            //        }
-            //    }
-            //} 
+
+            var gradeLevels = classes.Select(x => x.GradeLevel.Name).Distinct().ToList();
+            var classNames = classes.Select(x => x.Name).ToList();
+
+            var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
+            PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
             var executionResult = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(executionResult, ViewConstants.CLASSES);
-            PrepareClassesAdvancedData(classes, mp, getAllAnnouncementTypes);
-            PrepareCommonViewData(mp);
+            PrepareClassesAdvancedData(classes, mp);
+            PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MixPanelService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.SchoolId.ToString(), 
+                gradeLevels, classNames, person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }
-
-        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp, bool getAllAnnouncementTypes)
+        
+        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp)
         {
             var classesAdvancedData = new List<object>();
-            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id));
+            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id)).ToList();
             var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
-            
+            var allAlphaGrades = SchoolLocator.AlphaGradeService.GetAlphaGrades();
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailses.Select(x => x.Id).ToList());
             foreach (var classDetails in classDetailses)
             {
                 int classId = classDetails.Id;
-                var typesByClasses = AnnouncementTypeController.GetTypesByClass(SchoolLocator, classId);
+                var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
                 classesAdvancedData.Add(new
                 {
                     ClassId = classId,
                     Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>(),
-                    TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses)
+                    TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
+                    AlphaGrades = classDetails.GradingScaleRef.HasValue
+                                        ? SchoolLocator.AlphaGradeService.GetAlphaGradesForClass(classDetails.Id)
+                                        : allAlphaGrades,
+                    AlphaGradesForStandards = SchoolLocator.AlphaGradeService.GetAlphaGradesForClassStandards(classId)
                 });
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);
         }
 
-        //TODO: test only. don't forget to remove :)
-        public ActionResult Create(string userName, string password)
+        private bool CanTeacherViewChalkable()
         {
-            ServiceLocatorFactory.CreateMasterSysAdmin().UserService.CreateSysAdmin(userName, password);
-            return Json(new { Success = true, UserName = userName }, JsonRequestBehavior.AllowGet);
-        }        
+            return ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM, ClaimInfo.VIEW_LOOKUP})
+                   || ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN, ClaimInfo.VIEW_LOOKUP});
+        }
     }
 }

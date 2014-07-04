@@ -22,11 +22,16 @@ NAMESPACE('chlk.controls', function () {
                     node.off('error.load');
             },
 
+            function canShowAlert(person){
+                var user = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
+                if(user.getRole().getName().toLowerCase() ==  'student' && user.getId() != person.getId())
+                    return false;
+                return true;
+            },
+
             String, 'alternativeSrc',
 
             String, 'defaultSrc',
-
-
 
             //todo: make base method
             [[Object]],
@@ -44,6 +49,21 @@ NAMESPACE('chlk.controls', function () {
                             jQuery('#'+attributes.id).on('error.load', this.onImgError);
                         }.bind(this));
                 return attributes;
+            },
+
+            [[Object]],
+            Object, function getAlertsAttributes(model){
+                var len = 0, h = 123;
+                if(model.isWithMedicalAlert())
+                    len++;
+                if(model.isAllowedInetAccess())
+                    len++;
+                if(model.getSpecialInstructions())
+                    len++;
+                if(model.getSpedStatus())
+                    len++;
+                var top = -(h * len) / 4;
+                return top + 'px';
             }
         ]);
 });

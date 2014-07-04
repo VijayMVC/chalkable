@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -11,11 +10,9 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IMarkingPeriodService
     {
-        MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
         IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods);
         void Delete(int id);
         void DeleteMarkingPeriods(IList<int> ids);
-        MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays);
         IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods); 
         MarkingPeriod GetMarkingPeriodById(int id);
         MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null);
@@ -24,7 +21,6 @@ namespace Chalkable.BusinessLogic.Services.School
         MarkingPeriodClass GetMarkingPeriodClass(int markingPeriodClassId);
         IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
-        bool ChangeWeekDays(IList<int> markingPeriodIds, int weekDays);
     }
 
     public class MarkingPeriodService : SchoolServiceBase, IMarkingPeriodService
@@ -47,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
-                return  da.GetLast(tillDate ?? Context.NowSchoolTime);
+                return  da.GetLast(tillDate ?? Context.NowSchoolTime, Context.SchoolYearId);
             }
         }
 
@@ -77,30 +73,13 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
-                var res = da.GetMarkingPeriod(date);
+                var res = da.GetMarkingPeriod(date, Context.SchoolYearId);
                 if (res != null)
                     return res;
                 if (useLastExisting)
                     return GetLastMarkingPeriod(date);
             }
             return null;
-        }
-
-        public MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
-        {
-            var sy = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-            var mp = new MarkingPeriod()
-                {
-                    Description = description,
-                    EndDate = endDate,
-                    Id = id,
-                    Name = name,
-                    SchoolRef = sy.SchoolRef,
-                    SchoolYearRef = schoolYearId,
-                    StartDate = startDate,
-                    WeekDays = weekDays
-                };
-            return Add(new List<MarkingPeriod> {mp}).First();
         }
         
         public void Delete(int id)
@@ -119,43 +98,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
                 new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).DeleteMarkingPeriods(markingPeriodIds);
                 uow.Commit();
-            }
-        }
-
-
-        public MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
-        {
-            var sy = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-            var mp = new MarkingPeriod()
-            {
-                Description = description,
-                EndDate = endDate,
-                Id = id,
-                Name = name,
-                SchoolRef = sy.SchoolRef,
-                SchoolYearRef = schoolYearId,
-                StartDate = startDate,
-                WeekDays = weekDays
-            };
-            return Edit(new List<MarkingPeriod>{mp}).First();
-        }
-
-
-        //TODO : think how to rewrite this for better performance
-        //TODO : needs testing
-        public bool ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var mpDa = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
-                if (new DateDataAccess(uow, Context.SchoolLocalId).Exists(markingPeriodIds))
-                    throw new ChalkableException("Can't change markingPeriod week days ");
-                
-                mpDa.ChangeWeekDays(markingPeriodIds, weekDays);
-                uow.Commit();
-                return true;
             }
         }
 

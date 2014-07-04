@@ -41,5 +41,6 @@ namespace Chalkable.StiConnector.SyncModel
         public bool RecievesAttendanceAlerts { get; set; }
         public bool RecievesDisciplineAlerts { get; set; }
         public bool RecievesGradeAlerts { get; set; }
+        public DateTime? PhotoModifiedDate { get; set; }
     }
 }

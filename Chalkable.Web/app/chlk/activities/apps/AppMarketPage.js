@@ -57,6 +57,7 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function toggleCategories(node, event){
                 var selectedType = node.getAttr('name').replace('app-category-', '');
                 var checkboxes = this.dom.find('input[type=checkbox]:not(:disabled)');
+                var eventName = chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf();
 
                 var res = [];
 
@@ -64,7 +65,7 @@ NAMESPACE('chlk.activities.apps', function () {
                     if (checkboxes.count() > 1){
                     this.dom.find('input[type=checkbox]:not(:disabled)').filter(function(elem){
                     return elem.getAttr('name') != node.getAttr('name');
-                    }).setAttr('checked', false);
+                    }).trigger(eventName, [false]);
 
                     checkboxes
                         .filter(function(el){
@@ -76,7 +77,7 @@ NAMESPACE('chlk.activities.apps', function () {
                     }
                 }
                 else{
-                    this.dom.find('input[name=app-category-all]').setAttr('checked', false);
+                    this.dom.find('input[name=app-category-all]').trigger(eventName, [false]);
 
                     checkboxes
                         .filter(function(el){

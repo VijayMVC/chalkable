@@ -20,6 +20,17 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'index',
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+
+            String, function getToolTipText(){
+                var res = (this.getUserRole().isStudent() ? "My avg: " :"Avg: ")
+                    + (this.getAvg() ? this.getAvg() : 0)
+                    + (this.getPercent ? ("  Worth " + (this.getPercent() ? this.getPercent() : 0) + "%") : "");
+                var itemDescription = this.getItemDescription();
+                if(itemDescription && itemDescription.getName() && itemDescription.getName().length > 9)
+                    return itemDescription.getName() + ' <hr> ' + res;
+                return res;
+            }
         ]);
 });

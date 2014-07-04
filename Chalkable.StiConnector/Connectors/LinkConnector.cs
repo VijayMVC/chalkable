@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
@@ -11,9 +12,14 @@ namespace Chalkable.StiConnector.Connectors
         }
         public bool Link(Guid key)
         {
-            //http://sandbox.sti-k12.com/chalkable/api/chalkale/linkstatus?LinkKey=[LinkKeyGuid]
             var url = string.Format("{0}chalkable/linkstatus?LinkKey={1}", BaseUrl, key);
             return Call<string>(url).Equals("active", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public void CompleteSync(int schoolId)
+        {
+            var url = string.Format("{0}chalkable/school/{1}", BaseUrl, schoolId);
+            Post<object, object>(url, new { Id = schoolId, IsSyncComplete = true}, null, HttpMethod.Put);
         }
     }
 }

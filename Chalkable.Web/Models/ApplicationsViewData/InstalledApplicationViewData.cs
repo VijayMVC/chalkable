@@ -60,7 +60,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             {
                 ApplicationInstallId = applicationInstall.Id,
                 InstallationOwnerId = applicationInstall.OwnerRef,
-                PersonId = applicationInstall.OwnerRef,
+                PersonId = applicationInstall.PersonRef,
                 IsOwner = personId.HasValue && personId.Value == applicationInstall.OwnerRef,
             };
         }

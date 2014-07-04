@@ -17,11 +17,21 @@ NAMESPACE('chlk.lib.mvc', function () {
             },
 
             chlk.models.common.Role, function getCurrentRole_(){
-                return this.getContext().getSession().get('role');
+                return this.getContext().getSession().get(ChlkSessionConstants.USER_ROLE);
             },
 
             chlk.models.people.User, function getCurrentUser_(){
-                return this.getContext().getSession().get('currentPerson');
+                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON);
+            },
+
+            [[String]],
+            function submitToIFrame(src){
+                var iframe = new ria.dom.Dom('<iframe class="report-iframe">');
+                iframe.setAttr('src', src);
+                iframe.appendTo('body');
+                iframe.on('load', function(node, event){
+                    node.remove();
+                })
             },
 
             [[ria.mvc.IActivity]],

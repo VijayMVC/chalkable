@@ -56,5 +56,9 @@ namespace Chalkable.Data.Master.DataAccess
             return PaginatedSelect<School>(conds, School.ID_FIELD, start, count);
         }
         
+        public void Delete(IList<Guid> ids)
+        {
+            SimpleDelete(ids.Select(x => new School {Id = x}).ToList());
+        }
     }
 }

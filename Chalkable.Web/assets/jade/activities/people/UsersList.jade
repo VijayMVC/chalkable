@@ -8,7 +8,7 @@
             .left
                 A(class=self.isByLastName()?"":"pressed", data-value="false").action-button.first-last First name
                 A(class=self.isByLastName()?"pressed":"", data-value="true").action-button.first-last Last name
-                input(type="hidden", name="byLastName", value=self.isByLastName()))
+                input(type="hidden", name="byLastName", value=(self.isByLastName() ? 'true' : 'false'))
             .right
                 input(placeholder='Filter list...', name="filter", value=self.getFilter()).people-search
                 .people-search-imgs
@@ -16,7 +16,9 @@
                     label.people-search-close.opacity0
     .grid-container.loader-container
         +RenderWith(self.getModel(), chlk.templates.people.UsersGridTpl)(
-            userRole = self.getUserRole()
+            userRole = self.getUserRole(),
+            currentUser = self.getCurrentUser(),
+            rolesText = self.getRoleText()
         )
 
 

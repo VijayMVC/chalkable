@@ -1,7 +1,7 @@
 div(class="announcement-popup-" + self.getId().valueOf())#chlk-pop-up-container.popup-right.ann-grade-pop-up
     #pop-up-triangle
     .grading-pop-up
-        .separator.big-text=self.getAnnouncementTypeName()+self.getOrder()
+        .separator.big-text=self.getTitle()
         .separator.small-text #{Msg.Due}: #{self.getExpiresDate().format('mm/dd/yy')}
         .separator.small-text #{Msg.Class_average}: #{self.getAvg()}
         .chart-container.small

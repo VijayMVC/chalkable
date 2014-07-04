@@ -1,11 +1,23 @@
 REQUIRE('ria.serialize.IDeserializable');
 
+window.currentDate = new Date();
+
 function getDate(str,a,b){
     if(typeof str == "string" && str.length == 10 ){
         return new Date(str.replace(/-/g, '/'));
     }
     else{
-        return str ? ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str))  : (new Date());
+        if(str)
+            return ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str));
+        var serverTime = new Date(window.serverTime.replace(/-/g, '/'));
+        var now = new Date();
+        if(serverTime.getDate() == now.getDate() && serverTime.getMonth() == now.getMonth() && serverTime.getFullYear() == now.getFullYear())
+            return new Date();
+        var dt = new Date(serverTime.getTime() + now.getTime() - window.currentDate.getTime());
+        dt.setSeconds(now.getSeconds());
+        dt.setMinutes(now.getMinutes());
+        dt.setHours(now.getHours());
+        return dt;
     }
 }
 
@@ -15,7 +27,9 @@ function formatDate(date, format){
 
 
 function getDateDiffInDays(begin, end){
-    return Math.ceil((end - begin)/1000/3600/24);
+    var b = new Date(begin.getFullYear(), begin.getMonth(), begin.getDate());
+    var e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+    return Math.ceil((e - b)/1000/3600/24);
 }
 
 NAMESPACE('chlk.models.common', function () {
@@ -59,6 +73,8 @@ NAMESPACE('chlk.models.common', function () {
                 date_ && this.setDate(date_);
                 this._STANDART_FORMAT = 'mm-dd-yy'
                 this._DEFAULT_FORMAT = 'm-dd-yy';
+                this._USA_DATE_FORMAT = 'm/dd/yy';
+                this._USA_DATE_TIME_FORMAT = 'm/dd/yy hh:min:ss tt'
             },
 
             [[String]],
@@ -99,6 +115,10 @@ NAMESPACE('chlk.models.common', function () {
 
             String, function toStandardFormat(){
                 return this.format(this._STANDART_FORMAT);
+            },
+
+            String, function toUSADateTimeFormat(){
+                return this.format(this._USA_DATE_TIME_FORMAT);
             },
 
             [[SELF]],

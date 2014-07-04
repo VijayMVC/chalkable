@@ -1,22 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassAnnouncementTypeService
     {
+        ClassAnnouncementType GetClassAnnouncementType(int id);
+        IList<ClassAnnouncementType> GetClassAnnouncementTypes(IList<int> classesIds, bool all = true); 
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true);
-        void Add(IList<ClassAnnouncementType> classAnnouncementTypes);
-        void Edit(IList<ClassAnnouncementType> classAnnouncementTypes);
-        void Delete(IList<int> ids);
+        ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName);
 
         IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses);
     }
 
-    public class ClassClassAnnouncementTypeService : SchoolServiceBase, IClassAnnouncementTypeService
+    public class ClassClassAnnouncementTypeService : SisConnectedService, IClassAnnouncementTypeService
     {
         public ClassClassAnnouncementTypeService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -24,51 +26,53 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true)
         {
-            using (var uow = Read())
-            {
-                var cond = new AndQueryCondition{{ClassAnnouncementType.CLASS_REF_FIELD, classId}};
-                var res = new ClassAnnouncementTypeDataAccess(uow).GetAll(cond);
-                if (!all)
-                    res = res.Where(x => x.Percentage > 0).ToList();
-                return res;
-            }
+            return GetClassAnnouncementTypes(new List<int> { classId }, all);
+        }
+        public IList<ClassAnnouncementType> GetClassAnnouncementTypes(IList<int> classesIds, bool all = true)
+        {
+            var activityCategories = ConnectorLocator.ActivityCategoryConnnector.GetBySectionIds(classesIds);
+            var res = BuildClassAnnouncementTypes(activityCategories);
+            if (!all)
+                res = res.Where(x => x.Percentage > 0).ToList();
+            return res;
         }
 
-        public void Add(IList<ClassAnnouncementType> classAnnouncementTypes)
+        public ClassAnnouncementType GetClassAnnouncementType(int id)
         {
-            //TODO: security
-            using (var uow = Update())
-            {
-                var da = new ClassAnnouncementTypeDataAccess(uow);
-                da.Insert(classAnnouncementTypes);
-                uow.Commit();
-            }
+            var activityCategory = ConnectorLocator.ActivityCategoryConnnector.GetById(id);
+            return BuildClassAnnouncementTypes(new List<ActivityCategory> {activityCategory}).First();
         }
 
-        public void Delete(IList<int> ids)
+        public ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName)
         {
-            //TODO: security
-            using (var uow = Update())
-            {
-                new ClassAnnouncementTypeDataAccess(uow).Delete(ids);
-                uow.Commit();
-            }
+            return string.IsNullOrEmpty(classAnnouncementTypeName)
+                    ? null 
+                    : ChalkableAnnouncementType.All.FirstOrDefault(x => x.Keywords.Split(',').Any(y => classAnnouncementTypeName.ToLower().Contains(y)));
         }
 
-
-        public void Edit(IList<ClassAnnouncementType> classAnnouncementTypes)
+        private IList<ClassAnnouncementType> BuildClassAnnouncementTypes(IList<ActivityCategory> activityCategories)
         {
-            using (var uow = Update())
+            var announcementTypes = activityCategories.Select(x => new ClassAnnouncementType
             {
-                var da = new ClassAnnouncementTypeDataAccess(uow);
-                da.Update(classAnnouncementTypes);
-                uow.Commit();
+                Id = x.Id,
+                ClassRef = x.SectionId,
+                Description = x.Description,
+                Gradable = true,
+                Name = x.Name,
+                Percentage = (x.Percentage ?? 0)
+            }).ToList();
+            foreach (var classAnnouncementType in announcementTypes)
+            {
+                var ct = GetChalkableAnnouncementTypeByAnnTypeName(classAnnouncementType.Name);
+                if (ct != null)
+                    classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
             }
+            return announcementTypes;
         }
 
         public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
         {
-            var classAnnTypes = GetClassAnnouncementTypes(classId, false);
+            var classAnnTypes = GetClassAnnouncementTypes(classId);
             var res = new List<GradedClassAnnouncementType>();
             foreach (var classAnnouncementType in classAnnTypes)
             {
@@ -88,5 +92,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return res;
         }
+
     }
 }

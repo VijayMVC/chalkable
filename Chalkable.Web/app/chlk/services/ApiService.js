@@ -43,15 +43,15 @@ NAMESPACE('chlk.services', function () {
                             apiCache[dataItem.getRole()] = dataItem;
                             apiRoles.push(dataItem.getRole());
                         });
-                        this.getContext().getSession().set('apiCached', apiCache);
-                        this.getContext().getSession().set('apiRoles', apiRoles);
+                        this.getContext().getSession().set(ChlkSessionConstants.API_CACHED, apiCache);
+                        this.getContext().getSession().set(ChlkSessionConstants.API_ROLES, apiRoles);
                         return apiCache;
                     }, this);
             },
 
             [[String]],
             ria.async.Future, function listApiForRole(role){
-                var apiCache = this.getContext().getSession().get('apiCached');
+                var apiCache = this.getContext().getSession().get(ChlkSessionConstants.API_CACHED);
                 return apiCache && apiCache.hasOwnProperty(role) ? ria.async.DeferredData(apiCache[role]) :
                     this
                         .listApi()
@@ -61,7 +61,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             ArrayOf(String), function getApiRoles(){
-                return this.getContext().getSession().get('apiRoles') || [];
+                return this.getContext().getSession().get(ChlkSessionConstants.API_ROLES) || [];
             },
 
             [[chlk.models.api.ApiCallRequestData]],

@@ -19,6 +19,8 @@ namespace Chalkable.Data.Master.Model
 
     public class Preference
     {
+        
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Key { get; set; }
@@ -123,7 +125,7 @@ namespace Chalkable.Data.Master.Model
 
 
         //api
-
+        public const string API_DESCR_ANNOUNCEMENT_TYPE_LIST = "api_desc_announcement_type_read";
         public const string API_DESCR_ANNOUNCEMENT_READ = "api_desc_announcement_read";
         public const string API_DESCR_FEED_LIST = "api_desc_feed_list";
         public const string API_DESCR_SCHOOL_LIST = "api_desc_schools_list";

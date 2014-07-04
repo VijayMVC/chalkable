@@ -18,6 +18,25 @@ NAMESPACE('chlk.models.grading', function () {
 
             Boolean, 'autoUpdate',
 
-            Boolean, 'notCalculateGrid'
+            Boolean, 'notCalculateGrid',
+
+            Number, 'averageId',
+
+            Number, 'selectedIndex',
+
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean, Boolean, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId]],
+            function $(classId_, gradingPeriodId_, notCalculateGrid_, isAutoUpdate_, standardId_, categoryId_){
+                BASE();
+                if(classId_)
+                    this.setClassId(classId_);
+                if(gradingPeriodId_)
+                    this.setGradingPeriodId(gradingPeriodId_);
+                if(standardId_)
+                    this.setStandardId(standardId_);
+                if(categoryId_)
+                    this.setCategoryId(categoryId_);
+                this.setNotCalculateGrid(notCalculateGrid_ || false);
+                this.setAutoUpdate(isAutoUpdate_ || false);
+            }
         ]);
 });

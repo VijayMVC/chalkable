@@ -124,7 +124,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var classPeriod = ServiceLocator.ClassPeriodService.GetClassPeriodForSchoolPersonByDate(personId, dateTime);
             if (classPeriod == null) return null;
-            var c = ServiceLocator.ClassService.GetClassById(classPeriod.ClassRef);
+            var c = ServiceLocator.ClassService.GetClassDetailsById(classPeriod.ClassRef);
             return c.RoomRef.HasValue ? GetRoomById(c.RoomRef.Value) : null;
         }
 

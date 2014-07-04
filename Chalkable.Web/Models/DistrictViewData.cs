@@ -50,6 +50,7 @@ namespace Chalkable.Web.Models
         public Guid LinkKey { get; set; }
         public Guid DistrictGuid { get; set; }
         public string ApiUrl { get; set; }
+        public string RedirectUrl { get; set; }
         public string SisUserName { get; set; }
         public string SisPassword { get; set; }
         public string DistrictTimeZone { get; set; }

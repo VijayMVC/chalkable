@@ -71,8 +71,8 @@ namespace Chalkable.Data.School.DataAccess
                 while (reader.Read())
                 {
                     var c = reader.Read<ClassDetails>(true);
-                    if (c.TeacherRef.HasValue)
-                        c.Teacher = reader.Read<Person>(true);
+                    if (c.PrimaryTeacherRef.HasValue)
+                        c.PrimaryTeacher = reader.Read<Person>(true);
                     c.GradeLevel = reader.Read<GradeLevel>(true);
                     classes.Add(c);
                 }

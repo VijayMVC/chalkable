@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Security.Authentication;
+using Chalkable.Common.Exceptions;
 using WindowsAzure.Acs.Oauth2;
 using WindowsAzure.Acs.Oauth2.Protocol;
 
@@ -11,9 +12,9 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IAccessControlService
     {
         string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, string scope);
+            string clientSecret, string userName, int? schoolYear, string scope);
 
-        string GetAuthorizationCode(string clientId, string userName, string scope = null);
+        string GetAuthorizationCode(string clientId, string userName, int? schoolYear, string scope = null);
         ApplicationRegistration GetApplication(string clientId);
         bool RegisterApplication(string clientId, string appSecretKey, string appUrl, string appName);
         void RemoveApplication(string clientId);
@@ -66,7 +67,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 streamWriter.Close();
             }
 
-
             try
             {
                 if (httpWebRequest != null)
@@ -78,7 +78,16 @@ namespace Chalkable.BusinessLogic.Services.Master
                     {
                         result = message;
                     }
+                    else
+                    {
+                        var msg = string.Format("authorize message is null for [{0}] [{1}] [{2}] [{3}] [{4}] [{5}]",
+                                                accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken);
+                        throw new ChalkableException(msg);
+                    }
+                        
                 }
+                else
+                    throw new ChalkableException(string.Format("authorize http request is null for [{0}] [{1}] [{2}] [{3}] [{4}] [{5}]", accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken));
             }
             catch (WebException webex)
             {
@@ -100,18 +109,24 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             return result;
         }
+
         public string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, string scope)
+            string clientSecret, string userName, int? schoolYearId, string scope)
         {
-            var authorizationCode = GetAuthorizationCode(clientId, userName, scope);
+            var authorizationCode = GetAuthorizationCode(clientId, userName, schoolYearId, scope);
             var response = Authorize(new Uri(accessTokenUrl), clientId, clientSecret, scope, new Uri(redirectUrl), authorizationCode);
-            return response != null ? response.AccessToken : "";
+            if (response != null)
+                return response.AccessToken;
+            throw new ChalkableException(string.Format("can not get authorization token for access token url {0} redirect url {1} client id {2} authorization code {3}"
+                , accessTokenUrl, redirectUrl, clientId, authorizationCode));
         }
 
-        public string GetAuthorizationCode(string clientId, string userName, string scope = null)
+        public string GetAuthorizationCode(string clientId, string userName, int? schoolYearId, string scope = null)
         {
             if (string.IsNullOrEmpty(scope))
                 scope = ConfigurationManager.AppSettings[API_EXPLORER_SCOPE];//TODO: this is wrong approach
+            if (schoolYearId.HasValue)
+                userName = userName + Environment.NewLine + schoolYearId;
             return regService.GetAuthorizationCode(clientId,
                  new AuthorizationServerIdentity
                  {

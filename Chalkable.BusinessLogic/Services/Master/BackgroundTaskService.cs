@@ -27,11 +27,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             public string Message { get; set; }
             public int Level { get; set; }
             public DateTime Time { get; set; }
-            public Guid Id 
-            {
-                get { return Guid.Parse(RowKey); }
-                set { RowKey = value.ToString(); }
-            }
 
             public Guid BackgroundTaskId
             {
@@ -56,13 +51,14 @@ namespace Chalkable.BusinessLogic.Services.Master
 
             public void Log(int level, string message)
             {
+                var now = DateTime.UtcNow;
                 items.Add(new BackgroundTaskLogItem
                     {
                         BackgroundTaskId = backgroundTaskId,
-                        Id = Guid.NewGuid(),
+                        RowKey = now.Ticks + "-" + Guid.NewGuid(),
                         Message = message,
                         Level = level,
-                        Time = DateTime.Now
+                        Time = now
                     });
                 if (items.Count >= FLUSH_SIZE)
                     Flush();
@@ -81,6 +77,16 @@ namespace Chalkable.BusinessLogic.Services.Master
             public void LogError(string message)
             {
                 Log(LEVEL_ERROR, message);
+            }
+
+            public void LogException(Exception ex)
+            {
+                while (ex != null)
+                {
+                    LogError(ex.Message);
+                    LogError(ex.StackTrace);
+                    ex = ex.InnerException;
+                }
             }
 
             public List<BackgroundTaskLogItem> Items { get { return items; } }

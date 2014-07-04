@@ -4,83 +4,152 @@ using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
 {
-    public class AttendanceSummaryViewData
+    public class TeacherAttendanceSummaryViewData
     {
-        public IList<ShortPersonViewData> Trouble { get; set; }
-        public IList<ShortPersonViewData> Well { get; set; }
-        public IList<AbsentStatForMonthViewData> AbsentStat { get; set; }
+        public ShortAttendanceSummaryViewData Absent { get; set; }
+        public ShortAttendanceSummaryViewData Late { get; set; }
 
-        public static AttendanceSummaryViewData Create(IList<Person> trouble, IList<Person> well, IList<ClassAttendanceDetails> attendances, MarkingPeriod mp)
+        public static TeacherAttendanceSummaryViewData Create(AttendanceSummary attendanceSummary)
         {
-            var res = new AttendanceSummaryViewData();
-            res.Trouble = trouble.Select(ShortPersonViewData.Create).ToList();
-            res.Well = well.Select(ShortPersonViewData.Create).ToList();
-            res.AbsentStat = AbsentStatForMonthViewData.Create(attendances, mp);
+            var res = new TeacherAttendanceSummaryViewData();
+            var alerts = new List<string>();
+            res.Absent = new ShortAttendanceSummaryViewData
+                {
+                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Absent),
+                    Students = ShortStudentAttendanceViewData.Create(attendanceSummary.Students, alerts, AttendanceTypeEnum.Absent)
+                };
+            res.Late = new ShortAttendanceSummaryViewData
+                {
+                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Tardies),
+                    Students = ShortStudentAttendanceViewData.Create(attendanceSummary.Students, alerts, AttendanceTypeEnum.Tardies)
+                };
             return res;
         }
     }
 
 
-
-    public class AbsentStatForMonthViewData
+    public class ShortAttendanceSummaryViewData
     {
-        public List<AbsentStatForClassViewData> AbsentClasses { get; set; }
-        public DateTime Month { get; set; }
-        private AbsentStatForMonthViewData() { }
+        public IList<ClassAttendanceStatViewData> ClassesStats { get; set; }
+        public IList<ShortStudentAttendanceViewData> Students { get; set; }
+    }
 
-        public static IList<AbsentStatForMonthViewData> Create(IList<ClassAttendanceDetails> attendances, MarkingPeriod mp)
+    public class ClassAttendanceStatViewData
+    {
+        public ShortClassViewData Class { get; set; }
+        public IList<ShortAttendanceStatViewData> DayStats { get; set; }
+ 
+        public static IList<ClassAttendanceStatViewData> Create(IList<ClassDailyAttendanceSummary> classDailyAttendances, AttendanceTypeEnum type)
         {
+            return classDailyAttendances.Select(x => new ClassAttendanceStatViewData()
+                {
+                    Class = ShortClassViewData.Create(x.Class),
+                    DayStats = ShortAttendanceStatViewData.Create(x.DailyAttendances, type)
+                }).ToList();
+        }
+    }
 
-            var res = new List<AbsentStatForMonthViewData>();
+    public class ShortAttendanceStatViewData
+    {
+        public int StudentCount { get; set; }
+        public string Summary { get; set; }
+        public DateTime Date { get; set; }
 
-            DateTime d = mp.StartDate;
-            while (d < mp.EndDate)
+        public static IList<ShortAttendanceStatViewData> Create(IList<DailyAttendanceSummary> dailyAttendanceSummaries, AttendanceTypeEnum type)
+        {
+            var res = new List<ShortAttendanceStatViewData>();
+            string prevMonth = "";
+            foreach (var dailyAttendanceSummary in dailyAttendanceSummaries)
             {
-                var atts = attendances.Where(
-                    x => x.Date.Month == d.Month && x.Date.Year == d.Year && x.IsAbsentOrLate).ToList();
+                var attCount = 0;
+                if (type == AttendanceTypeEnum.Absent)
+                    attCount = (int)dailyAttendanceSummary.Absences;
+                if (type == AttendanceTypeEnum.Tardies)
+                    attCount = dailyAttendanceSummary.Tardies;
 
-                var dic = new Dictionary<Pair<int, string>, int>();
-                foreach (var classAttendance in atts)
+                var date = dailyAttendanceSummary.Date;
+                string summary = date.Day.ToString();
+                if (prevMonth != date.ToString("MMM"))
                 {
-                    var p = new Pair<int, string>(classAttendance.Class.Id, classAttendance.Class.Name);
-                    if (!dic.ContainsKey(p))
-                        dic.Add(p, 0);
-                    dic[p] = dic[p] + 1;
+                    prevMonth = date.ToString("MMM");
+                    summary = prevMonth + " " + summary;
                 }
-                var item = new AbsentStatForMonthViewData();
-                item.AbsentClasses = new List<AbsentStatForClassViewData>();
-                foreach (var pair in dic)
-                {
-                    var absentSt = AbsentStatForClassViewData.Create(pair.Key.First, pair.Key.Second, pair.Value);
-                    item.AbsentClasses.Add(absentSt);
-                }
-                item.Month = d;
-                res.Add(item);
-
-                d = d.AddMonths(1);
+                res.Add(new ShortAttendanceStatViewData
+                    {
+                        Date = dailyAttendanceSummary.Date,
+                        StudentCount = attCount,
+                        Summary = summary
+                    });
             }
             return res;
         }
     }
 
-    public class AbsentStatForClassViewData
+    public class ShortStudentAttendanceViewData
     {
-        public int AbsentCount { get; set; }
-        public string ClassName { get; set; }
-        public int ClassId { get; set; }
-        private AbsentStatForClassViewData() { }
+        public ShortPersonViewData StudentInfo { get; set; }
+        public IList<string> Alerts { get; set; }
+        public IList<AttendanceStatByClassViewData> StatByClass { get; set; }
+        public int TotalAttendanceCount { get; set; }
 
-        public static AbsentStatForClassViewData Create(int classId, string className, int count)
+        private ShortStudentAttendanceViewData(Person student, IList<string> alerts, IList<AttendanceStatByClassViewData> statByClassView)
         {
-            var res = new AbsentStatForClassViewData();
-            res.AbsentCount = count;
-            res.ClassName = className;
-            res.ClassId = classId;
-            return res;
+            StudentInfo = ShortPersonViewData.Create(student);
+            Alerts = alerts;
+            StatByClass = statByClassView;
+            TotalAttendanceCount = statByClassView.Sum(x => x.AttendanceCount);
         }
+
+        public static IList<ShortStudentAttendanceViewData> Create(IList<StudentAttendanceSummary> studentAttendanceSummaries, IList<string> alerts, AttendanceTypeEnum type)
+        {
+            var res = studentAttendanceSummaries.Select(x => new ShortStudentAttendanceViewData(x.Student, alerts
+                , AttendanceStatByClassViewData.Create(x.ClassAttendanceSummaries, type))).ToList();
+            
+            return res.Where(x=>x.TotalAttendanceCount > 2).OrderByDescending(x=>x.TotalAttendanceCount).ToList();
+        }
+    }
+
+    public class AttendanceStatByClassViewData
+    {
+        public int StudentId { get; set; }
+        public int ClassId { get; set; }
+        public string ClassName { get; set; }
+        public int AttendanceCount { get; set; }
+
+        public static AttendanceStatByClassViewData Create(int studentId, Class cClass, int attendanceCount)
+        {
+            return new AttendanceStatByClassViewData
+                {
+                    AttendanceCount = attendanceCount,
+                    StudentId = studentId,
+                    ClassId = cClass.Id,
+                    ClassName = cClass.Name
+                };
+        }
+        public static AttendanceStatByClassViewData Create(StudentClassAttendanceSummary studentClassAttendance, AttendanceTypeEnum type)
+        {
+            var attCount = 0;
+            if (type == AttendanceTypeEnum.Absent)
+                attCount = (int) studentClassAttendance.Absences;
+            if (type == AttendanceTypeEnum.Tardies)
+                attCount = studentClassAttendance.Tardies;
+            return Create(studentClassAttendance.StudentId, studentClassAttendance.Class, attCount);
+        }
+
+        public static IList<AttendanceStatByClassViewData> Create(IList<StudentClassAttendanceSummary> studentsClassAttendance, AttendanceTypeEnum type)
+        {
+            return studentsClassAttendance.Select(x => Create(x, type)).ToList();
+        }
+    }
+
+    public enum AttendanceTypeEnum
+    {
+        Absent = 0,
+        Tardies = 1,
     }
 }

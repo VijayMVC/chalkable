@@ -108,6 +108,7 @@ NAMESPACE('chlk.controls', function () {
                         if(this._loadAllButtonClicked){
                             this.scrollToBottom_();
                             this._loadAllButtonClicked = false;
+                            this.clearInterval_(this.getGrid());
                         }
                         if(isLastLoad){
                             this.hideLoadAllPopUp_(this.getGrid());
@@ -117,17 +118,19 @@ NAMESPACE('chlk.controls', function () {
             VOID, function initScrollAction_(){
                 jQuery(window).scroll(function () {
                     var grid = this.getGrid();
-                    var backTopNode = jQuery(grid.find('.back-top').valueOf());
-                    var showAllButton = grid.find('.load-all-popup');
-                    if (jQuery(window).scrollTop() > 100) {
-                        this.showGoTopButton_(grid);
-                        backTopNode.fadeIn();
-                    } else {
-                        backTopNode.fadeOut();
+                    if(grid){
+                        var backTopNode = jQuery(grid.find('.back-top').valueOf());
+                        var showAllButton = grid.find('.load-all-popup');
+                        if (jQuery(window).scrollTop() > 100) {
+                            this.showGoTopButton_(grid);
+                            backTopNode.fadeIn();
+                        } else {
+                            backTopNode.fadeOut();
+                        }
+                        var scrollTop = this.getScrollTop() || 0;
+                        if(scrollTop && new ria.dom.Dom().scrollTop() < scrollTop)
+                            this.hideLoadAllPopUp_(this.getGrid());
                     }
-                    var scrollTop = this.getScrollTop() || 0;
-                    if(scrollTop && new ria.dom.Dom().scrollTop() < scrollTop)
-                        this.hideLoadAllPopUp_(this.getGrid());
                 }.bind(this));
             },
 
@@ -209,14 +212,14 @@ NAMESPACE('chlk.controls', function () {
                 configs.currentStart = 0;
                 form.find('[name=count]').setValue(configs.totalCount);
                 this._loadAllButtonClicked = true;
-                this.scrollAction_(grid);
+                this.scrollAction_(grid, true);
             },
 
             VOID, function scrollToBottom_(){
-                jQuery('body').animate({ scrollTop: jQuery(document).height() }, 1000);
+                jQuery('body, html').animate({ scrollTop: jQuery(document).height() }, 1000);
             },
             VOID, function scrollToTop_(){
-                jQuery('body').animate({scrollTop: 0}, 1000);
+                jQuery('body, html').animate({scrollTop: 0}, 1000);
             },
 
             [ria.mvc.DomEventBind('click', '.back-top A,.back-top-arrow')],
@@ -225,8 +228,8 @@ NAMESPACE('chlk.controls', function () {
                 this.scrollToTop_();
             },
 
-            [[ria.dom.Dom]],
-            VOID, function scrollAction_(grid){
+            [[ria.dom.Dom, Boolean]],
+            VOID, function scrollAction_(grid, loadAll_){
                 //todo: trigger form submit
                 var configs = this.getConfigs();
                 var div = new ria.dom.Dom('<div class="horizontal-loader"></div>');
@@ -245,6 +248,8 @@ NAMESPACE('chlk.controls', function () {
                     var dom = new ria.dom.Dom('.chlk-grid');
                     methodRef.invokeOn(serviceIns, params)
                         .then(function(model){
+                            if(loadAll_)
+                                dom.find('.row').remove();
                             if(Array.isArray(model)){
                                 if(!model.length || model.length < configs.pageSize)
                                     this.clearInterval_(grid);
@@ -261,6 +266,8 @@ NAMESPACE('chlk.controls', function () {
                         }, this);
                 }else{
                     form.find('[name=start]').setValue(configs.currentStart);
+                    if(loadAll_)
+                        grid.find('.row').remove();
                     jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();
                 }
             },
@@ -378,7 +385,9 @@ NAMESPACE('chlk.controls', function () {
                     if(row.exists()){
                         var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
                         if(focusNode.exists()){
-                            focusNode.valueOf()[0].focus()
+                            focusNode.trigger('focus');
+                            if(focusNode.hasClass('select-text') && focusNode.getValue())
+                                focusNode.valueOf()[0].setSelectionRange(0, focusNode.getValue().length);
                         }else{
                             node.find('.grid-focus').valueOf()[0].focus();
                         }

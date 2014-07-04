@@ -12,6 +12,10 @@ using Chalkable.Common;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.Binders;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Diagnostics;
+using Microsoft.WindowsAzure.Diagnostics.Management;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace Chalkable.Web
 {
@@ -42,9 +46,33 @@ namespace Chalkable.Web
             {
                 throw new ArgumentException("To enable OAuth2 support for your web project, configure WindowsAzure.OAuth.RelyingPartyRealm, WindowsAzure.OAuth.ServiceNamespace and WindowsAzure.OAuth.SwtSigningKey in your applications's appSettings.");
             }
-
+            ConfigureDiagnostics();
         }
-        
+
+
+        private void ConfigureDiagnostics()
+        {
+            String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue(wadConnectionString));
+
+            RoleInstanceDiagnosticManager roleInstanceDiagnosticManager =
+                cloudStorageAccount.CreateRoleInstanceDiagnosticManager(RoleEnvironment.DeploymentId, RoleEnvironment.CurrentRoleInstance.Role.Name, RoleEnvironment.CurrentRoleInstance.Id);
+            DiagnosticMonitorConfiguration diagnosticMonitorConfiguration = roleInstanceDiagnosticManager.GetCurrentConfiguration();
+            diagnosticMonitorConfiguration.Directories.ScheduledTransferPeriod = TimeSpan.FromMinutes(5d);
+            diagnosticMonitorConfiguration.Logs.ScheduledTransferPeriod = TimeSpan.FromSeconds(30);
+            diagnosticMonitorConfiguration.Logs.ScheduledTransferLogLevelFilter = LogLevel.Verbose;
+            diagnosticMonitorConfiguration.WindowsEventLog.DataSources.Add("Application!*");
+            diagnosticMonitorConfiguration.WindowsEventLog.DataSources.Add("System!*");
+            diagnosticMonitorConfiguration.WindowsEventLog.ScheduledTransferPeriod = TimeSpan.FromMinutes(5d);
+            PerformanceCounterConfiguration performanceCounterConfiguration = new PerformanceCounterConfiguration();
+            performanceCounterConfiguration.CounterSpecifier = @"\Processor(_Total)\% Processor Time";
+            performanceCounterConfiguration.SampleRate = TimeSpan.FromSeconds(10d);
+            diagnosticMonitorConfiguration.PerformanceCounters.DataSources.Add(performanceCounterConfiguration);
+            diagnosticMonitorConfiguration.PerformanceCounters.ScheduledTransferPeriod = TimeSpan.FromMinutes(1d);
+            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);
+        }
+
+
         protected void Application_AuthenticateRequest(object sender, EventArgs args)
         {
             var chalkableUser = ChalkableAuthentication.GetUser();

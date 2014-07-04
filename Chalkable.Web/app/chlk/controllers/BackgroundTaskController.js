@@ -30,7 +30,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.BgTaskId, Boolean, Number]],
             function logsPageAction(id, postback_, start_) {
                 var result = this.bgTaskService
-                    .getLogs(id, start_ || 0)
+                    .getLogs(id, start_ || 0, 100)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         return new ria.async.DeferredData(new chlk.models.bgtasks.BgTasksLogListViewData(id, data));

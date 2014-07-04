@@ -2,7 +2,7 @@
 
 .glance-container{
   .glance-box:not(:first-child){
-    margin-left: 17px;
+    margin-left: 20px;
   }
 }
 
@@ -13,63 +13,69 @@
     @include transition-property("all");
     @include transition-duration("0.2s");
     @include transition-delay("0.3s");
+
+    .details-container{
+      @include transition-property("all");
+      @include transition-duration("0.2s");
+      @include transition-delay("0.3s");
+      height: 80px;
+      overflow-y: auto;
+      opacity: 0;
+      width: 105px;
+      text-align: left;
+    }
   }
   color: #957633;
   display: inline-block;
   vertical-align: top;
-  width: 95px;
-  height: 109px;
-  border-bottom: 1px solid #f9f5e8;
-  border-left: 1px solid #d9c594;
-  border-right: 1px solid #d9c594;
-  background: rgba(149,118,51,0.5);
-  border-radius: 11px;
+  width: 84px;
+  height: 99px;
+  border: 1px solid #b3a066;
+  @include box-shadow(0 1px 1px #b3a066);
+  background: rgba(240, 233, 212, 0.5);
+  border-radius: 5px;
   text-align: center;
   overflow: hidden;
 
-
-  &.hover-action-box{
+  &.hover-action-box:hover{
     >DIV{
-      &:hover{
-        margin-top: -79px;
+      margin-top: -69px;
 
-        .details{
-          opacity: 1;
-        }
+      .details-container{
+        opacity: 1;
       }
     }
   }
 
   .glance-title{
     text-align: center;
-    font-size: 15px;
-    text-shadow: 0 1px 1px white;
+    font: normal 14px Arial;
+    text-shadow: 1px 0px 0px #cdc4b4;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     padding: 0 3px;
-    color: #957633;
-    margin: 0;
-    font-family: Pacifico;
+    color: #40220f;
+    margin: 6px 0 0 0;
     &.f-13{
       font-size: 13px;
     }
   }
 
   .value{
-    width: 66px;
-    height: 66px;
-    margin: 11px auto 1px;
-    font: bold 43px Arial;
-    color: #C7B587;
-    text-shadow: 0px 1px 1px white;
-    line-height: 66px;
-    background: #276435;
+    width: 56px;
+    height: 56px;
+    margin: 12px auto 1px;
+    font: bold 22px Helvetica, Arial;
+    color: #fff;
+    text-shadow: 0px 1px 1px grey;
+    line-height: 56px;
+    background: #3d9350;
     @include border-radius(33px);
     overflow: hidden;
 
     &:not(:first-child){
-      margin-left: 17px;
+      margin-left: 20px;
     }
     &.large{
       font-size: 36px;
@@ -86,22 +92,40 @@
   }
 
   .details{
-    @include transition-property("all");
-    @include transition-duration("0.2s");
-    @include transition-delay("0.3s");
-
-    margin: 0 auto 10px;
+    margin: 0 11px 0;
     display: inline-block;
-    background: url(images/profile/glance-details-bg.png) 0 0 no-repeat;
-    height: 58px;
-    width: 57px;
-    padding: 13px 3px 3px 3px;
+    background: url(images/profile/glance-details-bg.png) center 0 no-repeat, #f0e5c4;
+    width: 55px;
+    min-height: 58px;
+    padding: 7px 3px 3px 3px;
     overflow: hidden;
-    opacity: 0;
     color: #957633;
+    border: 1px solid #6b5841;
+    border-width: 3px 1px 2px 1px;
+    border-radius: 2px;
+    @include box-shadow(inset 1px 1px 0 #bdaf92);
 
     >DIV{
       font: normal 11px Arial;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      >DIV{
+        display: inline-block;
+        vertical-align: top;
+        overflow: hidden;
+
+      }
+
+      .summary{
+        width: 40px;
+        text-overflow: ellipsis;
+      }
+
+      .total{
+        width: 15px;
+      }
     }
   }
 

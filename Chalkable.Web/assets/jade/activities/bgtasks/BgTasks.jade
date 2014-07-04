@@ -14,6 +14,7 @@
             .th School Id
             .th Created
             .th Scheduled
+            .th Started
             .th Completed
             .th Task State
             .th Task Type
@@ -25,6 +26,7 @@
                     .td= item.getSchoolId() ? item.getSchoolId().valueOf() : "general"
                     .td=item.getCreated().toString('dd/m/yy hh:min:ss')
                     .td=item.getScheduled().toString('dd/m/yy hh:min:ss')
+                    .td=item.getStarted() ? item.getStarted().toString('dd/m/yy hh:min:ss') : ""
                     .td=item.getCompleted() ? item.getCompleted().toString('dd/m/yy hh:min:ss') : ""
                     .td= item.getTaskState().valueOf()
                     .td= item.getTaskType().valueOf()

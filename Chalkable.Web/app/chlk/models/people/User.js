@@ -44,6 +44,8 @@ NAMESPACE('chlk.models.people', function () {
 
             Boolean, 'selected',
 
+            Boolean, 'demoUser',
+
             ArrayOf(chlk.models.people.Claim), 'claims',
 
             [[chlk.models.people.UserPermissionEnum]],

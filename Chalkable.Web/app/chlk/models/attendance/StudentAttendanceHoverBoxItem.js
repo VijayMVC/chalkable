@@ -6,6 +6,8 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.StudentAttendanceHoverBoxItem*/
     CLASS(
         'StudentAttendanceHoverBoxItem', [
+
+            [ria.serialize.SerializeProperty('attendancecount')],
             Number, 'value',
 
             [ria.serialize.SerializeProperty('classname')],

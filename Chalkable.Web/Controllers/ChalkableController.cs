@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
@@ -11,6 +12,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 using Microsoft.IdentityModel.Claims;
@@ -99,6 +101,7 @@ namespace Chalkable.Web.Controllers
                 return MasterLocator.Context;
             }
         }
+
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
@@ -108,11 +111,16 @@ namespace Chalkable.Web.Controllers
             bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
             if (isAuthenticatedByToken)
             {
-                var user = ServiceLocatorFactory.CreateMasterSysAdmin().UserService.GetByLogin(User.Identity.Name);
-                InitServiceLocators(user);
+                var sl = User.Identity.Name.Split(new []{Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+                var userName = sl[0];
+                int? schoolYearId = null;
+                if (sl.Length > 1)
+                    schoolYearId = int.Parse(sl[1]);
+                var masterL = ServiceLocatorFactory.CreateMasterSysAdmin();
+                var user = masterL.UserService.GetByLogin(userName);
+                InitServiceLocators(user, schoolYearId);
                 var claims = (User.Identity as ClaimsIdentity).Claims;
                 var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value;
-
                 SchoolLocator.Context.IsOAuthUser = true;
                 SchoolLocator.Context.SisToken = user.SisToken;
                 SchoolLocator.Context.SisTokenExpires = user.SisTokenExpires;
@@ -136,20 +144,25 @@ namespace Chalkable.Web.Controllers
             InitServiceLocators(context);
         }
 
-        private void InitServiceLocators(User user)
+        private void InitServiceLocators(User user, int? schoolYearId = null)
         {
             if (user.SchoolUsers == null || user.SchoolUsers.Count == 0)
                 throw new ChalkableException(ChlkResources.ERR_USER_IS_NOT_ASSIGNED_TO_SCHOOL);
-            SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers.First());
+
+            SchoolYear schoolYear = null;
+            var schoolUser = user.SchoolUsers[0];
+            if (schoolYearId.HasValue)
+            {
+                var schoolL = ServiceLocatorFactory.CreateMasterSysAdmin().SchoolServiceLocator(user.DistrictRef.Value, null);
+                schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
+                schoolUser = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolYear.SchoolRef);
+                if(schoolUser == null)
+                    throw new ChalkableException(string.Format("There is no school in current District with such schoolYearId : {0}", schoolYear.Id));
+            }
+            SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(schoolUser, schoolYear);
             MasterLocator = SchoolLocator.ServiceLocatorMaster;       
         }
 
-        private void InitServiceLocators(string userName)
-        {
-            var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            var user = serviceLocator.UserService.GetByLogin(userName);
-            InitServiceLocators(user);
-        }
 
         protected void InitServiceLocators(UserContext context)
         {
@@ -196,10 +209,9 @@ namespace Chalkable.Web.Controllers
 
         protected int GetCurrentSchoolYearId()
         {
-            var currentYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            if (currentYear != null)
-                return currentYear.Id;
-            throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            return Context.SchoolYearId.Value;
         }
 
         protected int NowTimeInMinutes

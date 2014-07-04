@@ -10,8 +10,14 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.grading.GradingClassSummaryItem), 'byAnnouncementTypes',
 
             [ria.serialize.SerializeProperty('gradingperiod')],
-            chlk.models.common.NameId, 'gradingPeriod',
+            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
 
-            Number, 'avg'
+            Number, 'avg',
+
+            Boolean, 'autoUpdate',
+
+            function getTooltipText(){
+                return (this.getAvg() != null ? Msg.Avg + " " + this.getAvg() : 'No grades yet');
+            }
         ]);
 });

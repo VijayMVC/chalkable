@@ -367,7 +367,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         //    var schoolSl = ServiceLocator.SchoolServiceLocator(Context.SchoolId.Value);
         //    using (var uow = Read())
         //    {
-        //        var clazz = schoolSl.ClassService.GetClassById(classId);
+        //        var clazz = schoolSl.ClassService.GetClassDetailsById(classId);
         //        if (!BaseSecurity.IsAdminViewerOrClassTeacher(clazz, Context))
         //            throw new ChalkableSecurityException();
         //        var students = schoolSl.PersonService.GetPaginatedPersons(new PersonQuery

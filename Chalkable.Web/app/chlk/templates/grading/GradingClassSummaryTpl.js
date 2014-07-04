@@ -8,6 +8,10 @@ NAMESPACE('chlk.templates.grading', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/TeacherClassGradingSummary.jade')],
         [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData)],
         'GradingClassSummaryTpl', EXTENDS(chlk.templates.common.PageWithClassesAndGradingPeriodsTpl), [
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.grading.GradingClassSummaryItems, 'currentGradingBox'
         ]);
 });

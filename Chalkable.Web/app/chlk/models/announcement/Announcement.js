@@ -102,7 +102,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('class')],
             Object, 'clazz',
 
-            [ria.serialize.SerializeProperty('classname')],
+            [ria.serialize.SerializeProperty('fullclassname')],
             String, 'className',
 
             String, 'comment',
@@ -175,7 +175,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
-            Boolean, 'starred',
+            Boolean, 'complete',
 
             Number, 'state',
 

@@ -10,6 +10,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -35,10 +36,10 @@ namespace Chalkable.Web.Controllers
             var appInfo = BaseApplicationInfo.Create(new ShortApplicationInfo {Name = name}, developerId);
             var application = MasterLocator.ApplicationUploadService.Create(appInfo);
            
-            //if (application != null) //TODO: mix panel
-            //{
-            //    MixPanelService.CreatedApp(SchoolLocator.Context.UserName, application.Name);
-            //}
+            if (application != null)
+            {
+                MixPanelService.CreatedApp(Context.Login, application.Name);
+            }
             return PrepareAppInfo(application, true, true);
         }
 
@@ -60,17 +61,24 @@ namespace Chalkable.Web.Controllers
                                 ? MasterLocator.ApplicationUploadService.Submit(appId, applicationInputModel)
                                 : MasterLocator.ApplicationUploadService.UpdateDraft(appId, applicationInputModel);
 
-            //if (forSubmit) //TODO: mixpanel
-            //{
 
-            //    MixPanelService.SubmittedForApprooval(SchoolLocator.Context.UserName, shortAppInfo.Name, shortAppInfo.ShortDescription,
-            //                                          subjects, appPrices.Price, appPrices.PricePerSchool, appPrices.PricePerClass);
-            //}
-            //else
-            //{
-            //    MixPanelService.UpdatedDraft(SchoolLocator.Context.UserName, shortAppInfo.Name, shortAppInfo.ShortDescription,
-            //                                          subjects, appPrices.Price, appPrices.PricePerSchool, appPrices.PricePerClass);
-            //}
+            var subjects = string.Join(",", app.Categories.Select(x => x.CategoryRef.ToString()));
+
+            if (applicationInputModel.ForSubmit) //TODO: mixpanel
+            {
+
+                MixPanelService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription,
+                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
+                                                      applicationInputModel.ApplicationPrices.PricePerSchool,
+                                                      applicationInputModel.ApplicationPrices.PricePerClass);
+            }
+            else
+            {
+                MixPanelService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription,
+                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
+                                                      applicationInputModel.ApplicationPrices.PricePerSchool, 
+                                                      applicationInputModel.ApplicationPrices.PricePerClass);
+            }
 
             return PrepareAppInfo(app, true, true);
         }
@@ -137,11 +145,10 @@ namespace Chalkable.Web.Controllers
         public ActionResult GoLive(Guid applicationId)
         {
             var res = MasterLocator.ApplicationUploadService.GoLive(applicationId);
-            //if (res) //TODO: mix panel
-            //{
-            //    var app = MasterLocator.ApplicationService.GetApplicationById(id, false);
-            //    MixPanelService.SelectedLive(ServiceLocator.Context.UserName, app.Name);
-            //}
+            if (res)
+            {
+                MixPanelService.SelectedLive(Context.Login, applicationId.ToString());
+            }
             return Json(res);
         }
 
@@ -200,7 +207,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetOauthCode(string applicationUrl)
         {
             //TODO: check if app is installed??
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, MasterLocator.Context.Login);
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
             return Json(authorizationCode);
             

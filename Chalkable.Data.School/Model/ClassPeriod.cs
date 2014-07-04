@@ -11,9 +11,9 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int PeriodRef { get; set; }
         [PrimaryKeyFieldAttr]
-        public int ClassRef { get; set; }
-        [PrimaryKeyFieldAttr]
         public int DayTypeRef { get; set; }
+        [PrimaryKeyFieldAttr]
+        public int ClassRef { get; set; }
         public int SchoolRef { get; set; }
 
         private Period period;

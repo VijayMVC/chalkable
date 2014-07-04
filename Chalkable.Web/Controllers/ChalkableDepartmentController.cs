@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
             string filename;
             GetFileFromRequest(out icon, out filename);
             if (icon == null)
-                icon = MasterLocator.DepartmentIconService.GetPicture(chalkableDepartmentId, null, null);
+                icon = MasterLocator.DepartmentIconService.GetPicture(chalkableDepartmentId.ToString(), null, null);
             var res = MasterLocator.ChalkableDepartmentService.Edit(chalkableDepartmentId, name, keywords, icon);
             return Json(ChalkableDepartmentViewData.Create(res), contentType);
         }

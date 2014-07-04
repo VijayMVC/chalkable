@@ -17,7 +17,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         void AddAnnouncementNewAttachmentNotification(int announcementId);
         void AddAnnouncementNewAttachmentNotificationToPerson(int announcementId, int fromPersonId);
-        void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement);
         void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId);
         void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId);
         void AddAnnouncementSetGradeNotificationToPerson(int announcement, int recipient);
@@ -36,7 +35,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
     {
         NotificationBuilder builder;
 
-
         public NotificationService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
             builder = new NotificationBuilder(serviceLocator);
@@ -44,27 +42,50 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public IList<Notification> GetUnshownNotifications()
         {
+            if(!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Read())
             {
                 var da = new NotificationDataAccess(uow);
-                return da.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.UserLocalId});
+                return da.GetNotifications(new NotificationQuery
+                    {
+                        Shown = false, 
+                        PersonId = Context.UserLocalId, 
+                        SchoolId = Context.SchoolLocalId.Value
+                    });
             }
         }
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
         {
+            if (!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
+
             using (var uow = Read())
             {
-                var da = new NotificationDataAccess(uow);
-                return da.GetPaginatedNotificationsDetails(new NotificationQuery
+                var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(new NotificationQuery
                     {
                         PersonId = Context.UserLocalId, 
                         Start = start, 
-                        Count = count
+                        Count = count,
+                        SchoolId = Context.SchoolLocalId.Value
                     });
+                var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement != null)
+                                   .Select(x => x.Announcement.ClassRef)
+                                   .ToList();
+                IList<ClassAnnouncementType> classAnnouncementTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+                foreach (var notification in notifications)
+                {
+                    if (notification.Announcement != null && notification.Announcement.ClassAnnouncementTypeRef.HasValue)
+                    {
+                        var classAnnType = classAnnouncementTypes.First(x => x.Id == notification.Announcement.ClassAnnouncementTypeRef);
+                        notification.AnnouncementType = classAnnType;
+                    }
+                }
+                return notifications;
             }
         }
-
+        
         public IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null)
         {
             throw new NotImplementedException();
@@ -72,10 +93,18 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public void MarkAsShown(int[] notificationIds)
         {
+            if (!Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException();
+
             using (var uow = Update())
             {
                 var da = new NotificationDataAccess(uow);
-                var notifications = da.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.UserLocalId });
+                var notifications = da.GetNotifications(new NotificationQuery
+                        {
+                            Shown = false, 
+                            PersonId = Context.UserLocalId,
+                            SchoolId = Context.SchoolLocalId.Value
+                        });
                 foreach (var notificationId in notificationIds)
                 {
                     var notification = notifications.FirstOrDefault(x => x.Id == notificationId);
@@ -109,28 +138,14 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotification(notification);
         }
 
-        public void AddAnnouncementReminderNotification(AnnouncementReminder announcementReminder, AnnouncementComplex announcement)
-        {
-            if (!NotificationSecurity.CanCreateAnnouncementNotification(announcement, Context))
-                throw new ChalkableSecurityException();
-            var recipients = ServiceLocator.AnnouncementService.GetAnnouncementRecipientPersons(announcement.Id);
-            var notifications = new List<Notification>(); 
-            foreach (var schoolPerson in recipients)
-            {
-                if (!announcementReminder.PersonRef.HasValue || schoolPerson.Id == announcementReminder.PersonRef)
-                {
-                    notifications.Add(builder.BuildAnnouncementReminderNotification(announcement, schoolPerson));
-                }
-            }
-            AddNotifications(notifications);
-        }
 
         public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            var authors = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery {ClassId = ann.ClassRef, RoleId = CoreRoles.TEACHER_ROLE.Id});
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
-            var notification = builder.BuildAnnouncementQnToAuthorNotifiaction(annQnA, ann);
-            AddNotification(notification);
+            IList<Notification> notifications = authors.Select(author => builder.BuildAnnouncementQnToAuthorNotifiaction(annQnA, ann, author)).ToList();
+            AddNotifications(notifications);
         }
 
         public void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId)

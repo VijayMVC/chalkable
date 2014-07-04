@@ -24,8 +24,6 @@ namespace Chalkable.Data.School.DataAccess
                 res.Add(Notification.SHOWN_FIELD, query.Shown);
             if(query.Type.HasValue)
                 res.Add(Notification.TYPE_FIELD, query.Type);
-            if(query.ClassPeriodRef.HasValue)
-                res.Add(Notification.CLASS_PERIOD_REF_FIELD, query.ClassPeriodRef);
             return res;
         } 
 
@@ -55,7 +53,6 @@ namespace Chalkable.Data.School.DataAccess
                                QuestionPerson.Id as QuestionPerson_Id
                         from [Notification]
                         left join Announcement on Announcement.Id  = [Notification].AnnouncementRef
-                        left join ClassAnnouncementType on ClassAnnouncementType.Id = Announcement.ClassAnnouncementTypeRef
                         left join MarkingPeriod on MarkingPeriod.Id = [Notification].MarkingPeriodRef
                         left join vwPrivateMessage on vwPrivateMessage.PrivateMessage_Id = [Notification].PrivateMessageRef
                         join vwPerson toPerson on toPerson.Id = [Notification].PersonRef
@@ -66,12 +63,17 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     typeof (Notification),
                     typeof (Announcement),
-                    typeof (ClassAnnouncementType),
                     typeof (MarkingPeriod)
                 };
             b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
             var res = new DbQuery(b, new Dictionary<string, object>());
             conds.BuildSqlWhere(res, tables[0].Name);
+            res.Sql.AppendFormat(
+                " and (toPerson.[{0}] =@{0} and (QuestionPerson.[{0}] is null or QuestionPerson.[{0}] =@{0}))"
+                , SchoolPerson.SCHOOL_REF_FIELD);
+            res.Sql.AppendFormat(" and PrivateMessage_SenderSchoolRef = @{0} and PrivateMessage_RecipientSchoolRef = @{0}"
+                , SchoolPerson.SCHOOL_REF_FIELD);
+            res.Parameters.Add(SchoolPerson.SCHOOL_REF_FIELD, query.SchoolId);
             return res;
         }
 
@@ -95,7 +97,6 @@ namespace Chalkable.Data.School.DataAccess
             if (res.Type == NotificationType.Announcement || res.Type == NotificationType.Question || res.Type == NotificationType.ItemToGrade)
             {
                 res.Announcement = reader.Read<Announcement>(true);
-                res.AnnouncementType = reader.Read<ClassAnnouncementType>(true);
             }
             if (res.Type == NotificationType.MarkingPeriodEnding)
                 res.MarkingPeriod = reader.Read<MarkingPeriod>(true);
@@ -130,8 +131,12 @@ namespace Chalkable.Data.School.DataAccess
         public PaginatedList<NotificationDetails> GetPaginatedNotificationsDetails(NotificationQuery query)
         {
             var innerQuery = BuildGetNotificationDetailsDbQuery(query);
-            var orderBy = "Notification_" + Notification.CREATED_FIELD;
-            var q = Orm.PaginationSelect(innerQuery, orderBy, Orm.OrderType.Desc, query.Start, query.Count);
+            var orderBy = new Dictionary<string, Orm.OrderType>
+                {
+                    {"Notification_" + Notification.CREATED_FIELD,Orm.OrderType.Desc},
+                    { "Notification_" + Notification.ID_FIELD, Orm.OrderType.Desc}
+                };
+            var q = Orm.PaginationSelect(innerQuery, orderBy, query.Start, query.Count);
             return ReadPaginatedResult(q, query.Start, query.Count, ReadListNotifcationDetails);
         }
     }
@@ -145,7 +150,8 @@ namespace Chalkable.Data.School.DataAccess
         public int Count { get; set; }
         public NotificationType? Type { get; set; }
         public int? ClassPeriodRef { get; set; }
-        
+        public int SchoolId { get; set; }
+
         public NotificationQuery()
         {
             Start = 0;

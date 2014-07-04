@@ -126,11 +126,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             var res = new Dictionary<string, PreferenceInfo>();
             res.Add(Preference.DEMO_DISTRICT_ID, new PreferenceInfo { Value = "4562e5bb-f5f2-42bd-aab4-3c61ba775581" });
-            res.Add(Preference.DEMO_SCHOOL_ADMIN_GRADE, new PreferenceInfo { Value = "user2735_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
-            res.Add(Preference.DEMO_SCHOOL_ADMIN_EDIT, new PreferenceInfo { Value = "" });
-            res.Add(Preference.DEMO_SCHOOL_ADMIN_VIEW, new PreferenceInfo { Value = "" });
-            res.Add(Preference.DEMO_SCHOOL_TEACHER, new PreferenceInfo { Value = "user1195_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
-            res.Add(Preference.DEMO_SCHOOL_STUDENT, new PreferenceInfo { Value = "user19_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_SCHOOL_ADMIN_GRADE, new PreferenceInfo { Value = "demo_user_1197_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_SCHOOL_ADMIN_EDIT, new PreferenceInfo { Value = "demo_user_1198_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_SCHOOL_ADMIN_VIEW, new PreferenceInfo { Value = "demo_user_1199_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_SCHOOL_TEACHER, new PreferenceInfo { Value = "demo_user_1195_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
+            res.Add(Preference.DEMO_SCHOOL_STUDENT, new PreferenceInfo { Value = "demo_user_1_4562e5bb-f5f2-42bd-aab4-3c61ba775581@chalkable.com" });
             res.Add(Preference.DEMO_USER_PASSWORD, new PreferenceInfo {Value = "Qwerty1@"});
             res.Add(Preference.DEMO_SCHOOL_PROCESSING_PARAMETERS, new PreferenceInfo { Value = "20|10|10|5000|3600" });
             res.Add(Preference.SERVER_NAME, new PreferenceInfo { Value = "smtp.sendgrid.net" });
@@ -142,7 +142,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             res.Add(Preference.CROCODOC_TOKEN, new PreferenceInfo { Value = "xEyUsXCwkjRMsNehL6CL7pyR" });
             res.Add(Preference.CROCODOC_API_URL, new PreferenceInfo { Value = "https://crocodoc.com/api/v2/" });
             res.Add(Preference.CROCODOC_URL, new PreferenceInfo { Value = "https://crocodoc.com/" });
-            res.Add(Preference.APPLICATION_URL, new PreferenceInfo { Value = "http://dev.chalkable.com" });
+            res.Add(Preference.APPLICATION_URL, new PreferenceInfo { Value = "http://chalkable.com" });
             res.Add(Preference.VIDEO_GETING_INFO_CHALKABLE, new PreferenceInfo { Value = "" });
             res.Add(Preference.VIDEO_GETING_INFO_READY, new PreferenceInfo { Value = "" });
             res.Add(Preference.VIDEO_UPLOAD_TEACHER_INFO, new PreferenceInfo { Value = "" });
@@ -355,6 +355,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Category = PreferenceCategoryEnum.ControllerDescriptions,
                 Type = PreferenceTypeEnum.ShortText,
                 Value = "Returns announcement data"
+            });
+
+            res.Add(Preference.API_DESCR_ANNOUNCEMENT_TYPE_LIST, new PreferenceInfo
+            {
+                Category = PreferenceCategoryEnum.ControllerDescriptions,
+                Type = PreferenceTypeEnum.LongText,
+                Value = "Returns announcement types for particular class"
             });
            
             res.Add(Preference.API_DESCR_FEED_LIST, new PreferenceInfo

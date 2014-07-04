@@ -4,6 +4,9 @@ using System.Net;
 using System.Threading;
 using Chalkable.BackgroundTaskProducer.Producers;
 using Chalkable.Data.Master.Model;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Diagnostics;
+using Microsoft.WindowsAzure.Diagnostics.Management;
 using Microsoft.WindowsAzure.ServiceRuntime;
 
 namespace Chalkable.BackgroundTaskProducer
@@ -14,9 +17,6 @@ namespace Chalkable.BackgroundTaskProducer
         {
             Trace.WriteLine("BackgroundTaskProducer entry point called", "Information");
             var cp = new CompositeProducer();
-            //cp.AddProducer("Demo school producer", new CreateDemoDistrictTaskProducer());
-            //cp.AddProducer("Demo school delete producer", new DemoDistrictDeleteTaskProducer());
-
             //cp.AddProducer("Process Reminders Producer", new AllDistrictsProducer("ProcessReminderProducer", BackgroundTaskTypeEnum.ProcessReminder));
             //cp.AddProducer("Attendance Notification Producer", new AllDistrictsProducer("AttendanceNotificationProducer", BackgroundTaskTypeEnum.AttendanceNotification));
             //cp.AddProducer("Teacher Attendance Notification Producer", new AllDistrictsProducer("TeacherAttendanceNotification", BackgroundTaskTypeEnum.TeacherAttendanceNotification));
@@ -53,8 +53,30 @@ namespace Chalkable.BackgroundTaskProducer
 
             // For information on handling configuration changes
             // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
-
+            ConfigureDiagnostics();
             return base.OnStart();
+        }
+
+        private void ConfigureDiagnostics()
+        {
+            String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue(wadConnectionString));
+
+            RoleInstanceDiagnosticManager roleInstanceDiagnosticManager =
+                cloudStorageAccount.CreateRoleInstanceDiagnosticManager(RoleEnvironment.DeploymentId, RoleEnvironment.CurrentRoleInstance.Role.Name, RoleEnvironment.CurrentRoleInstance.Id);
+            DiagnosticMonitorConfiguration diagnosticMonitorConfiguration = roleInstanceDiagnosticManager.GetCurrentConfiguration();
+            diagnosticMonitorConfiguration.Directories.ScheduledTransferPeriod = TimeSpan.FromMinutes(5d);
+            diagnosticMonitorConfiguration.Logs.ScheduledTransferPeriod = TimeSpan.FromSeconds(30);
+            diagnosticMonitorConfiguration.Logs.ScheduledTransferLogLevelFilter = LogLevel.Verbose;
+            diagnosticMonitorConfiguration.WindowsEventLog.DataSources.Add("Application!*");
+            diagnosticMonitorConfiguration.WindowsEventLog.DataSources.Add("System!*");
+            diagnosticMonitorConfiguration.WindowsEventLog.ScheduledTransferPeriod = TimeSpan.FromMinutes(5d);
+            PerformanceCounterConfiguration performanceCounterConfiguration = new PerformanceCounterConfiguration();
+            performanceCounterConfiguration.CounterSpecifier = @"\Processor(_Total)\% Processor Time";
+            performanceCounterConfiguration.SampleRate = TimeSpan.FromSeconds(10d);
+            diagnosticMonitorConfiguration.PerformanceCounters.DataSources.Add(performanceCounterConfiguration);
+            diagnosticMonitorConfiguration.PerformanceCounters.ScheduledTransferPeriod = TimeSpan.FromMinutes(1d);
+            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);
         }
     }
 }

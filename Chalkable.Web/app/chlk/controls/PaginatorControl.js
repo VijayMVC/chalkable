@@ -56,6 +56,8 @@ NAMESPACE('chlk.controls', function () {
                     end: (start + data.getPageSize()) | 0,
                     pageSize: data.getPageSize() | 0
                 };
+                if(res.end > res.totalCount)
+                    res.end = res.totalCount;
                 this.setConfigs(res);
                 return res;
             }

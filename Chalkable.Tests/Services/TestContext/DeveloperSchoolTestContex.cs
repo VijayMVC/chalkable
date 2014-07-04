@@ -33,7 +33,7 @@ namespace Chalkable.Tests.Services.TestContext
             var userInfo = CreateUserInfo(DEVELOPER_USER, CoreRoles.DEVELOPER_ROLE);
             masterLocator = sysSchoolSl.ServiceLocatorMaster;
             var developer = masterLocator.DeveloperService.Add(userInfo.Login, userInfo.Password, userInfo.FirstName,
-                             DEVELOPER_WEB_SITE, sysSchoolSl.Context.SchoolId.Value);
+                             DEVELOPER_WEB_SITE);
             developerId = developer.Id;
             var devContext = masterLocator.UserService.Login(userInfo.Login, userInfo.Password);
             DeveloperSl = new BaseSchoolServiceLocatorTest(new BaseMasterServiceLocatorTest(devContext));

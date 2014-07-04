@@ -23,14 +23,14 @@ NAMESPACE('chlk.services', function () {
 
 
             //TODO: refactor
-            [[Boolean, Boolean]],
-            Array, function getClassesForTopBar(withAll_, forCurrentMp_) {
+            [[Boolean, Boolean, Boolean]],
+            Array, function getClassesForTopBar(withAll_, forCurrentMp_, isNotAbleToGetClasses_) {
                 var res = this.getClassesToFilter(), res1 = this.getClassesToFilterWithAll();
                 //if(res)
                     //return withAll_ ? res1 : res;
                 var classes = window.classesToFilter;
                 if(forCurrentMp_){
-                    var mpId = this.getContext().getSession().get('markingPeriod').getId().valueOf();
+                    var mpId = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD).getId().valueOf();
                     classes = window.classesToFilter.filter(function(item){
                         return item.markingperiodsid.indexOf(mpId) > -1
                     })
@@ -45,6 +45,10 @@ NAMESPACE('chlk.services', function () {
                 });
                 res1 = chlk.lib.serialize.ChlkJsonSerializer().deserialize(classesToFilterWithAll, ArrayOf(chlk.models.classes.ClassForTopBar));
                 this.setClassesToFilterWithAll(res1);
+                if(isNotAbleToGetClasses_){
+                    res = [];
+                    res1 = res1.filter(function(item){return item.getName() == 'All';})
+                }
                 return withAll_ ? res1 : res;
             },
 

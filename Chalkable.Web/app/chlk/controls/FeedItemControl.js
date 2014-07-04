@@ -14,13 +14,15 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function starClick(node, event){
                 var feedItem = node.parent('.feed-item');
-                if (feedItem.getAttr("class").indexOf("starred") != -1)
+                if (feedItem.getAttr("class").indexOf("complete") != -1)
                 {
-                    feedItem.removeClass("starred");
+                    feedItem.removeClass("complete");
+                    node.setData('tooltip', Msg.ToDo);
                 }
                 else
                 {
-                    feedItem.addClass("starred");
+                    feedItem.addClass("complete");
+                    node.setData('tooltip', Msg.Done);
                 }
                 return true;
             }

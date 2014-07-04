@@ -83,38 +83,41 @@ NAMESPACE('chlk.activities.lib', function () {
                 BASE(model);
                 var target = model.getTarget();
                 var offset = target.offset();
-                this._popupHolder = model.getContainer() || this._popupHolder;
+                if(offset){
+                    this._popupHolder = model.getContainer() || this._popupHolder;
                 this._popupClass && this._popupHolder.addClass(this._popupClass);
                 this._popupHolder.removeClass(HIDDEN_CLASS);
                 if(!target)
                     throw new ria.mvc.MvcException('There is no target for Popup activity');
-                var container = this.getContainer(), res;
-                if(this._isHorizontal){
-                    this._popupHolder.setCss('top', offset.top - 10);
-                    var notOver = offset.left - container.offset().left > this._popupHolder.width();
-                    if(this._isTopLeft && (notOver || this._isConstantPosition)){
-                    //if(this._isTopLeft && (container.offset().left + container.width()) > (this._popupHolder.offset().left + this._popupHolder.width())){
-                        this._popupHolder.setCss('left', notOver ? offset.left - 10 - this._popupHolder.width() : 0);
-                        res = positionClasses.left;
+                    var container = this.getContainer(), res;
+                    if(this._isHorizontal){
+                        this._popupHolder.setCss('top', offset.top - 10);
+                        var notOver = offset.left - container.offset().left > this._popupHolder.width();
+                        if(this._isTopLeft && (notOver || this._isConstantPosition)){
+                        //if(this._isTopLeft && (container.offset().left + container.width()) > (this._popupHolder.offset().left + this._popupHolder.width())){
+                            this._popupHolder.setCss('left', notOver ? offset.left - 10 - this._popupHolder.width() : 0);
+                            res = positionClasses.left;
+                        }else{
+                            this._popupHolder.setCss('left', offset.left + 10 + target.width());
+                            res = positionClasses.right;
+                        }
                     }else{
-                        this._popupHolder.setCss('left', offset.left + 10 + target.width());
-                        res = positionClasses.right;
-                    }
-                }else{
-                    this._popupHolder.setCss('left', offset.left - (this._popupHolder.width() - target.width())/2);
-                    var notOver = offset.top - container.offset().top > this._popupHolder.height();
-                    if(this._isTopLeft && (notOver || this._isConstantPosition)){
-                    //if(this._isTopLeft && (container.offset().top + container.height()) > (this._popupHolder.offset().top + this._popupHolder.height())){
+                        this._popupHolder.setCss('left', offset.left - (this._popupHolder.width() - target.width())/2);
+                        var notOver = offset.top - container.offset().top > this._popupHolder.height();
+                        if(this._isTopLeft && (notOver || this._isConstantPosition)){
+                        //if(this._isTopLeft && (container.offset().top + container.height()) > (this._popupHolder.offset().top + this._popupHolder.height())){
 
-                        this._popupHolder.setCss('top', notOver ? offset.top - 10 - this._popupHolder.height() : 0);
-                        res = positionClasses.top;
-                    }else{
-                        this._popupHolder.setCss('top', offset.top + 10 + target.height());
-                        res = positionClasses.bottom;
+                            this._popupHolder.setCss('top', notOver ? offset.top - 10 - this._popupHolder.height() : 0);
+                            res = positionClasses.top;
+                        }else{
+                            this._popupHolder.setCss('top', offset.top + 10 + target.height());
+                            res = positionClasses.bottom;
+                        }
                     }
+                    this._popupHolder.addClass(res);
+                    this.setCurrentClass(res);
                 }
-                this._popupHolder.addClass(res);
-                this.setCurrentClass(res);
+
             },
 
             OVERRIDE, VOID, function onPause_() {

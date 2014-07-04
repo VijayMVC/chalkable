@@ -25,7 +25,7 @@ NAMESPACE('chlk.services', function () {
             ria.mvc.IContext, 'context',
 
             String, function getServiceRoot(){
-                return this.getContext().getSession().get('siteRoot');
+                return this.getContext().getSession().get(ChlkSessionConstants.SITE_ROOT);
             },
 
             [[String]],
@@ -64,7 +64,10 @@ NAMESPACE('chlk.services', function () {
                     .then(function (data) {
                         if (!clazz_)
                             return data.data || null;
-                        return Serializer.deserialize(data.data, clazz_);
+                        var dt = getDate().getTime();
+                        var res = Serializer.deserialize(data.data, clazz_);
+                        //console.info('deserialize time', getDate().getTime() - dt);
+                        return res;
                         throw(new Exception(handler.getMessage()));
                     }, this);
             },
@@ -89,6 +92,8 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders(this.prepareDefaultHeaders({"Content-Type": "application/json; charset=utf-8"}))
                     .run()
                     .then(function (data) {
+                        if (!clazz)
+                            return data.data || null;
                         return Serializer.deserialize(data.data, clazz);
                     }, this);
             },

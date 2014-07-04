@@ -18,7 +18,7 @@ NAMESPACE('chlk.models.developer', function () {
 
             function prepare_(){
 
-                var now = new chlk.models.common.ChlkDate(new Date());
+                var now = new chlk.models.common.ChlkDate(getDate());
                 var diff = now.getDateDiffInDays(now, now.getLastDay());
                 var daysInMonth = now.getDaysInMonth();
                 this.setDaysToPayout(diff);

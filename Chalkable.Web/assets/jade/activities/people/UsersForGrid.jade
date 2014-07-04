@@ -1,11 +1,15 @@
 each item, i in self.getItems()
-    -index = item.getIndex ? (item.getIndex() || i) : i;;
+    index = item.getIndex ? (item.getIndex() || i) : i
     .row(class=(index == 0 ? 'selected' : ''), index=index)
-        +ActionLink('user', 'infoByRole', item.getId(), item.getRole().getName()).left.image-container.white.shadow
-            +PersonImg(item, 47)
+        if self.canViewInfo(item)
+            +ActionLink('user', 'infoByRole', item.getId(), item.getRole().getName()).left.image-container.white.shadow
+                +PersonImg(item, 47)
+        else
+            .left.image-container.white.shadow
+                +PersonImg(item, 47)
         p.left= item.getFullName()
         .right
-            +ActionLinkButton('message', 'sendToPerson', item.getId(), item.getFirstName(), item.getLastName()).message-button.blue-gradient-btn Message
+            +ActionLinkButton('message', 'sendToPerson', null, item.getId(), item.getFirstName(), item.getLastName()).message-button.blue-gradient-btn Message
         .clear
 
 

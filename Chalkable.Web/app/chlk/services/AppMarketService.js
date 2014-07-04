@@ -76,20 +76,21 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[chlk.models.id.SchoolPersonId, Number, String]],
-            ria.async.Future, function getInstalledApps(personId, start_, filter_) {
+            [[chlk.models.id.SchoolPersonId, Number, String, Number]],
+            ria.async.Future, function getInstalledApps(personId, start_, filter_, count_) {
                 return this
                     .getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
                         personId: personId.valueOf(),
                         start: start_ | 0,
-                        filter: filter_ || ""
+                        filter: filter_ || "",
+                        count: count_
                     })
             },
 
-            [[chlk.models.id.SchoolPersonId, Boolean, Number, String]],
-            ria.async.Future, function getMyApps(personId, forEdit, start_, filter_) {
+            [[chlk.models.id.SchoolPersonId, Boolean, Number, String, Number]],
+            ria.async.Future, function getMyApps(personId, forEdit, start_, filter_, count_) {
                 return this
-                    .getInstalledApps(personId, start_, filter_)
+                    .getInstalledApps(personId, start_, filter_, count_)
                     .then(function(data){
 
                         var apps = data && data.getItems() || [];
@@ -121,14 +122,14 @@ NAMESPACE('chlk.services', function () {
 
                         data.setItems(apps);
 
-                        this.getContext().getSession().set('myAppsCached', apps);
+                        this.getContext().getSession().set(ChlkSessionConstants.MY_APPS_CACHED, apps);
                         return data;
                     }, this);
             },
 
             [[String]],
             ria.async.Future, function getMyAppsByFilter(filter) {
-                var personId = this.getContext().getSession().get('currentPerson').getId();
+                var personId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId();
                 return this.getMyApps(personId, false, 0, filter);
             },
 
@@ -137,7 +138,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String]],
             chlk.models.apps.AppMarketApplication, function getMyAppByUrl(url){
-                var myApps = this.getContext().getSession().get('myAppsCached') || [];
+                var myApps = this.getContext().getSession().get(ChlkSessionConstants.MY_APPS_CACHED) || [];
                 var result = myApps.filter(function(item){
                    return item.getUrl() == url;
                 }) || [];
@@ -205,7 +206,7 @@ NAMESPACE('chlk.services', function () {
                         gradelevelids: this.arrayToCsv(gradeLevels)
                     })
                     .then(function(data){
-                        this.getPersonBalance(this.getContext().getSession().get('currentPerson').getId(), true);
+                        this.getPersonBalance(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId(), true);
                         return data;
                     }, this)
             },
@@ -227,26 +228,18 @@ NAMESPACE('chlk.services', function () {
                         classids: this.arrayToCsv(classes),
                         roleIds: this.arrayToCsv(roles),
                         gradelevelids: this.arrayToCsv(gradeLevels)
-                    })
-                    .then(function(totalPrice){
-                        this.getContext().getSession().set('selectedAppTotalPrice', totalPrice);
-                        return totalPrice;
-                    }, this);
-            },
-
-            chlk.models.apps.AppTotalPrice, function getSelectedAppTotalPrice(){
-                return this.getContext().getSession().get('selectedAppTotalPrice', new chlk.models.apps.AppTotalPrice);
+                    });
             },
 
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getPersonBalance(personId, refresh_) {
-                var currentBalance = this.getContext().getSession().get('currentPersonBalance');
+                var currentBalance = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON_BALANCE);
                 return currentBalance == null || refresh_ ?
                     this.get('Fund/GetPersonBudgetBalance.json', chlk.models.funds.PersonBalance, {
                         personId: personId.valueOf()
                     })
                     .then(function(balance){
-                        this.getContext().getSession().set('currentPersonBalance', balance);
+                        this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PERSON_BALANCE, balance);
                         return balance;
                     }, this) : ria.async.DeferredData(currentBalance);
             },

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Services.Master.PictureServices;
+using Chalkable.Common.Exceptions;
 using Chalkable.Web.Tools;
 
 namespace Chalkable.Web.Controllers
@@ -18,5 +17,11 @@ namespace Chalkable.Web.Controllers
 #endif
         }
 
+        public ActionResult GetPictureRootUrl()
+        {
+            if (Context.DistrictId == null)
+                throw new ChalkableException("User is not authorized");
+            return Json(new {url = PictureService.GetPicturesRelativeAddress() + Context.DistrictId});
+        }
     }
 }

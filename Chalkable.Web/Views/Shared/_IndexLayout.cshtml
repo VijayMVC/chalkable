@@ -5,7 +5,6 @@
 	<meta charset="UTF-8">
 	<title>Chalkable</title>
 	<meta name="description" content="Web Apps for your school">
-    <link href="@Url.StaticContent("/Content/images/favicon.ico")" rel="shortcut icon"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
 	<link href="@Url.StaticContent("/Content/screen-home.css")" rel="stylesheet" media="screen, projection" type="text/css" />
@@ -40,7 +39,7 @@
 			<div class="taglineMessage">
 				<h1>Web Apps<br> for your school</h1>
 				<p>Chalkable is an app store for school and platform to make those apps work.</p>
-				<a href="@Url.Content("~/DemoSchool/Demo")" class="btnBig">Launch demo</a>
+				<a href="@Url.Content("~/DemoSchool/Index")" class="btnBig">Launch demo</a>
 				<p class="signup"><a href="mailto:pilot@chalkable.com?subject=I'm interested in piloting Chalkable at my school">Get your school on Chalkable</a></p>
 			</div>
 		</div>
@@ -91,7 +90,7 @@
 				<ul>
 					<li>
 						<ul class="links">
-							<li><a href="@Url.Content("~/Account/Faq")">FAQ</a></li>
+							<li><a href="@Url.Content("~/Home/Faq")">FAQ</a></li>
 							<li><a target="_blank" href="http://blog.chalkable.com/">Blog</a></li>
 							<li><a target="_blank" href="http://chalkable.uservoice.com/">Feedback</a></li>
 							<li><a href="mailto:info@chalkable.com">Email us</a></li>
@@ -122,7 +121,7 @@
 					<li>
 						<ul>
 							<li><a href="http://cl.ly/361V222N3T213e1m1J0Z">Press</a></li>
-							<li><a href="@Url.Content("~/Account/Terms")">Terms</a></li>
+							<li><a href="@Url.Content("~/Home/Terms")">Terms</a></li>
 						</ul>
 				</ul>
 			</div> <!-- /footerTop -->
@@ -170,7 +169,7 @@
 				<span class="close"></span>
 			</header>
 
-			<form id="reset-form" action="@Url.Content("~/Account/ResetPassword")" method="post">
+			<form id="reset-form" action="@Url.Content("~/User/ResetPassword")" method="post">
 				<p>
 					<label for="email">Email</label>
 					<input type="email" name="email" id="email" class="validate[required,custom[email]]">
@@ -188,7 +187,10 @@
 			</footer>
 		</div>
 	</div>
-    
+<script type="text/javascript">
+    var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
+    var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
+</script>
 <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
 <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-ui.min.js")"></script>
 <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
@@ -196,22 +198,8 @@
 <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
 <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
 <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
-    <!-- start Mixpanel -->
-    <script type="text/javascript">
-        var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
-        var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
-        (function (e, b) {
-            if (!b.__SV) {
-                var a, f, i, g; window.mixpanel = b; a = e.createElement("script"); a.type = "text/javascript"; a.async = !0; a.src = ("https:" === e.location.protocol ? "https:" : "http:") + "//cdn.mxpnl.com/libs/mixpanel-2.2.min.js"; f = e.getElementsByTagName("script")[0]; f.parentNode.insertBefore(a, f); b._i = []; b.init = function (a, e, d) {
-                    function f(b, h) { var a = h.split("."); 2 == a.length && (b = b[a[0]], h = a[1]); b[h] = function () { b.push([h].concat(Array.prototype.slice.call(arguments, 0))) } } var c = b; "undefined" !== typeof d ? c = b[d] =
-                        [] : d = "mixpanel"; c.people = c.people || []; c.toString = function (b) { var a = "mixpanel"; "mixpanel" !== d && (a += "." + d); b || (a += " (stub)"); return a }; c.people.toString = function () { return c.toString(1) + ".people (stub)" }; i = "disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.increment".split(" "); for (g = 0; g < i.length; g++) f(c, i[g]); b._i.push([a, e, d])
-                };
-                b.__SV = 1.2;
-            }
-        })(document, window.mixpanel || []);
-        mixpanel.init("@ConfigurationManager.AppSettings["mixpanel-token"]");
-    </script>
-
+    
+    @ChlkHelpers.MixPanel()    
     @RenderSection("MixPanelTracking", false)
 </body>
 </html>

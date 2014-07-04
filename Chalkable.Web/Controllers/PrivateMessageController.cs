@@ -4,6 +4,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -31,10 +32,10 @@ namespace Chalkable.Web.Controllers
         public ActionResult Send(int personId, string subject, string body)
         {
             var res = SchoolLocator.PrivateMessageService.SendMessage(personId, subject, body);
-            //if (res != null)
-            //{
-            //    MixPanelService.SentMessageTo(ServiceLocator.Context.UserName, res.Recipient.DisplayName);
-            //}
+            if (res != null)
+            {
+                MixPanelService.SentMessageTo(Context.Login, res.Recipient.FullName);
+            }
             return Json(PrivateMessageViewData.Create(res));
         }
 

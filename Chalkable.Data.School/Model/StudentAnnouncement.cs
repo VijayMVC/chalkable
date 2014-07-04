@@ -14,6 +14,7 @@ namespace Chalkable.Data.School.Model
     public class StudentAnnouncement
     {
         public int AnnouncementId { get; set; }
+        public string AnnouncementTitle { get; set; }
         public int ActivityId { get; set; }
         public int StudentId { get; set; }
         public string Comment { get; set; }
@@ -32,6 +33,11 @@ namespace Chalkable.Data.School.Model
         public bool Withdrawn { get; set; }
         public bool OverMaxScore { get; set; }
 
+        public bool IsUnexcusedAbsent
+        {
+            get { return Absent && string.IsNullOrEmpty(AbsenceCategory) && AbsenceCategory.ToLower() == "u"; }
+        }
+        
         //TODO : remove this later
         public StudentAnnouncementStateEnum State { get { return StudentAnnouncementStateEnum.Manual; } }
 
@@ -49,6 +55,17 @@ namespace Chalkable.Data.School.Model
 
     public class StudentAnnouncementGrade : StudentAnnouncement
     {
-        public AnnouncementComplex Announcement { get; set; }
+        private AnnouncementComplex announcement;
+
+        public AnnouncementComplex Announcement
+        {
+            get { return announcement; }
+            set
+            {
+                announcement = value;
+                if (announcement != null)
+                    AnnouncementId = announcement.Id;
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Phone> EditPhones(IList<Phone> phones);
         Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary);
         void Delete(string digitOnlyValue, int personId);
-        void DeletePhones(Dictionary<int, string> personsPhonesValues);
+        void Delete(IList<Phone> phones);
         IList<Person> GetUsersByPhone(string phone);
     }
 
@@ -92,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(string digitOnlyValue, int personId)
         {
-            DeletePhones(new Dictionary<int, string> {{personId, digitOnlyValue}});
+            Delete(new List<Phone> { new Phone{PersonRef = personId, DigitOnlyValue = digitOnlyValue} });
         }
 
         public IList<Person> GetUsersByPhone(string phone)
@@ -116,14 +116,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void DeletePhones(Dictionary<int, string> personsPhonesValues)
+        public void Delete(IList<Phone> phones)
         {
             if (!(BaseSecurity.IsDistrict(Context)))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new PhoneDataAccess(uow);
-                da.Delete(personsPhonesValues.Select(x=>new Phone{PersonRef = x.Key, DigitOnlyValue = x.Value}).ToList());
+                da.Delete(phones);
                 uow.Commit();
             }
         }

@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.calendar', function () {
 
             [[chlk.models.common.ChlkDate]],
             VOID, function setCurrentDate(date){
-                this.currentDate = date || chlk.models.common.ChlkDate(new Date());
+                this.currentDate = date || chlk.models.common.ChlkDate(getDate());
             },
 
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],

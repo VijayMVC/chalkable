@@ -1,10 +1,3 @@
-mixin AddEditReminderForm(announcement, reminders)
-    +ActionForm('announcement', 'editAddReminder')(data-reminders=reminders)#add-edit-reminder
-        +Hidden('id')
-        +Hidden('announcementId', announcement.getId())
-        +Hidden('before')
-        +Hidden('duplicate', false)
-
 //TODO refactor
 mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole)
     +Hidden('id', announcement.getId().valueOf())
@@ -56,9 +49,11 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                         each standard in standards
                             .grey-button.same-on-hover
                                 span=standard.getName()
-                                +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
+                                if !disableDeleteBtn
+                                    +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
                     .title=Msg.Click_to_add_standard
                     +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
+        .drawer-icon
         .drop-down-container
         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
         if !announcement.getState()
@@ -72,7 +67,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     inCurrentMp: true
                 },
                 placeholder=Msg.Due_date,
-                class="validate[required]"
+                class='validate[required]'
             )#expiresdate
         if !isAdminAnnouncement
             .max-score-container
@@ -126,4 +121,4 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     ).special-button.red-button.submit-btn.add-loader-btn
                         =Msg.Delete
         else
-            +ActionLink('announcement', 'discard', announcement.getPersonId()).grey-link.not-blue.add-loader-btn=Msg.Discard
+            +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
