@@ -189,7 +189,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassAnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                 ChalkableAnnouncementType = announcement.ChalkableAnnouncementType,
                 ClassName = announcement.ClassName,
-                GradeLevelId = announcement.GradeLevelId
+                GradeLevelId = announcement.GradeLevelId,
+                MaxScore = announcement.MaxScore
             };
         }
 
@@ -287,6 +288,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 var announcementDetail = Create(announcementType, classRef, DateTime.Today, DemoSchoolConstants.TeacherId,
                     DateTime.Now.AddDays(1));
                 announcementDetail.IsScored = true;
+                announcementDetail.MaxScore = 100;
                 announcementDetail.Title = classAnnouncementType.Name + " " + classId;
                 announcementDetail.VisibleForStudent = true;
 
