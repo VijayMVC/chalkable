@@ -46,7 +46,7 @@ mixin AppViewsChart_(data, header, chartId)
 mixin AppStatus_(appState, appDraftId, liveAppId)
     stateId = appState.getStateId()
     isApproved = stateId == chlk.models.apps.AppStateEnum.APPROVED
-    isSubmitted = stateId == chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE
+    isSubmitted = stateId == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
     isRejected = stateId == chlk.models.apps.AppStateEnum.REJECTED
     isAppLive = liveAppId != null && liveAppId.valueOf() != ""
 
