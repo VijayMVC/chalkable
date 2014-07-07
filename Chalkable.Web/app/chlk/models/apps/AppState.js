@@ -21,7 +21,7 @@ NAMESPACE('chlk.models.apps', function () {
                 BASE();
                 this._states = {};
                 this._states[chlk.models.apps.AppStateEnum.DRAFT] = "Not Submitted";
-                this._states[chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE] = "Submitted for approve";
+                this._states[chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL] = "Submitted for approval";
                 this._states[chlk.models.apps.AppStateEnum.APPROVED] = "Approved";
                 this._states[chlk.models.apps.AppStateEnum.REJECTED] = "Rejected";
                 this._states[chlk.models.apps.AppStateEnum.LIVE] = "Live";
@@ -33,7 +33,7 @@ NAMESPACE('chlk.models.apps', function () {
                 var currentStateId = this.getStateId();
                 if (isLive_){
                     switch (currentStateId.valueOf()){
-                        case chlk.models.apps.AppStateEnum.SUBMIT_FOR_APPROVE.valueOf():
+                        case chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL.valueOf():
                             status = 'Live - Update awaiting approval';
                             break;
                         case chlk.models.apps.AppStateEnum.APPROVED.valueOf():
