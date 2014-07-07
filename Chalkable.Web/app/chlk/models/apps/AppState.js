@@ -6,7 +6,7 @@ NAMESPACE('chlk.models.apps', function () {
     ENUM(
         'AppStateEnum', {
             DRAFT: 1,
-            SUBMIT_FOR_APPROVE: 2,
+            SUBMITTED_FOR_APPROVAL: 2,
             APPROVED: 3,
             REJECTED: 4,
             LIVE: 5
