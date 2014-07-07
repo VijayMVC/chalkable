@@ -58,6 +58,8 @@ namespace Chalkable.Data.School.DataAccess
             parameters.Add("@personId", query.PersonId);
             parameters.Add("@callerId", query.CallerId);
             parameters.Add("@markingPeriodId", query.MarkingPeriodId);
+            parameters.Add("@schoolYearId", query.SchoolYearId);
+            parameters.Add("@isEnrolled", query.IsEnrolled);
 
             //string roleIdsS = "";
             //if (query.RoleIds != null && query.RoleIds.Count > 0)
@@ -184,6 +186,9 @@ namespace Chalkable.Data.School.DataAccess
         public SortTypeEnum SortType { get; set; }
 
         public int? MarkingPeriodId { get; set; }
+        public int? SchoolYearId { get; set; }
+
+        public bool? IsEnrolled { get; set; }
 
         public PersonQuery()
         {

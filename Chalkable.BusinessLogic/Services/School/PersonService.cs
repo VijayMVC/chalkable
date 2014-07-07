@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
 
-        StudentSummeryInfo GetStudentSummaryInfo(int studentId);
+        StudentSummaryInfo GetStudentSummaryInfo(int studentId);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -197,6 +197,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 query.CallerId = Context.UserLocalId;
                 query.CallerRoleId = Context.Role.Id;
+                if(!query.SchoolYearId.HasValue)
+                    query.SchoolYearId = Context.SchoolYearId;
                 var res = da.GetPersons(query);
                 return res;
             }
@@ -354,13 +356,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return new List<StudentHealthCondition>();
         }
 
-        public StudentSummeryInfo GetStudentSummaryInfo(int studentId)
+        public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
         {
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
             var student = GetPerson(studentId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
-            var res = StudentSummeryInfo.Create(student, nowDashboard, infractions, MapperFactory.GetMapper<StudentAnnouncement, Score>());
+            var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
     }

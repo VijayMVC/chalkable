@@ -9,7 +9,7 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Model
 {
-    public class StudentSummeryInfo
+    public class StudentSummaryInfo
     {
         public Person StudentInfo { get; set; }
         public ClassRankInfo ClassRank { get; set; }
@@ -21,10 +21,10 @@ namespace Chalkable.BusinessLogic.Model
 
         public IList<ClassAttendanceSummary> Attendances { get; set; } 
 
-        public static StudentSummeryInfo Create(Person student, NowDashboard nowDashboard
+        public static StudentSummaryInfo Create(Person student, NowDashboard nowDashboard
             , IList<Data.School.Model.Infraction> infractions, IMapper  mapper)
         {
-            var res = new StudentSummeryInfo
+            var res = new StudentSummaryInfo
                 {
                     StudentInfo = student, 
                     ClassRank = ClassRankInfo.Create(nowDashboard.ClassRank),
