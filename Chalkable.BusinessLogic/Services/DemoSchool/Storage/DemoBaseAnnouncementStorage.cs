@@ -340,9 +340,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PersonId = userId,
                 Id = announcementId,
                 ClassId = classId
-            }).Announcements.Where(x => x.State == state);
+            }).Announcements;
+            if (state.HasValue)
+                announcementsToDelete = announcementsToDelete.Where(x => x.State == state).ToList();
             if (announcementType.HasValue)
-                announcementsToDelete = announcementsToDelete.Where(x => x.ClassAnnouncementTypeRef == announcementType);
+                announcementsToDelete = announcementsToDelete.Where(x => x.ClassAnnouncementTypeRef == announcementType).ToList();
             Delete(announcementsToDelete.Select(x => x.Id).ToList());
         }
 
