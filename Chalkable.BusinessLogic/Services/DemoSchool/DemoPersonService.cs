@@ -249,7 +249,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.StudentHealthConditionStorage.GetByStudentId(studentId);
         }
 
-        public StudentSummeryInfo GetStudentSummaryInfo(int studentId)
+        public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
         {
             throw new NotImplementedException();
         }
