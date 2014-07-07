@@ -185,6 +185,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 AttachmentsCount = announcement.AttachmentsCount,
                 StudentAnnouncements = Storage.StudentAnnouncementStorage.GetAll(announcement.Id),
                 VisibleForStudent = announcement.VisibleForStudent,
+                MayBeDropped = announcement.MayBeDropped,
                 Order = announcement.Order,
                 ClassAnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                 ChalkableAnnouncementType = announcement.ChalkableAnnouncementType,
