@@ -94,38 +94,35 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
+            var users = persons.Select(x => new User
+            {
+                LocalId = x.Id,
+                Login = x.Email,
+                DistrictRef = Context.DistrictId.Value,
+                Password = x.Password,
+                SisUserName = x.SisUserName,
+                Id = Guid.NewGuid()
+            }).ToList();
+            ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUsers(users);
+            var ps = persons.Select(x => new Person
+            {
+                Active = x.Active,
+                AddressRef = x.AddressRef,
+                BirthDate = x.BirthDate,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Gender = x.Gender,
+                Id = x.Id,
+                HasMedicalAlert = x.HasMedicalAlert,
+                IsAllowedInetAccess = x.IsAllowedInetAccess,
+                SpecialInstructions = x.SpecialInstructions,
+                SpEdStatus = x.SpEdStatus,
+                PhotoModifiedDate = x.PhotoModifiedDate
+            }).ToList();
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-
-                var users = persons.Select(x => new User
-                    {
-                        LocalId = x.Id,
-                        Login = x.Email,
-                        DistrictRef = Context.DistrictId.Value,
-                        Password = x.Password,
-                        SisUserName = x.SisUserName,
-                        Id = Guid.NewGuid()
-                    }).ToList();
-
-                ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUsers(users);
-
-                var ps = persons.Select(x => new Person
-                    {
-                        Active = x.Active,
-                        AddressRef = x.AddressRef,
-                        BirthDate = x.BirthDate,
-                        Email = x.Email,
-                        FirstName = x.FirstName,
-                        LastName = x.LastName,
-                        Gender = x.Gender,
-                        Id = x.Id,
-                        HasMedicalAlert = x.HasMedicalAlert,
-                        IsAllowedInetAccess = x.IsAllowedInetAccess,
-                        SpecialInstructions = x.SpecialInstructions,
-                        SpEdStatus = x.SpEdStatus,
-                        PhotoModifiedDate = x.PhotoModifiedDate
-                    }).ToList();
                 da.Insert(ps);                
                 uow.Commit();
             }

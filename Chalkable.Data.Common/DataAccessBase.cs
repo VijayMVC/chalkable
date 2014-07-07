@@ -91,7 +91,6 @@ namespace Chalkable.Data.Common
                     }
                     var f = fields.Select(x => "[" + x + "]").JoinString(",");
                     var sql = string.Format("INSERT INTO [{0}]({1}) SELECT {1} FROM @t", t.Name, f);
-                    Trace.WriteLine("execute batch " + sql);
                     using (var c = unitOfWork.GetTextCommand(sql))
                     {
                         c.CommandTimeout = 10 + objs.Count;

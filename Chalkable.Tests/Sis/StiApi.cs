@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Transactions;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
+using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.Tests.Sis
 {
@@ -32,39 +36,41 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
-            var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
+            var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
+            //var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
             //var cl = ConnectorLocator.Create("Chalkable", "b1Yn9Rz2X", "http://qa-external.stiinformationnow.com:8220/API/");
             //var cl = ConnectorLocator.Create("Chalkable", "Fp6Gs0Ck7", "http://208.83.95.80:8216/api/");
 
 
-            var schools = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
+            var schools = (cl.SyncConnector.GetDiff(typeof(PersonEmail), null) as SyncResult<PersonEmail>).All;
             Debug.WriteLine(schools.Count());
         }
 
         [Test]
         public void TransactionScopeTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var id = Guid.Parse("53D7CBD7-CD3E-4A50-9258-8C1F6DAEDB61");
+            var now = DateTime.Now;
+
+            IList<User> users = new List<User>();
+            for (int i = 0; i < 500000; i++)
             {
-                var cs = @"Data Source=.\sqlexpress;Initial Catalog=xxx;UID=sa;Pwd=mc_z631";
-                using (SqlConnection connection1 = new SqlConnection(cs))
-                {
-                    connection1.Open();
-
-                    SqlCommand command1 = new SqlCommand("insert into test (id) values (1)", connection1);
-                    command1.ExecuteNonQuery();
-                }
-                using (SqlConnection connection1 = new SqlConnection(cs))
-                {
-                    connection1.Open();
-
-                    SqlCommand command1 = new SqlCommand("insert into test (id) values (2)", connection1);
-                    command1.ExecuteNonQuery();
-                }
-
-                scope.Complete();
+                var u = new User
+                    {
+                        LocalId = i,
+                        Login = i.ToString() + "_" + Guid.NewGuid().ToString() + "@chalkable.com",
+                        DistrictRef = id,
+                        Password = "Qwerty1@",
+                        SisUserName = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid()
+                    };
+                users.Add(u);
             }
+            Debug.WriteLine("Generated");
+            sl.UserService.CreateSchoolUsers(users);
+            Debug.WriteLine("");
+            Debug.WriteLine((DateTime.Now - now).TotalSeconds);
         }
     }
 }

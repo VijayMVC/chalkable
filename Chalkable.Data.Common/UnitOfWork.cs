@@ -110,5 +110,11 @@ namespace Chalkable.Data.Common
         }
 
         private const string AT_SIGN = "@";
+
+        public SqlBulkCopy GetBulkCopy()
+        {
+            var res = new SqlBulkCopy(Connection, SqlBulkCopyOptions.Default, Transaction);
+            return res;
+        }
     }
 }
