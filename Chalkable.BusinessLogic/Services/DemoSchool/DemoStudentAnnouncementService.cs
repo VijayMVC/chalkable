@@ -55,6 +55,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Exempt = exempt,
                 ScoreValue = value,
                 NumericScore = numericScore,
+                
                 ActivityId = ann.SisActivityId.Value,
                 AnnouncementId = announcementId,
                 StudentId = studentId,
