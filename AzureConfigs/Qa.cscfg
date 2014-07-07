@@ -6,7 +6,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableqa;AccountKey=dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="Certificate1" thumbprint="D8884B835CF2696D0C37B56D161C1BA40CB2A708" thumbprintAlgorithm="sha1" />
+      <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="Chalkable.BackgroundTaskProcessor">

@@ -47,6 +47,13 @@ NAMESPACE('chlk.activities.developer', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleDetails(node, event){
                 node.find('.description').toggleClass('long');
+
+                var detailsNode = jQuery(node.parent().find('.details').valueOf());
+                var codeExample = jQuery(detailsNode).find('pre');
+                if (!jQuery.trim(codeExample.html())){
+                    jQuery(detailsNode).find('.tab-header.active').click();
+                }
+
                 jQuery(node.parent().find('.details').valueOf()).slideToggle();
             },
 

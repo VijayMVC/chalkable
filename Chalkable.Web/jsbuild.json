@@ -4,10 +4,12 @@
     "options": {
 		"uglifyjs": {
 			"output": {
-				"beautify": true
+				"beautify": false
 			},
 			"compress": {
 				"dead_code": true
+			},
+			"mangle": {
 			}
 		}
 	},

@@ -26,8 +26,8 @@ namespace Chalkable.BusinessLogic.Model
                     Standard = standard,
                     StudentId = standardScore.StudentId,
                     ClassId = standardScore.SectionId,
-                    AlphaGradeId = standardScore.ComputedScoreAlphaGradeId ?? standardScore.EnteredScoreAlphaGradeId,
-                    AlphaGradeName = standardScore.ComputedScoreAlphaGradeName ?? standardScore.EnteredScoreAlphaGradeName,
+                    AlphaGradeId = standardScore.EnteredScoreAlphaGradeId ?? standardScore.ComputedScoreAlphaGradeId,
+                    AlphaGradeName = standardScore.EnteredScoreAlphaGradeName ?? standardScore.ComputedScoreAlphaGradeName,
                     NumericGrade = standardScore.ComputedScore,
                     GradingPeriodId = standardScore.GradingPeriodId,
                     Note = standardScore.Note

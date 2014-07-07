@@ -45,7 +45,3 @@ FROM
 
 GO
 
-select ClassName from vwAnnouncement
-
-
-select * from Class

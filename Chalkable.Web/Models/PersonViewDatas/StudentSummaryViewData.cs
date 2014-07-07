@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
         }
 
-        public static StudentSummaryViewData Create(StudentSummeryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes)
+        public static StudentSummaryViewData Create(StudentSummaryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes)
         {
             var res = new StudentSummaryViewData(studentSummary.StudentInfo, room)
                 {

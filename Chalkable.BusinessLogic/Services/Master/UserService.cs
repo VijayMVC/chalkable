@@ -210,6 +210,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         private UserContext DemoUserLogin(User user, UnitOfWork uow, int? schoolYearId = null)
         {
             if (user == null) return null;
+            if (user.IsDeveloper)
+                return DeveloperLogin(user);
             if (user.IsSchoolUser && user.District.IsDemoDistrict)
             {
                 Guid? developerId = null;
