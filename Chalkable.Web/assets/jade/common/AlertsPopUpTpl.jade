@@ -1,0 +1,24 @@
+.alerts-triangle-container
+    .left-item
+    .alerts-triangle
+.alerts-container
+    each item in self.getAlerts()
+        div(class= self.getCssClass(item)).alert-item
+            SPAN.left-item
+            SPAN=item.getDescription()
+//    if self.isAllowedInetAccess()
+//        .alert-item.internet
+//            SPAN.left-item
+//            SPAN=Msg.Alert_Internet_access_text
+//    if self.isWithMedicalAlert()
+//        .alert-item.medical
+//            SPAN.left-item
+//            SPAN=Msg.Alert_Medical_text
+//    if self.getSpecialInstructions()
+//        .alert-item.special
+//            SPAN.left-item
+//            SPAN=Msg.Alert_Special_text
+//    if self.getSpedStatus()
+//        .alert-item.sped
+//            SPAN.left-item
+//            SPAN=Msg.Alert_Sped_text
