@@ -248,11 +248,11 @@ namespace Chalkable.Web.Controllers
             if(role == CoreRoles.ADMIN_GRADE_ROLE 
                 || role == CoreRoles.ADMIN_EDIT_ROLE 
                 || role == CoreRoles.ADMIN_VIEW_ROLE)
-                return Redirect<HomeController>(x => x.Admin(null));
+                return Redirect<HomeController>(x => x.Admin());
             if (role == CoreRoles.TEACHER_ROLE)
-                return Redirect<HomeController>(x => x.Teacher(false));
+                return Redirect<HomeController>(x => x.Teacher());
             if (role == CoreRoles.STUDENT_ROLE)
-                return Redirect<HomeController>(x => x.Student(false));
+                return Redirect<HomeController>(x => x.Student());
             return Redirect<HomeController>(x => x.Index());
         }
     }

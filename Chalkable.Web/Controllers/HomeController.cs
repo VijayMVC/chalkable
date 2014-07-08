@@ -102,18 +102,15 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Teacher(bool? redirectToSetup)
+        public ActionResult Teacher()
         {
-            if (redirectToSetup.HasValue && redirectToSetup.Value)
-                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.UserId);
-
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
             PrepareTeacherJsonData(mp);
             return View();
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
-        public ActionResult Admin(bool? redirectToSetup)
+        public ActionResult Admin()
         {
             PrepareAdminJsonData();
             
@@ -121,7 +118,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Student")]
-        public ActionResult Student(bool? redirectToSetup)
+        public ActionResult Student()
         {
             PrepareStudentJsonData();
             return View();
@@ -187,7 +184,14 @@ namespace Chalkable.Web.Controllers
             var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.FullName;
+            if (!person.FirstLoginDate.HasValue)
+            {
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.UserLocalId);
+                var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
+                personView.Email = personEmail == null ? null : personEmail.EmailAddress;
+            }
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
+            
             //todo: move this logic to getClass stored procedure later
             var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId)
@@ -224,13 +228,19 @@ namespace Chalkable.Web.Controllers
 
             var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
             var personView = PersonViewData.Create(person);
-            personView.DisplayName = person.ShortSalutationName;
+            personView.DisplayName = person.ShortSalutationName;           
+            if (!person.FirstLoginDate.HasValue)
+            {
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.UserLocalId);
+                var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
+                person.Email = personEmail == null ? null : personEmail.EmailAddress;
+            }
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
+
 
             if (!CanTeacherViewChalkable()) return;
             
             var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.UserLocalId.Value);
-
             var gradeLevels = classes.Select(x => x.GradeLevel.Name).Distinct().ToList();
             var classNames = classes.Select(x => x.Name).ToList();
 
