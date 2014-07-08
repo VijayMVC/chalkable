@@ -24,6 +24,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
+        public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
+
         protected StudentSummaryViewData(Person person, Room room) : base(person, room)
         {
         }

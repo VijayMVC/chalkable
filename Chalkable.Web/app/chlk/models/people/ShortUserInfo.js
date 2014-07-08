@@ -2,6 +2,7 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.common.AlertInfo');
+REQUIRE('chlk.models.people.HealthCondition');
 
 NAMESPACE('chlk.models.people', function () {
     "use strict";
@@ -53,6 +54,25 @@ NAMESPACE('chlk.models.people', function () {
             [ria.serialize.SerializeProperty('spedstatus')],
             String, 'spedStatus',
 
+
+            [ria.serialize.SerializeProperty('healthconditions')],
+            ArrayOf(chlk.models.people.HealthCondition), 'healthConditions',
+
+            [[Array]],
+            VOID, function addMedicalAlerts_(alerts){
+                var healthConditions = this.getHealthConditions();
+                var commonNS = chlk.models.common;
+                if(healthConditions && healthConditions.length > 0){
+                    for(var i = 0; i < healthConditions.length; i++){
+                        if(healthConditions[i].isAlert()){
+                            var description = healthConditions[i].getDescription() || healthConditions[i].getName();
+                            alerts.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, description));
+                        }
+                    }
+                }
+                else alerts.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, Msg.Alert_Medical_text))
+            },
+
             Boolean, function showAlerts(){
                 var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
                     || this.getSpecialInstructions() || this.getSpedStatus();
@@ -66,7 +86,8 @@ NAMESPACE('chlk.models.people', function () {
                 if (this.isAllowedInetAccess())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.INTERNET_ACCESS_ALERT, Msg.Alert_Internet_access_text));
                 if(this.isWithMedicalAlert())
-                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, Msg.Alert_Medical_text));
+                   // res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, Msg.Alert_Medical_text));
+                    this.addMedicalAlerts_(res);
                 if(this.getSpecialInstructions())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, Msg.Alert_Special_text));
                 if(this.getSpedStatus())
