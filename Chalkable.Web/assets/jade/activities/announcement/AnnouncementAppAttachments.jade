@@ -8,8 +8,8 @@ mixin AnnouncementFormAttachmentItem(attachment, i)
                 div=attachment.getName()
 
 mixin AnnouncementFormApplicationItem(app, i)
-    viewUrl = self.isGradable() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
-    appMode = self.isGradable() && !self.needDeleteButton ? chlk.models.apps.AppModes.GRADINGVIEW : chlk.models.apps.AppModes.VIEW
+    viewUrl = self.isAbleToGrade() && !self.needDeleteButton ? app.getGradingViewUrl() : app.getViewUrl()
+    appMode = self.isAbleToGrade() && !self.needDeleteButton ? chlk.models.apps.AppModes.GRADINGVIEW : chlk.models.apps.AppModes.VIEW
     appUrl = app.getUrl()
 
     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()

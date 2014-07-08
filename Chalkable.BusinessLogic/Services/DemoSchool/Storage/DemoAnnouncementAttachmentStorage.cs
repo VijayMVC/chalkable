@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
     public class DemoAnnouncementAttachmentStorage:BaseDemoIntStorage<AnnouncementAttachment>
     {
-        public DemoAnnouncementAttachmentStorage(DemoStorage storage) : base(storage, x => x.Id)
+        public DemoAnnouncementAttachmentStorage(DemoStorage storage) : base(storage, x => x.Id, true)
         {
         }
 

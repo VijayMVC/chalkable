@@ -176,6 +176,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 IsScored = announcement.IsScored,
                 Avg = announcement.Avg,
                 Title = announcement.Title,
+                Content = announcement.Content,
                 AnnouncementAttachments = announcementAttachments,
                 AnnouncementApplications = announcementApplications,
                 AnnouncementQnAs = announcementsQnA,
