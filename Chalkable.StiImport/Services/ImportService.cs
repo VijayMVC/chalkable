@@ -35,7 +35,7 @@ namespace Chalkable.StiImport.Services
             
             var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin" };
             var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null);
-            ServiceLocatorMaster = new ServiceLocatorMaster(cntx);
+            ServiceLocatorMaster = new ImportServiceLocatorMaster(cntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
@@ -48,16 +48,16 @@ namespace Chalkable.StiImport.Services
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             Log.LogInfo("download data to sync");
             DownloadSyncData();
-            //var masterDb = (ImportDbService) ServiceLocatorMaster.DbService;
-            //var schoolDb = (ImportDbService) ServiceLocatorSchool.SchoolDbService;
-            /*Log.LogInfo("begin master transaction");
+            
+            var masterDb = (ImportDbService) ServiceLocatorMaster.DbService;
+            var schoolDb = (ImportDbService) ServiceLocatorSchool.SchoolDbService;
+            Log.LogInfo("begin master transaction");
             masterDb.BeginTransaction();
             Log.LogInfo("begin school transaction");
-            schoolDb.BeginTransaction();*/
-            //bool schoolCommited = false;
+            schoolDb.BeginTransaction();
+            bool schoolCommited = false;
             SyncDb();
-
-            /*try
+            try
             {
                 SyncDb();
                 Log.LogInfo("commit school db");
@@ -79,7 +79,7 @@ namespace Chalkable.StiImport.Services
                 Log.LogInfo("rollback master db");
                 masterDb.Rollback();
                 throw;
-            }*/
+            }
             Log.LogInfo("process pictures");
             ProcessPictures();
             Log.LogInfo("setting link status");
