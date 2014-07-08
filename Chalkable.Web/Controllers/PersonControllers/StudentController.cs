@@ -49,7 +49,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
 
             }
+            var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(schoolPersonId);
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classes);
+            res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             return Json(res);
 
         }
