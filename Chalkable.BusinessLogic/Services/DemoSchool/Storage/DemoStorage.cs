@@ -93,6 +93,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public DemoStudentHealthConditionStorage StudentHealthConditionStorage { get; private set; }
 
+        public DemoPersonEmailStorage PersonEmailStorage { get; private set; }
+
         public UserContext Context { get; private set; }
 
         public void UpdateContext(UserContext context)
@@ -185,6 +187,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StiActivityScoreStorage = new DemoStiActivityScoreStorage(this);
             StiInfractionStorage = new DemoStiInfractionStorage(this);
             StiActivityStorage = new DemoStiActivityStorage(this);
+
+            PersonEmailStorage = new DemoPersonEmailStorage(this);
 
             AnnouncementStorage = CreateAnnouncementStorage(Context, this);
             Setup();
@@ -368,7 +372,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             address.Id = studentId;
             AddressStorage.Add(address);
         }
-
+        
         private void AddStudentsToClasses()
         {
             var studentIds = PersonStorage.GetPersons(new PersonQuery()
