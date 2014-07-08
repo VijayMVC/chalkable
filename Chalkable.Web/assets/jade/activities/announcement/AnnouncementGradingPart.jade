@@ -69,6 +69,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     +ActionLink('announcement', 'viewAttachment', attachment.getId()).announcement-item.attachment
                         +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)
                 each app, i in self.getApplications()
-                    +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId()).announcement-item.application
+                    isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+
+                    +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()).announcement-item.application
                         +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i)
 

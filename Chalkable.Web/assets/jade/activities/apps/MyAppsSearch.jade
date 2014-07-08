@@ -1,7 +1,7 @@
 li(data-title = self.name, data-value = self.id.valueOf(), style="background: white")
     div.app-market-search
-
-        +ActionLink('apps', 'viewApp', self.url, self.myAppsUrl, chlk.models.apps.AppModes.MYAPPSVIEW).app-market-search-item
+        isBanned = self.banInfo && self.banInfo.isBanned
+        +ActionLink('apps', 'viewApp', self.url, self.myAppsUrl, chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).app-market-search-item
             .img-container
                 +Image(src=self.getAppPictureURL(self.smallPictureId, 74, 74)).app-icon
             .app-name

@@ -297,8 +297,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
-        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean]],
-        function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned) {
+        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId]],
+        function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_) {
             var result = this.appsService
                 .getOauthCode(url)
                 .catchError(function(error_){
@@ -324,6 +324,11 @@ NAMESPACE('chlk.controllers', function (){
                         appData.setAppAccess(appAccess);
 
                     }
+
+                    if (studentId_){
+                        viewUrl += "&studentId=" + studentId_.valueOf();
+                    }
+
                     var app = new chlk.models.apps.AppAttachment.$create(
                         viewUrl,
                         code,

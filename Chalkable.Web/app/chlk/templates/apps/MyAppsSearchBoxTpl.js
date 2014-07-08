@@ -24,6 +24,9 @@ NAMESPACE('chlk.templates.apps', function () {
             String, 'myAppsUrl',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.apps.BannedAppData, 'banInfo',
+
+            [ria.templates.ModelPropertyBind],
             String, 'url'
         ])
 });
