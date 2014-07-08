@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
@@ -153,7 +154,10 @@ namespace Chalkable.Web.Controllers
             var schoolUser = user.SchoolUsers[0];
             if (schoolYearId.HasValue)
             {
-                var schoolL = ServiceLocatorFactory.CreateMasterSysAdmin().SchoolServiceLocator(user.DistrictRef.Value, null);
+                //todo : needs refactoring
+                var schoolL = user.IsDemoUser
+                    ? ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]) 
+                    : ServiceLocatorFactory.CreateMasterSysAdmin().SchoolServiceLocator(user.DistrictRef.Value, null);
                 schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
                 schoolUser = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolYear.SchoolRef);
                 if(schoolUser == null)
