@@ -9,11 +9,11 @@ namespace Chalkable.Data.School.Model
 {
     public class PersonEmail
     {
-        public const string ID_FIELD = "Id";
+        public const string PERSON_REF_FIELD = "PersonRef";
         public const string EMAIL_ADDRESS_FIELD = "EmailAddress";
 
         [PrimaryKeyFieldAttr]
-        public int Id { get; set; }
+        public int PersonRef { get; set; }
         [PrimaryKeyFieldAttr]
         public string EmailAddress { get; set; }
         public string Description { get; set; }

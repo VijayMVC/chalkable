@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 return new PersonEmailDataAccess(uow)
-                    .GetAll(new AndQueryCondition {{PersonEmail.ID_FIELD, personId}}).FirstOrDefault();
+                    .GetAll(new AndQueryCondition {{PersonEmail.PERSON_REF_FIELD, personId}}).FirstOrDefault();
             }
         }
     }

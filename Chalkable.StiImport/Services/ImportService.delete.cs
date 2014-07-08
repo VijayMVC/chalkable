@@ -81,6 +81,8 @@ namespace Chalkable.StiImport.Services
             DeleteGradeLevels();
             Log.LogInfo("delete phones");
             DeletePhones();
+            Log.LogInfo("delete persons emails");
+            DeletePersonsEmails();
             Log.LogInfo("delete school persons");
             DeleteSchoolPersons();
             Log.LogInfo("delete perons");
@@ -340,6 +342,22 @@ namespace Chalkable.StiImport.Services
                     
                 }).ToList();
             ServiceLocatorSchool.PhoneService.Delete(phones);
+        }
+
+        private void DeletePersonsEmails()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.PersonEmail>().Deleted == null)
+                return;
+            var personEmails = context.GetSyncResult<StiConnector.SyncModel.PersonEmail>().Deleted
+                .Select(x => new Data.School.Model.PersonEmail
+                {
+                    PersonRef = x.PersonID,
+                    Description = x.Description,
+                    EmailAddress = x.EmailAddress,
+                    IsListed = x.IsListed,
+                    IsPrimary = x.IsPrimary
+                }).ToList();
+            ServiceLocatorSchool.PersonEmailService.DeletePersonsEmails(personEmails);
         }
 
         private void DeleteSchoolPersons()
