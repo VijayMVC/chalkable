@@ -33,8 +33,8 @@ mixin FeedItem(item, noDisabled)
                                 data-tooltip=item.getAnnouncementTypeName() + (isAdminAnnouncement ?
                                     ' ' + Msg.Announcement : '')
                             ).icon.black
-                            h2.animated-header=item.getTitle()
-                            p.animated=item.getShortContent()
+                            h2.animated-header=item.getClassName()
+                            p.animated=item.getTitle() + ' ' + item.getShortContent()
                             .animated=item.getExpiresDate().toString('m/d/y')
                             div(data-tooltip=Msg.Document_Attached).attachment-icon
                             div(data-tooltip=(item.getApplicationsCount() == 1 ? item.getApplicationName() : Msg.Application(true)) + ' ' + Msg.Attached).apps-icon

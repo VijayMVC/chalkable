@@ -409,7 +409,7 @@ NAMESPACE('ria.dom', function () {
                     return false;
 
                 var others = other.valueOf();
-                return this._dom.every(function(el) { return others.indexOf(el) >= 0; });
+                return this.valueOf().every(function(el) { return others.indexOf(el) >= 0; });
             },
 
             [[SELF]],

@@ -13,6 +13,14 @@ NAMESPACE('chlk.lib.serialize', function () {
                     return null;
             }
             return BASE(raw, clazz, instance_);
+        },
+
+        OVERRIDE, ria.async.Future, function deserializeAsync(raw, clazz, instance_) {
+            if (ria.__API.isClassConstructor(clazz)) {
+                if (raw === null || raw === undefined || raw == '' && chlk.models.common.ChlkDate == clazz)
+                    return null;
+            }
+            return BASE(raw, clazz, instance_);
         }
     ])
 });

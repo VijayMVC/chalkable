@@ -369,6 +369,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
 
                     }else{
+                        node.removeClass('not-equals');
                         if(value){
                             var text = node.getValue() ? node.getValue().trim() : '';
                             var parsed = parseFloat(text);
@@ -383,8 +384,17 @@ NAMESPACE('chlk.activities.grading', function () {
                                 suggestions = text  ? this.getSuggestedValues(text, node) : [];
                                 if(!suggestions.length)
                                     node.addClass('error');
-                                else
+                                else{
                                     node.removeClass('error');
+                                    var p = false;
+                                    suggestions.forEach(function(item){
+                                        if(item.toLowerCase() == node.getValue().toLowerCase())
+                                            p = true;
+                                    });
+                                    if(!p){
+                                        node.addClass('not-equals');
+                                    }
+                                }
                                 this.updateDropDown(suggestions, node);
                             }
                         }
@@ -421,7 +431,9 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function seeAllClick(node, event){
                 var cell = this.dom.find('.active-cell');
-                this.updateDropDown(this.getScores(cell.find('.value-input')), cell, true);
+                var input = cell.find('.value-input');
+                input.removeClass('not-equals');
+                this.updateDropDown(this.getScores(input), cell, true);
                 return false;
             },
 
@@ -683,7 +695,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function gradingFormSubmit(node, event){
                 var input = node.find('.value-input');
-                if(!input.hasClass('error')){
+                if(!input.hasClass('error') && !input.hasClass('not-equals')){
                     node.find('.grading-input-popup').hide();
                     var value = (input.getValue() || '').toLowerCase();
                     if(value == 'dropped' || value == 'exempt')

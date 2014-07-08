@@ -37,7 +37,6 @@
                         announcementsLen = announcements.length > 3 ? 3 : announcements.length;
                         maxLen = max - announcementsLen;
                         each annItem,i in itemsArr
-                            -console.info(annItem)
                             if i < maxLen || itemsArr.length <= maxLen
                                 li(data-tooltip=annItem.title, data-tooltip-type="overflow")=annItem.title
                             if itemsArr.length > maxLen

@@ -17,11 +17,9 @@ mixin ProfileResetPasswordBlock()
                     +Button()(type="button").special-button.settings.cancel-button#cancell-edit-pwd-button=Msg.Cancel
 
 mixin SchoolPersonSettings()
-    -console.info('SchoolPersonSettings')
     .settings
         .action-bar.not-transparent.buttons
             .container.panel-bg
                 block
         .general
-            -console.info('SchoolPersonSettings')
             +ProfileResetPasswordBlock(true)

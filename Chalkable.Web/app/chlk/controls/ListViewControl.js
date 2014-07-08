@@ -293,7 +293,7 @@ NAMESPACE('chlk.controls', function () {
                         scrollPosition = window.pageYOffset;
                         configs = this.getConfigs();
                         if(!configs.isPaggingModel || configs.totalCount > configs.currentStart){
-                            if((contentHeight - pageHeight - scrollPosition) < 400){
+                            if((contentHeight - pageHeight - scrollPosition) < 1000){
                                 this.scrollAction_(grid);
                                 this.removeLoaderWithInterval_(grid);
                                 configs.currentStart += size;

@@ -27,7 +27,6 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
                 else
                     .third-container
                         block
-        -console.info(configs.disableNextButton, configs.disableNextButton ? configs.disabledClass : "")
         A(class=configs.disableNextButton ? configs.disabledClass : "").next-button.arrow
         if(configs.needDots)
             div(class=attributes.roundedDots ? "rounded" : "").paginator

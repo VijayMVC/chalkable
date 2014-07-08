@@ -1,6 +1,5 @@
 REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
-REQUIRE('chlk.models.announcement.Announcement');
 REQUIRE('chlk.templates.common.PageWithClasses');
 
 
@@ -12,7 +11,7 @@ NAMESPACE('chlk.templates.feed', function () {
         [ria.templates.ModelBind(chlk.models.feed.Feed)],
         'Feed', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'items',
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'importantOnly',
