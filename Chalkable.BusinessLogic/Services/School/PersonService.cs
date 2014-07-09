@@ -295,7 +295,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void ActivatePerson(int id)
         {
-            if(BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
+            if(!BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
