@@ -286,6 +286,8 @@
             var gradingComments = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADING_COMMMENTS)');
             var DEMO_SCHOOL = JSON.parse('@isDemoSchool.ToString().ToLowerInvariant()');
             var DEMO_SCHOOL_PICTURE_DISTRICT = '@demoSchoolPictureDistrictRef';
+            
+            var redirectUrl = '@ViewData[ViewConstants.REDIRECT_URL_KEY]';
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

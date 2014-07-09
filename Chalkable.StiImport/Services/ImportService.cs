@@ -56,7 +56,6 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("begin school transaction");
             schoolDb.BeginTransaction();
             bool schoolCommited = false;
-            SyncDb();
             try
             {
                 SyncDb();

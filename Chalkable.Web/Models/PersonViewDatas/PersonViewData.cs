@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string Salutation { get; set; }
         public bool Active { get; set; }
         public string Email { get; set; }
-
+        
         protected PersonViewData(Person person): base(person)
         {
             BirthDate = person.BirthDate;

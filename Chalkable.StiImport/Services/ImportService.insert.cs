@@ -40,6 +40,8 @@ namespace Chalkable.StiImport.Services
             InsertPersons();
             Log.LogInfo("insert school persons");
             InsertSchoolPersons();
+            Log.LogInfo("insert persons emails");
+            InsertPersonsEmails();
             Log.LogInfo("insert phones");
             InsertPhones();
             Log.LogInfo("insert grade levels");
@@ -96,6 +98,20 @@ namespace Chalkable.StiImport.Services
             InsertGradingComments();
             Log.LogInfo("insert schoolsOptions");
             InsertSchoolsOptions();
+        }
+
+        private void InsertPersonsEmails()
+        {
+            var personsEmails = context.GetSyncResult<StiConnector.SyncModel.PersonEmail>().All;
+            var chlkPersonsEmails = personsEmails.Select(x => new Data.School.Model.PersonEmail
+                {
+                    PersonRef = x.PersonID,
+                    Description = x.Description,
+                    EmailAddress = x.EmailAddress,
+                    IsListed = x.IsListed,
+                    IsPrimary = x.IsPrimary
+                }).ToList();
+            ServiceLocatorSchool.PersonEmailService.AddPersonsEmails(chlkPersonsEmails);
         }
 
         private void InsertSchools()

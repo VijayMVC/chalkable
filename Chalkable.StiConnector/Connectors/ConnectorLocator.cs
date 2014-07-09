@@ -78,7 +78,6 @@ namespace Chalkable.StiConnector.Connectors
             client.Encoding = Encoding.UTF8;
 
             var url = string.Format("{0}{1}", baseUrl, "token");
-            Debug.WriteLine(REQ_ON_FORMAT, url);
             var x = typeof(TokenModel);
             var ser = new DataContractJsonSerializer(x);
             MemoryStream stream = null;

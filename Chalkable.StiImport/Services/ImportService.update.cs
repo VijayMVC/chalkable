@@ -38,6 +38,8 @@ namespace Chalkable.StiImport.Services
             UpdatePersons();
             Log.LogInfo("update school persons");
             UpdateSchoolPersons();
+            Log.LogInfo("update persons emails");
+            UpdatePersonsEmails();
             Log.LogInfo("update phones");
             UpdatePhones();
             Log.LogInfo("update grade levels");
@@ -277,6 +279,22 @@ namespace Chalkable.StiImport.Services
         private void UpdateSchoolPersons()
         {
             //TODO: there is no way to update it....only insert or delete
+        }
+
+        private void UpdatePersonsEmails()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.PersonEmail>().Updated == null)
+                return;
+            var personsEmails = context.GetSyncResult<StiConnector.SyncModel.PersonEmail>().Updated;
+            var chlkPersonsEmails = personsEmails.Select(x => new Data.School.Model.PersonEmail
+            {
+                PersonRef = x.PersonID,
+                Description = x.Description,
+                EmailAddress = x.EmailAddress,
+                IsListed = x.IsListed,
+                IsPrimary = x.IsPrimary
+            }).ToList();
+            ServiceLocatorSchool.PersonEmailService.UpdatePersonsEmails(chlkPersonsEmails);
         }
 
         private void UpdatePhones()
