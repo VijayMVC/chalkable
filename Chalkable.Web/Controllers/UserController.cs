@@ -59,6 +59,19 @@ namespace Chalkable.Web.Controllers
         {
             return Confirm(key, AfterConfirmAction);
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ActivateUser(string newUserEmail)
+        {
+            if (!Context.UserLocalId.HasValue)
+                return Json(new UnassignedUserException());
+            string error;
+            SchoolLocator.PersonService.EditEmail(Context.UserLocalId.Value, newUserEmail, out error);
+            if (!string.IsNullOrEmpty(error))
+                return Json(new ChalkableException(error));
+            SchoolLocator.PersonService.ActivatePerson(Context.UserLocalId.Value);
+            return Json(true);            
+        }
         
         public ActionResult ChangePassword(string oldPassword, string newPassword, string newPasswordConfirmation)
         {
