@@ -28,6 +28,17 @@ $star-size: 18px;
     display: none !important;
   }
 }
+
+body:not(.first-login){
+  #first-login-input{
+    display: none;
+  }
+}
+
+#first-login-input{
+  opacity: 0;
+}
+
 .YouTubeDialog.ui-dialog{
   background: transparent;
   border: none !important;

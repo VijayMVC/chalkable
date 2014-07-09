@@ -60,7 +60,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 var body = ria.dom.Dom('body');
                 body.removeClass('first-login');
                 body.off('click.tour');
-                body.off('click.tour');
+                body.off('click.tour', '.YouTubeDialog .ui-dialog-titlebar-close');
                 ria.dom.Dom('.YouTubeDialog').find('.ui-dialog-titlebar-close').trigger('click');
             },
 
@@ -68,6 +68,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 BASE(model);
                 if(model.isFirstLogin()){
                     var body = ria.dom.Dom('body');
+                    ria.dom.Dom('#first-login-input').trigger('focus');
                     var that = this;
                     body.addClass('first-login');
                     $("#first-login-video").YouTubePopup();
@@ -75,7 +76,7 @@ NAMESPACE('chlk.activities.feed', function () {
                     body.on('click.tour', '.YouTubeDialog .ui-dialog-titlebar-close', function(){
                         body.removeClass('first-login');
                     });
-                    body.on('click.tour', function(node, event){
+                    body.on('click.tour keydown', function(node, event){
                         if(!node.isOrInside('.YouTubeDialog') && !node.is('.YouTubeDialog .ui-dialog-titlebar-close'))
                             that.stopTour();
                     })
