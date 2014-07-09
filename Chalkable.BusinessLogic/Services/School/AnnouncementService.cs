@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement GetAnnouncementById(int id);
         IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly);
         IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
-        IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false);
+        IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null);
         IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
 
@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetAnnouncements(false, start, count, null, null, onlyOwners);
         }
 
-        public IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
+        public IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null)
         {
             var q = new AnnouncementsQuery
             {
@@ -117,6 +117,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 ClassId = classId,
                 MarkingPeriodId = markingPeriodId,
                 OwnedOnly = ownerOnly,
+                Graded = graded
             };
             return GetAnnouncementsComplex(q);
         }
@@ -139,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new NotImplementedException();
             //TODO: Looks shity....think about this method and whole approach
             if (activities == null)
-                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete);
+                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded);
             else
             {
                 if (query.ClassId.HasValue)
@@ -210,7 +211,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false)
+        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null)
         {
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
@@ -223,7 +224,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (Context.Role == CoreRoles.TEACHER_ROLE)
                 return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.UserLocalId.Value, start, end, toDate, fromDate, complete, graded);
             return new List<Activity>();
         }
  

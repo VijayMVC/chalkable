@@ -15,12 +15,13 @@ namespace Chalkable.Web.Models
 
         public static GradingStudentSummaryViewData Create(IList<AnnouncementComplex> announcements, IList<StudentGradeAvgPerDate> studentStats)
         {
-            return new GradingStudentSummaryViewData
-                {
-                    Announcements = AnnouncementViewData.Create(announcements),
-                    TotalAvgPerDate = studentStats.Select(GradingStatsByDateViewData.Create).ToList(),
-                    PeersAvgPerDate = studentStats.Select(x => GradingStatsByDateViewData.Create(x.Date, x.PeersAvg)).ToList()
-                };
+            var res = new GradingStudentSummaryViewData {Announcements = AnnouncementViewData.Create(announcements)};
+            if (studentStats != null)
+            {
+                res.TotalAvgPerDate = studentStats.Select(GradingStatsByDateViewData.Create).ToList();
+                res.PeersAvgPerDate = studentStats.Select(x => GradingStatsByDateViewData.Create(x.Date, x.PeersAvg)).ToList();
+            }
+            return res;
         }
     }
 

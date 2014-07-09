@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return GetAnnouncements(false, start, count, null, null, onlyOwners);
         }
-        public IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false)
+        public IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null)
         {
             var q = new AnnouncementsQuery
             {
@@ -48,6 +48,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ClassId = classId,
                 MarkingPeriodId = markingPeriodId,
                 OwnedOnly = ownerOnly,
+                Graded = graded
             };
             return GetAnnouncementsComplex(q);
         }

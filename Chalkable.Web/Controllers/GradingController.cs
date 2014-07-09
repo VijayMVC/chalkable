@@ -13,6 +13,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -186,11 +187,22 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentSummary(int studentId, int? classId)
         {
-            throw new NotImplementedException();
-            //var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(30, true);
+            //throw new NotImplementedException();
+            // var announcements = ;
             //var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
             //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentGradePerDate(studentId, mp.Id, classId);
-            //return Json(GradingStudentSummaryViewData.Create(announcements, gradingStats));
+            var res = new GradingStudentSummaryViewData {Announcements = GetGradedItems()};
+            return Json(res);
+        }
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult RecentlyGradedItems(int? start, int? count)
+        {
+            return Json(GetGradedItems(start, count));
+        }
+
+        private IList<AnnouncementViewData> GetGradedItems(int? start = null, int? count = null)
+        {
+            return FeedController.GetAnnouncementForFeedList(SchoolLocator, start, count, null, null, false, true);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
