@@ -606,7 +606,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
                     break;
                 case 'checkTitle': var res = this.announcementService
-                    .existsTitle(model.getTitle())
+                    .existsTitle(model.getTitle(), classId)
                     .then(function(success){
                         return new chlk.models.Success(success);
                     });

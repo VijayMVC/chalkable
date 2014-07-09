@@ -83,10 +83,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String]],
-            ria.async.Future, function existsTitle(title) {
+            [[String, chlk.models.id.ClassId]],
+            ria.async.Future, function existsTitle(title, classId) {
                 return this.get('Announcement/Exists.json', Boolean, {
-                    title: title
+                    title: title,
+                    classId: classId.valueOf()
                 });
             },
 

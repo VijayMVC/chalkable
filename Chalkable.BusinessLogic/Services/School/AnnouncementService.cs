@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteAnnouncements(int schoolpersonid, AnnouncementState state = AnnouncementState.Draft);
 
         Announcement EditTitle(int announcementId, string title);
-        bool Exists(string title);
+        bool Exists(string title, int classId);
 
         AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null);
         void SubmitAnnouncement(int announcementId, int recipientId);
@@ -697,7 +697,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Announcement EditTitle(int announcementId, string title)
         {
-            return EditTitle(GetAnnouncementById(announcementId), title, (da, t) => da.Exists(t));
+            var ann = GetAnnouncementById(announcementId);
+            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef));
         }
 
         private Announcement EditTitle(Announcement announcement, string title, Func<AnnouncementDataAccess, string, bool> existsTitleAction)
@@ -726,11 +727,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return announcement;
         }
 
-        public bool Exists(string title)
+        public bool Exists(string title, int classId)
         {
             using (var uow = Read())
             {
-                return CreateAnnoucnementDataAccess(uow).Exists(title);
+                return CreateAnnoucnementDataAccess(uow).Exists(title, classId);
             }
         }
 
