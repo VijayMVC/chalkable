@@ -43,47 +43,12 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.PreferenceService, 'preferenceService',
 
-            [[chlk.models.people.User]],
-            function prepareProfileData(model){
-                var phones = model.getPhones(), addresses = model.getAddresses() ,phonesValue=[], addressesValue=[];
-                phones.forEach(function(item){
-                    var values = {
-                        id: item.getId().valueOf(),
-                        type: item.getType(),
-                        isPrimary: item.isIsPrimary(),
-                        value: item.getValue()
-                    }
-                    phonesValue.push(values);
-                    if(item.isIsPrimary() && !model.getPrimaryPhone()){
-                        model.setPrimaryPhone(item);
-                    }else{
-                        if(!model.getHomePhone())
-                            model.setHomePhone(item);
-                    }
-                });
-
-                addresses.forEach(function(item){
-                    var values = {
-                        id: item.getId().valueOf(),
-                        type: item.getType(),
-                        value: item.getValue()
-                    }
-                    addressesValue.push(values);
-                });
-
-                model.setPhonesValue(JSON.stringify(phonesValue));
-                model.setAddressesValue(JSON.stringify(addressesValue));
-                return model;
-            },
-
             [[chlk.models.id.SchoolPersonId]],
             function helloAction(personId_){
+                this.getContext().getSession().set(ChlkSessionConstants.FIRST_LOGIN, true);
                 var result = this.teacherService
                     .getInfo(personId_ || this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId())
-                    .attach(this.validateResponse_())
-                    .then(function(model){
-                        return this.prepareProfileData(model);
-                    }, this);
+                    .attach(this.validateResponse_());
                 return this.PushView(chlk.activities.setup.HelloPage, result);
             },
 
@@ -215,17 +180,10 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.people.User]],
             function infoEditAction(model){
                 this.personService
-                    .changePassword(model.getId(), model.getPassword())
+                    .changeEmail(model.getEmail())
                     .attach(this.validateResponse_())
-                    .then(function(changed){
-                        return this.teacherService
-                            .updateInfo(model.getId(), model.getAddressesValue(), model.getEmail(), model.getFirstName(),
-                                model.getLastName(), model.getGender(), model.getPhonesValue(), model.getSalutation(),
-                                model.getBirthDate())
-                            .attach(this.validateResponse_());
-                    }, this)
                     .then(function(model){
-                        return this.Redirect('setup', 'video', [model.getId().valueOf()]);
+                        return this.BackgroundNavigate('feed', 'list');
                     }, this);
                 return this.ShadeLoader();
             }

@@ -28,6 +28,7 @@
         ChlkHelpers.Olark();
     }
     @ChlkHelpers.RenderSiteRoot(Url)
+
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
@@ -50,7 +51,8 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.quicksand.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.creditCardValidator.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>   
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
 
 </head>
     <body>
@@ -163,6 +165,8 @@
             </div>
         }
         <div id = "chlk-overlay" class ="x-hidden"></div>
+        <div id = "first-login-overlay"></div>
+        <a id="first-login-video" href="https://www.youtube.com/watch?v=rj4J6i_vw0w&list=PLduQ8VhtxqZBIz85kNxPYS8jQIP451RW7"></a>
         <div id="chlk-pop-up-container" class="x-hidden">
             <div id="pop-up-triangle"></div>
         </div>

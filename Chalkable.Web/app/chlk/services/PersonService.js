@@ -19,6 +19,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[String]],
+            ria.async.Future, function changeEmail(email) {
+                return this.get('User/ActivateUser', Boolean, {
+                    newUserEmail: email
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId, String]],
             ria.async.Future, function changePassword(personId, password){
                 return this.get('Person/ReChangePassword', Boolean, {

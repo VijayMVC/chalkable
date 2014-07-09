@@ -85,12 +85,15 @@ NAMESPACE('chlk.controllers', function (){
 
                     var classes = this.classService.getClassesForTopBar(true);
                     var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                    var firstLogin = this.getContext().getSession().get(ChlkSessionConstants.FIRST_LOGIN, false);
+                    this.getContext().getSession().set(ChlkSessionConstants.FIRST_LOGIN, false);
 
                     return new chlk.models.feed.Feed(
                         feedItems,
                         classBarItemsMdl,
                         importantOnly_,
-                        this.getNewNotificationCount_()
+                        this.getNewNotificationCount_(),
+                        firstLogin
                     );
                 }, this);
         },

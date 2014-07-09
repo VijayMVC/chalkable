@@ -7,6 +7,90 @@ $blue-color: #2f7790;
 $gray-color: #737373;
 $star-size: 18px;
 
+.first-login{
+  #first-login-overlay{
+    display: block;
+  }
+
+  #sidebar-controls, .classes-bar{
+    z-index: 99999;
+    position: relative;
+  }
+
+  .YouTubeDialog{
+    z-index: 99999;
+    left: 500px !important;
+    position: absolute !important;
+    top: 300px !important;
+  }
+
+  .ui-widget-overlay{
+    display: none !important;
+  }
+}
+.YouTubeDialog.ui-dialog{
+  background: transparent;
+  border: none !important;
+
+  .ui-dialog-titlebar{
+    .ui-dialog-title{
+      display: none;
+    }
+
+    .ui-state-default{
+      z-index: 99;
+      background: url(images/ui/close-btn-dark.png) 50% 50% no-repeat;
+      border: none;
+      height: 24px;
+      width: 23px;
+      right: -10px;
+
+      >SPAN{
+        display: none;
+      }
+    }
+
+    background: transparent;
+    padding: 0;
+    border: none;
+  }
+
+  .ui-dialog-content{
+    border: 0;
+  }
+}
+
+
+#first-login-overlay{
+  display: none;
+  background: url(images/common/1st-run-overlay.png) 0 0 no-repeat;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 9999;
+
+  &:before {
+    position: absolute;
+    left: 0;
+    background: rgba(0,0,0,0.7);
+    bottom: 0;
+    right: 0;
+    top: 1099px;
+    content: "";
+  }
+
+  &:after {
+    position: absolute;
+    left: 1527px;
+    height: 1099px;
+    background: rgba(0,0,0,0.7);
+    right: 0;
+    content: "";
+  }
+}
+
 .feed-container{
   position: relative;
 
