@@ -13,11 +13,13 @@ NAMESPACE('chlk.templates.grading', function () {
                 var categories=[], mineData=[], peersData=[];
                 var totalAvgs = this.getTotalAvgPerDate();
                 var peersAvgs = this.getPeersAvgPerDate();
-                totalAvgs.forEach(function(item, index){
-                    categories.push(item.getDate().format('M d'));
-                    mineData.push(item.getAvg() || 0);
-                    peersData.push(peersAvgs[index].getAvg() || 0);
-                });
+                if (totalAvgs && peersAvgs){
+                    totalAvgs.forEach(function(item, index){
+                        categories.push(item.getDate().format('M d'));
+                        mineData.push(item.getAvg() || 0);
+                        peersData.push(peersAvgs[index].getAvg() || 0);
+                    });
+                }
                 return {
                     backgroundColor: 'transparent',
                     chart: {
