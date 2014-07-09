@@ -39,6 +39,12 @@ body:not(.first-login){
   opacity: 0;
 }
 
+body.setup{
+  #sidebar{
+    display: none;
+  }
+}
+
 .YouTubeDialog.ui-dialog{
   background: transparent;
   border: none !important;

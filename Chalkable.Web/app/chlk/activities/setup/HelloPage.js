@@ -30,6 +30,16 @@ NAMESPACE('chlk.activities.setup', function () {
                         el.addClass('x-hidden');
                     }
                 }.bind(this), 10);
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                BASE();
+                ria.dom.Dom('body').removeClass('setup');
+            },
+
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                ria.dom.Dom('body').addClass('setup');
             }
         ]);
 });
