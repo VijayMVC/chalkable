@@ -225,7 +225,15 @@ BODY {
             font: bold 32px "Myriad Pro";
             text-shadow: 1px 1px 1px white;
             color: $color;
-            padding: 3px 0 41px 41px;
+            padding: 3px 0 5px 41px;
+          }
+
+          .info{
+            text-align: center;
+            font: normal 14px "Myriad Pro";
+            text-shadow: 1px 1px 1px white;
+            color: #909090;
+            margin: 0 0 45px 51px;
           }
 
           .hint-text{
@@ -268,6 +276,15 @@ BODY {
               background: url(images/register/lock-icon.png) 184px 3px no-repeat, #fff;
             }
 
+            .grey-button.small, .blue-button.small{
+              padding: 8px 20px 10px;
+            }
+
+            .blue-button{
+              margin-right: 30px !important;
+              cursor: pointer;
+            }
+
             input[type="text"], input[type="password"]{
               width: 190px;
               height: 20px;
@@ -279,6 +296,13 @@ BODY {
               text-align: center;
               margin-bottom: 0;
               @include border-radius(0);
+
+              &[name=displayname]{
+                text-align: left;
+                background: transparent;
+                border: none;
+                box-shadow: none;
+              }
 
               &.salutation{
                 width: 30px;

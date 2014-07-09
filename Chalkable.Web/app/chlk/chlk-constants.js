@@ -1,4 +1,5 @@
 var ChlkSessionConstants = {
+    FIRST_LOGIN: 'firstLogin',
     USER_ROLE: 'role',
     SITE_ROOT: 'siteRoot',
     MARKING_PERIOD: 'markingPeriod',
@@ -20,6 +21,7 @@ var ChlkSessionConstants = {
     SCHOOL_OPTIONS: 'schoolOptions',
     GRADE_LEVELS: 'gradeLevels',
     STUDENT_AVG_MODEL: 'studentAvgModel',
+    REDIRECT_URL: 'redirectUrl',
 
     MONTH_CALENDAR_DATA: 'monthCalendarData',
     WEEK_CALENDAR_DATA: 'weekCalendarData',

@@ -144,7 +144,7 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                         data-header-id = header.headerid,
                         data-header-name = header.headername
                     ).codes-select
-                        +Option('', '')
+                        +Option('', 'Select an Option')
                         each comment in self.getGradingComments()
                             +Option(comment.getId().valueOf(), comment.getCode() + ' ' + comment.getComment(), header.gradingcomment && comment.getId() == header.gradingcomment.id)(
                                 data-code=comment.getCode(),

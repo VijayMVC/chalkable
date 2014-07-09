@@ -37,14 +37,6 @@ NAMESPACE('chlk.activities.feed', function () {
                 return false;
             },
 
-            /*[ria.mvc.DomEventBind('click', '.notifications-link:not(.disabled)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function notificationsClick(node, event){
-                setTimeout(function(){
-                    node.addClass('disabled');
-                }, 1);
-            },*/
-
             function stopInterval(){
                 this.dom.find('#stop-notifications-interval').trigger('click');
             },
@@ -61,6 +53,33 @@ NAMESPACE('chlk.activities.feed', function () {
                     }
                 }, 1000);
                 BASE();
+                this.stopTour();
+            },
+
+            function stopTour(){
+                var body = ria.dom.Dom('body');
+                body.removeClass('first-login');
+                body.off('click.tour');
+                body.off('click.tour');
+                ria.dom.Dom('.YouTubeDialog').find('.ui-dialog-titlebar-close').trigger('click');
+            },
+
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                if(model.isFirstLogin()){
+                    var body = ria.dom.Dom('body');
+                    var that = this;
+                    body.addClass('first-login');
+                    $("#first-login-video").YouTubePopup();
+                    $("#first-login-video").trigger('click');
+                    body.on('click.tour', '.YouTubeDialog .ui-dialog-titlebar-close', function(){
+                        body.removeClass('first-login');
+                    });
+                    body.on('click.tour', function(node, event){
+                        if(!node.isOrInside('.YouTubeDialog') && !node.is('.YouTubeDialog .ui-dialog-titlebar-close'))
+                            that.stopTour();
+                    })
+                }
             }
 
         ]);

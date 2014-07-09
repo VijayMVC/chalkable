@@ -90,6 +90,14 @@ NAMESPACE('chlk', function (){
                 return new chlk.lib.mvc.ChlkView;
             },
 
+            OVERRIDE, VOID, function run() {
+                var url = this.context.getSession().get(ChlkSessionConstants.REDIRECT_URL, false);
+                if(url)
+                    window.location.hash = url.substr(url.indexOf('#') + 1);
+
+                BASE();
+            },
+
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
                 window.currentChlkPerson.claims = window.userClaims;
@@ -111,6 +119,8 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.GRADING_COMMENTS, ArrayOf(chlk.models.grading.AvgComment));
                 this.saveInSession(session, ChlkSessionConstants.SCHOOL_OPTIONS, chlk.models.school.SchoolOption);
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL, Boolean);
+                this.saveInSession(session, ChlkSessionConstants.FIRST_LOGIN, Boolean);
+                this.saveInSession(session, ChlkSessionConstants.REDIRECT_URL, String);
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
 
 
