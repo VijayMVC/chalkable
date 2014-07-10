@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Footer";
+}
+
+<a id="footerA" style="visibility: hidden;"></a>
+<div id="footer_container">
+   <div class="wrapper">
+      <div id="footer">
+         <div>
+            <span class="staples"><img src="@Url.StaticContent("/Content/images/index/staples.png")" alt="staples"/></span>
+         </div>
+         <div class="coll">
+            <h3>Some Links.</h3>
+            <ul>
+               <li><a href="#first-anchor" class="scroll">Feature tour</a></li>
+               <li><a href="#pricing" class="scroll">Pricing &amp; Signup</a></li>
+               <li><a href="@Url.Content("~/Home/Faq")">FAQ</a></li>
+               <li><a href="@Url.Content("~/Developer/Info")">Developers</a></li>
+               <li><a href="http://blog.chalkable.com/" target="_blank">Blog</a></li>
+               <li><a href="http://chalkable.uservoice.com/" target="_blank">Feedback</a></li>
+            </ul>
+            <a href="https://mixpanel.com/f/partner"><img src="https://cdn.mxpnl.com/site_media/images/partner/badge_light.png" alt="Mobile Analytics" /></a>
+         </div>
+         <div class="coll">
+            <h3>Say Hi.</h3>
+            <ul>
+               <li>Chalkable</li>
+               <li>500 7th Ave.</li>
+               <li>17th Floor</li>
+               <li>New York, NY 10018</li>
+               <li><a href="mailto:info@chalkable.com">Email Us</a></li>
+               <li><a href="mailto:jobs@chalkable.com">Jobs</a></li>
+            </ul>
+         </div>
+         <div class="coll">
+            <h3>Don&#39;t Be Shy.</h3>
+            <ul class="social">
+               <li><img src="@Url.StaticContent("/Content/images/index/icon1.png")" alt="" /><a href="https://twitter.com/#!/chalkable">Follow us</a></li>
+               <li><img src="@Url.StaticContent("/Content/images/index/icon2.png")" alt="" /><a href="https://www.facebook.com/chalkable">Like us</a></li>
+               <span class="call_us">
+                  <img src="@Url.StaticContent("/Content/images/index/phone_icon.png")" alt="phone">
+                  <li>Call us</li>
+               </span>
+               <li class="phone_number">646.494.3464</li>
+            </ul>
+         </div>
+         <div class="coll last">
+            <h3>Fine Print.</h3>
+            <ul>
+               <li><a href="http://cl.ly/361V222N3T213e1m1J0Z">Press</a></li>
+               <li><a href="@Url.Content("~/Home/Terms")">Terms</a></li>
+            </ul>
+         </div>
+      </div>
+   </div>
+</div>
