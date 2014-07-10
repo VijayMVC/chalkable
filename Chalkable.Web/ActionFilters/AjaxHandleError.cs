@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -20,7 +21,10 @@ namespace Chalkable.Web.ActionFilters
             {
                 filterContext.ExceptionHandled = true;
                 filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-                filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                if (filterContext.Exception is HttpException)
+                    filterContext.HttpContext.Response.StatusCode = (filterContext.Exception as HttpException).GetHttpCode();
+                else
+                    filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var jsonResponse = ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException);
                 var jsonresult = new ChalkableJsonResult(false)
