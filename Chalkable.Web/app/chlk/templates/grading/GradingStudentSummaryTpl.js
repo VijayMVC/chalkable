@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.common.PageWithClasses');
 REQUIRE('chlk.models.grading.GradingStudentSummaryViewData');
+REQUIRE('chlk.templates.announcement.FeedItemTpl');
 
 NAMESPACE('chlk.templates.grading', function () {
     "use strict";

@@ -20,11 +20,14 @@ NAMESPACE('chlk.activities.grading', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                this.setItems(this.getGradingItems_(model));
+                if (this.getGradingItems_(model))
+                    this.setItems(this.getGradingItems_(model));
             },
 
             function getGradingItems_(model){
-                return model.getCurrentGradingBox().getByAnnouncementTypes();
+                if(model && model.getCurrentGradingBox && model.getCurrentGradingBox())
+                    return model.getCurrentGradingBox().getByAnnouncementTypes();
+                return null;
             },
 
             Object, 'currentMenu',

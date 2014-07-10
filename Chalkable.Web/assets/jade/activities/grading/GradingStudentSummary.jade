@@ -2,7 +2,7 @@ topData = self.getTopData()
 topItems = topData.getTopItems()
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')().classes-bar
 .student-grading-summary
-    if topItems
+    if topItems && self.getTotalAvgPerDate() && self.getPeersAvgPerDate()
         .grading-chart-part.relative
             .panel-header.relative=Msg.You_vs_Peers
                 +Select('clazzSelect', 'grading', 'summaryAll', [true])
@@ -15,8 +15,15 @@ topItems = topData.getTopItems()
             .chart-container-1
                 +RenderWith(self.getModel(), chlk.templates.grading.GradingStudentSummaryChartTpl)
     h1=Msg.Recently_Graded_Items
-    +Grid().not-transparent
-        +GridBody()
+    .not-transparent
+        +ListView(self.announcements)(
+        infiniteScroll = true,
+        needGoToButton = true,
+        service = chlk.services.GradingService,
+        method = "getRecentlyGradedItems",
+        tpl = chlk.templates.announcement.FeedItemTpl,
+        pageSize = 10,
+        paramsPrepend = [null]
+        )
             each announcement in self.announcements
-                +FeedItem(announcement, true)
-
+                +FeedItem(announcement)
