@@ -3,6 +3,9 @@ REQUIRE('chlk.models.grading.AnnTypeGradeStatsViewData');
 REQUIRE('chlk.models.grading.GradingClassSummaryPart');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 REQUIRE('chlk.models.common.PageWithClassesAndGradingPeriodsViewData');
+REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
+
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -23,6 +26,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
 
-            chlk.models.classes.ClassForTopBar, 'clazz'
+            chlk.models.classes.ClassForTopBar, 'clazz',
+
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements'
         ])
 });

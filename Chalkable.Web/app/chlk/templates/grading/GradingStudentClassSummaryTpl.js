@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.common.PageWithClassesAndGradingPeriodsTpl');
 REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
+REQUIRE('chlk.templates.announcement.FeedItemTpl');
 
 NAMESPACE('chlk.templates.grading', function () {
     "use strict";
@@ -26,6 +27,9 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.classes.ClassForTopBar, 'clazz',
 
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements',
+
             [[Number, Number]],
             String, function getColor(i, opacity_){
                 var colors =  ['rgba(204, 0, 0, 1)', 'rgba(204, 102, 0, 1)', 'rgba(0, 204, 204, 1)',
@@ -40,6 +44,7 @@ NAMESPACE('chlk.templates.grading', function () {
 
             Number, function getAvg(){
                 var items = this.getAvgPerDate(), res=0;
+                if(!items) return null;
                 items.forEach(function(item){
                     res+=item.getAvg();
                 });
@@ -50,30 +55,37 @@ NAMESPACE('chlk.templates.grading', function () {
                 var categories=[], mineData=[], peersData=[];
                 var mineAvgs = this.getAvgPerDate();
                 var typesInfo = this.getAnnTypesGradeStats();
+
+                if (!mineAvgs || !typesInfo) return null;
+
                 var series = [], that = this;
-                typesInfo.forEach(function(type, i){
-                    var data = [];
-                    type.getGradePerDate().forEach(function(item){
-                        data.push(item.getAvg() || 0);
-                    });
-                    series.push({
-                        name: type.getTypeName(),
-                        marker: {
-                            enabled: false,
-                            states: {
-                                hover: {
-                                    enabled: false
+                if(typesInfo){
+                    typesInfo.forEach(function(type, i){
+                        var data = [];
+                        type.getGradePerDate().forEach(function(item){
+                            data.push(item.getAvg() || 0);
+                        });
+                        series.push({
+                            name: type.getTypeName(),
+                            marker: {
+                                enabled: false,
+                                states: {
+                                    hover: {
+                                        enabled: false
+                                    }
                                 }
-                            }
-                        },
-                        color: 'rgba(193,193,193,0.2)',
-                        data: data
+                            },
+                            color: 'rgba(193,193,193,0.2)',
+                            data: data
+                        });
                     });
-                });
-                mineAvgs.forEach(function(item, index){
-                    categories.push(item.getDate().format('M d'));
-                    mineData.push(item.getAvg() || 0);
-                });
+                }
+                if(mineAvgs){
+                    mineAvgs.forEach(function(item, index){
+                        categories.push(item.getDate().format('M d'));
+                        mineData.push(item.getAvg() || 0);
+                    });
+                }
                 series.push({
                     name: 'Mine',
                     marker: {

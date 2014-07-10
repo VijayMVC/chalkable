@@ -195,23 +195,27 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult RecentlyGradedItems(int? start, int? count)
+        public ActionResult RecentlyGradedItems(int? start, int? count, int? classId)
         {
-            return Json(GetGradedItems(start, count));
+            return Json(GetGradedItems(start, count, classId));
         }
 
-        private IList<AnnouncementViewData> GetGradedItems(int? start = null, int? count = null)
+        private IList<AnnouncementViewData> GetGradedItems(int? start = null, int? count = null, int? classId = null)
         {
-            return FeedController.GetAnnouncementForFeedList(SchoolLocator, start, count, null, null, false, true);
+            return FeedController.GetAnnouncementForFeedList(SchoolLocator, start, count, null, classId, false, true);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentClassSummary(int studentId, int classId)
         {
+            //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
+            //var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
+            //return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, gradingPerMp));
+            var res = new GradingStudentClassSummaryViewData();
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
-            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
-            var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
-            return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, gradingPerMp));
+            res.Announcements = GetGradedItems(null, null, classId);
+            res.CurrentMarkingPeriod = MarkingPeriodViewData.Create(mp);
+            return Json(res);
         }
 
         //TODO: duplicate part of announcement/read data. for API compatibility only
