@@ -22,9 +22,13 @@ namespace Chalkable.Web.ActionFilters
                 filterContext.ExceptionHandled = true;
                 filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
                 if (filterContext.Exception is HttpException)
-                    filterContext.HttpContext.Response.StatusCode = (filterContext.Exception as HttpException).GetHttpCode();
+                {
+                    filterContext.HttpContext.Response.StatusCode =
+                        (filterContext.Exception as HttpException).GetHttpCode();
+                    filterContext.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
+                }
                 else
-                    filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    filterContext.HttpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
                 var jsonResponse = ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException);
                 var jsonresult = new ChalkableJsonResult(false)

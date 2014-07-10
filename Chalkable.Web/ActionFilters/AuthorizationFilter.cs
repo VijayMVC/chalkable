@@ -113,17 +113,12 @@ namespace Chalkable.Web.ActionFilters
             }
             if (!allow)
             {
-                if (controller.RouteData.Values.ContainsKey(format) &&
-                    controller.RouteData.Values[format].ToString().ToLower() != htmlFormat
-                    && controller.RouteData.Values[format].ToString().ToLower() != aspxFormat)
+                if (controller.Request.IsAjaxRequest())
                     throw new HttpException(401, "Unauthorized access");
                 filterContext.Result = controller.Redirect<HomeController>(c => c.Index());
             }
             base.OnActionExecuting(filterContext);
         }
-        private const string format = "format";
-        private const string htmlFormat = "html";
-        private const string aspxFormat = "aspx";
 
         public string[] Roles { get { return role; } }
         public string[] ParamsDescriptions { get { return null; } }

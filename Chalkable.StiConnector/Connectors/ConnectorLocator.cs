@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Web;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -90,8 +91,14 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
+                 
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
+                if (ex.Response is HttpWebResponse)
+                {
+                    HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+                    throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
+                }
                 throw new Exception(ex.Message + Environment.NewLine + msg);
             }
             finally
