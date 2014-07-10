@@ -1,0 +1,30 @@
+.class-grading.grading-summary-grid
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'finalGrades')(
+        selectedItemId=selectedId
+    ).classes-bar
+    .autocomplete-list.final-grades
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .center
+                +ActionLink('grading', "summary", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
+    .gps-container
+        each gradingPeriod,i in self.getGradingPeriods()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i, data-grading-period-id=gradingPeriod.getId()).big-grading-period-container
+                if gradingPeriod.getId() == self.getGradingPeriodId()
+                    gp = self.getCurrentFinalGrade()
+                    +RenderWith(gp, chlk.templates.grading.GradingPeriodFinalGradeTpl)(
+                        classId = selectedId,
+                        gradingComments = self.getGradingComments()
+                    )
+                else
+                    +ActionForm('grading', 'loadGradingPeriodFinalGradesSummary').load-grading-period
+                        +Hidden('classId', selectedId)
+                        +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                        .gp-title-block
+                            .gp-title=gradingPeriod.getFinalTitleText()
+                            .gp-triangle
