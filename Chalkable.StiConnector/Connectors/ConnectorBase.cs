@@ -6,7 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Chalkable.Common;
+using System.Web;
 using Chalkable.Common.Web;
 using Chalkable.StiConnector.Connectors.Model;
 using Newtonsoft.Json;
@@ -78,12 +78,19 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
-                if (ex.Response is HttpWebResponse &&
-                    (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
-                    return default(T);
                 var reader = new StreamReader(ex.Response.GetResponseStream());
                 var msg = reader.ReadToEnd();
                 Trace.TraceError(string.Format(ERROR_FORMAT, url, msg));
+                if (ex.Response is HttpWebResponse)
+                {
+                    if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                        return default(T);
+                    else
+                    {
+                        HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+                        throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
+                    }
+                }
                 throw new Exception(msg);
             }
             finally

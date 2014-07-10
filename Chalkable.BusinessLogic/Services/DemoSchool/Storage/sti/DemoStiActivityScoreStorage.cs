@@ -17,6 +17,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return data.First(x => x.Value.ActivityId == sisActivityId && x.Value.StudentId == userId).Value;
         }
 
+        public IList<Score> GetScores(int userId)
+        {
+            return data.Where(x => x.Value.StudentId == userId).Select(x => x.Value).ToList();
+        } 
+
         public IList<Score> GetSores(int sisActivityId)
         {
             return data.Where(x => x.Value.ActivityId == sisActivityId).Select(x => x.Value).ToList();

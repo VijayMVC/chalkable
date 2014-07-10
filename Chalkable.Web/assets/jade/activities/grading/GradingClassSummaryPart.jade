@@ -1,12 +1,13 @@
 .mps-container
-    each item,i in self.getItems()
-        gradingPeriod = item.getGradingPeriod()
-        div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
-            div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title=Msg.Grading_Period + ' ' +  gradingPeriod.getName()
-                .collapse
-            .mp-data
-                .ann-types-container
-                    +LeftRightToolbar(item.getItems(), chlk.templates.grading.GradingClassStandardItemTpl)(
-                        needDots = true,
-                        roundedDots = true
-                    ).big-arrows
+    if self.getItems()
+        each item,i in self.getItems()
+            gradingPeriod = item.getGradingPeriod()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title=Msg.Grading_Period + ' ' +  gradingPeriod.getName()
+                    .collapse
+                .mp-data
+                    .ann-types-container
+                        +LeftRightToolbar(item.getItems(), chlk.templates.grading.GradingClassStandardItemTpl)(
+                            needDots = true,
+                            roundedDots = true
+                        ).big-arrows

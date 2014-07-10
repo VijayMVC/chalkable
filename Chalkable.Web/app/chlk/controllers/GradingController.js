@@ -281,11 +281,13 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.gradingService
                     .getStudentsClassSummary(studentId, classId_)
                     .then(function(model){
-                        model.getItems().forEach(function(mpData){
-                            mpData.getItems().forEach(function(item){
-                                item.setClassId(classId_);
+                        if(model.getItems()){
+                            model.getItems().forEach(function(mpData){
+                                mpData.getItems().forEach(function(item){
+                                    item.setClassId(classId_);
+                                });
                             });
-                        });
+                        }
                         var classes = this.classService.getClassesForTopBar(true, true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                         var gradingPeriod = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, {});

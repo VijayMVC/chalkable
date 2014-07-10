@@ -117,5 +117,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
         {
             return classesIds.Select(classId => GetSaSummary(classId, startDate, endDate)).ToList();
         }
+
+
+        public IList<SectionAttendanceSummary> GetSectionAttendanceSummary(int studentId, DateTime startDate, DateTime endDate)
+        {
+            var classesIds = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
+            {
+                PersonId = studentId
+            }).Select(x => x.ClassRef).Distinct().ToList();
+
+            return classesIds.Select(classId => GetSaSummary(classId, startDate, endDate)).ToList();
+        }
     }
 }

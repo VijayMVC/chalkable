@@ -10,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Controllers;
+using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace Chalkable.Web.ActionFilters
 {
@@ -112,28 +113,12 @@ namespace Chalkable.Web.ActionFilters
             }
             if (!allow)
             {
-                if (controller.RouteData.Values.ContainsKey(format) &&
-                    controller.RouteData.Values[format].ToString().ToLower() != htmlFormat
-                    && controller.RouteData.Values[format].ToString().ToLower() != aspxFormat)
-                {
-                    filterContext.RequestContext.HttpContext.Response.AddHeader(requiresAuth, "1");
-
-                    filterContext.Result = new ChalkableJsonResult(false)
-                    {
-                        Data = new { Data = "User is not authorized" },
-                        SerializationDepth = 4
-                    };
-                }                   
-                else
-                    filterContext.Result = controller.Redirect<HomeController>(c => c.Index());
-
+                if (controller.Request.IsAjaxRequest())
+                    throw new HttpException(401, "Unauthorized access");
+                filterContext.Result = controller.Redirect<HomeController>(c => c.Index());
             }
             base.OnActionExecuting(filterContext);
         }
-        private const string format = "format";
-        private const string htmlFormat = "html";
-        private const string aspxFormat = "aspx";
-        private const string requiresAuth = "REQUIRES_AUTH";
 
         public string[] Roles { get { return role; } }
         public string[] ParamsDescriptions { get { return null; } }

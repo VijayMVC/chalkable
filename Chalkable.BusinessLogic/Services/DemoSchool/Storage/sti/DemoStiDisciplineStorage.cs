@@ -17,6 +17,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return data.Where(x => x.Value.SectionId == classId && x.Value.Date == date).Select(x => x.Value).ToList();
         }
 
+        public IList<DisciplineReferral> GetList(DateTime date)
+        {
+            return data.Where(x => x.Value.Date == date).Select(x => x.Value).ToList();
+        }
+
         public DisciplineReferral Create(DisciplineReferral stiDiscipline)
         {
             Add(stiDiscipline);

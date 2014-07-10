@@ -34,6 +34,11 @@ namespace Chalkable.Web.Controllers
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
+            return Json(PrepareClassGradingBoxes(classId));
+        }
+
+        private ClassGradingBoxesViewData PrepareClassGradingBoxes(int classId)
+        {
             var syId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolTime.Date);
@@ -42,7 +47,7 @@ namespace Chalkable.Web.Controllers
             {
                 gradingSummary = SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, currentGradingPeriod.Id);
             }
-            return Json(ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary));
+            return ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary);
         }
 
         [AuthorizationFilter("Teacher")]
@@ -195,23 +200,25 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult RecentlyGradedItems(int? start, int? count)
+        public ActionResult RecentlyGradedItems(int? start, int? count, int? classId)
         {
-            return Json(GetGradedItems(start, count));
+            return Json(GetGradedItems(start, count, classId));
         }
 
-        private IList<AnnouncementViewData> GetGradedItems(int? start = null, int? count = null)
+        private IList<AnnouncementViewData> GetGradedItems(int? start = null, int? count = null, int? classId = null)
         {
-            return FeedController.GetAnnouncementForFeedList(SchoolLocator, start, count, null, null, false, true);
+            return FeedController.GetAnnouncementForFeedList(SchoolLocator, start, count, null, classId, false, true);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentClassSummary(int studentId, int classId)
         {
+            //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
+           // var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
+            //return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, gradingPerMp));
+            ClassGradingBoxesViewData classGarding = null;//PrepareClassGradingBoxes(classId);
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
-            var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
-            var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
-            return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, gradingPerMp));
+            return Json(GradingStudentClassSummaryViewData.Create(mp, GetGradedItems(null, null, classId), classGarding));
         }
 
         //TODO: duplicate part of announcement/read data. for API compatibility only

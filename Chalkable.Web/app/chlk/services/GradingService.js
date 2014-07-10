@@ -193,6 +193,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[Number, chlk.models.id.ClassId]],
+            ria.async.Future, function getRecentlyGradedItems(pageIndex_, classId_){
+                return this.get('Grading/RecentlyGradedItems', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
+                    start: pageIndex_|0,
+                    classId: classId_ ? classId_.valueOf() : null
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getTeacherSummary(teacherId) {
                 return this.get('Grading/TeacherSummary', ArrayOf(chlk.models.grading.GradingTeacherClassSummaryViewData), {

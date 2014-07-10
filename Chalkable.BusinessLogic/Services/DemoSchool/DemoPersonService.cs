@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.WebSockets;
+using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
@@ -10,6 +12,8 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
+using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -251,7 +255,68 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
         {
-            throw new NotImplementedException();
+
+
+            /*
+             * public ClassRank ClassRank { get; set; }
+        public string CurrentAttendanceStatus { get; set; }
+        public DailyAbsenceSummary DailyAttendance { get; set; }
+        public IEnumerable<InfractionSummary> Infractions { get; set; }
+        public IEnumerable<Score> Scores { get; set; }
+        public IEnumerable<SectionAbsenceSummary> SectionAttendance { get; set; }
+             */
+
+
+            var classRank = new ClassRank
+            {
+                StudentId = studentId,
+                ClassSize = 10
+            };
+
+            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+          
+            var discipline = Storage.StiDisciplineStorage.GetList(DateTime.Today);
+
+            var infractions = new List<Chalkable.StiConnector.Connectors.Model.Infraction>();
+
+            foreach (var disciplineReferral in discipline)
+            {
+                infractions.AddRange(disciplineReferral.Infractions);
+            }
+
+            var chlkInfractions = ServiceLocator.InfractionService.GetInfractions();
+
+            var infractionSummaries = from infr in infractions
+                group infr by infr.Id
+                into g
+                select new {Id = g.Key, Count = g.Count()};
+
+            var attendances = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(studentId,
+                DateTime.Today.AddDays(-1), DateTime.Today).Select(sectionAttendanceSummary => new SectionAbsenceSummary()
+                {
+                    SectionId = sectionAttendanceSummary.SectionId,
+                    Tardies = sectionAttendanceSummary.Students.Select(x => x.Tardies).Sum(),
+                    Absences = sectionAttendanceSummary.Students.Select(x => x.Absences).Sum(),
+
+                }).ToList();
+
+            var infractionSummary = infractionSummaries.Select(x => new InfractionSummary()
+            {
+                StudentId = studentId,
+                InfractionId = x.Id,
+                Occurrences = x.Count
+            }).ToList();
+
+            var nowDashboard = new NowDashboard
+            {
+                ClassRank = classRank,
+                Infractions = infractionSummary,
+                SectionAttendance = attendances,
+                Scores = Storage.StiActivityScoreStorage.GetScores(studentId)
+            }; 
+            var student = GetPerson(studentId);
+            var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, MapperFactory.GetMapper<StudentAnnouncement, Score>());
+            return res;
         }
     }
 }
