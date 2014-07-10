@@ -34,6 +34,11 @@ namespace Chalkable.Web.Controllers
         {
             if (!SchoolLocator.Context.SchoolId.HasValue)
                 throw new UnassignedUserException();
+            return Json(PrepareClassGradingBoxes(classId));
+        }
+
+        private ClassGradingBoxesViewData PrepareClassGradingBoxes(int classId)
+        {
             var syId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolTime.Date);
@@ -42,7 +47,7 @@ namespace Chalkable.Web.Controllers
             {
                 gradingSummary = SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, currentGradingPeriod.Id);
             }
-            return Json(ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary));
+            return ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary);
         }
 
         [AuthorizationFilter("Teacher")]
@@ -209,13 +214,11 @@ namespace Chalkable.Web.Controllers
         public ActionResult StudentClassSummary(int studentId, int classId)
         {
             //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
-            //var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
+           // var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
             //return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, gradingPerMp));
-            var res = new GradingStudentClassSummaryViewData();
+            ClassGradingBoxesViewData classGarding = null;//PrepareClassGradingBoxes(classId);
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
-            res.Announcements = GetGradedItems(null, null, classId);
-            res.CurrentMarkingPeriod = MarkingPeriodViewData.Create(mp);
-            return Json(res);
+            return Json(GradingStudentClassSummaryViewData.Create(mp, GetGradedItems(null, null, classId), classGarding));
         }
 
         //TODO: duplicate part of announcement/read data. for API compatibility only

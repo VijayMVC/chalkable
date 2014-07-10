@@ -6,6 +6,7 @@ REQUIRE('chlk.models.common.PageWithClassesAndGradingPeriodsViewData');
 REQUIRE('chlk.models.announcement.Announcement');
 REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 
+REQUIRE('chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -23,6 +24,9 @@ NAMESPACE('chlk.models.grading', function () {
 
             [ria.serialize.SerializeProperty('gradingpermp')],
             ArrayOf(chlk.models.grading.GradingClassSummaryItems), 'items',
+
+            [ria.serialize.SerializeProperty('gradingperiodboxes')],
+            chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData, 'gradingPeriodBoxes',
 
             chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
 

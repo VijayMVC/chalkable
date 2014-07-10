@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.common.PageWithClassesAndGradingPeriodsTpl');
 REQUIRE('chlk.models.grading.GradingStudentClassSummaryViewData');
 REQUIRE('chlk.templates.announcement.FeedItemTpl');
+REQUIRE('chlk.templates.grading.TeacherClassGradingSummaryItemTpl');
 
 NAMESPACE('chlk.templates.grading', function () {
     "use strict";
@@ -29,6 +30,10 @@ NAMESPACE('chlk.templates.grading', function () {
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData, 'gradingPeriodBoxes',
+
 
             [[Number, Number]],
             String, function getColor(i, opacity_){

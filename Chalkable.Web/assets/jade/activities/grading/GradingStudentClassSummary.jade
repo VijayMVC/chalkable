@@ -24,6 +24,27 @@ selectedId = topData.getSelectedItemId()
                 .box
                 .name
                     |#{Msg.Avg} (#{self.getAvg()})
+
+    if self.getGradingPeriodBoxes()
+        .mps-container
+            each gradingPeriod,i in self.getGradingPeriodBoxes().getGradingPeriods()
+                div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                    item = self.getCurrentGradingBox()
+                    div(
+                        data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
+                    ).mp-title
+                        mpName = gradingPeriod.getName()
+                        span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                        .grading-selects
+                            +ActionForm('grading', 'loadGradingPeriodSummary').load-grading-period
+                                +Hidden('classId', selectedId)
+                                +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                        //a(href="javascript:").grey-button.comment-button=Msg.Comment
+                        .collapse
+                    div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                        if gradingPeriod.getId() == self.getGradingPeriodId()
+                            +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)
+
     if self.getChartOptions()
         .grading-chart-part.relative
             .chart-bg2
