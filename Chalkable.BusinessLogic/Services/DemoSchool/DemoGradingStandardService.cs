@@ -31,6 +31,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note)
         {
+
+
+            var alphaGradeName = alphaGradeId.HasValue ? Storage.AlphaGradeStorage.GetById(alphaGradeId.Value).Name : "";
             var standardScore = new StandardScore
                 {
                     SectionId = classId,
@@ -38,10 +41,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     StandardId = standardId,
                     Note = note,
                     EnteredScoreAlphaGradeId = alphaGradeId,
+                    ComputedScoreAlphaGradeId = alphaGradeId,
+                    EnteredScoreAlphaGradeName = alphaGradeName,
+                    ComputedScoreAlphaGradeName = alphaGradeName,
                     GradingPeriodId = gradingPeriodId
                 };
             standardScore = Storage.StiStandardScoreStorage.Update(classId, studentId, standardId, gradingPeriodId, standardScore);
             var standard = ServiceLocator.StandardService.GetStandardById(standardId);
+
+            
             return GradingStandardInfo.Create(standardScore, standard);
         }
     }
