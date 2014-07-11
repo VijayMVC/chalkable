@@ -93,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var stiModel = new ProgressReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
-                    AbsenceReasonIds = inputModel.AbsenceReasonIds,
+                    AbsenceReasonIds = inputModel.AbsenceReasonIds.ToArray(),
                     AdditionalMailings = inputModel.AdditionalMailings,
                     DailyAttendanceDisplayMethod = inputModel.DailyAttendanceDisplayMethod,
                     DisplayCategoryAverages = inputModel.DisplayCategoryAverages,
@@ -114,7 +114,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     MaxStandardAverage = inputModel.MaxStandardAverage,
                     MinStandardAverage = inputModel.MinStandardAverage,
                     SectionComment = inputModel.ClassComment,
-                    StudentIds = inputModel.StudentIds
+                    StudentIds = inputModel.StudentIds.ToArray()
                 };
             return ConnectorLocator.ReportConnector.ProgressReport(stiModel);
         }
