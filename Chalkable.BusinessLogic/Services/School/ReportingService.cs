@@ -171,7 +171,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public class ProgressReportInputModel : BaseReportInputModel
     {
-        public int[] AbsenceReasonIds { get; set; }
+        public IntList AbsenceReasonIds { get; set; }
         public bool AdditionalMailings { get; set; }
         
         public int DailyAttendanceDisplayMethod { get; set; }
@@ -192,7 +192,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool PrintFromHomePortal { get; set; }
 
         public string ClassComment { get; set; }
-        public int[] StudentIds { get; set; }
+        public IntList StudentIds { get; set; }
     }
 
     public enum ReportingFormat
