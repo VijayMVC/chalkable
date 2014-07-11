@@ -107,6 +107,7 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                                 data-tooltip=Msg.Late + ' (' + clazzInfo.getLateCount() + ')',
                                 style="width:" + self.getLateWidth(clazzInfo)
                             ).late
+
                         if self.getAbsentWidth(clazzInfo)
                             div(
                                 data-tooltip=Msg.Absent + ' (' + clazzInfo.getAbsentCount() + ')',
@@ -139,14 +140,15 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                 TEXTAREA.notes-textarea=avg.getNote()
                 .saving-text #{Msg.Saving.toLowerCase()}...
             .comments-block
-                each header in avg.getCodes()
-                    +Select('select-' + header.headerid)(
-                        data-header-id = header.headerid,
-                        data-header-name = header.headername
-                    ).codes-select
-                        +Option('', 'Select an Option')
-                        each comment in self.getGradingComments()
-                            +Option(comment.getId().valueOf(), comment.getCode() + ' ' + comment.getComment(), header.gradingcomment && comment.getId() == header.gradingcomment.id)(
-                                data-code=comment.getCode(),
-                                data-comment=comment.getComment()
-                            )
+                if avg.getCodes()
+                    each header in avg.getCodes()
+                        +Select('select-' + header.headerid)(
+                            data-header-id = header.headerid,
+                            data-header-name = header.headername
+                        ).codes-select
+                            +Option('', 'Select an Option')
+                            each comment in self.getGradingComments()
+                                +Option(comment.getId().valueOf(), comment.getCode() + ' ' + comment.getComment(), header.gradingcomment && comment.getId() == header.gradingcomment.id)(
+                                    data-code=comment.getCode(),
+                                    data-comment=comment.getComment()
+                                )
