@@ -154,7 +154,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String, Object, Object]],
             ria.async.Future, function getPaginatedList(uri, clazz, gParams) {
-                return new ria.ajax.JsonGetTask(this.resolveUri(uri))
+                return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
