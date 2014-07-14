@@ -97,7 +97,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Name = cls.Name,
                     RoomRef = cls.RoomRef,
                     SchoolRef = cls.SchoolRef,
-                    SchoolYearRef = cls.SchoolYearRef
+                    SchoolYearRef = cls.SchoolYearRef,
+                    PrimaryTeacher = Storage.PersonStorage.GetById(DemoSchoolConstants.TeacherId),
+                    PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
+                    StudentsCount = 10
                 };
 
 
