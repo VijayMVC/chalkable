@@ -37,6 +37,10 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
+        function doToListAction(){
+            return this.listAction(null, true);
+        },
+
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function listAction(postback_, importantOnly_, classId_, pageIndex_) {
 
