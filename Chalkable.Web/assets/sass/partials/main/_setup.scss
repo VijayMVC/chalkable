@@ -1,0 +1,358 @@
+BODY {
+  $color: #9D9D9D;
+
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        .announcement-type-item{
+          //overflow: hidden;
+
+          >DIV{
+            padding: 13px 13px 5px 13px;
+            height: 53px;
+            width: 630px;
+
+            .name{
+              color: #423a22;
+              font: bold 24px Arial;
+              text-shadow: 1px 1px 0px white;
+              height: 42px;
+              overflow: hidden;
+              line-height: 36px;
+              max-width: 350px;
+              text-overflow: ellipsis;
+            }
+
+            .announcement-type-weight{
+              border: 1px solid #af9c60;
+              font: bold 14px Arial;
+              color: #423a22;
+              height: 30px;
+              line-height: 30px;
+              padding: 0 6px;
+              width: 40px;
+              text-align: center;
+              @include box-shadow(inset 0 1px 2px #c5c5c5);
+            }
+
+            .hint {
+              bottom: -20px;
+              text-align: center;
+              font: normal 11px Arial;
+              color: #532f18;
+              left: 0;
+              right: 0;
+              text-shadow: 0 1px 0 white;
+            }
+
+            .type-container{
+              margin: 0 19px;
+
+              select{
+                width: 75px;
+              }
+
+              .chzn-container{
+                width: 75px;
+
+                .chzn-single{
+                  height: 31px;
+                  font: bold 14px/31px Arial;
+                  text-shadow: 1px 1px 1px white;
+                  color: #532f18;
+                  @include background(linear-gradient(top, #f3eee0, #ece1c1));
+                  @include box-shadow(0 1px 0 0 white);
+                  border: 1px solid #af9c60;
+                }
+              }
+            }
+
+            .drop-lowest-block{
+              margin-top: 6px;
+            }
+          }
+
+          &:not(.active){
+            opacity: 0.5;
+          }
+
+          &:not(:last-child) {
+            margin-bottom: 3px;
+          }
+        }
+
+        .setup-page{
+          &.video, &.start{
+            .right-up-arrow{
+              right: 0;
+              top: 45px;
+            }
+
+            .video-chalkable{
+              margin: 47px 0 50px 0;
+            }
+          }
+
+          &.start{
+            .bottom-text{
+              margin-top: 100px;
+            }
+          }
+
+          label#step{
+            position: absolute;
+            color: #51595d;
+            font: normal 11px/34px arial,tahoma;
+            margin-left: 230px;
+          }
+
+          #setup-schedule-view{
+            font: normal 12px Georgia;
+            font-style: italic;
+            color: #959595;
+            text-shadow: 1px 1px 1px #fafafa;
+            position: relative;
+            border: 1px solid;
+            border-color: #9a9898 #e2e2e2 #e2e2e2 #9a9898;
+            @include border-radius(5px);
+            padding: 10px 10px 20px 10px;
+
+            .left-block{
+              width: 232px;
+              text-align: left;
+              padding: 0 10px 0 30px;
+              vertical-align: top;
+
+              >DIV{
+                display: inline-block;
+
+                h1{
+                  word-wrap: break-word;
+                  max-width: 250px;
+                  border-bottom: 1px solid #ffffff;
+                  font-size: 24px;
+                  text-shadow: 1px 1px 1px #fafafa;
+                  margin-bottom: 0;
+
+                  .img-container{
+                    display: inline-block;
+                    width: 45px;
+                    height: 28px;
+                    overflow: hidden;
+
+                    img{
+                      width: 37px;
+                    }
+                  }
+                }
+
+                .course-room {
+                  padding-left: 25px;
+                  float: left;
+                }
+              }
+            }
+
+            .left-block, .right-block{
+              display: table-cell;
+
+              .bottom{
+                border-top: 1px solid #c2c2c2;
+              }
+            }
+
+            .right-block{
+              text-align: center;
+
+              >DIV{
+                float: left;
+                min-width: 70px;
+
+                >DIV{
+                  height: 30px;
+
+                  h3{
+                    font-size: 18px;
+                    border-bottom: 1px solid white;
+                    height: 23px;
+                    padding-top: 10px;
+                    color: #959595;
+                    text-shadow: 1px 1px 1px #fafafa;
+                    font-weight: normal;
+                  }
+                }
+              }
+            }
+
+            #mistake{
+              position: absolute;
+              bottom: 2px;
+              right: 4px;
+              color: #a5a5a5;
+              text-shadow: 1px 1px 1px #fafafa;
+              font: normal 11px Arial;
+              text-decoration: underline;
+              cursor: pointer;
+            }
+          }
+
+          #settings-step1, #settings-step2{
+            text-align: center;
+            margin-top: 45px;
+
+            .blue-arrow{
+              font: bold 30px Jrhand;
+              letter-spacing: 0;
+              word-spacing: 0px;
+            }
+
+            #tell-button {
+              margin-top: 45px;
+            }
+
+            .percents-count {
+              display: inline-block;
+              margin-left: 10px;
+
+              &.error{
+                color: #a70e0e;
+              }
+            }
+          }
+
+          h1.title{
+            text-align: center;
+            font: bold 32px "Myriad Pro";
+            text-shadow: 1px 1px 1px white;
+            color: $color;
+            padding: 3px 0 5px 41px;
+          }
+
+          .info{
+            text-align: center;
+            font: normal 14px "Myriad Pro";
+            text-shadow: 1px 1px 1px white;
+            color: #909090;
+            margin: 0 0 45px 51px;
+          }
+
+          .hint-text{
+            font: normal 11px Arial;
+            color: #423a22;
+            padding: 5px 0 23px;
+            text-shadow: 1px 1px 0 #ffffff;
+          }
+
+          #confirm-button{
+            margin: 25px 1px;
+
+            BUTTON{
+              width: 140px;
+            }
+          }
+
+          #other-data{
+            .announcement-type-item {
+              margin-bottom: 0px;
+              display: inline-block;
+              vertical-align: top;
+
+              >DIV{
+                width: 189px;
+              }
+
+              .name{
+                font: bold 18px/30px Arial;
+              }
+
+              &:not(:last-child) {
+                margin-right: 3px;
+              }
+            }
+          }
+
+          .x-form-field{
+            input[type="password"]{
+              background: url(images/register/lock-icon.png) 184px 3px no-repeat, #fff;
+            }
+
+            .grey-button.small, .blue-button.small{
+              padding: 8px 20px 10px;
+            }
+
+            .blue-button{
+              margin-right: 30px !important;
+              cursor: pointer;
+            }
+
+            input[type="text"], input[type="password"]{
+              width: 190px;
+              height: 20px;
+              font: normal 16px 'Myriad Pro';
+              text-shadow: 1px 1px 1px white;
+              color: $color;
+              padding: 1px 3px 1px 7px;
+              border: 1px solid #c0c0c0;
+              text-align: center;
+              margin-bottom: 0;
+              @include border-radius(0);
+
+              &[name=displayname]{
+                text-align: left;
+                background: transparent;
+                border: none;
+                box-shadow: none;
+              }
+
+              &.salutation{
+                width: 30px;
+              }
+
+              &.first-name, &.last-name{
+                width: 115px;
+              }
+
+              &.salutation, &.first-name{
+                margin-right: 15px;
+              }
+
+              &.salutation-label{
+                border: 1px solid #b1b1b1;
+                @include background(linear-gradient(top, #ffffff, #dadada));
+                margin-top: 5px;
+                padding: 7px;
+                @include border-radius(5px);
+                margin-bottom: 39px;
+                width: 155px;
+                color: #000;
+              }
+            }
+
+            label{
+              width: 253px;
+              display: inline-block;
+              font: bold 17px "Myriad Pro";
+              text-shadow: 1px 1px 1px white;
+              text-align: right;
+              padding: 0;
+              color: #000;
+              margin-bottom: 23px;
+              margin-right: 15px;
+
+              &#example{
+                top: 153px;
+                left: 134px;
+                background: url(images/register/hint-arrow.png) 120px 3px no-repeat;
+                height: 50px;
+                padding-top: 19px;
+                position: absolute;
+                font: normal 13px 'Myriad Pro';
+                width: 300px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
