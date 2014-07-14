@@ -19,6 +19,14 @@ NAMESPACE('chlk.lib.ajax', function () {
                     })
             },
 
+            OVERRIDE, VOID, function transferComplete_(evt) {
+                if (this._xhr.status == 401)   {
+                    this._completer.completeError(chlk.lib.exception.NotAuthorizedException());
+                    return;
+                }
+                BASE(evt);
+            },
+
             OVERRIDE, VOID, function do_() {
                 try {
                     var formData = new FormData();
