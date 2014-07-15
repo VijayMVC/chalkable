@@ -5,8 +5,8 @@ selectedId = topData.getSelectedItemId()
     selectedItemId=selectedId
 ).classes-bar
 .student-grading-summary.student-grading-class-summary
-    -clazz=self.getClazz()
-    if clazz && self.getCurrentMarkingPeriod()
+    clazz = self.getClazz()
+    if clazz && self.getCurrentMarkingPeriod() && clazz.getTeacher()
         h1
             +ActionLink('user', 'infoByRole', clazz.getTeacher().getId(), chlk.models.common.RoleNamesEnum.TEACHER)
                 +PersonImg(clazz.getTeacher(), 47)
@@ -70,6 +70,6 @@ selectedId = topData.getSelectedItemId()
             paramsPrepend = [selectedId]
             )
                 each announcement in self.announcements
-                    +FeedItem(announcement)
+                    +FeedItem(announcement, true)
 
 
