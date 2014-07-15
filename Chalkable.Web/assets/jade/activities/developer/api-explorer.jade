@@ -83,8 +83,41 @@ apiInfo = self.getApiInfo()
     .api-description
         OAuth 2.0 is used for authentication. The authentication token you receive, after making your request, includes a user role.
         The user role defines the level of access.
-    div#api-search-field
+    h4.text-title Authentication
+    .api-description
+        div Code example for getting access token
 
+        pre.prettyprint.lang-ruby.auto-overflow
+            | require 'rest-client'
+            |     def get_access_token()
+            |       begin
+            |         @response = RestClient.post(
+            |             'https://chalkable-access-control.accesscontrol.windows.net/v2/OAuth2-13',
+            |             'client_id' => '{your app url}',
+            |             'client_secret' => '{your app client secret, can be found on app info page for developer}',
+            |             'scope' => 'https://chalkable.com/',
+            |             'redirect_uri' => '{your app url}',
+            |             'grant_type' => 'authorization_code',
+            |             'code' => '{added to your app url as param}'
+            |         )
+            |         return JSON.parse(@response)
+            |       rescue Exception => e
+            |           puts "============================="
+            |           puts e.message
+            |           puts "============================="
+            |           puts e.inspect
+            |           puts "============================="
+            |       end
+            | end
+    .api-description
+        div Sample parsed json response
+        pre.prettyprint.lang-ruby.auto-overflow
+            | {"token_type"=>"http://schemas.xmlsoap.org/ws/2009/11/swt-token-profile-1.0",
+            | "access_token"=>"http%3a%2f%2fschemas.xmlsoap.org%2fws%2f2005%2f05%2fidentity%2fclaims%2fnameidentifier=user1234%40chalkable.com%0d%0a12&http%3a%2f%2fschemas.microsoft.com%2faccesscontrolservice%2f2010%2f07%2fclaims%2fpermissions=https%3A%2F%2Fchalkable.com%2f&http%3a%2f%2fschemas.xmlsoap.org%2fws%2f2009%2f09%2fidentity%2fclaims%2factor=http%3a%2f%2f127.0.0.1%3a3000%2fhome%2findex&http%3a%2f%2fschemas.microsoft.com%2faccesscontrolservice%2f2010%2f07%2fclaims%2fidentityprovider=https%3a%2f%2fchalkable-access-control.accesscontrol.windows.net%2f&Audience=https%3A%2F%2Fchalkable.com%2f&ExpiresOn=1405440742&Issuer=https%3a%2f%2fchalkable-access-control.accesscontrol.windows.net%2f&HMACSHA256=UvGUSTZZ%2b4Zlw8Me9CC8bi62dc0ItNuPGfEK60dQyJM%3d",
+            | "expires_in"=>"12345",
+            | "refresh_token"=>"bLs4ldzKYm7hApxSpOEOSg==",
+            | "scope"=>"https://chalkable.com/"}
+    div#api-search-field
             +SearchBox(chlk.services.ApiService, "getList", chlk.templates.developer.ApiListTpl, apiInfo.getRole())#api-search-box(name="apiSearchbox",
             triggerBtnId="api-search-btn", categorized="true", groupingField="category", listCls="apiDropdownList")
             div.search-btn#api-search-btn

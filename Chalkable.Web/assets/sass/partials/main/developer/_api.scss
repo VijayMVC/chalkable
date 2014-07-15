@@ -7,7 +7,9 @@ BODY {
             #main {
               DIV.api-explorer{
 
-
+                .auto-overflow{
+                  overflow: auto;
+                }
 
                 .lr-toolbar{
                   .arrow{
