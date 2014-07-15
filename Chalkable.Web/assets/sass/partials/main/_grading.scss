@@ -1046,12 +1046,61 @@ BODY {
 .grade-book-report-dialog, .worksheet-report-dialog, .progress-report-dialog{
   width: 628px;
 
+  .report-content{
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .report-bottom{
+    position: relative;
+
+    .chzn-container{
+      position: absolute;
+      top: 14px;
+      left: 20px;
+    }
+  }
+
+  .chzn-container-multi{
+    .chzn-choices{
+      max-height: 150px;
+      overflow-y: auto;
+    }
+  }
+
+  .section-comment{
+    width: 150px;
+    height: 43px;
+  }
+
+  #select-all{
+    margin: 20px 15px 0 0;
+  }
+
+  #select-all, LABEL[for="select-all"]{
+    vertical-align: bottom;
+  }
+
   .students-block{
+    margin-top: 12px;
+
     .chk{
       display: inline-block;
+
+      .checkbox student-chk{
+        margin-left: 7px;
+      }
+    }
+
+    .image-container{
+      margin: 0 15px;
     }
 
     .student-item{
+      border-top: 1px solid #ddd;
+      box-shadow: 0 1px 0 #fff inset;
+      padding: 13px 0;
+
       >DIV, >P, >A{
         display: inline-block;
         vertical-align: middle;
