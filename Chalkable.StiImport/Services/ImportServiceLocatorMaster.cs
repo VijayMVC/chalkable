@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Transactions;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
@@ -30,42 +31,37 @@ namespace Chalkable.StiImport.Services
         }
     }
 
-    public class ImportDbService : IDbService
+    public class ImportDbService : DbService, IDisposable
     {
-        private ImportUnitOfWork uow;
-        
-        public ImportDbService(string connectionString)
+        private TransactionScope scope;
+        public ImportDbService(string connectionString) : base(connectionString)
         {
-            uow = new ImportUnitOfWork(connectionString);
-        }
-
-        public UnitOfWork GetUowForRead()
-        {
-            return uow;
-        }
-
-        public UnitOfWork GetUowForUpdate()
-        {
-            return uow;
+            
         }
 
         public void CommitAll()
         {
-            uow.CommitAll();
+            scope.Complete();
         }
 
         public void BeginTransaction()
         {
-            uow.BeginTransaction();
+            scope = new TransactionScope(TransactionScopeOption.RequiresNew);
         }
 
         public void Rollback()
         {
-            uow.Rollback();
+            scope.Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (scope != null)
+                scope.Dispose();
         }
     }
     
-    public class ImportUnitOfWork : UnitOfWork
+    /*public class ImportUnitOfWork : UnitOfWork
     {
         public ImportUnitOfWork(string connectionString) : base(connectionString, false)
         {
@@ -93,5 +89,5 @@ namespace Chalkable.StiImport.Services
         {
             //DO nothing
         }
-    }
+    }*/
 }
