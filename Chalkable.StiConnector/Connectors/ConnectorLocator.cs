@@ -5,6 +5,7 @@ using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web;
+using Chalkable.Common.Exceptions;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -99,7 +100,7 @@ namespace Chalkable.StiConnector.Connectors
                     HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
                     throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
                 }
-                throw new Exception(ex.Message + Environment.NewLine + msg);
+                throw new ChalkableException(ex.Message + Environment.NewLine + msg);
             }
             finally
             {

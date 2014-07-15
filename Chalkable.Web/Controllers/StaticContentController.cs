@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult GetPictureRootUrl()
         {
-            if (Context.DistrictId == null)
+            if (Context == null || Context.DistrictId == null)
                 throw new ChalkableException("User is not authorized");
             return Json(new {url = PictureService.GetPicturesRelativeAddress() + Context.DistrictId});
         }

@@ -45,26 +45,34 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void TransactionScopeTest()
         {
-            using (TransactionScope scope = new TransactionScope())
+            var cs1 = @"Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
+            var cs2 = @"Data Source=me0buyg8np.database.windows.net;Initial Catalog=2014-06-09-chalkable-old;UID=chalkableadmin;Pwd=Hellowebapps1!";
+
+            TransactionScope scope1 = new TransactionScope(TransactionScopeOption.RequiresNew);
+
+            using (SqlConnection connection1 = new SqlConnection(cs1))
             {
-                var cs = @"Data Source=.\sqlexpress;Initial Catalog=xxx;UID=sa;Pwd=mc_z631";
-                using (SqlConnection connection1 = new SqlConnection(cs))
-                {
-                    connection1.Open();
-
-                    SqlCommand command1 = new SqlCommand("insert into test (id) values (1)", connection1);
-                    command1.ExecuteNonQuery();
-                }
-                using (SqlConnection connection1 = new SqlConnection(cs))
-                {
-                    connection1.Open();
-
-                    SqlCommand command1 = new SqlCommand("insert into test (id) values (2)", connection1);
-                    command1.ExecuteNonQuery();
-                }
-
-                scope.Complete();
+                connection1.Open();
+                var t = connection1.BeginTransaction();
+                SqlCommand command = new SqlCommand("insert into test (id) values (1)", connection1);
+                command.ExecuteNonQuery();
+                t.Commit();
             }
+            
+            TransactionScope scope2 = new TransactionScope(TransactionScopeOption.RequiresNew);
+            using (SqlConnection connection2 = new SqlConnection(cs2))
+            {
+                connection2.Open();
+                var t = connection2.BeginTransaction();
+                SqlCommand command = new SqlCommand("insert into test (id) values (1)", connection2);
+                command.ExecuteNonQuery();
+                t.Commit();
+            }
+            scope2.Complete();
+            scope2.Dispose();
+
+            scope1.Complete();
+            scope1.Dispose();
         }
 
 

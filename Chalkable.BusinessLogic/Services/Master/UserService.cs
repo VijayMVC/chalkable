@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
@@ -193,7 +194,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (user == null) return null;
             if (user.IsSchoolUser && user.DistrictRef.HasValue)
             {
-                user = SaveSisToken(user, uow, ref iNowConnector);
+                try
+                {
+                    user = SaveSisToken(user, uow, ref iNowConnector);
+                }
+                catch (HttpException)
+                {
+                    return null;
+                }
+
                 var schoolL = ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
                 Data.School.Model.SchoolYear schoolYear;
                 SchoolUser schoolUser;

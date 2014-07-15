@@ -293,17 +293,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 StudentId = x.Id
             }).ToList();
 
-            var discipline = Storage.StiDisciplineStorage.GetAll().Where(x => x.SectionId == classId).ToList();
 
+            var disciplines = chlkGradeBook.Students.Select(student => new FinalStudentDiscipline()
+            {
+                StudentId = student.Id,
+                Infraction = new Chalkable.Data.School.Model.Infraction()
+            }).ToList();
             return new FinalGradeInfo()
             {
                 Attendances = attendances,
                 Averages = chlkGradeBook.Students.Select(x => new ChalkableAverage()).ToList(),
-                Disciplines = chlkGradeBook.Students.Select(student => new FinalStudentDiscipline()
-                {
-                    StudentId = student.Id,
-                    Infraction = new Chalkable.Data.School.Model.Infraction()
-                }).ToList(),
+                Disciplines = disciplines,
                 GradeBook = chlkGradeBook
             };
         }

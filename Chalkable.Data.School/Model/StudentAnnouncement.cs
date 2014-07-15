@@ -35,7 +35,7 @@ namespace Chalkable.Data.School.Model
 
         public bool IsUnexcusedAbsent
         {
-            get { return Absent && string.IsNullOrEmpty(AbsenceCategory) && AbsenceCategory.ToLower() == "u"; }
+            get { return Absent && !string.IsNullOrEmpty(AbsenceCategory) && AbsenceCategory.ToLower() == "u"; }
         }
         
         //TODO : remove this later

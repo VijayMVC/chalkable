@@ -86,10 +86,10 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
             .title=self.appName
             +AppStatus_(self.appState, self.draftAppId, self.liveAppId)
 
-    .app-installs
+    //.app-installs
         +AppInstallsChart_(self.getAppAnalytics().getAppInstallStats(), "App Installs", 'appInstalls').app-installs
 
-    .app-store-balance
+    //.app-store-balance
         .app-store-views
             +AppViewsChart_(self.getAppAnalytics().getAppViewStats(), "App Store Views", "appViews").app-views
         .app-store-current-balance

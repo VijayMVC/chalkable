@@ -36,8 +36,10 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
 
             function getSortedDisciplines(){
-                var res = [], d = [], len = this.getDisciplines().length;
-                this.getDisciplines().forEach(function(item, i){
+                var disciplines = this.getDisciplines() || [];
+                var res = [], d = [], len = disciplines.length;
+
+                disciplines.forEach(function(item, i){
                     d.push(item);
                     if(i % 3 == 2 || i == len - 1){
                         res.push(d);
