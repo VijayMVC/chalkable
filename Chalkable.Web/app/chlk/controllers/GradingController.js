@@ -404,6 +404,8 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
+                if (this.isDemoSchool())
+                    return this.ShowMsgBox('Not available for demo', 'Error');
                 var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate));
                 return this.ShadeView(chlk.activities.grading.GradeBookReportDialog, res);
             },
@@ -434,6 +436,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.grading.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(model){
+
                 var src = this.reportingService.submitGradeBookReport(model.getClassId(), model.getGradingPeriodId(), model.getStartDate(),
                     model.getEndDate(), model.getReportType(), model.getOrderBy(), model.getIdToPrint(), model.getFormat(),
                     model.isDisplayLetterGrade(), model.isDisplayTotalPoints(), model.isDisplayStudentAverage(),
