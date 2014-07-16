@@ -130,6 +130,10 @@ NAMESPACE('chlk.controllers', function (){
            },
 
 
+           Boolean, function isDemoSchool(){
+               return this.getContext().getSession().get(ChlkSessionConstants.DEMO_SCHOOL, false);
+           },
+
            [[Number]],
            VOID, function setNewNotificationCount_(value){
                this.getContext().getSession().set(ChlkSessionConstants.NEW_NOTIFICATIONS, value);
