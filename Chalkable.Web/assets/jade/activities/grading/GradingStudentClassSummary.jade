@@ -1,0 +1,75 @@
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedId = topData.getSelectedItemId()
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
+    selectedItemId=selectedId
+).classes-bar
+.student-grading-summary.student-grading-class-summary
+    clazz = self.getClazz()
+    if clazz && self.getCurrentMarkingPeriod() && clazz.getTeacher()
+        h1
+            +ActionLink('user', 'infoByRole', clazz.getTeacher().getId(), chlk.models.common.RoleNamesEnum.TEACHER)
+                +PersonImg(clazz.getTeacher(), 47)
+            =clazz.getName()
+            .mp-info
+                -mp=self.getCurrentMarkingPeriod()
+                =Msg.Marking_Period_shortcut.toUpperCase() + ' ' + mp.getName() + mp.getStartDate().format(' M d - ') + mp.getEndDate().format('M d')
+    if self.getAnnTypesGradeStats()
+        .chart-top-legend
+            each item,i in self.getAnnTypesGradeStats()
+                div(data-color=self.getColor(i), data-opacity-color=self.getColor(i, 0.2), data-index=i).legend-item
+                    div(style="background:" + self.getColor(i) + ";").box
+                    .name=item.getTypeName()
+            .legend-item.hovered.avg
+                .box
+                .name
+                    |#{Msg.Avg} (#{self.getAvg()})
+
+    if self.getGradingPeriodBoxes()
+        .mps-container
+            each gradingPeriod,i in self.getGradingPeriodBoxes().getGradingPeriods()
+                div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
+                    item = self.getCurrentGradingBox()
+                    div(
+                        data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
+                    ).mp-title
+                        mpName = gradingPeriod.getName()
+                        span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                        .grading-selects
+                            +ActionForm('grading', 'loadGradingPeriodSummary').load-grading-period
+                                +Hidden('classId', selectedId)
+                                +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                        //a(href="javascript:").grey-button.comment-button=Msg.Comment
+                        .collapse
+                    div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                        if gradingPeriod.getId() == self.getGradingPeriodId()
+                            +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)
+
+    if self.getChartOptions()
+        .grading-chart-part.relative
+            .chart-bg2
+            .chart-container-1
+                +Chart()(
+                    data-options = self.getChartOptions()
+                ).relative.main-chart
+    if self.getSummaryPart() && self.getSummaryPart().getItems()
+        +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)(
+            gradingPeriodId = self.getGradingPeriodId()
+        )
+    if self.announcements
+        h1=Msg.Recently_Graded_Items
+
+        .not-transparent
+            +ListView(self.announcements)(
+            infiniteScroll = true,
+            needGoToButton = true,
+            service = chlk.services.GradingService,
+            method = "getRecentlyGradedItems",
+            tpl = chlk.templates.announcement.FeedItemTpl,
+            pageSize = 10,
+            paramsPrepend = [selectedId]
+            )
+                each announcement in self.announcements
+                    +FeedItem(announcement, true)
+
+
