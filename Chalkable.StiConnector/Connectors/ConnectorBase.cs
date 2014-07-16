@@ -5,10 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Web;
+using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Exceptions;
+using Chalkable.StiConnector.Mapping;
 using Newtonsoft.Json;
 using System.Configuration;
 
@@ -32,9 +36,11 @@ namespace Chalkable.StiConnector.Connectors
         private const string ERROR_FORMAT = "Error calling : '{0}' ;\n ErrorMessage : {1}";
         private const string REQUEST_TIME_MSG_FORMAT = "Request on : '{0}' \n Time : {1}";
         protected ConnectorLocator locator;
+        private ErrorMapper errorMapper;
         public ConnectorBase(ConnectorLocator locator)
         {
             this.locator = locator;
+            this.errorMapper = new ErrorMapper();
         }
 
         protected WebClient InitWebClient()
@@ -70,28 +76,12 @@ namespace Chalkable.StiConnector.Connectors
 
                 Debug.WriteLine(Encoding.UTF8.GetString(data));
                 stream = new MemoryStream(data);
+                return JsonConvert.DeserializeObject<T>((new StreamReader(stream)).ReadToEnd());
 
-                var serializer = new JsonSerializer();
-                var reader = new StreamReader(stream);
-                var jsonReader = new JsonTextReader(reader);
-                return serializer.Deserialize<T>(jsonReader);
             }
             catch (WebException ex)
             {
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                var msg = reader.ReadToEnd();
-                Trace.TraceError(string.Format(ERROR_FORMAT, url, msg));
-                if (ex.Response is HttpWebResponse)
-                {
-                    if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
-                        return default(T);
-                    else
-                    {
-                        HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
-                        throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
-                    }
-                }
-                throw new Exception(msg);
+                return HandleInowException<T>(ex);
             }
             finally
             {
@@ -113,8 +103,9 @@ namespace Chalkable.StiConnector.Connectors
                 var serializer = new JsonSerializer();
                 var writer = new StreamWriter(stream);
                 serializer.Serialize(writer, obj);
+                
                 writer.Flush();
-
+                
                 var startTime = DateTime.Now;
                 var res = client.UploadData(url, httpMethod.Method, stream.ToArray());
                 var time = DateTime.Now - startTime; 
@@ -125,13 +116,7 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
-                if (ex.Response is HttpWebResponse &&
-                    (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
-                    return null;
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                var msg = reader.ReadToEnd();
-                Trace.TraceError(ERROR_FORMAT, url, msg);
-                throw new Exception(msg);
+                return HandleInowException<byte[]>(ex);
             }
             finally
             {
@@ -146,9 +131,7 @@ namespace Chalkable.StiConnector.Connectors
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
             try
             {
-
                 client.QueryString = optionalParams ?? new NameValueCollection();
-                
                 var startTime = DateTime.Now;
                 var res = client.DownloadData(url);
                 var time = DateTime.Now - startTime;
@@ -161,14 +144,44 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                if (ex.Response is HttpWebResponse &&
-                    (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
-                    return null;
-                var msg = reader.ReadToEnd();
-                Trace.TraceError(string.Format(ERROR_FORMAT, url, msg));
-                throw new Exception(msg);
+                return HandleInowException<byte[]>(ex);
             }
+        }
+
+        private T HandleInowException<T>(WebException ex)
+        {
+            var reader = new StreamReader(ex.Response.GetResponseStream());
+            var msg = reader.ReadToEnd();
+            Trace.TraceError(string.Format(ERROR_FORMAT, ex.Response.ResponseUri, msg));
+            if (ex.Response is HttpWebResponse)
+            {
+                if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                    return default(T);
+                else
+                {
+                    HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+                    if (status == HttpStatusCode.BadRequest)
+                    {
+                        var inowErrorModel = JsonConvert.DeserializeObject<InowErrorMessageModel>(msg);
+                        if (inowErrorModel.ModelStates != null && inowErrorModel.ModelStates.Count > 0)
+                        {
+                            var chlkMessages = new List<string>();
+                            foreach (var modelState in inowErrorModel.ModelStates)
+                            {
+                                if(string.IsNullOrEmpty(modelState)) continue;
+                                var chlkMessage = errorMapper.Map(modelState);
+                                if(string.IsNullOrEmpty(chlkMessage)) continue;
+                                chlkMessages.Add(chlkMessage);
+                            }
+                            throw new ChalkableSisException(chlkMessages);
+                        }
+                        throw new ChalkableSisException(msg);
+                        
+                    }
+                    throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
+                }
+            }
+            throw new ChalkableException(msg);
         }
 
         public TReturn Post<TReturn, TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
@@ -196,7 +209,7 @@ namespace Chalkable.StiConnector.Connectors
             var headers = InitHeaders();
             var fileType = MimeHelper.GetContentTypeByName(fileName);
             return ChalkableHttpFileLoader.HttpUploadFile(url, fileName, fileContent, fileType
-                , ThrowWebException, Derialize<T>, parameters, headers, method ?? HttpMethod.Post);
+                , ThrowWebException, JsonConvert.DeserializeObject<T>, parameters, headers, method ?? HttpMethod.Post);
         }
 
         public void Delete(string url) 
@@ -218,13 +231,8 @@ namespace Chalkable.StiConnector.Connectors
         {
             var reader = new StreamReader(exception.Response.GetResponseStream());
             var msg = reader.ReadToEnd();
-            throw new Exception(msg);
+            throw new ChalkableException(msg);
         }
-        private static T Derialize<T>(string response)
-        {
-            return (new JsonSerializer()).Deserialize<T>(new JsonTextReader(new StringReader(response)));
-        }
-
         private IDictionary<string, string> InitHeaders()
         {
             return new Dictionary<string, string>
@@ -240,23 +248,21 @@ namespace Chalkable.StiConnector.Connectors
         }
     }
 
-    public class UsersConnector: ConnectorBase
-    {
-        public UsersConnector(ConnectorLocator locator) : base(locator)
-        {
-        }
-        public User GetMe()
-        {
-            var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users"); 
-            return Call<User>(url); 
-        }
 
-        public byte[] GetPhoto(int personId)
+    public class InowErrorMessageModel
+    {
+        public class InowErrorModelState
         {
-            var url = string.Format("{0}persons/{1}/photo", BaseUrl, personId);
-            return Download(url);
+            [JsonProperty(PropertyName = "")]
+            public IList<string> States { get; set; } 
+        }
+        [JsonProperty(PropertyName = "Message")]
+        public string ErrorMessage { get; set; }
+        public InowErrorModelState ModelState { get; set; }
+
+        public IList<string> ModelStates
+        {
+            get { return ModelState != null ? ModelState.States : new List<string>(); }
         }
     }
-
-
 }
