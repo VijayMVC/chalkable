@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -13,6 +12,9 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetGradebookReport(GradebookReportInputModel gradebookReportInput);
         byte[] GetWorksheetReport(WorksheetReportInputModel worksheetReportInput);
         byte[] GetProgressReport(ProgressReportInputModel progressReportInput);
+
+        IList<StudentCommentInfo> GetProgressReportComments(int classId, int? gradingPeriodId);
+        void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -117,6 +119,46 @@ namespace Chalkable.BusinessLogic.Services.School
                     StudentIds = inputModel.StudentIds.ToArray()
                 };
             return ConnectorLocator.ReportConnector.ProgressReport(stiModel);
+        }
+
+
+        public IList<StudentCommentInfo> GetProgressReportComments(int classId, int? gradingPeriodId)
+        {
+            var inowReportComments = ConnectorLocator.ReportConnector.GetProgressReportComments(classId, gradingPeriodId);
+            int? markingPeriodId = null;
+            if (gradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
+                markingPeriodId = gp.MarkingPeriodRef;
+            }
+            var students = ServiceLocator.ClassService.GetStudents(classId, null, markingPeriodId);
+            var res = new List<StudentCommentInfo>();
+            foreach (var inowStudentComment in inowReportComments)
+            {
+                var student = students.FirstOrDefault(x => x.Id == inowStudentComment.StudentId);
+                if(student == null) continue;
+                res.Add(new StudentCommentInfo
+                    {
+                        Student = student,
+                        Comment = inowStudentComment.Comment
+                    });
+            }
+            return res;
+        }
+
+        public void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment)
+        {
+            var inowStudentReportComments = new List<StudentProgressReportComment>
+                {
+                    new StudentProgressReportComment
+                        {
+                            Comment = comment,
+                            GradingPeriodId = gradingPeriodId,
+                            SectionId = classId,
+                            StudentId = studentId
+                        }
+                };
+            ConnectorLocator.ReportConnector.UpdateProgressReportComment(classId, inowStudentReportComments);
         }
     }
 
