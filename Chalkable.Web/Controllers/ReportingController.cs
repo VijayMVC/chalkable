@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers
 {
@@ -37,6 +38,13 @@ namespace Chalkable.Web.Controllers
             var extension = reportInputModel.FormatTyped.AsFileExtension();
             var fileName = string.Format("{0}.{1}", reportFileName, extension);
             return File(res, MimeHelper.GetContentTypeByExtension(extension), fileName);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult GetStudentProgressReportComments(int classId, int gradingPeriodId)
+        {
+            var studentComments = SchoolLocator.ReportService.GetProgressReportComments(classId, gradingPeriodId);
+            return Json(StudentCommentViewData.Create(studentComments));
         }
     }
 }
