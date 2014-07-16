@@ -92,6 +92,20 @@ namespace Chalkable.BusinessLogic.Services.School
         public byte[] GetProgressReport(ProgressReportInputModel inputModel)
         {
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            int[] studentIds = new int[0];
+            if (inputModel.StudentComments != null && inputModel.StudentComments.Count > 0)
+            {
+                var inowStudentProgressReportComments =
+                    inputModel.StudentComments.Select(x => new StudentProgressReportComment
+                        {
+                            Comment = x.Comment,
+                            StudentId = x.StudentId,
+                            GradingPeriodId = inputModel.GradingPeriodId,
+                            SectionId = inputModel.ClassId
+                        }).ToList();
+                ConnectorLocator.ReportConnector.UpdateProgressReportComment(inputModel.ClassId, inowStudentProgressReportComments);
+                studentIds = inputModel.StudentComments.Select(x => x.StudentId).ToArray();
+            }
             var stiModel = new ProgressReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
@@ -116,7 +130,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     MaxStandardAverage = inputModel.MaxStandardAverage,
                     MinStandardAverage = inputModel.MinStandardAverage,
                     SectionComment = inputModel.ClassComment,
-                    StudentIds = inputModel.StudentIds.ToArray()
+                    StudentIds = studentIds
                 };
             return ConnectorLocator.ReportConnector.ProgressReport(stiModel);
         }
@@ -234,7 +248,13 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool PrintFromHomePortal { get; set; }
 
         public string ClassComment { get; set; }
-        public IntList StudentIds { get; set; }
+        public IList<StudentCommentInputModel> StudentComments { get; set; }
+    }
+
+    public class StudentCommentInputModel
+    {
+        public int StudentId { get; set; }
+        public string Comment { get; set; }
     }
 
     public enum ReportingFormat

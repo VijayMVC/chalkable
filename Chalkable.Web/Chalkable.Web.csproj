@@ -313,6 +313,7 @@
     <Compile Include="Models\PersonViewDatas\PersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ShortPersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentCommentViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentGradingViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentHealthConditionViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentInfoViewData.cs" />
