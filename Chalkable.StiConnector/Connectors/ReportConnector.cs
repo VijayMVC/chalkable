@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -19,6 +21,21 @@ namespace Chalkable.StiConnector.Connectors
             var url = string.Format(BaseUrl + "reports/progress");
             var res = Download(url, ps);
             return res;
+        }
+
+        public IList<StudentProgressReportComment> GetProgressReportComments(int sectionId, int? gradingPeriodId = null)
+        {
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/progressreportcomments", sectionId);
+            var nvc = new NameValueCollection();
+            if(gradingPeriodId.HasValue)
+                nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
+            return Call<IList<StudentProgressReportComment>>(url, nvc);
+        }
+
+        public void UpdateProgressReportComment(int sectionId, IList<StudentProgressReportComment> comments)
+        {
+            var url = string.Format(BaseUrl + "chalkable/sections/{0}/progressreportcomments", sectionId);
+            Put(url, comments);
         }
 
         public byte[] GradebookReport(GradebookReportParams ps)
