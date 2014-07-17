@@ -170,8 +170,7 @@ namespace Chalkable.StiConnector.Connectors
                             {
                                 if(string.IsNullOrEmpty(modelState)) continue;
                                 var chlkMessage = errorMapper.Map(modelState);
-                                if(string.IsNullOrEmpty(chlkMessage)) continue;
-                                chlkMessages.Add(chlkMessage);
+                                chlkMessages.Add(chlkMessage ?? modelState);
                             }
                             throw new ChalkableSisException(chlkMessages);
                         }

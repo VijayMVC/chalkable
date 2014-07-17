@@ -8,6 +8,7 @@ namespace Chalkable.Common.Exceptions
         public string StackTrace { get; set; }
         public string InnerMessage { get; set; }
         public string InnerStackTrace { get; set; }
+        public string ExceptionType { get; set; }
 
         public static ExceptionViewData Create(Exception outer, Exception inner)
         {
@@ -19,6 +20,7 @@ namespace Chalkable.Common.Exceptions
             }
             exceptionViewData.Message = outer.Message;
             exceptionViewData.StackTrace = outer.StackTrace;
+            exceptionViewData.ExceptionType = outer.GetType().Name;
             return exceptionViewData;
         }
     }
