@@ -16,19 +16,18 @@ NAMESPACE('chlk.controls', function () {
 
             [ria.mvc.DomEventBind('click', '.logout-area')],
             [[ria.dom.Dom, ria.dom.Event]],
-
-        function onClicked($target, node) {
-            var elem = $target.parent().find('a');
-            if(!this.isLogoutShown()){
-                elem.setCss("visibility", "visible")
-                    .setCss("opacity", 1);
-            }else{
-                elem.setCss("opacity", 0);
-                setTimeout(function(){
-                    elem.setCss("visibility", "hidden");
-                }, 200);
+            function onClicked($target, node) {
+                var elem = $target.parent().find('.logout');
+                if(!this.isLogoutShown()){
+                    elem.setCss("visibility", "visible")
+                        .setCss("opacity", 1);
+                }else{
+                    elem.setCss("opacity", 0);
+                    setTimeout(function(){
+                        elem.setCss("visibility", "hidden");
+                    }, 200);
+                }
+                this.setLogoutShown(!this.isLogoutShown());
             }
-            this.setLogoutShown(!this.isLogoutShown());
-        }
     ])
 });
