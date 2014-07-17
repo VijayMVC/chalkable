@@ -22,8 +22,18 @@ NAMESPACE('chlk.models.apps', function () {
                 if (!app.getBanInfo()) {
                     app.setBanInfo(new chlk.models.apps.BannedAppData());
                 }
+
+                var webSiteLink = app.getDeveloperInfo().getWebSite() || "";
+
+                if (webSiteLink.indexOf("http") == -1){
+                    webSiteLink = "http://" + webSiteLink;
+                    app.getDeveloperInfo().setWebSite(webSiteLink);
+                }
+
                 this.setInstalled(isInstalled);
                 this.setInstallBtnTitle(installBtnTitle);
+
+
             }
         ]);
 
