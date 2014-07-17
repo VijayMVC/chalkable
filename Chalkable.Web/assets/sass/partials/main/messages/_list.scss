@@ -3,6 +3,11 @@ BODY {
     >DIV#content {
       DIV#content-wrapper{
         &.messages{
+
+          .grid .scroller{
+            overflow: visible;
+          }
+
           #search-message-btn{
             display: inline-block;
 
@@ -203,7 +208,7 @@ BODY {
                               background: url(images/private-messages/clock.png) 0 2px no-repeat;
                               padding-left: 15px;
                               position: absolute;
-                              bottom: 7px;
+                              top: 61px;
                               right: 7px;
                               font-size: 11px;
                             }

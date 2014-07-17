@@ -3,28 +3,24 @@ REQUIRE('ria.serialize.IDeserializable');
 window.currentDate = new Date();
 
 function getDate(str,a,b){
-    if(typeof str == "string" && str.length == 10 ){
-        return new Date(str.replace(/-/g, '/'));
+    if(str){
+        str = str.replace ? str.replace(/(-|\.)/g, '/') : str;
+        return ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str));
     }
-    else{
-        if(str)
-            return ( a !== undefined && b !== undefined ? new Date(str,a,b) : new Date(str));
-        var serverTime = new Date(window.serverTime.replace(/(-|\.)/g, "/"));
-        var now = new Date();
-        if(serverTime.getDate() == now.getDate() && serverTime.getMonth() == now.getMonth() && serverTime.getFullYear() == now.getFullYear())
-            return new Date();
-        var dt = new Date(serverTime.getTime() + now.getTime() - window.currentDate.getTime());
-        dt.setSeconds(now.getSeconds());
-        dt.setMinutes(now.getMinutes());
-        dt.setHours(now.getHours());
-        return dt;
-    }
+    var serverTime = new Date(window.serverTime.replace(/(-|\.)/g, "/"));
+    var now = new Date();
+    if(serverTime.getDate() == now.getDate() && serverTime.getMonth() == now.getMonth() && serverTime.getFullYear() == now.getFullYear())
+        return new Date();
+    var dt = new Date(serverTime.getTime() + now.getTime() - window.currentDate.getTime());
+    dt.setSeconds(now.getSeconds());
+    dt.setMinutes(now.getMinutes());
+    dt.setHours(now.getHours());
+    return dt;
 }
 
 function formatDate(date, format){
     return $.datepicker.formatDate(format, date || getDate());
 }
-
 
 function getDateDiffInDays(begin, end){
     var b = new Date(begin.getFullYear(), begin.getMonth(), begin.getDate());
@@ -94,11 +90,11 @@ NAMESPACE('chlk.models.common', function () {
                 var y = thisDate.getFullYear();
                 var date = new chlk.models.common.ChlkDate(), res;
                 switch (type){
-                    case dateEnum.YEAR: res = new Date(y + count, mon, day, h, min, sec); break;
-                    case dateEnum.MONTH: res = new Date(y, mon + count, day, h, min, sec); break;
+                    case dateEnum.YEAR: res = getDate(y + count, mon, day, h, min, sec); break;
+                    case dateEnum.MONTH: res = getDate(y, mon + count, day, h, min, sec); break;
                     default: res = thisDate.getTime() + count * chlk.models.common.MillisecondsEnum[type.valueOf()].valueOf();
                 }
-                date.setDate(new Date(res));
+                date.setDate(getDate(res));
                 return date;
             },
 
@@ -140,7 +136,7 @@ NAMESPACE('chlk.models.common', function () {
             Number, function getDaysInMonth(month_, year_) {
                 var month = this.getDate().getMonth() || month_;
                 var year = this.getDate().getFullYear() || year_;
-                return new Date(year, month + 1, 0).getDate();
+                return getDate(year, month + 1, 0).getDate();
             },
 
             [[SELF, SELF]],
@@ -159,7 +155,7 @@ NAMESPACE('chlk.models.common', function () {
                 var date = date_ || this.getDate();
                 var y = date.getFullYear();
                 var m = date.getMonth();
-                var lastDay = new Date(y, m + 1, 0);
+                var lastDay = getDate(y, m + 1, 0);
                 return new chlk.models.common.ChlkDate(lastDay);
             }
 

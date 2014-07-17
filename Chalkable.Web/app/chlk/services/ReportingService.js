@@ -10,7 +10,7 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'ReportingService', EXTENDS(chlk.services.BaseService), [
 
-            Number, 'reportType',
+        Number, 'reportType',
 
         Number, 'orderBy',
 
@@ -80,11 +80,11 @@ NAMESPACE('chlk.services', function () {
 
         [[chlk.models.id.ClassId, Number, Number, chlk.models.id.GradingPeriodId, String, Boolean, Number,
             Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean,
-            Number, Number, Number, Number, Boolean, String, String]],
+            Number, Number, Number, Number, Boolean, String, String, String]],
         String, function submitProgressReport(classId, idToPrint, format, gradingPeriodId, absenceReasonIds, additionalMailings_, dailyAttendanceDisplayMethod,
                 displayCategoryAverages_, displayClassAverages_, displayLetterGrade_, displayPeriodAttendance_, displaySignatureLine_, displayStudentComments_,
                 displayStudentMailingAddress_, displayTotalPoints_, goGreen_, maxCategoryClassAverage_, maxStandardAverage_, minCategoryClassAverage_,
-                minStandardAverage_, printFromHomePortal_, classComment, studentIds) {
+                minStandardAverage_, printFromHomePortal_, classComment, studentIds, commentsList) {
             return this.getUrl('Reporting/ProgressReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
@@ -108,7 +108,8 @@ NAMESPACE('chlk.services', function () {
                 minStandardAverage: minStandardAverage_,
                 printFromHomePortal: printFromHomePortal_,
                 classComment: classComment,
-                studentIds: studentIds
+                studentIds: studentIds,
+                comments: commentsList
             });
         },
 

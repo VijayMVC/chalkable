@@ -1094,6 +1094,8 @@ BODY {
 
     .image-container{
       margin: 0 15px;
+      border-radius: 100px;
+      overflow: hidden;
     }
 
     .student-item{
@@ -1104,6 +1106,12 @@ BODY {
       >DIV, >P, >A{
         display: inline-block;
         vertical-align: middle;
+      }
+
+      .student-comment{
+        float: right;
+        width: 170px;
+        margin: 12px 10px;
       }
     }
   }

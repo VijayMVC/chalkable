@@ -15,9 +15,15 @@ NAMESPACE('chlk.models.grading', function () {
 
         chlk.models.common.ChlkDate, 'endDate',
 
+        Number, 'notSelectedCount',
+
         Number, 'idToPrint',
 
         Number, 'format',
+
+        String, 'commentsList',
+
+        String, 'studentComments',
 
         String, 'absenceReasonIds',
 

@@ -6,10 +6,12 @@
         +ActionLink('grading', 'gradeBookReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Grade_Book_Report
         +ActionLink('grading', 'worksheetReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Worksheet_Report
         a(href="javascript:").report-button.pressed=Msg.Progress_Report
-    +ActionForm('grading', 'submitProgressReport').progress-report-form
+    +ActionForm('grading', 'submitProgressReport').progress-report-form.no-working
         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
         +Hidden('classId', self.getClassId().valueOf())
+        +Hidden('commentsList', '')#coments-list
         +Hidden('studentIds', '')#student-ids-value
+        +Hidden('notSelectedCount', 0)#not-selected-count
         +Hidden('absenceReasonIds', '')#absence-reasons
         +Hidden('dailyAttendanceDisplayMethod', 0)#daily-attendance-display-method
         .report-content
@@ -80,6 +82,7 @@
                                     +ActionLink('user', 'infoByRole', student.getId(), student.getRole().getName()).image-container.white.shadow
                                         +PersonImg(student, 47)
                                     p=student.getDisplayName()
+                                    INPUT(placeholder="This is a comment").student-comment
         .report-bottom
             +Select('format').format
                 +Option(0, "PDF", true)

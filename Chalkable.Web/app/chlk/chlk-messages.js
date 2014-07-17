@@ -212,6 +212,7 @@ var Msg = {
     Tomorrow: 'Tomorrow',
     Total: 'Total',
     Type: oneOrMany('Type'),
+    Yes: 'Yes',
     Yesterday: 'Yesterday',
     You_Vs_Your_Class: 'You Vs Your Class',
     Your_login_info: 'Your login info',
@@ -668,6 +669,9 @@ var Msg = {
     },
     You_set_a_0_value: function(name){
         return String.format('You set a 0% value for {0} in Settings> Grades.', name.toLowerCase())
+    },
+    Progress_report_msg : function(count){
+        return String.format('Looks like you entered a comment for {0} student(s) but did not select them. Do you want to continue?', count)
     },
     Installed: 'Installed'
 };

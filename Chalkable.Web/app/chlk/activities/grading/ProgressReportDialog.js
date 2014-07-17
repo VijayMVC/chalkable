@@ -39,12 +39,28 @@ NAMESPACE('chlk.activities.grading', function(){
             [ria.mvc.DomEventBind('submit', '.progress-report-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
-                var studentIdsNode = node.find('#student-ids-value'), valuesArray = [];
-                node.find('.student-chk:checked').forEach(function(item){
-                    valuesArray.push(item.getData('id'));
+                var studentIdsNode = node.find('#student-ids-value'),
+                    commentsNode = node.find('#coments-list'),
+                    notSelectedNode = node.find('#not-selected-count'),
+                    valuesArray = [], commentsArray = [], comment, notSelectedCount = 0;
+                node.find('.student-chk').forEach(function(item){
+                    comment = item.parent('.student-item').find('.student-comment').getValue();
+                    if(item.is(':checked')){
+                        valuesArray.push(item.getData('id'));
+                        commentsArray.push(comment);
+                    }else{
+                        if(comment)
+                            notSelectedCount++;
+                    }
                 });
-                if(valuesArray.length)
+
+                notSelectedNode.setValue(notSelectedCount);
+
+                if(valuesArray.length){
                     studentIdsNode.setValue(valuesArray.join(','));
+                    commentsNode.setValue(commentsArray.join(','));
+                }
+
                 var yearToDate = node.find('#year-to-date-chk').checked();
                 var gradingPeriod = node.find('#grading-period-chk').checked();
                 var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');

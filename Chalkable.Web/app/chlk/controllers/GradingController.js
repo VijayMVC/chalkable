@@ -447,16 +447,39 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [[chlk.models.grading.SubmitProgressReportViewData]],
-            function submitProgressReportAction(model){
+            function downloadProgressReportAction(model){
+                model = model.getClassId() ? model : this.getContext().getSession().get('modelForSubmit', null);
                 var src = this.reportingService.submitProgressReport(model.getClassId(), model.getIdToPrint(), model.getFormat(),
                     model.getGradingPeriodId(), model.getAbsenceReasonIds(), model.isAdditionalMailings(), model.getDailyAttendanceDisplayMethod(),
                     model.isDisplayCategoryAverages(), model.isDisplayClassAverages(), model.isDisplayLetterGrade(),
                     model.isDisplayPeriodAttendance(), model.isDisplaySignatureLine(), model.isDisplayStudentComments(),
                     model.isDisplayStudentMailingAddress(), model.isDisplayTotalPoints(), model.isGoGreen(), model.getMaxCategoryClassAverage(),
                     model.getMaxStandardAverage(), model.getMinCategoryClassAverage(), model.getMinStandardAverage(), model.isPrintFromHomePortal(),
-                    model.getClassComment(), model.getStudentIds());
+                    model.getClassComment(), model.getStudentIds(), model.getCommentsList());
                 this.BackgroundCloseView(chlk.activities.grading.ProgressReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [[chlk.models.grading.SubmitProgressReportViewData]],
+            function submitProgressReportAction(model){
+                var count = model.getNotSelectedCount();
+                if(!count){
+                    this.downloadProgressReportAction(model);
+                }else{
+                    this.getContext().getSession().set('modelForSubmit', model);
+                    this.ShowMsgBox(Msg.Progress_report_msg(count), '', [{
+                        text: Msg.Yes.toUpperCase(),
+                        controller: 'grading',
+                        action: 'downloadProgressReport',
+                        params: [model],
+                        color: chlk.models.common.ButtonColor.RED.valueOf()
+                    }, {
+                        text: Msg.Cancel.toUpperCase(),
+                        color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                    }]);
+                }
+
                 return null;
             },
 
