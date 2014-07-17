@@ -58,10 +58,6 @@ NAMESPACE('chlk.controllers', function (){
                        return this.redirectToErrorPage_(exception.toString(), 'error', 'appError', []);
                    }, this)
                    .catchError(this.handleServerError, this);
-//                   .catchError(function (error) {
-//                       //return this.redirectToErrorPage_(error.toString(), 'error', 'generalError', []);
-//                       return this.handleServerError(error);
-//                   }, this);
                return head;
            },
 

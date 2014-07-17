@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -26,8 +28,20 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput)
+        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, IntList studentIds, StringList commments)
         {
+            if (studentIds != null && commments != null && studentIds.Count == commments.Count)
+            {
+                progressReportInput.StudentComments = new List<StudentCommentInputModel>();
+                for (int i = 0; i < studentIds.Count; i++)
+                {
+                    progressReportInput.StudentComments.Add(new StudentCommentInputModel
+                        {
+                            Comment = commments[i],
+                            StudentId = studentIds[i]
+                        });
+                }
+            }
             return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
         }
 
