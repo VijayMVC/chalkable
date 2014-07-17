@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 
 namespace Chalkable.StiConnector.Exceptions
@@ -19,7 +20,7 @@ namespace Chalkable.StiConnector.Exceptions
             SisMessages = new List<string> {message};
         }
 
-        public ChalkableSisException(IList<string> messages)
+        public ChalkableSisException(IList<string> messages) : base(messages.JoinString())
         {
             SisMessages = messages;
         }
