@@ -68,7 +68,7 @@ NAMESPACE('chlk.services', function () {
                         var res = Serializer.deserialize(data.data, clazz_);
                         console.info('deserialize time', getDate().getTime() - dt);
                         return res;
-                        throw(new Exception(handler.getMessage()));
+//                        throw(new Exception(handler.getMessage()));
                     }, this);
             },
 
@@ -148,7 +148,7 @@ NAMESPACE('chlk.services', function () {
                     .run()
                     .then(function (data) {
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
-                        throw(new Exception(handler.getMessage()));
+//                        throw(new Exception(handler.getMessage()));
                     }, this);
             },
 
@@ -172,7 +172,7 @@ NAMESPACE('chlk.services', function () {
                         model.setHasPreviousPage(Boolean(data.haspreviouspage));
                         return model;
                     });
-                        throw(new Exception(handler.getMessage()));
+//                        throw(new Exception(handler.getMessage()));
             }
         ]);
 });

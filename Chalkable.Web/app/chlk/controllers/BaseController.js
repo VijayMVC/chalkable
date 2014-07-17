@@ -57,10 +57,24 @@ NAMESPACE('chlk.controllers', function (){
                    .catchException(chlk.lib.exception.AppErrorException, function(exception){
                        return this.redirectToErrorPage_(exception.toString(), 'error', 'appError', []);
                    }, this)
-                   .catchError(function (error) {
-                       return this.redirectToErrorPage_(error.toString(), 'error', 'generalError', []);
-                   }, this);
+                   .catchError(this.handleServerError, this);
+//                   .catchError(function (error) {
+//                       //return this.redirectToErrorPage_(error.toString(), 'error', 'generalError', []);
+//                       return this.handleServerError(error);
+//                   }, this);
                return head;
+           },
+
+           [[Object]],
+           function handleServerError(error){
+               if(error.getStatus() == 500){
+                    var response = JSON.parse(error.getResponse());
+                    if(response.exceptiontype == 'ChalkableSisException')
+                       return this.ShowMsgBox(response.message, 'oops',[{
+                           text: Msg.GOT_IT.toUpperCase()
+                       }]);
+               }
+               return this.redirectToErrorPage_(error.toString(), 'error', 'generalError', []);
            },
 
            function BackgroundNavigate(controller, action, args_) {
@@ -104,6 +118,12 @@ NAMESPACE('chlk.controllers', function (){
            [[String, String, Array, String]],
            function ShowMsgBox(text_, header_, buttons_, clazz_) {
                var instance = new chlk.activities.common.InfoMsgDialog();
+               var model = this.getMessageBoxModel_(text_, header_, buttons_, clazz_);
+               this.view.shadeD(instance, ria.async.DeferredData(model));
+           },
+
+           [[String, String, Array, String]],
+           chlk.models.common.InfoMsg, function getMessageBoxModel_(text_, header_, buttons_, clazz_){
                var buttons = [];
                if(buttons_){
 
@@ -114,8 +134,7 @@ NAMESPACE('chlk.controllers', function (){
                }else{
                    buttons.push(new chlk.models.common.Button('Ok'));
                }
-               var model = new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_);
-               this.view.shadeD(instance, ria.async.DeferredData(model));
+               return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_);
            },
 
            [[chlk.models.common.RoleEnum]],
