@@ -28,7 +28,7 @@ namespace Chalkable.StiImport.Services
     {
         public ImportServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster) : base(serviceLocatorMaster)
         {
-            SchoolDbService = new ImportDbService(this.Context.SchoolConnectionString);
+            SchoolDbService = new ImportDbService(Context.SchoolConnectionString);
         }
     }
 
@@ -58,7 +58,7 @@ namespace Chalkable.StiImport.Services
             return uow;
         }
 
-        public UnitOfWork GetUowForUpdate()
+        public UnitOfWork GetUowForUpdate(IsolationLevel isolationLevel = IsolationLevel.ReadUncommitted)
         {
             lock (locker)
             {

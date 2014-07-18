@@ -1,11 +1,12 @@
-﻿using Chalkable.Data.Common;
+﻿using System.Data;
+using Chalkable.Data.Common;
 
 namespace Chalkable.BusinessLogic.Services
 {
     public interface IDbService
     {
         UnitOfWork GetUowForRead();
-        UnitOfWork GetUowForUpdate();
+        UnitOfWork GetUowForUpdate(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);
     }
 
     public class DbService : IDbService
@@ -18,12 +19,12 @@ namespace Chalkable.BusinessLogic.Services
 
         public UnitOfWork GetUowForRead()
         {
-            return new UnitOfWork(connectionString, false);
+            return new UnitOfWork(connectionString, false, IsolationLevel.ReadCommitted);
         }
 
-        public UnitOfWork GetUowForUpdate()
+        public UnitOfWork GetUowForUpdate(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            return new UnitOfWork(connectionString, true);
+            return new UnitOfWork(connectionString, true, isolationLevel);
         }
     }
 }

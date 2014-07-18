@@ -11,12 +11,12 @@ namespace Chalkable.Data.Common
         protected SqlConnection Connection { get; private set; }
         protected SqlTransaction Transaction { get; set; }
 
-        public UnitOfWork(string connectionString, bool beginTransaction)
+        public UnitOfWork(string connectionString, bool beginTransaction, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             Connection = new SqlConnection(connectionString);
             Connection.Open();
             if (beginTransaction)
-                Transaction = Connection.BeginTransaction();
+                Transaction = Connection.BeginTransaction(isolationLevel);
         }
 
         public virtual void Dispose()
