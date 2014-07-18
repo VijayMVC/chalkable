@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
@@ -42,19 +44,64 @@ namespace Chalkable.StiImport.Services
         public void Import()
         {
             Log.LogInfo("start import");
-            Log.Flush();
+
+
+            var masterDb = (ImportDbService)ServiceLocatorMaster.DbService;
+            var schoolDb = (ImportDbService)ServiceLocatorSchool.SchoolDbService;
+            Log.LogInfo("begin master transaction");
+            masterDb.BeginTransaction();
+            Log.LogInfo("begin school transaction");
+            schoolDb.BeginTransaction();
+            //TODO: clean this 
+            Thread t1 = new Thread(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        using (var uow = masterDb.GetUowForRead())
+                        {
+                            var c = uow.GetTextCommand("select 1");
+                            c.ExecuteNonQuery();
+                        }
+                        Thread.Sleep(60 * 1000);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError(ex.Message);
+                    }
+                }
+            });
+
+            Thread t2 = new Thread(() =>
+            {
+                while (true)
+                {
+                    try
+                    {
+                        using (var uow = schoolDb.GetUowForRead())
+                        {
+                            var c = uow.GetTextCommand("select 1");
+                            c.ExecuteNonQuery();
+                        }
+                        Thread.Sleep(60 * 1000);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError(ex.Message);
+                    }
+                }
+            });
+            t1.Start();
+            t2.Start();
+
+
             importedSchoolIds.Clear();
             personsForImportPictures.Clear();
             connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
             Log.LogInfo("download data to sync");
             DownloadSyncData();
             
-            var masterDb = (ImportDbService) ServiceLocatorMaster.DbService;
-            var schoolDb = (ImportDbService) ServiceLocatorSchool.SchoolDbService;
-            Log.LogInfo("begin master transaction");
-            masterDb.BeginTransaction();
-            Log.LogInfo("begin school transaction");
-            schoolDb.BeginTransaction();
             bool schoolCommited = false;
             try
             {
@@ -85,6 +132,16 @@ namespace Chalkable.StiImport.Services
             foreach (var importedSchoolId in importedSchoolIds)
             {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            }
+
+            try
+            {
+                t1.Abort();
+                t2.Abort();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
             }
             Log.LogInfo("import is completed");
         }

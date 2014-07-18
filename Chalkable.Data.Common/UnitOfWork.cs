@@ -16,7 +16,7 @@ namespace Chalkable.Data.Common
             Connection = new SqlConnection(connectionString);
             Connection.Open();
             if (beginTransaction)
-                Transaction = Connection.BeginTransaction();
+                Transaction = Connection.BeginTransaction(IsolationLevel.ReadUncommitted);
         }
 
         public virtual void Dispose()

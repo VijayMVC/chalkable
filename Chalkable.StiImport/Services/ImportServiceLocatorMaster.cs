@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Transactions;
+using System.Data;
+using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
@@ -31,38 +32,61 @@ namespace Chalkable.StiImport.Services
         }
     }
 
-    public class ImportDbService : DbService, IDisposable
+    public class ImportDbService : IDbService
     {
-        private TransactionScope scope;
-        public ImportDbService(string connectionString) : base(connectionString)
+        private ImportUnitOfWork uow;
+        private object locker = new object();
+        private AutoResetEvent e = new AutoResetEvent(true);
+        
+        public ImportDbService(string connectionString)
         {
+            uow = new ImportUnitOfWork(connectionString);
+            uow.OnDisposing += () =>
+                {
+                    e.Set();
+                };
             
+        }
+
+        public UnitOfWork GetUowForRead()
+        {
+            lock (locker)
+            {
+                e.WaitOne();
+                e.Reset();
+            }
+            return uow;
+        }
+
+        public UnitOfWork GetUowForUpdate()
+        {
+            lock (locker)
+            {
+                e.WaitOne();
+                e.Reset();    
+            }
+            return uow;
         }
 
         public void CommitAll()
         {
-            scope.Complete();
+            uow.CommitAll();
         }
 
         public void BeginTransaction()
         {
-            scope = new TransactionScope(TransactionScopeOption.RequiresNew);
+            uow.BeginTransaction();
         }
 
         public void Rollback()
         {
-            scope.Dispose();
-        }
-
-        public void Dispose()
-        {
-            if (scope != null)
-                scope.Dispose();
+            uow.Rollback();
         }
     }
     
-    /*public class ImportUnitOfWork : UnitOfWork
+    public class ImportUnitOfWork : UnitOfWork
     {
+        public event Action OnDisposing;
         public ImportUnitOfWork(string connectionString) : base(connectionString, false)
         {
         }
@@ -80,14 +104,15 @@ namespace Chalkable.StiImport.Services
         public void BeginTransaction()
         {
             if (Transaction == null)
-                Transaction = Connection.BeginTransaction();
+                Transaction = Connection.BeginTransaction(IsolationLevel.ReadUncommitted);
             else
                 throw new Exception("Transaction wasn't started");
         }
 
         public override void Dispose()
         {
-            //DO nothing
+            if (OnDisposing != null)
+                OnDisposing();
         }
-    }*/
+    }
 }
