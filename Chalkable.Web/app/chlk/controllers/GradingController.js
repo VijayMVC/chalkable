@@ -418,7 +418,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
-                var res = this.reportingService.getStudentsForReport(classId)
+                var res = this.reportingService.getStudentsForReport(classId, gradingPeriodId)
                     .then(function(students){
                         var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
                         var absenceReasons = reasons.filter(function(item){

@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.grading', function () {
             chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.people.ShortUserInfo), 'students',
+            ArrayOf(chlk.models.grading.UserForReport), 'students',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
