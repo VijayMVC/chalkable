@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 
 namespace Chalkable.StiConnector.Mapping
 {
@@ -107,6 +108,8 @@ namespace Chalkable.StiConnector.Mapping
         public const string AVERAGESCORE_ALPHAGRADENAME_VALUEISREQUIRED_ERROR = "AverageScore_AlphaGradeName_ValueIsRequired";
         public const string AVERAGESCORE_AVERAGINGEQUIVALENT_NOTFOUND_ERROR = "AverageScore_AveragingEquivalent_NotFound";
 
+        public const string ALPHAGRADE_CANNOTDETERMINEALPHAGRADE_ERROR = "AlphaGrade_CannotDetermineAlphaGrade";
+        
         public const string CLASSROOM_CANNOTPOST_SECTIONISNOTSCHEDULEDONTHISDAY_ERROR = "Classroom_CannotPost_SectionIsNotScheduledOnThisDay";
         public const string CLASSROOMOPTION_SEATINGCHARTROWS_TOOHIGH_ERROR = "ClassroomOption_SeatingChartRows_TooHigh";
 
@@ -196,6 +199,7 @@ namespace Chalkable.StiConnector.Mapping
             "StudentStandardComment_CannotDeleteStudentData";
     }
 
+    
     public class ErrorMapper
     {
         private static IDictionary<string, string> mapper = new Dictionary<string, string>
@@ -210,8 +214,127 @@ namespace Chalkable.StiConnector.Mapping
                 {InowErrors.ACTIVITY_NAME_TOO_LONG_ERROR, "Looks like your assignment name is a bit too long."},
                 {InowErrors.ACTIVITY_WEIGHTADDTION_INVALID_RANGE_ERROR, "The weight addition needs to be a number between 0 and 9,999."},
                 {InowErrors.ACTIVITY_WEIGHTMULTIPLIER_INVALIDRANGE_0TO999_99999_ERROR, "The weight multiplier needs to be a number between 0 and 9,999."},
-                {InowErrors.ACTIVITYASSIGNEDATTRIBUTE_TEXT_REQUIRED_ERROR, "Looks like you forgot to include any text with your assignment. "}
+                {InowErrors.ACTIVITYASSIGNEDATTRIBUTE_TEXT_REQUIRED_ERROR, "Looks like you forgot to include any text with your assignment. "},
+
+                {InowErrors.ACTIVITYCATEGORY_DESCRIPTION_INVALIDFORMAT_ERROR, String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Description")},
+                {InowErrors.ACTIVITYCATEGORY_DESCRIPTION_TOOLONG_ERROR, "Description is too long. Please re-enter Description."},
+                {InowErrors.ACTIVITYCATEGORY_PERCENTAGE_TOOLOW_ERROR, "Percentage's value is too low."},
+                {InowErrors.ACTIVITYCATEGORY_HIGHSCORESTODROP_TOOLOW_ERROR,  "HighScores To Drop's value is too low."},
+
+                {InowErrors.ACTIVITYCATEGORY_LOWSCORESTODROP_TOOLOW_ERROR, "LowScores To Drop's value is too low."},
+                {InowErrors.ACTIVITYCATEGORY_HIGHSCORESTODROP_TOOHIGH_ERROR, "HighScores To Drop's value is too high."},
+                {InowErrors.ACTIVITYCATEGORY_LOWSCORESTODROP_TOOHIGH_ERROR, "LowScores To Drop's value is too high."},
+                {InowErrors.ACTIVITYCATEGORY_NAME_INVALIDFORMAT_ERROR,  String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Name")},
+                {InowErrors.ACTIVITYCATEGORY_NAME_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Name")}, 
+                {InowErrors.ACTIVITYCATEGORY_NAME_TOOLONG_ERROR,  "Name is too long. Please re-enter Name."},
+
+                {InowErrors.AVERAGE_CANNOTDELETESYSTEMAVERAGE_ERROR,  "Cannot delete System Average."},
+                {InowErrors.AVERAGE_CANNOTDELETESCOREDNONSYSTEMAVERAGE_ERROR,  "Cannot delete average because scores have been directly entered for students."}, 
+                {InowErrors.AVERAGE_AVERAGINGRULE_MUSTINCLUDEPERCENTAGESIFAVERAGINGRULEISOTHERAVERAGES_ERROR,  "Must include percentages if averaging rule is other averages."},
+
+                {InowErrors.AVERAGE_DESCRIPTION_INVALIDFORMAT_ERROR,  String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Description")},
+                {InowErrors.AVERAGE_DESCRIPTION_TOOLONG_ERROR,  "Description is too long. Please re-enter Description."}, 
+                {InowErrors.AVERAGE_NAME_INVALIDFORMAT_ERROR,  String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Name")},
+
+                {InowErrors.AVERAGE_NAME_MUSTBEUNIQUE_ERROR,   String.Format(ChlkResources.ERR_DUPLICATE_ERROR_MSG_FORMAT, "Name")}, 
+                {InowErrors.AVERAGE_NAME_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Name")},
+
+                {InowErrors.AVERAGE_NAME_TOOLONG_ERROR,  "Name is too long. Please re-enter Name."},
+                {InowErrors.AVERAGE_HIGHSCORESTODROP_CANNOTDEFINEIFAVERAGINGRULEISSINGLEACTIVITY_ERROR,  "Cannot define High Scores To Drop if averaging rule is Single Activity."}, 
+                {InowErrors.AVERAGE_LOWSCORESTODROP_CANNOTDEFINEIFAVERAGINGRULEISSINGLEACTIVITY_ERROR,  "Cannot define Low Scores To Drop if averaging rule is Single Activity."},
+
+
+                {InowErrors.AVERAGE_PERCENTAGE_OUTOFRANGE_ERROR,  "Percentage is out of range."},
+                {InowErrors.AVERAGE_WEIGHTADDITION_OUTOFRANGE_ERROR,  "Weight Addition is out of range."}, 
+                {InowErrors.AVERAGECOMMENT_CANNOTDELETESTUDENTDATA_ERROR,  ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT},
+
+                {InowErrors.AVERAGESCORE_CALCULATEDAVERAGE_OUTOFRANGE_ERROR,  "Calculated Average is out of range."},
+                {InowErrors.AVERAGESCORE_ENTEREDAVERAGE_OUTOFRANGE_ERROR,  "Entered Average is out of range."}, 
+                {InowErrors.CLASSROOMOPTION_SEATINGCHARTROWS_TOOHIGH_ERROR,  "Seating Chart Rows' value is too high."},
+                {InowErrors.SEATINGCHART_SEATROW_SEATCOLUMN_SHOULDBEUNIQUE_ERROR,   String.Format(ChlkResources.ERR_DUPLICATE_ERROR_MSG_FORMAT, "Seat row, Seat column")},
+                {InowErrors.SECTIONCHART_SEATCOLUMN_TOOHIGH_ERROR,  "Seat column 's value is too high."},
+                {InowErrors.SECTIONCHART_SEATROW_TOOHIGH_ERROR,  "Seat row 's value is too high."},
+                {InowErrors.AVERAGE_CANNOTMODIFYIFSECTIONAVERAGEMODIFICATIONISDISABLEDANDAVERAGEISCOMPOSEDOFSYSTEMAVERAGES_ERROR,  "Average cannot be modified if section average modification is disabled and average is composed of system averages."}, 
+                {InowErrors.AVERAGE_WEIGHTADDITION_CANNOTDEFINEIFSECTIONAVERAGEMODIFICATIONISDISABLED_ERROR,  "Weight Addition cannot be defined if section average modification is disabled."},
+                
+                {InowErrors.CLASSROOMSTUDENT_COMMENT_INVALIDFORMAT_ERROR,  String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Comment")},
+                {InowErrors.CLASSROOMSTUDENT_SECTION_ISREQUIRED_ERROR,   String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Section")},
+                {InowErrors.CLASSROOMSTUDENT_STUDENT_ISREQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Student")},
+                {InowErrors.CLASSROOMSTUDENT_GRADINGPERIOD_ISREQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Grading Period")},
+         
+
+                {InowErrors.ALPHAGRADE_CANNOTDETERMINEALPHAGRADE_ERROR,  "Alpha Grade cannot be determined."},
+                {InowErrors.AVERAGE_CANNOTSETMULTIPLEACTIVITIESIFSINGLEACTIVITYAVERAGINGRULEISUSED_ERROR,   "Multiple Activities cannot be set if Single Activity's Averageing Rule is using."},
+                {InowErrors.AVERAGE_CANNOTSPECIFYCIRCULARAVERAGEREFERENCE_ERROR,  "Circular Average Reference cannot be specified."},
+                {InowErrors.SCORE_CANNOTMODIFYUNEXCUSEDABSENCESCORE_ERROR,  "The student has an unexcused absence for this day, only a 0 score can be entered for the activity."},
+         
+                {InowErrors.SCORE_INVALIDRANGE_NEG9999_99TO9999_99_ERROR,  "The value of Score is out of range. Please re-enter Score."},
+                {InowErrors.SCORE_INVALIDALPHAGRADERANGE_ERROR,   "Alpha Grade is not in range. Please re-enter Alpha Grade."},
+                {InowErrors.SCORE_ACTIVITY_ISREQUIRED_ERROR,   String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Activity")},
+                {InowErrors.SCORE_STUDENT_ISREQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Student")},
+         
+                {InowErrors.STUDENTDAILYABSENCE_DUPLICATEABSENCE_ERROR,  ChlkResources.DUPLICATE_ENTRY_MSG},
+                {InowErrors.SCORE_ACTIVITYCANNOTBEDROPPED_ERROR,   "Activity cannot be dropped."},
+                {InowErrors.SCORE_INVALIDACTIVITYDROPSTATUS_ERROR,   "Activity Drop Status is invalid."},
+                {InowErrors.STUDENTPERIODABSENCE_DUPLICATEABSENCE_ERROR, ChlkResources.DUPLICATE_ENTRY_MSG},
+    
+                {InowErrors.AVERAGESCORE_ALPHAGRADENAME_VALUEISREQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Alpha Grade Name")},
+                {InowErrors.AVERAGESCORE_AVERAGINGEQUIVALENT_NOTFOUND_ERROR,   "Averaging Equivalent is not found."},
+             
+                {InowErrors.ACTIVITYSTANDARDSCORE_MAXIMUMVALUETOOLARGE_ERROR,   "Maximum value is too large for activity."},
+                {InowErrors.ACTIVITYSTANDARDSCORE_CORRECTVALUETOOLARGE_ERROR, "Correct value is too large for activity."},
+             
+                {InowErrors.ACTIVITYSTANDARDSCORE_MAXIMUMVALUEINVALIDFORMAT_ERROR,   String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Maximum Value")},
+                {InowErrors.ACTIVITYSTANDARDSCORE_CORRECTVALUEINVALIDFORMAT_ERROR, String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Correct Value")},
+                {InowErrors.ACTIVITYSTANDARDSCORE_CANNOTUPDATEINTEGRATEDSCORE_ERROR,   "You cannot update the Integrated Score."},
+            
+                {InowErrors.STANDARDSCORE_NOTETOOLONG_ERROR, String.Format(ChlkResources.ERR_TOO_LONG_MSG_FORMAT, "Note", "255")},
+         
+                {InowErrors.ACTIVITYSTANDARD_CANNOTDELETEINTEGRATEDSTANDARDORWITHVALUES_ERROR,   "Cannot delete because it is an integrated standard or student has entered values for it."},
+                {InowErrors.STANDARDSCORE_CANNOTDELETESTUDENTDATA_ERROR,  String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
+                {InowErrors.STANDARDSCORECOMMENT_CANNOTDELETESTUDENTDATA_ERROR,  String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
+         
+                {InowErrors.STUDENTGRADEDSTANDARD_CANNOTDELETESTUDENTDATA_ERROR,   String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
+                {InowErrors.STUDENTSTANDARDCOMMENT_CANNOTDELETESTUDENTDATA_ERROR,  String.Format(ChlkResources.ERR_DELETE_IN_USE_MSG_FORMAT, "Student")},
+                {InowErrors.CLASSROOM_CANNOTPOST_SECTIONISNOTSCHEDULEDONTHISDAY_ERROR,  "Cannot post attendance because the Section is not scheduled on this day."},
+
+                {InowErrors.ACTIVITY_UNIT_MUST_BE_ALPHA_NUMERIC_ONLY_ERROR,  "Unit must be AlphaNumeric.Please re-enter Unit."},
+                {InowErrors.ACTIVITY_UNIT_TOO_LONG_ERROR,  String.Format(ChlkResources.ERR_TOO_LONG_MSG_FORMAT, "Unit", "50")},
+                {InowErrors.SCORE_ACTIVITYDOESNOTALLOWEXEMPTIONS_ERROR,  "This Activity is not matched with a Graded Item that allows exemptions."},
+                {InowErrors.SCORE_CANNOTHAVEASCOREVALUE_FORANACTIVITYMARKEDASEXEMPT_ERROR,  "The Activity is marked as exempt. No score can be entered for exempt activities."},
+                {InowErrors.SCORE_INVALIDALPHAGRADE_OR_ALTERNATESCORE_ERROR,  "The New Score is in an invalid format.  Please re-enter the New Score."},
+           
+           
+                {InowErrors.DOCUMENT_DATA_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Document Data")},
+                {InowErrors.DOCUMENT_EXTENSION_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Document Extension")},
+                {InowErrors.DOCUMENT_MIMETYPE_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "MIMEType")},
+                {InowErrors.DOCUMENT_AGGREGATEFILESIZE_EXCEEDED_ERROR,  "District-defined storage capacity for attachments is full. Please contact your administrator."},
+                {InowErrors.DOCUMENT_INDIVIDUALFILESIZE_EXCEEDED_ERROR,  "File exceeds the {0} MB file limit."},
+                
+                {InowErrors.STUDENTABSENCE_ABSENCELEVEL_REQUIRED_ERROR, String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Absence Level")},
+                {InowErrors.STUDENTABSENCE_DATE_DOESNOTFALLWITHINACADEMICSESSION_ERROR,  "Absence Date is invalid. Absence Date must fall within academic session."},
+                {InowErrors.STUDENTABSENCE_DATE_ISNOTASCHOOLDAY_ERROR,  "Absence Date is not a school day. Please re-enter with a school day."},
+                {InowErrors.STUDENTABSENCE_DATE_STUDENTNOTENROLLED_ERROR,  "Student has not been enrolled. Please enroll student before adding daily absence."},
+                {InowErrors.STUDENTABSENCE_DATE_NOSAMEDAYENROLLMENT_ERROR,  "Student has an enrollment or withdrawal on this date. Daily attendance records should not be created."},
+           
+                {InowErrors.STUDENTABSENCE_NOTE_TOOLONG_ERROR,  String.Format(ChlkResources.ERR_TOO_LONG_MSG_FORMAT, "Note", "255")},
+                {InowErrors.STUDENTABSENCE_NOTE_INVALIDFORMAT_ERROR,  String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Note")},
+                {InowErrors.STUDENTGRADE_GRADEPOSTINGNOTALLOWED_ERROR,  "Current grading period is closed for grade posting."},
+                {InowErrors.STUDENTGRADINGCOMMENT_GRADINGPERIODID_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "GradingPeriod")},
+                {InowErrors.STUDENTGRADINGCOMMENT_MUSTBEUNIQUE_BYSTUDENTSECTIONANDGRADINGCOMMENTHEADERIDS_ERROR,  "Student Grading Comment must be unique in Student Sections and Grading Comment Headers."},
+                
+                {InowErrors.STUDENTGRADINGCOMMENT_SECTIONID_REQUIRED_ERROR, String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Section")},
+                {InowErrors.STUDENTGRADINGCOMMENT_STUDENTID_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Student")},
+                {InowErrors.STUDENTGRADEDITEM_MUSTBEUNIQUE_BYSTUDENTSECTIONANDGRADEDITEMIDS_ERROR,  "Student Graded Item must be unique in Student Sections and Graded Items."},
+                {InowErrors.STUDENTGRADEDITEM_NUMERICGRADE_ISREQUIREDIFALPHAGRADENOTSUPPLIEDANDGRADEDITEMNOTALPHAONLY_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Numeric Grade")},
+                {InowErrors.STUDENTGRADEDITEM_NUMERICGRADE_MUSTBENUMERIC_ERROR,  "Numeric Grade must be numeric."},
+            
+                {InowErrors.STUDENTPERIODABSENCE_TIMESLOT_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Period")},
+                {InowErrors.STUDENTPERIODABSENCE_TIMESLOT_NOTINSTUDENTSCHEDULE_ERROR,  "Period is not in Student Schedule."},
+
             }; 
+
+           
 
         public string Map(string inowError)
         {

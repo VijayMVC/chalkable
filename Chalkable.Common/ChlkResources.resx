@@ -129,6 +129,18 @@
   <data name="ALL_ROWS_ARE_PROCESSED" xml:space="preserve">
     <value>all rows are processed</value>
   </data>
+  <data name="ANNOUNCEMENT_ENDDATE" xml:space="preserve">
+    <value>End Date may not occur in the past. Please re-enter End Date.</value>
+  </data>
+  <data name="ANNOUNCEMENT_ENDDATE_STARTDATE" xml:space="preserve">
+    <value>End Date must occur on or after the Start Date. Please re-enter End Date or Start Date.</value>
+  </data>
+  <data name="ANNOUNCEMENT_EVENT_STARTDATE" xml:space="preserve">
+    <value>Event Date must occur on or after the Start Date. Please re-enter Event Date or Start Date.</value>
+  </data>
+  <data name="ANNOUNCEMENT_STARTDATE_EVENT_ENDDATE" xml:space="preserve">
+    <value>The Event date must occur between the start and end date. Please re-enter Event Date or Start Date or End Date.</value>
+  </data>
   <data name="APP_WAS_BOUGHT" xml:space="preserve">
     <value>application was bought</value>
   </data>
@@ -177,6 +189,9 @@
   <data name="CALENDAR_IDS" xml:space="preserve">
     <value>calendar ids {0}</value>
   </data>
+  <data name="CANNOT_BLANK_MSG_FORMAT" xml:space="preserve">
+    <value>The {0} cannot be blank. It is required for working. Please enter the {0} information.</value>
+  </data>
   <data name="CHANGES_ARE_SAVED" xml:space="preserve">
     <value>changes are saved</value>
   </data>
@@ -201,17 +216,38 @@
   <data name="CLEVER_TEACHER_WASNT_ADDED" xml:space="preserve">
     <value>teacher {0} wasn't added because of {1}</value>
   </data>
+  <data name="COMPARE" xml:space="preserve">
+    <value>The {0} must be less than or equal to {1}. Please re-select {0} or {1}.</value>
+  </data>
+  <data name="COMPARISON_BETWEEN" xml:space="preserve">
+    <value>The {0} must be greater than or equal to {1} and less than or equal to {2}.</value>
+  </data>
   <data name="CURRENT_PASSWORD" xml:space="preserve">
     <value>Current password</value>
   </data>
   <data name="DAYS_FOR_SCHOOL_YEAR_IMPORTED" xml:space="preserve">
     <value>days for school year {0} imported</value>
   </data>
+  <data name="DECIMAL_PLACES" xml:space="preserve">
+    <value>{0} only allows {1} decimal places. Please re-enter {0}.</value>
+  </data>
   <data name="DELETING_OLD_PERSONAL_DATA" xml:space="preserve">
     <value>Deleting old personal data</value>
   </data>
   <data name="DELETING_OLD_SCHEDULE_DATA" xml:space="preserve">
     <value>Deleting old schedule data</value>
+  </data>
+  <data name="DENIED_MESS" xml:space="preserve">
+    <value>User is denied access to perform one or more tasks on this page.</value>
+  </data>
+  <data name="DINAMIC_REQURIRED_MESSAGE" xml:space="preserve">
+    <value>{0} field is required when you enter data in {1} field.</value>
+  </data>
+  <data name="DOB_MUST_OCCUR_BEFORE_TODAY" xml:space="preserve">
+    <value>{0} must occur before date of today. Please re-enter {0}.</value>
+  </data>
+  <data name="DUPLICATE_ENTRY_MSG" xml:space="preserve">
+    <value>Duplicate entries are not allowed.</value>
   </data>
   <data name="EMAIL_ANNOUNCEMENT_TYPE_FORMAT" xml:space="preserve">
     <value>Announcment Type : {0}&lt;br/&gt;</value>
@@ -441,6 +477,18 @@
   <data name="ERR_CLEVER_TEACHER_WASNT_IMPORTED" xml:space="preserve">
     <value>Teacher {0} wasn't imported</value>
   </data>
+  <data name="ERR_CONCURRENCY_DELETE_MSG_FORMAT" xml:space="preserve">
+    <value>Your action has not been completed because the current record has been removed by another user.</value>
+  </data>
+  <data name="ERR_CONCURRENCY_MSG_FORMAT" xml:space="preserve">
+    <value>Your action has not been completed because the current record has been modified by another user.</value>
+  </data>
+  <data name="ERR_CONCURRENCY_UPDATE_DEPENDENCIES_MSG_FORMAT" xml:space="preserve">
+    <value>Your action has not been completed because one or more of the current record's dependencies has been modified or removed by another user. Please try again.</value>
+  </data>
+  <data name="ERR_CONCURRENCY_UPDATE_MSG_FORMAT" xml:space="preserve">
+    <value>Your action has not been completed because the current record has been modified by another user. Please try again.</value>
+  </data>
   <data name="ERR_CONTEXT_NO_SCHOOL_INFO_ID" xml:space="preserve">
     <value>No School Info Id</value>
   </data>
@@ -455,6 +503,12 @@
   </data>
   <data name="ERR_DEFAULTMAPPING_NOT_ENOUGH_RIGHTS" xml:space="preserve">
     <value>Only systemAdmin can manipulate defaultMapping</value>
+  </data>
+  <data name="ERR_DELETE_IN_USE_MSG_FORMAT" xml:space="preserve">
+    <value>Your action has not been completed because the current record is being used in other modules.</value>
+  </data>
+  <data name="ERR_DELETE_SECTION_MSG" xml:space="preserve">
+    <value>Section cannot be deleted.  {0}.</value>
   </data>
   <data name="ERR_DEMO_SCHOOL_INCORRECT_ROLE" xml:space="preserve">
     <value>This is not correct role</value>
@@ -483,8 +537,14 @@
   <data name="ERR_DISCIPLINE_TYPES_ARE_USED" xml:space="preserve">
     <value>You can't delete discipline types, that are used.</value>
   </data>
+  <data name="ERR_DUPLICATE_ERROR_MSG_FORMAT" xml:space="preserve">
+    <value>This {0} already exists. Duplicate entries are not allowed.</value>
+  </data>
   <data name="ERR_DUPLICATE_LOCAL_ID" xml:space="preserve">
     <value>duplicate localID:{0}</value>
+  </data>
+  <data name="ERR_DUPLICATE_STUDENT_MSG_FORMAT" xml:space="preserve">
+    <value>Duplicate student was found within the district. Student: {0} Duplicate student(s): {1}</value>
   </data>
   <data name="ERR_EMAIL_ERROR_UPLOADING_ZIP" xml:space="preserve">
     <value>&lt;br/&gt; Error in server. Zip file was not uploaded</value>
@@ -497,6 +557,12 @@
   </data>
   <data name="ERR_EMAIL_WASNT_SEND" xml:space="preserve">
     <value>Email wasn't sent</value>
+  </data>
+  <data name="ERR_ENDDATE_MUSTFOLLOWSTARTDATE" xml:space="preserve">
+    <value>End Date must follow Start Date. Please re-enter End Date.</value>
+  </data>
+  <data name="ERR_EXCEEDS_ALLOWABLE_SIZE_MSG_FORMAT" xml:space="preserve">
+    <value>{0} exceeds allowable size {1}. Please re-select {0}.</value>
   </data>
   <data name="ERR_FILE_IS_REQUIRED" xml:space="preserve">
     <value>File is required</value>
@@ -639,6 +705,9 @@
   <data name="ERR_INVALID_APPLICATION_MODE" xml:space="preserve">
     <value>Invalid application mode</value>
   </data>
+  <data name="ERR_INVALID_CHARS_MSG_FORMAT" xml:space="preserve">
+    <value>In {0} field, you have entered invalid character(s). Please make sure that the data that you enter does not contain any invalid character(s).</value>
+  </data>
   <data name="ERR_INVALID_CLASSDISCIPLINE_QUERY" xml:space="preserve">
     <value>Class Discipline Query must contain marking period, school year or current school person information</value>
   </data>
@@ -648,8 +717,14 @@
   <data name="ERR_INVALID_EMAIL_INFO_STRING" xml:space="preserve">
     <value>Invalid email info string</value>
   </data>
+  <data name="ERR_INVALID_FIELD_MSG_FORMAT" xml:space="preserve">
+    <value>{0} is invalid. Please re-enter {0}.</value>
+  </data>
   <data name="ERR_INVALID_FILENAME" xml:space="preserve">
     <value>invalid file name {0}</value>
+  </data>
+  <data name="ERR_INVALID_FORMAT_MSG_FORMAT" xml:space="preserve">
+    <value>{0} is invalid format. Please re-enter {0}.</value>
   </data>
   <data name="ERR_INVALID_NOTIFICATION_BUILDER_FOR_TYPE" xml:space="preserve">
     <value>Invalid Notification View Builder for such notification type</value>
@@ -683,6 +758,9 @@
   </data>
   <data name="ERR_INVITE_USER_TASK_INCORRECT_TASK_TYPE" xml:space="preserve">
     <value>Must be InviteUsers task type for current model</value>
+  </data>
+  <data name="ERR_LOWER_BOUND_EXCEEDED_MSG_FORMAT" xml:space="preserve">
+    <value>{0} exceeds lower bound. Please re-enter {0}.</value>
   </data>
   <data name="ERR_MAPPING_FOR_COLUMN_REQUIRED" xml:space="preserve">
     <value>mapping for column {0} is required</value>
@@ -794,6 +872,9 @@
   </data>
   <data name="ERR_METHOD_CALLER_DOES_NOT_HAVE_PERMISSION" xml:space="preserve">
     <value>Method caller does not have permission {0}</value>
+  </data>
+  <data name="ERR_MORE_THAN_ONE_PRIMARY_MSG_FORMAT" xml:space="preserve">
+    <value>{0} has more than one primary. Please re-select {0}.</value>
   </data>
   <data name="ERR_MULTIPLE_SCHOOL_ARE_NOT_SUPPORTED" xml:space="preserve">
     <value>Multiple school users are not supported yet</value>
@@ -918,11 +999,17 @@
   <data name="ERR_PROCESSING_FILE" xml:space="preserve">
     <value>Error in file processing</value>
   </data>
+  <data name="ERR_RECORD_NOT_FOUND_MSG_FORMAT" xml:space="preserve">
+    <value>The current record has been removed by another user.</value>
+  </data>
   <data name="ERR_REPORT_DEFINITION_FILE_NOT_FOUND" xml:space="preserve">
     <value>can't find report definition file: {0}</value>
   </data>
   <data name="ERR_REPORT_NO_RENDERER_FOR_FORMAT" xml:space="preserve">
     <value>No renderer for this format</value>
+  </data>
+  <data name="ERR_REQUIRED_FIELD_MSG_FORMAT" xml:space="preserve">
+    <value>{0} is a required field. Please make sure that you enter data in all required fields.</value>
   </data>
   <data name="ERR_REQUIRED_PERMISSIONS_NOT_SET_FOR_METHOD" xml:space="preserve">
     <value>Required permissions aren't set for this API method</value>
@@ -1155,6 +1242,12 @@
   <data name="ERR_TEACHER_NOT_FOUND" xml:space="preserve">
     <value>Teacher {0} not found</value>
   </data>
+  <data name="ERR_TOO_LONG_MSG_FORMAT" xml:space="preserve">
+    <value>Please make sure that the number of characters that you have entered for the {0} field is less than or equal to {1} characters.</value>
+  </data>
+  <data name="ERR_TOO_SHORT_MSG_FORMAT" xml:space="preserve">
+    <value>Please make sure that the number of characters that you have entered for the {0} field is longer than or equal to {1} characters.</value>
+  </data>
   <data name="ERR_TRACE_UNSUPPORTED_CONTROLLER" xml:space="preserve">
     <value>only chackable controller is supported in TraceControllerFilter filter</value>
   </data>
@@ -1163,6 +1256,9 @@
   </data>
   <data name="ERR_UPLOADING_STUDENT_PICTURES" xml:space="preserve">
     <value>Error in uploading student pictures</value>
+  </data>
+  <data name="ERR_UPPER_BOUND_EXCEEDED_MSG_FORMAT" xml:space="preserve">
+    <value>{0} exceeds upper bound. Please re-enter {0}.</value>
   </data>
   <data name="ERR_USER_INVALID_ROLE_NAME" xml:space="preserve">
     <value>Invalid roleName name [{0}]</value>
@@ -1199,6 +1295,9 @@
   </data>
   <data name="GETTING_ZIP_FROM_STORAGE" xml:space="preserve">
     <value>Getting zip file from storage</value>
+  </data>
+  <data name="GRADE_POSTING_NOT_ALLOWED" xml:space="preserve">
+    <value>Grade posting is not allowed for current Grading Period.</value>
   </data>
   <data name="IMPORTING_ADMINS" xml:space="preserve">
     <value>Admins importing.</value>
@@ -1260,6 +1359,15 @@
   <data name="MARKING_PERIODS_FOR_SCHOOL_YEAR_IMPORT_START" xml:space="preserve">
     <value>start importing marking periods for school year {0}</value>
   </data>
+  <data name="MSG_ACAD_SESSION_NOT_FOUND" xml:space="preserve">
+    <value>Academic Session is required. Please make sure that you select an academic session.</value>
+  </data>
+  <data name="MSG_TERM_NOT_FOUND" xml:space="preserve">
+    <value>Terms are not found.</value>
+  </data>
+  <data name="MUST_GREATER" xml:space="preserve">
+    <value>The {0} must be greater than {1}.</value>
+  </data>
   <data name="NOTIFICATIONS_SENT_TO_MAIL_COUNT" xml:space="preserve">
     <value>Count of notification sended to mail {0}</value>
   </data>
@@ -1271,6 +1379,9 @@
   </data>
   <data name="NO_CLASS_NAME" xml:space="preserve">
     <value>No class Name</value>
+  </data>
+  <data name="NO_DATA" xml:space="preserve">
+    <value>There is not any {0} in the {1}.</value>
   </data>
   <data name="NO_DAYS_DESCRIPTION" xml:space="preserve">
     <value>No days description</value>
@@ -1292,6 +1403,15 @@
   </data>
   <data name="NO_TEACHER_NAME" xml:space="preserve">
     <value>No teacher name</value>
+  </data>
+  <data name="OUT_OF_RANGE" xml:space="preserve">
+    <value>The {0} is not in range of {1}. Please re-enter {0}.</value>
+  </data>
+  <data name="PERMISSION_TOOLTIP" xml:space="preserve">
+    <value>You do not have enough permission to perform this action.</value>
+  </data>
+  <data name="PERSONETHNICITY_PERCENTAGE_NOT100_KEY" xml:space="preserve">
+    <value>PersonEthnicity_Percentage_Not100</value>
   </data>
   <data name="PERSON_IMPORT_START" xml:space="preserve">
     <value>Start Person Import</value>
@@ -1319,6 +1439,12 @@
   </data>
   <data name="REPORT_START_RENDER_ACTION" xml:space="preserve">
     <value>start render action {0}, {1}, {2}, {3}, {4}</value>
+  </data>
+  <data name="REQUIRED_DATA_MESSAGE" xml:space="preserve">
+    <value>{0} is required because {1} was entered. Please enter {0}.</value>
+  </data>
+  <data name="REQUIRED_FOR_WORKING_ERROR_MSG_FORMAT" xml:space="preserve">
+    <value>The {0} cannot be blank. It is required for working. Please enter the {0} information.</value>
   </data>
   <data name="ROSTER_RECORDS_PROCESSED_ADDED" xml:space="preserve">
     <value>{0} roster records are processed. {1} records were added</value>
