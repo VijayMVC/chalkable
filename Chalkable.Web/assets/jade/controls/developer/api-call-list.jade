@@ -1,0 +1,5 @@
+mixin ApiCallList(name)
+    -attributes.id = name
+    attributes = self.processAttrs(attributes)
+    .api-call-list(attributes)
+        block
