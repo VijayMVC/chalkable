@@ -113,10 +113,11 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[chlk.models.id.ClassId]],
-        ria.async.Future, function getStudentsForReport(classId) {
-            return this.get('Student/GetStudents.json', ArrayOf(chlk.models.people.ShortUserInfo), {
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+        ria.async.Future, function getStudentsForReport(classId, gradingPeriodId) {
+            return this.get('Reporting/GetStudentProgressReportComments.json', ArrayOf(chlk.models.grading.UserForReport), {
                 classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
                 start: 0,
                 count: 9999
             });
