@@ -82,7 +82,7 @@
                                     +ActionLink('user', 'infoByRole', student.getId(), student.getRole().getName()).image-container.white.shadow
                                         +PersonImg(student, 47)
                                     p=student.getDisplayName()
-                                    INPUT(placeholder="This is a comment", value=student.getComment()).student-comment
+                                    INPUT(value=student.getComment()).student-comment
         .report-bottom
             +Select('format').format
                 +Option(0, "PDF", true)
