@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             else
             {
                 user.OriginalPassword = password;
-                using (var uow = Update())
+                using (var uow = Update(IsolationLevel.ReadUncommitted))
                 {
                     var res = SisUserLogin(user, uow);
                     uow.Commit();
