@@ -295,17 +295,41 @@ NAMESPACE('chlk.activities.grading', function () {
                 node.parent('form').find('.grade-input').setValue('');
             },
 
+            function updateValue(node, input, value){
+                var checkbox = node.find('.exempt-checkbox');
+                if(value == 'exempt' && (!checkbox.exists() || checkbox.getData('value')))
+                    return false;
+                if(value == 'exempt'){
+                    checkbox.setValue(true);
+                    value = "";
+                    return true;
+                }else{
+                    if(!!checkbox.getData('value') == checkbox.checked())
+                        checkbox.setValue(false);
+                }
+                return false;
+            },
+
             [ria.mvc.DomEventBind('submit', 'form.update-grade-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitFormEvent(node, event){
                 var input = node.find('.grade-input');
+                var value = (input.getValue() || '').toLowerCase(), wasExempt = false;
+                var checkbox = node.find('.exempt-checkbox');
                 if(node.hasClass('no-loading')){
                     node.removeClass('no-loading');
                     if(input.hasClass('error'))
                         input.setValue(input.getData('grade-value'));
+                    else
+                        if(value == 'exempt'){
+                            checkbox.setValue(true);
+                            input.setValue('');
+                            setTimeout(function(){
+                                input.setValue(Msg.Exempt);
+                            }, 1);
+                        }
                     return true;
                 }
-                var checkbox = node.find('.exempt-checkbox');
                 if(node.find('.grade-input').hasClass('error'))
                     return false;
                 var row = node.parent('.row');
@@ -313,7 +337,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(container.hasClass('loading'))
                     return false;
                 row.find('.grading-input-popup').hide();
-                var value = (input.getValue() || '').toLowerCase(), wasExempt = false;
                 if(value == 'exempt' && (!checkbox.exists() || checkbox.getData('value')))
                     return false;
                 if(value == 'exempt'){
@@ -324,7 +347,6 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(!!checkbox.getData('value') == checkbox.checked())
                         checkbox.setValue(false);
                 }
-
                 if((value || '') == (input.getData('grade-value') || '') && (!checkbox.exists() || !!checkbox.getData('value') == checkbox.checked()))
                     return false;
                 if(wasExempt)
