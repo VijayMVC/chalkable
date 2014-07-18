@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -26,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         static PreferenceService()
         {
             var defaultList = DefaultList();
-            using (var uow = new UnitOfWork(Settings.MasterConnectionString, false))
+            using (var uow = new UnitOfWork(Settings.MasterConnectionString, false, IsolationLevel.ReadCommitted))
             {
                 var preferences = new PreferenceDataAccess(uow).GetAll();
                 foreach (var defaultelem in defaultList)

@@ -263,33 +263,38 @@ namespace Chalkable.StiImport.Services
 
         private void InsertSchoolPersons()
         {
-            var existsing = ServiceLocatorSchool.SchoolPersonService.GetAll();
-            var students = context.GetSyncResult<Student>().All;
-            var staff = context.GetSyncResult<Staff>().All;
+            var ex = ServiceLocatorSchool.SchoolPersonService.GetAll()
+                                    .Select(x => new Pair<int, int>(x.PersonRef, x.SchoolRef));
+            var existsing = new HashSet<Pair<int, int>>(ex);
+            
+            var students = context.GetSyncResult<Student>().All
+                .ToDictionary(x=>x.UserID);
+            var staff = context.GetSyncResult<Staff>().All
+                .Where(x=>x.UserID.HasValue).ToDictionary(x=>x.UserID);
             var userSchools = context.GetSyncResult<UserSchool>().All;
             IList<SchoolPerson> assignments = new List<SchoolPerson>();
             foreach (var us in userSchools)
             {
-                var student = students.FirstOrDefault(x => x.UserID == us.UserID);
                 int? personId = null;
                 int? role = null;
-                if (student != null)
+                if (students.ContainsKey(us.UserID))
                 {
-                    personId = student.StudentID;
+                    personId = students[us.UserID].StudentID;
                     role = CoreRoles.STUDENT_ROLE.Id;
                 }
                 else
                 {
-                    var teacher = staff.FirstOrDefault(x => x.UserID == us.UserID);
-                    if (teacher != null)
+                    
+                    if (staff.ContainsKey(us.UserID))
                     {
-                        personId = teacher.StaffID;
+                        personId = staff[us.UserID].StaffID;
                         role = CoreRoles.TEACHER_ROLE.Id;
                     }
                 }
                 if (role.HasValue)
                 {
-                    if (!existsing.Any(x => x.PersonRef == personId.Value && x.SchoolRef == us.SchoolID))
+                    var p = new Pair<int, int>(personId.Value, us.SchoolID);
+                    if (!existsing.Contains(p))
                     {
                         var sp = new SchoolPerson
                             {
@@ -298,14 +303,8 @@ namespace Chalkable.StiImport.Services
                                 PersonRef = personId.Value
                             };
                         assignments.Add(sp);
-                        existsing.Add(sp);
+                        existsing.Add(p);
                     }
-                }
-                else
-                {
-                    //TODO: may be useful but takes too much time for logging
-                    //var msg = string.Format("User {0} from school {1} doesn't refer to any person", us.UserID, us.SchoolID);
-                    //Log.LogWarning(msg);
                 }
             }
             ServiceLocatorSchool.PersonService.AsssignToSchool(assignments);
@@ -410,8 +409,7 @@ namespace Chalkable.StiImport.Services
                                       .ToList();
             foreach (var dayType in dayTypes)
             {
-                var dt = ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
-                Log.LogInfo(string.Format(ChlkResources.IMPORT_GENERAL_PERIODS_FOR_SCHEDULE_SECTION_START, dt.Id));
+                ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
             }
         }
 

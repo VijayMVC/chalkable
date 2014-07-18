@@ -130,24 +130,26 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AsssignToSchool(IList<SchoolPerson> assignments)
         {
-            //TODO: need cross db transaction handling
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
             var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetSchools(Context.DistrictId.Value, 0,
-                                                                                           int.MaxValue);
+                                                                                           int.MaxValue)
+                                                                                           .ToDictionary(x=>x.LocalId);
             //TODO: not the best performance solution for all sync but first one
-            var users = ServiceLocator.ServiceLocatorMaster.UserService.GetByDistrict(Context.DistrictId.Value);
+            var users = ServiceLocator.ServiceLocatorMaster.UserService.GetByDistrict(Context.DistrictId.Value)
+                .ToDictionary(x=>x.LocalId);
             var schoolUsers = assignments.Select(x => new SchoolUser
             {
                 Id = Guid.NewGuid(),
                 Role = x.RoleRef,
-                SchoolRef = schools.First(y => y.LocalId == x.SchoolRef).Id,
-                UserRef = users.First(y => y.LocalId == x.PersonRef).Id
-
+                SchoolRef = schools[x.SchoolRef].Id,
+                UserRef = users[x.PersonRef].Id
             }).ToList();
+
             ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(schoolUsers);
+
             using (var uow = Update())
             {
                 var schoolDataAccess = new SchoolPersonDataAccess(uow);

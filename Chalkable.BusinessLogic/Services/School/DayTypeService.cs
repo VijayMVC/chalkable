@@ -84,8 +84,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 dayTypes.Add(ss);
                 dayTypes = AdjustNumbering(dayTypes);
                 da.Update(dayTypes);
+
+                var res = da.GetById(id);
                 uow.Commit();
-                return GetSectionById(ss.Id);
+                return res;
             }
         }
 
@@ -117,8 +119,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 sections.Add(section);
                 sections = AdjustNumbering(sections);
                 da.Update(sections);
+                var res = da.GetById(id);
                 uow.Commit();
-                return GetSectionById(section.Id);
+                return res;
             }
         }
 
@@ -133,7 +136,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return sections;
         }  
-
 
         public void Delete(int id)
         {
@@ -153,7 +155,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
         public IList<DayType> Add(IList<DayType> dayTypes)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -166,7 +167,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 return dayTypes;
             }
-             
         }
 
         public void Delete(IList<int> ids)
@@ -188,7 +188,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
-
 
         public IList<DayType> Edit(IList<DayType> dayTypes)
         {

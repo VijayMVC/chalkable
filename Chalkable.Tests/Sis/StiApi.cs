@@ -49,6 +49,7 @@ namespace Chalkable.Tests.Sis
             var cs2 = @"Data Source=me0buyg8np.database.windows.net;Initial Catalog=2014-06-09-chalkable-old;UID=chalkableadmin;Pwd=Hellowebapps1!";
 
             TransactionScope scope1 = new TransactionScope(TransactionScopeOption.RequiresNew);
+            
 
             using (SqlConnection connection1 = new SqlConnection(cs1))
             {

@@ -1,4 +1,5 @@
-﻿using Chalkable.Data.Common;
+﻿using System.Data;
+using Chalkable.Data.Common;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
@@ -20,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             return ServiceLocator.DbService.GetUowForRead();
         }
 
-        protected UnitOfWork Update()
+        protected UnitOfWork Update(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             return ServiceLocator.DbService.GetUowForUpdate();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -78,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             else
             {
                 user.OriginalPassword = password;
-                using (var uow = Update())
+                using (var uow = Update(IsolationLevel.ReadUncommitted))
                 {
                     var res = SisUserLogin(user, uow);
                     uow.Commit();
@@ -153,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null)
         {
-            using (var uow = Update())
+            using (var uow = Update(IsolationLevel.ReadUncommitted))
             {
                 var district = new DistrictDataAccess(uow)
                     .GetAll(new AndQueryCondition{{District.SIS_DISTRICT_IF_FIELD, sisDistrictId}})

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -333,15 +332,6 @@ namespace Chalkable.Data.Common
         {
             SimpleDelete(BuildCondsByKey(key));
         }
-
-        //public virtual void Delete(IList<TParam> keys)
-        //{
-        //    //SimpleDelete<TEntity>(BuildCondsByKeys(keys));
-        //   var res = Orm.Orm.SimpleDelete<TEntity>(new AndQueryCondition());
-        //   var tName = typeof (TEntity).Name;
-        //   var primaryKeyField = Orm.Orm.GetPrimaryKeyFields().First().Name;
-        //   res.Sql.AppendFormat(" and [{0}].[{1}] in ()")
-        //}
 
         public virtual TEntity GetById(TParam key)
         {
