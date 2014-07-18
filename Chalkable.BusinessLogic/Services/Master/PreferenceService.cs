@@ -378,6 +378,16 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Value = "Returns list of accessible schools(returns 1 school for all of these roles)"
             });
 
+
+
+            res.Add(Preference.API_DESCR_SCHOOLYEAR_CURRENT, new PreferenceInfo
+            {
+                Category = PreferenceCategoryEnum.ControllerDescriptions,
+                Type = PreferenceTypeEnum.ShortText,
+                Value = "Returns current school year"
+            });
+
+
             res.Add(Preference.API_DESCR_STUDENT_SUMMARY, new PreferenceInfo
             {
                 Category = PreferenceCategoryEnum.ControllerDescriptions,

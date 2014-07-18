@@ -29,6 +29,7 @@ namespace Chalkable.Data.Master.Model
         public PreferenceCategoryEnum Category { get; set; }
         public PreferenceTypeEnum Type { get; set; }
         public string Hint { get; set; }
+        
 
 
         //Constants
@@ -169,6 +170,7 @@ namespace Chalkable.Data.Master.Model
         public const string API_DESCR_STUDENT_GET_STUDENTS = "api_desc_student_get_students";
         public const string API_DESCR_ATTENDANCE_REASON_LIST = "api_desc_attendance_reason_list";
         public const string API_DESCR_ATTENDANCE_SET_ATTENDANCE_FOR_CLASS = "api_desc_attendance_set_attendance_for_class";
+        public const string API_DESCR_SCHOOLYEAR_CURRENT = "api_desc_schoolyear_current";
     }
 
 }

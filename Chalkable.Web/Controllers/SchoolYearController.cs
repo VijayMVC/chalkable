@@ -15,5 +15,12 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.SchoolYearService.GetSchoolYears(start ?? 0, count ?? 10);
             return Json(res.Transform(SchoolYearViewData.Create));
         }
+
+        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_SCHOOLYEAR_CURRENT, true, CallType.Get, new[] { AppPermissionType.Schedule })]
+        public ActionResult CurrentSchoolYear()
+        {
+            var res = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            return Json(SchoolYearViewData.Create(res));
+        }
     }
 }

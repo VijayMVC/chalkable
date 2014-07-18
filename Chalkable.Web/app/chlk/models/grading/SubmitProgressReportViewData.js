@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.GradingPeriodId');
+REQUIRE('chlk.models.grading.UserForReport');
 REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.models.grading', function () {
@@ -63,11 +64,11 @@ NAMESPACE('chlk.models.grading', function () {
 
         String, 'studentIds',
 
-        ArrayOf(chlk.models.people.ShortUserInfo), 'students',
+        ArrayOf(chlk.models.grading.UserForReport), 'students',
 
         ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
-        [[ArrayOf(chlk.models.attendance.AttendanceReason), ArrayOf(chlk.models.people.ShortUserInfo), chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        [[ArrayOf(chlk.models.attendance.AttendanceReason), ArrayOf(chlk.models.grading.UserForReport), chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
         function $(reasons_, students_, gradingPeriodId_, classId_, startDate_, endDate_){
             BASE();
             if(students_)
