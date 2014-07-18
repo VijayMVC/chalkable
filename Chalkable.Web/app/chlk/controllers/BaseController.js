@@ -63,7 +63,7 @@ NAMESPACE('chlk.controllers', function (){
 
            [[Object]],
            function handleServerError(error){
-               if(error.getStatus() == 500){
+               if(error.getStatus && error.getStatus() == 500){
                     var response = JSON.parse(error.getResponse());
                     if(response.exceptiontype == 'ChalkableSisException')
                        return this.ShowMsgBox(response.message, 'oops',[{
