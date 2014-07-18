@@ -28,16 +28,16 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, IntList studentIds, StringList commments)
+        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, IntList studentIds, StringList comments)
         {
-            if (studentIds != null && commments != null && studentIds.Count == commments.Count)
+            if (studentIds != null && comments != null && studentIds.Count == comments.Count)
             {
                 progressReportInput.StudentComments = new List<StudentCommentInputModel>();
                 for (int i = 0; i < studentIds.Count; i++)
                 {
                     progressReportInput.StudentComments.Add(new StudentCommentInputModel
                         {
-                            Comment = commments[i],
+                            Comment = comments[i],
                             StudentId = studentIds[i]
                         });
                 }
