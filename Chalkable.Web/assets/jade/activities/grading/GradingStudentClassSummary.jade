@@ -65,11 +65,11 @@ selectedId = topData.getSelectedItemId()
             needGoToButton = true,
             service = chlk.services.GradingService,
             method = "getRecentlyGradedItems",
-            tpl = chlk.templates.announcement.FeedItemTpl,
+            tpl = chlk.templates.grading.GradingFeedItemTpl,
             pageSize = 10,
             paramsPrepend = [selectedId]
             )
                 each announcement in self.announcements
-                    +FeedItem(announcement, true)
+                    +FeedItem(announcement)
 
 

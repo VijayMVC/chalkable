@@ -21,7 +21,7 @@ mixin AnnouncementTooltip()
     hasGrade = self.isDropped() || grade || grade == 0
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
-    +FeedItem(self).animated-item
+    +FeedItem(self, true).animated-item
     .autocomplete-list.announcement-view
     .panel-bg
         .action-bar.buttons

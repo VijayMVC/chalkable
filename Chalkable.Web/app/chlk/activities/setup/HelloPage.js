@@ -34,11 +34,14 @@ NAMESPACE('chlk.activities.setup', function () {
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();
-                ria.dom.Dom('body').removeClass('setup');
+                var body = ria.dom.Dom('body');
+                body.removeClass('setup');
+                body.addClass('first-login');
             },
 
-            OVERRIDE, VOID, function onRender_(model){
-                BASE(model);
+            [[String]],
+            OVERRIDE, VOID, function onModelWait_(msg_) {
+                BASE(msg_);
                 ria.dom.Dom('body').addClass('setup');
             }
         ]);

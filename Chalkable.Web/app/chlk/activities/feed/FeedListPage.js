@@ -68,10 +68,8 @@ NAMESPACE('chlk.activities.feed', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 if(model.isFirstLogin()){
-                    var body = ria.dom.Dom('body');
+                    var body = ria.dom.Dom('body'), that = this;
                     ria.dom.Dom('#first-login-input').trigger('focus');
-                    var that = this;
-                    body.addClass('first-login');
                     $("#first-login-video").YouTubePopup();
                     $("#first-login-video").trigger('click');
                     body.on('click.tour', '.YouTubeDialog .ui-dialog-titlebar-close', function(){
