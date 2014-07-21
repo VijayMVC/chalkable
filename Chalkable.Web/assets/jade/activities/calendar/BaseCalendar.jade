@@ -1,0 +1,56 @@
+mixin TooltipWithOverflow(text)
+    -attributes['data-tooltip'] = text
+    -attributes['data-tooltip-type'] = 'overflow'
+    p(attributes)=text
+
+mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params)
+    .chlk-calendar(attributes)
+        .header
+            .header-container
+                .buttons-container
+                    .buttons
+                        block
+                        +CalendarHeader(data, controller, bodyModel, actions, params)
+        .calendar-body
+            +RenderWith(bodyModel, bodyTpl)(
+                userRole = data.getUserRole()
+                mainCalendar = true
+            )
+
+mixin CalendarHeader(data, controller, bodyModel, actions, params)
+    currentAction = actions.currentAction
+    todayAction = actions.todayAction || actions.currentAction
+        .calendar-today-container
+            -params.unshift('')
+            +ActionLinkWithPrepend(controller, todayAction, params).calendar-today.week=Msg.Today
+            -params.shift()
+        .prev-month-container
+            if bodyModel.getPrevDate()
+                -params.unshift(bodyModel.getPrevDate().format('mm-dd-yy'))
+                +ActionLinkWithPrepend(controller, currentAction, params).prev-month.week.teacher
+                -params.shift()
+            else
+                A.prev-month.week.teacher
+        .current-month-container.week
+            label.current-month=bodyModel.getCurrentTitle()
+        .next-month-container
+            if bodyModel.getNextDate()
+                -params.unshift(bodyModel.getNextDate().format('mm-dd-yy'))
+                +ActionLinkWithPrepend(controller, currentAction, params).next-month.week
+                -params.shift()
+            else
+                A.next-month.week
+        if actions.day && actions.week && actions.month
+            -params.unshift('')
+            .calendar-day-container
+                +ActionLinkWithPrepend(controller, actions.day, params)(class = actions.day == currentAction ? 'pressed' : '').calendar-day.week
+                    span.tooltip
+                    |#{Msg.Day}
+            .calendar-week-container
+                +ActionLinkWithPrepend(controller, actions.week, params)(class = actions.week == currentAction ? 'pressed' : '').calendar-week.week
+                    span.tooltip
+                    |#{Msg.Week}
+            .calendar-month-container
+                +ActionLinkWithPrepend(controller, actions.month, params)(class = actions.month == currentAction ? 'pressed' : '').calendar-month.week
+                    span.tooltip
+                    |#{Msg.Month}

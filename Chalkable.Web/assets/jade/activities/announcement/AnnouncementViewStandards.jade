@@ -1,0 +1,5 @@
+each standard in self.getStandards()
+    .standard-item
+        input(data-id=standard.getStandardId().valueOf(), value=standard.getGrade(), readonly="readonly").standard-grade.grey-input
+        .standard-name.letters=standard.getName()
+.clear-right
