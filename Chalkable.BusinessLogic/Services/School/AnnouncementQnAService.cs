@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+                if (!(Context.UserLocalId.HasValue && Context.SchoolLocalId.HasValue))
                     throw new UnassignedUserException();
           
                 var da = new AnnouncementQnADataAccess(uow);
@@ -56,7 +56,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 annQnA = da.GetAnnouncementQnA(new AnnouncementQnAQuery 
                                 {
                                     AnnouncementId = announcementId,
-                                    CallerId = annQnA.AskerRef
+                                    CallerId = annQnA.AskerRef,
+                                    SchoolId = Context.SchoolLocalId.Value
                                 }).AnnouncementQnAs.OrderByDescending(x=>x.Id).First();
                 ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
                 return annQnA;
@@ -109,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var da = new ClassTeacherDataAccess(uow);
             return BaseSecurity.IsSysAdmin(Context)
-                   || ((!announcementQnA.AnswererRef.HasValue  && da.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value))
+                   || ((!announcementQnA.AnswererRef.HasValue  && da.Exists(announcementQnA.ClassRef, Context.UserLocalId.Value))
                         || announcementQnA.AnswererRef == Context.UserLocalId);
         }
 
@@ -168,7 +169,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private AnnouncementQnAQueryResult GetAnnouncmentQnAs(AnnouncementQnAQuery query)
         {
+            if (!(Context.UserLocalId.HasValue && Context.SchoolLocalId.HasValue))
+                throw new UnassignedUserException();
+
             query.CallerId = Context.UserLocalId;
+            query.SchoolId = Context.SchoolLocalId.Value;
             using (var uow = Read())
             {
                 return new AnnouncementQnADataAccess(uow).GetAnnouncementQnA(query);
