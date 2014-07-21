@@ -1,4 +1,4 @@
-mixin FeedItem(item, noDisabled)
+mixin FeedItem(item, disabled)
     itemClasses = attributes.class || []
         -itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
         -itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
@@ -25,7 +25,7 @@ mixin FeedItem(item, noDisabled)
                 +ActionLink('announcement', 'star', item.getId().valueOf(), !item.isComplete())(
                     data-tooltip=item.isComplete() ? Msg.Done : Msg.ToDo
                 ).star
-                +ActionLink('announcement', 'view', item.getId())(class = !noDisabled ? 'disabled' : '').d-b.t-d.not-blue.announcement-link
+                +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').d-b.t-d.not-blue.announcement-link
                     .item-type
                         .attachment
                             div(class="announcement-type-" + item.getChalkableAnnouncementType()).icon.blue
