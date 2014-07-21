@@ -13,11 +13,10 @@ NAMESPACE('chlk.templates', function () {
                     return null;
                 var url = this.isDemoSchool() ? window.demoAzurePictureUrl : window.azurePictureUrl;
 
-                if (notDepartmentSpecific_ == null && window.school){
-                    var districtId = this.isDemoSchool() ? window.DEMO_SCHOOL_PICTURE_DISTRICT : window.school.districtid;
-                    url += districtId + '_';
-                }
+                var districtId = this.isDemoSchool() ? window.DEMO_SCHOOL_PICTURE_DISTRICT : window.school.districtid;
 
+                if (notDepartmentSpecific_ == null)
+                    url += districtId + '_';
                 url += id.valueOf();
 
                 if (sizeH_ && sizeW_)
