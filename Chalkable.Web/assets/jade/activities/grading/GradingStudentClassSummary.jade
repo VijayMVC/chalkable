@@ -8,7 +8,7 @@ selectedId = topData.getSelectedItemId()
     clazz = self.getClazz()
     if clazz && self.getCurrentMarkingPeriod() && clazz.getTeacher()
         h1
-            +ActionLink('user', 'infoByRole', clazz.getTeacher().getId(), chlk.models.common.RoleNamesEnum.TEACHER)
+            div
                 +PersonImg(clazz.getTeacher(), 47)
             =clazz.getName()
             .mp-info
