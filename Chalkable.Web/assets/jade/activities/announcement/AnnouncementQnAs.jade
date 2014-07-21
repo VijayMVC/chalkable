@@ -18,20 +18,22 @@ each item, i in self.getAnnouncementQnAs()
                 +Button()(type="submit").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
 
         answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
-        if answered || self.getUserRole().isTeacher()
+        if (answered || self.getUserRole().isTeacher())
             .row
                 hideEdit = answered || !self.annOwner
-                .avatar-container.i-b.no-overflow
-                    +PersonImg(item.getAnswer().getPerson(), 47)
+                if item.getAnswer()
+                    .avatar-container.i-b.no-overflow
+                        +PersonImg(item.getAnswer().getPerson(), 47)
                 .qna.i-b
-                    h2= item.getAnswer().getPerson().getFirstName()
-                    .edit-answer-block
-                        p(class = hideEdit ? "" : "x-hidden").edit-answer-text= item.getAnswer().getMessage()
-                        span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
-                        if answered && self.annOwner
-                            a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
-                        //a(href='javascript:', name='cancel-answer-link').cancel-answer-link cancel
-                    input(type="text",name="answer", value=item.getAnswer().getMessage()
+                    if item.getAnswer()
+                        h2= item.getAnswer().getPerson().getFirstName()
+                        .edit-answer-block
+                            p(class = hideEdit ? "" : "x-hidden").edit-answer-text= item.getAnswer().getMessage()
+                            span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                            if answered && self.annOwner
+                                a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
+                            //a(href='javascript:', name='cancel-answer-link').cancel-answer-link cancel
+                    input(type="text",name="answer", value=item.getAnswer() ? item.getAnswer().getMessage() : ''
                         , class=hideEdit ? "x-hidden validate[required]" : "validate[required]").edit-answer-input
                     br
                     +Button()(type="submit", class="special-button blue-button submit-btn").edit-answer-btn=Msg.Update.toUpperCase()

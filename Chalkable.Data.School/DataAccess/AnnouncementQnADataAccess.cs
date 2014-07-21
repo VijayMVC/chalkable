@@ -20,7 +20,8 @@ namespace Chalkable.Data.School.DataAccess
         private const string ANSWERER_ID_PARAM = "answererId";
         private const string ANNOUNCEMENT_ID_PARAM = "announcementId";
         private const string ANNOUNCEMENT_QNA_ID_PARAM = "announcementQnAId";
-        
+        private const string SCHOOL_ID_PARAM = "schoolId";
+
         public AnnouncementQnAQueryResult GetAnnouncementQnA(AnnouncementQnAQuery query)
         {
             var parameter = new Dictionary<string, object>
@@ -29,7 +30,8 @@ namespace Chalkable.Data.School.DataAccess
                     {ANNOUNCEMENT_ID_PARAM, query.AnnouncementId},
                     {ASKER_ID_PARAM, query.AskerId},
                     {ANSWERER_ID_PARAM, query.AnswererId},
-                    {CALLER_ID_PARAM, query.CallerId}
+                    {CALLER_ID_PARAM, query.CallerId},
+                    {SCHOOL_ID_PARAM, query.SchoolId}
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_QNA_PROCEDURE, parameter))
             {
@@ -82,6 +84,7 @@ namespace Chalkable.Data.School.DataAccess
         public int? AnswererId { get; set; }
         public int? AnnouncementId { get; set; }
         public int? CallerId { get; set; }
+        public int SchoolId { get; set; }
     }
 
     public class AnnouncementQnAQueryResult
