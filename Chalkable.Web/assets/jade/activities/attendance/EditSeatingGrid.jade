@@ -10,7 +10,7 @@
             input(
                 name='rows',
                 value=(self.getRows() || 0),
-                class='validate[custom[number],min[' + (self.getMinRows() || 1) + '], max[99]]',
+                class='validate[required, custom[number],min[' + (self.getMinRows() || 1) + '], max[99]]',
                 data-min-value=self.getMinRows()
             )
         div
@@ -18,7 +18,7 @@
             input(
                 name='columns',
                 value=(self.getColumns() || 0),
-                class='validate[custom[number],min[' + (self.getMinColumns() || 1) + '], max[99]]',
+                class='validate[required, custom[number],min[' + (self.getMinColumns() || 1) + '], max[99]]',
                 data-min-value=self.getMinColumns()
             )
         div
