@@ -115,7 +115,7 @@ NAMESPACE('chlk.controls', function () {
                         });
                     }
 
-                    if($form.validationEngine('validate')) {
+                    if($target.getData('submit-skip') || $form.validationEngine('validate')) {
                         var action = $target.getData('action');
                         var p = jQuery($form.valueOf()).serializeArray();
                         var params = {};
