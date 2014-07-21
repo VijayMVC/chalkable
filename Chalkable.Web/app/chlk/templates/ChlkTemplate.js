@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates', function () {
     CLASS(
         'ChlkTemplate', EXTENDS(chlk.templates.JadeTemplate), [
             [[Object, Number]],
-            String, function getPictureURL(id, sizeH_, sizeW_, notDepartmentSpecific_){
+            String, function getStudentPictureURL(id, sizeW_, sizeH_, notDepartmentSpecific_){
                 if(!id)
                     return null;
                 var url = this.isDemoSchool() ? window.demoAzurePictureUrl : window.azurePictureUrl;
@@ -19,23 +19,30 @@ NAMESPACE('chlk.templates', function () {
                     url += districtId + '_';
                 url += id.valueOf();
 
-                if (sizeH_ && sizeW_)
-                    return url + '-' + sizeH_ + 'x' + sizeW_;
-                if (sizeH_)
-                    return url + '-' + sizeH_ + 'x' + sizeH_;
+                return this.formatPictureURL_(url, sizeW_, sizeH_);
+            },
+
+            [[String, Number, Number]],
+            String, function formatPictureURL_(url, sizeW_, sizeH_)
+            {
+                if (sizeW_ && sizeH_)
+                    return url + '-' + sizeW_ + 'x' + sizeH_;
+                if (sizeW_)
+                    return url + '-' + sizeW_ + 'x' + sizeW_;
                 return url;
             },
 
             [[Object, Number]],
-            String, function getAppPictureURL(id, sizeH_, sizeW_){
+            String, function getPictureURL(id, sizeW_, sizeH_, notDepartmentSpecific_){
                 if(!id)
                     return null;
                 var url = window.azurePictureUrl + id.valueOf();
-                if (sizeH_ && sizeW_)
-                    return url + '-' + sizeH_ + 'x' + sizeW_;
-                if (sizeH_)
-                    return url + '-' + sizeH_ + 'x' + sizeH_;
-                return url;
+                return this.formatPictureURL_(url, sizeW_, sizeH_);
+            },
+
+            [[Object, Number]],
+            String, function getAppPictureURL(id, sizeW_, sizeH_){
+               return this.getPictureURL(id, sizeW_, sizeH_);
             },
 
             Boolean, function isDemoSchool(){
