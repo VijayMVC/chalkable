@@ -46,9 +46,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.SchoolPersonId]],
             function helloAction(personId_){
                 this.getContext().getSession().set(ChlkSessionConstants.FIRST_LOGIN, true);
-                var result = this.teacherService
-                    .getInfo(personId_ || this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId())
-                    .attach(this.validateResponse_());
+                var result = new ria.async.DeferredData(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON));
                 return this.PushView(chlk.activities.setup.HelloPage, result);
             },
 
