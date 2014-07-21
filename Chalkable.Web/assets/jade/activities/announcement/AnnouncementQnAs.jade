@@ -10,7 +10,7 @@ each item, i in self.getAnnouncementQnAs()
                 .edit-question-block
                     p.edit-question-text= item.getQuestion().getMessage()
                     span= self.convertWith(item.getQuestion().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
-                    if self.annOwner
+                    if self.isAnnOwner()
                         a(href='javascript:', name='edit-question-link').edit-question-link=Msg.Edit
                         //a(href='javascript:', name='cancel-question-link').cancel-question-link cancel
                 input(type="text",name="question", value=item.getQuestion().getMessage()).edit-question-input
@@ -20,7 +20,7 @@ each item, i in self.getAnnouncementQnAs()
         answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
         if (answered || self.getUserRole().isTeacher())
             .row
-                hideEdit = answered || !self.annOwner
+                hideEdit = answered || !self.isAnnOwner()
                 if item.getAnswer()
                     .avatar-container.i-b.no-overflow
                         +PersonImg(item.getAnswer().getPerson(), 47)
@@ -30,7 +30,7 @@ each item, i in self.getAnnouncementQnAs()
                         .edit-answer-block
                             p(class = hideEdit ? "" : "x-hidden").edit-answer-text= item.getAnswer().getMessage()
                             span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
-                            if answered && self.annOwner
+                            if answered && self.isAnnOwner()
                                 a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
                             //a(href='javascript:', name='cancel-answer-link').cancel-answer-link cancel
                     input(type="text",name="answer", value=item.getAnswer() ? item.getAnswer().getMessage() : ''
@@ -38,7 +38,8 @@ each item, i in self.getAnnouncementQnAs()
                     br
                     +Button()(type="submit", class="special-button blue-button submit-btn").edit-answer-btn=Msg.Update.toUpperCase()
 
-if !self.annOwner && self.getUserRole().isStudent()
+
+if !self.isAnnOwner() && self.getUserRole().isStudent()
     +ActionForm('announcement', 'askQuestion')
         .avatar-container.i-b.no-overflow
             +PersonImg(self.getCurrentUser(), 47)

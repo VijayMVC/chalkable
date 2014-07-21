@@ -163,7 +163,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 QnACount = announcement.QnACount,
                 OwnerAttachmentsCount = announcement.OwnerAttachmentsCount,
                 PrimaryTeacherRef = announcement.PrimaryTeacherRef,
-                IsOwner = announcement.IsOwner,
+                IsOwner = announcement.PrimaryTeacherRef == Storage.Context.UserLocalId,
                 PrimaryTeacherName = announcement.PrimaryTeacherName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
@@ -529,10 +529,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                             x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
                     .Select(x => x.AnnouncementRef);
 
-            return
-                data.Where(x => x.Value.Id == announcementId && classRefs.Contains(x.Value.ClassRef) || annRecipients.Contains(x.Value.Id))
+              return data.Where(x => x.Value.Id == announcementId && classRefs.Contains(x.Value.ClassRef) || annRecipients.Contains(x.Value.Id))
                     .Select(x => x.Value)
                     .First();
+            
         }
     }
 
