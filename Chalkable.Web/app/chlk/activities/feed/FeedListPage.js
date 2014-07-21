@@ -15,6 +15,7 @@ NAMESPACE('chlk.activities.feed', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.feed.NotificationsCount, 'notifications', '.feed-notifications', ria.mvc.PartialUpdateRuleActions.Replace)],
         'FeedListPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
+            //todo: to many cope past
             [ria.mvc.DomEventBind('click', '.announcement-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function announcementClick(node, event){
