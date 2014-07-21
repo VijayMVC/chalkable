@@ -257,7 +257,6 @@ namespace Chalkable.StiImport.Services
                 if (person.PhotoModifiedDate.HasValue)
                     personsForImportPictures.Add(person);
             }
-            //ProcessByParts(ps, ServiceLocatorSchool.PersonService.Add, 50000, "persons");
             ServiceLocatorSchool.PersonService.Add(ps);
         }
 

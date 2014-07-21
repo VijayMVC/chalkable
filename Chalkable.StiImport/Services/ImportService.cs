@@ -41,6 +41,27 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
+        void PingConnection(object o)
+        {
+            ImportDbService dbService = (ImportDbService)o;
+            while (true)
+            {
+                try
+                {
+                    using (var uow = dbService.GetUowForRead())
+                    {
+                        var c = uow.GetTextCommand("select 1");
+                        c.ExecuteNonQuery();
+                    }
+                    Thread.Sleep(60 * 1000);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                }
+            }
+        }
+
         public void Import()
         {
             Log.LogInfo("start import");
@@ -52,48 +73,10 @@ namespace Chalkable.StiImport.Services
             masterDb.BeginTransaction();
             Log.LogInfo("begin school transaction");
             schoolDb.BeginTransaction();
-            //TODO: clean this 
-            Thread t1 = new Thread(() =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        using (var uow = masterDb.GetUowForRead())
-                        {
-                            var c = uow.GetTextCommand("select 1");
-                            c.ExecuteNonQuery();
-                        }
-                        Thread.Sleep(60 * 1000);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.TraceError(ex.Message);
-                    }
-                }
-            });
-
-            Thread t2 = new Thread(() =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        using (var uow = schoolDb.GetUowForRead())
-                        {
-                            var c = uow.GetTextCommand("select 1");
-                            c.ExecuteNonQuery();
-                        }
-                        Thread.Sleep(60 * 1000);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.TraceError(ex.Message);
-                    }
-                }
-            });
-            t1.Start();
-            t2.Start();
+            var t1 = new Thread(PingConnection);
+            var t2 = new Thread(PingConnection);
+            t1.Start(masterDb);
+            t2.Start(schoolDb);
 
 
             importedSchoolIds.Clear();
@@ -118,31 +101,32 @@ namespace Chalkable.StiImport.Services
                 if (!schoolCommited)
                 {
                     Log.LogInfo("rollback school db");
-                    schoolDb.Rollback();    
+                    schoolDb.Rollback();
                 }
                 else
-                    Log.LogInfo("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");//TODO.....
+                    Log.LogInfo("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");
+                        //TODO.....
                 Log.LogInfo("rollback master db");
                 masterDb.Rollback();
                 throw;
+            }
+            finally
+            {
+                try
+                {
+                    t1.Abort();
+                    t2.Abort();
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                }    
             }
             Log.LogInfo("process pictures");
             ProcessPictures();
             Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
-            {
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
-            }
-
-            try
-            {
-                t1.Abort();
-                t2.Abort();
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceError(ex.Message);
-            }
             Log.LogInfo("import is completed");
         }
 
@@ -218,19 +202,6 @@ namespace Chalkable.StiImport.Services
                     newVersions.Add(i.Key, i.Value.Value);
                 }
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
-        }
-
-        private void ProcessByParts<T>(IList<T> source, Action<IList<T>> processor, int count, string logMsg)
-        {
-            for (int i = 0; i < source.Count; i += count)
-            {
-                var l = source.Skip(i).Take(count).ToList();
-                if (logMsg != null)
-                    Log.LogInfo(string.Format("starting {0} {1} {2}", logMsg, i, l.Count));
-                processor(l);
-                if (logMsg != null)
-                    Log.LogInfo(string.Format("finished {0} {1} {2}", logMsg, i, l.Count));
-            }
         }
     }
 
