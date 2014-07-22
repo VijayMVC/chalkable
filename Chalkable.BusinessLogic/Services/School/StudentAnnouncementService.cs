@@ -83,7 +83,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 else
                 {
                     scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
-                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef);
+                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
+                    bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
+                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef, enrolled);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)
