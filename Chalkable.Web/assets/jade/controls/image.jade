@@ -1,0 +1,26 @@
+mixin Image()
+    -attributes = self.processAttrs(attributes);
+    img(attributes)
+
+mixin PersonImg(person, size, needAlerts)
+    if(person && person.getGender())
+        src = chlk.templates.ChlkTemplate.prototype.getStudentPictureURL(person.getId(), size, size)
+        isWoman = person.getGender().toLowerCase() == 'f';
+        alternativeHref = joinUrls(window.scriptsRoot, 'Content/avatars/' + size + '/.no-avatar') + (isWoman ? '-female' : '') + '.png';
+        p = needAlerts && person.showAlerts() && self.canShowAlert(person)
+        div(style=p ? "overflow: visible" : "").avatar-wrapper
+            if p
+                top = self.getAlertsAttributes(person)
+                div(
+                    class=(size < 128 ? "small" : ""),
+                     data-stringalerts=person.getAlertsInfo().getStringAlerts()
+                ).alerts-icon.no-tooltip
+            div(attributes)(class="person-avatar-" + (isWoman ? "w" : "m") + "-" + size, style = "background-image: url(" + src + ")")
+
+mixin ClassImg(course, width, height)
+    -defaultSrc =joinUrls(window.scriptsRoot, 'Content/images/common/course-icons/all.png');
+    if course && course.getDepartmentId()
+        -attributes.src = chlk.templates.ChlkTemplate.prototype.getPictureURL(course.getDepartmentId(), height, width, true)
+    else
+        -attributes.src = defaultSrc;
+    +Image()(attributes)
