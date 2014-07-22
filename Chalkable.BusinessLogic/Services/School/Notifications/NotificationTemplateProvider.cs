@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                                  "<a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.QuestionSchoolPersonRef'}>^.Other.FromPersonName</a>";
 
         public const string PRIVATE_MESSAGE_NOTIFICATION = "PRIVATE_MESSAGE_NOTIFICATION";
-        private const string PRIVATE_MESSAGE_NOTIFICATION_TEMPLATE = " <a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Notification.PersonRef'}>^.Other.SenderName</a>" +
+        private const string PRIVATE_MESSAGE_NOTIFICATION_TEMPLATE = " <a ^[^.Other.NeedsUrlLink=true]{href='@0#@1/details/^.Other.SenderId'}>^.Other.SenderName</a>" +
                                                                      " wrote : ^.Other.MessageSubject - ^.Other.ShortedMessage";
 
         public const string END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN = "END_MARKINGPERIOD_NOTIFICATION_TO_ADMIN";
