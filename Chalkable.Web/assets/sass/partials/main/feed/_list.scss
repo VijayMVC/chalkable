@@ -82,6 +82,18 @@ body.setup{
   }
 }
 
+BODY.student #first-login-overlay{
+  background-image: url(images/common/1st-run-overlay-student.png);
+
+  &:before {
+    top: 1000px;
+  }
+
+  &:after {
+    left: 1200px;
+    height: 1000px;
+  }
+}
 
 #first-login-overlay{
   display: none;

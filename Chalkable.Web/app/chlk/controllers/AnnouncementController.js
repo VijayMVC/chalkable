@@ -378,8 +378,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setGradeViewApps(gradeViewApps);
                     announcement.prepareExpiresDateText();
                     announcement.setCurrentUser(this.getCurrentPerson());
-                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADING)
-                        || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)
+                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES)
                         || !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)){
                         announcement.setAbleToGrade(false);
                     }

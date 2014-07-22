@@ -15,6 +15,7 @@
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
     <!-- Whole Site CSS -->
     <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="~/Content/fonts.css" rel="stylesheet" media="screen, projection" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
@@ -55,7 +56,15 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
 
 </head>
-    <body>
+
+     @{
+             var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
+             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
+             var demoSchoolPictureDistrictRef = ViewData.GetValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
+             var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
+        }
+
+    <body class ="@ViewData.GetValueOrNull(ViewConstants.ROLE_NAME)">
         <div id="fb-root"></div>
         <input type="hidden" value=" ServerTime :  @ViewData.GetValueOrNull("CurrentServerDateTime")"/>
         <input type="hidden" value=" ServerDbTime:  @ViewData.GetValueOrNull("CurrentServerDBDateTime")"/>
@@ -65,11 +74,7 @@
             Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
         </div>
         
-         @{
-             var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
-             var demoSchoolPictureDistrictRef = ViewData.GetValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
-        }
+        
         
         
         
@@ -108,8 +113,8 @@
         </div>
         @if (isDemoSchool || isDeveloperSchool)
         {
+
             
-            var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
             var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
             var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
             var isAdmin = currentRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id

@@ -39,7 +39,7 @@ NAMESPACE('chlk.models.attendance', function () {
         },
         [[String]],
         chlk.models.attendance.AttendanceTypeEnum, function map(level){
-            if(!level) return this._attTypeEnum.PRESENT;
+            if(!level || level.toLowerCase() == 'present') return this._attTypeEnum.PRESENT;
             switch (level){
                 case this._attLevelEnum.ABSENT_LEVEL.valueOf() : return this._attTypeEnum.ABSENT;
                 case 'AO' : return this._attTypeEnum.ABSENT;

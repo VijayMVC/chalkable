@@ -70,6 +70,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
             ViewData[ViewConstants.NEEDS_TOUR] = false;
+            ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
             ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
@@ -152,6 +153,8 @@ namespace Chalkable.Web.Controllers
 
             }
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
+            ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
+
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
@@ -283,8 +286,8 @@ namespace Chalkable.Web.Controllers
 
         private bool CanTeacherViewChalkable()
         {
-            return ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM, ClaimInfo.VIEW_LOOKUP})
-                   || ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN, ClaimInfo.VIEW_LOOKUP});
+            return ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM})
+                   || ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN});
         }
     }
 }

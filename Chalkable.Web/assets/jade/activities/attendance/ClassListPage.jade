@@ -64,7 +64,7 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                             if needPresent
                                 -item.setType(valuesEnum.PRESENT.valueOf());
                             student = item.getStudent();
-                            +ActionLink('students', 'info', student.getId()).left.image-container.white.shadow
+                            +ActionLink('students', 'details', student.getId()).left.image-container.white.shadow
                                 +PersonImg(student, 47)
                             p.left
                                 SPAN.name=student.getFullName()
