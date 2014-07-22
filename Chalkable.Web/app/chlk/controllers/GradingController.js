@@ -359,14 +359,19 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
-            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId]],
-            function postGradeBookAction(classId, gradingPeriodId, standardId_, categoryId_){
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId, Boolean]],
+            function postGradeBookAction(classId, gradingPeriodId, standardId_, categoryId_, finalGrades_){
                 var res = this.gradingService.postGradeBook(classId, gradingPeriodId)
                     .attach(this.validateResponse_())
                     .then(function(data){
+                        if(finalGrades_)
+                            return new chlk.models.Success;
                         var model = new chlk.models.grading.GradingSummaryGridSubmitViewData(classId, gradingPeriodId, true, false, standardId_, categoryId_);
                         this.BackgroundNavigate('grading', 'loadGradingPeriodGridSummary', [model]);
                     }, this);
+
+                if(finalGrades_)
+                    return this.UpdateView(this.getView().getCurrent().getClass(), res, chlk.activities.lib.DontShowLoader());
                 return null;
             },
 

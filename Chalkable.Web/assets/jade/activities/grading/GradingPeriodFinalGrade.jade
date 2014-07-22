@@ -11,7 +11,7 @@ gradingPeriod = self.getGradingPeriod()
                     +Option(item.getAverageId().valueOf(), item.getAverageName(), item.getAverageId() == self.getCurrentAverage().getAverageId())
         .gp-title=gradingPeriod.getFinalTitleText()
         if gradingPeriod.isAblePostGradeBook()
-            +ActionLinkButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId()).message-button.blue-gradient-btn.post-gradebook-button.no-loading=Msg.Post
+            +ActionLinkButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId(), null, null, true).message-button.blue-gradient-btn.post-gradebook-button.no-loading=Msg.Post
         .gp-triangle
 div(class = (self.isAvgChanged() ? "opened slided" : "")).gp-data
     items = self.getStudentFinalGrades()

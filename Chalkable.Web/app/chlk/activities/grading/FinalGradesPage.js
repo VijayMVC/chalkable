@@ -1,6 +1,7 @@
 REQUIRE('chlk.templates.grading.FinalGradesTpl');
 REQUIRE('chlk.templates.grading.GradingPeriodFinalGradeTpl');
 REQUIRE('chlk.templates.grading.FinalGradeStudentBlockTpl');
+REQUIRE('chlk.templates.SuccessTpl');
 
 REQUIRE('chlk.activities.lib.TemplatePage');
 
@@ -23,6 +24,19 @@ NAMESPACE('chlk.activities.grading', function () {
                     gradingComments: this.getGradingComments()
                 });
                 tpl.renderTo(container.setHTML(''));
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function doUpdateButton(tpl, model, msg_) {
+                this.dom.find('.post-gradebook-button').find('a[disabled]').setHTML('POST').removeAttr('disabled');
+            },
+
+            [ria.mvc.DomEventBind('click', '.post-gradebook-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function postClick(node, event){
+                setTimeout(function(){
+                    node.find('a').setHTML('SAVING...').setAttr('disabled', true);
+                }, 1);
             },
 
             [[ria.dom.Dom, Boolean]],
