@@ -149,7 +149,8 @@ namespace Chalkable.Web.Controllers
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId);
             var classRoomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId);
-            var students = SchoolLocator.ClassService.GetStudents(classId, classRoomOption != null ? classRoomOption.IncludeWithdrawnStudents : default(bool?));
+            bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
+            var students = SchoolLocator.ClassService.GetStudents(classId, enrolled);
             var res = new List<StandardGradingGridViewData>();
             foreach (var gradingPeriod in gradingPeriods)
             {
@@ -199,6 +200,7 @@ namespace Chalkable.Web.Controllers
             var res = new GradingStudentSummaryViewData {Announcements = GetGradedItems()};
             return Json(res);
         }
+     
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult RecentlyGradedItems(int? start, int? count, int? classId)
         {
