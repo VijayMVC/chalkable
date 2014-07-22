@@ -3,7 +3,7 @@ li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|'
         if self.getSearchType() == 0
             -roleId = self.getPersonInfo() && self.getPersonInfo().getRole() ? self.getPersonInfo().getRole().getId() : 0
             -cntrl = roleId == 2 ? "teachers" : roleId == 3 ? "students" : "admins";
-            +ActionLink(cntrl, 'info', self.getId()).left.image-container.white.shadow
+            +ActionLink(cntrl, 'details', self.getId()).left.image-container.white.shadow
                 div.site-search-person
                     +PersonImg(self.getPersonInfo(), 47)
                     div.title= self.getDescription()
