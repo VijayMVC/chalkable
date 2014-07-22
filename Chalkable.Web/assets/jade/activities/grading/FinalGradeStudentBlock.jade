@@ -5,7 +5,7 @@ value = avg.displayAvgGradeValue(false, true)
 div(index=self.getIndex(), class=(selected ? "selected" : ""), data-student-id=student.getId().valueOf()).row.fixed-bg
     +ActionForm('grading', 'updateStudentAvgFromFinalPage').grading-form.avg-form.update-grade-form
         .top-content
-            +ActionLink('students', 'info', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
+            +ActionLink('students', 'details', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
                 +PersonImg(student, 47)
             .i-b.name-block
                 p= student.getFullName()

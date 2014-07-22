@@ -8,12 +8,12 @@ teacher = clazz.getTeacher()
         .info
             .img-box
                 if teacher
-                    +ActionLink('teacher', 'info', teacher.getId())
+                    +ActionLink('teacher', 'details', teacher.getId())
                         +PersonImg(teacher, 40)
             .title-holder
                 p.day-down.teacher-name
                     if teacher
-                        +ActionLink('teacher', 'info', teacher.getId())=teacher.getDisplayName()
+                        +ActionLink('teacher', 'details', teacher.getId())=teacher.getDisplayName()
                 div
                     p.day-down
                         +ActionLink('class', 'details', clazz.getId())="RM " + self.getRoomNumber()
