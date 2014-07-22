@@ -265,21 +265,6 @@ BODY.student #first-login-overlay{
     }
   }
 
-
-  &.animated-item{
-    DIV.item-type{
-      DIV.attachment{
-        h2{
-          padding-top: 33px;
-        }
-
-        .animated{
-          opacity: 0;
-        }
-      }
-    }
-  }
-
   &.is-admin{
     padding-left: 15px;
     width: 643px;
