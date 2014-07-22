@@ -113,7 +113,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.SchoolPersonId, String]],
             function infoByRoleAction(personId, roleName){
-                var action = "info",
+                var action = "details",
                     controller = null,
                     loweredRoleName = roleName.toLowerCase();
                 if(this.isAdminRoleName_(loweredRoleName))

@@ -12,7 +12,7 @@ NAMESPACE('chlk.converters.attendance', function () {
                 VALIDATE_ARG('level', String, level);
                 var attLvEnum = chlk.models.attendance.AttendanceLevelEnum;
                 var attTypeEnum = chlk.models.attendance.AttendanceTypeEnum;
-                if(!level) return attTypeEnum.PRESENT;
+                if(!level || level.toLowerCase() == 'present') return attTypeEnum.PRESENT;
                 switch (level){
                     case attLvEnum.ABSENT_LEVEL : return attTypeEnum.ABSENT;
                     case attLvEnum.LATE_LEVEL : return attTypeEnum.LATE;
