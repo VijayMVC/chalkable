@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         IList<AppPermissionType> GetPermisions(Guid applicationId);
         IList<AppPermissionType> GetPermisions(string applicationUrl);
-        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null);
+        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
 
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
             , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
@@ -56,9 +56,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
         {
-            var query = new ApplicationQuery {Start = start, Count = count, Live = live};
+            var query = new ApplicationQuery {Start = start, Count = count, Live = live, OnlyForInstall = onlyForInstall};
             return GetApplications(query);
         }
 
