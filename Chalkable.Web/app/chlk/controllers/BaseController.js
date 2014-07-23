@@ -168,6 +168,11 @@ NAMESPACE('chlk.controllers', function (){
            chlk.models.schoolYear.MarkingPeriod, function getCurrentMarkingPeriod(){
                return this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
            },
+
+           chlk.models.schoolYear.MarkingPeriod, function getNextMarkingPeriodId(){
+               return this.getContext().getSession().get(ChlkSessionConstants.NEXT_MARKING_PERIOD);
+           },
+
            chlk.models.id.SchoolYearId, function getCurrentSchoolYearId(){
                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID);
            },
