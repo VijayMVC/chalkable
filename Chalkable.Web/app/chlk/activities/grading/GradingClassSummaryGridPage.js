@@ -195,7 +195,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     html.prependTo(avgs.parent());
                     avgs.remove();
                     model.getGradingItems().forEach(function(item){
-                        dom.find('.avg-' + item.getId().valueOf()).setHTML(item.calculateGradesAvg() ? item.calculateGradesAvg().toString() : '');
+                        dom.find('.avg-' + item.getId().valueOf()).setHTML(item.calculateGradesAvg() || item.calculateGradesAvg() === 0 ? item.calculateGradesAvg().toString() : '');
                     });
                     container.parent().find('.mp-title').setData('tooltip', tooltipText);
                 }
@@ -705,11 +705,12 @@ NAMESPACE('chlk.activities.grading', function () {
                     var activeCell = node.parent('.grade-value');
                     this.dom.find('.autocomplete-list:visible').hide();
                     var model = this.getModelFromCell(activeCell), p = false;
+                    var resModel = this.serializeFromForm(node);
 
                     if(isAvg){
-                        p = ((input.getValue() || '') == (input.getData('grade-value').toString() || '')) && !node.find('.is-comment').getValue();
+                        p = ((input.getValue() || '') == (input.getData('grade-value').toString() || '')) && !node.find('.is-comment').getValue() &&
+                            this.getBooleanValue(model.isExempt()) == this.getBooleanValue(resModel.isExempt());
                     }else{
-                        var resModel = this.serializeFromForm(node);
                         p = (model.getGradeValue() || '') == (resModel.getGradeValue() || '') &&
                             this.getBooleanValue(model.isDropped()) == this.getBooleanValue(resModel.isDropped()) &&
                             this.getBooleanValue(model.isLate()) == this.getBooleanValue(resModel.isLate()) &&
