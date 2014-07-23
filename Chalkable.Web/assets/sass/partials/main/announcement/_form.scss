@@ -5,6 +5,14 @@
 
 @import "partials/_mixins";
 
+.add-standards-dialog.partial-update{
+  position: static;
+
+  &:after{
+    content:none;
+  }
+}
+
 .attachments-and-applications {
   width: 600px;
 
