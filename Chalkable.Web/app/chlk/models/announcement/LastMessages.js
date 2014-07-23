@@ -6,6 +6,15 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.LastMessages*/
     CLASS(
         'LastMessages', EXTENDS(chlk.models.common.Array), [
-            String, 'announcementTypeName'
+            String, 'announcementTypeName',
+
+            [[String, ArrayOf(String)]],
+            function $create(announcementTypeName, msgs) {
+                BASE();
+                this.setAnnouncementTypeName(announcementTypeName);
+                this.setItems(msgs);
+            }
         ]);
+
+
 });
