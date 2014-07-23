@@ -1,0 +1,43 @@
+mixin MyAppsIconLink(app, editable)
+    appId = app.getId().valueOf()
+    isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+    if editable
+        +ActionForm('appmarket', 'tryToUninstall').my-app-icon-link
+
+            .app-list-item
+                .icon(class=editable ? "jiggly" : undefined)
+                    pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
+                    img(src=pictureUrl)
+                .name=app.getName()
+                Button(type="submit").close-btn
+            +Hidden('appName', app.getName())
+            +Hidden('applicationInstallIds', app.getApplicationInstallIds())
+            +Hidden('personal', app.isPersonal())
+            +Hidden('selfInstalled', app.isSelfInstalled())
+            +Hidden('uninstallable', app.isUninstallable())
+    else
+        +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).my-app-icon-link
+            .app-list-item
+                .icon(class=editable ? "jiggly" : undefined)
+                    pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
+                    img(src=pictureUrl)
+                .name=app.getName()
+.my-apps
+    .action-bar.not-transparent.buttons
+        .container.panel-bg.buttons-toolbar
+            personId = self.getPersonId()
+            .left.no-border
+                if self.isEditable()
+                    +ActionLink('appmarket', 'myApps', false).edit.toolbar-btn Done
+                else
+                    +ActionLink('appmarket', 'myApps', true).edit.toolbar-btn Edit
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
+            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn.pressed My Apps
+            +ActionLink('funds', 'view').toolbar-btn App Funds
+            +ActionForm('', '')
+                +SearchBox(chlk.services.AppMarketService, "getMyAppsByFilter",
+                chlk.templates.apps.MyAppsSearchBoxTpl)#app-market-searchbox.market-search-box(name="appMarketSearch", triggerBtnId="app-market-search-btn")
+                button(type="submit").search-btn#app-market-search-btn
+    .apps
+            each app in self.apps.getItems()
+                +MyAppsIconLink(app, self.isEditable())
