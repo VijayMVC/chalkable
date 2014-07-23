@@ -399,6 +399,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setNeedButtons(true);
                     announcement.setNeedDeleteButton(true);
                     this.prepareAttachments(announcement);
+                    this.cacheAnnouncement(announcement);
                     return announcement;
                 }, this);
             return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
@@ -477,6 +478,22 @@ NAMESPACE('chlk.controllers', function (){
         function addAppAttachmentAction(announcement) {
             announcement.setNeedButtons(true);
             announcement.setNeedDeleteButton(true);
+            this.prepareAttachments(announcement);
+            return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementApplicationId]],
+        function removeAppAttachmentAction(announcementAppId) {
+            var announcement = this.getCachedAnnouncement();
+            announcement.setNeedButtons(true);
+            announcement.setNeedDeleteButton(true);
+            var apps = announcement.getApplications() || [];
+
+            apps = apps.filter(function(item){
+                return item.getAnnouncementApplicationId != announcementAppId;
+            });
+            announcement.setApplications(apps);
+            this.cacheAnnouncementApplications(apps);
             this.prepareAttachments(announcement);
             return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
         },
@@ -579,7 +596,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         chlk.models.announcement.Announcement, function getCachedAnnouncement(){
-             return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT, {});
+             return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT, new chlk.models.announcement.Announcement());
         },
 
 
@@ -634,7 +651,6 @@ NAMESPACE('chlk.controllers', function (){
                 });
             return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
         },
-
 
         [[chlk.models.announcement.Announcement]],
         function saveAnnouncementFormAction(announcement){

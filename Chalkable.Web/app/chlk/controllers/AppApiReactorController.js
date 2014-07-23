@@ -61,9 +61,12 @@ NAMESPACE('chlk.controllers', function (){
                 }
             },
 
-            function closeCurrentAppAction(){
-                 this.getView().getCurrent().close();
-                return null;
+
+            [[Object]],
+            function closeCurrentAppAction(data){
+                this.getView().getCurrent().close();
+                return this.BackgroundNavigate('announcement', 'removeAppAttachment',
+                    [new chlk.models.id.AnnouncementApplicationId(data.announcementAppId)]);
             },
 
             [[Object]],
@@ -75,7 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                     text: 'DON\'T ATTACH',
                     controller: 'appapireactor',
                     action: 'closeCurrentApp',
-                    params: [],
+                    params: [data],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
                 }], 'center');
             },
