@@ -195,7 +195,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     html.prependTo(avgs.parent());
                     avgs.remove();
                     model.getGradingItems().forEach(function(item){
-                        dom.find('.avg-' + item.getId().valueOf()).setHTML(item.calculateGradesAvg() ? item.calculateGradesAvg().toString() : '');
+                        dom.find('.avg-' + item.getId().valueOf()).setHTML(item.calculateGradesAvg() || item.calculateGradesAvg() === 0 ? item.calculateGradesAvg().toString() : '');
                     });
                     container.parent().find('.mp-title').setData('tooltip', tooltipText);
                 }
