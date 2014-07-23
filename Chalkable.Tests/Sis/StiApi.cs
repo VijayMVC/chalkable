@@ -32,50 +32,15 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
-            var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
+            var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
+            //var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
             //var cl = ConnectorLocator.Create("Chalkable", "b1Yn9Rz2X", "http://qa-external.stiinformationnow.com:8220/API/");
             //var cl = ConnectorLocator.Create("Chalkable", "Fp6Gs0Ck7", "http://208.83.95.80:8216/api/");
 
 
-            var schools = (cl.SyncConnector.GetDiff(typeof(User), null) as SyncResult<User>).All;
-            Debug.WriteLine(schools.Count());
+            var pe = (cl.SyncConnector.GetDiff(typeof(PersonEmail), null) as SyncResult<PersonEmail>).All;
+            Debug.WriteLine(pe.Count());
         }
-
-        [Test]
-        public void TransactionScopeTest()
-        {
-            var cs1 = @"Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!";
-            var cs2 = @"Data Source=me0buyg8np.database.windows.net;Initial Catalog=2014-06-09-chalkable-old;UID=chalkableadmin;Pwd=Hellowebapps1!";
-
-            TransactionScope scope1 = new TransactionScope(TransactionScopeOption.RequiresNew);
-            
-
-            using (SqlConnection connection1 = new SqlConnection(cs1))
-            {
-                connection1.Open();
-                var t = connection1.BeginTransaction();
-                SqlCommand command = new SqlCommand("insert into test (id) values (1)", connection1);
-                command.ExecuteNonQuery();
-                t.Commit();
-            }
-            
-            TransactionScope scope2 = new TransactionScope(TransactionScopeOption.RequiresNew);
-            using (SqlConnection connection2 = new SqlConnection(cs2))
-            {
-                connection2.Open();
-                var t = connection2.BeginTransaction();
-                SqlCommand command = new SqlCommand("insert into test (id) values (1)", connection2);
-                command.ExecuteNonQuery();
-                t.Commit();
-            }
-            scope2.Complete();
-            scope2.Dispose();
-
-            scope1.Complete();
-            scope1.Dispose();
-        }
-
 
         [Test]
         public void Test2()

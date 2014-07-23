@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
@@ -461,6 +462,7 @@ namespace Chalkable.StiImport.Services
             var courses = context.GetSyncResult<Course>().Updated.ToList();
             var classes = new List<Class>();
             var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
+            var departmenPairs = PrepareChalkableDepartmentKeywords();
             foreach (var course in courses)
             {
                 var glId = course.MaxGradeLevelID ?? course.MinGradeLevelID;
@@ -469,10 +471,10 @@ namespace Chalkable.StiImport.Services
                     Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
                     continue;
                 }
-                var current = ServiceLocatorSchool.ClassService.GetById(course.CourseID);
+                var closestDep = FindClosestDepartment(departmenPairs, course.ShortName.ToLower());
                 classes.Add(new Class
                 {
-                    ChalkableDepartmentRef = current.ChalkableDepartmentRef,
+                    ChalkableDepartmentRef = closestDep != null ? closestDep.Second : (Guid?)null,
                     Description = course.FullName,
                     GradeLevelRef = glId.Value,
                     Id = course.CourseID,
