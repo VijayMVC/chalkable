@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Model
             var res = new StudentSummaryInfo
                 {
                     StudentInfo = student, 
-                    ClassRank = ClassRankInfo.Create(nowDashboard.ClassRank),
+                    ClassRank = nowDashboard.ClassRank != null ? ClassRankInfo.Create(nowDashboard.ClassRank) : null,
                     TotalDisciplineOccurrences = nowDashboard.Infractions.Sum(x=>x.Occurrences),
                     InfractionSummaries = InfractionSummaryInfo.Create(nowDashboard.Infractions.ToList(), infractions),
                     StudentAnnouncements = new List<StudentAnnouncement>(),

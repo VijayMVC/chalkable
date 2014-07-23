@@ -439,9 +439,8 @@ namespace Chalkable.StiImport.Services
             }
         }
 
-        private void InsertCourses()
+        private List<Pair<string, Guid>> PrepareChalkableDepartmentKeywords()
         {
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var departments = ServiceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartments();
             var sep = new[] { ',' };
             var departmenPairs = new List<Pair<string, Guid>>();
@@ -451,6 +450,29 @@ namespace Chalkable.StiImport.Services
                 departmenPairs.AddRange(chalkableDepartment.Keywords.ToLower().Split(sep, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => new Pair<string, Guid>(x, chalkableDepartment.Id)));
             }
+            return departmenPairs;
+        }
+
+        private Pair<string, Guid> FindClosestDepartment(List<Pair<string, Guid>> departmenPairs, string name)
+        {
+            int minDist = int.MaxValue;
+            Pair<string, Guid> closestDep = null;
+            for (int i = 0; i < departmenPairs.Count; i++)
+            {
+                var d = StringTools.LevenshteinDistance(name, departmenPairs[i].First);
+                if (d < minDist && (d <= 4 || d <= 0.3 * name.Length + 2))
+                {
+                    minDist = d;
+                    closestDep = departmenPairs[i];
+                }
+            }
+            return closestDep;
+        }
+
+        private void InsertCourses()
+        {
+            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
+            var departmenPairs = PrepareChalkableDepartmentKeywords();
 
             var courses = context.GetSyncResult<Course>().All;
             var classes = new List<Class>();
@@ -462,18 +484,7 @@ namespace Chalkable.StiImport.Services
                     Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
                     continue;
                 }
-                string name = course.ShortName.ToLower();
-                int minDist = int.MaxValue;
-                Pair<string, Guid> closestDep = null;
-                for (int i = 0; i < departmenPairs.Count; i++)
-                {
-                    var d = StringTools.LevenshteinDistance(name, departmenPairs[i].First);
-                    if (d < minDist && (d <= 4 || d <= 0.3 * name.Length + 2))
-                    {
-                        minDist = d;
-                        closestDep = departmenPairs[i];
-                    }
-                }
+                var closestDep = FindClosestDepartment(departmenPairs, course.ShortName.ToLower());
                 classes.Add(new Class
                 {
                     ChalkableDepartmentRef = closestDep != null ? closestDep.Second : (Guid?)null,

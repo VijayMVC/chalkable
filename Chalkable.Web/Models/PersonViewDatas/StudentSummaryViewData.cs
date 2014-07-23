@@ -38,7 +38,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance, studentSummary.Attendances, classes),
                     DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
                     GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(studentSummary.StudentAnnouncements),
-                    RanksBox = StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank),
+                    RanksBox = studentSummary.ClassRank != null ? StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank) : null,
                 };
             if (currentClass != null)
             {
@@ -48,8 +48,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.CurrentAttendanceLevel = studentSummary.CurrentAttendanceLevel;
             return res;
         }
-
-
     }
 
     public class StudentHoverBoxViewData<T> : HoverBoxesViewData<T>
