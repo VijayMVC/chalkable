@@ -37,7 +37,10 @@ REQUIRE('chlk.AppApiHost');
                       this.close();
                   }
                   else{
-                     (new chlk.AppApiHost()).closeApp({});
+                     var announcementAppId = this.dom.find('#add-app').getData('announcement-app-id');
+                     (new chlk.AppApiHost()).closeApp({
+                         announcementAppId: announcementAppId
+                     });
                   }
                   return false;
               },
