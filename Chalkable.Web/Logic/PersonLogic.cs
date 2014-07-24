@@ -25,10 +25,13 @@ namespace Chalkable.Web.Logic
                     Count = count ?? DEFAULT_COUNT,
                     SortType = byLastName.HasValue && byLastName.Value ? SortTypeEnum.ByLastName : SortTypeEnum.ByFirstName,
                 };
-            if (classId.HasValue)
+            if (classId.HasValue && query.RoleId == CoreRoles.STUDENT_ROLE.Id)
             {
                 var classRoomOption = locator.ClassroomOptionService.GetClassOption(classId.Value);
                 query.IsEnrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
+                var mp = locator.MarkingPeriodService.GetLastMarkingPeriod(locator.Context.NowSchoolTime.Date);
+                if (mp != null) query.MarkingPeriodId = mp.Id;
+
             }
             var res = locator.PersonService.GetPaginatedPersons(query);
             return res.Transform(PersonViewData.Create);
