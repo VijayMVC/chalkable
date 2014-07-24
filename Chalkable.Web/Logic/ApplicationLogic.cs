@@ -16,7 +16,7 @@ namespace Chalkable.Web.Logic
 
         public static IList<AnnouncementApplicationViewData> PrepareAnnouncementApplicationInfo(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster maseterLocator, int announcementId)
         {
-            var applications = maseterLocator.ApplicationService.GetApplications();
+            var applications = maseterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
             var annApps = schoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
             var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.UserLocalId ?? 0);
             return AnnouncementApplicationViewData.Create(annApps, applications, installs, schoolLocator.Context.UserLocalId);

@@ -84,10 +84,13 @@ namespace Chalkable.Data.Master.DataAccess
                 {
                     res.Sql.Append(string.Format(" and [{0}] <> 1", Application.IS_INTERNAL_FIELD));
                 }
-                if (query.Role == CoreRoles.TEACHER_ROLE.Id)
-                    res.Sql.Append(string.Format(" and ([{0}] = 1 or [{1}] = 1 or [{2}] = 1)", Application.HAS_STUDENT_MY_APPS_FIELD, Application.HAS_TEACHER_MY_APPS_FIELD, Application.CAN_ATTACH_FIELD));
-                if (query.Role == CoreRoles.STUDENT_ROLE.Id)
-                    res.Sql.Append(string.Format(" and [{0}] = 1", Application.HAS_STUDENT_MY_APPS_FIELD));
+                if (query.OnlyForInstall)
+                {
+                    if (query.Role == CoreRoles.TEACHER_ROLE.Id)
+                        res.Sql.Append(string.Format(" and ([{0}] = 1 or [{1}] = 1 or [{2}] = 1)", Application.HAS_STUDENT_MY_APPS_FIELD, Application.HAS_TEACHER_MY_APPS_FIELD, Application.CAN_ATTACH_FIELD));
+                    if (query.Role == CoreRoles.STUDENT_ROLE.Id)
+                        res.Sql.Append(string.Format(" and [{0}] = 1", Application.HAS_STUDENT_MY_APPS_FIELD));
+                }
     
             }
             if (query.Id.HasValue)
@@ -310,7 +313,9 @@ namespace Chalkable.Data.Master.DataAccess
         public bool? Live { get; set; }
         public bool? Free { get; set; }
 
-        public string Filter { get; set; } 
+        public string Filter { get; set; }
+
+        public bool OnlyForInstall { get; set; }
 
         public ApplicationQuery()
         {
@@ -320,6 +325,7 @@ namespace Chalkable.Data.Master.DataAccess
             IncludeInternal = false;
             Live = null;
             Free = null;
+            OnlyForInstall = true;
         }
 
     }

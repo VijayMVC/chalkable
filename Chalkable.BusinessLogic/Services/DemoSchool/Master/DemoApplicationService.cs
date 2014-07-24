@@ -93,9 +93,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             }
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
         {
-            var query = new ApplicationQuery { Start = start, Count = count, Live = live };
+            var query = new ApplicationQuery { Start = start, Count = count, Live = live, OnlyForInstall = onlyForInstall};
             return GetApplications(query);
         }
 
