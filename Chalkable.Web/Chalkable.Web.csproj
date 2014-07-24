@@ -496,7 +496,6 @@
     <Content Include="fakeData\seatingChart2.json" />
     <Content Include="fakeData\seatingChart3.json" />
     <Content Include="Views\Home\Terms.cshtml" />
-    <Content Include="Views\Home\Faq.cshtml" />
     <Content Include="Content\fonts\BebasNeue-webfont.eot" />
     <Content Include="Content\fonts\BebasNeue-webfont.ttf" />
     <Content Include="Content\fonts\BebasNeue-webfont.woff" />

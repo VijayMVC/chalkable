@@ -39,11 +39,6 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
-        public ActionResult Faq()
-        {
-            return View();
-        }
-
         [AuthorizationFilter("SysAdmin")]
         public ActionResult SysAdmin()
         {

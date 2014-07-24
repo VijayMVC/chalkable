@@ -129,15 +129,19 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
         },
 
+        function prepareAttachment(attachment){
+            if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
+                attachment.setThumbnailUrl(this.announcementService.getAttachmentUri(attachment.getId(), false, 170, 110));
+                attachment.setUrl(this.announcementService.getAttachmentUri(attachment.getId(), false, null, null));
+            }
+        },
+
         [[chlk.models.announcement.Announcement]],
         function prepareAttachments(announcement){
             var attachments = announcement.getAnnouncementAttachments() || [], ids = [];
             attachments.forEach(function(item){
                 ids.push(item.getId().valueOf());
-                if(item.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
-                    item.setThumbnailUrl(this.announcementService.getAttachmentUri(item.getId(), false, 170, 110));
-                    item.setUrl(this.announcementService.getAttachmentUri(item.getId(), false, null, null));
-                }
+                this.prepareAttachment(item);
             }, this);
             announcement.setAttachments(ids.join(','));
             this.cacheAnnouncementAttachments(attachments);
@@ -359,6 +363,12 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(announcement){
                     this.prepareAttachments(announcement);
+                    var studentAnnouncements = announcement.getStudentAnnouncements().getItems(), that = this;
+                    studentAnnouncements.forEach(function(item){
+                        item.getAttachments().forEach(function(attachment){
+                            that.prepareAttachment(attachment);
+                        });
+                    });
                     if(!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
                         var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
                         var alphaGrades = classInfo ? classInfo.getAlphaGrades() : [];
@@ -798,7 +808,7 @@ NAMESPACE('chlk.controllers', function (){
                 else{
                     if(!this.userIsAdmin())
                         chlk.controls.updateWeekCalendar();
-                    return this.BackgroundNavigate('feed', 'list', []);
+                    return this.BackgroundNavigate('feed', 'list', [null, true]);
                 }
             }, this);
             return res;
