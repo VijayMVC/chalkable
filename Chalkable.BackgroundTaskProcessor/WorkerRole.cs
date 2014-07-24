@@ -3,10 +3,12 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using Chalkable.Common;
+using Chalkable.Web.Tools;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.Diagnostics.Management;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using Mindscape.Raygun4Net;
 
 
 namespace Chalkable.BackgroundTaskProcessor
@@ -19,6 +21,8 @@ namespace Chalkable.BackgroundTaskProcessor
             Trace.WriteLine("Chalkable.BackgroundTaskProcessor entry point called", "Information");
             var processor = new TaskProcessor();
             var delay = Settings.Configuration.TaskProcessorDelay;
+            var raygunClient = new RaygunClient();
+            raygunClient.ApplicationVersion = CompilerHelper.Version;
             while (true)
             {
                 if (delay <= 0)
@@ -34,6 +38,13 @@ namespace Chalkable.BackgroundTaskProcessor
                 }
                 catch (Exception ex)
                 {
+#if !DEBUG
+                    try
+                    {
+                        raygunClient.SendInBackground(ex);
+                    }
+                    catch (Exception){}
+#endif
                     while (ex != null)
                     {
                         Trace.TraceError(ex.Message);
