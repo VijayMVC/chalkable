@@ -5,7 +5,7 @@
     if announcements.length > 0
         .class-name
             h3.day-day
-                +ActionLink('class', 'details', announcements[0].getClassId().valueOf())=announcements[0].getClassName()
+                +ActionLink('class', 'info', announcements[0].getClassId().valueOf())=announcements[0].getClassName()
     .info
         if roomNumber
             p.day-down

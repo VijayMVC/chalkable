@@ -4,7 +4,7 @@ teacher = clazz.getTeacher()
     .calendar-popup
         .class-name
             h3.day-day
-                +ActionLink('class', 'details', clazz.getId())=clazz.getName()
+                +ActionLink('class', 'info', clazz.getId())=clazz.getName()
         .info
             .img-box
                 if teacher
@@ -16,9 +16,9 @@ teacher = clazz.getTeacher()
                         +ActionLink('teacher', 'details', teacher.getId())=teacher.getDisplayName()
                 div
                     p.day-down
-                        +ActionLink('class', 'details', clazz.getId())="RM " + self.getRoomNumber()
+                        +ActionLink('class', 'info', clazz.getId())="RM " + self.getRoomNumber()
                     p.day-down
-                        +ActionLink('class', 'details', clazz.getId())="Period " + self.getPeriod().getOrder()
+                        +ActionLink('class', 'info', clazz.getId())="Period " + self.getPeriod().getOrder()
         div.popup-footer
             p.day-down
-                +ActionLink('class', 'details', clazz.getId())= self.getStudentsCount() + " students"
+                +ActionLink('class', 'info', clazz.getId())= self.getStudentsCount() + " students"
