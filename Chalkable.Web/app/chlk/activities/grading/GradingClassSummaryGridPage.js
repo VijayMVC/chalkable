@@ -699,11 +699,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     node.find('.grading-input-popup').hide();
                     var value = (input.getValue() || '').toLowerCase();
                     var isAvg = node.hasClass('avg-form');
-                    if(value == 'dropped' || value == 'exempt')
+                    if(value == 'dropped' || value == 'exempt'){
                         input.setValue(input.getData('grade-value'));
-                    else
-                        if(isAvg)
-                            node.find('[name=isexempt]').setValue(false);
+                    }
 
                     var activeCell = node.parent('.grade-value');
                     this.dom.find('.autocomplete-list:visible').hide();
@@ -711,6 +709,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     var resModel = this.serializeFromForm(node);
 
                     if(isAvg){
+                        if(model.isExempt() && resModel.isExempt() && value != 'exempt' )
+                            node.find('[name=isexempt]').setValue(false);
                         p = ((input.getValue() || '') == (input.getData('grade-value').toString() || '')) && !node.find('.is-comment').getValue() &&
                             this.getBooleanValue(model.isExempt()) == this.getBooleanValue(resModel.isExempt());
                     }else{
