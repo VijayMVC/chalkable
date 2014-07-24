@@ -615,7 +615,7 @@ var Msg = {
     You_vs_Peers: 'You vs. Peers',
     Your_grade: 'Your grade',
 
-    Max_Score_Tooltip_Message: 'Enter a maximum score for this assignment',
+    Max_Score_Tooltip_Message: 'Enter a maximum score for this assignment. Enter 0 if you will not be grading the item.',
     Weight_Multiplier_Tooltip_Message: 'For this item to be part of the marking period average, a number greater than 0 must be entered.',
     Weight_Addition_Tooltip_Message: 'Enter a number here if points are to be added to each student’s grade for this item.',
     Hide_From_Student_Tooltip_Message: 'This is will hide the item from students',
