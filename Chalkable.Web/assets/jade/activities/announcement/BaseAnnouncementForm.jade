@@ -71,7 +71,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
             )#expiresdate
         if !isAdminAnnouncement
             .max-score-container
-                input(name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=announcement.getMaxScore())
+                input(name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=announcement.isGradable() ? announcement.getMaxScore() : '0')
                 div(data-tooltip=Msg.Max_Score_Tooltip_Message).question-mark ?
             .advanced-options
                 .advanced-options-btn.title.btn=Msg.Advanced_options
