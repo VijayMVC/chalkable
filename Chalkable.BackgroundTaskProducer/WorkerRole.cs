@@ -4,10 +4,12 @@ using System.Net;
 using System.Threading;
 using Chalkable.BackgroundTaskProducer.Producers;
 using Chalkable.Data.Master.Model;
+using Chalkable.Web.Tools;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.Diagnostics.Management;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using Mindscape.Raygun4Net;
 
 namespace Chalkable.BackgroundTaskProducer
 {
@@ -21,7 +23,8 @@ namespace Chalkable.BackgroundTaskProducer
             //cp.AddProducer("Attendance Notification Producer", new AllDistrictsProducer("AttendanceNotificationProducer", BackgroundTaskTypeEnum.AttendanceNotification));
             //cp.AddProducer("Teacher Attendance Notification Producer", new AllDistrictsProducer("TeacherAttendanceNotification", BackgroundTaskTypeEnum.TeacherAttendanceNotification));
             cp.AddProducer("Sis Import Producer", new AllDistrictsProducer("SisImportProducer", BackgroundTaskTypeEnum.SisDataImport));
-            
+            var raygunClient = new RaygunClient();
+            raygunClient.ApplicationVersion = CompilerHelper.Version;      
             while (true)
             {
                 try
@@ -33,6 +36,13 @@ namespace Chalkable.BackgroundTaskProducer
                 }
                 catch (Exception ex)
                 {
+#if !DEBUG
+                    try
+                    {
+                        raygunClient.SendInBackground(ex);
+                    }
+                    catch (Exception) { }
+#endif
                     while (ex != null)
                     {
                         Trace.TraceInformation("Exception during task producing");

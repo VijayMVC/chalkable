@@ -808,7 +808,7 @@ NAMESPACE('chlk.controllers', function (){
                 else{
                     if(!this.userIsAdmin())
                         chlk.controls.updateWeekCalendar();
-                    return this.BackgroundNavigate('feed', 'list', []);
+                    return this.BackgroundNavigate('feed', 'list', [null, true]);
                 }
             }, this);
             return res;

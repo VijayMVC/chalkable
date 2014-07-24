@@ -5,15 +5,26 @@ using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionResults;
+using Chalkable.Web.Tools;
+using Mindscape.Raygun4Net;
 
 
 namespace Chalkable.Web.ActionFilters
 {
     public class AjaxHandleErrorAttribute : HandleErrorAttribute
     {
+        private static RaygunClient raygunClient = new RaygunClient();
+        static AjaxHandleErrorAttribute()
+        {
+            raygunClient.ApplicationVersion = CompilerHelper.Version;
+        }
+
         public override void OnException(ExceptionContext filterContext)
         {
             Trace.TraceError(ChlkResources.ERR_MESSAGE_WITH_STACKTRACE, filterContext.Exception.Message, filterContext.Exception.StackTrace);
+#if !DEBUG
+            raygunClient.SendInBackground(filterContext.Exception);
+#endif
             if (filterContext.Exception.InnerException != null)
                 Trace.TraceError(ChlkResources.ERR_INNER_MESSAGE_WITH_STACKTRACE, filterContext.Exception.InnerException.Message, filterContext.Exception.InnerException.StackTrace);
              

@@ -72,6 +72,9 @@
     <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.1.7.0.0\lib\net35-full\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
     </Reference>
+    <Reference Include="Mindscape.Raygun4Net">
+      <HintPath>..\packages\Mindscape.Raygun4Net.3.1.0\lib\net40\Mindscape.Raygun4Net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -114,6 +117,10 @@
     <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
       <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
       <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Web\Chalkable.Web.csproj">
+      <Project>{60802BF0-AF2E-47F8-A792-7135DC7565D0}</Project>
+      <Name>Chalkable.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
