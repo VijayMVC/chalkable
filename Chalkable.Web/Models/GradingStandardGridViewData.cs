@@ -73,7 +73,7 @@ namespace Chalkable.Web.Models
 
         public static StandardGradingItemViewData Create(GradingStandardInfo gradingStandard)
         {
-            return new StandardGradingItemViewData
+            var res = new StandardGradingItemViewData
                 {
                     StudentId = gradingStandard.StudentId,
                     GradeId = gradingStandard.AlphaGradeId,
@@ -83,6 +83,9 @@ namespace Chalkable.Web.Models
                     ClassId = gradingStandard.ClassId,
                     Comment = gradingStandard.Note
                 };
+            if (string.IsNullOrEmpty(res.GradeValue) && gradingStandard.NumericGrade.HasValue)
+                res.GradeValue = gradingStandard.NumericGrade.Value.ToString();
+            return res;
         }
     }
 }

@@ -84,6 +84,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                             Id = id,
                             UserId = Context.UserId,
                             Role = Context.Role.Id,
+                            OnlyForInstall = false
                         });
             }
         }

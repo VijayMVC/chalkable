@@ -1,4 +1,4 @@
 +ActionLink('class', 'info', self.getId().valueOf()).class-link.item
     .class-img
         +ClassImg(self, 45, 80)
-    SPAN=self.getName()
+    SPAN(data-tooltip=self.getFullClassName())=self.getName()
