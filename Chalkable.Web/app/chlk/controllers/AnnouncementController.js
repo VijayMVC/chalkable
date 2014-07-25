@@ -517,8 +517,6 @@ NAMESPACE('chlk.controllers', function (){
         function deleteAction(announcementId, typeName) {
             this.disableAnnouncementSaving(true);
             this.ShowMsgBox('You are about to delete this item.\n'+
-                    'All grades and attachments for this ' + typeName + ' will\n' +
-                    'be gone forever.\n' +
                     'Are you sure?', 'whoa.', [{
                 text: "Cancel",
                 controller: 'announcement',
