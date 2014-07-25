@@ -31,6 +31,18 @@ NAMESPACE('chlk.models.attendance', function () {
 
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
+            Boolean, function hasSeatingStudents(){
+                var p = false;
+                this.getSeatingList().forEach(function(items){
+                    if(!p)
+                        items.forEach(function(item){
+                            if(!p && item.getInfo())
+                                p = true;
+                        });
+                });
+                return p;
+            },
+
             Boolean, function isPosted(){
                 var posted1, posted2, len = 0;
 

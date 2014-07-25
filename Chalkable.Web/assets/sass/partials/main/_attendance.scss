@@ -1335,6 +1335,12 @@ BODY {
   }
 }
 
+.save-attendances-buttons{
+  .disabled{
+    opacity: 0.5;
+  }
+}
+
 .can-post{
   .student-block{
     .attendance-data{
