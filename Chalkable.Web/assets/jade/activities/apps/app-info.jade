@@ -125,7 +125,8 @@ appPlatforms = appPlatforms.join(',')
         +Hidden('bannerEnabled', myAppsAccess.isAttachEnabled())
     +ActionForm('apps', 'update').app-info
         if !self.isReadOnly()
-            +Button()(disabled = self.isDraft(), name="submit-btn", class = self.isDraft() ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
+            disableSubmitBtn = self.isDraft() || app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
+            +Button()(disabled = disableSubmitBtn, name="submit-btn", class = disableSubmitBtn ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
         +Hidden('draft', self.isDraft())
         +Hidden('id', app.getId())
         +Hidden('developerName', app.getDeveloperInfo().getName())
