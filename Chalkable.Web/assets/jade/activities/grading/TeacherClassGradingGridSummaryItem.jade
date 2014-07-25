@@ -75,8 +75,6 @@ mixin DisplayTotalPoints(model)
                     div(data-tooltip="Withdrawn").withdrawn
         .student-name
             .dotted-h=Msg.Avg
-            if self.getGradingPeriod().isAblePostGradeBook()
-                +ActionLinkButton('grading','postGradeBook', self.getClassId(), self.getGradingPeriod().getId(), self.getStandardId(), self.getCategoryId()).message-button.blue-gradient-btn.post-gradebook-button Post
     +LeftRightToolbar()(
         needDots = true,
         roundedDots = true,
