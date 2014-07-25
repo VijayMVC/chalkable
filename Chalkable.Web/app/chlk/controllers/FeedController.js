@@ -79,7 +79,7 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.feed.Feed(null, null, null, data);
                     }, this);
                     this.BackgroundUpdateView(chlk.activities.feed.FeedListPage, result, 'notifications');
-                }.bind(this), 30000);
+                }.bind(this), 60000);
             return this.announcementService
                 .getAnnouncements(pageIndex_ | 0, classId_, importantOnly_)
                 .attach(this.validateResponse_())
