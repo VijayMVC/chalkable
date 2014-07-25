@@ -1,11 +1,11 @@
-mixin Grid(controller, action, data, params)
+mixin Grid(controller, action, data, params, noDisplaying)
     .grid(attributes)
         .loader
         .scroller
             .container
                 block
     if(controller)
-        +Paginator(controller, action, data, params)
+        +Paginator(controller, action, data, params, noDisplaying)
 
 mixin GridHead()
     .head.panel-bg

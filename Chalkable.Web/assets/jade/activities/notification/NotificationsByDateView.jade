@@ -4,7 +4,7 @@
             .left
                 +ActionLink('feed', 'list').back-btn
     .grid-container.not-transparent
-        +Grid('notification', 'listByDays', self.getModel())
+        +Grid('notification', 'listByDays', self.getModel(), null, true)
             +GridBody()
                 each item in self.getItems()
                     +GridRow()

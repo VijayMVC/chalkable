@@ -1,4 +1,4 @@
-mixin Paginator(controller, action, data, params)
+mixin Paginator(controller, action, data, params, noDisplaying)
     params = params || [];
     pagingData = self.preparePaginationData(data, params)
     .paginator-container
@@ -16,7 +16,8 @@ mixin Paginator(controller, action, data, params)
                     input(type="hidden", name="action", value=action).action-name
             +ActionLinkWithPrepend(controller, action, params, pagingData.nextPageStart)(class = 'next-page' + (pagingData.hasNextPage ? '' : ' disabled'))
             +ActionLinkWithPrepend(controller, action, params, pagingData.lastPageStart)(class = 'last-page' + (pagingData.hasNextPage ? '' : ' disabled'))
-        .right-container
-            SPAN
-                |Displaying #{pagingData.startText} - #{pagingData.end} of #{pagingData.totalCount || 0}
+        if !noDisplaying
+            .right-container
+                SPAN
+                    |Displaying #{pagingData.startText} - #{pagingData.end} of #{pagingData.totalCount || 0}
         .clear
