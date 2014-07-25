@@ -1,0 +1,12 @@
+.dialog-window.report-window.new-style.fixed
+    h1=Msg.Edit_Average.toUpperCase()
+    .popup-content
+        h2=Msg.Are_you_sure
+        p
+            b #{Msg.Note}:
+            |#{Msg.Edit_Average_Text_1}
+            br
+            |#{Msg.Edit_Average_Text_2}
+    .buttons-bottom
+        BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
+        +ActionLinkButton('grading', 'updateStudentAvgFromPopup').chlk-button.blue-gradient-btn=Msg.Save
