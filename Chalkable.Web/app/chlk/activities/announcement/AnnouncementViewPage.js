@@ -544,7 +544,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                     isFill = true;
                     value = text.split('(fill all)')[0].trim();
                 }
-                input.removeClass('not-equals');
+                input.removeClass('not-equals')
+                     .removeClass('error')
+                     .removeClass('disabled-submit');
                 input.setValue(value);
                 if(isFill){
                     input.parent('form').trigger('submit');
