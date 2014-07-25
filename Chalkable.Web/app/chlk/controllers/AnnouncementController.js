@@ -703,6 +703,7 @@ NAMESPACE('chlk.controllers', function (){
             if (submitType == 'saveNoUpdate'){
                 this.setNotAblePressSidebarButton(true);
                 this.saveAnnouncement(model);
+                return null;
             }
             var classIdInFinalizedClassIds = session.get(ChlkSessionConstants.FINALIZED_CLASS_IDS).indexOf(classId.valueOf()) > -1;
 
