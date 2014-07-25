@@ -50,8 +50,10 @@ div(class=showButtons ? 'can-post' : '').page-content
             .grey-button.add-remove-students=Msg.Add_remove_students
             .right.right-container.save-attendances-buttons
                 if showButtons
-                    A#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
-                    +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), false, true)#all-present-link=Msg.Mark_all_Present
+                    A(class=self.getModel().hasSeatingStudents() ? "" : "disabled")#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                    +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), false, true)(
+                        class=self.getModel().hasSeatingStudents() ? "" : "disabled"
+                    )#all-present-link=Msg.Mark_all_Present
             .black-arrow.add=Msg.Add_your_students
             .seating-chart-container
                 +LeftRightToolbar()(

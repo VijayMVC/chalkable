@@ -42,6 +42,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                 droppable.html(draggable.html());
                 draggable.html(html);
             }
+            var buttons = new ria.dom.Dom('.save-attendances-buttons').find('a');
+            if(new ria.dom.Dom('.seating-chart-container').find('.not-empty').exists())
+                buttons.removeClass('disabled');
         }
     };
 
@@ -221,6 +224,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                     .removeClass('ui-droppable');
                 jQuery(clone.valueOf()).draggable(draggableOptions);
                 checkPadding();
+                var buttons = this.dom.find('.save-attendances-buttons').find('a');
+                if(!this.dom.find('.seating-chart-container').find('.not-empty').exists())
+                    buttons.addClass('disabled');
             },
 
             [ria.mvc.DomEventBind('click', '#all-present-link')],
@@ -276,7 +282,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.find('.text-for-post').setValue(JSON.stringify(res));
             },
 
-            [ria.mvc.DomEventBind('click', '#submit-attendance-button')],
+            [ria.mvc.DomEventBind('click', '#submit-attendance-button:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function postButtonClick(node, event){
                 this.dom.find('.attendances-json').setValue(JSON.stringify(this.getAttendances_()));
