@@ -1,0 +1,66 @@
+mixin TypeOption(typeId, item)
+    mapper = new chlk.models.attendance.AttendanceTypeMapper()
+    id = mapper.mapBack(new chlk.models.attendance.AttendanceTypeEnum(typeId))
+    +Option(id, self.getTypeName(typeId), item && item.getType() == typeId)(class="attendance-" + typeId)
+
+dailyAttendance = self.getDailyAttendance()
+attendances = self.getAttendances()
+student = self.getStudent()
+reasons = self.getReasons()
+canEdit = self.isAbleEdit()
+typesEnum = chlk.models.attendance.AttendanceTypeEnum
+.add-student-triangle.big-triangle
+.add-student-popup
+    +ActionForm('attendance', 'setAttendanceForList')
+        if attendances.length
+            +Hidden('date', attendances[0].getDate().format('mm-dd-yy'))
+            +Hidden('personId', student.getId().valueOf())
+            +Hidden('classIds', '')
+            +Hidden('attendanceTypes', '')
+            +Hidden('attReasons', '')
+            +Hidden('controller', self.getController())
+            +Hidden('action', self.getAction())
+            +Hidden('params', self.getParams())
+            +Hidden('newStudent', self.isNewStudent()).is-new-student
+        .top-container
+            if self.isNewStudent()
+                +PersonImg(student, 47)
+            h1=student.getDisplayName()
+            if !self.isNewStudent()
+                +ActionLink('students', 'details', student.getId().valueOf()).profile-link.small-grey-text=Msg.Profile.toLowerCase() + ' »'
+        .blocks
+            if(canEdit)
+                .row.all-row
+                    .name-container.small-grey-text=Msg.All_day
+                    .type-container
+                        item = self.getAllItem()
+                            +Select('attendanceTypes').attendance-type-select.all-select.grey-select
+                                +TypeOption(typesEnum.ABSENT.valueOf(), item)
+                                +TypeOption(typesEnum.LATE.valueOf(), item)
+                    .reasons-container
+                        +RenderWith(self.getModel(), chlk.templates.attendance.StudentReasonsComboTpl)
+            each item in attendances
+                currentReasons = self.getReasonsForType(item.getLevel())
+                div(
+                    data-classId = item.getClassId().valueOf()
+                ).row
+                    //.name-container #{self.getSerial(item.getPeriod().getOrder())} - #{item.getClassName()}
+                    .name-container.small-grey-text #{item.getClassName()}
+                    .type-container
+                        if(canEdit)
+                            +Select('attendanceTypes').attendance-type-select.grey-select
+                                +TypeOption(typesEnum.ABSENT.valueOf(), item)
+                                +TypeOption(typesEnum.LATE.valueOf(), item)
+                                +TypeOption(typesEnum.PRESENT.valueOf(), item)
+                        else
+                            |#{self.getTypeName(item.getType())}
+                    .reasons-container
+                        if(canEdit)
+                            +RenderWith(self._model, chlk.templates.attendance.StudentReasonsComboTpl)(
+                                currentId = item.getAttendanceReasonId(),
+                                currentReasons = currentReasons
+                            )
+                        else
+                            |#{item.getAttendanceReason() ? item.getAttendanceReason().getDescription() : ''}
+        if(canEdit)
+            +Button().blue-gradient-btn.save-btn=Msg.Save
