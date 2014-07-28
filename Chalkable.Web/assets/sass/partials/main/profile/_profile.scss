@@ -339,13 +339,16 @@ BODY {
             }
 
             input{
-              color: #acacac;
               height: 21px;
               font-size: 13px;
               padding-bottom: 3px;
               padding-top: 0px;
               border: none;
               margin-top: 2px;
+            }
+
+            input[readonly], textarea[readonly]{
+              color: #acacac;
             }
 
             textarea{
