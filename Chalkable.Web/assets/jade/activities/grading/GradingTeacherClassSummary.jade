@@ -9,7 +9,7 @@ mixin StudentGradingItem(student)
 
 topData = self.getTopData()
 topItems = topData.getTopItems()
-+LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')().classes-bar
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid')().classes-bar
 .grading-summary
     each item in self.getItems()
         trouleCount = item.getTrouble().length

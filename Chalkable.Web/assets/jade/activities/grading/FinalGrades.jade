@@ -9,8 +9,8 @@
     .action-bar.not-transparent.buttons
         .container.panel-bg
             .center
-                +ActionLink('grading', "summary", selectedId)=Msg.Item(true)
-                +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
                 +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
     .gps-container
         each gradingPeriod,i in self.getGradingPeriods()
