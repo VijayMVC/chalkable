@@ -821,6 +821,36 @@ BODY {
               text-transform: uppercase;
             }
             .general{
+
+              .password-info{
+                margin-top: 10px;
+                display: inline-block;
+                margin-left: 13px;
+
+                .block1{
+                  width: 500px;
+                  display: inline-block;
+                  margin-top: 10px;
+                }
+                .block2{
+                  width: 500px;
+                  display: inline-block;
+                  margin-bottom: 15px;
+                  margin-top: 5px;
+                }
+
+              }
+
+              .inow-btn{
+                text-align: center;
+                margin-top: 20px;
+                a{
+                  width: 121px;
+                  height: 32px;
+                  line-height: 32px;
+                  color: #957633;
+                }
+              }
               .block{
                 padding: 10px;
                 height: 123px;
