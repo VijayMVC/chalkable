@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models
         public string AnnouncmentTitle { get; set; }
         public int? AnnouncementTypeId { get; set; }
         public int? ChalkableAnnouncementTypeId { get; set; }
-        public int? ClassAvg { get; set; }
+        public decimal? ClassAvg { get; set; }
         public string ClassName { get; set; }
         public Guid? CourseId { get; set; }
         public int GradedStudentCount { get; set; }
@@ -45,7 +45,7 @@ namespace Chalkable.Web.Models
         private static void CalculateClassAvg(StudentAnnouncementsViewData res, IEnumerable<StudentAnnouncementDetails> items)
         {
             int count = 0;
-            int? classAvg = 0;
+            decimal? classAvg = 0;
             foreach (var studentAnnouncement in items)
             {
                 if (IncludeToAvg(studentAnnouncement))

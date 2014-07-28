@@ -24,7 +24,7 @@ namespace Chalkable.Web.Models
                 var graphPoints = new List<ItemGradingGraphViewData>();
                 if (grades.Count > 0)
                 {
-                    double minGrade = grades.Min();
+                    double minGrade = (double)grades.Min();
                     double intervalLength = (MAX_GRADE - minGrade) / INTERVALS_COUNT;
                     if (intervalLength < 1)
                         intervalLength = MAX_GRADE - minGrade;
@@ -39,7 +39,7 @@ namespace Chalkable.Web.Models
                         position += intervalLength;
                         var endInterval = position;
                         var grade = (startInterval + position) / 2;
-                        var studentCount = grades.Count(x => x >= startInterval && x < position);
+                        var studentCount = grades.Count(x => (double)x >= startInterval && (double)x < position);
                         graphPoints.Add(ItemGradingGraphViewData.Create((int)grade, studentCount, (int)startInterval, (int)endInterval));
                     }
                 }
