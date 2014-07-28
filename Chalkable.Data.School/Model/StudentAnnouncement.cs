@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.Model
         public string ExtraCredit { get; set; }
         public bool Dropped { get; set; }
         
-        public int? NumericScore { get; set; }
+        public decimal? NumericScore { get; set; }
         public string ScoreValue { get; set; }
         public int? AlternateScoreId { get; set; }
         public int? AlphaGradeId { get; set; }

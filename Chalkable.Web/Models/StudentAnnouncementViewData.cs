@@ -70,7 +70,7 @@ namespace Chalkable.Web.Models
     {
         public int Id { get; set; }
         public string GradeValue { get; set; }
-        public int? NumericGradeValue { get; set; }
+        public decimal? NumericGradeValue { get; set; }
         public bool Dropped { get; set; }
         public bool IsExempt { get; set; }
         public bool IsIncomplete { get; set; }
