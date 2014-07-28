@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         
         public bool CanAddStandard { get; set; }
 
-        public int? Grade { get; set; }
+        public decimal? Grade { get; set; }
         public int? StudentAnnouncementId { get; set; }
         public int StudentsCount { get; set; }
         public int StudentsCountWithAttachments { get; set; }

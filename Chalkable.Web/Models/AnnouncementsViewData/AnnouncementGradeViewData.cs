@@ -40,7 +40,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                     res.Comment = studentAnnouncement.Comment;
                 }
                 int graded = 0;
-                int? summ = null;
+                decimal? summ = null;
                 int cnt = 0;
                 foreach (var gradeItem in studentAnnouncements)
                 {
@@ -54,8 +54,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 var count = studentAnnouncements.Count;
                 res.GradeSummary = graded + "/" + count;
                 res.AttachmentSummary = res.StudentsCountWithAttachments + "/" + count;
-                res.Avg = summ.HasValue ? (int)Math.Round(1.0 * summ.Value / cnt) : (int?)null;
-                res.AvgNumeric = summ.HasValue ? Math.Round(1.0 * summ.Value / cnt) : (double?)null;
+                res.Avg = summ.HasValue ? (int)Math.Round(1.0 * (double)summ.Value / cnt) : (int?)null;
+                res.AvgNumeric = summ.HasValue ? Math.Round(1.0 * (double)summ.Value / cnt) : (double?)null;
             }
         }
     }

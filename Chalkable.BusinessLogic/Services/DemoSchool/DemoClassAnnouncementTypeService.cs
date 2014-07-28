@@ -55,7 +55,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Name = classAnnouncementType.Name, 
                 Percentage = classAnnouncementType.Percentage, 
                 ChalkableAnnouncementTypeRef = classAnnouncementType.ChalkableAnnouncementTypeRef, 
-                Avg = announcementDetailses.Where(x => x.ClassAnnouncementTypeRef == classAnnouncementType.Id).Average(x => x.StudentAnnouncements.Average(y => y.NumericScore))
+                Avg = (double?)announcementDetailses.Where(x => x.ClassAnnouncementTypeRef == classAnnouncementType.Id)
+                .Average(x => x.StudentAnnouncements.Average(y => y.NumericScore))
             }).ToList();
         }
 

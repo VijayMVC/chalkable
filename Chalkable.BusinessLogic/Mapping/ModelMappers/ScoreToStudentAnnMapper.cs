@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
         {
             returnObj.Comment = sourceObj.Comment;
             returnObj.Dropped = sourceObj.Dropped;
-            returnObj.NumericScore = (int?) sourceObj.NumericScore;
+            returnObj.NumericScore = sourceObj.NumericScore;
             returnObj.StudentId = sourceObj.StudentId;
             returnObj.ActivityId = sourceObj.ActivityId;
             returnObj.ScoreValue = sourceObj.ScoreValue;
