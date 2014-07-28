@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<GradingStandardInfo> GetGradingStandards(int classId)
         {
+            ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, null);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
             var res = new List<GradingStandardInfo>();
