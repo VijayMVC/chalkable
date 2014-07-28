@@ -7,26 +7,27 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            $("a > .demo-button , #floatingbuttons > a.demo-button").click(function () {
-                mixpanel.track("Demo Button clicked");
-            });
 
-            $("li.demoLI a").click(function () {
-                mixpanel.track("Navbar Demo Button clicked");
-            });
+            if (mixpanel) {
+                $("a > .demo-button , #floatingbuttons > a.demo-button").click(function () {
+                    mixpanel.track("Demo Button clicked");
+                });
 
-            $("a > .signup-button , #floatingbuttons > a.signup-button").click(function () {
-                mixpanel.track("Signup Button clicked");
-            });
+                $("li.demoLI a").click(function () {
+                    mixpanel.track("Navbar Demo Button clicked");
+                });
 
-            mixpanel.track_links("a > .demo-button", "Demo Button clicked", { 'referrer': document.referrer });
-            mixpanel.track_links("a > .signup-button", "Signup Button clicked", { 'referrer': document.referrer });
-            mixpanel.track_pageview("/User/LogOn");
+                $("a > .signup-button , #floatingbuttons > a.signup-button").click(function () {
+                    mixpanel.track("Signup Button clicked");
+                });
 
-            mixpanel.track_pageview("/SignUp/Admin");
-            mixpanel.track_pageview("/SignUp/AdminSisInfo");
-            mixpanel.track_pageview("/Home/Terms");
-            mixpanel.track_pageview("/User/Developers");
+                mixpanel.track_links("a > .demo-button", "Demo Button clicked", { 'referrer': document.referrer });
+                mixpanel.track_links("a > .signup-button", "Signup Button clicked", { 'referrer': document.referrer });
+                mixpanel.track_pageview("/User/LogOn");
+                mixpanel.track_pageview("/Home/Terms");
+                mixpanel.track_pageview("/User/Developers");
+            }
+           
         });
     </script>   
 }
