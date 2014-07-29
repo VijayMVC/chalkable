@@ -15,6 +15,8 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
         {
             SupportedSizes.Add(new PictureSize { Height = 80, Width = 45 });
             SupportedSizes.Add(new PictureSize { Height = 46, Width = 26 });
+            SupportedSizes.Add(new PictureSize { Height = 24, Width = 48 });
+
         }
         public override void UploadPicture(Guid id, byte[] content)
         {

@@ -105,6 +105,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('fullclassname')],
             String, 'className',
 
+            [ria.serialize.SerializeProperty('departmentid')],
+            chlk.models.id.DepartmentId, 'departmentId',
+
             String, 'comment',
 
             String, 'content',
