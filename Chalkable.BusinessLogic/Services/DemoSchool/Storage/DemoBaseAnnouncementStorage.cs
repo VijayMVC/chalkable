@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         Announcement GetLastDraft(int i);
         IList<Person> GetAnnouncementRecipientPersons(int announcementId, int userId);
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int i);
-        bool Exists(string s, int classid);
+        bool Exists(string s, int classid, DateTime expiresDate);
         void ReorderAnnouncements(int id, int value, int recipientId);
         bool CanAddStandard(int announcementId);
         bool IsEmpty();
@@ -465,9 +465,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
-        public bool Exists(string s, int classId)
+        public bool Exists(string s, int classId, DateTime expiresDate)
         {
-            return data.Count(x => x.Value.Title == s && x.Value.ClassRef == classId) > 0;
+            return data.Count(x => x.Value.Title == s && x.Value.ClassRef == classId && x.Value.Expires.Date == expiresDate.Date) > 0;
         }
 
         public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int recipientClassId)
