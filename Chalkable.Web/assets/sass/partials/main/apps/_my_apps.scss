@@ -8,8 +8,12 @@ DIV.page {
 
 
             .toolbar-btn{
+
+              &.my-apps{
+                margin-right: 10px;
+              }
               &.app-store{
-                margin-left: 142px;
+                margin-left: 212px;
               }
 
               &.edit{
