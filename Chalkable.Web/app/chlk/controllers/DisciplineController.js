@@ -64,8 +64,8 @@ NAMESPACE('chlk.controllers', function(){
             },
 
             [chlk.controllers.SidebarButton('discipline')],
-            [[chlk.models.common.ChlkDate, Number, Number]],
-            function pageAction(date_, pageSize, pageIndex){
+            [[chlk.models.common.ChlkDate, Number, Number, Boolean]],
+            function pageAction(date_, pageSize, pageIndex, byLastName_){
                 var res = this.disciplineList_(pageIndex, pageSize, date_);
                 return this.UpdateView(chlk.activities.discipline.DisciplineSummaryPage, res);
             },
@@ -83,10 +83,13 @@ NAMESPACE('chlk.controllers', function(){
                     .then(function(result){
                         var classes = this.getClassForDisciplines_();
                         var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                        return new chlk.models.discipline.ClassDisciplinesViewData(
+
+                        var model = new chlk.models.discipline.ClassDisciplinesViewData(
                             classBarData, classId_, result[0], result[1], date_, true,
                             this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE)
                         );
+                        this.getContext().getSession().set(ChlkSessionConstants.DISCIPLINE_PAGE_DATA, model);
+                        return model;
                     }, this);
 
                 var activityClass = chlk.activities.discipline.ClassDisciplinesPage;
@@ -95,6 +98,29 @@ NAMESPACE('chlk.controllers', function(){
                     return this.UpdateView(activityClass, res);
                 }
                 return this.PushView(activityClass, res);
+            },
+
+            //TODO: refactor this copy past
+            [[Boolean]],
+            function sortStudentsAction(byLastName){
+                var model = this.getContext().getSession().get(ChlkSessionConstants.DISCIPLINE_PAGE_DATA);
+                model.getDisciplines().sort(function(item1, item2){
+                    var sortField1 = "";
+                    var sortField2 = "";
+
+                    if (byLastName){
+                        sortField1 = item1.getStudent().getLastName();
+                        sortField2 = item2.getStudent().getLastName();
+                    }
+                    else{
+                        sortField1 = item1.getStudent().getFirstName();
+                        sortField2 = item2.getStudent().getFirstName();
+                    }
+                    return strcmp(sortField1, sortField2);
+                });
+                model.setByLastName(byLastName);
+                var result = new ria.async.DeferredData(model);
+                return this.UpdateView(chlk.activities.discipline.ClassDisciplinesPage, result);
             },
 
             [[Number, Number, chlk.models.common.ChlkDate]],

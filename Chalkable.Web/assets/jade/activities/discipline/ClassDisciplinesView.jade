@@ -20,16 +20,11 @@ redirectData = self.getRedirectData()
     .people-list-container.not-transparent
         .top.panel-bg
             span.total-count=self.getTotalText()
-        //.action-bar.buttons.filter
+        .action-bar.buttons.filter
             .container.panel-bg
                 .left
-                    +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'])(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
-                    +ActionLinkWithPrepend('attendance', 'sortStudents', [true])(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
-                .right
-                    input(placeholder='Filter list...', name="filter", value=self.getFilter()).people-search
-                    .people-search-imgs
-                        label.people-search-img
-                        label.people-search-close.opacity0
+                    +ActionLink('discipline', 'sortStudents', false)(class=self.isByLastName()?"":"pressed").action-button=Msg.First_name
+                    +ActionLink('discipline', 'sortStudents', true)(class=self.isByLastName()?"pressed":"").action-button=Msg.Last_name
         .grid-container.disciplines-individual.loader-container
             +ListView(self.getDisciplines())#class-attendance-list-panel.people-list
                 each item, i in self.getDisciplines()

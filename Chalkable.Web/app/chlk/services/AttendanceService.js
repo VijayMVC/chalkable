@@ -24,11 +24,12 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Attendance/AttendanceSummary.json', chlk.models.attendance.AttendanceSummary, {});
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function getClassList(classId, date_) {
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
+            ria.async.Future, function getClassList(classId, date_, byLastName_) {
                 return this.get('Attendance/ClassList.json', ArrayOf(chlk.models.attendance.ClassAttendance), {
                     classId: classId.valueOf(),
-                    date: date_ && date_.toString('mm-dd-yy')
+                    date: date_ && date_.toStandardFormat(),
+                    byLastName: byLastName_
                 });
             },
 
@@ -62,7 +63,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getStudentAttendance(studentId, datetime_) {
                 return this.get('Attendance/GetAttendanceForStudent.json', chlk.models.attendance.StudentDayAttendances, {
                     studentId: studentId.valueOf(),
-                    datetime: datetime_ && datetime_.toString('mm-dd-yy')
+                    datetime: datetime_ && datetime_.toStandardFormat()
                 });
             },
 
@@ -73,7 +74,7 @@ NAMESPACE('chlk.services', function () {
                     classIds: classIds,
                     levels: attendanceTypes,
                     attReasons: attReasons,
-                    date: date_ && date_.toString('mm-dd-yy')
+                    date: date_ && date_.toStandardFormat()
                 });
             },
 
@@ -112,7 +113,7 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Attendance/SetAttendanceForClass.json', Boolean, {
                     classId: classId && classId.valueOf(),
                     level: level,
-                    date: date && date.toString('mm-dd-yy')
+                    date: date && date.toStandardFormat()
                 });
             },
 
@@ -127,9 +128,9 @@ NAMESPACE('chlk.services', function () {
                         gradeLevelsIds: gradeLevelsIds_,
                         fromMarkingPeriodId: fromMarkingPeriodId.valueOf(),
                         toMarkingPeriodId: toMarkingPeriodId.valueOf(),
-                        nowDateTime: nowDateTime_ && nowDateTime_.toString('mm-dd-yy'),
-                        startDate: startDate_ && startDate_.toString('mm-dd-yy'),
-                        endDate: endDate_ && endDate_.toString('mm-dd-yy')
+                        nowDateTime: nowDateTime_ && nowDateTime_.toStandardFormat(),
+                        startDate: startDate_ && startDate_.toStandardFormat(),
+                        endDate: endDate_ && endDate_.toStandardFormat()
                     });
             },
 
