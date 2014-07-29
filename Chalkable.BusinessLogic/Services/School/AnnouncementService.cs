@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteAnnouncements(int schoolpersonid, AnnouncementState state = AnnouncementState.Draft);
 
         Announcement EditTitle(int announcementId, string title);
-        bool Exists(string title, int classId);
+        bool Exists(string title, int classId, DateTime expiresDate);
 
         AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null);
         void SubmitAnnouncement(int announcementId, int recipientId);
@@ -329,22 +329,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(
                             res.ClassAnnouncementTypeName);
                     res.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?) null;
-                    if (Context.Role == CoreRoles.TEACHER_ROLE)
-                    {
-                        //TODO: rewrite this later 
-                        var atts = res.AnnouncementAttachments.Where(x => x.SisAttachmentId.HasValue && x.Id <= 0).ToList();
-                        foreach (var annAtt in atts)
-                        {
-                            annAtt.PersonRef = Context.UserLocalId.Value;
-                            if (string.IsNullOrEmpty(annAtt.Uuid) &&
-                                ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
-                            {
-                                var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(annAtt.SisAttachmentId.Value);
-                                annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Name, content).uuid;
-                            }
-                            new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
-                        }
-                    }
+                    InsertMissingAttachments(res, uow);
                 }
                 else if(res.ClassAnnouncementTypeRef.HasValue)
                 {
@@ -352,9 +337,32 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.ClassAnnouncementTypeName = classAnnType.Name;
                     res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
                 }
-
                 uow.Commit();
                 return res;
+            }
+        }
+
+        private void InsertMissingAttachments(AnnouncementDetails res, UnitOfWork uow)
+        {
+            var atts = res.AnnouncementAttachments.Where(x => x.SisAttachmentId.HasValue && x.Id <= 0).ToList();
+            if (atts.Count > 0)
+            {
+                IList<AnnouncementAttachment> toInsert = new List<AnnouncementAttachment>();
+                foreach (var annAtt in atts)
+                {
+                    annAtt.PersonRef = res.PrimaryTeacherRef;
+                    if (string.IsNullOrEmpty(annAtt.Uuid) &&
+                        ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
+                    {
+                        var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(annAtt.SisAttachmentId.Value);
+                        annAtt.Uuid = ServiceLocator.CrocodocService.UploadDocument(annAtt.Name, content).uuid;
+                    }
+                    toInsert.Add(annAtt);
+                }
+                var ada = new AnnouncementAttachmentDataAccess(uow);
+                ada.Insert(toInsert);
+                res.AnnouncementAttachments = ada.GetPaginatedList(res.Id, Context.UserLocalId.Value, Context.RoleId, 0,
+                                                                   int.MaxValue);
             }
         }
 
@@ -701,7 +709,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public Announcement EditTitle(int announcementId, string title)
         {
             var ann = GetAnnouncementById(announcementId);
-            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef));
+            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef, ann.Expires));
         }
 
         private Announcement EditTitle(Announcement announcement, string title, Func<AnnouncementDataAccess, string, bool> existsTitleAction)
@@ -730,11 +738,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return announcement;
         }
 
-        public bool Exists(string title, int classId)
+        public bool Exists(string title, int classId, DateTime expiresDate)
         {
             using (var uow = Read())
             {
-                return CreateAnnoucnementDataAccess(uow).Exists(title, classId);
+                return CreateAnnoucnementDataAccess(uow).Exists(title, classId, expiresDate);
             }
         }
 

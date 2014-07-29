@@ -242,12 +242,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return anns.Select(x => x.Content).ToList();
         }
 
-        public bool Exists(string title, int classId)
+        public bool Exists(string title, int classId, DateTime expiresDate)
         {
             var query = new AndQueryCondition
                 {
                     {Announcement.TITLE_FIELD, title},
-                    {Announcement.CLASS_REF_FIELD, classId}
+                    {Announcement.CLASS_REF_FIELD, classId},
+                    {Announcement.EXPIRES_FIELD, expiresDate}
                 };
             return Exists<Announcement>(query);
         }
