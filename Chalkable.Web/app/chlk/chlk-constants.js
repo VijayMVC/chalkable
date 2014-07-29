@@ -39,6 +39,7 @@ var ChlkSessionConstants = {
     SETTINGS_MODEL: 'settingsModel',
     DB_LIST_BACKUPS: 'listBackups',
     ATTENDANCE_PAGE_DATA: 'attendancePageData',
+    DISCIPLINE_PAGE_DATA: 'disciplinePageData',
     ATTENDANCE_DATA: 'attendanceData',
     ANNOUNCEMENT_APPLICATIONS: 'AnnoucementApplications',
     ANNOUNCEMENT_ATTACHMENTS: 'AnnouncementAttachments',

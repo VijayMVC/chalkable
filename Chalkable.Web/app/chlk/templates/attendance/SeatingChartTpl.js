@@ -39,6 +39,15 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return !!this.getSeatingList() && !!this.getNotSeatingStudents();
             },
 
+            Boolean, function hasStudentOnChart(){
+                var seatingList = this.getSeatingList();
+                return seatingList.length > 0 && seatingList.filter(function(items){
+                    return items.filter(function(item){
+                        return item.getInfo() != null && item.getInfo() != undefined;
+                    }).length > 0
+                }).length > 0;
+            },
+
             function getLateReasons(){
                 return (this.getReasons() || []).filter(function(item){
                     var len;

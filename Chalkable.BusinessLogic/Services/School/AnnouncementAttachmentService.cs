@@ -71,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 IList<AnnouncementAttachment> atts;
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
-                    var stiAtts = ConnectorLocator.AttachmentConnector.DownloadAttachment(name, content).ToList();
+                    var stiAtts = ConnectorLocator.AttachmentConnector.UploadAttachment(name, content).ToList();
                     var lastStiAtts = stiAtts.Last();
                     if(!string.IsNullOrEmpty(uuid))
                         lastStiAtts.CrocoDocId = Guid.Parse(uuid);

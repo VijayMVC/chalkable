@@ -4,7 +4,7 @@ mixin GlanceBox(controller, action, data, color, converter, useTooltip, inverse)
     else
         span(class="glance-box" + (data.items ? " hover-action-box" : ""))
             div
-                .value(class=self.getValueClass(data.value) + color ? ' ' + color : '') #{data.value}
+                .value(class=self.getValueClass(data.value) + color ? ' ' + color : '') #{data.value || ''}
                 p.glance-title #{data.title}
                 if data.items
                     .details-container

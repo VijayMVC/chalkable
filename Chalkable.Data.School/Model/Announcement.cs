@@ -15,12 +15,13 @@ namespace Chalkable.Data.School.Model
         public const string ID_FIELD = "Id";
         public const string CONTENT_FIELD = "Content";
         public const string CREATED_FIELD = "Created";
+        public const string EXPIRES_FIELD = "Expires";
         public const string STATE_FIELD = "State";
         public const string CLASS_REF_FIELD = "ClassRef";
         public const string CLASS_ANNOUNCEMENT_TYPE_REF_FIELD = "ClassAnnouncementTypeRef";
         public const string TITLE_FIELD = "Title";
         public const string SIS_ACTIVITY_ID_FIELD = "SisActivityId";
-
+        
         public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
         
         [PrimaryKeyFieldAttr]

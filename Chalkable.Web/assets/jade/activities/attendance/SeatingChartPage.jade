@@ -13,13 +13,13 @@ topData = self.getTopData()
 topItems = topData.getTopItems()
 showButtons = self.getModel().canPost() && self.isScheduled()
 selectedId = topData.getSelectedItemId()
+hasStudentOnChart = self.hasStudentOnChart()
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
     selectedItemId=selectedId ? selectedId.valueOf() : ""
 ).classes-bar
 .action-bar.not-transparent.buttons
     .container.panel-bg
         .left.no-border
-            -console.log(self.getDate())
             +ActionForm('attendance', 'saveFromSeatingChart').save-chart-form
                 +DatePicker('date', self.getDate())(
                     data-options={
@@ -47,14 +47,17 @@ div(class=showButtons ? 'can-post' : '').page-content
             .black-arrow.start=Msg.Start_by_creating_a_grid
         else
             +UpdateGridForm(Msg.Edit_grid, self.getRows(), self.getColumns(), self.getMinData().rows, self.getMinData().columns, selectedId.valueOf())
-            .grey-button.add-remove-students=Msg.Add_remove_students
+            .grey-button.add-remove-students= hasStudentOnChart ? Msg.Edit_students : Msg.Add_students
             .right.right-container.save-attendances-buttons
                 if showButtons
                     A(class=self.getModel().hasSeatingStudents() ? "" : "disabled")#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
                     +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), false, true)(
                         class=self.getModel().hasSeatingStudents() ? "" : "disabled"
                     )#all-present-link=Msg.Mark_all_Present
-            .black-arrow.add=Msg.Add_your_students
+            if !hasStudentOnChart
+                .black-arrow.add= Msg.Add_your_students
+            else
+                .add
             .seating-chart-container
                 +LeftRightToolbar()(
                     needDots = true,

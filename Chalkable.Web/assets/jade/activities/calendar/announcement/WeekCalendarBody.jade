@@ -30,7 +30,7 @@ mixin TooltipWithOverflow(text)
                                         .announcement-calendar-item
                                             //TODO add course
                                             .course-icon
-                                                +ClassImg(null, 24, 48).avatar.course-icon
+                                                +ClassImg(anns[0], 24, 48).avatar.course-icon
                                             .text-container
                                                 +TooltipWithOverflow(anns[0].getTitle()).typename
                                                 +TooltipWithOverflow(anns[0].getClassName()).title

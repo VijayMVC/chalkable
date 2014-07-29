@@ -48,9 +48,8 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
-        public ActionResult ClassList(DateTime? date, int classId, int? start, int? count)
+        public ActionResult ClassList(DateTime? date, int classId, int? start, int? count, bool? byLastName)
         {
-            //return FakeJson("~/fakeData/disciplineClassList.json");
             start = start ?? 0;
             count = count ?? int.MaxValue;
             var currentDate = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
@@ -60,7 +59,10 @@ namespace Chalkable.Web.Controllers
             {
                 res = DisciplineView.Create(disciplines, Context.UserLocalId ?? 0).ToList();   
             }
-            res = res.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
+            if (byLastName.HasValue && byLastName.Value)
+                res = res.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
+            else
+                res = res.OrderBy(x => x.Student.FirstName).ThenBy(x => x.Student.LastName).ToList();
             return Json(new PaginatedList<DisciplineView>(res, start.Value / count.Value, count.Value));
         }
 
