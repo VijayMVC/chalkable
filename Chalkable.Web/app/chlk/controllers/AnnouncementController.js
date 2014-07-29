@@ -166,6 +166,7 @@ NAMESPACE('chlk.controllers', function (){
             return result;
         },
 
+        [chlk.controllers.SidebarButton('statistic')],
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeFromGridAction(model){
             var result = this.setAnnouncementGrade(model, true);

@@ -20,13 +20,22 @@ NAMESPACE('chlk.activities.common', function () {
                     }, 500);
 
                     if(parent.hasClass('open')){
-                        setTimeout(function(){
-                            parent.removeClass('open');
-                        }, 500);
+                        this.closeBlock(parent);
                     }else{
+                        var item = this.dom.find('.marking-period-container.open');
+                        jQuery(item.find('.mp-data').valueOf()).animate({
+                            height: 0
+                        }, 500);
+                        this.closeBlock(item);
                         parent.addClass('open');
                     }
                 }
+            },
+
+            function closeBlock(node){
+                setTimeout(function(){
+                    node.removeClass('open');
+                }, 500);
             }
         ]);
 });
