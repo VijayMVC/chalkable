@@ -17,7 +17,7 @@ namespace Chalkable.StiConnector.Connectors
             urlFormat = url + "/{0}";
         }
         
-        public IEnumerable<StiAttachment> DownloadAttachment(string name, byte[] content)
+        public IEnumerable<StiAttachment> UploadAttachment(string name, byte[] content)
         {
             return PostWithFile<IList<StiAttachment>>(url, name, content, null); 
         } 
