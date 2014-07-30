@@ -131,6 +131,17 @@ BODY {
 
         #main-wrapper {
           #main {
+
+            .month-page, .week-page{
+              .classes-bar{
+                .img-wrapper{
+                  IMG{
+                    margin-top: -40px;
+                  }
+                }
+              }
+            }
+
             DIV.chlk-calendar {
               border: none;
 
