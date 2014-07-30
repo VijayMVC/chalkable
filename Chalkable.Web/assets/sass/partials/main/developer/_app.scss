@@ -337,7 +337,7 @@ BODY {
                       margin-top: -23px;
                       margin-left: -36px;
                       .myapps-permission{
-
+                        padding-top: 25px;
                         margin-left: 225px;
                         display: inline-block;
                         margin-top: -18px;
@@ -349,7 +349,23 @@ BODY {
                         .slide-checkbox{
                           margin-top: -5px;
                         }
+                        &.short-gd{
+                          label{
+                            width: 95px;
+                          }
+                          .app-name{
+                            margin-right: 32px;
+                          }
+                        }
 
+                        &.short{
+                          label{
+                              width: 115px;
+                            }
+                          .app-name{
+                            margin-right: 12px;
+                          }
+                        }
                         label{
                           width: 123px;
                           text-align: left;
@@ -358,6 +374,8 @@ BODY {
                           margin: 0;
                           font-size: 12px;
                           font-weight: normal;
+                          color: #444;
+
                         }
                         .app-name{
                           display: inline-block;
@@ -368,7 +386,7 @@ BODY {
                           white-space: nowrap;
                           margin-right: 5px;
                           vertical-align: top;
-                          margin-left: 5px;
+                          margin-left: 2px;
                         }
                       }
                     }
