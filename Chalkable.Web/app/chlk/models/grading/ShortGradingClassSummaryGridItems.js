@@ -10,6 +10,21 @@ REQUIRE('chlk.models.school.SchoolOption');
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
 
+    /** @class chlk.models.grading.StudentTotalPoint*/
+    CLASS('StudentTotalPoint',[
+
+        [ria.serialize.SerializeProperty('totalpoint')],
+        Number, 'totalPoint',
+        [ria.serialize.SerializeProperty('maxtotalpoint')],
+        Number, 'maxTotalPoint',
+
+        String, function displayTotalPoint(){
+            var totalPoint = this.getTotalPoint();
+            if (!totalPoint) return '';
+            return totalPoint.toString() + '/' + (this.getMaxTotalPoint() || 0).toString();
+        }
+    ]);
+
     /** @class chlk.models.grading.ShortGradingClassSummaryGridItems*/
     CLASS(
         'ShortGradingClassSummaryGridItems', [
@@ -46,7 +61,7 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
 
             [ria.serialize.SerializeProperty('totalpoints')],
-            ArrayOf(Number), 'totalPoints',
+            ArrayOf(chlk.models.grading.StudentTotalPoint), 'studentTotalPoints',
 
             function getTooltipText(){
                 return (this.getAvg() != null ? Msg.Avg + " " + this.getAvg() : 'No grades yet');

@@ -339,7 +339,10 @@ namespace Chalkable.StiImport.Services
                 return;
             var phones = context.GetSyncResult<PersonTelephone>().Deleted.Select(x=>new Phone
                 {
-                    
+                    DigitOnlyValue = x.TelephoneNumber,
+                    PersonRef = x.PersonID,
+                    IsPrimary = x.IsPrimary,
+                    Value = x.FormattedTelephoneNumber
                 }).ToList();
             ServiceLocatorSchool.PhoneService.Delete(phones);
         }

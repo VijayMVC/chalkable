@@ -50,7 +50,7 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(Number), 'totalPoints',
+            ArrayOf(chlk.models.grading.StudentTotalPoint), 'studentTotalPoints',
 
             chlk.models.id.ClassId, 'classId'
         ]);

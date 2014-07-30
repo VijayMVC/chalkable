@@ -60,6 +60,7 @@ namespace Chalkable.Data.Master.Model
         public int LocalId { get; set; }
         [NotDbFieldAttr]
         public District District { get; set; }
+        public bool IsChalkableEnabled { get; set; }
     }
 
     public class SchoolUser

@@ -23,6 +23,8 @@ namespace Chalkable.Web.ActionFilters
         {
             Trace.TraceError(ChlkResources.ERR_MESSAGE_WITH_STACKTRACE, filterContext.Exception.Message, filterContext.Exception.StackTrace);
 #if !DEBUG
+            if (filterContext.HttpContext != null && filterContext.HttpContext.User != null)
+                raygunClient.User = filterContext.HttpContext.User.Identity.Name;
             raygunClient.SendInBackground(filterContext.Exception);
 #endif
             if (filterContext.Exception.InnerException != null)
