@@ -80,7 +80,7 @@ NAMESPACE('chlk.models.notification', function () {
                     if(mins < 60) return Msg.minutes_ago(mins);
                     else return Msg.hours_ago(Math.floor(mins/60));
                 }
-                return date.toString('hh:mm tt');
+                return date.toString('hh:min tt');
             },
 
             chlk.models.common.ActionLinkModel, function prepareActionModel(){

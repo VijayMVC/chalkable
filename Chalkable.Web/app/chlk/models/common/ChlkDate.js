@@ -103,7 +103,13 @@ NAMESPACE('chlk.models.common', function () {
                 format = format.replace(/min/g, this.timepartToStr(this.getDate().getMinutes()));
                 var res =$.datepicker.formatDate(format, this.getDate() || getDate());
                 var hours = this.getDate().getHours();
-                res = res.replace(/hh/g, this.timepartToStr(hours));
+                var h = hours;
+                if(res.indexOf('tt') > 0){
+                    h %= 12;
+                    if(h < 1) h = 12;
+                }
+                else h = this.timepartToStr(hours);
+                res = res.replace(/hh/g, h);
                 res = res.replace(/ss/g, this.timepartToStr(this.getDate().getSeconds()));
                 res = res.replace(/tt/g, hours > 11 ? 'pm' : 'am');
                 return res;
