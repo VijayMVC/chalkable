@@ -693,7 +693,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.fill-grade-container')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function fillGradeClick(node, event){
-                if(!node.find('.checkbox').getAttr('disabled')){
+                if(!node.find('.checkbox').getAttr('disabled') && node.find('.checkbox').getAttr('checked')){
                     var form = node.parent('form');
                     form.trigger('submit');
                     var input = form.find('input[name=gradevalue]');
