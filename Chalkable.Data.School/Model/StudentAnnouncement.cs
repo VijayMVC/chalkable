@@ -45,6 +45,11 @@ namespace Chalkable.Data.School.Model
         {
             get { return !string.IsNullOrEmpty(ScoreValue) || Late || Incomplete || Exempt || Dropped; }
         }
+
+        public bool IncludeInTotalPoint
+        {
+            get { return (NumericScore.HasValue || Late) && !Incomplete && !Dropped; }
+        }
     }
 
     public class StudentAnnouncementDetails : StudentAnnouncement

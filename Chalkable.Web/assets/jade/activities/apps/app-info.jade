@@ -13,18 +13,10 @@ mixin TextArea(tName, val, isReadonly, validationRule)
         -attributes.disabled = isReadonly
     textarea(name=tName, class=rule)(attributes)=val
 
-mixin MyAppsPermission(prefix, app, suffix)
-    .myapps-permission
+mixin MyAppsPermission(prefix, app, suffix, shortText)
+    .myapps-permission(class= shortText ? shortText : undefined)
         label=prefix
         span.app-name=app + " " + suffix
-
-
-
-
-
-
-
-
 
 mixin AppPricing(appPrice, isReadOnly)
     isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
@@ -149,23 +141,23 @@ appPlatforms = appPlatforms.join(',')
                         +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
                         +SlideCheckbox("studentMyAppsEnabled", myAppsAccess.isStudentMyAppsEnabled(), self.isReadOnly())
                     .permission
-                        +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?")
+                        +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?", "short")
                         +SlideCheckbox("adminMyAppsEnabled", myAppsAccess.isAdminMyAppsEnabled(), self.isReadOnly())
                     .permission
-                        +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?")
+                        +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?", "short")
                         +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), self.isReadOnly())
         .section.small
             .elem.first
                 label.hint New Item:
                 .my-apps
                     .permission
-                        +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?")
+                        +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?", "short")
                         +SlideCheckbox("attachEnabled", myAppsAccess.isAttachEnabled(), self.isReadOnly())
             .elem
                 label.hint Grading View:
                 .my-apps
                     .permission
-                        +MyAppsPermission("Will be Teachers", '', 'viewing student output')
+                        +MyAppsPermission("Will be Teachers", '', 'viewing student output', "short-gd")
                         +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
         .section.small
             .elem.standarts

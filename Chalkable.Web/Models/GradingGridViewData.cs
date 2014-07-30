@@ -62,8 +62,8 @@ namespace Chalkable.Web.Models
         public bool DisplayTotalPoints { get; set; }
         public bool IncludeWithdrawnStudents { get; set; }
 
-        public IList<int> TotalPoints { get; set; } 
-
+        public IList<TotalPointViewData> TotalPoints { get; set; }
+        
         public static GradingGridViewData Create(ChalkableGradeBook gradeBook)
         {
             var res = new GradingGridViewData(gradeBook)
@@ -86,12 +86,16 @@ namespace Chalkable.Web.Models
             res.TotalAvarages = StudentTotalAveragesViewData.Create(gradeBook.Averages, stIds);
             if (gradeBook.Options.DisplayTotalPoints && gradeBook.Announcements.Count > 0)
             {
-                res.TotalPoints = new List<int>();
+                res.TotalPoints = new List<TotalPointViewData>();
                 foreach (var stId in stIds)
                 {
-                    var total = gradeBook.Announcements.Sum(x => x.StudentAnnouncements.First(y => y.Student.Id == stId).NumericScore);
-                    res.TotalPoints.Add((int) total);
+                    var scoredAnns = gradeBook.Announcements.Where(x =>!x.Dropped && x.StudentAnnouncements.Any(y => y.Student.Id == stId 
+                                                                    && y.IncludeInTotalPoint)).ToList();
+                    var totalPoint = scoredAnns.Sum(x => x.StudentAnnouncements.First(y => y.Student.Id == stId).NumericScore ?? 0);
+                    var maxTotalPoint = scoredAnns.Where(x => x.MaxScore.HasValue).Sum(x => x.MaxScore.Value);
+                    res.TotalPoints.Add(TotalPointViewData.Create((int)totalPoint, (int)maxTotalPoint));
                 }
+
             }
             res.GradingItems = gradeBook.Announcements
                                         .Select(x => ShortAnnouncementGradeViewData.Create(x, x.StudentAnnouncements, stIds))
@@ -102,6 +106,17 @@ namespace Chalkable.Web.Models
         public static IList<GradingGridViewData> Create(IList<ChalkableGradeBook> gradeBooks)
         {
             return gradeBooks.Select(Create).ToList();
+        }
+    }
+
+    public class TotalPointViewData
+    {
+        public int TotalPoint { get; set; }
+        public int MaxTotalPoint { get; set; }
+
+        public static TotalPointViewData Create(int totalPoint, int maxTotalPoint)
+        {
+            return new TotalPointViewData {TotalPoint = totalPoint, MaxTotalPoint = maxTotalPoint};
         }
     }
 

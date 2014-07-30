@@ -208,9 +208,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Data.School.Model.SchoolYear schoolYear;
                 SchoolUser schoolUser;
                 PrepareSchoolData(schoolL, user, schoolYearId, out schoolYear, out schoolUser);
-                var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, null, schoolYear);
+                if (!schoolUser.School.IsChalkableEnabled)
+                    return null;
                 if (iNowUser == null && iNowConnector != null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();
+                if (iNowUser.Claims.All(x => x.Values.All(y => y != "Access Chalkable")))
+                    return null;
+                var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, null, schoolYear);
                 res.Claims = ClaimInfo.Create(iNowUser.Claims);
                 return res;
             }

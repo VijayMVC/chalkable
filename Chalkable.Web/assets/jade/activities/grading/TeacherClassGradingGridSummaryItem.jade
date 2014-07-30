@@ -49,14 +49,14 @@ mixin StudentAverages(tpl)
             .dotted-h.grade-value=tpl.getModel().displayGrade(studentAvg.getTotalAverage())
 
 mixin DisplayTotalPoints(model)
-    -totalPoints = model.getTotalPoints()
-    if totalPoints && model.isAbleDisplayTotalPoints()
+    -studentTotalPoints = model.getStudentTotalPoints()
+    if studentTotalPoints && model.isAbleDisplayTotalPoints()
         .dotted-container.grade-container.with-horizontal-dots
             div(data-tooltip=Msg.Total_Points).type-name= Msg.Total_Points
             .time
             .max-score.dotted-h
-            each totalPoint, i in totalPoints
-                div(row-index=i).dotted-h.grade-value=totalPoint
+            each studentTotalPoint, i in studentTotalPoints
+                div(row-index=i).dotted-h.grade-value=studentTotalPoint.displayTotalPoint()
             .dotted-h.grade-value
 
 
@@ -93,7 +93,7 @@ mixin DisplayTotalPoints(model)
                 .max-score.dotted-h=maxScore
                 studentItems = announcement.getStudentAnnouncements().getItems()
                 each info,i in studentItems
-                    gradable = announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent())
+                    gradable = announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || info.isUnExcusedAbsent())
                     div(
                         row-index=i
                         data-able-drop-student-score= announcement.isAbleDropStudentScore(),

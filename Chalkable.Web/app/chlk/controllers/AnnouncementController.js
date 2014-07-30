@@ -536,27 +536,25 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId]],
         function deleteAnnouncementAction(announcementId) {
-            this.announcementService
+            return this.announcementService
                 .deleteAnnouncement(announcementId)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(!this.userIsAdmin())
                         chlk.controls.updateWeekCalendar();
-                    this.BackgroundNavigate('feed', 'list', []);
+                    return this.BackgroundNavigate('feed', 'list', [null, true]);
                 }, this);
-            return this.ShadeLoader();
         },
 
         function discardAction() {
             this.disableAnnouncementSaving(true);
             var currentPersonId = this.getCurrentPerson().getId();
-            this.announcementService
+            return this.announcementService
                 .deleteDrafts(currentPersonId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    this.BackgroundNavigate('feed', 'list', []);
+                    return this.BackgroundNavigate('feed', 'list', [null, true]);
                 }, this);
-            return this.ShadeLoader();
         },
 
         [[chlk.models.id.AttachmentId]],
@@ -587,7 +585,6 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
         },
-
 
         Boolean, function isAnnouncementSavingDisabled(){
             return this.getContext().getSession().get(ChlkSessionConstants.DONT_SAVE, false);

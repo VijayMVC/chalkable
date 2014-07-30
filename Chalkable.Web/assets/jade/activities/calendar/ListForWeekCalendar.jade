@@ -25,5 +25,5 @@ nextDate = items[6].getDate().add(chlk.models.common.ChlkDateEnum.DAY, 1).format
                                 if announcement.getChalkableAnnouncementType() == chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
                                     secondText = announcement.getSubject() || ''
                                 li
-                                    +ActionLink('announcement', 'view', announcement.getId())=announcement.getTitle() + ' ' + secondText
+                                    +ActionLink('announcement', 'view', announcement.getId())(data-tooltip=announcement.getClassName())=announcement.getTitle() + ' ' + secondText
                     .chlk-gradient-cnt-bottom
