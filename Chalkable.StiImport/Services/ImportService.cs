@@ -65,7 +65,9 @@ namespace Chalkable.StiImport.Services
         public void Import()
         {
             Log.LogInfo("start import");
-
+            connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+            importedSchoolIds.Clear();
+            personsForImportPictures.Clear();
 
             var masterDb = (ImportDbService)ServiceLocatorMaster.DbService;
             var schoolDb = (ImportDbService)ServiceLocatorSchool.SchoolDbService;
@@ -77,11 +79,7 @@ namespace Chalkable.StiImport.Services
             var t2 = new Thread(PingConnection);
             t1.Start(masterDb);
             t2.Start(schoolDb);
-
-
-            importedSchoolIds.Clear();
-            personsForImportPictures.Clear();
-            connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+            
             Log.LogInfo("download data to sync");
             DownloadSyncData();
             

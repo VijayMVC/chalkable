@@ -32,11 +32,11 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
+            //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
             //var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
             //var cl = ConnectorLocator.Create("Chalkable", "b1Yn9Rz2X", "http://qa-external.stiinformationnow.com:8220/API/");
-            //var cl = ConnectorLocator.Create("Chalkable", "Fp6Gs0Ck7", "http://208.83.95.80:8216/api/");
-
+            var cl = ConnectorLocator.Create("Chalkable", "q1Jn6Oq6N", "http://208.83.95.80/API/");
+            		
 
             var schools = (cl.SyncConnector.GetDiff(typeof(School), null) as SyncResult<School>).All;
             foreach (var s in schools)
