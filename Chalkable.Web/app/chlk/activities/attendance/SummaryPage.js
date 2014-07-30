@@ -13,6 +13,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 this.dom.addClass('refreshed');
+                var panelToShow = this.dom.find('.absent-late-page[data-page=1]');
+                this.startInterval(panelToShow);
             },
 
             [[ria.dom.Dom, Boolean]],
@@ -79,17 +81,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.changeLineOpacity(item, needOpacity);
             },
 
-            [ria.mvc.DomEventBind('click', '.absent-late-button:not(.pressed)')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function buttonClick(node, event){
-                this.dom.find('.absent-late-button.pressed').removeClass('pressed');
-                node.addClass('pressed');
-                var page = node.getData('page');
-                var panelToShow = this.dom.find('.absent-late-page[data-page=' + page + ']');
-                panelToShow.show();
-                this.dom.find('.absent-late-page[data-page!=' + page + ']').hide();
-                this.dom.find('.hidden-students-block').setCss('height', '0').addClass('height-0');
-
+            function startInterval(panelToShow){
                 clearInterval(interval);
                 var grid = panelToShow.find('.students-container');
                 var pageHeight = document.documentElement.clientHeight;
@@ -119,6 +111,20 @@ NAMESPACE('chlk.activities.attendance', function () {
                         clearInterval(interval);
                     }
                 }.bind(this, grid), 500);
+            },
+
+            [ria.mvc.DomEventBind('click', '.absent-late-button:not(.pressed)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function buttonClick(node, event){
+                this.dom.find('.absent-late-button.pressed').removeClass('pressed');
+                node.addClass('pressed');
+                var page = node.getData('page');
+                var panelToShow = this.dom.find('.absent-late-page[data-page=' + page + ']');
+                panelToShow.show();
+                this.dom.find('.absent-late-page[data-page!=' + page + ']').hide();
+                this.dom.find('.hidden-students-block').setCss('height', '0').addClass('height-0');
+
+                this.startInterval(panelToShow);
             },
 
             [ria.mvc.DomEventBind('mouseleave', '.student-with-picture')],
