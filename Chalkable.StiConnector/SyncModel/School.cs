@@ -28,5 +28,6 @@ namespace Chalkable.StiConnector.SyncModel
         public int? CourseRequestSessionID { get; set; }
         public bool IsLEEnabled { get; set; }
         public bool IsLESyncComplete { get; set; }
+        public bool IsChalkableEnabled { get; set; }
     }
 }

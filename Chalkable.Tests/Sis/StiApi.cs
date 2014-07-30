@@ -38,8 +38,13 @@ namespace Chalkable.Tests.Sis
             //var cl = ConnectorLocator.Create("Chalkable", "Fp6Gs0Ck7", "http://208.83.95.80:8216/api/");
 
 
-            var pe = (cl.SyncConnector.GetDiff(typeof(PersonEmail), null) as SyncResult<PersonEmail>).All;
-            Debug.WriteLine(pe.Count());
+            var schools = (cl.SyncConnector.GetDiff(typeof(School), null) as SyncResult<School>).All;
+            foreach (var s in schools)
+            {
+                //IsChalkableEnabled
+                Debug.WriteLine(s.IsChalkableEnabled);
+            }
+            
         }
 
         [Test]
