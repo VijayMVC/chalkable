@@ -65,8 +65,19 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('mouseover mouseleave', '.legend-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function itemTypeHover(node, event){
-                var needOpacity = event.type == 'mouseleave';
-                this.changeLineOpacity(node, needOpacity);
+                if(!node.hasClass('hovered')){
+                    var needOpacity = event.type == 'mouseleave';
+                    this.changeLineOpacity(node, needOpacity);
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.legend-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function itemTypeClick(node, event){
+                var wasHovered = node.hasClass('hovered');
+                this.dom.find('.legend-item.hovered').removeClass('hovered').removeClass('fixed-hovered');
+                if(!wasHovered)
+                    node.addClass('hovered').addClass('fixed-hovered');
             },
 
             [ria.mvc.DomEventBind('seriemouseover seriemouseleave', '.main-chart')],
@@ -74,11 +85,14 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function chartHover(node, event, chart_, hEvent_){
                 var needOpacity = event.type == 'seriemouseleave';
                 var item = node.parent('.chart-container').find('.legend-item[data-index=' + chart_.index + ']:visible');
-                if(needOpacity)
-                    item.removeClass('hovered');
-                else
-                    item.addClass('hovered');
-                this.changeLineOpacity(item, needOpacity);
+                if(!item.hasClass('fixed-hovered')){
+                    if(needOpacity)
+                        item.removeClass('hovered');
+                    else
+                        item.addClass('hovered');
+                    this.changeLineOpacity(item, needOpacity);
+                }
+
             },
 
             function startInterval(panelToShow){
