@@ -175,17 +175,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public ClassDetails DeleteStudent(int classId, int personId)
+        public void DeleteStudent(IList<ClassPerson> classPersons)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-
-            Storage.ClassPersonStorage.Delete(new ClassPersonQuery
-            {
-                ClassId = classId,
-                PersonId = personId
-            });
-            return GetClassDetailsById(classId);
+            throw new NotImplementedException();
         }
 
         public ClassDetails GetClassDetailsById(int id)

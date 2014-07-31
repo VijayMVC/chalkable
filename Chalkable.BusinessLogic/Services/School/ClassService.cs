@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddTeachers(IList<ClassTeacher> classTeachers);
         void EditTeachers(IList<ClassTeacher> classTeachers);
         void DeleteTeachers(IList<ClassTeacher> classTeachers);
-        ClassDetails DeleteStudent(int classId, int personId);
+        void DeleteStudent(IList<ClassPerson> classPersons);
         ClassDetails GetClassDetailsById(int id);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
         IList<ClassDetails> GetClasses(string filter);
@@ -241,20 +241,15 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ClassDetails DeleteStudent(int classId, int personId)
+        public void DeleteStudent(IList<ClassPerson> classPersons)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new ClassPersonDataAccess(uow, Context.SchoolLocalId).Delete(new ClassPersonQuery
-                    {
-                        ClassId = classId,
-                        PersonId = personId
-                    });
+                new ClassPersonDataAccess(uow, Context.SchoolLocalId).Delete(classPersons);
                 uow.Commit();
             }
-            return GetClassDetailsById(classId);
         }
 
         public ClassDetails GetClassDetailsById(int id)
