@@ -148,34 +148,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                 popUp.show();
                 var left = ((node.width() - popUp.width()) / 2) - 8 + 'px';
                 popUp.setCss('left', left);
-            }/*,
-
-            function setScroller(){
-                var grid = this.dom.find('.students-container:visible');
-                var baseContentHeight = grid.height();
-
-                var pageHeight = document.documentElement.clientHeight;
-                var scrollPosition;
-                var contentHeight = baseContentHeight + grid.offset().top;
-                var interval;
-
-                interval = setInterval(function(){
-                    if(grid.find('.hidden-students-block:not(.processed)')){
-                        if((contentHeight - pageHeight - scrollPosition) < 400){
-                            configs.currentStart += configs.pageSize;
-                            this.scrollAction_(grid);
-                            contentHeight += baseContentHeight;
-                        }
-                    }
-                    else{
-                        clearInterval(interval);
-                    }
-                }.bind(this));
-            },
-
-            OVERRIDE, VOID, function onRender_(model){
-                BASE(model);
-
-            }*/
+            }
         ]);
 });

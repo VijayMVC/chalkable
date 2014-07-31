@@ -64,7 +64,7 @@ mixin AnnouncementTooltip()
                             .title Standards:
                             .standard-list
                                 each standard in self.getStandards()
-                                    .grey-button.same-on-hover
+                                    div(data-tooltip = standard.getDescription()).grey-button.same-on-hover
                                         span=standard.getName()
             if self.getUserRole().isStudent()
                 .silver-panel.attachments-panel
