@@ -29,7 +29,7 @@ $(document).ready(function () {
               data: form.serialize(),
               success: function (response) {
 
-                if (mixpanel) {
+                if (typeof window['mixpanel'] !== "undefined") {
                     mixpanel.track(
                         "Logged in from com",
                         response.data || {}
