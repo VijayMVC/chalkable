@@ -1,0 +1,42 @@
+value = self.getValue()
+each studentAvg, i in value.totalavarages
+    .dotted-container.grade-container.with-horizontal-dots.avgs-container
+        text = self.displayAvgName(studentAvg)
+        div(data-tooltip=text).type-name=text
+        .time
+        .max-score.dotted-h
+        each average,i in studentAvg.averages
+            div(
+                row-index=i,
+                class=(i == value.rowIndex ? 'active-row' : ''),
+                data-able-display-alpha-grades=value.displayalphagrades,
+                data-average-id=average.averageid,
+                data-student-name=value.students[i].studentinfo.displayname,
+                data-student-id=average.studentid,
+                data-grading-period-id=value.gradingperiod.id,
+                data-grading-period-name=value.gradingperiod.name
+            ).dotted-h.grade-value.gradable.avg-value-container
+                displayValue = self.displayAvgGradeValue(average, value.displayalphagrades)
+                originalValue = self.displayAvgGradeValue(average, value.displayalphagrades, true)
+                edited = average.enteredavg || average.enteredavg == 0 || average.enteredalphagrade
+                div(
+                    data-isexempt= average.isexempt,
+                    data-calculated-avg= average.calculatedavg == null ? null : average.calculatedavg.toString(),
+                    data-entered-avg= average.enteredavg == null ? null : average.enteredavg.toString(),
+                    data-calculated-alpha-grade= average.calculatedalphagrade,
+                    data-entered-alpha-grade= average.enteredalphagrade,
+                    data-may-be-exempt=average.maybeexempt,
+                    data-exempt=average.isexempt,
+                    data-student-id=average.studentid,
+                    data-codes-string=JSON.stringify(average.codes)
+                    class=(average.isexempt ? 'letter' : '')
+                ).grade-info
+                    if self.withCodes(average)
+                        .with-comment
+                    div(
+                        data-tooltip=(edited && originalValue ? Msg.Orig + " " + originalValue : ""),
+                        data-value=displayValue
+                    ).grade-text.avg-text=displayValue
+                    if edited
+                        .edited=Msg.Edited.toLowerCase()
+        .dotted-h.grade-value=self.displayGrade(studentAvg.totalaverage)
