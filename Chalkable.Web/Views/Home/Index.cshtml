@@ -4,15 +4,15 @@
 }
 
 @section MixPanelTracking {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            if (mixpanel) {
+    
+    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        <script type="text/javascript">
+            $(document).ready(function() {
                 mixpanel.track_links(".taglineMessage a", "Clicked demo from com", {
                     "referrer": document.referrer
                 });
-                mixpanel.track_forms("#login-form", "Logged in from com");
-            }
-           
-        });
-    </script>   
+            });
+        </script>   
+    }
 }
