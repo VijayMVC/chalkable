@@ -27,7 +27,14 @@ $(document).ready(function () {
               type: "post",
               dataType: "json",
               data: form.serialize(),
-              success:function (response) {
+              success: function (response) {
+
+                if (mixpanel) {
+                    mixpanel.track(
+                        "Logged in from com",
+                        response.data || {}
+                    );
+                }
 
                 if (response.Success !== true) {
                     form.find('input[type=submit]').attr('disabled', false);
