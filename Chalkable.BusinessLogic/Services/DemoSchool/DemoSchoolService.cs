@@ -24,8 +24,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
             Storage.SchoolStorage.Add(school);
-           
-            ServiceLocator.ServiceLocatorMaster.SchoolService.Add(Context.DistrictId.Value, school.Id, school.Name);
+
+            var l = new List<SchoolInfo>
+                {
+                    new SchoolInfo
+                        {
+                            Name = school.Name,
+                            IsChalkableEnabled = school.IsChalkableEnabled,
+                            LocalId =  school.Id
+                        }
+                };
+            ServiceLocator.ServiceLocatorMaster.SchoolService.Add(l, Context.DistrictId.Value);
         }
 
         public void Add(IList<Data.School.Model.School> schools)

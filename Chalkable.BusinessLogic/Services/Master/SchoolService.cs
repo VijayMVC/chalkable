@@ -15,7 +15,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Update(Data.Master.Model.School school);
         PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count);
         IList<Data.Master.Model.School> GetAll();
-        void Add(Guid districtId, int localId, string name);
         void Add(IList<SchoolInfo> schools, Guid districtId);
         void Edit(IList<SchoolInfo> schoolInfos, Guid districtId);
         void Delete(IList<int> localIds, Guid districtId);
@@ -53,17 +52,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return da.GetAll();
             }
         }
-
-        public void Add(Guid districtId, int localId, string name)
-        {
-            Add(new List<SchoolInfo>{new SchoolInfo
-                    {
-                        LocalId = localId,
-                        Name = name
-                    }}, districtId);
-        }
-
-
+        
         //TODO: add district data to school
         public Data.Master.Model.School GetById(Guid id)
         {
@@ -95,6 +84,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Name = x.Name,
                         LocalId = x.LocalId,
                         DistrictRef = districtId,
+                        IsChalkableEnabled = x.IsChalkableEnabled,
                         Id = Guid.NewGuid()
                     }).ToList());
                 uow.Commit();
@@ -114,7 +104,10 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                    var si = schoolInfos.FirstOrDefault(x=>x.LocalId == school.LocalId);
                     if (si != null)
+                    {
+                        school.IsChalkableEnabled = si.IsChalkableEnabled;
                         school.Name = si.Name;
+                    }
                 }
                 da.Update(schools);
                 uow.Commit();
@@ -141,5 +134,6 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         public int LocalId { get; set; }
         public string Name { get; set; }
+        public bool IsChalkableEnabled { get; set; }
     }
 }

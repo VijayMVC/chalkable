@@ -51,7 +51,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var schoolInfos = schools.Select(x => new SchoolInfo
                 {
                     LocalId = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    IsChalkableEnabled = x.IsChalkableEnabled
                 }).ToList();
             ModifySchool(da => da.Insert(schools), (iSchoolS, districtId) => iSchoolS.Add(schoolInfos, districtId));
         }
@@ -61,7 +62,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var schoolInfos = schools.Select(x => new SchoolInfo
                 {
                     LocalId = x.Id,
-                    Name = x.Name
+                    Name = x.Name,
+                    IsChalkableEnabled = x.IsChalkableEnabled
                 }).ToList();
             ModifySchool(da => da.Update(schools), (iSchoolS, districtId) => iSchoolS.Edit(schoolInfos, districtId));
         }

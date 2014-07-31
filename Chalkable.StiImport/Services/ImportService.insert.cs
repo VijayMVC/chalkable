@@ -124,7 +124,8 @@ namespace Chalkable.StiImport.Services
                     Id = school.SchoolID,
                     IsActive = school.IsActive,
                     IsPrivate = school.IsPrivate,
-                    Name = school.Name
+                    Name = school.Name,
+                    IsChalkableEnabled = school.IsChalkableEnabled
                 });
                 importedSchoolIds.Add(school.SchoolID);
             }

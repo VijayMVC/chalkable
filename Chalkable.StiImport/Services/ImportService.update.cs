@@ -108,7 +108,8 @@ namespace Chalkable.StiImport.Services
                     Id = x.SchoolID,
                     IsActive = x.IsActive,
                     IsPrivate = x.IsPrivate,
-                    Name = x.Name
+                    Name = x.Name,
+                    IsChalkableEnabled = x.IsChalkableEnabled
                 }).ToList();
             ServiceLocatorSchool.SchoolService.Edit(schools);
         }
