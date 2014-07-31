@@ -175,12 +175,15 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<StudentScheduleTerm>().Deleted == null)
                 return;
-            var students = context.GetSyncResult<StudentScheduleTerm>().Deleted.ToList();
-            foreach (var student in students)
-            {
-                ServiceLocatorSchool.ClassService.DeleteStudent(student.SectionID, student.StudentID);
-            }
-            
+            var students = context.GetSyncResult<StudentScheduleTerm>().Deleted
+                .Select(x=>new ClassPerson
+                    {
+                        ClassRef = x.SectionID,
+                        MarkingPeriodRef = x.TermID,
+                        PersonRef = x.StudentID
+                    })
+                .ToList();
+            ServiceLocatorSchool.ClassService.DeleteStudent(students);
         }
 
         private void DeleteClassPeriods()

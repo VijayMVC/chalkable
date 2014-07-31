@@ -368,12 +368,15 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(announcement){
                     this.prepareAttachments(announcement);
-                    var studentAnnouncements = announcement.getStudentAnnouncements().getItems(), that = this;
-                    studentAnnouncements.forEach(function(item){
-                        item.getAttachments().forEach(function(attachment){
-                            that.prepareAttachment(attachment);
+                    var studentAnnouncements = announcement.getStudentAnnouncements();
+                    if(studentAnnouncements){
+                        var studentItems = studentAnnouncements.getItems(), that = this;
+                        studentItems.forEach(function(item){
+                            item.getAttachments().forEach(function(attachment){
+                                that.prepareAttachment(attachment);
+                            });
                         });
-                    });
+                    }
                     if(!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
                         var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
                         var alphaGrades = classInfo ? classInfo.getAlphaGrades() : [];
@@ -396,7 +399,8 @@ NAMESPACE('chlk.controllers', function (){
 //                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
                     announcement.calculateGradesAvg();
                     var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
-                    announcement.getStudentAnnouncements().setSchoolOptions(schoolOptions);
+                    if(studentAnnouncements)
+                        announcement.getStudentAnnouncements().setSchoolOptions(schoolOptions);
 
                     this.cacheAnnouncement(announcement);
                     return announcement;

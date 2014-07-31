@@ -11,9 +11,9 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(ClassPersonQuery query)
+        public void Delete(IList<ClassPerson> classPersons)
         {
-            SimpleDelete(BuildConditioins(query));
+            SimpleDelete(classPersons);
         }
 
         public QueryCondition BuildConditioins(ClassPersonQuery query)
