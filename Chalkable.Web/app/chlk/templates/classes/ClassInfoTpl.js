@@ -17,10 +17,10 @@ NAMESPACE('chlk.templates.classes', function () {
                     {title: 'TEACHER', value: model.getTeacher().getDisplayName()}
                 ];
                 if(model.getRoom())
-                    res.push({title: 'ROOM NUMBER', value: model.getRoom().getRoomNumber()});
+                    res.push({title: 'ROOM NUMBER', value: model.getRoom().getRoomNumber() || ''});
                 if(model.getDepartment())
                     res.push({title: 'DEPARTMENT', value: model.getDepartment().getName()});
-                res.push({title: 'GRADE', value: model.getGradeLevel().getFullText()});
+                res.push({title: 'GRADE', value: model.getGradeLevel().getFullText() || ''});
                 return res;
             }
         ])
