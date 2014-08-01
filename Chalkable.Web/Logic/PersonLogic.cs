@@ -30,7 +30,7 @@ namespace Chalkable.Web.Logic
             {
                 var classRoomOption = locator.ClassroomOptionService.GetClassOption(classId.Value);
                 query.IsEnrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
-                var mp = locator.MarkingPeriodService.GetLastMarkingPeriod(locator.Context.NowSchoolTime.Date);
+                var mp = locator.MarkingPeriodService.GetLastMarkingPeriod(locator.Context.NowSchoolYearTime.Date);
                 if (mp != null) query.MarkingPeriodId = mp.Id;
 
             }

@@ -19,7 +19,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '#expiresdate')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function dueDateChange(node, event){
-                var dt = getDate(node.getValue());
+                var dt = chlk.models.common.ChlkSchoolDate.GET_SCHOOL_YEAR_SEVER_DATE(node.getValue());
                 if(!dt.valueOf())
                     node.setValue('');
             },

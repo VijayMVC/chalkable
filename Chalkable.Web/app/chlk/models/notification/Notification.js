@@ -74,7 +74,7 @@ NAMESPACE('chlk.models.notification', function () {
 
             [[chlk.models.common.ChlkDate]],
             String, function convertToTime_(date){
-                var now = new chlk.models.common.ChlkDate(getDate()), mins;
+                var now = new chlk.models.common.ChlkDate(), mins;
                 if(now.isSameDay(date)){
                     mins = Math.floor((now.getDate() - date.getDate()) / (1000 * 60));
                     if(mins < 60) return Msg.minutes_ago(mins);

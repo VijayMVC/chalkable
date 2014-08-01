@@ -1,4 +1,5 @@
 REQUIRE('chlk.activities.lib.ChlkTemplateActivity');
+REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.activities.lib', function () {
     /** @class chlk.activities.lib.TemplatePage*/
@@ -11,6 +12,14 @@ NAMESPACE('chlk.activities.lib', function () {
                 this._body = new ria.dom.Dom('body');
             },
 
+
+            Date, function getDate(str_, a_, b_){
+                return chlk.models.common.ChlkDate.GET_SERVER_DATE(str_, a_, b_);
+            },
+
+            Date, function getSchoolYearServerDate(str_, a_, b_){
+                return chlk.models.common.ChlkSchoolYearDate.GET_SCHOOL_YEAR_SEVER_DATE(str_, a_, b_);
+            },
 
             OVERRIDE, VOID, function processAnnotations_(ref) {
                 BASE(ref);

@@ -70,7 +70,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
         public ActionResult ClassList(DateTime? date, int classId)
         {
-            date = (date ?? SchoolLocator.Context.NowSchoolTime).Date;
+            date = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;
             return Json(new PaginatedList<ClassAttendanceViewData>(ClassAttendanceList(date.Value, classId), 0, int.MaxValue));
         }
         private IList<ClassAttendanceViewData> ClassAttendanceList(DateTime date, int classId)
@@ -119,7 +119,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Checkin")]
         public ActionResult SwipeCard(Guid personId, Guid classPeriodId)
         {
-            var now = SchoolLocator.Context.NowSchoolTime;
+            var now = SchoolLocator.Context.NowSchoolYearTime;
             var cDate = SchoolLocator.CalendarDateService.GetCalendarDateByDate(now.Date);
             if (!(cDate.IsSchoolDay && cDate.DayTypeRef.HasValue))
                 throw new ChalkableException("Today is not school day");
@@ -181,7 +181,7 @@ namespace Chalkable.Web.Controllers
             if(!Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             var schoolYearId = GetCurrentSchoolYearId();
-            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date ?? Context.NowSchoolTime.Date);
+            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date ?? Context.NowSchoolYearTime.Date);
             var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.UserLocalId.Value, gradingPeriod.Id);
             return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary));
         }
@@ -193,7 +193,7 @@ namespace Chalkable.Web.Controllers
         }
 
         private AttendanceSeatingChartViewData GetSeatingChart(DateTime? date, int classId) {
-            var d = (date ?? Context.NowSchoolTime).Date;
+            var d = (date ?? Context.NowSchoolYearTime).Date;
             var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d, true);
             if(markingPeriod == null)
                 throw new NoMarkingPeriodException();
@@ -220,7 +220,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, Boolean needInfo)
         {
-            var d = (date ?? Context.NowSchoolTime).Date;
+            var d = (date ?? Context.NowSchoolYearTime).Date;
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
             SchoolLocator.AttendanceService.UpdateSeatingChart(seatingChartInfo.ClassId, mp.Id, seatingChartInfo);
             if (needInfo)

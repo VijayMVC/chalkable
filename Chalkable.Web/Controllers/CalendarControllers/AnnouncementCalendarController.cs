@@ -63,7 +63,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_ADMIN_DAY, true, CallType.Get, new[] { AppPermissionType.Schedule })]
          public ActionResult AdminDay(DateTime? day, IntList gradeLevelIds)
          {
-             var currentDay = (day ?? SchoolLocator.Context.NowSchoolTime).Date;
+             var currentDay = (day ?? SchoolLocator.Context.NowSchoolYearTime).Date;
              var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(currentDay);
              if (mp != null)
              {

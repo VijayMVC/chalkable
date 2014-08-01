@@ -86,7 +86,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
         public Period GetPeriod(int time)
         {
-            return GetPeriod(time, Context.NowSchoolTime.Date);
+            return GetPeriod(time, Context.NowSchoolYearTime.Date);
         }
 
 

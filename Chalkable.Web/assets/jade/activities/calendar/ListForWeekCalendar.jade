@@ -2,7 +2,7 @@ items = self.getItems()
 firstIndex = items[0].getAnnouncements().length ? 0 : 1
 lastIndex = items[6].getAnnouncements().length ? 6 : 5
 text = items[firstIndex].getDate().format('M. d') + ' - ' + items[lastIndex].getDate().format('M. d')
-dt = new chlk.models.common.ChlkDate(getDate())
+dt = new chlk.models.common.ChlkSchoolYearDate()
 prevDate = items[0].getDate().add(chlk.models.common.ChlkDateEnum.DAY, -1).format('mm-dd-yy')
 nextDate = items[6].getDate().add(chlk.models.common.ChlkDateEnum.DAY, 1).format('mm-dd-yy')
 

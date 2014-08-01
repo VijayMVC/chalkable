@@ -148,7 +148,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [[ria.dom.Dom]],
             chlk.models.announcement.BaseAnnouncementViewData, function getAnnouncementInfo(node){
-                var dt = getDate();
+                var dt = this.getSchoolYearServerDate();
                 var annIndex = node.parent('.announcements-type-item').getData('index');
                 var typeIndex = node.parent('.ann-type-container').getData('index');
                 this.setCurrentIndex(typeIndex);

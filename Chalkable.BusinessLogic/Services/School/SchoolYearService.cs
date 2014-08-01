@@ -151,7 +151,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
                 if (Context.SchoolYearId.HasValue)
                     return da.GetById(Context.SchoolYearId.Value);
-                var nowDate = Context.NowSchoolTime.Date;
+                var nowDate = Context.NowSchoolYearTime.Date;
                 var res = da.GetByDate(nowDate);
                 return res ?? da.GetLast(nowDate);
             }

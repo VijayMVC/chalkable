@@ -18,7 +18,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
         protected static void WeekCalendar(ref DateTime? date, out DateTime start, out DateTime end, UserContext context)
         {
-            date = date ?? context.NowSchoolTime;
+            date = date ?? context.NowSchoolYearTime;
             var cal = new GregorianCalendar();
             var today = date.Value;
             start = cal.AddDays(today, -((int)today.DayOfWeek));
@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 
         protected void MonthCalendar(ref DateTime? date, out DateTime start, out DateTime end)
         {
-            date = date ?? SchoolLocator.Context.NowSchoolTime;
+            date = date ?? SchoolLocator.Context.NowSchoolYearTime;
             start = new DateTime(date.Value.Year, date.Value.Month, 1);
             end = start.AddMonths(1);
             while (start.DayOfWeek != DayOfWeek.Sunday)

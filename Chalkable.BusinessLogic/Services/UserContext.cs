@@ -51,7 +51,15 @@ namespace Chalkable.BusinessLogic.Services
         {
             get
             {
-                var res = DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC");
+                return DateTime.UtcNow.ConvertFromUtc(SchoolTimeZoneId ?? "UTC");
+            }
+        }
+
+        public DateTime NowSchoolYearTime
+        {
+            get
+            {
+                var res = NowSchoolTime;
                 if (SchoolYearEndDate.HasValue && res > SchoolYearEndDate)
                     return SchoolYearEndDate.Value;
                 if (SchoolYearStartDate.HasValue && res < SchoolYearStartDate)

@@ -37,7 +37,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             }
             var studentSummaryInfo = SchoolLocator.PersonService.GetStudentSummaryInfo(schoolPersonId);
             var classes = SchoolLocator.ClassService.GetClasses(Context.SchoolYearId, null, schoolPersonId);
-            var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
+            var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
 
             var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
             Room currentRoom = null;
