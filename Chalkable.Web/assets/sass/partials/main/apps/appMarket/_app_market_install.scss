@@ -35,6 +35,15 @@
             .column{
               display: inline-block;
               vertical-align: top;
+
+              .disabled-lbl{
+                background: #DEDEDE;
+                box-shadow: none;
+                border: 0;
+                color: #444;
+                opacity: 0.5;
+                cursor: default;
+              }
             }
           }
 
