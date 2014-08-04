@@ -18,6 +18,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             Boolean, 'autoUpdate',
 
+            Boolean, 'avg',
+
             Boolean, 'notCalculateGrid',
 
             Number, 'averageId',

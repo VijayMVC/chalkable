@@ -39,4 +39,4 @@ each studentAvg, i in value.totalavarages
                     ).grade-text.avg-text=displayValue
                     if edited
                         .edited=Msg.Edited.toLowerCase()
-        .dotted-h.grade-value=self.displayGrade(studentAvg.totalaverage)
+        div(data-average-id=studentAvg.averageid).dotted-h.total-average.grade-value=self.displayGrade(studentAvg.totalaverage)
