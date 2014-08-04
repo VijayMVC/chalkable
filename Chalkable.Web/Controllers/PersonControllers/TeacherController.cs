@@ -16,7 +16,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult Summary(int personId)
         {
             var teacher = SchoolLocator.PersonService.GetPerson(personId);
-            var room = SchoolLocator.RoomService.WhereIsPerson(personId, SchoolLocator.Context.NowSchoolTime);
+            var room = SchoolLocator.RoomService.WhereIsPerson(personId, SchoolLocator.Context.NowSchoolYearTime);
             return Json(TeacherSummaryViewData.Create(teacher, room));
         }
 

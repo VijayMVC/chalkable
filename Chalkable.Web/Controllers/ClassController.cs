@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassInfo(int classId)
         {
             var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var classGeneralPeriod = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(classId, SchoolLocator.Context.NowSchoolTime);
+            var classGeneralPeriod = SchoolLocator.ClassPeriodService.GetNearestClassPeriod(classId, SchoolLocator.Context.NowSchoolYearTime);
             Room room = null;
             if (classGeneralPeriod != null)
             {
@@ -45,7 +45,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassSummary(int classId)
         {
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var currentDateTime = SchoolLocator.Context.NowSchoolTime;
+            var currentDateTime = SchoolLocator.Context.NowSchoolYearTime;
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(currentDateTime, true);
             if (mp == null)
                 return Json(ClassViewData.Create(c));

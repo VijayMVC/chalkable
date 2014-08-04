@@ -40,7 +40,7 @@ NAMESPACE('chlk.controls', function () {
                     [10,Msg.November],
                     [11,Msg.December]
                 ];
-                var daysData=[],days = 31,yearsData = [], currentYear = (getDate()).getFullYear();
+                var daysData=[],days = 31,yearsData = [], currentYear = (this.getSchoolYearServerDate()).getFullYear();
                 for(var i=1; i <= days; i++)daysData.push(i);
                 for(i = currentYear; i >=  1900; --i){yearsData.push(i)};
                 this.setMonths(monthData);

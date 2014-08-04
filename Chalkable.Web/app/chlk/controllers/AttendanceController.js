@@ -144,7 +144,7 @@ NAMESPACE('chlk.controllers', function (){
                 var topModel = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevelsIds_);
                 model.setTopData(topModel);
                 model.setFromMarkingPeriodId(fromMarkingPeriodId);
-                model.getAttendanceByDayData().setDate(nowDateTime_ ? nowDateTime_ : new chlk.models.common.ChlkDate(getDate()));
+                model.getAttendanceByDayData().setDate(nowDateTime_ ? nowDateTime_ : new chlk.models.common.ChlkSchoolYearDate());
                 model.setToMarkingPeriodId(toMarkingPeriodId);
                 if(gradeLevelsIds_)
                     model.setGradeLevelsIds(gradeLevelsIds_);
@@ -233,7 +233,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.attendance.SeatingChart, chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
         chlk.models.attendance.SeatingChart, function prepareSeatingData(model, classId, date_){
-            date_ = date_ || new chlk.models.common.ChlkDate(getDate());
+            date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
             var classes = this.classService.getClassesForTopBar(true);
             var topModel = new chlk.models.classes.ClassesForTopBar(classes);
             topModel.setSelectedItemId(classId);
@@ -343,7 +343,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getClassList(classId, date_)
                 .attach(this.validateResponse_())
                 .then(function(items){
-                    date_ = date_ || new chlk.models.common.ChlkDate(getDate());
+                    date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
                     this.getContext().getSession().set(ChlkSessionConstants.ATTENDANCE_DATA, items);
                     var classes = this.classService.getClassesForTopBar(true);
                     var topModel = new chlk.models.classes.ClassesForTopBar(classes);

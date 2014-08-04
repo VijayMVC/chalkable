@@ -73,7 +73,7 @@ NAMESPACE('chlk.templates.discipline', function(){
 
             function getMpChartConfigs(){
                 var configs = this.getChartData(this.getMpStats(), function(item){
-                    return new chlk.models.common.ChlkDate(getDate(item)).format('D d');
+                    return new chlk.models.common.ChlkSchoolYearDate.$createServerTime(item).format('D d');
                 });
                 var res =  {
                     chart: {
@@ -98,7 +98,7 @@ NAMESPACE('chlk.templates.discipline', function(){
 
             function isNowHidden(){
                 var date = this.getDate();
-                return date && date.getDate() < getDate();
+                return date && date.getDate() < this.getSchoolYearServerDate();
             },
 
             function getDayChartConfigs(){

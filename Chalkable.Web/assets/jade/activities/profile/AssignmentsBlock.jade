@@ -7,7 +7,7 @@ a.periods-link.item
                 data-tooltip = announcement.getAnnouncementTypeName()
             ).announcement
     .period-box
-        dt = new chlk.models.common.ChlkDate(getDate());
+        dt = new chlk.models.common.ChlkDate();
         dayText = self.getDate().isSameDay(dt) ? Msg.Today : self.getDate().format('D');
         .day=dayText
 

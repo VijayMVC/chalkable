@@ -130,7 +130,7 @@ namespace Chalkable.Web.Controllers
         private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId)
         {
             if (!announcementInfo.ExpiresDate.HasValue)
-                announcementInfo.ExpiresDate = SchoolLocator.Context.NowSchoolTime;
+                announcementInfo.ExpiresDate = SchoolLocator.Context.NowSchoolYearTime;
             return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
         }
 

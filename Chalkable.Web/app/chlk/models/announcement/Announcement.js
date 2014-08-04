@@ -239,7 +239,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'ableEdit',
 
             function prepareExpiresDateText(){
-                var now = getDate();
+                var now = getSchoolYearServerDate();
                 var days = 0;
                 var expTxt = "";
                 var expires = this.getExpiresDate();

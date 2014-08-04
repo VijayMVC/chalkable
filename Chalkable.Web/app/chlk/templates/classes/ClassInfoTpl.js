@@ -13,13 +13,16 @@ NAMESPACE('chlk.templates.classes', function () {
 
             Object, function prepareDetailedInfo(){
                 var model = this.getClassInfo();
-                var res = [
-                    {title: 'TEACHER', value: model.getTeacher().getDisplayName()}
-                ];
-                if(model.getRoom())
-                    res.push({title: 'ROOM NUMBER', value: model.getRoom().getRoomNumber() || ''});
-                if(model.getDepartment())
-                    res.push({title: 'DEPARTMENT', value: model.getDepartment().getName()});
+                var teacher = model.getTeacher();
+                var room = model.getRoom();
+                var department = model.getDepartment();
+                var res = [];
+                if (teacher)
+                    res.push({title: 'TEACHER', value: teacher.getDisplayName()});
+                if(room)
+                    res.push({title: 'ROOM NUMBER', value: room.getRoomNumber() || ''});
+                if(department)
+                    res.push({title: 'DEPARTMENT', value: department.getName()});
                 res.push({title: 'GRADE', value: model.getGradeLevel().getFullText() || ''});
                 return res;
             }

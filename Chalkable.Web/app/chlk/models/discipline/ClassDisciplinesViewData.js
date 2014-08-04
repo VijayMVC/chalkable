@@ -30,7 +30,7 @@ NAMESPACE('chlk.models.discipline', function(){
                 this.setDisciplines(disciplines_);
             if(disciplineTypes_)
                 this.setDisciplineTypes(disciplineTypes_);
-            this.setDate(date_ || chlk.models.common.ChlkDate(getDate()));
+            this.setDate(date_ || chlk.models.common.ChlkSchoolYearDate());
             this.setByLastName(byLastName_ || false);
             this.setAblePostDiscipline(isAblePostDiscipline_ || false);
         }

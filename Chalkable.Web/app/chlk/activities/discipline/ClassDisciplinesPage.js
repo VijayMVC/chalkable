@@ -125,7 +125,7 @@ NAMESPACE('chlk.activities.discipline', function(){
                 if(this._isAblePostDiscipline){
                     var form = node.parent('form');
                     if(this.validateDisciplineForm_(form)){
-                        var time = getDate().getTime();
+                        var time = this.getSchoolYearServerDate().getTime();
                         form.find('.save-time').setValue(time);
                         form.previous()
                             .setAttr('time', time)

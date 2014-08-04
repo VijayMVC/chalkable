@@ -55,6 +55,8 @@ NAMESPACE('chlk.services', function () {
                 return result;
             },
 
+
+
             [[String, Object, Object, Boolean]],
             ria.async.Future, function get(uri, clazz_, gParams_, async_) {
                 return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))

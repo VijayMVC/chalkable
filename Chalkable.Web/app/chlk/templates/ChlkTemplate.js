@@ -64,6 +64,14 @@ NAMESPACE('chlk.templates', function () {
 
             chlk.models.common.Role, 'userRole',
 
-            chlk.models.people.User, 'currentUser'
+            chlk.models.people.User, 'currentUser',
+
+            Date, function getServerDate(str_, a_, b_){
+                return chlk.models.common.ChlkDate.GET_SERVER_DATE(str_, a_, b_);
+            },
+
+            Date, function getSchoolYearServerDate(str_, a_, b_){
+                return chlk.models.common.ChlkSchoolYearDate.GET_SCHOOL_YEAR_SEVER_DATE(str_, a_, b_);
+            },
         ])
 });

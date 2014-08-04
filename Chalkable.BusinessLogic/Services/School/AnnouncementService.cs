@@ -91,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = CreateAnnoucnementDataAccess(uow);
                 query.RoleId = Context.Role.Id;
                 query.PersonId = Context.UserLocalId;
-                query.Now = Context.NowSchoolTime.Date;
+                query.Now = Context.NowSchoolYearTime.Date;
                 var res = da.GetAnnouncements(query);
                 return res;
             }

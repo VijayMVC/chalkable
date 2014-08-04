@@ -46,6 +46,7 @@ namespace Chalkable.Web.Common
         public const string ROLE_NAME = "RoleName";
 
         public const string SERVER_TIME = "ServerTime";
+        public const string SCHOOL_YEAR_SERVER_TIME = "SchoolYearServerTime";
 
         public const string ERROR_MESSAGE_KEY = "ErrorMessage";
         public const string DEMO_PREFIX_KEY = "DemoPrefix";

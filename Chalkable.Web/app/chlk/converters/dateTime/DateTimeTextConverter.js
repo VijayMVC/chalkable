@@ -11,7 +11,7 @@ NAMESPACE('chlk.converters.dateTime', function () {
                 VALIDATE_ARG('time', chlk.models.common.ChlkDate, time);
                 if (!time)
                     return "";
-                var nowDate = getDate();
+                var nowDate = getDate(); //todo : think about this row
                 var totalMins = Math.ceil((nowDate - time.getDate()) / 1000 / 60);
                 var minutes = totalMins % 60;
                 var totalHours = (totalMins - minutes) / 60;

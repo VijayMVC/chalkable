@@ -4,7 +4,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 NAMESPACE('chlk.controls', function () {
 
     chlk.controls.updateDatePicker = function (scope, node, value) {
-        var value = new chlk.models.common.ChlkDate(getDate(node.getValue()));
+        var value = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(node.getValue());
         chlk.controls.DatePickerControl.prototype.updateDatePicker.call(scope, node, value, true);
     };
 
@@ -17,6 +17,10 @@ NAMESPACE('chlk.controls', function () {
             },
 
             Date, 'value',
+
+            OVERRIDE, Date, function getServerDate(str_,a_,b_){
+                return this.getSchoolYearServerDate(str_,a_,b_);
+            },
 
             [[String, Object, Object]],
             Object, function processAttrs(name, value, attrs) {
@@ -32,7 +36,7 @@ NAMESPACE('chlk.controls', function () {
                     var params = attrs['data-params'] || [];
                     var that = this;
                     options.onSelect = function (dateText, inst) {
-                        var date = new chlk.models.common.ChlkDate(getDate(dateText));
+                        var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(dateText);
                         params.push(date);
                         var state = that.context.getState();
                         state.setController(controller);
@@ -69,14 +73,14 @@ NAMESPACE('chlk.controls', function () {
                 node.on('change.datepiker', function(node, event){
                     var options = node.getData('options');
                     if(options.minDate){
-                        var min = getDate(options.minDate);
-                        if(getDate(node.getValue()) < min)
-                            node.setValue(new chlk.models.common.ChlkDate(min).format('mm/dd/yy'));
+                        var min = this.getServerDate(options.minDate);
+                        if(this.getServerDate(node.getValue()) < min)
+                            node.setValue(new chlk.models.common.ChlkSchoolYearDate(min).format('mm/dd/yy'));
                     }
                     if(options.maxDate){
-                        var max = getDate(options.maxDate);
-                        if(getDate(node.getValue()) > max)
-                            node.setValue(new chlk.models.common.ChlkDate(max).format('mm/dd/yy'));
+                        var max = this.getServerDate(options.maxDate);
+                        if(this.getServerDate(node.getValue()) > max)
+                            node.setValue(new chlk.models.common.ChlkSchoolYearDate(max).format('mm/dd/yy'));
                     }
                 })
             },

@@ -21,7 +21,7 @@ NAMESPACE('chlk.templates.notification', function(){
 
             [[chlk.models.notification.NotificationsByDate]],
             String, function getItemTitle(item){
-                var now = new chlk.models.common.ChlkDate(getDate());
+                var now = new chlk.models.common.ChlkDate();
                 var created = item.getCreated();
                 return now.isSameDay(created) ? Msg.Sent_today : Msg.Sent_in_date(created.toString('MM, dd'));
             },

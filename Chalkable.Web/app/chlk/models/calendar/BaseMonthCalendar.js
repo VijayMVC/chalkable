@@ -26,13 +26,13 @@ NAMESPACE('chlk.models.calendar', function () {
                 var day = date.getDate().getDate();
                 var prevMonth = month ? month - 1 : 11;
                 var prevYear = month ? year : year - 1;
-                var prevDate = getDate(prevYear, prevMonth, day);
+                var prevDate = getSchoolYearServerDate(prevYear, prevMonth, day);
                 var nextMonth = month == 11 ? 0 : month + 1;
                 var nextYear = month == 11 ? year + 1 : year;
-                var nextDate = getDate(nextYear, nextMonth, day);
+                var nextDate = getSchoolYearServerDate(nextYear, nextMonth, day);
 
-                this.setPrevDate(new chlk.models.common.ChlkDate(prevDate));
-                this.setNextDate(new chlk.models.common.ChlkDate(nextDate));
+                this.setPrevDate(new chlk.models.common.ChlkSchoolYearDate(prevDate));
+                this.setNextDate(new chlk.models.common.ChlkSchoolYearDate(nextDate));
 
                 var startDate = minDate.getDate();
                 var endDate = maxDate.getDate();

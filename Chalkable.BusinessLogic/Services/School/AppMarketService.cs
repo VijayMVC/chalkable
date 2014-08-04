@@ -386,7 +386,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolTime.Date);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime.Date);
                 return da.GetPersonsForApplicationInstall(app.Id, Context.UserLocalId.Value, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }
@@ -399,7 +399,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolTime.Date);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime.Date);
                 return da.GetPersonsForApplicationInstallCount(applicationId, Context.UserLocalId ?? 0, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }

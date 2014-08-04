@@ -130,6 +130,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                     this.dom.find('#' + pickerId).trigger('focus');
             },
 
+
+            OVERRIDE, Date, function getDate(str_,a_,b_){
+                return this.getSchoolYearServerDate(str_,a_,b_);
+            },
+
             [ria.mvc.DomEventBind('change', '.endDate, .startDate')],
                 [[ria.dom.Dom, ria.dom.Event]],
                 VOID, function mpDateChange(node, event) {
@@ -142,7 +147,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                             .find('.chzn-single')
                             .find('>span')
                             .setHTML(node.getValue());
-                        var incorrectParams = isStart && getDate(otherDom.getValue()) < getDate(node.getValue()) || !isStart && getDate(otherDom.getValue()) > getDate(node.getValue());
+                        var incorrectParams = isStart
+                            && this.getDate(otherDom.getValue()) < this.getDate(node.getValue())
+                            || !isStart && this.getDate(otherDom.getValue()) > this.getDate(node.getValue());
                         if(!otherDom.getValue() || incorrectParams){
                             otherDom.setValue(node.getValue());
                             otherDom.trigger('change');

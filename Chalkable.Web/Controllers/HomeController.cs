@@ -64,6 +64,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd");
             ViewData[ViewConstants.NEEDS_TOUR] = false;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
@@ -156,6 +157,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd");
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
@@ -164,7 +166,7 @@ namespace Chalkable.Web.Controllers
             if (markingPeriod != null && SchoolLocator.Context.SchoolId.HasValue)
             {
                 PrepareJsonData(MarkingPeriodViewData.Create(markingPeriod), ViewConstants.MARKING_PERIOD);
-                var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolTime.Date);
+                var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolYearTime.Date);
                 if (gradingPeriod != null)
                     PrepareJsonData(ShortGradingPeriodViewData.Create(gradingPeriod), ViewConstants.GRADING_PERIOD);
 

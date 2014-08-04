@@ -93,7 +93,8 @@ NAMESPACE('chlk.controllers', function(){
                         );
                         this.getContext().getSession().set(ChlkSessionConstants.DISCIPLINE_PAGE_DATA, model);
                         return model;
-                    }, this);
+
+                      }, this);
 
                 var activityClass = chlk.activities.discipline.ClassDisciplinesPage;
                 var currentActivity = this.getView().getCurrent();
@@ -135,7 +136,7 @@ NAMESPACE('chlk.controllers', function(){
                     .list(date_, start)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        date_ = date_ || new chlk.models.common.ChlkDate(getDate());
+                        date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
                         var classes = this.getClassForDisciplines_();
                         var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
                         return new ria.async.DeferredData(new chlk.models.discipline.PaginatedListByDateModel(classBarData, data, date_));
@@ -179,7 +180,7 @@ NAMESPACE('chlk.controllers', function(){
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        date = date || new chlk.models.common.ChlkDate(getDate());
+                        date = date || new chlk.models.common.ChlkSchoolYearDate();
                         var model = result[1];
                         model.setDisciplineTypes(result[0]);
                         model.setDate(date);

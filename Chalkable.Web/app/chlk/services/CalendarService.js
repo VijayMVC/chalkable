@@ -187,7 +187,7 @@ NAMESPACE('chlk.services', function () {
 
 
                     var date = day.getDate().getDate();
-                    var today = new chlk.models.common.ChlkDate(getDate());
+                    var today = new chlk.models.common.ChlkSchoolYearDate();
                     day.setTodayClassName((today.format('mm-dd-yy') == day.getDate().format('mm-dd-yy')) ? 'today' : '');
                     day.setRole(isAdmin ? 'admin' : 'no-admin');
                     day.setAnnLimit(isAdmin ? 7 : 3);
@@ -202,7 +202,7 @@ NAMESPACE('chlk.services', function () {
             chlk.models.calendar.announcement.Week, function prepareWeekData(data, date_){
                 var max = 0, index = 0, kil=0, empty= 0, empty2=0, sun, date, startArray = [], endArray = [];
                 var len = data.length;
-                date_ = date_ || new chlk.models.common.ChlkDate(getDate());
+                date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
                 if(len < 7){
                     var dt = len ? data[0].getDate() : date_;
                     kil = dt.getDate().getDay();
@@ -257,7 +257,7 @@ NAMESPACE('chlk.services', function () {
                     };
                     return periods;
                 }
-                var dt = new chlk.models.common.ChlkDate(getDate());
+                var dt = new chlk.models.common.ChlkSchoolYearDate();
                 for(i = 0; i < data.length; i++){
                     var announcementperiods = data[i].getAnnouncementPeriods();
                     //data[i].setSunday(data[i].getDate().format('DD') == Msg.Sunday);
