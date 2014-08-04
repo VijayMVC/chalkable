@@ -98,6 +98,32 @@ a{
   text-decoration: none;
 }
 
+.error-container{
+  width: 642px;
+  height: 181px;
+  background: url(images/common/permission-error.png) 0 0 no-repeat;
+  text-align: center;
+  margin-top: 25px;
+
+  .text{
+    padding: 63px 0 24px;
+    text-align: center;
+    width: 300px;
+    display: inline-block;
+    font: bold 14px/19px Arial;
+    color: #808080;
+  }
+
+  .return-btn{
+    padding: 0;
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+}
+
 BODY {
   DIV.page{
     >DIV#content {

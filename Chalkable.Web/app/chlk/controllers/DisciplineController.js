@@ -70,6 +70,9 @@ NAMESPACE('chlk.controllers', function(){
                 return this.UpdateView(chlk.activities.discipline.DisciplineSummaryPage, res);
             },
 
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE
+            ])],
             [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function classListAction(classId_, date_){
@@ -141,9 +144,7 @@ NAMESPACE('chlk.controllers', function(){
             },
 
             Array, function getClassForDisciplines_(){
-                var canGetAttForClasses = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE)
-                    || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN);
-                return this.classService.getClassesForTopBar(false, false, !canGetAttForClasses);
+                return this.classService.getClassesForTopBar();
             },
 
             [[chlk.models.discipline.DisciplineInputModel]],

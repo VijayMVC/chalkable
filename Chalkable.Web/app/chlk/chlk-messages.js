@@ -505,6 +505,7 @@ var Msg = {
     Recent_Downloads: 'Recent Downloads',
     Recently_Graded_Items: 'Recently Graded Items',
     Report_type: 'Report type',
+    Return_to_Homepage: 'Return to Homepage',
     Right_now: 'Right now',
     Room_number: 'Room number',
     Room_shortcut: 'RM',

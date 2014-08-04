@@ -19,15 +19,33 @@ NAMESPACE('chlk.controllers', function (){
         [[String]],
         function SidebarButton(clazz) {});
 
+    /** @class chlk.controllers.AccessForRoles */
     ANNOTATION(
         [[ArrayOf(chlk.models.common.RoleEnum)]],
         function AccessForRoles(roles){});
+
+    /** @class chlk.controllers.Permissions */
+    ANNOTATION(
+        [[ArrayOf(chlk.models.people.UserPermissionEnum)]],
+        function Permissions(permissions){});
 
     function toCamelCase(str) {
         return str.replace(/(\-[a-z])/g, function($1){
             return $1.substring(1).toUpperCase();
         });
     }
+
+    /** @class chlk.controllers.MissingPermissionException */
+    EXCEPTION(
+        'MissingPermissionException', [
+            READONLY, ArrayOf(chlk.models.people.UserPermissionEnum), 'permissions',
+
+            [[ArrayOf(chlk.models.people.UserPermissionEnum), Object]],
+            function $(permissions, inner_) {
+                BASE('Permissions ' + JSON.stringify(permissions) + ' is required.', inner_);
+                this.permissions = permissions;
+            }
+        ]);
 
     var PRESSED_CLS = 'pressed';
     var ACTION_SUFFIX = 'Action';
@@ -86,6 +104,11 @@ NAMESPACE('chlk.controllers', function (){
            [[String, String, String, Array]],
            function redirectToErrorPage_(error, controller, action, params){
                console.error(error);
+               return this.redirectToPage_(controller, action, params);
+           },
+
+           [[String, String, Array]],
+           function redirectToPage_(controller, action, params){
                var state = this.context.getState();
                state.setController(controller);
                state.setAction(action);
@@ -198,32 +221,47 @@ NAMESPACE('chlk.controllers', function (){
 
            OVERRIDE, ria.reflection.ReflectionMethod, function resolveRoleAction_(state){
                var ref = new ria.reflection.ReflectionClass(this.getClass());
-
                var role = this.getContext().getSession().get(ChlkSessionConstants.USER_ROLE);
                var roleAction = toCamelCase(state.getAction()) + role.getRoleName() + 'Action';
                var method = ref.getMethodReflector(roleAction);
 
                if (!method){
                    method = BASE(state);
-                   var accessForAnnotation = method.findAnnotation(chlk.controllers.AccessForRoles)[0];
-                   if (accessForAnnotation){
 
-                       var filteredRoles = accessForAnnotation.roles.filter(function (r) {
-                           return r == role.getRoleId();
-                       });
-
-                       if (filteredRoles.length != 1){
-                           throw new ria.mvc.MvcException('Controller ' + ref.getName() + ' has no method ' + method.getName()
-                               + ' available for role ' + role.getRoleName());
-                       }
-                   }
-
+                   if (!this.checkUserRoles_(method, role))
+                        throw new ria.mvc.MvcException('Controller ' + ref.getName() + ' has no method ' + method.getName()
+                           + ' available for role ' + role.getRoleName());
                }
+
+               var missingPermissions = this.checkPermissions_(method);
+               if (missingPermissions.length) {
+                   throw new chlk.controllers.MissingPermissionException(missingPermissions);
+               }
+
                return method;
            },
 
            OVERRIDE, ria.serialize.ISerializer, function initSerializer_(){
-              return new chlk.lib.serialize.ChlkJsonSerializer();
+               return new chlk.lib.serialize.ChlkJsonSerializer();
+           },
+
+           [[ria.reflection.ReflectionMethod]],
+           Boolean, function checkUserRoles_(method, role) {
+               var annotations = method.findAnnotation(chlk.controllers.AccessForRoles);
+               return !annotations.length || annotations
+                   .reduce(function (prev, annotation) { return prev.concat(annotation.roles); }, [])
+                   .indexOf(role.getRoleId()) >= 0;
+           },
+
+           [[ria.reflection.ReflectionMethod]],
+           ArrayOf(chlk.models.people.UserPermissionEnum), function checkPermissions_(method) {
+               var userHasPermission = this.hasUserPermission_;
+               return method.findAnnotation(chlk.controllers.Permissions)
+                   .reduce(function (prev, annotation) {
+                       return prev.concat(annotation.permissions);
+                   }, []).filter(function (userPermission) {
+                       return !userHasPermission(userPermission);
+                   });
            },
 
            OVERRIDE, VOID, function postDispatchAction_() {
@@ -237,8 +275,24 @@ NAMESPACE('chlk.controllers', function (){
                    new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + buttonCls).addClass(PRESSED_CLS);
                }
                this.setNotAblePressSidebarButton(false);
-           }
+           },
 
+
+           [[ria.mvc.State]],
+           OVERRIDE, VOID, function callAction_(state) {
+               try {
+                   BASE(state);
+               } catch (e) {
+                   if (e instanceof chlk.controllers.MissingPermissionException) {
+                       state.setDispatched(false);
+                       state.setController('error');
+                       state.setAction('permissions');
+                       state.setParams([e.getPermissions()]);
+                   } else {
+                       throw e;
+                   }
+               }
+           }
    ])
 
 });

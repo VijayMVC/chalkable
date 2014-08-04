@@ -212,7 +212,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     return null;
                 if (iNowUser == null && iNowConnector != null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();
-                if (iNowUser.Claims.All(x => x.Values.All(y => y != "Access Chalkable")))
+                if (schoolUser.Role == CoreRoles.TEACHER_ROLE.Id && iNowUser.Claims.All(x => x.Values.All(y => y != "Access Chalkable")))
                     return null;
                 var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, null, schoolYear);
                 res.Claims = ClaimInfo.Create(iNowUser.Claims);

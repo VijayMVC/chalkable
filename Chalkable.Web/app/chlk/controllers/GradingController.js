@@ -90,6 +90,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.TeacherSettingsPage, result);
             },
 
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+            ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function summaryTeacherAction(classId_){
@@ -109,6 +112,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
             },
 
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+            ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.grading.GradingSummaryGridSubmitViewData]],
             function loadGradingPeriodSummaryAction(model){
@@ -118,7 +124,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.grading.GradingClassSummaryPage, result);
             },
 
-            [chlk.controllers.SidebarButton('statistic')],
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+            ])],
             [[chlk.models.id.ClassId]],
             function standardsTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
