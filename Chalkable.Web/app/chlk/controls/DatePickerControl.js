@@ -65,7 +65,7 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function updateDatePicker(node, value, options_, noClearValue_){
-                var options = options_ || node.getData('options');
+                var options = options_ || node.getData('options'), that = this;
                 this.reanimate_(node, options, value);
                 if(!value && !noClearValue_)
                     node.setValue('');
@@ -73,13 +73,13 @@ NAMESPACE('chlk.controls', function () {
                 node.on('change.datepiker', function(node, event){
                     var options = node.getData('options');
                     if(options.minDate){
-                        var min = this.getServerDate(options.minDate);
-                        if(this.getServerDate(node.getValue()) < min)
+                        var min = that.getServerDate(options.minDate);
+                        if(that.getServerDate(node.getValue()) < min)
                             node.setValue(new chlk.models.common.ChlkSchoolYearDate(min).format('mm/dd/yy'));
                     }
                     if(options.maxDate){
-                        var max = this.getServerDate(options.maxDate);
-                        if(this.getServerDate(node.getValue()) > max)
+                        var max = that.getServerDate(options.maxDate);
+                        if(that.getServerDate(node.getValue()) > max)
                             node.setValue(new chlk.models.common.ChlkSchoolYearDate(max).format('mm/dd/yy'));
                     }
                 })

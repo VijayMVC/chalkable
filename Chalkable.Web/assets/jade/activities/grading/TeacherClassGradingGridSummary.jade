@@ -40,6 +40,7 @@
                     .grading-selects
                         +ActionForm('grading', 'loadGradingPeriodGridSummary').load-grading-period
                             +Hidden('autoUpdate', false).auto-update
+                            +Hidden('avg', false).avg-value
                             +Hidden('classId', selectedId)
                             +Hidden('notCalculateGrid', false).not-calculate-grid
                             +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())

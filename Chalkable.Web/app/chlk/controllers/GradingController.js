@@ -182,8 +182,10 @@ NAMESPACE('chlk.controllers', function (){
                     .getClassSummaryGridForPeriod(model.getClassId(), model.getGradingPeriodId(), model.getStandardId(), model.getCategoryId(),
                         model.isNotCalculateGrid(), model.isAutoUpdate())
                     .then(function(newModel){
-                        if(model.isAutoUpdate())
+                        if(model.isAutoUpdate()){
+                            newModel.isAvg = model.isAvg();
                             return new chlk.models.common.SimpleObject(newModel);
+                        }
                         newModel.setAutoUpdate(model.isAutoUpdate());
                         newModel.setCategoryId(model.getCategoryId());
                         newModel.setStandardId(model.getStandardId());

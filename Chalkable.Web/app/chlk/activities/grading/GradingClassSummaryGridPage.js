@@ -212,12 +212,21 @@ NAMESPACE('chlk.activities.grading', function () {
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + value.gradingperiod.id + ']');
                 var tooltipText = (value.avg != null ? Msg.Avg + " " + value.avg : 'No grades yet');
                 var dom = this.dom;
-                var rowIndex = parseInt(dom.find('.active-row').getAttr('row-index'), 10);
-                model.getValue().rowIndex = rowIndex;
-                var avgs = container.find('.avgs-container');
-                var html = new ria.dom.Dom().fromHTML(tpl.render());
-                html.prependTo(avgs.parent());
-                avgs.remove();
+                if(!value.isAvg){
+                    var rowIndex = parseInt(dom.find('.active-row').getAttr('row-index'), 10);
+                    model.getValue().rowIndex = rowIndex;
+                    var avgs = container.find('.avgs-container');
+                    var html = new ria.dom.Dom().fromHTML(tpl.render());
+                    html.prependTo(avgs.parent());
+                    avgs.remove();
+                }else{
+                    value.totalavarages.forEach(function(item){
+                        var grade = item.totalaverage;
+                        var value = grade || grade == 0 ? grade.toFixed(2) : '';
+                        dom.find('.total-average[data-average-id=' + item.averageid + ']').setHTML(value.toString());
+                    });
+                }
+
                 value.gradingitems.forEach(function(item){
                     calculateGradesAvg = that.calculateGradesAvg(item);
                     dom.find('.avg-' + item.id).setHTML(calculateGradesAvg || calculateGradesAvg === 0 ? calculateGradesAvg.toString() : '');
@@ -784,19 +793,21 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.updateFlagByModel(model, activeCell);
                         activeCell.find('.grade-text').setHTML('...');
                     }
-                    this.addTimeOut(form);
+                    this.addTimeOut(form, isAvg);
                 }else{
                     event.preventDefault();
                     return false;
                 }
             },
 
-            function addTimeOut(form){
+            function addTimeOut(form, isAvg_){
                 gradingGridTimer = setTimeout(function(){
                     form.find('.auto-update').setValue(true);
+                    form.find('.avg-value').setValue(isAvg_);
                     form.trigger('submit');
                     setTimeout(function(){
                         form.find('.auto-update').setValue(false);
+                        form.find('.avg-value').setValue(false);
                     }, 1);
                 }, 5000);
             },
