@@ -17,7 +17,7 @@ mixin ScreenshotUploadBox(title, dimsX, dimsY, screenshots)
             .bottom
                 div.simple-gray-button.file=title
                     +FileUpload('apps', 'uploadScreenshot', [screenshots.ids]).simple-gray-button
-                a(href=screenshots.templateDownloadLink).download-link Download Template
+                a(href=screenshots.templateDownloadLink).download-tpl-link Download Template
     +Hidden('appScreenshots', screenshots.ids)
     each item in screenshots.items
         +ScreenshotBox(item.getPictureId(), item.getPictureUrl(), item.getPictureClass(), screenshots.ids, !item.isEditable())
