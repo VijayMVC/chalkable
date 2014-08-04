@@ -27,6 +27,12 @@ NAMESPACE('chlk.templates.grading', function () {
             String, 'gradeValue',
 
             [ria.templates.ModelPropertyBind],
-            String, 'comment'
+            String, 'comment',
+
+            String, function displayGrade(grade){
+                if(isNaN(parseFloat(grade)))
+                    return grade;
+                return grade || grade == 0 ? parseFloat(grade).toFixed(2) : '';
+            }
         ])
 });

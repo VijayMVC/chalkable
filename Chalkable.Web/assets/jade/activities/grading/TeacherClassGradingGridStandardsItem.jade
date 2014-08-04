@@ -1,4 +1,4 @@
-.value=self.getGradeValue()
+.value=self.displayGrade(self.getGradeValue())
 if self.getComment()
     .with-comment
 .edit-cell
@@ -11,4 +11,4 @@ if self.getComment()
         data-comment = self.getComment()
     ).comment-value
     +Hidden('studentid', self.getStudentId().valueOf())
-    input(value=self.getGradeValue(), name="gradevalue").grade-autocomplete.value-input
+    input(value=self.displayGrade(self.getGradeValue()), name="gradevalue").grade-autocomplete.value-input
