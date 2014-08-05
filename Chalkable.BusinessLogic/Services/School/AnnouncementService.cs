@@ -297,6 +297,13 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
             
+            if (!classAnnouncementTypeId.HasValue)
+            {
+                var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
+                if(classAnnTypes.Count == 0)
+                    throw new ChalkableException("Item can't be created. Current Class doesn't have classAnnouncementTypes");
+                classAnnouncementTypeId = classAnnTypes.First().Id;
+            }
             using (var uow = Update())
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
