@@ -156,12 +156,14 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.showDropDown();
             },
 
-            [[Number, Number, Number]],
-            VOID, function changeAttendance_(personId, type, reasonId){
+            [[Number, Number, Number, String]],
+            VOID, function changeAttendance_(personId, type, reasonId, level_){
                var atts = this._classAttendances.filter(function(item){return item.getStudentId().valueOf() == personId});
                if(atts && atts.length > 0){
                    var att = atts[0];
                    att.setType(type);
+                   if(level_)
+                        att.setLevel(level_);
                    /*if(!reasonId){
                        var level = att.getLevel();
                        var reasons = att.getReasons().filter(function(item){return item.isDefaultReason(level);});
@@ -302,10 +304,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var option = this.dom.find('.option.selected:visible');
                 option.parent('.row').addClass('reason-changed');
                 var id = option.getData('id');
+                var level = option.getData('level');
                 var grid = option.parent('.chlk-grid');
                 var form = option.parent('.student-attendance-form');
                 var row = option.parent('.row');
-                this.changeAttendance_(form.getData('person-id'), form.getData('type'), id);
+                this.changeAttendance_(form.getData('person-id'), form.getData('type'), id, level);
                 grid.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
             },
 
@@ -353,6 +356,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                     res.push({
                         personId: node.getData('person-id'),
                         type: node.getData('type'),
+                        level: node.getData('level'),
                         attendanceReasonId: node.getData('reason-id')
                     });
                 }

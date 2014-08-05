@@ -1,16 +1,19 @@
 if self.getStudent()
-    -typeName = self.getTypeName();
+    typeName = self.getTypeName()
+    reason = self.getAttendanceReason()
+    type = self.getType()
     div(class=typeName ? typeName.toLowerCase() : '').not-empty
         .remove-red-btn.remove-student
         student = self.getStudent()
         A(
             data-id=student.getId().valueOf(),
-            data-type=self.getType(),
+            data-type=type,
+            data-level=reason ? reason.getLevel(type) : null,
             data-reason-id=self.getAttendanceReasonId() ? self.getAttendanceReasonId().valueOf() : null,
-            data-reason-text=self.getAttendanceReason() ? self.getAttendanceReason().getName() : null
+            data-reason-text=reason ? reason.getName() : null
         ).image-container.white.shadow.attendance-data
             .reason-container
-                .reason-text=self.getAttendanceReason() ? self.getAttendanceReason().getName() : ''
+                .reason-text=reason ? reason.getName() : ''
             +PersonImg(student, 70)
         div(data-tooltip=student.getDisplayName(), data-tooltip-type="overflow").student-seating-name=student.getDisplayName()
         .student-seating-type

@@ -10,18 +10,18 @@ NAMESPACE('chlk.models.attendance', function () {
     CLASS('SetClassAttendanceItem', [
 
         chlk.models.id.SchoolPersonId, 'personId',
-        READONLY, String, 'level',
+        String, 'level',
         chlk.models.id.AttendanceReasonId, 'attendanceReasonId',
 
         Number, 'type',
-        [[Number]],
+        /*[[Number]],
         VOID, function setType(type){
             if(type && type > 0){
                 this.type = type;
                 var level = this._mapper.mapBack(new chlk.models.attendance.AttendanceTypeEnum(type));
                 this.level = level;
             }
-        },
+        },*/
 
         function $(){
             BASE();
