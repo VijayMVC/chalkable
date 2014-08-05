@@ -2,11 +2,33 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 NAMESPACE('chlk.models.people', function () {
     "use strict";
 
+    var roleCache = {};
 
     //todo: join with chlk.models.common.role
     /** @class chlk.models.people.Role*/
     CLASS(
         'Role',  [
+
+            function $$(instance, Clazz, ctor, args) {
+                if (ctor == SELF.prototype.$create) {
+                    var roleId = args[0];
+                    if (roleCache.hasOwnProperty(roleId))
+                        return roleCache[roleId];
+
+                    return roleCache[roleId] = new ria.__API.init(instance, Clazz, ctor, args);
+                }
+                return new ria.__API.init(instance, Clazz, ctor, args);
+            },
+
+            [[Number, String, String, String]],
+            function $create(id, name, nameLowered, description){
+                BASE();
+                this.id = id;
+                this.name = name;
+                this.namelowered = nameLowered;
+                this.description = description;
+            },
+
             String, 'description',
 
             Number, 'id',

@@ -85,7 +85,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
                     var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
                     bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
-                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef, enrolled);
+                    var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(ann.Expires);
+                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef, enrolled, mp != null ? mp.Id : (int?)null);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)

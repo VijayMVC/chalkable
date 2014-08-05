@@ -3,13 +3,15 @@ REQUIRE('chlk.models.attendance.ClassAttendanceWithSeatPlace');
 REQUIRE('chlk.models.common.PageWithClasses');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.attendance.AttendanceReason');
+REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
+
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
 
     /** @class chlk.models.attendance.SeatingChart*/
     CLASS(
-        'SeatingChart', EXTENDS(chlk.models.common.PageWithClasses), [
+        'SeatingChart', EXTENDS(chlk.models.common.PageWithClasses), IMPLEMENTS(ria.serialize.IDeserializable), [
             Number, 'columns',
 
             Number, 'rows',
@@ -30,6 +32,34 @@ NAMESPACE('chlk.models.attendance', function () {
             ArrayOf(ArrayOf(chlk.models.attendance.ClassAttendanceWithSeatPlace)), 'seatingList',
 
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
+
+
+            VOID, function deserialize(raw){
+//                this.setId(new chlk.models.apps.AppPermissionTypeEnum(raw.type));
+//                this.setName(raw.name);
+                var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
+                this.setRows(raw.rows);
+                this.setColumns(raw.columns);
+                this.setScheduled(raw.isscheduled);
+                this.setDate(new chlk.models.common.ChlkSchoolYearDate(raw.date));
+                var seatingList = [];
+                for(var i = 0; i < raw.seatinglist.length; i++){
+                    var items = [];
+                    for(var j = 0; j < raw.seatinglist[i].length; j++){
+                        var item = new chlk.models.attendance.ClassAttendanceWithSeatPlace();
+                        item.deserialize(raw.seatinglist[i][j]);
+                        items.push(item);
+                    }
+                    seatingList.push(items);
+                }
+                this.setSeatingList(seatingList);
+                if(raw.reasons){
+                    this.setReasons(serializer.deserialize(raw.reasons, ArrayOf(chlk.models.attendance.AttendanceReason)));
+                }
+                if(raw.notseatingstudents){
+                    this.setNotSeatingStudents(serializer.deserialize(raw.notseatingstudents, ArrayOf(chlk.models.attendance.ClassAttendance)));
+                }
+            },
 
             Boolean, function hasSeatingStudents(){
                 var p = false;
@@ -65,5 +95,7 @@ NAMESPACE('chlk.models.attendance', function () {
             Boolean, function canPost(){
                 return this.isAblePost()  && (!this.isPosted() || !!this.isAbleRePost());
             }
+
+
         ]);
 });

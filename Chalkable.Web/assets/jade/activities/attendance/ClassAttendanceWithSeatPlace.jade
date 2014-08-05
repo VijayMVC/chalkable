@@ -1,5 +1,6 @@
 if self.getStudent()
-    div(class=self.getModel().getTypeName().toLowerCase()).not-empty
+    -typeName = self.getTypeName();
+    div(class=typeName ? typeName.toLowerCase() : '').not-empty
         .remove-red-btn.remove-student
         student = self.getStudent()
         A(
