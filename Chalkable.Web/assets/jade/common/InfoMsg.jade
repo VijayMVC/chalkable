@@ -1,7 +1,10 @@
 div(class=(self.getClazz() || "")).dialog.info-msg.gray
     if(self.getHeader())
         h1=self.getHeader()
-    pre=self.getText()
+    if self.isHtmlText()
+        !=self.getText()
+    else
+        pre=self.getText()
     .buttons-container.center
         each button in self.getButtons()
             -attrs = button.getAttributes() || {};

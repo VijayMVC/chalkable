@@ -134,26 +134,25 @@ NAMESPACE('chlk.controllers', function (){
                return this.ShadeView(chlk.activities.lib.PendingActionDialog, new ria.async.DeferredData(new Class()));
            },
 
-           [[String, String, Array, String]],
-           function ShowMsgBox(text_, header_, buttons_, clazz_) {
+           [[String, String, Array, String, Boolean]],
+           function ShowMsgBox(text_, header_, buttons_, clazz_, isHtmlText_) {
                var instance = new chlk.activities.common.InfoMsgDialog();
-               var model = this.getMessageBoxModel_(text_, header_, buttons_, clazz_);
+               var model = this.getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_);
                this.view.shadeD(instance, ria.async.DeferredData(model));
            },
 
-           [[String, String, Array, String]],
-           chlk.models.common.InfoMsg, function getMessageBoxModel_(text_, header_, buttons_, clazz_){
+           [[String, String, Array, String, Boolean]],
+           chlk.models.common.InfoMsg, function getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_){
                var buttons = [];
                if(buttons_){
-
                    var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
                    buttons_.forEach(function(item){
                        buttons.push(serializer.deserialize(item, chlk.models.common.Button));
-                   })
+                   });
                }else{
                    buttons.push(new chlk.models.common.Button('Ok'));
                }
-               return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_);
+               return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_);
            },
 
            [[chlk.models.common.RoleEnum]],
