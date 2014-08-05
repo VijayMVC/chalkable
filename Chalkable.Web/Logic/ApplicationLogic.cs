@@ -27,6 +27,7 @@ namespace Chalkable.Web.Logic
         {
             IList<InstalledForPersonsGroupViewData> res = new List<InstalledForPersonsGroupViewData>();
             bool isPersonForInstall = schoolLocator.AppMarketService.IsPersonForInstall(application.Id);
+            
             res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.All, null, "All", !isPersonForInstall));
             if (BaseSecurity.IsAdminViewer(maseterLocator.Context))
             {

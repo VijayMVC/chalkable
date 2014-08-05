@@ -99,7 +99,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             {
                 var app = applications.FirstOrDefault(a=> annApps.Any(annApp=>annApp.ApplicationRef == a.Id && annApp.AnnouncementRef == ann.Id));
                 var appName = app != null ? app.Name : null;
-                res.Add(Create(ann, null, appName));
+                var annView = Create(ann, null, appName);
+                if (string.IsNullOrEmpty(appName))
+                    annView.ApplicationsCount = 0;
+                res.Add(annView);
             }
             return res;
         } 
