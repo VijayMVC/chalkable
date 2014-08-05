@@ -29,6 +29,7 @@ NAMESPACE('chlk.models.attendance', function () {
         LATE_LEVEL: 'T'
     });
 
+
     /** @class chlk.models.attendance.AttendanceTypeMapper*/
     CLASS('AttendanceTypeMapper', [
 
@@ -77,6 +78,8 @@ NAMESPACE('chlk.models.attendance', function () {
             //todo change number to AttendanceTypeEnum
             Number, 'type',
 
+            READONLY, String, 'typeName',
+
             String, function getTypeName(){
                 return chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert(this.getType())
             },
@@ -93,8 +96,6 @@ NAMESPACE('chlk.models.attendance', function () {
             },
 
             String, 'level',
-
-//            chlk.models.period.Period, 'period',
 
             chlk.models.people.User, 'student',
 

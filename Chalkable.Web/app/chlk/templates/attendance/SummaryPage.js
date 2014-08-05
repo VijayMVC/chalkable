@@ -46,7 +46,7 @@ NAMESPACE('chlk.templates.attendance', function () {
             Object, function getChartOptions(data){
                 var classesInfo = data.getClassesStats();
                 var series = [];
-                classesInfo.forEach(function(type, i){
+                classesInfo && classesInfo.forEach(function(type, i){
                     var data = [], sTooltips = {};
                     type.getDayStats().forEach(function(item, i){
                         var time = item.getDate().getDate().getTime();

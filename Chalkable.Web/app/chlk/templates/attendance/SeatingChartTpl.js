@@ -41,7 +41,7 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             Boolean, function hasStudentOnChart(){
                 var seatingList = this.getSeatingList();
-                return seatingList.length > 0 && seatingList.filter(function(items){
+                return seatingList && seatingList.length > 0 && seatingList.filter(function(items){
                     return items.filter(function(item){
                         return item.getInfo() != null && item.getInfo() != undefined;
                     }).length > 0

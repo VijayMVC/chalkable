@@ -64,6 +64,8 @@ div(class=showButtons ? 'can-post' : '').page-content
                     roundedDots = true,
                     padding = 110
                 ).seating-toolbar.auto-h.big-arrows
+                    -var emptyModel = new chlk.models.attendance.ClassAttendance
+                    -var caTpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl
                     each items in seatingList
                         .seating-row
                             each item in items
@@ -76,7 +78,9 @@ div(class=showButtons ? 'can-post' : '').page-content
                                     data-row= row,
                                     class=info ? '' : 'empty-box'
                                 ).student-block.droppable.draggable
-                                    +RenderWith(info || new chlk.models.attendance.ClassAttendance, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
+                                    -caTpl.assign(info || emptyModel)
+                                    !=caTpl.render()
+                                    //+RenderWith(info || emptyMdel, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
                                 if info
                                     .empty-box.student-block.absolute
     else

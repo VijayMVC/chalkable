@@ -38,7 +38,7 @@ NAMESPACE('chlk.templates.admin', function () {
             [[chlk.models.attendance.AttendanceStatBox]],
             function getChartData(info){
                 var categories = [], data = [];
-                info.getStat() && info.getStat().forEach(function(item){
+                (info.getStat() || []).forEach(function(item){
                     categories.push(item.getSummary());
                     data.push(item.getStudentCount());
                 });

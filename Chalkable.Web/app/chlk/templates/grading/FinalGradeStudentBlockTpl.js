@@ -101,7 +101,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 //var categories=[];
                 var typesInfo = this.getStatsByType();
                 var series = [], tooltips = [];
-                typesInfo.forEach(function(type, i){
+                typesInfo && typesInfo.forEach(function(type, i){
                     var data = [], sTooltips = {};
                     type.getStudentGradingStats().forEach(function(item, i){
                         var time = item.getDate().getDate().getTime();
