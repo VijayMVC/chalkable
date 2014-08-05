@@ -367,13 +367,21 @@ NAMESPACE('chlk.controllers', function (){
             }
             else{
                 var additionalMsg = '';
-                var warningMsg = 'Uninstalling an app removes it for you and anyone you installed it for.\n';
+                var warningMsg = '<div class="msg-detail">Uninstalling an app removes it for you and anyone you installed it for.</div>';
                 if(!data.isSelfInstalled()){
-                    additionalMsg = 'NOTE: This app is not self installed.';
+                    additionalMsg = '<div class="msg-detail">NOTE: This app is not self installed.</div>';
                     warningMsg = '';
                 }
 
-                var msgTitle = warningMsg + 'Uninstall the ' + data.getAppName() + ' app?' + additionalMsg;
+
+                /*
+
+                 title: arial bold 24 (just checking.)
+                 detail text: arial bold 16 (Uninstalling an app removes it for you and anyone you installed it for.)
+                 action text: arial bold 18 (Uninstall the [app name] app?)
+                 */
+
+                var msgTitle = warningMsg + '<div class="msg-action">Uninstall the ' + data.getAppName() + ' app?</div>' + additionalMsg;
 
                 return this.ShowMsgBox(msgTitle, 'just checking.', [{
                     text: 'CANCEL',
@@ -386,7 +394,7 @@ NAMESPACE('chlk.controllers', function (){
                     action: 'uninstall',
                     params: [data.getApplicationInstallIds()],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
-                }], 'center');
+                }], 'delete-app', true);
 
             }
             return this.ShadeLoader();

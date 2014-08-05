@@ -18,6 +18,8 @@ NAMESPACE('chlk.templates.common', function () {
             [ria.templates.ModelPropertyBind],
             String, 'clazz',
             [ria.templates.ModelPropertyBind],
+            Boolean, 'htmlText',
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.common.Button), 'buttons'
         ])
 });
