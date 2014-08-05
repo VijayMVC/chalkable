@@ -1,7 +1,7 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
 value = self.getType();
 level = self.getLevel();
--reasons = self.getReasons().filter(function(item){ return item.hasLevel(level); })
+-reasons = self.getAttendanceReasonsByType(value)
 needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
 reason = needDropdown ? self.getAttendanceReason() : '';
 name = self.getTypeName();
@@ -11,6 +11,7 @@ div(
     name="attendance",
     data-person-id=self.getStudent().getId().valueOf(),
     data-type=value,
+    data-level=level,
     data-reason-id=reason && reason.getId().valueOf()
 )(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
     //+Hidden('type', value)
@@ -37,6 +38,7 @@ div(
                 div(class=(firstSelected ? "selected" : "")).option=name
                 each reasonItem in reasons
                     div(
-                        data-id=reasonItem.getId().valueOf()
+                        data-id=reasonItem.getId().valueOf(),
+                        data-level=reasonItem.getLevel(value)
                     ).option=reasonItem.getDescription()
                 .press-enter=Msg.Press_enter

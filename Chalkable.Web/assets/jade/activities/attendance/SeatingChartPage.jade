@@ -41,7 +41,6 @@ hasStudentOnChart = self.hasStudentOnChart()
 div(class=showButtons ? 'can-post' : '').page-content
     seatingList = self.getSeatingList()
     if self.isScheduledInMp()
-        -console.log('1')
         if self.getColumns() == 0 || self.getRows() == 0
             +UpdateGridForm(Msg.Create_grid, self.getRows(), self.getColumns(), 0, 0, selectedId.valueOf())
             .black-arrow.start=Msg.Start_by_creating_a_grid
@@ -70,6 +69,8 @@ div(class=showButtons ? 'can-post' : '').page-content
                         .seating-row
                             each item in items
                                 info = item.getInfo()
+                                if info && info.getAttendanceReason()
+                                    -console.log(info, info.getAttendanceReason(), info.getAttendanceReason().getAttendanceLevelReasons())
                                 column = item.getColumn()
                                 row = item.getRow()
                                 div(
@@ -105,7 +106,11 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             .student-seating-type
             span.text=Msg.No_reason
         each item in self.getLateReasons()
-            div(data-id=item.getId().valueOf(), data-type=typesEnum.LATE.valueOf()).item.late.reason-item
+            div(
+                data-id=item.getId().valueOf(),
+                data-type=typesEnum.LATE.valueOf(),
+                data-level=item.getLevel(typesEnum.LATE.valueOf())
+            ).item.late.reason-item
                 .student-seating-type
                 span.text=item.getName()
     div(data-type=typesEnum.ABSENT.valueOf()).absent-part.type-part
@@ -113,6 +118,10 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             .student-seating-type
             span.text=Msg.No_reason
         each item in self.getAbsentReasons()
-            div(data-id=item.getId().valueOf(), data-type=typesEnum.ABSENT.valueOf()).item.absent.reason-item
+            div(
+                data-id=item.getId().valueOf(),
+                data-type=typesEnum.ABSENT.valueOf(),
+                data-level=item.getLevel(typesEnum.ABSENT.valueOf())
+            ).item.absent.reason-item
                 .student-seating-type
                 span.text=item.getName()

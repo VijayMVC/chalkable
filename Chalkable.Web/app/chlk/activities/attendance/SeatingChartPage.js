@@ -86,6 +86,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                     res.push({
                         personId: node.getData('id'),
                         type: node.getData('type'),
+                        level: node.getData('level'),
                         attendanceReasonId: node.getData('reason-id')
                     });
                 });
@@ -182,9 +183,11 @@ NAMESPACE('chlk.activities.attendance', function () {
             function setTypeByNode(node){
                 var reasonId = node.getData('id');
                 var typeId = node.getData('type');
+                var level = node.getData('level');
                 var reasonText = node.find('.text').getHTML();
                 var studentData = this.dom.find('.active-student');
                 studentData.setData('type', typeId);
+                studentData.setData('level', level);
                 studentData.setData('reason-id', reasonId);
                 studentData.setData('reason-text', reasonText);
                 var parent = studentData.parent('.not-empty');

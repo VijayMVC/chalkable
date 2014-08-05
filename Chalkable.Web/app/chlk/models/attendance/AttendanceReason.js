@@ -57,10 +57,19 @@ NAMESPACE('chlk.models.attendance', function () {
             },
 
             [[String]],
-            chlk.models.attendance.AttendanceLevelReason, function getAttendanceLevelReason_(level){
-                var attLevelReasons = this.getAttendanceLevelReasons();
-                if(!attLevelReasons) return null;
-                var res = attLevelReasons.filter(function(item){return item.getLevel() == level;});
+            function getAttendanceLevelReason_(level){
+                var attLevelReasons = this.getAttendanceLevelReasons(),res,that = this;
+                if(!attLevelReasons){
+                    var reason = window.attendanceReasons.filter(function(item){
+                        return that.getId().valueOf() == item.id;
+                    })[0];
+                    if(!reason)
+                        return null;
+                    attLevelReasons = reason.attendancelevelreason;
+                    res = attLevelReasons.filter(function(item){return item.level == level;});
+                }else{
+                    res = attLevelReasons.filter(function(item){return item.getLevel() == level;});
+                }
                 return res.length > 0 ? res[0] : null;
             },
 
@@ -68,6 +77,16 @@ NAMESPACE('chlk.models.attendance', function () {
             Boolean, function hasLevel(level){
                return this.getAttendanceLevelReason_(level) != null;
             },
+
+            function getLevel(type){
+                if(type == chlk.models.attendance.AttendanceTypeEnum.LATE.valueOf())
+                    return 'T';
+                if(this.hasLevel('A')) return 'A';
+                if(this.hasLevel('AO')) return 'AO';
+                if(this.hasLevel('H')) return 'H';
+                if(this.hasLevel('IO')) return 'IO';
+            },
+
             [[String]],
             Boolean, function isDefaultReason(level){
                 var reason = this.getAttendanceLevelReason_(level);

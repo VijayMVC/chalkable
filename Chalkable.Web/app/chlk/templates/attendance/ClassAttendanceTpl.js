@@ -47,6 +47,16 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             String, function getSubmitFormActionName(){
                 return 'setAttendanceProfile';
-            }
+            },
+
+            function getAttendanceReasonsByType(type){
+                var attLevelReasons = this.getReasons();
+                if(!attLevelReasons) return [];
+                return attLevelReasons.filter(function(item){
+                    return type == chlk.models.attendance.AttendanceTypeEnum.LATE.valueOf() ?
+                        item.hasLevel('T') : item.hasLevel('A') || item.hasLevel('AO') ||
+                            item.hasLevel('H') || item.hasLevel('HO');
+                });
+            },
         ]);
 });
