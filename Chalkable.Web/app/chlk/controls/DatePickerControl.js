@@ -36,7 +36,7 @@ NAMESPACE('chlk.controls', function () {
                     var params = attrs['data-params'] || [];
                     var that = this;
                     options.onSelect = function (dateText, inst) {
-                        var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(dateText);
+                        var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(new Date(dateText));
                         params.push(date);
                         var state = that.context.getState();
                         state.setController(controller);

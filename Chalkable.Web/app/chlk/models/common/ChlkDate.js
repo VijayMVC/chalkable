@@ -201,12 +201,16 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.ChlkSchoolYearDate*/
     CLASS('ChlkSchoolYearDate', EXTENDS(chlk.models.common.ChlkDate), [
 
-
         [[Date]],
         function $(date_){
             BASE(date_);
 //            date_ = date_ || this.getServerDate_();
 //            this.initBaseData_(date_);
+        },
+
+        [[Date]],
+        function $createServerTime(date_){
+            BASE(date_);
         },
 
         Date, function GET_SCHOOL_YEAR_SERVER_DATE(str_, a_, b_){
