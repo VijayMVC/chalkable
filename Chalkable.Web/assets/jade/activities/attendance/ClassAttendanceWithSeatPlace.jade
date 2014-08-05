@@ -1,0 +1,20 @@
+if self.getStudent()
+    -typeName = self.getTypeName();
+    div(class=typeName ? typeName.toLowerCase() : '').not-empty
+        .remove-red-btn.remove-student
+        student = self.getStudent()
+        A(
+            data-id=student.getId().valueOf(),
+            data-type=self.getType(),
+            data-reason-id=self.getAttendanceReasonId() ? self.getAttendanceReasonId().valueOf() : null,
+            data-reason-text=self.getAttendanceReason() ? self.getAttendanceReason().getName() : null
+        ).image-container.white.shadow.attendance-data
+            .reason-container
+                .reason-text=self.getAttendanceReason() ? self.getAttendanceReason().getName() : ''
+            +PersonImg(student, 70)
+        div(data-tooltip=student.getDisplayName(), data-tooltip-type="overflow").student-seating-name=student.getDisplayName()
+        .student-seating-type
+        .chlk-pop-up-container.popup-top.seating-attendance-popup
+else
+    .empty
+

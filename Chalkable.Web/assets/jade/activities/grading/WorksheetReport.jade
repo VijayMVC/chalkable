@@ -1,0 +1,81 @@
+.dialog-window.report-window
+    .close.close-btn.dark
+    date = new chlk.models.common.ChlkDate()
+    h1=Msg.Create_Report
+    .report-buttons.panel-bg
+        +ActionLink('grading', 'gradeBookReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Grade_Book_Report
+        a(href="javascript:").report-button.pressed=Msg.Worksheet_Report
+        +ActionLink('grading', 'progressReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Progress_Report
+    +ActionForm('grading', 'submitWorksheetReport').report-form
+        +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+        +Hidden('classId', self.getClassId().valueOf())
+        TABLE.report-table
+            TR
+                TD.item-3
+                    h3=Msg.Start_date
+                    +DatePicker('startDate', self.getStartDate() || date)(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            calendarCls: 'for-dialog',
+                            minDate: self.getStartDate().getDate(),
+                            maxDate: self.getEndDate().getDate()
+                        },
+                        class="validate[required]"
+                    ).report-date-picker
+                TD.item-3
+                    h3=Msg.End_date
+                    +DatePicker('endDate', self.getEndDate() || date)(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            calendarCls: 'for-dialog',
+                            minDate: self.getStartDate().getDate(),
+                            maxDate: self.getEndDate().getDate()
+                        },
+                        class="validate[required]"
+                    ).report-date-picker
+                TD.item-3
+                    h3=Msg.ID_to_print
+                    +Select('idToPrint').id-to-print
+                        +Option(1, Msg.Student_Number, true)
+                        +Option(2, Msg.State_ID_number, false)
+                        +Option(3, Msg.Alt_student_number, false)
+                        +Option(4, Msg.SS_number, false)
+                        +Option(0, Msg.None, false)
+            TR
+                TD(colspan="3").item-1
+                    .grid-container
+                        +RenderWith(self.getModel(), chlk.templates.grading.WorksheetReportGridTpl)
+            TR
+                TD(colspan="3").item-1.blank-columns
+                    h3=Msg.Blank_columns
+                    +LabeledCheckbox('', 'title1', false)(withInput = true, placeholder = Msg.Insert_title)
+                    +LabeledCheckbox('', 'title4', false)(withInput = true, placeholder = Msg.Insert_title)
+                    +LabeledCheckbox('', 'title2', false)(withInput = true, placeholder = Msg.Insert_title)
+                    +LabeledCheckbox('', 'title5', false)(withInput = true, placeholder = Msg.Insert_title)
+                    +LabeledCheckbox('', 'title3', false)(withInput = true, placeholder = Msg.Insert_title)
+            TR
+                TD.item-3
+                    h3=Msg.Include
+                    +LabeledCheckbox(Msg.Score(true), 'printScores', false)
+                    +LabeledCheckbox(Msg.Letter_grade, 'printLetterGrade', false)
+                    +LabeledCheckbox(Msg.Average, 'printAverage', false)
+                    +LabeledCheckbox(Msg.Student_name, 'printStudent', false)
+                TD.item-3
+                    h3=Msg.Working_filter
+                    +LabeledCheckbox(Msg.Save_to_Working_filter, 'workingFilter', false)
+                    +LabeledCheckbox(Msg.Append_to_existing, 'appendToExisting', false)
+                    +LabeledCheckbox(Msg.Overwrite_existing, 'overwriteExisting', false)
+                TD.item-3
+                    h3=Msg.Format
+                    +Select('format').format
+                        +Option(0, "PDF", true)
+                        +Option(1, "CSV", false)(disabled)
+                        +Option(2, "Excel", false)(disabled)
+                        +Option(3, "HTML", false)(disabled)
+                        +Option(4, "TIFF", false)(disabled)
+                        +Option(5, "XML (" + Msg.With_report_data + ")", false)(disabled)
+        .report-bottom
+            BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-gradient-btn=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
