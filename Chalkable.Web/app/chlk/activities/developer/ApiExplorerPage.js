@@ -65,6 +65,12 @@ NAMESPACE('chlk.activities.developer', function () {
                 parentNode.find('.header').find('.description').removeClass('long');
             },
 
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model) {
+                BASE(model);
+                prettyPrint();
+            },
+
             function getValidationDataForField(field){
                 var paramType = field.data('param-type');
 
