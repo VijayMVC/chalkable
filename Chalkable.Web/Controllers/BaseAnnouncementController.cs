@@ -21,7 +21,8 @@ namespace Chalkable.Web.Controllers
                 //    && !x.Exempt && !x.Dropped && !x.Absent).ToList();
                 //annDetails.Avg = stAnns.Count > 0 ? (int?) stAnns.Average(x => x.NumericScore.Value) : null;
             }
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
+            var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x=>x.PersonRef).ToList();
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
             var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.UserLocalId.Value, attInfo);
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, announcementId);
             annViewData.ApplicationsCount = annViewData.Applications.Count;
