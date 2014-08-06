@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Chalkable.Common;
 
+
 namespace Chalkable.StiConnector.Mapping
 {
     public class InowErrors
@@ -197,6 +198,8 @@ namespace Chalkable.StiConnector.Mapping
 
         public const string STUDENTSTANDARDCOMMENT_CANNOTDELETESTUDENTDATA_ERROR =
             "StudentStandardComment_CannotDeleteStudentData";
+
+        public const string OCCURRENCE_NOTE_INVALIDFORMAT_ERROR = "Occurrence_Note_InvalidFormat";
     }
 
     
@@ -332,6 +335,7 @@ namespace Chalkable.StiConnector.Mapping
                 {InowErrors.STUDENTPERIODABSENCE_TIMESLOT_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Period")},
                 {InowErrors.STUDENTPERIODABSENCE_TIMESLOT_NOTINSTUDENTSCHEDULE_ERROR,  "Period is not in Student Schedule."},
 
+                {InowErrors.OCCURRENCE_NOTE_INVALIDFORMAT_ERROR, String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Note")}
             }; 
 
            
