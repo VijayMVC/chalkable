@@ -109,9 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanEditAnswer(AnnouncementQnAComplex announcementQnA, UnitOfWork uow)
         {
             var da = new ClassTeacherDataAccess(uow);
-            return BaseSecurity.IsSysAdmin(Context)
-                   || ((!announcementQnA.AnswererRef.HasValue  && da.Exists(announcementQnA.ClassRef, Context.UserLocalId.Value))
-                        || announcementQnA.AnswererRef == Context.UserLocalId);
+            return BaseSecurity.IsSysAdmin(Context) || da.Exists(announcementQnA.ClassRef, Context.UserLocalId.Value);
         }
 
         public AnnouncementQnA EditQuestion(int announcementQnAId, string question)
