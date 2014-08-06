@@ -662,6 +662,22 @@ BODY {
 
             .left-block{
               position: relative;
+
+              .left-block-container{
+                display: inline-block;
+                height: 159px;
+
+                &:hover{
+                  .drawer-icon{
+                    opacity: 0.5;
+
+                    &:hover{
+                      opacity: 1;
+                    }
+                  }
+                }
+              }
+
               .drawer-icon{
                 background: url(images/announcement/all-files-icon.png) 0 0 no-repeat;
                 width: 20px;
@@ -670,41 +686,43 @@ BODY {
                 top: 93px;
                 position: absolute;
                 cursor: pointer;
-                opacity: 0.5;
+                opacity: 0;
               }
             }
 
             .new-item-dropdown{
               position: absolute;
               background: white;
-              width: 375px;
+              width: 381px;
               z-index: 999;
               border: 1px solid #a9a9a9;
               font-size: 14px;
               font-family: "Arial Narrow", Arial;
               color: #000;
-              padding-left: 6px;
               top: 116px;
 
               >DIV{
                 height: 20px;
-                padding:0 4px;
+                padding: 4px 4px 0 10px;
                 overflow: hidden;
-                word-wrap: break-word;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: pointer;
               }
 
               H1{
                 background: white;
                 margin: 0;
                 color: #bfbfbf;
-                padding: 3px;
+                padding: 7px 3px 3px 10px;
                 height: 20px;
-                font-size: 16px;
-                font-weight: normal;
+                text-transform: uppercase;
+                font: bold 14px Arial;
               }
 
               .current{
-                background: #eedd68;
+                background: #26647e;
+                color: white;
               }
             }
           }

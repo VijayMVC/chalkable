@@ -25,6 +25,13 @@ NAMESPACE('chlk.activities.announcement', function () {
         [chlk.activities.lib.PageClass('new-item')],
         'AnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                if(model instanceof chlk.models.announcement.LastMessages)
+                    this.dom.find('#content').trigger('focus');
+            },
+
             [ria.mvc.DomEventBind('click', '.class-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function classClick(node, event){

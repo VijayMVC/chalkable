@@ -79,50 +79,62 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('click', '.drawer-icon')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function drawerIconClick(node, event){
+            function drawerIconClick(node, event){
                 var dropDown = this.dom.find('.new-item-dropdown');
                 if(!dropDown.is(':visible')){
-                    node.setCss("opacity", 1);
                     this.dom.find('#list-last-button').trigger('click');
 
                 }else{
-                    node.setCss("opacity", 0.5);
-                    dropDown.addClass('x-hidden');
+                    dropDown.hide();
                 }
             },
 
-            [ria.mvc.DomEventBind('click keydown keyup', '#content')],
+            [ria.mvc.DomEventBind('mouseover', '.autofill-item')],
             [[ria.dom.Dom, ria.dom.Event]],
-            Boolean, function showDropDown(node, event){
+            function autoFillClick(node, event){
+                if(!node.hasClass('current')){
+                    node.parent().find('.current').removeClass('current');
+                    node.addClass('current');
+                }
+            },
+
+            [ria.mvc.DomEventBind('click', '.autofill-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function autoFillMouseOver(node, event){
+                this.dom.find('#content').setValue(node.getData('value'));
+                this.dom.find('.new-item-dropdown').hide();
+            },
+
+            [ria.mvc.DomEventBind('keydown', '#content')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function showDropDown(node, event){
                 if(this.dom.find('[name=announcementtypeid]').getValue() != chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()){
                     var dropDown = this.dom.find('.new-item-dropdown');
-                    if(!node.getValue() && !dropDown.is(':visible')){
-                        this.dom.find('#list-last-button').trigger('click');
-                    }else{
-                        if(event.type == 'keydown'){
-                            var isUp = event.keyCode == ria.dom.Keys.UP.valueOf(),
-                                isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
-                            if(dropDown.is(':visible') && (isUp || isDown)){
-                                var current = dropDown.find('.current');
-                                var currentIndex = parseInt(current.getData('index'),10), nextItem;
-                                var moveUp = currentIndex > 0 && isUp;
-                                var moveDown = currentIndex < (dropDown.getData('length') - 1) && isDown;
-                                if(moveUp || moveDown){
-                                    current.removeClass('current');
-                                    if(moveUp){
-                                        currentIndex--;
-                                    }else{
-                                        currentIndex++;
-                                    }
-                                    nextItem = dropDown.find('.autofill-item[data-index="' + currentIndex + '"]').addClass('current');
-                                    node.setValue(nextItem.getData('value'));
+                    var isUp = event.keyCode == ria.dom.Keys.UP.valueOf(),
+                        isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
+                    if(dropDown.is(':visible') && (isUp || isDown || event.keyCode == ria.dom.Keys.ENTER.valueOf())){
+                        if(isUp || isDown){
+                            var current = dropDown.find('.current');
+                            var currentIndex = parseInt(current.getData('index'),10), nextItem;
+                            var moveUp = currentIndex > 0 && isUp;
+                            var moveDown = currentIndex < (dropDown.getData('length') - 1) && isDown;
+                            if(moveUp || moveDown){
+                                current.removeClass('current');
+                                if(moveUp){
+                                    currentIndex--;
+                                }else{
+                                    currentIndex++;
                                 }
-                            }else{
-                                dropDown.addClass('x-hidden');
-                                //if(event.keyCode == ria.dom.Keys.ENTER.valueOf())
-                                    //return false;
+                                nextItem = dropDown.find('.autofill-item[data-index="' + currentIndex + '"]').addClass('current');
                             }
+
+                        }else{
+                            node.setValue(dropDown.find('.current').getData('value'));
+                            dropDown.hide();
                         }
+                        return false;
+                    }else{
+                        dropDown.hide();
                     }
                 }
                 return true;
@@ -154,7 +166,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this._handler = function(event, node){
                     var target = new ria.dom.Dom(event.target);
                     if(!target.parent('.drop-down-container').exists() && target.getAttr('name') != 'content')
-                        that.dom.find('.new-item-dropdown').addClass('x-hidden');
+                        that.dom.find('.new-item-dropdown').hide();
                 };
                 jQuery(this.dom.valueOf()).on('change', '.reminder-select', function(){
                     that.addEditReminder(new ria.dom.Dom(this));
