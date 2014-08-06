@@ -71,7 +71,10 @@
 
         <div id="page-header">
             Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
-            Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
+            @if (!isDemoSchool)
+            {
+                @:Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
+            }
         </div>
         
         

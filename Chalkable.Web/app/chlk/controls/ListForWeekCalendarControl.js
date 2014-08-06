@@ -47,7 +47,7 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('click', '.list-for-week-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             function clickPrevNextBtn(node, event) {
-                var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(node.getData('date'));
+                var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(new Date(node.getData('date')));
                 new ria.dom.Dom('.announcement-week-loader').addClass('loading');
                 this.addCalendar(date, true);
                 return false;
@@ -56,7 +56,7 @@ NAMESPACE('chlk.controls', function () {
             [ria.mvc.DomEventBind('change', '#list-for-week-date')],
             [[ria.dom.Dom, ria.dom.Event]],
             function dateChange(node, event) {
-                var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(node.getValue());
+                var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(new Date(node.getValue()));
                 new ria.dom.Dom('.announcement-week-loader').addClass('loading');
                 this.addCalendar(date, true);
             }

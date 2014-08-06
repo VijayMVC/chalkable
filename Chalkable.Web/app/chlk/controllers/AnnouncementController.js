@@ -808,6 +808,9 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
             }
             res = res.then(function(){
+                this.cacheAnnouncement(null);
+                this.cacheAnnouncementAttachments(null);
+                this.cacheAnnouncementApplications(null);
                 if(isEdit)
                     return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
                 else{

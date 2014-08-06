@@ -130,6 +130,8 @@ namespace Chalkable.Web.Controllers
                 var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
                 school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
+                if (Context.DeveloperId != null)
+                    ViewData[ViewConstants.IS_DEV] = true;
                 if (district.IsDemoDistrict)
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
@@ -139,9 +141,6 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
                     ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.Id.ToString();
                     ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
-                    if (Context.DeveloperId != null)
-                        ViewData[ViewConstants.IS_DEV] = true;
-
                 }
                 ViewData[ViewConstants.LAST_SYNC_DATE] = district.LastSync.HasValue 
                     ? district.LastSync.Value.ToString("yyyy/MM/dd hh:mm:ss")
