@@ -84,9 +84,8 @@ apiInfo = self.getApiInfo()
         OAuth 2.0 is used for authentication. The authentication token you receive, after making your request, includes a user role.
         The user role defines the level of access.
     h4.text-title Authentication
-    .api-description
-        div Code example for getting access token
-
+    .api-description Code example for getting access token
+    .api-description.white
         pre.prettyprint.lang-ruby.auto-overflow
             | require 'rest-client'
             |     def get_access_token()
@@ -109,8 +108,8 @@ apiInfo = self.getApiInfo()
             |           puts "============================="
             |       end
             | end
-    .api-description
-        div Sample parsed json response
+    .api-description Sample parsed json response
+    .api-description.white
         pre.prettyprint.lang-ruby.auto-overflow
             | {"token_type"=>"http://schemas.xmlsoap.org/ws/2009/11/swt-token-profile-1.0",
             | "access_token"=>"http%3a%2f%2fschemas.xmlsoap.org%2fws%2f2005%2f05%2fidentity%2fclaims%2fnameidentifier=user1234%40chalkable.com%0d%0a12&http%3a%2f%2fschemas.microsoft.com%2faccesscontrolservice%2f2010%2f07%2fclaims%2fpermissions=https%3A%2F%2Fchalkable.com%2f&http%3a%2f%2fschemas.xmlsoap.org%2fws%2f2009%2f09%2fidentity%2fclaims%2factor=http%3a%2f%2f127.0.0.1%3a3000%2fhome%2findex&http%3a%2f%2fschemas.microsoft.com%2faccesscontrolservice%2f2010%2f07%2fclaims%2fidentityprovider=https%3a%2f%2fchalkable-access-control.accesscontrol.windows.net%2f&Audience=https%3A%2F%2Fchalkable.com%2f&ExpiresOn=1405440742&Issuer=https%3a%2f%2fchalkable-access-control.accesscontrol.windows.net%2f&HMACSHA256=UvGUSTZZ%2b4Zlw8Me9CC8bi62dc0ItNuPGfEK60dQyJM%3d",

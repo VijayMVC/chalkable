@@ -60,6 +60,11 @@ BODY {
                   color: rgb(167, 167, 167);
                   margin-bottom: 18px;
                   @include text-shadow(0px 1px 0px white);
+
+                  &.white{
+                    background: white;
+                    margin-top: -10px;
+                  }
                 }
                 .text-title{
                   color: #767676;
