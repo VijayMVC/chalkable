@@ -12,6 +12,9 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.grading.GradingClassSummaryGridItems), 'items',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades'
+            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableEdit'
         ]);
 });

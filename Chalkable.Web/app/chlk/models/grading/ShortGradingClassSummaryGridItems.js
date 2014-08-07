@@ -42,6 +42,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             chlk.models.id.AnnouncementTypeGradingId, 'categoryId',
 
+            Boolean, 'ableEdit',
+
             Number, 'avg',
 
             Number, 'rowIndex',

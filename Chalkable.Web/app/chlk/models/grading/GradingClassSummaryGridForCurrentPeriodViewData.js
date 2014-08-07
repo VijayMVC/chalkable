@@ -18,6 +18,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
+            Boolean, 'ableEdit',
+
             [ria.serialize.SerializeProperty('currentgradinggrid')],
             chlk.models.grading.ShortGradingClassSummaryGridItems, 'currentGradingGrid',
 

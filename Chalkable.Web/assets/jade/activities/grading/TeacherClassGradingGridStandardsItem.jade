@@ -1,14 +1,15 @@
 .value=self.displayGrade(self.getGradeValue())
 if self.getComment()
     .with-comment
-.edit-cell
-+ActionForm('grading', 'updateStandardGradeFromGrid')
-    +Hidden('standardid', self.getStandardId())
-    +Hidden('gradeid', self.getGradeId())
-    +Hidden('classid', self.getClassId())
-    +Hidden('gradingperiodid', self.getGradingPeriodId())
-    +Hidden('comment', self.getComment())(
-        data-comment = self.getComment()
-    ).comment-value
-    +Hidden('studentid', self.getStudentId().valueOf())
-    input(value=self.displayGrade(self.getGradeValue()), name="gradevalue").grade-autocomplete.value-input
+if self.isAbleEdit()
+    .edit-cell
+    +ActionForm('grading', 'updateStandardGradeFromGrid')
+        +Hidden('standardid', self.getStandardId())
+        +Hidden('gradeid', self.getGradeId())
+        +Hidden('classid', self.getClassId())
+        +Hidden('gradingperiodid', self.getGradingPeriodId())
+        +Hidden('comment', self.getComment())(
+            data-comment = self.getComment()
+        ).comment-value
+        +Hidden('studentid', self.getStudentId().valueOf())
+        input(value=self.displayGrade(self.getGradeValue()), name="gradevalue").grade-autocomplete.value-input

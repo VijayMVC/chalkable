@@ -52,7 +52,7 @@ NAMESPACE('chlk.controllers', function (){
 
             Array, function getClassForGrading_(withAll_, forCurrentMp_){
                 var canGetClasses = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
-                return this.classService.getClassesForTopBar(withAll_, forCurrentMp_, !canGetClasses);
+                return this.classService.getClassesForTopBar(withAll_, forCurrentMp_);
             },
 
             //TODO: refactor
@@ -191,6 +191,8 @@ NAMESPACE('chlk.controllers', function (){
                         newModel.setStandardId(model.getStandardId());
                         var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                         newModel.setSchoolOptions(schoolOptions);
+                        var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
+                        newModel.setAbleEdit(canEdit);
                         return newModel;
                     }, this)
                     .attach(this.validateResponse_());
@@ -222,6 +224,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.FinalGradesPage, result);
             },
 
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+            ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function summaryGridTeacherAction(classId_){
@@ -245,7 +250,11 @@ NAMESPACE('chlk.controllers', function (){
                         model.setAlternateScores(alternateScores);
                         model.setGradingComments(gradingComments);
                         var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
-                        model.getCurrentGradingGrid() && model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
+                        if(model.getCurrentGradingGrid()){
+                            var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
+                            model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
+                            model.getCurrentGradingGrid().setAbleEdit(canEdit);
+                        }
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
@@ -266,6 +275,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.grading.GradingClassStandardsGridPage, result, chlk.activities.lib.DontShowLoader());
             },
 
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+            ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function standardsGridTeacherAction(classId_){
@@ -280,8 +292,9 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(items){
                         var gradingPeriod = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, {});
+                        var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
                         var model = new chlk.models.grading.GradingClassSummaryGridViewData(chlk.models.standard.StandardGradings,
-                            gradingPeriod.getId(), topData, null, items, alphaGrades);
+                            gradingPeriod.getId(), topData, null, items, alphaGrades, null, canEdit);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassStandardsGridPage, result);

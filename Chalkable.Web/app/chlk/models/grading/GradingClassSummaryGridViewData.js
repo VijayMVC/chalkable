@@ -15,12 +15,16 @@ NAMESPACE('chlk.models.grading', function () {
 
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
+            Boolean, 'ableEdit',
+
             [[chlk.models.id.GradingPeriodId, chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, ArrayOf(chlk.models.grading.GradingClassSummaryGridItems.OF(TItem)),
-                ArrayOf(chlk.models.grading.AlphaGrade), ArrayOf(chlk.models.grading.AlternateScore)]],
-            function $(gradingPeriodId_, topData_, selectedId_, items_, alphaGrades_, alternateScores_){
+                ArrayOf(chlk.models.grading.AlphaGrade), ArrayOf(chlk.models.grading.AlternateScore), Boolean]],
+            function $(gradingPeriodId_, topData_, selectedId_, items_, alphaGrades_, alternateScores_, ableEdit_){
                 BASE(gradingPeriodId_, topData_, selectedId_);
                 if(items_)
                     this.setItems(items_);
+                if(ableEdit_ || ableEdit_ === false)
+                    this.setAbleEdit(ableEdit_);
                 if(alphaGrades_)
                     this.setAlphaGrades(alphaGrades_);
                 if(alternateScores_)

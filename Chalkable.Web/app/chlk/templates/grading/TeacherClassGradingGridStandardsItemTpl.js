@@ -29,6 +29,8 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             String, 'comment',
 
+            Boolean, 'ableEdit',
+
             String, function displayGrade(grade){
                 if(isNaN(parseFloat(grade)))
                     return grade;

@@ -25,7 +25,8 @@
                     textarea(maxlength=500).comment-value
                     .grading-comments-list
                 a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
-                a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
+                if self.isAbleEdit()
+                    a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
         each item,i in self.getItems()
             gradingPeriod = item.getGradingPeriod()
             currentGp = (gradingPeriod.getId() == self.getGradingPeriodId())
@@ -33,7 +34,8 @@
                 div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title
                     mpName = gradingPeriod.getName()
                     span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
-                    a(href="javascript:").grey-button.comment-button.gp-button=Msg.Comment
+                    if self.isAbleEdit()
+                        a(href="javascript:").grey-button.comment-button.gp-button=Msg.Comment
                     .collapse
                 .mp-data
                     .ann-types-container
@@ -60,6 +62,8 @@
                                             data-student-id=info.getStudentId().valueOf(),
                                             data-standard-id=info.getStandardId().valueOf(),
                                             data-grading-period-id=gradingPeriod.getId().valueOf()
-                                            class=((self.getAlphaGrades() && self.getAlphaGrades().length) ? 'gradable' : '')
+                                            class=((self.getAlphaGrades() && self.getAlphaGrades().length && self.isAbleEdit()) ? 'gradable' : '')
                                         ).dotted-h.grade-value.letter
-                                            +RenderWith(info, chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl)
+                                            +RenderWith(info, chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl)(
+                                                ableEdit = self.isAbleEdit()
+                                            )

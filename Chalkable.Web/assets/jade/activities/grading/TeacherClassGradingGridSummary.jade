@@ -28,7 +28,8 @@
                     textarea(maxlength=500).comment-value
                     .grading-comments-list
                 a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
-                a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
+                if self.isAbleEdit()
+                    a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
         each gradingPeriod,i in self.getGradingPeriods()
             div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
                 item = self.getCurrentGradingGrid()
