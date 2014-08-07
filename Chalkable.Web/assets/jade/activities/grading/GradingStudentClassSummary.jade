@@ -13,7 +13,7 @@ selectedId = topData.getSelectedItemId()
             =clazz.getName()
             .mp-info
                 -mp=self.getCurrentMarkingPeriod()
-                =Msg.Marking_Period_shortcut.toUpperCase() + ' ' + mp.getName() + mp.getStartDate().format(' M d - ') + mp.getEndDate().format('M d')
+                =mp.getName() + mp.getStartDate().format(' M d - ') + mp.getEndDate().format('M d')
     if self.getAnnTypesGradeStats()
         .chart-top-legend
             each item,i in self.getAnnTypesGradeStats()
