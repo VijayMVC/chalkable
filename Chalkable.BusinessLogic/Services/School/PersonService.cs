@@ -339,7 +339,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
-            if (Context.Role != CoreRoles.STUDENT_ROLE)
+            if (CanGetHealthConditions())
             {
                 var healsConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
                 return healsConditions.Select(x => new StudentHealthCondition
@@ -353,6 +353,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 }).ToList();   
             }
             return new List<StudentHealthCondition>();
+        }
+
+        private bool CanGetHealthConditions()
+        {
+            return Context.Role != CoreRoles.STUDENT_ROLE
+                   && (ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_HEALTH_CONDITION})
+                       || ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_MEDICAL}));
         }
 
         public StudentSummaryInfo GetStudentSummaryInfo(int studentId)

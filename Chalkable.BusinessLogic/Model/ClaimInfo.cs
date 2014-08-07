@@ -13,6 +13,9 @@ namespace Chalkable.BusinessLogic.Model
         public const string VIEW_CLASSROOM = "View Classroom";
         public const string VIEW_CLASSROOM_ADMIN = "View Classroom (Admin)";
 
+        public const string VIEW_HEALTH_CONDITION = "View Health Condition";
+        public const string VIEW_MEDICAL = "View Medical";
+
         public string Type { get; set; }
         public IEnumerable<string> Values { get; set; }
 
