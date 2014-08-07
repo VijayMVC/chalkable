@@ -27,7 +27,7 @@ namespace Chalkable.Web.Models
         public static GradingTeacherClassSummaryViewData Create(ShortClassGradesSummary classGradesSummary)
         {
             var res = new GradingTeacherClassSummaryViewData {Class = ClassViewData.Create(classGradesSummary.Class)};
-            var studentsGrades = classGradesSummary.Students.OrderBy(x => x.Avg)
+            var studentsGrades = classGradesSummary.Students.Where(x=>x.Avg.HasValue).OrderBy(x => x.Avg)
                                                  .ThenBy(x => x.Student.LastName)
                                                  .ThenBy(x => x.Student.FirstName).ToList();
             var well = new List<ShortStudentClassGradesSummary>();
