@@ -53,6 +53,11 @@ BODY {
 
           .one-third-button.statistic {
             @include background-sprite(0, 2);
+            &.purchase-order{
+              font-size: 9px;
+              overflow: hidden;
+            }
+
           }
 
           .one-third-button.messages {
