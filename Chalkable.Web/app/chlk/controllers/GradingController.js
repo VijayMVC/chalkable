@@ -262,6 +262,7 @@ NAMESPACE('chlk.controllers', function (){
                             model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                             model.getCurrentGradingGrid().setAbleEdit(canEdit);
                         }
+                        model.setAbleEdit(canEdit);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
