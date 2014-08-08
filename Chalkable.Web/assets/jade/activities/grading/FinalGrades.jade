@@ -19,6 +19,8 @@
                     gp = self.getCurrentFinalGrade()
                     +RenderWith(gp, chlk.templates.grading.GradingPeriodFinalGradeTpl)(
                         classId = selectedId,
+                        ableEdit = self.isAbleEdit(),
+                        ableEditDirectValue = self.isAbleEditDirectValue(),
                         gradingComments = self.getGradingComments()
                     )
                 else

@@ -29,6 +29,10 @@ NAMESPACE('chlk.templates.grading', function () {
 
             Boolean, 'selected',
 
+            Boolean, 'ableEdit',
+
+            Boolean, 'ableEditDirectValue',
+
             Number, 'index',
 
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',

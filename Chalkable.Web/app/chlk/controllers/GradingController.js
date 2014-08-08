@@ -199,6 +199,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, model.isAutoUpdate() ? chlk.activities.lib.DontShowLoader() : null);
             },
 
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
+            ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function finalGradesAction(classId_){
@@ -215,10 +218,14 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var canEditDirectValue = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES);
+                        var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
                         model.setTopData(topData);
                         model.setGradingPeriodId(gradingPeriod.getId());
                         model.setAlphaGrades(alphaGrades);
                         model.setGradingComments(gradingComments);
+                        model.setAbleEdit(canEdit);
+                        model.setAbleEditDirectValue(canEditDirectValue);
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.FinalGradesPage, result);

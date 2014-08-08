@@ -19,6 +19,12 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments'
+            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableEdit',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableEditDirectValue'
         ]);
 });

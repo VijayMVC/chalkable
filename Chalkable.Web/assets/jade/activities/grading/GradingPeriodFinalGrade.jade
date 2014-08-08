@@ -10,7 +10,7 @@ gradingPeriod = self.getGradingPeriod()
                 each item in self.getAverages()
                     +Option(item.getAverageId().valueOf(), item.getAverageName(), item.getAverageId() == self.getCurrentAverage().getAverageId())
         .gp-title=gradingPeriod.getFinalTitleText()
-        if gradingPeriod.isAblePostGradeBook()
+        if self.isAbleEdit() && gradingPeriod.isAblePostGradeBook()
             +ActionLinkButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId(), null, null, true).message-button.blue-gradient-btn.post-gradebook-button.no-loading=Msg.Post
         .gp-triangle
 div(class = (self.isAvgChanged() ? "opened slided" : "")).gp-data
@@ -22,6 +22,8 @@ div(class = (self.isAvgChanged() ? "opened slided" : "")).gp-data
         each item, i in items
             +RenderWith(item, chlk.templates.grading.FinalGradeStudentBlockTpl)(
                 selected = selectedIndex == i,
+                ableEdit = self.isAbleEdit(),
+                ableEditDirectValue = self.isAbleEditDirectValue(),
                 index = i,
                 gradingPeriodId = gradingPeriod.getId(),
                 gradingComments = self.getGradingComments()
