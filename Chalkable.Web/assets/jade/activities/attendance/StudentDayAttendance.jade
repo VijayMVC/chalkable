@@ -27,7 +27,7 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
                 +PersonImg(student, 47)
             h1=student.getDisplayName()
             if !self.isNewStudent()
-                +ActionLink('students', 'details', student.getId().valueOf()).profile-link.small-grey-text=Msg.Profile.toLowerCase() + ' »'
+                +ProfileLink(student, 'student').profile-link.small-grey-text=Msg.Profile.toLowerCase() + ' »'
         .blocks
             if(canEdit)
                 .row.all-row

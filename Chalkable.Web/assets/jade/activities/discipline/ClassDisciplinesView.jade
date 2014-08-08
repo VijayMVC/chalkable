@@ -30,7 +30,7 @@ redirectData = self.getRedirectData()
                 each item, i in self.getDisciplines()
                     .row(index=i)
                         student = item.getStudent();
-                        +ActionLink('students', 'details', student.getId()).left.image-container.white.shadow
+                        +ProfileLink(student, 'student').left.image-container.white.shadow
                             +PersonImg(student, 47)
                         p.left= student.getFullName()
                         .right

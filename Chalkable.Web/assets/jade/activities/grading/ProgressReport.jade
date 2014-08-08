@@ -79,7 +79,7 @@
                                     .chk
                                         id = student.getId().valueOf()
                                         +Checkbox('student', !!student.getComment())(value=id, data-id=id).student-chk
-                                    +ActionLink('user', 'infoByRole', student.getId(), student.getRole().getName()).image-container.white.shadow
+                                    +ProfileLink(student).image-container.white.shadow
                                         +PersonImg(student, 47)
                                     p=student.getDisplayName()
                                     INPUT(value=student.getComment()).student-comment

@@ -25,6 +25,7 @@ REQUIRE('chlk.controls.ListViewControl');
 REQUIRE('chlk.controls.LoadingImgControl');
 REQUIRE('chlk.controls.LogoutControl');
 REQUIRE('chlk.controls.PaginatorControl');
+REQUIRE('chlk.controls.ProfileLinkControl');
 REQUIRE('chlk.controls.PhotoContainerControl');
 REQUIRE('chlk.controls.RangeSliderControl');
 REQUIRE('chlk.controls.SearchBoxControl');

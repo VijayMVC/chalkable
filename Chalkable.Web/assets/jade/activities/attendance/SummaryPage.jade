@@ -33,13 +33,13 @@ mixin AbsentLatePage(data, header)
                                 .chlk-pop-up-container.popup-top
                                     .pop-up-triangle
                                     .info-container
-                                        +ActionLink('user', 'infoByRole', student.getId(), 'student')
+                                        +ProfileLink(student, 'student')
                                             h1=student.getDisplayName()
                                         .stats
                                             each stat in info.getStatByClass()
                                                 p #{stat.getClassName()}: #{stat.getValue()}
                                 .img-container
-                                    +ActionLink('user', 'infoByRole', student.getId(), 'student')
+                                    +ProfileLink(student, 'student')
                                         +PersonImg(student, 128)
         if !items.length
             .no-items-text=Msg.No_attendance_issues

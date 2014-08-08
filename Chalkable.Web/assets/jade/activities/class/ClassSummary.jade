@@ -27,7 +27,7 @@ classSummary = self.getClassSummary()
                         +ClassImg(classSummary, 45, 80)
                     =classSummary.getName()
                 h2.no-line
-                    +ActionLink('teachers', 'details', classSummary.getTeacher().getId().valueOf())=classSummary.getTeacher().getDisplayName()
+                    +ProfileLink(classSummary.getTeacher(), 'teacher')=classSummary.getTeacher().getDisplayName()
                     | - #{classSummary.getRoom() && classSummary.getRoom().getDescription()}
                 .glance-container
                     if(classSummary.getClassAverageBox())

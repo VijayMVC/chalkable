@@ -4,7 +4,7 @@ mixin StudentGradingItem(student)
         tooltipText = tooltipText + student.getAvg().toFixed(2) + '%'
     -attributes['data-tooltip'] = tooltipText
     -attributes['studentId'] = student.getId().valueOf()
-    +ActionLink('students', 'details', student.getId())(attributes).image-container.white.student-item
+    +ProfileLink(student, 'student')(attributes).image-container.white.student-item
         +PersonImg(student, 47)
 
 topData = self.getTopData()

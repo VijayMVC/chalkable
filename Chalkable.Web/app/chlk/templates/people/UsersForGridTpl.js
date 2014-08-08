@@ -12,6 +12,8 @@ NAMESPACE('chlk.templates.people', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.User), 'items',
 
+            Boolean, 'hasAccess',
+
             [[chlk.models.people.User]],
             Boolean, function canViewInfo(user){
                 var currentRole = this.getUserRole();

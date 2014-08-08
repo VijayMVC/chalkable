@@ -33,7 +33,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     +Hidden('id', item.getId())
                     +Hidden('announcementid', item.getAnnouncementId())
                     +Hidden('studentid', student.getId())
-                    +ActionLink('students', 'details', student.getId())(data-tooltip=student.getFullName()).left.image-container.white.shadow
+                    +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
                         +PersonImg(student, 47)
                     .i-b.name-block
                         p= student.getFullName()

@@ -1,4 +1,4 @@
 .student.absolute
     .img-container.new-student
         +PersonImg(sels, 64)
-    +ActionLink('students', 'details', student.getId())=self.getDisplayName()
+    +ProfileLink(student, 'student')=self.getDisplayName()

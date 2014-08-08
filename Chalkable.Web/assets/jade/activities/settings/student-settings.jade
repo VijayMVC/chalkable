@@ -2,4 +2,4 @@
     .left
         +ActionLink('settings', 'generalStudent').pressed General
     .right
-        +ActionLink('students', 'details', self.personId).profile-toolbar-button Profile
+        +ProfileLink(self, 'student', self.personId, true).profile-toolbar-button Profile

@@ -46,5 +46,5 @@ each item, i in items
     if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
         +AnnouncementFormApplicationItem(item, i)
     else
-        if self.getUserRole().isTeacher() && (item.isOwner() || (!self.needButtons && item.isTeachersAttachment())) || self.getUserRole().isStudent() && !item.isOwner() || self.getUserRole().isAdmin()
+        if item.isTeachersAttachment()
             +AnnouncementFormAttachmentItem(item, i)

@@ -48,7 +48,7 @@ mixin AnnouncementTooltip()
                         ).image-container
                             +PersonImg(self.getOwner(), 47)
                     else
-                        +ActionLink('teachers', 'details', self.getOwner().getId())(
+                        +ProfileLink(self.getOwner(), 'teacher')(
                             data-tooltip=self.getOwner().getFullName(),
                         ).image-container
                             +PersonImg(self.getOwner(), 47)

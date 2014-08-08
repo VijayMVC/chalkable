@@ -29,7 +29,7 @@ date = self.getDate().format('mm-dd-yy')
                 +PersonImg(student, 47)
             h1=student.getDisplayName()
             if !self.isNewStudent()
-                +ActionLink('students', 'details', student.getId().valueOf()).profile-link.small-grey-text=Msg.Profile.toLowerCase() + ' »'
+                +ProfileLink(student, 'student').profile-link.small-grey-text=Msg.Profile.toLowerCase() + ' »'
         .blocks
             each item in disciplines
                 div(

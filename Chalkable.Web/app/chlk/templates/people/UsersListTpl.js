@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.people', function () {
             Number, 'start',
             Boolean, 'my',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccess',
+
             OVERRIDE, chlk.models.common.Role, function getUserRole(){
                 return this.getModel().getCurrentUserRole();
             },
