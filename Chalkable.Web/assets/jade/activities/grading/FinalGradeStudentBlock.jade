@@ -20,28 +20,32 @@ div(index=self.getIndex(), class=(selected ? "selected" : ""), data-student-id=s
                 +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
                 displayValue = avg.displayAvgGradeValue()
                 .grade-triangle
-                .not-selected.i-b.text-value=displayValue
-                .i-b.selected
-                    .input-container
-                        .text-value=value
-                        if value
-                            .letters=Msg.Avg
-                    .input-container.grade
-                        INPUT(
-                            type="text",
-                            autofill="off",
-                            value=displayValue,
-                            name="averageValue",
-                            data-grade-value=avg.displayAvgGradeValue(false, false, true),
-                            class="validate[min[0]]"
-                        ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus
-                        .letters=Msg.Direct
-                        if avg.isMayBeExempt()
-                            .grading-input-popup.chlk-pop-up-container.popup-bottom
-                                .pop-up-triangle.big
-                                +LabeledCheckbox(Msg.Exempt, 'isexempt', avg.isExempt())(data-value=avg.isExempt(), addCallBack = true).with-value.exempt-checkbox
-                        else
-                            +Hidden('isexempt', avg.isExempt())
+                div(class = self.isAbleEdit() && self.isAbleEditDirectValue() ? "not-selected" : "").i-b.text-value=displayValue
+                if self.isAbleEdit() && self.isAbleEditDirectValue()
+                    .i-b.selected
+                        .input-container
+                            .text-value=value
+                            if value
+                                .letters=Msg.Avg
+                        .input-container.grade
+                            INPUT(
+                                type="text",
+                                autofill="off",
+                                value=displayValue,
+                                name="averageValue",
+                                data-grade-value=avg.displayAvgGradeValue(false, false, true),
+                                class="validate[min[0]]"
+                            ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus
+                            .letters=Msg.Direct
+                            if avg.isMayBeExempt()
+                                .grading-input-popup.chlk-pop-up-container.popup-bottom
+                                    .pop-up-triangle.big
+                                    +LabeledCheckbox(Msg.Exempt, 'isexempt', avg.isExempt())(data-value=avg.isExempt(), addCallBack = true).with-value.exempt-checkbox
+                            else
+                                +Hidden('isexempt', avg.isExempt())
+                else
+                    +Hidden('isexempt', avg.isExempt())
+                    +Hidden('averageValue', displayValue)
 div(class=(selected ? "opened" : "")).attachments-container.z-10
     .attachments-container-2
         .avgs-block
@@ -138,14 +142,15 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                                         div(data-tooltip=name, data-tooltip-type="overflow").description=name
         .comments-notes-block
             .notes-block
-                TEXTAREA.notes-textarea=avg.getNote()
+                TEXTAREA(disabled = !self.isAbleEdit()).notes-textarea=avg.getNote()
                 .saving-text #{Msg.Saving.toLowerCase()}...
             .comments-block
                 if avg.getCodes()
                     each header in avg.getCodes()
                         +Select('select-' + header.headerid)(
                             data-header-id = header.headerid,
-                            data-header-name = header.headername
+                            data-header-name = header.headername,
+                            disabled = !self.isAbleEdit()
                         ).codes-select
                             +Option('', 'Select an Option')
                             each comment in self.getGradingComments()

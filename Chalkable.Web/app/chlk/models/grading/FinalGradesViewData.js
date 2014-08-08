@@ -15,6 +15,10 @@ NAMESPACE('chlk.models.grading', function () {
 
         ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
-        ArrayOf(chlk.models.grading.AvgComment), 'gradingComments'
+        ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
+        Boolean, 'ableEdit',
+
+        Boolean, 'ableEditDirectValue'
     ]);
 });

@@ -30,6 +30,10 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'avgChanged',
 
-            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments'
+            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
+            Boolean, 'ableEdit',
+
+            Boolean, 'ableEditDirectValue'
         ]);
 });
