@@ -326,6 +326,7 @@ var Msg = {
     Best_Class: 'Best Class',
     Biggest_improvement: 'Biggest improvement',
     Blank_columns: 'Blank columns',
+    Calculated_Avg: 'Calculated Avg.',
     Can_drop_student_score: 'Can drop student score',
     Category_averages: 'Category averages',
     Choose_date: 'Choose date',

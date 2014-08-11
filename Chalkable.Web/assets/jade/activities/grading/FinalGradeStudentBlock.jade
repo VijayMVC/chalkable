@@ -119,7 +119,7 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                                 style="width:" + self.getAbsentWidth(clazzInfo)
                             ).absent
             .suggested-block
-                h2 Suggested Avg.
+                h2=Msg.Calculated_Avg
                 .grade-container
                     .grade=value
                         if value || parseInt(value, 10) == 0
