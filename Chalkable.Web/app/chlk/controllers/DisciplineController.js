@@ -38,6 +38,9 @@ NAMESPACE('chlk.controllers', function(){
             chlk.services.ClassService, 'classService',
 
 
+            [chlk.controllers.Permissions([
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE
+            ])],
             [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.common.ChlkDate, Number, Number]],
             function listAction(date_, pageSize_, pageIndex_){
