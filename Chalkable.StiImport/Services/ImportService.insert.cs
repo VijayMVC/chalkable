@@ -561,11 +561,11 @@ namespace Chalkable.StiImport.Services
 
         private void InsertMarkingPeriodClasses()
         {
-            var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
+            //var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
             var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
             var cts = context.GetSyncResult<SectionTerm>().All
-                .Where(x => classes.Any(y => y.Id == x.SectionID))
-                .Where(x => mps.Any(y => y.Id == x.TermID))
+                //.Where(x => classes.Any(y => y.Id == x.SectionID))
+                //.Where(x => mps.Any(y => y.Id == x.TermID))
                 .Select(x => new MarkingPeriodClass
                 {
                     ClassRef = x.SectionID,
@@ -596,9 +596,21 @@ namespace Chalkable.StiImport.Services
 
         private void InsertClassPeriods()
         {
-            var classes = ServiceLocatorSchool.ClassService.GetClasses(null).ToDictionary(x=>x.Id);
-            var scheduledSections = context.GetSyncResult<ScheduledSection>().All
-                .Where(x => classes.ContainsKey(x.SectionID))
+            var scheduledSections = context.GetSyncResult<ScheduledSection>().All;
+            Dictionary<int, Class> classes;
+            if (scheduledSections.Length <= 30)
+            {
+                classes = new Dictionary<int, Class>();
+                foreach (var scheduledSection in scheduledSections)
+                {
+                    var c = ServiceLocatorSchool.ClassService.GetById(scheduledSection.SectionID);
+                    classes.Add(c.Id, c);
+                }
+            }
+            else
+                classes = ServiceLocatorSchool.ClassService.GetClasses(null).ToDictionary(x => x.Id, x => (Class)x);   
+            var classPeriods = scheduledSections
+                //.Where(x => classes.ContainsKey(x.SectionID))
                 .Select(x => new ClassPeriod
                 {
                     ClassRef = x.SectionID,
@@ -606,7 +618,7 @@ namespace Chalkable.StiImport.Services
                     PeriodRef = x.TimeSlotID,
                     SchoolRef = classes[x.SectionID].SchoolRef.Value
                 }).ToList();
-            ServiceLocatorSchool.ClassPeriodService.Add(scheduledSections);
+            ServiceLocatorSchool.ClassPeriodService.Add(classPeriods);
         }
 
         private void InsertClassPersons()
