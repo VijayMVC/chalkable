@@ -1,0 +1,51 @@
+mixin StudentGradingItem(student)
+    tooltipText = student.getFullName() + '<br/>'
+    if student.getAvg() || student.getAvg() == 0
+        tooltipText = tooltipText + student.getAvg().toFixed(2) + '%'
+    -attributes['data-tooltip'] = tooltipText
+    -attributes['studentId'] = student.getId().valueOf()
+    +ProfileLink(student, 'student')(attributes).image-container.white.student-item
+        +PersonImg(student, 47)
+
+topData = self.getTopData()
+topItems = topData.getTopItems()
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid')().classes-bar
+.grading-summary
+    each item in self.getItems()
+        trouleCount = item.getTrouble().length
+        wellCount = item.getWell().length
+        restCount = item.getAllStudents().length - trouleCount - wellCount
+        maxIndex = restCount + trouleCount - 1
+        students = self.getPreparedStudents(item.getAllStudents(), item.getWell(), item.getTrouble())
+        typeEnum = chlk.models.grading.StudentWellTroubleEnum
+        .class-block
+            h2.with-line=item.getClazz().getFullClassName()
+                a(href="javascript:").show-less
+                    span –
+                    |#{Msg.Show_less}
+            .students-block.with-line
+                if trouleCount == 0 && wellCount == 0 && restCount == 0
+                    .no-items-text=Msg.No_grades_yet
+                else
+                    each student in item.getTrouble()
+                        +StudentGradingItem(student).trouble
+                    button.all-button=Msg.All
+                    if restCount > 0
+                        each student,i in item.getAllStudents()
+                            if i > trouleCount - 1 && i <= maxIndex
+                                +StudentGradingItem(student)
+                    each student in item.getWell()
+                        +StudentGradingItem(student).well
+            .students-line
+                SPAN.n-0 0
+                SPAN.n-100 100
+                each student in students
+                    div(
+                        class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),
+                        style = "right:" + student.getRight() + "px",
+                        studentId=student.getId().valueOf()
+                    ).student-pic-container
+                        .student-pic
+                        br
+                        .student-triangle
+
