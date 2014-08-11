@@ -39,10 +39,12 @@ namespace Chalkable.Data.Common
             }
         }
 
-        protected void ExecuteNonQueryParametrized(string sql, IDictionary<string, object> parameters)
+        protected void ExecuteNonQueryParametrized(string sql, IDictionary<string, object> parameters, int? timeout = null)
         {
             using (var command = unitOfWork.GetTextCommandWithParams(sql, parameters))
             {
+                if (timeout.HasValue)
+                    command.CommandTimeout = timeout.Value;
                 command.ExecuteNonQuery();
             }
         }
@@ -140,7 +142,7 @@ namespace Chalkable.Data.Common
                 else
                 {
                     var q = buildQueryAction(objs);
-                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters, 10 + objs.Count);
                 }
             }
         }

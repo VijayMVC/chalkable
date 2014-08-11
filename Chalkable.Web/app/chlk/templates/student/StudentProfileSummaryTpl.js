@@ -35,7 +35,8 @@ NAMESPACE('chlk.templates.student', function () {
             Object, function getStatusData(){
                 var attType =this.getCurrentAttendanceType();
                 var res = {};
-                if(attType == chlk.models.attendance.AttendanceTypeEnum.NA.valueOf()){
+                if(attType == chlk.models.attendance.AttendanceTypeEnum.NA.valueOf()
+                    || !this.getUser().getCurrentClassName() || !this.getUser().getRoomId()){
                     res.statusName = 'No attendance taken';
                     res.status = 'not-assigned';
                 }else{

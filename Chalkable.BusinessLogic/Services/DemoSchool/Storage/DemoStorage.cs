@@ -527,8 +527,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddGradeLevels();
             AddGradingScales();
             AddGradingScaleRanges();
-            AddAttendanceReasons();
             AddAttendanceLevelReasons();
+            AddAttendanceReasons();
             AddInfractions();
         }
 

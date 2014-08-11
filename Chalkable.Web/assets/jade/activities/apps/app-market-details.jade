@@ -3,7 +3,7 @@ devName = app.getDeveloperInfo().getName()
 webSiteLink = app.getDeveloperInfo().getWebSite()
 
 .app-market-details
-    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels, true)
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels, true, true)
     .app-screenshots-panel
         +Carousel()
             -videoUrl = app.getVideoDemoUrl() || ''
