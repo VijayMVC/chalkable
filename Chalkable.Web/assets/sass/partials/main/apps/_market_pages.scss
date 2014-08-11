@@ -9,7 +9,12 @@
   .buttons-toolbar{
     .toolbar-btn.app-store{
       margin-left: 255px !important;
+      &.pressed-app-store{
+        @include background(linear-gradient(top, #f6f6f6, #d8d8d8));
+      }
     }
+
+
   }
 
 
