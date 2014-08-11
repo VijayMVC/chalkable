@@ -77,8 +77,8 @@ namespace Chalkable.Web.Models
             foreach (var student in gradeBook.Students)
             {
                 var ann = gradeBook.Announcements.FirstOrDefault();
-                bool isWithdrawn = ann != null && ann.StudentAnnouncements.FirstOrDefault() != null
-                                   && ann.StudentAnnouncements.First().Withdrawn;
+                bool isWithdrawn = ann != null && ann.StudentAnnouncements.Any(x=>x.StudentId == student.Id)
+                                   && ann.StudentAnnouncements.First(x=>x.StudentId == student.Id).Withdrawn;
                 res.Students.Add(GradeStudentViewData.Create(student, isWithdrawn));
 
             }
