@@ -354,7 +354,7 @@ BODY {
                 margin-bottom: 35px;
 
                 &.active{
-                  h2{
+                  h2, .h2{
                     .show-less{
                       display: inline-block;
                       text-decoration: none;
@@ -390,13 +390,14 @@ BODY {
                 }
               }
 
-              h2{
+              h2, .h2{
                 text-transform: uppercase;
                 color: #2f7790;
                 text-shadow: 0 1px 0 white;
                 font: bold 14px Arial;
                 padding-bottom: 5px;
                 margin-bottom: 11px;
+                display: block;
 
                 .show-less{
                   color: #989898;
@@ -1555,7 +1556,7 @@ BODY {
     }
 
     .grades-block{
-      h2{
+      h2, .h2{
         min-height: 61px;
       }
     }
@@ -1563,7 +1564,7 @@ BODY {
     .center-block{
       margin-top: -15px;
 
-      h2{
+      h2, .h2{
         margin: 40px 0 5px 0;
         text-align: center;
       }
@@ -1742,7 +1743,7 @@ BODY {
       }
     }
 
-    h2{
+    h2, .h2{
       margin: 40px 0 0 26px;
       font-size: 16px;
       text-transform: uppercase;

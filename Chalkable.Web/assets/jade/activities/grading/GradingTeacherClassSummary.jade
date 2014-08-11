@@ -21,8 +21,8 @@ topItems = topData.getTopItems()
         students = self.getPreparedStudents(item.getAllStudents(), item.getWell(), item.getTrouble())
         typeEnum = chlk.models.grading.StudentWellTroubleEnum
         .class-block
-            h2.with-line=item.getClazz().getFullClassName()
-                a(href="javascript:").show-less
+            +ActionLink('grading', 'summaryGrid', item.getClazz().getId()).h2.with-line=item.getClazz().getFullClassName()
+                span(href="javascript:").show-less
                     span –
                     |#{Msg.Show_less}
             .students-block.with-line

@@ -11,8 +11,9 @@ NAMESPACE('chlk.activities.grading', function () {
         'GradingTeacherClassSummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             [ria.mvc.DomEventBind('click', '.show-less')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function showLessClick(node, event){
+            Boolean, function showLessClick(node, event){
                 node.parent('.class-block').removeClass('active');
+                return false;
             },
 
             [ria.mvc.DomEventBind('mouseover mouseleave', '.student-item')],
