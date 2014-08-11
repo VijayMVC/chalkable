@@ -18,8 +18,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                                                    "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion";
 
         public const string ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON = "ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON";
-        private const string ANNOUNCEMENT_NOTIFICATION_ASWER_TO_PERSON_TEMPLATE = "<a href='@0#teachers/details/^.Notification.PersonRef'>^.Notification.Person.SalutationName" +
-                                                                            " ^.Notification.Person.LastName</a> answered a question about <a href='@0#announcement/view/^.Notification.AnnouncementRef'>" +
+        private const string ANNOUNCEMENT_NOTIFICATION_ASWER_TO_PERSON_TEMPLATE = "<a href='@0#teachers/details/^.Notification.PersonRef'>^.Notification.QuestionPerson.ShortSalutationName</a>" +
+                                                                            " answered a question about <a href='@0#announcement/view/^.Notification.AnnouncementRef'>" +
                                                                             "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion"; 
 
         public const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON";
