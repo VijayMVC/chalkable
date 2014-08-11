@@ -193,6 +193,7 @@ NAMESPACE('chlk', function (){
                                 showTooltip = true;
                             var value = node.data('tooltip');
                             var type = node.data('tooltip-type');
+                            var clazz = node.data('tooltip-class');
                             if(type == "overflow"){
                                 showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
                             }
@@ -201,6 +202,7 @@ NAMESPACE('chlk', function (){
                                 tooltip.find('.tooltip-content').html(node.data('tooltip'));
                                 tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)
                                     .css('top', offset.top - tooltip.height());
+                                clazz && tooltip.addClass(clazz);
                                 e.stopPropagation();
                             }
                         }
@@ -209,15 +211,17 @@ NAMESPACE('chlk', function (){
                 });
 
                 jQuery(document).on('mouseleave click', '[data-tooltip]', function(e){
+                    var node = jQuery(this);
                     if(e.type == "click"){
-                        var node = jQuery(this);
                         node.data('wasClick', true);
                         setTimeout(function(){
                             node.data('wasClick', null);
                         }, 100)
                     }
+                    var clazz = node.data('tooltip-class');
                     var tooltip = jQuery('#chlk-tooltip-item');
                     tooltip.hide();
+                    clazz && tooltip.removeClass(clazz);
                     tooltip.find('.tooltip-content').html('');
                 });
 

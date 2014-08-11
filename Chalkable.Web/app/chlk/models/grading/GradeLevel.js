@@ -12,8 +12,9 @@ NAMESPACE('chlk.models.grading', function () {
             String, 'fullText',
 
             String, function getFullText(){
-                var number = this.getNumber();
-                return number ? getSerial(number) : this.getName();
+                //var number = this.getNumber();
+                //return number ? getSerial(number) : this.getName();
+                return getSerial(this.getName());
             }
         ]);
 });

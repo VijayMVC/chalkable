@@ -187,6 +187,13 @@ overflow-hidden{
   display: none;
   z-index: 99999;
 
+  &.wide{
+    .tooltip-content {
+      max-width: 500px;
+      word-break: auto;
+    }
+  }
+
   .tooltip-content {
     background: rgba(0, 0, 0, 0.8);
     color: white;

@@ -35,7 +35,11 @@ mixin AnnouncementTooltip()
             .details-container.silver-panel
                 if self.getUserRole().isStudent() && hasGrade
                     +AnnouncementTooltip().comment-grade-container
-                        .comment=self.getComment() || Msg.Your_grade + ":"
+                        div(
+                            data-tooltip = self.getComment(),
+                            data-tooltip-type = "overflow",
+                            data-tooltip-class = "wide"
+                        ).comment=self.getComment() || Msg.Your_grade + ":"
                         .grade-value= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
                 if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
                     +AnnouncementTooltip().make-visible-container
