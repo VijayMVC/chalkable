@@ -156,7 +156,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             foreach (var classAttendanceSummary in atts)
             {
 
-                var c = classDetailses.First(x => x.Id == classAttendanceSummary.ClassId);
+                var c = classDetailses.FirstOrDefault(x => x.Id == classAttendanceSummary.ClassId);
+                if (c == null) continue;
                 res.Add(new TotalAbsencesPerClassViewData
                 {
                     Absences = classAttendanceSummary.Absences,
