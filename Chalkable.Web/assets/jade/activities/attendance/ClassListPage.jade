@@ -1,0 +1,88 @@
+mixin SummaryInfo(presentCount, allStudentsCount)
+    -presentPersent = Math.round((presentCount * 100) / allStudentsCount)
+    .summary-info
+        .title= presentCount + '/' + allStudentsCount + ' ' + Msg.Present.toUpperCase()
+        .slide-bar
+            div(style="width: " + presentPersent + "%").inner-bar
+
+
+.students-list.loader-container
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+    additionalParams = self.getAdditionalParams()
+    if(self.hasLeftRightToolBar())
+        +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
+            selectedItemId=selectedId ? selectedId.valueOf() : "",
+            disabledClass = 'x-hidden'
+        ).classes-bar
+    .loader
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left.no-border
+                +ActionLinkList(self.getLinksDataForLeftSide())
+                +DatePicker('attendanceDate', self.getDate())(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true
+                    },
+                    data-controller= "attendance",
+                    data-action="classList",
+                    data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
+                )#attendance-date.tb-date-picker
+            .right
+                +ActionLink('attendance', 'classList', selectedId).pressed=Msg.List
+                +ActionLink('attendance', 'seatingChart', selectedId, self.getDate().toStandardFormat())=Msg.Seating_Chart
+                //+ActionLinkList(self.getLinksDataForRightSide())
+    if self.getItems().length > 0
+        .people-list-container.not-transparent
+            .saved-pop-up
+            .not-saved-pop-up
+            +ActionForm('attendance', 'setClassAttendanceList').set-attendance-list-form
+                input(name="attendancesJson", type="hidden")
+                +Hidden('date', self.getDate().toStandardFormat())
+                +Hidden('classList', true)
+                +Hidden('classId', selectedId && selectedId.valueOf())
+                items = self.getItems()
+                .top.panel-bg
+                    +SummaryInfo(self.getPresentStudents().length, items.length)
+                    if self.canPost()
+                        A#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                    if(self.getItems().length > 0 && self.canPost())
+                        +ActionLinkWithPrepend('attendance', 'markAll',
+                            [selectedId.valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)
+                        )#all-present-link=Msg.Mark_all_Present
+                .action-bar.buttons.filter
+                    .container.panel-bg
+                        .left
+                            +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'].concat(additionalParams))(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
+                            +ActionLinkWithPrepend('attendance', 'sortStudents', [true].concat(additionalParams))(class=self.isByLastName()?"pressed":"").action-button.first-last=Msg.Last_name
+            .grid-container.loader-container
+                +ListView(self.getItems())#class-attendance-list-panel.people-list
+                    needSuggestion = self.getItems().filter(function(item){return item.getType() > valuesEnum.NA.valueOf()}).length == 0;
+                    each item, i in self.getItems()
+                        needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
+                        .row(index=i)
+                            if needPresent
+                                -item.setType(valuesEnum.PRESENT.valueOf());
+                            student = item.getStudent();
+                            +ProfileLink(student, 'student').left.image-container.white.shadow
+                                +PersonImg(student, 47)
+                            p.left
+                                SPAN.name=student.getFullName()
+                                if item.isAbsentPreviousDay()
+                                    SPAN(data-tooltip=Msg.Absent_yesterday).absent-yesterday
+                            .right
+                                .student-attendance-container
+                                    len = self.getItems().length;
+                                    if (needSuggestion && (i== 5 || (i == len - 1 && len < 6 && len > 2)))
+                                        .keyboard-suggestion
+                                    div(class="container-" + item.getStudentId().valueOf())
+                                        -item.setReasons(self.getReasons());
+                                        +RenderWith(item, self.getItemClassType())(
+                                            needPresent = needPresent
+                                        )
+                            .clear
+    else
+        .black-arrow.no-class-scheduled=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy'))
