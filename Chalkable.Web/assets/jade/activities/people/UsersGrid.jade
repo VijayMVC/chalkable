@@ -1,0 +1,16 @@
+.loader
+input(type="hidden", name="start", value=(self.getStart() || 0))
+input(type="hidden", name="count", value=10)
+Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
++ListView(self.getUsers())(
+    infiniteScroll = true,
+    goTopButton = true, loadAllButtonTitle = 'LOAD ALL ' + self.getRolesText().toUpperCase(),
+    loadAllPopUpTitle = self.getRolesText(),
+    needGoToButton = true, needLoadAllButton = true).people-list
+    +RenderWith(self.getUsers(), chlk.templates.people.UsersForGridTpl)(
+        userRole = self.getUserRole(),
+        currentUser = self.getCurrentUser(),
+        hasAccess = self.isHasAccess()
+    )
+
+
