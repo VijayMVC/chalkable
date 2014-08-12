@@ -38,8 +38,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
 
 
-
-            classPeriods = classPeriods.Where(x => classPeriodQuery.ClassIds.Contains(x.ClassRef));
+            if (classPeriodQuery.ClassIds != null)
+                classPeriods = classPeriods.Where(x => classPeriodQuery.ClassIds.Contains(x.ClassRef));
 
             if (classPeriodQuery.Time.HasValue)
             {
