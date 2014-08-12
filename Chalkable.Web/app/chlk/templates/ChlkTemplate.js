@@ -72,6 +72,6 @@ NAMESPACE('chlk.templates', function () {
 
             Date, function getSchoolYearServerDate(str_, a_, b_){
                 return chlk.models.common.ChlkSchoolYearDate.GET_SCHOOL_YEAR_SERVER_DATE(str_, a_, b_);
-            },
+            }
         ])
 });

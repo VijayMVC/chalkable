@@ -23,14 +23,20 @@ NAMESPACE('chlk.templates.profile', function(){
                     || role == chlk.models.common.RoleEnum.TEACHER;
 
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
-                return [
+
+                var links = [
                     this.buildActionLinkModelForClass('details', 'Now', pressedActionName, classId_, true),//!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ROSTER)),
                     this.buildActionLinkModelForClass('info', 'Info', pressedActionName, classId_),
                     this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_, true),
-                    this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, true), //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES)),
-                    this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_, true), //!isAdminOrTeacher && !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ATTENDANCE)),
-                    this.buildActionLinkModelForClass('apps', 'Apps', pressedActionName, classId_, true)
-                ]
+                    this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, true), //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
+                ];
+
+                var userRole = this.getUserRole();
+                if (userRole.isAdmin() || userRole.isTeacher())
+                //!isAdminOrTeacher && !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ATTENDANCE)),
+                    links.push(this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_, true));
+                links.push(this.buildActionLinkModelForClass('apps', 'Apps', pressedActionName, classId_, true));
+                return links;
             },
 
             [[String, String, String, chlk.models.id.ClassId]],
