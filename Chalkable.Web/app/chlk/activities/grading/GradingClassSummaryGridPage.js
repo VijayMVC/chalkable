@@ -768,10 +768,14 @@ NAMESPACE('chlk.activities.grading', function () {
                     var resModel = this.serializeFromForm(node);
 
                     if(isAvg){
+                        var isComment = node.find('.is-comment').getValue();
+                        var equalsValues = (input.getValue() || '') == (input.getData('grade-value').toString() || '');
                         if(model.isExempt() && resModel.isExempt() && value != 'exempt' )
                             node.find('[name=isexempt]').setValue(false);
-                        p = ((input.getValue() || '') == (input.getData('grade-value').toString() || '')) && !node.find('.is-comment').getValue() &&
-                            this.getBooleanValue(model.isExempt()) == this.getBooleanValue(resModel.isExempt());
+                        p = equalsValues && !isComment && this.getBooleanValue(model.isExempt()) == this.getBooleanValue(resModel.isExempt());
+                        if(!p && isComment && equalsValues && !node.parent('.grade-value').find('.edited').exists()){
+                            input.setValue('');
+                        }
                     }else{
                         p = (model.getGradeValue() || '') == (resModel.getGradeValue() || '') &&
                             this.getBooleanValue(model.isDropped()) == this.getBooleanValue(resModel.isDropped()) &&
