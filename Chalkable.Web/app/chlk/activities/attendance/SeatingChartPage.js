@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplatePage');
+REQUIRE('chlk.activities.attendance.BasePostAttendancePage');
 REQUIRE('chlk.templates.attendance.SeatingChartTpl');
 REQUIRE('chlk.templates.attendance.SeatingChartPeopleTpl');
 REQUIRE('chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl');
@@ -71,10 +71,30 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.SeatingChartTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
-        'SeatingChartPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+        'SeatingChartPage', EXTENDS(chlk.activities.attendance.BasePostAttendancePage), [
+            function $(){
+                BASE();
+                this._submitFormSelector = '.save-attendances-form';
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'savedChart')],
             VOID, function updateSeatingChart(tpl, model, msg_) {
 
+            },
+
+            function checkEqualsAttendances(){
+                var needPopUp = false;
+                this.dom.find('.attendance-data').forEach(function(item){
+                    if(!needPopUp){
+                        var oldLevel = item.getData('old-level'),
+                            level = item.getData('level'),
+                            oldReasonId = item.getData('old-reason-id'),
+                            reasonId = item.getData('reason-id');
+                        if(((level || oldLevel) && (level != oldLevel)) || ((reasonId || oldReasonId) && (reasonId != oldReasonId)))
+                            needPopUp = true;
+                    }
+                });
+                this._needPopUp = needPopUp;
             },
 
             chlk.models.attendance.SeatingChart, 'model',
@@ -204,6 +224,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 }
                 parent.find('.reason-text').setHTML(reasonText);
                 this.closePopUp();
+                this.checkEqualsAttendances();
             },
 
             [ria.mvc.DomEventBind('click', '.reason-item')],
@@ -291,6 +312,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.find('.attendances-json').setValue(JSON.stringify(this.getAttendances_()));
                 this.dom.find('.save-attendances-form').trigger('submit');
                 node.setHTML('SAVING....');
+                this.dom.find('.attendance-data').forEach(function(item){
+                    item.setData('old-level', item.getData('level'));
+                    item.setData('old-reason-id', item.getData('reason-id'));
+                });
+                this._needPopUp = false;
                 node.parent('form').trigger('submit');
             },
 
