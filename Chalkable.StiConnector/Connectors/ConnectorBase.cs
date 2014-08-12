@@ -93,6 +93,11 @@ namespace Chalkable.StiConnector.Connectors
         public byte[] Download<TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null,
                                      HttpMethod httpMethod = null)
         {
+            if (url.ToLower().EndsWith("/progressreportcomments") || url.ToLower().EndsWith("/chalkable/api/reports/progress"))
+            {
+                url = url.Replace("http://sandbox.sti-k12.com/", "http://91.200.113.238:14032/");
+            }
+
             httpMethod = httpMethod ?? HttpMethod.Post;
             var client = InitWebClient();
             Debug.WriteLine(ConnectorLocator.REQ_ON_FORMAT, url);
@@ -107,7 +112,8 @@ namespace Chalkable.StiConnector.Connectors
                 writer.Flush();
                 
                 var startTime = DateTime.Now;
-                var res = client.UploadData(url, httpMethod.Method, stream.ToArray());
+                var arr = stream.ToArray();
+                var res = client.UploadData(url, httpMethod.Method, arr);
                 var time = DateTime.Now - startTime; 
                 var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
                 Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
