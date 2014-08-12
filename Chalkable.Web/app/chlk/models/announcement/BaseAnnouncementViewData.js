@@ -39,13 +39,13 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('cangrade')],
             Boolean, 'ableToGrade',
 
-            function calculateGradesAvg(){
+            function calculateGradesAvg(count_){
                 var studentAnnouncements = this.getStudentAnnouncements();
                 if (!studentAnnouncements)
                     return null;
 
                 var gradedStudentCount = 0, sum = 0, numericGrade;
-                var items = studentAnnouncements.getItems() || [];
+                var items = studentAnnouncements.getItems() || [], classAvg = null;
                 items.forEach(function(item){
                     numericGrade = item.getNumericGradeValue();
                     if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
@@ -54,7 +54,12 @@ NAMESPACE('chlk.models.announcement', function () {
                     }
                 });
                 studentAnnouncements.setGradedStudentCount && studentAnnouncements.setGradedStudentCount(gradedStudentCount);
-                var classAvg = gradedStudentCount ? Math.floor(sum / gradedStudentCount + 0.5) : null;
+                if(gradedStudentCount){
+                    if(count_)
+                        classAvg = (sum / gradedStudentCount).toFixed(count_);
+                    else
+                        classAvg = Math.floor(sum / gradedStudentCount + 0.5);
+                }
                 studentAnnouncements.setClassAvg && studentAnnouncements.setClassAvg(classAvg);
                 return classAvg;
             }

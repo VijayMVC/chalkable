@@ -102,4 +102,4 @@ mixin DisplayTotalPoints(model)
                         class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
                     ).dotted-h.grade-value
                         +TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
-                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.calculateGradesAvg()
+                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.calculateGradesAvg(2)
