@@ -192,7 +192,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     return null;
 
                 var gradedStudentCount = 0, sum = 0, numericGrade;
-                var items = studentAnnouncements.items || [];
+                var items = studentAnnouncements.items || [], classAvg = null;
                 items.forEach(function(item){
                     numericGrade = item.numericgradevalue;
                     if(!item.dropped && !item.isincomplete && (numericGrade || numericGrade == 0 || item.gradevalue == 0 || item.gradevalue)){
@@ -201,7 +201,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                 });
                 studentAnnouncements.gradedStudentCount = gradedStudentCount;
-                var classAvg = gradedStudentCount ? Math.floor(sum / gradedStudentCount + 0.5) : null;
+                if(gradedStudentCount){
+                    classAvg = (sum / gradedStudentCount).toFixed(2);
+                }
                 studentAnnouncements.classAvg = classAvg;
                 return classAvg;
             },
