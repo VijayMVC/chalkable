@@ -155,8 +155,8 @@ NAMESPACE('chlk.controllers', function (){
                 this.getContext().getSession().set(ChlkSessionConstants.USER_MODEL, userProfileData.getUser());
             },
 
-            chlk.models.people.UserProfileViewData,  function getUserFromSession(){
-                return this.getContext().getSession().get(ChlkSessionConstants.USER_MODEL);
+            function getUserFromSession(){
+                return this.getContext().getSession().get(ChlkSessionConstants.USER_MODEL, null);
             },
 
             [[chlk.models.id.SchoolPersonId, Object]],
@@ -187,6 +187,11 @@ NAMESPACE('chlk.controllers', function (){
                     .updateInfo(model.getId(), model.getEmail(), model.getPhonesValue())
                     .attach(this.validateResponse_())
                     .then(function(data){
+                        var user = this.getUserFromSession();
+                        if(user){
+                            user.setEmail(data.getEmail());
+                            data = user;
+                        }
                         return new modelClass(this.getCurrentRole(), this.prepareProfileData(data));
                     }, this);
             }
