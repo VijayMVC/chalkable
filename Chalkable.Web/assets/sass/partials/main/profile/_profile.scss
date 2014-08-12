@@ -317,6 +317,12 @@ BODY {
             width: 405px;
             overflow: visible;
 
+            .display-name{
+              word-wrap: break-word;
+              text-overflow: ellipsis;
+              overflow-x: hidden;
+            }
+
             .glance-container {
               margin-top: 42px;
             }
