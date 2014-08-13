@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
             score = ConnectorLocator.ActivityScoreConnector.UpdateScore(score.ActivityId, score.StudentId, score);
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(stAnn, score);
 
-            if (ann.VisibleForStudent)
+            if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToPerson(announcementId, stAnn.StudentId);
             return stAnn;
         }
