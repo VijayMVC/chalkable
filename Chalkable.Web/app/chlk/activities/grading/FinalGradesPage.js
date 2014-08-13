@@ -193,6 +193,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(row.find('.top-content').hasClass('loading')){
                     tpl.options({
                         selected: row.hasClass('selected'),
+                        ableEdit: !!row.getData('able-edit'),
+                        ableEditDirectValue: !!row.getData('able-edit-direct-value'),
                         index: parseInt(row.getAttr('index'), 10),
                         gradingPeriodId: new chlk.models.id.GradingPeriodId(row.parent('.big-grading-period-container').getData('grading-period-id')),
                         gradingComments: this.getGradingComments()
