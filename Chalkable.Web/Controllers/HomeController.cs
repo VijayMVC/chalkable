@@ -63,8 +63,9 @@ namespace Chalkable.Web.Controllers
             }
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
-            ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
-            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd");
+            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss");
+            ViewData[ViewConstants.SERVER_TIME] = serverTime;
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss");
             ViewData[ViewConstants.NEEDS_TOUR] = false;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
@@ -155,8 +156,9 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
-            ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString("yyyy/MM/dd");
-            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd");
+            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss");
+            ViewData[ViewConstants.SERVER_TIME] = serverTime;
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss");
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
