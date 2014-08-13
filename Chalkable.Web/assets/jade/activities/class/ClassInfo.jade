@@ -1,0 +1,18 @@
+sectionsInfo  = self.prepareDetailedInfo()
+classInfo = self.getClassInfo()
+.class-info.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self, 'info')
+    .info-view
+        .top-panel
+            h1.info.with-line
+                .class-icon-container
+                    +ClassImg(classInfo, 45, 80)
+                =classInfo.getName()
+            h2
+                div
+        .detail-info
+            each item in sectionsInfo
+                .section
+                    .title=item.title
+                    .value=item.value
