@@ -49,6 +49,9 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                     +SummaryInfo(self.getPresentStudents().length, items.length)
                     if self.canPost()
                         A#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
+                    else
+                        if self.getReadOnlyReason()
+                            div=self.getReadOnlyReason()
                     if(self.getItems().length > 0 && self.canPost())
                         +ActionLinkWithPrepend('attendance', 'markAll',
                             [selectedId.valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)

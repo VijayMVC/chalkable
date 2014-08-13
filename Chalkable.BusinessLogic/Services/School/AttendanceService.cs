@@ -114,7 +114,9 @@ namespace Chalkable.BusinessLogic.Services.School
                             Student = student,
                             Category = ssa.Category,
                             IsPosted = sa.IsPosted,
-                            AbsentPreviousDay = ssa.AbsentPreviousDay
+                            AbsentPreviousDay = ssa.AbsentPreviousDay,
+                            ReadOnly = sa.ReadOnly,
+                            ReadOnlyReason = sa.ReadOnlyReason
                         });
                     }
                 }

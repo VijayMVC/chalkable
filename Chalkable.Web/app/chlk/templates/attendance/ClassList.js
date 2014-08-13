@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'byLastName',
 
+            [ria.templates.ModelPropertyBind],
+            String, 'readOnlyReason',
+
             Boolean, function hasLeftRightToolBar(){
                 return true;
             },

@@ -141,9 +141,16 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'attendanceReasonDescription',
             [ria.serialize.SerializeProperty('isposted')],
-            Boolean, 'posted'
+            Boolean, 'posted',
+
+            [ria.serialize.SerializeProperty('readonly')],
+            Boolean, 'readOnly',
+
+            [ria.serialize.SerializeProperty('readonlyreason')],
+            String, 'readOnlyReason'
+
             //,
-           // String, 'attendanceReasonName'
+            // String, 'attendanceReasonName'
 
         ]);
 });
