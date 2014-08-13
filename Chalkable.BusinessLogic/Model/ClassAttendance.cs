@@ -18,6 +18,9 @@ namespace Chalkable.BusinessLogic.Model
         public DateTime LastModified { get; set; }
         public bool AbsentPreviousDay { get; set; }
 
+        public bool ReadOnly { get; set; }
+        public string ReadOnlyReason { get; set; }
+
         public static bool IsLateLevel(string level)
         {
             return level == "T";

@@ -42,9 +42,21 @@ NAMESPACE('chlk.models.attendance', function () {
                     && items.filter(function(item){return item.isPosted()}).length > 0;
             },
 
-            Boolean, function canPost(){
-                return !!this._canSetAttendance  && (!this.isPosted() || !!this._canRePost);
-            }
+            READONLY, Boolean, 'readOnly',
+            Boolean, function isReadOnly(){
+                var items = this.getItems();
+                return items && items.length > 0
+                    && items.filter(function(item){ return item.isReadOnly()}).length > 0;
+            },
 
+            READONLY, String, 'readOnlyReason',
+            String, function getReadOnlyReason(){
+                var items = this.getItems();
+                return items && items.length > 0 ? items[0].getReadOnlyReason() : null;
+            },
+
+            Boolean, function canPost(){
+                return !!this._canSetAttendance && !this.isReadOnly() && (!this.isPosted() || !!this._canRePost);
+            }
         ]);
 });
