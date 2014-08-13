@@ -2,7 +2,7 @@ REQUIRE('ria.serialize.IDeserializable');
 
 window.currentDate = new Date();
 
-function getDate(str,a,b, serverTime){
+function getDate(str, a, b, serverTime){
     serverTime = serverTime || window.serverTime;
     if(str){
         str = str.replace ? str.replace(/(-|\.)/g, '/') : str;
@@ -10,8 +10,14 @@ function getDate(str,a,b, serverTime){
     }
     var serverTime = new Date(serverTime.replace(/(-|\.)/g, "/"));
     var now = new Date();
-    if(serverTime.getDate() == now.getDate() && serverTime.getMonth() == now.getMonth() && serverTime.getFullYear() == now.getFullYear())
-        return new Date();
+    if(serverTime.getDate() == now.getDate() &&
+       serverTime.getMonth() == now.getMonth() &&
+       serverTime.getFullYear() == now.getFullYear()){
+       now.setHours(serverTime.getHours());
+       now.setMinutes(serverTime.getMinutes());
+       return now;
+    }
+
     var dt = new Date(serverTime.getTime() + now.getTime() - window.currentDate.getTime());
     dt.setSeconds(now.getSeconds());
     dt.setMinutes(now.getMinutes());
