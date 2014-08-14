@@ -60,46 +60,49 @@ mixin DisplayTotalPoints(model)
             .dotted-h.grade-value
 
 .ann-types-container
-    .dotted-container.name-container.with-horizontal-dots
-        .type-name=Msg.Student(true)
-            +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
-        .time
-        .student-name
-            .max-score.dotted-h
-        each student,i in self.getStudents()
-            name = student.getStudentInfo().getDisplayName()
-            div(row-index=i).student-name
-                div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
-                if student.isWithdrawn()
-                    div(data-tooltip="Withdrawn").withdrawn
-        .student-name
-            .dotted-h=Msg.Avg
-    +LeftRightToolbar()(
-        needDots = true,
-        roundedDots = true,
-        padding = 77
-    ).grid-toolbar.i-b.big-arrows
-        if self.isAbleDisplayStudentAverage()
-            //+RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
-            +StudentAverages(self)
-        +DisplayTotalPoints(self)
-        each announcement in self.getGradingItems()
-            maxScore = announcement.getMaxScore()
-            div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
-                +ActionLink('announcement', 'view', announcement.getId())
-                    div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
-                .time=announcement.getExpiresDate().format('M d')
-                .max-score.dotted-h=maxScore
-                studentItems = announcement.getStudentAnnouncements().getItems()
-                each info,i in studentItems
-                    gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || info.isUnExcusedAbsent())
-                    div(
-                        row-index=i
-                        data-able-drop-student-score= announcement.isAbleDropStudentScore(),
-                        data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
-                        data-gradable= gradable,
-                        data-max-score= maxScore,
-                        class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
-                    ).dotted-h.grade-value
-                        +TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
-                div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.calculateGradesAvg(2)
+    if !self.getGradingItems().length || !self.getStudents().length
+        .no-items-text=Msg.No_grades_yet
+    else
+        .dotted-container.name-container.with-horizontal-dots
+            .type-name=Msg.Student(true)
+                +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
+            .time
+            .student-name
+                .max-score.dotted-h
+            each student,i in self.getStudents()
+                name = student.getStudentInfo().getDisplayName()
+                div(row-index=i).student-name
+                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
+                    if student.isWithdrawn()
+                        div(data-tooltip="Withdrawn").withdrawn
+            .student-name
+                .dotted-h=Msg.Avg
+        +LeftRightToolbar()(
+            needDots = true,
+            roundedDots = true,
+            padding = 77
+        ).grid-toolbar.i-b.big-arrows
+            if self.isAbleDisplayStudentAverage()
+                //+RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
+                +StudentAverages(self)
+            +DisplayTotalPoints(self)
+            each announcement in self.getGradingItems()
+                maxScore = announcement.getMaxScore()
+                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
+                    +ActionLink('announcement', 'view', announcement.getId())
+                        div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
+                    .time=announcement.getExpiresDate().format('M d')
+                    .max-score.dotted-h=maxScore
+                    studentItems = announcement.getStudentAnnouncements().getItems()
+                    each info,i in studentItems
+                        gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || info.isUnExcusedAbsent())
+                        div(
+                            row-index=i
+                            data-able-drop-student-score= announcement.isAbleDropStudentScore(),
+                            data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
+                            data-gradable= gradable,
+                            data-max-score= maxScore,
+                            class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
+                        ).dotted-h.grade-value
+                            +TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
+                    div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.calculateGradesAvg(2)

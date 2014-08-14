@@ -27,7 +27,7 @@ topItems = topData.getTopItems()
                     |#{Msg.Show_less}
             .students-block.with-line
                 if trouleCount == 0 && wellCount == 0 && restCount == 0
-                    .no-items-text=Msg.No_grades_yet
+                    .no-items-text.small=Msg.No_grades_yet
                 else
                     each student in item.getTrouble()
                         +StudentGradingItem(student).trouble

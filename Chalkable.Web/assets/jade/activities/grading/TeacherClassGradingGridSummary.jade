@@ -32,8 +32,11 @@
                 if self.isAbleEdit()
                     a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
         each gradingPeriod,i in self.getGradingPeriods()
-            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
-                item = self.getCurrentGradingGrid()
+            item = self.getCurrentGradingGrid()
+            div(
+                class=((gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "") + ((!item.getGradingItems().length || !item.getStudents().length) ? 'no-items' : ''),
+                data-index=i
+            ).marking-period-container
                 .mp-title
                     mpName = gradingPeriod.getName()
                     span(
