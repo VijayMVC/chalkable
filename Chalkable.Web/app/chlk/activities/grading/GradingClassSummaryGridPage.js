@@ -196,13 +196,19 @@ NAMESPACE('chlk.activities.grading', function () {
                 if (!studentAnnouncements)
                     return null;
 
-                var gradedStudentCount = 0, sum = 0, numericGrade;
+                var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
                 var items = studentAnnouncements.items || [], classAvg = null;
                 items.forEach(function(item){
                     numericGrade = item.numericgradevalue;
-                    if(!item.dropped && !item.isincomplete && (numericGrade || numericGrade == 0 || item.gradevalue == 0 || item.gradevalue)){
-                        gradedStudentCount++;
-                        sum += (numericGrade || 0);
+                    gradeValue = item.gradevalue;
+                    if(!item.dropped
+                        && !item.isincomplete
+                        && (gradeValue && gradeValue.toLowerCase() != 'ps'
+                            && gradeValue.toLowerCase() != 'wd'
+                            && gradeValue.toLowerCase() != 'nc')
+                        && (numericGrade || numericGrade == 0 || item.gradevalue == 0 || item.gradevalue)){
+                            gradedStudentCount++;
+                            sum += (numericGrade || 0);
                     }
                 });
                 studentAnnouncements.gradedStudentCount = gradedStudentCount;
