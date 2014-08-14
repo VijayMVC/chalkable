@@ -114,7 +114,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementAttachment.AnnouncementRef);
             var teachers =  ServiceLocator.ClassService.GetClassTeachers(ann.ClassRef, null);
-            return teachers.Any(x => x.PersonRef == announcementAttachment.PersonRef);
+            return teachers.Any(x => x.PersonRef == announcementAttachment.PersonRef) || announcementAttachment.PersonRef == Context.UserLocalId;
         }
 
 
