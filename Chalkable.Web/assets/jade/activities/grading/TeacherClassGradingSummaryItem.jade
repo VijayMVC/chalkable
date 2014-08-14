@@ -1,5 +1,9 @@
 .ann-types-container
-    +LeftRightToolbar(self.getByAnnouncementTypes(), chlk.templates.grading.GradingClassSummaryItemTpl)(
-        needDots = true,
-        roundedDots = true
-    ).big-arrows
+    items = self.getByAnnouncementTypes()
+    if !items.length
+        .no-items-text=Msg.No_grades_yet
+    else
+        +LeftRightToolbar(items, chlk.templates.grading.GradingClassSummaryItemTpl)(
+            needDots = true,
+            roundedDots = true
+        ).big-arrows

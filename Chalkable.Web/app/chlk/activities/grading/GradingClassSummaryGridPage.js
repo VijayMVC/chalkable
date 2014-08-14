@@ -174,14 +174,19 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)],
             VOID, function updateGradingPeriodPart(tpl, model, msg_) {
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
-                var tooltipText = model.getTooltipText();
+                var tooltipText = model.getTooltipText(), parent = container.parent();
                 tpl.options({
                     classId: this.getClassId()
                 });
                 tpl.renderTo(container.setHTML(''));
+                if(model.getGradingItems().length && model.getStudents().length){
+                    parent.removeClass('no-items');
+                }else{
+                    parent.addClass('no-items');
+                }
                 setTimeout(function(){
                     this.openGradingPeriod(container);
-                    container.parent().find('.mp-title').setData('tooltip', tooltipText);
+                    parent.find('.mp-title').setData('tooltip', tooltipText);
                 }.bind(this), 1);
 
             },

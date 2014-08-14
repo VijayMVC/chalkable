@@ -7,7 +7,11 @@
                     .collapse
                 .mp-data
                     .ann-types-container
-                        +LeftRightToolbar(item.getItems(), chlk.templates.grading.GradingClassStandardItemTpl)(
-                            needDots = true,
-                            roundedDots = true
-                        ).big-arrows
+                        items = item.getItems()
+                        if !items.length
+                            .no-items-text=Msg.No_grades_yet
+                        else
+                            +LeftRightToolbar(items, chlk.templates.grading.GradingClassStandardItemTpl)(
+                                needDots = true,
+                                roundedDots = true
+                            ).big-arrows
