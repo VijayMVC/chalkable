@@ -47,8 +47,8 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.PictureService, 'pictureService',
 
-
-
+        [ria.mvc.Inject],
+        chlk.services.ClassService, 'classService',
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppMarketPostData]],
@@ -273,6 +273,13 @@ NAMESPACE('chlk.controllers', function (){
                         if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL && this.userIsAdmin())
                             item.setDescription(Msg.Whole_School);
                         if (item.isInstalled()) ++installedCount;
+
+
+                        if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
+                            var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.getId().valueOf()));
+                            var classNumber = cls.getClassNumber() ? cls.getClassNumber()+ " " : "";
+                                item.setTooltipHint(classNumber + item.getDescription());
+                        }
                         return item;
                     }, this);
 

@@ -118,7 +118,7 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Class/ClassApps.json', chlk.models.classes.ClassApps,{
                     classId: classId && classId.valueOf()
                 })
-            },
+            }
 
 
         ])

@@ -15,10 +15,13 @@ NAMESPACE('chlk.models.apps', function () {
         CURRENT_USER: 6
     });
 
+
+    /** @class chlk.models.apps.AppInstallGroup*/
     CLASS(
         'AppInstallGroup',[
 
             String, 'description',
+            String, 'tooltipHint',
 
             [ria.serialize.SerializeProperty('grouptype')],
             chlk.models.apps.AppInstallGroupTypeEnum, 'groupType',
