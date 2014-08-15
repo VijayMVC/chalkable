@@ -15,13 +15,21 @@
                 +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
     .gps-container
         each gradingPeriod,i in self.getGradingPeriods()
-            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i, data-grading-period-id=gradingPeriod.getId()).big-grading-period-container
+            ableEdit = self.isAbleEdit()
+            ableEditDirectValue = self.isAbleEditDirectValue()
+            div(
+                class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "",
+                data-index=i,
+                data-grading-period-id=gradingPeriod.getId(),
+                data-able-edit=ableEdit,
+                data-able-edit-direct-value=ableEditDirectValue
+            ).big-grading-period-container
                 if gradingPeriod.getId() == self.getGradingPeriodId()
                     gp = self.getCurrentFinalGrade()
                     +RenderWith(gp, chlk.templates.grading.GradingPeriodFinalGradeTpl)(
                         classId = selectedId,
-                        ableEdit = self.isAbleEdit(),
-                        ableEditDirectValue = self.isAbleEditDirectValue(),
+                        ableEdit = ableEdit,
+                        ableEditDirectValue = ableEditDirectValue,
                         gradingComments = self.getGradingComments()
                     )
                 else

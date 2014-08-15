@@ -19,9 +19,13 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingPeriodFinalGradeTpl, 'average-change')],
             VOID, function updateGradingPeriodPartByAverage(tpl, model, msg_) {
                 var container = this.dom.find('.big-grading-period-container.open');
+                var ableEdit = !!container.getData('able-edit'),
+                    ableEditDirectValue = !!container.getData('able-edit-direct-value');
                 tpl.options({
                     classId: this.getClassId(),
-                    gradingComments: this.getGradingComments()
+                    gradingComments: this.getGradingComments(),
+                    ableEdit: ableEdit,
+                    ableEditDirectValue: ableEditDirectValue
                 });
                 tpl.renderTo(container.setHTML(''));
             },
@@ -176,9 +180,13 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function updateGradingPeriodPart1(tpl, model, msg_) {
                 if(model.getCurrentAverage()){
                     var container = this.dom.find('.big-grading-period-container[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
+                    var ableEdit = !!container.getData('able-edit'),
+                        ableEditDirectValue = !!container.getData('able-edit-direct-value');
                     tpl.options({
                         classId: this.getClassId(),
-                        gradingComments: this.getGradingComments()
+                        gradingComments: this.getGradingComments(),
+                        ableEdit: ableEdit,
+                        ableEditDirectValue: ableEditDirectValue
                     });
                     tpl.renderTo(container.setHTML(''));
                     setTimeout(function(){

@@ -174,14 +174,19 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)],
             VOID, function updateGradingPeriodPart(tpl, model, msg_) {
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
-                var tooltipText = model.getTooltipText();
+                var tooltipText = model.getTooltipText(), parent = container.parent();
                 tpl.options({
                     classId: this.getClassId()
                 });
                 tpl.renderTo(container.setHTML(''));
+                if(model.getGradingItems().length && model.getStudents().length){
+                    parent.removeClass('no-items');
+                }else{
+                    parent.addClass('no-items');
+                }
                 setTimeout(function(){
                     this.openGradingPeriod(container);
-                    container.parent().find('.mp-title').setData('tooltip', tooltipText);
+                    parent.find('.mp-title').setData('tooltip', tooltipText);
                 }.bind(this), 1);
 
             },
@@ -191,13 +196,19 @@ NAMESPACE('chlk.activities.grading', function () {
                 if (!studentAnnouncements)
                     return null;
 
-                var gradedStudentCount = 0, sum = 0, numericGrade;
+                var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
                 var items = studentAnnouncements.items || [], classAvg = null;
                 items.forEach(function(item){
                     numericGrade = item.numericgradevalue;
-                    if(!item.dropped && !item.isincomplete && (numericGrade || numericGrade == 0 || item.gradevalue == 0 || item.gradevalue)){
-                        gradedStudentCount++;
-                        sum += (numericGrade || 0);
+                    gradeValue = item.gradevalue;
+                    if(!item.dropped
+                        && !item.isincomplete
+                        && (gradeValue && gradeValue.toLowerCase() != 'ps'
+                            && gradeValue.toLowerCase() != 'wd'
+                            && gradeValue.toLowerCase() != 'nc')
+                        && (numericGrade || numericGrade == 0 || item.gradevalue == 0 || item.gradevalue)){
+                            gradedStudentCount++;
+                            sum += (numericGrade || 0);
                     }
                 });
                 studentAnnouncements.gradedStudentCount = gradedStudentCount;

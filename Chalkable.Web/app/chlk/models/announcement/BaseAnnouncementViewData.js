@@ -44,13 +44,19 @@ NAMESPACE('chlk.models.announcement', function () {
                 if (!studentAnnouncements)
                     return null;
 
-                var gradedStudentCount = 0, sum = 0, numericGrade;
+                var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
                 var items = studentAnnouncements.getItems() || [], classAvg = null;
                 items.forEach(function(item){
                     numericGrade = item.getNumericGradeValue();
-                    if(!item.isDropped() && !item.isIncomplete() && (numericGrade || numericGrade == 0 || item.getGradeValue() == 0 || item.getGradeValue())){
-                        gradedStudentCount++;
-                        sum += (numericGrade || 0);
+                    gradeValue = item.getGradeValue();
+                    if(!item.isDropped()
+                        && !item.isIncomplete()
+                        && (gradeValue && gradeValue.toLowerCase() != 'ps'
+                            && gradeValue.toLowerCase() != 'wd'
+                            && gradeValue.toLowerCase() != 'nc')
+                        && (numericGrade || numericGrade == 0 || gradeValue == 0 || gradeValue)){
+                            gradedStudentCount++;
+                            sum += (numericGrade || 0);
                     }
                 });
                 studentAnnouncements.setGradedStudentCount && studentAnnouncements.setGradedStudentCount(gradedStudentCount);
