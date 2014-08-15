@@ -17,12 +17,12 @@ NAMESPACE('chlk.controls', function () {
                 if (feedItem.getAttr("class").indexOf("complete") != -1)
                 {
                     feedItem.removeClass("complete");
-                    node.setData('tooltip', Msg.ToDo);
+                    //node.setData('tooltip', Msg.ToDo);
                 }
                 else
                 {
                     feedItem.addClass("complete");
-                    node.setData('tooltip', Msg.Done);
+                    //node.setData('tooltip', Msg.Done);
                 }
                 return true;
             }
