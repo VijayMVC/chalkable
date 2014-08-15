@@ -281,8 +281,12 @@ BODY.student #first-login-overlay{
       }
     }
     DIV.bullet {
-      a.star {
-        background-position: center top;
+      a.star.complete {
+        display: block;
+      }
+
+      a.star:not(.complete) {
+        display: none;
       }
     }
   }
@@ -409,6 +413,11 @@ BODY.student #first-login-overlay{
     margin-top: -12px;
     width: 25px;
     height: 26px;
+
+    &.complete{
+      background-position: center top;
+      display: none;
+    }
   }
 
   DIV.item-type {
