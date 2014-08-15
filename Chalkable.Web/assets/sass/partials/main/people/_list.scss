@@ -100,10 +100,11 @@
 
   P{
     font-size: 20px;
-    width: 438px;
+    max-width: 438px;
     text-overflow: ellipsis;
     overflow: hidden;
     padding-top: 20px;
+    color: #51595d;
   }
 }
 

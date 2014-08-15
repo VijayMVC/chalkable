@@ -7,7 +7,12 @@ each item, i in self.getItems()
         else
             .left.image-container.white.shadow
                 +PersonImg(item, 47)
-        p.left= item.getFullName()
+        if self.canViewInfo(item)
+            +ProfileLink(item)
+                p.left= item.getFullName()
+        else
+            p.left= item.getFullName()
+
         if self.isHasAccess()
             .right
                 +ActionLinkButton('message', 'sendToPerson', null, item.getId(), item.getFirstName(), item.getLastName()).message-button.blue-gradient-btn Message

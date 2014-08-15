@@ -71,6 +71,12 @@ NAMESPACE('chlk.activities.person', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function closeSearchClick(node, event){
                 this.clearSearch();
+            },
+
+            [ria.mvc.DomEventBind('dblclick', '.row')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function rowDblClick(node, event){
+                node.find('.image-container').trigger('click');
             }
         ]);
 });
