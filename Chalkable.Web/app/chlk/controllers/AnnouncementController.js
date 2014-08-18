@@ -808,16 +808,18 @@ NAMESPACE('chlk.controllers', function (){
                 )
                 .attach(this.validateResponse_());
             }
-            res = res.then(function(){
-                this.cacheAnnouncement(null);
-                this.cacheAnnouncementAttachments(null);
-                this.cacheAnnouncementApplications(null);
-                if(isEdit)
-                    return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
-                else{
-                    if(!this.userIsAdmin())
-                        chlk.controls.updateWeekCalendar();
-                    return this.BackgroundNavigate('feed', 'list', [null, true]);
+            res = res.then(function(saved){
+                if(saved){
+                    this.cacheAnnouncement(null);
+                    this.cacheAnnouncementAttachments(null);
+                    this.cacheAnnouncementApplications(null);
+                    if(isEdit)
+                        return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
+                    else{
+                        if(!this.userIsAdmin())
+                            chlk.controls.updateWeekCalendar();
+                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                    }
                 }
             }, this);
             return res;

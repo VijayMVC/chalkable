@@ -6,6 +6,7 @@ NAMESPACE('chlk.activities.common', function () {
      CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.common.InfoMsg)],
+        [ria.mvc.ActivityGroup('InfoMessage')],
         'InfoMsgDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
             [[Object]],
             OVERRIDE, VOID, function onRender_(data) {
