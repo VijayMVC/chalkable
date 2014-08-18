@@ -35,22 +35,10 @@ namespace Chalkable.Web.Controllers
                 classAnnouncementTypeId = draft.ClassAnnouncementTypeRef;
                 classId = draft.ClassRef;
             }
-            if (!classAnnouncementTypeId.HasValue)
+            if (classAnnouncementTypeId.HasValue && draft != null && draft.ClassAnnouncementTypeRef != classAnnouncementTypeId)
             {
-                if (SchoolLocator.Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
-                {
-                    var lastAnnouncement = SchoolLocator.AnnouncementService.GetAnnouncements(0, 1, true).FirstOrDefault();
-                    if (lastAnnouncement != null)
-                        classAnnouncementTypeId = lastAnnouncement.ClassAnnouncementTypeRef;
-                }
-            }
-            else
-            {
-                if (draft != null && draft.ClassAnnouncementTypeRef != classAnnouncementTypeId)
-                {
-                    draft.ClassAnnouncementTypeRef = classAnnouncementTypeId.Value;
-                    SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);
-                }
+                draft.ClassAnnouncementTypeRef = classAnnouncementTypeId.Value;
+                SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);
             }
             if (classId.HasValue)
                 return Json(CreateAnnouncement(classAnnouncementTypeId, classId.Value));

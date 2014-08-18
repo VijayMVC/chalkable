@@ -108,7 +108,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {CLASS_ANNOUNCEMENT_TYPE_ID_PARAM, classAnnouncementTypeId},
                     {PERSON_ID_PARAM, personId},
                     {CREATED_PARAM, created},
-                    {EXPIRES_PARAM, DateTime.MinValue},
+                    {EXPIRES_PARAM, created},
                     {STATE_PARAM, AnnouncementState.Draft},
                     {GRADING_STYLE_PARAM, GradingStyleEnum.Numeric100},
                     {CLASS_ID_PARAM, classId},
