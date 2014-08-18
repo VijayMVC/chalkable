@@ -13,9 +13,9 @@ each item, i in self.getItems()
         else
             p.left= item.getFullName()
 
-        if self.isHasAccess()
-            .right
-                +ActionLinkButton('message', 'sendToPerson', null, item.getId(), item.getFirstName(), item.getLastName()).message-button.blue-gradient-btn Message
+        //if self.isHasAccess()
+        .right
+            +ActionLinkButton('message', 'sendToPerson', null, item.getId(), item.getFirstName(), item.getLastName()).message-button.blue-gradient-btn Message
         .clear
 
 
