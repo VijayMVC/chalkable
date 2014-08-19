@@ -18,6 +18,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     '][data-standard-id=' + model.getStandardId().valueOf() +
                     '][data-grading-period-id=' + model.getGradingPeriodId().valueOf() + ']');
                 container.empty();
+                tpl.options({
+                    ableEdit: true
+                });
                 tpl.renderTo(container);
             },
 
@@ -289,7 +292,13 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(!node.hasClass('comment-button')){
                                 popUp.hide();
                                 var parent = node.parent('.grade-value.gradable');
-                                dom.find('.active-cell').removeClass('active-cell');
+                                var activeCell = dom.find('.active-cell');
+                                if(activeCell.exists()){
+                                    setTimeout(function(){
+                                        activeCell.find('form').trigger('submit');
+                                    },1)
+                                }
+                                activeCell.removeClass('active-cell');
                                 if(parent.exists()){
                                     if(!parent.hasClass('active-row')){
                                         var index = parent.getAttr('row-index');
@@ -314,7 +323,8 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
                 var res = !node.find('input[name="gradevalue"]').hasClass('error');
-                if(!res)
+                var valueInput = node.find('.value-input');
+                if(!res || valueInput.getValue().toLowerCase() == valueInput.getData('value').toLowerCase())
                     return false;
                 node.parent().find('.value').setHTML('...');
                 return true;
