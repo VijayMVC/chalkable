@@ -36,7 +36,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 return Json(ShortPersonViewData.Create(student));
             }
             var studentSummaryInfo = SchoolLocator.PersonService.GetStudentSummaryInfo(schoolPersonId);
-            var classes = SchoolLocator.ClassService.GetClasses(Context.SchoolYearId, null, schoolPersonId);
+            var classes = SchoolLocator.ClassService.GetClasses(Context.SchoolYearId, null, schoolPersonId).ToList();
+            var classPersons = SchoolLocator.ClassService.GetClassPersons(schoolPersonId, true);
+            classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
 
             var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
