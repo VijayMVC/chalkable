@@ -17,7 +17,8 @@ if self.getStudent()
             data-reason-text=reason ? reason.getName() : null
         ).image-container.white.shadow.attendance-data
             .reason-container
-                .reason-text=reason ? reason.getName() : ''
+                text = reason ? reason.getName() : ''
+                div(data-tooltip=text, data-tooltip-type='overflow').reason-text=text
             +PersonImg(student, 70)
         div(data-tooltip=student.getDisplayName(), data-tooltip-type="overflow").student-seating-name=student.getDisplayName()
         .student-seating-type

@@ -222,7 +222,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                     default:
                         parent.addClass('present');
                 }
-                parent.find('.reason-text').setHTML(reasonText);
+                parent.find('.reason-text')
+                    .setHTML(reasonText)
+                    .setData('tooltip', reasonText);
                 this.closePopUp();
                 this.checkEqualsAttendances();
             },

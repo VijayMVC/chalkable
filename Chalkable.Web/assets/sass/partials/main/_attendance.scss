@@ -1423,7 +1423,8 @@ BODY {
       .reason-text{
         display: table-cell;
         vertical-align: middle;
-        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
