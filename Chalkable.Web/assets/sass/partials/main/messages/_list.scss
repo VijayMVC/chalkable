@@ -1,0 +1,233 @@
+BODY {
+  DIV.page{
+    >DIV#content {
+      DIV#content-wrapper{
+        &.messages{
+
+          .grid .scroller{
+            overflow: visible;
+          }
+
+          #search-message-btn{
+            display: inline-block;
+
+            SPAN{
+              display: inline-block;
+              SPAN{
+                display: inline-block;
+                BUTTON{
+                  background: url(images/icons/search.png) 0% 50% no-repeat;
+                  width: 32px;
+                  height: 24px;
+                  vertical-align: middle;
+                  margin-right: 5px;
+                  border: 0;
+                }
+              }
+            }
+          }
+
+          #keyword {
+            height: 20px;
+            vertical-align: middle;
+            border-color: #C9C9C9;
+            -moz-border-radius: 6px 0 0 6px;
+            -webkit-border-radius: 6px 0 0 6px;
+            -o-border-radius: 6px 0 0 6px;
+            -ms-border-radius: 6px 0 0 6px;
+            -khtml-border-radius: 6px 0 0 6px;
+            border-radius: 6px 0 0 6px;
+            padding: 1px 0px 2px 1px;
+            margin: 0 0 0 10px;
+          }
+
+          #new-message-link{
+            padding: 0;
+            >span{
+              background: url(images/icons/pm-add.png) 7px 50% no-repeat;
+              padding: 0 4px 0 26px;
+              display: inline-block;
+            }
+          }
+
+          #main-top, #footer {
+            background-image: url(images/private-messages/paper-top-bottom.jpg);
+          }
+
+          #footer{
+            background-position: 0 -50px;
+          }
+
+          #main-wrapper {
+            background-image: url(images/private-messages/paper-bg.jpg);
+
+            #main{
+              .not-transparent{
+                background: #baa76e;
+              }
+
+              .panel-bg{
+                @include background(linear-gradient(top, #f5ebd7,#eadac1));
+              }
+
+              .paginator-container{
+                .left-container{
+                  .first-page{
+                    @include background(url(images/common/navigation-first.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .prev-page{
+                    @include background(url(images/common/navigation-prev.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .next-page{
+                    @include background(url(images/common/navigation-next.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .last-page{
+                    @include background(url(images/common/navigation-last.png) center center no-repeat, linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+
+                  .info-container{
+                    @include background(linear-gradient(top, #f5ebd7,#eadac1));
+                  }
+                }
+              }
+
+              .grid-container{
+                .container{
+                  border-color: #a08d6d #f3efe6 #f3efe6 #a08d6d;
+                  border: 1px solid;
+                  color: #815d38;
+                  border-radius: 9px;
+                  background-color: #c8b088;
+                  display: block;
+                  width:665px;
+                  .body{
+                    .action-bar{
+                      font-size: 11px;
+                      .left, .right{
+                        >*{
+                          vertical-align: middle;
+                        }
+                      }
+                      .action-link{
+                        padding: 0 5px;
+                        text-shadow: none;
+                      }
+                      .container{
+                        heigh: 24px;
+                        border-radius: 9px;
+                        background: transparent;
+                        border-bottom-width: 1px;
+                        border-top-width: 1px;
+                        border-letf-width: 0;
+                        border-right-width: 0;
+                        .plain-button{
+                          padding-left: 10px;
+                        }
+                        #checkboxall{
+                          margin: 7px 8px 8px 8px;
+                        }
+                      }
+                      #delete-button{
+                        background: url(images/icons/pm-delete.png) 0% 50% no-repeat;
+                      }
+                      #mark-read-button{
+                        background: url(images/icons/pm-read.png) 0% 50% no-repeat;
+                        margin-left: 3px;
+                      }
+                      #mark-unread-button{
+                        background: url(images/icons/pm-unread.png) 0% 50% no-repeat;
+                      }
+                    }
+
+                    .row{
+                      color: #815d38;
+                      background: transparent;
+
+                      .item-container{
+                        &.read{
+                          @include background(linear-gradient(top, #ded5c3,#d4c6af));
+                          border-top: 1px solid #e8e8e8;
+                          &:hover{
+                            @include background(linear-gradient(top, #cec5b3, #c4b69f));
+                          }
+                        }
+                        &.unread{
+                          @include background(linear-gradient(top, #f5ebd7,#eadac1));
+                          border-top: 1px solid white;
+                          &:hover{
+                            @include background(linear-gradient(top, #e5dbc7, #dacab1));
+                          }
+                        }
+                        border-bottom: 1px solid #968466;
+                        @include box-shadow(0 1px 0 #88785d);
+                        height: 82px;
+                        display: table;
+
+                        position: relative;
+                        @include border-radius(7px);
+
+                        >DIV.chk {
+                          display: table-cell;
+                          vertical-align: middle;
+                          width: 15px;
+                          padding-left: 23px;
+                        }
+                        >DIV.av {
+                          display: table-cell;
+                          vertical-align: middle;
+                          width: 57px;
+                          padding: 0 19px;
+                          position: relative;
+                          z-index: 1;
+                        }
+                        >DIV.item {
+                          display: table-cell;
+                          vertical-align: middle;
+                          position: relative;
+                          cursor: pointer;
+                          A{
+                            text-decoration: none;
+                            color: #2f424b;
+                            h2 {
+                              font-size: 18px;
+                              small{
+                                font-style: italic;
+                                font-weight: normal;
+                              }
+                            }
+                            p{
+                              font-size: 12pt;
+                              word-wrap: break-word;
+                              width: 531px;
+                              overflow: hidden;
+                            }
+                            .sent {
+                              background: url(images/private-messages/clock.png) 0 2px no-repeat;
+                              padding-left: 15px;
+                              position: absolute;
+                              top: 61px;
+                              right: 7px;
+                              font-size: 11px;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                .paginator-container
+                  {
+                  margin-top:10px;
+                  padding: 3px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
