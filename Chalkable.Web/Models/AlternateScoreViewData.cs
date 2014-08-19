@@ -11,14 +11,19 @@ namespace Chalkable.Web.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-   
+        public bool IncludeInAverage { get; set; }
+        public decimal? PercentOfMaximumScore { get; set; }
+
+
         public static AlternateScoreViewData Create(AlternateScore alternateScore)
         {
             return new AlternateScoreViewData
                 {
                     Id = alternateScore.Id,
                     Name = alternateScore.Name,
-                    Description = alternateScore.Description
+                    Description = alternateScore.Description,
+                    IncludeInAverage = alternateScore.IncludeInAverage,
+                    PercentOfMaximumScore = alternateScore.PercentOfMaximumScore
                 };
         }
         public static IList<AlternateScoreViewData> Create(IList<AlternateScore> alternateScores)

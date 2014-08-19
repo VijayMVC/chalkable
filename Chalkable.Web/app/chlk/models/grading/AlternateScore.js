@@ -7,6 +7,13 @@ NAMESPACE('chlk.models.grading', function () {
     CLASS('AlternateScore', [
         chlk.models.id.AlternateScoreId, 'id',
         String, 'name',
-        String, 'description'
+        String, 'description',
+
+        [ria.serialize.SerializeProperty('includeinaverage')],
+        Boolean, 'includeInAverage',
+
+        [ria.serialize.SerializeProperty('percentofmaximumscore')],
+        String, 'percentOfMaximumScore'
+
     ]);
 });
