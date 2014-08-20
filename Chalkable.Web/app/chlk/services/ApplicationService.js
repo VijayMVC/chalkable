@@ -189,6 +189,13 @@ NAMESPACE('chlk.services', function () {
                             }, this)
                     }, this);
             },
+
+            [[chlk.models.id.AppId]],
+            ria.async.Future, function sysAdminDeleteApp(appId) {
+                return this
+                    .post('Application/Delete.json', Boolean, {applicationId: appId.valueOf()});
+            },
+
             [[
                 chlk.models.id.AppId,
                 chlk.models.apps.ShortAppInfo,

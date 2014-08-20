@@ -39,5 +39,5 @@ mixin AppManagementControls(id, state, liveId)
 
                     .td.action-links
                         +ActionLink('apps', 'details', item.getId()).profile
-                        +ActionLink('apps', 'delete', item.getId()).remove
+                        +ActionLink('apps', 'tryDeleteApplication', item.getId(), item.getName()).remove
 

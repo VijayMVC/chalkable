@@ -403,6 +403,19 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
+        [[chlk.models.id.AppId]],
+        function deleteSysAdminAction(id) {
+            return this.appsService
+                .sysAdminDeleteApp(id)
+                .attach(this.validateResponse_())
+                .then(function(){
+                    return this.Redirect('apps', 'list', []);
+                }, this);
+        },
+
+        [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[chlk.models.apps.Application]],
@@ -411,7 +424,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
+            chlk.models.common.RoleEnum.DEVELOPER,
+            chlk.models.common.RoleEnum.SYSADMIN
         ])],
         [[chlk.models.id.AppId, String]],
         function tryDeleteApplicationAction(id, appName) {
