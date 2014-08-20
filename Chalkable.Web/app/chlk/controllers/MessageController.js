@@ -121,6 +121,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.messages.AddDialog, model);
             },
 
+            [chlk.controllers.SidebarButton('messages')],
             [[chlk.models.messages.SendMessage]],
             function sendAction(model)
             {
