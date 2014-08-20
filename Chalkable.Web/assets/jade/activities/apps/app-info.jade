@@ -201,7 +201,7 @@ appPlatforms = appPlatforms.join(',')
                 +TextArea("longDescription", app.getDescription(), self.isReadOnly(), "required, maxSize[1000]")
             .elem
                 label.wide.hint Video Demo:
-                +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly(), "required, custom[url]")
+                +Textbox("videoDemoUrl", app.getVideoDemoUrl(), self.isReadOnly(), "custom[url]")
         .section
             +AppPricing(appPrice, self.isReadOnly())
         .section.short
