@@ -66,8 +66,15 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForWeekMask, function getClassAnnouncementInfo(id){
                 var res = window.classesInfo[id.valueOf()];
-                if(!res)
-                    return null;
+                if(!res) {
+                    var cls = chlk.models.classes.ClassForWeekMask();
+                    cls.setAlphaGrades([]);
+                    cls.setMask([]);
+                    cls.setClassId(id);
+                    cls.setTypesByClass([]);
+                    cls.setAlphaGradesForStandards([]);
+                    return cls;
+                }
                 res.classId = id.valueOf();
                 res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
                 return res;
