@@ -281,6 +281,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();
                 if (!stiGradeBook.Options.IncludeWithdrawnStudents)
                     scores = scores.Where(x => !x.Withdrawn).ToList();
+                var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
                 foreach (var score in scores)
                 {
                     var student = students.FirstOrDefault(x => x.Id == score.StudentId);
@@ -292,6 +293,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         Student = student,
                     };
                     MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
+                    if (stAnn.AlternateScoreId.HasValue)
+                        stAnn.AlternateScore = alternateScores.FirstOrDefault(x => x.Id == stAnn.AlternateScoreId.Value);
                     annDetails.StudentAnnouncements.Add(stAnn);
                 }
                 annsDetails.Add(annDetails);

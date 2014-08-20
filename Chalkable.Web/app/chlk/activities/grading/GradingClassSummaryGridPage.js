@@ -206,6 +206,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         && (gradeValue && gradeValue.toLowerCase() != 'ps'
                             && gradeValue.toLowerCase() != 'wd'
                             && gradeValue.toLowerCase() != 'nc')
+                        && item.includeinaverage
                         && (numericGrade || numericGrade == 0 || item.gradevalue == 0 || item.gradevalue)){
                             gradedStudentCount++;
                             sum += (numericGrade || 0);
@@ -240,7 +241,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     });
                 }
 
-                value.totalpoints.forEach(function(item, index){
+                value.totalpoints && value.totalpoints.forEach(function(item, index){
                     var value = item.totalpoint + '/' + item.maxtotalpoint;
                     dom.find('.total-point[row-index=' + index + ']').setHTML(value);
                 });
@@ -954,7 +955,8 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.getBooleanValue(node.getData('isabsent')),
                         this.getBooleanValue(node.getData('isincomplete')),
                         node.getData('comment'),
-                        grade
+                        grade,
+                        this.getBooleanValue(node.getData('isincludeinaverage'))
                     );
                 }
 

@@ -50,9 +50,12 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('iscomplete')],
             Boolean, 'complete',
 
+            [ria.serialize.SerializeProperty('includeinaverage')],
+            Boolean, 'includeInAverage',
+
             [[chlk.models.id.StudentAnnouncementId, chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId,
-                Boolean, Boolean, Boolean, Boolean, Boolean, String, String]],
-            function $(id_, announcementId_, studentId_, dropped_, late_, exempt_, absent_, incomplete_, comment_, gradeValue_){
+                Boolean, Boolean, Boolean, Boolean, Boolean, String, String, Boolean]],
+            function $(id_, announcementId_, studentId_, dropped_, late_, exempt_, absent_, incomplete_, comment_, gradeValue_, includeInAverage_){
                 BASE();
                 if(id_)
                     this.setId(id_);
@@ -74,6 +77,8 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setComment(comment_);
                 if(gradeValue_)
                     this.setGradeValue(gradeValue_);
+                if(includeInAverage_)
+                    this.setIncludeInAverage(includeInAverage_);
             },
 
             Boolean, function needStrikeThrough(){

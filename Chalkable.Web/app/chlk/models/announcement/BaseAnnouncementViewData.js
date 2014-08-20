@@ -54,6 +54,7 @@ NAMESPACE('chlk.models.announcement', function () {
                         && (gradeValue && gradeValue.toLowerCase() != 'ps'
                             && gradeValue.toLowerCase() != 'wd'
                             && gradeValue.toLowerCase() != 'nc')
+                        && item.isIncludeInAverage()
                         && (numericGrade || numericGrade == 0 || gradeValue == 0 || gradeValue)){
                             gradedStudentCount++;
                             sum += (numericGrade || 0);

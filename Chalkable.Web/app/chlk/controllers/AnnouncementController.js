@@ -191,6 +191,7 @@ NAMESPACE('chlk.controllers', function (){
                             item.setIncomplete(currentItem.isIncomplete());
                             item.setLate(currentItem.isLate());
                             item.setDropped(currentItem.isDropped());
+                            item.setIncludeInAverage(currentItem.isIncludeInAverage());
                         }
                     });
                     announcement.calculateGradesAvg();

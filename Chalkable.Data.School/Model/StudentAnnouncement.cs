@@ -33,6 +33,13 @@ namespace Chalkable.Data.School.Model
         public bool Withdrawn { get; set; }
         public bool OverMaxScore { get; set; }
 
+
+        public AlternateScore AlternateScore { get; set; }
+        public bool IncludeInAverage
+        {
+            get { return AlternateScore == null || AlternateScore.IncludeInAverage; }
+        }
+
         public bool IsUnexcusedAbsent
         {
             get { return Absent && !string.IsNullOrEmpty(AbsenceCategory) && AbsenceCategory.ToLower() == "u"; }

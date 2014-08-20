@@ -63,6 +63,9 @@ namespace Chalkable.BusinessLogic.Services.School
             score = ConnectorLocator.ActivityScoreConnector.UpdateScore(score.ActivityId, score.StudentId, score);
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(stAnn, score);
 
+            if (stAnn.AlternateScoreId.HasValue)
+                stAnn.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(stAnn.AlternateScoreId.Value);
+            
             if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToPerson(announcementId, stAnn.StudentId);
             return stAnn;
@@ -91,6 +94,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef, enrolled, mp != null ? mp.Id : (int?)null);
                 }
                 var res = new List<StudentAnnouncementDetails>();
+                var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
                 foreach (var score in scores)
                 {
                     var student = persons.FirstOrDefault(x => x.Id == score.StudentId);
@@ -102,7 +106,9 @@ namespace Chalkable.BusinessLogic.Services.School
                                 Student = student,
                                 AnnouncementId = ann.Id
                             };
-                        MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);    
+                        MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);
+                        if (stAnn.AlternateScoreId.HasValue)
+                            stAnn.AlternateScore = alternateScores.FirstOrDefault(x => x.Id == stAnn.AlternateScoreId.Value);
                         res.Add(stAnn);    
                     }
                 }

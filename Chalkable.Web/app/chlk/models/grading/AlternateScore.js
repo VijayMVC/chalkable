@@ -14,6 +14,5 @@ NAMESPACE('chlk.models.grading', function () {
 
         [ria.serialize.SerializeProperty('percentofmaximumscore')],
         String, 'percentOfMaximumScore'
-
     ]);
 });

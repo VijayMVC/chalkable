@@ -50,5 +50,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return Storage.AlternateScoreStorage.GetAll();
         }
+
+
+        public AlternateScore GetAlternateScore(int id)
+        {
+            return Storage.AlternateScoreStorage.GetById(id);
+        }
     }
 }

@@ -14,7 +14,8 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
         data-isexempt= info.isExempt(),
         data-isabsent= info.isAbsent(),
         data-isincomplete= info.isIncomplete(),
-        data-comment= info.getComment()
+        data-comment= info.getComment(),
+        data-isincludeinaverage=info.isIncludeInAverage()
     ).grade-info
         span(data-grade-value=info.getGradeValue()).grade-text=normalValue
         cls = info.getAlertClass(maxScore, true)

@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(int id);
         void Delete(IList<int> ids);
         IList<AlternateScore> GetAlternateScores();
+        AlternateScore GetAlternateScore(int id);
     }
 
     public class AlternateScoreService : SchoolServiceBase, IAlternateScoreService
@@ -74,6 +75,15 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 new AlternateScoreDataAccess(uow).Update(alternateScores);
                 uow.Commit();
+            }
+        }
+
+
+        public AlternateScore GetAlternateScore(int id)
+        {
+            using (var  uow = Read())
+            {
+                return new AlternateScoreDataAccess(uow).GetByIdOrNull(id);
             }
         }
     }

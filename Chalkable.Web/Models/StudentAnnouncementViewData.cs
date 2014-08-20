@@ -82,6 +82,7 @@ namespace Chalkable.Web.Models
         public string ExtraCredits { get; set; }
         public int State { get; set; }
         public int StudentId { get; set; }
+        public bool IncludeInAverage { get; set; }
 
         protected ShortStudentAnnouncementViewData(StudentAnnouncement studentAnnouncement)
         {
@@ -99,6 +100,7 @@ namespace Chalkable.Web.Models
             GradeValue = studentAnnouncement.ScoreValue;
             State = (int)studentAnnouncement.State;
             StudentId = studentAnnouncement.StudentId;
+            IncludeInAverage = studentAnnouncement.IncludeInAverage;
         }
 
         public static ShortStudentAnnouncementViewData Create(StudentAnnouncement studentAnnouncement)
