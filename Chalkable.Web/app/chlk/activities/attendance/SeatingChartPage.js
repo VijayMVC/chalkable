@@ -14,37 +14,61 @@ NAMESPACE('chlk.activities.attendance', function () {
 
     var activeDragging = false;
 
+    var vertical = 148, horizontal = 110, top = 304, left = 381, height = 74, width = 74, topPadding = 14, leftPadding = 18, hKil, vKil;
+
     var droppableOptions = {
         activeClass: "active",
         hoverClass: "hover",
 
         drop: function(event, ui) {
-            new ria.dom.Dom('#submit-chart').show();
-            var droppable = $(this);
-            var draggable = ui.draggable;
-            if(droppable.find('.empty')[0]){
-                droppable.html(draggable.html()).removeClass('empty-box');
-                if(!droppable.next('.absolute')[0])
-                    jQuery('<div class="empty-box student-block absolute"></div>').insertAfter(droppable);
-                if(draggable.parents('.seating-chart-people')[0]){
-                    draggable.css('opacity', 0);
-                    draggable.animate({
-                        width: 0
-                    }, 250, function(){
-                        draggable.remove();
-                        checkPadding();
-                    });
+            var $node = $(this);
+            var draggable = ui.draggable, topPos = event.pageY, leftPos = event.pageX - (parseInt($node.parents('.second-container').css('left'), 10) || 0);
+            vKil = Math.floor((leftPos - left)/horizontal);
+            hKil = Math.floor((topPos - top)/vertical);
+            var columns = $node.data('columns');
+            var index = columns * hKil + vKil;
+            var newTop = top + hKil * vertical, diffTop = topPos - newTop;
+            var newLeft = left + vKil * horizontal, diffLeft = leftPos - newLeft;
+            if((diffTop > topPadding) && (diffTop < topPadding + height) && (diffLeft > leftPadding) && (diffLeft < leftPadding + width)){
+                new ria.dom.Dom('#submit-chart').show();
+                var droppable = $(this).find('.student-block[data-index=' + index + ']');
+                if(droppable.find('.empty')[0]){
+                    droppable.html(draggable.html()).removeClass('empty-box');
+                    if(!droppable.next('.absolute')[0])
+                        jQuery('<div class="empty-box student-block absolute"></div>').insertAfter(droppable);
+                    if(draggable.parents('.seating-chart-people')[0]){
+                        draggable.css('opacity', 0);
+                        draggable.animate({
+                            width: 0
+                        }, 250, function(){
+                            draggable.remove();
+                            checkPadding();
+                        });
+                    }else{
+                        setEmptyBoxHtml(new ria.dom.Dom(draggable));
+                        try{
+                            //draggable.draggable('destroy');
+                        }catch(e){
+
+                        }
+                    }
+                    try{
+                        droppable.draggable(draggableOptions);
+                    }catch(e){
+
+                    }
                 }else{
-                    setEmptyBoxHtml(new ria.dom.Dom(draggable));
+                    var html = droppable.html();
+                    droppable.html(draggable.html());
+                    draggable.html(html);
                 }
-            }else{
-                var html = droppable.html();
-                droppable.html(draggable.html());
-                draggable.html(html);
+                var buttons = new ria.dom.Dom('.save-attendances-buttons').find('a');
+                if(new ria.dom.Dom('.seating-chart-container').find('.not-empty').exists())
+                    buttons.removeClass('disabled');
             }
-            var buttons = new ria.dom.Dom('.save-attendances-buttons').find('a');
-            if(new ria.dom.Dom('.seating-chart-container').find('.not-empty').exists())
-                buttons.removeClass('disabled');
+
+
+
         }
     };
 
@@ -120,7 +144,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                     var chart = new ria.dom.Dom('.seating-chart-people');
                     chart.show();
                     this.dom.addClass('dragging-on');
-                    $(".draggable").draggable(draggableOptions);
+                    $(".draggable:not(.empty-box)").draggable(draggableOptions);
                     $(".droppable").droppable(droppableOptions);
                     activeDragging = true;
                     setTimeout(function(){
@@ -270,23 +294,24 @@ NAMESPACE('chlk.activities.attendance', function () {
             },
 
             function recalculateChartInfo(){
-                var rows = this.dom.find('.seating-row').count();
-                var columns = this.dom.find('.seating-row:eq(0)').find('.student-block[data-index]').count();
+                var rows = jQuery('.seating-row').length;
+                var columns = jQuery('.seating-row:eq(0)').find('.student-block[data-index]').length;
                 var classId = this.dom.find('.class-id').getValue();
                 var seatingList = [], minRows = 0, minColumns = 0;
-                this.dom.find('.seating-row').forEach(function(items){
+                jQuery('.seating-row').each(function(index, items){
                     var seatings = [];
-                    items.find('.student-block[data-index]').forEach(function(node){
+                    jQuery(items).find('.student-block[data-index]').each(function(){
+                        var node = jQuery(this);
                         var node2 = node.find('.image-container'),
-                            row = node.getData('row'),
-                            column = node.getData('column');
+                            row = node.data('row'),
+                            column = node.data('column');
                         seatings.push({
-                            index: node.getData('index'),
+                            index: node.data('index'),
                             row: row,
                             column: column,
-                            studentId: node2.exists() ? node2.getData('id') : null
+                            studentId: node2[0] ? node2.data('id') : null
                         });
-                        if(node2.exists()){
+                        if(node2[0]){
                             if(row > minRows)
                                 minRows = row;
                             if(column > minColumns)
@@ -353,9 +378,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                     chart.hide();
                 this.dom.removeClass('dragging-on');
                 if(activeDragging){
-                    if($( ".droppable" )[0])
+                    if($( ".droppable:not(.empty-box)" )[0])
                         try{
-                            $( ".droppable" ).droppable( "destroy" );
+                            $( ".droppable:not(.empty-box)" ).droppable( "destroy" );
                         }catch(e){
 
                         }
@@ -393,8 +418,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                         this.closePopUp();
                 }.bind(this));
 
-                new ria.dom.Dom().on('click.seating', '#submit-chart', function(){
+                new ria.dom.Dom().on('click.seating', '#submit-chart', function(node, event){
                     this.recalculateChartInfo();
+                    node.hide();
                     this.dom.find('.save-chart-form').trigger('submit');
                 }.bind(this));
 
