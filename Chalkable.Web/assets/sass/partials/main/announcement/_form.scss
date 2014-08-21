@@ -493,6 +493,24 @@ BODY {
               }
             }
 
+            .title-block-container{
+              &.with-date{
+                .title-block.exists{
+                  .exists-icon{
+                    display: inline-block;
+                  }
+                }
+              }
+
+              &:not(.with-date){
+                .title-block.active{
+                  button{
+                    display: none;
+                  }
+                }
+              }
+            }
+
             .title-block{
               padding-bottom: 14px;
               display: inline-block;
@@ -556,12 +574,6 @@ BODY {
 
               input#title{
                 width: 267px;
-              }
-
-              &.exists{
-                .exists-icon{
-                  display: inline-block;
-                }
               }
 
               &:not(.active){

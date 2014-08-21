@@ -99,13 +99,25 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateTitle(tpl, model, msg_) {
+                var block = this.dom.find('.title-text:visible'),
+                    saveBtn = this.dom.find('.save-title-btn'),
+                    titleBlock = this.dom.find('.title-block');
                 if(!model.isData() && this.dom.find('#title').getValue()){
-                    this.dom.find('.save-title-btn').setAttr('disabled', false);
-                    this.dom.find('.title-block').removeClass('exists');
+                    saveBtn.setAttr('disabled', false);
+                    if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
+                        saveBtn.trigger('click');
+                    titleBlock.removeClass('exists');
                 }else{
-                    this.dom.find('.save-title-btn').setAttr('disabled', true);
-                    this.dom.find('.title-block').addClass('exists');
+                    if(block.exists())
+                        this.dom.find('#show-title-popup').trigger('click');
+                    saveBtn.setAttr('disabled', true);
+                    titleBlock.addClass('exists');
                 }
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'title-popup')],
+            VOID, function titlePopUp(tpl, model, msg_) {
+                this.dom.find('.title-text:visible').trigger('click');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
@@ -124,21 +136,40 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind('change', '#expiresdate')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function expiresDateChange(node, event){
+                var block = this.dom.find('.title-block-container');
+                if(node.getValue()){
+                    if(!block.hasClass('with-date'))
+                        block.addClass('was-empty');
+                    else{
+                        block.removeClass('was-empty');
+                    }
+                    block.addClass('with-date');
+                    this.dom.find('#title').trigger('keyup');
+                }
+                else
+                    block.removeClass('with-date').removeClass('was-empty');
+            },
+
             [ria.mvc.DomEventBind('keyup', '#title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleKeyUp(node, event){
                 var dom = this.dom, node = node;
-                if(!node.getValue() || !node.getValue().trim()){
-                    dom.find('.save-title-btn').setAttr('disabled', true);
-                }else{
-                    if(node.getValue() == node.parent('.title-block').find('.title-text').getHTML()){
-                        dom.find('.title-block').removeClass('exists');
+                if(dom.find('.title-block-container').hasClass('with-date')){
+                    if(!node.getValue() || !node.getValue().trim()){
                         dom.find('.save-title-btn').setAttr('disabled', true);
                     }else{
-                        titleTimeout && clearTimeout(titleTimeout);
-                        titleTimeout = setTimeout(function(){
-                            dom.find('#check-title-button').trigger('click');
-                        }, 100);
+                        if(node.getValue() == node.getData('title')){
+                            dom.find('.title-block').removeClass('exists');
+                            dom.find('.save-title-btn').setAttr('disabled', true);
+                        }else{
+                            titleTimeout && clearTimeout(titleTimeout);
+                            titleTimeout = setTimeout(function(){
+                                dom.find('#check-title-button').trigger('click');
+                            }, 100);
+                        }
                     }
                 }
 
@@ -151,11 +182,17 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var target = new ria.dom.Dom(event.target);
                     if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
                         var titleBlock = dom.find('.title-block');
+                        var titleInput = titleBlock.find('#title');
                         titleBlock.removeClass('active');
-                        var text = titleBlock.find('#title').getValue();
+                        var text = titleInput.getValue();
                         if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == '' || text == null || text == undefined)){
                             titleBlock.removeClass('exists');
-                            titleBlock.find('#title').setValue(titleBlock.find('.title-text').getHTML());
+                            var oldText = titleInput.getData('title');
+                            titleInput.setValue(oldText);
+                            titleBlock.find('.title-text').setHTML(oldText);
+                        }
+                        if(text && !dom.find('.title-block-container').hasClass('with-date')){
+                            titleBlock.find('.title-text').setHTML(text);
                         }
                     }
                 });
