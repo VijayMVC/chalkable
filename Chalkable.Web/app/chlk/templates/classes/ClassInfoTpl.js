@@ -9,7 +9,9 @@ NAMESPACE('chlk.templates.classes', function () {
         [ria.templates.ModelBind(chlk.models.classes.ClassProfileInfoViewData)],
         'ClassInfoTpl', EXTENDS(chlk.templates.profile.ClassProfileTpl), [
 
-            chlk.models.classes.ClassInfo, function getClassInfo(){return this.getClazz();},
+            chlk.models.classes.ClassInfo, function getClassInfo(){
+                return this.getClazz();
+            },
 
             Object, function prepareDetailedInfo(){
                 var model = this.getClassInfo();
