@@ -8,7 +8,7 @@ classInfo = self.getClassInfo()
             h1.info.with-line
                 .class-icon-container
                     +ClassImg(classInfo, 45, 80)
-                =classInfo.getName()
+                span.className(data-tooltip=classInfo.getFullClassName())=classInfo.getName()
             h2
                 div
         .detail-info

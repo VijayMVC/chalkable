@@ -10,7 +10,9 @@ NAMESPACE('chlk.templates.profile', function(){
         [ria.templates.ModelBind(chlk.models.classes.BaseClassProfileViewData)],
         'ClassProfileTpl', EXTENDS(chlk.templates.profile.BaseProfileTpl),[
 
-            Object, function getClazz(){return this.getModel().getClazz();},
+            Object, function getClazz(){
+                return this.getModel().getClazz();
+            },
 
             [[String, chlk.models.id.ClassId]],
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedActionName, classId_){

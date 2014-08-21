@@ -13,6 +13,8 @@ NAMESPACE('chlk.models.classes', function(){
             if(claims_)
                 this.setClaims(claims_);
         },
-        Object, function getClazz(){return this._clazz;}
+        Object, function getClazz(){
+            return this._clazz;
+        }
     ])
 });
