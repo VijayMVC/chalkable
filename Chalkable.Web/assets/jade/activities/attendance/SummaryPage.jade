@@ -1,18 +1,18 @@
 mixin AbsentLatePage(data, header)
     .chart-container
         h2=Msg.Attendance
-            .chart-top-legend
-                each stat,i in data.getClassesStats()
-                    clazz = stat.getClazz()
-                    div(
-                        data-color=self.getColor(i),
-                        data-opacity-color=self.getColor(i, 0.2),
-                        data-index=i,
-                        data-id=clazz.getId()
-                    ).legend-item
-                        div(style="background:" + self.getColor(i) + ";").box
-                        .name #{clazz.getName()) #{clazz.getClassNumber())
-            .clear-right
+        .chart-top-legend
+            each stat,i in data.getClassesStats()
+                clazz = stat.getClazz()
+                div(
+                    data-color=self.getColor(i),
+                    data-opacity-color=self.getColor(i, 0.2),
+                    data-index=i,
+                    data-id=clazz.getId()
+                ).legend-item
+                    text = clazz.getName() + ' ' + clazz.getClassNumber()
+                    div(style="background:" + self.getColor(i) + ";").box
+                    div(data-tooltip=text, data-tooltip-type="overflow").name=text
         .chart-block.relative
             .wide-chart-bg
                 +Chart()(

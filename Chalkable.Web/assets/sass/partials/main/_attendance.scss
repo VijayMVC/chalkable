@@ -1094,14 +1094,21 @@ BODY {
   }
 
   .chart-top-legend {
-    text-align: right;
-    float: right;
-    width: 500px;
-    margin-top: -26px;
+    text-align: left;
+    margin: 10px 0 0 0;
 
     .legend-item {
       margin-right: 13px;
       margin-bottom: 0;
+      width: 190px;
+      text-align: left;
+
+      .name{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 170px;
+        white-space: nowrap;
+      }
     }
   }
 
@@ -1136,7 +1143,8 @@ BODY {
     .wide-chart-bg{
       top: 12px;
       height: auto;
-      background-position: 0px 10px;
+      background-position: 30px 14px;
+      background-size: 95% 72%;
     }
   }
 

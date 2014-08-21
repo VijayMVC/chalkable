@@ -72,11 +72,13 @@ NAMESPACE('chlk.templates.attendance', function () {
                         type: 'datetime',
                         dateTimeLabelFormats: {
                            day: '%b %e'
-                        }
+                        },
+                        title: {text:'Day.Month'}
                     },
 
                     yAxis: {
-                        min: 0
+                        min: 0,
+                        title: {text:'Student Count'}
                     },
 
                     series: series
