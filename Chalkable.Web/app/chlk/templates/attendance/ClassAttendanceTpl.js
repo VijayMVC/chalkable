@@ -54,8 +54,8 @@ NAMESPACE('chlk.templates.attendance', function () {
                 if(!attLevelReasons) return [];
                 return attLevelReasons.filter(function(item){
                     return type == chlk.models.attendance.AttendanceTypeEnum.LATE.valueOf() ?
-                        item.hasLevel('T') : item.hasLevel('A') || item.hasLevel('AO') ||
-                            item.hasLevel('H') || item.hasLevel('HO');
+                        item.hasLevel('T') : item.hasLevel('A'); //|| item.hasLevel('AO') ||
+                            //item.hasLevel('H') || item.hasLevel('HO');
                 });
             },
         ]);

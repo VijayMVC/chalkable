@@ -496,8 +496,9 @@ NAMESPACE('chlk.controllers', function (){
                         var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
                         var absenceReasons = reasons.filter(function(item){
                             var len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
-                                return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
-                                    reason.getLevel() == 'H' || reason.getLevel() == 'HO';
+                                /*return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
+                                    reason.getLevel() == 'H' || reason.getLevel() == 'HO';*/
+                                return reason.getLevel() == 'A';
                             }).length;
                             return !!len;
                         });
