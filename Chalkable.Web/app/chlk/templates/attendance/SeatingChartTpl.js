@@ -62,8 +62,8 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return (this.getReasons() || []).filter(function(item){
                     var len;
                     len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
-                        return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
-                            reason.getLevel() == 'H' || reason.getLevel() == 'HO';
+                        return reason.getLevel() == 'A';// || reason.getLevel() == 'AO' ||
+                            //reason.getLevel() == 'H' || reason.getLevel() == 'HO';
                     }).length;
                     return !!len;
                 })
