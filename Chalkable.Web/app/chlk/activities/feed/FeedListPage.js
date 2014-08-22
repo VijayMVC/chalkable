@@ -79,7 +79,8 @@ NAMESPACE('chlk.activities.feed', function () {
                     body.on('click.tour keydown.tour', function(node, event){
                         if(!node.isOrInside('.YouTubeDialog') && !node.is('.YouTubeDialog .ui-dialog-titlebar-close'))
                             that.stopTour();
-                    })
+                    });
+                    new ria.dom.Dom().scrollTop(0);
                 }
             }
 
