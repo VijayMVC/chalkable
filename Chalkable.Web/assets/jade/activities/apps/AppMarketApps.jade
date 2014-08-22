@@ -1,0 +1,15 @@
+mixin AppIconLink(app)
+    appId = app.getId().valueOf()
+    +ActionLink('appmarket', 'details', appId).app-icon-link
+        .app-list-item
+            .icon
+                pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
+                img(src=pictureUrl)
+            .description
+                .name=app.getName()
+                .shortdesc=app.getShortDescription()
+
+
+
+each app in self.getApps().getItems()
+    +AppIconLink(app)
