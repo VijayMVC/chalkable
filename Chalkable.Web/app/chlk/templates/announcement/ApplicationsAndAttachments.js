@@ -11,7 +11,8 @@ NAMESPACE('chlk.templates.announcement', function () {
             [[ArrayOf(chlk.models.apps.Application), ArrayOf(chlk.models.attachment.Attachment)]],
             ArrayOf(chlk.models.announcement.ApplicationOrAttachment), function getSortedAppsAndAttachments(applications_, attachments_){
                 var attachments = attachments_ || this.getAnnouncementAttachments() || [],
-                    applications = applications_ || this.getApplications() || [], res=[], that = this;
+                    applications = applications_ || this.getApplications() || [],
+                    res = [], that = this;
                 attachments.forEach(function(item){
                     res.push(new chlk.models.announcement.ApplicationOrAttachment(
                         item.getId(),
@@ -31,7 +32,7 @@ NAMESPACE('chlk.templates.announcement', function () {
                         item.getOrder(),
                         chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION,
                         item.getName(),
-                        that.getPictureURL(item.getSmallPictureId(), 74, 74, true),
+                        that.getPictureURL(item.getBigPictureId(), 74, 74, true),
                         item.getUrl(),
                         null,
                         item.getEditUrl(),
