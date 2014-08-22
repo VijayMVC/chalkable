@@ -665,6 +665,7 @@ var Msg = {
     Oops_Cancel: 'Oops, Cancel',
     Ok_Clear_Grades: 'OK, CLEAR GRADES',
     Please_enter_a_grade: 'Please enter a grade.',
+    Same_Title_Text: "There is an item with that title on the selected date.\nPlease enter a different title or select a different date.",
     OAuth_description: " OAuth 2.0 is used for authentication. The authentication token you receive, " +
         "after making your request, includes a user role. The user role defines the level of access.",
     You_already_entered_some_grades: 'You already entered some grades. These grades</br>will be cleared if you continue with the change.',

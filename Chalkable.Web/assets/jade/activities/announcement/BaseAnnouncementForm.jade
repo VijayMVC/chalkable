@@ -19,7 +19,8 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
     disableDeleteBtn = announcement.getGradingStudentsCount() > 0
     if !isAdminAnnouncement
-        .title-block-container
+        +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
+        div(class=announcement.getExpiresDate() ? 'with-date' : '').title-block-container
             +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
     .left-block
         if isAdminAnnouncement

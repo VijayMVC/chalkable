@@ -667,6 +667,19 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), res, chlk.activities.lib.DontShowLoader());
         },
 
+        function showTitlePopUpAction(){
+            return this.ShowMsgBox(Msg.Same_Title_Text, '', [{
+                text: Msg.OK.toUpperCase(),
+                controller: 'announcement',
+                action: 'closeTitlePopUp',
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }]);
+        },
+
+        function closeTitlePopUpAction(){
+            return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(new chlk.models.Success(true)), 'title-popup');
+        },
+
         [[chlk.models.announcement.Announcement]],
         function saveAnnouncementFormAction(announcement){
             announcement.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
