@@ -88,7 +88,7 @@ NAMESPACE('chlk.controllers', function (){
                            text: Msg.GOT_IT.toUpperCase()
                        }]);
                }
-               return this.redirectToErrorPage_(error.toString(), 'error', 'generalError', []);
+               return this.redirectToErrorPage_(error.toString(), 'error', 'error404', []);
            },
 
            function BackgroundNavigate(controller, action, args_) {

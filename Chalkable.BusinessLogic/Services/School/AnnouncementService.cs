@@ -331,6 +331,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
+                    if (activity == null)
+                    {
+                        throw new ChalkableException("You can't view this item. Current item was deleted from chalkable.");
+                    }
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     var chlkAnnType =
                         ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(
