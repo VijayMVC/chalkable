@@ -1,0 +1,59 @@
+.chalk-add {
+  background: url(images/icons/add-item.png) 0% 50% no-repeat;
+}
+
+.chalk-delete {
+  background: url(images/icons/close-item.png) 0% 50% no-repeat;
+  position: relative;
+  cursor: pointer;
+}
+
+.chalk-search {
+  background: url(images/icons/search.png) 0% 50% no-repeat;
+}
+
+.pm-add {
+  background: url(images/icons/pm-add.png) 7px 50% no-repeat !important;
+}
+
+.pm-delete {
+  background: url(images/icons/pm-delete.png) 0% 50% no-repeat;
+}
+
+.pm-read {
+  background: url(images/icons/pm-read.png) 0% 50% no-repeat;
+}
+
+.pm-unread {
+  background: url(images/icons/pm-unread.png) 0% 50% no-repeat;
+}
+
+.unread-count {
+  position: absolute;
+  width: 18px;
+  height: 16px;
+  color: white;
+  font-size: 13px;
+  display: block;
+  padding-top: 1px;
+  background: url(images/icons/feed-unread.png) 0 0  no-repeat;
+}
+
+.feed-unread{
+  padding-left: 25px !important;
+}
+
+.feed-stared {
+  background: url(images/icons/feed-stared.png) 0% 50% no-repeat;
+}
+
+.feed-notifications {
+  background: url(images/icons/new-notifications.png) 0% 50% no-repeat;
+}
+
+.choose-date-icon {
+  display: inline-block;
+  width: 30px;
+  height: 24px;
+  background: url(images/icons/choose-date.png) 0 center no-repeat;
+}
