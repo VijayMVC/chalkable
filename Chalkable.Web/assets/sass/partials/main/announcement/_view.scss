@@ -500,11 +500,17 @@ $red-color: #842727;
     .name-block{
       margin-left: 10px;
 
+
+      .p-container{
+        width: 328px;
+      }
+
       p{
         padding: 20px 0 2px 0;
         text-overflow: ellipsis;
         overflow: hidden;
-        width: 328px;
+        max-width: 328px;
+        display: inline-block;
       }
 
       span.container{
