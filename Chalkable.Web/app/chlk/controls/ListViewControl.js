@@ -93,7 +93,8 @@ NAMESPACE('chlk.controls', function () {
                             }
                             if(configs.infiniteScroll && !grid.hasClass('with-scroller') && !configs.noScroll)
                                 this.addInfiniteScroll(grid);
-
+                            else
+                                this.clearInterval_(this.getGrid());
 
 //                          if(configs.goTopButton){
 //                                //todo : add go top button
