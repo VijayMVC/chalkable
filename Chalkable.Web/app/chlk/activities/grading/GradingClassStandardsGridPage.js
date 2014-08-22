@@ -324,7 +324,7 @@ NAMESPACE('chlk.activities.grading', function () {
             Boolean, function submitForm(node, event){
                 var res = !node.find('input[name="gradevalue"]').hasClass('error');
                 var valueInput = node.find('.value-input');
-                if(!res || valueInput.getValue().toLowerCase() == valueInput.getData('value').toLowerCase())
+                if(!res || (valueInput.getValue() || '').toLowerCase() == (valueInput.getData('value') || '').toLowerCase())
                     return false;
                 node.parent().find('.value').setHTML('...');
                 return true;
