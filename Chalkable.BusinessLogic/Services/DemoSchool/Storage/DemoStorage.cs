@@ -94,6 +94,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStudentHealthConditionStorage StudentHealthConditionStorage { get; private set; }
 
         public DemoPersonEmailStorage PersonEmailStorage { get; private set; }
+        public DemoPersonBalanceStorage PersonBalanceStorage { get; private set; }
 
         public UserContext Context { get; private set; }
 
@@ -189,6 +190,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StiActivityStorage = new DemoStiActivityStorage(this);
 
             PersonEmailStorage = new DemoPersonEmailStorage(this);
+            PersonBalanceStorage = new DemoPersonBalanceStorage(this);
 
             AnnouncementStorage = CreateAnnouncementStorage(Context, this);
             Setup();
@@ -412,6 +414,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 RoleRef = CoreRoles.ADMIN_GRADE_ROLE.Id,
                 SchoolRef = DemoSchoolConstants.SchoolId
             });
+
+            PersonBalanceStorage.Add(new DemoPersonBalance
+            {
+                Balance = 10000,
+                PersonId = DemoSchoolConstants.AdminGradeId
+            });
         }
 
         private void AddTeacher()
@@ -433,6 +441,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PersonRef = DemoSchoolConstants.TeacherId,
                 RoleRef = CoreRoles.TEACHER_ROLE.Id,
                 SchoolRef = DemoSchoolConstants.SchoolId
+            });
+
+            PersonBalanceStorage.Add(new DemoPersonBalance
+            {
+                Balance = 10000,
+                PersonId = DemoSchoolConstants.TeacherId
             });
         }
 
@@ -473,6 +487,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Date = DateTime.Now.Date,
                 Infractions = StiInfractionStorage.GetAll(),
                 StudentId = id
+            });
+
+            PersonBalanceStorage.Add(new DemoPersonBalance
+            {
+                Balance = 1000,
+                PersonId = id
             });
 
 

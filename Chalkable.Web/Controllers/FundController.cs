@@ -4,7 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -32,7 +35,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher, Student, AdminGrade, AdminEdit, AdminView")]
         public ActionResult GetPersonBudgetBalance(int personId)
         {
-            return Json(new {balance = 0});
+            var userBalance = (decimal)0;
+            if (DemoUserService.IsDemoUser(Context))
+            {
+                userBalance = MasterLocator.FundService.GetUserBalance(personId);
+            }
+            return Json(new {balance = userBalance});
         }
 
         [AuthorizationFilter("Teacher, Student, Parent")]

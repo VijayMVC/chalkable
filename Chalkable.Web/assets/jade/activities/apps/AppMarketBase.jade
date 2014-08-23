@@ -1,9 +1,11 @@
 mixin AppMarketToolbar(balance, categories, gradelevels, isStore, needsStoreBtn)
     .action-bar.not-transparent.buttons
         .container.panel-bg.buttons-toolbar
+            storeBtnCls = needsStoreBtn ? "pressed-app-store" : "pressed"
             if balance
                 .user-balance= "$" + balance
-            storeBtnCls = needsStoreBtn ? "pressed-app-store" : "pressed"
+            if balance
+               -storeBtnCls += " with-balance"
             +ActionLink('appmarket', 'list')(class = isStore ? storeBtnCls : "").app-store.toolbar-btn App Store
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
             //+ActionLink('funds', 'view')(class = isStore ? "" : "pressed").toolbar-btn App Funds

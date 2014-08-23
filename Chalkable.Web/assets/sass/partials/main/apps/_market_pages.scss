@@ -12,6 +12,9 @@
       &.pressed-app-store{
         @include background(linear-gradient(top, #f6f6f6, #d8d8d8));
       }
+      &.with-balance{
+        margin-left: 144px !important;
+      }
     }
 
 
@@ -44,7 +47,7 @@
     }
 
     .user-balance{
-      width: 250px;
+      width: 100px;
       display: inline-block;
       color: #868686;
       font-size: 18px;
