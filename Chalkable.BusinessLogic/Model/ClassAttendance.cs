@@ -152,11 +152,19 @@ namespace Chalkable.BusinessLogic.Model
 
         public static IList<StudentAttendanceSummary> Create(IList<StudentSectionAttendanceSummary> studentSectionAttendances, IList<Person> students, IList<ClassDetails> classes)
         {
-            return studentSectionAttendances.GroupBy(x=>x.StudentId).Select(x => new StudentAttendanceSummary
-                {
-                    Student = students.First(student => student.Id == x.Key),
-                    ClassAttendanceSummaries = StudentClassAttendanceSummary.Create(x.ToList(), classes)
-                }).ToList();
+            var stSectionAttsDic = studentSectionAttendances.GroupBy(x => x.StudentId).ToDictionary(x => x.Key, x => x.ToList());
+            var res = new List<StudentAttendanceSummary>();
+            foreach (var stSectionAtts in stSectionAttsDic)
+            {
+                var student = students.FirstOrDefault(x => x.Id == stSectionAtts.Key);
+                if(student == null) continue;
+                res.Add(new StudentAttendanceSummary
+                    {
+                        Student = student,
+                        ClassAttendanceSummaries = StudentClassAttendanceSummary.Create(stSectionAtts.Value, classes)
+                    });
+            }
+            return res;
         } 
     }
 
