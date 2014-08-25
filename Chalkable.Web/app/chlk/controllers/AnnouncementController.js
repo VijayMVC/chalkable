@@ -903,10 +903,11 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.QnAForm]],
         function answerQuestionAction(model) {
             var ann;
-            if (model.getQuestion())
+            if (model.getQuestion()){
                 ann = this.announcementService
                     .answerQuestion(model.getId(), model.getQuestion(), model.getAnswer())
                     .attach(this.validateResponse_());
+            }
             else
                 ann = this.announcementService
                     .deleteQnA(model.getAnnouncementId(), model.getId())

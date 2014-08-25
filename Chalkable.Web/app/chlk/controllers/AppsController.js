@@ -226,6 +226,16 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN
         ])],
+        [[chlk.models.id.SchoolPersonId]],
+        function testApplicationSysAdminAction(devId) {
+            this.appsService
+                .testDevApps(devId);
+            return null;
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
         [[chlk.models.id.AppId]],
         function approveSysAdminAction(appId) {
             return this.appsService

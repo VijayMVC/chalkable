@@ -259,8 +259,10 @@ namespace Chalkable.BusinessLogic.Services.Master
                 if (developer != null) developerId = developer.Id;
                 var schoolL = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]);
                 PrepareSchoolData(schoolL, user, schoolYearId, out schoolYear, out schoolUser);
-                var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, developerId, schoolYear);
-                res.Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims());
+                var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, developerId, schoolYear)
+                {
+                    Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
+                };
                 return res;
             }
             throw new UnknownRoleException();

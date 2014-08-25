@@ -59,7 +59,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult MarkUnanswered(int announcementQnAId)
         {
-            var res = SchoolLocator.AnnouncementQnAService.MarkUnanswered(announcementQnAId);
+            SchoolLocator.AnnouncementQnAService.MarkUnanswered(announcementQnAId);
             return Json(true);
         }
 

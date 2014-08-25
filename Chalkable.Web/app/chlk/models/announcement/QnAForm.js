@@ -9,7 +9,9 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
             chlk.models.id.AnnouncementQnAId, 'id',
             String, 'question',
-            String, 'answer'
+            String, 'answer',
+            String, 'updateQuestionType',
+            String, 'updateAnswerType'
         ]);
 });
 

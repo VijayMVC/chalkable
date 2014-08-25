@@ -92,13 +92,17 @@ NAMESPACE('chlk.services', function () {
                     width: height_,
                     height: width_
                 });
-
             },
 
             [[chlk.models.id.AppId]],
             ria.async.Future, function installApp(appId) {
                 return this
                     .post('Application/Install.json', Boolean, {applicationId: appId.valueOf()});
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function testDevApps(devId) {
+                window.location.href = "/DemoSchool/TestApps.json?prefix=" + devId.valueOf();
             },
 
             [[chlk.models.id.AppId]],
