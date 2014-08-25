@@ -57,7 +57,10 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.save-title-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function saveClick(node, event){
-                this.dom.find('.title-text').setHTML(this.dom.find('#title').getValue());
+                var input = this.dom.find('#title'),
+                    value = input.getValue();
+                this.dom.find('.title-text').setHTML(value);
+                input.setData('title', value);
                 setTimeout(function(){
                     node.setAttr('disabled', true);
                 }, 1);
@@ -147,7 +150,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         block.removeClass('was-empty');
                     }
                     block.addClass('with-date');
-                    this.dom.find('#title').trigger('keyup');
+                    this.dom.find('#title').addClass('should-check').trigger('keyup');
                 }
                 else
                     block.removeClass('with-date').removeClass('was-empty');
@@ -161,7 +164,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!node.getValue() || !node.getValue().trim()){
                         dom.find('.save-title-btn').setAttr('disabled', true);
                     }else{
-                        if(node.getValue() == node.getData('title')){
+                        if(node.getValue() == node.getData('title') && !node.hasClass('should-check')){
                             dom.find('.title-block').removeClass('exists');
                             dom.find('.save-title-btn').setAttr('disabled', true);
                         }else{
@@ -172,7 +175,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     }
                 }
-
+                node.removeClass('should-check');
             },
 
             OVERRIDE, VOID, function onRender_(model){
