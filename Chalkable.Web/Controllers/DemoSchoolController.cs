@@ -27,6 +27,7 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult LogOnIntoDemo(string rolename, string prefix)
         {
+            //todo security
             if (string.IsNullOrEmpty(prefix))
                 Json(new ChalkableException(ChlkResources.ERR_DEMO_SCHOOL_INVALID_PREFIX));
 
@@ -38,6 +39,14 @@ namespace Chalkable.Web.Controllers
             if (rolename.ToLower() == CoreRoles.STUDENT_ROLE.LoweredName) return Redirect<HomeController>(c => c.Student());
             if (rolename.ToLower() == CoreRoles.DEVELOPER_ROLE.LoweredName) return Redirect<HomeController>(c => c.Developer(null));
             throw new ChalkableSecurityException(ChlkResources.ERR_DEMO_SCHOOL_INCORRECT_ROLE);
+        }
+
+        public ActionResult TestApps(string prefix)
+        {
+            var context = LogOn(false, userService => userService.LoginToDemo(CoreRoles.TEACHER_ROLE.LoweredName, prefix));
+            if (context == null)
+                return Json(new ChalkableException(string.Format(ChlkResources.USER_NOT_FOUND_IN_DEMO_SCHOOL, CoreRoles.TEACHER_ROLE.LoweredName, prefix)));
+            return Redirect<HomeController>(c => c.Teacher());
         }
     }
 }
