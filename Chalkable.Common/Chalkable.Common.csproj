@@ -77,6 +77,8 @@
     <Compile Include="Exceptions\ExceptionViewData.cs" />
     <Compile Include="Exceptions\IncorrectTaskDataException.cs" />
     <Compile Include="Exceptions\InvalidSchoolStatusException.cs" />
+    <Compile Include="Exceptions\NoAnnouncementException.cs" />
+    <Compile Include="Exceptions\NoClassAnnouncementTypeException.cs" />
     <Compile Include="Exceptions\NoMarkingPeriodException.cs" />
     <Compile Include="Exceptions\UnassignedUserException.cs" />
     <Compile Include="Exceptions\UnknownRoleException.cs" />

@@ -308,6 +308,13 @@ NAMESPACE('chlk.controllers', function (){
             }
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
+                .catchError(function(error){
+                    if(error.getStatus && error.getStatus() == 500){
+                        var res = JSON.parse(error.getResponse());
+                        if(res.exceptiontype == 'NoClassAnnouncementTypeException')
+                            return this.redirectToErrorPage_(error.toString(), 'error', 'createAnnouncementError', []);
+                    }
+                }, this)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(model && model.getAnnouncement()){
@@ -366,13 +373,7 @@ NAMESPACE('chlk.controllers', function (){
             this.getView().reset();
             var result = this.announcementService
                 .getAnnouncement(announcementId)
-//                .catchError(function(error_){
-////                    throw new chlk.lib.exception.AnnouncementErrorException(error_.getResponse());
-//                    var response = JSON.parse(error_.getResponse());
-//                    return this.ShowMsgBox(response.message, 'oops',[{
-//                        text: Msg.GOT_IT.toUpperCase()
-//                    }]);
-//                }, this)
+
 //                .attach(this.validateResponse_())
                 .then(function(announcement){
                     this.prepareAttachments(announcement);
@@ -413,9 +414,12 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(announcement);
                     return announcement;
                 }, this)
-                .catchError(function(error_){
-                    var response = JSON.parse(error_.getResponse());
-                    return this.redirectToErrorPage_(error_.toString(), 'error', 'generalServerError', [response.message]);
+                .catchError(function(error){
+                    if(error.getStatus && error.getStatus() == 500){
+                        var res = JSON.parse(error.getResponse());
+                        if(res.exceptiontype == 'NoAnnouncementException')
+                            return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
+                    }
                 }, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },

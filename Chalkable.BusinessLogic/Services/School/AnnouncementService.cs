@@ -301,7 +301,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
                 if(classAnnTypes.Count == 0)
-                    throw new ChalkableException("Item can't be created. Current Class doesn't have classAnnouncementTypes");
+                    throw new NoClassAnnouncementTypeException("Item can't be created. Current Class doesn't have classAnnouncementTypes");
                 classAnnouncementTypeId = classAnnTypes.First().Id;
             }
             using (var uow = Update())
@@ -333,7 +333,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     if (activity == null)
                     {
-                        throw new ChalkableException("You can't view this item. Current item was deleted from chalkable.");
+                        throw new NoAnnouncementException("You can't view this item. Current item was deleted from chalkable.");
                     }
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     var chlkAnnType =
