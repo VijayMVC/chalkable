@@ -249,7 +249,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 foreach (var student in students)
                 {
                    var score = stiGradeBook.Scores.FirstOrDefault(x => x.StudentId == student.Id);
-                   if(score != null && !score.Withdrawn)
+                   if(score == null || !score.Withdrawn)
                        gradeBook.Students.Add(student);
                 }    
             }
