@@ -23,7 +23,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         void AddFundsToPerson(Guid userId, decimal amount, string discription);
         IList<FundRequest> GetFundRequests();
 
-        decimal GetUserBalance(Guid userId, bool? privateMoney = null);
+        decimal GetUserBalance(int userId, bool? privateMoney = null);
+        void UpdateUserBalance(int userId, decimal newBalance);
         decimal GetClassBalance(Guid classId);
         Fund AppInstallPersonPayment(Guid appInstallId, decimal amount, DateTime performedDateTime, string descrption);
         IList<ApplicationInstallAction> GetSchoolPersonHistory(Guid userId);
@@ -527,7 +528,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             throw new NotImplementedException();
         }
 
-        public decimal GetUserBalance(Guid userId, bool? privateMoney = null)
+        public decimal GetUserBalance(int userId, bool? privateMoney = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateUserBalance(int userId, decimal newBalance)
         {
             throw new NotImplementedException();
         }

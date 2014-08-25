@@ -54,9 +54,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public decimal GetUserBalance(Guid userId, bool? privateMoney = null)
+        public decimal GetUserBalance(int userId, bool? privateMoney = null)
         {
-            throw new NotImplementedException();
+            return Storage.PersonBalanceStorage.GetById(userId).Balance;
+        }
+
+        public void UpdateUserBalance(int userId, decimal newBalance)
+        {
+            Storage.PersonBalanceStorage.UpdatePersonBalance(userId, newBalance);
         }
 
         public decimal GetClassBalance(Guid classId)

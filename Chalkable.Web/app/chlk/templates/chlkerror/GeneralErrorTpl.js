@@ -1,5 +1,4 @@
 REQUIRE('chlk.models.common.ServerErrorModel');
-REQUIRE('chlk.templates.common.PageWithClasses');
 
 NAMESPACE('chlk.templates.chlkerror',function(){
     "use strict";

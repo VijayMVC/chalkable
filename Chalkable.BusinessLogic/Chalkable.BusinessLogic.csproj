@@ -147,6 +147,7 @@
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoPersonBalanceStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPersonEmailStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\StudentHealthConditionStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementCompleteStorage.cs" />

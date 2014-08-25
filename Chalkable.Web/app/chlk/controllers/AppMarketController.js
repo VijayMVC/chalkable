@@ -53,22 +53,14 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppMarketPostData]],
         function listAction(filterData_) {
-
-
             var selectedPriceType = filterData_ ? new chlk.models.apps.AppPriceType(filterData_.getPriceType())
                                                 : chlk.models.apps.AppPriceType.ALL;
             var selectedSortingMode = filterData_ ? new chlk.models.apps.AppSortingMode(filterData_.getSortingMode())
                                                   : chlk.models.apps.AppSortingMode.POPULAR;
-
-
             var start = filterData_ ? filterData_.getStart() : 0;
-
-
             var selectedCategories = [];
             if (filterData_){
                 selectedCategories = this.getIdsList(filterData_.getSelectedCategories(), chlk.models.id.AppCategoryId);
-
-
                 selectedCategories = selectedCategories.map(function(item){
                     var category = new chlk.models.apps.AppCategory();
                     category.setId(item);
@@ -86,9 +78,6 @@ NAMESPACE('chlk.controllers', function (){
                 });
             }
 
-
-            //todo: replace with ria.async.wait
-
             var result = this.appCategoryService
                 .getCategories()
                 .attach(this.validateResponse_())
@@ -100,8 +89,10 @@ NAMESPACE('chlk.controllers', function (){
                     var actualGradeLevels = selectedGradeLevels.length > 0 ? selectedGradeLevels : gradeLevels;
                     var actualCategories = selectedCategories.length > 0  ? selectedCategories : categories;
 
-                    return this.appMarketService
-                        .getApps(
+                    var res = ria.async.wait([
+                        this.appMarketService.getPersonBalance(this.getCurrentPerson().getId()),
+                        this.appMarketService
+                            .getApps(
                             actualCategories,
                             actualGradeLevels,
                             "",
@@ -109,34 +100,30 @@ NAMESPACE('chlk.controllers', function (){
                             selectedSortingMode,
                             start
                         )
-                        .attach(this.validateResponse_())
-                        .then(function(apps){
-                            var items = apps.getItems();
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var apps = result[1];
+                        var balance = result[0].getBalance();
+                        var items = apps.getItems();
 
-                            items = items.map(function(app){
-                                var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
-                                app.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshots, false));
-                                return app;
-                            }, this);
-                            apps.setItems(items);
-                            return apps;
+                        items = items.map(function(app){
+                            var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
+                            app.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshots, false));
+                            return app;
+                        }, this);
+                        apps.setItems(items);
 
-                        }, this)
-                        .then(function(apps){
-                            return this.appMarketService
-                                .getPersonBalance(this.getCurrentPerson().getId())
-                                .attach(this.validateResponse_())
-                                .then(function(personBalance){
-                                    return new chlk.models.apps.AppMarketViewData(
-                                        apps,
-                                        categories,
-                                        gradeLevels,
-                                        personBalance.getBalance()
-                                    );
-                                });
-                        }, this)
-                }, this)
+                        return new chlk.models.apps.AppMarketViewData(
+                            apps,
+                            categories,
+                            gradeLevels,
+                            balance
+                        );
+                    }, this)
 
+                    return res;
+                }, this);
 
             if (filterData_) {
                 var msg = filterData_.isScroll() ? "scrollApps" : "updateApps";
@@ -162,8 +149,6 @@ NAMESPACE('chlk.controllers', function (){
             else
                 return this.PushView(chlk.activities.apps.MyAppsPage, result);
         },
-
-
 
         //todo: refactor
         [chlk.controllers.SidebarButton('apps')],
@@ -199,11 +184,9 @@ NAMESPACE('chlk.controllers', function (){
                          filteredPermissions.unshift(new chlk.models.apps.AppPermission(
                              chlk.models.apps.AppPermissionTypeEnum.UNKNOWN, 'Basic info'));
                      }
-
                     app.setPermissions(filteredPermissions);
 
                     var appRating = app.getApplicationRating();
-
                     if (!appRating)   {
                         appRating = new chlk.models.apps.AppRating();
                         appRating.setRoleRatings([]);
@@ -212,33 +195,31 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     var installBtnTitle ='';
-
                     var isAlreadyInstalledForStudent = this.userInRole(chlk.models.common.RoleEnum.STUDENT) && app.isInstalledOnlyForCurrentUser();
-
                     if (isAlreadyInstalledForStudent){
                         installBtnTitle = 'Installed';
                     }else{
                         installBtnTitle = app.getApplicationPrice().formatPrice();
                     }
-                    return this.appCategoryService
-                        .getCategories()
-                        .attach(this.validateResponse_())
-                        .then(function(categories){
-                            return this.appMarketService
-                                .getPersonBalance(this.getCurrentPerson().getId())
-                                .attach(this.validateResponse_())
-                                .then(function(personBalance){
-                                    return new chlk.models.apps.AppMarketDetailsViewData(
-                                        app,
-                                        installBtnTitle,
-                                        categories.getItems(),
-                                        this.gradeLevelService.getGradeLevels(),
-                                        personBalance.getBalance(),
-                                        isAlreadyInstalledForStudent
-                                    );
-                                }, this)
-                        }, this)
 
+                    var result = ria.async.wait([
+                        this.appCategoryService.getCategories(),
+                        this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
+                    ])
+                    .attach(this.validateResponse_())
+                    .then(function(res){
+                        var categories = res[0].getItems();
+                        var balance = res[1].getBalance();
+                        return new chlk.models.apps.AppMarketDetailsViewData(
+                            app,
+                            installBtnTitle,
+                            categories,
+                            this.gradeLevelService.getGradeLevels(),
+                            balance,
+                            isAlreadyInstalledForStudent
+                        );
+                    },this);
+                    return result;
                 }, this);
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);
         },
@@ -251,8 +232,6 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.apps.AppMarketPage, result);
         },
-
-
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
@@ -268,12 +247,10 @@ NAMESPACE('chlk.controllers', function (){
                         app.isInstalledOnlyForCurrentUser(), Msg.Just_me
                     ));
                     var installedCount = 0;
-
                     installedForGroups = installedForGroups.map(function(item){
                         if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL && this.userIsAdmin())
                             item.setDescription(Msg.Whole_School);
                         if (item.isInstalled()) ++installedCount;
-
 
                         if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
                             var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.getId().valueOf()));
@@ -338,7 +315,6 @@ NAMESPACE('chlk.controllers', function (){
                            }], 'center');
                     }, this);
             }, this);
-
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -379,14 +355,6 @@ NAMESPACE('chlk.controllers', function (){
                     additionalMsg = '<div class="msg-detail">NOTE: This app is not self installed.</div>';
                     warningMsg = '';
                 }
-
-
-                /*
-
-                 title: arial bold 24 (just checking.)
-                 detail text: arial bold 16 (Uninstalling an app removes it for you and anyone you installed it for.)
-                 action text: arial bold 18 (Uninstall the [app name] app?)
-                 */
 
                 var msgTitle = warningMsg + '<div class="msg-action">Uninstall the ' + data.getAppName() + ' app?</div>' + additionalMsg;
 

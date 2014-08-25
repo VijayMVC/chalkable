@@ -5,6 +5,7 @@ using System.Text;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -74,6 +75,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (!CanInstall(applicationId, personId, roleIds, classIds, gradeLevelIds, departmentIds))
                 throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY);
+            ChargeMoneyForAppInstall(applicationId, personId, roleIds, classIds, gradeLevelIds, departmentIds);
+
 
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
 
@@ -99,12 +102,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 });
             }
             Storage.ApplicationInstallStorage.Add(appInstalls);
+
+            
+
             res.ApplicationInstalls = appInstalls;
             return res;
         }
 
         private ApplicationInstallAction RegisterApplicationInstallAction(Application app, int? schoolPersonId, IList<int> roleids, IList<int> classids, IList<Guid> departmentids, IList<int> gradelevelids)
         {
+            
             var res = new ApplicationInstallAction
             {
                 ApplicationRef = app.Id,
@@ -237,12 +244,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds)
         {
-            if (!Context.SchoolId.HasValue)
+            if (!Context.SchoolId.HasValue || !Context.UserLocalId.HasValue)
                 throw new UnassignedUserException();
             var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
             var cnt = priceData.TotalCount;//ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
-            var budgetBalance = 0; // todo : implement fund service ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserId);
+            var budgetBalance = ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserLocalId.Value);
             return (budgetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
+        }
+
+        private void ChargeMoneyForAppInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds)
+        {
+            var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
+
+            if (Context.UserLocalId.HasValue)
+            {
+                var budgetBalance = ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserLocalId.Value);
+                var newBalance =  budgetBalance - priceData.TotalPrice;
+                ServiceLocator.ServiceLocatorMaster.FundService.UpdateUserBalance(Context.UserLocalId.Value, newBalance);
+            }
         }
 
         public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(int schoolYearId, Guid applicationId)
