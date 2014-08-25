@@ -328,12 +328,14 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 var res = da.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);
+                if(res == null)
+                    throw new NoAnnouncementException();
                 if (res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     if (activity == null)
                     {
-                        throw new NoAnnouncementException("You can't view this item. Current item was deleted from chalkable.");
+                        throw new NoAnnouncementException();
                     }
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     var chlkAnnType =
