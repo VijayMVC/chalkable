@@ -47,9 +47,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
         {
             var announcement = reader.ReadOrNull<AnnouncementDetails>();
-            announcement.IsScored = announcement.MaxScore > 0;
             if (announcement != null)
             {
+                announcement.IsScored = announcement.MaxScore > 0;
                 reader.NextResult();
                 announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
                 reader.NextResult();
