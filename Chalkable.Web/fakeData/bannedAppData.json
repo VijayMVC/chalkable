@@ -1,0 +1,12 @@
+{"data":{    
+    "banInfo": {
+		"banned": true,
+		"unbannable": true,
+		"bannedBy": {
+			"id": 2,
+			"name": "Teacher", 
+			"description": "Teacher", 
+			"namelowered": "teacher"
+		}
+	}
+},"success":true}
