@@ -294,6 +294,14 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
+            var classes = this.classService.getClassesForTopBar(false, true);
+            var classesBarData = new chlk.models.classes.ClassesForTopBar(classes), p = false;
+            classes.forEach(function(item){
+                if(!p && item.getId() == classId_)
+                    p = true;
+            });
+            if(!p)
+                classId_ = null;
             if(classId_ && announcementTypeId_){
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 var types = classInfo.getTypesByClass();
@@ -330,8 +338,6 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         return this.addEditAction(model, false);
                     }
-                    var classes = this.classService.getClassesForTopBar(false, true);
-                    var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
                     return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
                 },this);
             return this.PushView(this.getAnnouncementFormPageType_(), result);

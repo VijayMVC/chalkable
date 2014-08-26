@@ -28,7 +28,7 @@
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
     if !self.getUserRole().isStudent()
-        +ActionLink('announcement', 'add', clazz.getId(), chlk.models.announcement.AnnouncementTypeEnum.HW, date.format('mm/dd/yy'), true).ann-button.plus-ann
+        +ActionLink('announcement', 'addViaCalendar', date.format('mm-dd-yy'), true, clazz.getId() || '').ann-button.plus-ann
 
 
 
