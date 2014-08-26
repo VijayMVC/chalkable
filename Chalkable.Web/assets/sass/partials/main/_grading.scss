@@ -481,7 +481,7 @@ BODY {
                 }
 
                 &.no-items{
-                  .chzn-container-single{
+                  select:not(.with-value) +.chzn-container-single{
                     display: none;
                   }
                 }

@@ -325,6 +325,10 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function gradingSelectChange(node, event, selected_){
                 clearTimeout(gradingGridTimer);
+                if(node.getValue())
+                    node.addClass('with-value');
+                else
+                    node.removeClass('with-value');
                 var form = node.parent('form');
                 var hidden = form.find('.not-calculate-grid');
                 hidden.setValue(true);
