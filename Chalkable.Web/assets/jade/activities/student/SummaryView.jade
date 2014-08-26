@@ -1,0 +1,38 @@
+user = self.getUser()
+gradeLevel = user.getGradeLevelNumber();
+statusData = self.getStatusData()
+.loader-container
+    .loader
+    +ProfileTopBar(self, 'details')
+    .summary-view
+        #top-summary-panel
+            #avatar-photo-conainer
+                .img-container
+                    +PersonImg(user, 256, true)
+            #student-info-panel
+                displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                .status
+                    div(class=statusData.status, data-tooltip=statusData.statusName)
+                    |#{user.getCurrentClassName()}
+                    if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
+                        |&nbsp;- #{user.getRoomName()}
+                .glance-container
+                    if self.getUser().getRankBox()
+                        +GlanceBox(null, null, self.buildRankGlanceBoxData())
+                    if self.getUser().getAttendanceBox()
+                        +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, null, true, true)
+                    if self.getUser().getDisciplineBox()
+                        +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
+                    if self.getUser().getGradesBox()
+                        +GlanceBox(null, null, self.buildGradesGlanceBoxData(), null, null, true, true)
+        if user.getPeriodSection()
+            .today-work-panel
+                h2=Msg.Todays_work
+                .period-toolbar
+                    +LeftRightToolbar(user.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered.big-arrows
+        if user.getClassesSection()
+            .today-work-panel
+                h2.stats=Msg.Classes
+                .classes-tb
+                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class)(hideArrows).centered.big-arrows
