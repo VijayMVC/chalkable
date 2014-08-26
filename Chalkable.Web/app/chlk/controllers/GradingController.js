@@ -704,15 +704,23 @@ NAMESPACE('chlk.controllers', function (){
                         model.isExempt(),
                         JSON.parse(model.getCodesString()),
                         model.getNote()
-                    )
+                    ).then(function(newModel){
+                        newModel.setGradingPeriodId(model.getGradingPeriodId());
+                        return newModel;
+                    })
                     .attach(this.validateResponse_());
                 return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
             },
 
+            [[Boolean]],
             function updateStudentAvgFromPopupAction(save_){
                 var model = this.getContext().getSession().get(ChlkSessionConstants.STUDENT_AVG_MODEL);
                 if(!save_)
                     model.setGradingPeriodId(null);
+                else{
+                    if(!model.getGradingPeriodId())
+                        model.setGradingPeriodId(new chlk.models.id.GradingPeriodId(1))
+                }
                 return this.updateStudentAvgFromModel(model);
             },
 
