@@ -48,6 +48,7 @@ div(class=showButtons ? 'can-post' : '').page-content
         else
             +UpdateGridForm(Msg.Edit_grid, self.getRows(), self.getColumns(), self.getMinData().rows, self.getMinData().columns, selectedId.valueOf())
             .grey-button.add-remove-students= hasStudentOnChart ? Msg.Edit_students : Msg.Add_students
+            BUTTON(type="submit")#submit-chart.chlk-button.blue-gradient-btn=Msg.Save.toUpperCase()
             .right.right-container.save-attendances-buttons
                 if showButtons
                     A(class=self.getModel().hasSeatingStudents() ? "" : "disabled")#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT

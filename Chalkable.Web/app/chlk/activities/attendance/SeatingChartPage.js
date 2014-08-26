@@ -30,7 +30,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             var newTop = top + hKil * vertical, diffTop = topPos - newTop;
             var newLeft = left + vKil * horizontal, diffLeft = leftPos - newLeft;
             if((diffTop > topPadding) && (diffTop < topPadding + height) && (diffLeft > leftPadding) && (diffLeft < leftPadding + width)){
-                new ria.dom.Dom('#submit-chart').show();
+                jQuery('#submit-chart').show(100);
                 var droppable = $(this).find('.student-block[data-index=' + index + ']');
                 if(droppable.find('.empty')[0]){
                     droppable.html(draggable.html()).removeClass('empty-box');
@@ -144,6 +144,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                     var chart = new ria.dom.Dom('.seating-chart-people');
                     chart.show();
                     this.dom.addClass('dragging-on');
+                    //this.dom.find('#submit-chart').fadeIn();
                     $(".draggable:not(.empty-box)").draggable(draggableOptions);
                     $(".droppable").droppable(droppableOptions);
                     activeDragging = true;
@@ -262,14 +263,14 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('click', '.remove-student')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function removeStudentClick(node, event){
-                new ria.dom.Dom('#submit-chart').show();
+                this.dom.find('#submit-chart').show(100);
                 var parent = node.parent('.student-block ');
                 var clone = parent.clone();
                 parent.addClass('empty-box');
                 setEmptyBoxHtml(parent);
                 var container = new ria.dom.Dom('.seating-chart-people')
                     .find('.people-container');
-                clone.insertBefore(container.find('#submit-chart'))
+                clone.prependTo(container.find('.people-container'))
                     .removeClass('droppable')
                     .removeClass('ui-droppable');
                 jQuery(clone.valueOf()).draggable(draggableOptions);
@@ -377,6 +378,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 else
                     chart.hide();
                 this.dom.removeClass('dragging-on');
+                this.dom.find('#submit-chart').hide(100);
                 if(activeDragging){
                     if($( ".droppable:not(.empty-box)" )[0])
                         try{
@@ -420,7 +422,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
                 new ria.dom.Dom().on('click.seating', '#submit-chart', function(node, event){
                     this.recalculateChartInfo();
-                    node.hide();
+                    node.hide(100);
                     this.dom.find('.save-chart-form').trigger('submit');
                 }.bind(this));
 
