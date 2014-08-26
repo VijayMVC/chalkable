@@ -89,7 +89,7 @@ NAMESPACE('chlk.models.people', function () {
                    // res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, Msg.Alert_Medical_text));
                     this.addMedicalAlerts_(res);
                 if(this.getSpecialInstructions())
-                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, Msg.Alert_Special_text));
+                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, this.getSpecialInstructions()));
                 if(this.getSpedStatus() != 'Inactive')
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPED_STATUS_ALERT, Msg.Alert_Sped_text));
                 return new chlk.models.common.Alerts(res);
