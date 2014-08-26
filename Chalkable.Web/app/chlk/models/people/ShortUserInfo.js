@@ -90,7 +90,7 @@ NAMESPACE('chlk.models.people', function () {
                     this.addMedicalAlerts_(res);
                 if(this.getSpecialInstructions())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, Msg.Alert_Special_text));
-                if(this.getSpedStatus())
+                if(this.getSpedStatus() != 'Inactive')
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPED_STATUS_ALERT, Msg.Alert_Sped_text));
                 return new chlk.models.common.Alerts(res);
             },
