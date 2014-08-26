@@ -46,8 +46,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             ClassDetails currentClass = null;
             if (currentClassPeriod != null)
             {
-                currentClass = classes.First(x => x.Id == currentClassPeriod.ClassRef);
-                if (currentClass.RoomRef.HasValue)
+                currentClass = classes.FirstOrDefault(x => x.Id == currentClassPeriod.ClassRef);
+                if (currentClass != null && currentClass.RoomRef.HasValue)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
 
             }
