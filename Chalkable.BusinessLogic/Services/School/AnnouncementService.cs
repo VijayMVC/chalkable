@@ -309,13 +309,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annDa = CreateAnnoucnementDataAccess(uow);
                 var nowLocalDate = Context.NowSchoolTime;
                 var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId.Value);
+                uow.Commit();
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(nowLocalDate);
+                annDa.ReorderAnnouncements(sy.Id, classAnnouncementTypeId.Value, res.ClassRef);
+                res = annDa.GetDetails(res.Id, Context.UserLocalId.Value, Context.RoleId);
                 if (res.ClassAnnouncementTypeRef.HasValue)
                 {
                     var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
                     res.ClassAnnouncementTypeName = classAnnType.Name;
                     res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
                 }
-                uow.Commit();
                 return res;
             }
         }
