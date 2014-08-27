@@ -270,7 +270,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(!model.getGradingPeriodId()){
                     var input = container.find('.value-input');
                     //input.setValue(input.getData('grade-value'));
-                    container.find('.grade-text').setHTML(input.getData('grade-value'));
+                    var textNode = container.find('.grade-text');
+                    textNode.setHTML(textNode.getData('value'));
                     container.find('.for-edit').removeClass('for-edit');
                     container.find('.grading-form').remove();
                 }else{

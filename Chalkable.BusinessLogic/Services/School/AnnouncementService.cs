@@ -249,6 +249,14 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             //TODO : rewrite impl for better performance
             var anns = GetAnnouncements(new AnnouncementsQuery()).Announcements;
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
+            {
+                var classPersons = ServiceLocator.ClassService.GetClassPersons(Context.UserLocalId.Value, true);
+                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+                var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(sy.Id);
+                classPersons = classPersons.Where(x => markingPeriods.Any(y => y.Id == x.MarkingPeriodRef)).ToList();
+                anns = anns.Where(x => classPersons.Any(cp => cp.ClassRef == x.ClassRef)).ToList();
+            }
             var classesIds = anns.GroupBy(x => x.ClassRef).Select(x => x.Key).ToList();
             var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classesIds);
             foreach (var ann in anns)
