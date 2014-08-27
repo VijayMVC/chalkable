@@ -353,13 +353,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var list = this.dom.find('.autocomplete-list');
                 if(suggestions.length || node.hasClass('error')){
                     var html = '<div class="autocomplete-item">' + suggestions.join('</div><div class="autocomplete-item">') + '</div>';
-                    if(!all_){
+                    if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
-                        var top = node.offset().top - list.parent().offset().top + node.height() + 43;
-                        var left = node.offset().left - list.parent().offset().left + 61;
-                        list.setCss('top', top)
-                            .setCss('left', left);
-                    }
+                    var top = node.offset().top - list.parent().offset().top + node.height() + 50;
+                    var left = node.offset().left - list.parent().offset().left + 61;
+                    list.setCss('top', top)
+                        .setCss('left', left);
                     list.setHTML(html)
                         .show();
                 }else{
@@ -522,6 +521,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 input.removeClass('not-equals');
                 this.updateDropDown(this.getAllScores(), this.dom.find('.active-cell'), true);
                 return false;
+            },
+
+            [ria.mvc.DomEventBind('dblclick', '.grade-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function inputDblClickClick(node, event){
+                node.removeClass('not-equals');
+                node.addClass('disabled-submit');
+                this.updateDropDown(this.getAllScores(), node, true);
             },
 
             [ria.mvc.DomEventBind('mouseover', '.autocomplete-item')],
