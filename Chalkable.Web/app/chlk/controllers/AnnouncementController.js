@@ -420,14 +420,16 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(announcement);
                     return announcement;
                 }, this)
-                .catchError(function(error){
-                    if(error.getStatus && error.getStatus() == 500){
-                        var res = JSON.parse(error.getResponse());
-                        if(res.exceptiontype == 'NoAnnouncementException')
-                            return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
-                    }
-                }, this);
+                .catchError(this.handleNoAnnouncementException_, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
+        },
+
+        function handleNoAnnouncementException_(error){
+            if(error.getStatus && error.getStatus() == 500){
+                var res = JSON.parse(error.getResponse());
+                if(res.exceptiontype == 'NoAnnouncementException')
+                    return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
+            }
         },
 
         [[chlk.models.id.AnnouncementId, Object]],
@@ -902,6 +904,7 @@ NAMESPACE('chlk.controllers', function (){
         function askQuestionAction(model) {
             var ann = this.announcementService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
+                .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },
@@ -912,11 +915,13 @@ NAMESPACE('chlk.controllers', function (){
             if (model.getQuestion()){
                 ann = this.announcementService
                     .answerQuestion(model.getId(), model.getQuestion(), model.getAnswer())
+                    .catchError(this.handleNoAnnouncementException_, this)
                     .attach(this.validateResponse_());
             }
             else
                 ann = this.announcementService
                     .deleteQnA(model.getAnnouncementId(), model.getId())
+                    .catchError(this.handleNoAnnouncementException_, this)
                     .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },

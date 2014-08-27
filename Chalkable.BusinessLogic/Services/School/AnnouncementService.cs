@@ -638,7 +638,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = CreateAnnoucnementDataAccess(uow);
                 var res = da.GetAnnouncement(id, Context.Role.Id, Context.UserLocalId ?? 0); // security here 
                 if(res == null)
-                    throw new ChalkableSecurityException();
+                    throw new NoAnnouncementException();
                 return res;
             }
         }
