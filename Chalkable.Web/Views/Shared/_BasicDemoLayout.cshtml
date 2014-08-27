@@ -27,10 +27,11 @@
         ChlkHelpers.Olark();
     }
     @ChlkHelpers.RenderSiteRoot(Url)
+    <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-2.0.2.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autosize-min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autoresize.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.scrollTo.js")"></script>

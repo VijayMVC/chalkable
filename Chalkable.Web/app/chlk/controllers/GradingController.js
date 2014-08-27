@@ -233,7 +233,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getFinalGrades(classId_)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var gradingPeriod = this.getContext().getSession().get('gradingPeriod', {});
+                        var gradingPeriod = this.getCurrentGradingPeriod();
                         var canEditDirectValue = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES);
                         var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
                         model.setTopData(topData);
