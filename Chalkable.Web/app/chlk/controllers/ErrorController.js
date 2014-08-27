@@ -28,7 +28,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function viewAnnouncementErrorAction(){
-                var message = 'You can\'t view this item. Current item was deleted from Chalkable.';
+                var message = 'This item has been deleted';
                 return this.generalServerErrorAction(message);
             },
 

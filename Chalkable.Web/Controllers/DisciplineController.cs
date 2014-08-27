@@ -59,7 +59,7 @@ namespace Chalkable.Web.Controllers
             {
                 res = DisciplineView.Create(disciplines, Context.UserLocalId ?? 0).ToList();   
             }
-            if (byLastName.HasValue && byLastName.Value)
+            if (!byLastName.HasValue || byLastName.Value)
                 res = res.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
             else
                 res = res.OrderBy(x => x.Student.FirstName).ThenBy(x => x.Student.LastName).ToList();
