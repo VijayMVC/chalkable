@@ -423,6 +423,7 @@ var Msg = {
     Issues_right_now: 'Issues right now',
     Item_Ready_to_be_Graded: 'Item Ready to be Graded',
     Just_me: 'Just me',
+    Just_now: 'Just now',
     Last_name: 'Last name',
     Late_students: 'Late students',
     Last_week: 'Last week',

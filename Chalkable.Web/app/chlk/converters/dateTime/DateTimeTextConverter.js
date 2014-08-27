@@ -13,6 +13,8 @@ NAMESPACE('chlk.converters.dateTime', function () {
                     return "";
                 var nowDate = getDate(); //todo : think about this row
                 var totalMins = Math.ceil((nowDate - time.getDate()) / 1000 / 60);
+                if(totalMins == 0)
+                    return Msg.Just_now;
                 var minutes = totalMins % 60;
                 var totalHours = (totalMins - minutes) / 60;
                 var hours = totalHours % 24; //Math.floor(dif / 60);

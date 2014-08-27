@@ -9,8 +9,9 @@ function getDate(str, a, b, serverTime){
         return ( a !== undefined && b !== undefined ? new Date(str, a, b) : new Date(str));
     }
     var serverTime = new Date(serverTime.replace(/(-|\.)/g, "/"));
-    var now = new Date();
-    if(serverTime.getDate() == now.getDate() &&
+    var diff = window.clientTime - serverTime;
+    return new Date(new Date() - diff);
+    /*if(serverTime.getDate() == now.getDate() &&
        serverTime.getMonth() == now.getMonth() &&
        serverTime.getFullYear() == now.getFullYear()){
        now.setHours(serverTime.getHours());
@@ -22,7 +23,7 @@ function getDate(str, a, b, serverTime){
     dt.setSeconds(now.getSeconds());
     dt.setMinutes(now.getMinutes());
     dt.setHours(now.getHours());
-    return dt;
+    return dt;*/
 }
 
 function getSchoolYearServerDate(str,a,b){
