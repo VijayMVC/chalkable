@@ -20,10 +20,6 @@ function OneOrManyInst(txt, needE){
     var text = txt || '';
 
     this.getText = function(many){
-        this.toString = function(){
-            return text;
-        };
-
         return text + (many ? (needE ? 'es' : 's') : '');
     };
 
@@ -31,15 +27,18 @@ function OneOrManyInst(txt, needE){
         text = txt;
     };
 
+    this.toString = function(){
+        return text;
+    };
 }
 
 function oneOrMany(text, needE){
     var inst = new OneOrManyInst(text, needE);
-    var res = inst.getText;
-    res.toString = function(){
-        return this.getText(false);
-    }.bind(inst);
-    return res;
+    var oldGetText = inst.getText;
+    inst.getText = function() {
+        return oldGetText.call(inst, false);
+    };
+    return inst;
 }
 
 var Msg = {

@@ -1,5 +1,5 @@
 mixin FeedItem(item, disabled)
-    itemClasses = attributes.class || []
+    itemClasses = attributes['class'] || []
         -itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
         -itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
         isAdminAnnouncement = item.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
