@@ -1,0 +1,34 @@
+.calendar-popup
+    announcementclassperiod = self.getAnnouncementClassPeriods()[0]
+    announcements = announcementclassperiod.getAnnouncements()
+    period = self.getPeriod()
+    roomNumber = announcementclassperiod.getClassPeriod().getRoomNumber()
+    clazz = announcementclassperiod.getClassPeriod().getClazz()
+    date = self.getDate()
+    .class-name
+        h3.day-day
+            +ActionLink('class', 'info', clazz.getId())=clazz.getName()
+    .info
+        if roomNumber
+            p.day-down
+                a Rm #{roomNumber}
+            br
+        p.day-down
+            a #{period.displayPeriodTimeRange()}
+        br
+        p.day-down
+            a=date.format('DD, MM d')
+        br
+    if announcements.length > 0
+        .announcements-list
+            ul.day-announcements
+                each item in announcements
+                    li.items
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
+                            div
+                                +TooltipWithOverflow(item.getTitle()).item-title
+    if !self.getUserRole().isStudent()
+        +ActionLink('announcement', 'addViaCalendar', date.format('mm-dd-yy'), true, clazz.getId() || '').ann-button.plus-ann
+
+
+
