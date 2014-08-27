@@ -1,0 +1,37 @@
+#chlk-dialogs{
+
+  .dialog{
+    &.add-app-category{
+      min-height: 200px;
+      .x-window-body{
+
+
+
+        .submit-btn{
+          margin-left: 265px;
+          margin-top: 5px;
+          margin-right: 5px;
+        }
+
+        .x-form-field{
+          margin-bottom: 4px;
+          label{
+            width: 125px;
+            display: inline-block;
+            text-align: right;
+            height: 18px;
+            color: #808080;
+            font: normal 14px tahoma, arial, helvetica, sans-serif;
+            padding: 3px;
+            padding-left: 0;
+          }
+          input{
+            width: 312px;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+
+  }
+}

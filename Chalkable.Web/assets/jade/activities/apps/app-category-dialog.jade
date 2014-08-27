@@ -1,0 +1,15 @@
+.dialog.add-app-category.gray
+    .x-window-header
+        span Category
+    .x-window-body
+            +ActionForm('appcategories', 'save')
+                +Hidden("id", self.id)
+                .x-form-field
+                    label Name:
+                    input(type="text",name="name", value=self.name)
+                .x-form-field
+                    label Description:
+                    input(type="text",name="description", value=self.description)
+                .x-form-field
+                +Button()(type="submit").special-button.blue-button.submit-btn Submit
+                +Button.special-button.red-button Cancel
