@@ -38,7 +38,7 @@ function oneOrMany(text, needE){
     inst.getText = function() {
         return oldGetText.call(inst, false);
     };
-    return inst;
+    return inst.getText;
 }
 
 var Msg = {
