@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -50,6 +51,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult LogOut()
         {
             ChalkableAuthentication.SignOut();
+            DeveloperAuthentication.SignOut();
             return Json(new { success = true, data = new { success = true } }, JsonRequestBehavior.AllowGet);
         }
         
@@ -131,7 +133,11 @@ namespace Chalkable.Web.Controllers
         {
             var context = logOnAction(userService);
             if (context != null)
+            {
                 ChalkableAuthentication.SignIn(context, remember);
+                if (context.DeveloperId.HasValue && !DemoUserService.IsDemoUser(context))
+                    DeveloperAuthentication.SignIn(context, remember);
+            }
             return context;
         }
 

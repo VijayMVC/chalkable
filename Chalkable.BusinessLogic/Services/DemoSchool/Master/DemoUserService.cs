@@ -160,6 +160,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public UserContext DeveloperTestLogin(Developer developer)
+        {
+            throw new NotImplementedException();
+        }
+
         public UserContext ReLogin(Guid id)
         {
             throw new NotImplementedException();
