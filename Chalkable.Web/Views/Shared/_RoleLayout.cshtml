@@ -1,0 +1,363 @@
+﻿@using Chalkable.Common
+@using Chalkable.Web.Common
+@using Chalkable.Web.Models.PersonViewDatas
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>
+    @ChlkHelpers.RenderPageMetadata()
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
+    <!-- Whole Site CSS -->
+    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="~/Content/fonts.css" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
+
+    <!-- Page specific CSS -->
+    @RenderSection("Styles", false)
+    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        ChlkHelpers.GoogleAnalytics();
+        ChlkHelpers.Olark();
+    }
+    @ChlkHelpers.RenderSiteRoot(Url)
+    
+    
+    <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autosize-min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autoresize.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.scrollTo.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/carousel/jquery.jcarousel.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/carousel/jquery.carouFredSel-6.2.1-packed.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.validate.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
+    <script type="text/javascript" src="~/Scripts/api/chlk-post-message-api.js"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.signaturepad.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.quicksand.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.creditCardValidator.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
+
+</head>
+
+     @{
+             var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
+             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
+             var demoSchoolPictureDistrictRef = ViewData.GetValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
+             
+        }
+
+    <body class ="@ViewData.GetValueOrNull(ViewConstants.ROLE_NAME)">
+        <div id="fb-root"></div>
+        <input type="hidden" value=" ServerTime :  @ViewData.GetValueOrNull("CurrentServerDateTime")"/>
+        <input type="hidden" value=" ServerDbTime:  @ViewData.GetValueOrNull("CurrentServerDBDateTime")"/>
+
+        <div id="page-header">
+            Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
+            @if (!isDemoSchool)
+            {
+                @:Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
+            }
+        </div>
+        
+        
+        
+        
+        
+        <div id="logout-block">
+        @if (!isDemoSchool && !isDeveloperSchool)
+        {
+            @Html.ActionLink("Go to INOW", "RedirectToINow", "User")
+        }
+        </div>
+        
+
+        <div class="page 
+        @if (isDemoSchool || isDeveloperSchool)
+        {
+            @:demo
+        }
+        ">
+            <div id="sidebar"></div>
+            <div id="content">
+                <div class="ribbon"></div>
+                <div id="content-wrapper">
+                    <div id="main-top">
+                    </div>
+                    <div id="main-wrapper">
+                        <div id="main">
+                            @RenderBody()
+                       
+                        </div>
+                        <div id = "chlk-dialogs" class = "x-hidden"></div>
+                    </div>
+                    @ChlkHelpers.RenderChlkCopyrightYear()
+                </div>
+            </div>
+            
+            
+        </div>
+        @if (isDemoSchool || isDeveloperSchool)
+        {
+
+            var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
+            var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
+            var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
+            var isAdmin = currentRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id
+                || currentRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id || currentRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id;
+            var isStudent = currentRoleId == CoreRoles.STUDENT_ROLE.Id;
+                
+            <div id="demo-footer" class="top">
+            @if (isDeveloper)
+            {
+                <div id="dev-apps-list"></div>
+            }
+            else if (!isDeveloperSchool)
+            {
+                <div id="fb">
+                    <h>Don't be shy</h>
+                    <div class="fb-like" data-href="https://chalkable.com" data-layout="button_count" data-send="true" data-width="55" data-show-faces="true"></div>
+                    <a id="principal"></a>
+                </div>
+                <div class="border demo-end"></div>
+                <div class="demo-end">
+                    <h>Demo</h>
+                    <div id="demo-end-container"></div>
+                </div>
+                <div class="border"></div>
+                <div>
+                    <h>Sign up</h>
+                    <div id="demo-sign-up-container"></div>
+                </div>
+                
+                <div class="border"></div>
+            }
+
+            
+            <div id="roles-buttons">
+                @if (isDeveloperSchool)
+                {
+                    <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
+                >}<a class="demo-role-button  @if (isStudent)
+                                              {
+                    @:active
+                }" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
+                ><a class="demo-role-button @if (isTeacher)
+                                            {
+                    @:active
+                }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
+                ><a class="demo-role-button @if (isAdmin)
+                                            {
+                    @:active
+                }" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
+                ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
+                ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
+            </div>
+            </div>
+        }
+        <div id = "chlk-overlay" class ="x-hidden"></div>
+        <div id = "first-login-overlay"></div>
+        <a id="first-login-video" href="https://www.youtube.com/watch?v=sDdfBOYpduU"></a>
+        <input id="first-login-input" />
+        <div id="chlk-pop-up-container" class="x-hidden">
+            <div id="pop-up-triangle"></div>
+        </div>
+        <div class="chlk-tooltip" id="chlk-tooltip-item">
+            <div class="tooltip-content"></div>
+            <div class="tooltip-triangle"></div>
+        </div>
+        <div class="alerts-pop-up"></div>
+        @RenderSection("MixPanelTracking", false)
+        
+<script type="text/json" id="application-value" class="valuable-script">
+    @Html.Raw(@ViewData.GetValueOrNull(ViewConstants.DEFAULT_APPLICATION))
+</script>
+
+    <script type="text/json" id="applications-value" class="valuable-script">
+    @Html.Raw(@ViewData.GetValueOrNull(ViewConstants.APPLICATIONS))
+</script>
+
+        <script type="text/javascript">
+            (function($) {
+                $('.valuable-script').each(function() {
+                    if (!/^\s*$/.test(this.text || '')) {
+                        var name = $(this).attr('id').split('-')[0];
+                        window[name] = JSON.parse($(this).text()).data;
+                    }
+                });
+            }(jQuery));
+        </script>
+        
+        <script type="text/javascript">
+
+
+            var isGuidValid = function(value) {
+                var validGuid = /^({|()?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}(}|))?$/;
+                var emptyGuid = /^({|()?0{8}-(0{4}-){3}0{12}(}|))?$/;
+
+                return validGuid.test(value) && !emptyGuid.test(value);
+            };
+            
+            var isValidGuidList = function(value) {
+                if (!value) 
+                    return false;
+
+                var guids = (value || "").split(',') || [];
+                var cnt = 0;
+                for(var i = 0; i < guids.length; ++i) {
+                    if (isGuidValid(guids[i])) ++cnt;
+                }
+                return cnt == guids.length;
+            };
+
+            var isValidIntList = function(value) {
+                if (!value) 
+                    return false;
+
+                var ints = (value || "").split(',') || [];
+                var cnt = 0;
+                for(var i = 0; i < ints.length; ++i) {
+                    if (jQuery.isNumeric(ints[i])) ++cnt;
+                }
+                return cnt == ints.length;
+            };
+
+            jQuery.validator.addMethod("guid", function(value, element) {
+                return isGuidValid(value);
+            },  'Please select a valid and non empty Guid value.');
+            
+            jQuery.validator.addMethod("guidlist", function(value, element) {
+                return isValidGuidList(value);
+                
+            }, 'Please select one or more(coma separated) valid Guid values.');
+
+            jQuery.validator.addMethod("intlist", function(value, element) {
+                return isValidIntList(value);
+                
+            }, 'Please select one or more(coma separated) valid integer values.');
+        </script>
+
+        <script type="text/javascript">
+        
+            function parseJsonToObj(json){
+                return json ? JSON.parse(HtmlEncode(json)).data : null;
+            }
+            function parseJsonToArray(json){
+                return parseJsonToObj(json) || [];
+            }
+
+            var notificationsInterval;
+            var school = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL)');
+            var schoolOptions = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL_OPTIONS)');
+            var newNotifications = parseInt('@ViewData.GetValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT)', 10) || 0;
+            var azurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.AZURE_PICTURE_URL)';
+            var demoAzurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.DEMO_AZURE_PICTURE_URL)';
+
+            var USER_ROLE_EXT = '@ViewData.GetValueOrNull("Rolename")';
+            var currentSchoolYearId = '@ViewData.GetValueOrNull(ViewConstants.CURR_SCHOOL_YEAR_ID)';
+            var serverTime = '@ViewData.GetValueOrNull(ViewConstants.SERVER_TIME)';
+            var schoolYearServerTime = '@ViewData.GetValueOrNull(ViewConstants.SCHOOL_YEAR_SERVER_TIME)';
+            var currentChlkPerson = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.CURRENT_PERSON)');
+            var classesToFilter = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES)');
+            var classesAdvancedData = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES_ADV_DATA)');
+            var scriptsRoot = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot';
+            var classesInfo = {};
+            classesAdvancedData && classesAdvancedData.forEach(function (el) {
+                classesInfo[el.classid] = {
+                    mask: el.mask,
+                    typesByClass: el.typesbyclass,
+                    alphaGrades: el.alphagrades,
+                    alphaGradesForStandards: el.alphagradesforstandards
+                };
+            });
+
+            var markingPeriod =  parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.MARKING_PERIOD)');
+            var nextMarkingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.NEXT_MARKING_PERIOD)');
+            var gradingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.GRADING_PERIOD)');
+            var finalizedClassesIds = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.FINALIZED_CLASSES_IDS)'); 
+            var attendanceReasons = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ATTENDANCE_REASONS)');
+            var gradeLevels = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADE_LEVELS)') || [];
+            var userClaims = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.USER_CLAIMS)');
+            var alphaGrades = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALPHA_GRADES)');
+            var alternateScores = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALTERNATE_SCORES)');
+            var gradingComments = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADING_COMMMENTS)');
+            var DEMO_SCHOOL = JSON.parse('@isDemoSchool.ToString().ToLowerInvariant()');
+            var DEMO_SCHOOL_PICTURE_DISTRICT = '@demoSchoolPictureDistrictRef';
+            
+            var redirectUrl = '@ViewData[ViewConstants.REDIRECT_URL_KEY]';
+        </script>
+    
+    @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        <script src="@Url.Content("~/app/ria/_bootstrap.js")" type="text/javascript">
+            ria.__CFG = {
+                "prettyStackTraces": true,
+                "checkedMode": true,
+                "enablePipelineMethodCall": true,
+                "AssertWithExceptions": false,
+                "stackTraceJs": "lib/stacktrace.js",
+
+                "#require": {
+                    "plugins": ["~/assets/jade.js"],
+                    "appCodeDir": "~/app/",
+                    "appRoot": "@Url.Content("~")",
+                    "libs": {
+                    }
+                },
+
+                "#mvc": @RenderSection("MVCSettings", false)
+            }
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            var role = currentChlkPerson.role.name;
+            if (role.toLowerCase() == "admingrade" || role.toLowerCase() == "adminview" || role.toLowerCase() == "adminedit")
+                role = "Admin";
+            var roleAppScript = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot' + '/app/' + role + 'App.compiled.js';
+            (function(appUrl) {
+                var scr = document.createElement('script');
+                scr.setAttribute('type', 'text/javascript');
+                scr.src = appUrl;
+                
+                var cfgObject = {
+                    "prettyStackTraces": false,
+                    "checkedMode": false,
+                    "enablePipelineMethodCall": false,
+                    "AssertWithExceptions": true,
+                    "#mvc": @RenderSection("MVCSettings", false)
+                };
+
+                cfgObject = JSON.stringify(cfgObject);
+                $(scr).text("ria.__CFG = " + cfgObject);
+                document.getElementsByTagName('head').item(0).appendChild(scr);
+            })(roleAppScript);
+        </script>
+    }
+    @ChlkHelpers.MixPanel() 
+    @RenderSection("BottomScripts", false)
+    
+    
+    
+    </body> 
+</html>

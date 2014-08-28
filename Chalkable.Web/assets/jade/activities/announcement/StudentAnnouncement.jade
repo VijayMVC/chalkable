@@ -1,0 +1,40 @@
+normalValue = self.getNormalValue()
+itemCls = (self.isDropped() ? 'dropped' :'')
+selectedCls = (!self.isReadonly() ? 'not-selected' : '')
+maxScore = self.getMaxScore()
+div(class=self.getAttachments() && self.getAttachments().length ? "" : "no-attachments").grade-triangle
+div(class=self.getModel().getAlertClass(maxScore, true), data-tooltip=self.getModel().getTooltipText(maxScore, true)).alert-flag
+div(class=selectedCls + ' ' + itemCls).i-b.text-value=normalValue
+div(class="selected " + itemCls, rowIndex=self.getRowIndex(), recId=self.getId()).i-b
+    if !self.isReadonly()
+        .input-container
+            INPUT(
+                type="text",
+                autofill="off",
+                value=normalValue,
+                name="gradevalue",
+                data-value=normalValue,
+                class=self.getGradeInputClass()
+                data-grade-value=self.getGradeValue(),
+                data-id=self.getId().valueOf(),
+                readonly = !self.isAbleDropStudentScore() && self.isDropped()
+            ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus.select-text
+            .letters 0 - #{self.getMaxScore()}
+            .grading-input-popup.chlk-pop-up-container.popup-bottom
+                .pop-up-triangle.big
+                id = self.getServerDate().getTime()
+                if self.isAbleDropStudentScore() || self.isDropped()
+                    +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id, class = self.isAbleDropStudentScore() ? '' : 'cant-drop').with-value.dropped-checkbox
+                else
+                    if self.isDropped()
+                        +LabeledCheckbox("Undrop", 'undropped', !self.isDropped())(data-value=!self.isDropped(), id='undropped-' + id).with-value.undropped-checkbox
+                    +Hidden('dropped', false)
+                +Hidden('isabsent', self.isAbsent())
+                +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), id='islate-' + id).with-value
+                +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), id='isincomplete-' + id).with-value
+                if self.isAbleToExempt()
+                    +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), id='isexempt-' + id).with-value.exempt-checkbox
+
+                else
+                    +Hidden('isexempt', self.isExempt())
+                +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(containerClass = "fill-grade-container").fill-grade
