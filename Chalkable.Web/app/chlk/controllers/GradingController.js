@@ -438,6 +438,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
+            [chlk.controllers.SidebarButton('statistic')],
             function getGradeCommentsAction(){
                 var result = this.gradingService.getGradeComments().then(function(comments){
                     return new chlk.models.grading.GradingComments(comments);
@@ -462,6 +463,7 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+            [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){
                 var finalGradeAnnouncementTypes = [], item,
@@ -712,6 +714,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
             },
 
+            [chlk.controllers.SidebarButton('statistic')],
             [[Boolean]],
             function updateStudentAvgFromPopupAction(save_){
                 var model = this.getContext().getSession().get(ChlkSessionConstants.STUDENT_AVG_MODEL);
