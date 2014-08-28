@@ -14,12 +14,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
-        //TODO: remove this later 
-        public ActionResult EncryptPassword(string password)
-        {
-           return Json(MasterLocator.UserService.PasswordMd5(password));
-        }
-
         public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime, int? acadSessionId)
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);

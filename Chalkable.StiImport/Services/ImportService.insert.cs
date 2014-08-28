@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
@@ -247,7 +248,7 @@ namespace Chalkable.StiImport.Services
                     Gender = person.GenderID.HasValue ? genders[person.GenderID.Value].Code : "U",
                     Id = person.PersonID,
                     LastName = person.LastName,
-                    Password = ServiceLocatorMaster.UserService.PasswordMd5(DEF_USER_PASS),
+                    Password = UserService.PasswordMd5(DEF_USER_PASS),
                     SisUserName = userName,
                     HasMedicalAlert = hasMedicalAlert,
                     IsAllowedInetAccess = isAllowedInetAccess,

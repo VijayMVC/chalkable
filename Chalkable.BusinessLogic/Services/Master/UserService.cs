@@ -42,7 +42,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         User GetSysAdmin();
         void CreateSchoolUsers(IList<User> userInfos);
         void DeleteUsers(IList<int> localIds, Guid districtId);
-        string PasswordMd5(string password);
         void Edit(IList<User> users);
         void UpdateSisUserNames(List<Pair<string, string>> values);
     }
@@ -53,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public string PasswordMd5(string password)
+        public static string PasswordMd5(string password)
         {
             var bytes = Encoding.UTF8.GetBytes(password);
             var hash = new MD5CryptoServiceProvider().ComputeHash(bytes);

@@ -146,7 +146,7 @@ button.disabled, button[disabled]{
 
 .special-button, .special-button2{
   &.disabled, &[disabled]{
-    opacity: 0.6;
+    opacity: 0.6 !important;
   }
 }
 

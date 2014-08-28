@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Transactions;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
@@ -119,21 +120,8 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void Test3()
         {
-            //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/api/");
-            //var cl = ConnectorLocator.Create("administrator", "qqqq1111", "https://qa-external.stiinformationnow.com/API/");
-
-            Debug.WriteLine(DateTime.Now.Ticks);
-            var r = cl.SyncConnector.GetDiff(typeof(GradingPeriod), null) as SyncResult<GradingPeriod>;
-            Debug.WriteLine(DateTime.Now.Ticks);
-
-            var gradingPeriods = r.All.Where(x => x.AcadSessionID == 12).ToList();
-
-            foreach (var gradingPeriod in gradingPeriods)
-            {
-                Debug.WriteLine("gradingPeriod = ({0}, {1}, {2} ,{3}),", gradingPeriod.GradingPeriodID, gradingPeriod.Name, gradingPeriod.StartDate, gradingPeriod.EndDate);
-
-            }
+            var hash = UserService.PasswordMd5("Hellowebapps1!");
+            Debug.WriteLine(hash);
         }
     }
 }

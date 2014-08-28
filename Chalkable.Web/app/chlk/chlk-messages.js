@@ -637,6 +637,7 @@ var Msg = {
         "All methods return JSON. There are user roles on the bar above. Choosing a role, for example teacher, " +
         "displays all of the methods available to your app if a teacher had installed it.",
     Close_without_attaching_the_app: 'Close without attaching the app?',
+    Delete_announcement_btn_tooltip: 'You must delete the grades first to delete this item',
     Edit_Average_Text_1: 'This action overrides the calculated score.',
     Edit_Average_Text_2: 'To revert to the calculated score delete the manual input.',
     First_login_text1: 'Set your chalkable.com login info.',
