@@ -1,0 +1,55 @@
+-isTeacher=self.getUserRole().isTeacher()
+each item, i in self.getAnnouncementQnAs()
+    -questionMsg = item.getQuestion().getMessage()
+    +ActionForm('announcement', 'answerQuestion')
+        input(type="hidden",name="id", value=item.getId())
+        input(type="hidden",name="announcementId", value=self.getId())
+        .row
+            .avatar-container.i-b.no-overflow
+                +PersonImg(item.getQuestion().getPerson(), 47)
+            .qna.i-b
+                h2= item.getQuestion().getPerson().getFirstName()
+                .edit-question-block
+                    p.edit-question-text= questionMsg
+                    span= self.convertWith(item.getQuestion().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                    if self.isAnnOwner()
+                        a(href='javascript:', name='edit-question-link').edit-question-link=Msg.Edit
+                        //a(href='javascript:', name='cancel-question-link').cancel-question-link cancel
+                input(type="text",name="question", value=questionMsg).edit-question-input
+                br
+                +Button()(type="submit", name="updateQuestionType", value="editQuestion").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
+
+        answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
+        if (answered || isTeacher)
+            .row
+                hideEdit = answered || !self.isAnnOwner()
+                -answerMsg=''
+                if item.getAnswer()
+                    .avatar-container.i-b.no-overflow
+                        +PersonImg(item.getAnswer().getPerson(), 47)
+                .qna.i-b
+                    if item.getAnswer()
+                        -answerMsg=item.getAnswer().getMessage()
+                        -isAnswerOwner = item.getAnswer().getPerson().getId() == self.getCurrentUser().getId()
+                        h2= item.getAnswer().getPerson().getFirstName()
+                        .edit-answer-block
+                            p(class = hideEdit ? "" : "x-hidden").edit-answer-text= answerMsg
+                            span= self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
+                            if answered && self.isAnnOwner() && isAnswerOwner
+                                a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
+                            //a(href='javascript:', name='cancel-answer-link').cancel-answer-link cancel
+                    input(type="text",name="answer", value=answerMsg
+                        , class=hideEdit ? "x-hidden validate[required]" : "validate[required]").edit-answer-input
+                    br
+                    +Button()(type="submit", name="updateAnswerType", value= !answerMsg ? "answer" : "editAnswer", class="special-button blue-button submit-btn").edit-answer-btn=Msg.Update.toUpperCase()
+
+
+if !self.isAnnOwner() && self.getUserRole().isStudent()
+    +ActionForm('announcement', 'askQuestion')
+        .avatar-container.i-b.no-overflow
+            +PersonImg(self.getCurrentUser(), 47)
+        .qna.i-b
+            h2= self.getCurrentUser().getFirstName()
+            input(type="text", name="question", class="validate[required]")
+            input(type="hidden",name="announcementId", value=self.getId())
+            +Button()(type="submit").special-button.blue-button.submit-btn Ask
