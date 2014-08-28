@@ -112,15 +112,14 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         ).special-button.blue-button.submit-btn
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
-            if !disableDeleteBtn
-                +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(
-                disable=disableDeleteBtn)
-                    +Button()(
-                    type="submit",
-                    name="submitType",
-                    value="submit",
-                    disable=disableDeleteBtn
-                    ).special-button.red-button.submit-btn.add-loader-btn
-                        =Msg.Delete
+            +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(
+                disabled=disableDeleteBtn
+            )
+                +Button()(
+                    type="button",
+                    data-tooltip = disableDeleteBtn ? Msg.Delete_announcement_btn_tooltip : '',
+                    class=disableDeleteBtn ? 'disabled' : ''
+                ).special-button.red-button.submit-btn.add-loader-btn
+                    =Msg.Delete
         else
             +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
