@@ -10,7 +10,7 @@ REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
-    var titleTimeout, wasTypeChanged;
+    var titleTimeout, wasTypeChanged, wasExistingTitle, wasDisabledBtn, wasDateChanged;
 
     /** @class chlk.activities.announcement.AnnouncementFormPage*/
     CLASS(
@@ -28,8 +28,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);
-                if(wasTypeChanged)
-                    this.dom.find('#check-title-button').trigger('click');
+                if(wasTypeChanged && wasExistingTitle)
+                    this.disableSubmitBtn();
                 wasTypeChanged = false;
                 if(model instanceof chlk.models.announcement.LastMessages)
                     this.dom.find('#content').trigger('focus');
@@ -38,6 +38,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '#check-title-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function checkTitleClick(node, event){
+                wasDisabledBtn = this.dom.find('.submit-announcement').hasClass('disabled');
                 this.dom.find('.submit-announcement')
                     .addClass('disabled');
             },
@@ -71,9 +72,17 @@ NAMESPACE('chlk.activities.announcement', function () {
                     value = input.getValue();
                 this.dom.find('.title-text').setHTML(value);
                 input.setData('title', value);
+                this.removeDisabledClass();
+                wasExistingTitle = false;
                 setTimeout(function(){
                     node.setAttr('disabled', true);
                 }, 1);
+            },
+
+            function removeDisabledClass(){
+                this.dom.find('.submit-announcement')
+                    .removeClass('disabled')
+                    .setData('tooltip', false);
             },
 
             [ria.mvc.DomEventBind('click', '.submit-btn')],
@@ -113,8 +122,8 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateTitle(tpl, model, msg_) {
-                var submitBtn = this.dom.find('.submit-announcement');
-                submitBtn.removeClass('disabled');
+                if(!wasDisabledBtn || !model.isData() && wasDateChanged)
+                    this.removeDisabledClass();
                 var block = this.dom.find('.title-text:visible'),
                     saveBtn = this.dom.find('.save-title-btn'),
                     titleBlock = this.dom.find('.title-block');
@@ -123,6 +132,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
                         saveBtn.trigger('click');
                     this.updateFormByNotExistingTitle();
+
                 }else{
                     if(block.exists())
                         this.dom.find('#show-title-popup').trigger('click');
@@ -132,10 +142,16 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var text = titleInput.getValue();
                     var oldText = titleInput.getData('title');
                     if(oldText == text)
-                        submitBtn
-                            .addClass('disabled')
-                            .setData('tooltip', Msg.Existing_title_tooltip);
+                        this.disableSubmitBtn();
                 }
+                wasDateChanged = false;
+            },
+
+            function disableSubmitBtn(){
+                wasExistingTitle = true;
+                this.dom.find('.submit-announcement')
+                    .addClass('disabled')
+                    .setData('tooltip', Msg.Existing_title_tooltip)
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'title-popup')],
@@ -171,6 +187,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                     }
                     block.addClass('with-date');
                     this.dom.find('#title').addClass('should-check').trigger('keyup');
+                    setTimeout(function(){
+                        wasDateChanged = true;
+                    }, 1);
                 }
                 else
                     block.removeClass('with-date').removeClass('was-empty');
@@ -179,6 +198,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('keyup', '#title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleKeyUp(node, event){
+                wasDateChanged = false;
                 var dom = this.dom, node = node;
                 if(dom.find('.title-block-container').hasClass('with-date')){
                     if(!node.getValue() || !node.getValue().trim()){
@@ -206,11 +226,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [[Boolean]],
             function updateFormByNotExistingTitle(){
-                var titleBlock = this.dom.find('.title-block');
-                titleBlock.removeClass('exists');
-                this.dom.find('.submit-announcement')
-                    .removeClass('disabled')
-                    .setData('tooltip', false);
+                this.dom.find('.title-block').removeClass('exists');
             },
 
             OVERRIDE, VOID, function onRender_(model){
@@ -229,6 +245,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                                 that.updateFormByNotExistingTitle();
                                 titleInput.setValue(oldText);
                                 titleBlock.find('.title-text').setHTML(oldText);
+                                if(!wasDisabledBtn)
+                                    that.removeDisabledClass();
                             }
                         }
                         if(text && !dom.find('.title-block-container').hasClass('with-date')){
