@@ -495,7 +495,7 @@ BODY {
 
             .title-block-container{
               &.with-date{
-                .title-block.exists{
+                .title-block.exists.active{
                   .exists-icon{
                     display: inline-block;
                   }

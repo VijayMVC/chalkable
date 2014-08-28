@@ -106,10 +106,10 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
             )
     .bottom-block
         +Button()(
-        type="submit",
-        name="submitType",
-        value=announcement.getState() ? "submitOnEdit" : "submit"
-        ).special-button.blue-button.submit-btn
+            type="submit",
+            name="submitType",
+            value=announcement.getState() ? "submitOnEdit" : "submit"
+        ).special-button.blue-button.submit-btn.submit-announcement
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
             +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(

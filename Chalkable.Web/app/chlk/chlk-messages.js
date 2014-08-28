@@ -640,6 +640,7 @@ var Msg = {
     Delete_announcement_btn_tooltip: 'You must delete the grades first to delete this item',
     Edit_Average_Text_1: 'This action overrides the calculated score.',
     Edit_Average_Text_2: 'To revert to the calculated score delete the manual input.',
+    Existing_title_tooltip: 'There is an item with that title on the selected date. Please enter a different title or select a different date.',
     First_login_text1: 'Set your chalkable.com login info.',
     First_login_text2: 'Your password will be the same as your iNow password.',
     First_login_text3: 'You can always continue to login via iNow.',
