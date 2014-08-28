@@ -231,15 +231,26 @@ namespace Chalkable.BusinessLogic.Services.School
         private IList<AnnouncementComplex> MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IEnumerable<Activity> activities)
         {
             var res = new List<AnnouncementComplex>();
+            var needToUpdate = new List<Announcement>(); 
             foreach (var activity in activities)
             {
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
                 if (ann != null)
                 {
+                    if(ann.Expires != activity.Date || ann.Title != activity.Name)
+                        needToUpdate.Add(ann);
                     MapperFactory.GetMapper<AnnouncementComplex, Activity>().Map(ann, activity);
                     var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(ann.ClassAnnouncementTypeName);
                     ann.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?) null;
                     res.Add(ann);       
+                }
+            }
+            if (needToUpdate.Count > 0)
+            {
+                using (var uow = Update())
+                {
+                    CreateAnnoucnementDataAccess(uow).Update(needToUpdate);
+                    uow.Commit();
                 }
             }
             return res;
@@ -318,7 +329,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var nowLocalDate = Context.NowSchoolTime;
                 var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId.Value);
                 uow.Commit();
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(nowLocalDate);
+                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime);
                 annDa.ReorderAnnouncements(sy.Id, classAnnouncementTypeId.Value, res.ClassRef);
                 res = annDa.GetDetails(res.Id, Context.UserLocalId.Value, Context.RoleId);
                 if (res.ClassAnnouncementTypeRef.HasValue)
@@ -490,6 +501,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 var date = ann.Expires > DateTime.MinValue ? ann.Expires : ann.Created;
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(date);
+                if(sy == null)
+                    throw new ChalkableException("There is no school year in current date");
                 if(ann.ClassAnnouncementTypeRef.HasValue)
                     da.ReorderAnnouncements(sy.Id, ann.ClassAnnouncementTypeRef.Value, ann.ClassRef);
 
