@@ -231,15 +231,26 @@ namespace Chalkable.BusinessLogic.Services.School
         private IList<AnnouncementComplex> MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IEnumerable<Activity> activities)
         {
             var res = new List<AnnouncementComplex>();
+            var needToUpdate = new List<Announcement>(); 
             foreach (var activity in activities)
             {
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
                 if (ann != null)
                 {
+                    if(ann.Expires != activity.Date || ann.Title != activity.Name)
+                        needToUpdate.Add(ann);
                     MapperFactory.GetMapper<AnnouncementComplex, Activity>().Map(ann, activity);
                     var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(ann.ClassAnnouncementTypeName);
                     ann.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?) null;
                     res.Add(ann);       
+                }
+            }
+            if (needToUpdate.Count > 0)
+            {
+                using (var uow = Update())
+                {
+                    CreateAnnoucnementDataAccess(uow).Update(needToUpdate);
+                    uow.Commit();
                 }
             }
             return res;
