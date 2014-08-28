@@ -158,6 +158,7 @@
     <Compile Include="Authentication\ChalkableAuthentication.cs" />
     <Compile Include="Authentication\ChalkableIdentity.cs" />
     <Compile Include="Authentication\ChalkablePrincipal.cs" />
+    <Compile Include="Authentication\DeveloperAuthentication.cs" />
     <Compile Include="Authentication\OauthAuthenticate.cs" />
     <Compile Include="Common\UrlFormats.cs" />
     <Compile Include="Common\ViewConstants.cs" />

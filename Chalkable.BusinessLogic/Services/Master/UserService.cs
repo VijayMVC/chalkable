@@ -27,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string login, string password, out string error);
         UserContext Login(string confirmationKey);
         UserContext LoginToDemo(string roleName, string demoPrefix);
+        UserContext DeveloperTestLogin(Developer developer);
         UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null);
         UserContext ReLogin(Guid id);
         User GetByLogin(string login);
@@ -139,8 +140,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var demoUser = GetDemoUser(roleName, demoPrefix);
                 if (demoUser != null)
                     demoUser.OriginalPassword = PreferenceService.Get(Preference.DEMO_USER_PASSWORD).Value;
-                int schoolYearId = DemoSchoolConstants.CurrentSchoolYearId;
-                var res = DemoUserLogin(demoUser, uow, schoolYearId);
+                var res = DemoUserLogin(demoUser, uow, DemoSchoolConstants.CurrentSchoolYearId);
                 uow.Commit();
                 return res;
             }
@@ -247,29 +247,37 @@ namespace Chalkable.BusinessLogic.Services.Master
         private UserContext DemoUserLogin(User user, UnitOfWork uow, int? schoolYearId = null)
         {
             if (user == null) return null;
-            if (user.IsDeveloper)
-                return DeveloperLogin(user);
-            if (user.IsSchoolUser && user.District.IsDemoDistrict)
+            if (!user.IsSchoolUser || !user.District.IsDemoDistrict) 
+                throw new UnknownRoleException();
+
+            Guid? developerId = null;
+            var developer = new DeveloperDataAccess(uow).GetDeveloper(user.District.Id);
+            if (developer != null) developerId = developer.Id;
+            SchoolUser schoolUser;
+            Data.School.Model.SchoolYear schoolYear;
+            var schoolL = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]);
+            PrepareSchoolData(schoolL, user, schoolYearId, out schoolYear, out schoolUser);
+            var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, developerId, schoolYear)
             {
-                Guid? developerId = null;
-                SchoolUser schoolUser;
-                Data.School.Model.SchoolYear schoolYear;
-                var developer = new DeveloperDataAccess(uow).GetDeveloper(user.District.Id);
-                if (developer != null) developerId = developer.Id;
-                var schoolL = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]);
-                PrepareSchoolData(schoolL, user, schoolYearId, out schoolYear, out schoolUser);
-                var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, developerId, schoolYear)
-                {
-                    Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
-                };
-                return res;
-            }
-            throw new UnknownRoleException();
+                Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
+            };
+            return res;
         }
 
         private UserContext DeveloperLogin(User user)
         {
             var developer = ServiceLocator.DeveloperService.GetDeveloperById(user.Id);
+            return GetDeveloperContext(developer);
+        }
+
+        public UserContext DeveloperTestLogin(Developer developer)
+        {
+            return GetDeveloperContext(developer);
+        }
+
+        private UserContext GetDeveloperContext(Developer developer)
+        {
+            var user = developer.User;
             user.DistrictRef = developer.DistrictRef;
             user.District = DemoDistrictStorage.CreateDemoDistrict(developer.DistrictRef.Value);
             return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id);
@@ -314,15 +322,6 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private User GetDemoUser(string roleName, string prefix)
         {
-            if (roleName.ToLower() == CoreRoles.DEVELOPER_ROLE.LoweredName)
-            {
-                var developer = ServiceLocator.DeveloperService.GetDeveloperByDictrict(Guid.Parse(prefix));
-                if (developer != null)
-                {
-                    developer.User.SchoolUsers = new List<SchoolUser>();
-                    return developer.User;
-                }
-            }
             return DemoUserService.GetDemoUser(roleName, prefix);
         }
 
