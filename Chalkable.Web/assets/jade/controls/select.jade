@@ -4,7 +4,7 @@ mixin Select(name, controller, action, params)
     -attributes['data-controller'] = controller
     -attributes['data-action'] = action
     -attributes['data-params'] = params
-    select(attributes)
+    select(attributes).control-input
         if(attributes.items)
             each item in attributes.items
                 +Option(item["get" + attributes.idParam.toUpperCase()], item["get" + attributes.nameParam.toUpperCase()])
