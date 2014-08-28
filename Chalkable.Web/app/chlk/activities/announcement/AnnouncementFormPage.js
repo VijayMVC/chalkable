@@ -10,7 +10,7 @@ REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
-    var titleTimeout;
+    var titleTimeout, wasTypeChanged;
 
     /** @class chlk.activities.announcement.AnnouncementFormPage*/
     CLASS(
@@ -28,8 +28,18 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);
+                if(wasTypeChanged)
+                    this.dom.find('#check-title-button').trigger('click');
+                wasTypeChanged = false;
                 if(model instanceof chlk.models.announcement.LastMessages)
                     this.dom.find('#content').trigger('focus');
+            },
+
+            [ria.mvc.DomEventBind('click', '#check-title-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function checkTitleClick(node, event){
+                this.dom.find('.submit-announcement')
+                    .addClass('disabled');
             },
 
             [ria.mvc.DomEventBind('click', '.class-button')],
@@ -98,10 +108,13 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('input[name=announcementtypeid]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
                 this.dom.find('#announcement-type-btn').trigger('click');
+                wasTypeChanged = true;
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateTitle(tpl, model, msg_) {
+                var submitBtn = this.dom.find('.submit-announcement');
+                submitBtn.removeClass('disabled');
                 var block = this.dom.find('.title-text:visible'),
                     saveBtn = this.dom.find('.save-title-btn'),
                     titleBlock = this.dom.find('.title-block');
@@ -109,12 +122,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                     saveBtn.setAttr('disabled', false);
                     if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
                         saveBtn.trigger('click');
-                    titleBlock.removeClass('exists');
+                    this.updateFormByNotExistingTitle();
                 }else{
                     if(block.exists())
                         this.dom.find('#show-title-popup').trigger('click');
                     saveBtn.setAttr('disabled', true);
                     titleBlock.addClass('exists');
+                    var titleInput = titleBlock.find('#title');
+                    var text = titleInput.getValue();
+                    var oldText = titleInput.getData('title');
+                    if(oldText == text)
+                        submitBtn
+                            .addClass('disabled')
+                            .setData('tooltip', Msg.Existing_title_tooltip);
                 }
             },
 
@@ -165,7 +185,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         dom.find('.save-title-btn').setAttr('disabled', true);
                     }else{
                         if(node.getValue() == node.getData('title') && !node.hasClass('should-check')){
-                            dom.find('.title-block').removeClass('exists');
+                            this.updateFormByNotExistingTitle();
                             dom.find('.save-title-btn').setAttr('disabled', true);
                         }else{
                             titleTimeout && clearTimeout(titleTimeout);
@@ -178,21 +198,38 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.removeClass('should-check');
             },
 
+            [ria.mvc.DomEventBind('click', '.submit-announcement.disabled button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function disabledSubmitClick(node, event){
+                return false;
+            },
+
+            [[Boolean]],
+            function updateFormByNotExistingTitle(){
+                var titleBlock = this.dom.find('.title-block');
+                titleBlock.removeClass('exists');
+                this.dom.find('.submit-announcement')
+                    .removeClass('disabled')
+                    .setData('tooltip', false);
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                var dom = this.dom;
+                var that = this;
                 new ria.dom.Dom().on('click.title', function(node, event){
-                    var target = new ria.dom.Dom(event.target);
+                    var target = new ria.dom.Dom(event.target), dom = that.dom;
                     if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
                         var titleBlock = dom.find('.title-block');
                         var titleInput = titleBlock.find('#title');
                         titleBlock.removeClass('active');
                         var text = titleInput.getValue();
                         if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == '' || text == null || text == undefined)){
-                            titleBlock.removeClass('exists');
                             var oldText = titleInput.getData('title');
-                            titleInput.setValue(oldText);
-                            titleBlock.find('.title-text').setHTML(oldText);
+                            if(oldText != text){
+                                that.updateFormByNotExistingTitle();
+                                titleInput.setValue(oldText);
+                                titleBlock.find('.title-text').setHTML(oldText);
+                            }
                         }
                         if(text && !dom.find('.title-block-container').hasClass('with-date')){
                             titleBlock.find('.title-text').setHTML(text);
