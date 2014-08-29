@@ -30,7 +30,6 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(Student));
             RegisterType(typeof(Staff));
             RegisterType(typeof(StudentSchool));
-            RegisterType(typeof(StaffSchool));
             RegisterType(typeof(PersonTelephone));
             RegisterType(typeof(GradeLevel));
             RegisterType(typeof(AcadSession));
@@ -46,7 +45,6 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(Standard));
             RegisterType(typeof(CourseStandard));
             RegisterType(typeof(SectionTerm));
-            RegisterType(typeof(ActivityCategory));
             RegisterType(typeof(TimeSlot));
             RegisterType(typeof(ScheduledSection));
             RegisterType(typeof(AbsenceReason));

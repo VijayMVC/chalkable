@@ -29,6 +29,10 @@
   top: -12px;
   bottom: -12px;
 
+  .activity-model-wait{
+    position: absolute !important;
+  }
+
   > DIV {
       z-index: 10001;
       position: relative
