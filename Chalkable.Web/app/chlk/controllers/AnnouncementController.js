@@ -380,7 +380,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.announcementService
                 .getAnnouncement(announcementId)
 
-//                .attach(this.validateResponse_())
+                .attach(this.validateResponse_())
                 .then(function(announcement){
                     this.prepareAttachments(announcement);
                     var studentAnnouncements = announcement.getStudentAnnouncements();
@@ -420,7 +420,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(announcement);
                     return announcement;
                 }, this)
-                .catchError(this.handleNoAnnouncementException_, this);
+                //.catchError(this.handleNoAnnouncementException_, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 
