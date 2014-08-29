@@ -623,6 +623,19 @@ TEXTAREA.animated-textarea{
   }
 }
 
+.dialog-model-wait{
+  background: url(images/loaders/horizontal.gif) center center no-repeat;
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  >DIV{
+    display: none;
+  }
+}
+
 .press-enter {
   padding-right: 12px;
   background: url(images/grading/enter.png) right center no-repeat;

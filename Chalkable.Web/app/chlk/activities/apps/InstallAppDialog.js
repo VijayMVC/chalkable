@@ -6,6 +6,7 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.InstallAppDialogTpl)],
+        [chlk.activities.lib.ModelWaitClass('install-app-dialog-model-wait dialog-model-wait')],
         'InstallAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
             [ria.mvc.DomEventBind('click', '.chlk-button')],
