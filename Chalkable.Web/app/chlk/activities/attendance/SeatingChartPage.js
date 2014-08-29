@@ -383,17 +383,17 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.removeClass('dragging-on');
                 this.dom.find('#submit-chart').hide(100);
                 if(activeDragging){
-                    if($( ".droppable:not(.empty-box)" )[0])
+                    if($( ".droppable" )[0])
                         try{
-                            $( ".droppable:not(.empty-box)" ).droppable( "destroy" );
+                            $( ".droppable" ).droppable( "destroy" );
                         }catch(e){
-
+                            console.info('droppable', e);
                         }
-                    if($( ".draggable" )[0])
+                    if($( ".draggable:not(.empty-box)" )[0])
                         try{
-                            $( ".draggable" ).draggable( "destroy" );
+                            $( ".draggable:not(.empty-box)" ).draggable( "destroy" );
                         }catch(e){
-
+                            console.info('draggable', e);
                         }
                     activeDragging = false;
                 }
