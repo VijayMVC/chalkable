@@ -50,7 +50,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(bDate){
                     var day = parseInt(bDate.format('d'), 10);
                     var str;
-                    switch(day){
+                    switch(day % 10){
                         case 1: str = 'st';break;
                         case 2: str = 'n&#100;';break;
                         case 3: str = 'r&#100;';break;
@@ -74,7 +74,7 @@ NAMESPACE('chlk.controllers', function (){
                         type: item.getType(),
                         isPrimary: item.isIsPrimary(),
                         value: item.getValue()
-                    }
+                    };
                     phonesValue.push(values);
                     if(item.isIsPrimary() && !model.getPrimaryPhone()){
                         model.setPrimaryPhone(item);
@@ -184,7 +184,11 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.people.User, Object]],
             ria.async.Future, function infoEdit_(model, modelClass){
                 return this.personService
-                    .updateInfo(model.getId(), model.getEmail(), model.getPhonesValue())
+                    .updateInfo(
+                        model.getId(),
+                        model.getEmail(),
+                        model.getPhonesValue()
+                    )
                     .attach(this.validateResponse_())
                     .then(function(data){
                         var user = this.getUserFromSession();
