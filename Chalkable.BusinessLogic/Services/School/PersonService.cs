@@ -341,16 +341,23 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (CanGetHealthConditions())
             {
-                var healsConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
-                return healsConditions.Select(x => new StudentHealthCondition
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Description = x.Description,
-                    IsAlert = x.IsAlert,
-                    MedicationType = x.MedicationType,
-                    Treatment = x.Treatment
-                }).ToList();   
+                var healthConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
+
+                if (healthConditions == null) 
+                    return new List<StudentHealthCondition>();
+
+                var result = (from studentCondition in healthConditions
+                    where studentCondition != null
+                    select new StudentHealthCondition
+                    {
+                        Id = studentCondition.Id, 
+                        Name = studentCondition.Name, 
+                        Description = studentCondition.Description, 
+                        IsAlert = studentCondition.IsAlert, 
+                        MedicationType = studentCondition.MedicationType, 
+                        Treatment = studentCondition.Treatment
+                    }).ToList();
+                return result;
             }
             return new List<StudentHealthCondition>();
         }
