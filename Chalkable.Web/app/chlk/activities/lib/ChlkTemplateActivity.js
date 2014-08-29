@@ -20,6 +20,11 @@ NAMESPACE('chlk.activities.lib', function () {
         [[String]],
         function PartialUpdateClass(partialUpdateCls) {});
 
+    /** @class chlk.activities.lib.ModelWaitClass*/
+    ANNOTATION(
+        [[String]],
+        function ModelWaitClass(modelWaitCls) {});
+
     var PARTIAL_UPDATE_CLASS = 'partial-update';
 
     /** @class chlk.activities.lib.ChlkTemplateActivity*/
@@ -35,6 +40,10 @@ NAMESPACE('chlk.activities.lib', function () {
                }else{
                    this._partialUpdateCls = PARTIAL_UPDATE_CLASS;
                }
+
+                if (ref.isAnnotatedWith(chlk.activities.lib.ModelWaitClass)) {
+                    this._modelWaitClass = ref.findAnnotation(chlk.activities.lib.ModelWaitClass).pop().modelWaitCls;
+                }
             },
             OVERRIDE, VOID, function addPartialRefreshLoader(msg_) {
 
