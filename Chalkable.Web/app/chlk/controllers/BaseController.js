@@ -87,6 +87,8 @@ NAMESPACE('chlk.controllers', function (){
                        return this.ShowMsgBox(response.message, 'oops',[{
                            text: Msg.GOT_IT.toUpperCase()
                        }]);
+                    if(response.exceptiontype == 'NoAnnouncementException')
+                       return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
                }
                return this.redirectToErrorPage_(error.toString(), 'error', 'error404', []);
            },

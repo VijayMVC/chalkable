@@ -17,12 +17,13 @@ mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type)
     .base-attachment-dialog
         .x-window-header
             +Toolbar(buttons, announcementAppId, announcementId)
-        .iframe-wrap
-            if type == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE
+        if type == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE
+            .iframe-wrap.picture-wrap
                 .picture-container
                     .picture-container-2
                         img(src=url)
-            else
+        else
+            .iframe-wrap
                 iframe(src=url)
                     attributes.class
 
