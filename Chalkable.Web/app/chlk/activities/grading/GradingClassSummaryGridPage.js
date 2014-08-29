@@ -301,7 +301,10 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function updateDropDown(suggestions, node, all_){
                 var list = this.dom.find('.autocomplete-list');
                 if(suggestions.length || node.hasClass('error')){
-                    var html = '<div class="autocomplete-item">' + suggestions.join('</div><div class="autocomplete-item">') + '</div>';
+                    var html = '';
+                    suggestions.forEach(function(item){
+                        html += '<div class="autocomplete-item" data-tooltip-type="overflow" data-tooltip="' + item + '">' + item + '</div>';
+                    });
                     if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
                     var top = node.offset().top - list.parent().offset().top + node.height() + 43;
@@ -525,7 +528,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var cell = this.dom.find('.active-cell');
                 var input = cell.find('.value-input');
                 input.removeClass('not-equals');
-                this.updateDropDown(this.getScores(input), cell, true);
+                this.updateDropDown(this.getScores(input), input, true);
                 return false;
             },
 

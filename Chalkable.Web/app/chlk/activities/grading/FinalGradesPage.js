@@ -460,6 +460,13 @@ NAMESPACE('chlk.activities.grading', function () {
                 return true;
             },
 
+            [ria.mvc.DomEventBind('dblclick', '.grade-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function inputDblClickClick(node, event){
+                node.removeClass('not-equals');
+                this.updateDropDown(this.getAllScores(), node, true);
+            },
+
             [ria.mvc.DomEventBind('click', '.see-all')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function seeAllClick(node, event){
@@ -472,14 +479,17 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function updateDropDown(suggestions, node, all_){
                 var list = this.dom.find('.autocomplete-list');
                 if(suggestions.length || node.hasClass('error')){
-                    var html = '<div class="autocomplete-item">' + suggestions.join('</div><div class="autocomplete-item">') + '</div>';
-                    if(!all_){
+                    var html = '';
+                    suggestions.forEach(function(item){
+                        html += '<div class="autocomplete-item" data-tooltip-type="overflow" data-tooltip="' + item + '">' + item + '</div>';
+                    });
+                    if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
-                        var top = node.offset().top - list.parent().offset().top + node.height() + 43;
+
+                    var top = node.offset().top - list.parent().offset().top + node.height() + 43;
                         var left = node.offset().left - list.parent().offset().left + 61;
                         list.setCss('top', top)
                             .setCss('left', left);
-                    }
                     list.setHTML(html)
                         .show();
                 }else{
