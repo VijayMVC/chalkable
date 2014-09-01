@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
         void AttachAppToAnnouncement(int announcementAppId);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
-        IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds);
+        IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId);
 
@@ -163,11 +163,14 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds)
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false)
         {
             using (var uow = Read())
             {
-                return new AnnouncementApplicationDataAccess(uow).GetAnnouncementApplicationsbyAnnIds(announcementIds);
+                var res =  new AnnouncementApplicationDataAccess(uow).GetAnnouncementApplicationsbyAnnIds(announcementIds);
+                if (onlyActive)
+                    res = res.Where(x => x.Active).ToList();
+                return res;
             }
         }
     }

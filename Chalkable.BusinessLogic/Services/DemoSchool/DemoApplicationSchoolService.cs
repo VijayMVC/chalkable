@@ -108,12 +108,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds)
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false)
         {
-            return
-                Storage.AnnouncementApplicationStorage.GetAll()
-                    .Where(x => announcementIds.Contains(x.AnnouncementRef))
-                    .ToList();
+            var res = Storage.AnnouncementApplicationStorage.GetAll()
+                       .Where(x => announcementIds.Contains(x.AnnouncementRef));
+            if (onlyActive)
+                res = res.Where(x => x.Active);
+            return res.ToList();
         }
     }
 }
