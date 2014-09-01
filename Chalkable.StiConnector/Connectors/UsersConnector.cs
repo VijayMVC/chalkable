@@ -24,5 +24,10 @@ namespace Chalkable.StiConnector.Connectors
             var url = string.Format("{0}persons/{1}/photo", BaseUrl, personId);
             return Download(url);
         }
+
+        public int[] GetUserAcadSessionsIds()
+        {
+            return Call<int[]>(string.Format("{0}users/me/acadsessions", BaseUrl));
+        } 
     }
 }
