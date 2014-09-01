@@ -96,7 +96,7 @@ mixin DisplayTotalPoints(model)
                     .max-score.dotted-h=maxScore
                     studentItems = announcement.getStudentAnnouncements().getItems()
                     each info,i in studentItems
-                        gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || info.isUnExcusedAbsent())
+                        gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent())
                         div(
                             row-index=i
                             data-able-drop-student-score= announcement.isAbleDropStudentScore(),
