@@ -285,7 +285,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [ria.mvc.DomEventBind('click', '#all-present-link')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function allPresentClick(node, event){
+            VOID, function setAllPresentByClick(node, event){
                 new ria.dom.Dom('.student-block').forEach(function(node){
                     var container = node.find('.not-empty');
                     if(container.exists()){
