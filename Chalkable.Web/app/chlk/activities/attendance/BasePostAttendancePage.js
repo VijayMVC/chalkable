@@ -74,7 +74,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 BASE(model);
                 this._needPopUp = false;
                 var that = this;
-                new ria.dom.Dom('.page').on('click.leave', '.action-link:not(.class-button)', function(node, event){
+                new ria.dom.Dom('.page').on('click.leave', '.action-link:not(.class-button):not(#all-present-link)', function(node, event){
                     return that.tryToLeave(node);
                 });
 
@@ -99,6 +99,12 @@ NAMESPACE('chlk.activities.attendance', function () {
                     return false;
                 }
                 return true;
+            },
+
+            [ria.mvc.DomEventBind('click', '#all-present-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function allPresentClick(node, event){
+                this._needPopUp = false;
             }
         ])
 });
