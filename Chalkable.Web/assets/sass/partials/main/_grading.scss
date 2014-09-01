@@ -1664,6 +1664,15 @@ BODY {
           }
         }
 
+        .empty-disciplines{
+          text-align: center;
+          width: 100px;
+          white-space: normal;
+          margin: 23px 58px;
+          font: bold 15px Arial;
+          text-shadow: 1px 1px 0 white;
+        }
+
         .disciplines-toolbar{
           margin: 20px 10px 0 0px;
         }

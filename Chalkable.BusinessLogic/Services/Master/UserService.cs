@@ -230,6 +230,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var schoolL = ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
                 Data.School.Model.SchoolYear schoolYear;
                 SchoolUser schoolUser;
+                var userAcadSessionsIds = iNowConnector.UsersConnector.GetUserAcadSessionsIds();
+                if(userAcadSessionsIds.Length == 0)
+                    throw new ChalkableException("Current user does not have access to any of school acadSessions");
+                if (!schoolYearId.HasValue)
+                    schoolYearId = userAcadSessionsIds[0];
                 PrepareSchoolData(schoolL, user, schoolYearId, out schoolYear, out schoolUser);
                 if (!schoolUser.School.IsChalkableEnabled)
                     return null;

@@ -30,7 +30,8 @@ div(
                 if self.isAbleEdit() && self.isAbleEditDirectValue()
                     .i-b.selected
                         .input-container
-                            .text-value=value
+                            ent = avg.getEnteredAvg()
+                            div(class=(((ent || ent === 0) && (ent != avg.getCalculatedAvg())) ? "opacity05" : "" )).text-value=value
                             if value
                                 .letters=Msg.Avg
                         .input-container.grade
@@ -135,10 +136,11 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                 h2=Msg.Discipline
                 if self.getDisciplines()
                     items = self.getSortedDisciplines()
+                    empty = !self.getDisciplines().length
                     +LeftRightToolbar(items)(
                         itemsCount = 1
                         needDots = false
-                    )(class=self.getDisciplines().length ? "" : "empty").disciplines-toolbar.big-arrows
+                    )(class=empty ? "empty" : "").disciplines-toolbar.big-arrows
                         each block in items
                             .disciplines-items-block
                                 each discipline in block
@@ -146,6 +148,8 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                                         .count=discipline.getCount()
                                         name = discipline.getType().getName()
                                         div(data-tooltip=name, data-tooltip-type="overflow").description=name
+                        if empty
+                            .empty-disciplines=Msg.No_discipline_issues
         .comments-notes-block
             .notes-block
                 TEXTAREA(disabled = !self.isAbleEdit()).notes-textarea=avg.getNote()

@@ -649,6 +649,7 @@ var Msg = {
     Grade_values_cant_overlap: 'Grade values can&rsquo;t overlap between letter grades.',
     Just_checking: 'just checking',
     Keep_the_change: 'Keep the change?',
+    No_discipline_issues: 'No discipline issues',
     Worksheet_report_msg: 'Only eight columns can appear in this report.\nPlease reduce the number of activities and/or\nblank columns so that your worksheet will fit on a page.',
     Not_number_grade: 'Data is not valid!',
     Oops_Cancel: 'Oops, Cancel',
