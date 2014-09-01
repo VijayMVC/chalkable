@@ -1,0 +1,24 @@
+.dialog.add-standards
+    .header
+        h1=self.getAnnouncementTypeName() + ' STANDARDS'
+        span Choose a standard that describe the item
+    +ActionForm('announcement', 'addStandards').add-standards-form
+        +Hidden('announcementId', self.getAnnouncementId())
+        +Hidden('standardid', null)
+        +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
+        .standards-list-container
+            standardSubjects = self.getItemStandards() || []
+            table
+                tr.standards-row
+                    td.name-td
+                        .standards-names.column
+                            each subject in standardSubjects
+                                +ActionLink('announcement', 'showStandardsByCategory', self.getClassId(), subject.getId(), subject.getDescription()).standard-name.column-cell
+                                    .name=subject.getName()
+                                    .right-triangle
+                    td
+                        .standards-description
+        .buttons-container
+            +Button.special-button2.cancel.close Cancel
+            +Button()(type="submit", disabled).special-button2.blue.add.add-standard-btn Submit
+
