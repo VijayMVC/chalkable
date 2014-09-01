@@ -35,7 +35,7 @@ mixin FeedItem(item, disabled)
                             h2.animated-header=item.getClassName()
                             p.animated
                                 span.title=item.getTitle() + ' '
-                                span.content=item.getShortContent()
+                                |#{item.getShortContent()}
                             .animated=item.getExpiresDate().toString('m/d/y')
                             div(data-tooltip=Msg.Document_Attached).attachment-icon
                             div(data-tooltip=(item.getApplicationsCount() == 1 ? item.getApplicationName() : Msg.Application(true)) + ' ' + Msg.Attached).apps-icon
