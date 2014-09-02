@@ -37,4 +37,4 @@ div(class="selected " + itemCls, rowIndex=self.getRowIndex(), recId=self.getId()
 
                 else
                     +Hidden('isexempt', self.isExempt())
-                +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(containerClass = "fill-grade-container").fill-grade
+                +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(readonly, containerClass = "fill-grade-container").fill-grade

@@ -18,15 +18,19 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             var res = new List<AnnouncementsClassPeriodViewData>();
             foreach (var classPeriod in classPeriods)
             {
-                var c = classes.First(x => x.Id == classPeriod.ClassRef);
-                var anns = announcements.Where(x => x.ClassRef == classPeriod.ClassRef).ToList();
-                var room = c.RoomRef.HasValue ? rooms.First(x => x.Id == c.RoomRef) : null;
-                res.Add(new AnnouncementsClassPeriodViewData
+                var c = classes.FirstOrDefault(x => x.Id == classPeriod.ClassRef);
+                if (c != null)
+                {
+                    var anns = announcements.Where(x => x.ClassRef == classPeriod.ClassRef).ToList();
+                    var room = c.RoomRef.HasValue ? rooms.First(x => x.Id == c.RoomRef) : null;
+                    res.Add(new AnnouncementsClassPeriodViewData
                     {
                         Announcements = AnnouncementShortViewData.Create(anns),
                         ClassPeriod = ClassPeriodViewData.Create(classPeriod, c, room),
                         DayNumber = date.Day
                     });
+                }
+
             }
             return res;
         }

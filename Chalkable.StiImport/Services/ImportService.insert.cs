@@ -24,6 +24,7 @@ using GradingScale = Chalkable.StiConnector.SyncModel.GradingScale;
 using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
 using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Room = Chalkable.StiConnector.SyncModel.Room;
+using ScheduledTimeSlot = Chalkable.Data.School.Model.ScheduledTimeSlot;
 
 namespace Chalkable.StiImport.Services
 {
@@ -75,6 +76,8 @@ namespace Chalkable.StiImport.Services
             InsertClassStandard();
             Log.LogInfo("insert marking period classes");
             InsertMarkingPeriodClasses();
+            Log.LogInfo("insert scheduled time slots");
+            InsertScheduledTimeSlots();
             Log.LogInfo("insert periods");
             InsertPeriods();
             Log.LogInfo("insert class periods");
@@ -225,6 +228,8 @@ namespace Chalkable.StiImport.Services
                 var isAllowedInetAccess = false;
                 string specialInstructions = "";
                 string spEdStatus = null;
+                int? sisStudentUserId = null;
+                int? sisStaffUserId = null;
 
                 if (students.ContainsKey(person.PersonID))
                 {
@@ -232,11 +237,16 @@ namespace Chalkable.StiImport.Services
                     hasMedicalAlert = students[person.PersonID].HasMedicalAlert;
                     isAllowedInetAccess = students[person.PersonID].IsAllowedInetAccess;
                     specialInstructions = students[person.PersonID].SpecialInstructions;
+                    sisStudentUserId = students[person.PersonID].UserID;
                     if (students[person.PersonID].SpEdStatusID.HasValue)
                         spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
                 }
                 if (staff.ContainsKey(person.PersonID) && staff[person.PersonID].UserID.HasValue)
+                {
                     userName = sisUsers[staff[person.PersonID].UserID.Value].UserName;
+                    sisStaffUserId = staff[person.PersonID].UserID.Value;
+                }
+                    
                 
                 ps.Add(new PersonInfo
                 {
@@ -254,7 +264,9 @@ namespace Chalkable.StiImport.Services
                     IsAllowedInetAccess = isAllowedInetAccess,
                     SpecialInstructions = specialInstructions,
                     SpEdStatus = spEdStatus,
-                    PhotoModifiedDate = person.PhotoModifiedDate
+                    PhotoModifiedDate = person.PhotoModifiedDate,
+                    SisStaffUserId = sisStaffUserId,
+                    SisStudentUserId = sisStudentUserId
                 });
                 if (person.PhotoModifiedDate.HasValue)
                     personsForImportPictures.Add(person);
@@ -264,14 +276,10 @@ namespace Chalkable.StiImport.Services
 
         private void InsertSchoolPersons()
         {
-            var ex = ServiceLocatorSchool.SchoolPersonService.GetAll()
-                                    .Select(x => new Pair<int, int>(x.PersonRef, x.SchoolRef));
-            var existsing = new HashSet<Pair<int, int>>(ex);
-            
-            var students = context.GetSyncResult<Student>().All
-                .ToDictionary(x=>x.UserID);
-            var staff = context.GetSyncResult<Staff>().All
-                .Where(x=>x.UserID.HasValue).ToDictionary(x=>x.UserID);
+            var persons = ServiceLocatorSchool.PersonService.GetPersons();
+
+            var students = persons.Where(x => x.SisStudentUserId.HasValue).ToDictionary(x => x.SisStudentUserId.Value);
+            var staff = persons.Where(x => x.SisStaffUserId.HasValue).ToDictionary(x => x.SisStaffUserId);
             var userSchools = context.GetSyncResult<UserSchool>().All;
             IList<SchoolPerson> assignments = new List<SchoolPerson>();
             foreach (var us in userSchools)
@@ -280,32 +288,23 @@ namespace Chalkable.StiImport.Services
                 int? role = null;
                 if (students.ContainsKey(us.UserID))
                 {
-                    personId = students[us.UserID].StudentID;
+                    personId = students[us.UserID].Id;
                     role = CoreRoles.STUDENT_ROLE.Id;
                 }
-                else
+                else if (staff.ContainsKey(us.UserID))
                 {
-                    
-                    if (staff.ContainsKey(us.UserID))
-                    {
-                        personId = staff[us.UserID].StaffID;
-                        role = CoreRoles.TEACHER_ROLE.Id;
-                    }
+                    personId = staff[us.UserID].Id;
+                    role = CoreRoles.TEACHER_ROLE.Id;
                 }
                 if (role.HasValue)
                 {
-                    var p = new Pair<int, int>(personId.Value, us.SchoolID);
-                    if (!existsing.Contains(p))
+                    var sp = new SchoolPerson
                     {
-                        var sp = new SchoolPerson
-                            {
-                                RoleRef = role.Value,
-                                SchoolRef = us.SchoolID,
-                                PersonRef = personId.Value
-                            };
-                        assignments.Add(sp);
-                        existsing.Add(p);
-                    }
+                        RoleRef = role.Value,
+                        SchoolRef = us.SchoolID,
+                        PersonRef = personId.Value
+                    };
+                    assignments.Add(sp);
                 }
             }
             ServiceLocatorSchool.PersonService.AsssignToSchool(assignments);
@@ -562,11 +561,8 @@ namespace Chalkable.StiImport.Services
 
         private void InsertMarkingPeriodClasses()
         {
-            //var classes = ServiceLocatorSchool.ClassService.GetClasses(null);
             var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
             var cts = context.GetSyncResult<SectionTerm>().All
-                //.Where(x => classes.Any(y => y.Id == x.SectionID))
-                //.Where(x => mps.Any(y => y.Id == x.TermID))
                 .Select(x => new MarkingPeriodClass
                 {
                     ClassRef = x.SectionID,
@@ -576,11 +572,27 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.ClassService.AssignClassToMarkingPeriod(cts);
         }
 
+        private void InsertScheduledTimeSlots()
+        {
+            var allSts = context.GetSyncResult<StiConnector.SyncModel.ScheduledTimeSlot>().All
+                .Select(x=>new ScheduledTimeSlot
+                    {
+                        BellScheduleID = x.BellScheduleID,
+                        Description = x.Description,
+                        EndTime = x.EndTime,
+                        IsDailyAttendancePeriod = x.IsDailyAttendancePeriod,
+                        StartTime = x.StartTime,
+                        TimeSlotID = x.TimeSlotID
+                    })
+                .ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.Add(allSts);
+        }
+
         private void InsertPeriods()
         {
             //TODO: this logic is not exact how it is in INOW
             var periods = context.GetSyncResult<TimeSlot>().All.ToList();
-            var allSts = context.GetSyncResult<ScheduledTimeSlot>().All.ToList();
+            var allSts = ServiceLocatorSchool.ScheduledTimeSlotService.GetAll();
             foreach (var timeSlot in periods)
             {
                 var sts = allSts.FirstOrDefault(x => x.TimeSlotID == timeSlot.TimeSlotID);

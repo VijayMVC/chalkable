@@ -24,44 +24,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public Person Add(int localId, string email, string password, string firstName, string lastName, string gender,
-            string salutation, DateTime? birthDate
-            , int? addressId, string sisUserName, IList<SchoolPerson> assignments)
-        {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-            if (!Context.DistrictId.HasValue)
-                throw new UnassignedUserException();
-
-            var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetAll();
-
-
-            var user = ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUser(email, password, Context.DistrictId.Value, localId, sisUserName);
-            ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(assignments.Select(x => new SchoolUser
-            {
-                Id = Guid.NewGuid(),
-                Role = x.RoleRef,
-                SchoolRef = schools.First(y => y.LocalId == x.SchoolRef).Id,
-                UserRef = user.Id
-            }).ToList());
-
-            var person = new Person
-            {
-                Id = localId,
-                Active = false,
-                Email = email,
-                BirthDate = birthDate,
-                FirstName = firstName,
-                LastName = lastName,
-                Gender = gender,
-                Salutation = salutation,
-                AddressRef = addressId
-            };
-            Storage.PersonStorage.Add(person);
-            Storage.SchoolPersonStorage.Add(assignments);
-            return person;
-        }
-
         public void Add(IList<PersonInfo> persons)
         {
             throw new NotImplementedException();

@@ -36,7 +36,14 @@ NAMESPACE('chlk.controls', function () {
                 var hidden = dom_.find('#' + id + '-hidden');
                 var node = dom_.find('#' + id);
                 node.off('change.check');
-                node.on('change.check', function(){
+                node.off('click.check');
+                node.on('click.check', function(node, event){
+                    if(node.getAttr('readonly'))
+                        event.preventDefault();
+                });
+                node.on('change.check', function(node, event){
+                    if(node.getAttr('readonly'))
+                        return false;
                     var lastValue = hidden.getData('value');
                     var newValue = !lastValue;
                     node.trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [newValue]);

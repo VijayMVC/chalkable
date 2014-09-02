@@ -20,7 +20,6 @@ namespace Chalkable.BusinessLogic.Services.School
         Period GetPeriod(int time, DateTime date);
         Period GetPeriod(int time);
         IList<Period> GetPeriods(int schoolYearId);
-        IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, int? lengthBetweenPeriods = null, int? periodCount = null);
     }
 
     public class PeriodService : SchoolServiceBase, IPeriodService
@@ -88,8 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return GetPeriod(time, Context.NowSchoolYearTime.Date);
         }
-
-
+        
         //TODO: remove those methods later
         public Period GetPeriod(int time, DateTime date)
         {
@@ -109,72 +107,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
-        public IList<Period> ReGeneratePeriods(IList<Guid> markingPeriodIds, int? startTime = null, int? length = null, int? lengthBetweenPeriods = null, int? periodCount = null)
-        {
-            throw new NotImplementedException();
-
-            //startTime = startTime ?? 475;
-            //length = length ?? 45;
-            //lengthBetweenPeriods = lengthBetweenPeriods ?? 2;
-            //periodCount = periodCount ?? 9;
-
-            //if (!(markingPeriodIds != null && markingPeriodIds.Count > 0))
-            //    throw new ChalkableException();
-
-            //using (var uow = Update())
-            //{
-            //    var sections = new DateTypeDataAccess(uow).GetSections(markingPeriodIds);
-            //    if (markingPeriodIds.Any(mpId => sections.All(x => x.MarkingPeriodRef != mpId)))
-            //    {
-            //        throw new ChalkableException(ChlkResources.ERR_PERIOD_NO_SCHEDULE_SECTION);
-            //    }
-            //    if (!BaseSecurity.IsAdminEditor(Context))
-            //        throw new ChalkableSecurityException();
-            //    if (!Context.SchoolId.HasValue)
-            //        throw new UnassignedUserException();
-                
-            //    IList<Period> res = new List<Period>();
-            //    if (ServiceLocator.DayTypeService.CanDeleteSections(markingPeriodIds.ToList()))
-            //    {
-
-            //        var da = new PeriodDataAccess(uow);
-            //        da.Delete(markingPeriodIds);
-            //        foreach (var markingPeriodId in markingPeriodIds)
-            //        {
-            //            foreach (var scheduleSection in sections)
-            //            {
-            //                if (scheduleSection.MarkingPeriodRef == markingPeriodId)
-            //                {
-            //                    for (int i = 0; i < periodCount; i++)
-            //                    {
-            //                        var periodStartTime = startTime + (length + lengthBetweenPeriods) * i;
-            //                        var periodEndTime = periodStartTime + length;
-            //                        var period = new Period
-            //                        {
-            //                            Id = Guid.NewGuid(),
-            //                            SectionRef = scheduleSection.Id,
-            //                            StartTime = periodStartTime.Value,
-            //                            EndTime = periodEndTime.Value,
-            //                            MarkingPeriodRef = markingPeriodId
-            //                        };
-            //                        res.Add(period);
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        da.Insert(res);
-            //        uow.Commit();
-            //    }
-            //    else
-            //    {
-            //        throw new ChalkableException(ChlkResources.ERR_CANT_CHANGE_GENERAL_PERIODS);
-            //    }
-            //    return res;
-            //}
-
-        }
-        
         public IList<Period> AddPeriods(IList<Period> periods)
         {
             if (!BaseSecurity.IsDistrict(Context))

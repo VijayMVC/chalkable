@@ -26,10 +26,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return data.Where( x => x.Value.SchoolYearRef == schoolYearId).Select( x => x.Value).ToList();
         }
-
-        public IList<Period> RegeneratePeriods(IList<Guid> markingPeriodIds, int? startTime, int? length, int? lengthBetweenPeriods, int? periodCount)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

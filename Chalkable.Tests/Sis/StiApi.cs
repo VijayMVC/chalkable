@@ -36,23 +36,17 @@ namespace Chalkable.Tests.Sis
             //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
             //var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
             var cl = ConnectorLocator.Create("Chalkable", "r3Hp1Dm5Q", "http://208.83.95.80:8222/API/");
-            //var cl = ConnectorLocator.Create("Chalkable", "q1Jn6Oq6N", "http://208.83.95.80/API/");
 
-
-            var acadSessions = (cl.SyncConnector.GetDiff(typeof(StudentAcadSession), null) as SyncResult<StudentAcadSession>).All
-                .Where(x => x.StudentID == 3705);
-            foreach (var s in acadSessions)
+            var staff = (cl.SyncConnector.GetDiff(typeof (Staff), null) as SyncResult<Staff>).All;
+            var student = (cl.SyncConnector.GetDiff(typeof(Staff), null) as SyncResult<Staff>).All;
+            var schoolusers = (cl.SyncConnector.GetDiff(typeof (UserSchool), null) as SyncResult<UserSchool>).All;
+                
+            foreach (var s in schoolusers)
             {
-                //IsChalkableEnabled
-                Debug.WriteLine(s.CurrentEnrollmentStatus);
+                Debug.WriteLine(s.SchoolID);
             }
 
-            var ssT = (cl.SyncConnector.GetDiff(typeof(StudentScheduleTerm), null) as SyncResult<StudentScheduleTerm>).All
-                .Where(x => x.StudentID == 3705 && x.SectionID == 2100);
-            foreach (var s in ssT)
-            {
-                Debug.WriteLine(s.TermID + " " +  s.IsEnrolled);
-            }
+
         }
 
         [Test]

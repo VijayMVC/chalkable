@@ -141,6 +141,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IClassroomOptionService ClassroomOptionService { get { return classroomOptionService; } }
         public IPersonEmailService PersonEmailService { get { return personEmailService; } }
         public ISisUserService SisUserService { get { return sisUserService; } }
+        
+        public IScheduledTimeSlotService ScheduledTimeSlotService { get{throw new NotImplementedException();} }
+
         public IDbService SchoolDbService
         {
             get

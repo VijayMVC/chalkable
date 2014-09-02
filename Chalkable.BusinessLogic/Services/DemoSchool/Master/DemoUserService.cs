@@ -34,12 +34,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public User GetByLocalId(int localId, Guid districtId)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private const string DEMO_USER_PREFIX = "demo_user_";
 
         private static bool IsDemoLogin(string userLogin)
         {
-            var logins = new string[]
+            var logins = new[]
             {
                 PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_EDIT).Value,
                 PreferenceService.Get(Preference.DEMO_SCHOOL_ADMIN_GRADE).Value,

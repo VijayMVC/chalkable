@@ -703,17 +703,24 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.fill-grade-container')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function fillGradeClick(node, event){
-                if(!node.find('.checkbox').getAttr('disabled') && node.find('.checkbox').getAttr('checked')){
+                if(!node.find('.checkbox').getAttr('disabled')){
+                    node.parent('.grading-input-popup').hide();
                     var form = node.parent('form');
                     form.trigger('submit');
                     var input = form.find('input[name=gradevalue]');
                     var value = input.getValue();
-                    if(value  && !input.hasClass('error') && value.toLowerCase() != 'dropped' && value.toLowerCase() != 'exempt')
+                    if(value && !input.hasClass('error') && value.toLowerCase() != 'dropped' && value.toLowerCase() != 'exempt')
                         this.dom.find('.empty-grade-form').forEach(function(form){
                             form.find('input[name=gradevalue]').setValue(value);
                             form.trigger('submit');
-                        })
+                        });
                 }
+            },
+
+            [ria.mvc.DomEventBind('change', '.fill-grade')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            Boolean, function fillGradeChange(node, event){
+                return false;
             },
 
             //Grade Submit

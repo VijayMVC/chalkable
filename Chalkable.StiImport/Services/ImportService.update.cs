@@ -75,6 +75,8 @@ namespace Chalkable.StiImport.Services
             UpdateClassStandard();
             Log.LogInfo("update marking period classes");
             UpdateMarkingPeriodClasses();
+            Log.LogInfo("update scheduled time slots");
+            UpdateScheduledTimeSlots();
             Log.LogInfo("update periods");
             UpdatePeriods();
             Log.LogInfo("update class periods");
@@ -217,7 +219,9 @@ namespace Chalkable.StiImport.Services
                         SpecialInstructions = chalkablePerson.SpecialInstructions,
                         SpEdStatus = chalkablePerson.SpEdStatus,
                         Email = chalkablePerson.Email,
-                        PhotoModifiedDate = person.PhotoModifiedDate
+                        PhotoModifiedDate = person.PhotoModifiedDate,
+                        SisStaffUserId = chalkablePerson.SisStaffUserId,
+                        SisStudentUserId = chalkablePerson.SisStudentUserId
                     });
                     if (person.PhotoModifiedDate.HasValue)
                     {
@@ -252,7 +256,9 @@ namespace Chalkable.StiImport.Services
                         SpEdStatus = student.SpEdStatusID.HasValue ? spEdStatuses[student.SpEdStatusID.Value].Name : null,
                         Email = chalkablePerson.Email,
                         PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
-                        SisUserName = sisUser.UserName
+                        SisUserName = sisUser.UserName,
+                        SisStaffUserId = chalkablePerson.SisStaffUserId,
+                        SisStudentUserId = student.UserID
                     });
                 }
                 ServiceLocatorSchool.PersonService.Edit(pi);
@@ -281,7 +287,9 @@ namespace Chalkable.StiImport.Services
                         SpEdStatus = null,
                         Email = chalkablePerson.Email,
                         PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
-                        SisUserName = sisUser != null ? sisUser.UserName : string.Empty
+                        SisUserName = sisUser != null ? sisUser.UserName : string.Empty,
+                        SisStaffUserId = st.UserID,
+                        SisStudentUserId = chalkablePerson.SisStudentUserId
                     });
                 }
                 ServiceLocatorSchool.PersonService.Edit(pi);
@@ -560,12 +568,30 @@ namespace Chalkable.StiImport.Services
             //TODO: no way to update. delete or insert only
         }
 
+        private void UpdateScheduledTimeSlots()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.ScheduledTimeSlot>().Updated == null)
+                return;
+            var allSts = context.GetSyncResult<StiConnector.SyncModel.ScheduledTimeSlot>().Updated
+                .Select(x => new Data.School.Model.ScheduledTimeSlot
+                {
+                    BellScheduleID = x.BellScheduleID,
+                    Description = x.Description,
+                    EndTime = x.EndTime,
+                    IsDailyAttendancePeriod = x.IsDailyAttendancePeriod,
+                    StartTime = x.StartTime,
+                    TimeSlotID = x.TimeSlotID
+                })
+                .ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.Add(allSts);
+        }
+
         private void UpdatePeriods()
         {
             if (context.GetSyncResult<TimeSlot>().Updated == null)
                 return;
             var periods = context.GetSyncResult<TimeSlot>().Updated.ToList();
-            var allSts = context.GetSyncResult<ScheduledTimeSlot>().All.ToList();
+            var allSts = ServiceLocatorSchool.ScheduledTimeSlotService.GetAll();
             foreach (var timeSlot in periods)
             {
                 var sts = allSts.FirstOrDefault(x => x.TimeSlotID == timeSlot.TimeSlotID);

@@ -66,8 +66,9 @@ namespace Chalkable.Web.Models
                         studentFinalGrade.CurrentStudentAverage = StudentAveragesViewData.Create(stAvg);
                 }
                 studentFinalGrade.StudentAverages = StudentAveragesViewData.Create(gradeBook.Averages.Where(x=>x.StudentId == student.Id).ToList());
-                IList<StudentAnnouncementDetails> stAnns = gradeBook.Announcements.Select(a => a.StudentAnnouncements.First(
-                                                                            stAnn => stAnn.StudentId == student.Id)).ToList();
+                IList<StudentAnnouncementDetails> stAnns = gradeBook.Announcements
+                    .Where(a => a.StudentAnnouncements.Any(stAnn => stAnn.StudentId == student.Id))
+                    .Select(a => a.StudentAnnouncements.First(stAnn => stAnn.StudentId == student.Id)).ToList();
                 studentFinalGrade.StatsByType = StudentGradingByTypeStatsViewData.Create(gradeBook.Announcements, stAnns);
                 var currentStAttendance = finalGrade.Attendances.FirstOrDefault(x => x.StudentId == student.Id);
                 studentFinalGrade.Attendance = FinalStudentAttendanceViewData.Create(currentStAttendance, finalGrade.Attendances);
