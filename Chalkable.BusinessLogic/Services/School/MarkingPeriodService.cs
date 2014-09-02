@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -18,9 +19,10 @@ namespace Chalkable.BusinessLogic.Services.School
         MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null);
         MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId);
         MarkingPeriodClass GetMarkingPeriodClass(int classId, int markingPeriodId);
-        MarkingPeriodClass GetMarkingPeriodClass(int markingPeriodClassId);
+        MarkingPeriodClass GetMarkingPeriodClass(int markingPeriodClassId); // todo : old method ... delete this later
         IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
+        IList<MarkingPeriod> GetMarkingPeriodsByDateRange(DateTime fromDate, DateTime toDate, int? schoolYearId);
     }
 
     public class MarkingPeriodService : SchoolServiceBase, IMarkingPeriodService
@@ -36,6 +38,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId);
                 return da.GetById(id);
             }
+        }
+
+        public IList<MarkingPeriod> GetMarkingPeriodsByDateRange(DateTime fromDate, DateTime toDate, int? schoolYearId)
+        {
+            var res = GetMarkingPeriods(schoolYearId);
+            //if (fromDate.HasValue)
+            //    res = res.Where(x => x.StartDate <= fromDate.Value).ToList();
+            //if (toDate.HasValue)
+            //    res = res.Where(x =>  x.EndDate >= toDate).ToList();
+            return res.Where(x =>(x.StartDate <= fromDate && x.EndDate >= fromDate)
+                            || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
         }
 
         public MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null)
@@ -143,5 +156,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return markingPeriods;
             }
         }
+
+        
     }
 }

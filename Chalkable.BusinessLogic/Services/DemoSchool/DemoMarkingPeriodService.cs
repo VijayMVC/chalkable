@@ -59,6 +59,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return null;
         }
 
+        public IList<MarkingPeriod> GetMarkingPeriodsByDateRange(DateTime fromDate, DateTime toDate, int? schoolYearId)
+        {
+            var res = GetMarkingPeriods(schoolYearId).AsEnumerable();
+            return res.Where(x => (x.StartDate <= fromDate && x.EndDate >= fromDate)
+                                      || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
+        }
+
         public MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
         {
             if (!BaseSecurity.IsDistrict(Context))
