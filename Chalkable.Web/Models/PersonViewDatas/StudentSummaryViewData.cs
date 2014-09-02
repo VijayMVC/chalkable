@@ -172,12 +172,14 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public string Grade { get; set; }
         public string AnnouncmentTitle { get; set; }
+        public int AnnouncementId { get; set; }
         public static StudentSummeryGradeViewData Create(StudentAnnouncement studentAnnouncement)
         {
             var res = new StudentSummeryGradeViewData
             {
                 Grade = studentAnnouncement.ScoreValue,
-                AnnouncmentTitle = studentAnnouncement.AnnouncementTitle
+                AnnouncmentTitle = studentAnnouncement.AnnouncementTitle,
+                AnnouncementId = studentAnnouncement.AnnouncementId
             };
             return res;
         }
