@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
@@ -14,6 +15,7 @@ using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
 using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
+using ScheduledTimeSlot = Chalkable.StiConnector.SyncModel.ScheduledTimeSlot;
 using School = Chalkable.StiConnector.SyncModel.School;
 using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
@@ -49,6 +51,8 @@ namespace Chalkable.StiImport.Services
             DeleteClassPeriods();
             Log.LogInfo("delete periods");
             DeletePeriods();
+            Log.LogInfo("delete schedule time slot");
+            DeleteScheduledTimeSlots();
             Log.LogInfo("delete marking period classes");
             DeleteMarkingPeriodClasses();
             Log.LogInfo("delete class standards");
@@ -203,6 +207,18 @@ namespace Chalkable.StiImport.Services
                 return;
             var ids = context.GetSyncResult<TimeSlot>().Deleted.Select(x => x.TimeSlotID).ToList();
             ServiceLocatorSchool.PeriodService.Delete(ids);
+        }
+
+        private void DeleteScheduledTimeSlots()
+        {
+            if (context.GetSyncResult<ScheduledTimeSlot>().Deleted == null)
+                return;
+            IList<Data.School.Model.ScheduledTimeSlot> sts = context.GetSyncResult<ScheduledTimeSlot>().Deleted.Select(x => new Data.School.Model.ScheduledTimeSlot
+                {
+                    BellScheduleID = x.BellScheduleID,
+                    TimeSlotID = x.TimeSlotID
+                }).ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.Delete(sts);
         }
 
         private void DeleteMarkingPeriodClasses()

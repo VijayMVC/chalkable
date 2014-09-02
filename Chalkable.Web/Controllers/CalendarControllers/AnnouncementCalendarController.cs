@@ -97,12 +97,16 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              if (!BaseSecurity.IsAdminViewer(SchoolLocator.Context))
                  classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(schoolYearId, null, null, null, null, null, studentId, teacherId);
 
-             IList<ClassDetails> classes = new List<ClassDetails>();
-             if (classId.HasValue)
-                 classes.Add(SchoolLocator.ClassService.GetClassDetailsById(classId.Value));
-             else
-                 classes = SchoolLocator.ClassService.GetClasses(schoolYearId);
-
+             //todo: review commented code 
+             //IList<ClassDetails> classes = new List<ClassDetails>();
+             //if (classId.HasValue)
+             //    classes.Add(SchoolLocator.ClassService.GetClassDetailsById(classId.Value));
+             //else
+             //    classes = SchoolLocator.ClassService.GetClasses(schoolYearId);
+            
+             //var mpsIds = SchoolLocator.MarkingPeriodService.GetMarkingPeriodsByDateRange(start, end, schoolYearId).Select(x => x.Id).ToList();
+             //classes = classes.Where(x => x.MarkingPeriodClasses.Any(mpc => mpsIds.Contains(mpc.MarkingPeriodRef))).ToList();
+           
              IList<AnnouncementPeriodViewData> annPeriods = null;
              foreach (var d in days)
              {
@@ -142,8 +146,10 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              if (classId.HasValue)
                  classes.Add(locator.ClassService.GetClassDetailsById(classId.Value));
              else
-                 classes = locator.ClassService.GetClasses(null, null, teacherId ?? studentId);
+                 classes = locator.ClassService.GetClasses(schoolYearId, null, teacherId ?? studentId);
 
+             var mpsIds = locator.MarkingPeriodService.GetMarkingPeriodsByDateRange(start, end, schoolYearId).Select(x=>x.Id).ToList();
+             classes = classes.Where(x => x.MarkingPeriodClasses.Any(mpc => mpsIds.Contains(mpc.MarkingPeriodRef))).ToList();
              var rooms = locator.RoomService.GetRooms();
              IList<AnnouncementComplex> announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, null, classId);
              IList<ClassPeriod> classPeriods = new List<ClassPeriod>();

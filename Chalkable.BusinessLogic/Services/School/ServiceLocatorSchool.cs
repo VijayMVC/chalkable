@@ -49,6 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IClassroomOptionService ClassroomOptionService { get; }
         IPersonEmailService PersonEmailService { get; }
         ISisUserService SisUserService { get; }
+        IScheduledTimeSlotService ScheduledTimeSlotService { get; }
         IDbService SchoolDbService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -97,6 +98,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private ISisUserService sisUserService;
         private IPersonEmailService personEmailService;
         private IDbService schoolDbService;
+        private IScheduledTimeSlotService scheduledTimeSlotService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -145,6 +147,7 @@ namespace Chalkable.BusinessLogic.Services.School
             sisUserService = new SisUserService(this);
             personEmailService = new PersonEmailService(this);
             schoolDbService = new DbService(Context != null ? Context.SchoolConnectionString : null);
+            scheduledTimeSlotService = new ScheduledTimeSlotService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -190,6 +193,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IClassroomOptionService ClassroomOptionService { get { return classroomOptionService; } }
         public IPersonEmailService PersonEmailService { get { return personEmailService; } }
         public ISisUserService SisUserService { get { return sisUserService; } }
+        public IScheduledTimeSlotService ScheduledTimeSlotService { get { return scheduledTimeSlotService; } }
         public IDbService SchoolDbService
         {
             get { return schoolDbService; }

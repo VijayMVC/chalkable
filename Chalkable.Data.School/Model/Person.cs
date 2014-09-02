@@ -43,6 +43,8 @@ namespace Chalkable.Data.School.Model
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
+        public int? SisStudentUserId { get; set; }
+        public int? SisStaffUserId { get; set; }
 
 
         [NotDbFieldAttr]
@@ -117,7 +119,6 @@ namespace Chalkable.Data.School.Model
         [NotDbFieldAttr]
         public int RoleRef { get; set; }
     }
-
 
     public class PersonDetails : Person
     {

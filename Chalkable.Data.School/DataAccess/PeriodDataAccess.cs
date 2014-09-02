@@ -13,13 +13,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        //public void Delete(IList<Guid> markingPeriodIds)
-        //{
-        //    var mpIds = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-        //    var sql = string.Format("delete from Period where {0} in ({1})", Period.MARKING_PERIOD_REF_FIELD, mpIds);
-        //    ExecuteNonQueryParametrized(sql, new Dictionary<string, object>());
-        //}
-
         public void DeleteBySchoolYearId(int? schoolYearId)
         {
             SimpleDelete(GetCondsBySchoolYear(schoolYearId));

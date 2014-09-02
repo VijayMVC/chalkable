@@ -1,4 +1,5 @@
-﻿using Chalkable.Data.Common;
+﻿using System;
+using Chalkable.Data.Common;
 using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School

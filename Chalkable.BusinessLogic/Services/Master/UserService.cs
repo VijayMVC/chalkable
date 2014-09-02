@@ -45,6 +45,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void DeleteUsers(IList<int> localIds, Guid districtId);
         void Edit(IList<User> users);
         void UpdateSisUserNames(List<Pair<string, string>> values);
+        User GetByLocalId(int localId, Guid districtId);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -80,7 +81,21 @@ namespace Chalkable.BusinessLogic.Services.Master
                 uow.Commit();
             }
         }
-        
+
+        public User GetByLocalId(int localId, Guid districtId)
+        {
+            using (var uow = Read())
+            {
+                var da = new UserDataAccess(uow);
+                var cond = new AndQueryCondition
+                    {
+                        new SimpleQueryCondition(User.LOCAL_ID_FIELD, localId, ConditionRelation.Equal),
+                        new SimpleQueryCondition(User.DISTRICT_REF_FIELD, districtId, ConditionRelation.Equal)
+                    };
+                return da.GetAll(cond).FirstOrDefault();
+            }
+        }
+
         public UserContext Login(string login, string password)
         {
             string error = null;
@@ -191,7 +206,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var localId = iNowUser.PersonId ?? iNowUser.StudentId ?? iNowUser.StaffId;
                     var chlkUser = new UserDataAccess(uow).GetUser(new AndQueryCondition
                     {
-                        {User.LOCAL_ID, localId},
+                        {User.LOCAL_ID_FIELD, localId},
                         {User.DISTRICT_REF_FIELD, district.Id}
                     });
                     res = SisUserLogin(chlkUser, uow, iNowCl, iNowUser, acadSessionId);

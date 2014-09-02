@@ -147,12 +147,12 @@ namespace Chalkable.Web.Controllers
         {
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId);
-            var students = GetStudentsForGrid(classId);
             var date = Context.NowSchoolYearTime.Date;
             var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date);
             StandardGradingGridViewData currentStandardGrid = null;
             if (currentGradingPeriod != null)
             {
+                var students = GetStudentsForGrid(classId, currentGradingPeriod.MarkingPeriodRef);
                 var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, currentGradingPeriod.Id);
                 currentStandardGrid = StandardGradingGridViewData.Create(currentGradingPeriod, gradingStandards, students);
             }
@@ -171,15 +171,15 @@ namespace Chalkable.Web.Controllers
         {
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, gradingPeriodId);
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            var students = GetStudentsForGrid(classId);
+            var students = GetStudentsForGrid(classId, gradingPeriod.MarkingPeriodRef);
             return Json(StandardGradingGridViewData.Create(gradingPeriod, gradingStandards, students));
         }
 
-        private IList<Person> GetStudentsForGrid(int classId)
+        private IList<Person> GetStudentsForGrid(int classId, int markingPeriodId)
         {
             var classRoomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId);
             bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
-            return SchoolLocator.ClassService.GetStudents(classId, enrolled);
+            return SchoolLocator.ClassService.GetStudents(classId, enrolled, markingPeriodId);
         }
 
         [AuthorizationFilter("Teacher")]

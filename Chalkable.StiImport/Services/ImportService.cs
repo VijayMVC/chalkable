@@ -170,7 +170,6 @@ namespace Chalkable.StiImport.Services
             var currentVersions = ServiceLocatorSchool.SyncService.GetVersions();
             context.SetCurrentVersions(currentVersions);
             //Tables we need all data
-            context.TablesToSync[typeof(ScheduledTimeSlot).Name] = null;
             context.TablesToSync[typeof(Gender).Name] = null;
             context.TablesToSync[typeof(SpEdStatus).Name] = null;
 
