@@ -17,11 +17,12 @@ namespace Chalkable.Web.Controllers
 #endif
         }
 
-        public ActionResult GetPictureRootUrl()
+        public ActionResult GetPictureRootUrl(bool includeDistrictId = true)
         {
             if (Context == null || Context.DistrictId == null)
                 throw new ChalkableException("User is not authorized");
-            return Json(new {url = PictureService.GetPicturesRelativeAddress() + Context.DistrictId});
+            var districtId = includeDistrictId ? Context.DistrictId.ToString() : "";
+            return Json(new {url = PictureService.GetPicturesRelativeAddress() + districtId});
         }
     }
 }
