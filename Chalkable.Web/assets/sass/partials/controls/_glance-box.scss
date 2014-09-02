@@ -107,11 +107,12 @@
     border-radius: 2px;
     @include box-shadow(inset 1px 1px 0 #bdaf92);
 
-    >DIV{
+    >DIV, >A>DIV{
       font: normal 11px Arial;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: #957633;
 
       >DIV{
         display: inline-block;

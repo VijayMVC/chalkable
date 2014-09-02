@@ -71,7 +71,8 @@ NAMESPACE('chlk.templates.student', function () {
                 return this.buildGlanceBoxData_(this.getUser().getGradesBox()
                     , function(item){ return item.getGrade}
                     , function(item){ return item.getAnnouncementTitle}
-                    , Msg.Recent, null, 'announcement', 'view');
+                    , Msg.Recent, null, 'announcement', 'view'
+                    , function(item){ return [item.getAnnouncementId()]});
             },
 
             [[Object, Function, Function, String, Boolean, String, String, Function]],
@@ -83,7 +84,10 @@ NAMESPACE('chlk.templates.student', function () {
                         items.push({
                             data: hoverItems[i],
                             getTotalMethod: getTotalMethod(hoverItems[i]),
-                            getSummaryMethod: getSummaryMethod(hoverItems[i])
+                            getSummaryMethod: getSummaryMethod(hoverItems[i]),
+                            controller: controller_,
+                            action: action_,
+                            params: paramsMethod_ ? paramsMethod_(hoverItems[i]) : []
                         });
                     }
                 return {

@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.models.student', function(){
    "use strict";
@@ -6,10 +7,10 @@ NAMESPACE('chlk.models.student', function(){
     CLASS('StudentGradesHoverBoxItem', [
 
         String, 'grade',
-        [ria.serialize.SerializeProperty('gradingstyle')],
-        Number, 'gradingStyle',
-        [ria.serialize.SerializeProperty('announcementtypeid')],
-        Number, 'announcementTypeId',
+
+        [ria.serialize.SerializeProperty('announcementid')],
+        chlk.models.id.AnnouncementId, 'announcementId',
+
         [ria.serialize.SerializeProperty('announcmenttitle')],
         String, 'announcementTitle',
 
