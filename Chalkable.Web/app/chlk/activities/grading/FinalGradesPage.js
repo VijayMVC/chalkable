@@ -226,9 +226,9 @@ NAMESPACE('chlk.activities.grading', function () {
                 form.trigger('submit');
             },
 
-            function updateCodes(node){
+            function updateCodes(form){
                 var res = [], o;
-                var container = node.parent('.comments-notes-block');
+                var container = form.parent('.row').next('.attachments-container').find('.comments-notes-block');
                 container.find('.codes-select').forEach(function(select){
                     var option = select.find(':selected');
                     var code = option.getData('code');
@@ -248,13 +248,13 @@ NAMESPACE('chlk.activities.grading', function () {
                 var input = row.find('.value-input');
                 if(input.hasClass('error'))
                     input.setValue('input').getData('grade-input');
-                this.submitForm(row.find('form'), true);
             },
 
             [ria.mvc.DomEventBind('change', '.codes-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function codesChange(node, event, selected_){
-                this.updateCodes(node);
+                var row = this.dom.find('.row.selected');
+                this.submitForm(row.find('form'), true);
             },
 
             [ria.mvc.DomEventBind('input propertychange', '.notes-textarea')],
@@ -264,7 +264,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 notesTimeout = setTimeout(function(){
                     var row = this.dom.find('.row.selected');
                     row.find('input[name=note]').setValue(node.getValue());
-                    this.updateCodes(node);
+                    this.submitForm(row.find('form'), true);
                     node.parent('.attachments-container').addClass('loading');
                 }.bind(this), 1000);
             },
@@ -352,6 +352,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 input.setValue(Msg.Exempt);
                             }, 1);
                         }
+                    this.updateCodes(node);
                     return true;
                 }
                 if(node.find('.grade-input').hasClass('error'))
@@ -376,6 +377,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(wasExempt)
                     input.setValue('');
                 container.addClass('loading');
+                this.updateCodes(node);
                 return true;
             },
 
