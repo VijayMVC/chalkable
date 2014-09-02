@@ -1,0 +1,129 @@
+    .dialog{
+
+      &.add-standards{
+        z-index: 10001;
+        position: absolute;
+        margin-left: 50%;
+        left: -487px;
+        top: 200px;
+        background-color: #eaeaea;
+        min-height: 470px;
+        width: 974px;
+        @include border-radius(5px);
+        .header{
+          h1{
+            font-size: 18px;
+            font-weight: bold;
+            padding-top: 22px;
+            padding-bottom: 10px;
+          }
+          text-align: center;
+        }
+        .add-standards-form{
+          margin-top: 20px;
+
+          .standards-list-container{
+            min-height: 340px;
+            background-color: white;
+            font: normal 12px Arial;
+            color: #9c9c9c;
+            overflow-x: auto;
+
+            .standards-description{
+              padding: 10px 30px 10px 13px;
+            }
+
+            table{
+              border-spacing: 0;
+            }
+
+            td.name-td{
+              width: 243px;
+              height: 340px;
+              vertical-align: top;
+              border-right: 1px solid #d7d7d7;
+              display: inline-block;
+            }
+
+            td:not(.name-td){
+              vertical-align: top;
+            }
+
+            .column{
+              width: 243px;
+
+              .column-cell{
+                display: block;
+                height: 33px;
+                padding: 10px 30px 10px 13px;
+                text-align: left;
+                border-bottom: 1px solid #d7d7d7;
+                position: relative;
+                cursor: pointer;
+                color: #9c9c9c;
+
+                .right-triangle{
+                  width: 0;
+                  height: 0;
+                  border-top: 6px solid transparent;
+                  border-bottom: 6px solid transparent;
+                  border-left: 6px solid #9a9a9a;
+                  position: absolute;
+                  right: 10px;
+                  top: 20px;
+                }
+
+                .name{
+                  display: table-cell;
+                  height: 30px;
+                  vertical-align: middle;
+                }
+
+                &.active, &:hover{
+                  color: white;
+                  background: #2f7790;
+
+                  .right-triangle{
+                    border-left-color: #fff;
+                  }
+                }
+              }
+            }
+          }
+          .buttons-container{
+            text-align: right;
+            margin: 10px 35px 10px 0px;
+
+            .special-button2{
+              >span{
+                >span{
+                  >button{
+                    font-size: 14px;
+                    padding-left: 6px;
+                    padding-right: 6px;
+                  }
+                }
+              }
+              &.cancel{
+                border: 1px solid #a4a4a4;
+                margin-right: 10px;
+                @include border-radius(4px);
+                @include background(linear-gradient(top, #ffffff,#dadada));
+                @include box-shadow(rgba(0, 0, 0, 0.4) 0 0 3px, white 0px 1px 0px 0px inset);
+
+                min-height: 30px;
+                span{
+                  min-height: 30px;
+                  span{
+                    min-height: 30px;
+                    button{
+                      color: #3a3a3a;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
