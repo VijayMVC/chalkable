@@ -55,7 +55,6 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(Gender));
             RegisterType(typeof(SpEdStatus));
             RegisterType(typeof(Infraction));
-
             RegisterType(typeof(ClassroomOption));
             RegisterType(typeof(GradingScale));
             RegisterType(typeof(GradingScaleRange));
