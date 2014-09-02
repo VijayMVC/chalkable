@@ -40,7 +40,7 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 var builder = new StringBuilder();
                 var whereScrip = string.Format(" [{0}].[{1}] = @[{1}] and [{0}].[{2}] in ({3})"
-                                               , "User", User.DISTRICT_REF_FIELD, User.LOCAL_ID,
+                                               , "User", User.DISTRICT_REF_FIELD, User.LOCAL_ID_FIELD,
                                                localIds.Select(x => x.ToString()).JoinString(","));
                 builder.AppendFormat("delete from SchoolUser where [{0}] in (select [Id] from [User] where {1}) "
                                      , SchoolUser.USER_REF_FIELD, whereScrip)

@@ -13,7 +13,7 @@ namespace Chalkable.Data.Master.Model
         public const string LOGIN_FIELD = "Login";
         public const string PASSWORD_FIELD = "Password";
         public const string SIS_USER_NAME_FIELD = "SisUserName";
-        public const string LOCAL_ID = "LocalId";
+        public const string LOCAL_ID_FIELD = "LocalId";
 
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }

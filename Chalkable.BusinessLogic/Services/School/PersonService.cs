@@ -92,9 +92,20 @@ namespace Chalkable.BusinessLogic.Services.School
             var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetSchools(Context.DistrictId.Value, 0,
                                                                                            int.MaxValue)
                                                                                            .ToDictionary(x=>x.LocalId);
-            //TODO: not the best performance solution for all sync but first one
-            var users = ServiceLocator.ServiceLocatorMaster.UserService.GetByDistrict(Context.DistrictId.Value)
-                .ToDictionary(x=>x.LocalId);
+            Dictionary<int?, User> users;
+            if (assignments.Count > 30)
+                users = ServiceLocator.ServiceLocatorMaster.UserService.GetByDistrict(Context.DistrictId.Value)
+                    .ToDictionary(x=>x.LocalId);
+            else
+            {
+                users = new Dictionary<int?, User>();
+                foreach (var schoolPerson in assignments)
+                {
+                    var u = ServiceLocator.ServiceLocatorMaster.UserService.GetByLocalId(schoolPerson.PersonRef, Context.DistrictId.Value);
+                    users.Add(schoolPerson.PersonRef, u);
+                }
+            }
+            
             var schoolUsers = assignments.Select(x => new SchoolUser
             {
                 Id = Guid.NewGuid(),
