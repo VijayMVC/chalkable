@@ -1,0 +1,16 @@
+value = self.displayGrade(self.getGradeValue())
+.value=value
+if self.getComment()
+    .with-comment
+if self.isAbleEdit()
+    .edit-cell
+    +ActionForm('grading', 'updateStandardGradeFromGrid')
+        +Hidden('standardid', self.getStandardId())
+        +Hidden('gradeid', self.getGradeId())
+        +Hidden('classid', self.getClassId())
+        +Hidden('gradingperiodid', self.getGradingPeriodId())
+        +Hidden('comment', self.getComment())(
+            data-comment = self.getComment()
+        ).comment-value
+        +Hidden('studentid', self.getStudentId().valueOf())
+        input(value=value, name="gradevalue", data-value=value).grade-autocomplete.value-input

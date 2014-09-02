@@ -1,0 +1,17 @@
+clazz = self.getGradingPart()
+.class-grading.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self, 'grading')
+    .info-view
+        .top-panel
+            h1.info.with-line
+                .class-icon-container
+                    +ClassImg(clazz , 45, 80)
+                =clazz.getName()
+            h2
+                div
+            .grading-section
+                gradingModel = new chlk.models.grading.GradingClassSummaryPart(self.getGradingPart().getGradingPerMp())
+                +RenderWith(gradingModel, chlk.templates.grading.GradingClassSummaryPartTpl, {
+                    userRole: self.getUserRole()
+                })
