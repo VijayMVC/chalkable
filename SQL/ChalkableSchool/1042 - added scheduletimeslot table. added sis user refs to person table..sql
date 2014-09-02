@@ -1,8 +1,8 @@
 CREATE TABLE [dbo].[ScheduledTimeSlot](
 	[BellScheduleId] [int] NOT NULL,
 	[TimeSlotId] [int] NOT NULL,
-	[StartTime] [smallint] NULL,
-	[EndTime] [smallint] NULL,
+	[StartTime] [int] NULL,
+	[EndTime] [int] NULL,
 	[Description] [varchar](255) NOT NULL,
 	[IsDailyAttendancePeriod] [bit] NOT NULL,
 	[DistrictGuid] [uniqueidentifier] NOT NULL,
@@ -18,8 +18,8 @@ GO
 CREATE TYPE [dbo].[TScheduledTimeSlot] AS TABLE (
 	[BellScheduleId] [int] NOT NULL,
 	[TimeSlotId] [int] NOT NULL,
-	[StartTime] [smallint] NULL,
-	[EndTime] [smallint] NULL,
+	[StartTime] [int] NULL,
+	[EndTime] [int] NULL,
 	[Description] [varchar](255) NOT NULL,
 	[IsDailyAttendancePeriod] [bit] NOT NULL,
 	[DistrictGuid] [uniqueidentifier] NOT NULL
