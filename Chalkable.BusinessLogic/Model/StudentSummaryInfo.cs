@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Model
         public IList<ClassAttendanceSummary> Attendances { get; set; } 
 
         public static StudentSummaryInfo Create(Person student, NowDashboard nowDashboard
-            , IList<Data.School.Model.Infraction> infractions, IMapper  mapper)
+            , IList<Data.School.Model.Infraction> infractions, IList<AnnouncementComplex> anns, IMapper mapper)
         {
             var res = new StudentSummaryInfo
                 {
@@ -41,7 +41,9 @@ namespace Chalkable.BusinessLogic.Model
             var scores = nowDashboard.Scores.Where(x => !string.IsNullOrEmpty(x.ScoreValue)).ToList();
             foreach (var score in scores)
             {
-                var studentAnn = new StudentAnnouncement();
+                var ann = anns.FirstOrDefault(x => x.SisActivityId == score.ActivityId);
+                if(ann == null) continue;
+                var studentAnn = new StudentAnnouncement {AnnouncementId = ann.Id};
                 mapper.Map(studentAnn, score);
                 res.StudentAnnouncements.Add(studentAnn);
             }              

@@ -11,6 +11,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 using User = Chalkable.Data.Master.Model.User;
@@ -277,7 +278,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Scores = Storage.StiActivityScoreStorage.GetScores(studentId)
             }; 
             var student = GetPerson(studentId);
-            var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, MapperFactory.GetMapper<StudentAnnouncement, Score>());
+            var activitiesids = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
+            var anns = Storage.AnnouncementStorage.GetAnnouncements(new AnnouncementsQuery {SisActivitiesIds = activitiesids}).Announcements;
+            var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
     }

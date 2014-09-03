@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 using User = Chalkable.Data.Master.Model.User;
@@ -343,7 +344,14 @@ namespace Chalkable.BusinessLogic.Services.School
             var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
             var student = GetPerson(studentId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
-            var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, MapperFactory.GetMapper<StudentAnnouncement, Score>());
+            var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
+            IList<AnnouncementComplex> anns;
+            using (var uow = Read())
+            {
+                var da = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
+                anns = da.GetByActivitiesIds(activitiesIds);
+            }
+            var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
     }
