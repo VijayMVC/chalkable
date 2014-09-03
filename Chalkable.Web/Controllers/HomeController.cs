@@ -52,15 +52,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Developer")]
-        public ActionResult Developer(Guid? currentApplicationId)
+        public ActionResult Developer(Guid? currentApplicationId, bool? isPwdReset)
         {
+            if (isPwdReset.HasValue && isPwdReset.Value)
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.DEV_RESET_PASSWORD_URL;
+
             var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
             var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, false);
-            if (applications.Count == 0)
-            {
-                ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.DEV_APP_INFO_URL;
-            }
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss");

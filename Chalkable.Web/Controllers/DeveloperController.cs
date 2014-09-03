@@ -143,7 +143,7 @@ namespace Chalkable.Web.Controllers
         private ActionResult RedirectAction(UserContext userContext, Guid applicationId)
         {
             if (userContext.Role == CoreRoles.DEVELOPER_ROLE)
-                return Redirect<HomeController>(x => x.Developer(applicationId));
+                return Redirect<HomeController>(x => x.Developer(applicationId, null));
             return Redirect<HomeController>(x => x.Index());
         }
     }

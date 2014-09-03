@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers
                 if (devContext != null)
                 {
                     ChalkableAuthentication.SignIn(devContext, true);
-                    return Redirect<HomeController>(c => c.Developer(null));
+                    return Redirect<HomeController>(c => c.Developer(null, null));
                 }
                 throw new UnassignedUserException();
             }

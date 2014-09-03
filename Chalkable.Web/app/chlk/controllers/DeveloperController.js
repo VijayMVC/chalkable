@@ -69,6 +69,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.developer.PayPalSettingsPage, new ria.async.DeferredData(paypalSettings));
             },
 
+
+            [chlk.controllers.SidebarButton('settings')],
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
