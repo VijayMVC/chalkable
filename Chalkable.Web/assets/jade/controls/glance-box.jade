@@ -1,0 +1,36 @@
+mixin GlanceItem(item, converter, useTooltip, inverse)
+    summary = (item.getSummaryMethod || item.data.getSummary)()
+    summary = converter ? converter(summary) : summary
+    total = (item.getTotalMethod || item.data.getTotal)()
+    if useTooltip
+        .glance-item
+            if inverse
+                div(data-tooltip=summary, data-tooltip-type="overflow").summary=summary
+                div(data-tooltip=total, data-tooltip-type="overflow").total=total
+            else
+                div(data-tooltip=total, data-tooltip-type="overflow").total=total
+                div(data-tooltip=summary, data-tooltip-type="overflow").summary=summary
+    else
+        text = self.getShortText(total, summary)
+        div(data-tooltip=text, data-tooltip-type="overflow")=text
+
+mixin GlanceBox(controller, action, data, color, converter, useTooltip, inverse)
+    if controller
+        +ActionLink(controller, action).glance-box.hover-action-box
+    else
+        span(class="glance-box" + (data.items ? " hover-action-box" : ""))
+            div
+                .value(class=self.getValueClass(data.value) + color ? ' ' + color : '') #{data.value || ''}
+                p.glance-title #{data.title}
+                if data.items
+                    .details-container
+                        .details
+                            each item, i in data.items
+                                if item.controller
+                                    +ActionLinkWithPrepend(item.controller, item.action, item.params)
+                                        +GlanceItem(item, converter, useTooltip, inverse)
+                                else
+                                    +GlanceItem(item, converter, useTooltip, inverse)
+
+
+
