@@ -8,7 +8,7 @@
         top: 200px;
         background-color: #eaeaea;
         min-height: 470px;
-        width: 974px;
+        width: 980px;
         @include border-radius(5px);
         .header{
           h1{
@@ -35,6 +35,10 @@
 
             table{
               border-spacing: 0;
+
+              .standards-row{
+                white-space: nowrap;
+              }
             }
 
             td.name-td{
