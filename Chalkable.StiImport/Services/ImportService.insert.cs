@@ -281,6 +281,7 @@ namespace Chalkable.StiImport.Services
             var students = persons.Where(x => x.SisStudentUserId.HasValue).ToDictionary(x => x.SisStudentUserId.Value);
             var staff = persons.Where(x => x.SisStaffUserId.HasValue).ToDictionary(x => x.SisStaffUserId);
             var userSchools = context.GetSyncResult<UserSchool>().All;
+            Log.LogInfo(string.Format("Adding {0} user school records", userSchools.Count()));
             IList<SchoolPerson> assignments = new List<SchoolPerson>();
             foreach (var us in userSchools)
             {
@@ -307,6 +308,7 @@ namespace Chalkable.StiImport.Services
                     assignments.Add(sp);
                 }
             }
+            Log.LogInfo(string.Format("Adding {0} school person records", assignments.Count));
             ServiceLocatorSchool.PersonService.AsssignToSchool(assignments);
         }
 
