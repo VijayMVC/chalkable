@@ -240,6 +240,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<Class> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
         {
             var res =  GetClassesQueryResult(new ClassQuery
