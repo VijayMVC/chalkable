@@ -7,6 +7,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.InstallAppDialogTpl)],
         [chlk.activities.lib.ModelWaitClass('install-app-dialog-model-wait dialog-model-wait')],
+        [chlk.activities.lib.PartialUpdateClass('app-market-install')],
         'InstallAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
             [ria.mvc.DomEventBind('click', '.chlk-button')],
@@ -15,9 +16,8 @@ NAMESPACE('chlk.activities.apps', function () {
 
                 var ids = [{
                         id: chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ,
-                        name: 'classes'
-                    }, {
-                       id:chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL,
+                        name: 'classes' }, {
+                        id:chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL,
                        name: 'gradeLevels'
                     }, {
                         id: chlk.models.apps.AppInstallGroupTypeEnum.DEPARTMENT,

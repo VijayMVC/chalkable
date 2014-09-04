@@ -4,6 +4,7 @@ NAMESPACE('chlk.activities.lib', function () {
 
     var UNDER_OVERLAY_CLASS = 'under-overlay';
     var HIDDEN_CLASS = 'x-hidden';
+    var INNER_PARTIAL_UPDATE_CLASS = "partial-update-inner";
 
     /** @class chlk.activities.lib.TemplateDialog*/
     CLASS(
@@ -53,6 +54,20 @@ NAMESPACE('chlk.activities.lib', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function disableOnClick(node, event) {
                 node.setAttr('disabled', 'disabled');
+            },
+
+            OVERRIDE, VOID, function addPartialRefreshLoader(msg_) {
+                //todo: rewrite
+                jQuery(this.dom.valueOf()).children().first().addClass(this._partialUpdateCls + "-" +INNER_PARTIAL_UPDATE_CLASS);
+                BASE(msg_);
+            },
+
+            [[String]],
+            OVERRIDE, VOID, function onModelComplete_(msg_) {
+                //todo: rewrite
+                jQuery(this.dom.valueOf()).children().first().removeClass(this._partialUpdateCls + "-" +INNER_PARTIAL_UPDATE_CLASS);
+                BASE(msg_);
             }
+
         ]);
 });

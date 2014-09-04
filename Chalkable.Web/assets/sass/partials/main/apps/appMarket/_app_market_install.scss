@@ -1,5 +1,21 @@
 #chlk-dialogs{
 
+  .app-market-install-partial-update-inner{
+    position: relative;
+
+    &:after {
+      content: ' ';
+      position: absolute;
+      top: 0px;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: url(../content/images/loaders/circular-grey.gif) center center no-repeat, rgba(0,0,0,0.3);
+      z-index: 2;
+      @include border-radius(5px);
+    }
+  }
+
   .dialog{
     &.app-market-install{
 
@@ -7,6 +23,9 @@
       .install-app-dialog-model-wait{
 
       }
+
+
+
 
         width: 480px;
         min-height: 332px;
@@ -87,7 +106,7 @@
                   position: absolute;
                   top: 2px;
                   left: 4px;
-                  z-index: 1;
+                  z-index: 3;
                   @include background-image(linear-gradient(left top, #e9e9e9, #fefefe, #d6d6d6));
                   @include box-shadow(0 1px 7px #010101);
                   min-height: 6px;

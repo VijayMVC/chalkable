@@ -326,7 +326,9 @@ NAMESPACE('ria.dom', function () {
             // reference https://github.com/julienw/dollardom
 
             [[String]],
-            OVERRIDE, ria.dom.Dom, function descendants(selector__) {},
+            OVERRIDE, ria.dom.Dom, function descendants(selector__) {
+
+            },
             [[String]],
             OVERRIDE, ria.dom.Dom, function parent(selector_) {
                 return selector_ ? new ria.dom.Dom(this._dom.parents(selector_)) : new ria.dom.Dom(this._dom.parent());
@@ -340,7 +342,9 @@ NAMESPACE('ria.dom', function () {
                 return new ria.dom.Dom(this._dom.prev(selector_));
             },
             [[String]],
-            OVERRIDE, ria.dom.Dom, function first(selector_) {},
+            OVERRIDE, ria.dom.Dom, function first(selector_) {
+                return new ria.dom.Dom(this._dom.first(selector_));
+            },
             [[String]],
             OVERRIDE, ria.dom.Dom, function last(selector_) {},
             [[String]],
