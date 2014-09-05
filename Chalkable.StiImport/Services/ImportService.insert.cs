@@ -623,9 +623,8 @@ namespace Chalkable.StiImport.Services
                 }
             }
             else
-                classes = ServiceLocatorSchool.ClassService.GetClasses(null).ToDictionary(x => x.Id, x => (Class)x);   
+                classes = ServiceLocatorSchool.ClassService.GetAll().ToDictionary(x => x.Id, x => (Class)x);   
             var classPeriods = scheduledSections
-                //.Where(x => classes.ContainsKey(x.SectionID))
                 .Select(x => new ClassPeriod
                 {
                     ClassRef = x.SectionID,

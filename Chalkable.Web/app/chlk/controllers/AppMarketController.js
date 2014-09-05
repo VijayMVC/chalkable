@@ -272,6 +272,20 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
 
+
+        [chlk.controllers.SidebarButton('apps')],
+        [[Boolean]],
+        function installCompleteAction(result) {
+            var title = result ? "Installation successful" : "Error while installing app.";
+            return this.ShowMsgBox(title, '', [{
+                text: 'Ok',
+                controller: 'appmarket',
+                action: 'myApps',
+                params: [],
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }], 'center');
+        },
+
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
@@ -292,7 +306,8 @@ NAMESPACE('chlk.controllers', function (){
                 var personBalance = res[1];
                 var userBalance = personBalance.getBalance();
                 if (totalAppPrice > userBalance){
-                   return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error');
+                   this.ShowMsgBox('You have insufficient funds to buy this app', 'Error');
+                   return ria.async.BREAK;
                 }
                 return this.appMarketService
                     .installApp(
@@ -305,16 +320,10 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var title = result ? "Installation successful" : "Error while installing app.";
-                           return this.ShowMsgBox(title, '', [{
-                               text: 'Ok',
-                               controller: 'appmarket',
-                               action: 'myApps',
-                               params: [],
-                               color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                           }], 'center');
+                        return this.BackgroundNavigate('appmarket', 'installComplete', [result]);
                     }, this);
             }, this);
+            return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
         },
 
         [chlk.controllers.SidebarButton('apps')],

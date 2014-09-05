@@ -39,6 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
         IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null);
         Class GetById(int id);
+        IList<Class> GetAll();
     }
 
     public class ClassService : SchoolServiceBase, IClassService
@@ -312,6 +313,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new ClassDataAccess(uow, Context.SchoolLocalId)
                     .GetById(id);
             }
+        }
+
+        public IList<Class> GetAll()
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                return new ClassDataAccess(uow, Context.SchoolLocalId)
+                    .GetAll();
+            } 
         }
 
         public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
