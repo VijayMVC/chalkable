@@ -178,15 +178,21 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '#expiresdate')],
             [[ria.dom.Dom, ria.dom.Event]],
             function expiresDateChange(node, event){
-                var block = this.dom.find('.title-block-container');
-                if(node.getValue()){
+                var block = this.dom.find('.title-block-container'),
+                    value = node.getValue(),
+                    titleNode = this.dom.find('#title');
+                if(value){
                     if(!block.hasClass('with-date'))
                         block.addClass('was-empty');
                     else{
                         block.removeClass('was-empty');
                     }
                     block.addClass('with-date');
-                    this.dom.find('#title').addClass('should-check').trigger('keyup');
+                    if(value != node.getData('value')){
+                        titleNode.addClass('should-check');
+                    }
+                    titleNode.trigger('keyup');
+
                     setTimeout(function(){
                         wasDateChanged = true;
                     }, 1);
@@ -199,18 +205,20 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleKeyUp(node, event){
                 wasDateChanged = false;
-                var dom = this.dom, node = node;
+                var dom = this.dom, node = node, value = node.getValue();
                 if(dom.find('.title-block-container').hasClass('with-date')){
-                    if(!node.getValue() || !node.getValue().trim()){
+                    if(!value || !value.trim()){
                         dom.find('.save-title-btn').setAttr('disabled', true);
                     }else{
-                        if(node.getValue() == node.getData('title') && !node.hasClass('should-check')){
+                        var picker = this.dom.find('#expiresdate');
+                        if(value == node.getData('title') && !node.hasClass('should-check')){
                             this.updateFormByNotExistingTitle();
                             dom.find('.save-title-btn').setAttr('disabled', true);
                         }else{
                             titleTimeout && clearTimeout(titleTimeout);
                             titleTimeout = setTimeout(function(){
-                                dom.find('#check-title-button').trigger('click');
+                                if(value == node.getValue())
+                                    dom.find('#check-title-button').trigger('click');
                             }, 100);
                         }
                     }
