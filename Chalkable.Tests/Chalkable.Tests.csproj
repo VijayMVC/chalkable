@@ -72,6 +72,7 @@
     <Compile Include="OnDataBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sis\StiApi.cs" />
+    <Compile Include="Storage\LogDownloadTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBase.Pathes.cs" />
   </ItemGroup>

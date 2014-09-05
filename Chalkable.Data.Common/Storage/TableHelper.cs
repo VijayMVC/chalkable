@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Common;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -8,6 +9,7 @@ namespace Chalkable.Data.Common.Storage
     {
         private string tableName;
         private CloudTable table = null;
+        
         protected CloudTable GetTable()
         {
             if (table == null)
@@ -24,21 +26,33 @@ namespace Chalkable.Data.Common.Storage
             tableName = typeof (T).Name;
         }
 
-        /*
-         * TableQuery<T> rangeQuery = new TableQuery<T>().Where(
-                TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, key),
-                    TableOperators.And,
-                    TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.LessThan, "E")));
-         */
-
-        public PaginatedList<T> GetByPartKey(string key, int start, int count)
+        public TableHelper(string defaultProtocol, string accountName, string accountKey) : base(defaultProtocol, accountName, accountKey)
+        {
+            tableName = typeof(T).Name;
+        }
+        
+        public PaginatedList<T> GetByPartKey(string partitionKey, int start, int count)
         {
             var t = GetTable();
-            var tableQuery = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, key);
+            var tableQuery = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, partitionKey);
             var rangeQuery = new TableQuery<T>().Where(tableQuery).Take(start + count);
             var res = t.ExecuteQuery(rangeQuery);
             return new PaginatedList<T>(res, start / count, count);
+        }
+
+        public IList<T> GetNext(string lastKey, int count)
+        {
+            var t = GetTable();
+            TableQuery<T> rangeQuery;
+            if (lastKey != null)
+            {
+                var tableQuery = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.GreaterThan, lastKey);
+                rangeQuery = new TableQuery<T>().Where(tableQuery).Take(count);    
+            }
+            else
+                rangeQuery = new TableQuery<T>().Take(count);    
+            var res = t.ExecuteQuery(rangeQuery);
+            return res.ToList();
         }
 
         public void Save(IList<T> rows)

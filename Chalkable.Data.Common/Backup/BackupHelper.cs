@@ -32,7 +32,7 @@ namespace Chalkable.Data.Common.Backup
 
         private static void PrepareBlob(long time, string databaseName, out string key, out string blobUri)
         {
-            var cloudStorageAccount = GetStorageAccount();
+            var cloudStorageAccount = GetDefaultStorageAccount();
             key = Convert.ToBase64String(cloudStorageAccount.Credentials.ExportKey());
             blobUri = String.Format(BLOB_URL_TEMPLATE, cloudStorageAccount.BlobEndpoint.AbsoluteUri, BACKUP_CONTAINER, time, databaseName);
         }
