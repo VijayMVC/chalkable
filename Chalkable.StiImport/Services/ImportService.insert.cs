@@ -276,8 +276,7 @@ namespace Chalkable.StiImport.Services
 
         private void InsertSchoolPersons()
         {
-            var persons = ServiceLocatorSchool.PersonService.GetPersons();
-
+            var persons = ServiceLocatorSchool.PersonService.GetAll();
             var students = persons.Where(x => x.SisStudentUserId.HasValue).ToDictionary(x => x.SisStudentUserId.Value);
             var staff = persons.Where(x => x.SisStaffUserId.HasValue).ToDictionary(x => x.SisStaffUserId);
             var userSchools = context.GetSyncResult<UserSchool>().All;

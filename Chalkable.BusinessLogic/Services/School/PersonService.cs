@@ -30,16 +30,26 @@ namespace Chalkable.BusinessLogic.Services.School
         Person GetPerson(int id);
         void ActivatePerson(int id);
         Person EditEmail(int id, string email, out string error);
-
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
-
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
+        IList<Person> GetAll();
     }
 
     public class PersonService : SisConnectedService, IPersonService
     {
         public PersonService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+        }
+
+        public IList<Person> GetAll()
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Read())
+            {
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                return da.GetAll();
+            }
         }
 
         public void Add(IList<PersonInfo> persons)

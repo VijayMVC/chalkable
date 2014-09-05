@@ -283,5 +283,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
+
+        public IList<Person> GetAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
