@@ -20,11 +20,15 @@ NAMESPACE('chlk.templates.discipline', function(){
             [[Number]],
             String, function getTypesForToolTip(number){
                 var res = '',
-                    types = this.getDisciplines()[number].getDisciplineTypes();
-                if(types.length > 0){
-                    res = types.map(function(item){
+                    types = this.getDisciplines()[number].getDisciplineTypes(), otherLen, len = types.length;
+                if(len > 0){
+                    if(len > 3)
+                        otherLen = len - 3;
+                    res = types.slice(0,3).map(function(item){
                         return item.getName() ? item.getName().capitalize() : item.getName()
-                    }).join(', ');
+                    }).join(',\n');
+                    if(otherLen)
+                        res += ',\n+ {' + otherLen + '} more';
                 }
                 return res;
             }
