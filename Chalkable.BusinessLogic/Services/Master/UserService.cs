@@ -248,9 +248,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var userAcadSessionsIds = iNowConnector.UsersConnector.GetUserAcadSessionsIds();
                 if(userAcadSessionsIds.Length == 0)
                     throw new ChalkableException("Current user does not have access to any of school acadSessions");
-                if (!schoolYearId.HasValue)
+                if (!schoolYearId.HasValue && userAcadSessionsIds.Length == 1)
                     schoolYearId = userAcadSessionsIds[0];
-                PrepareSchoolData(schoolL, user, schoolYearId, out schoolYear, out schoolUser);
+                PrepareSchoolData(schoolL, user, schoolYearId, userAcadSessionsIds, out schoolYear, out schoolUser);
                 if (!schoolUser.School.IsChalkableEnabled)
                     return null;
                 if (iNowUser == null && iNowConnector != null)
@@ -276,7 +276,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             SchoolUser schoolUser;
             Data.School.Model.SchoolYear schoolYear;
             var schoolL = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]);
-            PrepareSchoolData(schoolL, user, schoolYearId, out schoolYear, out schoolUser);
+            PrepareSchoolData(schoolL, user, schoolYearId, null, out schoolYear, out schoolUser);
             var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, developerId, schoolYear)
             {
                 Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
@@ -303,7 +303,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id);
         }
 
-        private void PrepareSchoolData(IServiceLocatorSchool schoolL, User user, int? schoolYearId
+        private void PrepareSchoolData(IServiceLocatorSchool schoolL, User user, int? schoolYearId, int[] acdaIds
             , out Data.School.Model.SchoolYear schoolYear, out SchoolUser schoolUser)
         {
             if (schoolYearId.HasValue)
@@ -313,6 +313,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 schoolL.Context.SchoolId = user.SchoolUsers.First().SchoolRef;
                 schoolL.Context.SchoolLocalId = user.SchoolUsers.First().School.LocalId;
                 schoolYear = schoolL.SchoolYearService.GetCurrentSchoolYear();
+                if (acdaIds != null && !acdaIds.Contains(schoolYear.Id))
+                {
+                    var schoolYears = schoolL.SchoolYearService.GetSortedYears();
+                    schoolYears = schoolYears.Where(x => acdaIds.Contains(x.Id))
+                        .OrderByDescending(x=>x.StartDate).ToList();
+                    if(schoolYears.Count == 0)
+                        throw new ChalkableException("Current user doesn't have access to acada sessions in current school");
+                    schoolYear = schoolYears[0];
+                }
             }
             var schoolId = schoolYear.SchoolRef;
             schoolUser = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolId);
