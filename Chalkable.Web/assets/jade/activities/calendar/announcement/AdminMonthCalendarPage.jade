@@ -1,0 +1,11 @@
+div
+    topData = self.gradeLevelsInputData
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedId()
+    actions = {currentAction: 'month', day: 'day', week: 'week', month: 'month'}
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'calendar', 'month', [self.getCurrentDate().format('mm-dd-yy')])(
+        selectedId=selectedId,
+
+    ).classes-bar
+    +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBody, self.getModel(), 'calendar', actions, selectedId)
+
