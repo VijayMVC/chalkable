@@ -16,6 +16,8 @@ namespace Chalkable.Data.School.Model
         public const string LAST_NAME_FIELD = "LastName";
         public const string GENDER_FIELD = "Gender";
         public const string ROLE_REF_FIELD = "RoleRef";
+        public const string SCHOOL_REF_FIELD = "SchoolRef";
+
         public const string SALUTATION_FIELD = "Salutation";
         public const string ADDRESS_REF_FIELD = "AddressRef";
         public const string EMAIL_FIELD = "Email";
@@ -45,8 +47,7 @@ namespace Chalkable.Data.School.Model
         public DateTime? PhotoModifiedDate { get; set; }
         public int? SisStudentUserId { get; set; }
         public int? SisStaffUserId { get; set; }
-
-
+        
         [NotDbFieldAttr]
         public string CapitilizedFirstName
         {
@@ -118,6 +119,9 @@ namespace Chalkable.Data.School.Model
 
         [NotDbFieldAttr]
         public int RoleRef { get; set; }
+
+        [NotDbFieldAttr]
+        public int SchoolRef { get; set; }
     }
 
     public class PersonDetails : Person

@@ -12,6 +12,17 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public StudentSchoolYear GetStudentSchoolYear(int? schoolYearId, int studentId)
+        {
+            var conds = new AndQueryCondition
+                {
+                    {StudentSchoolYear.STUDENT_FIELD_REF_FIELD, studentId}
+                };
+            if(schoolYearId.HasValue)
+                conds.Add(StudentSchoolYear.SCHOOL_YEAR_REF_FIELD, schoolYearId.Value);
+            return SelectOneOrNull<StudentSchoolYear>(conds);
+        }
+
         public void Delete(IList<StudentSchoolYear> studentSchoolYears)
         {
             SimpleDelete(studentSchoolYears);

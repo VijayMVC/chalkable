@@ -31,11 +31,16 @@ namespace Chalkable.Data.Common.Orm
             foreach (var dbQuery in dbQueries)
             {
                 Sql.Append(dbQuery.Sql).Append("  ");
-                foreach (var param in dbQuery.Parameters)
-                {
-                    if (!Parameters.ContainsKey(param.Key))
-                        Parameters.Add(param);
-                }
+                AddParameters(dbQuery.Parameters);
+            }
+        }
+
+        public void AddParameters(IDictionary<string, object> parameters)
+        {
+            foreach (var parameter in parameters)
+            {
+                if (!Parameters.ContainsKey(parameter.Key))
+                    Parameters.Add(parameter);
             }
         }
     }
