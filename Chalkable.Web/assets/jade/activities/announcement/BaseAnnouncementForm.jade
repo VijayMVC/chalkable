@@ -1,0 +1,126 @@
+//TODO refactor
+mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole)
+    +Hidden('id', announcement.getId().valueOf())
+    +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
+    +Hidden('statetyped', announcement.getStateTyped())
+    +Hidden('systemtype', announcement.getSystemType())
+    +Hidden('personid', announcement.getPersonId().valueOf())
+    +Hidden('gradingstyle', announcement.getGradingStyle())
+    +Hidden('markingperiodid', announcement.getCreated())
+    +Hidden('state', announcement.getState())
+    +Hidden('isedit', !!announcement.getState())(data-isedit = !!announcement.getState()).is-edit
+    +Hidden('classid', classId)
+    +Hidden('order', announcement.getOrder()).order-value
+    +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
+
+    //+AnnouncementFormDescriptionBlock(announcement)
+    typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+    isAdminAnnouncement = adminRecipients && self.getUserRole().isAdmin()
+    isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
+    disableDeleteBtn = announcement.getGradingStudentsCount() > 0
+    if !isAdminAnnouncement
+        +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
+        div(class=announcement.getExpiresDate() ? 'with-date' : '').title-block-container
+            +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+    .left-block
+        if isAdminAnnouncement
+            .buttons-container
+                rolesEnum = chlk.models.common.RoleEnum
+                buttons = ['Student', 'Teacher', 'Parent', 'Admin']
+                each button in buttons
+                    roleName = button.toUpperCase();
+                    roleId = rolesEnum[roleName] ? rolesEnum[roleName].valueOf() : null
+                    text = Msg[button](true).toLowerCase().capitalize()
+                    Button(
+                        type="button",
+                        data-roleId = roleId,
+                        data-id = roleId ? '0|' + roleId + '|-1|-1' : adminRecipientId,
+                        disabled = roleId == rolesEnum.PARENT.valueOf()
+                        class = button.toLowerCase() + '-button',
+                        value = roleId ? "All " + text : text
+                    ).admin-gray.new-input=text
+            .recipient-part
+                +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
+        .left-block-container
+            +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
+            if !isAdminAnnouncement && announcement.isCanAddStandard()
+                .add-standards-container
+                    .add-standards
+                        .standards-list
+                            standards = announcement.getStandards() || []
+                            each standard in standards
+                                div(data-tooltip = standard.getDescription()).grey-button.same-on-hover
+                                    span=standard.getName()
+                                    if !disableDeleteBtn
+                                        +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
+                        .title=Msg.Click_to_add_standard
+                        +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
+            .drawer-icon
+        .drop-down-container
+        input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+        if !announcement.getState()
+            input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+    .right-block
+        .date-picker-container
+            +DatePicker('expiresdate', announcement.getExpiresDate())(
+                data-options={
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    inCurrentMp: true
+                },
+                data-value=announcement.getExpiresDate().format('mm/dd/yy')
+                placeholder=Msg.Due_date,
+                class='validate[required]'
+            )#expiresdate
+        if !isAdminAnnouncement
+            .max-score-container
+                input(name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=announcement.isGradable() ? announcement.getMaxScore() : '0')
+                div(data-tooltip=Msg.Max_Score_Tooltip_Message).question-mark ?
+            .advanced-options
+                .advanced-options-btn.title.btn=Msg.Advanced_options
+                    span.triangle-icon
+                .separator.x-hidden
+                .advanced-options-container.x-hidden
+                    .weight-multiplier.new-input-container
+                        .title=Msg.Weight_Multiplier
+                        input(name='weightmultiplier', class="validate[required,custom[number],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
+                        div(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message).question-mark ?
+                    .weight-addition.new-input-container
+                        .title=Msg.Weight_Addition
+                        input(name='weightaddition', class="validate[required,custom[number],min[0]]", placeholder="0.00", value=announcement.getWeightAddition() || 0.00)
+                        div(data-tooltip=Msg.Weight_Addition_Tooltip_Message).question-mark ?
+                    .check-box-container
+                        .title=Msg.Hide_from_Students
+                        +SlideCheckbox('hidefromstudents', announcement.isHiddenFromStudents(), false)
+                        div(data-tooltip=Msg.Hide_From_Student_Tooltip_Message).question-mark ?
+                    .check-box-container
+                        .title=Msg.Can_drop_student_score
+                        +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
+                        div(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message).question-mark ?
+
+    .attachments-and-applications
+        ann = announcement
+        -ann.setNeedButtons(true)
+        -ann.setNeedDeleteButton(true)
+            +RenderWith(ann, chlk.templates.announcement.Announcement)(
+                userRole = userRole
+            )
+    .bottom-block
+        +Button()(
+            type="submit",
+            name="submitType",
+            value=announcement.getState() ? "submitOnEdit" : "submit"
+        ).special-button.blue-button.submit-btn.submit-announcement
+            =(announcement.getState() ? Msg.Save : Msg.Submit)
+        if announcement.getState()
+            +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(
+                disabled=disableDeleteBtn
+            )
+                +Button()(
+                    type="button",
+                    data-tooltip = disableDeleteBtn ? Msg.Delete_announcement_btn_tooltip : '',
+                    class=disableDeleteBtn ? 'disabled' : ''
+                ).special-button.red-button.submit-btn.add-loader-btn
+                    =Msg.Delete
+        else
+            +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
