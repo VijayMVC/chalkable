@@ -303,7 +303,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.see-all')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function seeAllClick(node, event){
-                this.updateDropDown(this.getAllScores(), this.dom.find('.active-cell'), true);
+                this.updateDropDown(this.getAllScores(), this.dom.find('.active-cell').find('.value-input'), true);
                 return false;
             },
 

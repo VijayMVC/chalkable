@@ -42,7 +42,7 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                 disabledClass = 'x-hidden'
             ).classes-bar
             .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
-                .container.panel-bg.overflow-hidden
+                .container.panel-bg
                     +AnnouncementTypeToolBar(classes, announcement, typeId)
             .ann-form-container(class=(classId && typeId ? '' : 'x-hidden'))
                 +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form

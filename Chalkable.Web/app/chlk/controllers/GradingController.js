@@ -596,21 +596,26 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.grading.SubmitProgressReportViewData]],
             function submitProgressReportAction(model){
-                var count = model.getNotSelectedCount();
-                if(!count){
-                    return this.downloadProgressReportAction(model);
-                } else {
-                    this.getContext().getSession().set('modelForSubmit', model);
-                    this.ShowMsgBox(Msg.Progress_report_msg(count), '', [{
-                        text: Msg.Yes.toUpperCase(),
-                        controller: 'grading',
-                        action: 'downloadProgressReport',
-                        params: [model],
-                        color: chlk.models.common.ButtonColor.RED.valueOf()
-                    }, {
-                        text: Msg.Cancel.toUpperCase(),
-                        color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                    }]);
+                if(!model.getAbsenceReasonIds()){
+                    this.ShowMsgBox(Msg.Progress_Report_No_Reasons_msg);
+                }
+                else{
+                    var count = model.getNotSelectedCount();
+                    if(!count){
+                        return this.downloadProgressReportAction(model);
+                    } else {
+                        this.getContext().getSession().set('modelForSubmit', model);
+                        this.ShowMsgBox(Msg.Progress_report_msg(count), '', [{
+                            text: Msg.Yes.toUpperCase(),
+                            controller: 'grading',
+                            action: 'downloadProgressReport',
+                            params: [model],
+                            color: chlk.models.common.ButtonColor.RED.valueOf()
+                        }, {
+                            text: Msg.Cancel.toUpperCase(),
+                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                        }]);
+                    }
                 }
                 return null;
             },
