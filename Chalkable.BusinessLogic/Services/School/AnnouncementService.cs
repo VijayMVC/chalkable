@@ -380,12 +380,12 @@ namespace Chalkable.BusinessLogic.Services.School
         private void InsertMissingAttachments(AnnouncementDetails res, UnitOfWork uow)
         {
             var atts = res.AnnouncementAttachments.Where(x => x.SisAttachmentId.HasValue && x.Id <= 0).ToList();
-            if (atts.Count > 0)
+            if (atts.Count > 0 && res.PrimaryTeacherRef.HasValue)
             {
                 IList<AnnouncementAttachment> toInsert = new List<AnnouncementAttachment>();
                 foreach (var annAtt in atts)
                 {
-                    annAtt.PersonRef = res.PrimaryTeacherRef;
+                    annAtt.PersonRef = res.PrimaryTeacherRef.Value;
                     if (string.IsNullOrEmpty(annAtt.Uuid) &&
                         ServiceLocator.CrocodocService.IsDocument(annAtt.Name))
                     {

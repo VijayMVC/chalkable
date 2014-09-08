@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string AnnouncementTypeName { get; set; }
         public int? AnnouncementTypeId { get; set; }
         public int? ChalkableAnnouncementTypeId { get; set; }
-        public int PersonId { get; set; }
+        public int? PersonId { get; set; }
         public string PersonName { get; set; }
         public string PersonGender { get; set; }
         public int? ClassId { get; set; }

@@ -23,6 +23,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
 
+            if(!ann.PrimaryTeacherRef.HasValue)
+                throw new ChalkableException("There is no teachers for that item");
+
             var annQnA = new AnnouncementQnAComplex
             {
                 AnnouncementRef = announcementId,
@@ -32,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 QuestionTime = Context.NowSchoolTime,
                 State = AnnouncementQnAState.Asked,
                 Asker = Storage.PersonStorage.GetById(Context.UserLocalId.Value),
-                Answerer = Storage.PersonStorage.GetById(ann.PrimaryTeacherRef)
+                Answerer = Storage.PersonStorage.GetById(ann.PrimaryTeacherRef.Value)
             };
             Storage.AnnouncementQnAStorage.Add(annQnA);
             annQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery

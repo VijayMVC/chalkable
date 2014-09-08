@@ -54,7 +54,7 @@ namespace Chalkable.Data.School.Model
         public virtual string Title { get; set; }
 
         [NotDbFieldAttr]
-        public int PrimaryTeacherRef { get; set; }
+        public int? PrimaryTeacherRef { get; set; }
         [NotDbFieldAttr]
         public bool IsOwner { get; set; }
         [NotDbFieldAttr]

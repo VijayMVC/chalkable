@@ -522,7 +522,7 @@ var Msg = {
     },
     Show_grades_to_students: 'Show grades to students?',
     Show_less: 'Show less',
-    Signal_line: 'Signal line',
+    Signal_line: 'Signature line',
     Sorted_by: 'Sorted by',
     Source_Name: 'Source Name',
     Showing_items_due_before: function(endDateWithYear, endDate){

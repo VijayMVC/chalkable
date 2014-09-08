@@ -181,7 +181,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 AnnouncementApplications = announcementApplications,
                 AnnouncementQnAs = announcementsQnA,
                 AnnouncementStandards = announcementStandards,
-                Owner = Storage.PersonStorage.GetById(announcement.PrimaryTeacherRef),
+                Owner = announcement.PrimaryTeacherRef.HasValue ? Storage.PersonStorage.GetById(announcement.PrimaryTeacherRef.Value) : null,
                 ApplicationCount = announcement.ApplicationCount,
                 AttachmentsCount = announcement.AttachmentsCount,
                 StudentAnnouncements = Storage.StudentAnnouncementStorage.GetAll(announcement.Id),
