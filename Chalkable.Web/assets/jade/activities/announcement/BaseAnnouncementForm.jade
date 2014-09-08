@@ -68,7 +68,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     selectOtherMonths: true,
                     inCurrentMp: true
                 },
-                data-value=announcement.getExpiresDate().format('mm/dd/yy')
+                data-value=announcement.getExpiresDate() ? announcement.getExpiresDate().format('mm/dd/yy') : ''
                 placeholder=Msg.Due_date,
                 class='validate[required]'
             )#expiresdate
