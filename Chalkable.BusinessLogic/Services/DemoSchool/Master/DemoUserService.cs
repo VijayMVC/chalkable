@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public void UpdateSisUserNames(List<Pair<string, string>> values)
+        public void UpdateSisUserNames(List<Pair<string, string>> values, Guid districtId)
         {
             throw new NotImplementedException();
         }

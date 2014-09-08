@@ -11,8 +11,12 @@ namespace Chalkable.Data.Common.Storage
 
         static BaseStorageHelper()
         {
-            string connectionString = RoleEnvironment.GetConfigurationSettingValue(CONNECTION_STRING_NAME);
-            defaultStorageAccount = CloudStorageAccount.Parse(connectionString);
+            if (RoleEnvironment.IsAvailable)
+            {
+                string connectionString = RoleEnvironment.GetConfigurationSettingValue(CONNECTION_STRING_NAME);
+                defaultStorageAccount = CloudStorageAccount.Parse(connectionString);    
+            }
+            
         }
 
         public BaseStorageHelper()

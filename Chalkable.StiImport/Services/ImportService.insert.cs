@@ -207,7 +207,7 @@ namespace Chalkable.StiImport.Services
             var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
             var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
             Dictionary<int, SisUser> sisUsers;
-            if (persons.Length > 20)
+            if (persons.Length > 30)
             {
                 sisUsers = ServiceLocatorSchool.SisUserService.GetAll().ToDictionary(x=>x.Id);
             }

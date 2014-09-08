@@ -191,7 +191,7 @@ namespace Chalkable.StiImport.Services
                 var old = ServiceLocatorSchool.SisUserService.GetById(sisUser.Id);
                 values.Add(new Pair<string, string>(old.UserName, sisUser.UserName));
             }
-            ServiceLocatorMaster.UserService.UpdateSisUserNames(values);
+            ServiceLocatorMaster.UserService.UpdateSisUserNames(values, ServiceLocatorMaster.Context.DistrictId.Value);
             ServiceLocatorSchool.SisUserService.Edit(users);
         }
 

@@ -29,7 +29,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext LoginToDemo(string roleName, string demoPrefix);
         UserContext DeveloperTestLogin(Developer developer);
         UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null);
-        UserContext ReLogin(Guid id);
         User GetByLogin(string login);
         User GetById(Guid id);
         IList<User> GetByDistrict(Guid districtId);
@@ -44,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void CreateSchoolUsers(IList<User> userInfos);
         void DeleteUsers(IList<int> localIds, Guid districtId);
         void Edit(IList<User> users);
-        void UpdateSisUserNames(List<Pair<string, string>> values);
+        void UpdateSisUserNames(List<Pair<string, string>> values, Guid districtId);
         User GetByLocalId(int localId, Guid districtId);
     }
 
@@ -72,12 +71,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public void UpdateSisUserNames(List<Pair<string, string>> values)
+        public void UpdateSisUserNames(List<Pair<string, string>> values, Guid districtId)
         {
             using (var uow = Update())
             {
                 var da = new UserDataAccess(uow);
-                da.UpdateSisUserNames(values);
+                da.UpdateSisUserNames(districtId, values);
                 uow.Commit();
             }
         }
@@ -115,17 +114,13 @@ namespace Chalkable.BusinessLogic.Services.Master
 
             if (!user.IsSisUser)
                 return SimpleUserLogin(user, password);
-            else
+            user.OriginalPassword = password;
+            using (var uow = Update(IsolationLevel.ReadUncommitted))
             {
-                user.OriginalPassword = password;
-                using (var uow = Update(IsolationLevel.ReadUncommitted))
-                {
-                    var res = SisUserLogin(user, uow);
-                    uow.Commit();
-                    return res;
-                }
+                var res = SisUserLogin(user, uow);
+                uow.Commit();
+                return res;
             }
-
         }
         public UserContext Login(string confirmationKey)
         {
@@ -160,35 +155,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return res;
             }
         }
-        
-        public UserContext ReLogin(Guid id)
-        {
-            if (Context != null && Context.UserId == id)
-            {
-                using (var uow = Update())
-                {
-                    var user = new UserDataAccess(uow).GetUser(null, null, id);
-                    UserContext res;
-                    if (string.IsNullOrEmpty(user.SisUserName))
-                        res = SimpleUserLogin(user, null);
-                    else
-                    {
-                        if(!Context.DistrictId.HasValue)
-                            throw new UnassignedUserException();
-                        if(string.IsNullOrEmpty(Context.SisToken) || !Context.SisTokenExpires.HasValue)
-                            throw new ChalkableException("Can't relogin unlogged user");
-                        var district = ServiceLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
-                        if (!district.SisDistrictId.HasValue)
-                            throw new ChalkableException("There are no such district in Inow");
-                        res = SisLogIn(district.SisDistrictId.Value, Context.SisToken, Context.SisTokenExpires.Value, Context.SchoolYearId);
-                    }
-                    uow.Commit();
-                    return res;
-                }
-            }
-            return null;
-        }
-
 
         public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null)
         {
@@ -231,7 +197,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                                          , StiConnector.Connectors.Model.User iNowUser = null, int? schoolYearId = null)
         {
             if (user == null) return null;
-            if (user.IsSchoolUser && user.DistrictRef.HasValue)
+            if (user.IsSchoolUser)
             {
                 try
                 {
@@ -253,7 +219,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 PrepareSchoolData(schoolL, user, schoolYearId, userAcadSessionsIds, out schoolYear, out schoolUser);
                 if (!schoolUser.School.IsChalkableEnabled)
                     return null;
-                if (iNowUser == null && iNowConnector != null)
+                if (iNowUser == null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();
                 if (schoolUser.Role == CoreRoles.TEACHER_ROLE.Id && iNowUser.Claims.All(x => x.Values.All(y => y != "Access Chalkable")))
                     return null;

@@ -34,12 +34,12 @@ namespace Chalkable.Tests.Sis
         {
             //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
             //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
-            //var cl = ConnectorLocator.Create("Chalkable", "Zs5Qb4Wz8", "http://sandbox.sti-k12.com/Chalkable_Large/api/");
-            var cl = ConnectorLocator.Create("Chalkable", "r3Hp1Dm5Q", "http://208.83.95.80:8222/API/");
+            var cl = ConnectorLocator.Create("Chalkable", "2hV4gC3aO", "http://208.83.95.80:8255/api/");
+            //var cl = ConnectorLocator.Create("Chalkable", "r3Hp1Dm5Q", "http://208.83.95.80:8222/API/");
 
-            var schoolusers = (cl.SyncConnector.GetDiff(typeof(UserSchool), null) as SyncResult<UserSchool>).All.Where(x => x.UserID == 5028);
+            var items = (cl.SyncConnector.GetDiff(typeof(UserSchool), null) as SyncResult<UserSchool>).All.Where(x => x.UserID == 107);
                 
-            foreach (var s in schoolusers)
+            foreach (var s in items)
             {
                 Debug.WriteLine(s.UserID + " " + s.SchoolID);
             }

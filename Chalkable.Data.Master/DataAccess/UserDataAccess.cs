@@ -137,32 +137,34 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
-        public void UpdateSisUserNames(List<Pair<string, string>> values)
+        public void UpdateSisUserNames(Guid districtId, List<Pair<string, string>> values)
         {
-            if (2 * values.Count > MAX_PARAMETER_NUMBER)
+            //TODO: obviously commented logic is incorrect. think how to get this around
+            /*if (2 * values.Count > MAX_PARAMETER_NUMBER)
             {
                 var list1 = values.Take(values.Count / 2).ToList();
-                UpdateSisUserNames(list1);
-                UpdateSisUserNames(values.Skip(list1.Count).ToList());
+                UpdateSisUserNames(districtId, list1);
+                UpdateSisUserNames(districtId, values.Skip(list1.Count).ToList());
             }
             else
-            {
+            {*/
                 if (values.Count > 0)
                 {
                     var t = typeof(User);
                     var b = new StringBuilder();
                     IDictionary<string, object> ps = new Dictionary<string, object>();
+                    ps.Add("dId", districtId);
                     for (int i = 0; i < values.Count; i++)
                     {
 
-                        var sql = string.Format("Update [{0}] set SisUserName = @new_{1} where SisUserName = @old_{1}", t.Name, i);
+                        var sql = string.Format("Update [{0}] set {1} = @new_{2} where {1} = @old_{2} && {3}=@dId", t.Name, User.SIS_USER_NAME_FIELD, i, User.DISTRICT_REF_FIELD);
                         b.Append(sql).Append(" ");
                         ps.Add("new_" + i, values[i].Second);
                         ps.Add("old_" + i, values[i].First);
                     }
                     ExecuteNonQueryParametrized(b.ToString(), ps, 10 + values.Count);    
                 }
-            }
+            //}
         }
     }
 }

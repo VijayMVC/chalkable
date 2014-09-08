@@ -88,20 +88,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             throw new NotImplementedException();
         }
-
-        private Person EditPersonAdditionalInfo(AdminTeacherInputModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected void ReLogOn(Person person)
-        {
-            //TODO: think about how to get rememberMe  
-            var user = MasterLocator.UserService.GetByLogin(person.Email);
-            var context = LogOn(false, MasterLocator.UserService, us => us.ReLogin(user.Id));
-            if (context == null)
-                throw new ChalkableSecurityException();
-        }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetPersons(IntList roleIds, IntList gradeLevelIds, int? start, int? count, bool? byLastName, string filter)
