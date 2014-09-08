@@ -36,6 +36,12 @@ NAMESPACE('chlk.activities.grading', function(){
                     });
             },
 
+            [ria.mvc.DomEventBind('change', '.reasons-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function reasonsSelectChange(node, event, options_){
+                console.info(node.getValue(), options_);
+            },
+
             [ria.mvc.DomEventBind('submit', '.progress-report-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
@@ -66,7 +72,7 @@ NAMESPACE('chlk.activities.grading', function(){
                 var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
                 var reasonsNode = node.find('#absence-reasons'),
                     reasonsArray = node.find('.reasons-select').getValue();
-                if(reasonsArray.length)
+                if(reasonsArray && reasonsArray.length)
                     reasonsNode.setValue(reasonsArray.join(','));
                 if(yearToDate){
                     dailyAttendanceDisplayMethodNode.setValue(3);
