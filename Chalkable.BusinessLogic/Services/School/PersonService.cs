@@ -112,8 +112,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 users = new Dictionary<int?, User>();
                 foreach (var schoolPerson in assignments)
                 {
-                    var u = ServiceLocator.ServiceLocatorMaster.UserService.GetByLocalId(schoolPerson.PersonRef, Context.DistrictId.Value);
-                    users.Add(schoolPerson.PersonRef, u);
+                    if (!users.ContainsKey(schoolPerson.PersonRef))
+                    {
+                        var u = ServiceLocator.ServiceLocatorMaster.UserService.GetByLocalId(schoolPerson.PersonRef, Context.DistrictId.Value);
+                        users.Add(schoolPerson.PersonRef, u);    
+                    }
                 }
             }
             
