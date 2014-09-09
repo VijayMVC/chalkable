@@ -238,12 +238,13 @@ NAMESPACE('chlk.activities.grading', function () {
                 var value = node.getValue();
                 if(!value){
                     node.addClass('empty-grade');
-                    node.removeClass('error');
+                    node.removeClass('error')
+                        .removeClass('blocked');;
                 }
                 else{
                     node.removeClass('empty-grade');
                 }
-                if(!isDown && !isUp){
+                if(value && !isDown && !isUp){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
                         return false;
                     }else{
@@ -346,7 +347,7 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             OVERRIDE, VOID, function onRender_(model){
-                BASE(model)
+                BASE(model);
                 this.setClassId(model.getTopData().getSelectedItemId());
                 this.prepareAllScores(model);
                 this.addEvents();
@@ -410,11 +411,13 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
                 var res = !node.find('input[name="gradevalue"]').hasClass('error');
-                var valueInput = node.find('.value-input');
+                var valueInput = node.find('.value-input'), value = valueInput.getValue() || '';
                 var commentInput = node.find('.comment-value');
-                if(!res || ((valueInput.getValue() || '').toLowerCase() == (valueInput.getData('value') || '').toLowerCase()
+                if(!res || (value.toLowerCase() == (valueInput.getData('value') || '').toLowerCase()
                     && (commentInput.getValue() || '') == (commentInput.getData('comment') || '')))
                         return false;
+                if(!value)
+                    node.find('input[name=gradeid]').setValue('');
                 node.parent().find('.value').setHTML('...');
                 return true;
             }
