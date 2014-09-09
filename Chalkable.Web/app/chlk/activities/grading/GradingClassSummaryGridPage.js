@@ -186,7 +186,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 setTimeout(function(){
                     this.openGradingPeriod(container);
-                    parent.find('.mp-title').setData('tooltip', tooltipText);
+                    parent.find('.mp-name').setData('tooltip', tooltipText);
                 }.bind(this), 1);
 
             },
