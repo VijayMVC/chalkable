@@ -1,0 +1,83 @@
+{
+	"version": "3.0",
+
+    "options": {
+		"uglifyjs": {
+			"output": {
+				"beautify": false
+			},
+			"compress": {
+				"dead_code": true
+			},
+			"mangle": {
+			}
+		}
+	},
+
+    "modules": [{
+        "name": "SysAdmin",
+        "app": "chlk.SysAdminApp",
+        "out": "app/SysAdminApp.compiled.js",
+
+        "prepend": [
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    }, {
+        "name": "TeacherApp",
+        "app": "chlk.TeacherApp",
+        "out": "app/TeacherApp.compiled.js",
+
+        "prepend": [
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    }, {
+        "name": "DeveloperApp",
+        "app": "chlk.DeveloperApp",
+        "out": "app/DeveloperApp.compiled.js",
+
+        "prepend": [
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    },{
+        "name": "AdminApp",
+        "app": "chlk.AdminApp",
+        "out": "app/AdminApp.compiled.js",
+
+        "prepend": [
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    },{
+        "name": "StudentApp",
+        "app": "chlk.StudentApp",
+        "out": "app/StudentApp.compiled.js",
+
+        "prepend": [
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    }]
+}
