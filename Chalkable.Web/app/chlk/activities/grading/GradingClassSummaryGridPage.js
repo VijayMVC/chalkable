@@ -838,6 +838,8 @@ NAMESPACE('chlk.activities.grading', function () {
                         activeCell.find('.grade-text').setHTML('...');
                     }
                     this.addTimeOut(form, isAvg);
+                    var mp = node.parent('.marking-period-container');
+                    mp.find('.comment-button').hide();
                 }else{
                     event.preventDefault();
                     return false;
