@@ -62,13 +62,13 @@ selectedId = topData.getSelectedItemId()
 
         .not-transparent
             +ListView(self.announcements)(
-            infiniteScroll = true,
-            needGoToButton = true,
-            service = chlk.services.GradingService,
-            method = "getRecentlyGradedItems",
-            tpl = chlk.templates.grading.GradingFeedItemTpl,
-            pageSize = 10,
-            paramsPrepend = [selectedId]
+                infiniteScroll = true,
+                needGoToButton = true,
+                service = chlk.services.GradingService,
+                method = "getRecentlyGradedItems",
+                tpl = chlk.templates.announcement.FeedItemTpl,
+                pageSize = 10,
+                paramsPrepend = [selectedId]
             )
                 each announcement in self.announcements
                     +FeedItem(announcement)

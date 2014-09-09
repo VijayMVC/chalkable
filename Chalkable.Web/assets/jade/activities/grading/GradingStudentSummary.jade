@@ -19,13 +19,13 @@ topItems = topData.getTopItems()
     h1=Msg.Recently_Graded_Items
     .not-transparent
         +ListView(self.announcements)(
-        infiniteScroll = true,
-        needGoToButton = true,
-        service = chlk.services.GradingService,
-        method = "getRecentlyGradedItems",
-        tpl = chlk.templates.announcement.FeedItemTpl,
-        pageSize = 10,
-        paramsPrepend = [null]
+            infiniteScroll = true,
+            needGoToButton = true,
+            service = chlk.services.GradingService,
+            method = "getRecentlyGradedItems",
+            tpl = chlk.templates.announcement.FeedItemTpl,
+            pageSize = 10,
+            paramsPrepend = [null]
         )
             each announcement in self.announcements
                 +FeedItem(announcement)
