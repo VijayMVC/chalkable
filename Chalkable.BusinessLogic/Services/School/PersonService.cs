@@ -176,14 +176,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 query.CallerId = Context.UserLocalId;
                 query.CallerRoleId = Context.Role.Id;
+                if (!query.SchoolYearId.HasValue)
+                    query.SchoolYearId = Context.SchoolYearId;
                 if (query.CallerRoleId == CoreRoles.STUDENT_ROLE.Id)
                 {
                     var stSchoolYear = new StudentSchoolYearDataAccess(uow).GetStudentSchoolYear(query.SchoolYearId, Context.UserLocalId.Value);
                     if (stSchoolYear != null)
                         query.CallerGradeLevelId = stSchoolYear.GradeLevelRef;
                 }
-                if(!query.SchoolYearId.HasValue)
-                    query.SchoolYearId = Context.SchoolYearId;
                 var res = da.GetPersons(query);
                 return res;
             }
