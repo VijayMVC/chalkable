@@ -26,7 +26,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             if (announcementDetails.AnnouncementQnAs != null)
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
 
-            Owner = ShortPersonViewData.Create(announcementDetails.Owner);
+            if(announcementDetails.Owner != null)
+                Owner = ShortPersonViewData.Create(announcementDetails.Owner);
             if(announcementDetails.AnnouncementStandards != null)
                 Standards = AnnouncementStandardViewData.Create(announcementDetails.AnnouncementStandards);
             if (announcementDetails.AnnouncementApplications == null) return;

@@ -47,15 +47,16 @@ mixin AnnouncementTooltip()
                         +ActionLink('announcement', 'makeVisible', self.getId()).make-visible-btn Make visible
                 br
                 .left-block
-                    if self.getUserRole().isStudent()
-                        a(data-tooltip=self.getOwner().getFullName(),
-                        ).image-container
-                            +PersonImg(self.getOwner(), 47)
-                    else
-                        +ProfileLink(self.getOwner(), 'teacher')(
-                            data-tooltip=self.getOwner().getFullName(),
-                        ).image-container
-                            +PersonImg(self.getOwner(), 47)
+                    if self.getOwner()
+                        if self.getUserRole().isStudent()
+                            a(data-tooltip=self.getOwner().getFullName(),
+                            ).image-container
+                                +PersonImg(self.getOwner(), 47)
+                        else
+                            +ProfileLink(self.getOwner(), 'teacher')(
+                                data-tooltip=self.getOwner().getFullName(),
+                            ).image-container
+                                +PersonImg(self.getOwner(), 47)
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                     p=self.getContent()

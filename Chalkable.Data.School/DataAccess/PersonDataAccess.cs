@@ -324,7 +324,7 @@ namespace Chalkable.Data.School.DataAccess
             }
             return res;
         }
-
+        
         public static PersonDetails ReadPersonDetailsData(SqlDataReader reader)
         {
             var res = ReadPersonData(reader);
