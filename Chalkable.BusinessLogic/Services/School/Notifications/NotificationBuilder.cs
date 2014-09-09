@@ -26,8 +26,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var announcementQnToPersonTemplate = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON);
             RenderService.RegisterMainRenderer(NotificationTemplateProvider.ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON, new TemplateRenderer(announcementQnToPersonTemplate), false);
 
-            var announcementAttachmentToPersonTemplate = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON);
-            RenderService.RegisterMainRenderer(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON, new TemplateRenderer(announcementAttachmentToPersonTemplate), false);
+            var announcementAttachmentToPersonTemplate = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON);
+            RenderService.RegisterMainRenderer(NotificationTemplateProvider.ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON, new TemplateRenderer(announcementAttachmentToPersonTemplate), false);
 
             var announcementGradeToStudentTemplate = NotificationTemplateProvider.GetTemplate(NotificationTemplateProvider.ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON);
             RenderService.RegisterMainRenderer(NotificationTemplateProvider.ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON, new TemplateRenderer(announcementGradeToStudentTemplate), false);
@@ -161,7 +161,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
         public Notification BuildAnnouncementNewAttachmentNotificationToPerson(AnnouncementDetails announcement, Person fromschoolPerson)
         {
-            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON,
+            return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON,
                                                  NotificationType.Announcement, announcement.Owner, announcement, null, null,  
                                                  null, fromschoolPerson, new { AnnouncementTitle = announcement.Title});
         }

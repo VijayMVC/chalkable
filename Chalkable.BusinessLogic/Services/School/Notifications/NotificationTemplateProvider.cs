@@ -22,8 +22,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                                             " answered a question about <a href='#announcement/view/^.Notification.AnnouncementRef'>" +
                                                                             "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion"; 
 
-        public const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON";
-        private const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "Student <a href='#students/details/^.Notification.PersonRef'>^.Notification.Person.FullName</a> added  new attachment";
+        public const string ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON";
+        private const string ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "Student <a href='#students/details/^.Notification.QuestionPerson.Id'>^.Notification.QuestionPerson.FullName</a> added  new attachment";
 
         public const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON";
         private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a> ^.Other.AnnouncementOwner.ShortSalutationName </a> graded or commented your <a href='#announcement/view/^.Notification.AnnouncementRef'> ^.Other.AnnouncementTitle</a> ^.Other.AnnouncementTypeName";
@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             templates.Add(ANNOUNCEMENT_REMINDER_NOTIFICATION, ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE);
             templates.Add(ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR, ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE);
             templates.Add(ANNOUNCEMENT_NOTIFICATION_ANSWER_TO_PERSON, ANNOUNCEMENT_NOTIFICATION_ASWER_TO_PERSON_TEMPLATE);
-            templates.Add(ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON, ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE);
+            templates.Add(ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON, ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE);
             templates.Add(ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON, ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE);
             templates.Add(APPLICATION_NOTIFICATION, APPLICATION_NOTIFICATION_TEMPLATE);
             templates.Add(PRIVATE_MESSAGE_NOTIFICATION, PRIVATE_MESSAGE_NOTIFICATION_TEMPLATE);
