@@ -42,6 +42,9 @@ NAMESPACE('chlk.models.people', function () {
 
             String, 'salutation',
 
+            [ria.serialize.SerializeProperty('iswithdrawn')],
+            Boolean, 'withdrawn',
+
             [ria.serialize.SerializeProperty('hasmedicalalert')],
             Boolean, 'withMedicalAlert',
 

@@ -18,6 +18,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
+        public bool? IsWithDrawn { get; set; }
 
         protected ShortPersonViewData(Person person)
         {
@@ -38,7 +39,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     SpEdStatus = person.SpEdStatus;    
                 }
             }
-                
+            IsWithDrawn = person.IsWithdrawn;
+
         }
         public static ShortPersonViewData Create(Person person)
         {
