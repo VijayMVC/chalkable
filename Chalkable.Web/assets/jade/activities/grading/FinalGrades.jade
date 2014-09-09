@@ -1,0 +1,41 @@
+.class-grading.grading-summary-grid
+    topData = self.getTopData()
+    topItems = topData.getTopItems()
+    selectedId = topData.getSelectedItemId()
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'finalGrades')(
+        selectedItemId=selectedId,
+        disabledClass = 'x-hidden'
+    ).classes-bar
+    .autocomplete-list.final-grades
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .center
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
+    .gps-container
+        each gradingPeriod,i in self.getGradingPeriods()
+            ableEdit = self.isAbleEdit()
+            ableEditDirectValue = self.isAbleEditDirectValue()
+            div(
+                class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "",
+                data-index=i,
+                data-grading-period-id=gradingPeriod.getId(),
+                data-able-edit=ableEdit,
+                data-able-edit-direct-value=ableEditDirectValue
+            ).big-grading-period-container
+                if gradingPeriod.getId() == self.getGradingPeriodId()
+                    gp = self.getCurrentFinalGrade()
+                    +RenderWith(gp, chlk.templates.grading.GradingPeriodFinalGradeTpl)(
+                        classId = selectedId,
+                        ableEdit = ableEdit,
+                        ableEditDirectValue = ableEditDirectValue,
+                        gradingComments = self.getGradingComments()
+                    )
+                else
+                    +ActionForm('grading', 'loadGradingPeriodFinalGradesSummary').load-grading-period
+                        +Hidden('classId', selectedId)
+                        +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                        .gp-title-block
+                            .gp-title=gradingPeriod.getFinalTitleText()
+                            .gp-triangle
