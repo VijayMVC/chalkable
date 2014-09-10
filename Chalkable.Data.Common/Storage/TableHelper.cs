@@ -40,10 +40,14 @@ namespace Chalkable.Data.Common.Storage
             return new PaginatedList<T>(res, start / count, count);
         }
 
-        public IList<T> GetNext(string lastKey, int count)
+        public IList<T> GetNext(ref TableContinuationToken token)
         {
             var t = GetTable();
-            TableQuery<T> rangeQuery;
+            var res = t.ExecuteQuerySegmented(new TableQuery<T>(), token);
+            token = res.ContinuationToken;
+            return res.Results;
+
+            /*TableQuery<T> rangeQuery;
             if (lastKey != null)
             {
                 var tableQuery = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.GreaterThan, lastKey);
@@ -52,7 +56,13 @@ namespace Chalkable.Data.Common.Storage
             else
                 rangeQuery = new TableQuery<T>().Take(count);    
             var res = t.ExecuteQuery(rangeQuery);
-            return res.ToList();
+            return res.ToList();*/
+        }
+
+        public T GetByKey(string partKey, string key)
+        {
+            var t = GetTable();
+            return (T)t.Execute(TableOperation.Retrieve<T>(partKey, key)).Result;
         }
 
         public void Save(IList<T> rows)
