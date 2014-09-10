@@ -772,11 +772,6 @@ BODY {
                           position: relative;
 
                           .withdrawn{
-                            position: absolute;
-                            background: #d45151;
-                            height: 6px;
-                            width: 6px;
-                            @include border-radius(3px);
                             top: 21px;
                             right: 15px;
                           }

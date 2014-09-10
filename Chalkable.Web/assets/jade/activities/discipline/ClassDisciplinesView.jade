@@ -33,7 +33,11 @@ redirectData = self.getRedirectData()
                         student = item.getStudent();
                         +ProfileLink(student, 'student').left.image-container.white.shadow
                             +PersonImg(student, 47)
-                        p.left= student.getFullName()
+                        div.p.left
+                            .user-name-container.i-b.relative
+                                SPAN.name=student.getFullName()
+                                if student.isWithdrawn()
+                                    div(data-tooltip=Msg.Withdrawn).withdrawn
                         .right
                             .short-discipline-info-block
                                 .status-block
