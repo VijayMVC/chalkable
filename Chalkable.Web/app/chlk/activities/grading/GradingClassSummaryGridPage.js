@@ -186,7 +186,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 setTimeout(function(){
                     this.openGradingPeriod(container);
-                    parent.find('.mp-title').setData('tooltip', tooltipText);
+                    parent.find('.mp-name').setData('tooltip', tooltipText);
                 }.bind(this), 1);
 
             },
@@ -838,6 +838,8 @@ NAMESPACE('chlk.activities.grading', function () {
                         activeCell.find('.grade-text').setHTML('...');
                     }
                     this.addTimeOut(form, isAvg);
+                    var mp = node.parent('.marking-period-container');
+                    mp.find('.comment-button').hide();
                 }else{
                     event.preventDefault();
                     return false;

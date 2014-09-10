@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using NUnit.Framework;
@@ -28,16 +26,15 @@ namespace Chalkable.Tests.Storage
         public void DownloadLogs()
         {
             var helper = new TableHelper<WADLogsTable>("https", "chalkableqa", "dqWoVG68dHoteECPY1qmCAPloeWdvfMNt2Kjb8SCzT6Qqy3MELQrFfrJ7ZeJXrXxW8RhEn4XkwAvAYtMafqQKw==");
-            int count = 10;
             using (var fs = new FileStream("d:\\temp\\qa.log", FileMode.Create))
             {
                 using (StreamWriter writer = new StreamWriter(fs))
                 {
-                    var sb = new StringBuilder(10000);
-                    Debug.WriteLine("Downloading first " + count);
-                    var items = helper.GetNext(null, count);
+                    var sb = new StringBuilder(100000);
+                    TableContinuationToken token = null;
+                    IList<WADLogsTable> items = helper.GetNext(ref token);
                     Debug.WriteLine("Downloaded " + items.Count);
-                    while (items.Count > 0)
+                    while (token != null)
                     {
                         foreach (var item in items)
                         {
@@ -52,8 +49,8 @@ namespace Chalkable.Tests.Storage
                             writer.WriteLine(sb.ToString());
                             sb.Clear();
                         }
-                        Debug.WriteLine("Downloading next " + count);
-                        items = helper.GetNext(items[items.Count-1].RowKey, count);
+                        writer.Flush();
+                        items = helper.GetNext(ref token);
                         Debug.WriteLine("Downloaded " + items.Count);
                     }
                     

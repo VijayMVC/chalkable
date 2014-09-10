@@ -30,6 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetClasses(string filter);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue);
         ClassPerson GetClassPerson(int classId, int personId);
+        IList<ClassPerson> GetClassPersons(int? personId, int? classId, bool? isEnrolled, int? markingPeriodId); 
         IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled); 
         IList<ClassTeacher> GetClassTeachers(int? classId, int? teacherId); 
 
@@ -296,6 +297,13 @@ namespace Chalkable.BusinessLogic.Services.School
                                            : (StudentEnrollmentStatusEnum?) null;
                  var studentSys = new StudentSchoolYearDataAccess(uow).GetList(Context.SchoolYearId.Value, enrollentStatus);
                  res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
+
+                 var da = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
+                 var classPersons = da.GetClassPersons(new ClassPersonQuery { ClassId = classId, MarkingPeriodId = markingPeriodId });
+                 foreach (var person in res)
+                 {
+                     person.IsWithdrawn = classPersons.Any(x => x.PersonRef == person.Id && !x.IsEnrolled);
+                 }
                  //if (isEnrolled.HasValue)
                  //{
                  //    var da = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
@@ -443,13 +451,21 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled)
         {
+            return GetClassPersons(personId, null, isEnrolled, null);
+        }
+
+        public IList<ClassPerson> GetClassPersons(int? personId, int? classId, bool? isEnrolled, int? markingPeriodId)
+        {
             using (var uow = Read())
             {
-                return new ClassPersonDataAccess(uow, Context.SchoolLocalId).GetClassPersons(new ClassPersonQuery
-                    {
-                        PersonId = personId,
-                        IsEnrolled = isEnrolled
-                    });
+                return new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                    .GetClassPersons(new ClassPersonQuery
+                        {
+                            ClassId = classId,
+                            IsEnrolled = isEnrolled,
+                            PersonId = personId,
+                            MarkingPeriodId = markingPeriodId
+                        });
             }
         }
     }

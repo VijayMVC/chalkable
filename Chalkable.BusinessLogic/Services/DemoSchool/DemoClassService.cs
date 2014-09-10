@@ -320,5 +320,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return Storage.ClassTeacherStorage.GetClassTeachers(classId, teacherId);
         }
+        
+        public IList<ClassPerson> GetClassPersons(int? personId, int? classId, bool? isEnrolled, int? markingPeriodId)
+        {
+            return Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
+                {
+                    ClassId = classId,
+                    IsEnrolled = isEnrolled,
+                    MarkingPeriodId = markingPeriodId,
+                    PersonId = personId
+                }).ToList();
+        }
     }
 }

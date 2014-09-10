@@ -575,7 +575,7 @@ var Msg = {
     Todays_work: 'Today\'s work',
     Total_days_missed: 'Total days missed',
     Total_percent_market_share: 'Total percent market share',
-    Total_points: 'Total_points',
+    Total_points: 'Total points',
     Total_Points: 'Total Points',
     Try_it_out: 'Try it out',
     Type_Name: 'Type Name',

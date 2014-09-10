@@ -122,6 +122,9 @@ namespace Chalkable.Data.School.Model
 
         [NotDbFieldAttr]
         public int SchoolRef { get; set; }
+
+        [NotDbFieldAttr]
+        public bool? IsWithdrawn { get; set; }
     }
 
     public class PersonDetails : Person

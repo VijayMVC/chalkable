@@ -211,7 +211,7 @@ namespace Chalkable.Data.School.DataAccess
                 for (int i = 0; i < words.Length; i++)
                 {
                     var wordPrName = string.Format("filter{0}", i + 1);
-                    dbQuery.Parameters.Add(wordPrName, string.Format("'%{0}%'", words[i]));
+                    dbQuery.Parameters.Add(wordPrName, string.Format(FILTER_FORMAT, words[i]));
                     wordsPrNames.Add(wordPrName);
                 }
                 dbQuery.Sql.AppendFormat(" and ({0})", wordsPrNames.Select(x => string.Format("[{0}] like @{1} or [{2}] like @{1}"

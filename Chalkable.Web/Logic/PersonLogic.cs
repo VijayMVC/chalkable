@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Logic
@@ -26,15 +29,23 @@ namespace Chalkable.Web.Logic
                     SortType = byLastName.HasValue && byLastName.Value ? SortTypeEnum.ByLastName : SortTypeEnum.ByFirstName,
                     OnlyMyTeachers = onlyMyTeachers ?? false
                 };
+            IList<ClassPerson> classPersons = null;
             if (classId.HasValue && query.RoleId == CoreRoles.STUDENT_ROLE.Id)
             {
                 var classRoomOption = locator.ClassroomOptionService.GetClassOption(classId.Value);
                 query.IsEnrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
                 var mp = locator.MarkingPeriodService.GetLastMarkingPeriod(locator.Context.NowSchoolYearTime.Date);
                 if (mp != null) query.MarkingPeriodId = mp.Id;
-
+                if (!query.IsEnrolled.HasValue)
+                    classPersons = locator.ClassService.GetClassPersons(null, classId, query.IsEnrolled, query.MarkingPeriodId);
             }
             var res = locator.PersonService.GetPaginatedPersons(query);
+            if (classPersons != null && classPersons.Count > 0)
+                foreach (var person in res)
+                {
+                    person.IsWithdrawn = classPersons.Any(x => x.PersonRef == person.Id && !x.IsEnrolled);
+                }
+
             return res.Transform(PersonViewData.Create);
         }
     }
