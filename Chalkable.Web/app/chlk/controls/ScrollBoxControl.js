@@ -55,6 +55,7 @@ NAMESPACE('chlk.controls', function () {
                 var pageSizeField = 'input[name=' + this.getPageSizeField() + ']';
                 var startField = 'input[name=' + this.getStartField() + ']';
                 var totalCountField = 'input[name=' + this.getTotalCountField() + ']';
+                var actualCountField = 'input[name=' + this.getActualCountField() + ']';
                 var scrollOffset = this.getScrollOffset();
                 this._stopScroll = false;
 
@@ -68,9 +69,10 @@ NAMESPACE('chlk.controls', function () {
                         var start = jForm.find(startField).val() | 0;
                         var pageSize = jForm.find(pageSizeField).val() | 0;
                         var totalCount = jForm.find(totalCountField).val() | 0;
+                        var actualCount = jForm.find(actualCountField).val() | 0;
                         this._stopScroll = true;
 
-                        if (start < totalCount){
+                        if (start < totalCount && actualCount == pageSize){
                             jForm.find(startField).val(start + pageSize);
                             jForm.trigger('submit');
                         }
