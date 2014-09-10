@@ -91,12 +91,13 @@ namespace Chalkable.Web.Models
 
         public static FinalStudentAttendanceViewData Create(FinalStudentAttendance currentStattendance, IList<FinalStudentAttendance> allAttendances)
         {
-            var classAttendance = new FinalStudentAttendance
-                {
-                    Absenses = allAttendances.Average(x => x.Absenses),
-                    Presents = allAttendances.Average(x => x.Presents),
-                    Tardies = (int) allAttendances.Average(x => x.Tardies)
-                };
+            var classAttendance = new FinalStudentAttendance();
+            if (allAttendances.Count > 0)
+            {
+                classAttendance.Absenses = allAttendances.Average(x => x.Absenses);
+                classAttendance.Presents = allAttendances.Average(x => x.Presents);
+                classAttendance.Tardies = (int)allAttendances.Average(x => x.Tardies);    
+            }
             return new FinalStudentAttendanceViewData
                 {
                     TotalStudentAttendance = currentStattendance != null ? TotalAttendanceViewData.Create(currentStattendance) : null,
