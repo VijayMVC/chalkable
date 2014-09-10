@@ -14,7 +14,10 @@ div(
             +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
                 +PersonImg(student, 47)
             .i-b.name-block
-                p= student.getFullName()
+                .name-container.i-b.relative
+                    p= student.getFullName()
+                    if student.isWithdrawn()
+                        div(data-tooltip=Msg.Withdrawn).withdrawn
             div(id = "grade-container-" + self.getStudent().getId()).i-b.grade-block
                 +Hidden('note', avg.getNote())
                 +Hidden('averageid', avg.getAverageId().valueOf())

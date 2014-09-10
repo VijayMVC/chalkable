@@ -244,7 +244,9 @@ namespace Chalkable.Web.Models
 
         public static GradeStudentViewData Create(Person person, bool? isWithDrawn)
         {
-            return new GradeStudentViewData {StudentInfo = ShortPersonViewData.Create(person), IsWithDrawn = isWithDrawn};
+            var res = new GradeStudentViewData { StudentInfo = ShortPersonViewData.Create(person), IsWithDrawn = isWithDrawn };
+            res.StudentInfo.IsWithDrawn = isWithDrawn;
+            return res;
         }
     }
 
