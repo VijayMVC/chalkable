@@ -352,6 +352,17 @@ namespace Chalkable.Data.School.DataAccess
             }
             return null;
         }
+
+
+        public static int GetPersonDataForLogin(string districtServerUrl, Guid districtId, int userId, out int roleId)
+        {
+            var connectionString = string.Format(Settings.SchoolConnectionStringTemplate, districtServerUrl, districtId);
+            using (var uow = new UnitOfWork(connectionString, false))
+            {
+                //TODO: select person id and determine the role
+                throw new NotImplementedException();
+            }
+        }
     }
 
     public class PersonQuery

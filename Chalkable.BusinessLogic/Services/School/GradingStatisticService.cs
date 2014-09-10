@@ -275,7 +275,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Title = ann.Title,
                     StudentAnnouncements = new List<StudentAnnouncementDetails>(),
                     PrimaryTeacherRef = ann.PrimaryTeacherRef,
-                    IsOwner = classTeachers.Any(x=>x.PersonRef == Context.UserLocalId)
+                    IsOwner = classTeachers.Any(x => x.PersonRef == Context.PersonId)
                 };
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(annDetails, activity);
                 var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();

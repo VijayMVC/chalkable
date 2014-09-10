@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AnnouncementQnA AskQuestion(int announcementId, string question)
         {
-            if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
@@ -29,12 +29,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var annQnA = new AnnouncementQnAComplex
             {
                 AnnouncementRef = announcementId,
-                AskerRef = Context.UserLocalId.Value,
+                AskerRef = Context.PersonId.Value,
                 ClassRef = ann.ClassRef,
                 Question = question,
                 QuestionTime = Context.NowSchoolTime,
                 State = AnnouncementQnAState.Asked,
-                Asker = Storage.PersonStorage.GetById(Context.UserLocalId.Value),
+                Asker = Storage.PersonStorage.GetById(Context.PersonId.Value),
                 Answerer = Storage.PersonStorage.GetById(ann.PrimaryTeacherRef.Value)
             };
             Storage.AnnouncementQnAStorage.Add(annQnA);
@@ -49,21 +49,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private bool CanEditAnswer(AnnouncementQnAComplex announcementQnA)
         {
-            return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AnswererRef == Context.UserLocalId
-                || (Context.UserLocalId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE && string.IsNullOrEmpty(announcementQnA.Answer)
+            return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AnswererRef == Context.PersonId
+                || (Context.PersonId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE && string.IsNullOrEmpty(announcementQnA.Answer)
                        && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value));
         }
 
         private bool CanEditQuestion(AnnouncementQnAComplex announcementQnA)
         {
-            return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AskerRef == Context.UserLocalId
-                || (Context.UserLocalId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE
-                    && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.UserLocalId.Value));
+            return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AskerRef == Context.PersonId
+                || (Context.PersonId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE
+                    && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.PersonId.Value));
         }
 
         public AnnouncementQnA Answer(int announcementQnAId, string question, string answer)
         {
-            if (!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
             var annQnA = GetAnnouncementQnA(announcementQnAId);
@@ -73,9 +73,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             annQnA.State = AnnouncementQnAState.Answered;
             annQnA.Question = question;
-            if (Context.Role == CoreRoles.TEACHER_ROLE && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.UserLocalId))
+            if (Context.Role == CoreRoles.TEACHER_ROLE && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.PersonId))
             {
-                var answerer = Storage.PersonStorage.GetById(Context.UserLocalId.Value);
+                var answerer = Storage.PersonStorage.GetById(Context.PersonId.Value);
                 annQnA.Answerer = answerer;
                 annQnA.AnswererRef = answerer.Id;
                 annQnA.AnsweredTime = Context.NowSchoolTime;
@@ -132,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private AnnouncementQnAQueryResult GetAnnouncmentQnAs(AnnouncementQnAQuery query)
         {
-            query.CallerId = Context.UserLocalId;
+            query.CallerId = Context.PersonId;
             return Storage.AnnouncementQnAStorage.GetAnnouncementQnA(query);
         }
 

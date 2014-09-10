@@ -25,7 +25,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ListByClass(int classId)
         {
-            if (!SchoolLocator.Context.SchoolId.HasValue)
+            if (!SchoolLocator.Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var markingPeriod = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
             if (markingPeriod.EndDate < SchoolLocator.Context.NowSchoolYearTime.Date)

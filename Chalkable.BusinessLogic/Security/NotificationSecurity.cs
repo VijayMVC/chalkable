@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanModify(Notification notification, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || notification.PersonRef == context.UserLocalId;
+            return BaseSecurity.IsSysAdmin(context) || notification.PersonRef == context.PersonId;
         }
     }
 }

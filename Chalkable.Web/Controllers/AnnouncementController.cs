@@ -23,7 +23,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Create(int? classAnnouncementTypeId, int? classId)
         {
-            if (!SchoolLocator.Context.SchoolId.HasValue)
+            if (!SchoolLocator.Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             //if (classId.HasValue && !classAnnouncementTypeId.HasValue)
             //    throw new ChalkableException("Invalid method parameters");
@@ -49,7 +49,7 @@ namespace Chalkable.Web.Controllers
         {
             var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnouncementTypeId, classId);
             var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
-            var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.UserLocalId.Value, attachments);
+            var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
             avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
             avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
             return new CreateAnnouncementViewData
@@ -163,30 +163,7 @@ namespace Chalkable.Web.Controllers
             res.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             return Json(res);
         }
-
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
-        public ActionResult SaveForAdmin(AnnouncementInfo announcement, ListOfStringList annRecipients)
-        {
-            //var recipients = annRecipients != null ? RecipientInfo.Create(annRecipients) : null;
-            //Save(announcement, null);
-            //return Json(true);
-            throw new NotImplementedException();
-        }
-
-        private MarkingPeriod GetMarkingPeriod(DateTime expiresDate, int? markingPeriodId)
-        {
-            if (!SchoolLocator.Context.SchoolId.HasValue)
-                throw new ChalkableException(ChlkResources.ERR_CONTEXT_NO_SCHOOL_INFO_ID);
-            if (markingPeriodId.HasValue)
-            {
-                var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId.Value);
-                return markingPeriod.StartDate <= expiresDate && markingPeriod.EndDate >= expiresDate
-                           ? markingPeriod
-                           : null;
-            }
-            return SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate);
-        }
-
+        
         [AuthorizationFilter("Teacher")]
         public ActionResult SubmitAnnouncement(AnnouncementInfo announcement, int classId)
         {

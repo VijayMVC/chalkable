@@ -1,13 +1,9 @@
 ﻿using System;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
@@ -19,7 +15,6 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 using Microsoft.IdentityModel.Claims;
-using Newtonsoft.Json;
 
 namespace Chalkable.Web.Controllers
 {
@@ -125,8 +120,8 @@ namespace Chalkable.Web.Controllers
                 var claims = (User.Identity as ClaimsIdentity).Claims;
                 var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value;
                 SchoolLocator.Context.IsOAuthUser = true;
-                SchoolLocator.Context.SisToken = user.SisToken;
-                SchoolLocator.Context.SisTokenExpires = user.SisTokenExpires;
+                SchoolLocator.Context.SisToken = user.LoginInfo.SisToken;
+                SchoolLocator.Context.SisTokenExpires = user.LoginInfo.SisTokenExpires;
                 var app = MasterLocator.ApplicationService.GetApplicationByUrl(actor);
                 SchoolLocator.Context.IsInternalApp = app != null && app.IsInternal;
                 SchoolLocator.Context.OAuthApplication = actor;
@@ -242,7 +237,7 @@ namespace Chalkable.Web.Controllers
         }
         protected int EnsureMarkingPeriodId(int? markingPeriodId)
         {
-            if (!Context.SchoolId.HasValue)
+            if (!Context.SchoolLocalId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_NO_SCHOOL_INFO_ID);
             if (!markingPeriodId.HasValue)
             {

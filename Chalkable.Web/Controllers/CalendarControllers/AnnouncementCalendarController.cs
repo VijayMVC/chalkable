@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
@@ -24,7 +22,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_LIST, true, CallType.Get, new[] { AppPermissionType.Announcement })]
         public ActionResult List(DateTime? date, int? classId, IntList gradeLevelIds, int? schoolPersonId)
          {
-             if (!SchoolLocator.Context.SchoolId.HasValue)
+             if (!SchoolLocator.Context.PersonId.HasValue)
                  throw new UnassignedUserException();
              DateTime start, end;
              MonthCalendar(ref date, out start, out end);
@@ -178,8 +176,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          {
              if (!personId.HasValue)
              {
-                 teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE ? locator.Context.UserLocalId : null;
-                 studentId = locator.Context.Role == CoreRoles.STUDENT_ROLE ? locator.Context.UserLocalId : null;
+                 teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE ? locator.Context.PersonId : null;
+                 studentId = locator.Context.Role == CoreRoles.STUDENT_ROLE ? locator.Context.PersonId : null;
              }
              else
              {

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -19,12 +17,12 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public static ApplicationRatingViewData Create(IList<ApplicationRating> ratings, IList<Person> persons)
         {
 
-            ratings = ratings.Where(x => persons.Any(y => y.Id == x.User.LocalId)).ToList();
-            persons = persons.Where(x => ratings.Any(y => y.UserLocalId == x.Id)).ToList();
+            ratings = ratings.Where(x => persons.Any(y => y.UserId == x.User.SisUserId)).ToList();
+            persons = persons.Where(x => ratings.Any(y => y.User.SisUserId == x.UserId)).ToList();
 
             var ratingsbyrole = persons.GroupBy(x => x.RoleRef)
                                        .ToDictionary(x => CoreRoles.GetById(x.Key),
-                                                     x => ratings.Where(y => x.Any(z => z.Id == y.UserLocalId)).ToList());
+                                                     x => ratings.Where(y => x.Any(z => z.Id == y.User.SisUserId)).ToList());
             var res = new ApplicationRatingViewData
             {
                 RatingByPerson = ApplicationRatingByPersonViewData.Create(ratings, persons),
@@ -51,7 +49,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             {
                 Rating = rating.Rating,
                 Review = rating.Review,
-                Person = ShortPersonViewData.Create(persons.First(x=>x.Id == rating.UserLocalId)) 
+                Person = ShortPersonViewData.Create(persons.First(x=>x.Id == rating.User.SisUserId)) 
             };
             return res;
         }

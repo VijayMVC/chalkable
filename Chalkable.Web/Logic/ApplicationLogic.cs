@@ -18,8 +18,8 @@ namespace Chalkable.Web.Logic
         {
             var applications = maseterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
             var annApps = schoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
-            var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.UserLocalId ?? 0);
-            return AnnouncementApplicationViewData.Create(annApps, applications, installs, schoolLocator.Context.UserLocalId);
+            var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.PersonId ?? 0);
+            return AnnouncementApplicationViewData.Create(annApps, applications, installs, schoolLocator.Context.PersonId);
         } 
 
         public static IList<InstalledForPersonsGroupViewData> PrepareInstalledForPersonGroupData(
@@ -75,7 +75,7 @@ namespace Chalkable.Web.Logic
                 if (!schoolLocator.Context.SchoolYearId.HasValue)
                     throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
 
-                var classes = schoolLocator.ClassService.GetClasses(schoolLocator.Context.SchoolYearId.Value, null, schoolLocator.Context.UserLocalId);
+                var classes = schoolLocator.ClassService.GetClasses(schoolLocator.Context.SchoolYearId.Value, null, schoolLocator.Context.PersonId);
                 var studentCountToAppInstall = schoolLocator.AppMarketService.GetStudentCountToAppInstallByClass(schoolLocator.Context.SchoolYearId.Value, application.Id);
                 foreach (var clazz in classes)
                 {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.Caching;
 using System.Web;
 using System.Web.Caching;
 using Chalkable.BusinessLogic.Services.DemoSchool;
@@ -10,6 +8,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
 using CacheItemPriority = System.Web.Caching.CacheItemPriority;
 
 namespace Chalkable.BusinessLogic.Services
@@ -47,23 +46,26 @@ namespace Chalkable.BusinessLogic.Services
         public static IServiceLocatorMaster CreateMasterSysAdmin()
         {
             var admin = new User {Id = Guid.Empty, Login = "Virtual system admin"};
-            var context = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null);
+            var context = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
             var serviceLocator = new ServiceLocatorMaster(context);
             return serviceLocator;
         }
 
         public static IServiceLocatorSchool CreateSchoolLocator(SchoolUser schoolUser, Data.School.Model.SchoolYear schoolYear = null)
         {
-            return CreateSchoolLocator(CreateUserContext(schoolUser, schoolYear));
+            var context = CreateUserContext(schoolUser, schoolYear);
+            return CreateSchoolLocator(context);
         }
 
         private static UserContext CreateUserContext(SchoolUser schoolUser, Data.School.Model.SchoolYear schoolYear = null)
         {
+            int roleId;
+            int personId = PersonDataAccess.GetPersonDataForLogin(schoolUser.User.District.ServerUrl,
+                                                                  schoolUser.DistrictRef, schoolUser.UserRef, out roleId);
             var user = schoolUser.User;
             var school = schoolUser.School;
-            var role = CoreRoles.GetById(schoolUser.Role);
-            //TODO: how to get SIS token for OAuth
-            return new UserContext(user, role, user.District, school, null, schoolYear);
+            var role = CoreRoles.GetById(roleId);
+            return new UserContext(user, role, user.District, school, null, personId, schoolYear);
         }
 
         public static IServiceLocatorSchool CreateSchoolLocator(UserContext context)

@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
@@ -24,7 +14,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementAttachmentController : AnnouncementBaseController
     {
-        private const string headerFormat = "inline; filename={0}";
+        private const string HEADER_FORMAT = "inline; filename={0}";
         private const string CONTENT_DISPOSITION = "Content-Disposition";       
         private const string HTML_CONTENT_TYPE = "text/html";
 
@@ -67,7 +57,7 @@ namespace Chalkable.Web.Controllers
             }
             if (needsDownload.HasValue && !needsDownload.Value)
             {
-                Response.AddHeader(CONTENT_DISPOSITION, string.Format(headerFormat, attName));
+                Response.AddHeader(CONTENT_DISPOSITION, string.Format(HEADER_FORMAT, attName));
                 return File(content, contentTypeName);
             }
             return File(content, contentTypeName, attName);
@@ -86,7 +76,7 @@ namespace Chalkable.Web.Controllers
         {
             var announcementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(announcementId, start ?? 0, count ?? 10, false);
             var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments);
-            var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.UserLocalId ?? 0);
+            var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.PersonId ?? 0);
             return Json(res);
         }
 
@@ -96,7 +86,7 @@ namespace Chalkable.Web.Controllers
             var att = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
             try
             {
-                var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.UserLocalId ?? 0);
+                var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.PersonId ?? 0);
                 bool isOwner = (person.Id == att.PersonRef);
                 var canAnnotate = isOwner || person.RoleRef != CoreRoles.STUDENT_ROLE.Id;
                 string name = person.FirstName;

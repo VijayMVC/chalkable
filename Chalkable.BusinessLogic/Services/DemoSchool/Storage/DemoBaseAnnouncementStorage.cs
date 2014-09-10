@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public virtual AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
-            if (Storage.Context.UserLocalId == null)
+            if (Storage.Context.PersonId == null)
                 throw new ChalkableException("User is local id is null");
             var announcements = data.Select(x => x.Value);
 
@@ -97,12 +97,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.ToDate.HasValue)
                 announcements = announcements.Where(x => x.Expires <= query.ToDate);
             if (query.Complete.HasValue)
-                announcements = announcements.Where(x => Storage.AnnouncementCompleteStorage.GetComplete(x.Id, Storage.Context.UserLocalId.Value) == query.Complete);
+                announcements = announcements.Where(x => Storage.AnnouncementCompleteStorage.GetComplete(x.Id, Storage.Context.PersonId.Value) == query.Complete);
 
 
             foreach (var announcementComplex in announcements)
             {
-                var complete = Storage.AnnouncementCompleteStorage.GetComplete(announcementComplex.Id, Storage.Context.UserLocalId.Value);
+                var complete = Storage.AnnouncementCompleteStorage.GetComplete(announcementComplex.Id, Storage.Context.PersonId.Value);
                 announcementComplex.Complete = complete.HasValue && complete.Value;
             }
             if (query.OwnedOnly)
@@ -146,10 +146,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 }).ToList();
 
 
-            if (Storage.Context.UserLocalId == null) throw new Exception("Context user local id is null");
+            if (Storage.Context.PersonId == null) throw new Exception("Context user local id is null");
 
             var isComplete = Storage.AnnouncementCompleteStorage.GetComplete(announcement.Id,
-                Storage.Context.UserLocalId.Value);
+                Storage.Context.PersonId.Value);
 
             return new AnnouncementDetails
             {
@@ -163,7 +163,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 QnACount = announcement.QnACount,
                 OwnerAttachmentsCount = announcement.OwnerAttachmentsCount,
                 PrimaryTeacherRef = announcement.PrimaryTeacherRef,
-                IsOwner = announcement.PrimaryTeacherRef == Storage.Context.UserLocalId,
+                IsOwner = announcement.PrimaryTeacherRef == Storage.Context.PersonId,
                 PrimaryTeacherName = announcement.PrimaryTeacherName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
@@ -217,7 +217,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 IsScored = false,
                 Id = annId,
                 PrimaryTeacherRef = userId,
-                IsOwner = Storage.Context.UserLocalId == userId,
+                IsOwner = Storage.Context.PersonId == userId,
                 ClassRef = classId,
                 ClassAnnouncementTypeRef = classAnnouncementTypeId,
                 Created = nowLocalDate,

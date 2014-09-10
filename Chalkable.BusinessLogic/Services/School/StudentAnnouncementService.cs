@@ -73,7 +73,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
             if (ann.SisActivityId.HasValue)
@@ -82,8 +82,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 IList<Person> persons = new List<Person>();
                 if (CoreRoles.STUDENT_ROLE == Context.Role)
                 {
-                    scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.UserLocalId.Value));
-                    persons.Add(ServiceLocator.PersonService.GetPerson(Context.UserLocalId.Value));
+                    scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
+                    persons.Add(ServiceLocator.PersonService.GetPerson(Context.PersonId.Value));
                 }
                 else
                 {

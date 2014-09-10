@@ -93,7 +93,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public static User GetDemoUser(string roleName, string prefix)
         {
-            var demoUserName = BuildDemoUserName(roleName, prefix);
+            throw new NotImplementedException();
+            /*var demoUserName = BuildDemoUserName(roleName, prefix);
             roleName = roleName.ToLowerInvariant();
 
 
@@ -141,7 +142,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
             user.SchoolUsers = schoolUsers;
 
-            return user;
+            return user;*/
         }
 
         public UserContext Login(string login, string password)

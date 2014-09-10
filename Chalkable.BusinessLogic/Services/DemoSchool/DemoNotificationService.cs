@@ -25,14 +25,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<Notification> GetUnshownNotifications()
         {
-            return Storage.NotificationStorage.GetNotifications(new NotificationQuery {Shown = false, PersonId = Context.UserLocalId});
+            return Storage.NotificationStorage.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.PersonId });
         }
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
         {
             return Storage.NotificationStorage.GetPaginatedNotificationsDetails(new NotificationQuery
                     {
-                        PersonId = Context.UserLocalId, 
+                        PersonId = Context.PersonId, 
                         Start = start, 
                         Count = count
                     });
@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void MarkAsShown(int[] notificationIds)
         {
-            var notifications = Storage.NotificationStorage.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.UserLocalId });
+            var notifications = Storage.NotificationStorage.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.PersonId });
             foreach (var notificationId in notificationIds)
             {
                 var notification = notifications.FirstOrDefault(x => x.Id == notificationId);
@@ -115,11 +115,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void AddPrivateMessageNotification(int privateMessageId)
         {
-            if (!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
 
-            var privateMessage = Storage.PrivateMessageStorage.GetDetailsById(privateMessageId, Context.UserLocalId.Value);
+            var privateMessage = Storage.PrivateMessageStorage.GetDetailsById(privateMessageId, Context.PersonId.Value);
             var notification = builder.BuildPrivateMessageNotification(privateMessage, privateMessage.Sender, privateMessage.Recipient);
             Storage.NotificationStorage.Add(notification);
         }

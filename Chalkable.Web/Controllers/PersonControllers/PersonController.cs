@@ -20,9 +20,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_USER_ME, true, CallType.Get, new[] { AppPermissionType.User })]
         public ActionResult Me()
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var person = SchoolLocator.PersonService.GetPerson(Context.UserLocalId.Value);
+            var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
             return Json(PersonViewData.Create(person));
         }
 
@@ -61,7 +61,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
         public ActionResult ReChangePassword(int id, string newPassword)
         {
-            if (MasterLocator.Context.UserLocalId == id)
+            if (MasterLocator.Context.PersonId == id)
             {
                 MasterLocator.UserService.ChangePassword(MasterLocator.Context.Login, newPassword);
                 //MixPanelService.ChangedPassword(ServiceLocator.Context.UserName);
@@ -81,7 +81,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         private bool CanGetInfo(int personId)
         {
             return BaseSecurity.IsAdminOrTeacher(SchoolLocator.Context)
-                   || SchoolLocator.Context.UserLocalId == personId;
+                   || SchoolLocator.Context.PersonId == personId;
         }
 
         protected Person UpdateTeacherOrAdmin(AdminTeacherInputModel model)

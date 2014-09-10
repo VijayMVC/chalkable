@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
-using Chalkable.BusinessLogic.Mapping;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -90,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 query.RoleId = Context.Role.Id;
-                query.PersonId = Context.UserLocalId;
+                query.PersonId = Context.PersonId;
                 query.Now = Context.NowSchoolYearTime.Date;
                 var res = da.GetAnnouncements(query);
                 return res;
@@ -181,7 +180,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableException(string.Format("Announcement with such activity Ids {0} already exists", ids.Select(x => x.ToString()).JoinString() ));
                     
             }
-            IList<ClassDetails> classes = ServiceLocator.ClassService.GetClasses(null, null, Context.UserLocalId);
+            IList<ClassDetails> classes = ServiceLocator.ClassService.GetClasses(null, null, Context.PersonId);
             
             IList<Announcement> addToChlkAnns = new List<Announcement>();
             foreach (var activity in activities)
@@ -215,16 +214,16 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
-            if (!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new ChalkableException("Current User is has no inow id");
             var end = count + start;
             start = start + 1;
             if (classId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.UserLocalId.Value, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.UserLocalId.Value, start, end, toDate, fromDate, complete, graded);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, graded);
             return new List<Activity>();
         }
  
@@ -262,7 +261,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var anns = GetAnnouncements(new AnnouncementsQuery()).Announcements;
             if (Context.Role == CoreRoles.STUDENT_ROLE)
             {
-                var classPersons = ServiceLocator.ClassService.GetClassPersons(Context.UserLocalId.Value, true);
+                var classPersons = ServiceLocator.ClassService.GetClassPersons(Context.PersonId.Value, true);
                 var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
                 var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(sy.Id);
                 classPersons = classPersons.Where(x => markingPeriods.Any(y => y.Id == x.MarkingPeriodRef)).ToList();
@@ -311,7 +310,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
@@ -327,11 +326,11 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
                 var nowLocalDate = Context.NowSchoolTime;
-                var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.UserLocalId.Value);
+                var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.PersonId.Value);
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime);
                 annDa.ReorderAnnouncements(sy.Id, classAnnouncementTypeId.Value, res.ClassRef);
-                res = annDa.GetDetails(res.Id, Context.UserLocalId.Value, Context.RoleId);
+                res = annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
                 if (res.ClassAnnouncementTypeRef.HasValue)
                 {
                     var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
@@ -344,12 +343,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var res = da.GetDetails(announcementId, Context.UserLocalId.Value, Context.Role.Id);
+                var res = da.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id);
                 if(res == null)
                     throw new NoAnnouncementException();
                 if (res.SisActivityId.HasValue)
@@ -396,19 +395,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 var ada = new AnnouncementAttachmentDataAccess(uow);
                 ada.Insert(toInsert);
-                res.AnnouncementAttachments = ada.GetPaginatedList(res.Id, Context.UserLocalId.Value, Context.RoleId, 0,
+                res.AnnouncementAttachments = ada.GetPaginatedList(res.Id, Context.PersonId.Value, Context.RoleId, 0,
                                                                    int.MaxValue);
             }
         }
 
         public void DeleteAnnouncement (int announcementId)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var announcement = da.GetAnnouncement(announcementId, Context.RoleId, Context.UserLocalId.Value);
+                var announcement = da.GetAnnouncement(announcementId, Context.RoleId, Context.PersonId.Value);
                 if (!AnnouncementSecurity.CanDeleteAnnouncement(announcement, Context))
                     throw new ChalkableSecurityException();
 
@@ -424,20 +423,20 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                da.Delete(null, Context.UserLocalId, classId, announcementType, state);
+                da.Delete(null, Context.PersonId, classId, announcementType, state);
                 uow.Commit();
             }
         }
 
         public void DeleteAnnouncements(int personId, AnnouncementState state = AnnouncementState.Draft)
         {
-            if(Context.UserLocalId != personId && !BaseSecurity.IsSysAdmin(Context))
+            if (Context.PersonId != personId && !BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                da.Delete(null, Context.UserLocalId, null, null, state);
+                da.Delete(null, Context.PersonId, null, null, state);
                 uow.Commit();
             }
         }
@@ -467,12 +466,12 @@ namespace Chalkable.BusinessLogic.Services.School
       
         public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var ann = da.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.UserLocalId.Value);
+                var ann = da.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.PersonId.Value);
                 if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                     throw new ChalkableSecurityException();
 
@@ -511,7 +510,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             , new AndQueryCondition{{Class.ID_FIELD, ann.ClassRef}}, true);
 
                 uow.Commit();
-                var res = da.GetDetails(announcement.AnnouncementId, Context.UserLocalId.Value, Context.RoleId);
+                var res = da.GetDetails(announcement.AnnouncementId, Context.PersonId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
@@ -657,7 +656,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var res = da.GetAnnouncement(id, Context.Role.Id, Context.UserLocalId ?? 0); // security here 
+                var res = da.GetAnnouncement(id, Context.Role.Id, Context.PersonId ?? 0); // security here 
                 if(res == null)
                     throw new NoAnnouncementException();
                 return res;
@@ -692,7 +691,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void SetComplete(int id, bool complete)
         {
-            if (!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var ann = GetAnnouncementById(id);
             if (ann.State != AnnouncementState.Created)
@@ -720,7 +719,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                return da.GetLastDraft(Context.UserLocalId ?? 0);
+                return da.GetLastDraft(Context.PersonId ?? 0);
             }
         }
 
@@ -731,7 +730,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
             using (var uow = Read())
             {
-                return CreateAnnoucnementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.UserLocalId ?? 0);
+                return CreateAnnoucnementDataAccess(uow).GetAnnouncementRecipientPersons(announcementId, Context.PersonId ?? 0);
             }
         }
 
@@ -751,7 +750,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private Announcement EditTitle(Announcement announcement, string title, Func<AnnouncementDataAccess, string, bool> existsTitleAction)
         {
-            if (!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             if (announcement != null)
             {

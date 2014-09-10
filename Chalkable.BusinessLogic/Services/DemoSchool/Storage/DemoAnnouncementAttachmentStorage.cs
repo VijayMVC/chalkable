@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private IList<AnnouncementAttachment> GetAttachmentsQuery(AnnouncementAttachmentQuery query)
         {
-            query.CallerId = Storage.Context.UserLocalId;
+            query.CallerId = Storage.Context.PersonId;
             query.RoleId = Storage.Context.Role.Id;
 
             var attachments = data.Select(x => x.Value);

@@ -53,6 +53,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
         }
 
+        public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IUserService UserService { get { return userService; } }
         public Services.Master.ISchoolService SchoolService { get { return schoolService; } }
         public IDistrictService DistrictService { get { return districtService; } }
@@ -82,17 +87,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         }
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
-
-        public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, Guid? schoolId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IServiceLocatorSchool SchoolServiceLocator(Guid schoolId)
-        {
-            var school = SchoolService.GetById(schoolId);
-            return SchoolServiceLocator(school.DistrictRef, schoolId);
-        }
         
     }
 }

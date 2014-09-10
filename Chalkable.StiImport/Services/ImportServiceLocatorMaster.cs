@@ -15,10 +15,10 @@ namespace Chalkable.StiImport.Services
             DbService = new ImportDbService(context.MasterConnectionString);
         }
 
-        public override IServiceLocatorSchool SchoolServiceLocator(Guid districtId, Guid? schoolId)
+        public override IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolId)
         {
             var district = DistrictService.GetByIdOrNull(districtId);
-            Context.SwitchSchool(null, district.Id, district.Name, district.TimeZone, null, district.ServerUrl, null);
+            Context.SwitchSchool(district.Id, district.Name, district.TimeZone, null, district.ServerUrl, null);
             var serviceLocator = new ImportServiceLocatorSchool(this);
             return serviceLocator;
         }

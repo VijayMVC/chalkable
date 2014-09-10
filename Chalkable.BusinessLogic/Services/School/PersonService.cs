@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
-using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
 
     public interface IPersonService
     {
-        void Add(IList<PersonInfo> persons);
-        //void AsssignToSchool(IList<SchoolPerson> assignments);
-        IList<Person> Edit(IList<PersonInfo> personInfos);
+        void Add(IList<Person> persons);
+        void Edit(IList<Person> personInfos);
         void Delete(int id);
         void Delete(IList<int> ids);
-        void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons);
         IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
         PersonDetails GetPersonDetails(int id);
@@ -40,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public PersonService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
-
+        
         public IList<Person> GetAll()
         {
             if (!BaseSecurity.IsSysAdmin(Context))
@@ -52,91 +47,19 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Add(IList<PersonInfo> persons)
+        public void Add(IList<Person> persons)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
-            var users = persons.Select(x => new User
-            {
-                LocalId = x.Id,
-                Login = x.Email,
-                DistrictRef = Context.DistrictId.Value,
-                Password = x.Password,
-                SisUserName = x.SisUserName,
-                Id = Guid.NewGuid()
-            }).ToList();
-            ServiceLocator.ServiceLocatorMaster.UserService.CreateSchoolUsers(users);
-            var ps = persons.Select(x => new Person
-            {
-                Active = x.Active,
-                AddressRef = x.AddressRef,
-                BirthDate = x.BirthDate,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Gender = x.Gender,
-                Id = x.Id,
-                HasMedicalAlert = x.HasMedicalAlert,
-                IsAllowedInetAccess = x.IsAllowedInetAccess,
-                SpecialInstructions = x.SpecialInstructions,
-                SpEdStatus = x.SpEdStatus,
-                PhotoModifiedDate = x.PhotoModifiedDate,
-                SisStaffUserId = x.SisStaffUserId,
-                SisStudentUserId = x.SisStudentUserId
-            }).ToList();
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                da.Insert(ps);                
+                da.Insert(persons);                
                 uow.Commit();
             }
         }
-
-        /*public void AsssignToSchool(IList<SchoolPerson> assignments)
-        {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-            if (!Context.DistrictId.HasValue)
-                throw new UnassignedUserException();
-            var schools = ServiceLocator.ServiceLocatorMaster.SchoolService.GetSchools(Context.DistrictId.Value, 0,
-                                                                                           int.MaxValue)
-                                                                                           .ToDictionary(x=>x.LocalId);
-            Dictionary<int?, User> users;
-            if (assignments.Count > 30)
-                users = ServiceLocator.ServiceLocatorMaster.UserService.GetByDistrict(Context.DistrictId.Value)
-                    .ToDictionary(x=>x.LocalId);
-            else
-            {
-                users = new Dictionary<int?, User>();
-                foreach (var schoolPerson in assignments)
-                {
-                    if (!users.ContainsKey(schoolPerson.PersonRef))
-                    {
-                        var u = ServiceLocator.ServiceLocatorMaster.UserService.GetByLocalId(schoolPerson.PersonRef, Context.DistrictId.Value);
-                        users.Add(schoolPerson.PersonRef, u);    
-                    }
-                }
-            }
-            
-            var schoolUsers = assignments.Select(x => new SchoolUser
-            {
-                Id = Guid.NewGuid(),
-                Role = x.RoleRef,
-                SchoolRef = schools[x.SchoolRef].Id,
-                UserRef = users[x.PersonRef].Id
-            }).ToList();
-
-            ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(schoolUsers);
-
-            using (var uow = Update())
-            {
-                var schoolDataAccess = new SchoolPersonDataAccess(uow);
-                schoolDataAccess.Insert(assignments);
-                uow.Commit();
-            }
-        }*/
         
         public void Delete(int id)
         {
@@ -174,13 +97,13 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                query.CallerId = Context.UserLocalId;
+                query.CallerId = Context.PersonId;
                 query.CallerRoleId = Context.Role.Id;
                 if (!query.SchoolYearId.HasValue)
                     query.SchoolYearId = Context.SchoolYearId;
                 if (query.CallerRoleId == CoreRoles.STUDENT_ROLE.Id)
                 {
-                    var stSchoolYear = new StudentSchoolYearDataAccess(uow).GetStudentSchoolYear(query.SchoolYearId, Context.UserLocalId.Value);
+                    var stSchoolYear = new StudentSchoolYearDataAccess(uow).GetStudentSchoolYear(query.SchoolYearId, Context.PersonId.Value);
                     if (stSchoolYear != null)
                         query.CallerGradeLevelId = stSchoolYear.GradeLevelRef;
                 }
@@ -210,37 +133,17 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new PersonDataAccess(uow, Context.SchoolLocalId).GetPersonDetails(id, Context.UserLocalId ?? 0, Context.Role.Id);
+                return new PersonDataAccess(uow, Context.SchoolLocalId).GetPersonDetails(id, Context.PersonId ?? 0, Context.Role.Id);
             }
         }
-        
-        public IList<Person> Edit(IList<PersonInfo> personInfos)
+
+        public void Edit(IList<Person> persons)
         {
             using (var uow = Update())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                var res = personInfos.Select(x => new Person
-                {
-                    Active = x.Active,
-                    AddressRef = x.AddressRef,
-                    BirthDate = x.BirthDate,
-                    Email = x.Email,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Gender = x.Gender,
-                    Id = x.Id,
-                    HasMedicalAlert = x.HasMedicalAlert,
-                    IsAllowedInetAccess = x.IsAllowedInetAccess,
-                    SpecialInstructions = x.SpecialInstructions,
-                    SpEdStatus = x.SpEdStatus,
-                    PhotoModifiedDate = x.PhotoModifiedDate,
-                    SisStaffUserId = x.SisStaffUserId,
-                    SisStudentUserId = x.SisStudentUserId
-                }).ToList();
-
-                da.Update(res);
+                da.Update(persons);
                 uow.Commit();
-                return res;
             }
         }
 
@@ -373,28 +276,5 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
-    }
-
-    public class PersonInfo
-    {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime? BirthDate { get; set; }
-        public string Salutation { get; set; }
-        public string Gender { get; set; }
-        public bool Active { get; set; }
-        public string Email { get; set; }
-        public int? AddressRef { get; set; }
-        public string Password { get; set; }
-        public string SisUserName { get; set; }
-
-        public bool HasMedicalAlert { get; set; }
-        public bool IsAllowedInetAccess { get; set; }
-        public string SpecialInstructions { get; set; }
-        public string SpEdStatus { get; set; }
-        public DateTime? PhotoModifiedDate { get; set; }
-        public int? SisStaffUserId { get; set; }
-        public int? SisStudentUserId { get; set; }
     }
 }

@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                 if (notificationDetails.PrivateMessageRef.HasValue)
                     notificationDetails.PrivateMessage =
-                        Storage.PrivateMessageStorage.GetDetailsById(notificationDetails.PrivateMessageRef.Value, Storage.Context.UserLocalId.Value);
+                        Storage.PrivateMessageStorage.GetDetailsById(notificationDetails.PrivateMessageRef.Value, Storage.Context.PersonId.Value);
 
                 if (notificationDetails.QuestionPersonRef.HasValue)
                     notificationDetails.QuestionPerson = Storage.PersonStorage.GetById(notificationDetails.QuestionPersonRef.Value);

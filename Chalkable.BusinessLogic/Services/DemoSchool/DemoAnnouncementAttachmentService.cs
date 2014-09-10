@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Common.Web;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -33,14 +27,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                    || Storage.ClassPersonStorage.Exists(new ClassPersonQuery
                               {
                                   ClassId = ann.ClassRef,
-                                  PersonId = Context.UserLocalId
+                                  PersonId = Context.PersonId
                               });
         }
 
         public Announcement AddAttachment(int announcementId, byte[] content, string name, string uuid)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            if (!(Context.UserLocalId.HasValue && Context.SchoolId.HasValue))
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             if (!CanAttach(ann))
                     throw new ChalkableSecurityException();
@@ -48,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var annAtt = new AnnouncementAttachment
             {
                 AnnouncementRef = ann.Id,
-                PersonRef = Context.UserLocalId.Value,
+                PersonRef = Context.PersonId.Value,
                 AttachedDate = Context.NowSchoolTime,
                 Name = name,
                 Uuid = uuid,
@@ -58,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             Storage.AnnouncementAttachmentStorage.Add(annAtt);
 
-            var atts = Storage.AnnouncementAttachmentStorage.GetList(Context.UserLocalId.Value, Context.Role.Id, name);
+            var atts = Storage.AnnouncementAttachmentStorage.GetList(Context.PersonId.Value, Context.Role.Id, name);
 
             
             ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
@@ -68,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if (ann.IsOwner)
                     ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
                 else
-                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.UserLocalId.Value);
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.PersonId.Value);
             }
             return ann;
         }
@@ -86,12 +80,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
-            return Storage.AnnouncementAttachmentStorage.GetPaginatedList(announcementId, Context.UserLocalId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
+            return Storage.AnnouncementAttachmentStorage.GetPaginatedList(announcementId, Context.PersonId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
         }
 
         public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
         {
-            return Storage.AnnouncementAttachmentStorage.GetById(announcementAttachmentId, Context.UserLocalId ?? 0, Context.Role.Id);
+            return Storage.AnnouncementAttachmentStorage.GetById(announcementAttachmentId, Context.PersonId ?? 0, Context.Role.Id);
         }
 
         public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
@@ -102,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
         public IList<AnnouncementAttachment> GetAttachments(string filter)
         {
-            return Storage.AnnouncementAttachmentStorage.GetList(Context.UserLocalId ?? 0, Context.Role.Id, filter);
+            return Storage.AnnouncementAttachmentStorage.GetList(Context.PersonId ?? 0, Context.Role.Id, filter);
         }
         public static string GetAttachmentRelativeAddress()
         {

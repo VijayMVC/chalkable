@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
@@ -32,7 +27,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummary(int classId)
         {
-            if (!SchoolLocator.Context.SchoolId.HasValue)
+            if (!SchoolLocator.Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             return Json(PrepareClassGradingBoxes(classId));
         }
@@ -92,9 +87,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult GetGridComments(int schoolYearId)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            return Json(SchoolLocator.GradingStatisticService.GetGradeBookComments(schoolYearId, Context.UserLocalId.Value));
+            return Json(SchoolLocator.GradingStatisticService.GetGradeBookComments(schoolYearId, Context.PersonId.Value));
         }
 
         [AuthorizationFilter("Teacher")]

@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers
             IList<DisciplineView> res = new List<DisciplineView>();
             if (disciplines != null)
             {
-                res = DisciplineView.Create(disciplines, Context.UserLocalId ?? 0).ToList();   
+                res = DisciplineView.Create(disciplines, Context.PersonId ?? 0).ToList();   
             }
             if (!byLastName.HasValue || byLastName.Value)
                 res = res.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
@@ -78,7 +78,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetClassDiscipline(ClassDisciplineInputModel discipline)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             IList<Infraction> infractions = null;
             if (discipline.InfractionsIds != null && discipline.InfractionsIds.Count > 0)
@@ -96,7 +96,7 @@ namespace Chalkable.Web.Controllers
                     StudentId = discipline.StudentId
                 };
             var res = SchoolLocator.DisciplineService.SetClassDiscipline(classDisciplineModel);
-            return Json(DisciplineView.Create(res, Context.UserLocalId.Value));
+            return Json(DisciplineView.Create(res, Context.PersonId.Value));
         }
 
 

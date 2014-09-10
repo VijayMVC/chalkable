@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -9,7 +8,6 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
-using System.Transactions;
 
 namespace Chalkable.StiImport.Services
 {
@@ -36,7 +34,7 @@ namespace Chalkable.StiImport.Services
             Log = log;
             
             var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin" };
-            var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null);
+            var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
             ServiceLocatorMaster = new ImportServiceLocatorMaster(cntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }

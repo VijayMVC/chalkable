@@ -106,7 +106,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementAppId);
                 var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
-                    .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.UserLocalId.Value);
+                    .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
                 if (!ann.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Active = true;

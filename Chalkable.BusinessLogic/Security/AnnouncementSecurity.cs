@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services;
+﻿using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -36,7 +31,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.UserLocalId;
+            return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.PersonId;
         }
         //public static bool CanAttach(AnnouncementDetails announcementDetails, UserContext context)
         //{

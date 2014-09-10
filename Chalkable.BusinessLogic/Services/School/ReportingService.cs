@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     StudentIds = students.Select(x=>x.Id).ToArray()
                 };
             if (CoreRoles.TEACHER_ROLE == Context.Role)
-                stiModel.StaffId = Context.UserLocalId;
+                stiModel.StaffId = Context.PersonId;
             return ConnectorLocator.ReportConnector.GradebookReport(stiModel);
         }
 
@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     StudentIds = students.Select(x=>x.Id).ToArray()
                 };
             if (CoreRoles.TEACHER_ROLE == Context.Role)
-                stiModel.StaffId = Context.UserLocalId;
+                stiModel.StaffId = Context.PersonId;
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
             stiModel.AcadSessionId = gp.SchoolYearRef;
             return ConnectorLocator.ReportConnector.WorksheetReport(stiModel);

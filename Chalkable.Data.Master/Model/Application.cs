@@ -122,11 +122,6 @@ namespace Chalkable.Data.Master.Model
 
         [DataEntityAttr]
         public User User { get; set; }
-        [NotDbFieldAttr]
-        public int? UserLocalId
-        {
-            get { return User != null ? User.LocalId : null; }
-        }
     }
 
     public class ApplicationPicture

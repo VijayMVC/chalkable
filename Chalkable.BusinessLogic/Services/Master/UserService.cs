@@ -17,6 +17,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.Master
@@ -157,7 +158,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (user == null) return null;
             if (!string.IsNullOrEmpty(password) && user.Password != PasswordMd5(password)) return null;
             if (user.IsSysAdmin)
-                return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null);
+                return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null, null);
             if (user.IsDeveloper)
                 return DeveloperLogin(user);
             throw new UnknownRoleException();
@@ -191,9 +192,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                     return null;
                 if (iNowUser == null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();
-                if (schoolUser.Role == CoreRoles.TEACHER_ROLE.Id && iNowUser.Claims.All(x => x.Values.All(y => y != "Access Chalkable")))
+                int roleId;
+                int personId = PersonDataAccess.GetPersonDataForLogin(user.District.ServerUrl, user.DistrictRef.Value,
+                                                                      user.SisUserId.Value, out roleId);
+                if (roleId == CoreRoles.TEACHER_ROLE.Id && iNowUser.Claims.All(x => x.Values.All(y => y != "Access Chalkable")))
                     return null;
-                var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, null, schoolYear);
+                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear);
+                
                 res.Claims = ClaimInfo.Create(iNowUser.Claims);
                 return res;
             }
@@ -213,7 +218,11 @@ namespace Chalkable.BusinessLogic.Services.Master
             Data.School.Model.SchoolYear schoolYear;
             var schoolL = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]);
             PrepareSchoolData(schoolL, user, schoolYearId, null, out schoolYear, out schoolUser);
-            var res = new UserContext(user, CoreRoles.GetById(schoolUser.Role), user.District, schoolUser.School, developerId, schoolYear)
+
+            int roleId;
+            int personId = PersonDataAccess.GetPersonDataForLogin(user.District.ServerUrl, user.DistrictRef.Value,
+                                                                  user.SisUserId.Value, out roleId);
+            var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, developerId, personId, schoolYear)
             {
                 Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
             };
@@ -236,7 +245,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var user = developer.User;
             user.DistrictRef = developer.DistrictRef;
             user.District = DemoDistrictStorage.CreateDemoDistrict(developer.DistrictRef.Value);
-            return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id);
+            return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id, null);
         }
 
         private void PrepareSchoolData(IServiceLocatorSchool schoolL, User user, int? schoolYearId, int[] acdaIds
@@ -246,7 +255,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
             else
             {
-                schoolL.Context.SchoolId = user.SchoolUsers.First().SchoolRef;
+                schoolL.Context.SchoolLocalId = user.SchoolUsers.First().SchoolRef;
                 schoolL.Context.SchoolLocalId = user.SchoolUsers.First().School.LocalId;
                 schoolYear = schoolL.SchoolYearService.GetCurrentSchoolYear();
                 if (acdaIds != null && !acdaIds.Contains(schoolYear.Id))

@@ -178,11 +178,11 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         public ActionResult AttendanceSummary(DateTime? date)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date ?? Context.NowSchoolYearTime.Date);
-            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.UserLocalId.Value, gradingPeriod.Id);
+            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod.Id);
             return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary));
         }
 

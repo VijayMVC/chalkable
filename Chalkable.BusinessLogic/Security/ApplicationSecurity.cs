@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanUninstall(UserContext context, ApplicationInstall applicationInstall)
         {
-            return context.UserLocalId == applicationInstall.OwnerRef;
+            return context.PersonId == applicationInstall.OwnerRef;
         }
     }
 }

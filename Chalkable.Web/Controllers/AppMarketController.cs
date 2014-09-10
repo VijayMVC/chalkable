@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -103,7 +99,7 @@ namespace Chalkable.Web.Controllers
             var allPersons = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery());
             
             var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, allPersons);
-            var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.UserLocalId, null, null, null, null);
+            var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.PersonId, null, null, null, null);
             res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);
             res.IsInstalledOnlyForMe = persons.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count == 0;
             return Json(res);

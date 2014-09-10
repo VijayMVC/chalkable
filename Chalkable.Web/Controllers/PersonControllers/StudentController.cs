@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
-using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -26,10 +21,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Summary(int schoolPersonId)
         {
-            if (!Context.SchoolId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
-            if (SchoolLocator.Context.UserLocalId != schoolPersonId &&
+            if (SchoolLocator.Context.PersonId != schoolPersonId &&
                 SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
             {
                 var student = SchoolLocator.PersonService.GetPerson(schoolPersonId);
@@ -85,7 +80,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var roleName = CoreRoles.STUDENT_ROLE.Name;
             int? teacherId = null;
             if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
-                teacherId = SchoolLocator.Context.UserLocalId;
+                teacherId = SchoolLocator.Context.PersonId;
             var res = PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, classId, null, teacherId);
             return Json(res);
         }

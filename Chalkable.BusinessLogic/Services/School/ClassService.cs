@@ -282,7 +282,7 @@ namespace Chalkable.BusinessLogic.Services.School
             IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
                 {
                     ClassId = classId,
-                    CallerId = Context.UserLocalId,
+                    CallerId = Context.PersonId,
                     CallerRoleId = Context.Role.Id,
                     Count = int.MaxValue,
                     RoleId = CoreRoles.STUDENT_ROLE.Id,
@@ -356,7 +356,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                query.CallerId = Context.UserLocalId.HasValue ? Context.UserLocalId.Value : 0;
+                query.CallerId = Context.PersonId.HasValue ? Context.PersonId.Value : 0;
                 query.CallerRoleId = Context.Role.Id;
                 return new ClassDataAccess(uow, Context.SchoolLocalId)
                     .GetClassesComplex(query);

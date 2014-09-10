@@ -77,7 +77,6 @@ namespace Chalkable.Data.Master.Model
         public int UserRef { get; set; }
         [PrimaryKeyFieldAttr]
         public Guid DistrictRef { get; set; }
-        public int Role { get; set; }
         [DataEntityAttr]
         public User User { get; set; }
         [DataEntityAttr]

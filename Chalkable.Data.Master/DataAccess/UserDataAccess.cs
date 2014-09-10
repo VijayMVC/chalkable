@@ -34,14 +34,14 @@ namespace Chalkable.Data.Master.DataAccess
         } 
 
 
-        public void Delete(IList<int> localIds, Guid districtId)
+        public void Delete(IList<int> sisUserIds, Guid districtId)
         {
-            if (localIds != null && localIds.Count > 0)
+            if (sisUserIds != null && sisUserIds.Count > 0)
             {
                 var builder = new StringBuilder();
                 var whereScrip = string.Format(" [{0}].[{1}] = @[{1}] and [{0}].[{2}] in ({3})"
-                                               , "User", User.DISTRICT_REF_FIELD, User.LOCAL_ID_FIELD,
-                                               localIds.Select(x => x.ToString()).JoinString(","));
+                                               , "User", User.DISTRICT_REF_FIELD, User.SIS_USER_ID_FIELD,
+                                               sisUserIds.Select(x => x.ToString()).JoinString(","));
                 builder.AppendFormat("delete from SchoolUser where [{0}] in (select [Id] from [User] where {1}) "
                                      , SchoolUser.USER_REF_FIELD, whereScrip)
                        .AppendFormat("delete from [User] where {0}", whereScrip);

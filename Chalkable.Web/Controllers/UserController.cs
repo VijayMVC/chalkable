@@ -63,13 +63,13 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ActivateUser(string newUserEmail)
         {
-            if (!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 return Json(new UnassignedUserException());
             string error;
-            SchoolLocator.PersonService.EditEmail(Context.UserLocalId.Value, newUserEmail, out error);
+            SchoolLocator.PersonService.EditEmail(Context.PersonId.Value, newUserEmail, out error);
             if (!string.IsNullOrEmpty(error))
                 return Json(new ChalkableException(error));
-            SchoolLocator.PersonService.ActivatePerson(Context.UserLocalId.Value);
+            SchoolLocator.PersonService.ActivatePerson(Context.PersonId.Value);
             return Json(true);            
         }
         
@@ -98,8 +98,8 @@ namespace Chalkable.Web.Controllers
         private ActionResult AfterConfirmAction(UserContext context)
         {
             //TODO: create default Announcement for teacher
-            if(context.UserLocalId.HasValue)
-                SchoolLocator.PersonService.ActivatePerson(context.UserLocalId.Value);
+            if (context.PersonId.HasValue)
+                SchoolLocator.PersonService.ActivatePerson(context.PersonId.Value);
             //TODO: mix panel 
             if (context.Role == CoreRoles.SUPER_ADMIN_ROLE)
                 return Redirect<HomeController>(x => x.SysAdmin());
@@ -116,7 +116,7 @@ namespace Chalkable.Web.Controllers
             if (context != null)
             {
                 InitServiceLocators(context);
-                MixPanelService.UserLoggedInForFirstTime(context.Login, "", "", Context.SchoolId.ToString(), 
+                MixPanelService.UserLoggedInForFirstTime(context.Login, "", "", Context.SchoolLocalId.ToString(), 
                         DateTime.UtcNow.ConvertFromUtc(Context.SchoolTimeZoneId), Context.SchoolTimeZoneId, Context.Role.Name);
                 return redirectAction(context);
             }

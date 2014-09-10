@@ -20,7 +20,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
         }
         private const string confirmUrlFormat = "{0}/Home/Confirm?key={1}";
-        public void SendResettedPasswordToPerson(Person person, string confirmationKey)
+
+        public void SendResettedPasswordToPerson(User person, string confirmationKey)
         {
             throw new NotImplementedException();
         }

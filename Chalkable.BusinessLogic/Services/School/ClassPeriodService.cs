@@ -125,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var personDa = new PersonDataAccess(uow, Context.SchoolLocalId);
                 var person = personDa.GetPerson(new PersonQuery
                     {
-                        CallerId = Context.UserLocalId,
+                        CallerId = Context.PersonId,
                         CallerRoleId = Context.Role.Id,
                         PersonId = personId
                     });
@@ -142,9 +142,9 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!classId.HasValue)
             {
                 if (Context.Role == CoreRoles.STUDENT_ROLE)
-                    studentId = Context.UserLocalId;
+                    studentId = Context.PersonId;
                 if (Context.Role == CoreRoles.TEACHER_ROLE)
-                    teacherId = Context.UserLocalId;
+                    teacherId = Context.PersonId;
             }
             var classPeriods = GetClassPeriods(dateTime, classId, null, studentId, teacherId);
 

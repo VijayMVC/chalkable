@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.WebSockets;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -9,12 +8,10 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
-using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -25,20 +22,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public void Add(IList<PersonInfo> persons)
+        public void Add(IList<Person> persons)
         {
             throw new NotImplementedException();
         }
 
-        public void AsssignToSchool(IList<SchoolPerson> assignments)
+        public void Add(IList<Person> persons, IList<SchoolPerson> assignments)
         {
             throw new NotImplementedException();
-        }
-
-
-        public void Add(IList<PersonInfo> persons, IList<SchoolPerson> assignments)
-        {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            /*if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
@@ -79,10 +71,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Id = x.Id,
             }).ToList();
             Storage.PersonStorage.Add(ps);
-            Storage.SchoolPersonStorage.Add(assignments);
+            Storage.SchoolPersonStorage.Add(assignments);*/
         }
 
-        public IList<Person> Edit(IList<PersonInfo> personInfos)
+        public void Edit(IList<Person> personInfos)
         {
             var res = new List<Person>();
             foreach (var personInfo in personInfos)
@@ -91,8 +83,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                              personInfo.LastName, personInfo.Gender, personInfo.Salutation,
                              personInfo.BirthDate, personInfo.AddressRef));
             }
-            return Storage.PersonStorage.Update(res);
-
         }
 
         public void Delete(int id)
@@ -137,7 +127,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private PersonQueryResult GetPersons(PersonQuery query)
         {
-            query.CallerId = Context.UserLocalId;
+            query.CallerId = Context.PersonId;
             query.CallerRoleId = Context.Role.Id;
             return Storage.PersonStorage.GetPersons(query);
         }
@@ -155,7 +145,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public PersonDetails GetPersonDetails(int id)
         {
-            return Storage.PersonStorage.GetPersonDetails(id, Context.UserLocalId ?? 0, Context.Role.Id);
+            return Storage.PersonStorage.GetPersonDetails(id, Context.PersonId ?? 0, Context.Role.Id);
         }
 
         public Person EditEmail(int id, string email, out string error)

@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
             var studentIds = Storage.PersonStorage.GetPersons(new PersonQuery()
             {
-                TeacherId = Storage.Context.UserLocalId
+                TeacherId = Storage.Context.PersonId
             }).Persons.Select(x => x.Id);
 
             foreach (var studentId in studentIds)

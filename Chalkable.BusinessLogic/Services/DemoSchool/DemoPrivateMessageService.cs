@@ -6,7 +6,6 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -19,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public PrivateMessageDetails SendMessage(int toPersonId, string subject, string body)
         {
-            if (!Context.UserLocalId.HasValue || !Context.SchoolLocalId.HasValue)
+            if (!Context.PersonId.HasValue || !Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException();
 
             var toSchoolPerson = Storage.SchoolPersonStorage.GetSchoolPerson(toPersonId, Context.SchoolLocalId, null);
@@ -30,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 Body = body,
                 Subject = subject,
-                FromPersonRef = Context.UserLocalId.Value,
+                FromPersonRef = Context.PersonId.Value,
                 ToPersonRef = toPersonId,
                 Sent = Context.NowSchoolTime,
                 DeletedBySender = false,
@@ -39,10 +38,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             Storage.PrivateMessageStorage.Add(message);
             message =
-                Storage.PrivateMessageStorage.GetOutComeMessage(null, null, Context.UserLocalId.Value, 0, int.MaxValue).OrderByDescending(x => x.Id).First();
+                Storage.PrivateMessageStorage.GetOutComeMessage(null, null, Context.PersonId.Value, 0, int.MaxValue).OrderByDescending(x => x.Id).First();
 
             ServiceLocator.NotificationService.AddPrivateMessageNotification(message.Id);
-            return Storage.PrivateMessageStorage.GetDetailsById(message.Id, Context.UserLocalId.Value);
+            return Storage.PrivateMessageStorage.GetDetailsById(message.Id, Context.PersonId.Value);
         }
 
         public PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
@@ -53,9 +52,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             switch (type)
             {
                 case PrivateMessageType.Income:
-                    return Storage.PrivateMessageStorage.GetIncomeMessages(rolesIds, keyword, read, Context.UserLocalId ?? 0, start, count);
+                    return Storage.PrivateMessageStorage.GetIncomeMessages(rolesIds, keyword, read, Context.PersonId ?? 0, start, count);
                 case PrivateMessageType.Outcome:
-                    return Storage.PrivateMessageStorage.GetOutComeMessage(rolesIds, keyword, Context.UserLocalId ?? 0, start, count);
+                    return Storage.PrivateMessageStorage.GetOutComeMessage(rolesIds, keyword, Context.PersonId ?? 0, start, count);
                 default:
                     throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
             }    
@@ -66,7 +65,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (ids != null)
             {
                 var messages =
-                    Storage.PrivateMessageStorage.GetNotDeleted(Context.UserLocalId ?? 0)
+                    Storage.PrivateMessageStorage.GetNotDeleted(Context.PersonId ?? 0)
                         .Where(x => ids.Contains(x.Id))
                         .ToList();
                 if (messages.Count == 0)
@@ -86,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (ids != null)
             {
 
-                var messages = Storage.PrivateMessageStorage.GetNotDeleted(Context.UserLocalId ?? 0).Where(x => ids.Contains(x.Id)).ToList();
+                var messages = Storage.PrivateMessageStorage.GetNotDeleted(Context.PersonId ?? 0).Where(x => ids.Contains(x.Id)).ToList();
                 if (messages.Count == 0)
                     throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
 
@@ -95,9 +94,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     if (!PrivateMessageSecurity.CanDeleteMessage(message, Context))
                         throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
 
-                    if (message.ToPersonRef == Context.UserLocalId)
+                    if (message.ToPersonRef == Context.PersonId)
                         message.DeletedByRecipient = true;
-                    if (message.FromPersonRef == Context.UserLocalId)
+                    if (message.FromPersonRef == Context.PersonId)
                         message.DeletedBySender = true;
                 }
                 Storage.PrivateMessageStorage.Update(messages);
@@ -106,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public PrivateMessageDetails GetMessage(int id)
         {
-            return Storage.PrivateMessageStorage.GetDetailsById(id, Context.UserLocalId ?? 0);
+            return Storage.PrivateMessageStorage.GetDetailsById(id, Context.PersonId ?? 0);
         }
     }
 }

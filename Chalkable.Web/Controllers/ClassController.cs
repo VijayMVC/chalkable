@@ -92,7 +92,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassGrading(int classId)
         {
             var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var canCreateItem = SchoolLocator.Context.UserLocalId == classData.PrimaryTeacherRef;
+            var canCreateItem = SchoolLocator.Context.PersonId == classData.PrimaryTeacherRef;
             var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
             return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
         }
@@ -148,8 +148,8 @@ namespace Chalkable.Web.Controllers
                 now = now.AddDays(1);
             }
             var days = locator.CalendarDateService.GetDays(markingPeriodId, true);
-            int? teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE ? locator.Context.UserLocalId : (int?)null;
-            int? studentId = locator.Context.Role == CoreRoles.STUDENT_ROLE ? locator.Context.UserLocalId : (int?)null;
+            int? teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE ? locator.Context.PersonId : (int?)null;
+            int? studentId = locator.Context.Role == CoreRoles.STUDENT_ROLE ? locator.Context.PersonId : (int?)null;
             var mp = locator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
             var classPeriods = locator.ClassPeriodService.GetClassPeriods(mp.SchoolYearRef, markingPeriodId, null, null, null, null, studentId, teacherId);
             var classesIds = classPeriods.GroupBy(x => x.ClassRef).Select(x => x.Key).ToList();

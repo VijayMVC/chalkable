@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
 
             var callerRoleId = Storage.Context.RoleId;
-            var callerId = Storage.Context.UserLocalId;
+            var callerId = Storage.Context.PersonId;
 
             var canInstallForTeacher = hasTeacherMyApps || canAttach;
             var canInstallForStudent = hasStudentMyApps || canAttach;

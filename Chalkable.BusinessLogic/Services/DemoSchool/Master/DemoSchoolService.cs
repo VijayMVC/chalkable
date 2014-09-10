@@ -6,7 +6,7 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.DataAccess;
+
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
@@ -85,12 +85,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 throw new ChalkableSecurityException();
             Storage.MasterSchoolStorage.Add(schools);
         }
-
-
-        //TODO: add district data to school
-        public Data.Master.Model.School GetById(Guid id)
+        
+        public Data.Master.Model.School GetById(Guid districtRef, int localId)
         {
-            return Storage.MasterSchoolStorage.GetById(id);
+            throw new NotImplementedException();
         }
 
         public Data.Master.Model.School GetByIdOrNull(Guid id)

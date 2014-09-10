@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                if (!(Context.UserLocalId.HasValue && Context.SchoolLocalId.HasValue))
+                if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                     throw new UnassignedUserException();
           
                 var da = new AnnouncementQnADataAccess(uow);
@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annQnA = new AnnouncementQnAComplex
                     {
                         AnnouncementRef = announcementId,
-                        AskerRef = Context.UserLocalId.Value,
+                        AskerRef = Context.PersonId.Value,
                         Question = question,
                         QuestionTime = Context.NowSchoolTime,
                         State = AnnouncementQnAState.Asked
@@ -67,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementQnA Answer(int announcementQnAId, string question, string answer)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
@@ -79,9 +79,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 annQnA.State = AnnouncementQnAState.Answered;
                 annQnA.Question = question;
-                if (Context.Role == CoreRoles.TEACHER_ROLE && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.UserLocalId))
+                if (Context.Role == CoreRoles.TEACHER_ROLE && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.PersonId))
                 {
-                    var answerer = new PersonDataAccess(uow, Context.SchoolLocalId).GetById(Context.UserLocalId.Value);
+                    var answerer = new PersonDataAccess(uow, Context.SchoolLocalId).GetById(Context.PersonId.Value);
                     annQnA.Answerer = answerer;
                     annQnA.AnswererRef = answerer.Id;
                     annQnA.AnsweredTime = Context.NowSchoolTime;
@@ -114,17 +114,17 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanEditAnswer(AnnouncementQnAComplex announcementQnA, UnitOfWork uow)
         {
             var da = new ClassTeacherDataAccess(uow);
-            return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AnswererRef == Context.UserLocalId
-                || (Context.UserLocalId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE && string.IsNullOrEmpty(announcementQnA.Answer)
-                       && da.Exists(announcementQnA.ClassRef, Context.UserLocalId.Value));
+            return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AnswererRef == Context.PersonId
+                || (Context.PersonId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE && string.IsNullOrEmpty(announcementQnA.Answer)
+                       && da.Exists(announcementQnA.ClassRef, Context.PersonId.Value));
         }
 
         private bool CanEditQuestion(AnnouncementQnAComplex announcementQnA, UnitOfWork uow)
         {
             var da = new ClassTeacherDataAccess(uow);
-            return BaseSecurity.IsSysAdmin(Context)  || announcementQnA.AskerRef == Context.UserLocalId
-                || (Context.UserLocalId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE
-                    && da.Exists(announcementQnA.ClassRef, Context.UserLocalId.Value));
+            return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AskerRef == Context.PersonId
+                || (Context.PersonId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE
+                    && da.Exists(announcementQnA.ClassRef, Context.PersonId.Value));
         }
 
         public AnnouncementQnA EditQuestion(int announcementQnAId, string question)
@@ -185,10 +185,10 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private AnnouncementQnAQueryResult GetAnnouncmentQnAs(AnnouncementQnAQuery query)
         {
-            if (!(Context.UserLocalId.HasValue && Context.SchoolLocalId.HasValue))
+            if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                 throw new UnassignedUserException();
 
-            query.CallerId = Context.UserLocalId;
+            query.CallerId = Context.PersonId;
             query.SchoolId = Context.SchoolLocalId.Value;
             using (var uow = Read())
             {

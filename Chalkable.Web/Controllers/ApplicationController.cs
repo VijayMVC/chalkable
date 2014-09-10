@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -169,13 +168,13 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult AddToAnnouncement(int announcementId, Guid applicationId)
         {
-            if(!Context.UserLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, applicationId);
-            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.UserLocalId.Value, false);
+            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
-            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.UserLocalId));
+            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
