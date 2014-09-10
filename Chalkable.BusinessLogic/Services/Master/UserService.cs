@@ -31,10 +31,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null);
         User GetByLogin(string login);
         User GetById(Guid id);
-        IList<User> GetByDistrict(Guid districtId);
-        User CreateSysAdmin(string login, string password);
         User CreateDeveloperUser(string login, string password);
-        User CreateSchoolUser(string login, string password, Guid? districtId, int? localId, string sisUserName);
         void AssignUserToSchool(IList<SchoolUser> schoolUsers);
         void ChangePassword(string login, string newPassword);
         void ChangeUserLogin(Guid id, string login);
@@ -143,10 +140,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                 UserContext res = null;
                 if (!string.IsNullOrEmpty(iNowUser.Username))
                 {
-                    var localId = iNowUser.PersonId ?? iNowUser.StudentId ?? iNowUser.StaffId;
                     var chlkUser = new UserDataAccess(uow).GetUser(new AndQueryCondition
                     {
-                        {User.LOCAL_ID_FIELD, localId},
+                        {User.SIS_USER_ID_FIELD, iNowUser.Id},
                         {User.DISTRICT_REF_FIELD, district.Id}
                     });
                     res = SisUserLogin(chlkUser, uow, iNowCl, iNowUser, acadSessionId);
@@ -171,7 +167,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                                          , StiConnector.Connectors.Model.User iNowUser = null, int? schoolYearId = null)
         {
             if (user == null) return null;
-            if (user.IsSchoolUser)
+            if (user.SisUserId.HasValue)
             {
                 try
                 {
@@ -207,8 +203,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         private UserContext DemoUserLogin(User user, UnitOfWork uow, int? schoolYearId = null)
         {
             if (user == null) return null;
-            if (!user.IsSchoolUser || !user.District.IsDemoDistrict) 
-                throw new UnknownRoleException();
+            if (!user.District.IsDemoDistrict) 
+                throw new ChalkableException("This login is allowed to demo district only");
 
             Guid? developerId = null;
             var developer = new DeveloperDataAccess(uow).GetDeveloper(user.District.Id);
@@ -281,8 +277,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
                 if (!string.IsNullOrEmpty(iNowConnector.Token))
                 {
-                    user.SisToken = iNowConnector.Token;
-                    user.SisTokenExpires = iNowConnector.TokenExpires;
+                    user.LoginInfo.SisToken = iNowConnector.Token;
+                    user.LoginInfo.SisTokenExpires = iNowConnector.TokenExpires;
                     new UserDataAccess(uow).Update(user);
                 }
             }
@@ -315,21 +311,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var res = da.GetUser(null, null, id);
                 return res;
             }
-        }
-
-        public IList<User> GetByDistrict(Guid districtId)
-        {
-            using (var uow = Read())
-            {
-                var da = new UserDataAccess(uow);
-                var res = da.GetUsers(districtId);
-                return res;
-            }
-        }
-
-        public User CreateSysAdmin(string login, string password)
-        {
-            return CreateUser(login, password, true, false, null, null, null);
         }
 
         public void AssignUserToSchool(IList<SchoolUser> schoolUsers)
@@ -369,7 +350,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        private User CreateUser(string login, string password, bool isSysAdmin, bool isDeveloper, Guid? districtId, int? localId, string sisUserName)
+        public User CreateDeveloperUser(string login, string password)
         {
             using (var uow = Update())
             {
@@ -377,31 +358,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var user = new User
                 {
                     Id = Guid.NewGuid(),
-                    IsDeveloper = isDeveloper,
-                    IsSysAdmin = isSysAdmin,
+                    IsDeveloper = true,
+                    IsSysAdmin = false,
                     Login = login,
-                    Password = PasswordMd5(password),
-                    LocalId = localId,
-                    DistrictRef = districtId,
-                    SisUserName = sisUserName
+                    Password = PasswordMd5(password)
                 };
                 userDa.Insert(user);
                 uow.Commit();
                 return user;
             }
-        }
-
-        public User CreateDeveloperUser(string login, string password)
-        {
-            return CreateUser(login, password, false, true, null, null, null);
-        }
-
-        public User CreateSchoolUser(string login, string password, Guid? districtId, int? localId, string sisUserName)
-        {
-            if(!UserSecurity.CanCreate(Context, districtId))
-                throw new ChalkableSecurityException();
-
-            return CreateUser(login, password, false, false, districtId, localId, sisUserName);
         }
 
         public void ChangeUserLogin(Guid id, string login)

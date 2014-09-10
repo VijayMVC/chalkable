@@ -124,10 +124,10 @@ namespace Chalkable.Web.Controllers
         private void PrepareCommonViewData(MarkingPeriod markingPeriod = null)
         {
             //TODO: render data for demo school 
-            if (Context.DistrictId.HasValue && Context.SchoolId.HasValue)
+            if (Context.DistrictId.HasValue && Context.SchoolLocalId.HasValue)
             {
                 var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
-                var school = MasterLocator.SchoolService.GetById(Context.SchoolId.Value);
+                var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value, Context.SchoolLocalId.Value);
                 school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
                 if (Context.DeveloperId != null)
@@ -163,7 +163,7 @@ namespace Chalkable.Web.Controllers
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
 
             ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = SchoolLocator.NotificationService.GetUnshownNotifications().Count;
-            if (markingPeriod != null && SchoolLocator.Context.SchoolId.HasValue)
+            if (markingPeriod != null && SchoolLocator.Context.SchoolLocalId.HasValue)
             {
                 PrepareJsonData(MarkingPeriodViewData.Create(markingPeriod), ViewConstants.MARKING_PERIOD);
                 var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolYearTime.Date);
@@ -201,7 +201,7 @@ namespace Chalkable.Web.Controllers
             PrepareCommonViewData(mp);
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.SchoolId.ToString(), "", person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
+            MixPanelService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), "", person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }           
 
         private void PrepareAdminJsonData()
@@ -216,12 +216,12 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             PrepareCommonViewData(mp);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.SchoolId.ToString(), person.FirstLoginDate, Context.SchoolTimeZoneId, "Admin", ip);
+            MixPanelService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), person.FirstLoginDate, Context.SchoolTimeZoneId, "Admin", ip);
         }
 
         private void PrepareTeacherJsonData(MarkingPeriod mp)
         {
-            if (!Context.UserLocalId.HasValue)
+            if (!Context.SisUserId.HasValue)
                 throw new UnassignedUserException();
 
             PrepareCommonViewData(mp);
@@ -252,7 +252,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.SchoolId.ToString(), 
+            MixPanelService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), 
                 gradeLevels, classNames, person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }
         

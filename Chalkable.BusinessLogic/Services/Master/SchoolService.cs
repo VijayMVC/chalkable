@@ -4,13 +4,14 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface ISchoolService
     {
-        Data.Master.Model.School GetById(Guid id);
+        Data.Master.Model.School GetById(Guid districtRef, int localId);
         Data.Master.Model.School GetByIdOrNull(Guid id);
         void Update(Data.Master.Model.School school);
         PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count);
@@ -53,13 +54,17 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
         
-        //TODO: add district data to school
-        public Data.Master.Model.School GetById(Guid id)
+        public Data.Master.Model.School GetById(Guid districtRef, int localId)
         {
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
-                return da.GetById(id);
+                return da.GetAll(
+                    new AndQueryCondition
+                        { new SimpleQueryCondition(Data.Master.Model.School.DISTRICT_REF_FIELD, districtRef, ConditionRelation.Equal),
+                            new SimpleQueryCondition(Data.Master.Model.School.LOCAL_ID_FIELD, localId, ConditionRelation.Equal)}
+                    )
+                    .First();
             }
         }
 

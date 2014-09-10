@@ -24,7 +24,6 @@ namespace Chalkable.BusinessLogic.Services
         public string SchoolConnectionString { get; private set; }
         
         public Guid UserId { get; set; }
-        public Guid? SchoolId { get; set; }
         public Guid? DistrictId { get; set; }
         public string Login { get; set; }
         public int RoleId { get; set; }
@@ -35,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services
 
         public int? SchoolLocalId { get; set; }
         public Guid? DeveloperId { get; set; }
-        public int? UserLocalId { get; set; }
+        public int? PersonId { get; set; }
         public int? SchoolYearId { get; set; }
         public DateTime? SchoolYearStartDate { get; set; }
         public DateTime? SchoolYearEndDate { get; set; }
@@ -84,13 +83,14 @@ namespace Chalkable.BusinessLogic.Services
             MasterConnectionString = Settings.MasterConnectionString;     
         }
 
-        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, SchoolYear schoolYear = null) : this()
+        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, int? personId, SchoolYear schoolYear = null)
+            : this()
         {
             UserId = user.Id;
             Login = user.Login;
-            UserLocalId = user.LocalId;
-            SisTokenExpires = user.SisTokenExpires;
-            SisToken = user.SisToken;
+            SisTokenExpires = user.LoginInfo.SisTokenExpires;
+            SisToken = user.LoginInfo.SisToken;
+            PersonId = personId;
             Role = role;
             RoleId = role.Id;
             DeveloperId = developerId;
@@ -99,11 +99,10 @@ namespace Chalkable.BusinessLogic.Services
                 DistrictId = district.Id;
                 SchoolTimeZoneId = district.TimeZone;
                 DistrictServerUrl = district.ServerUrl;
-                SisUrl = district.SisUrl; //"http://localhost/"; //"http://sandbox.sti-k12.com/Chalkable/"; //
+                SisUrl = district.SisUrl; 
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;
-                    SchoolId = school.Id;
                     SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, DistrictServerUrl, DistrictId);
                 }
                 if (schoolYear != null)
@@ -115,12 +114,11 @@ namespace Chalkable.BusinessLogic.Services
             }
         }
 
-        public void SwitchSchool(Guid? schoolId, Guid districtId, string schoolName, string schoolTimeZoneId, int? schoolLocalId, string districtServerUrl, Guid? developerId)
+        public void SwitchSchool(Guid districtId, string schoolName, string schoolTimeZoneId, int? schoolLocalId, string districtServerUrl, Guid? developerId)
         {
             if (Role != CoreRoles.SUPER_ADMIN_ROLE && !(Role == CoreRoles.DISTRICT_ROLE && districtId == DistrictId))
                 throw new ChalkableSecurityException(ChlkResources.ERR_SWITCH_SCHOOL_INVALID_RIGTHS);
             DistrictServerUrl = districtServerUrl;
-            SchoolId = schoolId;
             SchoolTimeZoneId = schoolTimeZoneId;
             SchoolLocalId = schoolLocalId;
             DistrictId = districtId;
@@ -175,7 +173,7 @@ namespace Chalkable.BusinessLogic.Services
                     }
                     i++;
                 }
-            if (res.SchoolId.HasValue)
+            if (res.DistrictId.HasValue)
                 res.SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, res.DistrictServerUrl, res.DistrictId);
             res.Role = CoreRoles.GetById(res.RoleId);
             return res;

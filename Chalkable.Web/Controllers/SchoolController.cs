@@ -14,7 +14,7 @@ namespace Chalkable.Web.Controllers
     public class SchoolController : ChalkableController
     {
         //TODO: add
-        [AuthorizationFilter("SysAdmin")]
+        /*[AuthorizationFilter("SysAdmin")]
         public ActionResult List(Guid districtId, int? start, int? count, bool? demoOnly, bool? unimportedOnly)
         {
             count = count ?? 10;
@@ -55,6 +55,6 @@ namespace Chalkable.Web.Controllers
                 SchoolLocator = MasterLocator.SchoolServiceLocator(schoolId);
             var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).LoweredName : null;
             return Json(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, null, roleName, null, gradeLevelIds));
-        }
+        }*/
     }
 }
