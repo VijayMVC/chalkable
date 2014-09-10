@@ -33,6 +33,31 @@ NAMESPACE('chlk.services', function () {
                 return this.getServiceRoot() + uri;
             },
 
+            [[String, ArrayOf(String)]],
+            Boolean, function isValidFileExtension(url, formats){
+                var ext = url.split(".");
+                if( ext.length === 1 || ( ext[0] === "" && ext.length === 2 ) ) {
+                    ext = "";
+                }
+                else{
+                    ext = ext.pop();
+                }
+
+                ext = ext.toLowerCase();
+                var validExtensions = [] || formats;
+
+                var isValid = false;
+
+                for (var i = 0; i < validExtensions.length; ++i){
+                    var item = validExtensions[i];
+                    if (item.toLowerCase() == ext) {
+                        isValid = true;
+                        break;
+                    }
+                }
+                return isValid;
+            },
+
             String, function getUrl(uri, params){
                 var p = params, r = [];
                 for(var key in p) if (p.hasOwnProperty(key)) {
