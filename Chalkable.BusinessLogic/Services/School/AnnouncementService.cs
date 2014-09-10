@@ -710,7 +710,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
                 activity.DisplayInHomePortal = visible;
                 ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
-                ann.VisibleForStudent = visible;
+                   
+                using (var uow = Update())
+                {
+                    ann.VisibleForStudent = visible;
+                    CreateAnnoucnementDataAccess(uow).Update(ann);
+                    uow.Commit();
+                }
             }
             return ann;
         }
