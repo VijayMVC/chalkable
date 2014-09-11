@@ -5,10 +5,6 @@ create table Student
 	[LastName] [nvarchar](255) NOT NULL,
 	[BirthDate] [datetime2](7) NULL,
 	[Gender] [nvarchar](255) NULL,
-	[Salutation] [nvarchar](255) NULL,
-	[Active] [bit] NOT NULL,
-	[Email] [nvarchar](256) NOT NULL,
-	[AddressRef] [int] NULL constraint FK_Student_Address  foreign key references [Address](Id),
 	[HasMedicalAlert] [bit] NOT NULL,
 	[IsAllowedInetAccess] [bit] NOT NULL,
 	[SpecialInstructions] [nvarchar](1024) NOT NULL,
@@ -25,10 +21,6 @@ create table Staff
 	[LastName] [nvarchar](255) NOT NULL,
 	[BirthDate] [datetime2](7) NULL,
 	[Gender] [nvarchar](255) NULL,
-	[Salutation] [nvarchar](255) NULL,
-	[Email] [nvarchar](256) NOT NULL,
-	[AddressRef] [int] NULL constraint FK_Staff_Address foreign key references [Address](Id),
-	[Active] [bit] NOT NULL,
 	[UserId] [int] NULL
 )
 go

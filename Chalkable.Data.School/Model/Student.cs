@@ -17,10 +17,6 @@ namespace Chalkable.Data.School.Model
         public string LastName { get; set; }
         public DateTime? BirthDate { get; set; }
         public string Gender { get; set; }
-        public string Salutation { get; set; }
-        public bool Active { get; set; }
-        public string Email { get; set; }
-        public int? AddressRef { get; set; }
         public bool HasMedicalAlert { get; set; }
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
