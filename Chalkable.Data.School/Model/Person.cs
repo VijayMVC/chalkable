@@ -27,6 +27,8 @@ namespace Chalkable.Data.School.Model
         public const string SPECIAL_INSTRUCTIONS_FIELD = "SpecialInstructions";
         public const string SP_ED_STATUS_FIELD = "SpEdStatus";
 
+        public const string USER_ID_FIELD = "UserId";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string FirstName { get; set; }

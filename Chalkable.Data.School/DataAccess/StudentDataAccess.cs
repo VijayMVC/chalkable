@@ -14,6 +14,7 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+
         public void Delete(IList<Student> students)
         {
             SimpleDelete(students);

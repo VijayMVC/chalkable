@@ -9,6 +9,8 @@ namespace Chalkable.Data.School.Model
 {
     public class Staff
     {
+        public const string USER_ID_FIELD = "UserId";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string FirstName { get; set; }

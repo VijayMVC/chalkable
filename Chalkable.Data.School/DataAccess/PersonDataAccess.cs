@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -359,8 +360,28 @@ namespace Chalkable.Data.School.DataAccess
             var connectionString = string.Format(Settings.SchoolConnectionStringTemplate, districtServerUrl, districtId);
             using (var uow = new UnitOfWork(connectionString, false))
             {
-                //TODO: select person id and determine the role
-                throw new NotImplementedException();
+                var student = new StudentDataAccess(uow)
+                    .GetAll(new AndQueryCondition {{Student.USER_ID_FIELD, userId}}).FirstOrDefault();
+                if (student != null)
+                {
+                    roleId = CoreRoles.STUDENT_ROLE.Id;
+                    return student.Id;
+                }
+                var staff = new StaffDataAccess(uow)
+                    .GetAll(new AndQueryCondition {{Staff.USER_ID_FIELD, userId}}).FirstOrDefault();
+                if (staff != null)
+                {
+                    roleId = CoreRoles.TEACHER_ROLE.Id;
+                    return staff.Id;
+                }
+                var person = new PersonDataAccess(uow, null)
+                    .GetAll(new AndQueryCondition {{Person.USER_ID_FIELD, userId}}).FirstOrDefault();
+                if (person != null)
+                {
+                    roleId = CoreRoles.PARENT_ROLE.Id;
+                    return person.Id;
+                }
+                throw new ChalkableException("User is not identified");
             }
         }
     }
