@@ -25,7 +25,8 @@ hasStudentOnChart = self.hasStudentOnChart()
                 +DatePicker('date', self.getDate())(
                     data-options={
                         showOtherMonths: true,
-                        selectOtherMonths: true
+                        selectOtherMonths: true,
+                        inCurrentMp: true
                     },
                     data-controller= "attendance",
                     data-action="seatingChart",

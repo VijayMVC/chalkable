@@ -1,8 +1,12 @@
 if self.getController()
-    +ActionLinkWithPrepend(self.getController(), self.getAction(), self.getParams(), self.getId())(class=self.isPressed() ? "pressed " : "", index=self.getIndex()).item.class-button.button-link
+    +ActionLinkWithPrepend(self.getController(), self.getAction(), self.getParams(), self.getId())(
+        class=self.isPressed() ? "pressed " : "",
+        index=self.getIndex(),
+        data-tooltip=self.getId() ? self.getFullClassName() : ''
+    ).item.class-button.button-link
         .img-wrapper
             +ClassImg(self, 45, 80)
-        SPAN(data-tooltip=self.getFullClassName()).text-container= self.getName()
+        SPAN.text-container= self.getName()
 else
     BUTTON(
         classId=self.getId(),
@@ -11,8 +15,9 @@ else
         type=self.isDisabled() ? "button" : "submit",
         data-default-announcement-type-id = self.getDefaultAnnouncementTypeId(),
         name="submitType",
-        value="save"
+        value="save",
+        data-tooltip=self.getId() ? self.getFullClassName() : ''
     ).item.class-button.validate-skip
         .img-wrapper
             +ClassImg(self, 45, 80).avatar
-        SPAN(data-tooltip=self.getFullClassName()).text-container= self.getName()
+        SPAN.text-container= self.getName()
