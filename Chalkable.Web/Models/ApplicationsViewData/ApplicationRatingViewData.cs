@@ -16,7 +16,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
         public static ApplicationRatingViewData Create(IList<ApplicationRating> ratings, IList<Person> persons)
         {
-
+            //TODO: it could be user id from staff or student
             ratings = ratings.Where(x => persons.Any(y => y.UserId == x.User.SisUserId)).ToList();
             persons = persons.Where(x => ratings.Any(y => y.User.SisUserId == x.UserId)).ToList();
 

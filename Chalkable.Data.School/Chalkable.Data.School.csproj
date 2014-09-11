@@ -164,7 +164,6 @@
     <Compile Include="Model\SchoolOption.cs" />
     <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
-    <Compile Include="Model\SisUser.cs" />
     <Compile Include="Model\Staff.cs" />
     <Compile Include="Model\StaffSchool.cs" />
     <Compile Include="Model\Standard.cs" />

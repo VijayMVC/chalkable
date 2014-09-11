@@ -41,6 +41,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void CreateSchoolUsers(IList<User> userInfos);
         void DeleteUsers(IList<int> localIds, Guid districtId);
         void Edit(IList<User> users);
+        void Add(IList<User> users);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -63,6 +64,18 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new UserDataAccess(uow);
                 da.Update(users);
+                uow.Commit();
+            }
+        }
+
+        public void Add(IList<User> users)
+        {
+            using (var uow = Update())
+            {
+                var da = new UserDataAccess(uow);
+                da.Insert(users);
+                var loginInfos = users.Select(x => x.LoginInfo).ToList();
+                new UserLoginInfoDataAccess(uow).Insert(loginInfos);
                 uow.Commit();
             }
         }

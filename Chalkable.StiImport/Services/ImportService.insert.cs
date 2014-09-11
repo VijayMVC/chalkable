@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
@@ -25,6 +26,7 @@ using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
 using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using ScheduledTimeSlot = Chalkable.Data.School.Model.ScheduledTimeSlot;
+using User = Chalkable.StiConnector.SyncModel.User;
 
 namespace Chalkable.StiImport.Services
 {
@@ -36,12 +38,20 @@ namespace Chalkable.StiImport.Services
             InsertSchools();
             Log.LogInfo("insert addresses");
             InsertAddresses();
-            Log.LogInfo("insert sis users");
-            InsertSisUsers();
+            Log.LogInfo("insert users");
+            InsertUsers();
             Log.LogInfo("insert persons");
             InsertPersons();
-            Log.LogInfo("insert school persons");
-            InsertSchoolPersons();
+            Log.LogInfo("insert Staff");
+            InsertStaff();
+            Log.LogInfo("insert Student");
+            InsertStudent();
+            Log.LogInfo("insert StudentSchool");
+            InsertStudentSchool();
+            Log.LogInfo("insert StaffSchool");
+            InsertStaffSchool();
+
+
             Log.LogInfo("insert persons emails");
             InsertPersonsEmails();
             Log.LogInfo("insert phones");
@@ -187,17 +197,23 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.AddressService.Add(addressInfos);
         }
 
-        private void InsertSisUsers()
+        private void InsertUsers()
         {
-            var users = context.GetSyncResult<User>().All.Select(x=>new SisUser
+            var users = context.GetSyncResult<User>().All.Select(x=>new Data.Master.Model.User
                 {
-                    Id = x.UserID,
-                    IsDisabled = x.IsDisabled,
-                    IsSystem = x.IsSystem,
-                    LockedOut = x.LockedOut,
-                    UserName = x.UserName
+                    Id = Guid.NewGuid(),
+                    DistrictRef = ServiceLocatorSchool.Context.DistrictId,
+                    FullName = x.FullName,
+                    IsDemoUser = false,
+                    SisUserId = x.UserID,
+                    SisUserName = x.UserName,
+                    Password = UserService.PasswordMd5(DEF_USER_PASS),
+                    Login = string.Format(USER_EMAIL_FMT, x.UserID, ServiceLocatorSchool.Context.DistrictId),
+                    IsSysAdmin = false
                 }).ToList();
-            ServiceLocatorSchool.SisUserService.Add(users);
+            foreach (var user in users)
+                user.LoginInfo = new UserLoginInfo { Id = user.Id };
+            ServiceLocatorMaster.UserService.Add(users);
         }
         
         private void InsertPersons()
@@ -272,43 +288,6 @@ namespace Chalkable.StiImport.Services
                     personsForImportPictures.Add(person);
             }
             ServiceLocatorSchool.PersonService.Add(ps);
-        }
-
-        private void InsertSchoolPersons()
-        {
-            var persons = ServiceLocatorSchool.PersonService.GetAll();
-            var students = persons.Where(x => x.SisStudentUserId.HasValue).ToDictionary(x => x.SisStudentUserId.Value);
-            var staff = persons.Where(x => x.SisStaffUserId.HasValue).ToDictionary(x => x.SisStaffUserId);
-            var userSchools = context.GetSyncResult<UserSchool>().All;
-            Log.LogInfo(string.Format("Adding {0} user school records", userSchools.Count()));
-            IList<SchoolPerson> assignments = new List<SchoolPerson>();
-            foreach (var us in userSchools)
-            {
-                int? personId = null;
-                int? role = null;
-                if (students.ContainsKey(us.UserID))
-                {
-                    personId = students[us.UserID].Id;
-                    role = CoreRoles.STUDENT_ROLE.Id;
-                }
-                else if (staff.ContainsKey(us.UserID))
-                {
-                    personId = staff[us.UserID].Id;
-                    role = CoreRoles.TEACHER_ROLE.Id;
-                }
-                if (role.HasValue)
-                {
-                    var sp = new SchoolPerson
-                    {
-                        RoleRef = role.Value,
-                        SchoolRef = us.SchoolID,
-                        PersonRef = personId.Value
-                    };
-                    assignments.Add(sp);
-                }
-            }
-            Log.LogInfo(string.Format("Adding {0} school person records", assignments.Count));
-            ServiceLocatorSchool.PersonService.AsssignToSchool(assignments);
         }
 
         private void InsertPhones()
