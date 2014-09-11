@@ -6,3 +6,11 @@ create table UserLoginInfo
     LastPasswordReset datetime2 null
 )
 go
+create type TUserLoginInfo as table
+(
+	Id uniqueidentifier not null,
+	SisToken nvarchar(max),
+	SisTokenExpires datetime2 null,
+    LastPasswordReset datetime2 null
+)
+go

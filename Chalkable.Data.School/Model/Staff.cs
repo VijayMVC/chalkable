@@ -13,12 +13,12 @@ namespace Chalkable.Data.School.Model
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public DateTime? BirthDate { get; set; }
         public string Gender { get; set; }
         public string Salutation { get; set; }
+        public string Email { get; set; }
         public int? AddressRef { get; set; }
         public bool Active { get; set; }
-        public string Email { get; set; }
-        public DateTime? BirthDate { get; set; }
         public int? UresId { get; set; }
     }
 }
