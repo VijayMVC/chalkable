@@ -48,7 +48,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IGradingScaleService gradingScaleService;
         private IClassroomOptionService classroomOptionService;
         private IPersonEmailService personEmailService;
-        private ISisUserService sisUserService;
         private IStudentService studentService;
         private IStaffService staffService;
 
@@ -96,7 +95,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             gradingCommentService = new DemoGradingCommentService(this, storage);
             gradingScaleService = new DemoGradingScaleService(this, storage);
             classroomOptionService = new DemoClassroomOptionService(this, storage);
-            sisUserService = new DemoSisUserService(this, storage);
             personEmailService = new DemoPersonEmailService(this, storage);
             studentService = new DemoStudentService(this, storage);
             staffService = new DemoStaffService(this, storage);
@@ -144,7 +142,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IGradingScaleService GradingScaleService { get { return gradingScaleService; } }
         public IClassroomOptionService ClassroomOptionService { get { return classroomOptionService; } }
         public IPersonEmailService PersonEmailService { get { return personEmailService; } }
-        public ISisUserService SisUserService { get { return sisUserService; } }
         public IStudentService StudentService { get { return studentService; } }
         public IStaffService StaffService { get { return staffService; } }
 

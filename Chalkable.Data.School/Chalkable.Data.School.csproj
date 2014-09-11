@@ -87,7 +87,6 @@
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolOptionDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
-    <Compile Include="DataAccess\SisUserDataAccess.cs" />
     <Compile Include="DataAccess\StaffDataAccess.cs" />
     <Compile Include="DataAccess\StaffSchoolDataAccess.cs" />
     <Compile Include="DataAccess\StandardDataAccess.cs" />

@@ -126,7 +126,6 @@
     <Compile Include="Services\DemoSchool\DemoGradingScaleService.cs" />
     <Compile Include="Services\DemoSchool\Common\DemoSchoolConstants.cs" />
     <Compile Include="Services\DemoSchool\DemoPersonEmailService.cs" />
-    <Compile Include="Services\DemoSchool\DemoSisUserService.cs" />
     <Compile Include="Services\DemoSchool\DemoStaffService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentParentService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentAnnouncementService.cs" />
@@ -144,6 +143,7 @@
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
     <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
     <Compile Include="Services\DemoSchool\DemoStorageBlobService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoUserService.cs" />
     <Compile Include="Services\DemoSchool\Models\AnnouncementComplete.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
@@ -280,7 +280,6 @@
     <Compile Include="Services\DemoSchool\Master\DemoDeveloperService.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoServiceLocatorMaster.cs" />
-    <Compile Include="Services\DemoSchool\Master\DemoUserService.cs" />
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />

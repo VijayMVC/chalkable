@@ -24,6 +24,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public void Add(IList<User> users)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Edit(IList<User> users)
         {
             throw new NotImplementedException();
@@ -214,11 +219,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void ChangePassword(string login, string newPassword)
         {
-        }
-
-        public void CreateSchoolUsers(IList<User> users)
-        {
-            throw new NotImplementedException();
         }
 
 
