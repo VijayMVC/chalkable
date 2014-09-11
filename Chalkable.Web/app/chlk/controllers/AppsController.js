@@ -117,6 +117,9 @@ NAMESPACE('chlk.controllers', function (){
             return result;
         },
 
+
+
+        [chlk.controllers.SidebarButton('apps-info')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
@@ -450,6 +453,9 @@ NAMESPACE('chlk.controllers', function (){
             }], 'center');
         },
 
+
+
+        [chlk.controllers.SidebarButton('apps-info')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
