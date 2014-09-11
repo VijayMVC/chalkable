@@ -91,7 +91,10 @@ namespace Chalkable.Web.Controllers
                 var canAnnotate = isOwner || person.RoleRef != CoreRoles.STUDENT_ROLE.Id;
                 string name = person.FirstName;
                 if (string.IsNullOrEmpty(name))
-                    name = person.Email;
+                {
+                    var user = MasterLocator.UserService.GetById(SchoolLocator.Context.UserId);
+                    name = user.Login;
+                }
                 var res = SchoolLocator.CrocodocService.StartViewSession(new StartViewSessionRequestModel
                     {
                         Uuid = att.Uuid,

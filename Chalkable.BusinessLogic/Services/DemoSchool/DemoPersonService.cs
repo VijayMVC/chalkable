@@ -76,13 +76,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Edit(IList<Person> personInfos)
         {
-            var res = new List<Person>();
-            foreach (var personInfo in personInfos)
-            {
-                res.Add(Edit(personInfo.Id, personInfo.Email, personInfo.FirstName,
-                             personInfo.LastName, personInfo.Gender, personInfo.Salutation,
-                             personInfo.BirthDate, personInfo.AddressRef));
-            }
+            //var res = new List<Person>();
+            //foreach (var personInfo in personInfos)
+            //{
+            //    res.Add(Edit(personInfo.Id, personInfo.Email, personInfo.FirstName,
+            //                 personInfo.LastName, personInfo.Gender, personInfo.Salutation,
+            //                 personInfo.BirthDate, personInfo.AddressRef));
+            //}
         }
 
         public void Delete(int id)
@@ -150,21 +150,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Person EditEmail(int id, string email, out string error)
         {
-            var res = GetPerson(id);
-            error = null;
-            if (!(CanChangeEmail(res)))
-                throw new ChalkableSecurityException();
-            if (res.Email != email)
-            {
-                if (Storage.PersonStorage.Exists(email, res.Id))
-                    error = "There is user with that email in Chalkable";
-                else
-                {
-                    res.Email = email;
-                    Storage.PersonStorage.Update(res);
-                }
-            }
-            return res;
+            throw new NotImplementedException();
+            //var res = GetPerson(id);
+            //error = null;
+            //if (!(CanChangeEmail(res)))
+            //    throw new ChalkableSecurityException();
+            //if (res.Email != email)
+            //{
+            //    if (Storage.PersonStorage.Exists(email, res.Id))
+            //        error = "There is user with that email in Chalkable";
+            //    else
+            //    {
+            //        res.Email = email;
+            //        Storage.PersonStorage.Update(res);
+            //    }
+            //}
+            //return res;
         }
 
         private bool CanChangeEmail(Person person)
@@ -176,17 +177,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Person Edit(int localId, string email, string firstName,
             string lastName, string gender, string salutation, DateTime? birthDate, int? addressId)
         {
-            var res = GetPerson(localId);
-            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
-            ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
-            res.FirstName = firstName;
-            res.LastName = lastName;
-            res.Gender = gender;
-            res.Salutation = salutation;
-            res.BirthDate = birthDate;
-            res.AddressRef = addressId;
-            Storage.PersonStorage.Update(res);
-            return res;
+            //var res = GetPerson(localId);
+            //var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
+            //ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
+            //res.FirstName = firstName;
+            //res.LastName = lastName;
+            //res.Gender = gender;
+            //res.Salutation = salutation;
+            //res.BirthDate = birthDate;
+            //res.AddressRef = addressId;
+            //Storage.PersonStorage.Update(res);
+            //return res;
+            throw new NotImplementedException();
         }
 
 
@@ -275,6 +277,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public IList<Person> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        void IPersonService.EditEmail(int id, string email, out string error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetSisUserId(int personId)
         {
             throw new NotImplementedException();
         }

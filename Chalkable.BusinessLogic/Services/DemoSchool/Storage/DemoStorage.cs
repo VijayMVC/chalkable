@@ -405,7 +405,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Active = true,
                 FirstLoginDate = DateTime.Now,
                 Salutation = "Mr.",
-                Email = PreferenceService.Get("demoschool" + CoreRoles.ADMIN_GRADE_ROLE.LoweredName).Value,
+                //Email = PreferenceService.Get("demoschool" + CoreRoles.ADMIN_GRADE_ROLE.LoweredName).Value,
                 Id = DemoSchoolConstants.AdminGradeId,
                 FirstName = "rosteradmin",
                 LastName = "rosteradmin",
@@ -431,7 +431,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PersonStorage.Add(new Person
             {
                 Active = true,
-                Email = PreferenceService.Get("demoschool" + CoreRoles.TEACHER_ROLE.LoweredName).Value,
+                //Email = PreferenceService.Get("demoschool" + CoreRoles.TEACHER_ROLE.LoweredName).Value,
                 Gender = "M",
                 FirstName = "ROCKY",
                 LastName = "STEIN",
@@ -461,7 +461,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 BirthDate = birthDate,
                 Active = true,
                 FirstLoginDate = DateTime.Now,
-                Email = email,
+                //Email = email,
                 Id = id,
                 FirstName = firstName,
                 LastName = lastName,

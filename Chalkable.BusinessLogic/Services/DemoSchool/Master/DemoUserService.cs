@@ -202,6 +202,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public User GetBySisUserId(int userId, Guid? districtId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<User> GetByDistrict(Guid districtId)
         {
             throw new NotImplementedException();

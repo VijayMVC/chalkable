@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.Model
 
         public const string SALUTATION_FIELD = "Salutation";
         public const string ADDRESS_REF_FIELD = "AddressRef";
-        public const string EMAIL_FIELD = "Email";
+        //public const string EMAIL_FIELD = "Email";
 
         public const string HAS_MEDICAL_ALERT_FIELD = "HasMedicalAlert";
         public const string IS_ALLOWED_INET_ACCESS_FIELD = "IsAllowedInetAccess";
@@ -49,8 +49,6 @@ namespace Chalkable.Data.School.Model
             get { return FirstName.CapitalizeFirstLetter(); }
         }
 
-        [NotDbFieldAttr]
-        public string Email { get; set; }
         [NotDbFieldAttr]
         public bool HasMedicalAlert { get; set; }
         [NotDbFieldAttr]
@@ -81,7 +79,7 @@ namespace Chalkable.Data.School.Model
                         res += CapitilizedLastName;
                     return res;
                 }
-                return Email;
+                return "";
             }
         }
         [NotDbFieldAttr]
@@ -150,6 +148,9 @@ namespace Chalkable.Data.School.Model
         }
         public IList<Phone> Phones { get; set; }
         public IList<StudentSchoolYear> StudentSchoolYears { get; set; }
+        
+      
+        public string Email { get; set; }
     }
 
     public class StudentHealthCondition

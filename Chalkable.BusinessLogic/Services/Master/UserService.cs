@@ -32,6 +32,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null);
         User GetByLogin(string login);
         User GetById(Guid id);
+        User GetBySisUserId(int userId, Guid? districtId);
         User CreateDeveloperUser(string login, string password);
         void AssignUserToSchool(IList<SchoolUser> schoolUsers);
         void ChangePassword(string login, string newPassword);
@@ -41,6 +42,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void DeleteUsers(IList<int> localIds, Guid districtId);
         void ImportEdit(IList<User> users);
         void Add(IList<User> users);
+
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -456,6 +458,18 @@ namespace Chalkable.BusinessLogic.Services.Master
             var confirmatioKey = Guid.NewGuid().ToString();
             confirmatioKey = confirmatioKey.Replace("-", "");
             return confirmatioKey;
+        }
+
+
+        public User GetBySisUserId(int userId, Guid? districtId)
+        {
+            using (var uow = Read())
+            {
+                var conds = new AndQueryCondition {{User.SIS_USER_ID_FIELD, userId}};
+                if(districtId.HasValue)
+                    conds.Add(User.DISTRICT_REF_FIELD, districtId.Value);
+                return new UserDataAccess(uow).GetUser(conds);
+            }
         }
     }
 }

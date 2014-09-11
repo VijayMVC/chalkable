@@ -24,10 +24,12 @@ namespace Chalkable.BusinessLogic.Services.School
         PersonDetails GetPersonDetails(int id);
         Person GetPerson(int id);
         void ActivatePerson(int id);
-        Person EditEmail(int id, string email, out string error);
+        void EditEmail(int id, string email, out string error);
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
         IList<Person> GetAll();
+
+        int GetSisUserId(int personId);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -131,10 +133,16 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PersonDetails GetPersonDetails(int id)
         {
+            PersonDetails res;
             using (var uow = Read())
             {
-                return new PersonDataAccess(uow, Context.SchoolLocalId).GetPersonDetails(id, Context.PersonId ?? 0, Context.Role.Id);
+                res = new PersonDataAccess(uow, Context.SchoolLocalId)
+                    .GetPersonDetails(id, Context.PersonId ?? 0, Context.Role.Id);
             }
+            var userId = GetSisUserId(id);
+            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetBySisUserId(userId, Context.DistrictId);
+            res.Email = user.Login;
+            return res;
         }
 
         public void Edit(IList<Person> persons)
@@ -148,41 +156,36 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public Person EditEmail(int id, string email, out string error)
+        public void EditEmail(int id, string email, out string error)
         {
+            var person = GetPerson(id);
+            var userId = GetSisUserId(id);
+            error = null;
+            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetBySisUserId(userId, Context.DistrictId);
+            string oldEmail = user.Login;
             using (var uow = Update())
             {
-                var res = EditEmail(new PersonDataAccess(uow, Context.SchoolLocalId), id, email, out  error);
-                uow.Commit();
-                return res;
-            }
-        }
-
-        private Person EditEmail(PersonDataAccess dataAccess, int id, string email, out string error)
-        {
-            var res = GetPerson(id);
-            error = null;
-            if (!(CanChangeEmail(res)))
-                throw new ChalkableSecurityException();
-            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(res.Email);
-            if (res.Email != email)
-            {
-                if (dataAccess.Exists(email, res.Id))
-                    error = "There is user with that email in Chalkable";
-                else
+                
+                if (!(CanChangeEmail(id)))
+                    throw new ChalkableSecurityException();
+                if (user.Login != email)
                 {
-                    ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
-                    res.Email = email;
-                    dataAccess.Update(res);
-                    ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(res, email);         
+                    var newUser = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(email);
+                    if (newUser != null && user.Id != newUser.Id)
+                        error = "There is user with that email in Chalkable";
+                    else
+                    {
+                        ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
+                        ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(person, oldEmail, email);
+                    }
                 }
+                uow.Commit();
             }
-            return res;
         }
 
-        private bool CanChangeEmail(Person person)
+        private bool CanChangeEmail(int personId)
         {
-            return BaseSecurity.IsAdminEditorOrCurrentPerson(person.Id, Context)
+            return BaseSecurity.IsAdminEditorOrCurrentPerson(personId, Context)
                    || (Context.Role == CoreRoles.TEACHER_ROLE);
         }
 
@@ -275,6 +278,22 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
+        }
+
+
+        public int GetSisUserId(int personId)
+        {
+            using (var uow = Read())
+            {
+                var student = new StudentDataAccess(uow).GetByIdOrNull(personId);
+                if (student != null) return student.UresId;
+                var staff = new StaffDataAccess(uow).GetByIdOrNull(personId);
+                if (staff != null && staff.UresId.HasValue) return staff.UresId.Value;
+                var person = new PersonDataAccess(uow, Context.SchoolLocalId).GetByIdOrNull(personId);
+                if (person != null && person.UserId.HasValue) return person.UserId.Value;
+
+                throw new ChalkableException("Current person doesn't have user data");
+            }
         }
     }
 }

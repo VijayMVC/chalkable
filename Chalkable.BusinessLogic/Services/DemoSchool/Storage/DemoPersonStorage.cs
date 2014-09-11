@@ -130,7 +130,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Active = true,
                 AddressRef = person.AddressRef,
                 BirthDate = person.BirthDate,
-                Email = person.Email,
+                //Email = person.Email,
                 FirstLoginDate = person.FirstLoginDate,
                 FirstName = person.FirstName,
                 LastName = person.LastName,
@@ -153,7 +153,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public bool Exists(string email, int id)
         {
-            return data.Count(x => x.Value.Email == email && x.Value.Id == id) == 1;
+            throw new NotImplementedException();
+            //return data.Count(x => x.Value.Email == email && x.Value.Id == id) == 1;
         }
 
         public Person GetPerson(PersonQuery personQuery)

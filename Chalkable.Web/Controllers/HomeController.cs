@@ -181,8 +181,8 @@ namespace Chalkable.Web.Controllers
         private void PrepareStudentJsonData()
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
-            var personView = PersonViewData.Create(person);
+            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
+            var personView = PersonInfoViewData.Create(person);
             personView.DisplayName = person.FullName;
             if (!person.FirstLoginDate.HasValue)
             {
@@ -207,7 +207,7 @@ namespace Chalkable.Web.Controllers
         private void PrepareAdminJsonData()
         {
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
+            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
@@ -226,8 +226,8 @@ namespace Chalkable.Web.Controllers
 
             PrepareCommonViewData(mp);
 
-            var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
-            var personView = PersonViewData.Create(person);
+            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
+            var personView = PersonInfoViewData.Create(person);
             personView.DisplayName = person.ShortSalutationName;           
             if (!person.FirstLoginDate.HasValue)
             {

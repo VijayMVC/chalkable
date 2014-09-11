@@ -12,7 +12,6 @@ CREATE TYPE [dbo].[TPerson] AS TABLE(
 	[LastPasswordReset] [datetime2](7) NULL,
 	[FirstLoginDate] [datetime2](7) NULL,
 	[LastMailNotification] [datetime2](7) NULL,
-	[Email] [nvarchar](256) NOT NULL,
 	[AddressRef] [int] NULL,
 	[HasMedicalAlert] [bit] NOT NULL,
 	[IsAllowedInetAccess] [bit] NOT NULL,
