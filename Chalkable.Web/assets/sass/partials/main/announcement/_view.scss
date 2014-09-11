@@ -1,0 +1,764 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+@import "compass/css3/transform";
+@import "compass/css3/box-shadow";
+
+$blue-color: #276284;
+$red-color: #842727;
+
+.download-link{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.announcement-view-page{
+  @include border-radius(9px);
+}
+
+.announcement-view{
+  div.feed-item{
+    @include border-radius(7px 7px 0 0);
+  }
+
+  .grid-modal{
+    position: absolute;
+    background: url(images/announcement/auto-grade-modal.png) 438px 5px no-repeat, rgba(0, 0, 0, 0.6);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+
+    >DIV{
+      color: white;
+      width: 290px;
+      position: absolute;
+      font: normal 34px 'Reenie Beanie';
+      text-align: center;
+      top: 83px;
+      left: 293px;
+    }
+
+    &.double{
+      >DIV{
+        top: 1px;
+        left: 105px;
+      }
+    }
+  }
+
+  .z-0, .z-10{
+    position: relative;
+  }
+
+  .z-0{
+    z-index: 0;
+  }
+
+  .z-10{
+    //z-index: 10;
+
+    &.selected{
+      z-index: 11;
+    }
+  }
+
+  .attach-file-area{
+    .file{
+      margin-top: 25px;
+    }
+  }
+
+  .silver-panel{
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #d0d0d0;
+    padding: 16px;
+
+    .auto-grade-buttons, .grades-info{
+      height: 51px;
+    }
+
+    .auto-grade-buttons{
+      margin-right: 11px;
+
+      .special-button2{
+        margin: 5px;
+        >SPAN{
+          >SPAN{
+            >BUTTON{
+              font-size: 12px;
+              width: 94px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .student-announcements-top-panel{
+    padding: 6px 6px 6px 22px;
+
+    .special-button2{
+      >SPAN{
+        >SPAN{
+          min-width: 89px;
+          text-align: center;
+          font-size: 12px;
+
+          >A{
+            letter-spacing: 1px;
+          }
+        }
+      }
+    }
+
+    >DIV{
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .class-avg{
+      font: bold 38px Arial;
+      color: #757575;
+      margin-right: 45px;
+      height:46px;
+    }
+
+    .show-student-grades{
+      width: 32px;
+      height: 25px;
+      background: url(images/grading/show-grades.png) center center no-repeat;
+      margin-right: 54px;
+      cursor: pointer;
+      position: relative;
+
+      .chlk-pop-up-container{
+        padding: 12px 17px 16px;
+        bottom: 38px;
+        left: -95px;
+      }
+
+      &:not(.show-pop-up){
+        .chlk-pop-up-container{
+          display: none;
+        }
+      }
+
+      .show-student-grades-container{
+        width: 189px;
+
+        >DIV{
+          display: inline-block;
+          vertical-align: middle;
+          width: 94px;
+        }
+
+        .text{
+          font: bold 14px Arial;
+          color: #7c7c7c;
+        }
+
+        .slide-checkbox{
+          position: relative;
+          top: 2px;
+          left: 16px;
+        }
+      }
+
+      &.not-show{
+        background-image: url(images/grading/not-show-grades.png)
+      }
+    }
+
+    .graded-student{
+      border: 2px solid #757575;
+      padding: 1px;
+      width: 41px;
+      height: 11px;
+
+      .graded-bg{
+        height:11px;
+        background: url(images/grading/students-graded-bg.png);
+      }
+    }
+  }
+
+  .edit-button{
+    width: 53px;
+  }
+
+  .blue{
+    color: $blue-color;
+  }
+
+  .red{
+    color: $red-color;
+  }
+  .announcement-details-panel{
+    padding-botton: 37px;
+
+    .grades-info{
+      TABLE{
+        TD{
+          width: 90px;
+          text-align: center;
+
+          &:not(.small){
+            font: bold 34px Arial;
+            color: #a5a5a5;
+          }
+
+          &.small{
+            font-size: 11px;
+          }
+        }
+      }
+    }
+
+    .left-block{
+      width: 73px;
+      .image-container{
+        margin: 2px 4px;
+      }
+    }
+
+    .left-block.attachments{
+      height: 100px;
+      background: url(images/icons/upload-attachment-icon.png) no-repeat;
+    }
+
+    .right-block{
+      width: 552px;
+
+      &.center{
+        text-align: center;
+      }
+
+      h2{
+        font-size: 14px;
+        word-spacing: -1px;
+      }
+      p{
+        white-space: pre-wrap;
+      }
+
+      .standards-container{
+        .title{
+          font-weight: bold;
+          font-size: 15px;
+          text-shadow: 1px -1px 0px white;
+        }
+        .standard-list{
+          .grey-button{
+            padding: 7px 5px;
+            margin-right: 7px;
+            vertical-align: top;
+          }
+        }
+      }
+    }
+
+    .left-block, .right-block{
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .details-container{
+      >DIV{
+        display: inline-block;
+
+        &.announcement-view-tooltip{
+          .comment-container{
+            padding: 5px 21px 4px 26px;
+            background: white;
+            @include border-radius(10px);
+            border: 1px solid #cbcbcb;
+            letter-spacing: 1px;
+            word-spacing: 4px;
+
+            >DIV{
+              display: inline-block;
+              vertical-align: middle;
+
+              &.comment{
+                font: bold 16px Arial;
+                color: #818181;
+                overflow: hidden;
+                max-width: 495px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+            }
+          }
+          .comment-triangle{
+            width: 0px;
+            height: 0px;
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-top: 10px solid #CBCBCB;
+            font-size: 0px;
+            line-height: 0px;
+            margin-left: 15px;
+
+            .white{
+              border-top: 10px solid white;
+              border-left: 8px solid transparent;
+              margin: -11px 0 0 -9px;
+            }
+          }
+
+          &.comment-grade-container{
+            margin: 4px 4px 12px 4px;
+            .grade-value{
+              font-family: 'Reenie Beanie';
+              color: #c81616;
+              font-size: 45px;
+              margin-left: 30px;
+              letter-spacing: 5px;
+            }
+          }
+
+          &.make-visible-container{
+            .comment-container{
+              padding: 20px 21px 20px 26px;
+              .make-visible-btn{
+                float: right;
+                padding-left: 130px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #3B758C;
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+
+
+
+
+        P{
+          margin: 2px 0 38px;
+          font-weight: bold;
+          word-wrap: break-word;
+        }
+      }
+    }
+
+    .student-attachments{
+      width: 585px;
+    }
+
+    .questions-and-answers{
+      form{
+        margin-bottom: 30px;
+        .avatar-container{
+          vertical-align: top;
+        }
+
+        .edit-question-input, .edit-answer-btn.chlk-button, .edit-question-btn.chlk-button, .cancel-question-link, .cancel-answer-link{
+          display: none;
+        }
+
+        .chlk-button{
+          display: block;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          width: 80px;
+        }
+        .row{
+          margin-top: 15px;
+          margin-bottom: 15px;
+        }
+
+        .qna{
+          margin-left: 15px;
+          h2{
+            font-size: 14px;
+          }
+          p{
+            font-size: 14px;
+          }
+          span, a{
+            font-size: 10px;
+            color: #a5a5a5;
+          }
+          a{
+            margin-left: 10px;
+          }
+          BUTTON{
+            width:104px;
+          }
+
+          >INPUT{
+            border-color: "#9e9e9e";
+            width: 300px;
+            border: 1px solid silver;
+            height: 16px;
+            padding: 7px;
+            color: #a5a5a5;
+          }
+        }
+      }
+    }
+
+    .grades-individual{
+      position: relative;
+
+
+    }
+  }
+}
+
+.people-list{
+  .attachments-container{
+    display: none;
+
+    .announcement-item{
+      margin: 32px 0;
+
+      &:nth-child(3n - 2){
+        margin-left: 39px;
+      }
+
+      &:not(:last-child){
+        margin-right: 32px;
+      }
+
+      &+.standards-block{
+        margin-top: -17px;
+      }
+    }
+  }
+
+  .standards-block{
+    margin: 15px 11px 12px;
+  }
+
+  .standard-item{
+    display: inline-block;
+    float: right;
+    margin-left: 10px;
+  }
+
+  .grey-input{
+    width: 56px;
+    height: 21px;
+    line-height: 21px;
+    border: 1px solid #BCBCBC;
+    text-align: center;
+    @include border-radius(3px);
+
+    &.error{
+      border: 1px solid red;
+    }
+  }
+
+  .letters{
+    font-size: 10px;
+    color: #5F5F5F;
+    font-family: Arial;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  .row{
+
+    .top-content{
+      &.loading{
+        background: url(images/loaders/horizontal-small.gif) right 26px no-repeat;
+      }
+    }
+
+    &.selected:not(.readonly){
+      .name-block{
+        SPAN.container{
+          display: inline;
+        }
+      }
+
+      .grade-block{
+        .selected{
+          display: block;
+        }
+
+        .not-selected{
+          display: none;
+        }
+
+        .comment-icon{
+          display: none;
+        }
+      }
+    }
+
+    .name-block, .grade-block{
+      vertical-align: middle;
+    }
+
+    .name-block{
+      margin-left: 10px;
+
+
+      .p-container{
+        width: 328px;
+      }
+
+      p{
+        padding: 20px 0 2px 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 328px;
+        display: inline-block;
+      }
+
+      span.container{
+        font-size: 11px;
+        display: none;
+        position: absolute;
+        letter-spacing: 1px;
+        word-spacing: 8px;
+
+        .comment-grade{
+          position: relative;
+
+          .grading-comments-list{
+            margin: -20px 0 0 3px;
+            width: 303px;
+            z-index: 1;
+          }
+
+          .small-pop-up{
+            top: 28px;
+            left: -58px;
+            position: absolute;
+            border: 1px solid #b9b9b9;
+            @include border-radius(5px);
+            z-index: 100;
+
+            >DIV.container{
+              .triangle{
+                left: 70px;
+                top: -15px;
+                width: 26px;
+                height: 16px;
+                background: url(images/common/window-triangle-top.png) 0 0 no-repeat;
+              }
+
+              >DIV{
+                display: table-row;
+
+                >DIV{
+                  display: table-cell;
+                  vertical-align: top;
+                  IMG{
+                    width: 32px;
+                    height: 32px;
+                    background-repeat: no-repeat;
+                    background-position: 3px 2px;
+                  }
+
+                  TEXTAREA{
+                    width: 297px;
+                    margin: 7px 3px 17px 3px;
+                    height: 39px;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        a, SPAN{
+          text-decoration: none;
+          cursor: pointer;
+          color: #787878;
+        }
+
+        SPAN.dot{
+          position: relative;
+          top: -2px;
+          font-size: 20px;
+        }
+      }
+    }
+
+    .grade-block{
+      height: 25px;
+      overflow: visible;
+      position: relative;
+      width: 175px;
+      padding-right: 45px;
+      margin-top: 13px;
+
+      .text-value{
+        font-family: 'Reenie Beanie';
+        color: $red-color;
+        font-size: 40px;
+        display: block;
+        padding-left: 90px;
+        margin-top: -9px;
+        width: 60px;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .grade-triangle{
+        position: absolute;
+        right: 0;
+        top: 5px;
+        width: 24px;
+        height: 24px;
+        background: url(images/grading/student-arrow.png) center center no-repeat;
+        //border-top: 9px solid transparent;
+        //border-left: 10px solid #a5a5a5;
+        //border-bottom: 9px solid transparent;
+        @include transition-property("all");
+        @include transition-duration("0.5s");
+
+        &:not(.down){
+          @include transform(rotate(-90deg));
+        }
+      }
+
+      .alert-flag{
+        top: -24px;
+        right: 6px;
+      }
+
+      .selected{
+        display: none;
+        text-align: right;
+        margin-top: -9px;
+
+        .input-container{
+          margin-left: 6px;
+          position: relative;
+          display: inline-block;
+          width: 80px;
+          text-align: center;
+          vertical-align: top;
+          height: 41px;
+
+          .text-value{
+            padding: 0;
+          }
+        }
+
+        .grading-input{
+          background: white;
+          text-align: center;
+          overflow: hidden;
+          vertical-align: middle;
+          margin: 10px 0 4px;
+
+          &.error{
+            border: 1px solid red;
+          }
+        }
+
+        .letters{
+          position: absolute;
+          display: block;
+          left: 26px;
+          bottom: -10px;
+        }
+      }
+
+      .comment-icon{
+        display: inline-block;
+        position: absolute;
+        height: 9px;
+        width: 11px;
+        right: -9px;
+        bottom: -5px;
+        background: url(images/grading/comment-icon.png) 0 0 no-repeat;
+      }
+    }
+  }
+}
+
+DIV.triangle {
+ // padding: 0;
+  position: absolute;
+  width: 16px;
+  height: 10px;
+  background: url(images/common/window-triangle-top.png) no-repeat;
+  //top: -19px;
+  //left: 46%;
+}
+
+.small-pop-up{
+  position: absolute;
+  border: 1px solid #b9b9b9;
+  @include border-radius(5px);
+  z-index: 100;
+  display: none;
+
+  >DIV.container{
+    border: 1px solid #f6f6f6;
+    background: #eeeeee;
+    @include border-radius(4px);
+    padding: 3px 5px;
+
+    DIV.triangle{
+      position: absolute;
+      left: 15px;
+      top: -10px;
+      display: block;
+    }
+
+    TEXTAREA, INPUT{
+      @include border-radius(0px);
+      border: 1px solid #84898f;
+      height: 20px;
+      line-height: 20px;
+      padding: 1px 3px;
+      margin: 1px 1px 7px 1px;
+    }
+
+    TEXTAREA{
+      padding: 2px;
+    }
+
+    SPAN{
+      position: absolute;
+      display: block;
+      bottom: 0;
+      right: 10px;
+      font-size: 9px;
+      padding-right: 12px;
+      background: url(images/grading/enter.png) right center no-repeat;
+    }
+  }
+}
+
+.alert-flag{
+  position: absolute;
+  width: 12px;
+  height: 18px;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  &.incomplete{
+    background-image: url(images/grading/incomplete-flag.png);
+  }
+
+  &.late{
+    background-image: url(images/grading/orange-flag.png);
+  }
+
+  &.absent{
+    background-image: url(images/grading/blue-flag.png);
+  }
+
+  &.multiple{
+    background-image: url(images/grading/alerts.png);
+  }
+
+  &.error{
+    background-image: url(images/grading/red-flag.png);
+  }
+}
