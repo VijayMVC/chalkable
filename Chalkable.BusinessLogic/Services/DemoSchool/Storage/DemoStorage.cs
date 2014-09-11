@@ -95,6 +95,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public DemoPersonEmailStorage PersonEmailStorage { get; private set; }
         public DemoPersonBalanceStorage PersonBalanceStorage { get; private set; }
+        public DemoStudentStorage DemoStudentStorage { get; private set; }
+        public DemoStaffStorage DemoStaffStorage { get; private set; }
+        public DemoStudentSchoolStorage DemoStudentSchoolStorage { get; private set; }
+        public DemoStaffSchoolStorage DemoStaffSchoolStorage { get; private set; }
 
         public UserContext Context { get; private set; }
 
@@ -187,6 +191,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             PersonEmailStorage = new DemoPersonEmailStorage(this);
             PersonBalanceStorage = new DemoPersonBalanceStorage(this);
+            DemoStudentStorage = new DemoStudentStorage(this);
+            DemoStaffSchoolStorage = new DemoStaffSchoolStorage(this);
+            DemoStaffStorage = new DemoStaffStorage(this);
+            DemoStudentSchoolStorage = new DemoStudentSchoolStorage(this);
 
             AnnouncementStorage = CreateAnnouncementStorage(Context);
             Setup();

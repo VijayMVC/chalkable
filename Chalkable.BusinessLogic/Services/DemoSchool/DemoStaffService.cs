@@ -17,42 +17,43 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<Staff> staffs)
         {
-            throw new NotImplementedException();
+            Storage.DemoStaffStorage.Add(staffs);
         }
 
         public void Edit(IList<Staff> staffs)
         {
-            throw new NotImplementedException();
+            Storage.DemoStaffStorage.Update(staffs);
+
         }
 
         public void Delete(IList<Staff> staffs)
         {
-            throw new NotImplementedException();
+            Storage.DemoStaffStorage.Delete(staffs);
         }
 
         public IList<Staff> GetStaffs()
         {
-            throw new NotImplementedException();
+            return Storage.DemoStaffStorage.GetAll();
         }
 
         public void AddStaffSchools(IList<StaffSchool> staffSchools)
         {
-            throw new NotImplementedException();
+            Storage.DemoStaffSchoolStorage.Add(staffSchools);
         }
 
         public void EditStaffSchools(IList<StaffSchool> staffSchools)
         {
-            throw new NotImplementedException();
+            Storage.DemoStaffSchoolStorage.Update(staffSchools);
         }
 
         public void DeleteStaffSchools(IList<StaffSchool> staffSchools)
         {
-            throw new NotImplementedException();
+            Storage.DemoStaffSchoolStorage.Delete(staffSchools);
         }
 
         public IList<StaffSchool> GetStaffSchools()
         {
-            throw new NotImplementedException();
+            return Storage.DemoStaffSchoolStorage.GetAll();
         }
     }
 }

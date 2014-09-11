@@ -150,6 +150,10 @@
     <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPersonBalanceStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPersonEmailStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStaffSchoolStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStaffStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStudentSchoolStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStudentStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\StudentHealthConditionStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementCompleteStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoSchoolOptionStorage.cs" />
