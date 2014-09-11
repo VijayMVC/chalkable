@@ -50,6 +50,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IPersonEmailService PersonEmailService { get; }
         ISisUserService SisUserService { get; }
         IScheduledTimeSlotService ScheduledTimeSlotService { get; }
+        IStudentService StudentService { get; }
+        IStaffService StaffService { get; }
         IDbService SchoolDbService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -99,6 +101,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private IPersonEmailService personEmailService;
         private IDbService schoolDbService;
         private IScheduledTimeSlotService scheduledTimeSlotService;
+        private IStudentService studentService;
+        private IStaffService staffService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -148,6 +152,8 @@ namespace Chalkable.BusinessLogic.Services.School
             personEmailService = new PersonEmailService(this);
             schoolDbService = new DbService(Context != null ? Context.SchoolConnectionString : null);
             scheduledTimeSlotService = new ScheduledTimeSlotService(this);
+            studentService = new StudentService(this);
+            staffService = new StaffService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -194,6 +200,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public IPersonEmailService PersonEmailService { get { return personEmailService; } }
         public ISisUserService SisUserService { get { return sisUserService; } }
         public IScheduledTimeSlotService ScheduledTimeSlotService { get { return scheduledTimeSlotService; } }
+        public IStudentService StudentService { get { return studentService; } }
+        public IStaffService StaffService { get { return staffService; } }
         public IDbService SchoolDbService
         {
             get { return schoolDbService; }

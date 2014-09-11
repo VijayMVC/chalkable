@@ -88,6 +88,8 @@
     <Compile Include="DataAccess\SchoolOptionDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
     <Compile Include="DataAccess\SisUserDataAccess.cs" />
+    <Compile Include="DataAccess\StaffDataAccess.cs" />
+    <Compile Include="DataAccess\StaffSchoolDataAccess.cs" />
     <Compile Include="DataAccess\StandardDataAccess.cs" />
     <Compile Include="DataAccess\StudentDailyAttendanceDataAccess.cs" />
     <Compile Include="DataAccess\DateDataAccess.cs" />
@@ -105,6 +107,8 @@
     <Compile Include="DataAccess\DayTypeDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\StudentDataAccess.cs" />
+    <Compile Include="DataAccess\StudentSchoolDataAccess.cs" />
     <Compile Include="DataAccess\StudentSchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentParentDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
@@ -161,10 +165,14 @@
     <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
     <Compile Include="Model\SisUser.cs" />
+    <Compile Include="Model\Staff.cs" />
+    <Compile Include="Model\StaffSchool.cs" />
     <Compile Include="Model\Standard.cs" />
     <Compile Include="Model\StandardSubject.cs" />
+    <Compile Include="Model\Student.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
     <Compile Include="Model\StudentDailyAttendance.cs" />
+    <Compile Include="Model\StudentSchool.cs" />
     <Compile Include="Model\StudentSchoolYear.cs" />
     <Compile Include="Model\StudentParent.cs" />
     <Compile Include="Model\SyncVersion.cs" />
