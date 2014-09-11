@@ -42,6 +42,8 @@ namespace Chalkable.Data.Master.Model
 
     public class UserLoginInfo
     {
+        public const string ID_FIELD = "Id";
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string SisToken { get; set; }

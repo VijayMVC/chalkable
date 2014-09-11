@@ -311,21 +311,21 @@ namespace Chalkable.Data.Common
             return PaginatedSelect<TEntity>(orderBy, start, count, orderType);
         }
 
-        public void Insert(TEntity entity)
+        public virtual void Insert(TEntity entity)
         {
             SimpleInsert(entity);
         }
 
-        public void Insert(IList<TEntity> entities)
+        public virtual void Insert(IList<TEntity> entities)
         {
             SimpleInsert(entities);
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             SimpleUpdate(entity);
         }
-        public void Update(IList<TEntity> entities)
+        public virtual void Update(IList<TEntity> entities)
         {
             SimpleUpdate(entities);
         }

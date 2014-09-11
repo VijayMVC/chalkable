@@ -38,7 +38,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         void ChangeUserLogin(Guid id, string login);
         bool ResetPassword(string email);
         User GetSysAdmin();
-        void CreateSchoolUsers(IList<User> userInfos);
         void DeleteUsers(IList<int> localIds, Guid districtId);
         void Edit(IList<User> users);
         void Add(IList<User> users);
@@ -64,6 +63,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new UserDataAccess(uow);
                 da.Update(users);
+                new UserLoginInfoDataAccess(uow).Update(users.Select(x => x.LoginInfo).ToList());
                 uow.Commit();
             }
         }
@@ -122,6 +122,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     user.ConfirmationKey = null;
                     user.DistrictRef = districtId;
                     da.Update(user);
+                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
                 }
                 uow.Commit();
                 return res;
@@ -302,6 +303,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     user.LoginInfo.SisToken = iNowConnector.Token;
                     user.LoginInfo.SisTokenExpires = iNowConnector.TokenExpires;
                     new UserDataAccess(uow).Update(user);
+                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
                 }
             }
             return user;
@@ -355,6 +357,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var user = da.GetUser(login, null, null);
                     user.Password = PasswordMd5(newPassword);
                     da.Update(user);
+                    user.LoginInfo.LastPasswordReset = Context.NowSchoolTime;
+                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
                     uow.Commit();
                 }
             }
@@ -362,16 +366,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableSecurityException();
         }
 
-        public void CreateSchoolUsers(IList<User> users)
-        {
-            using (var uow = Update())
-            {
-                var userDa = new UserDataAccess(uow);
-                userDa.Insert(users);
-                uow.Commit();
-            }
-        }
-
+        
         public User CreateDeveloperUser(string login, string password)
         {
             using (var uow = Update())
@@ -386,6 +381,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Password = PasswordMd5(password)
                 };
                 userDa.Insert(user);
+                user.LoginInfo = new UserLoginInfo {Id = user.Id};
+                new UserLoginInfoDataAccess(uow).Insert(user.LoginInfo);
                 uow.Commit();
                 return user;
             }
@@ -446,6 +443,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     user.ConfirmationKey = key;
                     new UserDataAccess(uow).Update(user);
+                    user.LoginInfo.LastPasswordReset = Context.NowSchoolTime;
+                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
                     uow.Commit();
                 }
                 return true;

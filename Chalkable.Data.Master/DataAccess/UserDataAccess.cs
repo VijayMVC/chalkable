@@ -44,6 +44,8 @@ namespace Chalkable.Data.Master.DataAccess
                                                sisUserIds.Select(x => x.ToString()).JoinString(","));
                 builder.AppendFormat("delete from SchoolUser where [{0}] in (select [Id] from [User] where {1}) "
                                      , SchoolUser.USER_REF_FIELD, whereScrip)
+                       .AppendFormat("delete from UserLoginInfo where [{0}] in (select [Id] from [User] where {1})"
+                                     , UserLoginInfo.ID_FIELD, whereScrip)
                        .AppendFormat("delete from [User] where {0}", whereScrip);
                 var parameters = new Dictionary<string, object>{{User.DISTRICT_REF_FIELD, districtId}};
                 ExecuteNonQueryParametrized(builder.ToString(), parameters);        
