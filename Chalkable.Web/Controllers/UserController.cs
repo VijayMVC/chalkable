@@ -162,7 +162,7 @@ namespace Chalkable.Web.Controllers
                     }, 5);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return Json(false);
             }

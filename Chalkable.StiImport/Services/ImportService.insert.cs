@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -26,6 +24,10 @@ using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
 using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using ScheduledTimeSlot = Chalkable.Data.School.Model.ScheduledTimeSlot;
+using Staff = Chalkable.StiConnector.SyncModel.Staff;
+using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
+using Student = Chalkable.StiConnector.SyncModel.Student;
+using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 using User = Chalkable.StiConnector.SyncModel.User;
 
 namespace Chalkable.StiImport.Services
@@ -50,8 +52,6 @@ namespace Chalkable.StiImport.Services
             InsertStudentSchool();
             Log.LogInfo("insert StaffSchool");
             InsertStaffSchool();
-
-
             Log.LogInfo("insert persons emails");
             InsertPersonsEmails();
             Log.LogInfo("insert phones");
@@ -218,76 +218,75 @@ namespace Chalkable.StiImport.Services
         
         private void InsertPersons()
         {
-            var persons = context.GetSyncResult<Person>().All;
-            var ps = new List<PersonInfo>();
-            var students = context.GetSyncResult<Student>().All.ToDictionary(x => x.StudentID);
-            var staff = context.GetSyncResult<Staff>().All.ToDictionary(x => x.StaffID);
-            Dictionary<int, SisUser> sisUsers;
-            if (persons.Length > 30)
-            {
-                sisUsers = ServiceLocatorSchool.SisUserService.GetAll().ToDictionary(x=>x.Id);
-            }
-            else
-            {
-                var ids = students.Values.Select(x => x.UserID)
-                            .Union(staff.Values.Where(x => x.UserID.HasValue).Select(x => x.UserID.Value)).ToList();
-                sisUsers = ids.Select(ServiceLocatorSchool.SisUserService.GetById).ToDictionary(x => x.Id);
-            }
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
-            var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
-            foreach (var person in persons)
-            {
-                var email = string.Format(USER_EMAIL_FMT, person.PersonID, ServiceLocatorSchool.Context.DistrictId);
-                //TODO: what about admins? probably will be resolved by API
-                var userName = string.Empty;
-                var hasMedicalAlert = false;
-                var isAllowedInetAccess = false;
-                string specialInstructions = "";
-                string spEdStatus = null;
-                int? sisStudentUserId = null;
-                int? sisStaffUserId = null;
+            var persons = context.GetSyncResult<Person>().All
+                .Select(x=>new Data.School.Model.Person
+                    {
+                        Active = true,
+                        AddressRef = x.PhysicalAddressID,
+                        BirthDate = x.DateOfBirth,
+                        FirstName = x.FirstName,
+                        Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
+                        Id = x.PersonID,
+                        LastName = x.LastName,
+                        PhotoModifiedDate = x.PhotoModifiedDate
+                    }).ToList();
+            ServiceLocatorSchool.PersonService.Add(persons);
+        }
 
-                if (students.ContainsKey(person.PersonID))
+        private void InsertStaff()
+        {
+            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
+            var staff = context.GetSyncResult<Staff>().All.Select(x => new Data.School.Model.Staff
                 {
-                    userName = sisUsers[students[person.PersonID].UserID].UserName;
-                    hasMedicalAlert = students[person.PersonID].HasMedicalAlert;
-                    isAllowedInetAccess = students[person.PersonID].IsAllowedInetAccess;
-                    specialInstructions = students[person.PersonID].SpecialInstructions;
-                    sisStudentUserId = students[person.PersonID].UserID;
-                    if (students[person.PersonID].SpEdStatusID.HasValue)
-                        spEdStatus = spEdStatuses[students[person.PersonID].SpEdStatusID.Value].Name;
-                }
-                if (staff.ContainsKey(person.PersonID) && staff[person.PersonID].UserID.HasValue)
+                    BirthDate = x.DateOfBirth,
+                    Id = x.StaffID,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
+                    UresId = x.UserID
+                }).ToList();
+            ServiceLocatorSchool.StaffService.Add(staff);
+        }
+
+        private void InsertStudent()
+        {
+            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
+            var statuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
+            var students = context.GetSyncResult<Student>().All.Select(x => new Data.School.Model.Student
+            {
+                BirthDate = x.DateOfBirth,
+                Id = x.StudentID,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
+                UresId = x.UserID,
+                HasMedicalAlert = x.HasMedicalAlert,
+                IsAllowedInetAccess = x.IsAllowedInetAccess,
+                SpecialInstructions = x.SpecialInstructions,
+                SpEdStatus = x.SpEdStatusID.HasValue ? statuses[x.SpEdStatusID.Value].Name : ""
+            }).ToList();
+            ServiceLocatorSchool.StudentService.AddStudents(students);
+        }
+
+        private void InsertStaffSchool()
+        {
+            var staffSchool = context.GetSyncResult<StaffSchool>().All.Select(x => new Data.School.Model.StaffSchool
                 {
-                    userName = sisUsers[staff[person.PersonID].UserID.Value].UserName;
-                    sisStaffUserId = staff[person.PersonID].UserID.Value;
-                }
-                    
-                
-                ps.Add(new PersonInfo
-                {
-                    Active = true,
-                    AddressRef = person.PhysicalAddressID,
-                    BirthDate = person.DateOfBirth,
-                    Email = email,
-                    FirstName = person.FirstName,
-                    Gender = person.GenderID.HasValue ? genders[person.GenderID.Value].Code : "U",
-                    Id = person.PersonID,
-                    LastName = person.LastName,
-                    Password = UserService.PasswordMd5(DEF_USER_PASS),
-                    SisUserName = userName,
-                    HasMedicalAlert = hasMedicalAlert,
-                    IsAllowedInetAccess = isAllowedInetAccess,
-                    SpecialInstructions = specialInstructions,
-                    SpEdStatus = spEdStatus,
-                    PhotoModifiedDate = person.PhotoModifiedDate,
-                    SisStaffUserId = sisStaffUserId,
-                    SisStudentUserId = sisStudentUserId
-                });
-                if (person.PhotoModifiedDate.HasValue)
-                    personsForImportPictures.Add(person);
-            }
-            ServiceLocatorSchool.PersonService.Add(ps);
+                    SchoolRef = x.SchoolID,
+                    StaffRef = x.StaffID
+                }).ToList();
+            ServiceLocatorSchool.StaffService.AddStaffSchools(staffSchool);
+        }
+
+        private void InsertStudentSchool()
+        {
+            var studentSchools = context.GetSyncResult<StudentSchool>().All.Select(x => new Data.School.Model.StudentSchool
+            {
+                SchoolRef = x.SchoolID,
+                StudentRef = x.StudentID
+            }).ToList();
+            ServiceLocatorSchool.StudentService.AddStudentSchools(studentSchools);
         }
 
         private void InsertPhones()

@@ -33,18 +33,13 @@ namespace Chalkable.Data.School.Model
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public DateTime? FirstLoginDate { get; set; }
         public DateTime? BirthDate { get; set; }
         public string Gender { get; set; }
         public string Salutation { get; set; }
-        public bool Active { get; set; }
-        public DateTime? FirstLoginDate { get; set; }
+        public bool Active { get; set; }        
         public DateTime? LastMailNotification { get; set; }
-        public string Email { get; set; }
         public int? AddressRef { get; set; }
-        public bool HasMedicalAlert { get; set; }
-        public bool IsAllowedInetAccess { get; set; }
-        public string SpecialInstructions { get; set; }
-        public string SpEdStatus { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
         public int? UserId { get; set; }
         
@@ -53,6 +48,18 @@ namespace Chalkable.Data.School.Model
         {
             get { return FirstName.CapitalizeFirstLetter(); }
         }
+
+        [NotDbFieldAttr]
+        public string Email { get; set; }
+        [NotDbFieldAttr]
+        public bool HasMedicalAlert { get; set; }
+        [NotDbFieldAttr]
+        public bool IsAllowedInetAccess { get; set; }
+        [NotDbFieldAttr]
+        public string SpecialInstructions { get; set; }
+        [NotDbFieldAttr]
+        public string SpEdStatus { get; set; }
+        
 
         [NotDbFieldAttr]
         public string CapitilizedLastName

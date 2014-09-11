@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers
                 base.OnActionExecuting(filterContext);
         }
 
-        public new ActionResult Json(object data, int serializationDepth = 10)
+        public ActionResult Json(object data, int serializationDepth = 10)
         {
             var response = (data is IPaginatedList) ? new ChalkableJsonPaginatedResponse((IPaginatedList)data) 
                                                         : new ChalkableJsonResponce(data);

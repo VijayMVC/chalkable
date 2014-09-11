@@ -7,7 +7,6 @@ namespace Chalkable.Web.Models.SchoolsViewData
 {
     public class SchoolViewData : ShortSchoolViewData
     {
-        public Guid? DistrictId { get; set; }
         public string SchoolType { get; set; }
         //public string SchoolUrl { get; set; }
         public bool SendEmailNotifications { get; set; }

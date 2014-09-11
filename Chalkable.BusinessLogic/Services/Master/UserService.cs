@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         bool ResetPassword(string email);
         User GetSysAdmin();
         void DeleteUsers(IList<int> localIds, Guid districtId);
-        void Edit(IList<User> users);
+        void ImportEdit(IList<User> users);
         void Add(IList<User> users);
     }
 
@@ -57,13 +57,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             return b64;
         }
 
-        public void Edit(IList<User> users)
+        public void ImportEdit(IList<User> users)
         {
             using (var uow = Update())
             {
                 var da = new UserDataAccess(uow);
-                da.Update(users);
-                new UserLoginInfoDataAccess(uow).Update(users.Select(x => x.LoginInfo).ToList());
+                da.UpdateUsersForImport(users);
                 uow.Commit();
             }
         }
@@ -451,13 +450,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             return false;
         }
+
         private string GenerateConfirmationKey()
         {
             var confirmatioKey = Guid.NewGuid().ToString();
             confirmatioKey = confirmatioKey.Replace("-", "");
             return confirmatioKey;
         }
-
-
     }
 }

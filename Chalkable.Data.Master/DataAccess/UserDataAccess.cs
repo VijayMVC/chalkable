@@ -33,6 +33,23 @@ namespace Chalkable.Data.Master.DataAccess
             return new DbQuery(new List<DbQuery> { userQuery, suQuery });
         } 
 
+        public void UpdateUsersForImport(IList<User> users)
+        {
+            var table = typeof (User).Name;
+            if (users.Count > 0)
+            {
+                var builder = new StringBuilder();
+                foreach (var user in users)
+                {
+                    builder.AppendFormat("Update [{0}] set [{1}]='{2}', [{3}]='{4}' where [{5}]='{6}' and {7}={8} ",
+                                         table, User.SIS_USER_NAME_FIELD, user.SisUserName
+                                         , User.FULL_NAME_FIELD, user.FullName, User.DISTRICT_REF_FIELD,
+                                         user.DistrictRef, User.SIS_USER_ID_FIELD, user.SisUserId);
+                }
+                ExecuteNonQueryParametrized(builder.ToString(), new Dictionary<string, object>(), 10+users.Count);
+            }
+            
+        }
 
         public void Delete(IList<int> sisUserIds, Guid districtId)
         {
@@ -42,11 +59,9 @@ namespace Chalkable.Data.Master.DataAccess
                 var whereScrip = string.Format(" [{0}].[{1}] = @[{1}] and [{0}].[{2}] in ({3})"
                                                , "User", User.DISTRICT_REF_FIELD, User.SIS_USER_ID_FIELD,
                                                sisUserIds.Select(x => x.ToString()).JoinString(","));
-                builder.AppendFormat("delete from SchoolUser where [{0}] in (select [Id] from [User] where {1}) "
-                                     , SchoolUser.USER_REF_FIELD, whereScrip)
-                       .AppendFormat("delete from UserLoginInfo where [{0}] in (select [Id] from [User] where {1})"
+                       builder.AppendFormat("delete from UserLoginInfo where [{0}] in (select [Id] from [User] where {1}) "
                                      , UserLoginInfo.ID_FIELD, whereScrip)
-                       .AppendFormat("delete from [User] where {0}", whereScrip);
+                       .AppendFormat("delete from [User] where {0} ", whereScrip);
                 var parameters = new Dictionary<string, object>{{User.DISTRICT_REF_FIELD, districtId}};
                 ExecuteNonQueryParametrized(builder.ToString(), parameters);        
             }

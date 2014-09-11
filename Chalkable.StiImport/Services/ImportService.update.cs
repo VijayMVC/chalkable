@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
@@ -22,8 +18,12 @@ using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using School = Chalkable.StiConnector.SyncModel.School;
 using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
+using Staff = Chalkable.StiConnector.SyncModel.Staff;
+using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
+using Student = Chalkable.StiConnector.SyncModel.Student;
+using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 
 namespace Chalkable.StiImport.Services
 {
@@ -35,12 +35,21 @@ namespace Chalkable.StiImport.Services
             UpdateSchools();
             Log.LogInfo("update adresses");
             UpdateAddresses();
-            Log.LogInfo("update sis users");
-            UpdateSisUsers();
+            
+            Log.LogInfo("update users");
+            UpdateUsers();
             Log.LogInfo("update persons");
             UpdatePersons();
-            Log.LogInfo("update school persons");
-            UpdateSchoolPersons();
+            Log.LogInfo("update Staff");
+            UpdateStaff();
+            Log.LogInfo("update Student");
+            UpdateStudent();
+            Log.LogInfo("update StudentSchool");
+            UpdateStudentSchool();
+            Log.LogInfo("update StaffSchool");
+            UpdateStaffSchool();
+            
+            
             Log.LogInfo("update persons emails");
             UpdatePersonsEmails();
             Log.LogInfo("update phones");
@@ -171,136 +180,104 @@ namespace Chalkable.StiImport.Services
                 }).ToList();
             ServiceLocatorSchool.AddressService.Edit(addresses);
         }
-
-        private void UpdateSisUsers()
+        
+        private void UpdateUsers()
         {
             if (context.GetSyncResult<User>().Updated == null)
                 return;
-            var users = context.GetSyncResult<User>().Updated.Select(x => new SisUser
+            var users = context.GetSyncResult<User>().All.Select(x => new Data.Master.Model.User
             {
-                Id = x.UserID,
-                IsDisabled = x.IsDisabled,
-                IsSystem = x.IsSystem,
-                LockedOut = x.LockedOut,
-                UserName = x.UserName
+                DistrictRef = ServiceLocatorSchool.Context.DistrictId,
+                FullName = x.FullName,
+                SisUserId = x.UserID,
+                SisUserName = x.UserName
             }).ToList();
-            
-            var values = new List<Pair<string, string>>();
-            foreach (var sisUser in users)
-            {
-                var old = ServiceLocatorSchool.SisUserService.GetById(sisUser.Id);
-                values.Add(new Pair<string, string>(old.UserName, sisUser.UserName));
-            }
-            ServiceLocatorMaster.UserService.UpdateSisUserNames(values, ServiceLocatorMaster.Context.DistrictId.Value);
-            ServiceLocatorSchool.SisUserService.Edit(users);
+            ServiceLocatorMaster.UserService.ImportEdit(users);
         }
 
         private void UpdatePersons()
         {
-            
-            if (context.GetSyncResult<Person>().Updated != null)
-            {
-                var persons = context.GetSyncResult<Person>().Updated;
-                IList<PersonInfo> pi = new List<PersonInfo>();
-                foreach (var person in persons)
+            if (context.GetSyncResult<Person>().Updated == null)
+                return;
+            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
+            var persons = context.GetSyncResult<Person>().All
+                .Select(x => new Data.School.Model.Person
                 {
-                    Data.School.Model.Person chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(person.PersonID);
-                    pi.Add(new PersonInfo
-                    {
-                        Id = person.PersonID,
-                        Active = true,
-                        AddressRef = person.PhysicalAddressID,
-                        BirthDate = person.DateOfBirth,
-                        FirstName = person.FirstName,
-                        LastName = person.LastName,
-                        Gender = chalkablePerson.Gender,
-                        HasMedicalAlert = chalkablePerson.HasMedicalAlert,
-                        IsAllowedInetAccess = chalkablePerson.IsAllowedInetAccess,
-                        SpecialInstructions = chalkablePerson.SpecialInstructions,
-                        SpEdStatus = chalkablePerson.SpEdStatus,
-                        Email = chalkablePerson.Email,
-                        PhotoModifiedDate = person.PhotoModifiedDate,
-                        SisStaffUserId = chalkablePerson.SisStaffUserId,
-                        SisStudentUserId = chalkablePerson.SisStudentUserId
-                    });
-                    if (person.PhotoModifiedDate.HasValue)
-                    {
-                        if (!chalkablePerson.PhotoModifiedDate.HasValue || chalkablePerson.PhotoModifiedDate < person.PhotoModifiedDate)
-                            personsForImportPictures.Add(person);
-                    }
-                }
-                ServiceLocatorSchool.PersonService.Edit(pi);
-            }
-            
-            if (context.GetSyncResult<Student>().Updated != null)
-            {
-                IList<PersonInfo> pi = new List<PersonInfo>();
-                var students = context.GetSyncResult<Student>().Updated;
-                var spEdStatuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
-                foreach (var student in students)
-                {
-                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(student.StudentID);
-                    var sisUser = ServiceLocatorSchool.SisUserService.GetById(student.UserID);
-                    pi.Add(new PersonInfo
-                    {
-                        Id = student.StudentID,
-                        Active = true,
-                        AddressRef = chalkablePerson.AddressRef,
-                        BirthDate = chalkablePerson.BirthDate,
-                        FirstName = chalkablePerson.FirstName,
-                        LastName = chalkablePerson.LastName,
-                        Gender = chalkablePerson.Gender,
-                        HasMedicalAlert = student.HasMedicalAlert,
-                        IsAllowedInetAccess = student.IsAllowedInetAccess,
-                        SpecialInstructions = student.SpecialInstructions,
-                        SpEdStatus = student.SpEdStatusID.HasValue ? spEdStatuses[student.SpEdStatusID.Value].Name : null,
-                        Email = chalkablePerson.Email,
-                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
-                        SisUserName = sisUser.UserName,
-                        SisStaffUserId = chalkablePerson.SisStaffUserId,
-                        SisStudentUserId = student.UserID
-                    });
-                }
-                ServiceLocatorSchool.PersonService.Edit(pi);
-            }
-
-            if (context.GetSyncResult<Staff>().Updated != null)
-            {
-                IList<PersonInfo> pi = new List<PersonInfo>();
-                var staff = context.GetSyncResult<Staff>().Updated;
-                foreach (var st in staff)
-                {
-                    var chalkablePerson = ServiceLocatorSchool.PersonService.GetPerson(st.StaffID);
-                    var sisUser = st.UserID.HasValue ? ServiceLocatorSchool.SisUserService.GetById(st.UserID.Value) : null;
-                    pi.Add(new PersonInfo
-                    {
-                        Id = st.StaffID,
-                        Active = true,
-                        AddressRef = chalkablePerson.AddressRef,
-                        BirthDate = chalkablePerson.BirthDate,
-                        FirstName = chalkablePerson.FirstName,
-                        LastName = chalkablePerson.LastName,
-                        Gender = chalkablePerson.Gender,
-                        HasMedicalAlert = chalkablePerson.HasMedicalAlert,
-                        IsAllowedInetAccess = chalkablePerson.IsAllowedInetAccess,
-                        SpecialInstructions = chalkablePerson.SpecialInstructions,
-                        SpEdStatus = null,
-                        Email = chalkablePerson.Email,
-                        PhotoModifiedDate = chalkablePerson.PhotoModifiedDate,
-                        SisUserName = sisUser != null ? sisUser.UserName : string.Empty,
-                        SisStaffUserId = st.UserID,
-                        SisStudentUserId = chalkablePerson.SisStudentUserId
-                    });
-                }
-                ServiceLocatorSchool.PersonService.Edit(pi);
-            }
+                    Active = true,
+                    AddressRef = x.PhysicalAddressID,
+                    BirthDate = x.DateOfBirth,
+                    FirstName = x.FirstName,
+                    Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
+                    Id = x.PersonID,
+                    LastName = x.LastName,
+                    PhotoModifiedDate = x.PhotoModifiedDate
+                }).ToList();
+            ServiceLocatorSchool.PersonService.Edit(persons);
         }
 
-        private void UpdateSchoolPersons()
+        private void UpdateStaff()
         {
-            //TODO: there is no way to update it....only insert or delete
+            if (context.GetSyncResult<Staff>().Updated == null)
+                return;
+            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
+            var staff = context.GetSyncResult<Staff>().All.Select(x => new Data.School.Model.Staff
+            {
+                BirthDate = x.DateOfBirth,
+                Id = x.StaffID,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
+                UresId = x.UserID
+            }).ToList();
+            ServiceLocatorSchool.StaffService.Edit(staff);
         }
 
+        private void UpdateStudent()
+        {
+            if (context.GetSyncResult<Student>().Updated == null)
+                return;
+            var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
+            var statuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
+            var students = context.GetSyncResult<Student>().All.Select(x => new Data.School.Model.Student
+            {
+                BirthDate = x.DateOfBirth,
+                Id = x.StudentID,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
+                UresId = x.UserID,
+                HasMedicalAlert = x.HasMedicalAlert,
+                IsAllowedInetAccess = x.IsAllowedInetAccess,
+                SpecialInstructions = x.SpecialInstructions,
+                SpEdStatus = x.SpEdStatusID.HasValue ? statuses[x.SpEdStatusID.Value].Name : ""
+            }).ToList();
+            ServiceLocatorSchool.StudentService.EditStudents(students);
+        }
+
+        private void UpdateStaffSchool()
+        {
+            if (context.GetSyncResult<StaffSchool>().Updated == null)
+                return;
+            var staffSchool = context.GetSyncResult<StaffSchool>().All.Select(x => new Data.School.Model.StaffSchool
+            {
+                SchoolRef = x.SchoolID,
+                StaffRef = x.StaffID
+            }).ToList();
+            ServiceLocatorSchool.StaffService.EditStaffSchools(staffSchool);
+        }
+
+        private void UpdateStudentSchool()
+        {
+            if (context.GetSyncResult<StudentSchool>().Updated == null)
+                return;
+            var studentSchools = context.GetSyncResult<StudentSchool>().All.Select(x => new Data.School.Model.StudentSchool
+            {
+                SchoolRef = x.SchoolID,
+                StudentRef = x.StudentID
+            }).ToList();
+            ServiceLocatorSchool.StudentService.EditStudentSchools(studentSchools);
+        }
+        
         private void UpdatePersonsEmails()
         {
             if (context.GetSyncResult<StiConnector.SyncModel.PersonEmail>().Updated == null)

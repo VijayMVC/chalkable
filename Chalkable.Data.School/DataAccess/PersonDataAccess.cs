@@ -18,8 +18,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
         
-        private const string FILTER_FORMAT = "%{0}%";
-
         public void Delete(IList<int> ids)
         {
             if (ids.Count == 0)
