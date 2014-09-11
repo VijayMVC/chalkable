@@ -19,5 +19,6 @@ namespace Chalkable.Data.School.Model
         public bool Active { get; set; }
         public string Email { get; set; }
         public DateTime? BirthDate { get; set; }
+        public int? UresId { get; set; }
     }
 }
