@@ -44,8 +44,7 @@ namespace Chalkable.Data.School.Model
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
-        public int? SisStudentUserId { get; set; }
-        public int? SisStaffUserId { get; set; }
+        public int? UserId { get; set; }
         
         [NotDbFieldAttr]
         public string CapitilizedFirstName
@@ -125,8 +124,6 @@ namespace Chalkable.Data.School.Model
         [NotDbFieldAttr]
         public bool? IsWithdrawn { get; set; }
 
-        [NotDbFieldAttr]
-        public int? UserId { get; set; }
     }
 
     public class PersonDetails : Person

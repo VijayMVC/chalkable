@@ -14,7 +14,7 @@ create table Student
 	[SpecialInstructions] [nvarchar](1024) NOT NULL,
 	[SpEdStatus] [nvarchar](256) NULL,
 	[PhotoModifiedDate] [datetime2](7) NULL,
-	[UserID] [int] NOT NULL
+	[UserId] [int] NOT NULL
 )
 go
 
@@ -29,7 +29,7 @@ create table Staff
 	[Email] [nvarchar](256) NOT NULL,
 	[AddressRef] [int] NULL constraint FK_Staff_Address foreign key references [Address](Id),
 	[Active] [bit] NOT NULL,
-	[UserID] [int] NOT NULL
+	[UserId] [int] NULL
 )
 go
 
