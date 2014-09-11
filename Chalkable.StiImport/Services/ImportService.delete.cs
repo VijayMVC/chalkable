@@ -447,7 +447,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<User>().Deleted == null)
                 return;
             var ids = context.GetSyncResult<User>().Deleted.Select(x => x.UserID).ToList();
-            ServiceLocatorMaster.UserService.DeleteUsers(ids, ServiceLocatorSchool.Context.DeveloperId.Value);
+            ServiceLocatorMaster.UserService.DeleteUsers(ids, ServiceLocatorSchool.Context.DistrictId.Value);
         }
 
         private void DeleteAddresses()

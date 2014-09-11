@@ -286,9 +286,9 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var student = new StudentDataAccess(uow).GetByIdOrNull(personId);
-                if (student != null) return student.UresId;
+                if (student != null) return student.UserId;
                 var staff = new StaffDataAccess(uow).GetByIdOrNull(personId);
-                if (staff != null && staff.UresId.HasValue) return staff.UresId.Value;
+                if (staff != null && staff.UserId.HasValue) return staff.UserId.Value;
                 var person = new PersonDataAccess(uow, Context.SchoolLocalId).GetByIdOrNull(personId);
                 if (person != null && person.UserId.HasValue) return person.UserId.Value;
 

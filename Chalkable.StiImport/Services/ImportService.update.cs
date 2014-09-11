@@ -227,7 +227,7 @@ namespace Chalkable.StiImport.Services
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
-                UresId = x.UserID
+                UserId = x.UserID
             }).ToList();
             ServiceLocatorSchool.StaffService.Edit(staff);
         }
@@ -245,7 +245,7 @@ namespace Chalkable.StiImport.Services
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Gender = x.GenderID.HasValue ? genders[x.GenderID.Value].Code : "U",
-                UresId = x.UserID,
+                UserId = x.UserID,
                 HasMedicalAlert = x.HasMedicalAlert,
                 IsAllowedInetAccess = x.IsAllowedInetAccess,
                 SpecialInstructions = x.SpecialInstructions,

@@ -33,11 +33,12 @@ namespace Chalkable.Data.School.Model
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime? FirstLoginDate { get; set; }
+        
         public DateTime? BirthDate { get; set; }
         public string Gender { get; set; }
         public string Salutation { get; set; }
         public bool Active { get; set; }        
+        public DateTime? FirstLoginDate { get; set; }
         public DateTime? LastMailNotification { get; set; }
         public int? AddressRef { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
@@ -92,7 +93,7 @@ namespace Chalkable.Data.School.Model
         {
             get { return GetSalutation + (HasLastName ? CapitilizedLastName : CapitilizedFirstName); }
         }
-
+        [NotDbFieldAttr]
         private string GetSalutation
         {
             get
@@ -105,18 +106,22 @@ namespace Chalkable.Data.School.Model
                 return res;
             }
         }
+        [NotDbFieldAttr]
         private bool HasSalutation
         {
             get { return !(string.IsNullOrEmpty(Salutation) || Salutation.Trim() == ""); }
         }
+        [NotDbFieldAttr]
         private bool HasName
         {
             get { return HasFirstName || HasLastName; }
         }
+        [NotDbFieldAttr]
         private bool HasFirstName
         {
             get { return !string.IsNullOrEmpty(FirstName) && FirstName.Trim() != ""; }
         }
+        [NotDbFieldAttr]
         private bool HasLastName
         {
             get { return !string.IsNullOrEmpty(LastName) && LastName.Trim() != ""; }

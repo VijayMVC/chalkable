@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 
@@ -33,7 +34,7 @@ namespace Chalkable.StiImport.Services
             ConnectionInfo = connectionInfo;
             Log = log;
             
-            var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin" };
+            var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
             var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
             ServiceLocatorMaster = new ImportServiceLocatorMaster(cntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);

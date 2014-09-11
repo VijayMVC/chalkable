@@ -22,6 +22,6 @@ namespace Chalkable.Data.School.Model
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
-        public int UresId { get; set; }
+        public int UserId { get; set; }
     }
 }

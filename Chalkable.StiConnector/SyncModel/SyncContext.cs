@@ -62,6 +62,7 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(SectionStaff));
             RegisterType(typeof(UserSchool));
             RegisterType(typeof(PersonEmail));
+            RegisterType(typeof(StaffSchool));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)
