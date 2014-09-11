@@ -10,13 +10,24 @@ NAMESPACE('chlk.templates.messages', function () {
         'MessageList', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'messages',
+
             [ria.templates.ModelPropertyBind],
             Boolean, 'inbox',
+
             [ria.templates.ModelPropertyBind],
             String, 'role',
+
             [ria.templates.ModelPropertyBind],
             String, 'keyword',
+
             [ria.templates.ModelPropertyBind],
-            Number, 'start'
+            Number, 'start',
+
+            function getNoMessagesText(){
+                if(!this.getRole())
+                    return 'No messages';
+                var role = this.getRole().indexOf('admin') > -1 ? 'admin' : this.getRole();
+                return 'No messages ' + (this.isInbox() ? 'from ' : 'sent to ') + role  + 's';
+            }
         ])
 });
