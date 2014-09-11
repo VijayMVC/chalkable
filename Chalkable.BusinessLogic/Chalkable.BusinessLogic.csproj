@@ -309,7 +309,6 @@
     <Compile Include="Services\School\SchoolServiceBase.cs" />
     <Compile Include="Services\School\SchoolYearService.cs" />
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
-    <Compile Include="Services\School\SisUserService.cs" />
     <Compile Include="Services\School\StaffService.cs" />
     <Compile Include="Services\School\StandardService.cs" />
     <Compile Include="Services\School\StudentAnnouncementService.cs" />

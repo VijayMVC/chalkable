@@ -48,7 +48,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradingScaleService GradingScaleService { get; }
         IClassroomOptionService ClassroomOptionService { get; }
         IPersonEmailService PersonEmailService { get; }
-        ISisUserService SisUserService { get; }
         IScheduledTimeSlotService ScheduledTimeSlotService { get; }
         IStudentService StudentService { get; }
         IStaffService StaffService { get; }
@@ -97,7 +96,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradingCommentService gradingCommentService;
         private IGradingScaleService gradingScaleService;
         private IClassroomOptionService classroomOptionService;
-        private ISisUserService sisUserService;
         private IPersonEmailService personEmailService;
         private IDbService schoolDbService;
         private IScheduledTimeSlotService scheduledTimeSlotService;
@@ -148,7 +146,6 @@ namespace Chalkable.BusinessLogic.Services.School
             gradingCommentService = new GradingCommentService(this);
             gradingScaleService = new GradingScaleService(this);
             classroomOptionService = new ClassroomOptionService(this);
-            sisUserService = new SisUserService(this);
             personEmailService = new PersonEmailService(this);
             schoolDbService = new DbService(Context != null ? Context.SchoolConnectionString : null);
             scheduledTimeSlotService = new ScheduledTimeSlotService(this);
@@ -198,7 +195,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradingScaleService GradingScaleService { get { return gradingScaleService; } }
         public IClassroomOptionService ClassroomOptionService { get { return classroomOptionService; } }
         public IPersonEmailService PersonEmailService { get { return personEmailService; } }
-        public ISisUserService SisUserService { get { return sisUserService; } }
         public IScheduledTimeSlotService ScheduledTimeSlotService { get { return scheduledTimeSlotService; } }
         public IStudentService StudentService { get { return studentService; } }
         public IStaffService StaffService { get { return staffService; } }
