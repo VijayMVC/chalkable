@@ -217,7 +217,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public void AssignUserToSchool(IList<SchoolUser> schoolUsers)
+        public void AddSchoolUsers(IList<SchoolUser> schoolUsers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSchoolUsers(IList<SchoolUser> schoolUsers)
         {
             throw new NotImplementedException();
         }

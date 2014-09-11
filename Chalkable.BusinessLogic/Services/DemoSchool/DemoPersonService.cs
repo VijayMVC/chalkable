@@ -57,7 +57,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 UserRef = users.First(y => y.LocalId == x.PersonRef).Id
 
             }).ToList();
-            ServiceLocator.ServiceLocatorMaster.UserService.AssignUserToSchool(schoolUsers);
+            ServiceLocator.ServiceLocatorMaster.UserService.AddSchoolUsers(schoolUsers);
 
             var ps = persons.Select(x => new Person
             {

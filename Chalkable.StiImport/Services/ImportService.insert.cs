@@ -42,6 +42,8 @@ namespace Chalkable.StiImport.Services
             InsertAddresses();
             Log.LogInfo("insert users");
             InsertUsers();
+            Log.LogInfo("insert school users");
+            InsertSchoolUsers();
             Log.LogInfo("insert persons");
             InsertPersons();
             Log.LogInfo("insert Staff");
@@ -216,6 +218,17 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorMaster.UserService.Add(users);
         }
         
+        private void InsertSchoolUsers()
+        {
+            var su = context.GetSyncResult<UserSchool>().All.Select(x => new SchoolUser
+                {
+                    DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value,
+                    SchoolRef = x.SchoolID,
+                    UserRef = x.UserID
+                }).ToList();
+             ServiceLocatorMaster.UserService.AddSchoolUsers(su);
+        }
+
         private void InsertPersons()
         {
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);

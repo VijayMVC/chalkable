@@ -34,7 +34,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         User GetById(Guid id);
         User GetBySisUserId(int userId, Guid? districtId);
         User CreateDeveloperUser(string login, string password);
-        void AssignUserToSchool(IList<SchoolUser> schoolUsers);
+        void AddSchoolUsers(IList<SchoolUser> schoolUsers);
+        void DeleteSchoolUsers(IList<SchoolUser> schoolUsers);
         void ChangePassword(string login, string newPassword);
         void ChangeUserLogin(Guid id, string login);
         bool ResetPassword(string email);
@@ -338,12 +339,22 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public void AssignUserToSchool(IList<SchoolUser> schoolUsers)
+        public void AddSchoolUsers(IList<SchoolUser> schoolUsers)
         {
             using (var uow = Update())
             {
                 var schoolUserDa = new SchoolUserDataAccess(uow);
                 schoolUserDa.Insert(schoolUsers);
+                uow.Commit();
+            }
+        }
+
+        public void DeleteSchoolUsers(IList<SchoolUser> schoolUsers)
+        {
+            using (var uow = Update())
+            {
+                var schoolUserDa = new SchoolUserDataAccess(uow);
+                schoolUserDa.Delete(schoolUsers);
                 uow.Commit();
             }
         }

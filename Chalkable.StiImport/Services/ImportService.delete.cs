@@ -106,6 +106,9 @@ namespace Chalkable.StiImport.Services
 
             Log.LogInfo("delete persons");
             DeletePersons();
+            
+            Log.LogInfo("delete school users");
+            DeleteSchoolUsers();
 
             Log.LogInfo("delete users");
             DeleteUsers();
@@ -440,6 +443,19 @@ namespace Chalkable.StiImport.Services
                 return;
             var ids = context.GetSyncResult<Person>().Deleted.Select(x => x.PersonID).ToList();
             ServiceLocatorSchool.PersonService.Delete(ids);
+        }
+
+        private void DeleteSchoolUsers()
+        {
+            if (context.GetSyncResult<UserSchool>().Deleted == null)
+                return;
+            var schoolUsers = context.GetSyncResult<UserSchool>().Deleted.Select(x => new Data.Master.Model.SchoolUser
+                {
+                    SchoolRef = x.SchoolID, 
+                    UserRef = x.UserID, 
+                    DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value
+                }).ToList();
+            ServiceLocatorMaster.UserService.DeleteSchoolUsers(schoolUsers);
         }
 
         private void DeleteUsers()
