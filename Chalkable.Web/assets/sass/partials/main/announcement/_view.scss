@@ -375,6 +375,9 @@ $red-color: #842727;
 
         .qna{
           margin-left: 15px;
+          width: 550px;
+          overflow: hidden;
+          word-break: break-all;
           h2{
             font-size: 14px;
           }
