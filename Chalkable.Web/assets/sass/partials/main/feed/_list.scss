@@ -314,13 +314,12 @@ BODY.student #first-login-overlay{
 
     DIV.item-type {
       DIV.attachment {
-        padding-right: 0 !important;
         background: none !important;
       }
     }
   }
 
-  &.has-attachments.non-gradable {
+  &.has-attachments.non-gradable, &.no-attachments.is-gradable {
     DIV.item-type {
       DIV.attachment {
         padding-right: 78px !important;
@@ -481,6 +480,7 @@ BODY.student #first-login-overlay{
         @include transition-property("all");
         @include transition-duration($duration);
         margin: 0;
+        white-space: nowrap;
 
         &.moved{
           top: 13px;
