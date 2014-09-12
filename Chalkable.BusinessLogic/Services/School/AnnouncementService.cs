@@ -201,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 using (var uow = Update())
                 {
                     if (addToChlkAnns.Any(x => classes.All(y => y.Id != x.ClassRef)))
-                            throw new SecurityException();
+                            throw new ChalkableSecurityException();
                     
                     var da = CreateAnnoucnementDataAccess(uow); 
                     da.Insert(addToChlkAnns);
