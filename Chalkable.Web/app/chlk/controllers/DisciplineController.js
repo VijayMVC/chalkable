@@ -39,7 +39,7 @@ NAMESPACE('chlk.controllers', function(){
 
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.common.ChlkDate, Number, Number]],
@@ -74,7 +74,7 @@ NAMESPACE('chlk.controllers', function(){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
