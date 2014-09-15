@@ -492,12 +492,17 @@ BODY {
           #class-attendance-list-panel{
 
             .row{
-              P {
+              DIV.left {
                 width: 240px;
 
-                >SPAN{
+                .name{
                   display: inline-block;
                   vertical-align: middle;
+                }
+
+                .withdrawn{
+                  top: 11px;
+                  right: -38px;
                 }
               }
 

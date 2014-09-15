@@ -52,6 +52,8 @@ NAMESPACE('chlk.controllers', function (){
                     .appendTo(new ria.dom.Dom('#demo-footer').empty());
             },
 
+
+            [chlk.controllers.SidebarButton('docs')],
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
@@ -92,10 +94,12 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.developer.PayPalSettingsPage, result);
             },
 
+
+
+            [chlk.controllers.SidebarButton('api')],
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DEVELOPER
             ])],
-
             [[String]],
             function apiAction(role_){
                 var showForRole = role_ ? role_ : "teacher";
@@ -111,7 +115,10 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.developer.ApiExplorerPage, result);
             },
 
-
+            [chlk.controllers.SidebarButton('api')],
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DEVELOPER
+            ])],
             [[Object]],
             function makeApiCallAction(data){
                 var controllerName = data.controllerName;

@@ -117,6 +117,9 @@ NAMESPACE('chlk.controllers', function (){
             return result;
         },
 
+
+
+        [chlk.controllers.SidebarButton('apps-info')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
@@ -136,11 +139,30 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
+        [chlk.controllers.SidebarButton('apps-info')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        [[Number, Number, String]],
+        function invalidPictureFormatDeveloperAction(width, height, msg) {
+            var result = new ria.async.DeferredData(new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(''), '', width, height, msg, true));
+            return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
+        },
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [[Number, Number, String, Object]],
         function uploadPictureDeveloperAction(width, height, msg, file) {
+            if (!this.isValidFileExtension(file[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
+                return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
+                    text: 'Ok',
+                    color: chlk.models.common.ButtonColor.GREEN.valueOf(),
+                    controller: 'apps',
+                    action: 'invalidPictureFormat',
+                    params: [width, height, msg]
+                }]);
+
             var result = this.appsService
                 .uploadPicture(file, width, height)
                 .attach(this.validateResponse_())
@@ -148,6 +170,21 @@ NAMESPACE('chlk.controllers', function (){
                     var pictureUrl = this.pictureService.getPictureUrl(id, width, height);
                     return new chlk.models.apps.AppPicture(id, pictureUrl, width, height, msg, true);
                 }, this);
+            return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
+        },
+
+        [chlk.controllers.SidebarButton('apps-info')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER
+        ])],
+        [[String, Number, Number, String]],
+        function invalidScreenShotPictureFormatDeveloperAction(screenshots, width, height, msg) {
+            var imgs = screenshots.split(",").map(function(el){
+                    var pictureId = new chlk.models.id.PictureId(el);
+                    var pictureUrl = this.pictureService.getPictureUrl(pictureId, width, height);
+                    return new chlk.models.apps.AppPicture(pictureId, pictureUrl, width, height, msg, true);
+                }, this);
+            var result = new ria.async.DeferredData(new chlk.models.apps.AppScreenshots(imgs, false));
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 
@@ -159,6 +196,16 @@ NAMESPACE('chlk.controllers', function (){
             var width = 640;
             var height = 390;
             var msg = "Screenshots";
+
+            if (!this.isValidFileExtension(file[0].name, ['jpg', 'jpeg', 'png', 'bmp']))
+                return this.ShowMsgBox("Sorry, this picture format is invalid", 'Error', [{
+                    text: 'Ok',
+                    color: chlk.models.common.ButtonColor.GREEN.valueOf(),
+                    controller: 'apps',
+                    action: 'invalidScreenShotPictureFormat',
+                    params: [(screenshots_ || ""), width, height, msg]
+                }]);
+
             var result = this.appsService
                 .uploadPicture(file, width, height)
                 .attach(this.validateResponse_())
@@ -450,6 +497,9 @@ NAMESPACE('chlk.controllers', function (){
             }], 'center');
         },
 
+
+
+        [chlk.controllers.SidebarButton('apps-info')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],

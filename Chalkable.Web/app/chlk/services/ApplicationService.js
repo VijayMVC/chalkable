@@ -87,6 +87,7 @@ NAMESPACE('chlk.services', function () {
 
             [[Object, Number, Number]],
             ria.async.Future, function uploadPicture(file, width_, height_) {
+
                 //switched width and height intentionally
                 return this.uploadFiles('Application/UploadPicture', file, chlk.models.id.PictureId, {
                     width: height_,

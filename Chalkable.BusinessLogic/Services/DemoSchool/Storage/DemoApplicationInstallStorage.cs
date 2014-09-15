@@ -44,7 +44,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
 
-
+            var isForAll = !(personId.HasValue || (roleIds != null && roleIds.Count > 0) || (classIds != null && classIds.Count > 0) ||
+                                   (gradeLevelIds != null && gradeLevelIds.Count > 0) || (departmentIds != null && departmentIds.Count > 0));
             var callerRoleId = Storage.Context.RoleId;
             var callerId = Storage.Context.PersonId;
 
@@ -62,6 +63,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var schoolId = Storage.SchoolYearStorage.GetById(schoolYearId).SchoolRef;
 
+            if (isForAll && callerRoleId == CoreRoles.TEACHER_ROLE.Id)
+            {
+                classIds = Storage.ClassStorage.GetClassesComplex(new ClassQuery
+                {
+                    PersonId = callerId
+                }).Classes.Select(x => x.Id).ToList();
+            }
 
             var personsForInstall = new List<KeyValuePair<int, int>>();
 
@@ -205,7 +213,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var isSinglePerson = false;
 
-            if (callerRoleId == CoreRoles.TEACHER_ROLE.Id && !personId.HasValue)
+            if (callerRoleId == CoreRoles.TEACHER_ROLE.Id && !personId.HasValue && isForAll)
             {
                 personId = callerId;
                 isSinglePerson = true;

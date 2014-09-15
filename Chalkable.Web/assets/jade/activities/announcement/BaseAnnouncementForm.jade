@@ -65,8 +65,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
             +DatePicker('expiresdate', announcement.getExpiresDate())(
                 data-options={
                     showOtherMonths: true,
-                    selectOtherMonths: true,
-                    inCurrentMp: true
+                    selectOtherMonths: true
                 },
                 data-value=announcement.getExpiresDate() ? announcement.getExpiresDate().format('mm/dd/yy') : ''
                 placeholder=Msg.Due_date,

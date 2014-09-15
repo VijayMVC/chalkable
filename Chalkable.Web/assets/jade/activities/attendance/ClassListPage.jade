@@ -25,7 +25,8 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                 +DatePicker('attendanceDate', self.getDate())(
                     data-options={
                         showOtherMonths: true,
-                        selectOtherMonths: true
+                        selectOtherMonths: true,
+                        inCurrentMp: true
                     },
                     data-controller= "attendance",
                     data-action="classList",
@@ -72,8 +73,11 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                             student = item.getStudent();
                             +ProfileLink(student, 'student').left.image-container.white.shadow
                                 +PersonImg(student, 47)
-                            p.left
-                                SPAN.name=student.getFullName()
+                            div.p.left
+                                .user-name-container.i-b.relative
+                                    SPAN.name=student.getFullName()
+                                    if student.isWithdrawn()
+                                        div(data-tooltip=Msg.Withdrawn).withdrawn
                                 if item.isAbsentPreviousDay()
                                     SPAN(data-tooltip=Msg.Absent_yesterday).absent-yesterday
                             .right

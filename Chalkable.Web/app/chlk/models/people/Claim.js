@@ -12,6 +12,7 @@ NAMESPACE('chlk.models.people', function () {
         VIEW_ATTENDANCE: 'View Attendance',
         MAINTAIN_CLASSROOM_ABSENCE_REASONS: 'Maintain Classroom Absence Reasons',
         MAINTAIN_CLASSROOM_ATTENDANCE: 'Maintain Classroom Attendance',
+        MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN: 'Maintain Classroom Attendance (Admin)',
         MAINTAIN_CLASSROOM_DISCIPLINE: 'Maintain Classroom Discipline',
         MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN: 'Maintain Classroom Discipline (Admin)',
         MAINTAIN_CLASSROOM_GRADES: 'Maintain Classroom Grades',

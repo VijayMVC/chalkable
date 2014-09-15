@@ -208,6 +208,7 @@ var Msg = {
     Weekly: 'Weekly',
     Weight: 'Weight',
     Whoa: 'whoa.',
+    Withdrawn: 'Withdrawn',
 
     Sunday: 'Sunday',
     Monday: 'Monday',

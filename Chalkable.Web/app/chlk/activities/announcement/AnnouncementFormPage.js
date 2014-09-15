@@ -43,6 +43,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                     .addClass('disabled');
             },
 
+            [ria.mvc.DomEventBind('keypress', 'input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function inputKeyPress(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER){
+                    event.preventDefault();
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '.class-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function classClick(node, event){

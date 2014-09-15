@@ -33,6 +33,8 @@ NAMESPACE('chlk.services', function () {
                 return this.getServiceRoot() + uri;
             },
 
+
+
             String, function getUrl(uri, params){
                 var p = params, r = [];
                 for(var key in p) if (p.hasOwnProperty(key)) {

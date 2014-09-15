@@ -8,6 +8,16 @@ BODY {
             overflow: visible;
           }
 
+          .no-messages-text{
+            position: absolute;
+            font: normal 19px Jrhand;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #353e5e;
+            top: 80px;
+          }
+
           #search-message-btn{
             display: inline-block;
 
@@ -222,6 +232,12 @@ BODY {
                   {
                   margin-top:10px;
                   padding: 3px;
+                }
+
+                &.no-messages{
+                  .paginator-container{
+                    margin-top:100px;
+                  }
                 }
               }
             }

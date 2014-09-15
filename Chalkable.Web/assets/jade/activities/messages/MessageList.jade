@@ -1,3 +1,4 @@
+items = self.getMessages().getItems()
 +ActionForm('message', 'do')
     .action-bar.not-transparent.buttons
         .container.panel-bg
@@ -13,7 +14,7 @@
                 input(name="keyword", type="text", value=self.getKeyword())#keyword
                 +Button()(type="submit", submitType="search")#search-message-btn
 
-    .grid-container
+    DIV(class=items.length ? '' : 'no-messages').grid-container
         input(name="inbox", type="hidden", value=self.isInbox().toString())
         input(name="selectedIds", type="hidden")#selectedIds
         +Hidden('start', self.getStart())
@@ -35,7 +36,10 @@
                             +ActionLink('message', 'page', true, self.isInbox(), 'student', self.getKeyword()) Student
                             +ActionLink('message', 'page', true, self.isInbox(), 'teacher', self.getKeyword()) Teacher
                             +ActionLink('message', 'page', true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()) Admin
-                each item in self.getMessages().getItems()
+
+                if !items.length
+                    .no-messages-text=self.getNoMessagesText()
+                each item in items
                     +GridRow()
                         div(class= item.isRead() ? "read" : "unread").item-container
                             .chk

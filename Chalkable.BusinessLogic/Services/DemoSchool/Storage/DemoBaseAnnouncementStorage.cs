@@ -36,6 +36,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         void SetComplete(int announcementId, int userId, bool complete);
         void AddDemoAnnouncementsForClass(int classId);
         AnnouncementDetails SubmitAnnouncement(int? classId, AnnouncementDetails res);
+        void DuplicateAnnouncement(int id, IList<int> classIds);
     }
 
 
@@ -204,11 +205,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var person = Storage.PersonStorage.GetById(userId);
             var gradeLevelRef = Storage.ClassStorage.GetById(classId).GradeLevelRef;
 
+            if (!classAnnouncementTypeId.HasValue)
+                classAnnouncementTypeId = Storage.ClassAnnouncementTypeStorage.GetAll(classId).First().Id;
+
             //todo: create admin announcements if it's admin
 
             var announcement = new AnnouncementComplex
             {
-                ClassAnnouncementTypeName = classAnnouncementTypeId.HasValue ? Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name : "",
+                ClassAnnouncementTypeName = Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name,
                 ChalkableAnnouncementType = classAnnouncementTypeId,
                 PrimaryTeacherName = person.FullName,
                 ClassName = Storage.ClassStorage.GetById(classId).Name,
@@ -328,6 +332,128 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             res.GradingStyle = GradingStyleEnum.Numeric100;
             Update(res);
             return res;
+        }
+
+        public void DuplicateAnnouncement(int id, IList<int> classIds)
+        {
+            var sourceAnnouncement = GetDetails(id, Storage.Context.UserLocalId.Value, Storage.Context.Role.Id);
+            if (sourceAnnouncement.State != AnnouncementState.Created)
+                throw new ChalkableException("Current announcement is not submited yet");
+            if (!sourceAnnouncement.SisActivityId.HasValue)
+                throw new ChalkableException("Current announcement doesn't have activityId");
+
+            foreach (var classId in classIds)
+            {
+                var announcement = Create(sourceAnnouncement.ClassAnnouncementTypeRef, classId, DateTime.Today,
+                    Storage.Context.UserLocalId ?? 0);
+
+                Storage.AnnouncementCompleteStorage.Add(new AnnouncementComplete
+                {
+                    AnnouncementId = announcement.Id,
+                    Complete = sourceAnnouncement.Complete,
+                    UserId = Storage.Context.UserLocalId.Value
+                });
+                announcement.Complete = sourceAnnouncement.Complete;
+                announcement.Subject = sourceAnnouncement.Subject;
+                announcement.WeightAddition = sourceAnnouncement.WeightAddition;
+                announcement.GradingStyle = sourceAnnouncement.GradingStyle;
+                announcement.WeightMultiplier = sourceAnnouncement.WeightMultiplier;
+                announcement.QnACount = sourceAnnouncement.QnACount;
+                announcement.OwnerAttachmentsCount = sourceAnnouncement.OwnerAttachmentsCount;
+                announcement.PrimaryTeacherRef = announcement.PrimaryTeacherRef;
+                announcement.IsOwner = announcement.PrimaryTeacherRef == Storage.Context.UserLocalId;
+                announcement.PrimaryTeacherName = sourceAnnouncement.PrimaryTeacherName;
+                announcement.SchoolRef = sourceAnnouncement.SchoolRef;
+                announcement.PrimaryTeacherGender = sourceAnnouncement.PrimaryTeacherGender;
+                announcement.Expires = sourceAnnouncement.Expires;
+                announcement.GradingStyle = sourceAnnouncement.GradingStyle;
+                announcement.State = sourceAnnouncement.State;
+                announcement.IsScored = sourceAnnouncement.IsScored;
+                announcement.Avg = sourceAnnouncement.Avg;
+                announcement.Title = sourceAnnouncement.Title;
+                announcement.Content = sourceAnnouncement.Content;
+                announcement.Owner = announcement.PrimaryTeacherRef.HasValue
+                    ? Storage.PersonStorage.GetById(announcement.PrimaryTeacherRef.Value)
+                    : null;
+                announcement.ApplicationCount = sourceAnnouncement.ApplicationCount;
+                announcement.AttachmentsCount = sourceAnnouncement.AttachmentsCount;
+                announcement.VisibleForStudent = sourceAnnouncement.VisibleForStudent;
+                announcement.MayBeDropped = sourceAnnouncement.MayBeDropped;
+                announcement.Order = sourceAnnouncement.Order;
+                announcement.ClassAnnouncementTypeName = sourceAnnouncement.ClassAnnouncementTypeName;
+                announcement.ChalkableAnnouncementType = sourceAnnouncement.ChalkableAnnouncementType;
+                announcement.ClassName = sourceAnnouncement.ClassName;
+                announcement.GradeLevelId = sourceAnnouncement.GradeLevelId;
+                announcement.MaxScore = sourceAnnouncement.MaxScore;
+
+                var resAnnouncement = SubmitAnnouncement(classId, announcement);
+
+                foreach (var sourceAnnouncementAttachment in sourceAnnouncement.AnnouncementAttachments)
+                {
+                    Storage.AnnouncementAttachmentStorage.Add(new AnnouncementAttachment()
+                    {
+                        AnnouncementRef = resAnnouncement.Id,
+                        AttachedDate = sourceAnnouncementAttachment.AttachedDate,
+                        Name = sourceAnnouncementAttachment.Name,
+                        Order = sourceAnnouncementAttachment.Order,
+                        PersonRef = sourceAnnouncementAttachment.PersonRef,
+                        SisActivityId = resAnnouncement.SisActivityId
+                    });
+                }
+                
+                var announcementAttachments = Storage.AnnouncementAttachmentStorage.GetAll(resAnnouncement.Id);
+                resAnnouncement.AnnouncementAttachments = announcementAttachments;
+                var announcementApplications= new List<AnnouncementApplication>();
+
+                resAnnouncement.StudentAnnouncements = Storage.StudentAnnouncementStorage.GetAll(resAnnouncement.Id);
+                resAnnouncement.AnnouncementApplications = announcementApplications;
+
+                foreach (var announcementQnAComplex in sourceAnnouncement.AnnouncementQnAs)
+                {
+                    Storage.AnnouncementQnAStorage.Add(new AnnouncementQnAComplex
+                    {
+                        AnnouncementRef = resAnnouncement.Id,
+                        Answer = announcementQnAComplex.Answer,
+                        AnswererRef = announcementQnAComplex.AnswererRef,
+                        IsOwner = announcementQnAComplex.IsOwner,
+                        Question = announcementQnAComplex.Question,
+                        QuestionTime = announcementQnAComplex.QuestionTime,
+                        State = announcementQnAComplex.State,
+                        AskerRef = announcementQnAComplex.AskerRef,
+                        Asker = announcementQnAComplex.Asker,
+                        ClassRef = announcementQnAComplex.ClassRef,
+                        Answerer = announcementQnAComplex.Answerer,
+                        AnsweredTime = announcementQnAComplex.AnsweredTime
+                    });
+                }
+
+                var announcementsQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
+                {
+                    AnnouncementId = resAnnouncement.Id
+                }).AnnouncementQnAs;
+                resAnnouncement.AnnouncementQnAs = announcementsQnA;
+
+                foreach (var announcementStandardDetails in sourceAnnouncement.AnnouncementStandards)
+                {
+                    Storage.AnnouncementStandardStorage.Add(new AnnouncementStandardDetails
+                    {
+                        AnnouncementRef = resAnnouncement.Id,
+                        Standard = announcementStandardDetails.Standard,
+                        StandardRef = announcementStandardDetails.StandardRef
+                    });
+                }
+
+                var announcementStandards =
+                    Storage.AnnouncementStandardStorage.GetAll(resAnnouncement.Id).Select(x => new AnnouncementStandardDetails
+                    {
+                        AnnouncementRef = x.AnnouncementRef,
+                        StandardRef = x.StandardRef,
+                        Standard = Storage.StandardStorage.GetById(x.StandardRef)
+                    }).ToList();
+                resAnnouncement.AnnouncementStandards = announcementStandards;
+
+                Update(resAnnouncement);
+            }
         }
 
         public void SetComplete(int announcementId, int userId, bool complete)
