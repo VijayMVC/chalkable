@@ -10,10 +10,16 @@ NAMESPACE('chlk.templates.common',function(){
         [ria.templates.ModelBind(chlk.models.common.PermissionsError)],
         'PermissionsErrorTpl', EXTENDS(chlk.templates.common.PageWithClasses),[
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.people.UserPermissionEnum), 'permissions',
+            Array, 'permissions',
 
             function getText(){
                 var permissions = this.getPermissions().map(function(item){
+                    if(Array.isArray(item)){
+                        var arr = item.map(function(perm){
+                            return perm.valueOf();
+                        });
+                        return arr.join(' or ');
+                    }
                     return item.valueOf();
                 });
                 var res = 'You do not have permission to ' + permissions.join(', ');

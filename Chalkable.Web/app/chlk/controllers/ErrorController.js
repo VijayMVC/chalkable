@@ -50,7 +50,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.chlkerror.AppErrorDialog, result);
             },
 
-            [[ArrayOf(chlk.models.people.UserPermissionEnum)]],
+            [[Array]],
             function permissionsAction(permissions){
                 var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(true));
                 var result = new ria.async.DeferredData(new chlk.models.common.PermissionsError(topModel, null, permissions));

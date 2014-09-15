@@ -41,7 +41,7 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.MarkingPeriodService, 'markingPeriodService',
 
         [chlk.controllers.Permissions([
-            chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE
+            [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
         ])],
         [chlk.controllers.SidebarButton('attendance')],
         function summaryAction() {
@@ -333,7 +333,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.Permissions([
-            chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE
+            [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
         ])],
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean]],
