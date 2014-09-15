@@ -336,7 +336,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void DuplicateAnnouncement(int id, IList<int> classIds)
         {
-            var sourceAnnouncement = GetDetails(id, Storage.Context.UserLocalId.Value, Storage.Context.Role.Id);
+            var sourceAnnouncement = GetDetails(id, Storage.Context.PersonId.Value, Storage.Context.Role.Id);
             if (sourceAnnouncement.State != AnnouncementState.Created)
                 throw new ChalkableException("Current announcement is not submited yet");
             if (!sourceAnnouncement.SisActivityId.HasValue)
@@ -345,13 +345,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             foreach (var classId in classIds)
             {
                 var announcement = Create(sourceAnnouncement.ClassAnnouncementTypeRef, classId, DateTime.Today,
-                    Storage.Context.UserLocalId ?? 0);
+                    Storage.Context.PersonId ?? 0);
 
                 Storage.AnnouncementCompleteStorage.Add(new AnnouncementComplete
                 {
                     AnnouncementId = announcement.Id,
                     Complete = sourceAnnouncement.Complete,
-                    UserId = Storage.Context.UserLocalId.Value
+                    UserId = Storage.Context.PersonId.Value
                 });
                 announcement.Complete = sourceAnnouncement.Complete;
                 announcement.Subject = sourceAnnouncement.Subject;
@@ -361,7 +361,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 announcement.QnACount = sourceAnnouncement.QnACount;
                 announcement.OwnerAttachmentsCount = sourceAnnouncement.OwnerAttachmentsCount;
                 announcement.PrimaryTeacherRef = announcement.PrimaryTeacherRef;
-                announcement.IsOwner = announcement.PrimaryTeacherRef == Storage.Context.UserLocalId;
+                announcement.IsOwner = announcement.PrimaryTeacherRef == Storage.Context.PersonId;
                 announcement.PrimaryTeacherName = sourceAnnouncement.PrimaryTeacherName;
                 announcement.SchoolRef = sourceAnnouncement.SchoolRef;
                 announcement.PrimaryTeacherGender = sourceAnnouncement.PrimaryTeacherGender;
