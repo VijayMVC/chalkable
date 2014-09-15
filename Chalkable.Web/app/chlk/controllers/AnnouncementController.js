@@ -290,6 +290,9 @@ NAMESPACE('chlk.controllers', function (){
             return this.addAction(classId_, null, date_, noDraft_);
         },
 
+        [chlk.controllers.Permissions([
+            chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM
+        ])],
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
@@ -363,6 +366,9 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
         },
 
+        [chlk.controllers.Permissions([
+            chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM
+        ])],
         [[chlk.models.id.AnnouncementId]],
         function editAction(announcementId) {
             var result = this.announcementService
@@ -406,10 +412,11 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.setGradeViewApps(gradeViewApps);
                     announcement.prepareExpiresDateText();
                     announcement.setCurrentUser(this.getCurrentPerson());
-                    if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)){
+                    var hasMCPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM);
+                    if(!hasMCPermission){
                         announcement.setAbleToGrade(false);
                     }
-                    announcement.setAbleEdit(announcement.isAnnOwner());
+                    announcement.setAbleEdit(announcement.isAnnOwner() && hasMCPermission);
 //                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
                     announcement.calculateGradesAvg();
                     var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
