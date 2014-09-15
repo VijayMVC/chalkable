@@ -7,9 +7,9 @@ NAMESPACE('chlk.models.common', function(){
 
     CLASS('PermissionsError', EXTENDS(chlk.models.common.PageWithClasses), [
 
-        ArrayOf(chlk.models.people.UserPermissionEnum), 'permissions',
+        Array, 'permissions',
 
-        [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, ArrayOf(chlk.models.people.UserPermissionEnum)]],
+        [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, Array]],
         function $(classes_, classId_, permissions_){
             BASE(classes_, classId_);
             if(permissions_)

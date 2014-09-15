@@ -27,7 +27,7 @@ NAMESPACE('chlk.controllers', function (){
 
     /** @class chlk.controllers.Permissions */
     ANNOTATION(
-        [[ArrayOf(chlk.models.people.UserPermissionEnum)]],
+        [[Array]],
         function Permissions(permissions){});
 
     function toCamelCase(str) {
@@ -39,9 +39,9 @@ NAMESPACE('chlk.controllers', function (){
     /** @class chlk.controllers.MissingPermissionException */
     EXCEPTION(
         'MissingPermissionException', [
-            READONLY, ArrayOf(chlk.models.people.UserPermissionEnum), 'permissions',
+            READONLY, Array, 'permissions',
 
-            [[ArrayOf(chlk.models.people.UserPermissionEnum), Object]],
+            [[Array, Object]],
             function $(permissions, inner_) {
                 BASE('Permissions ' + JSON.stringify(permissions) + ' is required.', inner_);
                 this.permissions = permissions;
@@ -286,12 +286,18 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            [[ria.reflection.ReflectionMethod]],
-           ArrayOf(chlk.models.people.UserPermissionEnum), function checkPermissions_(method) {
-               var userHasPermission = this.hasUserPermission_;
+           Array, function checkPermissions_(method) {
+               var userHasPermission = this.hasUserPermission_, permArray;
                return method.findAnnotation(chlk.controllers.Permissions)
                    .reduce(function (prev, annotation) {
                        return prev.concat(annotation.permissions);
                    }, []).filter(function (userPermission) {
+                       if(Array.isArray(userPermission)){
+                           permArray = userPermission.filter(function(item){
+                               return userHasPermission(item);
+                           });
+                           return !permArray.length;
+                       }
                        return !userHasPermission(userPermission);
                    });
            },
