@@ -92,7 +92,8 @@ NAMESPACE('chlk.controllers', function(){
 
                         var model = new chlk.models.discipline.ClassDisciplinesViewData(
                             classBarData, classId_, result[0], result[1], date_, true,
-                            this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE)
+                            this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE) ||
+                                this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN)
                         );
                         this.getContext().getSession().set(ChlkSessionConstants.DISCIPLINE_PAGE_DATA, model);
                         return model;
