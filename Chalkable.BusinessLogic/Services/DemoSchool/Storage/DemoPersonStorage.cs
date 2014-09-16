@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.Common;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -130,7 +133,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Active = true,
                 AddressRef = person.AddressRef,
                 BirthDate = person.BirthDate,
-                //Email = person.Email,
                 FirstLoginDate = person.FirstLoginDate,
                 FirstName = person.FirstName,
                 LastName = person.LastName,
@@ -151,12 +153,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return personDetails;
         }
 
-        public bool Exists(string email, int id)
-        {
-            throw new NotImplementedException();
-            //return data.Count(x => x.Value.Email == email && x.Value.Id == id) == 1;
-        }
-
         public Person GetPerson(PersonQuery personQuery)
         {
             return GetPersons(personQuery).Persons.First();
@@ -165,6 +161,37 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<Person> GetPersonsByPhone(string phone)
         {
             return Storage.PhoneStorage.GetUsersByPhone(phone);
+        }
+
+        public static int GetPersonDataForLogin(User user, out int roleId)
+        {
+            var prefix = user.DistrictRef.ToString();
+            var localIds = new Dictionary<string, KeyValuePair<int, int>>
+            {
+                {
+                    DemoUserService.BuildDemoUserName(CoreRoles.TEACHER_ROLE.LoweredName, prefix), 
+                    new KeyValuePair<int, int>(DemoSchoolConstants.TeacherId, CoreRoles.TEACHER_ROLE.Id)
+                },
+                {
+                    DemoUserService.BuildDemoUserName(CoreRoles.STUDENT_ROLE.LoweredName, prefix), 
+                    new KeyValuePair<int, int>(DemoSchoolConstants.Student1, CoreRoles.STUDENT_ROLE.Id)
+                },
+                {
+                    DemoUserService.BuildDemoUserName(CoreRoles.ADMIN_GRADE_ROLE.LoweredName, prefix), 
+                    new KeyValuePair<int, int>(DemoSchoolConstants.AdminGradeId, CoreRoles.ADMIN_GRADE_ROLE.Id)
+                },
+                {
+                    DemoUserService.BuildDemoUserName(CoreRoles.ADMIN_EDIT_ROLE.LoweredName, prefix), 
+                    new KeyValuePair<int, int>(DemoSchoolConstants.AdminEditId, CoreRoles.ADMIN_EDIT_ROLE.Id)
+                },
+                {
+                    DemoUserService.BuildDemoUserName(CoreRoles.ADMIN_VIEW_ROLE.LoweredName, prefix), 
+                    new KeyValuePair<int, int>(DemoSchoolConstants.AdminViewId, CoreRoles.ADMIN_VIEW_ROLE.Id)
+                }
+            };
+            var res = localIds[user.Login];
+            roleId = res.Value;
+            return res.Key;
         }
     }
 }

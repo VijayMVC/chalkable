@@ -60,7 +60,12 @@ namespace Chalkable.BusinessLogic.Services
         private static UserContext CreateUserContext(SchoolUser schoolUser, Data.School.Model.SchoolYear schoolYear = null)
         {
             int roleId;
-            int personId = PersonDataAccess.GetPersonDataForLogin(schoolUser.User.District.ServerUrl,
+
+
+
+            int personId = schoolUser.User.IsDemoUser
+                ? DemoPersonStorage.GetPersonDataForLogin(schoolUser.User, out roleId)
+                : PersonDataAccess.GetPersonDataForLogin(schoolUser.User.District.ServerUrl,
                                                                   schoolUser.DistrictRef, schoolUser.UserRef, out roleId);
             var user = schoolUser.User;
             var school = schoolUser.School;

@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers
                 var roleName = description.Key.ToLowerInvariant();
                 if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || roleName == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
                 apiRoles.Add(roleName);
-                var context = MasterLocator.UserService.LoginToDemo(roleName, Context.UserId.ToString());
+                var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
                 var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, context.SchoolYearId, MasterLocator);
                 result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
             }

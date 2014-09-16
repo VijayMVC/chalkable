@@ -88,7 +88,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         
         public Data.Master.Model.School GetById(Guid districtRef, int localId)
         {
-            throw new NotImplementedException();
+            return
+                Storage.MasterSchoolStorage.GetAll().FirstOrDefault(x => x.DistrictRef == districtRef && x.LocalId == localId);
         }
 
         public Data.Master.Model.School GetByIdOrNull(Guid id)

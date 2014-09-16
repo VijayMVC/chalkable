@@ -96,12 +96,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return IsDemoLogin(index != -1 ? login.Substring(index) : login);
         }
 
+
+        //private static User Get
+
         public static User GetDemoUser(string roleName, string prefix)
         {
-            throw new NotImplementedException();
-            /*var demoUserName = BuildDemoUserName(roleName, prefix);
-            roleName = roleName.ToLowerInvariant();
-
+            var demoUserName = BuildDemoUserName(roleName, prefix);
 
             var schoolUsers = new List<SchoolUser>();
 
@@ -110,15 +110,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             var userRef = Guid.NewGuid();
 
 
-            var localIds = new Dictionary<string, int>
-            {
-                {CoreRoles.TEACHER_ROLE.LoweredName, DemoSchoolConstants.TeacherId},
-                {CoreRoles.STUDENT_ROLE.LoweredName, DemoSchoolConstants.Student1},
-                {CoreRoles.ADMIN_GRADE_ROLE.LoweredName, DemoSchoolConstants.AdminGradeId},
-                {CoreRoles.ADMIN_EDIT_ROLE.LoweredName, DemoSchoolConstants.AdminEditId},
-                {CoreRoles.ADMIN_VIEW_ROLE.LoweredName, DemoSchoolConstants.AdminViewId}
-            };
-
             var district = DemoDistrictStorage.CreateDemoDistrict(Guid.Parse(prefix));
 
             var user = new User
@@ -126,28 +117,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 ConfirmationKey = null,
                 DistrictRef = Guid.Parse(prefix),
                 Id = userRef,
-                LocalId = localIds[roleName],
                 IsDeveloper = false,
                 IsSysAdmin = false,
                 Login = demoUserName,
                 IsDemoUser = true,
                 District = district,
-                              
+                LoginInfo = new UserLoginInfo()
+                {
+                    Id = userRef,
+                }
             };
 
             schoolUsers.Add(new SchoolUser
             {
-                Id = Guid.NewGuid(),
-                Role = CoreRoles.GetByName(roleName).Id,
-                SchoolRef = school.Id,
-                UserRef = userRef,
                 School = school,
                 User = user
             });
 
             user.SchoolUsers = schoolUsers;
 
-            return user;*/
+            return user;
         }
 
         public UserContext Login(string login, string password)
@@ -166,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public UserContext LoginToDemo(string roleName, string demoPrefix)
+        public UserContext DemoLogin(string roleName, string demoPrefix)
         {
             throw new NotImplementedException();
         }
@@ -187,7 +176,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        private static string BuildDemoUserName(string roleName, string prefix)
+        public static string BuildDemoUserName(string roleName, string prefix)
         {
             return prefix + PreferenceService.Get("demoschool" + roleName.ToLower()).Value;
         }
