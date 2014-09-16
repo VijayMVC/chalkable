@@ -66,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 
                 ActivityId = ann.SisActivityId.Value,
                 AnnouncementId = announcementId,
-                StudentId = studentId,
+                StudentId = studentId
             };
             var score = new Score();
             MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, stAnn);

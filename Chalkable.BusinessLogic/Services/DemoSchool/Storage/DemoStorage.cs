@@ -95,10 +95,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public DemoPersonEmailStorage PersonEmailStorage { get; private set; }
         public DemoPersonBalanceStorage PersonBalanceStorage { get; private set; }
-        public DemoStudentStorage DemoStudentStorage { get; private set; }
-        public DemoStaffStorage DemoStaffStorage { get; private set; }
-        public DemoStudentSchoolStorage DemoStudentSchoolStorage { get; private set; }
-        public DemoStaffSchoolStorage DemoStaffSchoolStorage { get; private set; }
+        public DemoStudentStorage StudentStorage { get; private set; }
+        public DemoStaffStorage StaffStorage { get; private set; }
+        public DemoStudentSchoolStorage StudentSchoolStorage { get; private set; }
+        public DemoStaffSchoolStorage StaffSchoolStorage { get; private set; }
 
         public UserContext Context { get; private set; }
 
@@ -191,10 +191,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             PersonEmailStorage = new DemoPersonEmailStorage(this);
             PersonBalanceStorage = new DemoPersonBalanceStorage(this);
-            DemoStudentStorage = new DemoStudentStorage(this);
-            DemoStaffSchoolStorage = new DemoStaffSchoolStorage(this);
-            DemoStaffStorage = new DemoStaffStorage(this);
-            DemoStudentSchoolStorage = new DemoStudentSchoolStorage(this);
+            StudentStorage = new DemoStudentStorage(this);
+            StaffSchoolStorage = new DemoStaffSchoolStorage(this);
+            StaffStorage = new DemoStaffStorage(this);
+            StudentSchoolStorage = new DemoStudentSchoolStorage(this);
 
             AnnouncementStorage = CreateAnnouncementStorage(Context);
             Setup();
@@ -405,13 +405,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Active = true,
                 FirstLoginDate = DateTime.Now,
                 Salutation = "Mr.",
-                //Email = PreferenceService.Get("demoschool" + CoreRoles.ADMIN_GRADE_ROLE.LoweredName).Value,
                 Id = DemoSchoolConstants.AdminGradeId,
                 FirstName = "rosteradmin",
                 LastName = "rosteradmin",
                 Gender = null,
                 RoleRef = CoreRoles.ADMIN_GRADE_ROLE.Id
             });
+
+            StaffStorage.Add(new Staff
+            {
+                UserId = DemoSchoolConstants.AdminGradeId
+            });
+
             SchoolPersonStorage.Add(new SchoolPerson
             {
                 PersonRef = DemoSchoolConstants.AdminGradeId,
@@ -431,13 +436,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PersonStorage.Add(new Person
             {
                 Active = true,
-                //Email = PreferenceService.Get("demoschool" + CoreRoles.TEACHER_ROLE.LoweredName).Value,
                 Gender = "M",
                 FirstName = "ROCKY",
                 LastName = "STEIN",
                 Id = DemoSchoolConstants.TeacherId,
                 RoleRef = CoreRoles.TEACHER_ROLE.Id,
                 FirstLoginDate = DateTime.Now
+            });
+
+            StaffStorage.Add(new Staff
+            {
+                UserId = DemoSchoolConstants.TeacherId
             });
 
             SchoolPersonStorage.Add(new SchoolPerson
@@ -461,7 +470,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 BirthDate = birthDate,
                 Active = true,
                 FirstLoginDate = DateTime.Now,
-                //Email = email,
                 Id = id,
                 FirstName = firstName,
                 LastName = lastName,
@@ -470,6 +478,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 AddressRef = id
             });
 
+            StudentStorage.Add(new Student
+            {
+                UserId = id
+            });
 
             SchoolPersonStorage.Add(new SchoolPerson
             {
@@ -536,7 +548,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void PrepareGeneralData()
         {
-            MasterSchoolStorage.AddMasterSchool();
+            MasterSchoolStorage.AddMasterSchool(Context.DistrictId);
             DateStorage.AddDates();
             DistrictStorage.AddDistrict();
             AddPeriods();

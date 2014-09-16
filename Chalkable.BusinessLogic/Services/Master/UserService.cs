@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string login, string password);
         UserContext Login(string login, string password, out string error);
         UserContext Login(string confirmationKey);
-        UserContext LoginToDemo(string roleName, string demoPrefix);
+        UserContext DemoLogin(string roleName, string demoPrefix);
         UserContext DeveloperTestLogin(Developer developer);
         UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null);
         User GetByLogin(string login);
@@ -131,7 +131,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public UserContext LoginToDemo(string roleName, string demoPrefix)
+        public UserContext DemoLogin(string roleName, string demoPrefix)
         {
             using (var uow = Update())
             {
@@ -236,8 +236,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             PrepareSchoolData(schoolL, user, schoolYearId, null, out schoolYear, out schoolUser);
 
             int roleId;
-            int personId = PersonDataAccess.GetPersonDataForLogin(user.District.ServerUrl, user.DistrictRef.Value,
-                                                                  user.SisUserId.Value, out roleId);
+            int personId = DemoPersonStorage.GetPersonDataForLogin(schoolUser.User, out roleId);
             var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, developerId, personId, schoolYear)
             {
                 Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
@@ -260,6 +259,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             var user = developer.User;
             user.DistrictRef = developer.DistrictRef;
+            user.LoginInfo = new UserLoginInfo() {Id = user.Id};
             user.District = DemoDistrictStorage.CreateDemoDistrict(developer.DistrictRef.Value);
             return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id, null);
         }

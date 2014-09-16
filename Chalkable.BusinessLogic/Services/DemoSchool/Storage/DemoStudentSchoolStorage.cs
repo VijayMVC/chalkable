@@ -4,7 +4,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoStudentSchoolStorage : BaseDemoIntStorage<StudentSchool>
     {
-        public DemoStudentSchoolStorage(DemoStorage storage) : base(storage, null, true)
+        public DemoStudentSchoolStorage(DemoStorage storage) 
+            : base(storage, null, true)
         {
         }
     }

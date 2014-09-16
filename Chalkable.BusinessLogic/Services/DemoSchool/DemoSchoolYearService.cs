@@ -64,20 +64,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return schoolYears;
         }
 
-        private bool IsOverlaped(DateTime startDate, DateTime endDate,  SchoolYear schoolYear = null)
-        {
-            //var id = schoolYear != null ? schoolYear.Id : (int?) null;
-            //return startDate >= endDate || (dataAccess.IsOverlaped(startDate, endDate, id));
-            return false;//TODO: isn't supported in INOW
-        }
-
         public SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             var schoolYear = Storage.SchoolYearStorage.GetById(id);
-            if (IsOverlaped(startDate, endDate, schoolYear))
-                throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
             if (schoolYear.Name != name && Storage.SchoolYearStorage.Exists(name))
                 throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_ALREADY_EXISTS);
             return Storage.SchoolYearStorage.Edit(id, name, description, startDate, endDate);

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
@@ -31,13 +33,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             };
         }
 
-        public void AddMasterSchool()
+        public void AddMasterSchool(Guid? id)
         {
-            /*if (!Storage.Context.SchoolLocalId.HasValue)
-                throw new Exception("Context doesn't have valid school local id");
-            var schoolId = Storage.Context.SchoolId.Value;
-            Add(new List<Data.Master.Model.School>{CreateMasterSchool(schoolId)});*/
-            throw new NotImplementedException();
+            if (!id.HasValue)
+                throw new ChalkableException("Not valid district id");
+            Add(new List<Data.Master.Model.School> { CreateMasterSchool(id.Value) });
         }
 
 

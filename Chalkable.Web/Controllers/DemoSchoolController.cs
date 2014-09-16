@@ -43,7 +43,7 @@ namespace Chalkable.Web.Controllers
                 throw new UnassignedUserException();
             }
 
-            var context = LogOn(false, userService => userService.LoginToDemo(rolename, prefix));
+            var context = LogOn(false, userService => userService.DemoLogin(rolename, prefix));
             if (context == null)
                 return Json(new ChalkableException(string.Format(ChlkResources.USER_NOT_FOUND_IN_DEMO_SCHOOL, rolename, prefix)));
             if (rolename.ToLower() == CoreRoles.ADMIN_GRADE_ROLE.LoweredName) return Redirect<HomeController>(c => c.Admin());
@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult TestApps(string prefix)
         {
-            var context = LogOn(false, userService => userService.LoginToDemo(CoreRoles.TEACHER_ROLE.LoweredName, prefix));
+            var context = LogOn(false, userService => userService.DemoLogin(CoreRoles.TEACHER_ROLE.LoweredName, prefix));
             if (context == null)
             {
                 return Json(new ChalkableException(string.Format(ChlkResources.USER_NOT_FOUND_IN_DEMO_SCHOOL, CoreRoles.TEACHER_ROLE.LoweredName, prefix)));
