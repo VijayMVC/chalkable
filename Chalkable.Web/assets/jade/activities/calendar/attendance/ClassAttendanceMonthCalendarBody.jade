@@ -1,0 +1,28 @@
+.month-calendar-body
+    .day-names
+        div
+            p=Msg.Sunday
+        div
+            p=Msg.Monday
+        div
+            p=Msg.Tuesday
+        div
+            p=Msg.Wednesday
+        div
+            p=Msg.Thursday
+        div
+            p=Msg.Friday
+        div
+            p=Msg.Saturday
+    .items
+        each item in self.getCalendarItems()
+            +ActionLink('attendance', 'classList',  item.getClassId(), item.getDate().format('mm-dd-yy'), false, true
+            )(class = (item.isSunday() ? 'sunday ' : ' ')).gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    ul
+                        each att in item.getAttendances()
+                            li=att.getCount() + " " + att.getAttendanceTypeName()
+
+
