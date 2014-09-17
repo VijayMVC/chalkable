@@ -292,7 +292,13 @@ NAMESPACE('chlk.activities.attendance', function () {
                         container
                             .removeClass('absent')
                             .removeClass('late')
-                            .addClass('present')
+                            .addClass('present');
+                        var dataNode = container.find('.attendance-data');
+                        dataNode.setData('type', chlk.models.attendance.AttendanceTypeEnum.PRESENT.valueOf());
+                        dataNode.setData('level', null);
+                        dataNode.setData('old-level', null);
+                        dataNode.setData('reason-id', null);
+                        dataNode.setData('old-reason-id', null);
                     }
                 });
             },
