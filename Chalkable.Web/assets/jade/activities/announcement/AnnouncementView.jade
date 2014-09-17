@@ -1,0 +1,101 @@
+mixin AppAttachmentBlock(item, pictureHref, i)
+    +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        .title
+            div=item.getName()
+
+
+mixin AnnouncementTooltip()
+    div(attributes).announcement-view-tooltip
+        .comment-container
+            block
+        .comment-triangle
+            .white.comment-triangle
+
+.announcement-view.not-transparent
+    isReadonly = !self.isAbleToGrade()
+    studentAnnouncements = false
+    studentAnnouncementsInfo = self.getStudentAnnouncements()
+    applications = self.getApplications()
+    gradeViewApps = self.getGradeViewApps()
+    grade = self.getGrade()
+    hasGrade = self.isDropped() || grade || grade == 0
+    if studentAnnouncementsInfo
+        studentAnnouncements = studentAnnouncementsInfo.getItems()
+    +FeedItem(self, true).animated-item
+    .autocomplete-list.announcement-view
+    .panel-bg
+        .action-bar.buttons
+            .container
+                .left
+                    +ActionLink('feed', 'doToList').back-button
+                .right
+                    if !self.getUserRole().isStudent()
+                        +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
+        .announcement-details-panel
+            .details-container.silver-panel
+                if self.getUserRole().isStudent() && hasGrade
+                    +AnnouncementTooltip().comment-grade-container
+                        div(
+                            data-tooltip = self.getComment(),
+                            data-tooltip-type = "overflow",
+                            data-tooltip-class = "wide"
+                        ).comment=self.getComment() || Msg.Your_grade + ":"
+                        .grade-value= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
+                if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
+                    +AnnouncementTooltip().make-visible-container
+                        .comment This item is hidden from students.
+                        +ActionLink('announcement', 'makeVisible', self.getId()).make-visible-btn Make visible
+                br
+                .left-block
+                    if self.getOwner()
+                        if self.getUserRole().isStudent()
+                            a(data-tooltip=self.getOwner().getFullName(),
+                            ).image-container
+                                +PersonImg(self.getOwner(), 47)
+                        else
+                            +ProfileLink(self.getOwner(), 'teacher')(
+                                data-tooltip=self.getOwner().getFullName(),
+                            ).image-container
+                                +PersonImg(self.getOwner(), 47)
+                .right-block
+                    h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
+                    p=self.getContent()
+                    .attachments-and-applications
+                        +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
+                            userRole = self.getUserRole()
+                        )
+                    if self.getStandards() && self.getStandards().length > 0
+                        .standards-container
+                            .title Standards:
+                            .standard-list
+                                each standard in self.getStandards()
+                                    div(data-tooltip = standard.getDescription()).grey-button.same-on-hover
+                                        span=standard.getName()
+            if self.getUserRole().isStudent()
+                .silver-panel.attachments-panel
+                    .left-block.attachments
+                    .right-block
+                        .student-attachments
+                            +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
+                                userRole = self.getUserRole()
+                            )
+            .questions-and-answers.silver-panel
+                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
+                    userRole = self.getUserRole()
+                )
+            div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
+                if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
+                    +Hidden('maxScore', self.getMaxScore())#max-score
+                    +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
+                        autoGradeApps = self.getAutoGradeApps(),
+                        readonly = isReadonly,
+                        gradeViewApps = self.getGradeViewApps(),
+                        applications = self.getApplications(),
+                        userRole = self.getUserRole(),
+                        owner = self.getOwner(),
+                        announcementId = self.getId(),
+                        maxScore = self.getMaxScore(),
+                        ableDropStudentScore = self.isAbleDropStudentScore(),
+                        ableToExempt = self.isAbleToExempt(),
+                        gradable = self.isGradable()
+                    )
