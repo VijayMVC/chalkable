@@ -11,12 +11,13 @@
                     "alertTextCheckboxe": "This checkbox is required",
                     "alertTextDateRange": "Both date range fields are required"
                 },
-                "requiredInFunction": { 
-                    "func": function(field, rules, i, options){
+                "requiredInFunction": {
+                    "func": function(field, rules, i, options) {
                         return (field.val() == "test") ? true : false;
                     },
                     "alertText": "Field must equal test"
                 },
+
                 "nameLastName": {
                     "regex": /[a-zA-Z]+[\s]+[a-zA-Z]+/,
                     "alertText": "Not a valid last and first name"
