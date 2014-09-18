@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null);
 
         void AddAnnouncementNewAttachmentNotification(int announcementId);
-        void AddAnnouncementNewAttachmentNotificationToPerson(int announcementId, int fromPersonId);
+        void AddAnnouncementNewAttachmentNotificationToTeachers(int announcementId, int fromPersonId);
         void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId);
         void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId);
         void AddAnnouncementSetGradeNotificationToPerson(int announcement, int recipient);
@@ -130,12 +130,17 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotificationToPerson(int announcementId, int fromPersonId)
+        public void AddAnnouncementNewAttachmentNotificationToTeachers(int announcementId, int fromPersonId)
         {
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var fromPerson = ServiceLocator.PersonService.GetPerson(fromPersonId);
-            var notification = builder.BuildAnnouncementNewAttachmentNotificationToPerson(announcement, fromPerson);
-            AddNotification(notification);
+            var teachers = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+                    {
+                        RoleId = CoreRoles.TEACHER_ROLE.Id,
+                        ClassId = announcement.ClassRef
+                    });
+            var notification = teachers.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(announcement, x, fromPerson)).ToList();
+            AddNotifications(notification);
         }
 
 

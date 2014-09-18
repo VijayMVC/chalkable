@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if (ann.IsOwner)
                     ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
                 else
-                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToPerson(announcementId, Context.PersonId.Value);
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToTeachers(announcementId, Context.PersonId.Value);
             }
             return ann;
         }

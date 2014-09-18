@@ -159,10 +159,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Announcement, recipient, announcement, null, null,
                                                  null, null, new { AnnouncementTitle = announcement.Title});
         }
-        public Notification BuildAnnouncementNewAttachmentNotificationToPerson(AnnouncementDetails announcement, Person fromschoolPerson)
+        public Notification BuildAnnouncementNewAttachmentNotificationToPerson(AnnouncementDetails announcement, Person toPerson, Person fromschoolPerson)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON,
-                                                 NotificationType.Announcement, announcement.Owner, announcement, null, null,  
+                                                 NotificationType.Announcement, toPerson, announcement, null, null,  
                                                  null, fromschoolPerson, new { AnnouncementTitle = announcement.Title});
         }
 
