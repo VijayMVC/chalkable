@@ -241,6 +241,46 @@
                 return cnt == ints.length;
             };
 
+            
+            function chlkPrice(field, rules, i, options){
+                var value = field.val();
+                var digits = value.split('.')[1];
+                var result = false;
+                if (digits !== undefined) {
+                    if (digits.length > 2) {
+                        var newValue = parseInt(value, 10) + '.' + digits.slice(0, 2);
+                        if (parseFloat(value, 10) == newValue) {
+                            digits = digits.slice(0, 2);
+                            field.val(newValue);
+                        }
+                    }
+
+                    switch (digits) {
+                    case '00':
+                    case '25':
+                    case '50':
+                    case '75':
+                        result = true;
+                        break;
+                    case '0':
+                    case '5':
+                        {
+                            field.val(field.val() + '0');
+                            result = true;
+                        }
+                        break;
+                    case '':
+                        {
+                            field.val(field.val() + '00');
+                            result = true;
+                        }
+                        break;
+                    }
+                }
+                if (!result)
+                    return "Whole numbers or .25 increments";
+            }
+
             jQuery.validator.addMethod("guid", function(value, element) {
                 return isGuidValid(value);
             },  'Please select a valid and non empty Guid value.');
