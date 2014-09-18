@@ -1,0 +1,108 @@
+.feed-list-page
+  .wrapper
+    width: 100%
+
+  .feed-item
+    border: 1px solid #c8c7c3
+    border-radius: 5px
+    margin: 8px 0 0
+    +box-shadow(transparentize(#000, .91) 0 2px 3px)
+
+    padding: 0 24px 0 63px
+    position: relative
+
+    .star
+      position: absolute
+      left: 0
+      top: 0
+      bottom: 0
+      width: 63px
+
+      &::before
+        content: ' '
+        position: absolute
+        left: 23px
+        top: 32px
+        height: 16px
+        width: 16px
+        background: transparentize(#999, .75)
+        border-radius: 8px
+
+      &:hover::before
+        background: transparentize(#999, .5)
+
+      &.complete
+        display: none
+
+        &::before
+          background: transparentize(#999, .25)
+
+    &.complete
+      .star
+        display: none
+
+      .star.complete
+        display: block
+
+    .announcement-link
+      padding-left: 42.5%
+      position: relative
+      display: block
+      text-decoration: none
+
+      .title
+        left: 0
+        top: 27px
+        width: 41%
+        position: absolute
+        white-space: nowrap
+        vertical-align: middle
+        text-overflow: ellipsis
+        overflow: hidden
+
+        font-size: 20px
+        line-height: 25px
+        font-weight: 700
+        color: #2f7790
+        +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+        letter-spacing: -1px
+
+      .date
+        left: 0
+        top: 56px
+        width: 262px
+        position: absolute
+
+        font-size: 11px
+        line-height: 15px
+        color: #7b7974
+        +text-shadow(transparentize(#fff, .25) 0 1px 0)
+
+    .attachment, .grades, .visible
+      padding-right: 32px
+      position: relative
+
+      &::before
+        content: ' '
+        position: absolute
+        right: 0
+        top: 32px
+        height: 16px
+        width: 16px
+        background: transparentize(#ccc, .5)
+        border-radius: 8px
+
+
+    .content
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      word-break: break-all
+      font-size: 13px
+      line-height: 80px
+      color: #2b2a28
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+  .chlk-grid
+    margin-top: 28px

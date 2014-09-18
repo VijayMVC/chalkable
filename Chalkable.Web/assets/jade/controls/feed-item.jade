@@ -1,0 +1,24 @@
+mixin FeedItem(item, disabled)
+    -VALIDATE_ARG('item', [Object], item)
+    -VALIDATE_ARG('disabled_', [Boolean], disabled)
+
+    -var isAdminAnnouncement = item.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
+    -var itemClasses = attributes['class'] || []
+
+    - itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
+    - itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
+    - itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
+    -if (isAdminAnnouncement)         itemClasses.push('is-admin')
+    -if (item.isComplete())           itemClasses.push('complete')
+    -if (item.getApplicationsCount()) itemClasses.push('app-icon')
+
+    div(class = itemClasses).feed-item
+        +ActionLink('announcement', 'star', item.getId().valueOf(), false)(data-tooltip=Msg.Done).star.complete
+        +ActionLink('announcement', 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
+        +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').announcement-link
+            .title= item.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : '') + ' - ' + item.getClassName()
+            .date= item.getExpiresDate().toString('M d')
+            .attachment
+                .grades
+                    .visible
+                        .content= [item.getTitle(), item.getShortContent()].filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ')
