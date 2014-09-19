@@ -352,17 +352,21 @@ NAMESPACE('chlk.activities.grading', function () {
                 return true;
             },
 
+            function submitActiveForm(){
+                var activeCell = this.dom.find('.active-cell');
+                if(activeCell.exists()){
+                    activeCell.find('form').trigger('submit');
+                }
+                activeCell.removeClass('active-cell');
+                activeCell.find('.grading-form').remove();
+            },
+
             [ria.mvc.DomEventBind('contextmenu', '.edit-cell, .avg-text')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function cellContextMenu(node, event){
                 var cell = node.parent('.grade-value');
                 if(cell.hasClass('gradable')){
-                    var activeCell = this.dom.find('.active-cell');
-                    if(activeCell.exists()){
-                        activeCell.find('form').trigger('submit');
-                    }
-                    activeCell.removeClass('active-cell');
-                    activeCell.find('.grading-form').remove();
+                    this.submitActiveForm();
                     this.showCell(cell);
                     setTimeout(function(){
                         cell.find('.value-input').trigger('contextmenu');
@@ -504,6 +508,31 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                 }.bind(this, cell), 10);
 
+            },
+
+            [ria.mvc.DomEventBind('keydown', '.value-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeUpDownKeyDown(node, event){
+                var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
+                var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
+                var list = this.dom.find('.autocomplete-list:visible');
+                if(!list.is(':visible')){
+                    var curCell = node.parent('.grade-value'), cell;
+                    if(isUp){
+                        cell = curCell.previous('.grade-value');
+                        if(cell.exists() && cell.hasClass('gradable')){
+                            this.submitActiveForm();
+                            this.showCell(cell);
+                        }
+                    }
+                    if(isDown){
+                        cell = curCell.next('.grade-value');
+                        if(cell.exists() && cell.hasClass('gradable')){
+                            this.submitActiveForm();
+                            this.showCell(cell);
+                        }
+                    }
+                }
             },
 
             [[chlk.models.announcement.ShortStudentAnnouncementViewData, ria.dom.Dom]],
@@ -898,13 +927,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 popUp.hide();
                                 var parent = (node.hasClass('grade-value') && node.hasClass('gradable')) ? node : node.parent('.grade-value.gradable');
 
-                                //TODO
-                                var activeCell = dom.find('.active-cell');
-                                if(activeCell.exists()){
-                                    activeCell.find('form').trigger('submit');
-                                }
-                                activeCell.removeClass('active-cell');
-                                activeCell.find('.grading-form').remove();
+                                that.submitActiveForm();
                                 if(parent.exists() && !node.hasClass('alert-flag')){
                                     that.showCell(parent);
                                 }else{
