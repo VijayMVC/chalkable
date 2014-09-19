@@ -780,6 +780,11 @@ NAMESPACE('ria.dom', function () {
 
             String, function GID() {
                 return 'gid-' + (GID_++).toString(36);
+            },
+
+            SELF, function select() {
+                this._dom.select();
+                return this._dom;
             }
         ]);
 

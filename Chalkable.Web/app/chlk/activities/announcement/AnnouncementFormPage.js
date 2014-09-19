@@ -10,7 +10,7 @@ REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
-    var titleTimeout, wasTypeChanged, wasExistingTitle, wasDisabledBtn, wasDateChanged;
+    var titleTimeout, wasTypeChanged, wasExistingTitle, wasDisabledBtn, wasDateChanged, wasTitleSaved;
 
     /** @class chlk.activities.announcement.AnnouncementFormPage*/
     CLASS(
@@ -28,7 +28,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);
-                if(wasTypeChanged && wasExistingTitle)
+                if(wasTypeChanged && wasExistingTitle && wasTitleSaved)
                     this.disableSubmitBtn();
                 wasTypeChanged = false;
                 if(model instanceof chlk.models.announcement.LastMessages)
@@ -81,6 +81,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.title-text').setHTML(value);
                 input.setData('title', value);
                 this.removeDisabledClass();
+                wasTitleSaved = true;
                 wasExistingTitle = false;
                 setTimeout(function(){
                     node.setAttr('disabled', true);
@@ -247,6 +248,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
+                titleTimeout = wasTypeChanged = wasExistingTitle = wasDisabledBtn = wasDateChanged = wasTitleSaved = undefined;
                 var that = this;
                 new ria.dom.Dom().on('click.title', function(node, event){
                     var target = new ria.dom.Dom(event.target), dom = that.dom;

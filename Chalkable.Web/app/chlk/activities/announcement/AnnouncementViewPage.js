@@ -92,6 +92,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.parent().parent().addClass('x-hidden');
             },
 
+            [ria.mvc.DomEventBind('focus', '.grade-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeFocus(node, event){
+                setTimeout(function(){
+                    node.select();
+                }, 10);
+            },
+
             [ria.mvc.DomEventBind('keypress', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyPress(node, event){
