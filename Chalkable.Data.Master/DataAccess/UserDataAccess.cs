@@ -22,7 +22,7 @@ namespace Chalkable.Data.Master.DataAccess
             var typesL1 = new List<Type> { typeof(User), typeof(District), typeof(UserLoginInfo) };
             var typesL2 = new List<Type> { typesL1[0], typeof(SchoolUser), typeof(School) };
             userQuery.Sql.AppendFormat(@"select {0} from [{1}] 
-                                         join [{2}] on [{1}].{3} = [{2}].{4}
+                                         left join [{2}] on [{1}].{3} = [{2}].{4}
                                          left join [{5}] on [{5}].[{6}] = [{1}].[{7}]"
                                        , Orm.ComplexResultSetQuery(typesL1), typesL1[0].Name, typesL1[1].Name,
                                        User.DISTRICT_REF_FIELD, District.ID_FIELD, typesL1[2].Name, UserLoginInfo.ID_FIELD, User.ID_FIELD);
