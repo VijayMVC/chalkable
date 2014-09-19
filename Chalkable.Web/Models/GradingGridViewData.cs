@@ -91,8 +91,15 @@ namespace Chalkable.Web.Models
                 {
                     var scoredAnns = gradeBook.Announcements.Where(x =>!x.Dropped && x.StudentAnnouncements.Any(y => y.Student.Id == stId 
                                                                     && y.IncludeInTotalPoint)).ToList();
-                    var totalPoint = scoredAnns.Sum(x => x.StudentAnnouncements.First(y => y.Student.Id == stId).NumericScore ?? 0);
-                    var maxTotalPoint = scoredAnns.Where(x => x.MaxScore.HasValue).Sum(x => x.MaxScore.Value);
+                    decimal totalPoint = 0, maxTotalPoint = 0;
+                    foreach (var ann in scoredAnns)
+                    {
+                        var score = ann.StudentAnnouncements.First(x => x.StudentId == stId).NumericScore ?? 0;
+                        totalPoint += (decimal)((score + ann.WeightAddition)*ann.WeightMultiplier);
+                        if (ann.MaxScore.HasValue) maxTotalPoint += ann.MaxScore.Value;
+                    }
+                    //var totalPoint = scoredAnns.Sum(x => x.StudentAnnouncements.First(y => y.Student.Id == stId).NumericScore ?? 0);
+                    //var maxTotalPoint = scoredAnns.Where(x => x.MaxScore.HasValue).Sum(x => x.MaxScore.Value);
                     res.TotalPoints.Add(TotalPointViewData.Create((int)totalPoint, (int)maxTotalPoint));
                 }
 
