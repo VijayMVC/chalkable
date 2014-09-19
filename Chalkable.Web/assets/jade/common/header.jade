@@ -1,0 +1,12 @@
+.wrapper
+    +SearchBox(chlk.services.SearchService, "search", chlk.templates.search.SiteSearch)#siteSearch(
+        name="siteSearch"
+        clearAfterSelect = true
+        withButton = true)
+    label(for="siteSearch")#search-glass
+
++ActionButton('notification', 'list-new').blue.notifications-link
+    span 8
+    != '&nbsp;'
+
++Logout('account', 'logout', self.getCurrentPerson().getDisplayName())

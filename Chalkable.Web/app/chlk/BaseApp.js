@@ -278,8 +278,8 @@ NAMESPACE('chlk', function (){
                     .then(function(data){
                         if(this.getCurrentPerson())
                             new ria.dom.Dom()
-                                .fromHTML(ASSET('~/assets/jade/common/logout.jade')(this))
-                                .appendTo("#logout-block");
+                                .fromHTML(ASSET('~/assets/jade/common/header.jade')(this))
+                                .appendTo("header");
                         return data;
                     }, this);
             },

@@ -20,9 +20,10 @@ NAMESPACE('chlk.controls', function () {
                 var elem = $target.parent().find('.logout');
                 if(!this.isLogoutShown()){
                     elem.setCss("visibility", "visible")
-                        .setCss("opacity", 1);
+                        .setCss("opacity", 1)
+                        .setCss("height", "auto");
                 }else{
-                    elem.setCss("opacity", 0);
+                    elem.setCss("opacity", 0).setCss("height", 0);
                     setTimeout(function(){
                         elem.setCss("visibility", "hidden");
                     }, 200);

@@ -1,0 +1,44 @@
+.avatar-wrapper
+  position: relative
+  z-index: 0
+  overflow: hidden
+
+  .alerts-icon
+    background: image-url("images/icons/alerts-white.png") 0 0 no-repeat
+    width: 38px
+    height: 37px
+    right: -19px
+    top: -17px
+    position: absolute
+    z-index: 1000
+
+  .small
+    background: image-url("images/attendance/alerts.png") 0 0 no-repeat
+    width: 25px
+    height: 27px
+    right: -13px
+    top: -12px
+
+@each $size in 40, 47, 55, 64, 70, 128
+  .person-avatar-m-#{$size}, .person-avatar-w-#{$size}
+    height: $size + "px"
+    width:  $size + "px"
+
+    position: relative
+    &::before
+      content: " "
+      position: absolute
+      top: 0
+      bottom: 0
+      left: 0
+      right: 0
+
+    &, &::before
+      background: transparent 50% 50% no-repeat
+      background-size: cover
+
+  .person-avatar-m-#{$size}::before
+    background-image: image-url("avatars/" + $size + "/.no-avatar.png")
+
+  .person-avatar-w-#{$size}::before
+    background-image: image-url("avatars/" + $size + "/.no-avatar-female.png")

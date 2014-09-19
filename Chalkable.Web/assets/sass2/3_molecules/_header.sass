@@ -1,0 +1,117 @@
+header
+  line-height: 69px
+  vertical-align: middle
+  text-align: right
+
+  > *
+    line-height: 29px
+    display: inline
+    margin-left: 10px
+
+  A
+    color: #fff
+    +text-shadow(transparentize(#000, .75) 0 1px 1px)
+
+  .blue
+    cursor: pointer
+    background: #437d97
+    border-color: #2d6983
+    +box-shadow(transparentize(#000, .5) 0 1px 1px, transparentize(#fff, .8) 0 1px 0px inset)
+
+    font-weight: 400
+    color: #ffffff
+    +text-shadow(transparentize(#000, .5) 0 1px 2px)
+
+    height: 30px
+    line-height: 27px
+
+  .notifications-link
+    position: relative
+    width: 30px
+
+    &::before
+      content: ' '
+      position: absolute
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
+      +icons-sprite(notifications, -4px, -1px)
+
+    span
+      position: absolute
+      display: block
+      top: -8px
+      left: -8px
+      width: 18px
+      height: 18px
+
+      background: #d45151
+      +box-shadow(transparentize(#000, .5) 0 1px 5px)
+      border-radius: 50%
+
+      font-size: 11px
+      font-weight: 600
+      line-height: 18px
+      text-align: center
+
+      text-overflow: ellipsis
+      overflow: hidden
+
+
+  .logout
+    visibility: hidden
+    opacity: 0
+    height: 0
+    +transition(opacity, .4, ease-in-out)
+    +transition(height, .4, ease-in-out)
+
+    position: absolute
+    top: 27px
+    left: 0
+    right: 0
+
+    text-align: center
+    border-bottom-left-radius: 3px
+    border-bottom-right-radius: 3px
+
+    border: 1px solid #2d6983
+    background: #fff
+
+    A
+      color: #56554f
+      text-decoration: none
+      &:hover
+        text-decoration: underline
+
+
+  .logout-area
+    padding: 0 34px 0 16px
+    position: relative
+    z-index: 1
+
+    &::after
+      content: ' '
+      position: absolute
+      right: 4px
+      top: 4px
+      height: 24px
+      width: 24px
+      +icons-sprite(dropdown-btn-white)
+
+
+#siteSearch
+  width: 205px
+  padding: 0 5px 0 33px
+
+  background: #fff
+  border-color: #24566b
+  +box-shadow(transparentize(#000, .7) 0 1px 3px inset, transparentize(#fff, .75) 0 1px 1px)
+
+#search-glass
+  position: absolute
+  left: 6px
+  top: 1px
+  height: 24px
+  width: 24px
+  +icons-sprite(search-glass)

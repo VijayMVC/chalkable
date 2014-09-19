@@ -15,14 +15,12 @@
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
     <!-- Whole Site CSS -->
     <link href="@Url.StaticContent("/Content/" + ViewData.GetValueOrNull(ViewConstants.ROLE_NAME) + ".css")" rel="stylesheet" media="screen, projection" type="text/css" />
-    <!--
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700' rel='stylesheet' type='text/css'>
     <link href="~/Content/fonts.css" rel="stylesheet" media="screen, projection" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
-    -->
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700' rel='stylesheet' type='text/css'>
 
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
@@ -84,12 +82,10 @@
                                       
         <div id="page">
             <header>
-                <div id="logout-block">
-                    @if (!isDemoSchool && !isDeveloperSchool)
-                    {
-                        @Html.ActionLink("Go to INOW", "RedirectToINow", "User")
-                    }
-                </div>                 
+                @if (!isDemoSchool && !isDeveloperSchool)
+                {
+                    @Html.ActionLink("Go to INOW", "RedirectToINow", "User")
+                }
             </header>
         
             <div id="classes-bar-holder"></div>

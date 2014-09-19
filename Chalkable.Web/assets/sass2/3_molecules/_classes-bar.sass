@@ -8,10 +8,10 @@
     position: relative
     display: inline-block
     width: 80px
-    border-radius: 3px
+    border-radius: 5px
     border: 1px solid #c8c7c3
-    +box-shadow(transparentize(#000, 0.74) 0 1px 3px)
-    background: #ffffff
+    +box-shadow(transparentize(#020202, 0.84) 0 1px 2px) // , transparentize(#fff, .22) 0 1px 0px inset
+    background: #fff
 
     margin: 0 5px
 
@@ -55,6 +55,7 @@
 
     &.pressed
       &, &:hover
+        +box-shadow(transparentize(#fff, 1) 0 1px 0, transparentize(#000, .2) 0 1px 1px inset)
         background-color: #56554f
         color: #ffffff
         +text-shadow(transparentize(#000, .5) 0 1px 0px)

@@ -33,7 +33,7 @@ mixin ActionLinkList(actionLinksModel)
     each item in actionLinksModel
         +ActionLinkWithModel(item)
 
-mixin  ActionLinkButton(controller, action)
+mixin ActionLinkButton(controller, action)
     -VALIDATE_ARG('controller', [String], controller)
     -VALIDATE_ARG('action', [String], action)
     span.chlk-button.action-button(attributes)
@@ -45,3 +45,12 @@ mixin  ActionLinkButton(controller, action)
                 -attributes['data-link'] = link
                 a.action-link(attributes).not-blue
                     block
+
+mixin ActionButton(controller, action)
+    -VALIDATE_ARG('controller', [String], controller)
+    -VALIDATE_ARG('action', [String], action)
+    -var link = self.getLink(ria.__API.clone(arguments))
+    -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
+    -attributes['data-link'] = link
+    BUTTON.action-button(attributes)
+        block

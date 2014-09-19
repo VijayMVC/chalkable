@@ -3,6 +3,27 @@
   display: table-cell
   background: #e7e6e2
 
+  position: relative
+  &::after
+    content: ' '
+    position: absolute
+    right: 1px
+    width: 3px
+    top: 0
+    bottom: 0
+    z-index: 1
+    +background-image(linear-gradient(left, transparentize(#000, 1) 0%, transparentize(#000, .95) 100%))
+
+  &::before
+    content: ' '
+    position: absolute
+    right: 0
+    width: 1px
+    top: 0
+    bottom: 0
+    z-index: 1
+    background: #c8c7c3
+
   > A
     display: block
     width: 80px
@@ -10,6 +31,7 @@
     border: solid #c8c7c3
     border-width: 1px 1px 1px 0
     border-top-color: #f3f3f1
+    border-right-color: transparent
 
     text-align: center
     text-decoration: none
@@ -24,6 +46,7 @@
         opacity: 1
 
     &.active
+      z-index: 2
       &, &:hover
         border-top-color: #ffffff
         border-right-color: #ffffff

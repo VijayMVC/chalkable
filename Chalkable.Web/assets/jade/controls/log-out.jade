@@ -1,4 +1,5 @@
 mixin Logout(controller, action, userName)
-    .logout-area=userName
-    span.logout-area#logout-arrow
-    +ActionLink(controller, action).logout log out
+    .wrapper
+        BUTTON.blue.logout-area= userName
+        .logout
+            +ActionLink(controller, action) log out
