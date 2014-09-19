@@ -447,6 +447,17 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            /* text */
+            OVERRIDE, String, function getText() {
+                return this._dom.text();
+            },
+
+            [[String]],
+            OVERRIDE, SELF, function setText(value) {
+                this._dom.text(value);
+                return this;
+            },
+
             /* classes */
 
             [[String]],

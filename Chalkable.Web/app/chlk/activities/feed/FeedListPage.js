@@ -19,7 +19,6 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('click', '.announcement-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function announcementClick(node, event){
-                this.stopInterval();
                 var item = node.parent('.feed-item');
                 var clone = item.clone();
                 clone.addClass('animated-item');
@@ -38,13 +37,7 @@ NAMESPACE('chlk.activities.feed', function () {
                 return false;
             },
 
-            function stopInterval(){
-                clearInterval(window.notificationsInterval);
-                window.notificationsInterval = null;
-            },
-
             OVERRIDE, VOID, function onStop_() {
-                this.stopInterval();
                 interval = setInterval(function(){
                     var item = new ria.dom.Dom('.moving-wrapper');
                     if(!item.exists())

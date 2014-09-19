@@ -81,12 +81,7 @@
             --> 
                                       
         <div id="page">
-            <header>
-                @if (!isDemoSchool && !isDeveloperSchool)
-                {
-                    @Html.ActionLink("Go to INOW", "RedirectToINow", "User")
-                }
-            </header>
+            <header class="@(!isDemoSchool && !isDeveloperSchool?"has-inow-link":"")"></header>
         
             <div id="classes-bar-holder"></div>
 

@@ -1,3 +1,5 @@
+REQUIRE('ria.async.Timer');
+
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.FeedService');
@@ -12,8 +14,6 @@ REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.controllers', function (){
-
-
 
     /** @class chlk.controllers.FeedController*/
     CLASS(
@@ -40,6 +40,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('inbox')],
         function doToListAction(){
             return this.listAction(null, true);
+        },
+
+        OVERRIDE, ria.async.Future, function onAppInit() {
+            return BASE()
+                .then(function () {
+                    ria.async.Timer(60000, this.updateNotificationsCounter_);
+                }, this);
+        },
+
+        [[Object, Number]],
+        VOID, function updateNotificationsCounter_(timer, lag) {
+            this.context
+                .getService(chlk.services.NotificationService)
+                .getUnShownNotificationCount()
+                .then(function(data){
+                    this.context.getDefaultView().setNewNotificationCount(data);
+                }, this);
         },
 
         [chlk.controllers.SidebarButton('inbox')],
@@ -74,14 +91,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function getFeedItems(postback_, importantOnly_, classId_, pageIndex_){
-            if(!window.notificationsInterval)
-                window.notificationsInterval = setInterval(function(){
-                    var result = this.notificationService.getUnShownNotificationCount().then(function(data){
-                        this.setNewNotificationCount_(data);
-                        return new chlk.models.feed.Feed(null, null, null, data);
-                    }, this);
-                    this.BackgroundUpdateView(chlk.activities.feed.FeedListPage, result, 'notifications');
-                }.bind(this), 60000);
             return this.announcementService
                 .getAnnouncements(pageIndex_ | 0, classId_, importantOnly_)
                 .attach(this.validateResponse_())

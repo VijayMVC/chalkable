@@ -5,8 +5,6 @@
         withButton = true)
     label(for="siteSearch")#search-glass
 
-+ActionButton('notification', 'list-new').blue.notifications-link
-    span 8
-    != '&nbsp;'
++ActionButton('notification', 'list-new').blue.notifications-link &nbsp;
 
 +Logout('account', 'logout', self.getCurrentPerson().getDisplayName())

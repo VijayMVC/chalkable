@@ -42,6 +42,20 @@ NAMESPACE('chlk.lib.mvc', function () {
                 if (activity.setCurrentUser)
                     activity.setCurrentUser(this.getCurrentUser_());
                 return activity;
+            },
+
+            [[Number]],
+            VOID, function setNewNotificationCount(count) {
+                var $link = ria.dom.Dom('.notifications-link'),
+                    $span = $link.find('span');
+
+                if (count < 1) {
+                    $span.removeSelf()
+                } else if ($span.exists()) {
+                    $span.setText(String(count));
+                } else {
+                    ria.dom.Dom.$fromHTML('<span>'+count+'</span>').appendTo($link);
+                }
             }
         ]);
 });
