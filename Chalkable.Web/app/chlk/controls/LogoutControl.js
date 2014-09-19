@@ -16,7 +16,7 @@ NAMESPACE('chlk.controls', function () {
 
             [ria.mvc.DomEventBind('click', '.logout-area')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function onClicked($target, node) {
+            function onClicked($target, event) {
                 var elem = $target.parent().find('.logout');
                 if(!this.isLogoutShown()){
                     elem.setCss("visibility", "visible")
@@ -29,6 +29,22 @@ NAMESPACE('chlk.controls', function () {
                     }, 200);
                 }
                 this.setLogoutShown(!this.isLogoutShown());
+            },
+
+            [ria.mvc.DomEventBind('click', 'BODY')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onBodyClicked($target, event) {
+                var $parent = ria.dom.Dom('header .logout-area').parent();
+
+                if (!this.isLogoutShown() || $parent.contains(ria.dom.Dom(event.target)))
+                    return ;
+
+                var elem = $parent.find('.logout');
+                elem.setCss("opacity", 0).setCss("height", 0);
+                setTimeout(function(){
+                    elem.setCss("visibility", "hidden");
+                }, 200);
+                this.setLogoutShown(false);
             }
     ])
 });
