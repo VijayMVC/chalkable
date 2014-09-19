@@ -21,6 +21,11 @@ NAMESPACE('chlk.controllers', function (){
             function listNewAction() {
                 var result = this.notificationService.getNotifications(0, 5)
                     .attach(this.validateResponse_())
+                    .then(function (model) {
+                        this.view.setNewNotificationCount(0);
+
+                        return model;
+                    }, this)
                     .then(function(model){
                         var res = new chlk.models.notification.NotificationList();
                         res.setNotifications(model);
@@ -33,6 +38,7 @@ NAMESPACE('chlk.controllers', function (){
                         this.setNewNotificationCount_(data2);
                     }, this);
                 }, this);
+
                 return this.ShadeView(chlk.activities.notification.ListNewPopup, result);
             },
 

@@ -54,8 +54,15 @@ NAMESPACE('chlk.lib.mvc', function () {
                 } else if ($span.exists()) {
                     $span.setText(String(count));
                 } else {
-                    ria.dom.Dom.$fromHTML('<span>'+count+'</span>').appendTo($link);
+                    ria.dom.Dom.$fromHTML('<span>' + count + '</span>').appendTo($link);
                 }
+
+                var title = document.title;
+                var pos = title.indexOf('(');
+                if (pos > -1)
+                    title = title.slice(0, pos - 1);
+
+                document.title = title +(count ? ' (' + count + ')' : '');
             }
         ]);
 });

@@ -46,6 +46,9 @@ NAMESPACE('chlk.controllers', function (){
             return BASE()
                 .then(function () {
                     ria.async.Timer(60000, this.updateNotificationsCounter_);
+
+                    var notifications = window[ChlkSessionConstants.NEW_NOTIFICATIONS]|0;
+                    this.context.getDefaultView().setNewNotificationCount(notifications);
                 }, this);
         },
 
@@ -107,7 +110,7 @@ NAMESPACE('chlk.controllers', function (){
                         feedItems,
                         classBarItemsMdl,
                         importantOnly_,
-                        this.getNewNotificationCount_(),
+                        0,
                         firstLogin
                     );
                 }, this);

@@ -124,11 +124,6 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.REDIRECT_URL, String);
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
 
-                var notifications = window[ChlkSessionConstants.NEW_NOTIFICATIONS];
-
-                if(notifications)
-                   document.title = document.title + ' (' + notifications + ')';
-
                 if(window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');
                 }

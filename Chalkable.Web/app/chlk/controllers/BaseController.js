@@ -204,23 +204,6 @@ NAMESPACE('chlk.controllers', function (){
                return this.getContext().getSession().get(ChlkSessionConstants.DEMO_SCHOOL, false);
            },
 
-           [[Number]],
-           VOID, function setNewNotificationCount_(value){
-               var title = document.title;
-               var pos = title.indexOf('(');
-               if(pos > -1)
-                   title = title.slice(0, pos - 1);
-               if(value)
-                   document.title = title + ' (' + value + ')';
-               else{
-                   document.title = title;
-               };
-               this.getContext().getSession().set(ChlkSessionConstants.NEW_NOTIFICATIONS, value);
-           },
-           Number, function getNewNotificationCount_(){
-               return this.getContext().getSession().get(ChlkSessionConstants.NEW_NOTIFICATIONS);
-           },
-
            chlk.models.people.User, function getCurrentPerson(){
                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
            },
