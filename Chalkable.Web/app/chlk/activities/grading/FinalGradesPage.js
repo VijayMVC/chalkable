@@ -269,7 +269,14 @@ NAMESPACE('chlk.activities.grading', function () {
                 }.bind(this), 1000);
             },
 
+            [ria.mvc.DomEventBind('focus', '.grade-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeFocus(node, event){
+                setTimeout(function(){
+                    node.select();
+                }, 1);
 
+            },
 
             [ria.mvc.DomEventBind('keypress', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],

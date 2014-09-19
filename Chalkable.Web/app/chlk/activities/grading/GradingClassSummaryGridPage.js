@@ -352,6 +352,12 @@ NAMESPACE('chlk.activities.grading', function () {
                 return true;
             },
 
+            [ria.mvc.DomEventBind('focus', '.value-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeFocus(node, event){
+                node.select();
+            },
+
             function submitActiveForm(){
                 var activeCell = this.dom.find('.active-cell');
                 if(activeCell.exists()){
