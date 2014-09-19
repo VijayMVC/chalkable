@@ -21,21 +21,21 @@
       &::before
         content: ' '
         position: absolute
-        left: 23px
-        top: 32px
-        height: 16px
-        width: 16px
-        background: transparentize(#999, .75)
-        border-radius: 8px
+        left: 15px
+        top: 24px
+        height: 32px
+        width: 32px
+        +icons-sprite(todo)
+        opacity: .75
 
       &:hover::before
-        background: transparentize(#999, .5)
+        opacity: 1
 
       &.complete
         display: none
 
         &::before
-          background: transparentize(#999, .25)
+          +icons-sprite(done)
 
     &.complete
       .star
@@ -86,13 +86,24 @@
       &::before
         content: ' '
         position: absolute
-        right: 0
-        top: 32px
-        height: 16px
-        width: 16px
-        background: transparentize(#ccc, .5)
-        border-radius: 8px
+        right: -8px
+        top: 24px
+        height: 32px
+        width: 32px
 
+    .attachment::before
+      +icons-sprite(attachment)
+
+    .grades::before
+      +icons-sprite(grades)
+
+    .visible::before
+      +icons-sprite(invisible)
+
+    &.no-attachments .attachment, &.no-attachment-icon .attachment, &.non-gradable .grades, &.visible-for-students .visible
+      padding-right: 0
+      &::before
+        display: none
 
     .content
       overflow: hidden

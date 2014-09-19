@@ -37,10 +37,12 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
+        [chlk.controllers.SidebarButton('inbox')],
         function doToListAction(){
             return this.listAction(null, true);
         },
 
+        [chlk.controllers.SidebarButton('inbox')],
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
         function listAction(postback_, importantOnly_, classId_, pageIndex_) {
 

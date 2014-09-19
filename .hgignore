@@ -34,3 +34,5 @@ Chalkable.Web/app/highcharts/other/modules/annotations.js
 Chalkable.Web/app/highcharts/other/highcharts-all.js
 Chalkable.Web/app/highcharts/other/adapters/standalone-framework.src.js
 Chalkable.Web/app/highcharts/other/adapters/standalone-framework.js
+Chalkable.Web/Content/images2/icons-*.png
+Chalkable.Web/Content/images2/icons/apps.png

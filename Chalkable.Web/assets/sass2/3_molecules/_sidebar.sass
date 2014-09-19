@@ -20,9 +20,27 @@
 
     &:hover
       background-color: #f1f0ee
+      &::before
+        opacity: 1
 
     &.active
       &, &:hover
         border-top-color: #ffffff
         border-right-color: #ffffff
         background-color: #ffffff
+        &::before
+          opacity: 1
+
+    position: relative
+    &::before
+      content: ' '
+      position: absolute
+      top: 14px
+      left: 24px
+      width: 32px
+      height: 32px
+      opacity: .75
+
+  @each $button in inbox, new-item, apps, messages, people, grades, discipline, attendance, calendar
+    .#{$button}::before
+      +icons-sprite($button)
