@@ -13,6 +13,8 @@ using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ChalkableApiExplorerViewData;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Chalkable.Web.Logic
 {
@@ -48,6 +50,7 @@ namespace Chalkable.Web.Logic
         private static Dictionary<string, ApiPathFinderData> finders = new Dictionary<string, ApiPathFinderData>();
 
         private const string PATHFINDER_FILE_FORMAT = "pathfinder/{0}_methods.xml";
+        
         private const string PARAM_NAME = "name";
         private const string PARAM_NEED_TO_CALL = "needToCall";
 
@@ -256,6 +259,7 @@ namespace Chalkable.Web.Logic
     public static class ChalkableApiExplorerLogic
     {
         private static Dictionary<string, IList<ChalkableApiControllerDescription>> descriptions;
+        private static Dictionary<string, Dictionary<string, string>> fakeResponses;
 
         private static bool IsChalkableController(Type t)
         {
@@ -311,6 +315,8 @@ namespace Chalkable.Web.Logic
 
         private static Dictionary<string, IList<ChalkableApiControllerDescription>> BuildApiExplorerDescriptions()
         {
+
+            
 
             descriptions = new Dictionary<string, IList<ChalkableApiControllerDescription>>();
 
@@ -401,6 +407,8 @@ namespace Chalkable.Web.Logic
 
             }
 
+            if (fakeResponses == null) BuildFakeResponses(roles);
+
             foreach (var role in roles)
             {
                 foreach (var controllerDescr in controllersList)
@@ -410,6 +418,9 @@ namespace Chalkable.Web.Logic
                     {
                         descriptions.Add(role, new List<ChalkableApiControllerDescription>());
                     }
+
+                    availableMethodsForRole = PrepareFakeResponsesForMethods(controllerDescr.Name, availableMethodsForRole, role);
+
                     descriptions[role].Add(new ChalkableApiControllerDescription
                     {
                         Methods = availableMethodsForRole,
@@ -418,6 +429,60 @@ namespace Chalkable.Web.Logic
                 }
             }
             return descriptions;
+        }
+
+        private const string FAKE_RESPONSES_FILE = "pathfinder/{0}_fake_method_responses.json";
+        private static void BuildFakeResponses(IEnumerable<string> roles)
+        {
+            fakeResponses = new Dictionary<string, Dictionary<string, string>>();
+            foreach (var role in roles)
+            {
+                var roleFakeResponses = new Dictionary<string, string>();
+                var fname = AppDomain.CurrentDomain.BaseDirectory + string.Format(FAKE_RESPONSES_FILE, role);
+
+                if (File.Exists(fname))
+                {
+                    var json = "";
+                    using (var fs = new FileStream(fname, FileMode.Open))
+                    {
+                        using (var sr = new StreamReader(fs))
+                        {
+                            json = sr.ReadToEnd();
+                        }
+                    }
+
+                    var res = JsonConvert.DeserializeObject<JObject>(json);
+
+                    var controllers = res.Value<JObject>("controllers");
+                    foreach (var controller in controllers.Properties())
+                    {
+                        var controllerName = controller.Name;
+                        var methodsInfo = controllers.Value<JObject>(controllerName);
+                        foreach (var method in methodsInfo.Properties())
+                        {
+                            var methodName = method.Name;
+                            var response = methodsInfo.Value<JObject>(methodName).ToString();
+                            roleFakeResponses[controller.Name + "/" + method.Name] = response;
+                        }                        
+                    }
+                }
+                fakeResponses[role] = roleFakeResponses;
+            }
+            
+        }
+
+        private static List<ChalkableApiMethodDescription> PrepareFakeResponsesForMethods(string controller,List<ChalkableApiMethodDescription> availableMethodsForRole, String role)
+        {
+            var responses = fakeResponses[role];
+
+            foreach (var chalkableApiMethodDescription in availableMethodsForRole)
+            {
+                var key = controller + "/" + chalkableApiMethodDescription.Name;
+
+                if (responses.ContainsKey(key))
+                    chalkableApiMethodDescription.Response = responses[key];
+            }
+            return availableMethodsForRole;
         }
 
         public static Dictionary<string, IList<ChalkableApiControllerDescription>> GetApi()

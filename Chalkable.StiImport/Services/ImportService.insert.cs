@@ -213,8 +213,6 @@ namespace Chalkable.StiImport.Services
                     Login = string.Format(USER_EMAIL_FMT, x.UserID, ServiceLocatorSchool.Context.DistrictId),
                     IsSysAdmin = false
                 }).ToList();
-            foreach (var user in users)
-                user.LoginInfo = new UserLoginInfo { Id = user.Id };
             ServiceLocatorMaster.UserService.Add(users);
         }
         

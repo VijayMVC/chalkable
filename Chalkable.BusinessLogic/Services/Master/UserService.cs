@@ -76,8 +76,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new UserDataAccess(uow);
                 da.Insert(users);
-                var loginInfos = users.Select(x => x.LoginInfo).ToList();
-                new UserLoginInfoDataAccess(uow).Insert(loginInfos);
+                var loginInfos = users.Where(x=>x.LoginInfo != null).Select(x => x.LoginInfo).ToList();
+                if (loginInfos.Count > 0)
+                    new UserLoginInfoDataAccess(uow).Insert(loginInfos);
                 uow.Commit();
             }
         }
@@ -124,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     user.ConfirmationKey = null;
                     user.DistrictRef = districtId;
                     da.Update(user);
-                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
+                    UpdateUserLoginInfo(user, null, null, null, uow);
                 }
                 uow.Commit();
                 return res;
@@ -302,10 +303,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
                 if (!string.IsNullOrEmpty(iNowConnector.Token))
                 {
-                    user.LoginInfo.SisToken = iNowConnector.Token;
-                    user.LoginInfo.SisTokenExpires = iNowConnector.TokenExpires;
-                    new UserDataAccess(uow).Update(user);
-                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
+                    UpdateUserLoginInfo(user, iNowConnector.Token, iNowConnector.TokenExpires, null, uow);
                 }
             }
             return user;
@@ -369,8 +367,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var user = da.GetUser(login, null, null);
                     user.Password = PasswordMd5(newPassword);
                     da.Update(user);
-                    user.LoginInfo.LastPasswordReset = Context.NowSchoolTime;
-                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
+                    UpdateUserLoginInfo(user, null, null, Context.NowSchoolTime, uow);
                     uow.Commit();
                 }
             }
@@ -455,13 +452,28 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     user.ConfirmationKey = key;
                     new UserDataAccess(uow).Update(user);
-                    user.LoginInfo.LastPasswordReset = Context.NowSchoolTime;
-                    new UserLoginInfoDataAccess(uow).Update(user.LoginInfo);
+                    UpdateUserLoginInfo(user, null, null, Context.NowSchoolTime, uow);
                     uow.Commit();
                 }
                 return true;
             }
             return false;
+        }
+
+        private void UpdateUserLoginInfo(User user, string sisToken, DateTime? sisTokenExpires, DateTime? lastPasswordReset, UnitOfWork uow)
+        {
+            Action<UserLoginInfo> action;
+            if (user.LoginInfo == null)
+            {
+                user.LoginInfo = new UserLoginInfo { Id = user.Id };
+                action = new UserLoginInfoDataAccess(uow).Insert;
+            }
+            else action = new UserLoginInfoDataAccess(uow).Update;
+
+            user.LoginInfo.LastPasswordReset = lastPasswordReset;
+            user.LoginInfo.SisToken = sisToken;
+            user.LoginInfo.SisTokenExpires = sisTokenExpires;
+            action(user.LoginInfo);
         }
 
         private string GenerateConfirmationKey()

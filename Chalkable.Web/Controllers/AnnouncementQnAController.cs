@@ -35,7 +35,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult EditAnswer(int announcementQnAId, string answer)
         {
             var annQnA = SchoolLocator.AnnouncementQnAService.EditAnswer(announcementQnAId, answer);
-            var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnAs(annQnA.AnnouncementRef);
+            var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(annQnA.Id);
             return Json(AnnouncementQnAViewData.Create(res), 5);
         }
 
@@ -43,7 +43,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult EditQuestion(int announcementQnAId, string question)
         {
             var annQnA = SchoolLocator.AnnouncementQnAService.EditQuestion(announcementQnAId, question);
-            var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnAs(annQnA.AnnouncementRef);
+            var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(annQnA.Id);
             return Json(AnnouncementQnAViewData.Create(res), 5);
         }
 

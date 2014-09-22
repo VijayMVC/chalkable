@@ -10,6 +10,7 @@ namespace Chalkable.Web.Models.ChalkableApiExplorerViewData
         public string Name { get; set; }
         public string Method { get; set; }
         public string Description { get; set; }
+        public string Response { get; set; }
         public IList<ParamViewData> Params { get; set; }
 
         public static ApiExplorerMethodViewData Create(ChalkableApiMethodDescription method)
@@ -19,7 +20,8 @@ namespace Chalkable.Web.Models.ChalkableApiExplorerViewData
                 Name = method.Name,
                 Params = method.Parameters.Select(ParamViewData.Create).ToList(),
                 Method = method.Method,
-                Description = method.Description
+                Description = method.Description,
+                Response = method.Response
             };
         }
         public static IList<ApiExplorerMethodViewData> Create(IList<ChalkableApiMethodDescription> methods)

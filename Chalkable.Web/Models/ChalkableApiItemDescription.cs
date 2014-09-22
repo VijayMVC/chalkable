@@ -29,6 +29,7 @@ namespace Chalkable.Web.Models
         public string Name { get; set; }
         public string Method { get; set; }
         public string Description { get; set; }
+        public string Response { get; set; }
         public List<Param> Parameters { get; set; }
         public List<string> AvailableForRoles { get; set; }
     }

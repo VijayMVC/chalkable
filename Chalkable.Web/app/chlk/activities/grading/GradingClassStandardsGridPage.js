@@ -228,6 +228,37 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.updateDropDown(this.getAllScores(), node, true);
             },
 
+            [ria.mvc.DomEventBind('focus', '.grade-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeFocus(node, event){
+                node.select();
+            },
+
+            [ria.mvc.DomEventBind('keydown', '.grade-autocomplete')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function gradeUpDownKeyDown(node, event){
+                var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
+                var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
+                var list = this.dom.find('.autocomplete-list:visible');
+                if(!list.is(':visible')){
+                    var curCell = node.parent('.grade-value'), cell;
+                    if(isUp){
+                        cell = curCell.previous('.grade-value');
+                        if(cell.exists() && cell.hasClass('gradable')){
+                            this.submitActiveForm();
+                            this.showCell(cell);
+                        }
+                    }
+                    if(isDown){
+                        cell = curCell.next('.grade-value');
+                        if(cell.exists() && cell.hasClass('gradable')){
+                            this.submitActiveForm();
+                            this.showCell(cell);
+                        }
+                    }
+                }
+            },
+
             [ria.mvc.DomEventBind('keyup', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeKeyUp(node, event){
@@ -367,8 +398,36 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.setAllScores(allScores);
             },
 
+            function submitActiveForm(){
+                var activeCell = this.dom.find('.active-cell');
+                if(activeCell.exists()){
+                    setTimeout(function(){
+                        activeCell.find('form').trigger('submit');
+                    },1)
+                }
+                activeCell.removeClass('active-cell');
+            },
+
+            function showCell(parent){
+                if(parent.exists()){
+                    if(!parent.hasClass('active-row')){
+                        var index = parent.getAttr('row-index');
+                        this.dom.find('.active-row').removeClass('active-row');
+                        this.dom.find('[row-index=' + index + ']').addClass('active-row');
+                    }
+                    parent.addClass('active-cell');
+                    parent.parent('.marking-period-container').find('.comment-button').show();
+                    setTimeout(function(){
+                        parent.find('input').trigger('focus');
+                    },1)
+                }else{
+                    this.dom.find('.active-row').removeClass('active-row');
+                    this.dom.find('.comment-button').hide();
+                }
+            },
+
             function addEvents(){
-                var dom = this.dom;
+                var dom = this.dom, that = this;
                 new ria.dom.Dom().on('click.grade', function(doc, event){
 
                     var node = new ria.dom.Dom(event.target);
@@ -380,28 +439,8 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(!node.hasClass('comment-button')){
                                 popUp.hide();
                                 var parent = node.parent('.grade-value.gradable');
-                                var activeCell = dom.find('.active-cell');
-                                if(activeCell.exists()){
-                                    setTimeout(function(){
-                                        activeCell.find('form').trigger('submit');
-                                    },1)
-                                }
-                                activeCell.removeClass('active-cell');
-                                if(parent.exists()){
-                                    if(!parent.hasClass('active-row')){
-                                        var index = parent.getAttr('row-index');
-                                        dom.find('.active-row').removeClass('active-row');
-                                        dom.find('[row-index=' + index + ']').addClass('active-row');
-                                    }
-                                    parent.addClass('active-cell');
-                                    node.parent('.marking-period-container').find('.comment-button').show();
-                                    setTimeout(function(){
-                                        parent.find('input').trigger('focus');
-                                    },1)
-                                }else{
-                                    dom.find('.active-row').removeClass('active-row');
-                                    dom.find('.comment-button').hide();
-                                }
+                                that.submitActiveForm();
+                                that.showCell(parent);
                             }
                     }
                 });

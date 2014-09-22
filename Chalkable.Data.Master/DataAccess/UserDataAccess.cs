@@ -22,16 +22,16 @@ namespace Chalkable.Data.Master.DataAccess
             var typesL1 = new List<Type> { typeof(User), typeof(District), typeof(UserLoginInfo) };
             var typesL2 = new List<Type> { typesL1[0], typeof(SchoolUser), typeof(School) };
             userQuery.Sql.AppendFormat(@"select {0} from [{1}] 
-                                         join [{5}] on [{5}].[{6}] = [{1}].[{7}]
-                                         left join [{2}] on [{1}].{3} = [{2}].{4}"
+                                         left join [{2}] on [{1}].{3} = [{2}].{4}
+                                         left join [{5}] on [{5}].[{6}] = [{1}].[{7}]"
                                        , Orm.ComplexResultSetQuery(typesL1), typesL1[0].Name, typesL1[1].Name,
                                        User.DISTRICT_REF_FIELD, District.ID_FIELD, typesL1[2].Name, UserLoginInfo.ID_FIELD, User.ID_FIELD);
             conditions.BuildSqlWhere(userQuery, typesL1[0].Name);
 
             suQuery.Sql.AppendFormat(@"select {0} from [User]
-                                       join UserLoginInfo on UserLoginInfo.[{5}] = [User].[{6}]
                                        join SchoolUser on [User].[{1}] = SchoolUser.[{2}]
-                                       join School on SchoolUser.[{3}] = School.[{4}]", Orm.ComplexResultSetQuery(typesL2)
+                                       join School on SchoolUser.[{3}] = School.[{4}]
+                                       left join UserLoginInfo on UserLoginInfo.[{5}] = [User].[{6}]", Orm.ComplexResultSetQuery(typesL2)
                                      , User.SIS_USER_ID_FIELD, SchoolUser.USER_REF_FIELD, SchoolUser.SCHOOL_REF_FIELD, School.LOCAL_ID_FIELD
                                      , UserLoginInfo.ID_FIELD, User.ID_FIELD);
             conditions.BuildSqlWhere(suQuery, typesL1[0].Name);
@@ -85,7 +85,9 @@ namespace Chalkable.Data.Master.DataAccess
                 res = reader.Read<User>(true);
                 if (res.DistrictRef.HasValue)
                     res.District = reader.Read<District>(true);
-                res.LoginInfo = reader.Read<UserLoginInfo>(true);
+                var loginInfoId = SqlTools.ReadGuidNull(reader, string.Format("{0}_{1}", typeof(UserLoginInfo).Name, UserLoginInfo.ID_FIELD));
+                if(loginInfoId != null)
+                    res.LoginInfo = reader.Read<UserLoginInfo>(true);
                 reader.NextResult();
                 var sul = reader.ReadList<SchoolUser>(true);
                 foreach (var schoolUser in sul)

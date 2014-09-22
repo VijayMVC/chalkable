@@ -11,7 +11,7 @@ NAMESPACE('chlk.models.api', function () {
             [ria.serialize.SerializeProperty('method')],
             String, 'methodType',
             String, 'description',
-
+            String, 'response',
             ArrayOf(chlk.models.api.ApiParamInfo), 'params'
         ]);
 });

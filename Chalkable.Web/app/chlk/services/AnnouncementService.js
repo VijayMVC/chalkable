@@ -276,6 +276,7 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
+
             [[chlk.models.id.AnnouncementQnAId, String, String]],
             ria.async.Future, function answerQuestion(announcementQnAId, question, answer) {
                 return this.post('AnnouncementQnA/Answer', chlk.models.announcement.AnnouncementQnA, {
@@ -283,15 +284,41 @@ NAMESPACE('chlk.services', function () {
                     question: question,
                     answer: answer
                 }).then(function(qna){
-                    var result =this.cache[qna.getAnnouncementId().valueOf()];
-                    for (var i = 0; i < result.getAnnouncementQnAs().length; i++)
-                        if (result.getAnnouncementQnAs()[i].getId() == qna.getId())
-                        {
-                            result.getAnnouncementQnAs()[i] = qna;
-                            break;
-                        }
-                    return result;
+                        return this.editCacheAnnouncementQnAs_(qna);
                 }, this);
+            },
+
+
+            [[chlk.models.id.AnnouncementQnAId, String]],
+            ria.async.Future, function editQuestion(announcementQnAId, question) {
+                return this.post('AnnouncementQnA/EditQuestion', chlk.models.announcement.AnnouncementQnA, {
+                    announcementQnAId: announcementQnAId.valueOf(),
+                    question: question
+                }).then(function(qna){
+                        return this.editCacheAnnouncementQnAs_(qna);
+                    }, this);
+            },
+
+            [[chlk.models.id.AnnouncementQnAId, String]],
+            ria.async.Future, function editAnswer(announcementQnAId, answer) {
+                return this.post('AnnouncementQnA/EditAnswer', chlk.models.announcement.AnnouncementQnA, {
+                    announcementQnAId: announcementQnAId.valueOf(),
+                    answer: answer
+                }).then(function(qna){
+                            return this.editCacheAnnouncementQnAs_(qna);
+                    }, this);
+            },
+
+            [[chlk.models.announcement.AnnouncementQnA]],
+            Object, function editCacheAnnouncementQnAs_(qna){
+                var result =this.cache[qna.getAnnouncementId().valueOf()];
+                for (var i = 0; i < result.getAnnouncementQnAs().length; i++)
+                    if (result.getAnnouncementQnAs()[i].getId() == qna.getId())
+                    {
+                        result.getAnnouncementQnAs()[i] = qna;
+                        break;
+                    }
+                return result;
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementQnAId]],
@@ -319,8 +346,7 @@ NAMESPACE('chlk.services', function () {
                     announcementId: announcementId.valueOf(),
                     standardId: standardId.valueOf()
                 });
-            },
-
+            }
 
         ])
 });

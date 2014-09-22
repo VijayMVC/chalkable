@@ -25,6 +25,7 @@ mixin ApiCallForm(controllerInfo, role)
                                 +Hidden('apiCallRole', role)
                                 +Hidden('controllerName', controllerInfo.getName())
                                 +Hidden('methodName', cntMethod.getName())
+                                +Hidden('response', cntMethod.getResponse())
                                 +Hidden('apiFormId', apiFormId)
                                 if methodParams.length > 0
                                     table

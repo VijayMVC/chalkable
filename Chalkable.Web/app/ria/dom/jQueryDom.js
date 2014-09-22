@@ -378,6 +378,11 @@ NAMESPACE('ria.dom', function () {
                 return res;
             },
 
+            OVERRIDE, ria.dom.Dom, function select() {
+                this._dom.select();
+                return this;
+            },
+
             /* attributes */
 
             OVERRIDE, Object, function getAllAttrs() {},

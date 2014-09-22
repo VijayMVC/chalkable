@@ -4,6 +4,7 @@ each item, i in self.getAnnouncementQnAs()
     +ActionForm('announcement', 'answerQuestion')
         input(type="hidden",name="id", value=item.getId())
         input(type="hidden",name="announcementId", value=self.getId())
+        input(type="hidden",name="updateType")
         .row
             .avatar-container.i-b.no-overflow
                 +PersonImg(item.getQuestion().getPerson(), 47)
@@ -17,7 +18,7 @@ each item, i in self.getAnnouncementQnAs()
                         //a(href='javascript:', name='cancel-question-link').cancel-question-link cancel
                 input(type="text",name="question", value=questionMsg).edit-question-input
                 br
-                +Button()(type="submit", name="updateQuestionType", value="editQuestion").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
+                +Button()(type="submit").special-button.blue-button.submit-btn.edit-question-btn=Msg.Update.toUpperCase()
 
         answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
         if (answered || isTeacher)
@@ -41,7 +42,7 @@ each item, i in self.getAnnouncementQnAs()
                     input(type="text",name="answer", value=answerMsg
                         , class=hideEdit ? "x-hidden validate[required]" : "validate[required]").edit-answer-input
                     br
-                    +Button()(type="submit", name="updateAnswerType", value= !answerMsg ? "answer" : "editAnswer", class="special-button blue-button submit-btn").edit-answer-btn=Msg.Update.toUpperCase()
+                    +Button()(type="submit", value= !answerMsg ? "answer" : "editAnswer", class="special-button blue-button submit-btn").edit-answer-btn=Msg.Update.toUpperCase()
 
 
 if !self.isAnnOwner() && self.getUserRole().isStudent()

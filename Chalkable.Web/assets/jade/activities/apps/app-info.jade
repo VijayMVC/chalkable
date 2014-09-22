@@ -30,7 +30,7 @@ mixin AppPricing(appPrice, isReadOnly)
         .prices(class = isFreeApp ?  "x-hidden" : undefined)
             .elem.cost-per-user
                 label.hint.grey Cost per user:
-                +Textbox('costPerUser', appPrice.getPrice(), isReadOnly, "required, custom[number]", "0.0").price-box
+                +Textbox('costPerUser', appPrice.getPrice(), isReadOnly, "required, funcCall[chlkPrice]", "0.0").price-box
             .elem
                 label.wide.hint School flat rate:
                 .price-elem
@@ -38,7 +38,7 @@ mixin AppPricing(appPrice, isReadOnly)
                     +SlideCheckbox("schoolFlatRateEnabled",isSchoolFlatRateEnabled , isReadOnly)
             .elem.school-flat-rate(class = !isSchoolFlatRateEnabled ?  "x-hidden" : undefined)
                 label.hint.grey School cost:
-                +Textbox('costPerSchool', appPrice.getPricePerSchool(), isReadOnly, "required, custom[number]", "0.0").price-box
+                +Textbox('costPerSchool', appPrice.getPricePerSchool(), isReadOnly, "required, funcCall[chlkPrice]", "0.0").price-box
             .elem
                 label.wide.hint Class flat rate:
                 .price-elem
@@ -46,7 +46,7 @@ mixin AppPricing(appPrice, isReadOnly)
                     +SlideCheckbox("classFlatRateEnabled", isClassFlatRateEnabled, isReadOnly)
             .elem.class-flat-rate(class = !isClassFlatRateEnabled ?  "x-hidden" : undefined)
                 label.hint.grey Class cost:
-                +Textbox('costPerClass', appPrice.getPricePerClass(), isReadOnly, "required, custom[number]", "0.0").price-box
+                +Textbox('costPerClass', appPrice.getPricePerClass(), isReadOnly, "required, funcCall[chlkPrice]", "0.0").price-box
             .elem.paypal
                 label.hint Get Paid:
                 .price-elem

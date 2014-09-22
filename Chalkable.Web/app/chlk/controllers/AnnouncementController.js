@@ -904,10 +904,25 @@ NAMESPACE('chlk.controllers', function (){
         function answerQuestionAction(model) {
             var ann;
             if (model.getQuestion()){
-                ann = this.announcementService
-                    .answerQuestion(model.getId(), model.getQuestion(), model.getAnswer())
-                    .catchError(this.handleNoAnnouncementException_, this)
-                    .attach(this.validateResponse_());
+                var updateType = model.getUpdateType();
+                if(updateType ==  "editQuestion"){
+                    ann = this.announcementService
+                        .editQuestion(model.getId(), model.getQuestion())
+                        .catchError(this.handleNoAnnouncementException_, this)
+                        .attach(this.validateResponse_());
+                }
+                if(updateType == "answer"){
+                    ann = this.announcementService
+                        .answerQuestion(model.getId(), model.getQuestion(), model.getAnswer())
+                        .catchError(this.handleNoAnnouncementException_, this)
+                        .attach(this.validateResponse_());
+                }
+                if(updateType == "editAnswer"){
+                    ann = this.announcementService
+                        .editAnswer(model.getId(),  model.getAnswer())
+                        .catchError(this.handleNoAnnouncementException_, this)
+                        .attach(this.validateResponse_());
+                }
             }
             else
                 ann = this.announcementService
