@@ -61,6 +61,7 @@ namespace Chalkable.Web.Models
         public bool DisplayStudentAverage { get; set; }
         public bool DisplayTotalPoints { get; set; }
         public bool IncludeWithdrawnStudents { get; set; }
+        public bool RoundDisplayedAverages { get; set; }
 
         public IList<TotalPointViewData> TotalPoints { get; set; }
         
@@ -73,6 +74,7 @@ namespace Chalkable.Web.Models
                     DisplayStudentAverage = gradeBook.Options.DisplayStudentAverage,
                     DisplayTotalPoints = gradeBook.Options.DisplayTotalPoints,
                     IncludeWithdrawnStudents = gradeBook.Options.IncludeWithdrawnStudents,
+                    RoundDisplayedAverages = gradeBook.Options.RoundDisplayedAverages
                 };
             foreach (var student in gradeBook.Students)
             {
