@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             public const int LEVEL_INFO = 0;
             public const int LEVEL_WARN = 1;
             public const int LEVEL_ERROR = 2;
-            public const int FLUSH_SIZE = 1;
+            public const int FLUSH_SIZE = 100;
 
             private List<BackgroundTaskLogItem> items = new List<BackgroundTaskLogItem>();
             private Guid backgroundTaskId;
