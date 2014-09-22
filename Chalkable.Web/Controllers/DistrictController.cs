@@ -55,8 +55,8 @@ namespace Chalkable.Web.Controllers
         {
             start = start ?? 0;
             count = count ?? 10;
-            var districts = MasterLocator.DistrictService.GetDistricts(start.Value, count.Value);
-            return Json(districts.Transform(DistrictViewData.Create));
+            var districts = MasterLocator.DistrictService.GetDistrictsSyncStatus(start.Value, count.Value);
+            return Json(districts.Transform(DistrictSyncStatusViewData.Create));
         }
 
         public ActionResult ListTimeZones()

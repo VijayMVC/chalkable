@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -14,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         District GetByIdOrNull(Guid id);
         District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
+        PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = int.MaxValue);
         void Update(District district);
         void DeleteDistrict(Guid id);
         bool IsOnline(Guid id);
@@ -63,6 +63,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return new DistrictDataAccess(uow).GetPage(start, count);
+            }
+        }
+
+        public PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = Int32.MaxValue)
+        {
+            using (var uow = Read())
+            {
+                return new DistrictDataAccess(uow).GetSyncStatuses(start, count);
             }
         }
 
