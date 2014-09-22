@@ -1,6 +1,5 @@
 ﻿using System;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Enums;
 
 namespace Chalkable.Data.Master.Model
 {
@@ -14,14 +13,12 @@ namespace Chalkable.Data.Master.Model
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string DbName { get; set; }
         public string SisUrl { get; set; }
         public string SisUserName { get; set; }
         public string SisPassword { get; set; }
         public int Status { get; set; }
         public string TimeZone { get; set; }
         public string ServerUrl { get; set; }
-        public Guid? SisDistrictId { get; set; }
         public string SisRedirectUrl { get; set; }
         public DateTime? LastSync { get; set; }
 

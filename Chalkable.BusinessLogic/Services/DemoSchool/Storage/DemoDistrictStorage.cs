@@ -21,7 +21,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return new District
             {
-                DbName = "DemoDB",
                 Id = id,
                 IsDemoDistrict = true,
                 Name = "Demo District",
