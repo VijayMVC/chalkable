@@ -21,8 +21,8 @@
 
 @each $size in 40, 47, 55, 64, 70, 128
   .person-avatar-m-#{$size}, .person-avatar-w-#{$size}
-    height: $size + "px"
-    width:  $size + "px"
+    height: $size * 1px
+    width:  $size * 1px
 
     position: relative
     &::before
@@ -32,10 +32,12 @@
       bottom: 0
       left: 0
       right: 0
+      z-index: -1
 
     &, &::before
       background: transparent 50% 50% no-repeat
       background-size: cover
+      border-radius: 50%
 
   .person-avatar-m-#{$size}::before
     background-image: image-url("avatars/" + $size + "/.no-avatar.png")

@@ -2,7 +2,7 @@ mixin Glue_()
     =[].slice.call(arguments).filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ')
 
 mixin FeedItem(item, disabled)
-    -VALIDATE_ARG('item', [chlk.models.announcement.FeedAnnouncementViewData], item)
+    -VALIDATE_ARG('item', [chlk.models.announcement.FeedAnnouncementViewData, chlk.templates.announcement.AnnouncementView], item)
     -VALIDATE_ARG('disabled_', [Boolean], disabled)
 
     -var isAdminAnnouncement = item.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
