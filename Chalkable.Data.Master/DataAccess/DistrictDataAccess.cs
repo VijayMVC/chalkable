@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
@@ -34,6 +35,11 @@ namespace Chalkable.Data.Master.DataAccess
             using (ExecuteStoredProcedureReader("spDeleteDistrict ", new Dictionary<string, object> { { "id", id } })) { }
         }
 
+        public PaginatedList<DistrictSyncStatus> GetSyncStatuses(int start, int count)
+        {
+            var sql = "select * from vwDistrictSyncStatus";
+            return PaginatedSelect<DistrictSyncStatus>(new DbQuery(sql, null), District.ID_FIELD, start, count);
+        }
 
         //---------------------------------------------------------------------
         //TODO: next methods runs on the district db server under master database

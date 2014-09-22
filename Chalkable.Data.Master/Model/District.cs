@@ -36,4 +36,19 @@ namespace Chalkable.Data.Master.Model
         StudentLogged = 5,
         PayingCustomer = 6
     }
+
+    public class DistrictSyncStatus : District
+    {
+        public Guid? ProcessingId { get; set; }
+		public DateTime? ProcessingCreated { get; set; }
+		public DateTime? ProcessingStarted { get; set; }
+		public Guid? CompletedId { get; set; }
+		public DateTime? CompletedCreated { get; set; }
+		public DateTime? CompletedStarted { get; set; }
+		public DateTime? CompletedCompleted { get; set; }
+		public Guid? FailedId { get; set; }
+		public DateTime? FailedCreated { get; set; }
+		public DateTime? FailedStarted { get; set; }
+        public DateTime? FailedCompleted { get; set; }
+    }
 }
