@@ -64,7 +64,7 @@ mixin Glue_()
                 .description
                     .chat-bubble
                         h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
-                        p: +Glue_(item.getTitle(), self.getContent())
+                        p: +Glue_(self.getTitle(), self.getContent())
 
                         if self.getStandards() && self.getStandards().length > 0
                             .standards-container

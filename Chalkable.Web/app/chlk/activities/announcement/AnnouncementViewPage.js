@@ -201,19 +201,21 @@ NAMESPACE('chlk.activities.announcement', function () {
                     });
             },
 
-            [ria.mvc.DomEventBind('click', '.comment-grade')],
+            [ria.mvc.DomEventBind('click', '.comment-text')],
             [[ria.dom.Dom, ria.dom.Event]],
             function commentClick(node, event){
-                var popUp = node.find('.small-pop-up');
+                var popUp = node.parent().find('.small-pop-up'),
+                    comments = popUp.find('.grading-comments-list'),
+                    $textarea = popUp.find('.comment-input');
+
                 popUp.show();
-                var comments = popUp.find('.grading-comments-list');
-                if(popUp.find('.comment-input').getValue())
-                    comments.hide();
-                else
-                    comments.show();
+
+                if($textarea.getValue()) comments.hide();
+                else                     comments.show();
+
                 setTimeout(function(){
-                    jQuery(popUp.find('textarea').valueOf()).focus();
-                }, 10);
+                    jQuery($textarea.valueOf()).focus();
+                }, 1);
             },
 
             [ria.mvc.DomEventBind('click', '.grade-input')],
@@ -240,7 +242,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function wholeDomClick(node, event){
                 var target = new ria.dom.Dom(event.target);
-                if(!target.hasClass('comment-grade') && !target.parent('.comment-grade').exists())
+                if(!target.hasClass('comment-text') && !target.parent('.comment-text').exists())
                     this.dom.find(('.small-pop-up:visible')).hide();
             },
 

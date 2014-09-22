@@ -1,6 +1,9 @@
 .announcement-view-page
   position: relative
 
+  .close-open-control
+    margin-top: 24px
+
   .description
     min-width: 736px
     display: inline-block
@@ -21,7 +24,7 @@
   .standards-container
     margin-top: 24px
 
-  .attachments-and-applications
+  .attachments-and-applications, .attachments-container
     .attachment, .application
       border-radius: 3px
       background: #fff
@@ -78,9 +81,10 @@
     border: 1px solid #c8c7c3
     border-top-left-radius: 5px
     border-top-right-radius: 5px
-    height: 75px
+    line-height: 37px
     +box-shadow(#fff 0px 1px 0px inset)
     background: #f7f7f5
+    padding: 19px
 
     position: relative
     &::after
@@ -92,29 +96,106 @@
       height: 3px
       +background-image(linear-gradient(top, #c8c7c3 0%, transparentize(#c8c7c3, 1) 100%))
 
+    .right
+      float: right
+
+    .section
+      display: inline-block
+      color: #56554f
+      text-transform: uppercase
+      font-weight: 600
+
+    .section + .section
+      padding-left: 40px
+      position: relative
+      &::after, &::before
+        content: ' '
+        position: absolute
+        top: 10px
+        bottom: 10px
+        width: 1px
+
+      &::before
+        left: 20px
+        background-color: #e3e3e1
+      &::after
+        left: 21px
+        background-color: #efefed
+
+
+
+
   .grades-individual
     border: 1px solid #c8c7c3
 
     .row
       border-bottom: 1px solid #e7e6e2
+      padding: 15px
 
     .attachments-container
       display: none
       background: #f7f7f5
       border-bottom: 1px solid #c8c7c3
 
-  .update-grade-form
-    padding: 15px
+  .row:not(.readonly) .selected
+    display: none
 
+  .row.selected:not(.readonly)
+    .not-selected
+      display: none
+
+    .selected
+      display: block
+
+  .update-grade-form
+    display: table
+    width: 100%
     > *
-      display: inline-block
+      display: table-cell
+      vertical-align: top
 
     .image-container
-      margin-right: 25px
+      padding-right: 25px
+
+  .name-block
+    position: relative
+    width: 100%
+    line-height: 47px
+
+    A
+      text-decoration: none
+
+    > A
+      color: #2f7790
+      font-size: 20px
+
+    .grade-options
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+
+    .small-pop-up
+      position: absolute
+      top: 40px
+      left: 2px
+      display: none
+      border-radius: 5px
+      +box-shadow(transparentize(#000, .8) 0 2px 16px)
+      z-index: 11
+      line-height: 15px
 
   .grade-block
+    position: relative
+    width: 100px
+    line-height: 47px
+
     .text-value
       color: #2f7790
+      display: inline-block
+      width: 85px
+      text-align: center
 
     .text-value, input[type=text]
       font-size: 20px
@@ -122,10 +203,28 @@
       +text-shadow(transparentize(#fff, .5) 0 1px 0)
 
     input[type=text]
-      width: 50px
+      width: 75px
       text-align: center
       color: #000
 
+    .letters
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+      width: 85px
+      text-align: center
+
+  .grading-input-popup.chlk-pop-up-container
+    position: absolute
+    display: none
+    padding: 12px
+    text-align: left
+    left: -35px
+    top: 65px
+    white-space: normal !important
 
 
-
+  .attachments-container
+    padding: 30px

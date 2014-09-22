@@ -35,25 +35,16 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     +Hidden('studentid', student.getId())
                     +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
                         +PersonImg(student, 47)
-                    .i-b.name-block
-                        .p-container
-                            +ProfileLink(student, 'student')
-                                p= student.getFullName()
+                    .name-block
+                        +ProfileLink(student, 'student')
+                            = student.getFullName()
                         if !readonly
-                            SPAN.container
-                                SPAN.comment-grade
-                                    +ActionLink('grading', 'getGradeComments').comment-text=(item.getComment() ? Msg.Commented : Msg.Comment)
-                                    if !readonly
-                                        .small-pop-up
-                                            .container
-                                                .triangle
-                                                div
-                                                    div
-                                                        +PersonImg(owner, 24)
-                                                    div
-                                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment()).comment-input=item.getComment()
-                                                        .grading-comments-list
-                                                        span.enter=Msg.Enter_when_done
+                            .grade-options.selected
+                                +ActionLink('grading', 'getGradeComments').comment-text= (item.getComment() ? Msg.Commented : Msg.Comment)
+                                    .small-pop-up.chat-bubble.top
+                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment()).comment-input= item.getComment()
+                                        .grading-comments-list
+                                        span.enter= Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                             userRole = self.getUserRole()
