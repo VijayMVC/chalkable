@@ -13,7 +13,28 @@ button, input[type=button], input[type=submit], input[type=reset]
   color: #56554f
   +text-shadow(transparentize(#fff, .5) 0 1px 0px)
 
+  padding: 0 10px
+  cursor: pointer
+
+  &.blue-button
+    border-color: #29596e
+    background-color: #2e657c
+    +box-shadow(transparentize(#000, .55) 0 1px 3px, transparentize(#fff, .6) 0 1px 0px inset)
+    +background-image(linear-gradient(top, #568ea8 0%, transparentize(#568ea8, 1) 100%))
+    color: #fff
+    +text-shadow(transparentize(#000, .8) 0 1px 1px)
+
+  &.green-button
+    border-color: #327e30
+    background-color: #2e7c35
+    +box-shadow(transparentize(#000, .55) 0 1px 3px, transparentize(#fff, .6) 0 1px 0px inset)
+    +background-image(linear-gradient(top, #6dbb72 0%, transparentize(#6dbb72, 1) 100%))
+    color: #fff
+    +text-shadow(transparentize(#000, .8) 0 1px 1px)
+
 
   &.disabled, &[disabled]
     background-color: #999
     color: #eee
+
+

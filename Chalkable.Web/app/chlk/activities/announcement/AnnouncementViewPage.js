@@ -169,29 +169,13 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function editAnswerClick(node, event){
                 var row = node.parent('.row');
-                row.find('.edit-answer-block, .edit-question-block').fadeOut(function(){
+                row.find('.edit-answer-text, .edit-question-text').fadeOut(function(){
                     var node = row.find('.edit-answer-input, .edit-question-input');
                     node.removeClass('x-hidden').fadeIn(function(){
                         node.trigger('focus');
                     });
                 });
             },
-
-            [ria.mvc.DomEventBind('click', '.edit-question-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function saveQuestionClick(node, event){
-                var updateTypeNode = node.parent().parent().parent().find('[name="updateType"]');
-                updateTypeNode.setValue('editQuestion');
-            },
-
-            [ria.mvc.DomEventBind('click', '.edit-answer-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function saveAnswerClick(node, event){
-                var value = node.getAttr('value');
-                var updateTypeNode = node.parent().parent().parent().find('[name="updateType"]');
-                updateTypeNode.setValue(value);
-            },
-
 
             [ria.mvc.DomEventBind('keyup', '.edit-answer-input, .edit-question-input')],
             [[ria.dom.Dom, ria.dom.Event]],

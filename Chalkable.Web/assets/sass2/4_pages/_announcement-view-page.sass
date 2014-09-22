@@ -1,2 +1,131 @@
 .announcement-view-page
   position: relative
+
+  .description
+    min-width: 736px
+    display: inline-block
+    font-size: 15px
+    line-height: 22px
+    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+    color: #2b2a28
+
+    h2
+      color: #2f7790
+      margin: 0 0 8px
+      padding: 0
+      font-size: inherit
+
+    p
+      margin: 0
+
+  .standards-container
+    margin-top: 24px
+
+  .attachments-and-applications
+    .attachment, .application
+      border-radius: 3px
+      background: #fff
+      border: 1px solid #c8c7c3
+      display: inline-block
+      margin-right: 20px
+      padding: 18px
+
+  .questions-and-answers .row
+    margin-top: 24px
+
+  .qna
+    width: 350px
+    position: relative
+
+    font-size: 14px
+    line-height: 22px
+    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+    color: #2b2a28
+    font-family: 'Open Sans', sanf-serif
+
+    h3
+      margin: 0 0 8px
+      padding: 0
+      font-size: inherit
+
+    p
+      margin: 0
+
+    .chat-bubble + span
+      font-size: 10px
+      line-height: 40px
+      color: #9c9c9c
+      font-style: italic
+
+    .submit-btn
+      display: none
+      position: absolute
+      bottom: 0
+      right: 0
+
+    input[type=text]
+      //display: block
+      border: none
+      +box-shadow(none)
+      background: transparent
+      font-size: inherit
+      line-height: inherit
+      padding: 0
+      color: inherit
+      width: 100%
+
+  .student-announcements-top-panel
+    border: 1px solid #c8c7c3
+    border-top-left-radius: 5px
+    border-top-right-radius: 5px
+    height: 75px
+    +box-shadow(#fff 0px 1px 0px inset)
+    background: #f7f7f5
+
+    position: relative
+    &::after
+      content: ' '
+      position: absolute
+      bottom: -3px
+      right: 0
+      left: 0
+      height: 3px
+      +background-image(linear-gradient(top, #c8c7c3 0%, transparentize(#c8c7c3, 1) 100%))
+
+  .grades-individual
+    border: 1px solid #c8c7c3
+
+    .row
+      border-bottom: 1px solid #e7e6e2
+
+    .attachments-container
+      display: none
+      background: #f7f7f5
+      border-bottom: 1px solid #c8c7c3
+
+  .update-grade-form
+    padding: 15px
+
+    > *
+      display: inline-block
+
+    .image-container
+      margin-right: 25px
+
+  .grade-block
+    .text-value
+      color: #2f7790
+
+    .text-value, input[type=text]
+      font-size: 20px
+      font-weight: 600
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+    input[type=text]
+      width: 50px
+      text-align: center
+      color: #000
+
+
+
+

@@ -49,31 +49,38 @@ mixin Glue_()
                     .comment This item is hidden from students.
                     +ActionLink('announcement', 'makeVisible', self.getId()).make-visible-btn Make visible
             br
-            .left-block
-                if self.getOwner()
-                    if self.getUserRole().isStudent()
-                        a(data-tooltip=self.getOwner().getFullName(),
-                        ).image-container
-                            +PersonImg(self.getOwner(), 47)
-                    else
-                        +ProfileLink(self.getOwner(), 'teacher')(
-                            data-tooltip=self.getOwner().getFullName(),
-                        ).image-container
-                            +PersonImg(self.getOwner(), 47)
-            .right-block
-                h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
-                p=self.getContent()
-                .attachments-and-applications
-                    +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
-                        userRole = self.getUserRole()
-                    )
-                if self.getStandards() && self.getStandards().length > 0
-                    .standards-container
-                        .title Standards:
-                        .standard-list
-                            each standard in self.getStandards()
-                                div(data-tooltip = standard.getDescription()).grey-button.same-on-hover
-                                    span=standard.getName()
+            .table
+                .avatar-block-left
+                    if self.getOwner()
+                        if self.getUserRole().isStudent()
+                            a(data-tooltip=self.getOwner().getFullName(),
+                            ).image-container
+                                +PersonImg(self.getOwner(), 47)
+                        else
+                            +ProfileLink(self.getOwner(), 'teacher')(
+                                data-tooltip=self.getOwner().getFullName(),
+                            ).image-container
+                                +PersonImg(self.getOwner(), 47)
+                .description
+                    .chat-bubble
+                        h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
+                        p: +Glue_(item.getTitle(), self.getContent())
+
+                        if self.getStandards() && self.getStandards().length > 0
+                            .standards-container
+                                .title Standards:
+                                .standard-list
+                                    each standard in self.getStandards()
+                                        button(data-tooltip = standard.getDescription()).same-on-hover= standard.getName()
+                                        = ' '
+
+        .close-open-control
+            h3 Apps
+            .content.attachments-and-applications
+                +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
+                    userRole = self.getUserRole()
+                )
+
         if self.getUserRole().isStudent()
             .silver-panel.attachments-panel
                 .left-block.attachments
@@ -82,12 +89,16 @@ mixin Glue_()
                         +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
                             userRole = self.getUserRole()
                         )
-        .questions-and-answers.silver-panel
-            +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
-                userRole = self.getUserRole()
-            )
-        div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
-            if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
+
+        +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
+            userRole = self.getUserRole()
+        )
+
+        if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
+            .close-open-control
+                h3 Grades
+
+            div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
                 +Hidden('maxScore', self.getMaxScore())#max-score
                 +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
                     autoGradeApps = self.getAutoGradeApps(),

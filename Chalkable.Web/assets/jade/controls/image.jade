@@ -3,6 +3,9 @@ mixin Image()
     img(attributes)
 
 mixin PersonImg(person, size, needAlerts)
+    -VALIDATE_ARG('person', [Object], person)
+    -VALIDATE_ARG('size', [Number], size)
+    -VALIDATE_ARG('needAlerts_', [Boolean], needAlerts)
     if(person && person.getGender())
         src = chlk.templates.ChlkTemplate.prototype.getStudentPictureURL(person.getId(), size, size)
         isWoman = person.getGender().toLowerCase() == 'f';
