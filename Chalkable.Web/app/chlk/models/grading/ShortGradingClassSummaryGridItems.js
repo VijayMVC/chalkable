@@ -59,6 +59,9 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('displaytotalpoints')],
             Boolean , 'ableDisplayTotalPoints',
 
+            [ria.serialize.SerializeProperty('rounddisplayedaverages')],
+            Boolean, 'roundDisplayedAverages',
+
             [ria.serialize.SerializeProperty('totalavarages')],
             ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
 
@@ -77,6 +80,11 @@ NAMESPACE('chlk.models.grading', function () {
 
             String, function displayGrade(grade){
                 return grade ? grade.toFixed(2) : '';
+            },
+
+            String, function displayAverages(average){
+                var numbersCount = this.isRoundDisplayedAverages() ? 0 : 2;
+                return average ? parseFloat(average).toFixed(numbersCount) : '';
             },
 
             [[chlk.models.grading.ShortStudentAverageInfo, Boolean, Boolean]],
