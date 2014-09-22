@@ -1887,6 +1887,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Description = name,
                 GradeLevelRef = gradeLevelRef,
                 ChalkableDepartmentRef = null,
+                ClassNumber = "12" + "." + id.ToString(),
                 PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
                 SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
