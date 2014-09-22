@@ -203,7 +203,6 @@ namespace Chalkable.StiImport.Services
 
     public class SisConnectionInfo
     {
-        public string DbName { get; set; }
         public string SisUrl { get; set; }
         public string SisUserName { get; set; }
         public string SisPassword { get; set; }

@@ -25,7 +25,6 @@ namespace Chalkable.BackgroundTaskProcessor
             
             var info = new SisConnectionInfo
                 {
-                    DbName = district.DbName,
                     SisPassword = district.SisPassword,
                     SisUrl = district.SisUrl,
                     SisUserName = district.SisUserName

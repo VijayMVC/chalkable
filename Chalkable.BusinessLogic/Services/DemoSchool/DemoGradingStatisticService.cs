@@ -99,16 +99,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 annQuery.ToDate = gradingPeriods.First().EndDate;
             }
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
-            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students)).ToList();
+            var classRoomOptions = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
+            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students, classRoomOptions)).ToList();
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
-                                                  IList<AnnouncementComplex> anns, IList<Person> students)
+                                                  IList<AnnouncementComplex> anns, IList<Person> students, 
+                                                  Data.School.Model.ClassroomOption classroomOption)
         {
             var gradeBook = new ChalkableGradeBook
             {
                 GradingPeriod = gradingPeriod,
-                Options = ChalkableClassOptions.Create(stiGradeBook.Options),
+                Options = ChalkableClassOptions.Create(classroomOption),
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
                 Students = students
             };
@@ -119,7 +121,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
 
             gradeBook.Announcements = PrepareAnnouncementDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
-            if (!stiGradeBook.Options.IncludeWithdrawnStudents)
+            if (!classroomOption.IncludeWithdrawnStudents)
             {
                 gradeBook.Students = new List<Person>();
                 foreach (var student in students)

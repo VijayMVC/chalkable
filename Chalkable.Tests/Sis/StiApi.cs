@@ -48,72 +48,10 @@ namespace Chalkable.Tests.Sis
         }
 
         [Test]
-        public void Test2()
-        {
-            //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            //var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/api/");
-            var cl = ConnectorLocator.Create("administrator", "qqqq1111", "http://208.83.95.80:8215/API/");
-
-            Debug.WriteLine(DateTime.Now.Ticks);
-            var r = cl.SyncConnector.GetDiff(typeof(Term), null) as SyncResult<Term>;
-            Debug.WriteLine(DateTime.Now.Ticks);
-            var terms = r.All.Where(x => x.TermID == 54).ToList();
-            foreach (var term in terms)
-            {
-                Debug.WriteLine("term = ({0}, {1}),", term.Name, term.AcadSessionID);
-                
-                var r2 = cl.SyncConnector.GetDiff(typeof(AcadSession), null) as SyncResult<AcadSession>;
-                var acads = r2.All.Where(x => x.AcadSessionID == term.AcadSessionID).ToList();
-                foreach (var acadSession in acads)
-                {
-                    Debug.WriteLine("acad = ({0}, {1}),", acadSession.AcadSessionID, acadSession.SchoolID);
-                }
-            }
-
-        }
-
-        [Test]
-        public void AlternateScoreTest()
-        {
-            //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            //var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/api/");
-            var cl = ConnectorLocator.Create("administrator", "qqqq1111", "http://208.83.95.80:8215/API/");
-
-            Debug.WriteLine(DateTime.Now.Ticks);
-            var r = cl.SyncConnector.GetDiff(typeof(StudentScheduleTerm), null) as SyncResult<StudentScheduleTerm>;
-            var r3 = cl.SyncConnector.GetDiff(typeof(Student), null) as SyncResult<Student>;
-            //var r2 = cl.SyncConnector.GetDiff(typeof (SectionStaff), null) as SyncResult<SectionStaff>;
-            Debug.WriteLine(DateTime.Now.Ticks);
-
-            //var items = r.All.Where(x => x.AcadSessionID== 9 &&  r2.All.Any(y => y.SectionID == x.CourseID && y.StaffID == 3919) && x.SectionOfCourseID.HasValue).ToList();
-
-            var items = r.All.Where(x => x.SectionID == 11396 && x.TermID == 54).ToList();
-            var students = r3.All.Where(x => x.StudentID == 6980).ToList();
-            foreach (var student in students)
-            {
-                Debug.WriteLine("student = ({0}, {1}),", student.UserID, student.StudentID);
-                var r2 = cl.SyncConnector.GetDiff(typeof(UserSchool), null) as SyncResult<UserSchool>;
-                var users = r2.All.Where(x => x.UserID == student.UserID).ToList();
-                foreach (var userSchool in users)
-                {
-                    Debug.WriteLine("userschool = ({0}, {1}),", userSchool.UserID, userSchool.SchoolID);
-                }
-            }
-
-            foreach (var item in items)
-            {
-                //Debug.WriteLine("({0}, {1}),", item.CourseID, item.GradingScaleID.HasValue ? item.GradingScaleID.Value.ToString() : "null");
-                //Debug.WriteLine("({0}, {1}, {2}),"
-                //    , item.UserID, item.SchoolID, item.DistrictGuid);
-                Debug.WriteLine("({0}, {1}),", item.TermID, item.StudentID);
-            }
-        }
-
-        [Test]
         public void Test3()
         {
-            var hash = UserService.PasswordMd5("Hellowebapps1!");
-            Debug.WriteLine(hash);
+            //var hash = UserService.PasswordMd5("Hellowebapps1!");
+            //Debug.WriteLine(hash);
         }
     }
 }

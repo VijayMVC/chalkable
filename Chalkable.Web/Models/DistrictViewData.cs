@@ -9,7 +9,6 @@ namespace Chalkable.Web.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string DbName { get; set; }
         
         public int SisSystemType { get; set; }
         public string SisUrl { get; set; }
@@ -20,7 +19,6 @@ namespace Chalkable.Web.Models
         {
             Id = district.Id;
             Name = district.Name;
-            DbName = district.DbName;
             SisUrl = district.SisUrl;
             SisUserName = district.SisUserName;
         }

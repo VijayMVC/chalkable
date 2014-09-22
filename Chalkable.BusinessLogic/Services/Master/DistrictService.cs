@@ -41,13 +41,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                         ServerUrl = server,
                         Id = id,
                         Name = name,
-                        DbName = string.Empty,//TODO: remove from DB?
                         SisUrl = sisUrl,
                         SisRedirectUrl = sisRedirectUrl,
                         SisUserName = sisUserName,
                         SisPassword = sisPassword,
-                        TimeZone = timeZone,
-                        SisDistrictId = id//TODO: need to remove from DB
+                        TimeZone = timeZone
                     };
                 da.Insert(res);
                 uow.Commit();

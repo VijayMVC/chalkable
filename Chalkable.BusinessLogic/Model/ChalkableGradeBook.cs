@@ -108,15 +108,17 @@ namespace Chalkable.BusinessLogic.Model
         public bool DisplayStudentAverage { get; set; }
         public bool DisplayTotalPoints { get; set; }
         public bool IncludeWithdrawnStudents { get; set; }
+        public bool RoundDisplayedAverages { get; set; }
 
-        public static ChalkableClassOptions Create(StiConnector.Connectors.Model.ClassroomOption classroomOption)
+        public static ChalkableClassOptions Create(Data.School.Model.ClassroomOption classroomOption)
         {
             return new ChalkableClassOptions
                 {
-                    DisplayAlphaGrades = classroomOption.DisplayAlphaGrades,
+                    DisplayAlphaGrades = classroomOption.DisplayAlphaGrade,
                     DisplayStudentAverage = classroomOption.DisplayStudentAverage,
                     DisplayTotalPoints = classroomOption.DisplayTotalPoints,
-                    IncludeWithdrawnStudents = classroomOption.IncludeWithdrawnStudents
+                    IncludeWithdrawnStudents = classroomOption.IncludeWithdrawnStudents,
+                    RoundDisplayedAverages = classroomOption.RoundDisplayedAverages
                 };
         }
     }

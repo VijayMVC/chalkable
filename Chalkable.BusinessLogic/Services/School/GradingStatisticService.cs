@@ -221,18 +221,20 @@ namespace Chalkable.BusinessLogic.Services.School
                 mpId = gradingPeriods.First().MarkingPeriodRef;
             }
 
-            var students = ServiceLocator.ClassService.GetStudents(classId, gradebook.Options.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
-            var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());   
-            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students)).ToList();
+            var classRoomOptions = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
+            var students = ServiceLocator.ClassService.GetStudents(classId, classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
+            var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
+            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students, classRoomOptions)).ToList();
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
-                                                  IList<AnnouncementComplex> anns, IList<Person> students)
+                                                  IList<AnnouncementComplex> anns, IList<Person> students
+                                                 , Data.School.Model.ClassroomOption classroomOption)
         {
             var gradeBook = new ChalkableGradeBook
             {
                 GradingPeriod = gradingPeriod,
-                Options = ChalkableClassOptions.Create(stiGradeBook.Options),
+                Options = ChalkableClassOptions.Create(classroomOption),
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
                 Students = students
             };
@@ -242,7 +244,8 @@ namespace Chalkable.BusinessLogic.Services.School
             if (stAvgs.Count > 0)
                 gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
 
-            gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
+            gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students
+                , classroomOption.IncludeWithdrawnStudents);
             if (!stiGradeBook.Options.IncludeWithdrawnStudents)
             {
                 gradeBook.Students = new List<Person>();
@@ -257,7 +260,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         private IList<AnnouncementDetails> PrepareAnnounceemntDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
-            , IList<AnnouncementComplex> anns, IList<Person> students)
+            , IList<AnnouncementComplex> anns, IList<Person> students, bool inludeWithdrawnStudent)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
                                                            && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
@@ -279,8 +282,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(annDetails, activity);
                 var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();
-                if (!stiGradeBook.Options.IncludeWithdrawnStudents)
-                    scores = scores.Where(x => !x.Withdrawn).ToList();
+                if (!inludeWithdrawnStudent) scores = scores.Where(x => !x.Withdrawn).ToList();
                 var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
                 foreach (var score in scores)
                 {
