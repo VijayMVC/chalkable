@@ -23,11 +23,49 @@ namespace Chalkable.Web.Models
             SisUserName = district.SisUserName;
         }
 
-        public static DistrictViewData Create(District school)
+        public static DistrictViewData Create(District district)
         {
-            return new DistrictViewData(school);
+            return new DistrictViewData(district);
         }
-        public static IList<DistrictViewData> Create(IList<District> districts)
+    }
+
+    public class DistrictSyncStatusViewData : DistrictViewData
+    {
+        public Guid? ProcessingId { get; set; }
+        public DateTime? ProcessingCreated { get; set; }
+        public DateTime? ProcessingStarted { get; set; }
+        public Guid? CompletedId { get; set; }
+        public DateTime? CompletedCreated { get; set; }
+        public DateTime? CompletedStarted { get; set; }
+        public DateTime? CompletedCompleted { get; set; }
+        public Guid? FailedId { get; set; }
+        public DateTime? FailedCreated { get; set; }
+        public DateTime? FailedStarted { get; set; }
+        public DateTime? FailedCompleted { get; set; }
+
+        protected DistrictSyncStatusViewData(DistrictSyncStatus district) : base(district)
+        {
+            ProcessingId = district.ProcessingId;
+            ProcessingStarted = district.ProcessingStarted;
+            ProcessingCreated = district.ProcessingCreated;
+
+            CompletedId = district.CompletedId;
+            CompletedStarted = district.CompletedStarted;
+            CompletedCreated = district.CompletedCreated;
+            CompletedCompleted = district.CompletedCompleted;
+
+            FailedId = district.FailedId;
+            FailedStarted = district.FailedStarted;
+            FailedCreated = district.FailedCreated;
+            FailedCompleted = district.FailedCompleted;
+        }
+
+        public static DistrictSyncStatusViewData Create(DistrictSyncStatus district)
+        {
+            return new DistrictSyncStatusViewData(district);
+        }
+
+        public static IList<DistrictSyncStatusViewData> Create(IList<DistrictSyncStatus> districts)
         {
             return districts.Select(Create).ToList();
         } 
@@ -35,16 +73,6 @@ namespace Chalkable.Web.Models
 
     public class DistrictRegisterViewData
     {
-        /*
-         * linkKey: "4d2d35a9-c14d-478f-b949-9dd92316060c",
-  districtGuid: "59295830-5853-4a22-9585-9768145ae3ff",
-  apiUrl: "http://sandbox.sti-k12.com/chalkable/api/",
-  sisUsername: "Chalkable",
-  sisPassword: "R8bW2yF8h",
-  districtTimeZone: "Central Standard Time",
-  userName: "informationnow",
-  password: "somepassword"
-         */
         public Guid LinkKey { get; set; }
         public Guid DistrictGuid { get; set; }
         public string ApiUrl { get; set; }
