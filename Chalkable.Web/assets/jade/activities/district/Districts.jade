@@ -1,0 +1,46 @@
+.districts
+    .action-bar.not-transparent
+        .container.panel-bg
+            +ActionLink('district', 'list') refresh
+    +Grid('district', 'page', self).not-transparent
+        +GridHead()
+            .th Name
+            .th SIS URL
+            .th SIS User name
+            .th
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getSisUrl()
+                    .td= item.getSisUserName()
+                    .td.action-links
+                        +ActionLink('schools', 'list', item.getId()) info
+                    .td
+                        +ActionLink('district', 'sync', item.getId()) sync
+                +GridRow()
+                    .td Processing
+                    .td
+                        if item.getProcessingId()
+                            +ActionLink('backgroundtask', 'logsPage', item.getProcessingId()) log_
+                            +ActionLink('backgroundtask', 'delete', item.getProcessingId()) remove
+                    .td= item.getProcessingCreated() ? item.getProcessingCreated().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getProcessingStarted() ? item.getProcessingStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td
+                +GridRow()
+                    .td Completed
+                    .td
+                        +ActionLink('backgroundtask', 'logsPage', item.getCompletedId()) log_
+                        +ActionLink('backgroundtask', 'delete', item.getCompletedId()) remove
+                    .td= item.getCompletedCreated() ? item.getCompletedCreated().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getCompletedStarted() ? item.getCompletedStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getCompletedCompleted() ? item.getCompletedCompleted().toString('dd/m/yy hh:min:ss') : ""
+                +GridRow()
+                    .td Failed
+                    .td
+                        +ActionLink('backgroundtask', 'logsPage', item.getFailedId()) log_
+                        +ActionLink('backgroundtask', 'delete', item.getFailedId()) remove
+                    .td= item.getFailedCreated() ? item.getFailedCreated().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getFailedStarted() ? item.getFailedStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getFailedCompleted() ? item.getFailedCompleted().toString('dd/m/yy hh:min:ss') : ""
