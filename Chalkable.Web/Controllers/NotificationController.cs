@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers
         {
             var dayCount = count ?? 7;
             var str = start ?? 0;
-            var personNotifications = SchoolLocator.NotificationService.GetNotifications(str, dayCount);
+            var personNotifications = SchoolLocator.NotificationService.GetNotifications(0, int.MaxValue);
             var groupedNotifications = personNotifications.GroupBy(x => x.Created.Date).ToList();
             var dictionary = groupedNotifications.Skip(str).Take(dayCount).ToDictionary(x => x.Key, t => t.ToList());
             var resCount = groupedNotifications.Count;

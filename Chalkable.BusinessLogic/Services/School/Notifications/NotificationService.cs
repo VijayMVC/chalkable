@@ -58,18 +58,23 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
         {
+            return GetNotifications(new NotificationQuery
+                {
+                    Start = start,
+                    Count = count,
+                });
+        }
+
+        private PaginatedList<NotificationDetails> GetNotifications(NotificationQuery query)
+        {
             if (!Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException();
 
             using (var uow = Read())
             {
-                var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(new NotificationQuery
-                    {
-                        PersonId = Context.PersonId, 
-                        Start = start, 
-                        Count = count,
-                        SchoolId = Context.SchoolLocalId.Value
-                    });
+                query.SchoolId = Context.SchoolLocalId.Value;
+                query.PersonId = Context.PersonId;
+                var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(query);
                 var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement != null)
                                    .Select(x => x.Announcement.ClassRef)
                                    .ToList();
@@ -84,7 +89,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 }
                 return notifications;
             }
-        }
+        } 
+
         
         public IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null)
         {
@@ -231,6 +237,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             //var notification = builder.BuildAttendanceNotificationToStudent(recipient, classAtt);
             //AddNotification(notification);
         }
-        
+
+
+
     }
 }

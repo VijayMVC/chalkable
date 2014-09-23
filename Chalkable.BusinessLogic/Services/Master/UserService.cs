@@ -150,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update(IsolationLevel.ReadUncommitted))
             {
                 var district = new DistrictDataAccess(uow)
-                    .GetAll(new AndQueryCondition{{District.SIS_DISTRICT_IF_FIELD, sisDistrictId}})
+                    .GetAll(new AndQueryCondition{{District.ID_FIELD, sisDistrictId}})
                     .First();
                 var sisUrl = district.SisUrl;
                 var iNowCl = new ConnectorLocator(token, sisUrl, tokenExpiresTime);

@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="ProducerConfigSection.cs" />
     <Compile Include="Producers\AllDistrictsProducer.cs" />
+    <Compile Include="Producers\CleanupManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Producers\TaskProducer.cs" />
     <Compile Include="WorkerRole.cs" />

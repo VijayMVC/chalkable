@@ -53,5 +53,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             throw new NotImplementedException();
         }
+
+        public void Cancel(Guid taskId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteOlder(Guid districtId, DateTime dateTime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

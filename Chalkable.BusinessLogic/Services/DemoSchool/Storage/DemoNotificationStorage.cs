@@ -22,6 +22,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (notificationQuery.Shown.HasValue)
                 notifications = notifications.Where(x => x.Shown == notificationQuery.Shown);
 
+            if (notificationQuery.FromDate.HasValue)
+                notifications = notifications.Where(x => x.Created >= notificationQuery.FromDate.Value);
+            if (notificationQuery.ToDate.HasValue)
+                notifications = notifications.Where(x => x.Created <= notificationQuery.ToDate.Value);
+
             if (notificationQuery.Type.HasValue)
                 notifications = notifications.Where(x => x.Type == notificationQuery.Type);
             notifications = notifications.Skip(notificationQuery.Start).Take(notificationQuery.Count).OrderByDescending(x => x.Created);

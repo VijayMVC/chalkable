@@ -59,6 +59,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 return p
             },
 
-            Boolean, 'ableDisplayAlphaGrades'
+            Boolean, 'ableDisplayAlphaGrades',
+            Boolean, 'roundDisplayedAverages'
         ]);
 });

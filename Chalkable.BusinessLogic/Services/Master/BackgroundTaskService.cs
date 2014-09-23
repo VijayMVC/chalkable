@@ -17,6 +17,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state = null, BackgroundTaskTypeEnum? type = null, bool allDistricts = false, int start = 0, int count = int.MaxValue);
         PaginatedList<BackgroundTaskService.BackgroundTaskLogItem> GetLogItems(Guid backgroundTaskId, int start, int count);
         void Delete(Guid taskId);
+        void Cancel(Guid taskId);
+        void DeleteOlder(Guid districtId, DateTime dateTime);
     }
     
     public class BackgroundTaskService : MasterServiceBase, IBackgroundTaskService
@@ -40,13 +42,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             public const int LEVEL_INFO = 0;
             public const int LEVEL_WARN = 1;
             public const int LEVEL_ERROR = 2;
-            public const int FLUSH_SIZE = 1;
+            private int flushSize;
 
             private List<BackgroundTaskLogItem> items = new List<BackgroundTaskLogItem>();
             private Guid backgroundTaskId;
-            public BackgroundTaskLog(Guid backgroundTaskId)
+            public BackgroundTaskLog(Guid backgroundTaskId, int flushSize)
             {
                 this.backgroundTaskId = backgroundTaskId;
+                this.flushSize = flushSize;
             }
 
             public void Log(int level, string message)
@@ -60,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Level = level,
                         Time = now
                     });
-                if (items.Count >= FLUSH_SIZE)
+                if (items.Count >= flushSize)
                     Flush();
             }
 
@@ -181,6 +184,26 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new BackgroundTaskDataAccess(uow);
                 da.Delete(taskId);
+                uow.Commit();
+            }
+        }
+
+        public void Cancel(Guid taskId)
+        {
+            using (var uow = Update())
+            {
+                var da = new BackgroundTaskDataAccess(uow);
+                da.Cancel(taskId);
+                uow.Commit();
+            }
+        }
+
+        public void DeleteOlder(Guid districtId, DateTime dateTime)
+        {
+            using (var uow = Update())
+            {
+                var da = new BackgroundTaskDataAccess(uow);
+                da.DeleteOlder(districtId, dateTime);
                 uow.Commit();
             }
         }

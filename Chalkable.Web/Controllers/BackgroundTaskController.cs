@@ -25,9 +25,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult Delete(Guid taskId)
+        public ActionResult Cancel(Guid taskId)
         {
-            MasterLocator.BackgroundTaskService.Delete(taskId);
+            MasterLocator.BackgroundTaskService.Cancel(taskId);
             return Json(true);
         }
     }

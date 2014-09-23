@@ -24,6 +24,10 @@ namespace Chalkable.Data.School.DataAccess
                 res.Add(Notification.SHOWN_FIELD, query.Shown);
             if(query.Type.HasValue)
                 res.Add(Notification.TYPE_FIELD, query.Type);
+            if(query.FromDate.HasValue)
+                res.Add(Notification.CREATED_FIELD, "fromDate", query.FromDate, ConditionRelation.GreaterEqual);
+            if(query.ToDate.HasValue)
+                res.Add(Notification.CREATED_FIELD, "toDate", query.ToDate, ConditionRelation.LessEqual);
             return res;
         } 
 
@@ -151,6 +155,9 @@ namespace Chalkable.Data.School.DataAccess
         public NotificationType? Type { get; set; }
         public int? ClassPeriodRef { get; set; }
         public int SchoolId { get; set; }
+
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
 
         public NotificationQuery()
         {

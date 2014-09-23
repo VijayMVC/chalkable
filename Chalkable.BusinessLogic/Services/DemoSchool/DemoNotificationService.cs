@@ -34,10 +34,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     {
                         PersonId = Context.PersonId, 
                         Start = start, 
-                        Count = count
+                        Count = count,
+                        SchoolId = Context.SchoolLocalId.Value
                     });
            
         }
+
 
         public IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null)
         {
@@ -164,6 +166,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //var notification = builder.BuildAttendanceNotificationToStudent(recipient, classAtt);
             //AddNotification(notification);
         }
-        
     }
 }

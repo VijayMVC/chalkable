@@ -218,12 +218,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableException("Current User is has no inow id");
             var end = count + start;
             start = start + 1;
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, graded, classId);
             if (classId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
                 return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete);
-            if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, graded);
             return new List<Activity>();
         }
  

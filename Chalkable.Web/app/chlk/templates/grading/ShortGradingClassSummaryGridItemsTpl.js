@@ -50,6 +50,9 @@ NAMESPACE('chlk.templates.grading', function () {
             Boolean , 'ableDisplayTotalPoints',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'roundDisplayedAverages',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
 
             [ria.templates.ModelPropertyBind],

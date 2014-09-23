@@ -86,11 +86,11 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     .advanced-options-container.x-hidden.chat-bubble.top
                         .weight-multiplier.new-input-container
                             label(for="ann-weightmultiplier")= Msg.Weight_Multiplier
-                            input#ann-weightmultiplier(type="text", name='weightmultiplier', class="validate[required,custom[number],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
+                            input#ann-weightmultiplier(type="text", name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
                             .question-mark(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message) ?
                         .weight-addition.new-input-container
                             label(for="ann-weightaddition")=Msg.Weight_Addition
-                            input#ann-weightaddition(type="text", name='weightaddition', class="validate[required,custom[number],min[0]]", placeholder="0.00", value=announcement.getWeightAddition() || 0.00)
+                            input#ann-weightaddition(type="text", name='weightaddition', class="validate[required,custom[double],min[0]]", placeholder="0.00", value=announcement.getWeightAddition() || 0.00)
                             .question-mark(data-tooltip=Msg.Weight_Addition_Tooltip_Message) ?
                         .check-box-container
                             label(for="ann-hidefromstudents")=Msg.Hide_from_Students

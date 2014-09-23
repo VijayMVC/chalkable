@@ -37,6 +37,7 @@ mixin StudentAverages(tpl)
                     row-index=i,
                     class=((i == tpl.getRowIndex() ? 'active-row ' : '') + (self.isAbleEdit() ? 'gradable' : '')),
                     data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
+                    data-able-round-displayed-averages=self.isRoundDisplayedAverages(),
                     data-average-id=average.getAverageId(),
                     data-student-name=self.getStudents()[i].getStudentInfo().getDisplayName(),
                     data-student-id=average.getStudentId().valueOf(),
@@ -45,9 +46,10 @@ mixin StudentAverages(tpl)
                 ).dotted-h.grade-value.avg-value-container
                     +RenderWith(average, chlk.templates.grading.StudentAverageTpl)(
                         ableDisplayAlphaGrades = self.isAbleDisplayAlphaGrades(),
+                        roundDisplayedAverages = self.isRoundDisplayedAverages(),
                         gradingPeriodId = self.getGradingPeriod().getId()
                     )
-            div(data-average-id=studentAvg.getAverageId()).dotted-h.total-average.grade-value=tpl.getModel().displayGrade(studentAvg.getTotalAverage())
+            div(data-average-id=studentAvg.getAverageId()).dotted-h.total-average.grade-value=tpl.getModel().displayAverages(studentAvg.getTotalAverage())
 
 mixin DisplayTotalPoints(model)
     -studentTotalPoints = model.getStudentTotalPoints()
@@ -106,4 +108,4 @@ mixin DisplayTotalPoints(model)
                             class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
                         ).dotted-h.grade-value
                             +TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
-                    div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=announcement.calculateGradesAvg(2)
+                    div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=self.getModel().displayAverages(announcement.calculateGradesAvg(2))

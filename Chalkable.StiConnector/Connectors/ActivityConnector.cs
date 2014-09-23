@@ -16,7 +16,7 @@ namespace Chalkable.StiConnector.Connectors
         private const string END_PARAM = "end";
         private const string COOMPLETE = "complete";
         private const string GRADED = "graded";
-
+        private const string SECTION_ID = "sectionId";
         private string urlFormat;
         public ActivityConnector(ConnectorLocator locator) : base(locator)
         {
@@ -74,7 +74,7 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         public IList<Activity> GetStudentAcivities(int acadSessionId, int studentId, int? start = null, int? end = null
-            , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, bool? graded = null)
+            , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, bool? graded = null, int? classId = null)
         {
             var url = string.Format(BaseUrl + "Chalkable/{0}/students/{1}/activities", acadSessionId, studentId);
             var optinalParams = new NameValueCollection();
@@ -90,6 +90,8 @@ namespace Chalkable.StiConnector.Connectors
                 optinalParams.Add(COOMPLETE, complete.Value.ToString());
             if(graded.HasValue)
                 optinalParams.Add(GRADED, graded.Value.ToString());
+            if(classId.HasValue)
+                optinalParams.Add(SECTION_ID, classId.Value.ToString());
             return Call<IList<Activity>>(url, optinalParams);
         }
 

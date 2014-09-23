@@ -29,11 +29,11 @@ namespace Chalkable.Data.Master.DataAccess
             conditions.BuildSqlWhere(userQuery, typesL1[0].Name);
 
             suQuery.Sql.AppendFormat(@"select {0} from [User]
-                                       join SchoolUser on [User].[{1}] = SchoolUser.[{2}]
-                                       join School on SchoolUser.[{3}] = School.[{4}]
+                                       join SchoolUser on [User].[{1}] = SchoolUser.[{2}] and [User].[{7}] = SchoolUser.[{8}]
+                                       join School on SchoolUser.[{3}] = School.[{4}] and SchoolUser.[{8}] = School.[{9}]
                                        left join UserLoginInfo on UserLoginInfo.[{5}] = [User].[{6}]", Orm.ComplexResultSetQuery(typesL2)
                                      , User.SIS_USER_ID_FIELD, SchoolUser.USER_REF_FIELD, SchoolUser.SCHOOL_REF_FIELD, School.LOCAL_ID_FIELD
-                                     , UserLoginInfo.ID_FIELD, User.ID_FIELD);
+                                     , UserLoginInfo.ID_FIELD, User.ID_FIELD, User.DISTRICT_REF_FIELD, SchoolUser.DISTRICT_REF_FIELD, School.DISTRICT_REF_FIELD);
             conditions.BuildSqlWhere(suQuery, typesL1[0].Name);
             return new DbQuery(new List<DbQuery> { userQuery, suQuery });
         } 
