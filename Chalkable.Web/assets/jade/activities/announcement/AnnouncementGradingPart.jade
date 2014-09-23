@@ -1,7 +1,8 @@
 mixin AppAttachmentBlock(item, pictureHref, i)
-    +LoadingImage(src=pictureHref, id="loading-image-" + i)
-        .title
-            div=item.getName()
+    div(attributes)
+        .title= item.getName()
+        +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        block
 
 autoCount = self.getAutoGradeCount()
 studentAnnouncements = self.getItems()
@@ -42,9 +43,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                             .grade-options.selected
                                 +ActionLink('grading', 'getGradeComments').comment-text= (item.getComment() ? Msg.Commented : Msg.Comment)
                                     .small-pop-up.chat-bubble.top
-                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment()).comment-input= item.getComment()
+                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment(), placeholder=Msg.Enter_when_done).comment-input= item.getComment()
                                         .grading-comments-list
-                                        span.enter= Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
                         +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
                             userRole = self.getUserRole()
@@ -58,15 +58,16 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
             .attachments-container-2
                 each attachment, i in item.getAttachments()
                     if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
-                        A(href=attachment.getUrl()).download-link
-                            .title
-                                div=attachment.getName()
+                        .announcement-item.attachment
+                            A(href=attachment.getUrl()).download-link Download
+                            .title=attachment.getName()
                     else
-                        +ActionLink('announcement', 'viewAttachment', attachment.getId()).announcement-item.attachment
-                            +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)
+                        +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
+                            +ActionButton('announcement', 'viewAttachment', attachment.getId()) Open
+
                 each app, i in self.getApplications()
                     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+                    +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
+                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()) Open
 
-                    +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()).announcement-item.application
-                        +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i)
 

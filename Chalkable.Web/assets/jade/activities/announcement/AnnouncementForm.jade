@@ -1,5 +1,5 @@
 mixin AnnouncementTypeToolBar(types, announcement, typeId)
-    if types.length > 6
+    if types.length > 60
         SPAN.type-text #{Msg.Type} :
         +Select('typeid')#type-select
             each item in types
@@ -13,43 +13,43 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
             value="save"
         )#announcement-type-btn.validate-skip.x-hidden
     else
-        each item in types
-            BUTTON(
-            class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
-            data-typeid=item.getId(),
-            data-typename=item.getName(),
-            type = "submit",
-            name="submitType",
-            value="save"
-            ).action-button.announcement-type-button= item.getDescription()
+        .action-bar
+            .items
+                each item in types
+                    A.item.announcement-type-button(
+                        href = "javascript:;"
+                        class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
+                        data-typeid=item.getId(),
+                        data-typename=item.getName(),
+                        name="submitType",
+                        value="save"
+                    )= item.getDescription()
 
-
-
-topData = self.getTopData()
-announcement = self.getAnnouncement()
-topItems = topData.getTopItems()
-classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
-typeId = self.getSelectedTypeId()
-state = announcement && announcement.getState()
-classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+-var topData = self.getTopData()
+-var announcement = self.getAnnouncement()
+-var topItems = topData.getTopItems()
+-var classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
+-var typeId = self.getSelectedTypeId()
+-var state = announcement && announcement.getState()
+-var classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 
 .announcement-form.loader-container
-    .loader
     if announcement
+        h2.page-title= announcement.getClassName()
+        .loader
         +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
             +LeftRightToolbar(topItems, chlk.templates.classes.TopBar)(
                 selectedItemId=topData.getSelectedItemId(),
                 pressAfterClick=!announcement.getState(),
                 disabledClass = 'x-hidden'
             ).classes-bar
-            .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
-                .container.panel-bg
-                    +AnnouncementTypeToolBar(classes, announcement, typeId)
+            .not-transparent(class=(classId ? '' : 'x-hidden'))
+                +AnnouncementTypeToolBar(classes, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
                 +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form
                 if announcement.getState()
                     .duplicate-btn-container
-                        +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+                        +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
             .choose-type(class=(classId && !typeId && !state ? '' : 'x-hidden'))
             .choose-class(class=(classId ? 'x-hidden' : ''))
     else

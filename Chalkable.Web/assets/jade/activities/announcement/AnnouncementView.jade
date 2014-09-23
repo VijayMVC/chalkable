@@ -26,13 +26,12 @@ mixin Glue_()
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
 
-    .action-bar.buttons
-        .container
-            .left
-                +ActionLink('feed', 'doToList').back-button
-            .right
-                if !self.getUserRole().isStudent()
-                    +ActionLink('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").edit-button Edit
+    .buttons
+        if !self.getUserRole().isStudent()
+            +ActionButton('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").right Edit
+        +ActionButton('feed', 'doToList').back-button Back
+        .clear-fix
+
     h2.page-title: +Glue_(self.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), self.getClassName())
     .announcement-details-panel
         .details-container.silver-panel
@@ -74,12 +73,15 @@ mixin Glue_()
                                         button(data-tooltip = standard.getDescription()).same-on-hover= standard.getName()
                                         = ' '
 
-        .close-open-control
-            h3 Apps
-            .content.attachments-and-applications
-                +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
-                    userRole = self.getUserRole()
-                )
+        -var attachments = self.getAnnouncementAttachments() || []
+        -var applications = self.getApplications() || []
+        if attachments.length + applications.length
+            .close-open-control
+                h3 Apps
+                .content.attachments-and-applications
+                    +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
+                        userRole = self.getUserRole()
+                    )
 
         if self.getUserRole().isStudent()
             .silver-panel.attachments-panel

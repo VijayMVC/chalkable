@@ -20,8 +20,7 @@ div(class="selected " + itemCls, rowIndex=self.getRowIndex(), recId=self.getId()
                 readonly = !self.isAbleDropStudentScore() && self.isDropped()
             ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus.select-text
             .letters 0 - #{self.getMaxScore()}
-            .grading-input-popup.chlk-pop-up-container.popup-bottom
-                .pop-up-triangle.big
+            .grading-input-popup.chlk-pop-up-container.popup-bottom.chat-bubble.top
                 id = self.getServerDate().getTime()
                 if self.isAbleDropStudentScore() || self.isDropped()
                     +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id, class = self.isAbleDropStudentScore() ? '' : 'cant-drop').with-value.dropped-checkbox

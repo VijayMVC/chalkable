@@ -1,0 +1,14 @@
+.close-btn
+  position: absolute
+  right: 0
+  top: 0
+  width: 32px
+  height: 32px
+  +icons-sprite(close-btn)
+  opacity: .5
+  +transition(opacity, .1s, easy-in-out)
+  cursor: pointer
+  z-index: 99
+
+  &:hover
+    opacity: 1

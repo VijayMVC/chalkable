@@ -1,0 +1,16 @@
+.buttons
+  button, input[type=button], input[type=submit], input[type=reset]
+    line-height: 25px
+    padding: 0 13px
+
+  .back-button
+    padding-left: 9px + 24px
+    position: relative
+    &::before
+      content: ' '
+      position: absolute
+      top: 1px
+      left: 9px
+      width: 24px
+      height: 24px
+      +icons-sprite(back-arrow)

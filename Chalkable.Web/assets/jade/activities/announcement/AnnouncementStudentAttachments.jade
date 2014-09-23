@@ -7,11 +7,10 @@ each attachment, i in self.getAnnouncementAttachments()
         .announcement-item.attachment
             +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
             if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
-                A(href=attachment.getUrl()).download-link
-                    .title
-                        div=attachment.getName()
+                .title=attachment.getName()
+                A(href=attachment.getUrl()).download-link Download
             else
-                +ActionLink('announcement', 'viewAttachment', attachment.getId())
-                    +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
-                    .title
-                        div=attachment.getName()
+                +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
+                .title=attachment.getName()
+                +ActionButton('announcement', 'viewAttachment', attachment.getId()) Open
+

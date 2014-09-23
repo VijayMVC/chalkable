@@ -259,7 +259,7 @@ var Msg = {
     Add_students: 'Add students',
     Add_your_students: 'Add your students',
     Additional_mailings: 'Additional mailings',
-    Advanced_options: 'Advanced options...',
+    Advanced_options: 'Show advanced options...',
     Alert_Internet_access_text: 'Student has permission for Internet access',
     Alert_Medical_text: 'Student has medical alert',
     Alert_Special_text: 'Student marked with special alert',
