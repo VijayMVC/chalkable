@@ -1,9 +1,9 @@
-.list-new
+.list-new.chat-bubble.top
     if self.getNotifications().getItems().length > 0
         each item in self.getNotifications().getItems()
             .row
                 +ActionLinkWithModel(item.prepareActionModel()).notification-link
-                .image
+                .image.left
                     if item.getType() == chlk.models.notification.NotificationTypeEnum.MESSAGE
                         .notification-person
                             a
