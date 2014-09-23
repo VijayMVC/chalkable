@@ -36,13 +36,13 @@ mixin Glue_()
     .announcement-details-panel
         .details-container.silver-panel
             if self.getUserRole().isStudent() && hasGrade
-                +AnnouncementTooltip().comment-grade-container
-                    div(
+                .comment-grade-container
+                    .grade-value.right= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
+                    .comment(
                         data-tooltip = self.getComment(),
                         data-tooltip-type = "overflow",
                         data-tooltip-class = "wide"
-                    ).comment=self.getComment() || Msg.Your_grade + ":"
-                    .grade-value= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
+                    )= self.getComment() || Msg.Your_grade + ":"
             if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
                 +AnnouncementTooltip().make-visible-container
                     .comment This item is hidden from students.
