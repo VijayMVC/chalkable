@@ -1,4 +1,4 @@
-.attachments-and-applications
+.attachments-and-applications, .student-attachments
   margin-right: -20px
 
   .attach-file-area
@@ -8,6 +8,7 @@
     margin-right: 20px
     margin-bottom: 20px
     vertical-align: top
+    height: 31px + 31px + 17px
 
     > *
       font-weight: 600
@@ -16,7 +17,10 @@
       width: 120px
       margin-bottom: 17px
 
-.attachments-and-applications, .attachments-container
+    > DIV
+      width: 100px
+
+.attachments-and-applications, .attachments-container, .student-attachments
   .attachment, .application
     border-radius: 5px
     background: #fff
@@ -85,3 +89,9 @@
 
     .download-link
       text-align: center
+
+    .close-btn
+      display: none
+
+    &:hover .close-btn
+      display: block

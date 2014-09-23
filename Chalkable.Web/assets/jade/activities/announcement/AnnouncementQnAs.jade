@@ -44,7 +44,7 @@ if showPostQuestion || self.getAnnouncementQnAs().length
                                         -var isAnswerOwner = item.getAnswer().getPerson().getId() == self.getCurrentUser().getId()
                                         h3= item.getAnswer().getPerson().getFirstName()
                                         p(class = hideEdit ? "" : "x-hidden").edit-answer-text= answerMsg
-                                    input(type="text",name="answer", value=answerMsg, class=[hideEdit ? "x-hidden": "", "validate[required]"]).edit-answer-input
+                                    input(type="text",name="answer", value=answerMsg, class=[hideEdit ? "x-hidden": "", "validate[required]"], placeholder="Answer").edit-answer-input
                                 if item.getAnswer()
                                     span
                                         = self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
@@ -52,16 +52,16 @@ if showPostQuestion || self.getAnnouncementQnAs().length
                                         if answered && self.isAnnOwner() && isAnswerOwner
                                             a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
                                 br
-                                +Button()(type="submit", class="special-button blue-button submit-btn", style="display:" + (!item.getAnswer() ? "block": "")).edit-answer-btn=Msg.Update.toUpperCase()
+                                +Button()(type="submit", style="display:" + (!item.getAnswer() ? "block": "")).edit-answer-btn.blue-button.submit-btn= Msg.Update.toUpperCase()
 
 
             if showPostQuestion
-                +ActionForm('announcement', 'askQuestion').table
-                    .avatar-container
+                .table.row
+                    .avatar-block-left
                         +PersonImg(self.getCurrentUser(), 47)
                     .qna
-                        .chat-bubble
-                            h2= self.getCurrentUser().getFirstName()
-                            input(type="text", name="question", class="validate[required]")
+                        +ActionForm('announcement', 'askQuestion')
                             input(type="hidden",name="announcementId", value=self.getId())
-                            +Button()(type="submit").special-button.blue-button.submit-btn Ask
+                            .chat-bubble
+                                input(type="text", name="question", class="validate[required]", placeholder="Ask question")
+                            +Button()(type="submit").blue-button.edit-question-btn Ask
