@@ -42,6 +42,10 @@ namespace Chalkable.Web.Models
         public DateTime? FailedCreated { get; set; }
         public DateTime? FailedStarted { get; set; }
         public DateTime? FailedCompleted { get; set; }
+        public Guid? CanceledId { get; set; }
+        public DateTime? CanceledCreated { get; set; }
+        public DateTime? CanceledStarted { get; set; }
+        public DateTime? CanceledCompleted { get; set; }
 
         protected DistrictSyncStatusViewData(DistrictSyncStatus district) : base(district)
         {
@@ -58,6 +62,11 @@ namespace Chalkable.Web.Models
             FailedStarted = district.FailedStarted;
             FailedCreated = district.FailedCreated;
             FailedCompleted = district.FailedCompleted;
+
+            CanceledId = district.CanceledId;
+            CanceledStarted = district.CanceledStarted;
+            CanceledCreated = district.CanceledCreated;
+            CanceledCompleted = district.CanceledCompleted;
         }
 
         public static DistrictSyncStatusViewData Create(DistrictSyncStatus district)

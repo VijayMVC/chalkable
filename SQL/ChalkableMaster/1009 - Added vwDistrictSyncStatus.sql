@@ -28,7 +28,7 @@ as
 				Id as ProcessingId,
 				Started as ProcessingStarted,
 				Created as ProcessingCreated,
-				Rank() over(partition by districtref order by started) R
+				Rank() over(partition by districtref order by started desc) R
 			from 
 			BackgroundTask 
 			where 
@@ -45,7 +45,7 @@ as
 				Started as CompletedStarted,
 				Created as CompletedCreated,
 				Completed as CompletedCompleted,
-				Rank() over(partition by districtref order by started) R
+				Rank() over(partition by districtref order by started desc) R
 			from 
 			BackgroundTask 
 			where 
@@ -62,7 +62,7 @@ as
 				Started as FailedStarted,
 				Created as FailedCreated,
 				Completed as FailedCompleted,
-				Rank() over(partition by districtref order by started) R
+				Rank() over(partition by districtref order by started desc) R
 			from 
 			BackgroundTask 
 			where 
