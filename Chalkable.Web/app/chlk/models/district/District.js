@@ -53,7 +53,20 @@ NAMESPACE('chlk.models.district', function () {
             chlk.models.common.ChlkDate, 'FailedStarted',
 
             [ria.serialize.SerializeProperty('failedcompleted')],
-            chlk.models.common.ChlkDate, 'FailedCompleted'
+            chlk.models.common.ChlkDate, 'FailedCompleted',
+
+
+            [ria.serialize.SerializeProperty('canceledid')],
+            chlk.models.id.BgTaskId, 'CanceledId',
+
+            [ria.serialize.SerializeProperty('canceledcreated')],
+            chlk.models.common.ChlkDate, 'CanceledCreated',
+
+            [ria.serialize.SerializeProperty('canceledstarted')],
+            chlk.models.common.ChlkDate, 'CanceledStarted',
+
+            [ria.serialize.SerializeProperty('canceledcompleted')],
+            chlk.models.common.ChlkDate, 'CanceledCompleted'
 
         ]);
 });

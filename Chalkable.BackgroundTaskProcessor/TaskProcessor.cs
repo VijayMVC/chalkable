@@ -28,7 +28,13 @@ namespace Chalkable.BackgroundTaskProcessor
             var task = sl.BackgroundTaskService.GetTaskToProcess(DateTime.UtcNow);
             if (task == null)
                 return;
-            using (var log = new BackgroundTaskService.BackgroundTaskLog(task.Id))
+            int logFlushSize = 100;
+            if (task.DistrictRef.HasValue)
+            {
+                var d = sl.DistrictService.GetByIdOrNull(task.DistrictRef.Value);
+                logFlushSize = d.SyncLogFlushSize;
+            }
+            using (var log = new BackgroundTaskService.BackgroundTaskLog(task.Id, logFlushSize))
             {
                 if (!handlers.ContainsKey(task.Type))
                 {

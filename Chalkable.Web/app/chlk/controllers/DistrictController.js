@@ -4,6 +4,8 @@ REQUIRE('chlk.models.district.District');
 REQUIRE('chlk.activities.district.DistrictListPage');
 REQUIRE('chlk.activities.district.DistrictDialog');
 REQUIRE('chlk.models.id.DistrictId');
+REQUIRE('chlk.services.BgTaskService');
+
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -13,6 +15,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.DistrictService, 'districtService',
+        [ria.mvc.Inject],
+        chlk.services.BgTaskService, 'bgTaskService',
 
         [chlk.controllers.SidebarButton('districts')],
 
@@ -65,6 +69,16 @@ NAMESPACE('chlk.controllers', function (){
                         .attach(this.validateResponse_());
                 }, this);
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);
+        },
+
+        [[chlk.models.id.BgTaskId]],
+        function cancelBgTaskAction(id){
+            return this.bgTaskService
+                .cancelTask(id)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.pageAction(0);
+                }, this);
         }
 
     ])

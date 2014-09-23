@@ -21,7 +21,9 @@ namespace Chalkable.BusinessLogic.Services.Master
 
     public class DistrictService : MasterServiceBase, IDistrictService
     {
-
+        private const int MAX_SYNC_TIME_DEFAULT = 1800;
+        private const int SYNC_LOG_FLUSH_SIZE_DEFAULT = 100;
+        private const int SYNC_HISTORY_DAYS_DEFAULT = 15;
 
         public DistrictService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)
@@ -45,7 +47,10 @@ namespace Chalkable.BusinessLogic.Services.Master
                         SisRedirectUrl = sisRedirectUrl,
                         SisUserName = sisUserName,
                         SisPassword = sisPassword,
-                        TimeZone = timeZone
+                        TimeZone = timeZone,
+                        MaxSyncTime = MAX_SYNC_TIME_DEFAULT,
+                        SyncLogFlushSize = SYNC_LOG_FLUSH_SIZE_DEFAULT,
+                        SyncHistoryDays = SYNC_HISTORY_DAYS_DEFAULT
                     };
                 da.Insert(res);
                 uow.Commit();
