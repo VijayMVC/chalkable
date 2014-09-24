@@ -18,6 +18,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     isAdminAnnouncement = adminRecipients && self.getUserRole().isAdmin()
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
     disableDeleteBtn = announcement.getGradingStudentsCount() > 0
+    standards = announcement.getStandards() || []
     if !isAdminAnnouncement
         +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
         div(class=announcement.getExpiresDate() ? 'with-date' : '').title-block-container
@@ -43,18 +44,18 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                 +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
         .left-block-container
             +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
-            if !isAdminAnnouncement && announcement.isCanAddStandard()
+            if standards.length > 0 || (!isAdminAnnouncement && announcement.isCanAddStandard())
                 .add-standards-container
                     .add-standards
                         .standards-list
-                            standards = announcement.getStandards() || []
                             each standard in standards
                                 div(data-tooltip = standard.getDescription()).grey-button.same-on-hover
                                     span=standard.getName()
                                     if !disableDeleteBtn
                                         +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
-                        .title=Msg.Click_to_add_standard
-                        +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
+                        if !isAdminAnnouncement && announcement.isCanAddStandard()
+                            .title=Msg.Click_to_add_standard
+                            +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
             .drawer-icon
         .drop-down-container
         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
