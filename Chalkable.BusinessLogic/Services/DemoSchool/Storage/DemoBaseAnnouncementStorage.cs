@@ -104,6 +104,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             foreach (var announcementComplex in announcements)
             {
                 var complete = Storage.AnnouncementCompleteStorage.GetComplete(announcementComplex.Id, Storage.Context.PersonId.Value);
+                var cls = Storage.ClassStorage.GetById(announcementComplex.ClassRef);
+                announcementComplex.FullClassName = cls.Name + " " + cls.ClassNumber;
                 announcementComplex.Complete = complete.HasValue && complete.Value;
             }
             if (query.OwnedOnly)
@@ -152,6 +154,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var isComplete = Storage.AnnouncementCompleteStorage.GetComplete(announcement.Id,
                 Storage.Context.PersonId.Value);
 
+            var cls = Storage.ClassStorage.GetById(announcement.ClassRef);
+
             return new AnnouncementDetails
             {
                 Id = announcement.Id,
@@ -168,6 +172,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PrimaryTeacherName = announcement.PrimaryTeacherName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
+                FullClassName = cls.Name + " " + cls.ClassNumber,
                 PrimaryTeacherGender = announcement.PrimaryTeacherGender,
                 ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeRef,
                 Created = announcement.Created,
