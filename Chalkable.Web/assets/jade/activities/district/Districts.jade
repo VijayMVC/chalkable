@@ -1,25 +1,59 @@
 .districts
     .action-bar.not-transparent
         .container.panel-bg
+            +ActionLink('district', 'list') refresh
     +Grid('district', 'page', self).not-transparent
         +GridHead()
             .th Name
-            .th DB Name
             .th SIS URL
             .th SIS User name
-            .th SIS password
-            .th SIS system type
+            .th
             .th
         +GridBody()
             each item in self.items
                 +GridRow()
                     .td= item.getName()
-                    .td= item.getDbName()
                     .td= item.getSisUrl()
                     .td= item.getSisUserName()
-                    .td *
-                    .td= item.getSisSystemType()
                     .td.action-links
                         +ActionLink('schools', 'list', item.getId()) info
+                    .td
                         +ActionLink('district', 'sync', item.getId()) sync
-
+                +GridRow()
+                    .td Processing
+                    .td
+                        if item.getProcessingId()
+                            +ActionLink('backgroundtask', 'logsPage', item.getProcessingId()) log
+                            = ' '
+                            +ActionLink('district', 'cancelBgTask', item.getProcessingId()) cancel
+                    .td= item.getProcessingCreated() ? item.getProcessingCreated().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getProcessingStarted() ? item.getProcessingStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td
+                +GridRow()
+                    .td Completed
+                    .td
+                        if item.getCompletedId()
+                            +ActionLink('backgroundtask', 'logsPage', item.getCompletedId()) log
+                            = ' '
+                            +ActionLink('district', 'cancelBgTask', item.getCompletedId()) cancel
+                    .td= item.getCompletedCreated() ? item.getCompletedCreated().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getCompletedStarted() ? item.getCompletedStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getCompletedCompleted() ? item.getCompletedCompleted().toString('dd/m/yy hh:min:ss') : ""
+                +GridRow()
+                    .td Failed
+                    .td
+                        if item.getFailedId()
+                            +ActionLink('backgroundtask', 'logsPage', item.getFailedId()) log
+                            = ' '
+                            +ActionLink('district', 'cancelBgTask', item.getFailedId()) cancel
+                    .td= item.getFailedCreated() ? item.getFailedCreated().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getFailedStarted() ? item.getFailedStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getFailedCompleted() ? item.getFailedCompleted().toString('dd/m/yy hh:min:ss') : ""
+                +GridRow()
+                    .td Canceled
+                    .td
+                        if item.getCanceledId()
+                            +ActionLink('backgroundtask', 'logsPage', item.getCanceledId()) log
+                    .td= item.getCanceledCreated() ? item.getCanceledCreated().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getCanceledStarted() ? item.getCanceledStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getCanceledCompleted() ? item.getCanceledCompleted().toString('dd/m/yy hh:min:ss') : ""

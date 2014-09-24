@@ -88,19 +88,19 @@ NAMESPACE('chlk.models.grading', function () {
             },
 
             [[Boolean, Boolean, Boolean]],
-            String, function displayAvgGradeValue(isAbleDisplayAlphaGrades_, original_, noText_){
+            String, function displayAvgGradeValue(isAbleDisplayAlphaGrades_, original_, noText_, isRounded_){
                 if(this.isExempt() && !original_ && !noText_)
                     return Msg.Exempt;
                 var alphaGrade = original_ ? this.getCalculatedAlphaGrade() : this.getAlphaGrade();
-                var res = this.displayGrade(original_ ? this.getCalculatedAvg() : this.getNumericAvg());
+                var res = this.displayGrade(original_ ? this.getCalculatedAvg() : this.getNumericAvg(), isRounded_);
                 if(res && this.getNumericAvg() != 0 && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
                     res += '(' + alphaGrade + ')';
                 }
                 return res;
             },
 
-            String, function displayGrade(grade){
-                return grade || grade == 0 ? grade.toFixed(2) : '';
+            String, function displayGrade(grade, idRounded_){
+                return grade || grade == 0 ? grade.toFixed(idRounded_ ? 0 : 2) : '';
             }
 
     ]);

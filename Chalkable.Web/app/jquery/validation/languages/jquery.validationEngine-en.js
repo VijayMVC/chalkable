@@ -97,6 +97,10 @@
                     "regex": /^[\-\+]?\d+$/,
                     "alertText": "Not a valid integer"
                 },
+                "double":{
+                    "regex": /^[-+]?([0-9]*\.[0-9]+|[0-9]+)$/,
+                    "alertText" : "Invalid value"
+                },
                 "number": {
                     // Number, including positive, negative, and floating decimal. credit: orefalo
                     "regex": /^[\-\+]?(([0-9]{1,3})([\.]([0-9]{3}))*([,]([0-9]+))?|([0-9]+)?([,]([0-9]+))?)$/,

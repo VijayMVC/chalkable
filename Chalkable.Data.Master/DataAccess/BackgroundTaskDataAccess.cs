@@ -38,6 +38,18 @@ namespace Chalkable.Data.Master.DataAccess
             SimpleUpdate<BackgroundTask>(setParamsDic, conds);
         }
 
+        public void Cancel(Guid id)
+        {
+            var state = (int)(BackgroundTaskStateEnum.Canceled);
+            var conds = new AndQueryCondition { { BackgroundTask.ID_FIELD_NAME, id } };
+            var setParamsDic = new Dictionary<string, object>
+                {
+                    {BackgroundTask.STATE_FIELD_NAME, state},
+                    {BackgroundTask.COMPLETED_FIELD_NAME, DateTime.UtcNow},
+                };
+            SimpleUpdate<BackgroundTask>(setParamsDic, conds);
+        }
+
         public PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state, BackgroundTaskTypeEnum? type, bool allDistricts, int start, int count)
         {
             var q = new AndQueryCondition();
@@ -48,7 +60,14 @@ namespace Chalkable.Data.Master.DataAccess
             if (!allDistricts)
                 q.Add(BackgroundTask.DISTRICT_REF_FIELD_NAME, districtId);
             return PaginatedSelect<BackgroundTask>(q, BackgroundTask.SCHEDULED_FIELD_NAME, start, count, Orm.OrderType.Desc);
-            
+        }
+
+        public void DeleteOlder(Guid districtId, DateTime dateTime)
+        {
+            var q = new AndQueryCondition();
+            q.Add(BackgroundTask.DISTRICT_REF_FIELD_NAME, districtId);
+            q.Add(BackgroundTask.COMPLETED_FIELD_NAME, dateTime, ConditionRelation.Less);
+            SimpleDelete(q);
         }
     }
 }

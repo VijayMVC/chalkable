@@ -44,7 +44,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.BgTaskId]],
             function deleteAction(id){
                 return this.bgTaskService
-                    .deleteTask(id)
+                    .cancelTask(id)
                     .attach(this.validateResponse_())
                     .then(function(data){
                         return this.pageAction(true, 0);

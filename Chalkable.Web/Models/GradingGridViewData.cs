@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -67,15 +66,15 @@ namespace Chalkable.Web.Models
         
         public static GradingGridViewData Create(ChalkableGradeBook gradeBook)
         {
-            var res = new GradingGridViewData(gradeBook)
-                {
-                    Students = new List<GradeStudentViewData>(),
-                    DisplayAlphaGrades = gradeBook.Options.DisplayAlphaGrades,
-                    DisplayStudentAverage = gradeBook.Options.DisplayStudentAverage,
-                    DisplayTotalPoints = gradeBook.Options.DisplayTotalPoints,
-                    IncludeWithdrawnStudents = gradeBook.Options.IncludeWithdrawnStudents,
-                    RoundDisplayedAverages = gradeBook.Options.RoundDisplayedAverages
-                };
+            var res = new GradingGridViewData(gradeBook) {Students = new List<GradeStudentViewData>()};
+            if (gradeBook.Options != null)
+            {
+                res.DisplayAlphaGrades = gradeBook.Options.DisplayAlphaGrades;
+                res.DisplayStudentAverage = gradeBook.Options.DisplayStudentAverage;
+                res.DisplayTotalPoints = gradeBook.Options.DisplayTotalPoints;
+                res.IncludeWithdrawnStudents = gradeBook.Options.IncludeWithdrawnStudents;
+                res.RoundDisplayedAverages = gradeBook.Options.RoundDisplayedAverages;
+            }
             foreach (var student in gradeBook.Students)
             {
                 var ann = gradeBook.Announcements.FirstOrDefault();

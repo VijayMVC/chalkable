@@ -21,7 +21,10 @@ namespace Chalkable.Data.Master.Model
         public string ServerUrl { get; set; }
         public string SisRedirectUrl { get; set; }
         public DateTime? LastSync { get; set; }
-
+        public int MaxSyncTime { get; set; }
+        public int SyncLogFlushSize { get; set; }
+        public int SyncHistoryDays { get; set; }
+        
         [NotDbFieldAttr]
         public bool IsDemoDistrict { get; set; }
     }
@@ -35,5 +38,24 @@ namespace Chalkable.Data.Master.Model
         InvitedStudent = 4,
         StudentLogged = 5,
         PayingCustomer = 6
+    }
+
+    public class DistrictSyncStatus : District
+    {
+        public Guid? ProcessingId { get; set; }
+		public DateTime? ProcessingCreated { get; set; }
+		public DateTime? ProcessingStarted { get; set; }
+		public Guid? CompletedId { get; set; }
+		public DateTime? CompletedCreated { get; set; }
+		public DateTime? CompletedStarted { get; set; }
+		public DateTime? CompletedCompleted { get; set; }
+		public Guid? FailedId { get; set; }
+		public DateTime? FailedCreated { get; set; }
+		public DateTime? FailedStarted { get; set; }
+        public DateTime? FailedCompleted { get; set; }
+        public Guid? CanceledId { get; set; }
+        public DateTime? CanceledCreated { get; set; }
+        public DateTime? CanceledStarted { get; set; }
+        public DateTime? CanceledCompleted { get; set; }
     }
 }

@@ -22,7 +22,9 @@ namespace Chalkable.BackgroundTaskProducer
             //cp.AddProducer("Process Reminders Producer", new AllDistrictsProducer("ProcessReminderProducer", BackgroundTaskTypeEnum.ProcessReminder));
             //cp.AddProducer("Attendance Notification Producer", new AllDistrictsProducer("AttendanceNotificationProducer", BackgroundTaskTypeEnum.AttendanceNotification));
             //cp.AddProducer("Teacher Attendance Notification Producer", new AllDistrictsProducer("TeacherAttendanceNotification", BackgroundTaskTypeEnum.TeacherAttendanceNotification));
-            cp.AddProducer("Sis Import Producer", new AllDistrictsProducer("SisImportProducer", BackgroundTaskTypeEnum.SisDataImport));
+            
+            //cp.AddProducer("Sis Import Producer", new AllDistrictsProducer("SisImportProducer", BackgroundTaskTypeEnum.SisDataImport));
+            cp.AddProducer("Cleanup Manager", new CleanupManager("CleanupManager"));
             var raygunClient = new RaygunClient();
             raygunClient.ApplicationVersion = CompilerHelper.Version;      
             while (true)

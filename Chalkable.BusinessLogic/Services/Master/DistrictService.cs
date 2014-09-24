@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -14,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         District GetByIdOrNull(Guid id);
         District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
+        PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = int.MaxValue);
         void Update(District district);
         void DeleteDistrict(Guid id);
         bool IsOnline(Guid id);
@@ -21,7 +21,9 @@ namespace Chalkable.BusinessLogic.Services.Master
 
     public class DistrictService : MasterServiceBase, IDistrictService
     {
-
+        private const int MAX_SYNC_TIME_DEFAULT = 1800;
+        private const int SYNC_LOG_FLUSH_SIZE_DEFAULT = 100;
+        private const int SYNC_HISTORY_DAYS_DEFAULT = 15;
 
         public DistrictService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)
@@ -45,7 +47,10 @@ namespace Chalkable.BusinessLogic.Services.Master
                         SisRedirectUrl = sisRedirectUrl,
                         SisUserName = sisUserName,
                         SisPassword = sisPassword,
-                        TimeZone = timeZone
+                        TimeZone = timeZone,
+                        MaxSyncTime = MAX_SYNC_TIME_DEFAULT,
+                        SyncLogFlushSize = SYNC_LOG_FLUSH_SIZE_DEFAULT,
+                        SyncHistoryDays = SYNC_HISTORY_DAYS_DEFAULT
                     };
                 da.Insert(res);
                 uow.Commit();
@@ -63,6 +68,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return new DistrictDataAccess(uow).GetPage(start, count);
+            }
+        }
+
+        public PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = Int32.MaxValue)
+        {
+            using (var uow = Read())
+            {
+                return new DistrictDataAccess(uow).GetSyncStatuses(start, count);
             }
         }
 

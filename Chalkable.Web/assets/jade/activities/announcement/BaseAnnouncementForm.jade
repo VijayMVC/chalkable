@@ -83,11 +83,11 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                 .advanced-options-container.x-hidden
                     .weight-multiplier.new-input-container
                         .title=Msg.Weight_Multiplier
-                        input(name='weightmultiplier', class="validate[required,custom[number],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
+                        input(name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
                         div(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message).question-mark ?
                     .weight-addition.new-input-container
                         .title=Msg.Weight_Addition
-                        input(name='weightaddition', class="validate[required,custom[number],min[0]]", placeholder="0.00", value=announcement.getWeightAddition() || 0.00)
+                        input(name='weightaddition', class="validate[required,custom[double],min[0]]", placeholder="0.00", value=announcement.getWeightAddition() || 0.00)
                         div(data-tooltip=Msg.Weight_Addition_Tooltip_Message).question-mark ?
                     .check-box-container
                         .title=Msg.Hide_from_Students

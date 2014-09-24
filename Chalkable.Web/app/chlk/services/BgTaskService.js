@@ -29,8 +29,8 @@ NAMESPACE('chlk.services', function () {
                 });
             },
             [[chlk.models.id.BgTaskId]],
-            ria.async.Future, function deleteTask(id) {
-                return this.get('BackgroundTask/Delete.json', null
+            ria.async.Future, function cancelTask(id) {
+                return this.get('BackgroundTask/Cancel.json', null
                     , {
                             taskId: id.valueOf()
                       }
