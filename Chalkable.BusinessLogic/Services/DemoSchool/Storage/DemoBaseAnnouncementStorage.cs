@@ -210,14 +210,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             //todo: create admin announcements if it's admin
 
+
+            var cls = Storage.ClassStorage.GetById(classId);
             var announcement = new AnnouncementComplex
             {
                 ClassAnnouncementTypeName = Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name,
                 ChalkableAnnouncementType = classAnnouncementTypeId,
                 PrimaryTeacherName = person.FullName,
-                ClassName = Storage.ClassStorage.GetById(classId).Name,
+                ClassName = cls.Name,
                 GradeLevelId = gradeLevelRef,
                 PrimaryTeacherGender = person.Gender,
+                FullClassName = cls.Name + " " + cls.ClassNumber,
                 IsScored = false,
                 Id = annId,
                 PrimaryTeacherRef = userId,
@@ -269,6 +272,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 var announcementType = classAnnouncementType.Id;
                 var announcementDetail = Create(announcementType, classRef, DateTime.Today, DemoSchoolConstants.TeacherId,
                     DateTime.Now.AddDays(1));
+                var cls = Storage.ClassStorage.GetById(classRef);
+                announcementDetail.ClassName = cls.Name;
+                announcementDetail.FullClassName= cls.Name + " " + cls.ClassNumber;
                 announcementDetail.IsScored = true;
                 announcementDetail.MaxScore = 100;
                 announcementDetail.Title = classAnnouncementType.Name + " " + classId;
