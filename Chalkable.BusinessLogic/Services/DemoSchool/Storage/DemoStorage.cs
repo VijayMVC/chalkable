@@ -203,7 +203,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         private void Setup()
         {
             PrepareGeneralData();
-            AddAdmin();
             AddTeacher();
             PrepareStudents();
             AddStudentsToClasses();
@@ -395,39 +394,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     AddStudentToClass(studentId, cls, DemoSchoolConstants.SecondMarkingPeriodId);    
                 }
             }
-        }
-
-        private void AddAdmin()
-        {
-            PersonStorage.Add(new Person
-            {
-                Active = true,
-                FirstLoginDate = DateTime.Now,
-                Salutation = "Mr.",
-                Id = DemoSchoolConstants.AdminGradeId,
-                FirstName = "rosteradmin",
-                LastName = "rosteradmin",
-                Gender = null,
-                RoleRef = CoreRoles.ADMIN_GRADE_ROLE.Id
-            });
-
-            StaffStorage.Add(new Staff
-            {
-                UserId = DemoSchoolConstants.AdminGradeId
-            });
-
-            SchoolPersonStorage.Add(new SchoolPerson
-            {
-                PersonRef = DemoSchoolConstants.AdminGradeId,
-                RoleRef = CoreRoles.ADMIN_GRADE_ROLE.Id,
-                SchoolRef = DemoSchoolConstants.SchoolId
-            });
-
-            PersonBalanceStorage.Add(new DemoPersonBalance
-            {
-                Balance = 10000,
-                PersonId = DemoSchoolConstants.AdminGradeId
-            });
         }
 
         private void AddTeacher()

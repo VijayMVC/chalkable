@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -44,32 +46,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
 
-            var isForAll = !(personId.HasValue || (roleIds != null && roleIds.Count > 0) || (classIds != null && classIds.Count > 0) ||
-                                   (gradeLevelIds != null && gradeLevelIds.Count > 0) || (departmentIds != null && departmentIds.Count > 0));
             var callerRoleId = Storage.Context.RoleId;
             var callerId = Storage.Context.PersonId;
 
             var canInstallForTeacher = hasTeacherMyApps || canAttach;
             var canInstallForStudent = hasStudentMyApps || canAttach;
 
-            var canInstall = callerRoleId == CoreRoles.STUDENT_ROLE.Id || hasStudentMyApps ||
-                             (callerRoleId == CoreRoles.TEACHER_ROLE.Id &&
-                              (canInstallForStudent || canInstallForTeacher))
-                             ||
-                             ((callerRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id ||
-                               callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id ||
-                               callerRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id)
-                              && (hasAdminMyApps || canInstallForStudent || canInstallForTeacher));
+            var canInstall = CanInstall(hasAdminMyApps, hasStudentMyApps, callerRoleId, canInstallForStudent, canInstallForTeacher);
 
             var schoolId = Storage.SchoolYearStorage.GetById(schoolYearId).SchoolRef;
-
-            if (isForAll && callerRoleId == CoreRoles.TEACHER_ROLE.Id)
-            {
-                classIds = Storage.ClassStorage.GetClassesComplex(new ClassQuery
-                {
-                    PersonId = callerId
-                }).Classes.Select(x => x.Id).ToList();
-            }
 
             var personsForInstall = new List<KeyValuePair<int, int>>();
 
@@ -85,7 +70,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                 if (callerRoleId == CoreRoles.TEACHER_ROLE.Id)
                 {
-
                     var classes = Storage.ClassStorage.GetClassesComplex(new ClassQuery
                     {
                         PersonId = callerId
@@ -98,25 +82,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                     var sps =
                         Storage.SchoolPersonStorage.GetAll()
-                            .Where(x => (personRefs.Contains(x.PersonRef) && canInstallForStudent || x.PersonRef == callerId && canInstallForTeacher) && x.SchoolRef == schoolId);
-
+                            .Where(x => (personRefs.Contains(x.PersonRef) && canInstallForStudent || x.PersonRef == callerId && canInstallForTeacher)
+                                && x.SchoolRef == schoolId);
+                    
                     personsForInstall.AddRange(sps.Select(schoolPerson => new KeyValuePair<int, int>(schoolPerson.PersonRef, schoolPerson.RoleRef)));
                 }
-
-                if (callerRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id || callerRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id ||
-                    callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id)
-                {
-                    var sps = Storage.SchoolPersonStorage.GetAll().Where(x =>
-                        (x.RoleRef == CoreRoles.TEACHER_ROLE.Id && canInstallForTeacher) ||
-                        (x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id || x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id ||
-                         x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id) && hasAdminMyApps
-                        || (x.RoleRef == CoreRoles.STUDENT_ROLE.Id && canInstallForStudent) && x.SchoolRef == schoolId)
-                        .ToList();
-                    personsForInstall.AddRange(sps.Select(schoolPerson => new KeyValuePair<int, int>(schoolPerson.PersonRef, schoolPerson.RoleRef)));
-
-
-                }
-
             }
 
             var installed =
@@ -126,142 +96,175 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             personsForInstall = personsForInstall.Where(x => !installed.Contains(x.Key)).ToList();
 
-
             var result = new List<PersonsForApplicationInstall>();
+            PrepareRoleInstalls(roleIds, result, personsForInstall);
+            PrepareDepartmentInstalls(departmentIds, personsForInstall, result);
+            PrepareClassInstalls(classIds, personsForInstall, result, callerRoleId);
+            PreparePersonInstalls(personId, roleIds, departmentIds, gradeLevelIds, classIds, callerRoleId, callerId, result, personsForInstall);
+            PrepareGradeLevelInstalls(gradeLevelIds, schoolYearId, personsForInstall, result);
+            return result;
+        }
 
+        private static bool CanInstall(bool hasAdminMyApps, bool hasStudentMyApps, int callerRoleId, bool canInstallForStudent,
+            bool canInstallForTeacher)
+        {
+            var canInstall = callerRoleId == CoreRoles.STUDENT_ROLE.Id && hasStudentMyApps ||
+                             (callerRoleId == CoreRoles.TEACHER_ROLE.Id &&
+                              (canInstallForStudent || canInstallForTeacher))
+                             ||
+                             ((callerRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id ||
+                               callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id ||
+                               callerRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id)
+                              && (hasAdminMyApps || canInstallForStudent || canInstallForTeacher));
+            return canInstall;
+        }
 
-            if (roleIds != null)
-            {
-                result.AddRange(personsForInstall.Where(x => roleIds.Contains(x.Value)).Select(x => new PersonsForApplicationInstall
+        private static void PrepareRoleInstalls(ICollection<int> roleIds, List<PersonsForApplicationInstall> result, IEnumerable<KeyValuePair<int, int>> personsForInstall)
+        {
+            if (roleIds == null) return;
+            result.AddRange(
+                personsForInstall.Where(x => roleIds.Contains(x.Value)).Select(x => new PersonsForApplicationInstall
                 {
-                    GroupId = x.Key.ToString(),
+                    GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
                     PersonId = x.Key,
                     Type = PersonsFroAppInstallTypeEnum.Role
                 }));
-    
+        }
+
+        private void PrepareDepartmentInstalls(ICollection<Guid> departmentIds, IEnumerable<KeyValuePair<int, int>> personsForInstall, List<PersonsForApplicationInstall> result)
+        {
+            if (departmentIds == null) return;
+
+            var personRefs = personsForInstall.Select(x => x.Key).ToList();
+
+            var filtered =
+                Storage.ClassPersonStorage.GetAll().Where(x =>
+                {
+                    var cls = Storage.ClassStorage.GetById(x.ClassRef);
+                    return personRefs.Contains(x.PersonRef) && cls.ChalkableDepartmentRef != null &&
+                           departmentIds.Contains(cls.ChalkableDepartmentRef.Value);
+                }).Select(x =>
+                {
+                    var chalkableDepartmentRef = Storage.ClassStorage.GetById(x.ClassRef).ChalkableDepartmentRef;
+                    return chalkableDepartmentRef != null
+                        ? new
+                        {
+                            x.PersonRef,
+                            DepartmentName = Storage.ChalkableDepartmentStorage.GetById(chalkableDepartmentRef.Value).Name
+                        }
+                        : new {x.PersonRef, DepartmentName = ""};
+                });
+
+            result.AddRange(filtered.Select(x => new PersonsForApplicationInstall
+            {
+                GroupId = x.DepartmentName,
+                PersonId = x.PersonRef,
+                Type = PersonsFroAppInstallTypeEnum.Department
+            }));
+        }
+
+        private void PrepareClassInstalls(IList<int> classIds, IEnumerable<KeyValuePair<int, int>> personsForInstall, 
+            List<PersonsForApplicationInstall> result, int callerRoleId)
+        {
+            if (classIds == null) return;
+            var ids = personsForInstall.Select(x => x.Key).ToList();
+            foreach (var classId in classIds)
+            {
+                result.AddRange(
+                    Storage.ClassPersonStorage.GetAll()
+                        .Where(x => x.ClassRef == classId && ids.Contains(x.PersonRef))
+                        .Select(x => new PersonsForApplicationInstall()
+                        {
+                            GroupId = classId.ToString(CultureInfo.InvariantCulture),
+                            PersonId = x.PersonRef,
+                            Type = PersonsFroAppInstallTypeEnum.Class
+                        }));
             }
 
-            if (departmentIds != null)
+            if (callerRoleId == CoreRoles.TEACHER_ROLE.Id) return;
+            foreach (var classId in classIds)
             {
-                var personRefs = personsForInstall.Select(x => x.Key).ToList();
-     
-                var filtered =
-                    Storage.ClassPersonStorage.GetAll().Where(x =>
-                    {
-                        var cls = Storage.ClassStorage.GetById(x.ClassRef);
-                        return personRefs.Contains(x.PersonRef) && cls.ChalkableDepartmentRef != null && departmentIds.Contains(cls.ChalkableDepartmentRef.Value);
-                    }).Select(x =>
-                    {
-                        var chalkableDepartmentRef = Storage.ClassStorage.GetById(x.ClassRef).ChalkableDepartmentRef;
-                        return chalkableDepartmentRef != null ? new {PersonRef = x.PersonRef, DepartmentName = Storage.ChalkableDepartmentStorage.GetById(chalkableDepartmentRef.Value).Name} : new {PersonRef = x.PersonRef, DepartmentName = ""};
-                    });
-
-                result.AddRange(filtered.Select(x => new PersonsForApplicationInstall
-                {
-                    GroupId = x.DepartmentName,
-                    PersonId = x.PersonRef,
-                    Type = PersonsFroAppInstallTypeEnum.Department
-                }));
+                result.AddRange(
+                    Storage.ClassStorage.GetAll()
+                        .Where(cls => cls.Id == classId && cls.PrimaryTeacherRef != null && ids.Contains(cls.PrimaryTeacherRef.Value))
+                        .Select(x => new PersonsForApplicationInstall()
+                        {
+                            GroupId = classId.ToString(CultureInfo.InvariantCulture),
+                            PersonId = x.PrimaryTeacherRef.Value,
+                            Type = PersonsFroAppInstallTypeEnum.Class
+                        }));
             }
+        }
 
+        private static void PreparePersonInstalls(int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds,
+            IList<int> classIds, int callerRoleId, int? callerId, List<PersonsForApplicationInstall> result, 
+            List<KeyValuePair<int, int>> personsForInstall)
+        {
+            var isSinglePerson = false;
 
-            if (classIds != null)
+            if (callerRoleId == CoreRoles.TEACHER_ROLE.Id && !personId.HasValue)
             {
-                var ids = personsForInstall.Select(x => x.Key).ToList();
-                foreach (var classId in classIds)
-                {
-                    result.AddRange(
-                        Storage.ClassPersonStorage.GetAll()
-                            .Where(x => x.ClassRef == classId && ids.Contains(x.PersonRef))
-                            .Select(x => new PersonsForApplicationInstall()
-                            {
-                                GroupId = classId.ToString(),
-                                PersonId = x.PersonRef,
-                                Type = PersonsFroAppInstallTypeEnum.Class
-                            }));
-                }
-
-                if (callerRoleId != CoreRoles.TEACHER_ROLE.Id)
-                {
-                    foreach (var classId in classIds)
-                    {
-                        result.AddRange(
-                            Storage.ClassStorage.GetAll()
-                                .Where(x => x.Id == classId && x.PrimaryTeacherRef != null && ids.Contains(x.PrimaryTeacherRef.Value))
-                                .Select(x => new PersonsForApplicationInstall()
-                                {
-                                    GroupId = classId.ToString(),
-                                    PersonId = x.PrimaryTeacherRef.Value,
-                                    Type = PersonsFroAppInstallTypeEnum.Class
-                                }));
-                    }
-                }
-
-
+                personId = callerId;
+                isSinglePerson = true;
             }
 
             if (personId.HasValue)
             {
                 result.AddRange(personsForInstall.Where(x => x.Key == personId).Select(x => new PersonsForApplicationInstall
                 {
-                    GroupId = x.Key.ToString(),
+                    GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
                     PersonId = x.Key,
                     Type = PersonsFroAppInstallTypeEnum.Person
                 }));
-            }
-
-
-            var isSinglePerson = false;
-
-            if (callerRoleId == CoreRoles.TEACHER_ROLE.Id && !personId.HasValue && isForAll)
-            {
-                personId = callerId;
-                isSinglePerson = true;
             }
 
             if (roleIds == null && departmentIds == null && gradeLevelIds == null && classIds == null &&
                 (isSinglePerson || !personId.HasValue))
             {
-                result.AddRange(personsForInstall.Where(x => x.Key == personId).Select(x => new PersonsForApplicationInstall
+                result.AddRange(personsForInstall.Select(x => new PersonsForApplicationInstall
                 {
-                    GroupId = x.Key.ToString(),
+                    GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
                     PersonId = x.Key,
                     Type = PersonsFroAppInstallTypeEnum.Person
                 }));
             }
+        }
 
-            if (gradeLevelIds != null)
+        private void PrepareGradeLevelInstalls(ICollection<int> gradeLevelIds, int schoolYearId, List<KeyValuePair<int, int>> personsForInstall,
+            List<PersonsForApplicationInstall> result)
+        {
+            if (gradeLevelIds == null) return;
+            var personIds = personsForInstall.Select(x => x.Key).ToList();
+            var ssyPersons =
+                Storage.StudentSchoolYearStorage.GetAll()
+                    .Where(
+                        x =>
+                            personIds.Contains(x.StudentRef) && x.SchoolYearRef == schoolYearId &&
+                            gradeLevelIds.Contains(x.GradeLevelRef));
+
+            result.AddRange(ssyPersons.Select(x => new PersonsForApplicationInstall
             {
-                var personIds = personsForInstall.Select(x => x.Key).ToList();
-                var ssyPersons =
-                    Storage.StudentSchoolYearStorage.GetAll()
-                        .Where(x => personIds.Contains(x.StudentRef) && x.SchoolYearRef == schoolYearId && gradeLevelIds.Contains(x.GradeLevelRef));
-
-                result.AddRange(ssyPersons.Select(x => new PersonsForApplicationInstall
-                {
-                    Type = PersonsFroAppInstallTypeEnum.GradeLevel,
-                    GroupId = x.GradeLevel.Number.ToString(),
-                    PersonId = x.StudentRef
-                }));
+                Type = PersonsFroAppInstallTypeEnum.GradeLevel,
+                GroupId = x.GradeLevel.Number.ToString(CultureInfo.InvariantCulture),
+                PersonId = x.StudentRef
+            }));
 
 
+            var teacherRefs = personsForInstall.Select(x => x.Key).ToList();
+            var classes =
+                Storage.ClassStorage.GetAll()
+                    .Where(x => x.PrimaryTeacherRef != null && (gradeLevelIds.Contains(x.GradeLevelRef) && teacherRefs.Contains(x.PrimaryTeacherRef.Value)));
 
-                var teacherRefs = personsForInstall.Select(x => x.Key).ToList();
-                var classes = Storage.ClassStorage.GetAll().Where(x => x.PrimaryTeacherRef != null && (gradeLevelIds.Contains(x.GradeLevelRef) && teacherRefs.Contains(x.PrimaryTeacherRef.Value)));
-
-                result.AddRange(classes.Select( x => new PersonsForApplicationInstall
-                {
-                    Type = PersonsFroAppInstallTypeEnum.GradeLevel,
-                    GroupId = Storage.GradeLevelStorage.GetById(x.GradeLevelRef).Number.ToString(),
-                    PersonId = x.PrimaryTeacherRef.Value
-                }));
-            }
-            return result;
+            result.AddRange(classes.Select(x => new PersonsForApplicationInstall
+            {
+                Type = PersonsFroAppInstallTypeEnum.GradeLevel,
+                GroupId = Storage.GradeLevelStorage.GetById(x.GradeLevelRef).Number.ToString(CultureInfo.InvariantCulture),
+                PersonId = x.PrimaryTeacherRef.Value
+            }));
         }
 
         public IEnumerable<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int userId, int roleId)
         {
-
             var classes = Storage.ClassStorage.GetClassesComplex(new ClassQuery
             {
                 CallerRoleId = roleId,
@@ -306,12 +309,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int userId, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
-
-
             var personsForAppInstall = GetPersonsForApplicationInstall(applicationId, userId, personId, roleIds, departmentIds,
                 gradeLevelIds, classIds, id, hasAdminMyApps, hasTeacherMyApps, hasStudentMyApps, canAttach, schoolYearId);
-
-
 
             var res =
                 (from p in personsForAppInstall
@@ -319,16 +318,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 into gr
                 select new
                 {
-                    Count = gr.ToList().Count,
-                    GroupId = gr.Key.GroupId,
-                    Type = gr.Key.Type
+                    gr.ToList().Count, 
+                    gr.Key.GroupId, 
+                    gr.Key.Type
                 }).Union(new[] {new
                 {
                     personsForAppInstall.Select(x => x.PersonId).Distinct().ToList().Count,
                     GroupId = "",
                     Type = PersonsFroAppInstallTypeEnum.Total
                 }});
-
 
             return res.Select(x => new PersonsForApplicationInstallCount
             {
@@ -349,7 +347,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data.Where(x => (x.Value.OwnerRef == personId || x.Value.PersonRef == personId) && x.Value.Active)
                     .Select(x => x.Value)
                     .ToList();
-
         }
     
         public IList<ApplicationInstall> GetAll(Guid applicationId, bool personId)
