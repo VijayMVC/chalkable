@@ -104,6 +104,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             foreach (var announcementComplex in announcements)
             {
                 var complete = Storage.AnnouncementCompleteStorage.GetComplete(announcementComplex.Id, Storage.Context.PersonId.Value);
+                var cls = Storage.ClassStorage.GetById(announcementComplex.ClassRef);
+                announcementComplex.FullClassName = cls.Name + " " + cls.ClassNumber;
                 announcementComplex.Complete = complete.HasValue && complete.Value;
             }
             if (query.OwnedOnly)
@@ -152,6 +154,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var isComplete = Storage.AnnouncementCompleteStorage.GetComplete(announcement.Id,
                 Storage.Context.PersonId.Value);
 
+            var cls = Storage.ClassStorage.GetById(announcement.ClassRef);
+
             return new AnnouncementDetails
             {
                 Id = announcement.Id,
@@ -168,6 +172,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PrimaryTeacherName = announcement.PrimaryTeacherName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
+                FullClassName = cls.Name + " " + cls.ClassNumber,
                 PrimaryTeacherGender = announcement.PrimaryTeacherGender,
                 ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeRef,
                 Created = announcement.Created,
@@ -210,14 +215,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             //todo: create admin announcements if it's admin
 
+
+            var cls = Storage.ClassStorage.GetById(classId);
             var announcement = new AnnouncementComplex
             {
                 ClassAnnouncementTypeName = Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name,
                 ChalkableAnnouncementType = classAnnouncementTypeId,
                 PrimaryTeacherName = person.FullName,
-                ClassName = Storage.ClassStorage.GetById(classId).Name,
+                ClassName = cls.Name,
                 GradeLevelId = gradeLevelRef,
                 PrimaryTeacherGender = person.Gender,
+                FullClassName = cls.Name + " " + cls.ClassNumber,
                 IsScored = false,
                 Id = annId,
                 PrimaryTeacherRef = userId,
@@ -269,6 +277,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 var announcementType = classAnnouncementType.Id;
                 var announcementDetail = Create(announcementType, classRef, DateTime.Today, DemoSchoolConstants.TeacherId,
                     DateTime.Now.AddDays(1));
+                var cls = Storage.ClassStorage.GetById(classRef);
+                announcementDetail.ClassName = cls.Name;
+                announcementDetail.FullClassName= cls.Name + " " + cls.ClassNumber;
                 announcementDetail.IsScored = true;
                 announcementDetail.MaxScore = 100;
                 announcementDetail.Title = classAnnouncementType.Name + " " + classId;

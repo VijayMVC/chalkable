@@ -222,7 +222,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
 
             var classRoomOptions = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
-            var students = ServiceLocator.ClassService.GetStudents(classId, classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
+            var students = ServiceLocator.ClassService.GetStudents(classId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
             return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students, classRoomOptions)).ToList();
         }
@@ -234,19 +234,20 @@ namespace Chalkable.BusinessLogic.Services.School
             var gradeBook = new ChalkableGradeBook
             {
                 GradingPeriod = gradingPeriod,
-                Options = ChalkableClassOptions.Create(classroomOption),
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
                 Students = students
             };
+            if (classroomOption != null)
+                gradeBook.Options = ChalkableClassOptions.Create(classroomOption);
             var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();
             stAvgs = stAvgs.Where(x => x.CalculatedNumericAverage.HasValue || x.EnteredNumericAverage.HasValue).ToList();
             if (stAvgs.Count > 0)
                 gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
 
-            gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students
-                , classroomOption.IncludeWithdrawnStudents);
-            if (!stiGradeBook.Options.IncludeWithdrawnStudents)
+            var includeWithdrawnStudents = classroomOption != null && classroomOption.IncludeWithdrawnStudents;
+            gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students, includeWithdrawnStudents);
+            if (!includeWithdrawnStudents)
             {
                 gradeBook.Students = new List<Person>();
                 foreach (var student in students)
