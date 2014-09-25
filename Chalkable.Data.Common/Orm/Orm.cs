@@ -28,7 +28,7 @@ namespace Chalkable.Data.Common.Orm
                 && propertyInfo.GetCustomAttribute<NotDbFieldAttr>() == null;
         }
         
-        public static List<string> Fields(Type t, bool identityFields = true)
+        public static List<string> Fields(Type t, bool identityFields = true, bool pkFields = true)
         {
             var res = new List<string>();
             var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -36,7 +36,8 @@ namespace Chalkable.Data.Common.Orm
                 if (propertyInfo.CanWrite && propertyInfo.CanRead)
                 {
                     if (IsDbField(propertyInfo) 
-                        && (identityFields || propertyInfo.GetCustomAttribute<IdentityFieldAttr>() == null))
+                        && (identityFields || propertyInfo.GetCustomAttribute<IdentityFieldAttr>() == null)
+                        && (pkFields || propertyInfo.GetCustomAttribute<PrimaryKeyFieldAttr>() == null))
                         res.Add(propertyInfo.Name);
                 }
             return res;
@@ -150,7 +151,7 @@ namespace Chalkable.Data.Common.Orm
         {
             var b = new StringBuilder();
             var t = typeof(T);
-            var fields = Fields(t, false);
+            var fields = Fields(t, false, false);
             var primaryKeyFields = GetPrimaryKeyFields(t);
             var res = new DbQuery {Parameters = new Dictionary<string, object>()};
             for (int i = 0; i < objs.Count; i++)
@@ -171,7 +172,7 @@ namespace Chalkable.Data.Common.Orm
          public static DbQuery SimpleUpdate<T>(T obj, QueryCondition condition)
          {
              var t = typeof(T);
-             var fields = Fields(t);
+             var fields = Fields(t, false, false);
              return SimpleUpdate(t, fields.ToDictionary(x => x, x => t.GetProperty(x).GetValue(obj)), condition);
          }
 
