@@ -356,6 +356,7 @@ namespace Chalkable.StiImport.Services
                                              SchoolYearRef = x.AcadSessionID,
                                              StudentRef = x.StudentID
                                          }).ToList();
+            Log.LogInfo(string.Format("studentSchoolYear count for delete {0}", assignments.Count));
             ServiceLocatorSchool.SchoolYearService.UnassignStudents(assignments);
         }
 
