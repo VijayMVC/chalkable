@@ -358,6 +358,10 @@ NAMESPACE('chlk.controllers', function (){
                 .getInstalledApps(userId, pageIndex_ | 0, null, null, true)
                 .attach(this.validateResponse_())
                 .then(function(data){
+                    var apps = (data.getItems() || []).filter(function(app){
+                       return app.isInstalledOnlyForCurrentUser() == false;
+                    });
+                    data.setItems(apps);
                     return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
                 });
             if (pageIndex_ || pageIndex_ == 0)

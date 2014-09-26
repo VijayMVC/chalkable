@@ -48,7 +48,7 @@ namespace Chalkable.Web.Logic
                 foreach (var role in roles)
                 {
                     var groupId = role.Id.ToString();
-                    var c = counts.FirstOrDefault(x => x.Type == PersonsFroAppInstallTypeEnum.Role && x.GroupId == groupId);
+                    var c = counts.FirstOrDefault(x => x.Type == PersonsForAppInstallTypeEnum.Role && x.GroupId == groupId);
                     var installed = c == null || c.Count == 0;
                     res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.Role, groupId,
                         role.Name, installed));
@@ -56,7 +56,7 @@ namespace Chalkable.Web.Logic
                 foreach (var department in departments)
                 {
                     var groupId = department.Id.ToString();
-                    var c = counts.FirstOrDefault(x => x.Type == PersonsFroAppInstallTypeEnum.Department && x.GroupId == groupId);
+                    var c = counts.FirstOrDefault(x => x.Type == PersonsForAppInstallTypeEnum.Department && x.GroupId == groupId);
                     var installed = c == null || c.Count == 0;
                     res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.Department, groupId,
                         department.Name, installed));
@@ -64,7 +64,7 @@ namespace Chalkable.Web.Logic
                 foreach (var gradeLevel in gradeLevels)
                 {
                     var groupId = gradeLevel.Id.ToString();
-                    var c = counts.FirstOrDefault(x => x.Type == PersonsFroAppInstallTypeEnum.GradeLevel && x.GroupId == groupId);
+                    var c = counts.FirstOrDefault(x => x.Type == PersonsForAppInstallTypeEnum.GradeLevel && x.GroupId == groupId);
                     var installed = c == null || c.Count == 0;
                     res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.GradeLevel, groupId,
                         gradeLevel.Name, installed));

@@ -103,6 +103,22 @@ NAMESPACE('chlk.services', function () {
                         count: count_,
                         forAttach: forAttachOnly_
                     })
+                    .then(function(data){
+                        var apps = data.getItems() || [];
+                        apps = apps.map(function(app){
+                            app.setInstalledOnlyForCurrentUser(false);
+                            var appInstalls = app.getApplicationInstalls() || [];
+
+                            if (appInstalls.length == 1){
+                                if(appInstalls[0].getPersonId() == appInstalls[0].getInstallationOwnerId()){
+                                    app.setInstalledOnlyForCurrentUser(true);
+                                }
+                            }
+                            return app;
+                        });
+                        data.setItems(apps);
+                        return data;
+                    })
             },
 
             [[chlk.models.id.SchoolPersonId, Boolean, Number, String, Number]],

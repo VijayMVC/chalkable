@@ -278,7 +278,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool IsPersonForInstall(Guid applicationId)
         {
             var r = GetPersonsForApplicationInstallCount(applicationId, null, null, null, null, null).ToList();
-            return r.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count > 0;
+            return r.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count > 0;
         }
 
         public void Uninstall(int applicationInstallationId)
@@ -309,7 +309,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException();
             var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
-            var cnt = priceData.TotalCount;//priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+            var cnt = priceData.TotalCount;//priceData.ApplicationInstallCountInfo.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count.Value;
             var bugetBalance = 0; // todo : implement fund service ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.UserId);
             return (bugetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
@@ -358,7 +358,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 {
-                    var personsPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Class).ToList();
+                    var personsPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsForAppInstallTypeEnum.Class).ToList();
                     //var totalInClassCount = countPerClassComplex.Sum(x => x.Count);
                     var personids = new HashSet<int>();
                     var classPersonsDic = personsPerClassComplex.GroupBy(x => x.GroupId).ToDictionary(x => x.Key, x => x.ToList());
