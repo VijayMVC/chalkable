@@ -103,7 +103,9 @@
       color: #fff
       +text-shadow(transparentize(#fff, .5) 0 1px 0)
 
+
     .week-day
+      $height: 116px - 32px
       vertical-align: top
       display: table-cell
       border-right: 1px solid #ededed
@@ -117,7 +119,7 @@
 
       A
         display: inline-block
-        height: 116px
+        height: $height
         width: 100%
         position: relative
         color: inherit
@@ -141,18 +143,18 @@
           font-size: 13px
           pointer-events: none
 
-    .announcement-calendar-item
-      margin: 16px
-      max-height: 116px - 32px
-      font-size: 12px
-      line-height: 18px
-      overflow: hidden
-      font-style: italic
-      > *
-        display: inline-block
+      .announcement-calendar-item
+        margin: 16px
+        max-height: $height - 32px
+        font-size: 12px
+        line-height: 18px
+        overflow: hidden
+        font-style: italic
+        > *
+          display: inline-block
 
-      strong
-        font-weight: 600
+        strong
+          font-weight: 600
 
     .today.week-day A:hover
       background-color: transparentize(#fff, .95)

@@ -28,7 +28,7 @@ mixin TooltipWithOverflow(text)
                                     -VALIDATE_ARG('ann', [chlk.models.announcement.Announcement], ann)
                                     .ann-line
                                         strong= ann.getAnnouncementTypeName()
-                                        =' - ' + ann.getClassName()
+                                        =' - ' + ann.getShortClassName()
                                         .x-hidden
                                             +TooltipWithOverflow(ann.getTitle()).typename
                                             +TooltipWithOverflow(ann.getClassName()).title
