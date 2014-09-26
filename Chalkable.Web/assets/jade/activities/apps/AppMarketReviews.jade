@@ -1,7 +1,7 @@
 app = self
 appRating = app.getApplicationRating()
 
-a.write-review-btn Write a review
+BUTTON.write-review-btn Write a review
 .add-review.x-hidden
     +ActionForm('appmarket', 'writeReview')#submit-review-form
         +Hidden('appId', app.getId().valueOf())
