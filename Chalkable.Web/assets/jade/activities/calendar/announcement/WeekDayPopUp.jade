@@ -1,4 +1,4 @@
-.calendar-popup
+.calendar-popup.chat-bubble
     announcements = self.getAnnouncements();
     period = self.getPeriod();
     roomNumber = self.getRoomNumber();
@@ -8,25 +8,19 @@
                 +ActionLink('class', 'info', announcements[0].getClassId().valueOf())=announcements[0].getClassName()
     .info
         if roomNumber
-            p.day-down
-                a Rm #{roomNumber}
-            br
-        p.day-down
-            a #{period.displayPeriodTimeRange()}
-        br
-        p.day-down
-            a=self.getDate().format('DD, MM d')
-        br
+            .day-down Rm #{roomNumber}
+        .day-down #{period.displayPeriodTimeRange()}
+        .day-down= self.getDate().format('DD, MM d')
     if announcements.length > 0
         .announcements-list
-            ul.day-announcements
+            .day-announcements
                 each item in announcements
-                    li.items
+                    .items
                         +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
     if !self.getUserRole().isStudent()
-        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann
+        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann New item
 
 
 

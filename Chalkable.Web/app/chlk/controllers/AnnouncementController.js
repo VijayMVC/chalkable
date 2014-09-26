@@ -319,12 +319,8 @@ NAMESPACE('chlk.controllers', function (){
             }
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
-                .catchError(function(error){
-                    if(error.getStatus && error.getStatus() == 500){
-                        var res = JSON.parse(error.getResponse());
-                        if(res.exceptiontype == 'NoClassAnnouncementTypeException')
-                            return this.redirectToErrorPage_(error.toString(), 'error', 'createAnnouncementError', []);
-                    }
+                .catchException(chlk.services.NoClassAnnouncementTypeException, function(ex){
+                    return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(model){
