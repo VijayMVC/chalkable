@@ -85,7 +85,8 @@ namespace Chalkable.Web.Models
             }
             var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
             res.TotalAvarages = StudentTotalAveragesViewData.Create(gradeBook.Averages, stIds);
-            if (gradeBook.Options.DisplayTotalPoints && gradeBook.Announcements.Count > 0)
+
+            if (gradeBook.Options != null && gradeBook.Options.DisplayTotalPoints && gradeBook.Announcements.Count > 0)
             {
                 res.TotalPoints = new List<TotalPointViewData>();
                 foreach (var stId in stIds)

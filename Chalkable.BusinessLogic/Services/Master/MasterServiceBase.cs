@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         protected UnitOfWork Update(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            return ServiceLocator.DbService.GetUowForUpdate();
+            return ServiceLocator.DbService.GetUowForUpdate(isolationLevel);
         }
     }
 }

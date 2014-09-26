@@ -100,8 +100,6 @@
             var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
             var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
             var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
-            var isAdmin = currentRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id
-                || currentRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id || currentRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id;
             var isStudent = currentRoleId == CoreRoles.STUDENT_ROLE.Id;
                 
             <div id="demo-footer" class="top">
@@ -143,10 +141,6 @@
                                             {
                     @:active
                 }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
-                ><a class="demo-role-button @if (isAdmin)
-                                            {
-                    @:active
-                }" rolename="AdminGrade"><span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
                 ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
                 ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
             </div>
