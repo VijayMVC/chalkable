@@ -118,22 +118,14 @@ namespace Chalkable.Data.School.DataAccess
                 });
         }
 
-//        public void DeleteByClassId(int announcementId, int classId)
-//        {
-//            var sql = string.Format(@"delete from AnnouncementStandard 
-//                        where AnnouncementStandard.[{0}]=@{0} and  AnnouncementStandard.[{1}]
-//                                in (select ClassStandard.[{2}] from ClassStandard 
-//                                    join [Class] on [Class].Id = ClassStandard.ClassRef or ClassStandard.ClassRef = Class.CourseRef 
-//                                    where Class.Id = @classId)"
-//                , AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, AnnouncementStandard.STANDARD_REF_FIELD, ClassStandard.STANDARD_REF_FIELD);
-//            var parameters = new Dictionary<string, object>
-//                {
-//                    {AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId},
-//                    {"classId", classId}
-//                };
-//            ExecuteNonQueryParametrized(sql, parameters);
-//        }
-
+        public void DeleteAll(int standardId)
+        {
+            SimpleDelete(new AndQueryCondition
+                {
+                    {AnnouncementStandard.STANDARD_REF_FIELD, standardId}
+                });
+        }
+        
         public void Delete(QueryCondition annCondition, QueryCondition classCondition, bool notInClassStandard)
         {
             var cStandardDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, classCondition);

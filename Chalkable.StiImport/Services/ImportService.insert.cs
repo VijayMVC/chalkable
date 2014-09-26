@@ -535,7 +535,9 @@ namespace Chalkable.StiImport.Services
                 StandardSubjectRef = x.StandardSubjectID,
                 UpperGradeLevelRef = x.UpperGradeLevelID
             }).ToList();
-            ServiceLocatorSchool.StandardService.AddStandards(sts);
+            var toInsert = sts.ToDictionary(x=>x.Id);
+            var sorted = TopologicSort(x => x.Id, x => x.ParentStandardRef, toInsert);
+            ServiceLocatorSchool.StandardService.AddStandards(sorted);
         }
 
         private void InsertClassStandard()

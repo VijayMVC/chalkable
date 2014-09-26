@@ -14,7 +14,6 @@ namespace Chalkable.Tests.Storage
     {
         public class WADLogsTable : TableEntity
         {
-            public DateTime TimeStamp { get; set; }
             public long EventTickCount { get; set; }
             public string Role { get; set; }
             public string RoleInstance { get; set; }
@@ -40,7 +39,7 @@ namespace Chalkable.Tests.Storage
                         {
                             sb.Append(item.RowKey).Append(",")
                               .Append(item.PartitionKey).Append(",")
-                              .Append(item.TimeStamp).Append(",")
+                              .Append(item.Timestamp).Append(",")
                               .Append(item.EventTickCount).Append(",")
                               .Append(item.Role).Append(",")
                               .Append(item.RoleInstance).Append(",")

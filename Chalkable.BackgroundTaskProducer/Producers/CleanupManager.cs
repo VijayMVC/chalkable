@@ -16,7 +16,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             var districts = sl.DistrictService.GetDistricts().ToDictionary(x=>x.Id);
 
-            var processingTasks = sl.BackgroundTaskService.Find(null, BackgroundTaskStateEnum.Processing);
+            var processingTasks = sl.BackgroundTaskService.Find(null, BackgroundTaskStateEnum.Processing, null, true);
             var now = DateTime.Now;
             foreach (var processingTask in processingTasks)
                 if (processingTask.DistrictRef.HasValue && processingTask.Started.HasValue)
