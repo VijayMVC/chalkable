@@ -267,12 +267,17 @@ namespace Chalkable.StiImport.Services
                 }).ToList();
             ServiceLocatorSchool.StandardService.DeleteClassStandards(classStandards);
         }
-
+        
         private void DeleteStandards()
         {
             if (context.GetSyncResult<Standard>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<Standard>().Deleted.Select(x => x.StandardID).ToList();
+            var toDelete = context.GetSyncResult<Standard>().Deleted.ToDictionary(x => x.StandardID, x => ServiceLocatorSchool.StandardService.GetStandardById(x.StandardID));
+            var sorted = TopologicSort(x => x.Id, x => x.ParentStandardRef, toDelete).Reverse();
+            var ids = sorted.Select(x => x.Id).ToList();
+            
+            foreach (var id in ids)
+                ServiceLocatorSchool.AnnouncementService.RemoveAllAnnouncementStandards(id);
             ServiceLocatorSchool.StandardService.DeleteStandards(ids);
         }
 

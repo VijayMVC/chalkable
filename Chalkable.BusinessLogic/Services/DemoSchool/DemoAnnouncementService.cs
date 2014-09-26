@@ -374,6 +374,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.StandardStorage.GetById(standardId);
         }
 
+        public void RemoveAllAnnouncementStandards(int standardId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
         {
             var announcementIds = (Storage.AnnouncementStandardStorage).GetAll().Select(x => x.AnnouncementRef);
