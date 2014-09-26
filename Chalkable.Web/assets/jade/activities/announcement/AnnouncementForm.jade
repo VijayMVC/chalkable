@@ -1,6 +1,6 @@
 mixin AnnouncementTypeToolBar(types, announcement, typeId)
-    if types.length > 60
-        SPAN.type-text #{Msg.Type} :
+    if types.length > 8
+        SPAN.type-text #{Msg.Type}:&nbsp;
         +Select('typeid')#type-select
             each item in types
                 +Option(item.getId(), item.getName(), typeId==item.getId())(

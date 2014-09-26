@@ -1,8 +1,6 @@
 app = self
 appRating = app.getApplicationRating()
 
-a.review-link User Ratings
-+Rating("appRating", appRating.getAverage(), false).all
 a.write-review-btn Write a review
 .add-review.x-hidden
     +ActionForm('appmarket', 'writeReview')#submit-review-form

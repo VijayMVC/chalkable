@@ -6,6 +6,6 @@ action = banInfo.isBanned() ? "unbanApp" : "banApp"
 
     if banInfo.isUnbannable()
 
-        +ActionLink('appmarket', action, self.getId())(class=cls)=btnTitle
+        +ActionButton('appmarket', action, self.getId())(class=cls)=btnTitle
     else
         .ban-app-btn.pressed=btnTitle

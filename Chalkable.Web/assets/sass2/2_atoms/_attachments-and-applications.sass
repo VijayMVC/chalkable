@@ -1,4 +1,4 @@
-.attachments-and-applications, .student-attachments
+.attachments-and-applications, .student-attachments, .apps
   margin-right: -20px
 
   .attach-file-area
@@ -20,7 +20,7 @@
     > DIV
       width: 100px
 
-.attachments-and-applications, .attachments-container, .student-attachments
+.attachments-and-applications, .attachments-container, .student-attachments, .apps
   .attachment, .application
     border-radius: 5px
     background: #fff
@@ -65,12 +65,30 @@
       font-size: 13px
       font-weight: 600
       line-height: 36px
-      +transition(bottom, .2s, easy-in-out)
+      //+transition(bottom, .05s, easy-in-out)
       z-index: 5
       width: 188px - 2 * 19px
 
     &:hover .title
       bottom: 155px - 36px - $padding
+
+    .shortdesc
+      position: absolute
+      top: 40px
+      left: 0
+      padding: 0 19px
+      color: #56554f
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      font-size: 12px
+      font-weight: 600
+      line-height: 16px
+      +transition(opacity, .2s, easy-in-out)
+      z-index: 5
+      width: 188px - 2 * 19px
+      opacity: 0
+
+    &:hover .shortdesc
+      opacity: 1
 
     BUTTON, .download-link
       opacity: 0
