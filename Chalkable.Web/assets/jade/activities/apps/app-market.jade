@@ -35,9 +35,10 @@ mixin AppIconLink(app)
                            +LabeledCheckbox(subject.getName(), 'app-category-' + subject.getId().valueOf(), false, false)
 
             .price
-                BUTTON.price-type.all.btn(data-price-type=chlk.models.apps.AppPriceType.ALL.valueOf()).pressed All
-                BUTTON.price-type.paid.btn(data-price-type=chlk.models.apps.AppPriceType.PAID.valueOf()) Paid
-                BUTTON.price-type.free.btn(data-price-type=chlk.models.apps.AppPriceType.FREE.valueOf()) Free
+                .buttons-group
+                    BUTTON.price-type.all.btn(data-price-type=chlk.models.apps.AppPriceType.ALL.valueOf()).pressed All
+                    BUTTON.price-type.paid.btn(data-price-type=chlk.models.apps.AppPriceType.PAID.valueOf()) Paid
+                    BUTTON.price-type.free.btn(data-price-type=chlk.models.apps.AppPriceType.FREE.valueOf()) Free
                 +Hidden('priceType', chlk.models.apps.AppPriceType.ALL.valueOf())
 
             .sort

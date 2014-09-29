@@ -2,18 +2,20 @@
     -topData = self.getTopData();
     -topItems = topData.getTopItems();
     -selectedId = topData.getSelectedItemId();
+
+    h2.page-title People
+
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'students', "my", [])(
         selectedItemId=selectedId ? selectedId.valueOf() : "",
         disabledClass = 'x-hidden'
     ).classes-bar
     if !selectedId || !selectedId.valueOf()
-        .action-bar.not-transparent.buttons
-            .container.panel-bg
-                .right
-                    +ActionLink('students', 'my')(class=self.isMy() ? "pressed" : "")
-                        =self.getUserRole().isStudent() ? Msg.Classmates :Msg.My_Students
-                    +ActionLink('students', 'all')(class=self.isMy() ? "" : "pressed")
-                        =self.getUserRole().isStudent() ? Msg.My_Teachers :Msg.Whole_School
+        .action-bar
+            .items
+                +ActionLink('students', 'my')(class=self.isMy() ? "pressed" : "")
+                    =self.getUserRole().isStudent() ? Msg.Classmates :Msg.My_Students
+                +ActionLink('students', 'all')(class=self.isMy() ? "" : "pressed")
+                    =self.getUserRole().isStudent() ? Msg.My_Teachers :Msg.Whole_School
     +ActionForm('students', 'updateList')#people-list-form
         input(type="hidden", name="my", value=(self.isMy() ? 'true' : 'false')))
         input(type="hidden", name="classId", value=self.getTopData().getSelectedItemId()))
