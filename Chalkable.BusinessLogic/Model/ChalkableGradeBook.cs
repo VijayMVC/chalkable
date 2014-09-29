@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using ClassroomOption = Chalkable.StiConnector.Connectors.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Model
 {
@@ -110,15 +111,15 @@ namespace Chalkable.BusinessLogic.Model
         public bool IncludeWithdrawnStudents { get; set; }
         public bool RoundDisplayedAverages { get; set; }
 
-        public static ChalkableClassOptions Create(Data.School.Model.ClassroomOption classroomOption)
+        public static ChalkableClassOptions Create(ClassroomOption classroomOption)
         {
             return new ChalkableClassOptions
                 {
-                    DisplayAlphaGrades = classroomOption.DisplayAlphaGrade,
+                    DisplayAlphaGrades = classroomOption.DisplayAlphaGrades,
                     DisplayStudentAverage = classroomOption.DisplayStudentAverage,
                     DisplayTotalPoints = classroomOption.DisplayTotalPoints,
                     IncludeWithdrawnStudents = classroomOption.IncludeWithdrawnStudents,
-                    RoundDisplayedAverages = classroomOption.RoundDisplayedAverages
+                    RoundDisplayedAverages = classroomOption.RoundAverages
                 };
         }
     }
