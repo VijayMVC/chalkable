@@ -415,7 +415,7 @@ var Msg = {
     },
     ID_to_print: 'ID to print',
     Import_Types: 'Import Types',
-    Include_students: 'Include_students',
+    Include_students: 'Include students',
     Info_this_app_uses: 'Info this app uses:',
     Insert_title: 'Insert title',
     Install_App: 'Install App',
