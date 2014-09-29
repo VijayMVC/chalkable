@@ -61,7 +61,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Incomplete = incomplete,
                 Late = late,
                 Exempt = exempt,
-                ScoreValue = value,
+                ScoreValue = numericScore.ToString(),
                 NumericScore = numericScore,
                 
                 ActivityId = ann.SisActivityId.Value,
