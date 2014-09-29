@@ -29,6 +29,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public void CreateUserLoginInfos()
+        {
+            throw new NotImplementedException();
+        }
+
         public void ImportEdit(IList<User> users)
         {
             throw new NotImplementedException();

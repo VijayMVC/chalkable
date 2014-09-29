@@ -13,6 +13,8 @@ topItems = topData.getTopItems() || []
     disabledClass = 'x-hidden'
 ).classes-bar
 .grading-summary
+    if !self.getItems().length
+        .no-items-text There is no grading summary data for current term
     each item in self.getItems()
         trouleCount = item.getTrouble().length
         wellCount = item.getWell().length
