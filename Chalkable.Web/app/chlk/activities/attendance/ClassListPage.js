@@ -48,7 +48,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                     case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
                     case ria.dom.Keys.RIGHT.valueOf(): node.find('.row.selected').find('.' + this._RIGHT_ARROW).trigger('click');break;
                     case ria.dom.Keys.ESC.valueOf(): this.hideDropDown();break;
+                    //default: return true;
                 }
+                //return false;
             },
 
             VOID, function hideDropDown(){

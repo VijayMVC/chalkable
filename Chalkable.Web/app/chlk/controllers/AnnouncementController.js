@@ -564,7 +564,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     if(!this.userIsAdmin())
                         chlk.controls.updateWeekCalendar();
-                    return this.BackgroundNavigate('feed', 'list', [null, true]);
+                    return this.Redirect('feed', 'list', [null, true]);
                 }, this);
         },
 
@@ -575,7 +575,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteDrafts(currentPersonId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.BackgroundNavigate('feed', 'list', [null, true]);
+                    return this.Redirect('feed', 'list', [null, true]);
                 }, this);
         },
 

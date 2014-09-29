@@ -29,7 +29,7 @@ mixin ActionLinkWithModel(actionLinkModel)
 
 // requires: actionLinksModel instanceOf ArrayOf(chlk.models.common.ActionLinkModel)
 mixin ActionLinkList(actionLinksModel)
-    -VALIDATE_ARG('actionLinkModel', [ArrayOf(chlk.models.common.ActionLinkModel)], actionLinkModel)
+    -VALIDATE_ARG('actionLinksModel', [ArrayOf(chlk.models.common.ActionLinkModel)], actionLinksModel)
     each item in actionLinksModel
         +ActionLinkWithModel(item)
 

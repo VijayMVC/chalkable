@@ -1,22 +1,21 @@
 -users=self.getUsers()
 -selectedIndex = self.getSelectedIndex();
-.people-list-container.not-transparent
-    .buttons
-        BUTTON.total-count= self.getTotalText()
+.buttons.filter
+    .left
+        input(type="hidden", name="byLastName", value=(self.isByLastName() ? 'true' : 'false'))
+        .buttons-group
+        BUTTON(class=self.isByLastName()?"":"pressed", data-value="false").first-last First name
+            BUTTON(class=self.isByLastName()?"pressed":"", data-value="true").first-last Last name
+    .right.wrapper
+        input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter()).people-search.search-input
+        .search-glass
+        .people-search-imgs
+            label.people-search-img
+            label.people-search-close.opacity0
+    .clear-fix
 
-    .buttons.filter
-        .left
-            input(type="hidden", name="byLastName", value=(self.isByLastName() ? 'true' : 'false'))
-            .buttons-group
-                BUTTON(class=self.isByLastName()?"":"pressed", data-value="false").first-last First name
-                BUTTON(class=self.isByLastName()?"pressed":"", data-value="true").first-last Last name
-        .right.wrapper
-            input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter()).people-search.search-input
-            .search-glass
-            .people-search-imgs
-                label.people-search-img
-                label.people-search-close.opacity0
-        .clear-fix
+.people-list-container.not-transparent
+    .header: .title= self.getTotalText()
     .grid-container.loader-container
         +RenderWith(self.getModel(), chlk.templates.people.UsersGridTpl)(
             userRole = self.getUserRole(),
