@@ -217,7 +217,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public bool IsPersonForInstall(Guid applicationId)
         {
             var r = GetPersonsForApplicationInstallCount(applicationId, null, null, null, null, null).ToList();
-            return r.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count > 0;
+            return r.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count > 0;
         }
 
         public void Uninstall(int applicationInstallationId)
@@ -243,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
-            var cnt = priceData.TotalCount;//ApplicationInstallCountInfo.First(x => x.Type == PersonsFroAppInstallTypeEnum.Total).Count.Value;
+            var cnt = priceData.TotalCount;//ApplicationInstallCountInfo.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count.Value;
             var budgetBalance = ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.PersonId.Value);
             return (budgetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
@@ -300,7 +300,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
                 if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 {
-                    var personstPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Class).ToList();
+                    var personstPerClassComplex = applicationInstallCount.Where(x => x.Type == PersonsForAppInstallTypeEnum.Class).ToList();
                     //var totalInClassCount = countPerClassComplex.Sum(x => x.Count);
                     var personids = new HashSet<int>();
                     var classPersonsDic = personstPerClassComplex.GroupBy(x => x.GroupId).ToDictionary(x => x.Key, x => x.ToList());
@@ -313,7 +313,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                         decimal price = notAddPersons.Count * app.Price;
                         totalPrice += app.PricePerClass.HasValue && price > app.PricePerClass.Value ? app.PricePerClass.Value : price;
                     }
-                    var otherPersons = applicationInstallCount.Where(x => x.Type == PersonsFroAppInstallTypeEnum.Person)
+                    var otherPersons = applicationInstallCount.Where(x => x.Type == PersonsForAppInstallTypeEnum.Person)
                                                               .GroupBy(x => x.PersonId).Count();
                     totalPrice += app.Price * otherPersons;
                     return totalPrice;

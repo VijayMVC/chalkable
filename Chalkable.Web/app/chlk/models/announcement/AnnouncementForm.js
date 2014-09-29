@@ -23,6 +23,12 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setTopData(classes);
                 }
                 this.setIsDraft(isDraft || false);
+            },
+
+            [[chlk.models.announcement.Announcement]],
+            function $createFromAnnouncement(announcement){
+                BASE();
+                this.setAnnouncement(announcement);
             }
         ]);
 });

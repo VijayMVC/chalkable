@@ -38,30 +38,22 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null);
         IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
-
         IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null);
-
         Announcement GetLastDraft();
-
         void UpdateAnnouncementGradingStyle(int announcementId, GradingStyleEnum gradingStyle);
         Announcement DropUnDropAnnouncement(int announcementId, bool drop);
         IList<Announcement> GetDroppedAnnouncement(int markingPeriodClassId);
-
-
         IList<AnnouncementRecipient> GetAnnouncementRecipients(int announcementId);
         IList<Person> GetAnnouncementRecipientPersons(int announcementId); 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
-
         void SetComplete(int id, bool complete);
         Announcement SetVisibleForStudent(int id, bool visible);
-
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
-
         bool CanAddStandard(int announcementId);
         Standard AddAnnouncementStandard(int announcementId, int standardId);
         Standard RemoveStandard(int announcementId, int standardId);
+        void RemoveAllAnnouncementStandards(int standardId);
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
-
         void CopyAnnouncement(int id, IList<int> classIds);
     }
 
@@ -828,6 +820,17 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 uow.Commit();
                 return new StandardDataAccess(uow).GetById(standardId);
+            }
+        }
+
+        public void RemoveAllAnnouncementStandards(int standardId)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                new AnnouncementStandardDataAccess(uow).DeleteAll(standardId);
+                uow.Commit();
             }
         }
 

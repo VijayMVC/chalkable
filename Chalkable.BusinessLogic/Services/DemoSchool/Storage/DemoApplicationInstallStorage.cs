@@ -127,7 +127,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
                     PersonId = x.Key,
-                    Type = PersonsFroAppInstallTypeEnum.Role
+                    Type = PersonsForAppInstallTypeEnum.Role
                 }));
         }
 
@@ -159,7 +159,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 GroupId = x.DepartmentName,
                 PersonId = x.PersonRef,
-                Type = PersonsFroAppInstallTypeEnum.Department
+                Type = PersonsForAppInstallTypeEnum.Department
             }));
         }
 
@@ -177,7 +177,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         {
                             GroupId = classId.ToString(CultureInfo.InvariantCulture),
                             PersonId = x.PersonRef,
-                            Type = PersonsFroAppInstallTypeEnum.Class
+                            Type = PersonsForAppInstallTypeEnum.Class
                         }));
             }
 
@@ -191,7 +191,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         {
                             GroupId = classId.ToString(CultureInfo.InvariantCulture),
                             PersonId = x.PrimaryTeacherRef.Value,
-                            Type = PersonsFroAppInstallTypeEnum.Class
+                            Type = PersonsForAppInstallTypeEnum.Class
                         }));
             }
         }
@@ -214,7 +214,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
                     PersonId = x.Key,
-                    Type = PersonsFroAppInstallTypeEnum.Person
+                    Type = PersonsForAppInstallTypeEnum.Person
                 }));
             }
 
@@ -225,7 +225,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
                     PersonId = x.Key,
-                    Type = PersonsFroAppInstallTypeEnum.Person
+                    Type = PersonsForAppInstallTypeEnum.Person
                 }));
             }
         }
@@ -244,7 +244,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             result.AddRange(ssyPersons.Select(x => new PersonsForApplicationInstall
             {
-                Type = PersonsFroAppInstallTypeEnum.GradeLevel,
+                Type = PersonsForAppInstallTypeEnum.GradeLevel,
                 GroupId = x.GradeLevel.Number.ToString(CultureInfo.InvariantCulture),
                 PersonId = x.StudentRef
             }));
@@ -257,7 +257,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             result.AddRange(classes.Select(x => new PersonsForApplicationInstall
             {
-                Type = PersonsFroAppInstallTypeEnum.GradeLevel,
+                Type = PersonsForAppInstallTypeEnum.GradeLevel,
                 GroupId = Storage.GradeLevelStorage.GetById(x.GradeLevelRef).Number.ToString(CultureInfo.InvariantCulture),
                 PersonId = x.PrimaryTeacherRef.Value
             }));
@@ -325,7 +325,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     personsForAppInstall.Select(x => x.PersonId).Distinct().ToList().Count,
                     GroupId = "",
-                    Type = PersonsFroAppInstallTypeEnum.Total
+                    Type = PersonsForAppInstallTypeEnum.Total
                 }});
 
             return res.Select(x => new PersonsForApplicationInstallCount

@@ -21,7 +21,7 @@ mixin FeedItem(item, disabled)
         +ActionLink('announcement', 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
         +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').announcement-link
             .title: +Glue_(item.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), item.getClassName())
-            .date= item.getExpiresDate().toString('M d')
+            .date= item.getExpiresDate() ? item.getExpiresDate().toString('m/d/y') : ''
             .attachment
                 .grades
                     .visible
