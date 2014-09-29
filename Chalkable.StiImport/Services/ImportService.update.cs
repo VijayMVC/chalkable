@@ -268,14 +268,15 @@ namespace Chalkable.StiImport.Services
 
         private void UpdateStudentSchool()
         {
-            if (context.GetSyncResult<StudentSchool>().Updated == null)
+            //TODO: justinsert or delete is possible in INOW
+            /*if (context.GetSyncResult<StudentSchool>().Updated == null)
                 return;
             var studentSchools = context.GetSyncResult<StudentSchool>().All.Select(x => new Data.School.Model.StudentSchool
             {
                 SchoolRef = x.SchoolID,
                 StudentRef = x.StudentID
             }).ToList();
-            ServiceLocatorSchool.StudentService.EditStudentSchools(studentSchools);
+            ServiceLocatorSchool.StudentService.EditStudentSchools(studentSchools);*/
         }
         
         private void UpdatePersonsEmails()
