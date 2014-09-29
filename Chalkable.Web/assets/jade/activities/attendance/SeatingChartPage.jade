@@ -9,39 +9,22 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
         +Hidden('date', self.getDate().format('mm/dd/yy'))
         +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
 
-topData = self.getTopData()
-topItems = topData.getTopItems()
-showButtons = self.getModel().canPost() && self.isScheduled()
-selectedId = topData.getSelectedItemId()
-hasStudentOnChart = self.hasStudentOnChart()
+h2.page-title Attendance
+-var topData = self.getTopData()
+-var topItems = topData.getTopItems()
+-var showButtons = self.getModel().canPost() && self.isScheduled()
+-var selectedId = topData.getSelectedItemId()
+-var hasStudentOnChart = self.hasStudentOnChart()
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
     selectedItemId=selectedId ? selectedId.valueOf() : "",
     disabledClass = 'x-hidden'
 ).classes-bar
-.action-bar.not-transparent.buttons
-    .container.panel-bg
-        .left.no-border
-            +ActionForm('attendance', 'saveFromSeatingChart').save-chart-form
-                +DatePicker('date', self.getDate())(
-                    data-options={
-                        showOtherMonths: true,
-                        selectOtherMonths: true,
-                        inCurrentMp: true
-                    },
-                    data-controller= "attendance",
-                    data-action="seatingChart",
-                    data-params=selectedId ? [selectedId.valueOf()] : null
-                )#attendance-date.tb-date-picker
-                +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
-            +ActionForm('attendance', 'setClassAttendanceListFromSeatingChart').save-attendances-form
-                +Hidden('date', self.getDate().format('mm/dd/yy'))
-                +Hidden('classId', selectedId.valueOf()).class-id
-                +Hidden('attendancesJson').attendances-json
-        .right
-            +ActionLink('attendance', 'classList', selectedId, self.getDate().format('mm-dd-yy'))=Msg.List
-            a.action-link.pressed=Msg.Seating_Chart
-div(class=showButtons ? 'can-post' : '').page-content
-    seatingList = self.getSeatingList()
+.action-bar
+    .items
+        +ActionLink('attendance', 'classList', selectedId, self.getDate().toStandardFormat())= Msg.List
+        +ActionLink('attendance', 'seatingChart', selectedId, self.getDate().toStandardFormat()).pressed= Msg.Seating_Chart
+
+.buttons
     if self.isScheduledInMp()
         if self.getColumns() == 0 || self.getRows() == 0
             +UpdateGridForm(Msg.Create_grid, self.getRows(), self.getColumns(), 0, 0, selectedId.valueOf())
@@ -60,34 +43,58 @@ div(class=showButtons ? 'can-post' : '').page-content
                 .black-arrow.add= Msg.Add_your_students
             else
                 .add
-            .seating-chart-container
-                +LeftRightToolbar()(
-                    needDots = true,
-                    roundedDots = true,
-                    padding = 110
-                ).seating-toolbar.auto-h.big-arrows
-                    -var emptyModel = new chlk.models.attendance.ClassAttendance
-                    -var caTpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl
-                    div(data-columns=self.getColumns(), data-rows=self.getRows()).droppable
-                        each items in seatingList
-                            .seating-row
-                                each item in items
-                                    info = item.getInfo()
-                                    if info && info.getAttendanceReason()
-                                        -console.log(info, info.getAttendanceReason(), info.getAttendanceReason().getAttendanceLevelReasons())
-                                    column = item.getColumn()
-                                    row = item.getRow()
-                                    div(
-                                        data-index= item.getIndex(),
-                                        data-column= column,
-                                        data-row= row,
-                                        class=info ? '' : 'empty-box'
-                                    ).student-block.draggable
-                                        -caTpl.assign(info || emptyModel)
-                                        !=caTpl.render()
-                                        //+RenderWith(info || emptyMdel, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
-                                    if info
-                                        .empty-box.student-block.absolute
+
++ActionForm('attendance', 'setClassAttendanceListFromSeatingChart').save-attendances-form
+    +Hidden('date', self.getDate().format('mm/dd/yy'))
+    +Hidden('classId', selectedId.valueOf()).class-id
+    +Hidden('attendancesJson').attendances-json
+
+div(class=showButtons ? 'can-post' : '').page-content.people-list-container
+    .header
+        +ActionForm('attendance', 'saveFromSeatingChart').save-chart-form.table
+            .title
+                =self.getDate().toString('MM dd, yy')
+                +DatePicker('date', self.getDate())(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true,
+                        inCurrentMp: true
+                    },
+                    data-controller= "attendance",
+                    data-action="seatingChart",
+                    data-params=selectedId ? [selectedId.valueOf()] : null
+                )#attendance-date.tb-date-picker
+                +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
+    seatingList = self.getSeatingList()
+    if self.isScheduledInMp() && self.getColumns() * self.getRows() > 0
+        .seating-chart-container
+            +LeftRightToolbar()(
+                needDots = true,
+                roundedDots = true,
+                padding = 110
+            ).seating-toolbar.auto-h.big-arrows
+                -var emptyModel = new chlk.models.attendance.ClassAttendance
+                -var caTpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl
+                div(data-columns=self.getColumns(), data-rows=self.getRows()).droppable
+                    each items in seatingList
+                        .seating-row
+                            each item in items
+                                info = item.getInfo()
+                                if info && info.getAttendanceReason()
+                                    -console.log(info, info.getAttendanceReason(), info.getAttendanceReason().getAttendanceLevelReasons())
+                                column = item.getColumn()
+                                row = item.getRow()
+                                div(
+                                    data-index= item.getIndex(),
+                                    data-column= column,
+                                    data-row= row,
+                                    class=info ? '' : 'empty-box'
+                                ).student-block.draggable
+                                    -caTpl.assign(info || emptyModel)
+                                    !=caTpl.render()
+                                    //+RenderWith(info || emptyMdel, chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl)
+                                if info
+                                    .empty-box.student-block.absolute
     else
         .black-arrow.no-class-scheduled Selected class is not scaduled in current Term
 typesEnum = chlk.models.attendance.AttendanceTypeEnum

@@ -15,7 +15,7 @@ h2.page-title Attendance
 
 .action-bar
     .items
-        +ActionLink('attendance', 'classList', selectedId).pressed=Msg.List
+        +ActionLink('attendance', 'classList', selectedId, self.getDate().toStandardFormat()).pressed=Msg.List
         +ActionLink('attendance', 'seatingChart', selectedId, self.getDate().toStandardFormat())=Msg.Seating_Chart
 .loader
 .students-list.loader-container
