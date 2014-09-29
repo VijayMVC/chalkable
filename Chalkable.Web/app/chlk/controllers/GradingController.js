@@ -331,7 +331,7 @@ NAMESPACE('chlk.controllers', function (){
                                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
                             model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                             model.getCurrentGradingGrid().setAbleEdit(canEdit);
-                            model.getCurrentGradingGrid().setGradable(alphaGrades && alphaGrades.length && canEdit);
+                            model.getCurrentGradingGrid().setGradable(alphaGrades && (alphaGrades.length || false) && canEdit);
                         }
                         model.setAbleEdit(canEdit);
                         return model;
@@ -355,7 +355,7 @@ NAMESPACE('chlk.controllers', function (){
                         var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
                         newModel.setAbleEdit(canEdit);
-                        newModel.setGradable(alphaGrades && alphaGrades.length && canEdit);
+                        newModel.setGradable(alphaGrades && (alphaGrades.length || false) && canEdit);
                         return newModel;
                     }, this)
                     .attach(this.validateResponse_());

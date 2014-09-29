@@ -64,6 +64,7 @@ NAMESPACE('chlk.services', function () {
                 return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams_ || {})
                     .requestHeaders(this.prepareDefaultHeaders({}))
+                    .disableCache()
                     .run()
                     .then(function (data) {
                         var res, dt;
@@ -158,6 +159,7 @@ NAMESPACE('chlk.services', function () {
                 return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({}))
+                    .disableCache()
                     .run()
                     .then(function (data) {
                         return Serializer.deserialize(data.data, ArrayOf(clazz));
@@ -170,6 +172,7 @@ NAMESPACE('chlk.services', function () {
                 return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({}))
+                    .disableCache()
                     .run()
                     .then(function (data) {
                         var model = new chlk.models.common.PaginatedList(clazz);

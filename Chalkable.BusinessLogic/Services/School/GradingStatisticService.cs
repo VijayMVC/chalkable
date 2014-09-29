@@ -381,6 +381,12 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var classesDetails = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0, int.MaxValue);
+
+            if (classesDetails.Count == 0)
+            {
+                return new List<ShortClassGradesSummary>();
+            }
+
             var classesIds = classesDetails.Select(x => x.Id).ToList();
             var stiSectionsGrades = ConnectorLocator.GradebookConnector.GetSectionGradesSummary(classesIds, gradingPeriodId);
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery

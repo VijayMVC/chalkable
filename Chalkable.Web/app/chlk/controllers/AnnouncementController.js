@@ -568,7 +568,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     if(!this.userIsAdmin())
                         chlk.controls.updateWeekCalendar();
-                    return this.BackgroundNavigate('feed', 'list', [null, true]);
+                    return this.Redirect('feed', 'list', [null, true]);
                 }, this);
         },
 
@@ -579,7 +579,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteDrafts(currentPersonId)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    return this.BackgroundNavigate('feed', 'list', [null, true]);
+                    return this.Redirect('feed', 'list', [null, true]);
                 }, this);
         },
 
@@ -706,8 +706,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.Announcement]],
         function saveAnnouncementFormAction(announcement){
-            this.prepareAnnouncementForm_(announcement);
-            return this.saveAnnouncement(announcement, announcementForm);
+            var announcementForm = this.prepareAnnouncementForm_(announcement);
+            return this.Redirect('announcement', 'saveAnnouncement', [announcement, announcementForm]);
         },
 
         [chlk.controllers.SidebarButton('add-new')],
@@ -783,8 +783,8 @@ NAMESPACE('chlk.controllers', function (){
                     model.getTitle(),
                     model.getContent(),
                     model.getExpiresDate(),
-                    model.getAttachments(),
-                    model.getApplications(),
+                    Array.isArray(model.getAttachments()) ? model.getAttachments().join(',') : model.getAttachments(),
+                    Array.isArray(model.getApplications()) ? model.getApplications().join(',') : model.getApplications(),
                     model.getMarkingPeriodId(),
                     model.getMaxScore(),
                     model.getWeightAddition(),
@@ -801,8 +801,8 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setStandards(model.getStandards());
                         announcement.setGradable(model.isGradable());
                         form_.setAnnouncement(announcement);
+                        return this.addEditAction(form_, false);
                     }
-                    return this.addEditAction(form_, false);
                 }, this);
 
             if (form_)
