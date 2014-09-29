@@ -124,5 +124,12 @@ namespace Chalkable.Data.Master.DataAccess
                 conds.Add(User.CONFIRMATION_KEY_FIELD, confirmationKey);
             return GetUser(conds);
         }
+
+        public void CreateUserLoginInfos()
+        {
+            using (ExecuteStoredProcedureReader("spCreateLoginInfos", new Dictionary<string, object>()))
+            {
+            }
+        }
     }
 }

@@ -80,7 +80,7 @@ namespace Chalkable.StiImport.Services
             t2.Start(schoolDb);
             
             Log.LogInfo("download data to sync");
-            DownloadSyncData();
+            DownloadSyncData();//TODO: can we do this before transaction opens?
             
             bool schoolCommited = false;
             try
@@ -124,6 +124,8 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            Log.LogInfo("creating user login infos");
+            ServiceLocatorMaster.UserService.CreateUserLoginInfos();
             Log.LogInfo("import is completed");
         }
 
