@@ -65,7 +65,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('mouseover mouseleave', '.legend-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function itemTypeHover(node, event){
-                if(!node.hasClass('hovered')){
+                if(!node.hasClass('hover')){
                     var needOpacity = event.type == 'mouseleave';
                     this.changeLineOpacity(node, needOpacity);
                 }
@@ -75,9 +75,14 @@ NAMESPACE('chlk.activities.attendance', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function itemTypeClick(node, event){
                 var wasHovered = node.hasClass('hovered');
-                this.dom.find('.legend-item.hovered').removeClass('hovered').removeClass('fixed-hovered');
-                if(!wasHovered)
-                    node.addClass('hovered').addClass('fixed-hovered');
+                this.dom.find('.legend-item.hover').forEach(function ($node) {
+                    $node.removeClass('hover').removeClass('pressed');
+                    this.changeLineOpacity($node, true);
+                }.bind(this));
+                if(!wasHovered) {
+                    node.addClass('hover').addClass('pressed');
+                    this.changeLineOpacity(node, false);
+                }
             },
 
             [ria.mvc.DomEventBind('seriemouseover seriemouseleave', '.main-chart')],
@@ -85,11 +90,11 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function chartHover(node, event, chart_, hEvent_){
                 var needOpacity = event.type == 'seriemouseleave';
                 var item = node.parent('.chart-container').find('.legend-item[data-index=' + chart_.index + ']:visible');
-                if(!item.hasClass('fixed-hovered')){
+                if(!item.hasClass('pressed')){
                     if(needOpacity)
-                        item.removeClass('hovered');
+                        item.removeClass('hover');
                     else
-                        item.addClass('hovered');
+                        item.addClass('hover');
                     this.changeLineOpacity(item, needOpacity);
                 }
 
@@ -160,8 +165,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function studentHover3(node, event){
                 var popUp = node.parent('.student-with-picture').find('.chlk-pop-up-container');
                 popUp.show();
-                var left = ((node.width() - popUp.width()) / 2) - 8 + 'px';
-                popUp.setCss('left', left);
+                //var left = ((node.width() - popUp.width()) / 2) - 8 + 'px';
+                //popUp.setCss('left', left);
             }
         ]);
 });

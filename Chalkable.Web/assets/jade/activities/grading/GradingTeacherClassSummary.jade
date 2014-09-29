@@ -8,7 +8,7 @@ mixin StudentGradingItem(student)
         +PersonImg(student, 47)
 
 topData = self.getTopData()
-topItems = topData.getTopItems()
+topItems = topData.getTopItems() || []
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid')(
     disabledClass = 'x-hidden'
 ).classes-bar

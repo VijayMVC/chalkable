@@ -65,8 +65,8 @@ NAMESPACE('chlk.templates.attendance', function () {
 
                 return {
                     chart: {
-                        width: 704,
-                        height: 179
+                        width: 800,
+                        height: 200
                     },
                     xAxis: {
                         type: 'datetime',

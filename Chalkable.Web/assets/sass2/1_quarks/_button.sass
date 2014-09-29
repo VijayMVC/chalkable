@@ -1,11 +1,13 @@
-button, input[type=button], input[type=submit], input[type=reset], input[type="file"], .file
+button, input[type=button], input[type=submit], input[type=reset], input[type="file"], .file, .button-like
   outline: none
   border-radius: 3px
   border: 1px solid #c8c7c3
   background-color: #f2f1ed
   +background-image(linear-gradient(top, #fff 0%, transparentize(#fff, 1) 100%))
   +box-shadow(transparentize(#000, .74) 0 1px 3px, transparentize(#fff, .22) 0 1px 0px inset)
+  cursor: pointer
 
+button, input[type=button], input[type=submit], input[type=reset], input[type="file"], .file
   font-family: 'Open Sans', sanf-serif
   font-size: 13px
   line-height: 28px
@@ -13,10 +15,9 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
   color: #56554f
   +text-shadow(transparentize(#fff, .5) 0 1px 0px)
   text-align: center
-
   padding: 0 10px
-  cursor: pointer
 
+button, input[type=button], input[type=submit], input[type=reset], input[type="file"], .file, .button-like
   &.blue-button
     border-color: #29596e
     background-color: #2e657c
@@ -44,7 +45,7 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     cursor: default
 
 
-  &.pressed, &.pressed:hover, &:active
+  &.pressed, &.hover, &.pressed:hover, &:active
     +box-shadow(transparentize(#000, .79) 0 1px 5px inset, #fff 0 1px 0)
     background-color: #fff
 
