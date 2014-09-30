@@ -1,0 +1,44 @@
+valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
+value = self.getType();
+level = self.getLevel();
+-reasons = self.getAttendanceReasonsByType(value)
+needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
+reason = needDropdown ? self.getAttendanceReason() : '';
+name = self.getTypeName();
+student = self.getStudent();
+        //+ActionForm('attendance', 'setAttendance')(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
+div(
+    name="attendance",
+    data-person-id=self.getStudent().getId().valueOf(),
+    data-type=value,
+    data-level=level,
+    data-reason-id=reason && reason.getId().valueOf()
+)(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
+    //+Hidden('type', value)
+    //+Hidden('classid', self.getClassId().valueOf())
+    //+Hidden('studentid', self.getStudent().getId().valueOf())
+    //+Hidden('attendancereasonid', reason && reason.getId().valueOf())
+    //+Hidden('date', self.getDate().toStandardFormat())
+    //+Hidden('attendanceReasonDescription', reason && reason.getDescription())
+    .attendance-option
+        =(reason ? reason.getDescription() : '')
+    div(class=name.toLowerCase().replace(/\//g, '-')).attendance-text
+        =(value == valuesEnum.NA.valueOf() ? '_______' : name)
+    .attendance-combo
+        BUTTON(href="javascript:", type="button", value="leftArrow").left-arrow
+            span
+        div(class=needDropdown ? "with-dropdown" : '').current-attendance=name
+        BUTTON(href="javascript:", type="button", value="rightArrow").right-arrow
+            span
+        if value > valuesEnum.PRESENT.valueOf()
+            .combo-list.no-row-click
+                input.combo-input.x-zero
+                .connector
+                firstSelected = true
+                div(class=(firstSelected ? "selected" : "")).option=name
+                each reasonItem in reasons
+                    div(
+                        data-id=reasonItem.getId().valueOf(),
+                        data-level=reasonItem.getLevel(value)
+                    ).option=reasonItem.getDescription()
+                .press-enter=Msg.Press_enter
