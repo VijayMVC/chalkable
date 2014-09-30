@@ -55,7 +55,7 @@ namespace Chalkable.Web.Controllers
             return res;
         }
 
-        public ActionResult FakeJson(string filename)
+        protected ActionResult FakeJson(string filename)
         {
             var fullName = HttpContext.Server.MapPath(filename);
             var jsonF = System.IO.File.ReadAllText(fullName);
