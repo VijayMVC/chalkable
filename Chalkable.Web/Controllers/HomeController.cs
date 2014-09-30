@@ -246,9 +246,9 @@ namespace Chalkable.Web.Controllers
 
             var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
             PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
-            var executionResult = classes.Select(ClassViewData.Create).ToList();
-            PrepareJsonData(executionResult, ViewConstants.CLASSES);
-            PrepareClassesAdvancedData(classes, mp);
+            var classesList = classes.Select(ClassViewData.Create).ToList();
+            PrepareJsonData(classesList, ViewConstants.CLASSES);
+            PrepareClassesAdvancedData(classes);
             PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             var ip = RequestHelpers.GetClientIpAddress(Request);
@@ -256,22 +256,22 @@ namespace Chalkable.Web.Controllers
                 gradeLevels, classNames, person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }
         
-        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp)
+        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailsList)
         {
             var classesAdvancedData = new List<object>();
-            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id)).ToList();
-            var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
+            //var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
             var allAlphaGrades = SchoolLocator.AlphaGradeService.GetAlphaGrades();
-            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailses.Select(x => x.Id).ToList());
-            foreach (var classDetails in classDetailses)
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailsList.Select(x => x.Id).ToList());
+            foreach (var classDetails in classDetailsList)
             {
 
                 int classId = classDetails.Id;
                 var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
                 classesAdvancedData.Add(new
                 {
+                    //Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>()
                     ClassId = classId,
-                    Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>(),
+                    Mask = new List<int>(),
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
                     AlphaGrades = classDetails.GradingScaleRef.HasValue
                                         ? SchoolLocator.AlphaGradeService.GetAlphaGradesForClass(classDetails.Id)
