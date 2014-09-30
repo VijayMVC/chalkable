@@ -33,5 +33,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             data[item.Key] = score;
             return score;
         }
+
+        public void ResetScores(int sisActivityId, IEnumerable<int> studentIds)
+        {
+            foreach (var studentId in studentIds)
+            {
+                UpdateScore(sisActivityId, studentId, new Score()
+                {
+                    ActivityId = sisActivityId,
+                    StudentId = studentId
+                });
+            }
+        }
     }
 }
