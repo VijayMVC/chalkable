@@ -51,17 +51,19 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                     .duplicate-btn-container
                         +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
             .choose-type(class=(classId && !typeId && !state ? '' : 'x-hidden'))
-            if topItems.length
-                .choose-class(class=(classId ? 'x-hidden' : ''))
-            else
-                .no-items-text There are no classes for current term
+            if !classId
+                if topItems.length
+                    .choose-class
+                else
+                    .no-items-text There are no classes for current term
     else
         +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'announcement', 'add')(
             selectedItemId=topData.getSelectedItemId(),
             pressAfterClick=true,
             disabledClass = 'x-hidden'
         ).classes-bar
-        if topItems.length
-            .choose-class(class=(classId ? 'x-hidden' : ''))
-        else
-            .no-items-text There are no classes for current term
+        if !classId
+            if topItems.length
+                .choose-class
+            else
+                .no-items-text There are no classes for current term
