@@ -72,5 +72,9 @@ redirectData = self.getRedirectData()
                             .discipline-desciption-container
                                 .title Occurrence Note:
                                 .notes-area-container
-                                    textarea(name='description', disabled=self.isAblePostDiscipline() && self.getSelectedTypeIds(item) ? undefined : "disabled").notes-area.change-discipline=item.getDescription()
+                                    textarea(
+                                        name='description',
+                                        disabled=self.isAblePostDiscipline() && self.getSelectedTypeIds(item) ? undefined : "disabled",
+                                        maxlength=500
+                                    ).notes-area.change-discipline=item.getDescription()
 
