@@ -25,20 +25,23 @@ h2.page-title Attendance
             disabledClass = 'x-hidden'
         ).classes-bar
     if self.getItems().length == 0
-        .heaader.table
-            .container.panel-bg
-                .left.no-border
-                    +DatePicker('attendanceDate', self.getDate())(
-                        data-options={
-                            showOtherMonths: true,
-                            selectOtherMonths: true,
-                            inCurrentMp: true
-                        },
-                        data-controller= "attendance",
-                        data-action="classList",
-                        data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
-                    )#attendance-date.tb-date-picker
-
+        .people-list-container
+            .header
+                .table
+                    .title
+                        = self.getDate().toString('MM dd, yy')
+                        +DatePicker('attendanceDate', self.getDate())(
+                            data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true,
+                                inCurrentMp: true
+                            },
+                            data-controller= "attendance",
+                            data-action="classList",
+                            data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
+                        )#attendance-date.tb-date-picker.tr
+            .grid-container.people-list
+                .black-arrow.no-class-scheduled.row=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy'))
     if self.getItems().length > 0
         .people-list-container.not-transparent
             .saved-pop-up
@@ -107,5 +110,3 @@ h2.page-title Attendance
                                 if item.isAbsentPreviousDay()
                                     SPAN(data-tooltip=Msg.Absent_yesterday).absent-yesterday
                             .clear-fix
-    else
-        .black-arrow.no-class-scheduled=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy'))
