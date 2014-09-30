@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
@@ -190,6 +191,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
             Gradebook stiGradeBook = null;
+            Trace.WriteLine("GradebookConnector.Calculate" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             if(needsReCalculate)
                 stiGradeBook = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriodId);
             if (!needsReCalculate || standardId.HasValue || classAnnouncementType.HasValue)
@@ -197,7 +199,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType
                 , gradingPeriodId, standardId);
             }
+            Trace.WriteLine("GetGradingPeriodById" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            Trace.WriteLine("GetGradeBooks" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             return GetGradeBooks(classId, new List<GradingPeriodDetails>{gradingPeriod}, stiGradeBook).First();
         }
 
@@ -220,16 +224,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 annQuery.ToDate = gradingPeriods.First().EndDate;
                 mpId = gradingPeriods.First().MarkingPeriodRef;
             }
-
-            var classRoomOptions = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
+            var classRoomOptions = gradebook.Options;
+            Trace.WriteLine("GetStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var students = ServiceLocator.ClassService.GetStudents(classId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
+            Trace.WriteLine("GetAnnouncementsComplex " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
-            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students, classRoomOptions)).ToList();
+            Trace.WriteLine("BuildGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
+            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students)).ToList();
         }
 
-        private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
-                                                  IList<AnnouncementComplex> anns, IList<Person> students
-                                                 , Data.School.Model.ClassroomOption classroomOption)
+        private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<Person> students)
         {
             var gradeBook = new ChalkableGradeBook
             {
@@ -237,18 +241,20 @@ namespace Chalkable.BusinessLogic.Services.School
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
                 Students = students
             };
-            if (classroomOption != null)
-                gradeBook.Options = ChalkableClassOptions.Create(classroomOption);
+            if (stiGradeBook.Options != null)
+                gradeBook.Options = ChalkableClassOptions.Create(stiGradeBook.Options);
             var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();
             stAvgs = stAvgs.Where(x => x.CalculatedNumericAverage.HasValue || x.EnteredNumericAverage.HasValue).ToList();
             if (stAvgs.Count > 0)
                 gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
 
-            var includeWithdrawnStudents = classroomOption != null && classroomOption.IncludeWithdrawnStudents;
+            var includeWithdrawnStudents = stiGradeBook.Options != null && stiGradeBook.Options.IncludeWithdrawnStudents;
+            Trace.WriteLine("PrepareAnnounceemntDetailsForGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students, includeWithdrawnStudents);
             if (!includeWithdrawnStudents)
             {
+                Trace.WriteLine("includeWithdrawnStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
                 gradeBook.Students = new List<Person>();
                 foreach (var student in students)
                 {
@@ -267,6 +273,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                                            && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
             var annsDetails = new List<AnnouncementDetails>();
             var classTeachers = ServiceLocator.ClassService.GetClassTeachers(stiGradeBook.SectionId, null);
+            var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
             foreach (var activity in activities)
             {
                 var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
@@ -284,7 +291,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(annDetails, activity);
                 var scores = stiGradeBook.Scores.Where(x => x.ActivityId == activity.Id).ToList();
                 if (!inludeWithdrawnStudent) scores = scores.Where(x => !x.Withdrawn).ToList();
-                var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
                 foreach (var score in scores)
                 {
                     var student = students.FirstOrDefault(x => x.Id == score.StudentId);

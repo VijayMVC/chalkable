@@ -11,6 +11,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
+using ClassroomOption = Chalkable.StiConnector.Connectors.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -99,18 +100,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 annQuery.ToDate = gradingPeriods.First().EndDate;
             }
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
-            var classRoomOptions = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
-            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students, classRoomOptions)).ToList();
+            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students)).ToList();
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
-                                                  IList<AnnouncementComplex> anns, IList<Person> students, 
-                                                  Data.School.Model.ClassroomOption classroomOption)
+                                                  IList<AnnouncementComplex> anns, IList<Person> students)
         {
             var gradeBook = new ChalkableGradeBook
             {
                 GradingPeriod = gradingPeriod,
-                Options = ChalkableClassOptions.Create(classroomOption),
+                Options = ChalkableClassOptions.Create(stiGradeBook.Options),
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
                 Students = students
             };
@@ -121,7 +120,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
 
             gradeBook.Announcements = PrepareAnnouncementDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
-            if (!classroomOption.IncludeWithdrawnStudents)
+            if (!stiGradeBook.Options.IncludeWithdrawnStudents)
             {
                 gradeBook.Students = new List<Person>();
                 foreach (var student in students)

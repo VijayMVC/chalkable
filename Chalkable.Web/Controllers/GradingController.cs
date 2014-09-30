@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
@@ -65,15 +67,25 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummaryGrids(int classId)
         {
+            Trace.WriteLine("GetCurrentSchoolYearId " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var syId = GetCurrentSchoolYearId();
+            Trace.WriteLine("GetGradingPeriodsDetails " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
+            Trace.WriteLine("GetStandards " + DateTime.Now.Ticks * 100.0 / TimeSpan.TicksPerSecond);
             var standards = SchoolLocator.StandardService.GetStandards(classId, null, null);
+            Trace.WriteLine("GetClassAnnouncementTypes " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var date = Context.NowSchoolYearTime.Date;
-            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, date);
+            Trace.WriteLine("gradingPeriods " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
+            var currentGradingPeriod = gradingPeriods.FirstOrDefault(x => x.StartDate.Date <= date && x.EndDate >= date);
+            if (currentGradingPeriod == null)
+                currentGradingPeriod = gradingPeriods.Where(x => x.StartDate.Date <= date)
+                                  .OrderByDescending(x => x.StartDate).FirstOrDefault();
+            Trace.WriteLine("GetGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             ChalkableGradeBook gradeBook = null;
             if(currentGradingPeriod != null)
                 gradeBook = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod.Id);
+            Trace.WriteLine("GradingGridsViewData.Create " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             return Json(GradingGridsViewData.Create(gradeBook, gradingPeriods, standards, classAnnouncementTypes));
         }
 
