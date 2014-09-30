@@ -243,6 +243,8 @@ namespace Chalkable.StiImport.Services
                         PhotoModifiedDate = x.PhotoModifiedDate
                     }).ToList();
             ServiceLocatorSchool.PersonService.Add(persons);
+            foreach (var person in context.GetSyncResult<Person>().All)
+                personsForImportPictures.Add(person);
         }
 
         private void InsertStaff()

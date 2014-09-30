@@ -91,7 +91,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             if (ids != null && ids.Count > 0)
             {
-                var sqlFormat = "delete from [{0}] where [{0}].[{1}] in ({2}) ";
+                const string sqlFormat = "delete from [{0}] where [{0}].[{1}] in ({2}) ";
                 var sqlBuilder = new StringBuilder();
                 var idsString = ids.Select(x => x.ToString()).JoinString(",");
                 sqlBuilder.AppendFormat(sqlFormat, "ClassPerson", ClassPerson.CLASS_REF_FIELD, idsString)
@@ -104,6 +104,49 @@ namespace Chalkable.Data.School.DataAccess
         public new void Delete(int id)
         {
             Delete(new List<int> {id});
+        }
+
+        public IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
+        {
+            var sql = new StringBuilder();
+            sql.Append(@"select distinct
+                            Id = vwPerson.Id,
+                            FirstName = vwPerson.FirstName,
+                            LastName = vwPerson.LastName,
+                            BirthDate = vwPerson.BirthDate,
+                            Gender = vwPerson.Gender,
+                            Salutation = vwPerson.Salutation,
+                            Active = vwPerson.Active,
+                            IsEnrolled = ClassPerson.IsEnrolled    
+                        from 
+                            vwPerson
+                            join ClassPerson on vwPerson.Id = ClassPerson.PersonRef
+                            join MarkingPeriod on ClassPerson.MarkingPeriodRef = MarkingPeriod.Id
+                            join StudentSchoolYear on ClassPerson.PersonRef = StudentSchoolYear.StudentRef and StudentSchoolYear.SchoolYearRef = MarkingPeriod.SchoolYearRef
+                        where ")
+               .AppendFormat("ClassPerson.ClassRef = {0} ", classId);
+            if(markingPeriodId.HasValue)
+                sql.AppendFormat("and MarkingPeriod.Id = {0} ", markingPeriodId.Value);
+            if (isEnrolled.HasValue)
+            {
+                var enrollentStatus = isEnrolled.Value
+                                          ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
+                                          : StudentEnrollmentStatusEnum.PreviouslyEnrolled;
+                if (markingPeriodId.HasValue)
+                    sql.AppendFormat("and StudentSchoolYear.EnrollmentStatus = {0} ", (int) enrollentStatus)
+                       .AppendFormat("and ClassPerson.IsEnrolled = {0} ", isEnrolled.Value ? 1 : 0);
+            }
+            var res = new List<Person>();
+            using (var reader = ExecuteReaderParametrized(sql.ToString(), new Dictionary<string, object>()))
+            {
+                while (reader.Read())
+                {
+                    var p = reader.Read<Person>();
+                    p.IsWithdrawn = !SqlTools.ReadBool(reader, "IsEnrolled");
+                    res.Add(p);
+                }
+            }
+            return res;
         }
     }
 
