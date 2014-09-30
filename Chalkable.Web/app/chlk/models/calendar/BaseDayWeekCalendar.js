@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.calendar', function () {
 
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             OVERRIDE, VOID, function setBaseCalendarData(date, minDate, maxDate){
-                BASE(date, minDate, maxDate);
+                BASE(date, minDate, maxDate);minDate = null;maxDate=null;
 
                 var date = this.getCurrentDate();
                 var dayNumber = date.getDate().getDay(), sunday = date, saturday = date;

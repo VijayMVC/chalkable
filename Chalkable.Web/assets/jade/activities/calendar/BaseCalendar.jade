@@ -41,7 +41,8 @@ mixin CalendarHeader(data, controller, bodyModel, actions, params)
             else
                 A.next-month.week
         if actions.day && actions.week && actions.month
-            -params.unshift('')
+            -console.info(bodyModel)
+            -params.unshift(bodyModel.getCurrentDate().format('mm-dd-yy'))
             .calendar-day-container
                 +ActionLinkWithPrepend(controller, actions.day, params)(class = actions.day == currentAction ? 'pressed' : '').calendar-day.week
                     span.tooltip

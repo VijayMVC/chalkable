@@ -161,7 +161,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
       
         public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null)
         {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            
             var ann = Storage.AnnouncementStorage.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.PersonId.Value);
+
+            if (!ann.SisActivityId.HasValue)
+                throw new ChalkableException("Announcement doesn't have sis activity id");
             if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                 throw new ChalkableSecurityException();
 
@@ -176,6 +182,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ann.WeightMultiplier = announcement.WeightMultiplier;
                 ann.MayBeDropped = announcement.CanDropStudentScore;
                 ann.VisibleForStudent = !announcement.HideFromStudents;
+
+                if (!ann.IsScored)
+                {
+                    var studentIds = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id).Select(x => x.StudentId);
+
+                    Storage.StiActivityScoreStorage.ResetScores(ann.SisActivityId.Value, studentIds);
+                }
             }
             if (BaseSecurity.IsAdminViewer(Context))
                 throw new NotImplementedException();
