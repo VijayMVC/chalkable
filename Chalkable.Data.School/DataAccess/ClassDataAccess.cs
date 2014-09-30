@@ -117,7 +117,8 @@ namespace Chalkable.Data.School.DataAccess
                             Gender = vwPerson.Gender,
                             Salutation = vwPerson.Salutation,
                             Active = vwPerson.Active,
-                            IsEnrolled = ClassPerson.IsEnrolled    
+                            IsEnrolled = ClassPerson.IsEnrolled,
+                            RoleRef = vwPerson.RoleRef
                         from 
                             vwPerson
                             join ClassPerson on vwPerson.Id = ClassPerson.PersonRef
