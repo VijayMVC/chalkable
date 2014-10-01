@@ -23,6 +23,7 @@ namespace Chalkable.StiImport.Services
         private IList<int> importedSchoolIds = new List<int>();
         private ConnectorLocator connectorLocator;
         private IList<Person> personsForImportPictures = new List<Person>();
+        private UserContext sysadminCntx;
 
         protected IServiceLocatorMaster ServiceLocatorMaster { get; set; }
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
@@ -35,8 +36,8 @@ namespace Chalkable.StiImport.Services
             Log = log;
             
             var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
-            var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
-            ServiceLocatorMaster = new ImportServiceLocatorMaster(cntx);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
@@ -119,16 +120,21 @@ namespace Chalkable.StiImport.Services
                     Trace.TraceError(ex.Message);
                 }    
             }
+            schoolDb.Dispose();
+            masterDb.Dispose();
             Log.LogInfo("process pictures");
             ProcessPictures();
             Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            //recreating locator bc previous one could have expired connection
+            ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
             Log.LogInfo("updating district last sync");
             UpdateDistrictLastSync();
             Log.LogInfo("creating user login infos");
             ServiceLocatorMaster.UserService.CreateUserLoginInfos();
             Log.LogInfo("import is completed");
+            ((ImportDbService)ServiceLocatorMaster.DbService).Dispose();
         }
 
         private void SyncDb()
