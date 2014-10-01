@@ -54,7 +54,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                             readonly = readonly,
                             rowIndex = i
                         )
-        .attachments-container.z-10
+        .attachments-container.z-10.sub-row
             .attachments-container-2
                 each attachment, i in item.getAttachments()
                     if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
