@@ -4,9 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -214,8 +212,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 mpId = gradingPeriods.First().MarkingPeriodRef;
             }
             var classRoomOptions = gradebook.Options;
-            Trace.WriteLine("GetStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            var students = ServiceLocator.ClassService.GetStudents(classId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
+            Trace.WriteLine("GetClassStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
             Trace.WriteLine("GetAnnouncementsComplex " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
             Trace.WriteLine("BuildGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
@@ -384,11 +382,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             var classesIds = classesDetails.Select(x => x.Id).ToList();
             var stiSectionsGrades = ConnectorLocator.GradebookConnector.GetSectionGradesSummary(classesIds, gradingPeriodId);
-            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-                {
-                    RoleId = CoreRoles.STUDENT_ROLE.Id,
-                    TeacherId = teacherId
-                });
+            var students = ServiceLocator.PersonService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
             var res = new List<ShortClassGradesSummary>();
             foreach (var sectionGrades in stiSectionsGrades)
             {

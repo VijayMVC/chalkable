@@ -105,50 +105,6 @@ namespace Chalkable.Data.School.DataAccess
         {
             Delete(new List<int> {id});
         }
-
-        public IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
-        {
-            var sql = new StringBuilder();
-            sql.Append(@"select distinct
-                            Id = vwPerson.Id,
-                            FirstName = vwPerson.FirstName,
-                            LastName = vwPerson.LastName,
-                            BirthDate = vwPerson.BirthDate,
-                            Gender = vwPerson.Gender,
-                            Salutation = vwPerson.Salutation,
-                            Active = vwPerson.Active,
-                            IsEnrolled = ClassPerson.IsEnrolled,
-                            RoleRef = vwPerson.RoleRef
-                        from 
-                            vwPerson
-                            join ClassPerson on vwPerson.Id = ClassPerson.PersonRef
-                            join MarkingPeriod on ClassPerson.MarkingPeriodRef = MarkingPeriod.Id
-                            join StudentSchoolYear on ClassPerson.PersonRef = StudentSchoolYear.StudentRef and StudentSchoolYear.SchoolYearRef = MarkingPeriod.SchoolYearRef
-                        where ")
-               .AppendFormat("ClassPerson.ClassRef = {0} ", classId);
-            if(markingPeriodId.HasValue)
-                sql.AppendFormat("and MarkingPeriod.Id = {0} ", markingPeriodId.Value);
-            if (isEnrolled.HasValue)
-            {
-                var enrollentStatus = isEnrolled.Value
-                                          ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
-                                          : StudentEnrollmentStatusEnum.PreviouslyEnrolled;
-                if (markingPeriodId.HasValue)
-                    sql.AppendFormat("and StudentSchoolYear.EnrollmentStatus = {0} ", (int) enrollentStatus)
-                       .AppendFormat("and ClassPerson.IsEnrolled = {0} ", isEnrolled.Value ? 1 : 0);
-            }
-            var res = new List<Person>();
-            using (var reader = ExecuteReaderParametrized(sql.ToString(), new Dictionary<string, object>()))
-            {
-                while (reader.Read())
-                {
-                    var p = reader.Read<Person>();
-                    p.IsWithdrawn = !SqlTools.ReadBool(reader, "IsEnrolled");
-                    res.Add(p);
-                }
-            }
-            return res;
-        }
     }
 
     public class ClassQuery

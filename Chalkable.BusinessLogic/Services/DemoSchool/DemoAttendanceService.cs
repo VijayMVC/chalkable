@@ -126,7 +126,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.ClassService.GetStudents(classId);
+                var persons = ServiceLocator.PersonService.GetClassStudents(classId);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {

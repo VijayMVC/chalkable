@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
         {
-            var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
+            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId);
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
             var stiModel = new GradebookReportParams
                 {
@@ -60,7 +60,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 anns = anns.Where(x => x.SisActivityId.HasValue && inputModel.AnnouncementIds.Contains(x.Id)).ToList();
                 activityIds = anns.Select(x => x.SisActivityId.Value).ToArray();    
             }
-            var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
+            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId);
             var stiModel = new WorksheetReportParams
                 {
                     ActivityIds = activityIds,
@@ -145,7 +145,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
                 markingPeriodId = gp.MarkingPeriodRef;
             }
-            var students = ServiceLocator.ClassService.GetStudents(classId, null, markingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, null, markingPeriodId);
             var res = new List<StudentCommentInfo>();
             foreach (var inowStudentComment in inowReportComments)
             {
