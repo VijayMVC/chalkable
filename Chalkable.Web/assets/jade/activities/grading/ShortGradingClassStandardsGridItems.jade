@@ -17,7 +17,7 @@
         ).grid-toolbar.i-b.big-arrows
             each gradingItem in self.getGradingItems()
                 .dotted-container.grade-container.with-horizontal-dots
-                    div(data-tooltip=gradingItem.getTooltip(), data-tooltip-type="overflow").type-name=gradingItem.getTitle()
+                    div(data-tooltip=gradingItem.getTooltip()).type-name=gradingItem.getTitle()
                     each info,i in gradingItem.getItems()
                         div(
                             row-index=i,
