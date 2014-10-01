@@ -799,7 +799,6 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [[Boolean]],
             function updateValue(selectNext_){
-                clearTimeout(gradingGridTimer);
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
 
@@ -873,6 +872,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.updateFlagByModel(model, activeCell);
                         activeCell.find('.grade-text').setHTML('...');
                     }
+                    clearTimeout(gradingGridTimer);
                     this.addTimeOut(form, isAvg);
                     var mp = node.parent('.marking-period-container');
                     mp.find('.comment-button').hide();
