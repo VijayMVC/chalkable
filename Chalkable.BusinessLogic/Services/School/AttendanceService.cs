@@ -96,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.ClassService.GetStudents(classId);
+                var persons = ServiceLocator.PersonService.GetClassStudents(classId);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {
@@ -197,7 +197,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = classId,
                 };
             var stiSeats = new List<Seat>();
-            var students = ServiceLocator.ClassService.GetStudents(classId, true, markingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, true, markingPeriodId);
             var defaultStudent = students.FirstOrDefault(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
             if (defaultStudent == null)
                 defaultStudent = students.First();

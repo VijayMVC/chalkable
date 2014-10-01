@@ -214,7 +214,8 @@ namespace Chalkable.StiImport.Services
                 }).ToList();
             ServiceLocatorSchool.PersonService.Edit(persons);
             foreach (var person in context.GetSyncResult<Person>().Updated)
-                personsForImportPictures.Add(person);
+                if (person.PhotoModifiedDate.HasValue)
+                    personsForImportPictures.Add(person);
         }
 
         private void UpdateStaff()

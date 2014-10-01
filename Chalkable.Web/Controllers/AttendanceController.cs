@@ -55,7 +55,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE_FOR_CLASS, true, CallType.Post, new[] { AppPermissionType.Attendance })]
         public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date)
         {
-            IList<Person> persons = SchoolLocator.ClassService.GetStudents(classId);
+            IList<Person> persons = SchoolLocator.PersonService.GetClassStudents(classId);
             SchoolLocator.AttendanceService.SetClassAttendances(date, classId, persons.Select(x => new ClassAttendance
             {
                 AttendanceReasonRef = attendanceReasonId,
@@ -201,7 +201,7 @@ namespace Chalkable.Web.Controllers
             if (seatingChart != null)
             {
                 var attendances = ClassAttendanceList(d, classId);
-                var students = SchoolLocator.ClassService.GetStudents(classId, true, markingPeriod.Id);
+                var students = SchoolLocator.PersonService.GetClassStudents(classId, true, markingPeriod.Id);
                 return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);               
             }
             return null;
