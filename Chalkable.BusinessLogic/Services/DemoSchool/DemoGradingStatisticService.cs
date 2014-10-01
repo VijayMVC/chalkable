@@ -63,18 +63,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public ChalkableGradeBook GetGradeBook(int classId, int gradingPeriodId, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
+        public ChalkableGradeBook GetGradeBook(int classId, GradingPeriodDetails gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
           
             Gradebook stiGradeBook = null;
             if (needsReCalculate)
-                stiGradeBook = Storage.StiGradeBookStorage.Calculate(classId, gradingPeriodId);
+                stiGradeBook = Storage.StiGradeBookStorage.Calculate(classId, gradingPeriod.Id);
             if (!needsReCalculate || standardId.HasValue || classAnnouncementType.HasValue)
             {
                 stiGradeBook = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, classAnnouncementType
-                , gradingPeriodId, standardId);
+                , gradingPeriod.Id, standardId);
             }
-            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             return GetGradeBooks(classId, new List<GradingPeriodDetails> { gradingPeriod }, stiGradeBook).First();
         }
 
@@ -180,9 +179,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.StiGradeBookStorage.GetGradebookComments(schoolYearId, teacherId);
         }
 
-        public TeacherClassGrading GetClassGradingSummary(int classId, int gradingPeriodId)
+        public TeacherClassGrading GetClassGradingSummary(int classId, GradingPeriodDetails gradingPeriod)
         {
-            var gradeBook = ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriodId);
+            var gradeBook = ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod);
             var gradedCAnnTypes = ServiceLocator.ClassAnnouncementTypeService.CalculateAnnouncementTypeAvg(classId, gradeBook.Announcements);
             return new TeacherClassGrading
             {
@@ -273,16 +272,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public FinalGradeInfo GetFinalGrade(int classId, int gradingPeriodId)
+        public FinalGradeInfo GetFinalGrade(int classId, GradingPeriodDetails gradingPeriod)
         {
-            var gb = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, null, gradingPeriodId);
-            var gradingPeriod =
-                Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
-                {
-                    GradingPeriodId = gradingPeriodId
-                });
+            var gb = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, null, gradingPeriod.Id);
 
-            var chlkGradeBook = GetGradeBooks(classId, new List<GradingPeriodDetails>(gradingPeriod), gb).First();
+            var chlkGradeBook = GetGradeBooks(classId, new List<GradingPeriodDetails>() { gradingPeriod }, gb).First();
 
             var startDate = new DateTime(DateTime.Today.Year, 1, 1);
             var attendance = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(new List<int>(){classId}, startDate, DateTime.Today).First();

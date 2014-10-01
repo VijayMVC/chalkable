@@ -124,6 +124,8 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            Log.LogInfo("updating district last sync");
+            UpdateDistrictLastSync();
             Log.LogInfo("creating user login infos");
             ServiceLocatorMaster.UserService.CreateUserLoginInfos();
             Log.LogInfo("import is completed");
@@ -139,7 +141,6 @@ namespace Chalkable.StiImport.Services
             ProcessDelete();
             Log.LogInfo("update versions");
             UpdateVersion();
-            UpdateDistrictLastSync();
         }
 
         private void UpdateDistrictLastSync()

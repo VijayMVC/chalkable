@@ -16,6 +16,13 @@ NAMESPACE('chlk.models.standard', function () {
 
             chlk.models.standard.Standard, 'standard',
 
+
+            String, function getTooltip(){
+                var standard = this.getStandard();
+                return standard.getDescription() ? standard.getName() + " | " + standard.getDescription()
+                                                 : standard.getName();
+            },
+
             String, function getTitle(){
                 return this.getStandard().getName();
             }
