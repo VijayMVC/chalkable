@@ -14,3 +14,5 @@ Create Index StudentSchool_Student on StudentSchool(StudentRef)
 GO
 Create Index StaffSchool_Staff on StaffSchool(StaffRef)
 GO
+Create Index IX_Announcement_SisId on Announcement(SisActivityId)
+GO
