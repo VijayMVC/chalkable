@@ -165,10 +165,14 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)
         {
             var d = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date.Date);
-            if (d == null || !d.DayTypeRef.HasValue)
-                return new List<ClassPeriod>();
+            var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(date.Date);
+            if (mp == null || d == null || !d.DayTypeRef.HasValue)
+                return new List<ClassPeriod>();            
 
-            return GetClassPeriods(d.SchoolYearRef, null, classId, roomId, null, d.DayTypeRef, studentId, teacherId, time);
+            if (d.SchoolYearRef != mp.SchoolYearRef)
+                throw new Exception("d.SchoolYearRef != mp.SchoolYearRef");
+
+            return GetClassPeriods(mp.SchoolYearRef, mp.Id, classId, roomId, null, d.DayTypeRef, studentId, teacherId, time);
         }
     }
 }
