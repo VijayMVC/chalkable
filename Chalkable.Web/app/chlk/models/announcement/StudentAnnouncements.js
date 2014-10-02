@@ -2,13 +2,14 @@ REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.id.CourseId');
+REQUIRE('chlk.models.announcement.BaseStudentAnnouncementsViewData');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
     /** @class chlk.models.announcement.StudentAnnouncements*/
     CLASS(
-        'StudentAnnouncements', [
+        'StudentAnnouncements', EXTENDS(chlk.models.announcement.BaseStudentAnnouncementsViewData), [
             [ria.serialize.SerializeProperty('announcementtypeid')],
             Number, 'announcementTypeId',
 
