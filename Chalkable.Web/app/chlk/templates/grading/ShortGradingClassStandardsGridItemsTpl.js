@@ -31,6 +31,13 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'gradable',
 
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            ArrayOf(chlk.models.standard.StandardGradings), function getGradingItemsOrdered() {
+                Assert(Array.isArray(this.gradingItems));
+                return (this.gradingItems || []).sort(function (_1, _2) {
+                    return _1.getTitle() < _2.getTitle() ? -1 : _1.getTitle() > _2.getTitle() ? 1 : 0;
+                });
+            }
         ]);
 });

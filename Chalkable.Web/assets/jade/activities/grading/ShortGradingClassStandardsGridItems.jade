@@ -15,7 +15,7 @@
             roundedDots = true,
             padding = 77
         ).grid-toolbar.i-b.big-arrows
-            each gradingItem in self.getGradingItems()
+            each gradingItem in self.getGradingItemsOrdered()
                 .dotted-container.grade-container.with-horizontal-dots
                     div(data-tooltip=gradingItem.getTooltip()).type-name=gradingItem.getTitle()
                     each info,i in gradingItem.getItems()
