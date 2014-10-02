@@ -35,4 +35,4 @@ statusData = self.getStatusData()
             .today-work-panel
                 h2.stats=Msg.Classes
                 .classes-tb
-                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class)(hideArrows).centered.big-arrows
+                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class)(hideArrows, itemsCount = 7).centered.big-arrows
