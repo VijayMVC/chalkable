@@ -84,9 +84,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.StiSeatingChartStorage.UpdateChart(classId, markingPeriodId, seatingChart);
         }
 
-        public AttendanceSummary GetAttendanceSummary(int teacherId, int gradingPeriodId)
+        public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
         {
-            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
             var classesIds = classes.Select(x => x.Id).ToList();
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery

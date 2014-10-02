@@ -111,6 +111,7 @@
     <Compile Include="DataAccess\StudentSchoolYearDataAccess.cs" />
     <Compile Include="DataAccess\StudentParentDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
+    <Compile Include="DataAccess\UserSchoolDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
     <Compile Include="Model\AlphaGrade.cs" />
     <Compile Include="Model\AlternateScore.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Model\StudentSchoolYear.cs" />
     <Compile Include="Model\StudentParent.cs" />
     <Compile Include="Model\SyncVersion.cs" />
+    <Compile Include="Model\UserSchool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
