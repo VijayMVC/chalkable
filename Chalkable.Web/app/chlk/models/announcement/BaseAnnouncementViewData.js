@@ -44,29 +44,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 if (!studentAnnouncements)
                     return null;
 
-                var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
-                var items = studentAnnouncements.getItems() || [], classAvg = null;
-                items.forEach(function(item){
-                    numericGrade = item.getNumericGradeValue();
-                    gradeValue = item.getGradeValue();
-                    if(!item.isDropped()
-                        && !item.isIncomplete()
-                        && (gradeValue && gradeValue.toLowerCase() != 'ps'
-                            && gradeValue.toLowerCase() != 'wd'
-                            && gradeValue.toLowerCase() != 'nc')
-                        && item.isIncludeInAverage()
-                        && (numericGrade || numericGrade == 0 || gradeValue == 0 || gradeValue)){
-                            gradedStudentCount++;
-                            sum += (numericGrade || 0);
-                    }
-                });
-                studentAnnouncements.setGradedStudentCount && studentAnnouncements.setGradedStudentCount(gradedStudentCount);
-                if(gradedStudentCount){
-                    if(count_)
-                        classAvg = (sum / gradedStudentCount).toFixed(count_);
-                    else
-                        classAvg = Math.floor(sum / gradedStudentCount + 0.5);
-                }
+                var classAvg = studentAnnouncements.getGradesAvg(count_);
                 studentAnnouncements.setClassAvg && studentAnnouncements.setClassAvg(classAvg);
                 return classAvg;
             }

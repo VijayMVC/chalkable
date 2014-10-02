@@ -3,8 +3,9 @@ div(class="announcement-popup-" + self.getId().valueOf())#chlk-pop-up-container.
     .grading-pop-up
         .separator.big-text=self.getTitle()
         .separator.small-text #{Msg.Due}: #{self.getExpiresDate().format('mm/dd/yy')}
-        .separator.small-text #{Msg.Class_average}: #{self.getAvg()}
+
         .grading-chart-container.small
+            .separator.small-text #{Msg.Class_average}: ...
             .chart-loader
         if self.isAnnOwner()
             +ActionLink('grading', 'unDropFromPopup', self.getId())(
