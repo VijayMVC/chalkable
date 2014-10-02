@@ -17,10 +17,11 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Boolean, 'byLastName',
 
+            Boolean, 'ableChangeReasons',
 
             [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, ArrayOf(chlk.models.attendance.ClassAttendance), chlk.models.common.ChlkDate,
-                Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason), Boolean, Boolean]],
-            function $(topData_, selectedId_, items_, date_, byLastName_, reasons_, canRePost_, canSetAttendance_){
+                Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason), Boolean, Boolean, Boolean]],
+            function $(topData_, selectedId_, items_, date_, byLastName_, reasons_, canRePost_, canSetAttendance_, canChangeReasons_){
                 BASE(topData_, selectedId_);
                 if(items_)
                     this.setItems(items_);
@@ -30,6 +31,8 @@ NAMESPACE('chlk.models.attendance', function () {
                     this.setReasons(reasons_);
                 if(byLastName_)
                     this.setByLastName(byLastName_);
+                if(canChangeReasons_)
+                    this.setAbleChangeReasons(canChangeReasons_);
 
                     this._canRePost = !!canRePost_;
                     this._canSetAttendance = !!canSetAttendance_;

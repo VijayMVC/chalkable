@@ -24,6 +24,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this._reasons = null;
                 this._classAttendances = null;
                 this._currentStudentAtt = null;
+                this._canChangeReasons = null;
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendanceTpl)],
@@ -94,16 +95,18 @@ NAMESPACE('chlk.activities.attendance', function () {
             },
 
             VOID, function showDropDown(){
-                clearTimeout(this._comboTimer);
-                var row = this.dom.find('#class-attendance-list-panel').find('.row.selected');
-                this._comboTimer = setTimeout(function(){
-                    var list = row.find('.combo-list:hidden');
-                    if(row.hasClass('selected') && list.exists()){
-                        row.find('.combo-list').show();
-                        row.find('.student-attendance-container').addClass('active');
-                        row.find('input.combo-input').trigger('focus');
-                    }
-                }, 500);
+                if(this._canChangeReasons){
+                    clearTimeout(this._comboTimer);
+                    var row = this.dom.find('#class-attendance-list-panel').find('.row.selected');
+                    this._comboTimer = setTimeout(function(){
+                        var list = row.find('.combo-list:hidden');
+                        if(row.hasClass('selected') && list.exists()){
+                            row.find('.combo-list').show();
+                            row.find('.student-attendance-container').addClass('active');
+                            row.find('input.combo-input').trigger('focus');
+                        }
+                    }, 500);
+                }
             },
 
             [ria.mvc.DomEventBind('keydown', '.combo-input')],
@@ -201,6 +204,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
+                this._canChangeReasons = model.isAbleChangeReasons();
                 this._reasons = model.getReasons();
                 this._classAttendances = model.getItems();
             },

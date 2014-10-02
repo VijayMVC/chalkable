@@ -25,6 +25,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
             chlk.models.common.ChlkDate, 'date',
 
+            Boolean, 'ableChangeReasons',
+
             [ria.serialize.SerializeProperty('notseatingstudents')],
             ArrayOf(chlk.models.attendance.ClassAttendance), 'notSeatingStudents',
 
