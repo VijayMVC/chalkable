@@ -100,6 +100,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             function $(){
                 BASE();
                 this._submitFormSelector = '.save-attendances-form';
+                this._canChangeReasons = null;
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'savedChart')],
@@ -219,9 +220,19 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var popUp = node.parent('.seating-chart-popup');
                 switch(typeId){
                     case chlk.models.attendance.AttendanceTypeEnum.ABSENT.valueOf():
-                        popUp.addClass('absent'); this.checkPopUp(); break;
+                        if(this._canChangeReasons){
+                            popUp.addClass('absent'); this.checkPopUp();
+                        }
+                        else
+                            this.setTypeByNode(node.parent('.seating-chart-popup').find('.absent.reason-item:eq(0)'));
+                        break;
                     case chlk.models.attendance.AttendanceTypeEnum.LATE.valueOf():
-                        popUp.addClass('late'); this.checkPopUp(); break;
+                        if(this._canChangeReasons){
+                            popUp.addClass('late'); this.checkPopUp();
+                        }
+                        else
+                            this.setTypeByNode(node.parent('.seating-chart-popup').find('.late.reason-item:eq(0)'));
+                        break;
                     default:
                         this.setTypeByNode(node);
                 }
@@ -412,6 +423,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
+                this._canChangeReasons = model.isAbleChangeReasons();
                 this.setModel(model);
                 this.setAbleRePost(model.isAbleRePost());
 
