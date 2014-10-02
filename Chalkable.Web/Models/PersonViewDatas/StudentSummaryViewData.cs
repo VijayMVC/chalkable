@@ -81,7 +81,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     Hover = TotalAbsencesPerClassViewData.Create(attendances, classDetailses),
                 };
             if (dailyAbsenceSummary != null && dailyAbsenceSummary.Absences != null)
-                res.Title = dailyAbsenceSummary.Absences.ToString();
+                res.Title = (dailyAbsenceSummary.Absences + dailyAbsenceSummary.Tardies).ToString();
             return res;
         }
 
@@ -160,7 +160,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 if (c == null) continue;
                 res.Add(new TotalAbsencesPerClassViewData
                 {
-                    Absences = classAttendanceSummary.Absences,
+                    Absences = classAttendanceSummary.Absences + classAttendanceSummary.Tardies,
                     Class = ShortClassViewData.Create(c)
                 });
             }
