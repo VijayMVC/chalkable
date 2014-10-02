@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -36,6 +37,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
 
+            var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.StartTime).Select(cp => cp.ClassRef).Distinct().ToList();
+            var classList = sortedClassRefs.Select(sortedClassRef => classes.First(cls => cls.Id == sortedClassRef)).ToList();
+            classList.AddRange(classes.Where(cls => !sortedClassRefs.Contains(cls.Id)));
+
             var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
             Room currentRoom = null;
             ClassDetails currentClass = null;
@@ -47,7 +52,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
             }
             var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(schoolPersonId);
-            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classes);
+            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             return Json(res);
 
