@@ -161,6 +161,7 @@
     <Compile Include="Services\DemoSchool\DemoGradingStatisticService.cs" />
     <Compile Include="Services\DemoSchool\DemoInfractionService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingCommentService.cs" />
+    <Compile Include="Services\DemoSchool\DemoUserSchoolService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoBackgroundTaskService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoApplicationUploadService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="Services\School\StudentParentService.cs" />
     <Compile Include="Services\School\StudentService.cs" />
     <Compile Include="Services\School\SyncService.cs" />
+    <Compile Include="Services\School\UserSchoolService.cs" />
     <Compile Include="Services\StorageBlobService.cs" />
     <Compile Include="Services\UserContext.cs" />
     <Compile Include="Services\ServiceLocator.cs" />

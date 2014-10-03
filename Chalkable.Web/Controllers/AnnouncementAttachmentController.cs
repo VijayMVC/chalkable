@@ -45,6 +45,29 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult CloneAttachment(int originalAttachmentId)
+        {
+            var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(originalAttachmentId);
+            byte[] bin = attContentInfo.Content;
+            string name = attContentInfo.Attachment.Name;
+            string uuid = null;
+            if (SchoolLocator.CrocodocService.IsDocument(name))
+            {
+                try
+                {
+                    uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
+                }
+                catch (ChalkableException exception)
+                {
+                    return Json(exception);
+                }
+            }
+            var announcement = SchoolLocator.AnnouncementAttachmentService.AddAttachment(attContentInfo.Attachment.AnnouncementRef, bin, name, uuid);
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id);
+            return Json(res, HTML_CONTENT_TYPE, 6);
+        }
+
+        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult DownloadAttachment(int announcementAttachmentId, bool? needsDownload, int? width, int? height)
         {
             var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(announcementAttachmentId);

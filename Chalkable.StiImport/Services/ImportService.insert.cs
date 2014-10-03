@@ -29,6 +29,7 @@ using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
 using Student = Chalkable.StiConnector.SyncModel.Student;
 using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 using User = Chalkable.StiConnector.SyncModel.User;
+using UserSchool = Chalkable.StiConnector.SyncModel.UserSchool;
 
 namespace Chalkable.StiImport.Services
 {
@@ -218,13 +219,19 @@ namespace Chalkable.StiImport.Services
         
         private void InsertSchoolUsers()
         {
-            var su = context.GetSyncResult<UserSchool>().All.Select(x => new SchoolUser
+            var masterUserSchool = context.GetSyncResult<UserSchool>().All.Select(x => new SchoolUser
                 {
                     DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value,
                     SchoolRef = x.SchoolID,
                     UserRef = x.UserID
                 }).ToList();
-             ServiceLocatorMaster.UserService.AddSchoolUsers(su);
+            ServiceLocatorMaster.UserService.AddSchoolUsers(masterUserSchool);
+            var districtUserSchool = context.GetSyncResult<UserSchool>().All.Select(x => new Data.School.Model.UserSchool
+            {
+                SchoolRef = x.SchoolID,
+                UserRef = x.UserID
+            }).ToList();
+            ServiceLocatorSchool.UserSchoolService.Add(districtUserSchool);
         }
 
         private void InsertPersons()

@@ -182,7 +182,7 @@ namespace Chalkable.Web.Controllers
                 throw new UnassignedUserException();
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date ?? Context.NowSchoolYearTime.Date);
-            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod.Id);
+            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod);
             return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary));
         }
 

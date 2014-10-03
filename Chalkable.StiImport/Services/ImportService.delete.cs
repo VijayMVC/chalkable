@@ -24,6 +24,7 @@ using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 using Student = Chalkable.StiConnector.SyncModel.Student;
 using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
+using UserSchool = Chalkable.StiConnector.SyncModel.UserSchool;
 
 namespace Chalkable.StiImport.Services
 {
@@ -455,13 +456,20 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<UserSchool>().Deleted == null)
                 return;
-            var schoolUsers = context.GetSyncResult<UserSchool>().Deleted.Select(x => new Data.Master.Model.SchoolUser
+            var masterSchoolUsers = context.GetSyncResult<UserSchool>().Deleted.Select(x => new Data.Master.Model.SchoolUser
                 {
                     SchoolRef = x.SchoolID, 
                     UserRef = x.UserID, 
                     DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value
                 }).ToList();
-            ServiceLocatorMaster.UserService.DeleteSchoolUsers(schoolUsers);
+            ServiceLocatorMaster.UserService.DeleteSchoolUsers(masterSchoolUsers);
+
+            var districtUserSchool = context.GetSyncResult<UserSchool>().Deleted.Select(x => new Data.School.Model.UserSchool
+            {
+                SchoolRef = x.SchoolID,
+                UserRef = x.UserID
+            }).ToList();
+            ServiceLocatorSchool.UserSchoolService.Delete(districtUserSchool);
         }
 
         private void DeleteUsers()

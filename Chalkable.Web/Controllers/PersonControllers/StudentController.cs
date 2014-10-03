@@ -38,7 +38,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
 
             var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.StartTime).Select(cp => cp.ClassRef).Distinct().ToList();
-            var classList = sortedClassRefs.Select(sortedClassRef => classes.First(cls => cls.Id == sortedClassRef)).ToList();
+
+            var classList = sortedClassRefs.Select(sortedClassRef => classes.FirstOrDefault(cls => cls.Id == sortedClassRef)).Where(c => c != null).ToList();
             classList.AddRange(classes.Where(cls => !sortedClassRefs.Contains(cls.Id)));
 
             var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
