@@ -221,7 +221,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, Boolean needInfo)
         {
             var d = (date ?? Context.NowSchoolYearTime).Date;
-            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d, true);
             SchoolLocator.AttendanceService.UpdateSeatingChart(seatingChartInfo.ClassId, mp.Id, seatingChartInfo);
             if (needInfo)
                 return Json(GetSeatingChart(date, seatingChartInfo.ClassId));
