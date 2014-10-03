@@ -60,6 +60,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementAttachmentId]],
+            ria.async.Future, function cloneAttachment(attachmentId) {
+                return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
+                    originalAttachmentId: attachmentId.valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, Boolean]],
             ria.async.Future, function setShowGradesToStudents(announcementId, value) {
                 return ria.async.DeferredData(true);

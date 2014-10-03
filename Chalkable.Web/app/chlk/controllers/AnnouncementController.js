@@ -384,6 +384,47 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
+        function prepareAnnouncementForView(announcement){
+            this.prepareAttachments(announcement);
+            var studentAnnouncements = announcement.getStudentAnnouncements();
+            if(studentAnnouncements){
+                var studentItems = studentAnnouncements.getItems(), that = this;
+                studentItems.forEach(function(item){
+                    item.getAttachments().forEach(function(attachment){
+                        that.prepareAttachment(attachment);
+                    });
+                });
+            }
+            if(!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
+                var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
+                var alphaGrades = classInfo ? classInfo.getAlphaGrades() : [];
+                var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
+                announcement.setAlphaGrades(alphaGrades);
+                announcement.setAlternateScores(alternateScores);
+            }
+            var apps = announcement.getApplications() || [];
+            var gradeViewApps = apps.filter(function(app){
+                return app.getAppAccess().isVisibleInGradingView();
+            }) || [];
+            announcement.setGradeViewApps(gradeViewApps);
+            announcement.prepareExpiresDateText();
+            announcement.setCurrentUser(this.getCurrentPerson());
+            var hasMCPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM) ||
+                this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
+            if(!hasMCPermission){
+                announcement.setAbleToGrade(false);
+            }
+            announcement.setAbleEdit(announcement.isAnnOwner() && hasMCPermission);
+//                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
+            announcement.calculateGradesAvg();
+            var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
+            if(studentAnnouncements)
+                announcement.getStudentAnnouncements().setSchoolOptions(schoolOptions);
+
+            this.cacheAnnouncement(announcement);
+            return announcement;
+        },
+
         [[chlk.models.id.AnnouncementId]],
         function viewAction(announcementId) {
             this.getView().reset();
@@ -392,45 +433,8 @@ NAMESPACE('chlk.controllers', function (){
 
                 .attach(this.validateResponse_())
                 .then(function(announcement){
-                    this.prepareAttachments(announcement);
-                    var studentAnnouncements = announcement.getStudentAnnouncements();
-                    if(studentAnnouncements){
-                        var studentItems = studentAnnouncements.getItems(), that = this;
-                        studentItems.forEach(function(item){
-                            item.getAttachments().forEach(function(attachment){
-                                that.prepareAttachment(attachment);
-                            });
-                        });
-                    }
-                    if(!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
-                        var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
-                        var alphaGrades = classInfo ? classInfo.getAlphaGrades() : [];
-                        var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
-                        announcement.setAlphaGrades(alphaGrades);
-                        announcement.setAlternateScores(alternateScores);
-                    }
-                    var apps = announcement.getApplications() || [];
-                    var gradeViewApps = apps.filter(function(app){
-                        return app.getAppAccess().isVisibleInGradingView();
-                    }) || [];
-                    announcement.setGradeViewApps(gradeViewApps);
-                    announcement.prepareExpiresDateText();
-                    announcement.setCurrentUser(this.getCurrentPerson());
-                    var hasMCPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM) ||
-                        this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
-                    if(!hasMCPermission){
-                        announcement.setAbleToGrade(false);
-                    }
-                    announcement.setAbleEdit(announcement.isAnnOwner() && hasMCPermission);
-//                    announcement.setAbleChangeDate(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHANGE_ACTIVITY_DATES));
-                    announcement.calculateGradesAvg();
-                    var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
-                    if(studentAnnouncements)
-                        announcement.getStudentAnnouncements().setSchoolOptions(schoolOptions);
-
-                    this.cacheAnnouncement(announcement);
-                    return announcement;
-                }, this)
+                    return this.prepareAnnouncementForView(announcement);
+                }, this);
                 //.catchError(this.handleNoAnnouncementException_, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
@@ -511,13 +515,17 @@ NAMESPACE('chlk.controllers', function (){
                     );
                     res = new ria.async.DeferredData(attachmentViewData);
                 }else{
+                    var buttons = [downloadAttachmentButton];
+                    if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachments[0].isTeachersAttachment())
+                        buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
+                            'announcement', 'cloneAttachment', [attachments[0].getId().valueOf()], true));
                     res = this.announcementService
                         .startViewSession(attachmentId)
                         .then(function(session){
                             attachmentUrl = 'https://crocodoc.com/view/' + session;
                             return new chlk.models.common.attachments.BaseAttachmentViewData(
                                 attachmentUrl,
-                                [downloadAttachmentButton],
+                                buttons,
                                 attachments[0].getType()
                             );
                         });
@@ -525,6 +533,18 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
             }
             return null;
+        },
+
+        [[chlk.models.id.AnnouncementAttachmentId]],
+        function cloneAttachmentAction(attachmentId) {
+            var res = this.announcementService
+                .cloneAttachment(attachmentId)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    return this.prepareAnnouncementForView(announcement);
+                }, this);
+            this.BackgroundCloseView(chlk.activities.common.attachments.AttachmentDialog);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res);
         },
 
         [[chlk.models.announcement.Announcement]],

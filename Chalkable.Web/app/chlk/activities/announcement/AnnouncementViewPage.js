@@ -53,6 +53,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.row.selected .grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '.student-attachments', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementView, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             Array, 'applicationsInGradeView',
             Array, 'applications',

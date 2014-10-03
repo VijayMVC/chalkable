@@ -4,12 +4,20 @@ mixin ToolbarButton(btn, announcementAppId, announcementId)
     cls = btn.getCls()
     -attributes['data-announcement-app-id'] = announcementAppId ? announcementAppId : undefined
     -attributes['data-announcement-id'] = announcementId ? announcementId: undefined
-    a(class= cls, id= btn.getId(), href= url, target= btnTarget)(attributes)=btn.getTitle()
+    if btn.getController()
+        +ActionLinkWithPrepend(btn.getController(), btn.getAction(), btn.getParams())(class= cls, id= btn.getId(), target= btnTarget)=btn.getTitle()
+    else
+        a(class= cls, id= btn.getId(), href= url, target= btnTarget)(attributes)=btn.getTitle()
 
 
 mixin Toolbar(buttons, announcementAppId, announcementId)
+    leftButtons = buttons.filter(function(item){return !item.isRight()})
+    rightButtons = buttons.filter(function(item){return item.isRight()})
     .toolbar
-        each btn in buttons
+        each btn in leftButtons
+            +ToolbarButton(btn, announcementAppId, announcementId)
+    .toolbar.right-toolbar
+        each btn in rightButtons
             +ToolbarButton(btn, announcementAppId, announcementId)
     .x-close-btn.close
 

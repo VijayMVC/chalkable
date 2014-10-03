@@ -50,6 +50,11 @@
         left:0;
         top: -16px;
 
+        &.right-toolbar{
+          right: 25px;
+          text-align: right;
+        }
+
         >DIV, >A{
           display: inline-block;
           padding: 11px 15px 12px 11px;
