@@ -1,0 +1,26 @@
+.setup-page.setup-hello.loader-container
+    .loader
+    h1.title=Msg.Your_login_info
+    .info=Msg.First_login_text1
+        br
+        |#{Msg.First_login_text2}
+        br
+        |#{Msg.First_login_text3}
+    +ActionForm('setup', 'infoEdit')#hello-form
+        +Hidden("id", self.getId())
+        .x-form-field
+            label(for="salutation") Name:
+            input(type="text",name="displayname",value=self.getDisplayName(),readonly)
+        .x-form-field
+            label(for="email") Email:
+            input(type="text",name="email",class="validate[required,custom[email]] email",value=self.getEmail())
+            .form-ok
+        .x-form-field
+            label(for="password") Password:
+            input(type="text",name="password",value='Your iNow password', readonly).password
+        .x-form-field
+            label
+            BUTTON(type="submit").content-box.small.blue-button#confirm-button=Msg.Confirm
+            +ActionLink('feed', 'doToList').small.grey-button=Msg.Skip
+
+
