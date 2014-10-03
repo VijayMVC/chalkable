@@ -11,6 +11,7 @@ namespace Chalkable.Web.Models
     {
         public int AnnouncementId { get; set; }
         public IList<ItemGradingGraphViewData> GraphPoints { get; set; }
+        public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
 
         private const int INTERVALS_COUNT = 4;
         private const int MAX_GRADE = 100;
@@ -46,6 +47,7 @@ namespace Chalkable.Web.Models
                 res.AnnouncementId = announcementId;
                 res.GraphPoints = graphPoints;
             }
+            res.StudentAnnouncements = studentAnnouncements;
             return res;
         }
     }
