@@ -50,7 +50,7 @@ NAMESPACE('chlk.templates.student', function () {
                 return this.buildGlanceBoxData_(this.getUser().getRankBox()
                     , function(item){ return item.getRank; }
                     , function(item){ return  item.getMarkingPeriodName; }
-                    , Msg.Percentile, true);
+                    , Msg.Rank, true);
             },
 
             Object, function buildAttendanceGlanceBoxData(){
