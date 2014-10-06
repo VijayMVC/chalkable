@@ -828,6 +828,7 @@ NAMESPACE('chlk.controllers', function (){
                         this.cacheAnnouncementApplications(applications);
                         var announcement = form_.getAnnouncement();
                         announcement.setTitle(model.getTitle());
+                        announcement.setApplications(applications);
                         announcement.setCanAddStandard(model.isCanAddStandard());
                         announcement.setStandards(model.getStandards());
                         announcement.setGradable(model.isGradable());
