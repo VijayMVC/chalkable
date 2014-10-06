@@ -261,6 +261,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.dom.find(('.small-pop-up:visible')).hide();
             },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                this.dom.find('.open-on-start').trigger('click').removeClass('open-on-start');
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
 

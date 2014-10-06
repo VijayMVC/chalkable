@@ -11,7 +11,7 @@ each attachment, i in self.getAnnouncementAttachments()
                     .title
                         div=attachment.getName()
             else
-                +ActionLink('announcement', 'viewAttachment', attachment.getId())
+                +ActionLink('announcement', 'viewAttachment', attachment.getId())(class=attachment.isOpenOnStart() ? 'open-on-start' : '')
                     +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
                     .title
                         div=attachment.getName()

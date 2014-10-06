@@ -18,6 +18,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Boolean, 'owner',
 
+            Boolean, 'openOnStart',
+
             Boolean, 'teachersAttachment',
 
             Number, 'order',
@@ -38,7 +40,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.apps.BannedAppData, 'banInfo',
 
-            function $(id_, owner_, order_, type_, name_, pictureUrl_, url_, teachersAttachment_, editUrl_, gradingViewUrl_, viewUrl_, banInfo_){
+            function $(id_, owner_, order_, type_, name_, pictureUrl_, url_, teachersAttachment_, editUrl_, gradingViewUrl_, viewUrl_, banInfo_, openOnStart_){
                 BASE();
                 if(id_)
                     this.setId(id_);
@@ -64,6 +66,8 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setViewUrl(viewUrl_);
                 if (banInfo_)
                     this.setBanInfo(banInfo_);
+                if (openOnStart_)
+                    this.setOpenOnStart(openOnStart_);
             }
         ]);
 });

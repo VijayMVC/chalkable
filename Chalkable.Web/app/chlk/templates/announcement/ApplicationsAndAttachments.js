@@ -22,7 +22,12 @@ NAMESPACE('chlk.templates.announcement', function () {
                         item.getName(),
                         item.getThumbnailUrl(),
                         item.getUrl(),
-                        item.isTeachersAttachment()
+                        item.isTeachersAttachment(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        item.isOpenOnStart()
                     ));
                 });
                 applications.forEach(function(item){
