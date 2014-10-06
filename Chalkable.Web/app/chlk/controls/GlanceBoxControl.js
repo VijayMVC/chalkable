@@ -9,9 +9,10 @@ NAMESPACE('chlk.controls', function () {
                 BASE();
                 ASSET('~/assets/jade/controls/glance-box.jade')(this);
             },
-            [[Number]],
             String, function getValueClass(value) {
                 var res = '';
+                if(isNaN(parseInt(value, 10)))
+                    return '';
                 if (value >= 100 && value < 1000) res = 'large';
                 else if (value >= 1000) res = 'small';
                 return res;
