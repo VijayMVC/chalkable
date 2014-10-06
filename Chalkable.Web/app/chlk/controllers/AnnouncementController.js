@@ -541,6 +541,15 @@ NAMESPACE('chlk.controllers', function (){
                 .cloneAttachment(attachmentId)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
+                    var attachments = this.getCachedAnnouncementAttachments().filter(function(item){return item.isOwner()});
+                    var newAttachments = announcement.getAnnouncementAttachments().filter(function(item){return item.isOwner()});
+                    var clone = newAttachments.filter(function(item){
+                        var len = attachments.filter(function(attachment){
+                            return attachment.getId() == item.getId()
+                        }).length;
+                        return !len;
+                    })[0];
+                    clone.setOpenOnStart(true);
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             this.BackgroundCloseView(chlk.activities.common.attachments.AttachmentDialog);

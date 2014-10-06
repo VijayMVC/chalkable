@@ -140,6 +140,16 @@ ul.ui-autocomplete{
       }
     }
 
+    >div.grade-book-comment{
+        padding: 4px 8px;
+        font: bold 12px Arial;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-shadow: none;
+        cursor: pointer;
+    }
+
     >div.api-list{
       .api-list-item{
         padding: 8px;

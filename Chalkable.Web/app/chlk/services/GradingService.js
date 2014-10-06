@@ -231,9 +231,21 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            ria.async.Future, function getGradeComments() {
-                return this.get('Grading/GetGridComments', Array, {
+            [[String]],
+            ria.async.Future, function getGradeComments(query_) {
+                return this.get('Grading/GetGridComments', ArrayOf(String), {
                     schoolYearId: this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null).valueOf()
+                }).then(function(data){
+                    var comments = data || [];
+                    if (query_){
+                        query_ = query_.toLowerCase();
+                        comments = comments.filter(function(item){
+                            return item != null && item.toLowerCase().indexOf(query_) != -1;
+                        });
+                    }
+                    return comments.map(function(item){
+                        return new chlk.models.grading.GradingComment(item);
+                    });
                 });
             },
 

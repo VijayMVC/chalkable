@@ -47,12 +47,15 @@
     .x-window-header{
       .toolbar{
         position: absolute;
-        left:0;
         top: -16px;
 
         &.right-toolbar{
           right: 25px;
           text-align: right;
+        }
+
+        &:not(.right-toolbar){
+          left:0;
         }
 
         >DIV, >A{

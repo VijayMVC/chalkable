@@ -447,9 +447,11 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('statistic')],
             function getGradeCommentsAction(){
-                var result = this.gradingService.getGradeComments().then(function(comments){
-                    return new chlk.models.grading.GradingComments(comments);
-                });
+                var result = this.gradingService
+                    .getGradeComments()
+                    .then(function(comments){
+                        return chlk.models.grading.GradingComments.$createFromList(comments);
+                    });
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },
 
@@ -487,7 +489,8 @@ NAMESPACE('chlk.controllers', function (){
                     finalGradeAnnouncementTypes.push(item)
                 });
 
-                return this.finalGradeService.update(
+                return this.finalGradeService
+                    .update(
                         model.getId(),
                         model.getParticipation(),
                         model.getAttendance(),

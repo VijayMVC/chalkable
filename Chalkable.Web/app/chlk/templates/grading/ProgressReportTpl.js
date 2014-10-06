@@ -1,4 +1,5 @@
 REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.grading.GradingCommentsDropdownTpl');
 REQUIRE('chlk.models.grading.SubmitProgressReportViewData');
 
 NAMESPACE('chlk.templates.grading', function () {

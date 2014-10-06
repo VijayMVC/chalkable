@@ -208,16 +208,6 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult UpdateSeatingChart(DateTime? date, int classId, int columns, int rows)
-        {
-            if (classId == 645)
-                return FakeJson("~/fakeData/seatingChart2.json");
-            if (classId == 723)
-                return FakeJson("~/fakeData/seatingChart3.json");
-            return FakeJson("~/fakeData/seatingChart.json");
-        }
-
-        [AuthorizationFilter("Teacher")]
         public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, Boolean needInfo)
         {
             var d = (date ?? Context.NowSchoolYearTime).Date;
@@ -226,14 +216,6 @@ namespace Chalkable.Web.Controllers
             if (needInfo)
                 return Json(GetSeatingChart(date, seatingChartInfo.ClassId));
             return Json(true);
-        }
-
-        [AuthorizationFilter("Teacher")]
-        public ActionResult ChangeStudentSeat(DateTime? date, int studentId, int classId, int index)
-        {
-            if (classId == 723 || classId == 645)
-                return FakeJson("~/fakeData/seatingChart3.json");
-            return FakeJson("~/fakeData/seatingChart2.json");
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]

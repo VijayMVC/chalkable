@@ -82,7 +82,10 @@
                                     +ProfileLink(student, 'student').image-container.white.shadow
                                         +PersonImg(student, 47)
                                     p=student.getDisplayName()
-                                    INPUT(value=student.getComment()).student-comment
+
+                                    +SearchBox(chlk.services.GradingService, "getGradeComments", chlk.templates.grading.GradingCommentsDropdownTpl)(
+                                        value=student.getComment()
+                                    )(class="student-comment", id="comments-" + id)
         .report-bottom
             +Select('format').format
                 +Option(0, "PDF", true)

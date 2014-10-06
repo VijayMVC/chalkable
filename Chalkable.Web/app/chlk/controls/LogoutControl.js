@@ -20,11 +20,11 @@ NAMESPACE('chlk.controls', function () {
                 var elem = $target.parent().find('.logout');
                 if(!this.isLogoutShown()){
                     elem.setCss("visibility", "visible")
-                        .setCss("opacity", 1);
+                        .setCss("opacity", 1).setCss('height', '21px');
                 }else{
                     elem.setCss("opacity", 0);
                     setTimeout(function(){
-                        elem.setCss("visibility", "hidden");
+                        elem.setCss("visibility", "hidden").setCss('height', 0);
                     }, 200);
                 }
                 this.setLogoutShown(!this.isLogoutShown());
