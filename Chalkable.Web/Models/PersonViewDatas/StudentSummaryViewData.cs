@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Chalkable.BusinessLogic.Mapping;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -58,7 +55,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();
             var rank = rankInfo.Rank;
-            res.IsPassing = rank > 50;
+            res.IsPassing = true;
             res.Title = rank.HasValue ? rank.ToString() : "";
             return res;
         }
@@ -104,28 +101,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentSummeryRankViewData
     {
-        public int MarkingPeriodId { get; set; }
-        public string MarkingPeiordName { get; set; }
         public int? Rank { get; set; }
-        public static IList<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
-        {
-            var rankByMps = currentStudentRanks;
-            var res = new List<StudentSummeryRankViewData>();
-            foreach (var rankByMp in rankByMps)
-            {
-                var allStudentsByMp = allStudentsRanks.Where(x => x.MarkingPeriodId == rankByMp.MarkingPeriodId).ToList();
-                var studentSummeryRank = new StudentSummeryRankViewData
-                                        {
-                                            MarkingPeriodId = rankByMp.MarkingPeriodId,
-                                            MarkingPeiordName = rankByMp.MarkingPeriodName,
-                                        };
-                var lowRankStCount = allStudentsByMp.Count(x => x.StudentId != rankByMp.StudentId && x.Rank >= rankByMp.Rank);
-                var allStudentsCount = allStudentsByMp.Count;
-                studentSummeryRank.Rank = allStudentsCount > 0 ? 100 * lowRankStCount / allStudentsCount : default(int?);
-                res.Add(studentSummeryRank);
-            }
-            return res;
-        }
     }
 
     public class DisciplineTotalPerTypeViewData
