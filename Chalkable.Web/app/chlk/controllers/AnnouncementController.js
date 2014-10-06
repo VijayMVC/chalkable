@@ -824,11 +824,14 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if (form_){
+                        var applications = model.getApplications() || [];
+                        this.cacheAnnouncementApplications(applications);
                         var announcement = form_.getAnnouncement();
                         announcement.setTitle(model.getTitle());
                         announcement.setCanAddStandard(model.isCanAddStandard());
                         announcement.setStandards(model.getStandards());
                         announcement.setGradable(model.isGradable());
+                        announcement.setApplications(applications);
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
                     }
