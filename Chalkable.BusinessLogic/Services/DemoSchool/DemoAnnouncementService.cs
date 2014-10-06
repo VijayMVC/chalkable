@@ -165,9 +165,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new UnassignedUserException();
             
             var ann = Storage.AnnouncementStorage.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.PersonId.Value);
-
-            if (!ann.SisActivityId.HasValue)
-                throw new ChalkableException("Announcement doesn't have sis activity id");
+          
             if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                 throw new ChalkableSecurityException();
 
@@ -183,7 +181,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ann.MayBeDropped = announcement.CanDropStudentScore;
                 ann.VisibleForStudent = !announcement.HideFromStudents;
 
-                if (!ann.IsScored)
+                if (!ann.IsScored && ann.SisActivityId.HasValue)
                 {
                     var studentIds = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id).Select(x => x.StudentId);
 
