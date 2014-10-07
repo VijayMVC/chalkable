@@ -84,8 +84,11 @@
                                     p=student.getDisplayName()
 
                                     +SearchBox(chlk.services.GradingService, "getGradeComments", chlk.templates.grading.GradingCommentsDropdownTpl)(
-                                        value=student.getComment()
-                                    )(class="student-comment", id="comments-" + id)
+                                        value=student.getComment(),
+                                        default-value=""
+                                        keepNonExsistentValue != true
+                                        minLength = 0,class="student-comment", id="comments-" + id
+                                    )
         .report-bottom
             +Select('format').format
                 +Option(0, "PDF", true)

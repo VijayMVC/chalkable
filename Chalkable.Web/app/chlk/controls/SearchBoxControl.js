@@ -14,6 +14,7 @@ NAMESPACE('chlk.controls', function () {
             String, 'triggerBtnId',
             Boolean, 'categorized',
             String, 'groupingField',
+            Number, 'minLength',
 
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
@@ -31,6 +32,11 @@ NAMESPACE('chlk.controls', function () {
                     this.setCategorized(true);
                 if (attrs.groupingField)
                     this.setGroupingField(attrs.groupingField);
+
+                if (attrs.minLength != undefined)
+                    this.setMinLength(parseInt(attrs.minLength) || 0);
+                else
+                    this.setMinLength(2);
 
                 var serviceIns = this.getContext().getService(service);
                 var ref = ria.reflection.ReflectionClass(service);
@@ -121,6 +127,13 @@ NAMESPACE('chlk.controls', function () {
 
                 jQuery(node.valueOf())
                     .autocomplete(autocompleteConfig)
+                    .focus(function(){
+                        var minLength = node.getAttr('minLength') || 0;
+                        if (minLength == 0){
+                            jQuery(this).autocomplete("search",jQuery(this).val())
+                                .val(jQuery(this).val());
+                        }
+                    })
                     .data( "ui-autocomplete" )
                     ._renderItem = renderItemFunction;
 
@@ -141,7 +154,7 @@ NAMESPACE('chlk.controls', function () {
             [[String, Object, Function, Function, Boolean, String]],
             Object, function getAutoCompleteConfig_(id, attrs, serviceF, selectHandler, categorized, groupingField_){
                 return {
-                    minLength: 2,
+                    minLength: this.getMinLength(),
                     source: function( request, response ) {
                         serviceF(request.term)
                             .then(function(data){
@@ -158,6 +171,9 @@ NAMESPACE('chlk.controls', function () {
                         return selectHandler(event, ui, true);
                     },
                     change: function( event, ui ) {
+                        if (attrs.keepNonExsistentValue)
+                            ria.dom.Dom('#' + id + '-hidden').setValue(ria.dom.Dom('#' + id).getValue());
+
                         if (!ria.dom.Dom('#' + id + '-hidden').getValue())
                             ria.dom.Dom('#' + id).setValue(null);
                     },
