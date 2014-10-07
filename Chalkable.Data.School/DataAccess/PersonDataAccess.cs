@@ -42,6 +42,8 @@ namespace Chalkable.Data.School.DataAccess
             return GetPersons(query).Persons.First();
         }
 
+
+        //TODO: need to remove this golden hummer and make particular functions for students and teacher (and maybe staff and parents in a future)
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             var dbQuery = new DbQuery();
@@ -111,16 +113,28 @@ namespace Chalkable.Data.School.DataAccess
             
             if (query.TeacherId.HasValue)
             {
-                var cpDbQuery = new DbQuery();
-                cpDbQuery.Sql.AppendFormat(@"select ClassPerson.[{0}] from ClassPerson
-                                             join ClassTeacher on ClassPerson.[{1}] = ClassTeacher.[{2}]"
-                                           , ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD, ClassTeacher.CLASS_REF_FIELD);
-
-                new AndQueryCondition {{ClassTeacher.PERSON_REF_FIELD, "teacherId", query.TeacherId, ConditionRelation.Equal}}
-                    .BuildSqlWhere(cpDbQuery, "ClassTeacher");
-                cpDbQuery = BuildClassPersonConds(cpDbQuery, query, false);
-                dbQuery.AddParameters(cpDbQuery.Parameters);
-                dbQuery.Sql.AppendFormat(" and vwPerson.[{0}] in ({1})", Person.ID_FIELD, cpDbQuery.Sql);
+                var teachersStudentSql = new StringBuilder();
+                teachersStudentSql.AppendFormat(@"select ClassPerson.[{0}] from ClassPerson
+                                             join ClassTeacher on ClassPerson.[{1}] = ClassTeacher.[{2}]
+                                             join MarkingPeriod on MarkingPeriod.[{3}] = ClassPerson.[{4}]
+                                             where ClassTeacher.[{5}] = @teacherId and MarkingPeriod.[{6}] = @schoolYearRef "
+                                           , ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD, ClassTeacher.CLASS_REF_FIELD,
+                                           MarkingPeriod.ID_FIELD, ClassPerson.MARKING_PERIOD_REF,
+                                           ClassTeacher.PERSON_REF_FIELD, MarkingPeriod.SCHOOL_YEAR_REF);
+                dbQuery.AddParameters(new Dictionary<string, object>
+                    {
+                        {"teacherId", query.TeacherId},
+                        {ClassPerson.MARKING_PERIOD_REF, query.MarkingPeriodId},
+                        {ClassPerson.IS_ENROLLED_FIELD, query.IsEnrolled},
+                        {ClassPerson.CLASS_REF_FIELD, query.ClassId},
+                    });
+                if (query.ClassId.HasValue)
+                    teachersStudentSql.AppendFormat(" and ClassPerson.[{0}] = @{0}", ClassPerson.CLASS_REF_FIELD);
+                if (query.MarkingPeriodId.HasValue)
+                    teachersStudentSql.AppendFormat(" and ClassPerson.[{0}] = @{0}", ClassPerson.MARKING_PERIOD_REF);
+                if (query.IsEnrolled.HasValue)
+                    teachersStudentSql.AppendFormat(" and ClassPerson.[{0}] = @{0}", ClassPerson.IS_ENROLLED_FIELD);
+                dbQuery.Sql.AppendFormat(" and vwPerson.[{0}] in ({1})", Person.ID_FIELD, teachersStudentSql);
             } 
             else if (query.ClassId.HasValue && (query.RoleId == CoreRoles.STUDENT_ROLE.Id || query.RoleId == CoreRoles.TEACHER_ROLE.Id))
             {
