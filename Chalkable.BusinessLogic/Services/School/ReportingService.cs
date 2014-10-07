@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetWorksheetReport(WorksheetReportInputModel worksheetReportInput);
         byte[] GetProgressReport(ProgressReportInputModel progressReportInput);
 
-        IList<StudentCommentInfo> GetProgressReportComments(int classId, int? gradingPeriodId);
+        IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId);
         void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
     }
 
@@ -136,15 +136,11 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<StudentCommentInfo> GetProgressReportComments(int classId, int? gradingPeriodId)
+        public IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId)
         {
             var inowReportComments = ConnectorLocator.ReportConnector.GetProgressReportComments(classId, gradingPeriodId);
-            int? markingPeriodId = null;
-            if (gradingPeriodId.HasValue)
-            {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
-                markingPeriodId = gp.MarkingPeriodRef;
-            }
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            int markingPeriodId = gp.MarkingPeriodRef;
             var students = ServiceLocator.PersonService.GetClassStudents(classId, null, markingPeriodId);
             var res = new List<StudentCommentInfo>();
             foreach (var inowStudentComment in inowReportComments)

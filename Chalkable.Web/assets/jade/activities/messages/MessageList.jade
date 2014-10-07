@@ -7,8 +7,8 @@ items = self.getMessages().getItems()
                     span New message
 
             .right
-                +ActionLink('message', 'page', true, true, self.getRole(), self.getKeyword())(class=self.isInbox() ? "pressed" : "") Inbox
-                +ActionLink('message', 'page', true, false, self.getRole(), self.getKeyword())(class=self.isInbox() ? "" : "pressed") Sent
+                +ActionLink('message', 'page', true, true, self.getRole())(class=self.isInbox() ? "pressed" : "") Inbox
+                +ActionLink('message', 'page', true, false, self.getRole())(class=self.isInbox() ? "" : "pressed") Sent
                 input(name="role", type="hidden", value=self.getRole())
                 input(name="inbox", type="hidden", value=self.isInbox())
                 input(name="keyword", type="text", value=self.getKeyword())#keyword
@@ -31,11 +31,11 @@ items = self.getMessages().getItems()
                                 +Button()(type="submit", name="submitType", value="markAsUnread").plain-button#mark-unread-button Unread
                         .right
                             |View:
-                            +ActionLink('message', 'page', true, self.isInbox(), '', self.getKeyword()) All
-                            +ActionLink('message', 'page', true, self.isInbox(), 'parent', self.getKeyword()) Parent
-                            +ActionLink('message', 'page', true, self.isInbox(), 'student', self.getKeyword()) Student
-                            +ActionLink('message', 'page', true, self.isInbox(), 'teacher', self.getKeyword()) Teacher
-                            +ActionLink('message', 'page', true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()) Admin
+                            +ActionLink('message', 'page', true, self.isInbox(), '') All
+                            +ActionLink('message', 'page', true, self.isInbox(), 'parent') Parent
+                            +ActionLink('message', 'page', true, self.isInbox(), 'student') Student
+                            +ActionLink('message', 'page', true, self.isInbox(), 'teacher') Teacher
+                            +ActionLink('message', 'page', true, self.isInbox(), 'admingrade,adminedit,adminview') Admin
 
                 if !items.length
                     .no-messages-text=self.getNoMessagesText()

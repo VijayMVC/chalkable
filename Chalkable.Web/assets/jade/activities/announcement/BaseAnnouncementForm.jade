@@ -23,7 +23,8 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
         +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
         div(class=announcement.getExpiresDate() ? 'with-date' : '').title-block-container
             +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
-    .left-block
+    needStandardsBlock = standards.length > 0 || (!isAdminAnnouncement && announcement.isCanAddStandard())
+    div(class=needStandardsBlock ? 'with-standards' : '').left-block
         if isAdminAnnouncement
             .buttons-container
                 rolesEnum = chlk.models.common.RoleEnum
@@ -44,7 +45,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                 +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
         .left-block-container
             +TextArea(id="content",name="content",placeholder=isAnnouncement ? "Message" : "Assignment")=announcement.getContent()
-            if standards.length > 0 || (!isAdminAnnouncement && announcement.isCanAddStandard())
+            if needStandardsBlock
                 .add-standards-container
                     .add-standards
                         .standards-list

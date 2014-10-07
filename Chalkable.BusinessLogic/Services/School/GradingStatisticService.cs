@@ -196,28 +196,23 @@ namespace Chalkable.BusinessLogic.Services.School
                 stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType
                 , gradingPeriod.Id, standardId);
             }
-            Trace.WriteLine("GetGradingPeriodById" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             Trace.WriteLine("GetGradeBooks" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            return GetGradeBooks(classId, new List<GradingPeriodDetails>{gradingPeriod}, stiGradeBook).First();
+            return GetGradeBooks(classId, gradingPeriod, stiGradeBook);
         }
 
-        private IList<ChalkableGradeBook> GetGradeBooks(int classId, IList<GradingPeriodDetails> gradingPeriods, Gradebook gradebook)
+        private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriodDetails gradingPeriod, Gradebook gradebook)
         {
             var annQuery = new AnnouncementsQuery {ClassId = classId};
-            int? mpId = null;
-            if (gradingPeriods.Count == 1)
-            {
-                annQuery.FromDate = gradingPeriods.First().StartDate;
-                annQuery.ToDate = gradingPeriods.First().EndDate;
-                mpId = gradingPeriods.First().MarkingPeriodRef;
-            }
+            int mpId = gradingPeriod.MarkingPeriodRef;
+            annQuery.FromDate = gradingPeriod.StartDate;
+            annQuery.ToDate = gradingPeriod.EndDate;
             var classRoomOptions = gradebook.Options;
             Trace.WriteLine("GetClassStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var students = ServiceLocator.PersonService.GetClassStudents(classId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
             Trace.WriteLine("GetAnnouncementsComplex " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
             Trace.WriteLine("BuildGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students)).ToList();
+            return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<Person> students)
