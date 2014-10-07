@@ -167,7 +167,8 @@ NAMESPACE('chlk.controls', function () {
                 }else{
                     this.context.getDefaultView()
                         .onActivityRefreshed(function (activity, model) {
-                            jQuery('#' + attributes.id).validationEngine('attach');
+                            var form = jQuery('#' + attributes.id);
+                            form.validationEngine('attach');
                         }.bind(this));
                 }
             }
