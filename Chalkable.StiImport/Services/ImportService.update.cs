@@ -23,7 +23,6 @@ using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 using Student = Chalkable.StiConnector.SyncModel.Student;
-using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 
 namespace Chalkable.StiImport.Services
 {
@@ -185,7 +184,7 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<User>().Updated == null)
                 return;
-            var users = context.GetSyncResult<User>().All.Select(x => new Data.Master.Model.User
+            var users = context.GetSyncResult<User>().Updated.Select(x => new Data.Master.Model.User
             {
                 DistrictRef = ServiceLocatorSchool.Context.DistrictId,
                 FullName = x.FullName,
@@ -200,7 +199,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<Person>().Updated == null)
                 return;
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
-            var persons = context.GetSyncResult<Person>().All
+            var persons = context.GetSyncResult<Person>().Updated
                 .Select(x => new Data.School.Model.Person
                 {
                     Active = true,
@@ -223,7 +222,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<Staff>().Updated == null)
                 return;
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
-            var staff = context.GetSyncResult<Staff>().All.Select(x => new Data.School.Model.Staff
+            var staff = context.GetSyncResult<Staff>().Updated.Select(x => new Data.School.Model.Staff
             {
                 BirthDate = x.DateOfBirth,
                 Id = x.StaffID,
@@ -241,7 +240,7 @@ namespace Chalkable.StiImport.Services
                 return;
             var genders = context.GetSyncResult<Gender>().All.ToDictionary(x => x.GenderID);
             var statuses = context.GetSyncResult<SpEdStatus>().All.ToDictionary(x => x.SpEdStatusID);
-            var students = context.GetSyncResult<Student>().All.Select(x => new Data.School.Model.Student
+            var students = context.GetSyncResult<Student>().Updated.Select(x => new Data.School.Model.Student
             {
                 BirthDate = x.DateOfBirth,
                 Id = x.StudentID,
@@ -261,7 +260,7 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<StaffSchool>().Updated == null)
                 return;
-            var staffSchool = context.GetSyncResult<StaffSchool>().All.Select(x => new Data.School.Model.StaffSchool
+            var staffSchool = context.GetSyncResult<StaffSchool>().Updated.Select(x => new Data.School.Model.StaffSchool
             {
                 SchoolRef = x.SchoolID,
                 StaffRef = x.StaffID
