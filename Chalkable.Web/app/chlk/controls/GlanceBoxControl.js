@@ -35,6 +35,23 @@ NAMESPACE('chlk.controls', function () {
                 if(nodeT.hasClass('glance-box')){
                     node.find('.details-container').scrollTop(0);
                 }
+            },
+
+            function prepareGlanceBox(){
+                this.context.getDefaultView()
+                    .onActivityRefreshed(function (activity, model) {
+                        var textItems = activity.getDom().find('.glance-text:not(.processed)');
+                        textItems.forEach(function(textItem){
+                            var parentWidth = textItem.parent().width();
+                            var width = textItem.valueOf()[0].scrollWidth;
+                            if(width > parentWidth){
+                                var currentFontSize = parseInt(textItems.getCss('font-size'), 10);
+                                var newFontSize = Math.floor(currentFontSize * parentWidth / width);
+                                textItem.setCss('font-size', newFontSize).addClass('processed');
+                            }
+                        });
+
+                    }.bind(this));
             }
 
         ]);
