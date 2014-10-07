@@ -56,7 +56,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();
             var rank = rankInfo.Rank;
             res.IsPassing = true;
-            res.Title = rank.HasValue ? rank.ToString() : "";
+            res.Title = rank.HasValue ? string.Format("{0} of {1}", rankInfo.Rank, rankInfo.ClassSize) : "";
             return res;
         }
 
@@ -101,7 +101,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentSummeryRankViewData
     {
-        public int? Rank { get; set; }
     }
 
     public class DisciplineTotalPerTypeViewData
