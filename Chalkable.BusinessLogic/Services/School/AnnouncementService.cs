@@ -506,7 +506,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
-                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
+                    MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
                 }
                 else if (res.ClassAnnouncementTypeRef.HasValue)
