@@ -96,18 +96,6 @@ NAMESPACE('chlk.controls', function () {
                 $form.setData('submit-skip', $target.hasClass('validate-skip'))
             },
 
-
-            [[Object]],
-            function highlightRequiredFields_(form){
-
-                form.each(function(item){
-                    var field = jQuery(item);
-                    var cls = field.attr('class');
-                    if (cls != undefined && cls.indexOf('required') != -1)
-                        field.addClass('form-required-field');
-                });
-            },
-
             [ria.mvc.DomEventBind('submit', 'FORM')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submit($target, event) {
@@ -181,7 +169,6 @@ NAMESPACE('chlk.controls', function () {
                         .onActivityRefreshed(function (activity, model) {
                             var form = jQuery('#' + attributes.id);
                             form.validationEngine('attach');
-                            this.highlightRequiredFields_(form);
                         }.bind(this));
                 }
             }
