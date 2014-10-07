@@ -40,7 +40,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementComplex> GetAnnouncements(string filter);
         IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null);
         Announcement GetLastDraft();
-        void UpdateAnnouncementGradingStyle(int announcementId, GradingStyleEnum gradingStyle);
         Announcement DropUnDropAnnouncement(int announcementId, bool drop);
         IList<Announcement> GetDroppedAnnouncement(int markingPeriodClassId);
         IList<AnnouncementRecipient> GetAnnouncementRecipients(int announcementId);
@@ -506,7 +505,20 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
-                    MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
+                    foreach (var activityStandard in activity.Standards)
+                    {
+                        if (res.AnnouncementStandards.All(x => x.Standard.Id != activityStandard.Id))
+                            res.AnnouncementStandards.Add(new AnnouncementStandardDetails
+                                {
+                                    AnnouncementRef = res.Id, StandardRef = activityStandard.Id,
+                                    Standard = new Standard
+                                        {
+                                            Id = activityStandard.Id,
+                                            Name = activityStandard.Name
+                                        }
+                                });
+                    }
+                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
                 }
                 else if (res.ClassAnnouncementTypeRef.HasValue)
@@ -599,35 +611,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return announcement;
         }
        
-        private Announcement ReCreateRecipients(UnitOfWork unitOfWork, Announcement announcement, IList<RecipientInfo> recipientInfos)
-        {
-            if (recipientInfos != null && BaseSecurity.IsAdminViewer(Context))
-            {
-                var da = new AnnouncementRecipientDataAccess(unitOfWork);
-                da.DeleteByAnnouncementId(announcement.Id);
-                var annRecipients = new List<AnnouncementRecipient>();
-                foreach (var recipientInfo in recipientInfos)
-                {
-                    annRecipients.Add(InternalAddAnnouncementRecipient(announcement.Id, recipientInfo));
-                }
-                da.Insert(annRecipients);
-            }
-            return announcement;
-        }
-        
-        private AnnouncementRecipient InternalAddAnnouncementRecipient(int announcementId, RecipientInfo recipientInfo)
-        {
-            var announcementRecipient = new AnnouncementRecipient
-            {
-                AnnouncementRef = announcementId,
-                ToAll = recipientInfo.ToAll,
-                RoleRef = recipientInfo.ToAll ? null : recipientInfo.RoleId,
-                GradeLevelRef = recipientInfo.ToAll ? null : recipientInfo.GradeLevelId,
-                PersonRef = recipientInfo.ToAll ? null : recipientInfo.PersonId
-            };
-            return announcementRecipient;
-        }
-
         //TODO: security check 
         public IList<AnnouncementRecipient> GetAnnouncementRecipients(int announcementId)
         {
@@ -637,12 +620,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return da.GetList(announcementId);
             }
         }
-
-        public void UpdateAnnouncementGradingStyle(int announcementId, GradingStyleEnum gradingStyle)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public Announcement GetAnnouncementById(int id)
         {
             using (var uow = Read())
