@@ -129,7 +129,7 @@ NAMESPACE('chlk', function (){
                 if(notifications)
                    document.title = document.title + ' (' + notifications + ')';
 
-                if(window.redirectUrl.indexOf('setup/hello') > -1){
+                if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');
                 }
 

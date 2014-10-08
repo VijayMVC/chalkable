@@ -30,6 +30,7 @@ NAMESPACE('chlk.models.student', function () {
             [ria.serialize.SerializeProperty('currentattendancelevel')],
             String, 'currentAttendanceLevel',
 
+            Boolean, 'ableViewTranscript',
 
             READONLY, Number, 'currentAttendanceType',
             Number, function getCurrentAttendanceType(){

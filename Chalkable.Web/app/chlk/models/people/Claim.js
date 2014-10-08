@@ -64,7 +64,8 @@ NAMESPACE('chlk.models.people', function () {
         VIEW_STUDENT_FORM: 'View Student Form',
         VIEW_STUDENT_MISCELLANEOUS: 'View Student Miscellaneous',
         MAINTAIN_STUDENT_FILTER: 'Maintain Student Filter',
-        VIEW_STUDENT_FILTER: 'View Student Filter'
+        VIEW_STUDENT_FILTER: 'View Student Filter',
+        VIEW_TRANSCRIPT: 'View Transcript'
     });
 
     /** @class chlk.models.people.Claim*/
