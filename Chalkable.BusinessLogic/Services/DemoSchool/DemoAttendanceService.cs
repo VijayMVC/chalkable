@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -121,11 +122,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
         {
+            var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            if (markingPeriod == null)
+            {
+                throw new ChalkableException("No marking period is scheduled for this date");
+            }
+
             var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.PersonService.GetClassStudents(classId);
+                var persons = ServiceLocator.PersonService.GetClassStudents(classId, markingPeriod.Id);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {

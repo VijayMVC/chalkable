@@ -92,11 +92,17 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
         {
+            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            if (mp == null)
+            {
+                throw new ChalkableException("No marking period is scheduled on this date");
+            }
+
             var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.PersonService.GetClassStudents(classId);
+                var persons = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {
@@ -190,7 +196,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = classId,
                 };
             var stiSeats = new List<Seat>();
-            var students = ServiceLocator.PersonService.GetClassStudents(classId, true, markingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, markingPeriodId, true);
             var defaultStudent = students.FirstOrDefault(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
             if (defaultStudent == null)
                 defaultStudent = students.First();

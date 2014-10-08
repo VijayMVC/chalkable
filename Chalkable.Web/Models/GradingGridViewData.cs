@@ -77,11 +77,7 @@ namespace Chalkable.Web.Models
             }
             foreach (var student in gradeBook.Students)
             {
-                var ann = gradeBook.Announcements.FirstOrDefault();
-                bool isWithdrawn = ann != null && ann.StudentAnnouncements.Any(x=>x.StudentId == student.Id)
-                                   && ann.StudentAnnouncements.First(x=>x.StudentId == student.Id).Withdrawn;
-                res.Students.Add(GradeStudentViewData.Create(student, isWithdrawn));
-
+                res.Students.Add(GradeStudentViewData.Create(student, student.IsWithdrawn));
             }
             var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
             res.TotalAvarages = StudentTotalAveragesViewData.Create(gradeBook.Averages, stIds);

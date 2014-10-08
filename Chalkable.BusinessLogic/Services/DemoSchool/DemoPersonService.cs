@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public IList<Person> GetClassStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
+        public IList<Person> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
             IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
             {
