@@ -337,7 +337,7 @@
             var DEMO_SCHOOL = @isDemoSchool.ToString().ToLowerInvariant();
             var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
             
-            var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY);
+            var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
