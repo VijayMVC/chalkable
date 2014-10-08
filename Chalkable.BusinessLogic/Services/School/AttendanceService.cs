@@ -115,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             AttendanceReasonRef = ssa.ReasonId,
                             Date = date,
                             PersonRef = ssa.StudentId,
-                            Level = ssa.Level,
+                            Level = ClassroomLevelToLevelCvt(ssa.ClassroomLevel),
                             Class = clazz,
                             Student = student,
                             Category = ssa.Category,
@@ -130,7 +130,22 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return null;
         }
-        
+
+        private static string ClassroomLevelToLevelCvt(string classroomLevel)
+        {
+            switch (classroomLevel)
+            {
+                case "Present":
+                    return null;
+                case "Absent":
+                    return "A";
+                case "Tardy":
+                    return "T";
+                default:
+                    return "H";
+            }
+        }
+
         public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
         {
             var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
