@@ -68,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     Category = item.Category,
                     Date = dataStr,
-                    ClassroomLevel = LevelToClassRoomLevel(item.Level),
+                    ClassroomLevel = item.Level,
                     ReasonId = (short)(item.AttendanceReasonRef.HasValue ? item.AttendanceReasonRef.Value : 0),
                     SectionId = classId,
                     StudentId = item.PersonRef,
@@ -115,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             AttendanceReasonRef = ssa.ReasonId,
                             Date = date,
                             PersonRef = ssa.StudentId,
-                            Level = ssa.Level,
+                            Level = ssa.ClassroomLevel,
                             Class = clazz,
                             Student = student,
                             Category = ssa.Category,

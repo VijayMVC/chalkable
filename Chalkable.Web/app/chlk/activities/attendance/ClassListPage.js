@@ -233,6 +233,15 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var grid = option.parent('.chlk-grid');
                 var form = option.parent('.student-attendance-form');
                 var row = option.parent('.row');
+
+                switch(level) {
+                    case null: level = 'Present'; break;
+                    case 'T':  level = 'Tardy'; break;
+                    case 'A':
+                    case 'AO': level = 'Absent'; break;
+                    default:   level = 'Missing';
+                }
+
                 this.changeAttendance_(form.getData('person-id'), form.getData('type'), id, level);
                 grid.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
             },
