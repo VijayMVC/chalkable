@@ -10,7 +10,8 @@ REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
-    var titleTimeout, wasTypeChanged, wasExistingTitle, wasDisabledBtn, wasDateChanged, wasTitleSaved;
+    var titleTimeout, wasTypeChanged, wasExistingTitle, wasDisabledBtn, wasDateChanged, wasTitleSaved,
+        listLastTimeout;
 
     /** @class chlk.activities.announcement.AnnouncementFormPage*/
     CLASS(
@@ -31,8 +32,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(wasTypeChanged && wasExistingTitle && wasTitleSaved)
                     this.disableSubmitBtn();
                 wasTypeChanged = false;
-                if(model instanceof chlk.models.announcement.LastMessages)
+                if(model instanceof chlk.models.announcement.LastMessages){
                     this.dom.find('#content').trigger('focus');
+                    var node = this.dom.find('.no-assignments-text');
+                    listLastTimeout = setTimeout(function(){
+                        node.fadeOut();
+                    }, 2000)
+                }
+
             },
 
             [ria.mvc.DomEventBind('click', '#check-title-button')],

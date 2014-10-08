@@ -61,21 +61,21 @@
 
      @{
              var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-             var isDemoSchool = !string.IsNullOrEmpty((string)ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY));
-             var demoSchoolPictureDistrictRef = ViewData.GetValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
+             var isDemoSchool = ViewData.ContainsKey(ViewConstants.IS_DEV) && !string.IsNullOrEmpty(ViewData[ViewConstants.DEMO_PREFIX_KEY].ToString());
+             var demoSchoolPictureDistrictRef = ViewData.GetJsConstantValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
              
         }
 
-    <body class ="@ViewData.GetValueOrNull(ViewConstants.ROLE_NAME)">
+    <body class ="@ViewData[ViewConstants.ROLE_NAME]">
         <div id="fb-root"></div>
-        <input type="hidden" value=" ServerTime :  @ViewData.GetValueOrNull("CurrentServerDateTime")"/>
-        <input type="hidden" value=" ServerDbTime:  @ViewData.GetValueOrNull("CurrentServerDBDateTime")"/>
+        <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
+        <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
 
         <div id="page-header">
             Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
             @if (!isDemoSchool)
             {
-                @:Last Sync Date: @ViewData.GetValueOrNull(ViewConstants.LAST_SYNC_DATE) 
+                @:Last Sync Date: @ViewData[ViewConstants.LAST_SYNC_DATE] 
             }
         </div>
         
@@ -183,11 +183,11 @@
         @RenderSection("MixPanelTracking", false)
         
 <script type="text/json" id="application-value" class="valuable-script">
-    @Html.Raw(@ViewData.GetValueOrNull(ViewConstants.DEFAULT_APPLICATION))
+    @Html.Raw(@ViewData[ViewConstants.DEFAULT_APPLICATION])
 </script>
 
     <script type="text/json" id="applications-value" class="valuable-script">
-    @Html.Raw(@ViewData.GetValueOrNull(ViewConstants.APPLICATIONS))
+    @Html.Raw(@ViewData[ViewConstants.APPLICATIONS])
 </script>
 
         <script type="text/javascript">
@@ -291,29 +291,28 @@
         </script>
 
         <script type="text/javascript">
-        
-            function parseJsonToObj(json){
-                return json ? JSON.parse(HtmlEncode(json)).data : null;
+            function getObj(json){
+                return json ? json.data : null;
             }
-            function parseJsonToArray(json){
-                return parseJsonToObj(json) || [];
+            function getArray(json){
+                return getObj(json) || [];
             }
 
             var notificationsInterval;
-            var school = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL)');
-            var schoolOptions = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.SCHOOL_OPTIONS)');
-            var newNotifications = parseInt('@ViewData.GetValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT)', 10) || 0;
-            var azurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.AZURE_PICTURE_URL)';
-            var demoAzurePictureUrl = '@ViewData.GetValueOrNull(ViewConstants.DEMO_AZURE_PICTURE_URL)';
+            var school = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL));
+            var schoolOptions = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL_OPTIONS));
+            var newNotifications = parseInt(@ViewData.GetJsConstantValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT), 10) || 0;
+            var azurePictureUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.AZURE_PICTURE_URL);
+            var demoAzurePictureUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.DEMO_AZURE_PICTURE_URL);
 
-            var USER_ROLE_EXT = '@ViewData.GetValueOrNull("Rolename")';
-            var currentSchoolYearId = '@ViewData.GetValueOrNull(ViewConstants.CURR_SCHOOL_YEAR_ID)';
-            var serverTime = '@ViewData.GetValueOrNull(ViewConstants.SERVER_TIME)';
+            var USER_ROLE_EXT = @ViewData.GetJsConstantValueOrNull("Rolename");
+            var currentSchoolYearId = @ViewData.GetJsConstantValueOrNull(ViewConstants.CURR_SCHOOL_YEAR_ID);
+            var serverTime = @ViewData.GetJsConstantValueOrNull(ViewConstants.SERVER_TIME);
             var clientTime = new Date();
-            var schoolYearServerTime = '@ViewData.GetValueOrNull(ViewConstants.SCHOOL_YEAR_SERVER_TIME)';
-            var currentChlkPerson = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.CURRENT_PERSON)');
-            var classesToFilter = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES)');
-            var classesAdvancedData = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.CLASSES_ADV_DATA)');
+            var schoolYearServerTime = @ViewData.GetJsConstantValueOrNull(ViewConstants.SCHOOL_YEAR_SERVER_TIME);
+            var currentChlkPerson = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.CURRENT_PERSON));
+            var classesToFilter = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.CLASSES));
+            var classesAdvancedData = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.CLASSES_ADV_DATA));
             var scriptsRoot = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot';
             var classesInfo = {};
             classesAdvancedData && classesAdvancedData.forEach(function (el) {
@@ -325,20 +324,20 @@
                 };
             });
 
-            var markingPeriod =  parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.MARKING_PERIOD)');
-            var nextMarkingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.NEXT_MARKING_PERIOD)');
-            var gradingPeriod = parseJsonToObj('@ViewData.GetValueOrNull(ViewConstants.GRADING_PERIOD)');
-            var finalizedClassesIds = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.FINALIZED_CLASSES_IDS)'); 
-            var attendanceReasons = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ATTENDANCE_REASONS)');
-            var gradeLevels = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADE_LEVELS)') || [];
-            var userClaims = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.USER_CLAIMS)');
-            var alphaGrades = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALPHA_GRADES)');
-            var alternateScores = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.ALTERNATE_SCORES)');
-            var gradingComments = parseJsonToArray('@ViewData.GetValueOrNull(ViewConstants.GRADING_COMMMENTS)');
-            var DEMO_SCHOOL = JSON.parse('@isDemoSchool.ToString().ToLowerInvariant()');
-            var DEMO_SCHOOL_PICTURE_DISTRICT = '@demoSchoolPictureDistrictRef';
+            var markingPeriod =  getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MARKING_PERIOD));
+            var nextMarkingPeriod = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.NEXT_MARKING_PERIOD));
+            var gradingPeriod = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_PERIOD));
+            var finalizedClassesIds = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.FINALIZED_CLASSES_IDS)); 
+            var attendanceReasons = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ATTENDANCE_REASONS));
+            var gradeLevels = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADE_LEVELS));
+            var userClaims = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.USER_CLAIMS));
+            var alphaGrades = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ALPHA_GRADES));
+            var alternateScores = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ALTERNATE_SCORES));
+            var gradingComments = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_COMMMENTS));
+            var DEMO_SCHOOL = @isDemoSchool.ToString().ToLowerInvariant();
+            var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
             
-            var redirectUrl = '@ViewData[ViewConstants.REDIRECT_URL_KEY]';
+            var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

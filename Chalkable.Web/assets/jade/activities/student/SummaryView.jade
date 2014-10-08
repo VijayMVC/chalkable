@@ -18,13 +18,13 @@ statusData = self.getStatusData()
                     if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
                         |&nbsp;- #{user.getRoomName()}
                 .glance-container
-                    if self.getUser().getRankBox()
+                    if user.getRankBox() && user.isAbleViewTranscript()
                         +GlanceBox(null, null, self.buildRankGlanceBoxData())
-                    if self.getUser().getAttendanceBox()
+                    if user.getAttendanceBox()
                         +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, null, true, true)
-                    if self.getUser().getDisciplineBox()
+                    if user.getDisciplineBox()
                         +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
-                    if self.getUser().getGradesBox()
+                    if user.getGradesBox()
                         +GlanceBox(null, null, self.buildGradesGlanceBoxData(), null, null, true, true)
         if user.getPeriodSection()
             .today-work-panel

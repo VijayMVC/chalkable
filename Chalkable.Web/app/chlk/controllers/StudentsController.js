@@ -166,6 +166,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data){
                         var role = new chlk.models.people.Role();
                         role.setId(chlk.models.common.RoleEnum.STUDENT.valueOf());
+                        data.setAbleViewTranscript(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_TRANSCRIPT));
                         data.setRole(role);
                         return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data, this.getUserClaims_());
                     }, this);
