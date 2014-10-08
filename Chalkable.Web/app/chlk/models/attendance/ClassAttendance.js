@@ -47,9 +47,6 @@ NAMESPACE('chlk.models.attendance', function () {
                 case 'H' : return this._attTypeEnum.ABSENT;
                 case 'HO' : return this._attTypeEnum.ABSENT;
                 case this._attLevelEnum.LATE_LEVEL.valueOf() : return this._attTypeEnum.LATE;
-                case 'Absent': return this._attTypeEnum.ABSENT;
-                case 'Tardy': return this._attTypeEnum.LATE;
-                case 'Missing': return this._attTypeEnum.ABSENT;
             }
             throw new Exception('Unknown attendance level ');
         },

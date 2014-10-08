@@ -126,24 +126,13 @@ NAMESPACE('chlk.activities.attendance', function () {
             chlk.models.attendance.SeatingChart, 'model',
 
             Array, function getAttendances_(){
-                function mapper(level) {
-                    switch(level) {
-                        case null: level = 'Present'; break;
-                        case 'T':  level = 'Tardy'; break;
-                        case 'A':
-                        case 'AO': level = 'Absent'; break;
-                        default:   level = 'Missing';
-                    }
-                    return level;
-                }
-
                 var res = [];
                 var attendancesNodes = new ria.dom.Dom('.attendance-data');
                 attendancesNodes.forEach(function(node){
                     res.push({
                         personId: node.getData('id'),
                         type: node.getData('type'),
-                        level: mapper(node.getData('level')),
+                        level: node.getData('level'),
                         attendanceReasonId: node.getData('reason-id')
                     });
                 });

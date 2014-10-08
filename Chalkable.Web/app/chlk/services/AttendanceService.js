@@ -98,8 +98,8 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function markAllPresent(classId, date) {
-                var level = 'Present'; // new chlk.models.attendance.AttendanceTypeMapper()
-                    //.mapBack(chlk.models.attendance.AttendanceTypeEnum.PRESENT);
+                var level =  new chlk.models.attendance.AttendanceTypeMapper()
+                    .mapBack(chlk.models.attendance.AttendanceTypeEnum.PRESENT);
 
                 return this.get('Attendance/SetAttendanceForClass.json', Boolean, {
                     classId: classId && classId.valueOf(),
