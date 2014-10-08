@@ -25,8 +25,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
         {
-            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId);
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new GradebookReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
@@ -60,7 +60,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 anns = anns.Where(x => x.SisActivityId.HasValue && inputModel.AnnouncementIds.Contains(x.Id)).ToList();
                 activityIds = anns.Select(x => x.SisActivityId.Value).ToArray();    
             }
-            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId);
+
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new WorksheetReportParams
                 {
                     ActivityIds = activityIds,
@@ -83,7 +85,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
             if (CoreRoles.TEACHER_ROLE == Context.Role)
                 stiModel.StaffId = Context.PersonId;
-            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
             stiModel.AcadSessionId = gp.SchoolYearRef;
             return ConnectorLocator.ReportConnector.WorksheetReport(stiModel);
         }
@@ -141,7 +142,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var inowReportComments = ConnectorLocator.ReportConnector.GetProgressReportComments(classId, gradingPeriodId);
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             int markingPeriodId = gp.MarkingPeriodRef;
-            var students = ServiceLocator.PersonService.GetClassStudents(classId, null, markingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, markingPeriodId);
             var res = new List<StudentCommentInfo>();
             foreach (var inowStudentComment in inowReportComments)
             {

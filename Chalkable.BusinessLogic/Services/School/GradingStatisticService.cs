@@ -208,7 +208,7 @@ namespace Chalkable.BusinessLogic.Services.School
             annQuery.ToDate = gradingPeriod.EndDate;
             var classRoomOptions = gradebook.Options;
             Trace.WriteLine("GetClassStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            var students = ServiceLocator.PersonService.GetClassStudents(classId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true, mpId);
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, mpId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true);
             Trace.WriteLine("GetAnnouncementsComplex " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
             Trace.WriteLine("BuildGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);

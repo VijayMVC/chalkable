@@ -37,8 +37,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     var cp = ServiceLocator.ClassService.GetClassPerson(classId, student.Id);
                     if ((cp.IsEnrolled || (options != null && options.IncludeWithdrawnStudents)) && cp.MarkingPeriodRef == mp.Id) students.Add(student);
                 }
-                else students = ServiceLocator.PersonService.GetClassStudents(classId
-                    , options != null && options.IncludeWithdrawnStudents ? (bool?)null : true, mp.Id);
+                else students = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id
+                    , options != null && options.IncludeWithdrawnStudents ? (bool?)null : true);
                 var cClass = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var res = new List<ClassDisciplineDetails>();
                 foreach (var student in students)

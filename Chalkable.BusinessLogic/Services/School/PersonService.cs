@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -30,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Person> GetAll();
         int GetSisUserId(int personId);
         IList<Person> GetTeacherStudents(int teacherId, int schoolYearId);
-        IList<Person> GetClassStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null);
+        IList<Person> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -306,12 +307,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Person> GetClassStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
+        public IList<Person> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                return da.GetStudents(classId, isEnrolled, markingPeriodId);
+                return da.GetStudents(classId, markingPeriodId, isEnrolled);
             }
         }
     }

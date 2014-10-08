@@ -422,7 +422,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
 
-        public IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
+        public IList<Person> GetStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
             var sql = new StringBuilder();
             sql.Append(@"select distinct
@@ -434,6 +434,7 @@ namespace Chalkable.Data.School.DataAccess
                             Salutation = vwPerson.Salutation,
                             Active = vwPerson.Active,
                             IsEnrolled = ClassPerson.IsEnrolled,
+                            SchoolEnrollmentStatus = StudentSchoolYear.EnrollmentStatus,
                             RoleRef = vwPerson.RoleRef
                         from 
                             vwPerson
@@ -441,17 +442,16 @@ namespace Chalkable.Data.School.DataAccess
                             join MarkingPeriod on ClassPerson.MarkingPeriodRef = MarkingPeriod.Id
                             join StudentSchoolYear on ClassPerson.PersonRef = StudentSchoolYear.StudentRef and StudentSchoolYear.SchoolYearRef = MarkingPeriod.SchoolYearRef
                         where ")
-               .AppendFormat("ClassPerson.ClassRef = {0} ", classId);
-            if (markingPeriodId.HasValue)
-                sql.AppendFormat("and MarkingPeriod.Id = {0} ", markingPeriodId.Value);
+               .AppendFormat("ClassPerson.ClassRef = {0} ", classId)
+               .AppendFormat("and MarkingPeriod.Id = {0} ", markingPeriodId);
             if (isEnrolled.HasValue)
             {
                 var enrollentStatus = isEnrolled.Value
                                           ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
                                           : StudentEnrollmentStatusEnum.PreviouslyEnrolled;
-                if (markingPeriodId.HasValue)
-                    sql.AppendFormat("and StudentSchoolYear.EnrollmentStatus = {0} ", (int)enrollentStatus)
-                       .AppendFormat("and ClassPerson.IsEnrolled = {0} ", isEnrolled.Value ? 1 : 0);
+
+                sql.AppendFormat("and StudentSchoolYear.EnrollmentStatus = {0} ", (int)enrollentStatus)
+                   .AppendFormat("and ClassPerson.IsEnrolled = {0} ", isEnrolled.Value ? 1 : 0);
             }
             var res = new List<Person>();
             using (var reader = ExecuteReaderParametrized(sql.ToString(), new Dictionary<string, object>()))
@@ -459,7 +459,8 @@ namespace Chalkable.Data.School.DataAccess
                 while (reader.Read())
                 {
                     var p = reader.Read<Person>();
-                    p.IsWithdrawn = !SqlTools.ReadBool(reader, "IsEnrolled");
+                    p.IsWithdrawn = !SqlTools.ReadBool(reader, "IsEnrolled") 
+                        || SqlTools.ReadInt32(reader, "SchoolEnrollmentStatus") != (int)StudentEnrollmentStatusEnum.CurrentlyEnrolled;
                     res.Add(p);
                 }
             }
