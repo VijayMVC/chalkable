@@ -55,8 +55,8 @@
 </head>
     <body>
         <div id="fb-root"></div>
-        <input type="hidden" value=" ServerTime :  @ViewData.GetValueOrNull("CurrentServerDateTime")"/>
-        <input type="hidden" value=" ServerDbTime:  @ViewData.GetValueOrNull("CurrentServerDBDateTime")"/>
+        <input type="hidden" value=" ServerTime : @ViewData["CurrentServerDateTime"]"/>
+        <input type="hidden" value=" ServerDbTime: @ViewData["CurrentServerDBDateTime"]"/>
 
         <div id="page-header">
             Revision: @Chalkable.Web.Tools.CompilerHelper.Version

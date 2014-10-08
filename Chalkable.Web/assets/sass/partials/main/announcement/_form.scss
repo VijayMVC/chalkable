@@ -676,6 +676,12 @@ BODY {
             .left-block{
               position: relative;
 
+              .no-assignments-text{
+                position: absolute;
+                font: normal 14px Arial;
+                font-style: italic;
+              }
+
               .drawer-icon{
                 background: url(images/announcement/all-files-icon.png) 0 0 no-repeat;
                 width: 20px;

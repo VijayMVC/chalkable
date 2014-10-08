@@ -78,7 +78,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     Hover = TotalAbsencesPerClassViewData.Create(attendances, classDetailses),
                 };
             if (dailyAbsenceSummary != null && dailyAbsenceSummary.Absences != null)
-                res.Title = (dailyAbsenceSummary.Absences + dailyAbsenceSummary.Tardies).ToString();
+                res.Title = (dailyAbsenceSummary.Absences).ToString(); // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
             return res;
         }
 
