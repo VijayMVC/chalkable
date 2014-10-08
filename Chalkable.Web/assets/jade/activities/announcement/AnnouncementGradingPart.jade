@@ -38,7 +38,10 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     .i-b.name-block
                         .p-container
                             +ProfileLink(student, 'student')
-                                p= student.getFullName()
+                                .wrapper
+                                    p= student.getFullName()
+                                    if student.isWithdrawn()
+                                        div(data-tooltip=Msg.Withdrawn).withdrawn
                         if !readonly
                             SPAN.container
                                 SPAN.comment-grade

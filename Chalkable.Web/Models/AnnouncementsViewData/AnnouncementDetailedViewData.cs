@@ -59,7 +59,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 Dropped = x.Dropped,
                 ExtraCredit = x.ExtraCredit,
                 ScoreValue = x.ScoreValue,
-                NumericScore = x.NumericScore
+                NumericScore = x.NumericScore,
+                IsWithdrawn = x.Student.IsWithdrawn
             }).ToList();
             return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements, mapper, currentSchoolPersonId);
         }

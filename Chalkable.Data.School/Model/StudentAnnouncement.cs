@@ -57,6 +57,8 @@ namespace Chalkable.Data.School.Model
         {
             get { return (NumericScore.HasValue || Late) && !Incomplete && !Dropped; }
         }
+
+        public bool? IsWithdrawn { get; set; }
     }
 
     public class StudentAnnouncementDetails : StudentAnnouncement
