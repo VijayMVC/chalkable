@@ -1,0 +1,24 @@
+#chlk-dialogs{
+  .dialog{
+    padding: 20px 30px;
+    &.delete-app {
+      h1{
+        margin-bottom: 25px;
+        font-size: 24px;
+      }
+      .msg-detail{
+        width: 390px;
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      .msg-action{
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 35px;
+      }
+    }
+  }
+}

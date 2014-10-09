@@ -1,0 +1,61 @@
+BODY {
+  DIV.page {
+    #content {
+      > DIV {
+        #main-wrapper {
+          #main {
+            DIV.developer {
+
+              h2{
+                background: url(images/profile/header-line.png) 0 0 no-repeat !important;
+                padding-top: 8px;
+                padding-bottom: 12px;
+                font-family: tahoma, arial, helvetica, sans-serif;
+                color: #808080;
+                margin-left: -3px;
+              }
+
+
+              .info{
+                position: relative;
+
+                .hint{
+                  font-size: 11px;
+                  position: absolute;
+                  top: 10px;
+                  right: 0;
+                }
+
+
+                .bg-line{
+                  background: url(images/profile/header-line.png) 0 10px no-repeat;
+                  height: 15px;
+                  width: auto;
+                }
+                font: normal 12px tahoma, arial, helvetica, sans-serif;
+                margin-top: 246px;
+
+                label{
+                  color: #808080;
+                  font-size: 1.2em;
+                  width: 149px;
+                  display: inline-block;
+                  margin-bottom: 9px;
+                  font-weight: bold;
+
+                }
+                input{
+                  width: 60%;
+                }
+
+                .align-right{
+                  text-align: right;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
