@@ -135,7 +135,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 if (c == null) continue;
                 res.Add(new TotalAbsencesPerClassViewData
                 {
-                    Absences = classAttendanceSummary.Absences + classAttendanceSummary.Tardies,
+                    Absences = classAttendanceSummary.Absences, // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
                     Class = ShortClassViewData.Create(c)
                 });
             }
