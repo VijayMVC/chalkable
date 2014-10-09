@@ -12,6 +12,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public DateTime? BirthDate { get; set; }
         public string Salutation { get; set; }
         public bool Active { get; set; }
+        public SchoolYear CurrentSchoolYear { get; set; }
         
         protected PersonViewData(Person person): base(person)
         {
@@ -24,6 +25,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             return new PersonViewData(person);
         }
+
+
+        public static new PersonViewData Create(Person person, SchoolYear schoolYear)
+        {
+            var data = Create(person);
+            data.CurrentSchoolYear = schoolYear;
+            return data;
+        }
+
         public static new IList<PersonViewData> Create(IList<Person> person)
         {
             return person.Select(Create).ToList();
