@@ -25,6 +25,7 @@ namespace Chalkable.BackgroundTaskProducer
             
             cp.AddProducer("Sis Import Producer", new AllDistrictsProducer("SisImportProducer", BackgroundTaskTypeEnum.SisDataImport));
             cp.AddProducer("Cleanup Manager", new CleanupManager("CleanupManager"));
+            cp.AddProducer("Db backup Producer", new DbBackupProducer("DbBackupProducer"));
             var raygunClient = new RaygunClient();
             raygunClient.ApplicationVersion = CompilerHelper.Version;      
             while (true)
