@@ -355,14 +355,12 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<StudentAcadSession>().Deleted == null)
                 return;
             var assignments = context.GetSyncResult<StudentAcadSession>().Deleted
-                                     .Where(x => x.GradeLevelID.HasValue) //TODO: what about this? GL is not assigned?
                                      .Select(x => new StudentSchoolYear
                                          {
                                              GradeLevelRef = x.GradeLevelID.Value,
                                              SchoolYearRef = x.AcadSessionID,
                                              StudentRef = x.StudentID
                                          }).ToList();
-            Log.LogInfo(string.Format("studentSchoolYear count for delete {0}", assignments.Count));
             ServiceLocatorSchool.SchoolYearService.UnassignStudents(assignments);
         }
 
