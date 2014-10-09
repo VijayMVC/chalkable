@@ -89,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             SendMail(mailMessage, sysEMail);
         }
 
-        private const string developerConfirmUrlFormat = "{0}/Developer/Confirm?key={1}&applicationId={2}";
+        private const string developerConfirmUrlFormat = "{0}/Developer/GoLive?key={1}&applicationId={2}";
         public void SendApplicationEmailToDeveloper(Application application)
         {
 
