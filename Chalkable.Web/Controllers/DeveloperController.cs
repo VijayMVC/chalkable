@@ -136,7 +136,7 @@ namespace Chalkable.Web.Controllers
             return Json(DeveloperViewData.Create(res));
         }
 
-        public ActionResult Confirm(string key, Guid applicationId)
+        public ActionResult GoLive(string key, Guid applicationId)
         {
             return Confirm(key, (context) => RedirectAction(context, applicationId));
         }
