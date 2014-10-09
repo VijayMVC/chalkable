@@ -61,7 +61,7 @@
 
      @{
              var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-             var isDemoSchool = ViewData.ContainsKey(ViewConstants.IS_DEV) && !string.IsNullOrEmpty(ViewData[ViewConstants.DEMO_PREFIX_KEY].ToString());
+             var isDemoSchool = ViewData.ContainsKey(ViewConstants.DEMO_PREFIX_KEY) && !string.IsNullOrEmpty(ViewData[ViewConstants.DEMO_PREFIX_KEY].ToString());
              var demoSchoolPictureDistrictRef = ViewData.GetJsConstantValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
              
         }

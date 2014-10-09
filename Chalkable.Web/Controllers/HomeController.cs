@@ -46,6 +46,8 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(SysAdminViewData.Create(sysUser), ViewConstants.CURRENT_PERSON);
+            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss");
+            ViewData[ViewConstants.SERVER_TIME] = serverTime;
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MixPanelService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
             return View();

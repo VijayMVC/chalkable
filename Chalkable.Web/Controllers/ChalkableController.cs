@@ -118,7 +118,7 @@ namespace Chalkable.Web.Controllers
                 var user = masterL.UserService.GetByLogin(userName);
                 InitServiceLocators(user, schoolYearId);
                 var claims = (User.Identity as ClaimsIdentity).Claims;
-                var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value;
+                var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value.Split(',').FirstOrDefault();
                 SchoolLocator.Context.IsOAuthUser = true;
                 SchoolLocator.Context.SisToken = user.LoginInfo.SisToken;
                 SchoolLocator.Context.SisTokenExpires = user.LoginInfo.SisTokenExpires;
