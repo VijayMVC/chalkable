@@ -118,7 +118,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 return Json(new { data = errorMessage, success = false });
             //ReLogOn(res);
             var res = SchoolLocator.PersonService.GetPersonDetails(personId);
-            return Json(PersonViewData.Create(res));
+            return Json(PersonInfoViewData.Create(res));
         }
 
     }
