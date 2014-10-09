@@ -41,7 +41,10 @@ items = self.getMessages().getItems()
                     .no-messages-text=self.getNoMessagesText()
                 each item in items
                     +GridRow()
-                        div(class= item.isRead() ? "read" : "unread").item-container
+                        div(
+                            class= item.isRead() ? "read" : "unread",
+                            data-can-read = self.getCurrentUser().getId() == item.getRecipient().getId()
+                        ).item-container
                             .chk
                                 +Checkbox('ch',false)(data-id=item.getId().valueOf())
                             .av

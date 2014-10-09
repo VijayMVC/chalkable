@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Model
     {
         public Person StudentInfo { get; set; }
         public ClassRankInfo ClassRank { get; set; }
+        public int? CurrentSectionId { get; set; }
         public string CurrentAttendanceLevel { get; set; }
         public DailyAbsenceSummaryInfo DailyAttendance { get; set; }
         public int TotalDisciplineOccurrences { get; set; }
@@ -28,6 +29,7 @@ namespace Chalkable.BusinessLogic.Model
                 {
                     StudentInfo = student, 
                     ClassRank = nowDashboard.ClassRank != null ? ClassRankInfo.Create(nowDashboard.ClassRank) : null,
+                    CurrentSectionId = nowDashboard.CurrentSectionId,
                     TotalDisciplineOccurrences = nowDashboard.Infractions.Sum(x=>x.Occurrences),
                     InfractionSummaries = InfractionSummaryInfo.Create(nowDashboard.Infractions.ToList(), infractions),
                     StudentAnnouncements = new List<StudentAnnouncement>(),

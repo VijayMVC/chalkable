@@ -42,12 +42,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var classList = sortedClassRefs.Select(sortedClassRef => classes.FirstOrDefault(cls => cls.Id == sortedClassRef)).Where(c => c != null).ToList();
             classList.AddRange(classes.Where(cls => !sortedClassRefs.Contains(cls.Id)));
 
-            var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
             Room currentRoom = null;
             ClassDetails currentClass = null;
-            if (currentClassPeriod != null)
+            if (studentSummaryInfo.CurrentSectionId.HasValue)
             {
-                currentClass = classes.FirstOrDefault(x => x.Id == currentClassPeriod.ClassRef);
+                currentClass = classes.FirstOrDefault(x => x.Id == studentSummaryInfo.CurrentSectionId.Value);
                 if (currentClass != null && currentClass.RoomRef.HasValue)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
 
