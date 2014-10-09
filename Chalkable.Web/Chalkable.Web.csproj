@@ -318,6 +318,7 @@
     <Compile Include="Models\PeriodViewData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\MarkingPeriodViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\CurrentPersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonInfoViewData.cs" />

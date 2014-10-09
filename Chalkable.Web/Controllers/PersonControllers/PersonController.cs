@@ -23,8 +23,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
-            var schoolYear = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            return Json(PersonViewData.Create(person, schoolYear));
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException("User has no valid school year id");
+            if (!Context.DistrictId.HasValue || !Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException("User is not assigned to any school");
+            return Json(CurrentPersonViewData.Create(person, Context.DistrictId.Value, Context.SchoolYearId.Value, Context.SchoolLocalId.Value));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
