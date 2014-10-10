@@ -504,6 +504,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 var res = da.GetDetails(announcement.AnnouncementId, Context.PersonId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
                 {
+                    var studentAnnouncements = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(announcement.AnnouncementId);
+                    res.GradingStudentsCount = studentAnnouncements.Count(x => x.IsGraded);
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     foreach (var activityStandard in activity.Standards)
                     {

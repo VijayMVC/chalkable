@@ -177,7 +177,7 @@ NAMESPACE('chlk.controls', function () {
                         if (!ria.dom.Dom('#' + id + '-hidden').getValue())
                             ria.dom.Dom('#' + id).setValue(null);
                     },
-                    close: function( event, ui ) {console.info(event, ui);
+                    close: function( event, ui ) {
                         if(attrs.clearAfterSelect && !wasButtonClicked){
                             ria.dom.Dom('#' + id).setValue(null);
 
