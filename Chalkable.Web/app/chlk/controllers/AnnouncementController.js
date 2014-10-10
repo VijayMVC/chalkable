@@ -832,6 +832,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setCanAddStandard(model.isCanAddStandard());
                         announcement.setStandards(model.getStandards());
                         announcement.setGradable(model.isGradable());
+                        announcement.setGradingStudentsCount(model.getGradingStudentsCount());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
                     }
