@@ -88,6 +88,30 @@ namespace Chalkable.Web
                 HttpContext.Current.User = chalkableUser;
             }
         }
+
+        void Application_BeginRequest(object source, EventArgs e)
+        {
+            EnsureCorrectDomain(Request, Response);
+        }
+
+
+        private static void EnsureCorrectDomain(HttpRequest httpRequest, HttpResponse httpResponse)
+        {
+            var ensureDomain = ConfigurationManager.AppSettings["Domain"];
+            if (String.IsNullOrWhiteSpace(ensureDomain))
+                return;
+
+            var currentDomain = httpRequest.ServerVariables["SERVER_NAME"];
+            if (currentDomain.Equals(ensureDomain))
+                return;
+            httpResponse.Redirect(
+                String.Format("http{0}://{1}{2}{3}",
+                              httpRequest.IsSecureConnection ? "s" : "",
+                              ensureDomain,
+                              "", // leave default port http or https
+                              httpRequest.Url.PathAndQuery
+                    ));
+        }
     }
 
     

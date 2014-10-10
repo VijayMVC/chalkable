@@ -22,7 +22,8 @@ NAMESPACE('chlk.models.search', function () {
             Number, 'announcementType',
             [ria.serialize.SerializeProperty('isadminannouncement')],
             Boolean, 'adminAnnouncement',
-
+            [ria.serialize.SerializeProperty('smallpictureid')],
+            String, 'smallPictureId',
             [ria.serialize.SerializeProperty('departmentid')],
             chlk.models.id.DepartmentId, 'departmentId',
 

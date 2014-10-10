@@ -35,6 +35,9 @@ NAMESPACE('chlk.templates.search', function () {
             Number, 'chalkableAnnouncementType',
 
             [ria.templates.ModelPropertyBind],
+            String, 'smallPictureId',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.DepartmentId, 'departmentId'
 
         ])
