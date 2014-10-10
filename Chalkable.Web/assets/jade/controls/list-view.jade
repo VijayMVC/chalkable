@@ -1,0 +1,17 @@
+mixin ListView(data)
+    -self.prepareData(data, attributes)
+    -config=self.getConfigs()
+    .chlk-grid(attributes)
+        input.grid-focus
+        if config.needGoToButton
+            .back-top.x-hidden
+                .back-top-arrow
+                A.new-popup
+        if config.needLoadAllButton
+            .load-all-popup.x-hidden
+                .outer-container.new-popup
+                .inner-container
+                    .title=config.totalCount + ' ' + config.loadAllPopUpTitle
+                    .load-all-button
+                        +Button(name="loadAll").blue-gradient-btn=config.loadAllButtonTitle
+        block
