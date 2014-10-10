@@ -617,10 +617,11 @@ namespace Chalkable.StiImport.Services
             {
                 classes = new Dictionary<int, Class>();
                 foreach (var scheduledSection in scheduledSections)
-                {
-                    var c = ServiceLocatorSchool.ClassService.GetById(scheduledSection.SectionID);
-                    classes.Add(c.Id, c);
-                }
+                    if (!classes.ContainsKey(scheduledSection.SectionID))
+                    {
+                        var c = ServiceLocatorSchool.ClassService.GetById(scheduledSection.SectionID);
+                        classes.Add(c.Id, c);
+                    }
             }
             else
                 classes = ServiceLocatorSchool.ClassService.GetAll().ToDictionary(x => x.Id);   
