@@ -36,6 +36,5 @@ namespace Chalkable.Web.Tools
                 return VERSION.Replace('.', '-');    
             }
         }
-
     }
 }
