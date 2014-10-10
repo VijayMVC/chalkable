@@ -325,6 +325,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(res.exceptiontype == 'NoClassAnnouncementTypeException')
                             return this.redirectToErrorPage_(error.toString(), 'error', 'createAnnouncementError', []);
                     }
+                    throw error;
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(model){
@@ -445,6 +446,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(res.exceptiontype == 'NoAnnouncementException')
                     return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
             }
+            throw error;
         },
 
         [[chlk.models.id.AnnouncementId, Object]],
