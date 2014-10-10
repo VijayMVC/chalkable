@@ -159,6 +159,11 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [[chlk.models.id.SchoolPersonId]],
+            function detailsStudentAction(personId){
+                return null;
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
             function detailsAction(personId){
                 var result = this.studentService
                     .getSummary(personId)
