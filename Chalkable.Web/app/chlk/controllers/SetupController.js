@@ -181,6 +181,10 @@ NAMESPACE('chlk.controllers', function (){
                     .changeEmail(model.getEmail())
                     .attach(this.validateResponse_())
                     .then(function(model){
+                        if(model.message){
+                            this.getView().pop();
+                            return this.ShowMsgBox(model.message, '');
+                        }
                         return this.BackgroundNavigate('feed', 'list');
                     }, this);
                 return this.ShadeLoader();
