@@ -41,10 +41,13 @@ NAMESPACE('chlk.templates.profile', function(){
                 var userId = this.getUser().getId().valueOf();
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var isStudentController = controller == this._studentControllerName;
+                var canViewInfo = userId == this.getCurrentUser().getId().valueOf()
+                    || (!this.getUserRole().isStudent() && this.hasUserPermission_(permissionEnum.VIEW_ADDRESS));
                 var res = [
                     this.createActionLinkModel_(controller, 'details', 'Now', pressedLinkName, [userId]),
-                    this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName, [userId],  (!isStudentController && this.getUserRole().isStudent())
-                     || (isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ADDRESS)))
+                    this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName, [userId], !canViewInfo)
+//                    ,  (!isStudentController && this.getUserRole().isStudent())
+//                     || (isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ADDRESS)))
                 ];
                 if(isStudentController){
                     res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId], true));
