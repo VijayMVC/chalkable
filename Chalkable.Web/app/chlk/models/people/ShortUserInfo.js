@@ -78,7 +78,7 @@ NAMESPACE('chlk.models.people', function () {
 
             Boolean, function showAlerts(){
                 var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
-                    || this.getSpecialInstructions() || this.getSpedStatus();
+                    || this.getSpecialInstructions() || this.getSpedStatus() && this.getSpedStatus() != 'Inactive';
                 return !!res;
             },
 
