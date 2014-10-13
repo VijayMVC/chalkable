@@ -13,6 +13,15 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.grading.StudentGradingViewData), 'trouble',
 
             [ria.serialize.SerializeProperty('allstudents')],
-            ArrayOf(chlk.models.grading.StudentGradingViewData), 'allStudents'
+            ArrayOf(chlk.models.grading.StudentGradingViewData), 'allStudents',
+
+            function getUpdatedTrouble(){
+                var res = [], item;
+                for(var i = 0; i < 5; i++){
+                    item = this.getTrouble()[i] || new chlk.models.grading.StudentGradingViewData();
+                    res.push(item);
+                }
+                return res;
+            }
         ]);
 });
