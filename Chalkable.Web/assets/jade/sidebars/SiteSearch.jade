@@ -1,27 +1,39 @@
 li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|' + self.getSearchType().valueOf(), style="background: white")
     div.site-search
-        if self.getSearchType() == 0
-            -roleId = self.getPersonInfo() && self.getPersonInfo().getRole() ? self.getPersonInfo().getRole().getId() : 0
-            -cntrl = roleId == 2 ? "teachers" : roleId == 3 ? "students" : "admins";
-            +ActionLink(cntrl, 'details', self.getId()).left.image-container.white.shadow
-                div.site-search-person
-                    +PersonImg(self.getPersonInfo(), 47)
-                    div.title= self.getDescription()
-        else if self.getSearchType() == 4
-            +ActionLink('class', 'details', self.getId()).left.image-container.white.shadow
-                div.site-search-class
-                    .img-wrapper
-                        +ClassImg(self, 45, 80).avatar
-                    div.title= self.getDescription()
-        else if self.getSearchType() == 3
-            +ActionLink('announcement', 'view', self.getAnnouncementId()).left.image-container.white.shadow
-                div.site-search-attachment
-                    .image
-                    div.title= self.getDescription()
-        else if self.getSearchType() == 2
-            +ActionLink('announcement', 'view', self.getId()).left.image-container.white.shadow
-                div.site-search-announcement
-                    div(class="announcement-type-" + self.getChalkableAnnouncementType()).icon.blue.image
-                    div.title= self.getDescription()
-        else
-            div= self.getDescription()
+        case self.getSearchType()
+            when 0
+                -roleId = self.getPersonInfo() && self.getPersonInfo().getRole() ? self.getPersonInfo().getRole().getId() : 0
+                -cntrl = roleId == 2 ? "teachers" : roleId == 3 ? "students" : "admins";
+                +ActionLink(cntrl, 'details', self.getId()).left.image-container.white.shadow
+                    div.site-search-person
+                        +PersonImg(self.getPersonInfo(), 47)
+                        div.title= self.getDescription()
+            when 4
+                +ActionLink('class', 'details', self.getId()).left.image-container.white.shadow
+                    div.site-search-class
+                        .img-wrapper
+                            +ClassImg(self, 45, 80).avatar
+                        div.title= self.getDescription()
+            when 3
+                +ActionLink('announcement', 'view', self.getAnnouncementId()).left.image-container.white.shadow
+                    div.site-search-attachment
+                        .image
+                        div.title= self.getDescription()
+            when 2
+                +ActionLink('announcement', 'view', self.getId()).left.image-container.white.shadow
+                    div.site-search-announcement
+                        div(class="announcement-type-" + self.getChalkableAnnouncementType()).icon.blue.image
+                        div.title= self.getDescription()
+            when 1
+                +ActionLink('appmarket', 'details', self.getId()).left.image-container.white.shadow
+                    div.site-search-class
+                        .img-wrapper
+                            -var pictureUrl = self.getAppPictureURL(self.getSmallPictureId(), 74, 74)
+                            img(src=pictureUrl, width="74", height="74").avatar
+                        div.title= self.getDescription()
+            default
+                A(href="jvascript:'").left.image-container.white.shadow
+                    .site-search-class
+                        .img-wrapper
+                            img(width="45", height="80").avatar
+                        div.title= self.getDescription()
