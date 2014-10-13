@@ -134,18 +134,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.SchoolPersonStorage.Delete(schoolPersons);
         }
 
-        public IList<Person> GetPersons()
-        {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
-                throw new ChalkableSecurityException();
-
-            return GetPersons(new PersonQuery
-            {
-                Count = int.MaxValue,
-                Start = 0
-            }).Persons;
-        }
-
         public PaginatedList<Person> GetPaginatedPersons(PersonQuery query)
         {
             var res = GetPersons(query);
