@@ -69,7 +69,7 @@ namespace Chalkable.Data.Master.DataAccess
             if (sisUserIds != null && sisUserIds.Count > 0)
             {
                 var builder = new StringBuilder();
-                var whereScrip = string.Format(" [{0}].[{1}] = @[{1}] and [{0}].[{2}] in ({3})"
+                var whereScrip = string.Format(" [{0}].[{1}] = @{1} and [{0}].[{2}] in ({3})"
                                                , "User", User.DISTRICT_REF_FIELD, User.SIS_USER_ID_FIELD,
                                                sisUserIds.Select(x => x.ToString()).JoinString(","));
                        builder.AppendFormat("delete from UserLoginInfo where [{0}] in (select [Id] from [User] where {1}) "

@@ -407,10 +407,10 @@ namespace Chalkable.Data.School.DataAccess
                             vwPerson
                             join ClassPerson on vwPerson.Id = ClassPerson.PersonRef
                             join MarkingPeriod on ClassPerson.MarkingPeriodRef = MarkingPeriod.Id
-                            join Class on ClassPerson.ClassRef = Class.Id
                         where ")
                .AppendFormat("MarkingPeriod.SchoolYearRef = ").Append(psy)
-               .AppendFormat(" and Class.PrimaryTeacherRef = ").Append(ptid);
+               .AppendFormat(" and ClassPerson.ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = {0})", ptid);
+               //.AppendFormat(" and Class.PrimaryTeacherRef = ").Append(ptid);
 
             var ps = new Dictionary<string, object>
                 {

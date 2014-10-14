@@ -115,8 +115,11 @@ namespace Chalkable.Data.Common.Backup
                 Trace.WriteLine(string.Format("Request Falied:{0}", responseException.Message));
                 if (responseException.Response != null)
                 {
-                    Trace.WriteLine(string.Format("Status Code: {0}", ((HttpWebResponse)responseException.Response).StatusCode));
-                    Trace.WriteLine(string.Format("Status Description: {0}\n\r", ((HttpWebResponse)responseException.Response).StatusDescription));
+                    var statusCodeLine = string.Format("Status Code: {0}", ((HttpWebResponse) responseException.Response).StatusCode);
+                    var messageLine = string.Format("Status Description: {0}\n\r", ((HttpWebResponse)responseException.Response).StatusDescription);
+                    Trace.WriteLine(statusCodeLine);
+                    Trace.WriteLine(messageLine);
+                    throw new Exception(responseException.Message, new Exception(statusCodeLine + "\n" + messageLine));
                 }
                 throw;
             }

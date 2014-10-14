@@ -350,7 +350,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     ableDropStudentScore : this.isAbleDropStudentScore(),
                     ableToExempt : this.isAbleToExempt()
                 });
-                var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());
+                var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf()).find('.grade-container');
                 if(itemModel.isEmptyGrade()){
                     container.parent('form').addClass('empty-grade-form');
                 }
@@ -362,7 +362,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var topContent = this.dom.find('#top-content-' + itemModel.getStudentId().valueOf());
                 topContent.removeClass('loading');
                 itemTpl.renderTo(container);
-                container.find('.grade-input').trigger('focus').trigger('select');
+                container.find('.grade-input:visible').trigger('focus').trigger('select');
             },
 
             //TODO copied from GridPage
