@@ -38,6 +38,12 @@ NAMESPACE('chlk.activities.feed', function () {
                 return false;
             },
 
+            [ria.mvc.DomEventBind('click', '.notifications-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function notificationsClick(node, event){
+                this.dom.find('.new-notification-count').remove();
+            },
+
             function stopInterval(){
                 clearInterval(window.notificationsInterval);
                 window.notificationsInterval = null;
