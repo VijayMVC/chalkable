@@ -350,7 +350,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     ableDropStudentScore : this.isAbleDropStudentScore(),
                     ableToExempt : this.isAbleToExempt()
                 });
-                var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());
+                var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf()).find('.grade-container');
                 if(itemModel.isEmptyGrade()){
                     container.parent('form').addClass('empty-grade-form');
                 }

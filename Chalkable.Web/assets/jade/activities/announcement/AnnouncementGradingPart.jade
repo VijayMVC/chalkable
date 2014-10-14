@@ -58,14 +58,16 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                                         .grading-comments-list
                                                         span.enter=Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
-                        +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
-                            userRole = self.getUserRole()
-                            maxScore = self.getMaxScore()
-                            ableDropStudentScore = self.isAbleDropStudentScore()
-                            ableToExempt = self.isAbleToExempt(),
-                            readonly = readonly,
-                            rowIndex = i
-                        )
+                        div(class=item.getAttachments() && item.getAttachments().length ? "" : "no-attachments").grade-triangle
+                        .grade-container
+                            +RenderWith(item, chlk.templates.announcement.StudentAnnouncement)(
+                                userRole = self.getUserRole()
+                                maxScore = self.getMaxScore()
+                                ableDropStudentScore = self.isAbleDropStudentScore()
+                                ableToExempt = self.isAbleToExempt(),
+                                readonly = readonly,
+                                rowIndex = i
+                            )
         .attachments-container.z-10
             .attachments-container-2
                 each attachment, i in item.getAttachments()
