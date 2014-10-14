@@ -89,7 +89,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 da.Update(annQnA);
                 uow.Commit();
-                ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
+                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(annQnA.AnnouncementRef);
+                if(ann.VisibleForStudent)
+                    ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
                 return annQnA;
             }
         }
