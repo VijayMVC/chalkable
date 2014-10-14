@@ -20,7 +20,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<Person> personInfos);
         void Delete(int id);
         void Delete(IList<int> ids);
-        IList<Person> GetPersons();
         PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
         PersonDetails GetPersonDetails(int id);
         Person GetPerson(int id);
@@ -76,18 +75,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Delete(id);
                 uow.Commit();
             }
-        }
-
-        public IList<Person> GetPersons()
-        {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
-                throw new ChalkableSecurityException();
-
-            return GetPersons(new PersonQuery 
-                {
-                    Count = int.MaxValue,
-                    Start = 0
-                }).Persons;
         }
 
         public PaginatedList<Person> GetPaginatedPersons(PersonQuery query)

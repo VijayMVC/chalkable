@@ -357,7 +357,6 @@ namespace Chalkable.StiImport.Services
             var assignments = context.GetSyncResult<StudentAcadSession>().Deleted
                                      .Select(x => new StudentSchoolYear
                                          {
-                                             GradeLevelRef = x.GradeLevelID.Value,
                                              SchoolYearRef = x.AcadSessionID,
                                              StudentRef = x.StudentID
                                          }).ToList();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -14,7 +15,6 @@ namespace Chalkable.Data.Common.Backup
 {
     public class BackupHelper : BaseStorageHelper
     {
-        private const string END_POINT_URI = "https://bl2prod-dacsvc.azure.com/DACWebService.svc";
         public const string BACKUP_CONTAINER = "databasebackupcontainer";
 
         private static ConnectionInfo BuildConnectionInfo(string serverName, string databaseName)
@@ -73,10 +73,22 @@ namespace Chalkable.Data.Common.Backup
             return importInputs;
         }
 
+        private static string Endpoint
+        {
+            get
+            {
+                var endpoint = ConfigurationManager.AppSettings["DbBackupServiceUrl"];
+                if (string.IsNullOrEmpty(endpoint))
+                    throw new Exception("Db export endpoint is not configured");
+                return endpoint;
+            }
+        }
+
         public static string DoExport(long time, string serverName, string databaseName)
         {
             var exportInputs = BuildExportInput(time, serverName, databaseName);
-            WebRequest webRequest = WebRequest.Create(END_POINT_URI + @"/Export");
+
+            WebRequest webRequest = WebRequest.Create(Endpoint + @"/Export");
             webRequest.Method = WebRequestMethods.Http.Post;
             webRequest.ContentType = @"application/xml";
 
@@ -112,7 +124,7 @@ namespace Chalkable.Data.Common.Backup
 
         public static string DoImport(long time, string serverName, string databaseName)
         {
-            var webRequest = WebRequest.Create(END_POINT_URI + @"/Import");
+            var webRequest = WebRequest.Create(Endpoint + @"/Import");
             webRequest.Method = WebRequestMethods.Http.Post;
             webRequest.ContentType = @"application/xml";
 
@@ -152,7 +164,7 @@ namespace Chalkable.Data.Common.Backup
 
         public static List<StatusInfo> CheckRequestStatus(string requestGuid, string serverName)
         {
-            var webRequest = WebRequest.Create(END_POINT_URI + string.Format("/Status?servername={0}&username={1}&password={2}&reqId={3}",
+            var webRequest = WebRequest.Create(Endpoint + string.Format("/Status?servername={0}&username={1}&password={2}&reqId={3}",
                     HttpUtility.UrlEncode(serverName),
                     HttpUtility.UrlEncode(Settings.Configuration.SchoolDbUser),
                     HttpUtility.UrlEncode(Settings.Configuration.SchoolDbPassword),

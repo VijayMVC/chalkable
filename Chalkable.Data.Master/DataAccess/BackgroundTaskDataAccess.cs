@@ -62,7 +62,7 @@ namespace Chalkable.Data.Master.DataAccess
             return PaginatedSelect<BackgroundTask>(q, BackgroundTask.SCHEDULED_FIELD_NAME, start, count, Orm.OrderType.Desc);
         }
 
-        public void DeleteOlder(Guid districtId, DateTime dateTime)
+        public void DeleteOlder(Guid? districtId, DateTime dateTime)
         {
             var q = new AndQueryCondition();
             q.Add(BackgroundTask.DISTRICT_REF_FIELD_NAME, districtId);

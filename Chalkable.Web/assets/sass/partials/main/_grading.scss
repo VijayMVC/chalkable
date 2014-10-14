@@ -428,6 +428,10 @@ BODY {
                   margin: 0 8px 7px 0;
                   vertical-align: top;
 
+                  &.empty-container{
+                    width: 53px;
+                  }
+
                   &:last-child{
                       margin-right: 0;
                   }

@@ -12,7 +12,15 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.show-less')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function showLessClick(node, event){
-                node.parent('.class-block').removeClass('active');
+                var parent = node.parent('.class-block');
+                parent.removeClass('active');
+                var html = '', button = parent.find('.all-button');
+                var count = button.getData('empty-count');
+                if(count){
+                    for(var i = 0; i < count; i++)
+                        html+='<a class="empty-container"></a>';
+                    new ria.dom.Dom(html).insertBefore(button);
+                }
                 return false;
             },
 
@@ -42,7 +50,9 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.all-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function allButtonClick(node, event){
-                node.parent('.class-block').addClass('active');
+                var parent = node.parent('.class-block');
+                parent.addClass('active');
+                parent.find('.empty-container').remove();
             }
         ]);
 });

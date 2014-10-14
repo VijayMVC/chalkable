@@ -44,14 +44,22 @@ namespace Chalkable.Data.Master.DataAccess
             if (users.Count > 0)
             {
                 var builder = new StringBuilder();
+                IDictionary<string, object> ps = new Dictionary<string, object>();
+                int counter = 0;
                 foreach (var user in users)
                 {
-                    builder.AppendFormat("Update [{0}] set [{1}]='{2}', [{3}]='{4}' where [{5}]='{6}' and {7}={8} ",
-                                         table, User.SIS_USER_NAME_FIELD, user.SisUserName
-                                         , User.FULL_NAME_FIELD, user.FullName, User.DISTRICT_REF_FIELD,
+                    var pSisUserName = "sisUserName" + counter;
+                    var pFullName = "fullName" + counter;
+                    ps.Add(pSisUserName, user.SisUserName);
+                    ps.Add(pFullName, user.FullName);
+                    counter++;
+                    builder.AppendFormat("Update [{0}] set [{1}]=@{2}, [{3}]=@{4} where [{5}]='{6}' and {7}={8} ",
+                                         table, User.SIS_USER_NAME_FIELD, pSisUserName
+                                         , User.FULL_NAME_FIELD, pFullName, User.DISTRICT_REF_FIELD,
                                          user.DistrictRef, User.SIS_USER_ID_FIELD, user.SisUserId);
                 }
-                ExecuteNonQueryParametrized(builder.ToString(), new Dictionary<string, object>(), 10+users.Count);
+                
+                ExecuteNonQueryParametrized(builder.ToString(), ps, 10+users.Count);
             }
             
         }

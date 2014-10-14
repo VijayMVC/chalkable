@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public void DeleteOlder(Guid districtId, DateTime dateTime)
+        public void DeleteOlder(Guid? districtId, DateTime dateTime)
         {
             throw new NotImplementedException();
         }

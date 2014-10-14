@@ -17,8 +17,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
     isAdminAnnouncement = adminRecipients && self.getUserRole().isAdmin()
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
-    disableDeleteBtn = announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0
-    -console.info(announcement, announcement.getGradingStudentsCount(), disableDeleteBtn)
+    disableDeleteBtn = !!(announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0)
     standards = announcement.getStandards() || []
     if !isAdminAnnouncement
         +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden

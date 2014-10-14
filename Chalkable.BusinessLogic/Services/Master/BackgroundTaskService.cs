@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<BackgroundTaskService.BackgroundTaskLogItem> GetLogItems(Guid backgroundTaskId, int start, int count);
         void Delete(Guid taskId);
         void Cancel(Guid taskId);
-        void DeleteOlder(Guid districtId, DateTime dateTime);
+        void DeleteOlder(Guid? districtId, DateTime dateTime);
     }
     
     public class BackgroundTaskService : MasterServiceBase, IBackgroundTaskService
@@ -198,7 +198,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public void DeleteOlder(Guid districtId, DateTime dateTime)
+        public void DeleteOlder(Guid? districtId, DateTime dateTime)
         {
             using (var uow = Update())
             {

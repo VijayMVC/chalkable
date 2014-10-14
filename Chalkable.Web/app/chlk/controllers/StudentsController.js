@@ -158,10 +158,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.profile.StudentInfoPage, result);
             },
 
-            [[chlk.models.id.SchoolPersonId]],
-            function detailsStudentAction(personId){
-                return null;
-            },
 
             [[chlk.models.id.SchoolPersonId]],
             function detailsAction(personId){

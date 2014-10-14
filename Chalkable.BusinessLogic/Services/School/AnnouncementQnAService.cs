@@ -104,7 +104,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
 
                 annQnA.Answer = answer;
-                annQnA.AnsweredTime = Context.NowSchoolTime;
                 da.Update(annQnA);
                 uow.Commit();
                 return annQnA;
@@ -137,7 +136,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 
                 annQnA.Question = question;
-                annQnA.QuestionTime = Context.NowSchoolTime;
                 da.Update(annQnA);
                 uow.Commit();
                 return annQnA;

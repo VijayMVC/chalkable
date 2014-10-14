@@ -21,7 +21,7 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
         .app-buy
             +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button(class=self.isInstalled()? "installed" : undefined)=self.installBtnTitle
 
-        textarea(name = "app-description", class ="app-description", readonly)=app.getDescription()
+        pre(name = "app-description", class ="app-description", readonly)=app.getDescription()
         .app-general-info
             .reviews
                 +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)
