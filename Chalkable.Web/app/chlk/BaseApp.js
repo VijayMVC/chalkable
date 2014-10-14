@@ -184,6 +184,10 @@ NAMESPACE('chlk', function (){
                     if(!jQuery(this).data('wasClick')){
                         var target = jQuery(e.target),
                             tooltip = jQuery('#chlk-tooltip-item');
+                        target.off('remove.tooltip');
+                        target.on('remove.tooltip', function(e){
+                            target.trigger('mouseleave');
+                        });
                         if(target.hasClass('no-tooltip') || target.parents('.no-tooltip')[0]){
                             tooltip.hide();
                             tooltip.find('.tooltip-content').html('');
