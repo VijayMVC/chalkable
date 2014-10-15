@@ -20,7 +20,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 for(var i = students.length - 1; i >= 0; i--){
                     var student = students[i];
                     var right = Math.floor(width - student.getAvg() * width / 100)-10;
-                    if(right - lastRight < interval)
+                    if(interval && right - lastRight < interval)
                         right = lastRight + interval;
                     lastRight = right;
                     student.setRight(right);
