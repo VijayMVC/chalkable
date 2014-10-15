@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 ArrayOf(chlk.models.grading.StudentGradingViewData), Number, Number]],
             ArrayOf(chlk.models.grading.StudentGradingViewData), function getPreparedStudents(students, well, trouble, width_, interval_){
                 var width = width_ || 670;
-                var interval = interval_ || 5;
+                var interval = interval_ || 0;
                 var lastRight = - 2*interval-10;
                 for(var i = students.length - 1; i >= 0; i--){
                     var student = students[i];
