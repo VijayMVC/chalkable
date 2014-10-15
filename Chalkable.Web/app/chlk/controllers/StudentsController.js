@@ -158,6 +158,14 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.profile.StudentInfoPage, result);
             },
 
+            [[chlk.models.id.SchoolPersonId]],
+            function detailsStudentAction(personId){
+                /* Student can see ONLY his own profile CHLK-3117, CHLk-3303 */
+                if (this.getCurrentPerson().getId() != personId)
+                    return null;
+
+                return this.detailsAction(personId);
+            },
 
             [[chlk.models.id.SchoolPersonId]],
             function detailsAction(personId){
