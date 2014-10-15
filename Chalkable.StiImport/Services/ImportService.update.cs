@@ -563,7 +563,7 @@ namespace Chalkable.StiImport.Services
                     TimeSlotID = x.TimeSlotID
                 })
                 .ToList();
-            ServiceLocatorSchool.ScheduledTimeSlotService.Add(allSts);
+            ServiceLocatorSchool.ScheduledTimeSlotService.Edit(allSts);
         }
 
         private void UpdatePeriods()

@@ -95,7 +95,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
             if (mp == null)
             {
-                throw new ChalkableException("No marking period is scheduled on this date");
+                //throw new ChalkableException("No marking period is scheduled on this date");
+                return null;
             }
 
             var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
