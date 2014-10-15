@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace Chalkable.Common
 {
@@ -69,12 +70,14 @@ namespace Chalkable.Common
             get { return (KeyValueConfigurationCollection)this["Servers"]; }
         }
 
+        [Obsolete]
         [ConfigurationProperty("EmptySchoolsReserved")]
         public int EmptySchoolsReserved
         {
             get { return (int)this["EmptySchoolsReserved"]; }
         }
 
+        [Obsolete]
         [ConfigurationProperty("DemoSchoolsReserved")]
         public int DemoSchoolsReserved
         {
