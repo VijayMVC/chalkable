@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.PictureService');
+REQUIRE('chlk.services.DeveloperService');
 
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
@@ -23,6 +24,9 @@ REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
 REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.developer.HomeAnalytics');
 REQUIRE('chlk.models.apps.AppPersonReviewPostData');
+REQUIRE('chlk.models.apps.GetAppsPostData');
+
+REQUIRE('chlk.models.apps.AppsListViewData');
 
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
@@ -49,21 +53,53 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.PictureService, 'pictureService',
 
+        [ria.mvc.Inject],
+        chlk.services.DeveloperService, 'developerService',
+
         [chlk.controllers.SidebarButton('apps')],
-        [[Number]],
-        function listAction(pageIndex_) {
-            var result = this.appsService
-                .getApps(pageIndex_ | 0)
-                .attach(this.validateResponse_());
-            return this.PushView(chlk.activities.apps.AppsListPage, result);
+        [[chlk.models.apps.GetAppsPostData]],
+        function listAction(postData_) {
+            if(postData_)
+                return this.getApplications_(
+                    postData_.getStart(),
+                    postData_.getDeveloperId(),
+                    postData_.getState(),
+                    postData_.getFilter()
+                );
+            return this.getApplications_();
         },
 
-        [[Number]],
-        function pageAction(pageIndex_) {
-            var result = this.appsService
-                .getApps(pageIndex_ | 0)
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.apps.AppsListPage, result);
+        [[chlk.models.id.SchoolPersonId, Number, String, Number]],
+        function pageAction(developerId_, state_, filter_, start_) {
+//            var result = this.appsService
+//                .getApps(pageIndex_ | 0)
+//                .attach(this.validateResponse_());
+//            return this.UpdateView(chlk.activities.apps.AppsListPage, result);
+            return this.getApplications_(start_, developerId_, state_, filter_);
+        },
+
+        [[Number, chlk.models.id.SchoolPersonId, Number, String]],//[[chlk.models.apps.GetAppsPostData]],
+        function getApplications_(startIndex_, developerId_, state_, filter_){
+            var pageIndex = startIndex_ || 0;
+            var result =
+                ria.async.wait(
+                    this.appsService.getApps(pageIndex, developerId_ || null, state_, filter_),
+                    this.developerService.getDevelopers()
+                )
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    var states = [
+                        new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.DRAFT),
+                        new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL),
+                        new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.APPROVED),
+                        new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.REJECTED),
+                        new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.LIVE)
+                    ];
+                    return new chlk.models.apps.AppsListViewData(res[0], res[1], states, developerId_, state_);
+                });
+            if(startIndex_ || developerId_ || state_ || filter_)
+                return this.UpdateView(chlk.activities.apps.AppsListPage, result);
+            return this.PushView(chlk.activities.apps.AppsListPage, result);
         },
 
         [[chlk.models.apps.Application, Boolean, Boolean]],

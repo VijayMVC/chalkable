@@ -37,10 +37,13 @@ NAMESPACE('chlk.services', function () {
                 this.devApplicationListChange = new ria.async.Observable(chlk.services.DevApplicationListChangeEvent);
             },
 
-            [[Number]],
-            ria.async.Future, function getApps(pageIndex_) {
+            [[Number, chlk.models.id.SchoolPersonId, Number, String]],
+            ria.async.Future, function getApps(pageIndex_, developerId_, state_, filter_) {
                 return this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
-                        start: pageIndex_
+                        start: pageIndex_,
+                        developerId: developerId_ ? developerId_.valueOf() : null,
+                        state: state_ || null,
+                        filter: filter_
                     })
             },
 

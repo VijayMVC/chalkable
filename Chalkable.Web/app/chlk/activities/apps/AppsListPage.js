@@ -14,6 +14,14 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function isInternalChanged(node, event){
                 var isInternal = node.checked();
                 node.parent().trigger('submit');
+            },
+
+            [ria.mvc.DomEventBind('change', '#developers-select, #states-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function sortingChanged(node, event, data){
+//                this.resetScrolling_();
+
+                this.dom.find('#apps-list-form').trigger('submit');
             }
         ]);
 });

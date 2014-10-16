@@ -61,6 +61,11 @@ namespace Chalkable.Data.Master.DataAccess
             if (query.Role == CoreRoles.SUPER_ADMIN_ROLE.Id)
             {
                 //TODO: do nothing
+                if (query.DeveloperId.HasValue)
+                {
+                    res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
+                    res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);                    
+                }
             }
             else
             {
@@ -98,13 +103,19 @@ namespace Chalkable.Data.Master.DataAccess
                 res.Sql.AppendFormat(" and [{0}] = @{0}", Application.ID_FIELD);
                 res.Parameters.Add(Application.ID_FIELD, query.Id.Value);
             }
-            if (query.Live.HasValue)
+            if (query.Live.HasValue || query.State.HasValue)
             {
-                var sqlOperator = query.Live.Value ? " = " : " <> ";
+                string sqlOperator = " = ";
+                int? state = (int?) query.State;
+                if (query.Live.HasValue)
+                {
+                    if(!query.Live.Value) sqlOperator = " <> ";
+                    state = (int?) ApplicationStateEnum.Live;
+                }
                 res.Sql.Append(string.Format(" and [{0}] {1} @{0}", Application.STATE_FIELD, sqlOperator));
-                res.Parameters.Add(Application.STATE_FIELD, (int)ApplicationStateEnum.Live);
+                res.Parameters.Add(Application.STATE_FIELD, state);
             }
-
+            
             if (query.Free.HasValue)
             {
                 res.Sql.AppendFormat(" and [{0}] {1} 0", Application.PRICE_FIELD, query.Free.Value ? "=" : ">");
@@ -309,6 +320,8 @@ namespace Chalkable.Data.Master.DataAccess
 
         public int Start { get; set; }
         public int Count { get; set; }
+
+        public ApplicationStateEnum? State { get; set; }
 
         public bool? Live { get; set; }
         public bool? Free { get; set; }

@@ -25,7 +25,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ListInstalled(int personId, string filter, int? start, int? count, bool? forAttach)
+        public ActionResult ListInstalled(int personId, int? classId, string filter, int? start, int? count, bool? forAttach)
         {
             var st = start ?? 0;
             var cnt = count ?? 9;
@@ -35,6 +35,13 @@ namespace Chalkable.Web.Controllers
             var installedApp = SchoolLocator.AppMarketService.ListInstalled(personId, true);
             if (forAttach.HasValue && forAttach.Value)
                 installedApp = installedApp.Where(x => x.CanAttach).ToList();
+
+            if (classId.HasValue)
+            {
+                var classPersons = SchoolLocator.ClassService.GetClassPersons(null, classId, null, null);
+
+            }
+
             var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
 
             var res = InstalledApplicationViewData.Create(appInstallations, sp, installedApp, hasMyAppDic);
