@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?> 
   <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
-	<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+	<!--<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>-->
 	<UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>
 
 	<PropertyGroup>
@@ -21,7 +21,7 @@
 	</Target>  
 	
 	<Target Name="Production">		
-		<MakeDir Directories="Chalkable.Azure\obj\Release\Package"></MakeDir>
+		<!--<MakeDir Directories="Chalkable.Azure\obj\Release\Package"></MakeDir> -->
 		<!--<Delete Files="$(BackgroundProcessorConfig)" />
 		<Move SourceFiles="$(BackgroundProcessorConfigRelease)" DestinationFiles="$(BackgroundProcessorConfig)"/>-->
 		
