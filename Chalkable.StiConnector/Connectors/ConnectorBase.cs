@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Web;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.StiConnector.Connectors.Model;
@@ -31,8 +32,6 @@ namespace Chalkable.StiConnector.Connectors
 
     public class ConnectorBase
     {
-        private const string STI_APPLICATION_KEY = "sti.application.key";
-        
         private const string ERROR_FORMAT = "Error calling : '{0}' ;\n ErrorMessage : {1}";
         private const string REQUEST_TIME_MSG_FORMAT = "Request on : '{0}' \n Time : {1}";
         protected ConnectorLocator locator;
@@ -55,7 +54,7 @@ namespace Chalkable.StiConnector.Connectors
         protected void InitHeaders(WebHeaderCollection headers)
         {
             headers[HttpRequestHeader.Authorization] = "Session " + locator.Token;
-            headers["ApplicationKey"] = string.Format("chalkable {0}", ConfigurationManager.AppSettings[STI_APPLICATION_KEY]);
+            headers["ApplicationKey"] = string.Format("chalkable {0}", Settings.StiApplicationKey);
             headers["Accept-Encoding"] = "gzip, deflate";
         }
 
@@ -236,7 +235,7 @@ namespace Chalkable.StiConnector.Connectors
             return new Dictionary<string, string>
                 {
                     {HttpRequestHeader.Authorization.ToString(), "Session " + locator.Token},
-                    {"ApplicationKey", string.Format("chalkable {0}", ConfigurationManager.AppSettings[STI_APPLICATION_KEY])}
+                    {"ApplicationKey", string.Format("chalkable {0}", Settings.StiApplicationKey)}
                 };
         }
 

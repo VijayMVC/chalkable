@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Chalkable.Common;
 using Microsoft.IdentityModel.Claims;
 using WindowsAzure.Acs.Oauth2.Protocol.Swt;
 
@@ -22,9 +23,9 @@ namespace WindowsAzure.Acs.Oauth2.ResourceServer
         private string _tokenSigningKey;
 
         public OAuth2MessageHandler()
-            : this(ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyRealm"],
-                    string.Format("https://{0}.accesscontrol.windows.net/", ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespace"]),
-                    ConfigurationManager.AppSettings["WindowsAzure.OAuth.SwtSigningKey"])
+            : this(Settings.WindowsAzureOAuthRelyingPartyRealm,
+                    string.Format("https://{0}.accesscontrol.windows.net/", Settings.WindowsAzureOAuthServiceNamespace),
+                    Settings.WindowsAzureOAuthSwtSigningKey)
         {
         }
 

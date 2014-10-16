@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Chalkable.Common;
 
 namespace Chalkable.Web.Tools
 {
@@ -20,11 +21,7 @@ namespace Chalkable.Web.Tools
         {
             get
             {
-                var res = ConfigurationManager.AppSettings["ScriptsRoot"];
-                var includeVersion = bool.Parse(ConfigurationManager.AppSettings["ScriptsRootIncludeVersion"]);
-                if (includeVersion)
-                    res += Version;
-                return res;
+                return string.Format(Settings.ScriptsRoot, Version);
             }
         }
         

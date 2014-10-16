@@ -26,17 +26,14 @@ namespace Chalkable.Web.Authentication
             }
         }
 
-        private const string relyingPartyRealmKey = "WindowsAzure.OAuth.RelyingPartyRealm";
-        private const string serviceNamespaceKey = "WindowsAzure.OAuth.ServiceNamespace";
-        private const string swtSigningKey = "WindowsAzure.OAuth.SwtSigningKey";
-        private const string acsUrlFormat = "https://{0}.accesscontrol.windows.net/";
+        private const string AcsUrlFormat = "https://{0}.accesscontrol.windows.net/";
 
         public static void InitFromConfig()
         {
             instance = new OauthAuthenticate(
-                ConfigurationManager.AppSettings[relyingPartyRealmKey], 
-                string.Format(acsUrlFormat, ConfigurationManager.AppSettings[serviceNamespaceKey]),
-                ConfigurationManager.AppSettings[swtSigningKey]);
+                Settings.WindowsAzureOAuthRelyingPartyRealm, 
+                string.Format(AcsUrlFormat, Settings.WindowsAzureOAuthServiceNamespace),
+                Settings.WindowsAzureOAuthSwtSigningKey);
         }
 
         private string issuer, tokenSigningKey, realm;

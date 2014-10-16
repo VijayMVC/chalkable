@@ -33,8 +33,11 @@
   <!-- Items for the project -->
   <ItemGroup>
     <ServiceDefinition Include="ServiceDefinition.csdef" />
-    <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
-    <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.LocalStaging.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.LocalQA.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Qa.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Release.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Staging.cscfg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj">
