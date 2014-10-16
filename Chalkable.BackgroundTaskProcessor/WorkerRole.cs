@@ -20,7 +20,7 @@ namespace Chalkable.BackgroundTaskProcessor
             // This is a sample worker implementation. Replace with your logic.
             Trace.WriteLine("Chalkable.BackgroundTaskProcessor entry point called", "Information");
             var processor = new TaskProcessor();
-            var delay = Settings.Configuration.TaskProcessorDelay;
+            var delay = Settings.TaskProcessorDelay;
             var raygunClient = new RaygunClient();
             raygunClient.ApplicationVersion = CompilerHelper.Version;
             while (true)
@@ -44,6 +44,8 @@ namespace Chalkable.BackgroundTaskProcessor
                         raygunClient.SendInBackground(ex);
                     }
                     catch (Exception){}
+#else
+                    Debug.Fail(ex.Message);
 #endif
                     while (ex != null)
                     {

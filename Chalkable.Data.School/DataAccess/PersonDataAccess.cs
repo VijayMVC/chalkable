@@ -361,7 +361,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public static int GetPersonDataForLogin(string districtServerUrl, Guid districtId, int userId, out int roleId)
         {
-            var connectionString = string.Format(Settings.SchoolConnectionStringTemplate, districtServerUrl, districtId);
+            var connectionString = Settings.GetSchoolConnectionString(districtServerUrl, districtId);
             using (var uow = new UnitOfWork(connectionString, false))
             {
                 var student = new StudentDataAccess(uow)

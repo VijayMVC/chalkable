@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Security.Authentication;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using WindowsAzure.Acs.Oauth2;
 using WindowsAzure.Acs.Oauth2.Protocol;
@@ -124,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public string GetAuthorizationCode(string clientId, string userName, int? schoolYearId, string scope = null)
         {
             if (string.IsNullOrEmpty(scope))
-                scope = ConfigurationManager.AppSettings[API_EXPLORER_SCOPE];//TODO: this is wrong approach
+                scope = Settings.ApiExplorerScope; //TODO: this is wrong approach
             if (schoolYearId.HasValue)
                 userName = userName + Environment.NewLine + schoolYearId;
             return regService.GetAuthorizationCode(clientId,

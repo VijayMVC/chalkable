@@ -268,6 +268,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluentACS\FluentACS.csproj">
       <Project>{7257f961-4bfd-4d2c-9521-a4c711c90476}</Project>
       <Name>FluentACS</Name>

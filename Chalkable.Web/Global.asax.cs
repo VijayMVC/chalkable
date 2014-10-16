@@ -41,7 +41,7 @@ namespace Chalkable.Web
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
 
 
-            if (ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyRealm"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespace"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.SwtSigningKey"] != null)
+            if (Settings.WindowsAzureOAuthRelyingPartyRealm != null && Settings.WindowsAzureOAuthServiceNamespace != null && Settings.WindowsAzureOAuthSwtSigningKey != null)
             {
                 OauthAuthenticate.InitFromConfig();
             }
@@ -97,7 +97,7 @@ namespace Chalkable.Web
 
         private static void EnsureCorrectDomain(HttpRequest httpRequest, HttpResponse httpResponse)
         {
-            var ensureDomain = ConfigurationManager.AppSettings["Domain"];
+            var ensureDomain = Settings.Domain;
             if (String.IsNullOrWhiteSpace(ensureDomain))
                 return;
 
