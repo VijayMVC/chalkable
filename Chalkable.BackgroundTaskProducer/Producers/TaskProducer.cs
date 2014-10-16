@@ -36,7 +36,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var secondsOfDay = (now - now.Date).TotalSeconds;
             if (secondsOfDay >= intervalStart && secondsOfDay <= intervalEnd)
             {
-                var currentTime = startTime.AddSeconds(interval * count);
+                var currentTime = startTime.AddSeconds(interval * count);//TODO: this logic doesn't take into account working interval 2014-10-16
                 if (currentTime <= now)
                 {
                     Trace.TraceWarning(string.Format(ChlkResources.BG_PROCESSING_FOR_TIME, currentTime));

@@ -297,11 +297,12 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<Application> GetByIds(IList<Guid> ids)
         {
-            var tableName = "Application";
+            if (ids == null || ids.Count == 0)
+                return new List<Application>();
+            var tableName = typeof(Application).Name;
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat(@"select * from [{0}]", tableName);
-            if (ids != null && ids.Count > 0)
-                dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName, Application.ID_FIELD
+            dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName, Application.ID_FIELD
                     , ids.Select(x => "'" + x.ToString() + "'").JoinString(","));
             return ReadMany<Application>(dbQuery);
         } 

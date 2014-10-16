@@ -32,7 +32,8 @@ namespace Chalkable.Web.Controllers
 
             var sp = SchoolLocator.PersonService.GetPerson(personId);
             var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            var installedApp = SchoolLocator.AppMarketService.ListInstalled(personId, true);
+            var installedApp = MasterLocator.ApplicationService.GetApplicationsByIds(
+                    appInstallations.Select(x => x.ApplicationRef).Distinct().ToList());
             if (forAttach.HasValue && forAttach.Value)
                 installedApp = installedApp.Where(x => x.CanAttach).ToList();
 

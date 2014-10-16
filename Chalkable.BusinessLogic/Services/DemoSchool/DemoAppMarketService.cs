@@ -26,16 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             : base(serviceLocator, storage)
         {
         }
-
         
-
-        public IList<Application> ListInstalled(int personId, bool owner)
-        {
-            var installed = ListInstalledAppInstalls(personId);
-            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
-            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
-        }
-
         public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
         {
             return Storage.ApplicationInstallStorage.GetInstalled(personId);
