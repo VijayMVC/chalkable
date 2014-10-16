@@ -24,15 +24,16 @@ mixin AppsFilterSelect(name, items)
         +Hidden('actualCount', self.applications.getActualCount())
         +Hidden('pageSize', self.applications.getPageSize())
 
-        .action-bar.buttons.filter
+        .action-bar.not-transparent.buttons
             .container.panel-bg
                 .left
-                    span.action-button.select-btn  Developer:
-
-                    +AppsFilterSelect('developerid', self.prepareDevelopersSelectModel())#developers-select
+                    .action-button.select-btn
+                        span  Developer:
+                        +AppsFilterSelect('developerid', self.prepareDevelopersSelectModel())#developers-select
+                    .action-button.select-btn
+                        span States:
+                        +AppsFilterSelect('state', self.prepareStatesSelectModel())#states-select
                 .right
-                    span.action-button.select-btn  States:
-                    +AppsFilterSelect('state', self.prepareStatesSelectModel())#states-select
 
         +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
             +GridHead()
