@@ -17,6 +17,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             },
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'exempt',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
             [ria.templates.ModelPropertyBind],

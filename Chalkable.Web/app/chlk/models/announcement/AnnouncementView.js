@@ -6,6 +6,7 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementView*/
     CLASS(
         'AnnouncementView', EXTENDS(chlk.models.announcement.Announcement), [
+            Boolean, 'exempt',
 
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
