@@ -30,7 +30,7 @@ namespace Chalkable.Web.Tools
         {
             get
             {
-                return VERSION.Replace('.', '-');    
+                return VERSION;    
             }
         }
     }
