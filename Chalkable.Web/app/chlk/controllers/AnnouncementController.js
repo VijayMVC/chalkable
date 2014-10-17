@@ -220,6 +220,7 @@ NAMESPACE('chlk.controllers', function (){
                 var classes = this.classService.getClassesForTopBar(false, true);
                 var classId_ = announcement.getClassId(), classInfo, types;
                 var announcementTypeId_ = announcement.getAnnouncementTypeId();
+                var savedClassInfo = this.getContext().getSession().get('classInfo', null);
                 classes.forEach(function(item){
                     var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
                     types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
@@ -228,9 +229,14 @@ NAMESPACE('chlk.controllers', function (){
                     if(currentClassInfo && classId_ && classId_ == item.getId()){
                         classInfo = currentClassInfo;
                         model.setClassInfo(classInfo);
-                        var hasType = types.filter(function(item){return item.getId() == announcementTypeId_}).length;
-                        if(!hasType && announcement.getState() && currentClassInfo && announcementTypeId_){
-                            currentClassInfo.getTypesByClass().push(new chlk.models.announcement.ClassAnnouncementType(announcementTypeId_, announcement.getAnnouncementTypeName()))
+                        if(savedClassInfo && savedClassInfo.getId() == item.getId()){
+                            currentClassInfo = savedClassInfo;
+                        }else{
+                            var hasType = types.filter(function(item){return item.getId() == announcementTypeId_}).length;
+                            if(!hasType && announcement.getState() && currentClassInfo && announcementTypeId_){
+                                currentClassInfo.getTypesByClass().push(new chlk.models.announcement.ClassAnnouncementType(announcementTypeId_, announcement.getAnnouncementTypeName()));
+                                this.getContext().getSession().set('classInfo', currentClassInfo);
+                            }
                         }
                     }
                 }, this);
@@ -300,6 +306,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
+            this.getContext().getSession().set('classInfo', null);
             var classes = this.classService.getClassesForTopBar(false, true);
             var classesBarData = new chlk.models.classes.ClassesForTopBar(classes), p = false;
             classes.forEach(function(item){
@@ -356,18 +363,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, Number]],
-        function attachAppAction(announcementId, pageIndex_) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number]],
+        function attachAppAction(announcementId, classId, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
-
+            var mp = this.getCurrentMarkingPeriod();
             var result = this.appMarketService
-                .getInstalledApps(userId, pageIndex_ | 0, null, null, true)
+                .getAppsForAttach(userId, classId, mp.getId(), pageIndex_ | 0, null)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var apps = (data.getItems() || []).filter(function(app){
-                       return app.isInstalledOnlyForCurrentUser() == false;
-                    });
-                    data.setItems(apps);
                     return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
                 });
             if (pageIndex_ || pageIndex_ == 0)
@@ -381,6 +384,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AnnouncementId]],
         function editAction(announcementId) {
+            this.getContext().getSession().set('classInfo', null);
             var result = this.announcementService
                 .editAnnouncement(announcementId)
                 .attach(this.validateResponse_())

@@ -1,13 +1,16 @@
-mixin AppIconLink(announcementId, app)
+mixin AppIconLink(announcementId, app, iconTooltip)
    appId = app.getId().valueOf()
-   +ActionLink('apps', 'tryToAttach', announcementId, appId).app-icon-link
-        .app-list-item
+   div(data-tooltip=iconTooltip).app-icon-link
+       +ActionLink('apps', 'tryToAttach', announcementId, appId)(disabled=app.needToInstall() ? "disabled" : null).app-link
+       div(disabled=app.needToInstall() ? "disabled" : null).app-list-item
             .icon
                 pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
                 img(src=pictureUrl)
             .description
                 .name=app.getName()
                 .shortdesc=app.getShortDescription()
+                if app.needToInstall()
+                   +ActionLink('appmarket', 'details', app.getId()) Install
 
 teacherId = self.teacherId.valueOf()
 announcementId = self.announcementId.valueOf()
@@ -16,12 +19,10 @@ announcementId = self.announcementId.valueOf()
         a.close.close-btn
     .x-window-body
         .header Attach an App
-
-
         if self.apps.getItems().length > 0
             .apps
                 each app in self.apps.getItems()
-                    +AppIconLink(announcementId, app)
+                    +AppIconLink(announcementId, app, self.getAppIconToolTip(app))
             .paging
                 +Paginator('announcement', 'attachApp', self.apps, [announcementId])
         else

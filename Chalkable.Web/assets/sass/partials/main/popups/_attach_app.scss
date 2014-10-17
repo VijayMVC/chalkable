@@ -61,6 +61,20 @@
               width: 220px;
               height: 106px;
 
+              &[disabled]{
+                .icon{
+                  opacity: 0.5;
+                }
+                .description{
+                  .name{
+                    opacity: 0.5;
+                  }
+                  .shortdesc{
+                    opacity: 0.5;
+                  }
+                }
+              }
+
               .icon{
                 width: 80px;
                 height: 80px;

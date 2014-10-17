@@ -19,7 +19,17 @@ NAMESPACE('chlk.templates.apps', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.PaginatedList, 'apps'
+            chlk.models.common.PaginatedList, 'apps',
 
+            [[chlk.models.apps.ApplicationForAttach]],
+            String, function getAppIconToolTip(app){
+                var res = null
+                if(app && app.getNotInstalledStudentsCount() > 0){
+                    res = app.getNotInstalledStudentsCount();
+                    res += res > 1 ? ' student have ' : ' students has ';
+                    res += ' no installed current application yet';
+                }
+                return res;
+            }
         ])
 });

@@ -334,5 +334,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
         }
 
+        public IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

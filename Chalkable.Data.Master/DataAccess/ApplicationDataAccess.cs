@@ -304,7 +304,9 @@ namespace Chalkable.Data.Master.DataAccess
             dbQuery.Sql.AppendFormat(@"select * from [{0}]", tableName);
             dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName, Application.ID_FIELD
                     , ids.Select(x => "'" + x.ToString() + "'").JoinString(","));
-            return ReadMany<Application>(dbQuery);
+            var res = ReadMany<Application>(dbQuery);
+            if (res.Count == 0) return res;
+            return PreparePicturesData(res);
         } 
     }
 
