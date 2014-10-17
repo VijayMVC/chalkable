@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'adminRecipientId',
 
             [[chlk.models.classes.ClassesForTopBar, Boolean]],
-            function $create(classes, isDraft){
+            function $create(classes, isDraft, date_){
                 BASE();
                 if(classes){
                     this.setTopData(classes);
