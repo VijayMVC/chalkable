@@ -22,17 +22,16 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.notificationService.getNotifications(0, 5)
                     .attach(this.validateResponse_())
                     .then(function(model){
+                        this.notificationService.markAllAsShown().then(function(data){
+                            return this.notificationService.getUnShownNotificationCount().then(function(data2){
+                                this.setNewNotificationCount_(data2);
+                            }, this);
+                        }, this);
                         var res = new chlk.models.notification.NotificationList();
                         res.setNotifications(model);
                         res.setTarget(new ria.dom.Dom('.notifications-link'));
                         return res;
                     }, this);
-
-                this.notificationService.markAllAsShown().then(function(data){
-                    return this.notificationService.getUnShownNotificationCount().then(function(data2){
-                        this.setNewNotificationCount_(data2);
-                    }, this);
-                }, this);
                 return this.ShadeView(chlk.activities.notification.ListNewPopup, result);
             },
 

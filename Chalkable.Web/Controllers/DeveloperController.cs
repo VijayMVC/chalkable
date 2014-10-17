@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
@@ -85,6 +86,13 @@ namespace Chalkable.Web.Controllers
         {
             var developer = MasterLocator.DeveloperService.GetDeveloperById(developerId);
             return Json(DeveloperViewData.Create(developer));
+        }
+
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult GetDevelopers()
+        {
+            var developers = MasterLocator.DeveloperService.GetDevelopers();
+            return Json(developers.Select(DeveloperViewData.Create).ToList());
         }
 
         public string ApplicationPath

@@ -17,7 +17,14 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'AppState', IMPLEMENTS(ria.serialize.IDeserializable),  [
             chlk.models.apps.AppStateEnum, 'stateId',
-            function $(){
+
+            READONLY, String, 'status',
+            String, function getStatus(){
+                return this._states[this.getStateId()];
+            },
+
+            [[chlk.models.apps.AppStateEnum]],
+            function $(stateId_){
                 BASE();
                 this._states = {};
                 this._states[chlk.models.apps.AppStateEnum.DRAFT] = "Not Submitted";
@@ -25,6 +32,8 @@ NAMESPACE('chlk.models.apps', function () {
                 this._states[chlk.models.apps.AppStateEnum.APPROVED] = "Approved";
                 this._states[chlk.models.apps.AppStateEnum.REJECTED] = "Rejected";
                 this._states[chlk.models.apps.AppStateEnum.LIVE] = "Live";
+                if(stateId_)
+                    this.setStateId(stateId_);
             },
 
             [[Boolean]],

@@ -14,7 +14,7 @@ namespace $rootnamespace$.App_Start
     {
         public static void Start()
         {
-            if (ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyRealm"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespace"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.SwtSigningKey"] != null)
+            if (Settings.WindowsAzureOAythRelyingPartyRealm != null && Settings.WindowsAzureOAythServiceNamespace != null && Settings.WindowsAzureOAuthSwtSigningKey != null)
             {
                 GlobalConfiguration.Configuration.MessageHandlers.Add(new OAuth2MessageHandler());
             }

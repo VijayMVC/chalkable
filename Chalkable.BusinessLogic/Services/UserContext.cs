@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
@@ -103,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;
-                    SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, DistrictServerUrl, DistrictId);
+                    SchoolConnectionString = Settings.GetSchoolConnectionString(DistrictServerUrl, district.Id);
                 }
                 if (schoolYear != null)
                 {
@@ -123,7 +124,7 @@ namespace Chalkable.BusinessLogic.Services
             SchoolLocalId = schoolLocalId;
             DistrictId = districtId;
             DeveloperId = developerId;
-            SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, DistrictServerUrl, districtId);   
+            SchoolConnectionString = Settings.GetSchoolConnectionString(DistrictServerUrl, districtId);   
         }
 
         public override string ToString()
@@ -174,7 +175,7 @@ namespace Chalkable.BusinessLogic.Services
                     i++;
                 }
             if (res.DistrictId.HasValue)
-                res.SchoolConnectionString = string.Format(Settings.SchoolConnectionStringTemplate, res.DistrictServerUrl, res.DistrictId);
+                res.SchoolConnectionString = Settings.GetSchoolConnectionString(res.DistrictServerUrl, res.DistrictId.Value);
             res.Role = CoreRoles.GetById(res.RoleId);
             return res;
         }

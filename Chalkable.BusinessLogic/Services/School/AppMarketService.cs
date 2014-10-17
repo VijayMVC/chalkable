@@ -17,7 +17,6 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAppMarketService
     {
-        IList<Application> ListInstalled(int personId, bool owner);
         IList<ApplicationInstall> ListInstalledAppInstalls(int personId);
         IList<ApplicationInstall> ListInstalledForClass(int classId);
         IList<Application> ListInstalledAppsForClass(int classId);
@@ -49,13 +48,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AppMarketService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
-        }
-
-        public IList<Application> ListInstalled(int personId, bool owner)
-        {
-            var installed = ListInstalledAppInstalls(personId);
-            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
-            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
         }
 
         public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)

@@ -20,9 +20,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
 
         protected BaseProducer(string configSectionName)
         {
-            var config = ConfigurationManager.GetSection(configSectionName) as ProducerConfigSection;
-            if (config == null)
-                throw new Exception(string.Format(ChlkResources.ERR_BG_PROCESSOR_CANT_FIND_CONFIG_SECTION, configSectionName));
+            var config = Settings.GetProducerConfig(configSectionName);
             startTime = DateTime.UtcNow;
             count = 0;
             interval = config.Interval;
@@ -36,7 +34,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var secondsOfDay = (now - now.Date).TotalSeconds;
             if (secondsOfDay >= intervalStart && secondsOfDay <= intervalEnd)
             {
-                var currentTime = startTime.AddSeconds(interval * count);
+                var currentTime = startTime.AddSeconds(interval * count);//TODO: this logic doesn't take into account working interval 2014-10-16
                 if (currentTime <= now)
                 {
                     Trace.TraceWarning(string.Format(ChlkResources.BG_PROCESSING_FOR_TIME, currentTime));

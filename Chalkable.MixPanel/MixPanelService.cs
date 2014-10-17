@@ -38,7 +38,6 @@ namespace Chalkable.MixPanel
         private static string token;
 
 
-        private const string MIXPANEL_TOKEN = "mixpanel-token";
         private const string MIXPANEL_USER_PREFIX = "mixpanel-user-";
         private static string MixPanelToken
         {
@@ -46,7 +45,7 @@ namespace Chalkable.MixPanel
             {
                 if (string.IsNullOrEmpty(token))
                 {
-                    token = ConfigurationManager.AppSettings[MIXPANEL_TOKEN];
+                    token = Settings.MixPanelToken;
                 }
                 return token;
             }

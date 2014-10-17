@@ -23,8 +23,8 @@ namespace Chalkable.Data.Common.Backup
                 {
                     ServerName = serverName,
                     DatabaseName = databaseName,
-                    UserName = Settings.Configuration.SchoolDbUser,
-                    Password = Settings.Configuration.SchoolDbPassword
+                    UserName = Settings.ChalkableSchoolDbUser,
+                    Password = Settings.ChalkableSchoolDbPassword
                 };
         }
 
@@ -77,7 +77,7 @@ namespace Chalkable.Data.Common.Backup
         {
             get
             {
-                var endpoint = ConfigurationManager.AppSettings["DbBackupServiceUrl"];
+                var endpoint = Settings.DbBackupServiceUrl;
                 if (string.IsNullOrEmpty(endpoint))
                     throw new Exception("Db export endpoint is not configured");
                 return endpoint;
@@ -169,8 +169,8 @@ namespace Chalkable.Data.Common.Backup
         {
             var webRequest = WebRequest.Create(Endpoint + string.Format("/Status?servername={0}&username={1}&password={2}&reqId={3}",
                     HttpUtility.UrlEncode(serverName),
-                    HttpUtility.UrlEncode(Settings.Configuration.SchoolDbUser),
-                    HttpUtility.UrlEncode(Settings.Configuration.SchoolDbPassword),
+                    HttpUtility.UrlEncode(Settings.ChalkableSchoolDbUser),
+                    HttpUtility.UrlEncode(Settings.ChalkableSchoolDbPassword),
                     HttpUtility.UrlEncode(requestGuid)));
 
             webRequest.Method = WebRequestMethods.Http.Get;

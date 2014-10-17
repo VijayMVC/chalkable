@@ -103,8 +103,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                         if(row.hasClass('selected') && list.exists()){
                             row.find('.combo-list').show();
                             row.find('.student-attendance-container').addClass('active');
-                            row.find('input.combo-input').trigger('focus');
                         }
+                        row.find('input.combo-input').trigger('focus');
                     }, 500);
                 }
             },
@@ -223,6 +223,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                 selected.removeClass('selected');
                 node.addClass('selected');
                 this.updateReasons();
+                var grid = this.dom.find('.chlk-grid');
+                grid.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
             },
 
             VOID, function updateReasons(){
@@ -230,11 +232,10 @@ NAMESPACE('chlk.activities.attendance', function () {
                 option.parent('.row').addClass('reason-changed');
                 var id = option.getData('id');
                 var level = option.getData('level');
-                var grid = option.parent('.chlk-grid');
                 var form = option.parent('.student-attendance-form');
                 var row = option.parent('.row');
                 this.changeAttendance_(form.getData('person-id'), form.getData('type'), id, level);
-                grid.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
+
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), '#class-attendance-list-panel')],

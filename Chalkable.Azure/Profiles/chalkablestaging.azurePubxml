@@ -13,7 +13,7 @@
     <AzureHostedServiceName>chalkablestaging</AzureHostedServiceName>
     <AzureEnableIntelliTrace>False</AzureEnableIntelliTrace>
     <AzureEnableProfiling>False</AzureEnableProfiling>
-    <AzureServiceConfiguration>Cloud</AzureServiceConfiguration>
+    <AzureServiceConfiguration>LocalQA</AzureServiceConfiguration>
     <AzureSolutionConfiguration>Release</AzureSolutionConfiguration>
     <AzureStorageAccountLabel>chalkablestaging</AzureStorageAccountLabel>
     <AzureStorageAccountName>chalkablestaging</AzureStorageAccountName>

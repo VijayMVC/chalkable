@@ -45,7 +45,10 @@ namespace Chalkable.BackgroundTaskProducer
                         raygunClient.SendInBackground(ex);
                     }
                     catch (Exception) { }
+#else
+                    Debug.Fail(ex.Message);
 #endif
+                    
                     while (ex != null)
                     {
                         Trace.TraceInformation("Exception during task producing");

@@ -19,9 +19,9 @@ namespace Chalkable.Web.Controllers
     public class ApplicationController : AnnouncementBaseController //TODO: think about this
     {
         [AuthorizationFilter("SysAdmin, Developer")]
-        public ActionResult List(int? start, int? count)
+        public ActionResult List(Guid? developerId, int? state, int? start, int? count)
         {
-            var applications = MasterLocator.ApplicationService.GetApplications(start ?? 0, count ?? DEFAULT_PAGE_SIZE, false);
+            var applications = MasterLocator.ApplicationService.GetApplications(developerId, (ApplicationStateEnum?)state, null, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
             return Json(applications.Transform(BaseApplicationViewData.Create));
         }
 

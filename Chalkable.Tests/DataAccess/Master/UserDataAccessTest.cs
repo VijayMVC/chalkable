@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -44,7 +45,7 @@ namespace Chalkable.Tests.DataAccess.Master
         public void PerformanceTest()
         {
             int count = 1;
-            var connectionString = ConfigurationManager.ConnectionStrings["ChalkableMaster"].ConnectionString;
+            var connectionString = Settings.MasterConnectionString;
             
             var users = new Dictionary<string, string>();
             for (int i = 0; i < count; i++)

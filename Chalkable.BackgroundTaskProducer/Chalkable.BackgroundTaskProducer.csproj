@@ -90,7 +90,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProducerConfigSection.cs" />
     <Compile Include="Producers\AllDistrictsProducer.cs" />
     <Compile Include="Producers\CleanupManager.cs" />
     <Compile Include="Producers\DbBackupProducer.cs" />
@@ -102,11 +101,6 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="app.qa.config" />
-    <None Include="app.release.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="app.staging.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

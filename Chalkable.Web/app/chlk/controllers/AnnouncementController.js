@@ -219,6 +219,7 @@ NAMESPACE('chlk.controllers', function (){
             else{
                 var classes = this.classService.getClassesForTopBar(false, true);
                 var classId_ = announcement.getClassId(), classInfo, types;
+                var announcementTypeId_ = announcement.getAnnouncementTypeId();
                 classes.forEach(function(item){
                     var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
                     types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
@@ -227,6 +228,10 @@ NAMESPACE('chlk.controllers', function (){
                     if(currentClassInfo && classId_ && classId_ == item.getId()){
                         classInfo = currentClassInfo;
                         model.setClassInfo(classInfo);
+                        var hasType = types.filter(function(item){return item.getId() == announcementTypeId_}).length;
+                        if(!hasType && announcement.getState() && currentClassInfo && announcementTypeId_){
+                            currentClassInfo.getTypesByClass().push(new chlk.models.announcement.ClassAnnouncementType(announcementTypeId_, announcement.getAnnouncementTypeName()))
+                        }
                     }
                 }, this);
 
@@ -235,8 +240,6 @@ NAMESPACE('chlk.controllers', function (){
                     classId_,
                     isEdit
                 );
-
-                var announcementTypeId_ = announcement.getAnnouncementTypeId();
                 if(announcementTypeId_){
                     if(classId_ && classInfo){
                         types = classInfo.getTypesByClass();
@@ -305,7 +308,7 @@ NAMESPACE('chlk.controllers', function (){
             });
             if(!p)
                 classId_ = null;
-            if(classId_ && announcementTypeId_){
+            if(classId_ && announcementTypeId_ && announcementTypeId_.valueOf()){
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 var types = classInfo.getTypesByClass();
                 var typeId = null;
@@ -330,6 +333,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(model && model.getAnnouncement()){
+                        if(date_)
+                            model.setDate(date_);
                         var announcement = model.getAnnouncement();
                         if(noDraft_){
                             announcement.setClassId(classId_ || null);
@@ -342,7 +347,7 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         return this.addEditAction(model, false);
                     }
-                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
+                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, date_);
                 },this);
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
