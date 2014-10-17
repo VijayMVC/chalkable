@@ -26,8 +26,8 @@ NAMESPACE('chlk.templates.apps', function () {
                 var res = null
                 if(app && app.getNotInstalledStudentsCount() > 0){
                     res = app.getNotInstalledStudentsCount();
-                    res += res > 1 ? ' student have ' : ' students has ';
-                    res += ' no installed current application yet';
+                    res += res > 1 ? ' students have ' : ' student has ';
+                    res += ' no this application installed';
                 }
                 return res;
             }
