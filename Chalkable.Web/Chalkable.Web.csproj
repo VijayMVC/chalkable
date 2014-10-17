@@ -383,12 +383,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -543,14 +537,6 @@
     <Content Include="Content\icons-templates\banner.psd" />
     <Content Include="Content\icons-templates\icon.psd" />
     <Content Include="Content\icons-templates\screenshot.psd" />
-    <None Include="Web.qa.config">
-      <SubType>Designer</SubType>
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.staging.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

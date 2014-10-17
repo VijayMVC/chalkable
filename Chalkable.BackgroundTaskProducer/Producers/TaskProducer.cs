@@ -20,9 +20,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
 
         protected BaseProducer(string configSectionName)
         {
-            var config = ConfigurationManager.GetSection(configSectionName) as ProducerConfigSection;
-            if (config == null)
-                throw new Exception(string.Format(ChlkResources.ERR_BG_PROCESSOR_CANT_FIND_CONFIG_SECTION, configSectionName));
+            var config = Settings.GetProducerConfig(configSectionName);
             startTime = DateTime.UtcNow;
             count = 0;
             interval = config.Interval;

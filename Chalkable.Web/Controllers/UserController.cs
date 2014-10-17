@@ -141,10 +141,6 @@ namespace Chalkable.Web.Controllers
             return context;
         }
 
-        private const string SERVICE_NAMESPACE = "WindowsAzure.OAuth.ServiceNamespace";
-        private const string ACS_URL_FORMAT = "https://{0}.accesscontrol.windows.net/v2/OAuth2-13/";
-        private const string RELYING_PARTY_REALM = "WindowsAzure.OAuth.RelyingPartyRealm";
-
         public ActionResult GetAccessToken(string login, string password, string clientId, string clientSecret, string redirectUri)
         {
             try
@@ -153,8 +149,8 @@ namespace Chalkable.Web.Controllers
                 var context = serviceLocator.UserService.Login(login, password);
                 if (context != null)
                 {
-                    var accessTokenUri = string.Format(ACS_URL_FORMAT, ConfigurationManager.AppSettings[SERVICE_NAMESPACE]);
-                    var scope = ConfigurationManager.AppSettings[RELYING_PARTY_REALM];
+                    var accessTokenUri = string.Format("https://{0}.accesscontrol.windows.net/v2/OAuth2-13/", Settings.WindowsAzureOAuthServiceNamespace);
+                    var scope = Settings.WindowsAzureOAuthRelyingPartyRealm;
                     return Json(new
                     {
                         token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId,

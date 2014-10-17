@@ -63,10 +63,13 @@ namespace Chalkable.BackgroundTaskProcessor
                     }
                     else
                     {
-                        using (var uow = new UnitOfWork(Settings.SchoolTemplateConnectionString, false))
+                        foreach (var dbServer in Settings.ChalkableSchoolDbServers)
                         {
-                            var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
-                            cmd.ExecuteNonQuery();
+                            using (var uow = new UnitOfWork(Settings.GetSchoolTemplateConnectionString(dbServer), false))
+                            {
+                                var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
+                                cmd.ExecuteNonQuery();
+                            }
                         }
                         var runer = new AllSchoolRunner<string>();
                         if (
@@ -101,9 +104,7 @@ namespace Chalkable.BackgroundTaskProcessor
 
         private string ExecSql(AllSchoolRunner<string>.Task task)
         {
-            string connectionString = string.Format(Settings.SchoolConnectionStringTemplate, task.Server,
-                                                            task.Database, Settings.Configuration.SchoolDbUser,
-                                                            Settings.Configuration.SchoolDbPassword);
+            string connectionString = Settings.GetSchoolConnectionString(task.Server, task.Database);
             using (var uow = new UnitOfWork(connectionString, false))
             {
                 var cmd = uow.GetTextCommandWithParams(task.Data, new Dictionary<string, object>());
