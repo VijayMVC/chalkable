@@ -1,0 +1,6 @@
+mixin FileUpload(controller, action, params)
+    -attributes['data-controller'] = controller;
+    -attributes['data-action'] = action;
+    -attributes['data-params'] = params;
+    -self.prepareData(attributes);
+    input(type="file")(attributes)
