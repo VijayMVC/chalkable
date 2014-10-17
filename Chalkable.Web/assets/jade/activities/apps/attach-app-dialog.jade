@@ -1,8 +1,8 @@
 mixin AppIconLink(announcementId, app, iconTooltip)
    appId = app.getId().valueOf()
    div(data-tooltip=iconTooltip).app-icon-link
-       +ActionLink('apps', 'tryToAttach', announcementId, appId).app-link
-       .app-list-item
+       +ActionLink('apps', 'tryToAttach', announcementId, appId)(disabled=app.needToInstall() ? "disabled" : null).app-link
+       div(disabled=app.needToInstall() ? "disabled" : null).app-list-item
             .icon
                 pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
                 img(src=pictureUrl)
@@ -10,7 +10,7 @@ mixin AppIconLink(announcementId, app, iconTooltip)
                 .name=app.getName()
                 .shortdesc=app.getShortDescription()
                 if app.needToInstall()
-                   +ActionLink('appmarket', 'details', app.getId()).shortdesc Install
+                   +ActionLink('appmarket', 'details', app.getId()) Install
 
 teacherId = self.teacherId.valueOf()
 announcementId = self.announcementId.valueOf()
