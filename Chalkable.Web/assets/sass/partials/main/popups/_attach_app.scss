@@ -60,8 +60,10 @@
             .app-list-item{
               width: 220px;
               height: 106px;
+              cursor: pointer;
 
               &[disabled]{
+                cursor: default;
                 .icon{
                   opacity: 0.5;
                 }
