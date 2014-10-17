@@ -19,15 +19,82 @@
     <Certificates>
       <Certificate name="Certificate1" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
+    <ConfigurationSettings>
+      <!-- DB settings -->
+      <Setting name="ChalkableMaster"/>
+      <Setting name="ChalkableSchoolTemplate"/>
+      <Setting name="ChalkableSchool"/>
+      <Setting name="ChalkableSchoolDbUser"/>
+      <Setting name="ChalkableSchoolDbPwd"/>
+      <Setting name="ChalkableSchoolDbServers"/>
+      <!-- CDN and content settings-->
+      <Setting name="Domain"/>
+      <Setting name="ScriptsRoot"/>
+      <!-- OAuth -->
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"/>
+      <!-- API Explorer -->
+      <Setting name="api.explorer.client-id"/>
+      <Setting name="api.explorer.secret"/>
+      <Setting name="api.explorer.redirecturi"/>
+      <Setting name="api.explorer.client-name"/>
+      <Setting name="api.explorer.scope"/>
+    </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Small">
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <ConfigurationSettings>
+      <!-- DB settings -->
+      <Setting name="ChalkableMaster"/>
+      <Setting name="ChalkableSchoolTemplate"/>
+      <Setting name="ChalkableSchool"/>
+      <Setting name="ChalkableSchoolDbUser"/>
+      <Setting name="ChalkableSchoolDbPwd"/>
+      <Setting name="ChalkableSchoolDbServers"/>
+      <!-- OAuth -->
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"/>
+      <!-- other settings -->
+      <Setting name="TaskProcessorDelay"/>
+      <Setting name="DbBackupServiceUrl"/>
+    </ConfigurationSettings>
   </WorkerRole>
   <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="ExtraSmall">
     <Imports>
       <Import moduleName="Diagnostics" />
     </Imports>
+    <ConfigurationSettings>
+      <!-- DB settings -->
+      <Setting name="ChalkableMaster"/>
+      <Setting name="ChalkableSchoolTemplate"/>
+      <Setting name="ChalkableSchool"/>
+      <Setting name="ChalkableSchoolDbUser"/>
+      <Setting name="ChalkableSchoolDbPwd"/>
+      <Setting name="ChalkableSchoolDbServers"/>
+      <!-- OAuth -->
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"/>
+      <!-- Task settings -->
+      <Setting name="TaskProducer.SisImportProducer.Interval"/>
+      <Setting name="TaskProducer.SisImportProducer.IntervalStart"/>
+      <Setting name="TaskProducer.SisImportProducer.IntervalEnd"/>
+      <Setting name="TaskProducer.CleanupManager.Interval"/>
+      <Setting name="TaskProducer.CleanupManager.IntervalStart"/>
+      <Setting name="TaskProducer.CleanupManager.IntervalEnd"/>
+    </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

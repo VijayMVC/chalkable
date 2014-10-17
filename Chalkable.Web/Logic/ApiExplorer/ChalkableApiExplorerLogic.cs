@@ -282,23 +282,16 @@ namespace Chalkable.Web.Logic
         }
 
 
-        private const string API_EXPLORER_CLIENT_ID = "api.explorer.client-id";
-        private const string API_EXPLORER_SECRET = "api.explorer.secret";
-        private const string API_EXPLORER_REDIRECT_URI = "api.explorer.redirecturi";
-        private const string ACS_URL_FORMAT = "https://{0}.accesscontrol.windows.net/v2/OAuth2-13/";
-        private const string SERVICE_NAMESPACE = "WindowsAzure.OAuth.ServiceNamespace";
-        private const string API_EXPLORER_SCOPE = "api.explorer.scope";
+        private const string AcsUrlFormat = "https://{0}.accesscontrol.windows.net/v2/OAuth2-13/";
 
 
         public static string GetAccessTokenFor(string userName, int? schoolYearId, IServiceLocatorMaster locator)
         {
-            var clientId = ConfigurationManager.AppSettings[API_EXPLORER_CLIENT_ID];
-            var clientSecret = ConfigurationManager.AppSettings[API_EXPLORER_SECRET];
-            var redirectUri = ConfigurationManager.AppSettings[API_EXPLORER_REDIRECT_URI];
-            var accessTokenUri = string.Format(ACS_URL_FORMAT,
-                                      ConfigurationManager.AppSettings[SERVICE_NAMESPACE]);
-
-            var scope = ConfigurationManager.AppSettings[API_EXPLORER_SCOPE];
+            var clientId = Settings.ApiExplorerClientId;
+            var clientSecret = Settings.ApiExplorerSecret;
+            var redirectUri = Settings.ApiExplorerRedirectUri;
+            var accessTokenUri = string.Format(AcsUrlFormat, Settings.WindowsAzureOAuthServiceNamespace);
+            var scope = Settings.ApiExplorerScope;
             return locator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, schoolYearId, scope);
         }
 

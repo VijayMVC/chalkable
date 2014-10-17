@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Microsoft.IdentityModel.Claims;
 using WindowsAzure.Acs.Oauth2.Protocol;
 
@@ -41,7 +42,7 @@ namespace WindowsAzure.Acs.Oauth2
         /// The parameters are read from the application configuration's appSettings keys 'WindowsAzure.OAuth.ServiceNamespace', 'WindowsAzure.OAuth.ServiceNamespaceManagementUserName', 'WindowsAzure.OAuth.ServiceNamespaceManagementUserKey' and 'WindowsAzure.OAuth.RelyingPartyName'.
         /// </summary>
         public AuthorizationServer()
-            : this(ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyName"], new ApplicationRegistrationService())
+            : this(Settings.WindowsAzureOAuthRelyingPartyName, new ApplicationRegistrationService())
         {
         }
 
@@ -51,7 +52,7 @@ namespace WindowsAzure.Acs.Oauth2
         /// </summary>
         /// <param name="applicationRegistrationService">The application registration service.</param>
         public AuthorizationServer(IApplicationRegistrationService applicationRegistrationService)
-            : this(ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyName"], applicationRegistrationService)
+            : this(Settings.WindowsAzureOAuthRelyingPartyName, applicationRegistrationService)
         {
         }
 

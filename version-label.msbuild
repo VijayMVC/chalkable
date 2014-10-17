@@ -16,15 +16,5 @@
 		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
 			Regex='private-build' 
 			ReplacementText='$(Version)' />
-			
-		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
-			Regex='\.\.' 
-			ReplacementText='!!!' />	
-		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
-			Regex='\.' 
-			ReplacementText='-' />
-		<FileUpdate Files="Chalkable.Web\StorageAssets\configuration.xml" 
-			Regex='!!!' 
-			ReplacementText='..' />				
 	</Target>
 </Project>

@@ -219,6 +219,8 @@ NAMESPACE('chlk.controllers', function (){
             else{
                 var classes = this.classService.getClassesForTopBar(false, true);
                 var classId_ = announcement.getClassId(), classInfo, types;
+                var announcementTypeId_ = announcement.getAnnouncementTypeId();
+                var savedClassInfo = this.getContext().getSession().get('classInfo', null);
                 classes.forEach(function(item){
                     var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
                     types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
@@ -227,6 +229,15 @@ NAMESPACE('chlk.controllers', function (){
                     if(currentClassInfo && classId_ && classId_ == item.getId()){
                         classInfo = currentClassInfo;
                         model.setClassInfo(classInfo);
+                        if(savedClassInfo && savedClassInfo.getId() == item.getId()){
+                            currentClassInfo = savedClassInfo;
+                        }else{
+                            var hasType = types.filter(function(item){return item.getId() == announcementTypeId_}).length;
+                            if(!hasType && announcement.getState() && currentClassInfo && announcementTypeId_){
+                                currentClassInfo.getTypesByClass().push(new chlk.models.announcement.ClassAnnouncementType(announcementTypeId_, announcement.getAnnouncementTypeName()));
+                                this.getContext().getSession().set('classInfo', currentClassInfo);
+                            }
+                        }
                     }
                 }, this);
 
@@ -235,8 +246,6 @@ NAMESPACE('chlk.controllers', function (){
                     classId_,
                     isEdit
                 );
-
-                var announcementTypeId_ = announcement.getAnnouncementTypeId();
                 if(announcementTypeId_){
                     if(classId_ && classInfo){
                         types = classInfo.getTypesByClass();
@@ -297,6 +306,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
+            this.getContext().getSession().set('classInfo', null);
             var classes = this.classService.getClassesForTopBar(false, true);
             var classesBarData = new chlk.models.classes.ClassesForTopBar(classes), p = false;
             classes.forEach(function(item){
@@ -305,7 +315,7 @@ NAMESPACE('chlk.controllers', function (){
             });
             if(!p)
                 classId_ = null;
-            if(classId_ && announcementTypeId_){
+            if(classId_ && announcementTypeId_ && announcementTypeId_.valueOf()){
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 var types = classInfo.getTypesByClass();
                 var typeId = null;
@@ -330,6 +340,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(model && model.getAnnouncement()){
+                        if(date_)
+                            model.setDate(date_);
                         var announcement = model.getAnnouncement();
                         if(noDraft_){
                             announcement.setClassId(classId_ || null);
@@ -342,7 +354,7 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         return this.addEditAction(model, false);
                     }
-                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
+                    return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, date_);
                 },this);
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
@@ -372,6 +384,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AnnouncementId]],
         function editAction(announcementId) {
+            this.getContext().getSession().set('classInfo', null);
             var result = this.announcementService
                 .editAnnouncement(announcementId)
                 .attach(this.validateResponse_())

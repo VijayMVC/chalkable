@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data.Services.Client;
 using System.Linq;
 using System.Text;
+using Chalkable.Common;
 using FluentACS.ManagementService;
 using WindowsAzure.Acs.Oauth2.Protocol;
 
@@ -22,7 +23,10 @@ namespace WindowsAzure.Acs.Oauth2
         /// The parameters are read from the application configuration's appSettings keys 'WindowsAzure.OAuth.ServiceNamespace', 'WindowsAzure.OAuth.ServiceNamespaceManagementUserName', 'WindowsAzure.OAuth.ServiceNamespaceManagementUserKey' and 'WindowsAzure.OAuth.RelyingPartyName'.
         /// </summary>
         public ApplicationRegistrationService()
-            : this(ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespace"], ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespaceManagementUserName"], ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"], ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyName"])
+            : this( Settings.WindowsAzureOAuthServiceNamespace, 
+                    Settings.WindowsAzureOAuthServiceNamespaceManagementUserName, 
+                    Settings.WindowsAzureOAuthServiceNamespaceManagementUserKey, 
+                    Settings.WindowsAzureOAuthRelyingPartyName)
         {
         }
 

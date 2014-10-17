@@ -17,9 +17,9 @@ namespace Chalkable.Tests.Common
         public void Test()
         {
             Debug.WriteLine(Settings.MasterConnectionString);
-            Debug.WriteLine(Settings.SchoolConnectionStringTemplate);
-            Debug.WriteLine(Settings.Configuration.SchoolTemplateDataBase);
-            Debug.WriteLine(Settings.Configuration.Servers.AllKeys.JoinString(",")); 
+            Debug.WriteLine(Settings.GetSchoolConnectionString("dbServer", "catalogName"));
+            Debug.WriteLine(Settings.GetSchoolTemplateConnectionString("dbServer"));
+            Debug.WriteLine(Settings.ChalkableSchoolDbServers.JoinString(","));
         }
 
         [Test]

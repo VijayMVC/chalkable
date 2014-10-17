@@ -18,7 +18,7 @@ mixin AnnouncementTooltip()
     applications = self.getApplications()
     gradeViewApps = self.getGradeViewApps()
     grade = self.getGrade()
-    hasGrade = self.isDropped() || grade || grade == 0
+    hasGrade = self.isDropped() || self.isExempt() || grade || grade == 0
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
     +FeedItem(self, true).animated-item
@@ -40,7 +40,7 @@ mixin AnnouncementTooltip()
                             data-tooltip-type = "overflow",
                             data-tooltip-class = "wide"
                         ).comment=self.getComment() || Msg.Your_grade + ":"
-                        .grade-value= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
+                        .grade-value= self.isDropped() ? Msg.Dropped : (self.isExempt() ? Msg.Exempt : (grade || grade == 0 ? grade : ''))
                 if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
                     +AnnouncementTooltip().make-visible-container
                         .comment This item is hidden from students.
