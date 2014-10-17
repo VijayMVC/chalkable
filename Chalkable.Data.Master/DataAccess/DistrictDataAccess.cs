@@ -16,7 +16,7 @@ namespace Chalkable.Data.Master.DataAccess
         
         public IDictionary<string, int> CalcServersLoading()
         {
-            var res = Settings.Servers.ToDictionary(server => server, server => 0);
+            var res = Settings.ChalkableSchoolDbServers.ToDictionary(server => server, server => 0);
             string sql = string.Format("select {0}, count(*) as [Count] from District group by {0}", District.SERVER_URL_FIELD);
             using (var reader = ExecuteReaderParametrized(sql, new Dictionary<string, object>()))
             {
