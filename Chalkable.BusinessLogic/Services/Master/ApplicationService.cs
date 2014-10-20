@@ -213,7 +213,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow).GetByIds(ids);
+                var res = new ApplicationDataAccess(uow).GetByIds(ids);
+                return res.Where(x=>x.State == ApplicationStateEnum.Live).ToList();
             }
         }
 

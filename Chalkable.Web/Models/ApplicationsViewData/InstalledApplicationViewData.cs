@@ -9,6 +9,24 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
+
+    public class ApplicationForAttachViewData : BaseApplicationViewData
+    {
+        public int NotInstalledStudentsCount { get; set; }
+        protected ApplicationForAttachViewData(Application application) : base(application)
+        {
+        }
+        
+        public static ApplicationForAttachViewData Create(Application application, int notInstalledStudentsCount)
+        {
+            return new ApplicationForAttachViewData(application) {NotInstalledStudentsCount = notInstalledStudentsCount};
+        }
+        public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp)
+        {
+            return applications.Select(x => Create(x, notInstalledStCountPerApp[x.Id])).ToList();
+        } 
+    }
+
     public class InstalledApplicationViewData : BaseApplicationViewData
     {
         public bool HasMyApp { get; set; }
@@ -18,12 +36,11 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         {
         }
 
-        public static IList<InstalledApplicationViewData> Create(IList<ApplicationInstall> installedApp, Person person,
+        public static IList<InstalledApplicationViewData> Create(IList<ApplicationInstall> installedApp, int? personId,
                                                          IList<Application> applications, IDictionary<Guid, bool> hasMyAppsDic = null)
         {
             var res = new List<InstalledApplicationViewData>();
             var dicApp = installedApp.GroupBy(x => x.ApplicationRef).ToDictionary(x => x.Key, x => x.ToList());
-            var personId = person != null ? person.Id : default(int?);
             foreach (var appKey in dicApp.Keys)
             {
                 var appInstalls = dicApp[appKey];

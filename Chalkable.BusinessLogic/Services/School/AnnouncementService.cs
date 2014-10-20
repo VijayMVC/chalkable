@@ -600,7 +600,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (classId.HasValue)
             {
-                var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate.Date);
+                // Fetch current or prev marking period, 'cause if this method is called even when expiresDate wasn't supplied by teacher
+                var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate.Date, true);
                 if (mp == null)
                     throw new NoMarkingPeriodException();
                 var mpc = ServiceLocator.MarkingPeriodService.GetMarkingPeriodClass(classId.Value, mp.Id);

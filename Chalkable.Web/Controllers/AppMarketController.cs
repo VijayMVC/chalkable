@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.MixPanel;
@@ -25,35 +27,72 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ListInstalled(int personId, int? classId, string filter, int? start, int? count, bool? forAttach)
+        public ActionResult ListInstalledForAttach(int personId, int classId, int markingPeriodId, int? start, int? count)
         {
             var st = start ?? 0;
             var cnt = count ?? 9;
 
-            var sp = SchoolLocator.PersonService.GetPerson(personId);
-            var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            var installedApp = MasterLocator.ApplicationService.GetApplicationsByIds(
-                    appInstallations.Select(x => x.ApplicationRef).Distinct().ToList());
-            if (forAttach.HasValue && forAttach.Value)
-                installedApp = installedApp.Where(x => x.CanAttach).ToList();
-
-            if (classId.HasValue)
-            {
-                var classPersons = SchoolLocator.ClassService.GetClassPersons(null, classId, null, null);
-
-            }
-
-            var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
-
-            var res = InstalledApplicationViewData.Create(appInstallations, sp, installedApp, hasMyAppDic);
-            if (!string.IsNullOrEmpty(filter))
-                res = res.Where(x => x.Name.ToLower().Contains(filter)).ToList();
-            
+            var studentCountPerApp = SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
+            var installedApp = GetApplications(studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
+            var res = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp);
             var totalCount = res.Count;
             res = res.Skip(st).Take(cnt).ToList();
-            var appsList = new PaginatedList<InstalledApplicationViewData>(res, st/cnt, cnt, totalCount);
+            return Json(new PaginatedList<ApplicationForAttachViewData>(res, st / cnt, cnt, totalCount));
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ListInstalled(int personId, string filter, int? start, int? count)
+        {
+            var st = start ?? 0;
+            var cnt = count ?? 9;
+            var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
+            var installedApp = GetApplications(appInstallations.Select(x => x.ApplicationRef).Distinct().ToList(), true, null);
+            var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
+            var res = InstalledApplicationViewData.Create(appInstallations, personId, installedApp, hasMyAppDic);
+            var totalCount = res.Count;
+            res = res.Skip(st).Take(cnt).ToList();
+            var appsList = new PaginatedList<InstalledApplicationViewData>(res, st / cnt, cnt, totalCount);
             return Json(appsList);
         }
+
+        private IList<Application> GetApplications(IList<Guid> ids, bool? forAttach, string filter)
+        {
+            var res = MasterLocator.ApplicationService.GetApplicationsByIds(ids);
+            if(forAttach.HasValue)
+                res = res.Where(x => x.CanAttach).ToList();
+            if (!string.IsNullOrEmpty(filter))
+                res = res.Where(x => x.Name.ToLower().Contains(filter)).ToList();
+            return res;
+        }
+
+        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        //public ActionResult ListInstalled(int personId, int? classId, string filter, int? start, int? count, bool? forAttach)
+        //{
+        //    var st = start ?? 0;
+        //    var cnt = count ?? 9;
+
+        //    var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
+        //    var installedApp = MasterLocator.ApplicationService.GetApplicationsByIds(
+        //            appInstallations.Select(x => x.ApplicationRef).Distinct().ToList());
+        //    if (forAttach.HasValue && forAttach.Value)
+        //        installedApp = installedApp.Where(x => x.CanAttach).ToList();
+
+        //    if (classId.HasValue)
+        //    {
+        //        var classPersons = SchoolLocator.ClassService.GetClassPersons(null, classId, null, null);
+        //    }
+
+        //    var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
+
+        //    var res = InstalledApplicationViewData.Create(appInstallations, personId, installedApp, hasMyAppDic);
+        //    if (!string.IsNullOrEmpty(filter))
+        //        res = res.Where(x => x.Name.ToLower().Contains(filter)).ToList();
+            
+        //    var totalCount = res.Count;
+        //    res = res.Skip(st).Take(cnt).ToList();
+        //    var appsList = new PaginatedList<InstalledApplicationViewData>(res, st/cnt, cnt, totalCount);
+        //    return Json(appsList);
+        //}
 
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]

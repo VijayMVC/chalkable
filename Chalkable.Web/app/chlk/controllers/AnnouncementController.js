@@ -363,18 +363,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, Number]],
-        function attachAppAction(announcementId, pageIndex_) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number]],
+        function attachAppAction(announcementId, classId, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
-
+            var mp = this.getCurrentMarkingPeriod();
             var result = this.appMarketService
-                .getInstalledApps(userId, pageIndex_ | 0, null, null, true)
+                .getAppsForAttach(userId, classId, mp.getId(), pageIndex_ | 0, null)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var apps = (data.getItems() || []).filter(function(app){
-                       return app.isInstalledOnlyForCurrentUser() == false;
-                    });
-                    data.setItems(apps);
                     return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
                 });
             if (pageIndex_ || pageIndex_ == 0)

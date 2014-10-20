@@ -9,7 +9,7 @@ li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|'
                         +PersonImg(self.getPersonInfo(), 47)
                         div.title= self.getDescription()
             when 4
-                +ActionLink('class', 'details', self.getId()).left.image-container.white.shadow
+                +ActionLink('class', 'info', self.getId()).left.image-container.white.shadow
                     div.site-search-class
                         .img-wrapper
                             +ClassImg(self, 45, 80).avatar
