@@ -54,7 +54,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                                     div
                                                         +PersonImg(owner, 24)
                                                     div
-                                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment()).comment-input=item.getComment()
+                                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment()).comment-input.with-grid-focus=item.getComment()
                                                         .grading-comments-list
                                                         span.enter=Msg.Enter_when_done
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block

@@ -350,7 +350,7 @@ NAMESPACE('chlk.controls', function () {
                 var target = new ria.dom.Dom(event.target);
                 if(!(target.hasClass(noRowClickEventClass) || target.parent('.' + noRowClickEventClass).exists())){
                     if(node.hasClass('selected')){
-                        this.focusGrid();
+                        this.focusGrid(target);
                     }else{
                         var grid = this.getGrid();
                         var index = parseInt(node.getAttr('index'), 10);
@@ -380,10 +380,12 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[ria.dom.Dom]],
-            VOID, function focusGrid() {
+            VOID, function focusGrid(target_) {
                 //if(!new ria.dom.Dom(':focus').exists()){
                     var node = this.getGrid();
                     var row = node.find('.row.selected');
+                    if(target_ && (target_.hasClass(otherInputWithFocusClass) || target_.hasClass('grid-focus')))
+                        return;
                     if(row.exists()){
                         var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
                         if(focusNode.exists()){
