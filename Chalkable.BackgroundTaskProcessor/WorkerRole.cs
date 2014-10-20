@@ -23,12 +23,17 @@ namespace Chalkable.BackgroundTaskProcessor
             var delay = Settings.TaskProcessorDelay;
             var raygunClient = new RaygunClient();
             raygunClient.ApplicationVersion = CompilerHelper.Version;
+
+            if (delay <= 0)
+            {
+                Trace.TraceError("Task processing is turned off");
+            }
+
             while (true)
             {
                 if (delay <= 0)
                 {
-                    Thread.Sleep(7200000);
-                    Trace.TraceError("Task processing is turned off");
+                    Thread.Sleep(10000);                    
                     continue;
                 }
                 try

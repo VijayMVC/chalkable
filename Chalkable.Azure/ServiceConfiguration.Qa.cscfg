@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2014-06.2.4">
+<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
@@ -42,7 +42,7 @@
       <Setting name="ChalkableSchoolTemplate" value="Data Source={0};Initial Catalog=ChalkableSchoolTemplate;UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="v8xjnk8au1.database.windows.net" />      
+      <Setting name="ChalkableSchoolDbServers" value="v8xjnk8au1.database.windows.net" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="Yqw/rtCv1iQ7eHejhSTVzV81Zv0Z51G/BCA/B9W4XU8=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="qa.chalkable.com" />
