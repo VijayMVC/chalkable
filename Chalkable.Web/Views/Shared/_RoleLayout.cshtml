@@ -271,7 +271,7 @@
                         break;
                     }
                 }
-                if (!result)
+                if (!result && parseInt(value, 10) != value)
                     return "Whole numbers or .25 increments";
             }
 
