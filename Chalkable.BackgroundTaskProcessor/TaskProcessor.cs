@@ -31,10 +31,6 @@ namespace Chalkable.BackgroundTaskProcessor
             int logFlushSize = 100;
             if (task.DistrictRef.HasValue)
             {
-                if (task.DistrictRef.Value == Guid.Parse("07abdc8f-2dfc-4bbe-960b-395f6feae8c7"))
-                {
-                    int a = 0;
-                }
                 var d = sl.DistrictService.GetByIdOrNull(task.DistrictRef.Value);
                 logFlushSize = d.SyncLogFlushSize;
             }

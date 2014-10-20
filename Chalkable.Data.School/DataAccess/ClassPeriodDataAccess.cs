@@ -19,7 +19,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new AndQueryCondition();
             conds.Add(ClassPeriod.CLASS_REF_FIELD, classId);
-            conds.Add(ClassPeriod.PERIOD_REF_FIELD, classId);
+            conds.Add(ClassPeriod.PERIOD_REF_FIELD, periodId);
             conds.Add(ClassPeriod.DAY_TYPE_REF_FIELD, dayTypeId);
             SimpleDelete(conds);
         }
