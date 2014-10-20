@@ -15,18 +15,18 @@
       <Setting name="Domain" value="" />
       <Setting name="ScriptsRoot" value="" />
       <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://localhost/chalkable/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-local-access-control" />
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="Yqw/rtCv1iQ7eHejhSTVzV81Zv0Z51G/BCA/B9W4XU8=" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="qa.chalkable.com" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://qa.chalkable.com/" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-qa-access-control" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="1PjfB6WRfT7szdig42F59R4H65H+ak23RM5SJJ7pr9U=" />
       <!-- API Explorer -->
-      <Setting name="api.explorer.client-id" value="https://localhost/chalkable" />
-      <Setting name="api.explorer.secret" value="Qwerty1@Local" />
-      <Setting name="api.explorer.redirecturi" value="https://localhost/chalkable" />
-      <Setting name="api.explorer.client-name" value="local-api-explorer" />
-      <Setting name="api.explorer.scope" value="https://localhost/chalkable/" />
+      <Setting name="api.explorer.client-id" value="https://qa.chalkable.com" />
+      <Setting name="api.explorer.secret" value="Qwerty1@" />
+      <Setting name="api.explorer.redirecturi" value="https://qa.chalkable.com" />
+      <Setting name="api.explorer.client-name" value="api explorer" />
+      <Setting name="api.explorer.scope" value="https://qa.chalkable.com/" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="D8884B835CF2696D0C37B56D161C1BA40CB2A708" thumbprintAlgorithm="sha1" />
@@ -44,12 +44,12 @@
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="v8xjnk8au1.database.windows.net" />
       <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://localhost/chalkable/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-local-access-control" />
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="Yqw/rtCv1iQ7eHejhSTVzV81Zv0Z51G/BCA/B9W4XU8=" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="qa.chalkable.com" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://qa.chalkable.com/" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-qa-access-control" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="1PjfB6WRfT7szdig42F59R4H65H+ak23RM5SJJ7pr9U=" />
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="-1" />
       <Setting name="DbBackupServiceUrl" value="" />
@@ -67,12 +67,12 @@
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="v8xjnk8au1.database.windows.net" />
       <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://localhost/chalkable/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-local-access-control" />
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="Yqw/rtCv1iQ7eHejhSTVzV81Zv0Z51G/BCA/B9W4XU8=" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="qa.chalkable.com" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://qa.chalkable.com/" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-qa-access-control" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="JBWJoVgOgUP0pdPqxrdKO+OqRGyQ2gb2GdN8POvMgRA=" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="1PjfB6WRfT7szdig42F59R4H65H+ak23RM5SJJ7pr9U=" />
       <!-- Task settings -->
       <Setting name="TaskProducer.SisImportProducer.Interval" value="600" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />
