@@ -191,7 +191,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             },
 
-            function calculateGradesAvg(gradingitem){
+            function calculateGradesAvg(gradingitem, round_){
                 var studentAnnouncements = gradingitem.studentannouncements;
                 if (!studentAnnouncements)
                     return null;
@@ -214,7 +214,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 });
                 studentAnnouncements.gradedStudentCount = gradedStudentCount;
                 if(gradedStudentCount){
-                    classAvg = (sum / gradedStudentCount).toFixed(2);
+                    classAvg = (sum / gradedStudentCount).toFixed(round_ ? 0 : 2)
                 }
                 studentAnnouncements.classAvg = classAvg;
                 return classAvg;
@@ -236,7 +236,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 }else{
                     value.totalavarages.forEach(function(item){
                         var grade = item.totalaverage;
-                        var value = grade || grade == 0 ? grade.toFixed(2) : '';
+                        var value = grade || grade == 0 ? grade.toFixed(value.rounddisplayedaverages ? 0 :2) : '';
                         dom.find('.total-average[data-average-id=' + item.averageid + ']').setHTML(value.toString());
                     });
                 }
@@ -247,7 +247,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 });
 
                 value.gradingitems.forEach(function(item){
-                    calculateGradesAvg = that.calculateGradesAvg(item);
+                    calculateGradesAvg = that.calculateGradesAvg(item, value.rounddisplayedaverages);
                     dom.find('.avg-' + item.id).setHTML(calculateGradesAvg || calculateGradesAvg === 0 ? calculateGradesAvg.toString() : '');
                 });
                 container.parent().find('.mp-name').setData('tooltip', tooltipText);
