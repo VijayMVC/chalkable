@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Security;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.Common;
 using Newtonsoft.Json;
 
 namespace Chalkable.Web.Authentication
@@ -120,6 +122,10 @@ namespace Chalkable.Web.Authentication
                 var cntx = UserContext.FromString(ticket.UserData);
                 if (sl.Length > 1)
                     cntx.SisToken = sl[1];
+
+                if (!string.IsNullOrEmpty(cntx.DistrictServerUrl) && !Settings.ChalkableSchoolDbServers.Contains(cntx.DistrictServerUrl))
+                    return null;
+
                 var userPermissionData = GetClaimsDataFromCookie(USER_PERMISSION_COOKIE_NAME);
                 if (!string.IsNullOrEmpty(userPermissionData))
                 {

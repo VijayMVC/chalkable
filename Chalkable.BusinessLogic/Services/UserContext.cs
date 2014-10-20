@@ -22,7 +22,13 @@ namespace Chalkable.BusinessLogic.Services
         [Ignore]
         public string MasterConnectionString { get; private set; }
         [Ignore]
-        public string SchoolConnectionString { get; private set; }
+        public string SchoolConnectionString {
+            get
+            {
+                return (DistrictId.HasValue && !string.IsNullOrEmpty(DistrictServerUrl))
+                    ? Settings.GetSchoolConnectionString(DistrictServerUrl, DistrictId.Value)
+                    : null;
+            } }
         
         public Guid UserId { get; set; }
         public Guid? DistrictId { get; set; }
@@ -104,8 +110,6 @@ namespace Chalkable.BusinessLogic.Services
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;
-                    if (!user.IsDemoUser)
-                        SchoolConnectionString = Settings.GetSchoolConnectionString(DistrictServerUrl, district.Id);
                 }
                 if (schoolYear != null)
                 {
@@ -125,7 +129,6 @@ namespace Chalkable.BusinessLogic.Services
             SchoolLocalId = schoolLocalId;
             DistrictId = districtId;
             DeveloperId = developerId;
-            SchoolConnectionString = Settings.GetSchoolConnectionString(DistrictServerUrl, districtId);   
         }
 
         public override string ToString()
@@ -175,8 +178,6 @@ namespace Chalkable.BusinessLogic.Services
                     }
                     i++;
                 }
-            if (res.DistrictId.HasValue && !string.IsNullOrEmpty(res.DistrictServerUrl))
-                res.SchoolConnectionString = Settings.GetSchoolConnectionString(res.DistrictServerUrl, res.DistrictId.Value);
             res.Role = CoreRoles.GetById(res.RoleId);
             return res;
         }
