@@ -28,7 +28,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function viewAnnouncementErrorAction(){
-                var message = 'This item has been deleted';
+                var message = 'This item has been deleted or you don\'t have access to view it';
                 return this.generalServerErrorAction(message);
             },
 
