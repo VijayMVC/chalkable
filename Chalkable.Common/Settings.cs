@@ -48,10 +48,9 @@ namespace Chalkable.Common
         public static string ChalkableSchoolDbPassword { get { return Get("ChalkableSchoolDbPwd"); } }
         public static string[] ChalkableSchoolDbServers { get { return Get("ChalkableSchoolDbServers").Split(','); } }
 
-
         public static string GetSchoolConnectionString(string dbServer, string catalogName)
         {
-            Debug.Assert(ChalkableSchoolDbServers.Contains(dbServer), "School DB server should be included in ChalkableSchoolDbServers");
+            Debug.Assert(ChalkableSchoolDbServers.Contains(dbServer), string.Format("School DB server {0} should be included in ChalkableSchoolDbServers", dbServer));
             return String.Format(GetSchoolConnectionString("ChalkableSchool"), dbServer, catalogName);
         }
 
@@ -62,7 +61,7 @@ namespace Chalkable.Common
 
         public static string GetSchoolTemplateConnectionString(string dbServer)
         {
-            Debug.Assert(ChalkableSchoolDbServers.Contains(dbServer), "School DB server should be included in ChalkableSchoolDbServers");
+            Debug.Assert(ChalkableSchoolDbServers.Contains(dbServer), string.Format("School DB server {0} should be included in ChalkableSchoolDbServers", dbServer));
             return String.Format(GetSchoolConnectionString("ChalkableSchoolTemplate"), dbServer);
         }
 
