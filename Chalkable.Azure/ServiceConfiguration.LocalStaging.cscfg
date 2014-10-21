@@ -27,6 +27,8 @@
       <Setting name="api.explorer.redirecturi" value="https://localhost/chalkable" />
       <Setting name="api.explorer.client-name" value="local-api-explorer" />
       <Setting name="api.explorer.scope" value="https://localhost/chalkable/" />
+      <!--tracking-->
+      <Setting name="mixpanel-token" value=""/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="D8884B835CF2696D0C37B56D161C1BA40CB2A708" thumbprintAlgorithm="sha1" />

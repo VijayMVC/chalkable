@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             DistrictId = districtId;
         }
 
-        public static new CurrentPersonViewData Create(Person person, Guid districtId, int schoolYearId, int schoolLocalId)
+        public static CurrentPersonViewData Create(Person person, Guid districtId, int schoolYearId, int schoolLocalId)
         {
             return new CurrentPersonViewData(person, districtId, schoolYearId, schoolLocalId);
         }

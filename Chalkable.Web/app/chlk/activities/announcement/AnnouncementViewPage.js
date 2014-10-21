@@ -653,6 +653,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var input = popUp.find('.comment-input');
                 input.setValue(node.getHTML());
                 popUp.find('.grading-comments-list').hide();
+                setTimeout(function(){
+                    input.trigger('focus');
+                }, 100)
             },
 
             [ria.mvc.DomEventBind('click', '.grading-comments-list .item')],

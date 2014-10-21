@@ -9,7 +9,6 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -37,7 +36,7 @@ namespace Chalkable.Web.Controllers
            
             if (application != null)
             {
-                MixPanelService.CreatedApp(Context.Login, application.Name);
+                MasterLocator.UserTrackingService.CreatedApp(Context.Login, application.Name);
             }
             return PrepareAppInfo(application, true, true);
         }
@@ -66,14 +65,14 @@ namespace Chalkable.Web.Controllers
             if (applicationInputModel.ForSubmit) //TODO: mixpanel
             {
 
-                MixPanelService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription,
+                MasterLocator.UserTrackingService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription,
                                                       subjects, applicationInputModel.ApplicationPrices.Price, 
                                                       applicationInputModel.ApplicationPrices.PricePerSchool,
                                                       applicationInputModel.ApplicationPrices.PricePerClass);
             }
             else
             {
-                MixPanelService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription,
+                MasterLocator.UserTrackingService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription,
                                                       subjects, applicationInputModel.ApplicationPrices.Price, 
                                                       applicationInputModel.ApplicationPrices.PricePerSchool, 
                                                       applicationInputModel.ApplicationPrices.PricePerClass);
@@ -146,7 +145,7 @@ namespace Chalkable.Web.Controllers
             var res = MasterLocator.ApplicationUploadService.GoLive(applicationId);
             if (res)
             {
-                MixPanelService.SelectedLive(Context.Login, applicationId.ToString());
+                MasterLocator.UserTrackingService.SelectedLive(Context.Login, applicationId.ToString());
             }
             return Json(res);
         }

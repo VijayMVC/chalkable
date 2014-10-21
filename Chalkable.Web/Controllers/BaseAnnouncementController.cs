@@ -17,9 +17,6 @@ namespace Chalkable.Web.Controllers
             {
                 annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
                 annDetails.GradingStudentsCount = annDetails.StudentAnnouncements.Count(x=>x.IsGraded);
-                //var stAnns = annDetails.StudentAnnouncements.Where(x => x.NumericScore.HasValue && !x.Incomplete 
-                //    && !x.Exempt && !x.Dropped && !x.Absent).ToList();
-                //annDetails.Avg = stAnns.Count > 0 ? (int?) stAnns.Average(x => x.NumericScore.Value) : null;
             }
             var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x=>x.PersonRef).ToList();
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);

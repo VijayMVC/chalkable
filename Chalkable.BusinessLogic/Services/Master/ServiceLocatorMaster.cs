@@ -1,6 +1,9 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
+using Chalkable.MixPanel;
+using Chalkable.UserTracking;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
@@ -27,6 +30,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IFundService FundService { get; }
         IDeveloperService DeveloperService { get; }
         IDbService DbService { get; }
+        IUserTrackingService UserTrackingService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -44,12 +48,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IPictureService applicationPictureService;
         private IApplicationService applicationService;
         private ICategoryService categoryService;
-        private IAccessControlService accessControlService;
         private IApplicationUploadService applicationUploadService;
-        private IEmailService emailService;
         private IFundService fundService;
         private IDeveloperService developerService;
-        private IDbService dbService;
+        private IUserTrackingService userTrackingService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -64,14 +66,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             districtService = new DistrictService(this);
             applicationService = new ApplicationService(this);
             categoryService = new CategoryService(this);
-            accessControlService = new AccessControlService(this);
+            AccessControlService = new AccessControlService(this);
             applicationUploadService = new ApplicationUploadService(this);
-            emailService = new EmailService(this);
+            EmailService = new EmailService(this);
             fundService = new FundService(this);
             fundRequestPictureService = new FundRequestPictureService(this);
             developerService = new DeveloperService(this);
             applicationPictureService = new ApplicationPictureService(this);
-            dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
+            DbService = new DbService(Context != null ? Context.MasterConnectionString : null);
+            userTrackingService = new MixPanelService(Settings.MixPanelToken);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -86,22 +89,14 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IApplicationService ApplicationService { get { return applicationService; } }
         public ICategoryService CategoryService { get { return categoryService; } }
         public IApplicationUploadService ApplicationUploadService { get { return applicationUploadService; } }
-        public IAccessControlService AccessControlService
-        {
-            get { return accessControlService; }
-            protected set { accessControlService = value; }
-        }
-        public IEmailService EmailService
-        {
-            get { return emailService; } 
-            protected set { emailService = value; }
-        }
-
+        public IAccessControlService AccessControlService { get; protected set; }
+        public IEmailService EmailService { get; protected set; }
         public IFundService FundService { get { return fundService; } }
         public IDeveloperService DeveloperService { get { return developerService; } }
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
-
+        public IDbService DbService { get; protected set; }
+        public IUserTrackingService UserTrackingService { get { return userTrackingService; } }
         public virtual IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)
         {
             if (Context.DistrictId != districtId || Context.SchoolLocalId != schoolLocalId)
@@ -115,11 +110,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             return serviceLocator;
         }
 
-        public IDbService DbService
-        {
-            get { return dbService; } 
-            protected set { dbService = value; }
-        }
         
     }
 }

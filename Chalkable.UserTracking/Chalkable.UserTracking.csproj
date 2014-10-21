@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</ProjectGuid>
+    <ProjectGuid>{A0F02AE8-991B-4080-A49A-9428F2B87181}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Chalkable.Data.Master</RootNamespace>
-    <AssemblyName>Chalkable.Data.Master</AssemblyName>
+    <RootNamespace>Chalkable.UserTracking</RootNamespace>
+    <AssemblyName>Chalkable.UserTracking</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -31,8 +31,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'STAGING|AnyCPU'">
-    <OutputPath>bin\STAGING\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Staging|AnyCPU'">
+    <OutputPath>bin\Staging\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -50,9 +50,40 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Mixpanel.NET, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\3rdParty\Mixpanel.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,40 +91,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\ApplicationDataAccess.cs" />
-    <Compile Include="DataAccess\ApplicationRatingDataAccess.cs" />
-    <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />
-    <Compile Include="DataAccess\CategoryDataAccess.cs" />
-    <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
-    <Compile Include="DataAccess\DeveloperDataAccess.cs" />
-    <Compile Include="DataAccess\DistrictDataAccess.cs" />
-    <Compile Include="DataAccess\FundDataAccess.cs" />
-    <Compile Include="DataAccess\PreferenceDataAccess.cs" />
-    <Compile Include="DataAccess\SchoolDataAccess.cs" />
-    <Compile Include="DataAccess\SchoolUserDataAccess.cs" />
-    <Compile Include="DataAccess\UserDataAccess.cs" />
-    <Compile Include="DataAccess\UserLoginInfoDataAccess.cs" />
-    <Compile Include="Model\Application.cs" />
-    <Compile Include="Model\BackgroundTask.cs" />
-    <Compile Include="Model\ChalkableDepartment.cs" />
-    <Compile Include="Model\DatabaseBackupRestoreTaskData.cs" />
-    <Compile Include="Model\DatabaseUpdateTaskData.cs" />
-    <Compile Include="Model\District.cs" />
-    <Compile Include="Model\Fund.cs" />
-    <Compile Include="Model\PictureImportTaskData.cs" />
-    <Compile Include="Model\Preference.cs" />
-    <Compile Include="Model\User.cs" />
+    <Compile Include="IUserTrackingService.cs" />
+    <Compile Include="MixPanelService.cs" />
+    <Compile Include="NullTrackingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserTrackingEvents.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
-      <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
-      <Name>Chalkable.Data.Common</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
@@ -103,6 +115,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

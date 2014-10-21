@@ -364,6 +364,10 @@
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.UserTracking\Chalkable.UserTracking.csproj">
+      <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
+      <Name>Chalkable.UserTracking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GCObjectRenderer\GCObjectRenderer.csproj">
       <Project>{ccd7266b-94bb-45ef-bc49-0f608da006f3}</Project>
       <Name>GCObjectRenderer</Name>

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -34,7 +32,7 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.PrivateMessageService.SendMessage(personId, subject, body);
             if (res != null)
             {
-                MixPanelService.SentMessageTo(Context.Login, res.Recipient.FullName);
+                MasterLocator.UserTrackingService.SentMessageTo(Context.Login, res.Recipient.FullName);
             }
             return Json(PrivateMessageViewData.Create(res));
         }

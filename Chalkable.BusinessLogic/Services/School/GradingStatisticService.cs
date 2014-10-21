@@ -245,6 +245,7 @@ namespace Chalkable.BusinessLogic.Services.School
                        gradeBook.Students.Add(student);
                 }    
             }
+            gradeBook.Students = gradeBook.Students.OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
             return gradeBook;
         }
 
@@ -288,6 +289,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         stAnn.AlternateScore = alternateScores.FirstOrDefault(x => x.Id == stAnn.AlternateScoreId.Value);
                     annDetails.StudentAnnouncements.Add(stAnn);
                 }
+                annDetails.StudentAnnouncements = annDetails.StudentAnnouncements.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
                 annsDetails.Add(annDetails);
             }
             return annsDetails;

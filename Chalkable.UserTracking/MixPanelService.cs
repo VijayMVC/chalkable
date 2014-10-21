@@ -1,63 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.RegularExpressions;
-using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.Common;
+using Chalkable.UserTracking;
 using Mixpanel.NET.Engage;
 using Mixpanel.NET.Events;
 
 namespace Chalkable.MixPanel
 {
-    public static class MixPanelEvents
+    public class MixPanelService:IUserTrackingService
     {
-        public const string AttachedDocument = "Attached document";
-        public const string AttachedApp = "Attached App";
-        public const string OpenedAnnouncement = "opened announcement";
-        public const string OpenedApp = "opened app";
-        public const string BoughtApp = "Bought app";
-        public const string LaunchedApp = "Launched app";
-        public const string ResetPassword = "Reset password";
-        public const string ChangedPassword = "changed password";
-        public const string ChangedEmail = "changed email";
-        public const string SentMessageTo = "sent a message to";
-        public const string CreatedNewItem = "created new item";
-        public const string FinishedFirstStep = "finished first step";
-        public const string FinishedSecondStep = "finished second step";
-        public const string InvitedUser = "invited user";
-        public static string LoggedInForTheFirstTime = "logged in for the first time";
-        public static string SubmittedAppForApproval = "Submitted app for approval";
-        public static string SelectedLive = "Selected \"Live\"";
-        public static string CreatedApp = "Created App";
-        public static string UpdatedDraft = "Updated draft";
-    }
-
-    public static class MixPanelService
-    {
-        private static string token;
-
+        private bool IsDisabled { get { return string.IsNullOrEmpty(MixPanelToken); } }
 
         private const string MIXPANEL_USER_PREFIX = "mixpanel-user-";
-        private static string MixPanelToken
+        private string MixPanelToken { get; set; }
+
+
+        public MixPanelService(string mixToken)
         {
-            get 
-            {
-                if (string.IsNullOrEmpty(token))
-                {
-                    token = Settings.MixPanelToken;
-                }
-                return token;
-            }
+            MixPanelToken = mixToken;
         }
-        private static double unixTimeStamp(DateTime date) 
+
+        private static double UnixTimeStamp(DateTime date) 
         {
             var unix_time = (date - new DateTime(1970, 1, 1, 0, 0, 0));
             return unix_time.TotalSeconds;
         }
 
 
-        
+        private IEventTracker GetEventTracker()
+        {
+            if (IsDisabled)
+                return new NullEventTracker();
+            return new MixpanelTracker(MixPanelToken);
+        }
+
+        private IEngage GetEngage()
+        {
+            if (IsDisabled)
+                return new NullEngage();
+            return new MixpanelEngage(MixPanelToken);
+        }
+
 
         public static string MakeId(string email)
         {
@@ -71,7 +57,7 @@ namespace Chalkable.MixPanel
         private const string ROLE = "role";
         private const string INVITED_USER_EMAIL = "invited-user-email";
 
-        public static void InvitedUser(string email, string inviteEmail, string firstName, string lastName, string school, string role)
+        public void InvitedUser(string email, string inviteEmail, string firstName, string lastName, string school, string role)
         {
             var properties = new Dictionary<string, object>();
             properties[FIRST_NAME] = firstName;
@@ -79,16 +65,16 @@ namespace Chalkable.MixPanel
             properties[SCHOOL] = school;
             properties[ROLE] = role;
             properties[INVITED_USER_EMAIL] = inviteEmail;
-            SendEvent(email, MixPanelEvents.InvitedUser, properties);
+            SendEvent(email, UserTrackingEvents.InvitedUser, properties);
         }
 
-        public static void IdentifySysAdmin(string email, string firstName, string lastName,
+        public void IdentifySysAdmin(string email, string firstName, string lastName,
             DateTime? firstLoginDate, string ip)
         {
             try
             {
-                var engage = new MixpanelEngage(MixPanelToken);
-                var properties = prepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.SUPER_ADMIN_ROLE.LoweredName);
+                var engage = GetEngage();
+                var properties = PrepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.SUPER_ADMIN_ROLE.LoweredName);
                 engage.Set(MakeId(email), ip, properties);
             }
             catch (Exception ex)
@@ -98,13 +84,13 @@ namespace Chalkable.MixPanel
 
         }
 
-        public static void IdentifyAdmin(string email, string firstName, string lastName, string schoolName,
+        public void IdentifyAdmin(string email, string firstName, string lastName, string schoolName,
             DateTime? firstLoginDate, string timeZoneId, string role, string ip)
         {
             try
             {
-                var engage = new MixpanelEngage(MixPanelToken);
-                var properties = prepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role);
+                var engage = GetEngage();
+                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role);
                 engage.Set(MakeId(email), ip, properties);
             }
             catch (Exception ex)
@@ -114,13 +100,13 @@ namespace Chalkable.MixPanel
 
         }
 
-        public static void IdentifySignUpUser(string email, string username, string schoolName, 
+        public void IdentifySignUpUser(string email, string username, string schoolName, 
             DateTime firstLoginDate, string timeZoneId, string role, string ip)
         {
             try
             {
-                var engage = new MixpanelEngage(MixPanelToken);
-                var properties = prepareBasicProperties(email, username, "", schoolName, firstLoginDate, timeZoneId, role);
+                var engage = GetEngage();
+                var properties = PrepareBasicProperties(email, username, "", schoolName, firstLoginDate, timeZoneId, role);
                 engage.Set(MakeId(email), ip, properties);
             }
             catch (Exception ex)
@@ -131,13 +117,13 @@ namespace Chalkable.MixPanel
         }
 
         private const string GRADE = "grade";
-        public static void IdentifyStudent(string email, string firstName, string lastName, string schoolName, 
+        public void IdentifyStudent(string email, string firstName, string lastName, string schoolName, 
             string grade, DateTime? firstLoginDate, string timeZoneId, string ip)
         {
             try
             {
-                var engage = new MixpanelEngage(MixPanelToken);
-                var properties = prepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, CoreRoles.STUDENT_ROLE.LoweredName);
+                var engage = GetEngage();
+                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, CoreRoles.STUDENT_ROLE.LoweredName);
                 properties[GRADE] = grade;
                 engage.Set(MakeId(email), ip, properties);
             }
@@ -149,13 +135,13 @@ namespace Chalkable.MixPanel
         }
 
         private const string TEACHER_ROLE = "teacher";
-        public static void IdentifyTeacher(string email, string firstName, string lastName, string schoolName,
+        public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName,
             List<string> gradeLevels, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip)
         {
             try
             {
-                var engage = new MixpanelEngage(MixPanelToken);
-                var properties = prepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, "student");
+                var engage = GetEngage();
+                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, "student");
                 properties[CLASSES] = classes;
                 properties[GRADE_LEVELS] = gradeLevels;
                 properties[ROLE] = TEACHER_ROLE;
@@ -175,7 +161,7 @@ namespace Chalkable.MixPanel
         private const string LAST_LOGIN_MIX = "$last_login";
         private const string CREATED_MIX = "$created";
 
-        private static Dictionary<string, object> prepareBasicProperties(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role)
+        private static Dictionary<string, object> PrepareBasicProperties(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role)
         {
             var properties = new Dictionary<string, object>();
 
@@ -183,7 +169,7 @@ namespace Chalkable.MixPanel
             {
                 if (!string.IsNullOrEmpty(firstName))
                 {
-                    if (email.ToLower() != firstName.ToLower())
+                    if (!String.Equals(email, firstName, StringComparison.CurrentCultureIgnoreCase))
                     {
                         var parts = Regex.Split(firstName.Trim(), @"\W+");
                         if (parts.Length > 1)
@@ -234,13 +220,13 @@ namespace Chalkable.MixPanel
             return properties;
         }
 
-        public static void IdentifyDeveloper(string email, string userName,
+        public void IdentifyDeveloper(string email, string userName,
             DateTime? firstLoginDate, string timeZoneId, string ip)
         {
             try
             {
-                var engage = new MixpanelEngage(MixPanelToken);
-                var properties = prepareBasicProperties(email, userName, "", "", firstLoginDate, timeZoneId, CoreRoles.DEVELOPER_ROLE.LoweredName);
+                var engage = GetEngage();
+                var properties = PrepareBasicProperties(email, userName, "", "", firstLoginDate, timeZoneId, CoreRoles.DEVELOPER_ROLE.LoweredName);
                 engage.Set(MakeId(email), ip, properties);
             }
             catch (Exception ex)
@@ -250,12 +236,12 @@ namespace Chalkable.MixPanel
 
         }
 
-        public static void IdentifyParent(string email, string firstName, string lastName, DateTime? firstLoginDate, string ip)
+        public void IdentifyParent(string email, string firstName, string lastName, DateTime? firstLoginDate, string ip)
         {
             try
             {
-                var engage = new MixpanelEngage(MixPanelToken);
-                var properties = prepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.PARENT_ROLE.LoweredName);
+                var engage = GetEngage();
+                var properties = PrepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.PARENT_ROLE.LoweredName);
                 //created at
                 engage.Set(MakeId(email), ip, properties);
             }
@@ -265,71 +251,71 @@ namespace Chalkable.MixPanel
             }
         }
 
-        public static void FinishedStep(string email, string step)
+        public void FinishedStep(string email, string step)
         {
             var properties = new Dictionary<string, object>();
             SendEvent(email, step, properties);
         }
 
         private const string DOCUMENTS = "documents";
-        public static void AttachedDocument(string email, List<string> docs)
+        public void AttachedDocument(string email, List<string> docs)
         {
             var properties = new Dictionary<string, object>();
             properties[DOCUMENTS] = docs;
-            SendEvent(email, MixPanelEvents.AttachedDocument, properties);
+            SendEvent(email, UserTrackingEvents.AttachedDocument, properties);
         }
 
         private const string APPS = "apps";
-        public static void AttachedApp(string email, List<string> apps)
+        public void AttachedApp(string email, List<string> apps)
         {
             var properties = new Dictionary<string, object>();
             properties[APPS] = apps;
-            SendEvent(email, MixPanelEvents.AttachedApp, properties);        
+            SendEvent(email, UserTrackingEvents.AttachedApp, properties);        
         }
 
 
 
         private const string TITLE = "title";
         private const string CREATED_BY = "created-by";
-        public static void OpenedAnnouncement(string email, string announcementType, string title, string createdBy)
+        public void OpenedAnnouncement(string email, string announcementType, string title, string createdBy)
         {
             var properties = new Dictionary<string, object>();
             properties[TYPE] = announcementType;
             properties[TITLE] = title;
             properties[CREATED_BY] = createdBy;
-            SendEvent(email, MixPanelEvents.OpenedAnnouncement, properties);      
+            SendEvent(email, UserTrackingEvents.OpenedAnnouncement, properties);      
         }
 
-        public static void Clicked(string eventName, string email)
+        public void Clicked(string eventName, string email)
         {
             var properties = new Dictionary<string, object>();
             SendEvent(email, eventName, properties);
         }
 
-        public static void OpenedApp(string email, string appName)
+        public void OpenedApp(string email, string appName)
         {
             var properties = new Dictionary<string, object>();
             properties[APP_NAME] = appName;
-            SendEvent(email, MixPanelEvents.OpenedApp, properties);
+            SendEvent(email, UserTrackingEvents.OpenedApp, properties);
         }
 
-        public static void SelectedLive(string email, string appName)
+        public void SelectedLive(string email, string appName)
         {
             var properties = new Dictionary<string, object>();
             properties[APP_NAME] = appName;
-            SendEvent(email, MixPanelEvents.SelectedLive, properties);
+            SendEvent(email, UserTrackingEvents.SelectedLive, properties);
         }
 
-        public static void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass)
+        public void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass)
         {
-            var properties = prepareAppProperties(appName, shortDescription, subjects, price, pricePerSchool, pricePerClass);
-            SendEvent(email, MixPanelEvents.SubmittedAppForApproval, properties);
+            var properties = PrepareAppProperties(appName, shortDescription, subjects, price, pricePerSchool, pricePerClass);
+            SendEvent(email, UserTrackingEvents.SubmittedAppForApproval, properties);
         }
 
-        public static void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass)
+        public void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass)
         {
-            var properties = prepareAppProperties(appName, shortDescription, subjects, price, pricePerSchool, pricePerClass);
-            SendEvent(email, MixPanelEvents.UpdatedDraft, properties);
+            var properties = PrepareAppProperties(appName, shortDescription, subjects, price, pricePerSchool, pricePerClass);
+            SendEvent(email, UserTrackingEvents.UpdatedDraft, properties);
         }
 
         private const string APP_SHORT_DESCRIPTION = "app-short-description";
@@ -338,7 +324,7 @@ namespace Chalkable.MixPanel
         private const string FREE = "Free";
         private const string APP_PRICE_PER_CLASS = "app-price-per-class";
         private const string APP_PRICE_PER_SCHOOL = "app-price-per-school";
-        private static Dictionary<string, object> prepareAppProperties(string appName, string shortDescription, string subjects, decimal price,
+        private static Dictionary<string, object> PrepareAppProperties(string appName, string shortDescription, string subjects, decimal price,
                                                        decimal? pricePerSchool, decimal? pricePerClass)
         {
             var properties = new Dictionary<string, object>();
@@ -358,18 +344,18 @@ namespace Chalkable.MixPanel
             return properties;
         }
 
-        public static void CreatedApp(string email, string appName)
+        public void CreatedApp(string email, string appName)
         {
             var properties = new Dictionary<string, object>();
             properties[APP_NAME] = appName;
-            SendEvent(email, MixPanelEvents.CreatedApp, properties);
+            SendEvent(email, UserTrackingEvents.CreatedApp, properties);
         }
 
         private const string INSTALLED_FOR_ALL = "installed-for-all";
         private const string CLASSES = "classes";
         private const string DEPARTMENTS = "departments";
         private const string GRADE_LEVELS = "grade-levels";
-        public static void BoughtApp(string email, string appName, List<string> classes, List<string> departments, List<string> gradeLevels)
+        public void BoughtApp(string email, string appName, List<string> classes, List<string> departments, List<string> gradeLevels)
         {
             var properties = new Dictionary<string, object>();
             properties[APP_NAME] = appName;
@@ -384,52 +370,51 @@ namespace Chalkable.MixPanel
                 if (departments.Count > 0) properties[DEPARTMENTS] = departments;
                 if (gradeLevels.Count > 0) properties[GRADE_LEVELS] = gradeLevels;
             }
-            SendEvent(email, MixPanelEvents.BoughtApp, properties);
+            SendEvent(email, UserTrackingEvents.BoughtApp, properties);
         }
 
         private const string APP_NAME = "app-name";
-        public static void LaunchedApp(string email, string appName)
+        public void LaunchedApp(string email, string appName)
         {
             var properties = new Dictionary<string, object>();
             properties[APP_NAME] = appName;
-            SendEvent(email, MixPanelEvents.LaunchedApp, properties);
+            SendEvent(email, UserTrackingEvents.LaunchedApp, properties);
         }
 
-        public static void ResetPassword(string email)
+        public void ResetPassword(string email)
         {
             var properties = new Dictionary<string, object>();
-            SendEvent(email, MixPanelEvents.ResetPassword, properties);
+            SendEvent(email, UserTrackingEvents.ResetPassword, properties);
         }
 
-        public static void ChangedPassword(string email)
+        public void ChangedPassword(string email)
         {
             var properties = new Dictionary<string, object>();
-            SendEvent(email, MixPanelEvents.ChangedPassword, properties);
+            SendEvent(email, UserTrackingEvents.ChangedPassword, properties);
         }
 
         private const string NEW_EMAIL = "new-email";
-        public static void ChangedEmail(string email, string newEmail)
+        public void ChangedEmail(string email, string newEmail)
         {
-            if (string.Compare(email, newEmail) != 0)
-            {
-                var properties = new Dictionary<string, object>();
-                properties[NEW_EMAIL] = newEmail;
-                SendEvent(email, MixPanelEvents.ChangedEmail, properties);
-            }
+            if (string.CompareOrdinal(email, newEmail) == 0) return;
+
+            var properties = new Dictionary<string, object>();
+            properties[NEW_EMAIL] = newEmail;
+            SendEvent(email, UserTrackingEvents.ChangedEmail, properties);
         }
 
-        public static void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role)
+        public void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role)
         {
-            var properties = prepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role);
-            SendEvent(email, MixPanelEvents.LoggedInForTheFirstTime, properties);
+            var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role);
+            SendEvent(email, UserTrackingEvents.LoggedInForTheFirstTime, properties);
         }
 
         private const string RECIPIENT = "recipient";
-        public static void SentMessageTo(string email, string userName)
+        public void SentMessageTo(string email, string userName)
         {
             var properties = new Dictionary<string, object>();
             properties[RECIPIENT] = userName;
-            SendEvent(email, MixPanelEvents.SentMessageTo, properties);
+            SendEvent(email, UserTrackingEvents.SentMessageTo, properties);
         }
 
 
@@ -437,39 +422,34 @@ namespace Chalkable.MixPanel
         private const string CLASS = "class";
         private const string APPS_ATTACHED = "apps-attached";
         private const string DOCS_ATTACHED = "docs-attached";
-        public static void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached)
+        public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached)
         {
             var properties = new Dictionary<string, object>();
             properties[TYPE] = type;
             properties[CLASS] = sClass;
             properties[APPS_ATTACHED] = appsAttached;
             properties[DOCS_ATTACHED] = docsAttached;
-            SendEvent(email, MixPanelEvents.CreatedNewItem, properties);
+            SendEvent(email, UserTrackingEvents.CreatedNewItem, properties);
         }
 
         private const string DISTINCT_ID = "distinct_id";
         private const string TIME = "time";
-        private static void SendEvent(string email, string eventName, IDictionary<string, object> properties)
+        private void SendEvent(string email, string eventName, IDictionary<string, object> properties)
         {
-
-
-            if (DemoUserService.IsDemoUser(email)) return;
-
             Action a = delegate
                 {
                     try
                     {
                         var distinctId = MakeId(email);
                         properties[DISTINCT_ID] = MakeId(email);
-                        properties[TIME] = unixTimeStamp(DateTime.UtcNow).ToString();
-                        var tracker = new MixpanelTracker(MixPanelToken);
-
+                        properties[TIME] = UnixTimeStamp(DateTime.UtcNow).ToString(CultureInfo.InvariantCulture);
+                        var tracker = GetEventTracker();
                         tracker.Track(eventName, properties);
 
 
                         var engageProperties = new Dictionary<string, object>();
                         engageProperties[eventName] = true;
-                        var engage = new MixpanelEngage(token);
+                        var engage = GetEngage();
                         engage.Increment(distinctId, engageProperties);
 
                     }
@@ -479,6 +459,37 @@ namespace Chalkable.MixPanel
                     }
                 };
             a.BeginInvoke(null, null);
+        }
+    }
+
+    class NullEngage : IEngage
+    {
+        public bool Set(string distinctId, string ip, IDictionary<string, object> setProperties)
+        {
+            return true;
+        }
+
+        public bool Increment(string distinctId, IDictionary<string, object> incrementProperties)
+        {
+            return true;
+        }
+    }
+
+    class NullEventTracker : IEventTracker
+    {
+        public bool Track(string ev, IDictionary<string, object> properties)
+        {
+            return true;
+        }
+
+        public bool Track<T>(T @event)
+        {
+            return true;
+        }
+
+        public bool Track(MixpanelEvent @event)
+        {
+            return true;
         }
     }
 }

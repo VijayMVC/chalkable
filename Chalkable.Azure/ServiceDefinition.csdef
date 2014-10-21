@@ -43,6 +43,8 @@
       <Setting name="api.explorer.redirecturi"/>
       <Setting name="api.explorer.client-name"/>
       <Setting name="api.explorer.scope"/>
+      <!--tracking-->
+      <Setting name="mixpanel-token"/>
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Small">

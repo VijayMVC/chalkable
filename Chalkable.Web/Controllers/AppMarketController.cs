@@ -8,7 +8,6 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
@@ -117,7 +116,7 @@ namespace Chalkable.Web.Controllers
                 ////var departments = appinstallAction.ApplicationInstallActionDepartments.Select(x => x.ChalkableDepartment.Name).ToList();//TODO: fix after DB remapping
                 var gradeLevels = gradelevelids.Select(x => x.ToString()).ToList();
                 var departments = departmentids.Select(x => x.ToString()).ToList();
-                MixPanelService.BoughtApp(Context.Login, applicationId.ToString(), classes, departments, gradeLevels);
+                MasterLocator.UserTrackingService.BoughtApp(Context.Login, applicationId.ToString(), classes, departments, gradeLevels);
             }
             catch (Exception)
             {

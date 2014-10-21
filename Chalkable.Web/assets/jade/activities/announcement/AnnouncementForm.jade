@@ -31,7 +31,7 @@ topItems = topData.getTopItems()
 classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
 typeId = self.getSelectedTypeId()
 state = announcement && announcement.getState()
-classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 
 .announcement-form.loader-container
     .loader
@@ -44,13 +44,13 @@ classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
             ).classes-bar
             .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
                 .container.panel-bg
-                    +AnnouncementTypeToolBar(classes, announcement, typeId)
+                    +AnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
                 +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form
                 if announcement.getState()
                     .duplicate-btn-container
                         +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
-            .choose-type(class=(classId && !typeId && !state ? '' : 'x-hidden'))
+            .choose-type(class=(classId && !typeId && !state && types.length ? '' : 'x-hidden'))
             if !classId
                 if topItems.length
                     .choose-class

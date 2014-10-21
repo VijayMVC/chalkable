@@ -420,13 +420,13 @@
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Chalkable.MixPanel\Chalkable.MixPanel.csproj">
-      <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
-      <Name>Chalkable.MixPanel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.UserTracking\Chalkable.UserTracking.csproj">
+      <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
+      <Name>Chalkable.UserTracking</Name>
     </ProjectReference>
     <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Configuration;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 
@@ -81,7 +79,7 @@ namespace Chalkable.Web.Controllers
                 if (newPassword == newPasswordConfirmation)
                 {
                     MasterLocator.UserService.ChangePassword(login, newPassword);
-                    MixPanelService.ChangedPassword(Context.Login);
+                    MasterLocator.UserTrackingService.ChangedPassword(Context.Login);
                     return Json(true);
                 }
                 return Json(new ChalkableException("new password and confirmation dont't match"));
@@ -116,7 +114,7 @@ namespace Chalkable.Web.Controllers
             if (context != null)
             {
                 InitServiceLocators(context);
-                MixPanelService.UserLoggedInForFirstTime(context.Login, "", "", Context.SchoolLocalId.ToString(), 
+                MasterLocator.UserTrackingService.UserLoggedInForFirstTime(context.Login, "", "", Context.SchoolLocalId.ToString(), 
                         DateTime.UtcNow.ConvertFromUtc(Context.SchoolTimeZoneId), Context.SchoolTimeZoneId, Context.Role.Name);
                 return redirectAction(context);
             }
