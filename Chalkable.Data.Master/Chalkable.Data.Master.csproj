@@ -74,9 +74,11 @@
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\BackgroundTask.cs" />
     <Compile Include="Model\ChalkableDepartment.cs" />
+    <Compile Include="Model\DatabaseBackupRestoreTaskData.cs" />
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />
     <Compile Include="Model\District.cs" />
     <Compile Include="Model\Fund.cs" />
+    <Compile Include="Model\PictureImportTaskData.cs" />
     <Compile Include="Model\Preference.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

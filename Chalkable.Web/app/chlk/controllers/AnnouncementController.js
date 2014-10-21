@@ -238,7 +238,10 @@ NAMESPACE('chlk.controllers', function (){
                                 this.getContext().getSession().set('classInfo', currentClassInfo);
                             }
                         }
+                        if(currentClassInfo && !currentClassInfo.getTypesByClass().length)
+                            this.ShowMsgBox('There are no categories setup', '');
                     }
+
                 }, this);
 
                 var classesBarData = new chlk.models.classes.ClassesForTopBar(

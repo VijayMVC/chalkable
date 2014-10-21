@@ -162,13 +162,18 @@ namespace Chalkable.StiImport.Services
         {
             if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
                 throw new Exception("District id should be defined for import");
-            foreach (var person in personsForImportPictures)
+            IList<int> ids = new List<int>();
+            const int personsPerTask = 5000;
+            var districtId = ServiceLocatorSchool.Context.DistrictId.Value;
+            for (int i = 0; i < personsForImportPictures.Count; i++ )
             {
-                var content = connectorLocator.UsersConnector.GetPhoto(person.PersonID);
-                if (content != null)
-                    ServiceLocatorMaster.PersonPictureService.UploadPicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID ,content);
-                else
-                    ServiceLocatorMaster.PersonPictureService.DeletePicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID);
+                ids.Add(personsForImportPictures[i].PersonID);
+                if (ids.Count >= personsPerTask || ids.Count > 0 && i + 1 == personsForImportPictures.Count)
+                {
+                    var data = new PictureImportTaskData(districtId, ids);
+                    ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.PictureImport, DateTime.UtcNow, null, data.ToString());
+                    ids.Clear();
+                }
             }
         }
 

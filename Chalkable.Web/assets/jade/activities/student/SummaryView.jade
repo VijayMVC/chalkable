@@ -15,7 +15,7 @@ statusData = self.getStatusData()
                 .status
                     div(class=statusData.status, data-tooltip=statusData.statusName)
                     |#{user.getCurrentClassName()}
-                    if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
+                    if(user.getCurrentClassName() && user.getRoomName() && user.getCurrentClassName().toLowerCase() != 'no class now')
                         |&nbsp;- #{user.getRoomName()}
                 .glance-container
                     if user.getRankBox() && user.isAbleViewTranscript()

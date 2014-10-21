@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BackgroundTaskProcessor.Parallel;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Backup;
