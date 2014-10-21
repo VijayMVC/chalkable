@@ -15,8 +15,7 @@ div(class="selected " + itemCls, rowIndex=self.getRowIndex(), recId=self.getId()
                 data-value=normalValue,
                 class=self.getGradeInputClass()
                 data-grade-value=self.getGradeValue(),
-                data-id=self.getId().valueOf(),
-                readonly = !self.isAbleDropStudentScore() && self.isDropped()
+                data-id=self.getId().valueOf()
             ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus.select-text
             .letters 0 - #{self.getMaxScore()}
             .grading-input-popup.chlk-pop-up-container.popup-bottom
