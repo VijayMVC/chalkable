@@ -80,7 +80,7 @@ namespace Chalkable.Common
 
         /* Settings from WEB.config */
 
-        public static string MixPanelToken { get { return ConfigurationManager.AppSettings["mixpanel-token"]; } }
+        public static string MixPanelToken { get { return Get("mixpanel-token"); } }
 
         /* WindowsAzure.OAuth */
 
