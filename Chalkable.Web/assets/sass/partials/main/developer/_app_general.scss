@@ -6,6 +6,21 @@ BODY {
         > DIV {
           #main-wrapper {
             #main {
+              .app-general-info-page{
+                &.partial-update-general-info {
+                  .chlk-scrollbox {
+                    .horizontal-loader {
+                      display: inline-block;
+                    }
+                  }
+                }
+
+                .chlk-scrollbox{
+                  .horizontal-loader{
+                    display: none;
+                  }
+                }
+              }
               DIV.app-general-info{
 
                 .chart-bg{

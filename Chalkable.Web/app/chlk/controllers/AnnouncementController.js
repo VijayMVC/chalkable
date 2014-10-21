@@ -343,8 +343,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(model && model.getAnnouncement()){
-                        if(date_)
-                            model.setDate(date_);
+                        //if(date_)
+                            //model.setDate(date_);
                         var announcement = model.getAnnouncement();
                         if(noDraft_){
                             announcement.setClassId(classId_ || null);
