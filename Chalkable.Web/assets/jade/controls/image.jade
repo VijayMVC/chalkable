@@ -18,7 +18,7 @@ mixin PersonImg(person, size, needAlerts)
             div(attributes)(class="person-avatar-" + (isWoman ? "w" : "m") + "-" + size, style = "background-image: url(" + src + ")")
 
 mixin ClassImg(clazz, width, height)
-    -defaultSrc =joinUrls(window.scriptsRoot, 'Content/images/common/course-icons/all.png');
+    -defaultSrc =joinUrls(window.scriptsRoot, '/Content/images/common/course-icons/all.png');
     if clazz && clazz.getDepartmentId()
         -attributes.src = chlk.templates.ChlkTemplate.prototype.getPictureURL(clazz.getDepartmentId(), width, height, true)
     else

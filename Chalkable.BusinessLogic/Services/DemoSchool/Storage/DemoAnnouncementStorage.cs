@@ -37,29 +37,151 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         void AddDemoAnnouncementsForClass(int classId);
         AnnouncementDetails SubmitAnnouncement(int? classId, AnnouncementDetails res);
         void DuplicateAnnouncement(int id, IList<int> classIds);
+        void SetAnnouncementProcessor(IAnnouncementProcessor processor);
+
+        IDemoAnnouncementStorage GetTeacherStorage();
     }
 
 
-    public abstract class DemoBaseAnnouncementStorage : BaseDemoIntStorage<AnnouncementComplex>, IDemoAnnouncementStorage
+    public interface IAnnouncementProcessor
     {
-        protected DemoBaseAnnouncementStorage(DemoStorage storage):base(storage, x => x.Id)
+        IEnumerable<AnnouncementComplex> GetAnnouncements(IEnumerable<AnnouncementComplex> announcements, AnnouncementsQuery query);
+        Announcement GetAnnouncement(IEnumerable<AnnouncementComplex> announcements, int announcementId, int roleId, int userId);
+    }
+
+    class BaseAnnouncementProcessor : IAnnouncementProcessor
+    {
+        private DemoStorage Storage { get; set; }
+        public BaseAnnouncementProcessor(DemoStorage storage)
         {
-            if (storage.AnnouncementStorage != null && !storage.AnnouncementStorage.IsEmpty())
+            Storage = storage;
+        }
+
+        public IEnumerable<AnnouncementComplex> GetAnnouncements(IEnumerable<AnnouncementComplex> announcements, AnnouncementsQuery query)
+        {
+            return announcements;
+        }
+
+        public Announcement GetAnnouncement(IEnumerable<AnnouncementComplex> announcements, int announcementId, int roleId, int userId)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class TeacherAnnouncementProcessor : IAnnouncementProcessor
+    {
+        private DemoStorage Storage { get; set; }
+        private IAnnouncementProcessor baseAnnouncementProcessor;
+
+        public TeacherAnnouncementProcessor(DemoStorage storage)
+        {
+            Storage = storage;
+            baseAnnouncementProcessor = new BaseAnnouncementProcessor(storage);
+        }
+
+        public IEnumerable<AnnouncementComplex> GetAnnouncements(IEnumerable<AnnouncementComplex> announcements, AnnouncementsQuery query)
+        {
+            var res = baseAnnouncementProcessor.GetAnnouncements(announcements, query);
+            return res.OrderByDescending(x => x.Id).ToList();
+        }
+
+        public Announcement GetAnnouncement(IEnumerable<AnnouncementComplex> announcements, int announcementId, int roleId, int userId)
+        {
+            var announcementRecipients =
+                Storage.AnnouncementRecipientStorage.GetAll()
+                    .Where(x => x.ToAll || x.PersonRef == userId || x.RoleRef == roleId).Select(x => x.AnnouncementRef);
+
+            return
+                announcements.Where(x => x.Id == announcementId && x.PrimaryTeacherRef == userId || announcementRecipients.Contains(x.Id))
+                    .Select(x => x)
+                    .First();
+        }
+    }
+
+    class StudentAnnouncementProcessor : IAnnouncementProcessor
+    {
+        private DemoStorage Storage { get; set; }
+        private IAnnouncementProcessor baseAnnouncementProcessor;
+
+        public StudentAnnouncementProcessor(DemoStorage storage)
+        {
+            Storage = storage;
+            baseAnnouncementProcessor = new BaseAnnouncementProcessor(storage);
+        }
+
+        public IEnumerable<AnnouncementComplex> GetAnnouncements(IEnumerable<AnnouncementComplex> announcements, AnnouncementsQuery query)
+        {
+            var res = baseAnnouncementProcessor.GetAnnouncements(announcements, query);
+            return res.Where(x => x.VisibleForStudent).OrderByDescending(x => x.Id).ToList();
+        }
+
+        public Announcement GetAnnouncement(IEnumerable<AnnouncementComplex> announcements, int announcementId, int roleId, int userId)
+        {
+            var classRefs = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
             {
-                var oldData = storage.AnnouncementStorage.GetData();
-                foreach (var item in oldData)
-                {
-                    if (!data.ContainsKey(item.Key)) 
-                    {
-                        data.Add(item.Key, item.Value);    
-                    }
-                    else
-                    {
-                        data[item.Key] = item.Value;
-                    }
-                }
-                Index = oldData.Count + 1;
-            }
+                PersonId = userId
+            }).Select(x => x.ClassRef).ToList();
+
+
+            var gradeLevelRefs = Storage.StudentSchoolYearStorage.GetAll(userId).Select(x => x.GradeLevelRef).ToList();
+
+            var annRecipients =
+                Storage.AnnouncementRecipientStorage.GetAll()
+                    .Where(
+                        x =>
+                            x.ToAll || x.PersonRef == userId || x.RoleRef == roleId ||
+                            x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
+                    .Select(x => x.AnnouncementRef);
+
+            return announcements.Where(x => x.Id == announcementId && classRefs.Contains(x.ClassRef) || annRecipients.Contains(x.Id))
+                  .Select(x => x)
+                  .First();
+        }
+    }
+
+
+    
+
+    class AdminAnnouncementProcessor : IAnnouncementProcessor
+    {
+        public IEnumerable<AnnouncementComplex> GetAnnouncements(IEnumerable<AnnouncementComplex> announcements, AnnouncementsQuery query)
+        {
+            return announcements;
+        }
+
+        public Announcement GetAnnouncement(IEnumerable<AnnouncementComplex> announcements, int announcementId, int roleId, int userId)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class DemoAnnouncementStorage : BaseDemoIntStorage<AnnouncementComplex>, IDemoAnnouncementStorage
+    {
+        private IAnnouncementProcessor announcementProcessor { get; set; }
+
+        public DemoAnnouncementStorage(DemoStorage storage):base(storage, x => x.Id)
+        {
+            SetAnnouncementProcessor(new BaseAnnouncementProcessor(storage));
+        }
+
+        public DemoAnnouncementStorage(DemoStorage storage, Dictionary<int, AnnouncementComplex> anns)
+            : base(storage, x => x.Id)
+        {
+            data = anns;
+            SetAnnouncementProcessor(new BaseAnnouncementProcessor(storage));
+        }
+
+        public void SetAnnouncementProcessor(IAnnouncementProcessor processor)
+        {
+            announcementProcessor = processor;
+        }
+
+        public IDemoAnnouncementStorage GetTeacherStorage()
+        {
+            var storage = new DemoAnnouncementStorage(Storage, data);
+            storage.SetAnnouncementProcessor(new TeacherAnnouncementProcessor(Storage));
+            return storage;
         }
 
         public bool CanAddStandard(int announcementId)
@@ -79,7 +201,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (Storage.Context.PersonId == null)
                 throw new ChalkableException("User is local id is null");
             var announcements = data.Select(x => x.Value);
-
             if (query.Id.HasValue)
                 announcements = announcements.Where(x => x.Id == query.Id);
 
@@ -116,6 +237,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             if (query.SisActivitiesIds != null)
                 announcements = announcements.Where(x => query.SisActivitiesIds.Contains(x.Id));
+
+
+            announcements = announcementProcessor.GetAnnouncements(announcements, query);
 
             if (query.Start > 0)
                 announcements = announcements.Skip(query.Start);
@@ -558,10 +682,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 data[ann.Id].MayBeExempt = ann.MayBeExempt;
                 data[ann.Id].IsScored = ann.IsScored;
             }
-
         }
 
-        public abstract Announcement GetAnnouncement(int announcementId, int roleId, int userId);
+        public Announcement GetAnnouncement(int announcementId, int roleId, int userId)
+        {
+            return announcementProcessor.GetAnnouncement(data.Select(x => x.Value), announcementId, roleId, userId);
+        }
 
         public Announcement GetLastDraft(int userId)
         {
@@ -605,95 +731,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int recipientClassId)
         {
-        }
-    }
-
-
-    public class DemoAnnouncementForAdminStorage:DemoBaseAnnouncementStorage
-    {
-        public DemoAnnouncementForAdminStorage(DemoStorage storage)
-            : base(storage)
-        {
-        }
-
-        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class DemoAnnouncementForStudentStorage : DemoBaseAnnouncementStorage
-    {
-        public DemoAnnouncementForStudentStorage(DemoStorage storage)
-            : base(storage)
-        {
-        }
-
-        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
-        {
-            var announcementsResult = base.GetAnnouncements(query);
-            var announcements = announcementsResult.Announcements;
-            announcements = announcements.Where(x => x.VisibleForStudent).OrderByDescending(x => x.Id).ToList();
-            announcementsResult.Announcements = announcements;
-            return announcementsResult;
-        }
-
-        public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
-        {
-
-            var classRefs = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
-            {
-                PersonId = userId
-            }).Select(x => x.ClassRef).ToList();
-
-
-            var gradeLevelRefs = Storage.StudentSchoolYearStorage.GetAll(userId).Select(x => x.GradeLevelRef).ToList();
-
-            var annRecipients =
-                Storage.AnnouncementRecipientStorage.GetAll()
-                    .Where(
-                        x =>
-                            x.ToAll || x.PersonRef == userId || x.RoleRef == roleId ||
-                            x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
-                    .Select(x => x.AnnouncementRef);
-
-              return data.Where(x => x.Value.Id == announcementId && classRefs.Contains(x.Value.ClassRef) || annRecipients.Contains(x.Value.Id))
-                    .Select(x => x.Value)
-                    .First();
-            
-        }
-    }
-
-    public class DemoAnnouncementForTeacherStorage : DemoBaseAnnouncementStorage
-    {
-        public DemoAnnouncementForTeacherStorage(DemoStorage storage)
-            : base(storage)
-        {
-        }
-
-        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
-        {
-
-            var result = base.GetAnnouncements(query);
-            result.Announcements = result.Announcements.OrderByDescending(x => x.Id).ToList();
-            return result; 
-        }
-
-        public override Announcement GetAnnouncement(int announcementId, int roleId, int userId)
-        {
-            var announcementRecipients =
-                Storage.AnnouncementRecipientStorage.GetAll()
-                    .Where(x => x.ToAll || x.PersonRef == userId || x.RoleRef == roleId).Select(x => x.AnnouncementRef);
-
-            return
-                data.Where(x => x.Value.Id == announcementId && x.Value.PrimaryTeacherRef == userId || announcementRecipients.Contains(x.Value.Id))
-                    .Select(x => x.Value)
-                    .First();
         }
     }
 }

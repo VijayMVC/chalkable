@@ -197,7 +197,7 @@
     <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementStandardStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementQnAStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoBaseAnnouncementStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoNotificationStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoApplicationRatingStorage.cs" />
