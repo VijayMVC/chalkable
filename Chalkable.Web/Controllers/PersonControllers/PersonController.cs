@@ -75,10 +75,31 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var person = SchoolLocator.PersonService.GetPersonDetails(id);
             return vdCreator(person);
         }
+
         private bool CanGetInfo(int personId)
         {
             return BaseSecurity.IsAdminOrTeacher(SchoolLocator.Context)
                    || SchoolLocator.Context.PersonId == personId;
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult GetPersons(IntList roleIds, IntList gradeLevelIds, int? start, int? count, bool? byLastName, string filter)
+        {
+            var res = new List<PersonViewData>();
+            if (roleIds != null && roleIds.Count > 0)
+            {
+                foreach (var roleId in roleIds)
+                {
+                    var roleName = CoreRoles.GetById(roleId).Name;
+                    res.AddRange(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, null, gradeLevelIds));
+                }
+                res = byLastName.HasValue && byLastName.Value
+                          ? res.OrderBy(x => x.LastName).ToList()
+                          : res.OrderBy(x => x.FirstName).ToList();
+            }
+            else res = PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, null, null, gradeLevelIds);
+            //var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).Name : null;
+            return Json(res);
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
