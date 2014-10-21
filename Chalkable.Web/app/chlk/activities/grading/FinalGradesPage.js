@@ -323,7 +323,11 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                node.parent('form').find('.grade-input').setValue('');
+                var input = node.parent('form').find('.grade-input');
+                if(node.checked())
+                    input.setValue('');
+                else
+                    input.setValue(input.getData('grade-value'));
             },
 
             function updateValue(node, input, value){

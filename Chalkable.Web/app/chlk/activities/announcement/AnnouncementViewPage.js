@@ -624,7 +624,11 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                var input = node.parent('form').find('.grade-autocomplete').setValue('');
+                var input = node.parent('form').find('.grade-autocomplete');
+                if(node.checked())
+                    input.setValue('');
+                else
+                    input.setValue(input.getData('grade-value'));
             },
 
             [[ria.dom.Dom, String, Boolean, Boolean]],
