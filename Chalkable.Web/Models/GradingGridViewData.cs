@@ -82,7 +82,7 @@ namespace Chalkable.Web.Models
             var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
             res.TotalAvarages = StudentTotalAveragesViewData.Create(gradeBook.Averages, stIds);
 
-            if (gradeBook.Options != null && gradeBook.Options.DisplayTotalPoints && gradeBook.Announcements.Count > 0)
+            if (res.DisplayTotalPoints  && gradeBook.Announcements.Count > 0)
             {
                 res.TotalPoints = new List<TotalPointViewData>();
                 foreach (var stId in stIds)
@@ -98,7 +98,7 @@ namespace Chalkable.Web.Models
                     }
                     //var totalPoint = scoredAnns.Sum(x => x.StudentAnnouncements.First(y => y.Student.Id == stId).NumericScore ?? 0);
                     //var maxTotalPoint = scoredAnns.Where(x => x.MaxScore.HasValue).Sum(x => x.MaxScore.Value);
-                    res.TotalPoints.Add(TotalPointViewData.Create((int)totalPoint, (int)maxTotalPoint));
+                    res.TotalPoints.Add(TotalPointViewData.Create(totalPoint, (int)maxTotalPoint));
                 }
 
             }
@@ -117,10 +117,10 @@ namespace Chalkable.Web.Models
 
     public class TotalPointViewData
     {
-        public int TotalPoint { get; set; }
+        public decimal TotalPoint { get; set; }
         public int MaxTotalPoint { get; set; }
 
-        public static TotalPointViewData Create(int totalPoint, int maxTotalPoint)
+        public static TotalPointViewData Create(decimal totalPoint, int maxTotalPoint)
         {
             return new TotalPointViewData {TotalPoint = totalPoint, MaxTotalPoint = maxTotalPoint};
         }
