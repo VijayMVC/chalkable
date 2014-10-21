@@ -77,8 +77,10 @@ NAMESPACE('chlk.activities.feed', function () {
                 if(model.isFirstLogin()){
                     var body = ria.dom.Dom('body'), that = this;
                     ria.dom.Dom('#first-login-input').trigger('focus');
-                    $("#first-login-video").YouTubePopup();
-                    $("#first-login-video").trigger('click');
+                    if(this.getRole().isTeacher()){
+                        $("#first-login-video").YouTubePopup();
+                        $("#first-login-video").trigger('click');
+                    }
                     body.on('click.tour', '.YouTubeDialog .ui-dialog-titlebar-close', function(){
                         body.removeClass('first-login');
                     });
