@@ -730,7 +730,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('change', '.cant-drop')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
-            Boolean, function cantDropClick(node, event){
+            function cantDropClick(node, event){
                 node.setAttr('disabled', 'disabled');
             },
 

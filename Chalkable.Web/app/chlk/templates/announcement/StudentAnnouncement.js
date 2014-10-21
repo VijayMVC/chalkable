@@ -92,7 +92,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             },
 
             Object, function isGradeDisabled(){
-                return this.isDropped() || this.isExempt();
+                return this.isExempt();
             }
         ])
 });
