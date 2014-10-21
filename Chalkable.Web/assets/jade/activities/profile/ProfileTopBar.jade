@@ -1,0 +1,13 @@
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin ProfileTopBar(tplObj, pressedActionName)
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLinkList(tplObj.buildActionLinkModels(pressedActionName))
+            block
+
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin UserProfileTopBar(tplObj, pressedActionName)
+    +ProfileTopBar(tplObj, pressedActionName)
+        .right
+            +ActionLink('settings', 'dashboard').settings Settings
