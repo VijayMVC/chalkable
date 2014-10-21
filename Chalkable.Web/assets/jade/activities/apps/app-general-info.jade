@@ -95,10 +95,11 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
             +ActionForm('apps', 'getAppReviews')#appReviews
                 +Hidden('start',devAppReviews.getPageIndex()) * devAppReviews.getPageSize())
                 +Hidden('totalCount', devAppReviews.getTotalCount())
+                +Hidden('actualCount', devAppReviews.getActualCount())
                 +Hidden('pageSize', devAppReviews.getPageSize())
                 +Hidden('appId', self.liveAppId)
                 +Hidden('scroll', 0)
-            +ScrollBox('appReviews', 50)
+            +ScrollBox('appReviews', 100)
                 .user-reviews
                     .rating-persons
                         +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
