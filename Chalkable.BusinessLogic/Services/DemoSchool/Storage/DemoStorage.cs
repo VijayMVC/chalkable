@@ -460,7 +460,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
                 StudentRef = id,
                 GradeLevel = GradeLevelStorage.GetById(gradeLevelRef),
-                GradeLevelRef = gradeLevelRef
+                GradeLevelRef = gradeLevelRef,
+                EnrollmentStatus = StudentEnrollmentStatusEnum.CurrentlyEnrolled
             });
 
             StiDisciplineStorage.Create(new DisciplineReferral
@@ -487,7 +488,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = classId,
                 MarkingPeriodRef = markingPeriodId,
                 PersonRef = studentId,
-                SchoolRef = DemoSchoolConstants.SchoolId
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                IsEnrolled = true
             });
 
 

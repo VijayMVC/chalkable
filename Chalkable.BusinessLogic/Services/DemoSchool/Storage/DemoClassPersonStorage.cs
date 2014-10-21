@@ -48,6 +48,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 classPersons = classPersons.Where(x => x.MarkingPeriodRef == classPersonQuery.MarkingPeriodId);
             if (classPersonQuery.PersonId.HasValue)
                 classPersons = classPersons.Where(x => x.PersonRef == classPersonQuery.PersonId);
+
+            if (classPersonQuery.IsEnrolled.HasValue)
+                classPersons = classPersons.Where(x => x.IsEnrolled);
+
             return classPersons;
         }
     }
