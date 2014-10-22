@@ -22,6 +22,8 @@ var ChlkSessionConstants = {
     GRADE_LEVELS: 'gradeLevels',
     STUDENT_AVG_MODEL: 'studentAvgModel',
     REDIRECT_URL: 'redirectUrl',
+    CLASSES_TO_FILTER: 'classesToFilter',
+    CLASSES_TO_FILTER_WITH_ALL: 'classesToFilterWithAll',
 
     MONTH_CALENDAR_DATA: 'monthCalendarData',
     WEEK_CALENDAR_DATA: 'weekCalendarData',

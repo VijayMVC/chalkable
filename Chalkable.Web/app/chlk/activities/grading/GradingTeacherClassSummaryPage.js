@@ -19,7 +19,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(count){
                     for(var i = 0; i < count; i++)
                         html+='<a class="empty-container"></a>';
-                    new ria.dom.Dom(html).insertBefore(button);
+                    new ria.dom.Dom(html).prependTo(parent.find('.students-block'));
                 }
                 return false;
             },

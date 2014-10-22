@@ -19,7 +19,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<String> autoGradeApps { get; set; }
 
         public ShortPersonViewData Owner { get; set; }
+        public bool Exempt { get; set; }
         
+
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, int currentSchoolPersonId)
             : base(announcementDetails, studentAnnouncements, mapper, null)
         {
@@ -37,6 +39,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             //{
             //    Applications.Add(AnnouncementApplicationViewData.Create(announcementApplication, currentSchoolPersonId));
             //}
+            Exempt = studentAnnouncements.Count > 0 && studentAnnouncements.All(x => x.Exempt);
         }
 
         private AnnouncementDetailedViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded)

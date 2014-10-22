@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.grading', function () {
                 var res = [], item;
                 for(var i = 0; i < 5; i++){
                     item = this.getTrouble()[i] || new chlk.models.grading.StudentGradingViewData();
-                    res.push(item);
+                    res.unshift(item);
                 }
                 return res;
             }
