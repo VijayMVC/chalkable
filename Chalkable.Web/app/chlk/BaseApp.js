@@ -123,8 +123,17 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.FIRST_LOGIN, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.REDIRECT_URL, String);
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
+                this.saveInSession(session, ChlkSessionConstants.CLASSES_TO_FILTER, ArrayOf(chlk.models.classes.ClassForTopBar));
 
                 var notifications = window[ChlkSessionConstants.NEW_NOTIFICATIONS];
+                var newClasses = session.get(ChlkSessionConstants.CLASSES_TO_FILTER, []).slice();
+                newClasses.unshift(chlk.lib.serialize.ChlkJsonSerializer().deserialize({
+                    name: 'All',
+                    description: 'All',
+                    id: ''
+                }, chlk.models.classes.ClassForTopBar));
+
+                session.set(ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL, newClasses);
 
                 if(notifications)
                    document.title = document.title + ' (' + notifications + ')';
