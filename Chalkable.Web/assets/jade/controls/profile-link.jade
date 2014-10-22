@@ -1,0 +1,7 @@
+mixin ProfileLink(person, role, id, hasAccess)
+    if hasAccess || self.hasAccess()
+        +ActionLink('user', 'infoByRole', id || person.getId(), role || person.getRole().getName())(attributes)
+            block
+    else
+        a(href="javascript:")(attributes).action-link
+            block
