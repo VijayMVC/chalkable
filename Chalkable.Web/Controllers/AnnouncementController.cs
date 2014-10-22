@@ -82,7 +82,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult EditTitle(int announcementId, string title)
         {
             var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (!SchoolLocator.AnnouncementService.Exists(title, ann.ClassRef, ann.Expires) && !string.IsNullOrEmpty(title))
+            if (!SchoolLocator.AnnouncementService.Exists(title, ann.ClassRef, ann.Expires, announcementId) && !string.IsNullOrEmpty(title))
             {
                 SchoolLocator.AnnouncementService.EditTitle(announcementId, title);
                 return Json(true);
@@ -91,9 +91,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult Exists(string title, int classId, DateTime? expiresDate)
+        public ActionResult Exists(string title, int classId, DateTime? expiresDate, int? excludeAnnouncementId)
         {
-            return Json(!expiresDate.HasValue || (SchoolLocator.AnnouncementService.Exists(title, classId, expiresDate.Value) && !string.IsNullOrEmpty(title)));
+            return Json(!expiresDate.HasValue || (SchoolLocator.AnnouncementService.Exists(title, classId, expiresDate.Value, excludeAnnouncementId) && !string.IsNullOrEmpty(title)));
         }
 
 

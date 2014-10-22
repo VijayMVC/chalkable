@@ -204,10 +204,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                         block.removeClass('was-empty');
                     }
                     block.addClass('with-date');
-                    if(value != node.getData('value')){
-                        titleNode.addClass('should-check');
-                    }
-                    titleNode.trigger('keyup');
+                    titleNode
+                        .addClass('should-check')
+                        .trigger('keyup');
 
                     setTimeout(function(){
                         wasDateChanged = true;
