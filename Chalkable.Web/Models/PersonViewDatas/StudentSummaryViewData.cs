@@ -131,7 +131,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         public static IList<TotalAbsencesPerClassViewData> Create(IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
-            var atts = attendances.OrderByDescending(x=>x.Absences).Take(5);
+            var atts = attendances.OrderByDescending(x=>x.Absences);
             var res = new List<TotalAbsencesPerClassViewData>();
             foreach (var classAttendanceSummary in atts)
             {
