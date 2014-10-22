@@ -33,6 +33,13 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId]],
+            ArrayOf(chlk.models.id.MarkingPeriodId), function getMarkingPeriodRefsOfClass(classId) {
+                var classInfo = _GLOBAL.classesToFilter.filter(function (_) { return _.id == classId.valueOf()})[0];
+                Assert(classInfo, 'Class with is should exist');
+                return classInfo.markingperiodsid.map(function (_) { return chlk.models.id.MarkingPeriodId(_) });
+            },
+
+            [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForTopBar, function getClassById(classId) {
                 var classes = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_TO_FILTER), res;
                 classes.forEach(function(item){
