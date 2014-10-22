@@ -48,8 +48,11 @@ namespace Chalkable.Web.Controllers
                 var stAnnouncements = annDetails.StudentAnnouncements;
                 annViewData.autoGradeApps = appNames;
                 if (SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
+                {
                     annViewData.Dropped = stAnnouncements.Count > 0 && stAnnouncements[0].Dropped;
-
+                    annViewData.Exempt = stAnnouncements.Count > 0 && stAnnouncements[0].Exempt;
+                }
+                
                 if (stAnnouncements.Count > 0 && annDetails.GradableType)
                     annViewData.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annDetails, attInfo);
             }
