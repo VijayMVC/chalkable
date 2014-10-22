@@ -46,7 +46,7 @@ types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                 .container.panel-bg
                     +AnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
-                +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form
+                +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
                 if announcement.getState()
                     .duplicate-btn-container
                         +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()

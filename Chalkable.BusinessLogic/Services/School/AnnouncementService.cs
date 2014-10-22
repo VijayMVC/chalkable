@@ -316,8 +316,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
-                var nowLocalDate = Context.NowSchoolTime;
-                var res = annDa.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.PersonId.Value);
+                var res = annDa.Create(classAnnouncementTypeId, classId, Context.NowSchoolTime, Context.NowSchoolYearTime, Context.PersonId.Value);
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime);
                 annDa.ReorderAnnouncements(sy.Id, classAnnouncementTypeId.Value, res.ClassRef);
@@ -486,26 +485,20 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(announcement.ExpiresDate.HasValue)
                     ann.Expires = announcement.ExpiresDate.Value;
 
-                ann = SetClassToAnnouncement(ann, classId, ann.Expires);
+                SetClassToAnnouncement(ann, classId, ann.Expires);
                 da.Update(ann);
-
-                var date = ann.Expires > DateTime.MinValue ? ann.Expires : ann.Created;
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(date);
-                if(sy == null)
-                    throw new ChalkableException("There is no school year in current date");
-                if(ann.ClassAnnouncementTypeRef.HasValue)
-                    da.ReorderAnnouncements(sy.Id, ann.ClassAnnouncementTypeRef.Value, ann.ClassRef);
-
+                
                 var stDa = new AnnouncementStandardDataAccess(uow);
                 stDa.Delete(new AndQueryCondition{{AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, ann.Id}}
                             , new AndQueryCondition{{Class.ID_FIELD, ann.ClassRef}}, true);
 
-                uow.Commit();
+                // Should do reording to ensure correct Anno Title
+                if (ann.ClassAnnouncementTypeRef.HasValue && Context.SchoolYearId.HasValue)
+                    da.ReorderAnnouncements(Context.SchoolYearId.Value, ann.ClassAnnouncementTypeRef.Value, ann.ClassRef);
+
                 var res = da.GetDetails(announcement.AnnouncementId, Context.PersonId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
                 {
-                    var studentAnnouncements = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(announcement.AnnouncementId);
-                    res.GradingStudentsCount = studentAnnouncements.Count(x => x.IsGraded);
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
                     foreach (var activityStandard in activity.Standards)
                     {
@@ -522,6 +515,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     }
                     MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                     ConnectorLocator.ActivityConnector.UpdateActivity(res.SisActivityId.Value, activity);
+
+                    var studentAnnouncements = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(announcement.AnnouncementId);
+                    res.GradingStudentsCount = studentAnnouncements.Count(x => x.IsGraded);
                 }
                 else if (res.ClassAnnouncementTypeRef.HasValue)
                 {
@@ -529,6 +525,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.ClassAnnouncementTypeName = classAnnType.Name;
                     res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
                 }
+
+                uow.Commit();
+
                 return res;
             }                
             
@@ -596,22 +595,28 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         
-        private Announcement SetClassToAnnouncement(Announcement announcement, int? classId, DateTime expiresDate)
+        private void SetClassToAnnouncement(Announcement announcement, int? classId, DateTime expiresDate)
         {
             if (classId.HasValue)
             {
+                if (announcement.State == AnnouncementState.Draft)
+                {
+                    announcement.ClassRef = classId.Value;
+                    return;
+                }
+
                 // Fetch current or prev marking period, 'cause if this method is called even when expiresDate wasn't supplied by teacher
-                var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate.Date, true);
+                /*var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(expiresDate.Date, true);
                 if (mp == null)
                     throw new NoMarkingPeriodException();
                 var mpc = ServiceLocator.MarkingPeriodService.GetMarkingPeriodClass(classId.Value, mp.Id);
                 if (mpc == null)
-                    throw new ChalkableException(ChlkResources.ERR_CLASS_IS_NOT_SCHEDULED_FOR_MARKING_PERIOD);
+                    throw new ChalkableException(ChlkResources.ERR_CLASS_IS_NOT_SCHEDULED_FOR_MARKING_PERIOD);*/
                 if (announcement.State == AnnouncementState.Created && announcement.ClassRef != classId)
                     throw new ChalkableException("Class can't be changed for submmited announcement");
                 announcement.ClassRef = classId.Value;   
             }
-            return announcement;
+            
         }
        
         //TODO: security check 

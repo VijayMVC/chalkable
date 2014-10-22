@@ -56,5 +56,6 @@ namespace Chalkable.Web.Common
 
         public const string ALPHA_GRADES = "AlphaGrades";
         public const string ALTERNATE_SCORES = "AlternateScores";
+        public const string MARKING_PERIODS = "MarkingsPeriods";
     }
 }
