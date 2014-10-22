@@ -1,5 +1,5 @@
 //TODO refactor
-mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole)
+mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges)
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
     +Hidden('statetyped', announcement.getStateTyped())
@@ -68,7 +68,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                 data-options={
                     showOtherMonths: true,
                     selectOtherMonths: true,
-                    inCurrentMp: true
+                    dateRanges: classScheduleDateRanges
                 },
                 data-value=announcement.getExpiresDate() ? announcement.getExpiresDate().format('mm/dd/yy') : ''
                 placeholder=Msg.Due_date,

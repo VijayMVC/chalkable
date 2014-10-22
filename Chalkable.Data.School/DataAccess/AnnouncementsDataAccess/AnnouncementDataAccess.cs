@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -102,14 +103,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
 
-        public AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime created, int personId)
+        public AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime created, DateTime nowSchoolYearTime, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {CLASS_ANNOUNCEMENT_TYPE_ID_PARAM, classAnnouncementTypeId},
                     {PERSON_ID_PARAM, personId},
                     {CREATED_PARAM, created},
-                    {EXPIRES_PARAM, DateTime.MinValue},
+                    {EXPIRES_PARAM, nowSchoolYearTime},
                     {STATE_PARAM, AnnouncementState.Draft},
                     {GRADING_STYLE_PARAM, GradingStyleEnum.Numeric100},
                     {CLASS_ID_PARAM, classId},
@@ -243,14 +244,18 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return anns.Select(x => x.Content).ToList();
         }
 
-        public bool Exists(string title, int classId, DateTime expiresDate)
+        public bool Exists(string title, int classId, DateTime expiresDate, int? excludeAnnouncementId)
         {
             var query = new AndQueryCondition
                 {
                     {Announcement.TITLE_FIELD, title},
                     {Announcement.CLASS_REF_FIELD, classId},
-                    {Announcement.EXPIRES_FIELD, expiresDate}
+                    {Announcement.EXPIRES_FIELD, expiresDate}                    
                 };
+
+            if (excludeAnnouncementId.HasValue)
+                query.Add(Announcement.ID_FIELD, Announcement.ID_FIELD, excludeAnnouncementId, ConditionRelation.NotEqual);
+
             return Exists<Announcement>(query);
         }
 

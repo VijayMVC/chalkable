@@ -3,6 +3,7 @@ var ChlkSessionConstants = {
     USER_ROLE: 'role',
     SITE_ROOT: 'siteRoot',
     MARKING_PERIOD: 'markingPeriod',
+    MARKING_PERIODS: 'markingPeriods',
     NEXT_MARKING_PERIOD: 'nextMarkingPeriod',
     GRADING_PERIOD: 'gradingPeriod',
     FINALIZED_CLASS_IDS: 'finalizedClassesIds',

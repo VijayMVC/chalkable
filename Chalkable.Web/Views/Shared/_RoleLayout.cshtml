@@ -325,6 +325,7 @@
             });
 
             var markingPeriod =  getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MARKING_PERIOD));
+            var markingPeriods =  getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MARKING_PERIODS));
             var nextMarkingPeriod = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.NEXT_MARKING_PERIOD));
             var gradingPeriod = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_PERIOD));
             var finalizedClassesIds = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.FINALIZED_CLASSES_IDS)); 

@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         Announcement GetLastDraft(int i);
         IList<Person> GetAnnouncementRecipientPersons(int announcementId, int userId);
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType, int i);
-        bool Exists(string s, int classid, DateTime expiresDate);
+        bool Exists(string s, int classid, DateTime expiresDate, int? excludeAnnouncementId);
         void ReorderAnnouncements(int id, int value, int recipientId);
         bool CanAddStandard(int announcementId);
         bool IsEmpty();
@@ -620,9 +620,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 if (announcementComplex.SisActivityId.HasValue)
                 {
                     var scores = Storage.StiActivityScoreStorage.GetSores(announcementComplex.SisActivityId.Value);
-
-
-                    
                     Storage.StiActivityScoreStorage.Delete(scores);
                     var studentAnnouncements =
                         Storage.StudentAnnouncementStorage.GetAll()
@@ -630,27 +627,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                             .ToList();
                     Storage.StudentAnnouncementStorage.Delete(studentAnnouncements);
 
-
-                    var announcementApps = Storage.AnnouncementApplicationStorage.GetAll(announcementComplex.Id, true);
-                    Storage.AnnouncementApplicationStorage.Delete(announcementApps);
-
-                    var attachments = Storage.AnnouncementAttachmentStorage.GetAll(announcementComplex.Id);
-                    Storage.AnnouncementAttachmentStorage.Delete(attachments);
-
                     var qnas = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
                     {
                         AnnouncementId = announcementComplex.Id
                     }).AnnouncementQnAs;
 
                     Storage.AnnouncementQnAStorage.Delete(qnas);
-
-                    var standarts = Storage.AnnouncementStandardStorage.GetAll(announcementComplex.Id);
-
-                    Storage.AnnouncementStandardStorage.Delete(standarts);
-
                     Storage.StiActivityStorage.Delete(announcementComplex.SisActivityId.Value);
                 }
-                
+                var announcementApps = Storage.AnnouncementApplicationStorage.GetAll(announcementComplex.Id, true);
+                Storage.AnnouncementApplicationStorage.Delete(announcementApps);
+
+                var attachments = Storage.AnnouncementAttachmentStorage.GetAll(announcementComplex.Id);
+                Storage.AnnouncementAttachmentStorage.Delete(attachments);
+                var standarts = Storage.AnnouncementStandardStorage.GetAll(announcementComplex.Id);
+                Storage.AnnouncementStandardStorage.Delete(standarts);
             }
             
             Delete(announcementsToDelete.Select(x => x.Id).ToList());
@@ -724,9 +715,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
-        public bool Exists(string s, int classId, DateTime expiresDate)
+        public bool Exists(string s, int classId, DateTime expiresDate, int? excludeAnnouncementId)
         {
-            return data.Count(x => x.Value.Title == s && x.Value.ClassRef == classId && x.Value.Expires.Date == expiresDate.Date) > 0;
+            return data.Count(x => x.Value.Title == s && x.Value.ClassRef == classId && x.Value.Expires.Date == expiresDate.Date && excludeAnnouncementId != x.Value.Id ) > 0;
         }
 
         public void ReorderAnnouncements(int schoolYearId, int classAnnouncementTypeId, int recipientClassId)
