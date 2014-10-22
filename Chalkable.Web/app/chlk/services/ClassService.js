@@ -18,11 +18,6 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'ClassService', EXTENDS(chlk.services.BaseService), [
 
-            ArrayOf(chlk.models.classes.ClassForTopBar), 'classesToFilter',
-            ArrayOf(chlk.models.classes.ClassForTopBar), 'classesToFilterWithAll',
-
-
-            //TODO: refactor
             [[Boolean, Boolean]],
             Array, function getClassesForTopBar(withAll_, forCurrentMp_) {
                 var res = this.getContext().getSession().get(withAll_ ? ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL : ChlkSessionConstants.CLASSES_TO_FILTER);
@@ -39,7 +34,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForTopBar, function getClassById(classId) {
-                var classes = this.getClassesForTopBar(), res;
+                var classes = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_TO_FILTER), res;
                 classes.forEach(function(item){
                     if(item.getId() == classId)
                         res = item;
