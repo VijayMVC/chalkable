@@ -30,7 +30,7 @@ NAMESPACE('chlk.services', function () {
                 if(forCurrentMp_){
                     var mpId = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD).getId();
                     res = res.filter(function(item){
-                        return item.getMarkingPeriodsId().indexOf(mpId) > -1 || item.getName() == 'All'
+                        return item.getName() == 'All' || item.getMarkingPeriodsId().indexOf(mpId) > -1;
                     })
                 }
 
