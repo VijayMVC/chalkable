@@ -730,10 +730,10 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
         },
 
-        [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-        function checkTitleAction(title, classId, expiresdate){
+        [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.id.AnnouncementId]],
+        function checkTitleAction(title, classId, expiresdate, annoId){
             var res = this.announcementService
-                .existsTitle(title, classId, expiresdate)
+                .existsTitle(title, classId, expiresdate, annoId)
                 .attach(this.validateResponse_())
                 .then(function(success){
                     return new chlk.models.Success(success);
@@ -790,7 +790,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'checkTitle'){
-                return this.checkTitleAction(model.getTitle(), classId, model.getExpiresDate());
+                return this.checkTitleAction(model.getTitle(), classId, model.getExpiresDate(), model.getId());
             }
 
             if (submitType == 'save'){

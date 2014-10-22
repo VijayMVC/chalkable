@@ -90,12 +90,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function existsTitle(title, classId, expiresDate) {
+            [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function existsTitle(title, classId, expiresDate, announcementId) {
                 return this.get('Announcement/Exists.json', Boolean, {
                     title: title,
                     classId: classId.valueOf(),
-                    expiresDate: expiresDate && expiresDate.toStandardFormat()
+                    expiresDate: expiresDate && expiresDate.toStandardFormat(),
+                    excludeAnnouncementId: announcementId.valueOf()
                 });
             },
 

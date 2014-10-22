@@ -328,7 +328,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Announcement EditTitle(int announcementId, string title)
         {
             var ann = GetAnnouncementById(announcementId);
-            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef, ann.Expires));
+            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef, ann.Expires, announcementId));
         }
 
         private Announcement EditTitle(Announcement announcement, string title, Func<IDemoAnnouncementStorage, string, bool> existsTitleAction)
@@ -354,9 +354,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public bool Exists(string title, int classId, DateTime expiresDate)
+        public bool Exists(string title, int classId, DateTime expiresDate, int? excludeAnnouncementId)
         {
-            return Storage.AnnouncementStorage.Exists(title, classId, expiresDate);
+            return Storage.AnnouncementStorage.Exists(title, classId, expiresDate, excludeAnnouncementId);
         }
 
 
