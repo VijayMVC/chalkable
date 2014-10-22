@@ -928,6 +928,7 @@ NAMESPACE('chlk.controllers', function (){
                 .duplicateAnnouncement(model.getAnnouncementId(), model.getSelectedIds())
                 .attach(this.validateResponse_())
                 .then(function(data){
+                    chlk.controls.updateWeekCalendar();
                     return this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId()]);
                 }, this);
             return res;
