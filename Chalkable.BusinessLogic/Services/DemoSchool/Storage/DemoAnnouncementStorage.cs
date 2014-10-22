@@ -620,9 +620,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 if (announcementComplex.SisActivityId.HasValue)
                 {
                     var scores = Storage.StiActivityScoreStorage.GetSores(announcementComplex.SisActivityId.Value);
-
-
-                    
                     Storage.StiActivityScoreStorage.Delete(scores);
                     var studentAnnouncements =
                         Storage.StudentAnnouncementStorage.GetAll()
@@ -630,27 +627,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                             .ToList();
                     Storage.StudentAnnouncementStorage.Delete(studentAnnouncements);
 
-
-                    var announcementApps = Storage.AnnouncementApplicationStorage.GetAll(announcementComplex.Id, true);
-                    Storage.AnnouncementApplicationStorage.Delete(announcementApps);
-
-                    var attachments = Storage.AnnouncementAttachmentStorage.GetAll(announcementComplex.Id);
-                    Storage.AnnouncementAttachmentStorage.Delete(attachments);
-
                     var qnas = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
                     {
                         AnnouncementId = announcementComplex.Id
                     }).AnnouncementQnAs;
 
                     Storage.AnnouncementQnAStorage.Delete(qnas);
-
-                    var standarts = Storage.AnnouncementStandardStorage.GetAll(announcementComplex.Id);
-
-                    Storage.AnnouncementStandardStorage.Delete(standarts);
-
                     Storage.StiActivityStorage.Delete(announcementComplex.SisActivityId.Value);
                 }
-                
+                var announcementApps = Storage.AnnouncementApplicationStorage.GetAll(announcementComplex.Id, true);
+                Storage.AnnouncementApplicationStorage.Delete(announcementApps);
+
+                var attachments = Storage.AnnouncementAttachmentStorage.GetAll(announcementComplex.Id);
+                Storage.AnnouncementAttachmentStorage.Delete(attachments);
+                var standarts = Storage.AnnouncementStandardStorage.GetAll(announcementComplex.Id);
+                Storage.AnnouncementStandardStorage.Delete(standarts);
             }
             
             Delete(announcementsToDelete.Select(x => x.Id).ToList());
