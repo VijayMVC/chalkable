@@ -44,7 +44,7 @@ NAMESPACE('chlk.templates.grading', function () {
                     return Msg.Exempt;
                 var alphaGrade = original_ ? average.calculatedalphagrade : this.getAlphaGrade(average);
                 var res = this.displayGrade(original_ ? average.calculatedavg : this.getNumericAvg(average));
-                if(res && this.getNumericAvg(average) != 0 && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
+                if((res || res == 0)  && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
                     res += '(' + alphaGrade + ')';
                 }
                 return res;

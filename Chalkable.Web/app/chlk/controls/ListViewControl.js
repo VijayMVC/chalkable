@@ -58,7 +58,8 @@ NAMESPACE('chlk.controls', function () {
                     isPaggingModel: false,
                     service: null,
                     method: null,
-                    paramsPrepend: []
+                    paramsPrepend: [],
+                    scrollToElementTimeout: null
                 };
                 if(configs_){
                     if(data.getTotalCount){
@@ -402,9 +403,18 @@ NAMESPACE('chlk.controls', function () {
             },
 
             VOID, function scrollToElement(){
+                var timeout = this.getConfigs().scrollToElementTimeout;
+                if(timeout)
+                    setTimeout(function(){this.scrollToElementWithoutTimeout()}.bind(this), timeout);
+                else
+                    this.scrollToElementWithoutTimeout();
+            },
+
+            VOID, function scrollToElementWithoutTimeout(){
                 var el = this.getGrid().find('.row.selected');
                 var demo = new ria.dom.Dom('#demo-footer');
                 //window.scrollTo(0, el.offset().top + el.height()/2 - (window.innerHeight - (demo.height() || 0))/2);
+
                 $("html, body").stop( true, true ).animate({
                     scrollTop: el.offset().top + el.height()/2 - (window.innerHeight - (demo.height() || 0))/2
                 }, 300, 'linear');
