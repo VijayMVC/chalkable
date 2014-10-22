@@ -26,7 +26,8 @@ div(class = (self.isAvgChanged() ? "opened slided" : "")).gp-data
         else
             isAbleDisplayAlphaGrades = true
             +ListView(items)(
-                selectedIndex = selectedIndex
+                selectedIndex = selectedIndex,
+                scrollToElementTimeout = 550
             ).grades-individual.people-list.final-grid
                 each item, i in items
                     +RenderWith(item, chlk.templates.grading.FinalGradeStudentBlockTpl)(
