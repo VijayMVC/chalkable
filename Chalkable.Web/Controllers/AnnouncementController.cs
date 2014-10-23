@@ -115,6 +115,9 @@ namespace Chalkable.Web.Controllers
 
         private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId)
         {
+            // get announcement to ensure it exists
+            SchoolLocator.AnnouncementService.GetAnnouncementById(announcementInfo.AnnouncementId);
+
             return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
         }
 

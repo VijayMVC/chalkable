@@ -76,7 +76,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                             .title
                                 div=attachment.getName()
                     else
-                        +ActionLink('announcement', 'viewAttachment', attachment.getId()).announcement-item.attachment
+                        +ActionLink('announcement', 'viewAttachment', attachment.getId(), self.getId()).announcement-item.attachment
                             +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)
                 each app, i in self.getApplications()
                     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()

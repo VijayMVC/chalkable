@@ -74,13 +74,13 @@ NAMESPACE('chlk.services', function () {
                         if(async_){
                             res = Serializer.deserializeAsync(data.data, clazz_);
                             res.then(function(model){
-                                console.info('deserialize time', getDate().getTime() - dt);
+                                _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
                                 return model;
                             });
                             return res;
                         }
                         res = Serializer.deserialize(data.data, clazz_);
-                        console.info('deserialize time', getDate().getTime() - dt);
+                        _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
                         return res;
 //                        throw(new Exception(handler.getMessage()));
                     }, this);
@@ -178,7 +178,7 @@ NAMESPACE('chlk.services', function () {
                         var model = new chlk.models.common.PaginatedList(clazz);
                         var dt = getDate().getTime();
                         model.setItems(Serializer.deserialize(data.data, ArrayOf(clazz)));
-                        console.info('deserialize time', getDate().getTime() - dt);
+                        _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
                         model.setPageIndex(Number(data.pageindex));
                         model.setPageSize(Number(data.pagesize));
                         model.setActualCount(Number((data.data || []).length));
