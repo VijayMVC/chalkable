@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
         public AnnouncementAttachment GetById(int id, int callerId, int roleId)
         {
             var conds = new AndQueryCondition { { AnnouncementAttachment.ID_FIELD, id } };
-            return GetAnnouncementAttachments(conds, callerId, roleId).First();
+            return GetAnnouncementAttachments(conds, callerId, roleId).FirstOrDefault();
         }
 
         public IList<AnnouncementAttachment> GetList(int callerId, int roleId, string filter = null)

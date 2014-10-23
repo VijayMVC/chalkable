@@ -69,6 +69,8 @@
       <!-- other settings -->
       <Setting name="TaskProcessorDelay"/>
       <Setting name="DbBackupServiceUrl"/>
+      <!--tracking-->
+      <Setting name="mixpanel-token"/>
     </ConfigurationSettings>
   </WorkerRole>
   <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="ExtraSmall">
@@ -97,6 +99,8 @@
       <Setting name="TaskProducer.CleanupManager.Interval"/>
       <Setting name="TaskProducer.CleanupManager.IntervalStart"/>
       <Setting name="TaskProducer.CleanupManager.IntervalEnd"/>
+      <!--tracking-->
+      <Setting name="mixpanel-token"/>
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

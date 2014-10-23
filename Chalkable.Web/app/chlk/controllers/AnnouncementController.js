@@ -520,53 +520,50 @@ NAMESPACE('chlk.controllers', function (){
             }]);
         },
 
-        [[chlk.models.id.AnnouncementAttachmentId]],
-        function viewAttachmentAction(attachmentId){
-            var attachments = this.getCachedAnnouncementAttachments();
-            attachments = attachments.filter(function(item){
-                return item.getId() == attachmentId;
-            });
+        [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
+        function viewAttachmentAction(attachmentId, announcementId){
+            var attachment = this.getCachedAnnouncementAttachments().filter(function(item){ return item.getId() == attachmentId; })[0];
+            if (!attachment)
+                return null;
 
-            if (attachments.length == 1){
-                var attachmentUrl, res;
-                var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
-                    "download-attachment",
-                    "Download Attachment",
-                    "/AnnouncementAttachment/DownloadAttachment.json?needsDownload=true&announcementAttachmentId=" + attachments[0].getId().valueOf()
+            var attachmentUrl, res;
+            var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
+                "download-attachment",
+                "Download Attachment",
+                "/AnnouncementAttachment/DownloadAttachment.json?needsDownload=true&announcementAttachmentId=" + attachment.getId().valueOf()
+            );
+
+            if(attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
+                attachmentUrl = attachment.getUrl();
+                var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(
+                    attachmentUrl,
+                    [downloadAttachmentButton],
+                    attachment.getType()
                 );
-                if(attachments[0].getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
-                    attachmentUrl = attachments[0].getUrl();
-                    var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(
-                        attachmentUrl,
-                        [downloadAttachmentButton],
-                        attachments[0].getType()
-                    );
-                    res = new ria.async.DeferredData(attachmentViewData);
-                }else{
-                    var buttons = [downloadAttachmentButton];
-                    if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachments[0].isTeachersAttachment())
-                        buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
-                            'announcement', 'cloneAttachment', [attachments[0].getId().valueOf()], true));
-                    res = this.announcementService
-                        .startViewSession(attachmentId)
-                        .then(function(session){
-                            attachmentUrl = 'https://crocodoc.com/view/' + session;
-                            return new chlk.models.common.attachments.BaseAttachmentViewData(
-                                attachmentUrl,
-                                buttons,
-                                attachments[0].getType()
-                            );
-                        });
-                }
-                return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
+                res = new ria.async.DeferredData(attachmentViewData);
+            }else{
+                var buttons = [downloadAttachmentButton];
+                if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment())
+                    buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
+                        'announcement', 'cloneAttachment', [attachment.getId().valueOf(), announcementId.valueOf()], true));
+                res = this.announcementService
+                    .startViewSession(attachmentId)
+                    .then(function(session){
+                        attachmentUrl = 'https://crocodoc.com/view/' + session;
+                        return new chlk.models.common.attachments.BaseAttachmentViewData(
+                            attachmentUrl,
+                            buttons,
+                            attachment.getType()
+                        );
+                    });
             }
-            return null;
+            return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
         },
 
-        [[chlk.models.id.AnnouncementAttachmentId]],
-        function cloneAttachmentAction(attachmentId) {
+        [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
+        function cloneAttachmentAction(attachmentId, announcementId) {
             var res = this.announcementService
-                .cloneAttachment(attachmentId)
+                .cloneAttachment(attachmentId, announcementId)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
                     var attachments = this.getCachedAnnouncementAttachments().filter(function(item){return item.isOwner()});
@@ -640,10 +637,10 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
-        [[chlk.models.id.AttachmentId]],
-        function deleteAttachmentAction(attachmentId) {
+        [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId]],
+        function deleteAttachmentAction(attachmentId, announcementId) {
             var result = this.announcementService
-                .deleteAttachment(attachmentId)
+                .deleteAttachment(attachmentId, announcementId)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     model.setNeedButtons(true);

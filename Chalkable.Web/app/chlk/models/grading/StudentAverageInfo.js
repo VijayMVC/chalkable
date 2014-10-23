@@ -93,7 +93,7 @@ NAMESPACE('chlk.models.grading', function () {
                     return Msg.Exempt;
                 var alphaGrade = original_ ? this.getCalculatedAlphaGrade() : this.getAlphaGrade();
                 var res = this.displayGrade(original_ ? this.getCalculatedAvg() : this.getNumericAvg(), isRounded_);
-                if(res && this.getNumericAvg() != 0 && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
+                if((res || res == 0) && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
                     res += '(' + alphaGrade + ')';
                 }
                 return res;

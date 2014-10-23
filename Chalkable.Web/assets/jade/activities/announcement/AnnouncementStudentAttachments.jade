@@ -5,13 +5,13 @@
 each attachment, i in self.getAnnouncementAttachments()
     if attachment.isOwner()
         .announcement-item.attachment
-            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId()).close-btn
             if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
                 A(href=attachment.getUrl()).download-link
                     .title
                         div=attachment.getName()
             else
-                +ActionLink('announcement', 'viewAttachment', attachment.getId())(class=attachment.isOpenOnStart() ? 'open-on-start' : '')
+                +ActionLink('announcement', 'viewAttachment', attachment.getId(), self.getId())(class=attachment.isOpenOnStart() ? 'open-on-start' : '')
                     +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + i)
                     .title
                         div=attachment.getName()

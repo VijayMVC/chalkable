@@ -34,6 +34,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var attachments = data.Select(x => x.Value);
 
+            if (query.AnnouncementId.HasValue)
+            {
+                attachments = attachments.Where(x => x.AnnouncementRef == query.AnnouncementId);
+            }
 
             if (CoreRoles.SUPER_ADMIN_ROLE.Id == query.RoleId)
             {
@@ -61,7 +65,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                             var announcement = Storage.AnnouncementStorage.GetById(x.AnnouncementRef);
                             return x.PersonRef == query.CallerId ||x.PersonRef == announcement.PrimaryTeacherRef || announcementRefs.Contains(x.AnnouncementRef);
                         });
-                return attachments.ToList();
 
             }
             if (CoreRoles.STUDENT_ROLE.Id == query.RoleId)
@@ -73,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     var classRef = Storage.AnnouncementStorage.GetById(x.AnnouncementRef).ClassRef;
                     return (x.PersonRef == query.CallerId || classRefs.Contains(classRef));
                 });
-                return attachments.ToList();
+                attachments.ToList();
             }
 
 
@@ -91,6 +94,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 attachments = attachments.Where(x => filters.Contains(x.Name.ToLower()));
             }
 
+            if (query.Start.HasValue)
+                attachments = attachments.Skip(query.Start.Value);
+            if (query.Count.HasValue)
+                attachments = attachments.Take(query.Count.Value);
             return attachments.ToList();
         } 
 
