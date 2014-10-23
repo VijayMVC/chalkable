@@ -262,8 +262,11 @@ NAMESPACE('chlk', function (){
                             tpl.assign(model);
                             tooltip.html(tpl.render());
                             tooltip.show();
+                            var top = offset.top - (tooltip.height() - node.height()) / 2;
                             tooltip.css('left', offset.left + node.width() + 20)
-                                .css('top', offset.top - (tooltip.height() - node.height()) / 2);
+                                .css('top', top > 0 ? top : 0);
+                            if(top < 0)
+                                tooltip.find('.alerts-triangle').css('top', top);
                             e.stopPropagation();
                         }
                     }

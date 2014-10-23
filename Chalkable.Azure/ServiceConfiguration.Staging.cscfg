@@ -54,8 +54,10 @@
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="5e4ner6DWKJqPblD+rrit2FblrM5cAdasvA8XAFu630=" />
       <!-- other settings -->
-      <Setting name="TaskProcessorDelay" value="-1" />
+      <Setting name="TaskProcessorDelay" value="10000" />
       <Setting name="DbBackupServiceUrl" value="https://bl2prod-dacsvc.azure.com/DACWebService.svc" />
+    <!--tracking-->
+      <Setting name="mixpanel-token" value=""/>
     </ConfigurationSettings>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
@@ -83,6 +85,8 @@
       <Setting name="TaskProducer.CleanupManager.Interval" value="600" />
       <Setting name="TaskProducer.CleanupManager.IntervalStart" value="0" />
       <Setting name="TaskProducer.CleanupManager.IntervalEnd" value="86400" />
+    <!--tracking-->
+      <Setting name="mixpanel-token" value=""/>
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
