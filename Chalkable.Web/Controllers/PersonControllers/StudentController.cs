@@ -61,7 +61,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
         public ActionResult Info(int personId)
         {
-            var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
+            var syId = GetCurrentSchoolYearId();
+            var res = (StudentInfoViewData)GetInfo(personId, studentInfo=> StudentInfoViewData.Create(studentInfo, syId));
             var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             //parents functionality are not implemanted yet
