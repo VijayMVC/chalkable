@@ -196,6 +196,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
         {
             var att = GetAttachmentById(announcementAttachmentId);
+            if (att == null)
+                return null;
+
             var content = att.SisAttachmentId.HasValue 
                                  ? ConnectorLocator.AttachmentConnector.GetAttachmentContent(att.SisAttachmentId.Value)
                                  : ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(att));

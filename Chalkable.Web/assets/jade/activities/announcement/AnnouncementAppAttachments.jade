@@ -2,13 +2,13 @@ mixin AnnouncementFormAttachmentItem(attachment, i)
     -console.info(self.isNeedDeleteButton())
     .announcement-item.attachment
         if self.needDeleteButton
-            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId()).close-btn
         if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
             A(href=attachment.getUrl()).download-link
                 .title
                     div=attachment.getName()
         else
-            +ActionLink('announcement', 'viewAttachment', attachment.getId())
+            +ActionLink('announcement', 'viewAttachment', attachment.getId(), self.getId())
                 +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
                 .title
                     div=attachment.getName()

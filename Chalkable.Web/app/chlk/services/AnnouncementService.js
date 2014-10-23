@@ -60,10 +60,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementAttachmentId]],
-            ria.async.Future, function cloneAttachment(attachmentId) {
+            [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function cloneAttachment(attachmentId, announcementId) {
                 return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
-                    originalAttachmentId: attachmentId.valueOf()
+                    originalAttachmentId: attachmentId.valueOf(),
+                    announcementId: announcementId.valueOf()
                 });
             },
 
@@ -100,10 +101,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AttachmentId, Object]],
-            ria.async.Future, function deleteAttachment(attachmentId) {
+            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function deleteAttachment(attachmentId, announcementId) {
                 return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.Announcement, {
-                    announcementAttachmentId: attachmentId.valueOf()
+                    announcementAttachmentId: attachmentId.valueOf(),
+                    announcementId: announcementId.valueOf()
                 });
             },
 
