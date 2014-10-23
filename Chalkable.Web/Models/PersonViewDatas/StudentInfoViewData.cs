@@ -13,13 +13,22 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; } 
         protected StudentInfoViewData(PersonDetails student):base(student)
         {
-            GradeLevels = student.StudentSchoolYears.Select(x => IdNameViewData<int>.Create(x.GradeLevelRef, x.GradeLevel.Name)).ToList();
-            GradeLevel = GradeLevels.FirstOrDefault();
+            GradeLevels = student.StudentSchoolYears.OrderBy(x=>x.SchoolYearRef).Select(x => IdNameViewData<int>.Create(x.GradeLevelRef, x.GradeLevel.Name)).ToList();
+            GradeLevel = GradeLevels.LastOrDefault();
         }
 
         public static new StudentInfoViewData Create(PersonDetails student)
         {
             return new StudentInfoViewData(student);
+        }
+
+        public static StudentInfoViewData Create(PersonDetails student, int currentSchoolYearId)
+        {
+            var res = Create(student);
+            var currentStudentSchoolYear = student.StudentSchoolYears.FirstOrDefault(x => x.SchoolYearRef == currentSchoolYearId);
+            if (currentStudentSchoolYear != null)
+                res.GradeLevel = res.GradeLevels.First(x => x.Id == currentStudentSchoolYear.GradeLevelRef);
+            return res;
         }
     }
 
