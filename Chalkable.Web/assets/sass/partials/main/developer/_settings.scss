@@ -1,0 +1,24 @@
+BODY {
+  DIV.page {
+    #content {
+      > DIV {
+        #main-wrapper {
+          #main {
+            DIV.settings {
+              .row{
+                margin-bottom: 5px;
+                .yellow-button{
+                  min-width: 134px;
+                  a{
+                    color: #b3a066;
+                    line-height: 36px;
+                  }
+                }
+              }
+             }
+            }
+          }
+        }
+      }
+    }
+  }
