@@ -23,7 +23,7 @@ topItems = topData.getTopItems()
         wellCount = item.getWell().length
         restCount = item.getAllStudents().length - troubleCount - wellCount
         maxIndex = restCount + troubleCount - 1
-        students = self.getPreparedStudents(item.getAllStudents(), item.getWell(), item.getTrouble())
+        students = self.getPreparedStudents(item)
         typeEnum = chlk.models.grading.StudentWellTroubleEnum
         .class-block
             h2.with-line
@@ -48,7 +48,7 @@ topItems = topData.getTopItems()
                         +StudentGradingItem(student).well
             .students-line
                 SPAN.n-0 0
-                SPAN.n-100 100
+                SPAN.n-100=item.getMaxScore()
                 each student in students
                     div(
                         class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),
