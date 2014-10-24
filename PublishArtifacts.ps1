@@ -41,7 +41,7 @@ function PutFile($sbase, $dbase) {
 function PutDir($dbase) {
 	foreach ($d in $input) {
 		$dir = $d.FullName
-		Get-ChildItem $dir -force -recurse | Where-Object {$_.mode -match "-a---"} | PutFileFilter -sbase $dir -dbase $dbase
+		Get-ChildItem $dir -force -recurse | Where-Object {$_.mode -match "-a---"} | PutFile -sbase $dir -dbase $dbase
 	}
 }
 
@@ -71,7 +71,6 @@ Get-Item "Chalkable.Web\app\*App.compiled.js" | PutFile -dbase "app"
 Get-Item "Chalkable.Web\app\chlk\shared.js" | PutFile -dbase "app\chlk"
 Get-Item "Chalkable.Web\app\chlk\chlk-messages.js" | PutFile -dbase "app\chlk"
 Get-Item "Chalkable.Web\app\chlk\chlk-constants.js" | PutFile -dbase "app\chlk"
-Get-Item "Chalkable.Web\app\api\chlk-post-message-api.js" | PutFile -dbase "app\api"
 
 Get-Item "Chalkable.Web\app\chlk\index" | PutDir -dbase "app\chlk\index"
 Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
