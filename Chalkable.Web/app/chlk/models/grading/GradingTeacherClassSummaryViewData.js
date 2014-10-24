@@ -8,6 +8,13 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('class')],
             chlk.models.classes.Class, 'clazz',
 
+            Number, 'maxScore',
+
+            function $(){
+                BASE();
+                this.maxScore = 100;
+            },
+
             ArrayOf(chlk.models.grading.StudentGradingViewData), 'well',
 
             ArrayOf(chlk.models.grading.StudentGradingViewData), 'trouble',
