@@ -6,6 +6,9 @@ function GetContentTypeFromExtension([string]$extension)
 {   
 	switch ($extension)
 	{
+		".mp3"  { return "audio/mp3" }
+		".ogg"  { return "audio/ogg" }
+		".wav"  { return "audio/wave" }
 		".png"  { return "image/png" }
 		".htm"  { return "text/html" }
 		".pfx"  { return "application/x-pkcs12" }
