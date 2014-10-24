@@ -22,12 +22,14 @@ function GetContentTypeFromExtension([string]$extension)
 }
 
 function GetFileDest($sbase, $dbase) {
-	$dest = $input.Name
-	if ($sbase -ne $null) {
-		$dest = $input.FullName -replace [regex]::Escape($sbase)
+	foreach ($file in $input) {
+		$dest = $file.Name
+		if ($sbase -ne $null) {
+			$dest = $file.FullName -replace [regex]::Escape($sbase)
+		}
+		
+		return join-path $dbase $dest
 	}
-	
-	return join-path $dbase $dest
 }
 
 function PutFile($sbase, $dbase) {
