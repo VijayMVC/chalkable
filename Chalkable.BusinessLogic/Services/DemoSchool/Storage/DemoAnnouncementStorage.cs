@@ -524,6 +524,39 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 announcement.SisActivityId = sourceAnnouncement.Id;
 
                 var resAnnouncement = SubmitAnnouncement(classId, announcement);
+                Storage.StiActivityScoreStorage.DuplicateFrom(sourceAnnouncement.SisActivityId.Value, resAnnouncement.SisActivityId.Value);
+                var sourceStudentAnnouncements =
+                        Storage.StudentAnnouncementStorage.GetAll()
+                            .Where(x => x.AnnouncementId == sourceAnnouncement.Id)
+                            .ToList();
+
+                foreach (var sourceStudentAnnouncement in sourceStudentAnnouncements)
+                {
+                    Storage.StudentAnnouncementStorage.Add(new StudentAnnouncement
+                    {
+                        ActivityId = resAnnouncement.SisActivityId.Value,
+                        StudentId = sourceStudentAnnouncement.StudentId,
+                        Absent = sourceStudentAnnouncement.Absent,
+                        AbsenceCategory = sourceStudentAnnouncement.AbsenceCategory,
+                        AlphaGradeId = sourceStudentAnnouncement.AlphaGradeId,
+                        AlternateScoreId = sourceStudentAnnouncement.AlternateScoreId,
+                        Comment = sourceStudentAnnouncement.Comment,
+                        Dropped = sourceStudentAnnouncement.Dropped,
+                        AlternateScore = sourceStudentAnnouncement.AlternateScore,
+                        Exempt = sourceStudentAnnouncement.Exempt,
+                        Incomplete = sourceStudentAnnouncement.Incomplete,
+                        Late = sourceStudentAnnouncement.Late,
+                        NumericScore = sourceStudentAnnouncement.NumericScore,
+                        OverMaxScore = sourceStudentAnnouncement.OverMaxScore,
+                        ScoreValue = sourceStudentAnnouncement.ScoreValue,
+                        Withdrawn = sourceStudentAnnouncement.Withdrawn,
+                        AnnouncementId = resAnnouncement.Id,
+                        AnnouncementTitle = sourceAnnouncement.Title,
+                        ExtraCredit = sourceStudentAnnouncement.ExtraCredit,
+                        IsWithdrawn = sourceStudentAnnouncement.IsWithdrawn
+                    });
+                }
+                
 
                 foreach (var sourceAnnouncementAttachment in sourceAnnouncement.AnnouncementAttachments)
                 {
