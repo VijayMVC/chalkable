@@ -1,0 +1,29 @@
+items = self.getItems()
+firstIndex = items[0].getAnnouncements().length ? 0 : 1
+lastIndex = items[6].getAnnouncements().length ? 6 : 5
+text = items[firstIndex].getDate().format('M. d') + ' - ' + items[lastIndex].getDate().format('M. d')
+dt = new chlk.models.common.ChlkSchoolYearDate()
+prevDate = items[0].getDate().add(chlk.models.common.ChlkDateEnum.DAY, -1).format('mm-dd-yy')
+nextDate = items[6].getDate().add(chlk.models.common.ChlkDateEnum.DAY, 1).format('mm-dd-yy')
+
+.loader-container.announcement-week-loader
+    .loader
+    .controls
+        A(href="#", data-date=prevDate).left-btn.list-for-week-btn
+        .week=text
+        A(href="#", data-date=nextDate).right-btn.list-for-week-btn
+    .wrapper
+        each item,i in items
+            if i >= firstIndex && i <=lastIndex
+                div(class=item.getDate().isSameDay(dt) ? 'chlk-gradient-cnt-today' : 'chlk-gradient-cnt')
+                    .chlk-gradient-cnt-top
+                    .day-content
+                        label=item.getDate().format('D')[0]
+                        ul
+                            each announcement in item.getAnnouncements()
+                                secondText = announcement.getAnnouncementTypeName()
+                                if announcement.getChalkableAnnouncementType() == chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf()
+                                    secondText = announcement.getSubject() || ''
+                                li
+                                    +ActionLink('announcement', 'view', announcement.getId())(data-tooltip=announcement.getClassName())=announcement.getTitle() + ' ' + secondText
+                    .chlk-gradient-cnt-bottom
