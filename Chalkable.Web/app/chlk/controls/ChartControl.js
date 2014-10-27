@@ -62,7 +62,7 @@ NAMESPACE('chlk.controls', function () {
             borderRadius: 2,
             useHTML: true,
             positioner: function (labelWidth, labelHeight, point) {
-                return { x: point.plotX + 18, y: point.plotY - 37 };
+                return { x: point.plotX + 18 + (jQuery(this.chart.renderTo).data('tooltip-padding') || 0), y: point.plotY - 37 };
             },
             style: {
                 display: 'none'
