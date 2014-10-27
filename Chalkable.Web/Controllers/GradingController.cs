@@ -188,7 +188,8 @@ namespace Chalkable.Web.Controllers
         {
             var classRoomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId);
             bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
-            return SchoolLocator.PersonService.GetClassStudents(classId, markingPeriodId, enrolled);
+            return SchoolLocator.PersonService.GetClassStudents(classId, markingPeriodId, enrolled)
+                                               .OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
         }
 
         [AuthorizationFilter("Teacher")]

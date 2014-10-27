@@ -52,7 +52,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                             each standard in standards
                                 div(data-tooltip = standard.getDescription()).grey-button.same-on-hover
                                     span=standard.getName()
-                                    if !disableDeleteBtn
+                                    if announcement.isAbleToRemoveStandard()
                                         +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
                         if !isAdminAnnouncement && announcement.isCanAddStandard()
                             .title=Msg.Click_to_add_standard

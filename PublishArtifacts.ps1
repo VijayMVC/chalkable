@@ -6,6 +6,9 @@ function GetContentTypeFromExtension([string]$extension)
 {   
 	switch ($extension)
 	{
+		".mp3"  { return "audio/mp3" }
+		".ogg"  { return "audio/ogg" }
+		".wav"  { return "audio/wave" }
 		".png"  { return "image/png" }
 		".htm"  { return "text/html" }
 		".pfx"  { return "application/x-pkcs12" }
@@ -22,12 +25,14 @@ function GetContentTypeFromExtension([string]$extension)
 }
 
 function GetFileDest($sbase, $dbase) {
-	$dest = $input.Name
-	if ($sbase -ne $null) {
-		$dest = $input.FullName -replace [regex]::Escape($sbase)
+	foreach ($file in $input) {
+		$dest = $file.Name
+		if ($sbase -ne $null) {
+			$dest = $file.FullName -replace [regex]::Escape($sbase)
+		}
+		
+		return join-path $dbase $dest
 	}
-	
-	return join-path $dbase $dest
 }
 
 function PutFile($sbase, $dbase) {
@@ -41,7 +46,7 @@ function PutFile($sbase, $dbase) {
 function PutDir($dbase) {
 	foreach ($d in $input) {
 		$dir = $d.FullName
-		Get-ChildItem $dir -force -recurse | Where-Object {$_.mode -match "-a---"} | PutFileFilter -sbase $dir -dbase $dbase
+		Get-ChildItem $dir -force -recurse | Where-Object {$_.mode -match "-a---"} | PutFile -sbase $dir -dbase $dbase
 	}
 }
 
@@ -71,7 +76,6 @@ Get-Item "Chalkable.Web\app\*App.compiled.js" | PutFile -dbase "app"
 Get-Item "Chalkable.Web\app\chlk\shared.js" | PutFile -dbase "app\chlk"
 Get-Item "Chalkable.Web\app\chlk\chlk-messages.js" | PutFile -dbase "app\chlk"
 Get-Item "Chalkable.Web\app\chlk\chlk-constants.js" | PutFile -dbase "app\chlk"
-Get-Item "Chalkable.Web\app\api\chlk-post-message-api.js" | PutFile -dbase "app\api"
 
 Get-Item "Chalkable.Web\app\chlk\index" | PutDir -dbase "app\chlk\index"
 Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
