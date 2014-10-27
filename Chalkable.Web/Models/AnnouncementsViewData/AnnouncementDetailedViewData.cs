@@ -43,7 +43,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             //}
             Exempt = studentAnnouncements.Count > 0 && studentAnnouncements.All(x => x.Exempt);
             CanRemoveStandard = studentAnnouncements.Count == 0
-                                || studentAnnouncements.All(x => string.IsNullOrEmpty(x.ScoreValue) && !x.Exempt);
+                                || studentAnnouncements.All(x => string.IsNullOrEmpty(x.ScoreValue));
         }
 
         private AnnouncementDetailedViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded)
