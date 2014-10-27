@@ -16,7 +16,8 @@ mixin AbsentLatePage(data, header)
         .chart-block.relative
             .wide-chart-bg
                 +Chart()(
-                    data-options=self.getChartOptions(data)
+                    data-options=self.getChartOptions(data),
+                    data-tooltip-padding=28
                 ).main-chart
     .students-container.relative
         items = self.getGroupedStudents(data.getStudents())
