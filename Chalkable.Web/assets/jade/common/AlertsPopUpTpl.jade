@@ -1,0 +1,9 @@
+.alerts-triangle-container
+    .left-item
+    .alerts-triangle
+.alerts-container
+    each item in self.getAlerts()
+        .alert-item
+            alertIconClass = "alert-icon " + self.getCssClass(item)
+            div(class=alertIconClass)
+            .alert-description=item.getDescription()
