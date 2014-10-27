@@ -191,9 +191,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (BaseSecurity.IsAdminViewer(Context))
                 throw new NotImplementedException();
 
-            if (announcement.ExpiresDate.HasValue)
-                ann.Expires = announcement.ExpiresDate.Value;
-
+            ann.Expires = announcement.ExpiresDate.HasValue ? announcement.ExpiresDate.Value : DateTime.Today.AddDays(1);
             ann = SetClassToAnnouncement(ann, classId, ann.Expires);
             Storage.AnnouncementStorage.Update(ann);
 
