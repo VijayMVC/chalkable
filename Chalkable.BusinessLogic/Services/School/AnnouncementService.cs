@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementService
     {
-        AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId);
+        AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId);
         AnnouncementDetails GetAnnouncementDetails(int announcementId);
         void DeleteAnnouncement(int announcementId);
         void DeleteAnnouncements(int classId, int? announcementType, AnnouncementState state);
@@ -299,31 +299,23 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId)
+        public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
             
-            if (!classAnnouncementTypeId.HasValue)
-            {
-                var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
-                if(classAnnTypes.Count == 0)
-                    throw new NoClassAnnouncementTypeException("Item can't be created. Current Class doesn't have classAnnouncementTypes");
-                classAnnouncementTypeId = classAnnTypes.First().Id;
-            }
             using (var uow = Update())
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
-                var res = annDa.Create(classAnnouncementTypeId, classId, Context.NowSchoolTime, Context.NowSchoolYearTime, Context.PersonId.Value);
+                var res = annDa.Create(classAnnType.Id, classId, Context.NowSchoolTime, Context.NowSchoolYearTime, Context.PersonId.Value);
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime);
-                annDa.ReorderAnnouncements(sy.Id, classAnnouncementTypeId.Value, res.ClassRef);
+                annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassRef);
                 res = annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
                 if (res.ClassAnnouncementTypeRef.HasValue)
                 {
-                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
                     res.ClassAnnouncementTypeName = classAnnType.Name;
                     res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
                 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -26,37 +28,49 @@ namespace Chalkable.Web.Controllers
             //if (classId.HasValue && !classAnnouncementTypeId.HasValue)
             //    throw new ChalkableException("Invalid method parameters");
 
-            //todo: rewrite this later
             var draft = SchoolLocator.AnnouncementService.GetLastDraft();
             if (draft != null && !classId.HasValue && !classAnnouncementTypeId.HasValue)
             {
                 classAnnouncementTypeId = draft.ClassAnnouncementTypeRef;
                 classId = draft.ClassRef;
             }
-            if (classAnnouncementTypeId.HasValue && draft != null && draft.ClassAnnouncementTypeRef != classAnnouncementTypeId)
+
+            var classAnnType = classAnnouncementTypeId.HasValue
+                ? SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(classAnnouncementTypeId.Value)
+                : null;
+
+            if (classAnnType == null && classId.HasValue)
             {
-                draft.ClassAnnouncementTypeRef = classAnnouncementTypeId.Value;
+                var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId.Value);
+                if (classAnnTypes.Count == 0)
+                    throw new NoClassAnnouncementTypeException("Item can't be created. Current Class doesn't have classAnnouncementTypes");
+
+                classAnnType = classAnnTypes.First();
+            }
+
+            if (classAnnType != null && draft != null && draft.ClassAnnouncementTypeRef != classAnnType.Id)
+            {
+                draft.ClassAnnouncementTypeRef = classAnnType.Id;
                 SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);
             }
-            if (classId.HasValue)
-                return Json(CreateAnnouncement(classAnnouncementTypeId, classId.Value));
+
+            if (classId.HasValue && classAnnType != null)
+            {
+                var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnType, classId.Value);
+                var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
+                Debug.Assert(Context.PersonId.HasValue);
+                var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
+                avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
+                avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
+                return Json(new CreateAnnouncementViewData
+                {
+                    Announcement = avd,
+                    IsDraft = annDetails.IsDraft
+                });
+            }
+
             return Json(null, 7);
         }
-
-        private CreateAnnouncementViewData CreateAnnouncement(int? classAnnouncementTypeId, int classId)
-        {
-            var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnouncementTypeId, classId);
-            var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
-            var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
-            avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
-            avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
-            return new CreateAnnouncementViewData
-            {
-                Announcement = avd,
-                IsDraft = annDetails.IsDraft
-            };
-        }
-
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Delete(int announcementId)

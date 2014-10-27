@@ -103,12 +103,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId)
+        public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId)
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
             var nowLocalDate = Context.NowSchoolTime;
-            var res = Storage.AnnouncementStorage.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.PersonId ?? 0);
+            var res = Storage.AnnouncementStorage.Create(classAnnType.Id, classId, nowLocalDate, Context.PersonId ?? 0);
             return res;
         }
 

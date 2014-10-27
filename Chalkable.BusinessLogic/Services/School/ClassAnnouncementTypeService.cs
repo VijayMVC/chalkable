@@ -40,6 +40,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassAnnouncementType GetClassAnnouncementType(int id)
         {
             var activityCategory = ConnectorLocator.ActivityCategoryConnnector.GetById(id);
+            if (activityCategory == null)
+                return null;
+
             return BuildClassAnnouncementTypes(new List<ActivityCategory> {activityCategory}).First();
         }
 
