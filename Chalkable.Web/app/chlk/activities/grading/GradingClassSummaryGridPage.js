@@ -145,8 +145,11 @@ NAMESPACE('chlk.activities.grading', function () {
                 var input = node.parent('form').find('.value-input');
                 if(node.checked())
                     input.setValue('');
-                else
-                    input.setValue(input.getData('grade-value'));
+                else{
+                    var oldValue = input.getData('grade-value');
+                    input.setValue(oldValue.toLowerCase() == 'exempt' ? '' : oldValue);
+                }
+
             },
 
             function getScores(node){
@@ -240,7 +243,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 }else{
                     value.totalavarages.forEach(function(item){
                         var grade = item.totalaverage;
-                        var value = grade || grade == 0 ? grade.toFixed(value.rounddisplayedaverages ? 0 :2) : '';
+                        var value = grade || grade == 0 ? grade.toFixed(value && value.rounddisplayedaverages ? 0 :2) : '';
                         dom.find('.total-average[data-average-id=' + item.averageid + ']').setHTML(value.toString());
                     });
                 }
