@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
@@ -23,7 +24,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Create(int? classAnnouncementTypeId, int? classId)
         {
-            if (!SchoolLocator.Context.PersonId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             //if (classId.HasValue && !classAnnouncementTypeId.HasValue)
             //    throw new ChalkableException("Invalid method parameters");
@@ -62,7 +63,8 @@ namespace Chalkable.Web.Controllers
             if (classId.HasValue && classAnnType != null)
             {
                 var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnType, classId.Value);
-                var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
+                var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x => x.PersonRef).ToList();
+                var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
                 Debug.Assert(Context.PersonId.HasValue);
                 var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
                 avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
