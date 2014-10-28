@@ -54,7 +54,7 @@ namespace Chalkable.Web.Controllers
                 classAnnType = classAnnTypes.First();
             }
 
-            if (classAnnType != null && draft != null && draft.ClassAnnouncementTypeRef != classAnnType.Id)
+            if (classAnnType != null && draft != null && (draft.ClassAnnouncementTypeRef != classAnnType.Id || draft.ClassRef != classId))
             {
                 draft.ClassAnnouncementTypeRef = classAnnType.Id;
                 SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);

@@ -115,5 +115,26 @@ namespace Chalkable.UserTracking
         public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached)
         {
         }
+
+        public void CreatedReport(string email, string reportType)
+        {
+        }
+
+        public void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId)
+        {
+        }
+
+        public void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt,
+            string note)
+        {
+        }
+
+        public void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits)
+        {
+        }
+
+        public void SetAttendance(string login, int classId)
+        {
+        }
     }
 }

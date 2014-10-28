@@ -206,7 +206,7 @@ NAMESPACE('chlk.controllers', function (){
             this.disableAnnouncementSaving(false);
             var announcement = model.getAnnouncement();
             var reminders = announcement.getAnnouncementReminders() || [];
-            var remindersArray = [];
+            var remindersArray = [], redirectToNoCategoriesPage;
 
             reminders.forEach(function(item){
                 remindersArray.push(item.getBefore());
@@ -240,7 +240,10 @@ NAMESPACE('chlk.controllers', function (){
                             }
                         }
                         if(currentClassInfo && !currentClassInfo.getTypesByClass().length)
-                            this.ShowMsgBox('There are no categories setup', '');
+                            throw new chlk.lib.exception.NoClassAnnouncementTypeException();
+                            //this.redirectToPage_('error', 'createAnnouncementError', []);
+                            //redirectToNoCategoriesPage = true;
+                            //this.ShowMsgBox('There are no categories setup', '');
 
                         var classMarkingPeriods = this.classService.getMarkingPeriodRefsOfClass(classId_);
                         model.setClassScheduleDateRanges(
@@ -257,6 +260,9 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                 }, this);
+
+                //if(redirectToNoCategoriesPage)
+                    //return this.Redirect('error', 'createAnnouncementError', []);
 
                 var classesBarData = new chlk.models.classes.ClassesForTopBar(
                     classes,
@@ -357,8 +363,6 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(model && model.getAnnouncement()){
-                        //if(date_)
-                            //model.setDate(date_);
                         var announcement = model.getAnnouncement();
                         if(noDraft_){
                             announcement.setClassId(classId_ || null);
@@ -372,7 +376,8 @@ NAMESPACE('chlk.controllers', function (){
                         return this.addEditAction(model, false);
                     }
                     return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true, date_);
-                },this);
+                },this)
+                .attach(this.validateResponse_());
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
@@ -861,7 +866,8 @@ NAMESPACE('chlk.controllers', function (){
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
                     }
-                }, this);
+                }, this)
+                .attach(this.validateResponse_());
 
             if (form_)
                 return this.UpdateView(this.getAnnouncementFormPageType_(), res);

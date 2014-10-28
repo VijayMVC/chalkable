@@ -31,6 +31,7 @@ namespace Chalkable.Web.Controllers
                     PersonRef = x.PersonId,
                     Level = x.Level
                 }).ToList());
+            MasterLocator.UserTrackingService.SetAttendance(Context.Login, data.ClassId);
             return Json(true);
         }
 

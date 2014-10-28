@@ -4,14 +4,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Chalkable.Common;
-using Chalkable.UserTracking;
 using Mixpanel.NET.Engage;
 using Mixpanel.NET.Events;
 
-namespace Chalkable.MixPanel
+namespace Chalkable.UserTracking
 {
     public class MixPanelService:IUserTrackingService
     {
+        
+
         private bool IsDisabled { get { return string.IsNullOrEmpty(MixPanelToken); } }
 
         private const string MIXPANEL_USER_PREFIX = "mixpanel-user-";
@@ -51,22 +52,8 @@ namespace Chalkable.MixPanel
         }
 
 
-        private const string FIRST_NAME = "first_name";
-        private const string LAST_NAME = "last_name";
-        private const string SCHOOL = "school";
+        private const string DISTRICT = "district";
         private const string ROLE = "role";
-        private const string INVITED_USER_EMAIL = "invited-user-email";
-
-        public void InvitedUser(string email, string inviteEmail, string firstName, string lastName, string school, string role)
-        {
-            var properties = new Dictionary<string, object>();
-            properties[FIRST_NAME] = firstName;
-            properties[LAST_NAME] = lastName;
-            properties[SCHOOL] = school;
-            properties[ROLE] = role;
-            properties[INVITED_USER_EMAIL] = inviteEmail;
-            SendEvent(email, UserTrackingEvents.InvitedUser, properties);
-        }
 
         public void IdentifySysAdmin(string email, string firstName, string lastName,
             DateTime? firstLoginDate, string ip)
@@ -98,22 +85,6 @@ namespace Chalkable.MixPanel
                 Trace.WriteLine(ex);
             }
 
-        }
-
-        public void IdentifySignUpUser(string email, string username, string schoolName, 
-            DateTime firstLoginDate, string timeZoneId, string role, string ip)
-        {
-            try
-            {
-                var engage = GetEngage();
-                var properties = PrepareBasicProperties(email, username, "", schoolName, firstLoginDate, timeZoneId, role);
-                engage.Set(MakeId(email), ip, properties);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);  
-            }
-            
         }
 
         private const string GRADE = "grade";
@@ -200,7 +171,7 @@ namespace Chalkable.MixPanel
 
             if (!string.IsNullOrEmpty(schoolName))
             {
-                properties[SCHOOL] = schoolName;
+                properties[DISTRICT] = schoolName;
             }
             if (!string.IsNullOrEmpty(role))
             {
@@ -335,11 +306,11 @@ namespace Chalkable.MixPanel
 
             if (pricePerSchool.HasValue)
             {
-                properties[APP_PRICE_PER_SCHOOL] = pricePerSchool.Value > 0 ? pricePerSchool.Value.ToString() : FREE;
+                properties[APP_PRICE_PER_SCHOOL] = pricePerSchool.Value > 0 ? pricePerSchool.Value.ToString(CultureInfo.InvariantCulture) : FREE;
             }
             if (pricePerClass.HasValue)
             {
-                properties[APP_PRICE_PER_CLASS] = pricePerClass.Value > 0 ? pricePerClass.Value.ToString() : FREE;
+                properties[APP_PRICE_PER_CLASS] = pricePerClass.Value > 0 ? pricePerClass.Value.ToString(CultureInfo.InvariantCulture) : FREE;
             }
             return properties;
         }
@@ -430,6 +401,64 @@ namespace Chalkable.MixPanel
             properties[APPS_ATTACHED] = appsAttached;
             properties[DOCS_ATTACHED] = docsAttached;
             SendEvent(email, UserTrackingEvents.CreatedNewItem, properties);
+        }
+
+        private const string REPORT_TYPE = "report-type";
+        public void CreatedReport(string email, string reportType)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[REPORT_TYPE] = reportType;
+            SendEvent(email, UserTrackingEvents.CreatedReport, properties);
+        }
+
+        private const string DESCRIPTION = "description";
+        private const string STUDENT_ID = "studentId";
+
+        public void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[DESCRIPTION] = description;
+            properties[CLASS] = classId.HasValue ? classId.Value.ToString(CultureInfo.InvariantCulture) : "";
+            properties[STUDENT_ID] = studentId.ToString(CultureInfo.InvariantCulture);
+            SendEvent(login, UserTrackingEvents.SetDiscipline, properties);
+        }
+
+        private const string GRADING_PERIOD_ID = "gradingPeriodId";
+        private const string AVG_VALUE = "average";
+        private const string NOTE = "note";
+        private const string IS_EXEMPT = "exempt";
+
+        public void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt,
+            string note)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[CLASS] = classId;
+            properties[STUDENT_ID] = studentId;
+            properties[AVG_VALUE] = averageValue;
+            properties[GRADING_PERIOD_ID] = gradingPeriodId;
+            properties[NOTE] = note;
+            properties[IS_EXEMPT] = exempt;
+            SendEvent(login, UserTrackingEvents.SetFinalGrade, properties);
+        }
+
+        private const string ANNOUNCEMENT_ID = "announcementId";
+        private const string EXTRA_CREDITS = "extraCredits";
+
+        public void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[ANNOUNCEMENT_ID] = announcementId;
+            properties[STUDENT_ID] = studentId;
+            properties[GRADE] = gradeValue;
+            properties[EXTRA_CREDITS] = extraCredits;
+            SendEvent(login, UserTrackingEvents.SetScore, properties);
+        }
+
+        public void SetAttendance(string login, int classId)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[CLASS] = classId;
+            SendEvent(login, UserTrackingEvents.SetAttendance, properties);
         }
 
         private const string DISTINCT_ID = "distinct_id";

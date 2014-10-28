@@ -12,6 +12,15 @@ NAMESPACE('chlk.templates.chlkerror',function(){
         'GeneralServerErrorWithClassesTpl', EXTENDS(chlk.templates.common.PageWithClasses),[
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.ServerErrorModel, 'error'
+            chlk.models.common.ServerErrorModel, 'error',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'controller',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'action',
+
+            [ria.templates.ModelPropertyBind],
+            Array, 'params'
         ]);
 });

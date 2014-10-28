@@ -284,6 +284,11 @@ namespace Chalkable.Web.Controllers
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits
                 , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false
                 , (int)GradingStyleEnum.Numeric100);
+            MasterLocator.UserTrackingService.SetScore(Context.Login,
+                studentAnn.AnnouncementId,
+                studentAnn.StudentId,
+                gradeValue,
+                extraCredits);
             return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
         }
 
@@ -309,6 +314,10 @@ namespace Chalkable.Web.Controllers
                     }).ToList(); 
             var res = SchoolLocator.GradingStatisticService.UpdateStudentAverage(classId, studentId, averageId, gradingPeriodId
                 , averageValue, exempt, comments ?? new List<ChalkableStudentAverageComment>(), note);
+
+            MasterLocator.UserTrackingService.SetFinalGrade(Context.Login, classId, studentId, gradingPeriodId,
+                averageValue, exempt, note);
+
             return Json(StudentAveragesViewData.Create(res));
         }
 

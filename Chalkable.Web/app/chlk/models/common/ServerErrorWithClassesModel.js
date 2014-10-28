@@ -9,6 +9,12 @@ NAMESPACE('chlk.models.common', function(){
 
         chlk.models.common.ServerErrorModel, 'error',
 
+        String, 'controller',
+
+        String, 'action',
+
+        Array, 'params',
+
         [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, chlk.models.common.ServerErrorModel]],
         function $(classes_, classId_, serverError_){
             BASE(classes_, classId_);
@@ -17,13 +23,19 @@ NAMESPACE('chlk.models.common', function(){
             }
         },
 
-        [[chlk.models.classes.ClassesForTopBar, String]],
-        function $create(classes, message){
+        [[chlk.models.classes.ClassesForTopBar, String, String, String, Array]],
+        function $create(classes, message, controller_, action_, params_){
             BASE(classes, null);
             if(message){
                 var serverError = new chlk.models.common.ServerErrorModel(message);
                 this.setError(serverError);
             }
+            if(controller_)
+                this.setController(controller_);
+            if(action_)
+                this.setAction(action_);
+            if(params_)
+                this.setParams(params_);
         }
     ]);
 });

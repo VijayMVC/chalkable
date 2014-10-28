@@ -10,6 +10,7 @@ REQUIRE('chlk.models.common.InfoMsg');
 REQUIRE('chlk.models.common.Button');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 REQUIRE('chlk.lib.exception.NotAuthorizedException');
+REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.AppErrorException');
 REQUIRE('chlk.lib.exception.InvalidPictureException');
 
@@ -75,6 +76,9 @@ NAMESPACE('chlk.controllers', function (){
                    })
                    .catchException(chlk.lib.exception.AppErrorException, function(exception){
                        return this.redirectToErrorPage_(exception.toString(), 'error', 'appError', []);
+                   }, this)
+                   .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(exception){
+                       return this.redirectToErrorPage_(exception.toString(), 'error', 'createAnnouncementError', []);
                    }, this)
                    .catchException(chlk.lib.exception.InvalidPictureException, function(exception){
                        return this.ShowMsgBox('You need to upload valid picture for you app', 'Error', [{
