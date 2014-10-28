@@ -51,6 +51,7 @@ namespace Chalkable.Web.Controllers
             var res = reportAction(reportInputModel);
             var extension = reportInputModel.FormatTyped.AsFileExtension();
             var fileName = string.Format("{0}.{1}", reportFileName, extension);
+            MasterLocator.UserTrackingService.CreatedReport(Context.Login, reportFileName);
             return File(res, MimeHelper.GetContentTypeByExtension(extension), fileName);
         }
 

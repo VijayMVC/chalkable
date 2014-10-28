@@ -96,6 +96,11 @@ namespace Chalkable.Web.Controllers
                     StudentId = discipline.StudentId
                 };
             var res = SchoolLocator.DisciplineService.SetClassDiscipline(classDisciplineModel);
+            MasterLocator.UserTrackingService.SetDiscipline(Context.Login, 
+                classDisciplineModel.ClassId,
+                classDisciplineModel.Date,
+                classDisciplineModel.Description,
+                classDisciplineModel.StudentId);
             return Json(DisciplineView.Create(res, Context.PersonId.Value));
         }
 
