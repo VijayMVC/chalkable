@@ -36,13 +36,13 @@ namespace Chalkable.Web.Controllers
                 classId = draft.ClassRef;
             }
 
-            ClassAnnouncementType classAnnType = null;
-            if (classId.HasValue && classAnnouncementTypeId.HasValue)
-            {
-                classAnnType = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(classAnnouncementTypeId.Value);
+            var classAnnType = classAnnouncementTypeId.HasValue
+                ? SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(classAnnouncementTypeId.Value)
+                : null;
 
-                if (classAnnType.ClassRef != classId.Value)
-                    classAnnType = null;
+            if (classId.HasValue && classAnnType != null && classAnnType.ClassRef != classId.Value)
+            {
+                classAnnType = null;
             }
 
             if (classAnnType == null && classId.HasValue)
