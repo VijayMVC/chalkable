@@ -39,6 +39,7 @@
     <ServiceConfiguration Include="ServiceConfiguration.LocalQA.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Qa.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Support.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Release.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Staging.cscfg" />
   </ItemGroup>
