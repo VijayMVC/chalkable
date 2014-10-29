@@ -314,7 +314,7 @@ namespace Chalkable.Web.Logic
             descriptions = new Dictionary<string, IList<ChalkableApiControllerDescription>>();
 
             var controllers =
-                Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + ASSEMBLY_FILE).GetExportedTypes().
+                Assembly.GetExecutingAssembly().GetExportedTypes().
                     Where(IsChalkableController);
 
             var roles = new List<string>();
