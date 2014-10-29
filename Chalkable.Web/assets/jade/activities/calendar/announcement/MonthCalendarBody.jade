@@ -15,11 +15,12 @@
         div
             p=Msg.Saturday
     .items
+        -selectedItem = self.getTopData() ? self.getTopData().getSelectedItemId() : null
         each item in self.getItems()
             announcements = item.getAnnouncements()
             itemsArr = item.getItemsArray()
             disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !itemsArr.length
-            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().format('mm-dd-yy'), self.getTopData().getSelectedItemId())(
+            +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().toStandardFormat(), selectedItem)(
                 class = ((item.isSunday() ? 'sunday ' : ' ') + item.getClassName() + ' ' + item.getTodayClassName() + (disablePopUp ? ' disabled' : ''))
             ).gradient-cnt.item
                 div

@@ -2,7 +2,6 @@
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.MixPanel;
 using Chalkable.UserTracking;
 
 namespace Chalkable.BusinessLogic.Services.Master

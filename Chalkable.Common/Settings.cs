@@ -62,7 +62,12 @@ namespace Chalkable.Common
         public static string GetSchoolTemplateConnectionString(string dbServer)
         {
             Debug.Assert(ChalkableSchoolDbServers.Contains(dbServer), string.Format("School DB server {0} should be included in ChalkableSchoolDbServers", dbServer));
-            return String.Format(GetSchoolConnectionString("ChalkableSchoolTemplate"), dbServer);
+            return String.Format(GetSchoolConnectionString("ChalkableSchool"), dbServer, SchoolTemplateDbName);
+        }
+
+        public static string SchoolTemplateDbName
+        {
+            get { return Get("ChalkableSchoolTemplateDbName"); }
         }
 
         /* Web settings */

@@ -203,7 +203,7 @@ namespace Chalkable.Web.Controllers
             PrepareCommonViewData(mp);
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), "", person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
+            MasterLocator.UserTrackingService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.DistrictId.ToString(), "", person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }           
 
         private void PrepareAdminJsonData()
@@ -218,7 +218,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             PrepareCommonViewData(mp);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), person.FirstLoginDate, Context.SchoolTimeZoneId, "Admin", ip);
+            MasterLocator.UserTrackingService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.DistrictId.ToString(), person.FirstLoginDate, Context.SchoolTimeZoneId, "Admin", ip);
         }
 
         private void PrepareTeacherJsonData(MarkingPeriod mp)
@@ -254,7 +254,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), 
+            MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), 
                 gradeLevels, classNames, person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }
         

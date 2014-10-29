@@ -58,7 +58,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var unitOfWork = new UnitOfWork(Settings.GetSchoolConnectionString(server, "Master"), false))
             {
                 var da = new DistrictDataAccess(unitOfWork);
-                da.CreateDistrictDataBase(res.Id.ToString(), Settings.GetSchoolTemplateConnectionString(server));
+                da.CreateDistrictDataBase(res.Id.ToString(), Settings.SchoolTemplateDbName);
             }
             return res;
         }

@@ -22,7 +22,7 @@
     <ConfigurationSettings>
       <!-- DB settings -->
       <Setting name="ChalkableMaster"/>
-      <Setting name="ChalkableSchoolTemplate"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
       <Setting name="ChalkableSchool"/>
       <Setting name="ChalkableSchoolDbUser"/>
       <Setting name="ChalkableSchoolDbPwd"/>

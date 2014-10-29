@@ -114,7 +114,7 @@ namespace Chalkable.Web.Controllers
             if (context != null)
             {
                 InitServiceLocators(context);
-                MasterLocator.UserTrackingService.UserLoggedInForFirstTime(context.Login, "", "", Context.SchoolLocalId.ToString(), 
+                MasterLocator.UserTrackingService.UserLoggedInForFirstTime(context.Login, "", "", Context.DistrictId.ToString(), 
                         DateTime.UtcNow.ConvertFromUtc(Context.SchoolTimeZoneId), Context.SchoolTimeZoneId, Context.Role.Name);
                 return redirectAction(context);
             }

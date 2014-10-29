@@ -21,5 +21,10 @@ namespace Chalkable.UserTracking
         public const string FinishedFirstStep = "finished first step";
         public const string FinishedSecondStep = "finished second step";
         public const string InvitedUser = "invited user";
+        public const string CreatedReport = "created report";
+        public const string SetDiscipline = "set discipline";
+        public const string SetFinalGrade = "set final grade";
+        public const string SetScore = "set score";
+        public const string SetAttendance = "set attendance";
     }
 }

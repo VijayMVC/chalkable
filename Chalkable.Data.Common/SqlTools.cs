@@ -106,7 +106,7 @@ namespace Chalkable.Data.Common
         {
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                if (reader.GetName(i) == columnName)
+                if (string.Compare(reader.GetName(i),columnName, StringComparison.InvariantCultureIgnoreCase) == 0)
                 {
                     return true;
                 }
