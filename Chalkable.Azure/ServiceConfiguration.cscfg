@@ -7,10 +7,10 @@
       <!-- DB Settings -->
       <Setting name="ChalkableMaster" value="" />
       <Setting name="ChalkableSchool" value="" />
-      <Setting name="ChalkableSchoolTemplate" value="" />
-      <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
-      <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
+      <Setting name="ChalkableSchoolDbUser" value="" />
+      <Setting name="ChalkableSchoolDbPwd" value="" />
       <Setting name="ChalkableSchoolDbServers" value="" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
       <Setting name="ScriptsRoot" value="" />

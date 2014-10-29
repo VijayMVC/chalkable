@@ -1,6 +1,12 @@
 schedule = self.getUser()
-.loader-container
-    .loader
-    +UserProfileTopBar(self, 'schedule')
-    actions = {currentAction: 'monthSchedule', day: 'daySchedule', week: 'weekSchedule', month: 'monthSchedule'}
-    +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getCalendar(), self.getControllerName(), actions, [schedule.getId()])
+.profile-calendar.scheduling-view
+    .loader-container
+        .loader
+        +UserProfileTopBar(self, 'schedule')
+        .profile-info.scheduling-view
+            .summary-info
+                +ShortPersonInfoSection(schedule, 64)
+                    label= 'Currently enrolled in ' + schedule.getClassesNumber() + ' classes'
+        actions = {currentAction: 'monthSchedule', day: 'daySchedule', week: 'weekSchedule', month: 'monthSchedule'}
+        .calendar-section
+            +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getCalendar(), self.getControllerName(), actions, [schedule.getId()])
