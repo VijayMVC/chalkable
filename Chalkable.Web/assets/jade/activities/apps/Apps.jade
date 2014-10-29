@@ -1,0 +1,65 @@
+mixin AppManagementControls(id, state, liveId)
+    if (liveId && liveId.valueOf())
+        if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
+            span=state.toString(true)
+        else
+            +ActionLink('apps', 'approve', id).btn Approve
+            +ActionLink('apps', 'decline', id).btn Reject
+    else
+        if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
+            span=state.toString(false)
+        else
+            +ActionLink('apps', 'approve', id).btn Approve
+            +ActionLink('apps', 'decline', id).btn Reject
+
+mixin AppsFilterSelect(name, items)
+    +Select(name)(attributes)
+        each item in items
+            +Option(item.value, item.displayValue, item.selected)
+
+.apps-list
+    +ActionForm('apps', 'list')#apps-list-form
+        +Hidden('start', self.applications.getPageIndex())
+        +Hidden('totalCount', self.applications.getTotalCount())
+        +Hidden('actualCount', self.applications.getActualCount())
+        +Hidden('pageSize', self.applications.getPageSize())
+
+        .action-bar.not-transparent.buttons
+            .container.panel-bg
+                .left
+                    .action-button.select-btn
+                        span  Developer:
+                        +AppsFilterSelect('developerid', self.prepareDevelopersSelectModel())#developers-select
+                    .action-button.select-btn
+                        span States:
+                        +AppsFilterSelect('state', self.prepareStatesSelectModel())#states-select
+                .right
+
+        +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
+            +GridHead()
+                .th
+                .th Application Name
+                .th Description
+                .th State
+                .th.narrow isInternal
+                .th
+            +GridBody()
+                each item in self.applications.getItems()
+                    +GridRow()
+                        pictureLink = item.getSmallPictureId() ? self.getAppPictureURL(item.getSmallPictureId(), 74, 74) : '#'
+                        .td
+                            img.app-icon(src=pictureLink)
+                        .td= item.getName()
+                        .td= item.getShortDescription()
+                        .td.app-state
+                            +AppManagementControls(item.getId(), item.getState(), item.getLiveAppId())
+                        .td
+                            +ActionForm('apps', 'changeAppType')
+                                +Checkbox('isInternal', item.isInternal())
+                                +Hidden('appId', item.getId())
+
+                        .td.action-links
+                            +ActionLink('apps', 'details', item.getId()).profile
+                            +ActionLink('apps', 'testApplication', item.getDeveloperId()).profile
+                            +ActionLink('apps', 'tryDeleteApplication', item.getId(), item.getName()).remove
+
