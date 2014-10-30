@@ -4,6 +4,16 @@ DIV.page {
     > DIV {
       #main-wrapper {
         #main {
+          .app-market-page{
+            &.partial-update-market {
+              .chlk-scrollbox {
+                .horizontal-loader {
+                  display: inline-block;
+                }
+              }
+            }
+          }
+
           DIV.app-market{
              .app-screenshots-panel{
 
@@ -12,8 +22,11 @@ DIV.page {
             .chlk-scrollbox{
               .horizontal-loader{
                 bottom: 15px;
+                display: none;
               }
             }
+
+
 
             .app-filter{
               margin-bottom: 30px;

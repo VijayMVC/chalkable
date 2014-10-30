@@ -105,18 +105,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public void UpdateContext(UserContext context)
         {
             Context = context;
-            AnnouncementStorage = CreateAnnouncementStorage(context);
+            CreateAnnouncementStorage(context);
         }
 
-        private IDemoAnnouncementStorage CreateAnnouncementStorage(UserContext context)
+        private void CreateAnnouncementStorage(UserContext context)
         {
+            if (AnnouncementStorage == null)
+            {
+                AnnouncementStorage = new DemoAnnouncementStorage(this);
+            }
             if (BaseSecurity.IsAdminViewer(context))
-                return new DemoAnnouncementForAdminStorage(this);
+                AnnouncementStorage.SetAnnouncementProcessor(new AdminAnnouncementProcessor());
             if (context.Role == CoreRoles.TEACHER_ROLE)
-                return new DemoAnnouncementForTeacherStorage(this);
+                AnnouncementStorage.SetAnnouncementProcessor(new TeacherAnnouncementProcessor(this));
             if (context.Role == CoreRoles.STUDENT_ROLE)
-                return new DemoAnnouncementForStudentStorage(this);
-            throw new ChalkableException("Unsupported role for announcements");
+                AnnouncementStorage.SetAnnouncementProcessor(new StudentAnnouncementProcessor(this));
         }
 
         public DemoStorage(UserContext context)
@@ -196,7 +199,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StaffStorage = new DemoStaffStorage(this);
             StudentSchoolStorage = new DemoStudentSchoolStorage(this);
 
-            AnnouncementStorage = CreateAnnouncementStorage(Context);
+            CreateAnnouncementStorage(Context);
             Setup();
         }
 
@@ -234,7 +237,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 IsGradingPeriodAverage = true,
                 GradingPeriodId = gradingPeriodId,
-                CalculatedNumericAverage = 0,
                 StudentId = x
             });
             StiGradeBookStorage.Add(new Gradebook()
@@ -257,9 +259,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             
         }
 
-        private string BuildDemoEmail(int studentId, string districtId)
+        public static string BuildDemoEmail(int personId, string districtId)
         {
-            return "demo-user_" + studentId.ToString() + districtId + "@chalkable.com";
+            return "demo-user_" + personId + "_" + districtId + "@chalkable.com";
         }
 
         private void PrepareStudents()
@@ -267,14 +269,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (!Context.DistrictId.HasValue) throw new Exception("District id is null");
 
             var districtRef = Context.DistrictId.Value.ToString();
-            AddStudent(DemoSchoolConstants.Student1, PreferenceService.Get("demoschool" + CoreRoles.STUDENT_ROLE.LoweredName).Value,
-                "KAYE", "BURGESS", "F",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 11, 27));
+            AddStudent(DemoSchoolConstants.Student1,"KAYE", "BURGESS", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 11, 27));
             AddStudentAddress(DemoSchoolConstants.Student1, new Address());
 
-            AddStudent(DemoSchoolConstants.Student2, BuildDemoEmail(DemoSchoolConstants.Student2, districtRef), 
-                "BRYON", "BOWEN", "M",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 1, 23));
+            AddStudent(DemoSchoolConstants.Student2, "BRYON", "BOWEN", "M", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 1, 23));
             AddStudentAddress(DemoSchoolConstants.Student2, new Address
             {
                 AddressNumber = "A1026",
@@ -286,10 +284,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 CountyId = 200
             });
 
-            AddStudent(DemoSchoolConstants.Student3,
-                BuildDemoEmail(DemoSchoolConstants.Student3, districtRef),
-                "ADRIAN", "BEAN", "F",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 3, 10));
+            AddStudent(DemoSchoolConstants.Student3,"ADRIAN", "BEAN", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 3, 10));
             AddStudentAddress(DemoSchoolConstants.Student3, new Address
             {
                 AddressNumber = "A1185",
@@ -301,22 +296,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 CountyId = 220
             });
 
-            AddStudent(DemoSchoolConstants.Student4,
-                BuildDemoEmail(DemoSchoolConstants.Student4, districtRef),
-                "COLLEEN", "HOLDEN", "F",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 9, 17));
+            AddStudent(DemoSchoolConstants.Student4, "COLLEEN", "HOLDEN", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 9, 17));
             AddStudentAddress(DemoSchoolConstants.Student4, new Address());
 
-            AddStudent(DemoSchoolConstants.Student5,
-                BuildDemoEmail(DemoSchoolConstants.Student5, districtRef),
-                "INGRID", "LOWERY", "F",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 2, 12));
+            AddStudent(DemoSchoolConstants.Student5, "INGRID", "LOWERY", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 2, 12));
             AddStudentAddress(DemoSchoolConstants.Student5, new Address());
 
-            AddStudent(DemoSchoolConstants.Student6,
-                BuildDemoEmail(DemoSchoolConstants.Student6, districtRef),
-                "LUCIA", "SNYDER", "F",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 8, 12));
+            AddStudent(DemoSchoolConstants.Student6,"LUCIA", "SNYDER", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 8, 12));
             AddStudentAddress(DemoSchoolConstants.Student6, new Address
             {
                 AddressNumber = "A1008",
@@ -328,10 +314,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 CountyId = 220
             });
 
-            AddStudent(DemoSchoolConstants.Student7,
-                BuildDemoEmail(DemoSchoolConstants.Student7, districtRef),
-                "BYRON", "BYERS", "M",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 12, 14));
+            AddStudent(DemoSchoolConstants.Student7, "BYRON", "BYERS", "M", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 12, 14));
             AddStudentAddress(DemoSchoolConstants.Student7, new Address
             {
                 AddressNumber = "A1270",
@@ -343,22 +326,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 CountyId = 220
             });
 
-            AddStudent(DemoSchoolConstants.Student8,
-                BuildDemoEmail(DemoSchoolConstants.Student8, districtRef),
-                "NOEL", "BOYD", "M",
-                DemoSchoolConstants.GradeLevel12, new DateTime(1998, 12, 14));
+            AddStudent(DemoSchoolConstants.Student8, "NOEL", "BOYD", "M", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 12, 14));
             AddStudentAddress(DemoSchoolConstants.Student8, new Address());
 
-            AddStudent(DemoSchoolConstants.Student9,
-               BuildDemoEmail(DemoSchoolConstants.Student9, districtRef),
-               "JAMEL", "HARRIS", "M",
-               DemoSchoolConstants.GradeLevel12, new DateTime(1998, 4, 4));
+            AddStudent(DemoSchoolConstants.Student9, "JAMEL", "HARRIS", "M", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 4, 4));
             AddStudentAddress(DemoSchoolConstants.Student9, new Address());
 
-            AddStudent(DemoSchoolConstants.Student10,
-              BuildDemoEmail(DemoSchoolConstants.Student10, districtRef),
-              "MOLLIE", "PAUL", "F",
-              DemoSchoolConstants.GradeLevel12, new DateTime(1998, 4, 4));
+            AddStudent(DemoSchoolConstants.Student10, "MOLLIE", "PAUL", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 4, 4));
             AddStudentAddress(DemoSchoolConstants.Student10, new Address
             {
                 AddressNumber = "A1036",
@@ -411,7 +385,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             StaffStorage.Add(new Staff
             {
-                UserId = DemoSchoolConstants.TeacherId
+                UserId = DemoSchoolConstants.TeacherId,
             });
 
             SchoolPersonStorage.Add(new SchoolPerson
@@ -419,6 +393,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PersonRef = DemoSchoolConstants.TeacherId,
                 RoleRef = CoreRoles.TEACHER_ROLE.Id,
                 SchoolRef = DemoSchoolConstants.SchoolId
+                
             });
 
             PersonBalanceStorage.Add(new DemoPersonBalance
@@ -428,7 +403,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
         }
 
-        private void AddStudent(int id, string email, string firstName, string lastName, string gender, int gradeLevelRef, DateTime birthDate)
+        private void AddStudent(int id, string firstName, string lastName, string gender, int gradeLevelRef, DateTime birthDate)
         {
             PersonStorage.Add(new Person
             {
@@ -440,7 +415,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 LastName = lastName,
                 Gender = gender,
                 RoleRef = CoreRoles.STUDENT_ROLE.Id,
-                AddressRef = id
+                AddressRef = id,
             });
 
             StudentStorage.Add(new Student
@@ -460,7 +435,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
                 StudentRef = id,
                 GradeLevel = GradeLevelStorage.GetById(gradeLevelRef),
-                GradeLevelRef = gradeLevelRef
+                GradeLevelRef = gradeLevelRef,
+                EnrollmentStatus = StudentEnrollmentStatusEnum.CurrentlyEnrolled
             });
 
             StiDisciplineStorage.Create(new DisciplineReferral
@@ -487,7 +463,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = classId,
                 MarkingPeriodRef = markingPeriodId,
                 PersonRef = studentId,
-                SchoolRef = DemoSchoolConstants.SchoolId
+                SchoolRef = DemoSchoolConstants.SchoolId,
+                IsEnrolled = true
             });
 
 

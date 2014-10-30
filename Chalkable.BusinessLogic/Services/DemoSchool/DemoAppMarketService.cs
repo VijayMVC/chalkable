@@ -9,6 +9,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
@@ -26,16 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             : base(serviceLocator, storage)
         {
         }
-
         
-
-        public IList<Application> ListInstalled(int personId, bool owner)
-        {
-            var installed = ListInstalledAppInstalls(personId);
-            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
-            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
-        }
-
         public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
         {
             return Storage.ApplicationInstallStorage.GetInstalled(personId);
@@ -343,5 +335,57 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
         }
 
+        public IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId)
+        {
+            /*
+             * declare @schoolYearId int = (select SchoolYearRef from MarkingPeriod where Id = @markingPeriodId)
+
+            declare @personIdsT table(id int)
+            insert into @personIdsT
+            select PersonRef from ClassPerson
+            join StudentSchoolYear ssy on ssy.StudentRef = ClassPerson.PersonRef
+            where ClassPerson.ClassRef = @classId 
+	            and ClassPerson.MarkingPeriodRef = @markingPeriodId 
+	            and ClassPerson.IsEnrolled = 1
+	            and ssy.EnrollmentStatus = 0
+	            and ssy.SchoolYearRef = @schoolYearId
+            group by ClassPerson.PersonRef
+
+            declare @appStudentT table(appId uniqueidentifier, personId int)
+            insert into @appStudentT
+            select ApplicationRef, PersonRef from ApplicationInstall
+            where Active = 1 
+	            and OwnerRef = @staffId 
+	            and SchoolYearRef = @schoolYearId
+	            and PersonRef in (select id from @personIdsT)
+
+            declare @classStudentCount int = (select count(*) from @personIdsT)
+            select appSt.appId as ApplicationId, 
+	               @classStudentCount - count(appSt.personId) as NotInstalledStudentCount
+            from @appStudentT appSt
+            group by appSt.appId
+
+             */
+
+            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
+            var cps = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery()
+            {
+                ClassId = classId,
+                IsEnrolled = true,
+                MarkingPeriodId = markingPeriodId,
+            }).GroupBy(x => x.PersonRef, (key, group) => new {PersonId = key, Count = group.Count()});
+
+            var personIds = cps.Select(x => x.PersonId);
+
+            var appInstalls = Storage.ApplicationInstallStorage.GetAll().Where(
+                    x => x.Active && x.OwnerRef == staffId
+                    && x.SchoolYearRef == mp.SchoolYearRef &&
+                    personIds.Contains(x.PersonRef));
+
+            var classStudentsCount = personIds.Count();
+
+            return appInstalls.GroupBy(x => x.ApplicationRef,
+                (key, val) => new {ApplicationId = key, NotInstalledCount = classStudentsCount - val.Count()}).ToDictionary(x => x.ApplicationId, x => x.NotInstalledCount);
+        }
     }
 }

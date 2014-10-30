@@ -53,6 +53,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.row.selected .grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '.student-attachments', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementView, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             Array, 'applicationsInGradeView',
             Array, 'applications',
@@ -246,6 +247,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.dom.find(('.small-pop-up:visible')).hide();
             },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                this.dom.find('.open-on-start').trigger('click').removeClass('open-on-start');
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
 
@@ -329,7 +336,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     ableDropStudentScore : this.isAbleDropStudentScore(),
                     ableToExempt : this.isAbleToExempt()
                 });
-                var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf());
+                var container = this.dom.find('#grade-container-' + itemModel.getStudentId().valueOf()).find('.grade-container');
                 if(itemModel.isEmptyGrade()){
                     container.parent('form').addClass('empty-grade-form');
                 }
@@ -341,7 +348,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var topContent = this.dom.find('#top-content-' + itemModel.getStudentId().valueOf());
                 topContent.removeClass('loading');
                 itemTpl.renderTo(container);
-                container.find('.grade-input').trigger('focus').trigger('select');
+                container.find('.grade-input:visible').trigger('focus').trigger('select');
             },
 
             //TODO copied from GridPage
@@ -603,7 +610,11 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                var input = node.parent('form').find('.grade-autocomplete').setValue('');
+                var input = node.parent('form').find('.grade-autocomplete');
+                if(node.checked())
+                    input.setValue('');
+                else
+                    input.setValue(input.getData('grade-value'));
             },
 
             [[ria.dom.Dom, String, Boolean, Boolean]],
@@ -632,6 +643,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var input = popUp.find('.comment-input');
                 input.setValue(node.getHTML());
                 popUp.find('.grading-comments-list').hide();
+                setTimeout(function(){
+                    input.trigger('focus');
+                }, 100)
             },
 
             [ria.mvc.DomEventBind('click', '.grading-comments-list .item')],
@@ -706,7 +720,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('change', '.cant-drop')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
-            Boolean, function cantDropClick(node, event){
+            function cantDropClick(node, event){
                 node.setAttr('disabled', 'disabled');
             },
 

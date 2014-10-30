@@ -24,18 +24,18 @@ NAMESPACE('chlk.controllers', function (){
 
             function createAnnouncementErrorAction(){
                 var message = 'You have to set up category types in iNow before you can send a new item in Chalkable.';
-                return this.generalServerErrorWithClassesAction(message);
+                return this.generalServerErrorWithClassesAction(message, false, 'announcement', 'add');
             },
 
             function viewAnnouncementErrorAction(){
-                var message = 'This item has been deleted';
+                var message = 'This item has been deleted or you don\'t have access to view it';
                 return this.generalServerErrorAction(message);
             },
 
             [[String]],
-            function generalServerErrorWithClassesAction(message){
-                var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(true));
-                var res = new ria.async.DeferredData(new chlk.models.common.ServerErrorWithClassesModel.$create(topModel, message));
+            function generalServerErrorWithClassesAction(message, withAll_, controller_, action_, params_){
+                var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(withAll_));
+                var res = new ria.async.DeferredData(new chlk.models.common.ServerErrorWithClassesModel.$create(topModel, message, controller_, action_, params_));
                 return this.PushView(chlk.activities.chlkerror.GeneralServerErrorWithClassesPage, res);
             },
 

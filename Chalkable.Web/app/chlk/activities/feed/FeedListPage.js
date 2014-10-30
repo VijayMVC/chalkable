@@ -37,6 +37,12 @@ NAMESPACE('chlk.activities.feed', function () {
                 return false;
             },
 
+            [ria.mvc.DomEventBind('click', '.notifications-link')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function notificationsClick(node, event){
+                this.dom.find('.new-notification-count').remove();
+            },
+
             OVERRIDE, VOID, function onStop_() {
                 interval = setInterval(function(){
                     var item = new ria.dom.Dom('.moving-wrapper');
@@ -64,8 +70,10 @@ NAMESPACE('chlk.activities.feed', function () {
                 if(model.isFirstLogin()){
                     var body = ria.dom.Dom('body'), that = this;
                     ria.dom.Dom('#first-login-input').trigger('focus');
-                    $("#first-login-video").YouTubePopup();
-                    $("#first-login-video").trigger('click');
+                    if(this.getRole().isTeacher()){
+                        $("#first-login-video").YouTubePopup();
+                        $("#first-login-video").trigger('click');
+                    }
                     body.on('click.tour', '.YouTubeDialog .ui-dialog-titlebar-close', function(){
                         body.removeClass('first-login');
                     });

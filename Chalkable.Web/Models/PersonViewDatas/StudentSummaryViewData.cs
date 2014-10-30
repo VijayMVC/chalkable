@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Chalkable.BusinessLogic.Mapping;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -26,6 +23,9 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
 
+        private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
+
+
         protected StudentSummaryViewData(Person person, Room room) : base(person, room)
         {
         }
@@ -40,11 +40,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(studentSummary.StudentAnnouncements),
                     RanksBox = studentSummary.ClassRank != null ? StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank) : null,
                 };
+            res.CurrentClassName = NO_CLASS_SCHEDULED;
             if (currentClass != null)
             {
                 res.GradeLevelNumber = currentClass.GradeLevel.Number;
                 res.CurrentClassName = currentClass.Name;
             }
+
             res.CurrentAttendanceLevel = studentSummary.CurrentAttendanceLevel;
             return res;
         }
@@ -58,8 +60,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();
             var rank = rankInfo.Rank;
-            res.IsPassing = rank > 50;
-            res.Title = rank.HasValue ? rank.ToString() : "";
+            res.IsPassing = true;
+            res.Title = rank.HasValue ? string.Format("{0} of {1}", rankInfo.Rank, rankInfo.ClassSize) : "";
             return res;
         }
 
@@ -81,7 +83,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     Hover = TotalAbsencesPerClassViewData.Create(attendances, classDetailses),
                 };
             if (dailyAbsenceSummary != null && dailyAbsenceSummary.Absences != null)
-                res.Title = dailyAbsenceSummary.Absences.ToString();
+                res.Title = (dailyAbsenceSummary.Absences).ToString(); // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
             return res;
         }
 
@@ -104,28 +106,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentSummeryRankViewData
     {
-        public int MarkingPeriodId { get; set; }
-        public string MarkingPeiordName { get; set; }
-        public int? Rank { get; set; }
-        public static IList<StudentSummeryRankViewData> Create(IList<StudentGradingRank> currentStudentRanks, IList<StudentGradingRank> allStudentsRanks)
-        {
-            var rankByMps = currentStudentRanks;
-            var res = new List<StudentSummeryRankViewData>();
-            foreach (var rankByMp in rankByMps)
-            {
-                var allStudentsByMp = allStudentsRanks.Where(x => x.MarkingPeriodId == rankByMp.MarkingPeriodId).ToList();
-                var studentSummeryRank = new StudentSummeryRankViewData
-                                        {
-                                            MarkingPeriodId = rankByMp.MarkingPeriodId,
-                                            MarkingPeiordName = rankByMp.MarkingPeriodName,
-                                        };
-                var lowRankStCount = allStudentsByMp.Count(x => x.StudentId != rankByMp.StudentId && x.Rank >= rankByMp.Rank);
-                var allStudentsCount = allStudentsByMp.Count;
-                studentSummeryRank.Rank = allStudentsCount > 0 ? 100 * lowRankStCount / allStudentsCount : default(int?);
-                res.Add(studentSummeryRank);
-            }
-            return res;
-        }
     }
 
     public class DisciplineTotalPerTypeViewData
@@ -151,16 +131,16 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         public static IList<TotalAbsencesPerClassViewData> Create(IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
-            var atts = attendances.OrderByDescending(x=>x.Absences).Take(5);
+            var atts = attendances.OrderByDescending(x=>x.Absences);
             var res = new List<TotalAbsencesPerClassViewData>();
             foreach (var classAttendanceSummary in atts)
             {
-
+                if (classAttendanceSummary.Absences < 1) continue;
                 var c = classDetailses.FirstOrDefault(x => x.Id == classAttendanceSummary.ClassId);
                 if (c == null) continue;
                 res.Add(new TotalAbsencesPerClassViewData
                 {
-                    Absences = classAttendanceSummary.Absences,
+                    Absences = classAttendanceSummary.Absences, // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
                     Class = ShortClassViewData.Create(c)
                 });
             }

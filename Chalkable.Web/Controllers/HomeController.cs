@@ -10,7 +10,6 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -46,8 +45,10 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(SysAdminViewData.Create(sysUser), ViewConstants.CURRENT_PERSON);
+            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
+            ViewData[ViewConstants.SERVER_TIME] = serverTime;
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
+            MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
             return View();
         }
 
@@ -62,9 +63,9 @@ namespace Chalkable.Web.Controllers
             var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, false);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
-            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss");
+            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
-            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss");
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss tt");
             ViewData[ViewConstants.NEEDS_TOUR] = false;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
@@ -94,7 +95,7 @@ namespace Chalkable.Web.Controllers
                 PrepareJsonData(res, ViewConstants.DEFAULT_APPLICATION, 6);
             }
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifyDeveloper(developer.Email, developer.DisplayName, DateTime.UtcNow, "UTC", ip);
+            MasterLocator.UserTrackingService.IdentifyDeveloper(developer.Email, developer.DisplayName, DateTime.UtcNow, "UTC", ip);
             return View();
         }
 
@@ -155,9 +156,9 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
-            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss");
+            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
-            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss");
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss tt");
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
@@ -176,6 +177,7 @@ namespace Chalkable.Web.Controllers
             }
             PrepareJsonData(AlphaGradeViewData.Create(SchoolLocator.AlphaGradeService.GetAlphaGrades()), ViewConstants.ALPHA_GRADES);
             PrepareJsonData(AlternateScoreViewData.Create(SchoolLocator.AlternateScoreService.GetAlternateScores()), ViewConstants.ALTERNATE_SCORES);
+            PrepareJsonData(MarkingPeriodViewData.Create(SchoolLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId)), ViewConstants.MARKING_PERIODS);
         }
         
         private void PrepareStudentJsonData()
@@ -201,7 +203,7 @@ namespace Chalkable.Web.Controllers
             PrepareCommonViewData(mp);
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), "", person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
+            MasterLocator.UserTrackingService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.DistrictId.ToString(), "", person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }           
 
         private void PrepareAdminJsonData()
@@ -216,7 +218,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             PrepareCommonViewData(mp);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), person.FirstLoginDate, Context.SchoolTimeZoneId, "Admin", ip);
+            MasterLocator.UserTrackingService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.DistrictId.ToString(), person.FirstLoginDate, Context.SchoolTimeZoneId, "Admin", ip);
         }
 
         private void PrepareTeacherJsonData(MarkingPeriod mp)
@@ -246,32 +248,32 @@ namespace Chalkable.Web.Controllers
 
             var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
             PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
-            var executionResult = classes.Select(ClassViewData.Create).ToList();
-            PrepareJsonData(executionResult, ViewConstants.CLASSES);
-            PrepareClassesAdvancedData(classes, mp);
+            var classesList = classes.Select(ClassViewData.Create).ToList();
+            PrepareJsonData(classesList, ViewConstants.CLASSES);
+            PrepareClassesAdvancedData(classes);
             PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MixPanelService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.SchoolLocalId.ToString(), 
+            MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), 
                 gradeLevels, classNames, person.FirstLoginDate, Context.SchoolTimeZoneId, ip);
         }
         
-        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailses, MarkingPeriod mp)
+        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailsList)
         {
             var classesAdvancedData = new List<object>();
-            classDetailses = classDetailses.Where(x => x.MarkingPeriodClasses.Any(y => y.MarkingPeriodRef == mp.Id)).ToList();
-            var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
+            //var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
             var allAlphaGrades = SchoolLocator.AlphaGradeService.GetAlphaGrades();
-            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailses.Select(x => x.Id).ToList());
-            foreach (var classDetails in classDetailses)
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailsList.Select(x => x.Id).ToList());
+            foreach (var classDetails in classDetailsList)
             {
 
                 int classId = classDetails.Id;
                 var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
                 classesAdvancedData.Add(new
                 {
+                    //Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>()
                     ClassId = classId,
-                    Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>(),
+                    Mask = new List<int>(),
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
                     AlphaGrades = classDetails.GradingScaleRef.HasValue
                                         ? SchoolLocator.AlphaGradeService.GetAlphaGradesForClass(classDetails.Id)

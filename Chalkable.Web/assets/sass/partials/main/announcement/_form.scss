@@ -606,7 +606,7 @@ BODY {
 
               &#content{
                 //height: 100px !important;
-                padding-bottom: 53px;
+                padding-bottom: 75px;
                 min-height: 100px;
               }
             }
@@ -676,9 +676,35 @@ BODY {
             .left-block{
               position: relative;
 
+              .no-assignments-text{
+                position: absolute;
+                font: normal 14px Arial;
+                font-style: italic;
+              }
+
+              .drawer-icon{
+                background: url(images/announcement/all-files-icon.png) 0 0 no-repeat;
+                width: 20px;
+                height: 20px;
+                right: 37px;
+                bottom: 30px;
+                position: absolute;
+                cursor: pointer;
+                opacity: 0;
+              }
+
+              &.with-standards{
+                .drawer-icon{
+                  bottom: 113px;
+                }
+
+                .new-item-dropdown{
+                  bottom: 47px;
+                }
+              }
+
               .left-block-container{
                 display: inline-block;
-                height: 159px;
 
                 &:hover{
                   .drawer-icon{
@@ -689,17 +715,6 @@ BODY {
                     }
                   }
                 }
-              }
-
-              .drawer-icon{
-                background: url(images/announcement/all-files-icon.png) 0 0 no-repeat;
-                width: 20px;
-                height: 20px;
-                right: 37px;
-                top: 93px;
-                position: absolute;
-                cursor: pointer;
-                opacity: 0;
               }
             }
 
@@ -712,7 +727,7 @@ BODY {
               font-size: 14px;
               font-family: "Arial Narrow", Arial;
               color: #000;
-              top: 116px;
+              bottom: -33px;
 
               >DIV{
                 height: 20px;

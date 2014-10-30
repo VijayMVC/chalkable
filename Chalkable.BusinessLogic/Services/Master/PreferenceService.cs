@@ -396,6 +396,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Value = "returns summary data (current classes, statistics etc...) for a particular student"
             });
 
+            res.Add(Preference.API_DESCR_TEACHER_TEACHERS, new PreferenceInfo
+            {
+                Category = PreferenceCategoryEnum.ControllerDescriptions,
+                Type = PreferenceTypeEnum.ShortText,
+                Value = "returns information about teachers"
+            });
+
             res.Add(Preference.API_DESCR_STUDENT_INFO, new PreferenceInfo
             {
                 Category = PreferenceCategoryEnum.ControllerDescriptions,

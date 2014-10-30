@@ -17,7 +17,8 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAppMarketService
     {
-        IList<Application> ListInstalled(int personId, bool owner);
+        IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId);
+ 
         IList<ApplicationInstall> ListInstalledAppInstalls(int personId);
         IList<ApplicationInstall> ListInstalledForClass(int classId);
         IList<Application> ListInstalledAppsForClass(int classId);
@@ -51,19 +52,15 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<Application> ListInstalled(int personId, bool owner)
-        {
-            var installed = ListInstalledAppInstalls(personId);
-            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
-            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
-        }
-
         public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
         {
+            int? syId = Context.SchoolYearId;
+            if (!syId.HasValue)
+                syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                return da.GetInstalled(personId);
+                return da.GetInstalled(personId, syId.Value);
             }
         }
 
@@ -406,6 +403,12 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-
+        public IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId)
+        {
+            using (var uow = Read())
+            {
+                return  new ApplicationInstallDataAccess(uow).GetNotInstalledStudentsCountPerApplication(staffId, classId, markingPeriodId);
+            }
+        }
     }
 }

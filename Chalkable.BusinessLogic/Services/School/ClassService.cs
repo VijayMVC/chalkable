@@ -38,7 +38,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses);
         void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId);
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
-        IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null);
         Class GetById(int id);
         IList<Class> GetAll();
     }
@@ -273,16 +272,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     });
                 uow.Commit();
             }
-        }
-
-        public IList<Person> GetStudents(int classId, bool? isEnrolled = null, int? markingPeriodId = null)
-        {
-             using (var uow = Read())
-             {
-                 var da = new ClassDataAccess(uow, Context.SchoolLocalId);
-                 return da.GetStudents(classId, isEnrolled, markingPeriodId);
-
-             }   
         }
 
         public Class GetById(int id)

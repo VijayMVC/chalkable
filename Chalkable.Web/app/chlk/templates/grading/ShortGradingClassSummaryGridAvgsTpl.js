@@ -34,15 +34,17 @@ NAMESPACE('chlk.templates.grading', function () {
             },
 
             String, function displayGrade(grade_){
-                return grade_ || grade_ == 0 ? grade_.toFixed(2) : '';
+                var isRoundDisplayAverage = this.getModel().getValue().rounddisplayedaverages;
+                return grade_ || grade_ == 0 ? grade_.toFixed(isRoundDisplayAverage ? 0 : 2) : '';
             },
+
 
             String, function displayAvgGradeValue(average, isAbleDisplayAlphaGrades_, original_, noText_){
                 if(average.isexempt && !original_ && !noText_)
                     return Msg.Exempt;
                 var alphaGrade = original_ ? average.calculatedalphagrade : this.getAlphaGrade(average);
                 var res = this.displayGrade(original_ ? average.calculatedavg : this.getNumericAvg(average));
-                if(res && this.getNumericAvg(average) != 0 && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
+                if((res || res == 0)  && isAbleDisplayAlphaGrades_ && alphaGrade && alphaGrade.trim() != ''){
                     res += '(' + alphaGrade + ')';
                 }
                 return res;

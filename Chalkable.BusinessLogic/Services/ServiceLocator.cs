@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using CacheItemPriority = System.Web.Caching.CacheItemPriority;
@@ -61,8 +62,6 @@ namespace Chalkable.BusinessLogic.Services
         {
             int roleId;
 
-
-
             int personId = schoolUser.User.IsDemoUser
                 ? DemoPersonStorage.GetPersonDataForLogin(schoolUser.User, out roleId)
                 : PersonDataAccess.GetPersonDataForLogin(schoolUser.User.District.ServerUrl,
@@ -70,7 +69,16 @@ namespace Chalkable.BusinessLogic.Services
             var user = schoolUser.User;
             var school = schoolUser.School;
             var role = CoreRoles.GetById(roleId);
-            return new UserContext(user, role, user.District, school, null, personId, schoolYear);
+
+            Guid? developerId = null;
+
+            if (schoolUser.User.IsDemoUser)
+            {
+                var developer = CreateMasterSysAdmin().UserService.GetById(user.District.Id);
+                if (developer != null)
+                    developerId = developer.Id;
+            }
+            return new UserContext(user, role, user.District, school, developerId, personId, schoolYear);
         }
 
         public static IServiceLocatorSchool CreateSchoolLocator(UserContext context)

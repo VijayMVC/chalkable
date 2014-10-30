@@ -11,9 +11,6 @@
 
     <script type="text/javascript">
 
-        var errorMessage = HtmlEncode('@ViewData.GetValueOrNull(ViewConstants.ERROR_MESSAGE_KEY)');
-        var demoPrefix = '@ViewData.GetValueOrNull(ViewConstants.DEMO_PREFIX_KEY)';
-        
         jQuery(document).ready(function () {
             /*if (thisBrowser.isIE) {
                 var ffIcon = joinUrls(WEB_SITE_ROOT, "/Content/images/common/firefox-icon.png");
@@ -49,11 +46,6 @@
                 jQuery('.buttons-container').fadeIn();
             });
             jQuery('#home-logo').attr('href', WEB_SITE_ROOT);
-
-            if (errorMessage) {
-                alert(errorMessage);
-                window.location.href = WEB_SITE_ROOT + '#start';
-            }
         });
     </script>
 }

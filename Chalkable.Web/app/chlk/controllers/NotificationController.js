@@ -32,7 +32,7 @@ NAMESPACE('chlk.controllers', function (){
                         res.setTarget(new ria.dom.Dom('.notifications-link'));
                         return res;
                     }, this);
-
+                    
                 this.notificationService.markAllAsShown().then(function(data){
                     return this.notificationService.getUnShownNotificationCount().then(function(data2){
                         this.setNewNotificationCount_(data2);

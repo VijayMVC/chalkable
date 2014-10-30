@@ -20,15 +20,20 @@ namespace Chalkable.BackgroundTaskProcessor
             // This is a sample worker implementation. Replace with your logic.
             Trace.WriteLine("Chalkable.BackgroundTaskProcessor entry point called", "Information");
             var processor = new TaskProcessor();
-            var delay = Settings.Configuration.TaskProcessorDelay;
+            var delay = Settings.TaskProcessorDelay;
             var raygunClient = new RaygunClient();
             raygunClient.ApplicationVersion = CompilerHelper.Version;
+
+            if (delay <= 0)
+            {
+                Trace.TraceError("Task processing is turned off");
+            }
+
             while (true)
             {
                 if (delay <= 0)
                 {
-                    Thread.Sleep(7200000);
-                    Trace.TraceError("Task processing is turned off");
+                    Thread.Sleep(10000);                    
                     continue;
                 }
                 try
@@ -44,6 +49,8 @@ namespace Chalkable.BackgroundTaskProcessor
                         raygunClient.SendInBackground(ex);
                     }
                     catch (Exception){}
+#else
+                    Debug.Fail(ex.Message);
 #endif
                     while (ex != null)
                     {
@@ -69,7 +76,7 @@ namespace Chalkable.BackgroundTaskProcessor
 
         private void ConfigureDiagnostics()
         {
-            String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
+            /*String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue(wadConnectionString));
 
             RoleInstanceDiagnosticManager roleInstanceDiagnosticManager =
@@ -86,7 +93,7 @@ namespace Chalkable.BackgroundTaskProcessor
             performanceCounterConfiguration.SampleRate = TimeSpan.FromSeconds(10d);
             diagnosticMonitorConfiguration.PerformanceCounters.DataSources.Add(performanceCounterConfiguration);
             diagnosticMonitorConfiguration.PerformanceCounters.ScheduledTransferPeriod = TimeSpan.FromMinutes(1d);
-            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);
+            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);*/
         }
     }
 }

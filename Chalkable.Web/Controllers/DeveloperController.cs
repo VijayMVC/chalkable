@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
@@ -87,6 +87,13 @@ namespace Chalkable.Web.Controllers
             return Json(DeveloperViewData.Create(developer));
         }
 
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult GetDevelopers()
+        {
+            var developers = MasterLocator.DeveloperService.GetDevelopers();
+            return Json(developers.Select(DeveloperViewData.Create).ToList());
+        }
+
         public string ApplicationPath
         {
             get
@@ -125,18 +132,18 @@ namespace Chalkable.Web.Controllers
         public ActionResult UpdateInfo(Guid developerId, string name, string websiteLink, string email)
         {
             var res = MasterLocator.DeveloperService.Edit(developerId, name, email, websiteLink);
-            MixPanelService.ChangedEmail(Context.Login, email);
+            MasterLocator.UserTrackingService.ChangedEmail(Context.Login, email);
             if (Context.Role.LoweredName == CoreRoles.DEVELOPER_ROLE.LoweredName)
             {
                 var timeZoneId = Context.SchoolTimeZoneId;
                 var ip = RequestHelpers.GetClientIpAddress(Request);
-                MixPanelService.IdentifyDeveloper(res.Email, res.DisplayName,
+                MasterLocator.UserTrackingService.IdentifyDeveloper(res.Email, res.DisplayName,
                     string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
             }
             return Json(DeveloperViewData.Create(res));
         }
 
-        public ActionResult Confirm(string key, Guid applicationId)
+        public ActionResult GoLive(string key, Guid applicationId)
         {
             return Confirm(key, (context) => RedirectAction(context, applicationId));
         }

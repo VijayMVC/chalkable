@@ -1,11 +1,14 @@
 mixin StudentGradingItem(student)
-    tooltipText = student.getFullName() + '<br/>'
-    if student.getAvg() || student.getAvg() == 0
-        tooltipText = tooltipText + student.getAvg().toFixed(2) + '%'
-    -attributes['data-tooltip'] = tooltipText
-    -attributes['studentId'] = student.getId().valueOf()
-    +ProfileLink(student, 'student')(attributes).image-container.white.student-item
-        +PersonImg(student, 47)
+    if !student.getId()
+        a.empty-container
+    else
+        tooltipText = student.getFullName() + '<br/>'
+        if student.getAvg() || student.getAvg() == 0
+            tooltipText = tooltipText + student.getAvg().toFixed(2) + '%'
+        -attributes['data-tooltip'] = tooltipText
+        -attributes['studentId'] = student.getId().valueOf()
+        +ProfileLink(student, 'student')(attributes).image-container.white.student-item
+            +PersonImg(student, 47)
 
 topData = self.getTopData()
 topItems = topData.getTopItems() || []
@@ -16,33 +19,36 @@ topItems = topData.getTopItems() || []
     if !self.getItems().length
         .no-items-text There is no grading summary data for current term
     each item in self.getItems()
-        trouleCount = item.getTrouble().length
+        troubleCount = item.getTrouble().length
         wellCount = item.getWell().length
-        restCount = item.getAllStudents().length - trouleCount - wellCount
-        maxIndex = restCount + trouleCount - 1
-        students = self.getPreparedStudents(item.getAllStudents(), item.getWell(), item.getTrouble())
+        restCount = item.getAllStudents().length - troubleCount - wellCount
+        maxIndex = restCount + troubleCount - 1
+        students = self.getPreparedStudents(item)
         typeEnum = chlk.models.grading.StudentWellTroubleEnum
         .class-block
-            +ActionLink('grading', 'summaryGrid', item.getClazz().getId()).h2.with-line=item.getClazz().getFullClassName()
-                span(href="javascript:").show-less
+            h2.with-line
+                +ActionLink('grading', 'summaryGrid', item.getClazz().getId())=item.getClazz().getFullClassName()
+                span.show-less
                     span –
                     |#{Msg.Show_less}
             .students-block.with-line
-                if trouleCount == 0 && wellCount == 0 && restCount == 0
+                if troubleCount == 0 && wellCount == 0 && restCount == 0
                     .no-items-text.small=Msg.No_grades_yet
                 else
-                    each student in item.getTrouble()
+                    each student in item.getUpdatedTrouble()
                         +StudentGradingItem(student).trouble
-                    button.all-button=Msg.All
+                    button(
+                        data-empty-count = 5 - troubleCount
+                    ).all-button=Msg.All
                     if restCount > 0
                         each student,i in item.getAllStudents()
-                            if i > trouleCount - 1 && i <= maxIndex
+                            if i > troubleCount - 1 && i <= maxIndex
                                 +StudentGradingItem(student)
                     each student in item.getWell()
                         +StudentGradingItem(student).well
             .students-line
                 SPAN.n-0 0
-                SPAN.n-100 100
+                SPAN.n-100=item.getMaxScore()
                 each student in students
                     div(
                         class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),

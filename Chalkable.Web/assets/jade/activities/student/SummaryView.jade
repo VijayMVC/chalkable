@@ -15,16 +15,16 @@ statusData = self.getStatusData()
                 .status
                     div(class=statusData.status, data-tooltip=statusData.statusName)
                     |#{user.getCurrentClassName()}
-                    if(!user.getCurrentClassName() || user.getCurrentClassName().toLowerCase() != 'no class now')
+                    if(user.getCurrentClassName() && user.getRoomName() && user.getCurrentClassName().toLowerCase() != 'no class now')
                         |&nbsp;- #{user.getRoomName()}
                 .glance-container
-                    if self.getUser().getRankBox()
+                    if user.getRankBox() && user.isAbleViewTranscript()
                         +GlanceBox(null, null, self.buildRankGlanceBoxData())
-                    if self.getUser().getAttendanceBox()
+                    if user.getAttendanceBox()
                         +GlanceBox(null, null, self.buildAttendanceGlanceBoxData(), null, null, true, true)
-                    if self.getUser().getDisciplineBox()
+                    if user.getDisciplineBox()
                         +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
-                    if self.getUser().getGradesBox()
+                    if user.getGradesBox()
                         +GlanceBox(null, null, self.buildGradesGlanceBoxData(), null, null, true, true)
         if user.getPeriodSection()
             .today-work-panel
@@ -35,4 +35,4 @@ statusData = self.getStatusData()
             .today-work-panel
                 h2.stats=Msg.Classes
                 .classes-tb
-                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class)(hideArrows).centered.big-arrows
+                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class)(hideArrows, itemsCount = 7).centered.big-arrows

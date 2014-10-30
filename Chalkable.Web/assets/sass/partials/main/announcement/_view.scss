@@ -509,6 +509,12 @@ $red-color: #842727;
         width: 328px;
       }
 
+      .wrapper {
+        display: inline-block;
+        position: relative;
+        paddin-right: 25px;
+      }
+
       p{
         padding: 20px 0 2px 0;
         text-overflow: ellipsis;

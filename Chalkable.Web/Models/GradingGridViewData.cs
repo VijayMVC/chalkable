@@ -77,34 +77,19 @@ namespace Chalkable.Web.Models
             }
             foreach (var student in gradeBook.Students)
             {
-                var ann = gradeBook.Announcements.FirstOrDefault();
-                bool isWithdrawn = ann != null && ann.StudentAnnouncements.Any(x=>x.StudentId == student.Id)
-                                   && ann.StudentAnnouncements.First(x=>x.StudentId == student.Id).Withdrawn;
-                res.Students.Add(GradeStudentViewData.Create(student, isWithdrawn));
-
+                res.Students.Add(GradeStudentViewData.Create(student, student.IsWithdrawn));
             }
             var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
             res.TotalAvarages = StudentTotalAveragesViewData.Create(gradeBook.Averages, stIds);
 
-            if (gradeBook.Options != null && gradeBook.Options.DisplayTotalPoints && gradeBook.Announcements.Count > 0)
+            if (res.DisplayTotalPoints  && gradeBook.StudentTotalPoints != null && gradeBook.StudentTotalPoints.Count > 0)
             {
                 res.TotalPoints = new List<TotalPointViewData>();
                 foreach (var stId in stIds)
                 {
-                    var scoredAnns = gradeBook.Announcements.Where(x =>!x.Dropped && x.StudentAnnouncements.Any(y => y.Student.Id == stId 
-                                                                    && y.IncludeInTotalPoint)).ToList();
-                    decimal totalPoint = 0, maxTotalPoint = 0;
-                    foreach (var ann in scoredAnns)
-                    {
-                        var score = ann.StudentAnnouncements.First(x => x.StudentId == stId).NumericScore ?? 0;
-                        totalPoint += (decimal)((score + ann.WeightAddition)*ann.WeightMultiplier);
-                        if (ann.MaxScore.HasValue) maxTotalPoint += ann.MaxScore.Value;
-                    }
-                    //var totalPoint = scoredAnns.Sum(x => x.StudentAnnouncements.First(y => y.Student.Id == stId).NumericScore ?? 0);
-                    //var maxTotalPoint = scoredAnns.Where(x => x.MaxScore.HasValue).Sum(x => x.MaxScore.Value);
-                    res.TotalPoints.Add(TotalPointViewData.Create((int)totalPoint, (int)maxTotalPoint));
+                    var totalpoint = gradeBook.StudentTotalPoints.FirstOrDefault(x => x.StudentId == stId);
+                    res.TotalPoints.Add(totalpoint == null ? new TotalPointViewData() : TotalPointViewData.Create(totalpoint));
                 }
-
             }
             res.GradingItems = gradeBook.Announcements
                                         .OrderByDescending(x=>x.Expires)
@@ -121,12 +106,13 @@ namespace Chalkable.Web.Models
 
     public class TotalPointViewData
     {
-        public int TotalPoint { get; set; }
-        public int MaxTotalPoint { get; set; }
+        public int StudentId { get; set; }
+        public decimal? TotalPoint { get; set; }
+        public decimal? MaxTotalPoint { get; set; }
 
-        public static TotalPointViewData Create(int totalPoint, int maxTotalPoint)
+        public static TotalPointViewData Create(StudentTotalPoint studentTotalPoint)
         {
-            return new TotalPointViewData {TotalPoint = totalPoint, MaxTotalPoint = maxTotalPoint};
+            return new TotalPointViewData {TotalPoint = studentTotalPoint.TotalPointsEarned, MaxTotalPoint = studentTotalPoint.TotalPointsPossible, StudentId = studentTotalPoint.StudentId};
         }
     }
 

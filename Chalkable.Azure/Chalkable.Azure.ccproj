@@ -4,14 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>1.8</ProductVersion>
+    <ProductVersion>2.4</ProductVersion>
     <ProjectGuid>d0243bce-6845-4df4-afe5-948ff21831b2</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Chalkable.Azure</RootNamespace>
     <AssemblyName>Chalkable.Azure</AssemblyName>
-    <StartDevelopmentStorage>True</StartDevelopmentStorage>
+    <StartDevelopmentStorage>False</StartDevelopmentStorage>
     <Name>Chalkable.Azure</Name>
+    <UseEmulatorExpressByDefault>False</UseEmulatorExpressByDefault>
+    <UseWebProjectPorts>True</UseWebProjectPorts>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,8 +35,13 @@
   <!-- Items for the project -->
   <ItemGroup>
     <ServiceDefinition Include="ServiceDefinition.csdef" />
-    <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
-    <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.LocalStaging.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.LocalQA.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Qa.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Support.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Release.cscfg" />
+    <ServiceConfiguration Include="ServiceConfiguration.Staging.cscfg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj">
@@ -71,7 +78,7 @@
   <!-- Import the target files for this project template -->
   <PropertyGroup>
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
-    <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\1.8\</CloudExtensionsDir>
+    <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.4\</CloudExtensionsDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'STAGING' ">
     <OutputPath>bin\STAGING\</OutputPath>

@@ -3,6 +3,7 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.UserTracking;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
@@ -27,6 +28,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private IFundService fundService;
         private IDeveloperService developerService;
         private IDbService dbService;
+        private IUserTrackingService userTrackingService;
 
         public DemoServiceLocatorMaster(UserContext context, DemoStorage storage)
             : base(context)
@@ -51,6 +53,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             fundRequestPictureService = new FundRequestPictureService(this);
             applicationPictureService = new ApplicationPictureService(this);
             dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
+            userTrackingService = new NullTrackingService();
         }
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)
@@ -85,6 +88,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             get { return dbService; }
             protected set { dbService = value; }
         }
+
+        public IUserTrackingService UserTrackingService { get { return userTrackingService;} }
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
         

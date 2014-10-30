@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -84,9 +85,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.StiSeatingChartStorage.UpdateChart(classId, markingPeriodId, seatingChart);
         }
 
-        public AttendanceSummary GetAttendanceSummary(int teacherId, int gradingPeriodId)
+        public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
         {
-            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
             var classesIds = classes.Select(x => x.Id).ToList();
             var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
@@ -122,11 +122,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
         {
+            var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            if (markingPeriod == null)
+            {
+                throw new ChalkableException("No marking period is scheduled for this date");
+            }
+
             var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.ClassService.GetStudents(classId);
+                var persons = ServiceLocator.PersonService.GetClassStudents(classId, markingPeriod.Id);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {

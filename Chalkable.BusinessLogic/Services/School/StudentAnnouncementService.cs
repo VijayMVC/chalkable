@@ -91,7 +91,11 @@ namespace Chalkable.BusinessLogic.Services.School
                     var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
                     bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
                     var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(ann.Expires);
-                    persons = ServiceLocator.ClassService.GetStudents(ann.ClassRef, enrolled, mp != null ? mp.Id : (int?)null);
+                    if (mp == null)
+                    {
+                        throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
+                    }
+                    persons = ServiceLocator.PersonService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();

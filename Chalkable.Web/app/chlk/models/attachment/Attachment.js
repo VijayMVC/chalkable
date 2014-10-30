@@ -10,6 +10,8 @@ NAMESPACE('chlk.models.attachment', function () {
             [ria.serialize.SerializeProperty('isowner')],
             Boolean, 'owner',
 
+            Boolean, 'openOnStart',
+
             [ria.serialize.SerializeProperty('isteacherattachment')],
             Boolean, 'teachersAttachment',
 

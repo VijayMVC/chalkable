@@ -29,6 +29,7 @@ using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
 using Student = Chalkable.StiConnector.SyncModel.Student;
 using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 using User = Chalkable.StiConnector.SyncModel.User;
+using UserSchool = Chalkable.StiConnector.SyncModel.UserSchool;
 
 namespace Chalkable.StiImport.Services
 {
@@ -218,13 +219,19 @@ namespace Chalkable.StiImport.Services
         
         private void InsertSchoolUsers()
         {
-            var su = context.GetSyncResult<UserSchool>().All.Select(x => new SchoolUser
+            var masterUserSchool = context.GetSyncResult<UserSchool>().All.Select(x => new SchoolUser
                 {
                     DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value,
                     SchoolRef = x.SchoolID,
                     UserRef = x.UserID
                 }).ToList();
-             ServiceLocatorMaster.UserService.AddSchoolUsers(su);
+            ServiceLocatorMaster.UserService.AddSchoolUsers(masterUserSchool);
+            var districtUserSchool = context.GetSyncResult<UserSchool>().All.Select(x => new Data.School.Model.UserSchool
+            {
+                SchoolRef = x.SchoolID,
+                UserRef = x.UserID
+            }).ToList();
+            ServiceLocatorSchool.UserSchoolService.Add(districtUserSchool);
         }
 
         private void InsertPersons()
@@ -244,7 +251,8 @@ namespace Chalkable.StiImport.Services
                     }).ToList();
             ServiceLocatorSchool.PersonService.Add(persons);
             foreach (var person in context.GetSyncResult<Person>().All)
-                personsForImportPictures.Add(person);
+                if (person.PhotoModifiedDate.HasValue)
+                    personsForImportPictures.Add(person);
         }
 
         private void InsertStaff()
@@ -609,13 +617,14 @@ namespace Chalkable.StiImport.Services
             {
                 classes = new Dictionary<int, Class>();
                 foreach (var scheduledSection in scheduledSections)
-                {
-                    var c = ServiceLocatorSchool.ClassService.GetById(scheduledSection.SectionID);
-                    classes.Add(c.Id, c);
-                }
+                    if (!classes.ContainsKey(scheduledSection.SectionID))
+                    {
+                        var c = ServiceLocatorSchool.ClassService.GetById(scheduledSection.SectionID);
+                        classes.Add(c.Id, c);
+                    }
             }
             else
-                classes = ServiceLocatorSchool.ClassService.GetAll().ToDictionary(x => x.Id, x => (Class)x);   
+                classes = ServiceLocatorSchool.ClassService.GetAll().ToDictionary(x => x.Id);   
             var classPeriods = scheduledSections
                 .Select(x => new ClassPeriod
                 {

@@ -3,6 +3,7 @@ var ChlkSessionConstants = {
     USER_ROLE: 'role',
     SITE_ROOT: 'siteRoot',
     MARKING_PERIOD: 'markingPeriod',
+    MARKING_PERIODS: 'markingPeriods',
     NEXT_MARKING_PERIOD: 'nextMarkingPeriod',
     GRADING_PERIOD: 'gradingPeriod',
     FINALIZED_CLASS_IDS: 'finalizedClassesIds',
@@ -22,6 +23,8 @@ var ChlkSessionConstants = {
     GRADE_LEVELS: 'gradeLevels',
     STUDENT_AVG_MODEL: 'studentAvgModel',
     REDIRECT_URL: 'redirectUrl',
+    CLASSES_TO_FILTER: 'classesToFilter',
+    CLASSES_TO_FILTER_WITH_ALL: 'classesToFilterWithAll',
 
     MONTH_CALENDAR_DATA: 'monthCalendarData',
     WEEK_CALENDAR_DATA: 'weekCalendarData',

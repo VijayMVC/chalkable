@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -36,18 +37,22 @@ namespace Chalkable.Web.Controllers.PersonControllers
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
 
-            var currentClassPeriod = classPeriods.FirstOrDefault(x => x.Period.StartTime <= NowTimeInMinutes && x.Period.EndTime >= NowTimeInMinutes);
+            var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.StartTime).Select(cp => cp.ClassRef).Distinct().ToList();
+
+            var classList = sortedClassRefs.Select(sortedClassRef => classes.FirstOrDefault(cls => cls.Id == sortedClassRef)).Where(c => c != null).ToList();
+            classList.AddRange(classes.Where(cls => !sortedClassRefs.Contains(cls.Id)));
+
             Room currentRoom = null;
             ClassDetails currentClass = null;
-            if (currentClassPeriod != null)
+            if (studentSummaryInfo.CurrentSectionId.HasValue)
             {
-                currentClass = classes.FirstOrDefault(x => x.Id == currentClassPeriod.ClassRef);
+                currentClass = classes.FirstOrDefault(x => x.Id == studentSummaryInfo.CurrentSectionId.Value);
                 if (currentClass != null && currentClass.RoomRef.HasValue)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
 
             }
             var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(schoolPersonId);
-            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classes);
+            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             return Json(res);
 
@@ -56,7 +61,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
         public ActionResult Info(int personId)
         {
-            var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
+            var syId = GetCurrentSchoolYearId();
+            var res = (StudentInfoViewData)GetInfo(personId, studentInfo=> StudentInfoViewData.Create(studentInfo, syId));
             var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             //parents functionality are not implemanted yet
@@ -65,18 +71,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res, 6);
         }
 
-        ////ToDo This is only info copy 
-        //[RequireRequestValue("personId")]
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_INFO, true, CallType.Get, new[] { AppPermissionType.User })]
-        //public new ActionResult Schedule(int personId)
-        //{
-        //    var res = (StudentInfoViewData)GetInfo(personId, StudentInfoViewData.Create);
-        //    return Json(res, 6);
-        //}
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GET_STUDENTS, true, CallType.Get, new[] { AppPermissionType.User, })]
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName)
         {
+            //TODO: I think we need use particular methods like get teacher students and get class students
             var roleName = CoreRoles.STUDENT_ROLE.Name;
             int? teacherId = null;
             if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)

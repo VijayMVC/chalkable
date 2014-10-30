@@ -143,13 +143,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 {
                     SectionId = gb.SectionId
                 };
-                var students = (from studentAvg in gb.StudentAverages
-                    let enteredAvg = !string.IsNullOrEmpty(studentAvg.EnteredAverageValue) ? int.Parse(studentAvg.EnteredAverageValue) : 0
-                    let avg = enteredAvg > 0 ? enteredAvg : studentAvg.CalculatedNumericAverage
+                var students = (from studentAvg in gb.Scores
                     select new StudentSectionGradesSummary
                     {
                         SectionId = gb.SectionId, 
-                        Average = avg, 
+                        Average = studentAvg.NumericScore, 
                         Exempt = false, 
                         StudentId = studentAvg.StudentId
                     }).ToList();

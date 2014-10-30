@@ -31,7 +31,8 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
         .content
             .table.app-info-details
                 .app-description
-                    textarea(name = "app-description", class ="app-description", readonly)=app.getDescription()
+                    textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
+    
                 .side-panel
                     span.review-link User Ratings
                     +Rating("appRating", app.getApplicationRating().getAverage(), false).all

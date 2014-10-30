@@ -26,12 +26,10 @@ NAMESPACE('chlk.lib.mvc', function () {
 
             [[String]],
             function submitToIFrame(src){
+                new ria.dom.Dom('.report-iframe').remove();
                 var iframe = new ria.dom.Dom('<iframe class="report-iframe">');
                 iframe.setAttr('src', src);
                 iframe.appendTo('body');
-                iframe.on('load', function(node, event){
-                    node.remove();
-                })
             },
 
             [[ria.mvc.IActivity]],

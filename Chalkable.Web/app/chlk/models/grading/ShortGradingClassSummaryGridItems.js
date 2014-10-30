@@ -13,6 +13,8 @@ NAMESPACE('chlk.models.grading', function () {
     /** @class chlk.models.grading.StudentTotalPoint*/
     CLASS('StudentTotalPoint',[
 
+        [ria.serialize.SerializeProperty('studentid')],
+        chlk.models.id.SchoolPersonId, 'studentId',
         [ria.serialize.SerializeProperty('totalpoint')],
         Number, 'totalPoint',
         [ria.serialize.SerializeProperty('maxtotalpoint')],
@@ -20,8 +22,8 @@ NAMESPACE('chlk.models.grading', function () {
 
         String, function displayTotalPoint(){
             var totalPoint = this.getTotalPoint();
-            if (!totalPoint) return '';
-            return totalPoint.toString() + '/' + (this.getMaxTotalPoint() || 0).toString();
+            return this.getMaxTotalPoint() && (totalPoint || totalPoint == 0)
+                ? (totalPoint.toString() + '/' + this.getMaxTotalPoint().toString()) : '';
         }
     ]);
 

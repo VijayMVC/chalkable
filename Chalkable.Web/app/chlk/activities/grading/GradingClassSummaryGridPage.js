@@ -18,6 +18,28 @@ NAMESPACE('chlk.activities.grading', function () {
 
     var gradingGridTimer;
 
+    function reorder(source, remap, studendIdProvider) {
+        VALIDATE_ARGS(['source', 'remap', 'studendIdProvider'], [[Array], [Object], [Function]], [source, remap, studendIdProvider]);
+
+        var result = new Array(source.length);
+        source.forEach(function (_) {
+            var studentId = studendIdProvider(_);
+
+            VALIDATE_ARG('studentId', [chlk.models.id.SchoolPersonId], studentId);
+
+            var index = remap[studentId];
+
+            Assert(index != null);
+
+            result[index] = _;
+        });
+        return result;
+    }
+
+    function strcmp(_1, _2) {
+        return _1 < _2 ? -1 : _1 > _2 ? 1 : 0
+    }
+
     /** @class chlk.activities.grading.GradingClassSummaryGridPage */
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
@@ -26,6 +48,12 @@ NAMESPACE('chlk.activities.grading', function () {
         'GradingClassSummaryGridPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
+            function $() {
+                BASE();
+
+                this._lastModel = null;
+            },
 
             [ria.mvc.DomEventBind('click', '.mp-title')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -142,7 +170,14 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                node.parent('form').find('.value-input').setValue('');
+                var input = node.parent('form').find('.value-input');
+                if(node.checked())
+                    input.setValue('');
+                else{
+                    var oldValue = input.getData('grade-value');
+                    input.setValue(oldValue.toLowerCase() == 'exempt' ? '' : oldValue);
+                }
+
             },
 
             function getScores(node){
@@ -191,7 +226,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
             },
 
-            function calculateGradesAvg(gradingitem){
+            function calculateGradesAvg(gradingitem, round_){
                 var studentAnnouncements = gradingitem.studentannouncements;
                 if (!studentAnnouncements)
                     return null;
@@ -214,7 +249,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 });
                 studentAnnouncements.gradedStudentCount = gradedStudentCount;
                 if(gradedStudentCount){
-                    classAvg = (sum / gradedStudentCount).toFixed(2);
+                    classAvg = (sum / gradedStudentCount).toFixed(round_ ? 0 : 2)
                 }
                 studentAnnouncements.classAvg = classAvg;
                 return classAvg;
@@ -236,18 +271,18 @@ NAMESPACE('chlk.activities.grading', function () {
                 }else{
                     value.totalavarages.forEach(function(item){
                         var grade = item.totalaverage;
-                        var value = grade || grade == 0 ? grade.toFixed(2) : '';
+                        var value = grade || grade == 0 ? grade.toFixed(value && value.rounddisplayedaverages ? 0 :2) : '';
                         dom.find('.total-average[data-average-id=' + item.averageid + ']').setHTML(value.toString());
                     });
                 }
 
                 value.totalpoints && value.totalpoints.forEach(function(item, index){
-                    var value = item.totalpoint + '/' + item.maxtotalpoint;
+                    var value = item.maxtotalpoint ? (item.totalpoint + '/' + item.maxtotalpoint) : '';
                     dom.find('.total-point[row-index=' + index + ']').setHTML(value);
                 });
 
                 value.gradingitems.forEach(function(item){
-                    calculateGradesAvg = that.calculateGradesAvg(item);
+                    calculateGradesAvg = that.calculateGradesAvg(item, value.rounddisplayedaverages);
                     dom.find('.avg-' + item.id).setHTML(calculateGradesAvg || calculateGradesAvg === 0 ? calculateGradesAvg.toString() : '');
                 });
                 container.parent().find('.mp-name').setData('tooltip', tooltipText);
@@ -799,7 +834,6 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [[Boolean]],
             function updateValue(selectNext_){
-                clearTimeout(gradingGridTimer);
                 var activeCell = this.dom.find('.active-cell');
                 activeCell.find('form').trigger('submit');
 
@@ -873,6 +907,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.updateFlagByModel(model, activeCell);
                         activeCell.find('.grade-text').setHTML('...');
                     }
+                    clearTimeout(gradingGridTimer);
                     this.addTimeOut(form, isAvg);
                     var mp = node.parent('.marking-period-container');
                     mp.find('.comment-button').hide();
@@ -1118,6 +1153,138 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function postGradeBookClick(node, event){
                 jQuery(node.find('a').valueOf()[0]).text('Saving')
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onModelReady_(model, msg_) {
+                BASE(model, msg_);
+
+                this._lastModel = null;
+                if (model instanceof chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData)
+                    this._lastModel = model;
+            },
+
+            [ria.mvc.DomEventBind('click', '[data-sort-type]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function sortByAnnoClick($node, event){
+                Assert(this._lastModel instanceof chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData)
+                if (this._lastModel == null) return;
+
+                _DEBUG && console.time('sorting');
+
+                var ordered,
+                    multiplier = -1,
+                    sortMode = $node.getData('sort-type'),
+                    sortOrder = $node.getData('sort-order');
+                switch (sortMode) {
+                    case 'name':
+                        multiplier = 1;
+                        ordered = this._lastModel.getCurrentGradingGrid().getStudents()
+                            .map(function (_) { return [_.getStudentInfo().getId(), _.getStudentInfo().getLastName()] })
+                        break;
+
+                    case 'avg':
+                        var avgIndex = $node.getData('sort-avg-index') | 0;
+                        ordered = this._lastModel.getCurrentGradingGrid().getStudentAverages()[avgIndex].getAverages()
+                            .map(function (_) {
+                                var value = _.isExempt() ? -1 : _.getEnteredAvg() != null ? _.getEnteredAvg() : _.getCalculatedAvg();
+                                return [_.getStudentId(), value];
+                            })
+                        break;
+
+                    case 'total':
+                        ordered = this._lastModel.getCurrentGradingGrid().getStudentTotalPoints()
+                            .map(function (_) {
+                                return [_.getStudentId(), _.getTotalPoint() + _.getMaxTotalPoint()];
+                            })
+                        break;
+
+                    case 'anno':
+                        var annoId = chlk.models.id.AnnouncementId($node.getData('sort-anno-id') | 0);
+                        ordered = this._lastModel.getCurrentGradingGrid()
+                            .getGradingItems()
+                            .filter(function (_) { return _.getId() == annoId })
+                            [0]
+                            .getStudentAnnouncements()
+                            .getItems()
+                            .map(function (_) { return [_.getStudentId(), _.getNumericGradeValue()]; });
+                        break;
+                    default:
+                        return;
+                }
+
+                ordered = ordered.sort(function (_1, _2) { return multiplier * strcmp(_1[1], _2[1]); });
+
+                if (sortOrder == 'asc')
+                    ordered = ordered.reverse();
+
+                var remap = {};
+                ordered.forEach(function (item, index) { remap[item[0]] = index; });
+
+                this._lastModel.getCurrentGradingGrid()
+                    .setStudents(reorder(
+                        this._lastModel.getCurrentGradingGrid().getStudents(),
+                        remap,
+                        function (_) { return _.getStudentInfo().getId() }
+                    ));
+
+                var totals = this._lastModel.getCurrentGradingGrid().getStudentTotalPoints();
+                totals && this._lastModel.getCurrentGradingGrid()
+                    .setStudentTotalPoints(reorder(
+                        totals,
+                        remap,
+                        function (_) { return _.getStudentId() }
+                    ));
+
+                this._lastModel.getCurrentGradingGrid().getStudentAverages()
+                    .forEach(function (_) {
+                        _.setAverages(reorder(
+                            _.getAverages(),
+                            remap,
+                            function (_) { return _.getStudentId() }
+                        ))
+                    })
+
+                this._lastModel.getCurrentGradingGrid().getGradingItems()
+                    .forEach(function (_) {
+                        _.getStudentAnnouncements().setItems(reorder(
+                            _.getStudentAnnouncements().getItems(),
+                            remap,
+                            function (_) { return _.getStudentId() }
+                        ))
+                    })
+
+                _DEBUG && console.timeEnd('sorting');
+
+                _DEBUG && console.time('repainting');
+
+                var pIndex = chlk.controls.LeftRightToolbarControl.GET_CURRENT_PAGE(this.dom.find('.ann-types-container .grid-toolbar'));
+                console.info(pIndex);
+                this.refreshD(ria.async.Future.$fromData(this._lastModel))
+                    .then(function () {
+                        var node = this.dom.find('.ann-types-container .grid-toolbar');
+                        chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
+
+                        setTimeout(function () {
+                            this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+
+                            this.dom.find('[data-sort-type][data-sort-order]').removeData('sort-order');
+                            var newSortOrder = sortOrder == 'asc' ? 'desc' : 'asc';
+
+                            switch(sortMode) {
+                                case 'name':
+                                    this.dom.find('[data-sort-type=name]').setData('sort-order', newSortOrder); break;
+                                case 'avg':
+                                    this.dom.find('[data-sort-type=avg][data-sort-avg-index=' + avgIndex + ']').setData('sort-order', newSortOrder); break;
+                                case 'total':
+                                    this.dom.find('[data-sort-type=total]').setData('sort-order', newSortOrder); break;
+                                case 'anno':
+                                    this.dom.find('[data-sort-type=anno][data-sort-anno-id=' + annoId.valueOf() + ']').setData('sort-order', newSortOrder); break;
+                            }
+                        }.bind(this), 17);
+
+                        _DEBUG && console.timeEnd('repainting');
+                    }, this);
             }
         ]);
 });

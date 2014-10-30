@@ -145,6 +145,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
+                        userData.setAbleEdit(false);
                         var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData, this.getUserClaims_());
                         this.setUserToSession(res);
                         return res;
@@ -159,6 +160,15 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [[chlk.models.id.SchoolPersonId]],
+            function detailsStudentAction(personId){
+                /* Student can see ONLY his own profile CHLK-3117, CHLk-3303 */
+                if (this.getCurrentPerson().getId() != personId)
+                    return null;
+
+                return this.detailsAction(personId);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
             function detailsAction(personId){
                 var result = this.studentService
                     .getSummary(personId)
@@ -166,6 +176,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function (data){
                         var role = new chlk.models.people.Role();
                         role.setId(chlk.models.common.RoleEnum.STUDENT.valueOf());
+                        data.setAbleViewTranscript(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_TRANSCRIPT));
                         data.setRole(role);
                         return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data, this.getUserClaims_());
                     }, this);

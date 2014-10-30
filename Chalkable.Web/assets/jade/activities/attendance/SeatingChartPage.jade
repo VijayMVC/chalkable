@@ -1,6 +1,6 @@
 mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
     +ActionForm('attendance', 'showEditGridWindow').show-edit-grid-form
-        BUTTON(type="submit").grey-button.update-grid=text
+        BUTTON(type="submit", disabled=!(seatingList.length || self.getNotSeatingStudents().length) ).grey-button.update-grid=text
         +Hidden('rows', rows)
         +Hidden('columns', columns)
         +Hidden('minRows', minRows)#min-rows
@@ -40,8 +40,7 @@ div(class=showButtons ? 'can-post' : '').page-content.people-list-container
                 +DatePicker('date', self.getDate())(
                     data-options={
                         showOtherMonths: true,
-                        selectOtherMonths: true,
-                        inCurrentMp: true
+                        selectOtherMonths: true
                     },
                     data-controller= "attendance",
                     data-action="seatingChart",

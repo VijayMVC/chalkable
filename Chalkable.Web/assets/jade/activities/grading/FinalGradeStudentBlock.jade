@@ -155,7 +155,7 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                             .empty-disciplines=Msg.No_discipline_issues
         .comments-notes-block
             .notes-block
-                TEXTAREA(disabled = !self.isAbleEdit()).notes-textarea=avg.getNote()
+                TEXTAREA(disabled = !self.isAbleEdit(), placeholder = Msg.Add_a_comment).notes-textarea=avg.getNote()
                 .saving-text #{Msg.Saving.toLowerCase()}...
             .comments-block
                 if avg.getCodes()

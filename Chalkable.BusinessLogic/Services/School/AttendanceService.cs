@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items);
         SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
         void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
-        AttendanceSummary GetAttendanceSummary(int teacherId, int gradingPeriodId);
+        AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
         
         //TODO: OLD!!!!
         IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null);
@@ -92,11 +92,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
         {
+            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            if (mp == null)
+            {
+                //throw new ChalkableException("No marking period is scheduled on this date");
+                return null;
+            }
+
             var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.ClassService.GetStudents(classId);
+                var persons = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {
@@ -109,7 +116,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             AttendanceReasonRef = ssa.ReasonId,
                             Date = date,
                             PersonRef = ssa.StudentId,
-                            Level = ssa.Level,
+                            Level = ClassroomLevelToLevelCvt(ssa.ClassroomLevel),
                             Class = clazz,
                             Student = student,
                             Category = ssa.Category,
@@ -125,15 +132,27 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-
-        public AttendanceSummary GetAttendanceSummary(int teacherId, int gradingPeriodId)
+        private static string ClassroomLevelToLevelCvt(string classroomLevel)
         {
-            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
+            switch (classroomLevel)
+            {
+                case "Present":
+                    return null;
+                case "Absent":
+                    return "A";
+                case "Tardy":
+                    return "T";
+                default:
+                    return "H";
+            }
+        }
 
+        public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
+        {
+            var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
             if (classes.Count == 0)
             {
-                return new AttendanceSummary()
+                return new AttendanceSummary
                     {
                         ClassesDaysStat = new List<ClassDailyAttendanceSummary>(),
                         Students = new List<StudentAttendanceSummary>()
@@ -141,11 +160,8 @@ namespace Chalkable.BusinessLogic.Services.School
             }
 
             var classesIds = classes.Select(x => x.Id).ToList();
-            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-                {
-                    RoleId = CoreRoles.STUDENT_ROLE.Id,
-                    TeacherId = teacherId
-                });
+            var students = ServiceLocator.PersonService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
+        
             var sectionsAttendanceSummary = ConnectorLocator.AttendanceConnector.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
             var res = new AttendanceSummary();
             var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
@@ -197,7 +213,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = classId,
                 };
             var stiSeats = new List<Seat>();
-            var students = ServiceLocator.ClassService.GetStudents(classId, true, markingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, markingPeriodId, true);
             var defaultStudent = students.FirstOrDefault(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
             if (defaultStudent == null)
                 defaultStudent = students.First();

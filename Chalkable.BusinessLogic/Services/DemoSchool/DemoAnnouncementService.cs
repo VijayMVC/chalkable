@@ -103,12 +103,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public AnnouncementDetails CreateAnnouncement(int? classAnnouncementTypeId, int classId)
+        public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId)
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
             var nowLocalDate = Context.NowSchoolTime;
-            var res = Storage.AnnouncementStorage.Create(classAnnouncementTypeId, classId, nowLocalDate, Context.PersonId ?? 0);
+            var res = Storage.AnnouncementStorage.Create(classAnnType.Id, classId, nowLocalDate, Context.PersonId ?? 0);
             return res;
         }
 
@@ -161,7 +161,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
       
         public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null)
         {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            
             var ann = Storage.AnnouncementStorage.GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.PersonId.Value);
+          
             if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                 throw new ChalkableSecurityException();
 
@@ -176,13 +180,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ann.WeightMultiplier = announcement.WeightMultiplier;
                 ann.MayBeDropped = announcement.CanDropStudentScore;
                 ann.VisibleForStudent = !announcement.HideFromStudents;
+
+                if (!ann.IsScored && ann.SisActivityId.HasValue)
+                {
+                    var studentIds = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id).Select(x => x.StudentId);
+
+                    Storage.StiActivityScoreStorage.ResetScores(ann.SisActivityId.Value, studentIds);
+                }
             }
             if (BaseSecurity.IsAdminViewer(Context))
                 throw new NotImplementedException();
 
-            if (announcement.ExpiresDate.HasValue)
-                ann.Expires = announcement.ExpiresDate.Value;
-
+            ann.Expires = announcement.ExpiresDate.HasValue ? announcement.ExpiresDate.Value : DateTime.Today.AddDays(1);
             ann = SetClassToAnnouncement(ann, classId, ann.Expires);
             Storage.AnnouncementStorage.Update(ann);
 
@@ -317,7 +326,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Announcement EditTitle(int announcementId, string title)
         {
             var ann = GetAnnouncementById(announcementId);
-            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef, ann.Expires));
+            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef, ann.Expires, announcementId));
         }
 
         private Announcement EditTitle(Announcement announcement, string title, Func<IDemoAnnouncementStorage, string, bool> existsTitleAction)
@@ -343,9 +352,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public bool Exists(string title, int classId, DateTime expiresDate)
+        public bool Exists(string title, int classId, DateTime expiresDate, int? excludeAnnouncementId)
         {
-            return Storage.AnnouncementStorage.Exists(title, classId, expiresDate);
+            return Storage.AnnouncementStorage.Exists(title, classId, expiresDate, excludeAnnouncementId);
         }
 
 

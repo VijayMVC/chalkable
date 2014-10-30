@@ -22,6 +22,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
+        public IList<Person> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        {
+            IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            {
+                ClassId = classId,
+                CallerId = Context.PersonId,
+                CallerRoleId = Context.Role.Id,
+                Count = int.MaxValue,
+                RoleId = CoreRoles.STUDENT_ROLE.Id
+            });
+
+
+            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var enrollmentStatus = isEnrolled.HasValue && isEnrolled.Value
+                                      ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
+                                      : (StudentEnrollmentStatusEnum?)null;
+            var studentSys = Storage.StudentSchoolYearStorage.GetList(sy.Id, enrollmentStatus);
+            res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
+            if (isEnrolled.HasValue)
+            {
+                var classPersons = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId });
+                res = res.Where(x => classPersons.Any(y => y.PersonRef == x.Id)).ToList();
+            }
+
+            return res;
+        }
+
         public void Add(IList<Person> persons)
         {
             throw new NotImplementedException();
@@ -105,18 +132,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
             Storage.SchoolPersonStorage.Delete(schoolPersons);
-        }
-
-        public IList<Person> GetPersons()
-        {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
-                throw new ChalkableSecurityException();
-
-            return GetPersons(new PersonQuery
-            {
-                Count = int.MaxValue,
-                Start = 0
-            }).Persons;
         }
 
         public PaginatedList<Person> GetPaginatedPersons(PersonQuery query)
@@ -290,6 +305,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public int GetSisUserId(int personId)
         {
             throw new NotImplementedException();
+        }
+
+        public IList<Person> GetTeacherStudents(int teacherId, int schoolYearId)
+        {
+            return GetPersons(new PersonQuery()
+                {
+                    SchoolYearId = schoolYearId,
+                    TeacherId = teacherId
+                }).Persons;
         }
     }
 }

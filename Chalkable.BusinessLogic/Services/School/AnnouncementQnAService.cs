@@ -89,7 +89,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 da.Update(annQnA);
                 uow.Commit();
-                ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
+                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(annQnA.AnnouncementRef);
+                if(ann.VisibleForStudent)
+                    ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
                 return annQnA;
             }
         }
@@ -104,7 +106,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
 
                 annQnA.Answer = answer;
-                annQnA.AnsweredTime = Context.NowSchoolTime;
                 da.Update(annQnA);
                 uow.Commit();
                 return annQnA;
@@ -137,7 +138,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException();
                 
                 annQnA.Question = question;
-                annQnA.QuestionTime = Context.NowSchoolTime;
                 da.Update(annQnA);
                 uow.Commit();
                 return annQnA;

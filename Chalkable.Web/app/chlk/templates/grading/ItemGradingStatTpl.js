@@ -24,6 +24,29 @@ NAMESPACE('chlk.templates.grading', function () {
                 return res;
             },
 
+            function getClassAvg(){
+                var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
+                var items = this.getValue().studentannouncements || [], classAvg = null;
+                items.forEach(function(item){
+                    numericGrade = item.numericscore;
+                    gradeValue = item.scorevalue;
+                    if(!item.dropped
+                        && !item.isincomplete
+                        && (gradeValue && gradeValue.toLowerCase() != 'ps'
+                            && gradeValue.toLowerCase() != 'wd'
+                            && gradeValue.toLowerCase() != 'nc')
+                        && item.includeinaverage
+                        && (numericGrade || numericGrade == 0 || gradeValue == 0 || gradeValue)){
+                            gradedStudentCount++;
+                            sum += (numericGrade || 0);
+                    }
+                });
+                if(gradedStudentCount){
+                    classAvg = (sum / gradedStudentCount).toFixed(2);
+                }
+                return classAvg;
+            },
+
             Object, function getGraphConfigs(){
                 var graphpoints = this.getValue().graphpoints;
                 var len = graphpoints.length;

@@ -34,7 +34,7 @@ namespace Chalkable.Web.Models
             var res = new StandardGradingGridViewData
                 {
                     GradingPeriod = GradingPeriodViewData.Create(gradingPeriod),
-                    Students = students.Select(x=>GradeStudentViewData.Create(x, null)).ToList()
+                    Students = students.Select(x=>GradeStudentViewData.Create(x, x.IsWithdrawn)).ToList()
                 };
             gradingStandardInfos = gradingStandardInfos.Where(x => students.Any(y => y.Id == x.StudentId)
                 && gradingPeriod.Id == x.GradingPeriodId).ToList();

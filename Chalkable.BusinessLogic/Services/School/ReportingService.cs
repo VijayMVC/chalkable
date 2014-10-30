@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetWorksheetReport(WorksheetReportInputModel worksheetReportInput);
         byte[] GetProgressReport(ProgressReportInputModel progressReportInput);
 
-        IList<StudentCommentInfo> GetProgressReportComments(int classId, int? gradingPeriodId);
+        IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId);
         void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
     }
 
@@ -25,8 +25,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
         {
-            var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new GradebookReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
@@ -60,7 +60,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 anns = anns.Where(x => x.SisActivityId.HasValue && inputModel.AnnouncementIds.Contains(x.Id)).ToList();
                 activityIds = anns.Select(x => x.SisActivityId.Value).ToArray();    
             }
-            var students = ServiceLocator.ClassService.GetStudents(inputModel.ClassId);
+
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var students = ServiceLocator.PersonService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new WorksheetReportParams
                 {
                     ActivityIds = activityIds,
@@ -83,7 +85,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
             if (CoreRoles.TEACHER_ROLE == Context.Role)
                 stiModel.StaffId = Context.PersonId;
-            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
             stiModel.AcadSessionId = gp.SchoolYearRef;
             return ConnectorLocator.ReportConnector.WorksheetReport(stiModel);
         }
@@ -136,16 +137,12 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<StudentCommentInfo> GetProgressReportComments(int classId, int? gradingPeriodId)
+        public IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId)
         {
             var inowReportComments = ConnectorLocator.ReportConnector.GetProgressReportComments(classId, gradingPeriodId);
-            int? markingPeriodId = null;
-            if (gradingPeriodId.HasValue)
-            {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
-                markingPeriodId = gp.MarkingPeriodRef;
-            }
-            var students = ServiceLocator.ClassService.GetStudents(classId, null, markingPeriodId);
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            int markingPeriodId = gp.MarkingPeriodRef;
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, markingPeriodId);
             var res = new List<StudentCommentInfo>();
             foreach (var inowStudentComment in inowReportComments)
             {

@@ -6,7 +6,7 @@
         |#{Msg.First_login_text2}
         br
         |#{Msg.First_login_text3}
-    +ActionForm('setup', 'infoEdit')#hello-form
+    +ActionForm('setup', 'infoEdit').no-working#hello-form
         +Hidden("id", self.getId())
         .x-form-field
             label(for="salutation") Name:

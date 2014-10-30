@@ -55,10 +55,10 @@ namespace Chalkable.BusinessLogic.Services.Master
                 da.Insert(res);
                 uow.Commit();
             }
-            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, server, "Master"), false))
+            using (var unitOfWork = new UnitOfWork(Settings.GetSchoolConnectionString(server, "Master"), false))
             {
                 var da = new DistrictDataAccess(unitOfWork);
-                da.CreateDistrictDataBase(res.Id.ToString(), Settings.Configuration.SchoolTemplateDataBase);
+                da.CreateDistrictDataBase(res.Id.ToString(), Settings.SchoolTemplateDbName);
             }
             return res;
         }
@@ -126,7 +126,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 uow.Commit();
             }
 
-            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, district.ServerUrl, "Master"), false))
+            using (var unitOfWork = new UnitOfWork(Settings.GetSchoolConnectionString(district.ServerUrl, "Master"), false))
             {
                 var da = new DistrictDataAccess(unitOfWork);
                 da.DeleteDistrictDataBase(district.Id.ToString());
@@ -136,7 +136,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public bool IsOnline(Guid id)
         {
             var d = GetByIdOrNull(id);
-            using (var unitOfWork = new UnitOfWork(string.Format(Settings.SchoolConnectionStringTemplate, d.ServerUrl, "Master"), false))
+            using (var unitOfWork = new UnitOfWork(Settings.GetSchoolConnectionString(d.ServerUrl, "Master"), false))
             {
                 var da = new DistrictDataAccess(unitOfWork);
                 var l = da.GetOnline(new[] { id });

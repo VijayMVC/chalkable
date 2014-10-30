@@ -15,7 +15,7 @@
     <AssemblyName>Chalkable.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -36,7 +36,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;RELEASE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -45,13 +45,17 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Data.Edm, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Data.Edm.5.5.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Data.OData, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Data.OData.5.5.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -60,25 +64,25 @@
     <Reference Include="Microsoft.Web.Mvc">
       <HintPath>..\3rdParty\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.Storage.1.7.0.0\lib\net35-full\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="Mindscape.Raygun4Net">
       <HintPath>..\packages\Mindscape.Raygun4Net.3.1.0\lib\net40\Mindscape.Raygun4Net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PayPalCoreSDK">
       <HintPath>..\packages\PayPalCoreSDK.1.4.1\lib\net45\PayPalCoreSDK.dll</HintPath>
@@ -93,9 +97,9 @@
     <Reference Include="System.IdentityModel">
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Spatial, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Spatial.5.5.0\lib\net40\System.Spatial.dll</HintPath>
+      <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -103,6 +107,11 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -120,6 +129,7 @@
     </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
@@ -129,9 +139,7 @@
     </Reference>
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -184,6 +192,7 @@
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
+    <Compile Include="Controllers\AlternateScoreController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\DemoSchoolController.cs" />
     <Compile Include="Controllers\DeveloperController.cs" />
@@ -313,6 +322,7 @@
     <Compile Include="Models\PeriodViewData.cs" />
     <Compile Include="Models\IdNameViewData.cs" />
     <Compile Include="Models\MarkingPeriodViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\CurrentPersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ParentViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonInfoViewData.cs" />
@@ -377,12 +387,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -416,13 +420,13 @@
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Chalkable.MixPanel\Chalkable.MixPanel.csproj">
-      <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
-      <Name>Chalkable.MixPanel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.UserTracking\Chalkable.UserTracking.csproj">
+      <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
+      <Name>Chalkable.UserTracking</Name>
     </ProjectReference>
     <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
@@ -537,14 +541,11 @@
     <Content Include="Content\icons-templates\banner.psd" />
     <Content Include="Content\icons-templates\icon.psd" />
     <Content Include="Content\icons-templates\screenshot.psd" />
-    <None Include="Web.qa.config">
-      <SubType>Designer</SubType>
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.staging.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
+    <Content Include="pathfinder\adminedit_fake_method_responses.json" />
+    <Content Include="pathfinder\admingrade_fake_method_responses.json" />
+    <Content Include="pathfinder\adminview_fake_method_responses.json" />
+    <Content Include="pathfinder\student_fake_method_responses.json" />
+    <Content Include="pathfinder\teacher_fake_method_responses.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -582,7 +583,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>11603</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost/chalkable/</IISUrl>
+          <IISUrl>http://localhost:11603/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

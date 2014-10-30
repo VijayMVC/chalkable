@@ -18,43 +18,30 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'ClassService', EXTENDS(chlk.services.BaseService), [
 
-            ArrayOf(chlk.models.classes.ClassForTopBar), 'classesToFilter',
-            ArrayOf(chlk.models.classes.ClassForTopBar), 'classesToFilterWithAll',
+            [[Boolean, Boolean]],
+            Array, function getClassesForTopBar(withAll_, forCurrentMp_) {
+                var res = this.getContext().getSession().get(withAll_ ? ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL : ChlkSessionConstants.CLASSES_TO_FILTER);
 
-
-            //TODO: refactor
-            [[Boolean, Boolean, Boolean]],
-            Array, function getClassesForTopBar(withAll_, forCurrentMp_, isNotAbleToGetClasses_) {
-                var res = this.getClassesToFilter(), res1 = this.getClassesToFilterWithAll();
-                //if(res)
-                    //return withAll_ ? res1 : res;
-                var classes = window.classesToFilter;
                 if(forCurrentMp_){
-                    var mpId = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD).getId().valueOf();
-                    classes = window.classesToFilter.filter(function(item){
-                        return item.markingperiodsid.indexOf(mpId) > -1
+                    var mpId = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD).getId();
+                    res = res.filter(function(item){
+                        return item.getName() == 'All' || item.getMarkingPeriodsId().indexOf(mpId) > -1;
                     })
                 }
-                res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(classes, ArrayOf(chlk.models.classes.ClassForTopBar));
-                this.setClassesToFilter(res);
-                var classesToFilterWithAll = window.classesToFilter.slice();
-                classesToFilterWithAll.unshift({
-                    name: 'All',
-                    description: 'All',
-                    id: ''
-                });
-                res1 = chlk.lib.serialize.ChlkJsonSerializer().deserialize(classesToFilterWithAll, ArrayOf(chlk.models.classes.ClassForTopBar));
-                this.setClassesToFilterWithAll(res1);
-                if(isNotAbleToGetClasses_){
-                    res = [];
-                    res1 = res1.filter(function(item){return item.getName() == 'All';})
-                }
-                return withAll_ ? res1 : res;
+
+                return res;
+            },
+
+            [[chlk.models.id.ClassId]],
+            ArrayOf(chlk.models.id.MarkingPeriodId), function getMarkingPeriodRefsOfClass(classId) {
+                var classInfo = _GLOBAL.classesToFilter.filter(function (_) { return _.id == classId.valueOf()})[0];
+                Assert(classInfo, 'Class with is should exist');
+                return classInfo.markingperiodsid.map(function (_) { return chlk.models.id.MarkingPeriodId(_) });
             },
 
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForTopBar, function getClassById(classId) {
-                var classes = this.getClassesForTopBar(), res;
+                var classes = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_TO_FILTER), res;
                 classes.forEach(function(item){
                     if(item.getId() == classId)
                         res = item;

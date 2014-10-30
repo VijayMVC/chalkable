@@ -31,6 +31,7 @@ namespace Chalkable.Web.Controllers
                     PersonRef = x.PersonId,
                     Level = x.Level
                 }).ToList());
+            MasterLocator.UserTrackingService.SetAttendance(Context.Login, data.ClassId);
             return Json(true);
         }
 
@@ -55,7 +56,13 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE_FOR_CLASS, true, CallType.Post, new[] { AppPermissionType.Attendance })]
         public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date)
         {
-            IList<Person> persons = SchoolLocator.ClassService.GetStudents(classId);
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            if (mp == null)
+            {
+                throw new ChalkableException("No marking period scheduled on this date");
+            }
+
+            IList<Person> persons = SchoolLocator.PersonService.GetClassStudents(classId, mp.Id);
             SchoolLocator.AttendanceService.SetClassAttendances(date, classId, persons.Select(x => new ClassAttendance
             {
                 AttendanceReasonRef = attendanceReasonId,
@@ -182,7 +189,7 @@ namespace Chalkable.Web.Controllers
                 throw new UnassignedUserException();
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date ?? Context.NowSchoolYearTime.Date);
-            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod.Id);
+            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod);
             return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary));
         }
 
@@ -201,39 +208,21 @@ namespace Chalkable.Web.Controllers
             if (seatingChart != null)
             {
                 var attendances = ClassAttendanceList(d, classId);
-                var students = SchoolLocator.ClassService.GetStudents(classId, true, markingPeriod.Id);
+                var students = SchoolLocator.PersonService.GetClassStudents(classId, markingPeriod.Id, true);
                 return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);               
             }
             return null;
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult UpdateSeatingChart(DateTime? date, int classId, int columns, int rows)
-        {
-            if (classId == 645)
-                return FakeJson("~/fakeData/seatingChart2.json");
-            if (classId == 723)
-                return FakeJson("~/fakeData/seatingChart3.json");
-            return FakeJson("~/fakeData/seatingChart.json");
-        }
-
-        [AuthorizationFilter("Teacher")]
         public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, Boolean needInfo)
         {
             var d = (date ?? Context.NowSchoolYearTime).Date;
-            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d);
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d, true);
             SchoolLocator.AttendanceService.UpdateSeatingChart(seatingChartInfo.ClassId, mp.Id, seatingChartInfo);
             if (needInfo)
                 return Json(GetSeatingChart(date, seatingChartInfo.ClassId));
             return Json(true);
-        }
-
-        [AuthorizationFilter("Teacher")]
-        public ActionResult ChangeStudentSeat(DateTime? date, int studentId, int classId, int index)
-        {
-            if (classId == 723 || classId == 645)
-                return FakeJson("~/fakeData/seatingChart3.json");
-            return FakeJson("~/fakeData/seatingChart2.json");
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]

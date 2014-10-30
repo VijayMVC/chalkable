@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string Salutation { get; set; }
         public bool Active { get; set; }
         
+        
         protected PersonViewData(Person person): base(person)
         {
             BirthDate = person.BirthDate;
@@ -24,6 +25,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             return new PersonViewData(person);
         }
+
         public static new IList<PersonViewData> Create(IList<Person> person)
         {
             return person.Select(Create).ToList();

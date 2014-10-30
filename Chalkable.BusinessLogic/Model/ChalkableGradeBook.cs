@@ -14,6 +14,28 @@ namespace Chalkable.BusinessLogic.Model
         public IList<AnnouncementDetails> Announcements { get; set; } 
         public IList<ChalkableStudentAverage> Averages { get; set; }
         public ChalkableClassOptions Options { get; set; }
+        public IList<StudentTotalPoint> StudentTotalPoints { get; set; } 
+    }
+
+    public class StudentTotalPoint
+    {
+        public int StudentId { get; set; }
+        public decimal TotalPointsEarned { get; set; }
+        public decimal TotalPointsPossible { get; set; }
+
+        public static StudentTotalPoint Create(StudentTotalPoints studentTotalPoint)
+        {
+            return new StudentTotalPoint
+                {
+                    StudentId = studentTotalPoint.StudentId,
+                    TotalPointsEarned = studentTotalPoint.TotalPointsEarned,
+                    TotalPointsPossible = studentTotalPoint.TotalPointsPossible
+                };
+        }
+        public static IList<StudentTotalPoint> Create(IList<StudentTotalPoints> studentTotalPointses)
+        {
+            return studentTotalPointses.Select(Create).ToList();
+        } 
     }
 
     public class ChalkableAverage

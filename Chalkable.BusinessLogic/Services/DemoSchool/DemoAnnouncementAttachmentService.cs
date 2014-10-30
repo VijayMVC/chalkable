@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -50,12 +51,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
 
 
-            Storage.AnnouncementAttachmentStorage.Add(annAtt);
-
-            var atts = Storage.AnnouncementAttachmentStorage.GetList(Context.PersonId.Value, Context.Role.Id, name);
-
-            
-            ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Last().Id.ToString(), content);
+            var attachment = Storage.AnnouncementAttachmentStorage.Add(annAtt);
+            ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, attachment.Id.ToString(CultureInfo.InvariantCulture), content);
 
             if (ann.State != AnnouncementState.Draft)
             {
@@ -75,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             Storage.AnnouncementAttachmentStorage.Delete(annAtt.Id);
             if (!annAtt.SisAttachmentId.HasValue)
-                ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString());
+                ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString(CultureInfo.InvariantCulture));
         }
 
         public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)

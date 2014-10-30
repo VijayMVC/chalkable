@@ -60,6 +60,22 @@
             .app-list-item{
               width: 220px;
               height: 106px;
+              cursor: pointer;
+
+              &[disabled]{
+                cursor: default;
+                .icon{
+                  opacity: 0.5;
+                }
+                .description{
+                  .name{
+                    opacity: 0.5;
+                  }
+                  .shortdesc{
+                    opacity: 0.5;
+                  }
+                }
+              }
 
               .icon{
                 width: 80px;

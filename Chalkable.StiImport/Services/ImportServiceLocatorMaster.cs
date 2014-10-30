@@ -32,7 +32,7 @@ namespace Chalkable.StiImport.Services
         }
     }
 
-    public class ImportDbService : IDbService
+    public class ImportDbService : IDbService, IDisposable
     {
         private ImportUnitOfWork uow;
         private object locker = new object();
@@ -81,6 +81,11 @@ namespace Chalkable.StiImport.Services
         public void Rollback()
         {
             uow.Rollback();
+        }
+
+        public void Dispose()
+        {
+            uow.Dispose();
         }
     }
     

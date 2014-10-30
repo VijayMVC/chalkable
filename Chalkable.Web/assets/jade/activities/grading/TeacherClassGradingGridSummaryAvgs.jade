@@ -18,7 +18,7 @@ each studentAvg, i in value.totalavarages
             ).dotted-h.grade-value.gradable.avg-value-container
                 displayValue = self.displayAvgGradeValue(average, value.displayalphagrades)
                 originalValue = self.displayAvgGradeValue(average, value.displayalphagrades, true)
-                edited = average.enteredavg || average.enteredavg == 0 || average.enteredalphagrade
+                edited = average.isexempt || average.enteredavg || average.enteredavg == 0 || average.enteredalphagrade
                 div(
                     data-isexempt= average.isexempt,
                     data-calculated-avg= average.calculatedavg == null ? null : average.calculatedavg.toString(),

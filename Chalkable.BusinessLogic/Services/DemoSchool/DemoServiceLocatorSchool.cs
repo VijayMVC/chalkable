@@ -50,6 +50,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IPersonEmailService personEmailService;
         private IStudentService studentService;
         private IStaffService staffService;
+        private IUserSchoolService userSchoolService;
 
 
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
@@ -98,6 +99,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             personEmailService = new DemoPersonEmailService(this, storage);
             studentService = new DemoStudentService(this, storage);
             staffService = new DemoStaffService(this, storage);
+            userSchoolService = new DemoUserSchoolService(this, storage);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -144,6 +146,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IPersonEmailService PersonEmailService { get { return personEmailService; } }
         public IStudentService StudentService { get { return studentService; } }
         public IStaffService StaffService { get { return staffService; } }
+        public IUserSchoolService UserSchoolService { get { return userSchoolService; } }
 
         public IScheduledTimeSlotService ScheduledTimeSlotService { get{throw new NotImplementedException();} }
 

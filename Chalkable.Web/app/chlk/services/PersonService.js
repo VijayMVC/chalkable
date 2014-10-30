@@ -21,7 +21,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String]],
             ria.async.Future, function changeEmail(email) {
-                return this.get('User/ActivateUser', Boolean, {
+                return this.get('User/ActivateUser', Object, {
                     newUserEmail: email
                 });
             },

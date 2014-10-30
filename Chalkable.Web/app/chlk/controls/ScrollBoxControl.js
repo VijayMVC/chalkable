@@ -20,7 +20,6 @@ NAMESPACE('chlk.controls', function () {
 
             function $(){
                 BASE();
-                this._stopScroll = false;
             },
 
             [[Object]],
@@ -42,7 +41,6 @@ NAMESPACE('chlk.controls', function () {
 
                 this.context.getDefaultView().getCurrent()
                     .addRefreshCallback(function (activity, model) {
-                        this._stopScroll = false;
                         this.update(jQuery('#'+attributes.id));
                 }.bind(this));
                 return attributes;
@@ -57,27 +55,21 @@ NAMESPACE('chlk.controls', function () {
                 var totalCountField = 'input[name=' + this.getTotalCountField() + ']';
                 var actualCountField = 'input[name=' + this.getActualCountField() + ']';
                 var scrollOffset = this.getScrollOffset();
-                this._stopScroll = false;
 
                 jQuery(window).scroll(function(){
-                    if  (!this._stopScroll && (jQuery(window).scrollTop() + scrollOffset >= jQuery(document).height() - jQuery(window).height())){
-
-                        var jForm = jQuery('#' + formId);
-                        jForm.parent().find('.scrollbox-loader').removeClass('x-hidden');
+                    var jForm = jQuery('#' + formId);
+                    if  ((jQuery(window).scrollTop() + scrollOffset >= jQuery(document).height() - jQuery(window).height())){
                         jForm.find(scrollField).val(1);
-
                         var start = jForm.find(startField).val() | 0;
                         var pageSize = jForm.find(pageSizeField).val() | 0;
                         var totalCount = jForm.find(totalCountField).val() | 0;
                         var actualCount = jForm.find(actualCountField).val() | 0;
-                        this._stopScroll = true;
 
-                        if (start < totalCount && actualCount == pageSize){
+                        if ((start < totalCount && actualCount == pageSize)){
                             jForm.find(startField).val(start + pageSize);
                             jForm.trigger('submit');
                         }
                         else{
-                            jForm.parent().find('.scrollbox-loader').addClass('x-hidden');
                             return false;
                         }
 

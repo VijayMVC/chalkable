@@ -30,5 +30,10 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// </summary>
         public IEnumerable<StudentAverage> StudentAverages { get; set; }
 
+        /// <summary>
+        /// A list of total points for student that should be displayed in the gradebook
+        /// </summary>
+        public IEnumerable<StudentTotalPoints> StudentTotalPoints { get; set; }
+
     }
 }

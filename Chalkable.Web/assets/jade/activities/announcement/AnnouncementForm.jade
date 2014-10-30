@@ -32,6 +32,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
 -var typeId = self.getSelectedTypeId()
 -var state = announcement && announcement.getState()
 -var classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+-var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 
 .announcement-form.loader-container
     if announcement
@@ -44,18 +45,26 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
                 disabledClass = 'x-hidden'
             ).classes-bar
             .not-transparent(class=(classId ? '' : 'x-hidden'))
-                +AnnouncementTypeToolBar(classes, announcement, typeId)
+                +AnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
-                +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole()).announcement-form
+                +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
                 if announcement.getState()
                     .duplicate-btn-container
                         +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
-            .choose-type(class=(classId && !typeId && !state ? '' : 'x-hidden'))
-            .choose-class(class=(classId ? 'x-hidden' : ''))
+            .choose-type(class=(classId && !typeId && !state && types.length ? '' : 'x-hidden'))
+            if !classId
+                if topItems.length
+                    .choose-class
+                else
+                    .no-items-text There are no classes for current term
     else
         +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'announcement', 'add')(
             selectedItemId=topData.getSelectedItemId(),
             pressAfterClick=true,
             disabledClass = 'x-hidden'
         ).classes-bar
-        .choose-class(class=(classId ? 'x-hidden' : ''))
+        if !classId
+            if topItems.length
+                .choose-class
+            else
+                .no-items-text There are no classes for current term

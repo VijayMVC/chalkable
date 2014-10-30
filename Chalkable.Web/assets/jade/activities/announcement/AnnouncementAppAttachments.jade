@@ -2,14 +2,14 @@ mixin AnnouncementFormAttachmentItem(attachment, i)
     -console.info(self.isNeedDeleteButton())
     .announcement-item.attachment
         if self.needDeleteButton
-            +ActionLink('announcement', 'deleteAttachment', attachment.getId()).close-btn
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId()).close-btn
         if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
             A(href=attachment.getUrl()).download-link Download
             .title= attachment.getName()
         else
             +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
             .title= attachment.getName()
-            +ActionButton('announcement', 'viewAttachment', attachment.getId()) Open
+            +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId()) Open
 
 mixin AnnouncementFormApplicationItem(app, i)
     viewUrl = app.getViewUrl()
@@ -36,7 +36,7 @@ items = self.getSortedAppsAndAttachments();
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement
-            +ActionButton('announcement', 'attachApp', self.getId())#add-application.simple-gray-button Attach App
+            +ActionButton('announcement', 'attachApp', self.getId(), self.getClassId())#add-application.simple-gray-button Attach App
         .simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each item, i in items

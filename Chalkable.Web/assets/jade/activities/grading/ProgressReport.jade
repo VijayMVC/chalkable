@@ -79,10 +79,16 @@
                                     .chk
                                         id = student.getId().valueOf()
                                         +Checkbox('student', !!student.getComment())(value=id, data-id=id).student-chk
-                                    +ProfileLink(student).image-container.white.shadow
+                                    +ProfileLink(student, 'student').image-container.white.shadow
                                         +PersonImg(student, 47)
                                     p=student.getDisplayName()
-                                    INPUT(value=student.getComment()).student-comment
+
+                                    +SearchBox(chlk.services.GradingService, "getGradeComments", chlk.templates.grading.GradingCommentsDropdownTpl)(
+                                        value=student.getComment(),
+                                        default-value=""
+                                        keepNonExsistentValue != true
+                                        minLength = 0,class="student-comment", id="comments-" + id
+                                    )
         .report-bottom
             +Select('format').format
                 +Option(0, "PDF", true)

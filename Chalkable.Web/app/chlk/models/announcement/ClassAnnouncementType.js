@@ -7,6 +7,15 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.ClassAnnouncementType*/
     CLASS(
         'ClassAnnouncementType', EXTENDS(chlk.models.announcement.AnnouncementType), [
+            [[Number, String]],
+            function $(id_, name_){
+                BASE();
+                if(id_)
+                    this.setId(id_);
+                if(name_)
+                    this.setName(name_);
+            },
+
             Number, 'id',
             [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId'

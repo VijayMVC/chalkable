@@ -46,7 +46,11 @@ h2.page-title Messages
                     .no-messages-text=self.getNoMessagesText()
                 each item in items
                     +GridRow()
-                        div(class= item.isRead() ? "read" : "unread").item-container.table
+                        div(
+                            class= item.isRead() ? "read" : "unread",
+                            data-can-read = self.getCurrentUser().getId() == item.getRecipient().getId()
+                        ).item-container.table
+
                             .chk
                                 +Checkbox('ch',false)(data-id=item.getId().valueOf())
                             .av

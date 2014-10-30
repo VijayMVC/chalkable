@@ -23,6 +23,7 @@ namespace Chalkable.StiImport.Services
         private IList<int> importedSchoolIds = new List<int>();
         private ConnectorLocator connectorLocator;
         private IList<Person> personsForImportPictures = new List<Person>();
+        private UserContext sysadminCntx;
 
         protected IServiceLocatorMaster ServiceLocatorMaster { get; set; }
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
@@ -35,8 +36,8 @@ namespace Chalkable.StiImport.Services
             Log = log;
             
             var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
-            var cntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
-            ServiceLocatorMaster = new ImportServiceLocatorMaster(cntx);
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+            ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
@@ -119,14 +120,21 @@ namespace Chalkable.StiImport.Services
                     Trace.TraceError(ex.Message);
                 }    
             }
+            schoolDb.Dispose();
+            masterDb.Dispose();
             Log.LogInfo("process pictures");
             ProcessPictures();
             Log.LogInfo("setting link status");
             foreach (var importedSchoolId in importedSchoolIds)
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            //recreating locator bc previous one could have expired connection
+            ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
+            Log.LogInfo("updating district last sync");
+            UpdateDistrictLastSync();
             Log.LogInfo("creating user login infos");
             ServiceLocatorMaster.UserService.CreateUserLoginInfos();
             Log.LogInfo("import is completed");
+            ((ImportDbService)ServiceLocatorMaster.DbService).Dispose();
         }
 
         private void SyncDb()
@@ -139,7 +147,6 @@ namespace Chalkable.StiImport.Services
             ProcessDelete();
             Log.LogInfo("update versions");
             UpdateVersion();
-            UpdateDistrictLastSync();
         }
 
         private void UpdateDistrictLastSync()
@@ -155,13 +162,18 @@ namespace Chalkable.StiImport.Services
         {
             if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
                 throw new Exception("District id should be defined for import");
-            foreach (var person in personsForImportPictures)
+            IList<int> ids = new List<int>();
+            const int personsPerTask = 5000;
+            var districtId = ServiceLocatorSchool.Context.DistrictId.Value;
+            for (int i = 0; i < personsForImportPictures.Count; i++ )
             {
-                var content = connectorLocator.UsersConnector.GetPhoto(person.PersonID);
-                if (content != null)
-                    ServiceLocatorMaster.PersonPictureService.UploadPicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID ,content);
-                else
-                    ServiceLocatorMaster.PersonPictureService.DeletePicture(ServiceLocatorSchool.Context.DistrictId.Value, person.PersonID);
+                ids.Add(personsForImportPictures[i].PersonID);
+                if (ids.Count >= personsPerTask || ids.Count > 0 && i + 1 == personsForImportPictures.Count)
+                {
+                    var data = new PictureImportTaskData(districtId, ids);
+                    ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.PictureImport, DateTime.UtcNow, null, data.ToString());
+                    ids.Clear();
+                }
             }
         }
 

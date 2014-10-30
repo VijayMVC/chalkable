@@ -128,20 +128,18 @@ namespace Chalkable.Tests
 
         protected void CreateMasterDb()
         {
+            /*var chalkableSchoolTemplateConnection = Settings.SchoolTemplateConnectionStringTemplate;
             
-            var chalkableMasterConnection = Settings.MasterConnectionString;
-            var chalkableSchoolTemplateConnection = Settings.SchoolTemplateConnectionString;
-            
-            var masterConnection = chalkableMasterConnection.Replace(MASTER_DB_NAME, "Master");
-            BeforCreateDb(chalkableMasterConnection, masterConnection);
+            var masterConnection = Settings.MasterConnectionString.Replace(MASTER_DB_NAME, "Master");
+            BeforCreateDb(Settings.MasterConnectionString, masterConnection);
 
             ExecuteQuery(masterConnection, "create database " + MASTER_DB_NAME);
             ExecuteQuery(masterConnection, "create database " + SCHOOL_DB_TEMPLATE_NAME);
               
             SqlConnection.ClearAllPools();
             var masterSqlRoot = Path.Combine(SQLRoot, "ChalkableMaster");
-            ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1000 - Create DB Script.sql"));
-
+            ExecuteFile(Settings.MasterConnectionString, Path.Combine(masterSqlRoot, "1000 - Create DB Script.sql"));
+            */
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1000 - Create DB Script.sql"));
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1001 - add field Empty to school.sql"));
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1002 - add background task table.sql"));
@@ -167,7 +165,7 @@ namespace Chalkable.Tests
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1021 - increase Data column size in background task table.sql"));
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1022 - create multiple primary key  in ApplicationPicture.sql"));
             
-            RunCreateSchoolScripts(chalkableSchoolTemplateConnection);
+            //RunCreateSchoolScripts(chalkableSchoolTemplateConnection);
         }
     }
 }

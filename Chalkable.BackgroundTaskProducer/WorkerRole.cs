@@ -25,6 +25,7 @@ namespace Chalkable.BackgroundTaskProducer
             
             cp.AddProducer("Sis Import Producer", new AllDistrictsProducer("SisImportProducer", BackgroundTaskTypeEnum.SisDataImport));
             cp.AddProducer("Cleanup Manager", new CleanupManager("CleanupManager"));
+            //cp.AddProducer("Db backup Producer", new DbBackupProducer("DbBackupProducer"));
             var raygunClient = new RaygunClient();
             raygunClient.ApplicationVersion = CompilerHelper.Version;      
             while (true)
@@ -44,7 +45,10 @@ namespace Chalkable.BackgroundTaskProducer
                         raygunClient.SendInBackground(ex);
                     }
                     catch (Exception) { }
+#else
+                    Debug.Fail(ex.Message);
 #endif
+                    
                     while (ex != null)
                     {
                         Trace.TraceInformation("Exception during task producing");
@@ -71,7 +75,7 @@ namespace Chalkable.BackgroundTaskProducer
 
         private void ConfigureDiagnostics()
         {
-            String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
+            /*String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue(wadConnectionString));
 
             RoleInstanceDiagnosticManager roleInstanceDiagnosticManager =
@@ -88,7 +92,7 @@ namespace Chalkable.BackgroundTaskProducer
             performanceCounterConfiguration.SampleRate = TimeSpan.FromSeconds(10d);
             diagnosticMonitorConfiguration.PerformanceCounters.DataSources.Add(performanceCounterConfiguration);
             diagnosticMonitorConfiguration.PerformanceCounters.ScheduledTransferPeriod = TimeSpan.FromMinutes(1d);
-            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);
+            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);*/
         }
     }
 }

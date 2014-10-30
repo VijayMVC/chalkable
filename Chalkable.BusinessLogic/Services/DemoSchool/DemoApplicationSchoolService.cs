@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (announcementAppId.HasValue)
             {
 
-                var anDa = new DemoAnnouncementForTeacherStorage(Storage);
+                var anDa = Storage.AnnouncementStorage.GetTeacherStorage();
                 var announcementApplication = Storage.AnnouncementApplicationStorage.GetById(announcementAppId.Value);
                 var ann = anDa.GetById(announcementApplication.AnnouncementRef);
                 var csp = Storage.ClassPersonStorage
@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void AttachAppToAnnouncement(int announcementAppId)
         {
             var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
-            var ann = new DemoAnnouncementForTeacherStorage(Storage)
+            var ann = Storage.AnnouncementStorage.GetTeacherStorage()
                 .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
             var c = Storage.ClassStorage.GetById(ann.ClassRef);
             if (Context.PersonId != c.PrimaryTeacherRef)

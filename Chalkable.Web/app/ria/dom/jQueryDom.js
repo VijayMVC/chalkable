@@ -133,7 +133,7 @@ NAMESPACE('ria.dom', function () {
 
             [[Number]],
             ria.dom.Dom, function slideDown(time_){
-                time_ ? this._dom.slideDown(time_) : this.slideDown.show();
+                time_ ? this._dom.slideDown(time_) : this._dom.slideDown();
                 return this;
             },
 

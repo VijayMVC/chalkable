@@ -68,6 +68,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function cloneAttachment(attachmentId, announcementId) {
+                return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
+                    originalAttachmentId: attachmentId.valueOf(),
+                    announcementId: announcementId.valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, Boolean]],
             ria.async.Future, function setShowGradesToStudents(announcementId, value) {
                 return ria.async.DeferredData(true);
@@ -91,19 +99,21 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function existsTitle(title, classId, expiresDate) {
+            [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function existsTitle(title, classId, expiresDate, announcementId) {
                 return this.get('Announcement/Exists.json', Boolean, {
                     title: title,
                     classId: classId.valueOf(),
-                    expiresDate: expiresDate && expiresDate.toStandardFormat()
+                    expiresDate: expiresDate && expiresDate.toStandardFormat(),
+                    excludeAnnouncementId: announcementId.valueOf()
                 });
             },
 
-            [[chlk.models.id.AttachmentId, Object]],
-            ria.async.Future, function deleteAttachment(attachmentId) {
+            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function deleteAttachment(attachmentId, announcementId) {
                 return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.Announcement, {
-                    announcementAttachmentId: attachmentId.valueOf()
+                    announcementAttachmentId: attachmentId.valueOf(),
+                    announcementId: announcementId.valueOf()
                 });
             },
 

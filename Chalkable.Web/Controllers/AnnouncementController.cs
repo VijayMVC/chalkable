@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.MixPanel;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -23,42 +24,60 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Create(int? classAnnouncementTypeId, int? classId)
         {
-            if (!SchoolLocator.Context.PersonId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             //if (classId.HasValue && !classAnnouncementTypeId.HasValue)
             //    throw new ChalkableException("Invalid method parameters");
 
-            //todo: rewrite this later
             var draft = SchoolLocator.AnnouncementService.GetLastDraft();
             if (draft != null && !classId.HasValue && !classAnnouncementTypeId.HasValue)
             {
                 classAnnouncementTypeId = draft.ClassAnnouncementTypeRef;
                 classId = draft.ClassRef;
             }
-            if (classAnnouncementTypeId.HasValue && draft != null && draft.ClassAnnouncementTypeRef != classAnnouncementTypeId)
+
+            var classAnnType = classAnnouncementTypeId.HasValue
+                ? SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(classAnnouncementTypeId.Value)
+                : null;
+
+            if (classId.HasValue && classAnnType != null && classAnnType.ClassRef != classId.Value)
             {
-                draft.ClassAnnouncementTypeRef = classAnnouncementTypeId.Value;
+                classAnnType = null;
+            }
+
+            if (classAnnType == null && classId.HasValue)
+            {
+                var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId.Value);
+                if (classAnnTypes.Count == 0)
+                    throw new NoClassAnnouncementTypeException("Item can't be created. Current Class doesn't have classAnnouncementTypes");
+
+                classAnnType = classAnnTypes.First();
+            }
+
+            if (classAnnType != null && draft != null && (draft.ClassAnnouncementTypeRef != classAnnType.Id || draft.ClassRef != classId))
+            {
+                draft.ClassAnnouncementTypeRef = classAnnType.Id;
                 SchoolLocator.AnnouncementService.EditAnnouncement(AnnouncementInfo.Create(draft), classId);
             }
-            if (classId.HasValue)
-                return Json(CreateAnnouncement(classAnnouncementTypeId, classId.Value));
+
+            if (classId.HasValue && classAnnType != null)
+            {
+                var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnType, classId.Value);
+                var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x => x.PersonRef).ToList();
+                var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
+                Debug.Assert(Context.PersonId.HasValue);
+                var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
+                avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
+                avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
+                return Json(new CreateAnnouncementViewData
+                {
+                    Announcement = avd,
+                    IsDraft = annDetails.IsDraft
+                });
+            }
+
             return Json(null, 7);
         }
-
-        private CreateAnnouncementViewData CreateAnnouncement(int? classAnnouncementTypeId, int classId)
-        {
-            var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnouncementTypeId, classId);
-            var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments);
-            var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
-            avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
-            avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
-            return new CreateAnnouncementViewData
-            {
-                Announcement = avd,
-                IsDraft = annDetails.IsDraft
-            };
-        }
-
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Delete(int announcementId)
@@ -84,7 +103,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult EditTitle(int announcementId, string title)
         {
             var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (!SchoolLocator.AnnouncementService.Exists(title, ann.ClassRef, ann.Expires) && !string.IsNullOrEmpty(title))
+            if (!SchoolLocator.AnnouncementService.Exists(title, ann.ClassRef, ann.Expires, announcementId) && !string.IsNullOrEmpty(title))
             {
                 SchoolLocator.AnnouncementService.EditTitle(announcementId, title);
                 return Json(true);
@@ -93,9 +112,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult Exists(string title, int classId, DateTime? expiresDate)
+        public ActionResult Exists(string title, int classId, DateTime? expiresDate, int? excludeAnnouncementId)
         {
-            return Json(!expiresDate.HasValue || (SchoolLocator.AnnouncementService.Exists(title, classId, expiresDate.Value) && !string.IsNullOrEmpty(title)));
+            return Json(!expiresDate.HasValue || (SchoolLocator.AnnouncementService.Exists(title, classId, expiresDate.Value, excludeAnnouncementId) && !string.IsNullOrEmpty(title)));
         }
 
 
@@ -117,8 +136,9 @@ namespace Chalkable.Web.Controllers
 
         private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId)
         {
-            if (!announcementInfo.ExpiresDate.HasValue)
-                announcementInfo.ExpiresDate = SchoolLocator.Context.NowSchoolYearTime;
+            // get announcement to ensure it exists
+            SchoolLocator.AnnouncementService.GetAnnouncementById(announcementInfo.AnnouncementId);
+
             return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
         }
 
@@ -128,7 +148,7 @@ namespace Chalkable.Web.Controllers
         {
             var res = PrepareFullAnnouncementViewData(announcementId, true, true);
             //if (res.SystemType != SystemAnnouncementType.Admin)
-            MixPanelService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
+            MasterLocator.UserTrackingService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
             return Json(res, 7);
         }
 
@@ -179,17 +199,17 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef, AnnouncementState.Draft);
 
-            MixPanelService.CreatedNewItem(Context.Login, res.ClassAnnouncementTypeName, res.ClassName, res.ApplicationCount, res.AttachmentsCount);
+            MasterLocator.UserTrackingService.CreatedNewItem(Context.Login, res.ClassAnnouncementTypeName, res.ClassName, res.ApplicationCount, res.AttachmentsCount);
 
             if (res.ApplicationCount > 0)
             {
                 var apps = res.AnnouncementApplications.Select(x => x.Id.ToString()).ToList();
-                MixPanelService.AttachedApp(Context.Login, apps);
+                MasterLocator.UserTrackingService.AttachedApp(Context.Login, apps);
             }
             if (res.AttachmentsCount > 0)
             {
                 var docs = res.AnnouncementAttachments.Select(x => x.Name).ToList();
-                MixPanelService.AttachedDocument(Context.Login, docs);
+                MasterLocator.UserTrackingService.AttachedDocument(Context.Login, docs);
             }
             return Json(true, 5);
         }

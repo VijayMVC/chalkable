@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.common', function () {
         GENERIC('THoverItem'),
         'HoverBox', [
 
-            Number, 'title',
+            String, 'title',
 
             [ria.serialize.SerializeProperty('ispassing')],
             Boolean, 'passing',

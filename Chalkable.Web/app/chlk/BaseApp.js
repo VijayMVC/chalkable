@@ -103,6 +103,7 @@ NAMESPACE('chlk', function (){
                 var session = BASE();
                 window.currentChlkPerson.claims = window.userClaims;
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.MARKING_PERIODS, ArrayOf(chlk.models.schoolYear.MarkingPeriod));
                 this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.NEXT_MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.FINALIZED_CLASS_IDS);
@@ -123,8 +124,17 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.FIRST_LOGIN, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.REDIRECT_URL, String);
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
+                this.saveInSession(session, ChlkSessionConstants.CLASSES_TO_FILTER, ArrayOf(chlk.models.classes.ClassForTopBar));
 
-                if(window.redirectUrl.indexOf('setup/hello') > -1){
+                var newClasses = session.get(ChlkSessionConstants.CLASSES_TO_FILTER, []).slice();
+                newClasses.unshift(chlk.lib.serialize.ChlkJsonSerializer().deserialize({
+                    name: 'All',
+                    description: 'All',
+                    id: ''
+                }, chlk.models.classes.ClassForTopBar));
+
+                session.set(ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL, newClasses);
+                if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');
                 }
 
@@ -179,6 +189,10 @@ NAMESPACE('chlk', function (){
                     if(!jQuery(this).data('wasClick')){
                         var target = jQuery(e.target),
                             tooltip = jQuery('#chlk-tooltip-item');
+                        target.off('remove.tooltip');
+                        target.on('remove.tooltip', function(e){
+                            target.trigger('mouseleave');
+                        });
                         if(target.hasClass('no-tooltip') || target.parents('.no-tooltip')[0]){
                             tooltip.hide();
                             tooltip.find('.tooltip-content').html('');
@@ -221,7 +235,7 @@ NAMESPACE('chlk', function (){
                 });
 
                 jQuery(document).on('mouseover mousemove', '.alerts-icon', function(e){
-                    if(!jQuery(this).data('wasClick')){
+                    if(!jQuery(this).data('wasClick')) {
                         var tooltip = jQuery('.alerts-pop-up'),
                             node = jQuery(this),
                             offset = node.offset();
@@ -235,13 +249,21 @@ NAMESPACE('chlk', function (){
                         var js = new ria.serialize.JsonSerializer();
                         //var model = new chlk.models.common.Alerts.$create(o.stringAlerts);
                         var model = js.deserialize(o, chlk.models.common.Alerts);
-                        var tpl = chlk.templates.common.AlertsPopUpTpl();
-                        tpl.assign(model);
-                        tooltip.html(tpl.render());
-                        tooltip.show();
-                        tooltip.css('left', offset.left + node.width() + 20)
-                            .css('top', offset.top - (tooltip.height() - node.height()) / 2);
-                        e.stopPropagation();
+
+                        var alerts = model.getAlerts() || [];
+
+                        if (alerts.length > 0){
+                            var tpl = chlk.templates.common.AlertsPopUpTpl();
+                            tpl.assign(model);
+                            tooltip.html(tpl.render());
+                            tooltip.show();
+                            var top = offset.top - (tooltip.height() - node.height()) / 2;
+                            tooltip.css('left', offset.left + node.width() + 20)
+                                .css('top', top > 0 ? top : 0);
+                            if(top < 0)
+                                tooltip.find('.alerts-triangle').css('top', top);
+                            e.stopPropagation();
+                        }
                     }
 
                 });

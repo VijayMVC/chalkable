@@ -58,7 +58,8 @@ NAMESPACE('chlk.controls', function () {
                     isPaggingModel: false,
                     service: null,
                     method: null,
-                    paramsPrepend: []
+                    paramsPrepend: [],
+                    scrollToElementTimeout: null
                 };
                 if(configs_){
                     if(data.getTotalCount){
@@ -350,7 +351,7 @@ NAMESPACE('chlk.controls', function () {
                 var target = new ria.dom.Dom(event.target);
                 if(!(target.hasClass(noRowClickEventClass) || target.parent('.' + noRowClickEventClass).exists())){
                     if(node.hasClass('selected')){
-                        this.focusGrid();
+                        this.focusGrid(target);
                     }else{
                         var grid = this.getGrid();
                         var index = parseInt(node.getAttr('index'), 10);
@@ -380,10 +381,12 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[ria.dom.Dom]],
-            VOID, function focusGrid() {
+            VOID, function focusGrid(target_) {
                 //if(!new ria.dom.Dom(':focus').exists()){
                     var node = this.getGrid();
                     var row = node.find('.row.selected');
+                    if(target_ && (target_.hasClass(otherInputWithFocusClass) || target_.hasClass('grid-focus')))
+                        return;
                     if(row.exists()){
                         var focusNode = node.find('.row.selected').find('.' + otherInputWithFocusClass);
                         if(focusNode.exists()){
@@ -400,9 +403,18 @@ NAMESPACE('chlk.controls', function () {
             },
 
             VOID, function scrollToElement(){
+                var timeout = this.getConfigs().scrollToElementTimeout;
+                if(timeout)
+                    setTimeout(function(){this.scrollToElementWithoutTimeout()}.bind(this), timeout);
+                else
+                    this.scrollToElementWithoutTimeout();
+            },
+
+            VOID, function scrollToElementWithoutTimeout(){
                 var el = this.getGrid().find('.row.selected');
                 var demo = new ria.dom.Dom('#demo-footer');
                 //window.scrollTo(0, el.offset().top + el.height()/2 - (window.innerHeight - (demo.height() || 0))/2);
+
                 $("html, body").stop( true, true ).animate({
                     scrollTop: el.offset().top + el.height()/2 - (window.innerHeight - (demo.height() || 0))/2
                 }, 300, 'linear');

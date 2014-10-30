@@ -138,6 +138,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 LastName = person.LastName,
                 Gender = person.Gender,
                 Id = person.Id,
+                Email = DemoStorage.BuildDemoEmail(person.Id, Storage.Context.DistrictId.ToString()),
                 LastMailNotification = person.LastMailNotification,
                 RoleRef = person.RoleRef,
                 Salutation = person.Salutation

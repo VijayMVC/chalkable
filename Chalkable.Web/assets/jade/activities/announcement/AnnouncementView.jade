@@ -22,7 +22,7 @@ mixin Glue_()
     -var applications = self.getApplications()
     -var gradeViewApps = self.getGradeViewApps()
     -var grade = self.getGrade()
-    -var hasGrade = self.isDropped() || grade || grade == 0
+    -var hasGrade = self.isDropped() || self.isExempt() || grade || grade == 0
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
 
@@ -37,7 +37,7 @@ mixin Glue_()
         .details-container.silver-panel
             if self.getUserRole().isStudent() && hasGrade
                 .comment-grade-container
-                    .grade-value.right= self.isDropped() ? Msg.Dropped : (grade || grade == 0 ? grade : '')
+                    .grade-value.right= self.isDropped() ? Msg.Dropped : (self.isExempt() ? Msg.Exempt : (grade || grade == 0 ? grade : ''))
                     .comment(
                         data-tooltip = self.getComment(),
                         data-tooltip-type = "overflow",

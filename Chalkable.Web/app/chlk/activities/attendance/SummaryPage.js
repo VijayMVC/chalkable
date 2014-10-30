@@ -74,15 +74,12 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('click', '.legend-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function itemTypeClick(node, event){
-                var wasHovered = node.hasClass('hovered');
-                this.dom.find('.legend-item.hover').forEach(function ($node) {
-                    $node.removeClass('hover').removeClass('pressed');
-                    this.changeLineOpacity($node, true);
-                }.bind(this));
-                if(!wasHovered) {
-                    node.addClass('hover').addClass('pressed');
-                    this.changeLineOpacity(node, false);
-                }
+                var wasHovered = node.hasClass('hovered'), hoveredItem = this.dom.find('.legend-item.hovered');
+                if(!wasHovered && hoveredItem.exists())
+                    this.changeLineOpacity(hoveredItem, true);
+                hoveredItem.removeClass('hovered').removeClass('fixed-hovered');
+                if(!wasHovered)
+                    node.addClass('hovered').addClass('fixed-hovered');
             },
 
             [ria.mvc.DomEventBind('seriemouseover seriemouseleave', '.main-chart')],

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Security;
@@ -61,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Incomplete = incomplete,
                 Late = late,
                 Exempt = exempt,
-                ScoreValue = numericScore.ToString(),
+                ScoreValue = numericScore.ToString(CultureInfo.InvariantCulture),
                 NumericScore = numericScore,
                 
                 ActivityId = ann.SisActivityId.Value,

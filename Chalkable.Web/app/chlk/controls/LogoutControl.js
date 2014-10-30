@@ -25,7 +25,7 @@ NAMESPACE('chlk.controls', function () {
                 }else{
                     elem.setCss("opacity", 0).setCss("height", 0);
                     setTimeout(function(){
-                        elem.setCss("visibility", "hidden");
+                        elem.setCss("visibility", "hidden").setCss('height', 0);
                     }, 200);
                 }
                 this.setLogoutShown(!this.isLogoutShown());

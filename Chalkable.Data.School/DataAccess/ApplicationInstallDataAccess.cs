@@ -23,17 +23,40 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<ApplicationInstall>(dbQuery);
         } 
 
-        public IList<ApplicationInstall> GetInstalled(int personId)
+        public IList<ApplicationInstall> GetInstalled(int personId, int schoolYearId)
         {
-            var sql = string.Format("select * from ApplicationInstall where ({0}=@{0} or {1} = @{1}) and {2}=1",
-                                    ApplicationInstall.OWNER_REF_FIELD, ApplicationInstall.PERSON_REF_FIELD, ApplicationInstall.ACTIVE_FIELD);
+            var sql = string.Format("select * from ApplicationInstall where ({0}=@{0} or {1} = @{1}) and {2}=1 and {3}=@{3}"
+                                    , ApplicationInstall.OWNER_REF_FIELD, ApplicationInstall.PERSON_REF_FIELD
+                                    , ApplicationInstall.ACTIVE_FIELD, ApplicationInstall.SCHOOL_YEAR_REF_FIELD);
             var ps = new Dictionary<string, object>
                 {
                     {ApplicationInstall.PERSON_REF_FIELD, personId},
-                    {ApplicationInstall.OWNER_REF_FIELD, personId}
+                    {ApplicationInstall.OWNER_REF_FIELD, personId},
+                    {ApplicationInstall.SCHOOL_YEAR_REF_FIELD, schoolYearId}
                 };
             return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
         }
+
+        public IDictionary<Guid, int> GetNotInstalledStudentsCountPerApplication(int staffId, int classId, int markingPeriodId)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+                {
+                    {"@markingPeriodId", markingPeriodId},
+                    {"@classId", classId},
+                    {"@staffId", staffId},
+                };
+            using (var reader = ExecuteStoredProcedureReader("spGetNotInstalledStudentsCountPerApplication", ps))
+            {
+                var res = new Dictionary<Guid, int>();
+                while (reader.Read())
+                {
+                    var appId = SqlTools.ReadGuid(reader, "ApplicationId");
+                    var notInstalledStCount = SqlTools.ReadInt32(reader, "NotInstalledStudentCount");
+                    res.Add(appId, notInstalledStCount);
+                }
+                return res;
+            }
+        } 
 
         public IList<ApplicationInstall> GetInstalledForClass(Class clazz)
         {

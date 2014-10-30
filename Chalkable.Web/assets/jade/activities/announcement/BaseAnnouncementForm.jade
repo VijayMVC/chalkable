@@ -1,5 +1,5 @@
 //TODO refactor
-mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole)
+mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges)
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
     +Hidden('statetyped', announcement.getStateTyped())
@@ -17,14 +17,14 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
     isAdminAnnouncement = adminRecipients && self.getUserRole().isAdmin()
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
-    disableDeleteBtn = announcement.getGradingStudentsCount() > 0
+    disableDeleteBtn = !!(announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0)
     standards = announcement.getStandards() || []
     if !isAdminAnnouncement
         +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
         div(class=announcement.getExpiresDate() ? 'with-date' : '').title-block-container
             +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
-    .table
-        .left-block
+        needStandardsBlock = standards.length > 0 || (!isAdminAnnouncement && announcement.isCanAddStandard())
+        .left-block(class=needStandardsBlock ? 'with-standards' : '')
             if isAdminAnnouncement
                 .buttons-container
                     rolesEnum = chlk.models.common.RoleEnum
@@ -45,14 +45,14 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
             .left-block-container
                 +TextArea(name="content", placeholder=isAnnouncement ? "Message" : "Assignment")= announcement.getContent()
-                if standards.length > 0 || (!isAdminAnnouncement && announcement.isCanAddStandard())
+                if needStandardsBlock
                     .add-standards-container
                         .add-standards
                             .standards-list
                                 each standard in standards
                                     BUTTON(data-tooltip = standard.getDescription()).grey-button.same-on-hover
                                         = standard.getName()
-                                        if !disableDeleteBtn
+                                        if announcement.isAbleToRemoveStandard()
                                             +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
                             if !isAdminAnnouncement && announcement.isCanAddStandard()
                                 .title=Msg.Click_to_add_standard
@@ -69,7 +69,7 @@ mixin BaseAnnouncementFormContainer(announcement, classId, adminRecipientId, adm
                     data-options={
                         showOtherMonths: true,
                         selectOtherMonths: true,
-                        inCurrentMp: true
+                        dateRanges: classScheduleDateRanges
                     },
                     data-value=announcement.getExpiresDate() ? announcement.getExpiresDate().format('mm/dd/yy') : ''
                     placeholder=Msg.Due_date,

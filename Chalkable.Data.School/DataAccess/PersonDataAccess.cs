@@ -42,6 +42,8 @@ namespace Chalkable.Data.School.DataAccess
             return GetPersons(query).Persons.First();
         }
 
+
+        //TODO: need to remove this golden hummer and make particular functions for students and teacher (and maybe staff and parents in a future)
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             var dbQuery = new DbQuery();
@@ -111,16 +113,28 @@ namespace Chalkable.Data.School.DataAccess
             
             if (query.TeacherId.HasValue)
             {
-                var cpDbQuery = new DbQuery();
-                cpDbQuery.Sql.AppendFormat(@"select ClassPerson.[{0}] from ClassPerson
-                                             join ClassTeacher on ClassPerson.[{1}] = ClassTeacher.[{2}]"
-                                           , ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD, ClassTeacher.CLASS_REF_FIELD);
-
-                new AndQueryCondition {{ClassTeacher.PERSON_REF_FIELD, "teacherId", query.TeacherId, ConditionRelation.Equal}}
-                    .BuildSqlWhere(cpDbQuery, "ClassTeacher");
-                cpDbQuery = BuildClassPersonConds(cpDbQuery, query, false);
-                dbQuery.AddParameters(cpDbQuery.Parameters);
-                dbQuery.Sql.AppendFormat(" and vwPerson.[{0}] in ({1})", Person.ID_FIELD, cpDbQuery.Sql);
+                var teachersStudentSql = new StringBuilder();
+                teachersStudentSql.AppendFormat(@"select ClassPerson.[{0}] from ClassPerson
+                                             join ClassTeacher on ClassPerson.[{1}] = ClassTeacher.[{2}]
+                                             join MarkingPeriod on MarkingPeriod.[{3}] = ClassPerson.[{4}]
+                                             where ClassTeacher.[{5}] = @teacherId and MarkingPeriod.[{6}] = @schoolYearRef "
+                                           , ClassPerson.PERSON_REF_FIELD, ClassPerson.CLASS_REF_FIELD, ClassTeacher.CLASS_REF_FIELD,
+                                           MarkingPeriod.ID_FIELD, ClassPerson.MARKING_PERIOD_REF,
+                                           ClassTeacher.PERSON_REF_FIELD, MarkingPeriod.SCHOOL_YEAR_REF);
+                dbQuery.AddParameters(new Dictionary<string, object>
+                    {
+                        {"teacherId", query.TeacherId},
+                        {ClassPerson.MARKING_PERIOD_REF, query.MarkingPeriodId},
+                        {ClassPerson.IS_ENROLLED_FIELD, query.IsEnrolled},
+                        {ClassPerson.CLASS_REF_FIELD, query.ClassId},
+                    });
+                if (query.ClassId.HasValue)
+                    teachersStudentSql.AppendFormat(" and ClassPerson.[{0}] = @{0}", ClassPerson.CLASS_REF_FIELD);
+                if (query.MarkingPeriodId.HasValue)
+                    teachersStudentSql.AppendFormat(" and ClassPerson.[{0}] = @{0}", ClassPerson.MARKING_PERIOD_REF);
+                if (query.IsEnrolled.HasValue)
+                    teachersStudentSql.AppendFormat(" and ClassPerson.[{0}] = @{0}", ClassPerson.IS_ENROLLED_FIELD);
+                dbQuery.Sql.AppendFormat(" and vwPerson.[{0}] in ({1})", Person.ID_FIELD, teachersStudentSql);
             } 
             else if (query.ClassId.HasValue && (query.RoleId == CoreRoles.STUDENT_ROLE.Id || query.RoleId == CoreRoles.TEACHER_ROLE.Id))
             {
@@ -347,7 +361,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public static int GetPersonDataForLogin(string districtServerUrl, Guid districtId, int userId, out int roleId)
         {
-            var connectionString = string.Format(Settings.SchoolConnectionStringTemplate, districtServerUrl, districtId);
+            var connectionString = Settings.GetSchoolConnectionString(districtServerUrl, districtId);
             using (var uow = new UnitOfWork(connectionString, false))
             {
                 var student = new StudentDataAccess(uow)
@@ -373,6 +387,84 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 throw new ChalkableException("User is not identified");
             }
+        }
+
+        public IList<Person> GetTeacherStudents(int teacherId, int schoolYearId)
+        {
+            var sql = new StringBuilder();
+            const string psy = "@schoolYear";
+            const string ptid = "@teacherId";
+            sql.Append(@"select distinct
+                            Id = vwPerson.Id,
+                            FirstName = vwPerson.FirstName,
+                            LastName = vwPerson.LastName,
+                            BirthDate = vwPerson.BirthDate,
+                            Gender = vwPerson.Gender,
+                            Salutation = vwPerson.Salutation,
+                            Active = vwPerson.Active,
+                            RoleRef = vwPerson.RoleRef
+                        from 
+                            vwPerson
+                            join ClassPerson on vwPerson.Id = ClassPerson.PersonRef
+                            join MarkingPeriod on ClassPerson.MarkingPeriodRef = MarkingPeriod.Id
+                        where ")
+               .AppendFormat("MarkingPeriod.SchoolYearRef = ").Append(psy)
+               .AppendFormat(" and ClassPerson.ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = {0})", ptid);
+               //.AppendFormat(" and Class.PrimaryTeacherRef = ").Append(ptid);
+
+            var ps = new Dictionary<string, object>
+                {
+                    {psy, schoolYearId},
+                    {ptid, teacherId}
+                };
+            var q = new DbQuery(sql, ps);
+            return ReadMany<Person>(q);
+        }
+
+
+        public IList<Person> GetStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        {
+            var sql = new StringBuilder();
+            sql.Append(@"select distinct
+                            Id = vwPerson.Id,
+                            FirstName = vwPerson.FirstName,
+                            LastName = vwPerson.LastName,
+                            BirthDate = vwPerson.BirthDate,
+                            Gender = vwPerson.Gender,
+                            Salutation = vwPerson.Salutation,
+                            Active = vwPerson.Active,
+                            IsEnrolled = ClassPerson.IsEnrolled,
+                            SchoolEnrollmentStatus = StudentSchoolYear.EnrollmentStatus,
+                            RoleRef = vwPerson.RoleRef
+                        from 
+                            vwPerson
+                            join ClassPerson on vwPerson.Id = ClassPerson.PersonRef
+                            join MarkingPeriod on ClassPerson.MarkingPeriodRef = MarkingPeriod.Id
+                            join StudentSchoolYear on ClassPerson.PersonRef = StudentSchoolYear.StudentRef and StudentSchoolYear.SchoolYearRef = MarkingPeriod.SchoolYearRef
+                        where ")
+               .AppendFormat("ClassPerson.ClassRef = {0} ", classId)
+               .AppendFormat("and MarkingPeriod.Id = {0} ", markingPeriodId);
+            if (isEnrolled.HasValue)
+            {
+                var enrollentStatus = isEnrolled.Value
+                                          ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
+                                          : StudentEnrollmentStatusEnum.PreviouslyEnrolled;
+
+                sql.AppendFormat("and StudentSchoolYear.EnrollmentStatus = {0} ", (int)enrollentStatus)
+                   .AppendFormat("and ClassPerson.IsEnrolled = {0} ", isEnrolled.Value ? 1 : 0);
+            }
+            var res = new List<Person>();
+            using (var reader = ExecuteReaderParametrized(sql.ToString(), new Dictionary<string, object>()))
+            {
+                while (reader.Read())
+                {
+                    var p = reader.Read<Person>();
+                    p.IsWithdrawn = !SqlTools.ReadBool(reader, "IsEnrolled") 
+                        || SqlTools.ReadInt32(reader, "SchoolEnrollmentStatus") != (int)StudentEnrollmentStatusEnum.CurrentlyEnrolled;
+                    res.Add(p);
+                }
+            }
+            return res;
         }
     }
 

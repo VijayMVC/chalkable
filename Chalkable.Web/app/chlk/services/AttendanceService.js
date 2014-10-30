@@ -41,15 +41,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, Number, Number]],
-            ria.async.Future, function updateSeatingChart(classId, columns, rows) {
-                return this.get('Attendance/UpdateSeatingChart.json', chlk.models.attendance.SeatingChart, {
-                    classId: classId.valueOf(),
-                    columns: columns,
-                    rows: rows
-                });
-            },
-
             [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, Number]],
             ria.async.Future, function changeStudentSeat(classId, studentId, index) {
                 return this.get('Attendance/ChangeStudentSeat.json', chlk.models.attendance.SeatingChart, {

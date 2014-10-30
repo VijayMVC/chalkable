@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BackgroundTaskProcessor.Parallel;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Backup;
@@ -49,8 +50,10 @@ namespace Chalkable.BackgroundTaskProcessor
                     return false;
                 }
             }
+
+            foreach (var dbServer in Settings.ChalkableSchoolDbServers)
             {
-                var c = new SqlConnection(Settings.SchoolTemplateConnectionString);
+                var c = new SqlConnection(Settings.GetSchoolTemplateConnectionString(dbServer));
                 var t = new AllSchoolRunner<long>.Task
                 {
                     Database = c.Database,
@@ -84,9 +87,7 @@ namespace Chalkable.BackgroundTaskProcessor
 
         private static string Restore(AllSchoolRunner<long>.Task task)
         {
-            string connectionString = string.Format(Settings.SchoolConnectionStringTemplate, task.Server,
-                                                            "master", Settings.Configuration.SchoolDbUser,
-                                                            Settings.Configuration.SchoolDbPassword);
+            string connectionString = Settings.GetSchoolConnectionString(task.Server, "Master");
             using (var uow = new UnitOfWork(connectionString, false))
             {
                 var cmd = uow.GetTextCommandWithParams(string.Format("drop database [{0}]", task.Database),

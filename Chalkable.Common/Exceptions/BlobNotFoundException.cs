@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Chalkable.Common.Exceptions
+﻿namespace Chalkable.Common.Exceptions
 {
     public class BlobNotFoundException : ChalkableException
     {

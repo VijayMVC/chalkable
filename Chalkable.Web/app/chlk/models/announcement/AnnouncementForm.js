@@ -15,9 +15,10 @@ NAMESPACE('chlk.models.announcement', function () {
             Array, 'reminders',
             chlk.models.announcement.AdminRecipients, 'adminRecipients',
             String, 'adminRecipientId',
+            Array, 'classScheduleDateRanges',
 
             [[chlk.models.classes.ClassesForTopBar, Boolean]],
-            function $create(classes, isDraft){
+            function $create(classes, isDraft, date_){
                 BASE();
                 if(classes){
                     this.setTopData(classes);

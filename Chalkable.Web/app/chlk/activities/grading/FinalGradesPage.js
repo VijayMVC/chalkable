@@ -278,18 +278,54 @@ NAMESPACE('chlk.activities.grading', function () {
 
             },
 
-            [ria.mvc.DomEventBind('keypress', '.grade-input')],
+            [ria.mvc.DomEventBind('keydown', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
-            function inputKeyPress(node, event){
-                if(event.keyCode == ria.dom.Keys.ENTER){
-                    if(!node.hasClass('error')){
+            Boolean, function gradeKeyDown(node, event){
+                var list = this.dom.find('.autocomplete-list:visible');
+                if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
+                    if(node.hasClass('error')){
+                        return false;
+                    }else{
+                        if(list.exists()){
+                            if(list.find('.see-all').hasClass('hovered')){
+                                list.find('.see-all').trigger('click');
+                                return false;
+                            }
+                            var newValue = list.find('.hovered').getHTML();
+                            if(newValue)
+                                node.setValue(newValue);
+                            this.hideDropDown();
+                        }
                         var row = node.parent('.row');
                         if(!node.hasClass('error'))
                             this.selectRow(this.dom.find('.grades-individual').find('.row:eq(' + (parseInt(row.getAttr('index'),10) + 1) + ')'));
                         event.preventDefault();
-                        return false;
                     }
                 }
+                var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
+                var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
+                if(isDown || isUp){
+                    if(list.exists()){
+                        var hovered = list.find('.hovered');
+                        if(hovered.exists()){
+                            if(isDown && hovered.next().exists()){
+                                hovered.removeClass('hovered');
+                                hovered.next().addClass('hovered');
+                            }
+                            if(isUp && hovered.previous().exists()){
+                                hovered.removeClass('hovered');
+                                hovered.previous().addClass('hovered');
+                            }
+                        }else{
+                            if(isDown){
+                                list.find('.autocomplete-item:eq(0)').addClass('hovered');
+                            }
+                        }
+                        event.stopPropagation();
+                    }
+                }
+
+                return true;
             },
 
             function selectRow(row){
@@ -323,7 +359,11 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                node.parent('form').find('.grade-input').setValue('');
+                var input = node.parent('form').find('.grade-input');
+                if(node.checked())
+                    input.setValue('');
+                else
+                    input.setValue(input.getData('grade-value'));
             },
 
             function updateValue(node, input, value){

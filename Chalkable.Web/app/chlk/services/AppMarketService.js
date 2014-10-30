@@ -1,7 +1,6 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('chlk.services.AppCategoryService');
 
-
 REQUIRE('ria.async.Future');
 
 REQUIRE('chlk.models.apps.AppGradeLevel');
@@ -12,6 +11,8 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.apps.AppTotalPrice');
+REQUIRE('chlk.models.apps.ApplicationForAttach');
+
 
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
@@ -67,7 +68,7 @@ NAMESPACE('chlk.services', function () {
                 return this
                     .getPaginatedList('AppMarket/List.json', chlk.models.apps.AppMarketApplication, {
                         start: start_ | 0,
-                        count: count_,
+                        count: count_ || 9,
                         categoriesIds:  categoryIds,
                         gradeLevelsIds: gradeLvlsIds,
                         filter: filter,
@@ -91,6 +92,18 @@ NAMESPACE('chlk.services', function () {
                         data.setPageIndex(start_ / 10);
                         return data;
                     }, this)*/;
+            },
+
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId,   Number, Number]],
+            ria.async.Future, function getAppsForAttach(personId, classId, markingPeriodId,  start_, count_){
+                return this.getPaginatedList('AppMarket/ListInstalledForAttach', chlk.models.apps.ApplicationForAttach,{
+                    personId: personId.valueOf(),
+                    start: start_ || 0,
+                    classId: classId.valueOf(),
+                    markingPeriodId: markingPeriodId.valueOf(),
+                    count: count_ || 10
+                });
             },
 
             [[chlk.models.id.SchoolPersonId, Number, String, Number]],

@@ -4,6 +4,7 @@ mixin TooltipWithOverflow(text)
     p(attributes)=text
 
 .week-calendar-body
+    -selectedItem = self.getTopData() ? self.getTopData().getSelectedItemId() : ''
     .day-names
         each item in self.getItems()
             .week
@@ -13,13 +14,13 @@ mixin TooltipWithOverflow(text)
             div
                 anns = item.getAnnouncements();
                 if anns && anns.length
-                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'), null, self.getTopData().getSelectedItemId() || '')(class = self.isMainCalendar() ? '' : 'disabled').bar-item
+                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().toStandardFormat(), null, selectedItem)(class = self.isMainCalendar() ? '' : 'disabled').bar-item
     .items
         each item in self.getItems()
             .week-day(class = item.getTodayClassName(), data-day = item.getDay())
                 each announcementPeriod,i in item.getAnnouncementPeriods()
                     -VALIDATE_ARG('announcementPeriod', [chlk.models.announcement.AnnouncementPeriod], announcementPeriod)
-                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'), i, self.getTopData().getSelectedItemId() || '')(class = self.isMainCalendar() ? '' : 'disabled').period-item
+                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().toStandardFormat(), i, selectedItem || '')(class = self.isMainCalendar() ? '' : 'disabled').period-item
                         if item.getDate().format('DD') == Msg.Sunday
                             .period-info=i+1
                         else

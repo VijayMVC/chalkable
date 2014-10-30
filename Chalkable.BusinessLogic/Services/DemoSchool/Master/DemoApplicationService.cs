@@ -42,6 +42,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Storage.ApplicationRatingStorage.GetAll(applicationId);
         }
 
+        public PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
         public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, Services.Master.AppFilterMode? filterMode, Services.Master.AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
         {
             var query = new ApplicationQuery
@@ -95,7 +100,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
         {
-            var query = new ApplicationQuery { Start = start, Count = count, Live = live, OnlyForInstall = onlyForInstall};
+            var query = new ApplicationQuery
+                {
+                    Start = start,
+                    Count = count,
+                    Live = live,
+                    OnlyForInstall = onlyForInstall
+                };
             return GetApplications(query);
         }
 
@@ -122,6 +133,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                         UserId = Context.UserId,
                         Role = Context.Role.Id,
                         DeveloperId = Context.DeveloperId,
+                        OnlyForInstall = false
                     });
             }
         }

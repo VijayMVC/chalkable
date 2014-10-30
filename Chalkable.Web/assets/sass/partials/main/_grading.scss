@@ -406,6 +406,7 @@ BODY {
                   text-transform: uppercase;
                   float: right;
                   display: none;
+                  cursor: pointer;
                 }
               }
 
@@ -427,6 +428,10 @@ BODY {
                   display: inline-block;
                   margin: 0 8px 7px 0;
                   vertical-align: top;
+
+                  &.empty-container{
+                    width: 53px;
+                  }
 
                   &:last-child{
                       margin-right: 0;
@@ -990,7 +995,7 @@ BODY {
       background: url(images/grading/small-chart.png) 26px 8px no-repeat;
 
       &.small{
-        background: url(images/grading/small-chart.png) 20px 8px no-repeat;
+        background: url(images/grading/small-chart.png) 20px 30px no-repeat;
         text-align: left;
       }
 

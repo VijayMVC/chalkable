@@ -16,6 +16,9 @@ using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.Diagnostics.Management;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using Microsoft.WindowsAzure.Storage;
+using LogLevel = Microsoft.WindowsAzure.Diagnostics.LogLevel;
+
 
 namespace Chalkable.Web
 {
@@ -38,7 +41,7 @@ namespace Chalkable.Web
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
 
 
-            if (ConfigurationManager.AppSettings["WindowsAzure.OAuth.RelyingPartyRealm"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.ServiceNamespace"] != null && ConfigurationManager.AppSettings["WindowsAzure.OAuth.SwtSigningKey"] != null)
+            if (Settings.WindowsAzureOAuthRelyingPartyRealm != null && Settings.WindowsAzureOAuthServiceNamespace != null && Settings.WindowsAzureOAuthSwtSigningKey != null)
             {
                 OauthAuthenticate.InitFromConfig();
             }
@@ -52,11 +55,15 @@ namespace Chalkable.Web
 
         private void ConfigureDiagnostics()
         {
-            String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
+            /*String wadConnectionString = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(RoleEnvironment.GetConfigurationSettingValue(wadConnectionString));
 
             RoleInstanceDiagnosticManager roleInstanceDiagnosticManager =
-                cloudStorageAccount.CreateRoleInstanceDiagnosticManager(RoleEnvironment.DeploymentId, RoleEnvironment.CurrentRoleInstance.Role.Name, RoleEnvironment.CurrentRoleInstance.Id);
+                CloudAccountDiagnosticMonitorExtensions.CreateRoleInstanceDiagnosticManager(
+                cloudStorageAccount,
+                RoleEnvironment.DeploymentId, 
+                RoleEnvironment.CurrentRoleInstance.Role.Name, 
+                RoleEnvironment.CurrentRoleInstance.Id);
             DiagnosticMonitorConfiguration diagnosticMonitorConfiguration = roleInstanceDiagnosticManager.GetCurrentConfiguration();
             diagnosticMonitorConfiguration.Directories.ScheduledTransferPeriod = TimeSpan.FromMinutes(5d);
             diagnosticMonitorConfiguration.Logs.ScheduledTransferPeriod = TimeSpan.FromSeconds(30);
@@ -69,7 +76,7 @@ namespace Chalkable.Web
             performanceCounterConfiguration.SampleRate = TimeSpan.FromSeconds(10d);
             diagnosticMonitorConfiguration.PerformanceCounters.DataSources.Add(performanceCounterConfiguration);
             diagnosticMonitorConfiguration.PerformanceCounters.ScheduledTransferPeriod = TimeSpan.FromMinutes(1d);
-            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);
+            roleInstanceDiagnosticManager.SetCurrentConfiguration(diagnosticMonitorConfiguration);*/
         }
 
 
@@ -80,6 +87,30 @@ namespace Chalkable.Web
             {
                 HttpContext.Current.User = chalkableUser;
             }
+        }
+
+        void Application_BeginRequest(object source, EventArgs e)
+        {
+            EnsureCorrectDomain(Request, Response);
+        }
+
+
+        private static void EnsureCorrectDomain(HttpRequest httpRequest, HttpResponse httpResponse)
+        {
+            var ensureDomain = Settings.Domain;
+            if (String.IsNullOrWhiteSpace(ensureDomain))
+                return;
+
+            var currentDomain = httpRequest.ServerVariables["SERVER_NAME"];
+            if (currentDomain.Equals(ensureDomain))
+                return;
+            httpResponse.Redirect(
+                String.Format("http{0}://{1}{2}{3}",
+                              httpRequest.IsSecureConnection ? "s" : "",
+                              ensureDomain,
+                              "", // leave default port http or https
+                              httpRequest.Url.PathAndQuery
+                    ));
         }
     }
 

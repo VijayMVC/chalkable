@@ -41,6 +41,9 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('canaddstandard')],
             Boolean, 'canAddStandard',
 
+            [ria.serialize.SerializeProperty('canremovestandard')],
+            Boolean, 'ableToRemoveStandard',
+
             [ria.serialize.SerializeProperty('announcementattachments')],
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 

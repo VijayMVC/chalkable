@@ -23,7 +23,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
-            return Json(PersonViewData.Create(person));
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException("User has no valid school year id");
+            if (!Context.DistrictId.HasValue || !Context.SchoolLocalId.HasValue)
+                throw new UnassignedUserException("User is not assigned to any school");
+            return Json(CurrentPersonViewData.Create(person, Context.DistrictId.Value, Context.SchoolYearId.Value, Context.SchoolLocalId.Value));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
@@ -51,13 +55,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, personId);
             return Json(PersonScheduleViewData.Create(person, classes));
         }
-        
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult UploadPicture(int personId)
-        {
-            throw new NotImplementedException();
-           // return UploadPicture(MasterLocator.PersonPictureService, personId, null, null);
-        }
 
         public ActionResult ReChangePassword(int id, string newPassword)
         {
@@ -78,17 +75,13 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var person = SchoolLocator.PersonService.GetPersonDetails(id);
             return vdCreator(person);
         }
+
         private bool CanGetInfo(int personId)
         {
             return BaseSecurity.IsAdminOrTeacher(SchoolLocator.Context)
                    || SchoolLocator.Context.PersonId == personId;
         }
 
-        protected Person UpdateTeacherOrAdmin(AdminTeacherInputModel model)
-        {
-            throw new NotImplementedException();
-        }
-        
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetPersons(IntList roleIds, IntList gradeLevelIds, int? start, int? count, bool? byLastName, string filter)
         {
@@ -108,7 +101,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             //var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).Name : null;
             return Json(res);
         }
-
+        
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult UpdateInfo(int personId, string email)
         {
@@ -118,7 +111,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 return Json(new { data = errorMessage, success = false });
             //ReLogOn(res);
             var res = SchoolLocator.PersonService.GetPersonDetails(personId);
-            return Json(PersonViewData.Create(res));
+            return Json(PersonInfoViewData.Create(res));
         }
 
     }

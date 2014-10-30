@@ -15,6 +15,12 @@ NAMESPACE('chlk.services', function () {
                     developerId: id.valueOf()
                 });
             },
+
+            ria.async.Future, function getDevelopers() {
+                return this.get('Developer/GetDevelopers.json', ArrayOf(chlk.models.developer.DeveloperInfo), {
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId, String, String ,String]],
             ria.async.Future, function saveInfo(id, name, webSite, email) {
                 return this
@@ -37,5 +43,6 @@ NAMESPACE('chlk.services', function () {
                 mdl.setEmail(email);
                 return ria.async.DeferredData(mdl);
             }
+
         ])
 });
