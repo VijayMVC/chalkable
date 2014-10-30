@@ -1,0 +1,13 @@
+a.periods-link.item
+    .announcement-box
+        each announcement,i in self.getAnnouncements()
+            div(
+                class = "announcement-type-" + announcement.getChalkableAnnouncementType(),
+                style = "bottom: " + (i*4) + "px;left: " + (20 + i*4) + "px; z-index: " + (97 - i),
+                data-tooltip = announcement.getAnnouncementTypeName()
+            ).announcement
+    .period-box
+        .number=self.getClassPeriod().getPeriod().getOrder()
+        .name=self.getClassPeriod().getClazz().getName()
+
+
