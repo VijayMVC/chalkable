@@ -1169,18 +1169,23 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function sortByAnnoClick($node, event){
                 Assert(this._lastModel instanceof chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData)
                 if (this._lastModel == null) return;
-                if (ria.dom.Dom(event.target).hasClass('edit-cell')) return;
 
-                var ordered;
-                switch ($node.getData('sort-type')) {
+                _DEBUG && console.time('sorting');
+
+                var ordered,
+                    multiplier = -1,
+                    sortMode = $node.getData('sort-type'),
+                    sortOrder = $node.getData('sort-order');
+                switch (sortMode) {
                     case 'name':
+                        multiplier = 1;
                         ordered = this._lastModel.getCurrentGradingGrid().getStudents()
                             .map(function (_) { return [_.getStudentInfo().getId(), _.getStudentInfo().getLastName()] })
                         break;
 
                     case 'avg':
-                        var index = $node.getData('sort-avg-index') | 0;
-                        ordered = this._lastModel.getCurrentGradingGrid().getStudentAverages()[index].getAverages()
+                        var avgIndex = $node.getData('sort-avg-index') | 0;
+                        ordered = this._lastModel.getCurrentGradingGrid().getStudentAverages()[avgIndex].getAverages()
                             .map(function (_) {
                                 var value = _.isExempt() ? -1 : _.getEnteredAvg() != null ? _.getEnteredAvg() : _.getCalculatedAvg();
                                 return [_.getStudentId(), value];
@@ -1195,10 +1200,10 @@ NAMESPACE('chlk.activities.grading', function () {
                         break;
 
                     case 'anno':
-                        var sourceId = chlk.models.id.AnnouncementId($node.getData('sort-anno-id') | 0);
+                        var annoId = chlk.models.id.AnnouncementId($node.getData('sort-anno-id') | 0);
                         ordered = this._lastModel.getCurrentGradingGrid()
                             .getGradingItems()
-                            .filter(function (_) { return _.getId() == sourceId })
+                            .filter(function (_) { return _.getId() == annoId })
                             [0]
                             .getStudentAnnouncements()
                             .getItems()
@@ -1208,9 +1213,9 @@ NAMESPACE('chlk.activities.grading', function () {
                         return;
                 }
 
-                ordered = ordered.sort(function (_1, _2) { return strcmp(_1[1], _2[1]); });
+                ordered = ordered.sort(function (_1, _2) { return multiplier * strcmp(_1[1], _2[1]); });
 
-                if (false) // reverse
+                if (sortOrder == 'asc')
                     ordered = ordered.reverse();
 
                 var remap = {};
@@ -1249,7 +1254,37 @@ NAMESPACE('chlk.activities.grading', function () {
                         ))
                     })
 
-                this.refresh(this._lastModel);
+                _DEBUG && console.timeEnd('sorting');
+
+                _DEBUG && console.time('repainting');
+
+                var pIndex = chlk.controls.LeftRightToolbarControl.GET_CURRENT_PAGE(this.dom.find('.ann-types-container .grid-toolbar'));
+                console.info(pIndex);
+                this.refreshD(ria.async.Future.$fromData(this._lastModel))
+                    .then(function () {
+                        var node = this.dom.find('.ann-types-container .grid-toolbar');
+                        chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
+
+                        setTimeout(function () {
+                            this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+
+                            this.dom.find('[data-sort-type][data-sort-order]').removeData('sort-order');
+                            var newSortOrder = sortOrder == 'asc' ? 'desc' : 'asc';
+
+                            switch(sortMode) {
+                                case 'name':
+                                    this.dom.find('[data-sort-type=name]').setData('sort-order', newSortOrder); break;
+                                case 'avg':
+                                    this.dom.find('[data-sort-type=avg][data-sort-avg-index=' + avgIndex + ']').setData('sort-order', newSortOrder); break;
+                                case 'total':
+                                    this.dom.find('[data-sort-type=total]').setData('sort-order', newSortOrder); break;
+                                case 'anno':
+                                    this.dom.find('[data-sort-type=anno][data-sort-anno-id=' + annoId.valueOf() + ']').setData('sort-order', newSortOrder); break;
+                            }
+                        }.bind(this), 17);
+
+                        _DEBUG && console.timeEnd('repainting');
+                    }, this);
             }
         ]);
 });

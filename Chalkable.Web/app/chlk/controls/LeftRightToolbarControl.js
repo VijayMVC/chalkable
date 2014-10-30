@@ -21,12 +21,16 @@ NAMESPACE('chlk.controls', function () {
         AFTER_RENDER: 'afterrender'
     });
 
+    var self = null;
+
     /** @class chlk.controls.LeftRightToolbarControl */
     CLASS(
         'LeftRightToolbarControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
                 ASSET('~/assets/jade/controls/left-right-tb.jade')(this);
+
+                self = this;
             },
 
             //Object, 'configs',
@@ -215,7 +219,16 @@ NAMESPACE('chlk.controls', function () {
                         }
                     }, 10)
                 }
+            },
 
+            [[ria.dom.Dom]],
+            Number, function GET_CURRENT_PAGE(node) {
+                return node.getData('currentIndex') | 0;
+            },
+
+            [[ria.dom.Dom, Number]],
+            VOID, function SET_CURRENT_PAGE(node, index) {
+                self.setPageByCurrentDot(null, node, index);
             }
         ]);
 });
