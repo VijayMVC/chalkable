@@ -6,6 +6,31 @@ REQUIRE('chlk.models.grading.GradingClassSummary');
 
 NAMESPACE('chlk.activities.grading', function () {
 
+    function reorder(source, remap, studendIdProvider) {
+        VALIDATE_ARGS(['source', 'remap', 'studendIdProvider'], [[Array], [Object], [Function]], [source, remap, studendIdProvider]);
+
+        var result = new Array(source.length);
+        source.forEach(function (_) {
+            var studentId = studendIdProvider(_);
+
+            VALIDATE_ARG('studentId', [chlk.models.id.SchoolPersonId], studentId);
+
+            var index = remap[studentId];
+
+            Assert(index != null);
+
+            result[index] = _;
+        });
+        return result;
+    }
+
+    function strcmp(_1, _2) {
+        var v1 = _1[1], v2 = _2[1];
+        v1 = v1 != null ? v1 : Number.NEGATIVE_INFINITY;
+        v2 = v2 != null ? v2 : Number.NEGATIVE_INFINITY;
+        return v1 < v2 ? -1 : v1 > v2 ? 1 : _1[0] - _2[0];
+    }
+
     var gradingGridTimer;
 
     /** @class chlk.activities.grading.GradingClassStandardsGridPage */
@@ -14,6 +39,12 @@ NAMESPACE('chlk.activities.grading', function () {
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassStandardsGridTpl)],
         'GradingClassStandardsGridPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             Array, 'allScores',
+
+            function $() {
+                BASE();
+
+                this._lastModel = null;
+            },
 
             [ria.mvc.DomEventBind('click', '.mp-title')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -459,6 +490,100 @@ NAMESPACE('chlk.activities.grading', function () {
                     node.find('input[name=gradeid]').setValue('');
                 node.parent().find('.value').setHTML('...');
                 return true;
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onModelReady_(model, msg_) {
+                BASE(model, msg_);
+
+                this._lastModel = null;
+                if (model instanceof chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData)
+                    this._lastModel = model;
+            },
+
+            [ria.mvc.DomEventBind('click', '[data-sort-type]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function sortByAnnoClick($node, event){
+                Assert(this._lastModel instanceof chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData);
+                if (this._lastModel == null) return;
+
+                _DEBUG && console.time('sorting');
+
+                var ordered,
+                    multiplier = -1,
+                    sortMode = $node.getData('sort-type'),
+                    sortOrder = $node.getData('sort-order');
+                switch (sortMode) {
+                    case 'name':
+                        multiplier = 1;
+                        ordered = this._lastModel.getCurrentGradingGrid().getStudents()
+                            .map(function (_) { return [_.getStudentInfo().getId(), _.getStudentInfo().getLastName()] })
+                        break;
+
+                    case 'standard':
+                        var sdId = chlk.models.id.StandardId($node.getData('sort-id') | 0);
+                        ordered = this._lastModel.getCurrentGradingGrid()
+                            .getGradingItems()
+                            .filter(function (_) { return _.getStandard().getStandardId() == sdId })
+                            [0]
+                            .getItems()
+                            .map(function (_, index) { return [_.getStudentId(), _.getGradeValue(), index]; });
+                        break;
+                    default:
+                        return;
+                }
+
+                ordered = ordered.sort(function (_1, _2) { return multiplier * strcmp(_1, _2); });
+
+                if (sortOrder == 'asc')
+                    ordered.reverse();
+
+                var remap = {};
+                ordered.forEach(function (item, index) { remap[item[0]] = index; });
+
+                this._lastModel.getCurrentGradingGrid()
+                    .setStudents(reorder(
+                        this._lastModel.getCurrentGradingGrid().getStudents(),
+                        remap,
+                        function (_) { return _.getStudentInfo().getId() }
+                    ));
+
+                this._lastModel.getCurrentGradingGrid().getGradingItems()
+                    .forEach(function (_) {
+                        _.setItems(reorder(
+                            _.getItems(),
+                            remap,
+                            function (_) { return _.getStudentId() }
+                        ))
+                    });
+
+                _DEBUG && console.timeEnd('sorting');
+
+                _DEBUG && console.time('repainting');
+
+                var pIndex = chlk.controls.LeftRightToolbarControl.GET_CURRENT_PAGE(this.dom.find('.ann-types-container .grid-toolbar'));
+                console.info(pIndex);
+                this.refreshD(ria.async.Future.$fromData(this._lastModel))
+                    .then(function () {
+                        var node = this.dom.find('.ann-types-container .grid-toolbar');
+                        chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
+
+                        setTimeout(function () {
+                            this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+
+                            this.dom.find('[data-sort-type][data-sort-order]').removeData('sort-order');
+                            var newSortOrder = sortOrder == 'asc' ? 'desc' : 'asc';
+
+                            switch(sortMode) {
+                                case 'name':
+                                    this.dom.find('[data-sort-type=name]').setData('sort-order', newSortOrder); break;
+                                case 'standard':
+                                    this.dom.find('[data-sort-type=standard][data-sort-id=' + sdId.valueOf() + ']').setData('sort-order', newSortOrder); break;
+                            }
+                        }.bind(this), 17);
+
+                        _DEBUG && console.timeEnd('repainting');
+                    }, this);
             }
         ]);
 });

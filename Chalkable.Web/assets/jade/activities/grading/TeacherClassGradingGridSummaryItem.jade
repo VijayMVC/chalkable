@@ -33,7 +33,7 @@ mixin StudentAverages(tpl)
             .time
             .max-score.dotted-h
             each average,i in studentAvg.getAverages()
-                div(
+                .dotted-h.grade-value.avg-value-container(
                     row-index=i,
                     class=((i == tpl.getRowIndex() ? 'active-row ' : '') + (self.isAbleEdit() ? 'gradable' : '')),
                     data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
@@ -42,8 +42,8 @@ mixin StudentAverages(tpl)
                     data-student-name=self.getStudents()[i].getStudentInfo().getDisplayName(),
                     data-student-id=average.getStudentId().valueOf(),
                     data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
-                    data-grading-period-name=self.getGradingPeriod().getName()
-                ).dotted-h.grade-value.avg-value-container
+                    data-grading-period-name=self.getGradingPeriod().getName())
+
                     +RenderWith(average, chlk.templates.grading.StudentAverageTpl)(
                         ableDisplayAlphaGrades = self.isAbleDisplayAlphaGrades(),
                         roundDisplayedAverages = self.isRoundDisplayedAverages(),
@@ -52,7 +52,7 @@ mixin StudentAverages(tpl)
             div(data-average-id=studentAvg.getAverageId()).dotted-h.total-average.grade-value=tpl.getModel().displayAverages(studentAvg.getTotalAverage())
 
 mixin DisplayTotalPoints(model)
-    -studentTotalPoints = model.getStudentTotalPoints()
+    -var studentTotalPoints = model.getStudentTotalPoints()
     if studentTotalPoints && model.isAbleDisplayTotalPoints()
         .dotted-container.grade-container.with-horizontal-dots.total-points
             div(data-tooltip=Msg.Total_Points, data-sort-type = "total").type-name= Msg.Total_Points
@@ -60,6 +60,7 @@ mixin DisplayTotalPoints(model)
             .max-score.dotted-h
             each studentTotalPoint, i in studentTotalPoints
                 div(row-index=i).dotted-h.grade-value.total-point=studentTotalPoint.displayTotalPoint()
+
             .dotted-h.grade-value
 
 .ann-types-container
