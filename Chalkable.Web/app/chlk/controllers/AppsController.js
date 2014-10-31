@@ -563,14 +563,14 @@ NAMESPACE('chlk.controllers', function (){
              var isFreeApp = model.isFree();
 
              var isSchoolFlatRateEnabled = model.isSchoolFlatRateEnabled();
-             var isClassFlatRateEnabled = model.isSchoolFlatRateEnabled();
+             var isClassFlatRateEnabled = model.isClassFlatRateEnabled();
 
              var appPriceInfo = isFreeApp ? new chlk.models.apps.AppPrice()
                                           :
                                             new chlk.models.apps.AppPrice(
                                                 model.getCostPerUser(),
-                                                isSchoolFlatRateEnabled ? model.getCostPerClass() : null,
-                                                isClassFlatRateEnabled  ? model.getCostPerSchool(): null
+                                                isClassFlatRateEnabled ? model.getCostPerClass() : null,
+                                                isSchoolFlatRateEnabled ? model.getCostPerSchool(): null
                                             );
             var cats = this.getIdsList(model.getCategories(), chlk.models.id.AppCategoryId);
             var gradeLevels = this.getIdsList(model.getGradeLevels(), chlk.models.id.GradeLevelId);
