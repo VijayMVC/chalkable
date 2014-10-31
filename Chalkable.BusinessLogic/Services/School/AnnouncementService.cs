@@ -468,8 +468,13 @@ namespace Chalkable.BusinessLogic.Services.School
                     ann.WeightMultiplier = announcement.WeightMultiplier;
                     ann.MayBeDropped = announcement.CanDropStudentScore;
                     ann.VisibleForStudent = !announcement.HideFromStudents;
+                    
                     if (classId.HasValue && ann.ClassRef != classId.Value && ann.State == AnnouncementState.Draft)
+                    {
+                        // clearing some data before switching between classes
                         ann.Title = null;
+                        new AnnouncementApplicationDataAccess(uow).DeleteByAnnouncementId(ann.Id);
+                    }
                 }
                 if (BaseSecurity.IsAdminViewer(Context))
                     throw new NotImplementedException();
