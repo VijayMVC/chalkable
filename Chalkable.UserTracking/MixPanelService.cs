@@ -461,6 +461,14 @@ namespace Chalkable.UserTracking
             SendEvent(login, UserTrackingEvents.SetAttendance, properties);
         }
 
+        public void PostedGrades(string login, int classId, int gradingPeriodId)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[CLASS] = classId;
+            properties[GRADING_PERIOD_ID] = GRADING_PERIOD_ID;
+            SendEvent(login, UserTrackingEvents.PostedGrades, properties);
+        }
+
         private const string DISTINCT_ID = "distinct_id";
         private const string TIME = "time";
         private void SendEvent(string email, string eventName, IDictionary<string, object> properties)
