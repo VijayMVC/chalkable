@@ -96,12 +96,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
                 Storage.AnnouncementApplicationStorage.Delete(announcementAppId);
                 var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                var c = new DemoClassStorage(Storage).GetById(res.ClassRef);
+                var c = Storage.ClassStorage.GetById(res.ClassRef);
                 if (Context.PersonId != c.PrimaryTeacherRef)
                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 return res;
             }
-            catch
+            catch(Exception e)
             {
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
             }
