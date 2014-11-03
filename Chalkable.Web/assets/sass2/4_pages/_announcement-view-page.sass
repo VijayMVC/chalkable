@@ -1,6 +1,10 @@
 .announcement-view-page
   position: relative
 
+  .people-list
+    .row
+      z-index: auto
+
   .close-open-control
     margin-top: 24px
 
@@ -129,6 +133,10 @@
     .selected
       display: block
 
+    .empty-grade-form
+      .grade-options.selected
+        display: none
+
   .update-grade-form
     display: table
     width: 100%
@@ -142,6 +150,10 @@
   .name-block
     position: relative
     width: 100%
+
+    .wrapper, p
+      display: inline-block
+
 
     A
       text-decoration: none
