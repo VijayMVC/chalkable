@@ -663,9 +663,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('keyup', '.comment-input')],
+            [ria.mvc.DomEventBind('keydown', '.comment-input')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function commentKeyUp(node, event, options_){
+            function commentKeyUp(node, event, options_){
                 var popUp = node.parent().find('.grading-comments-list');
                 if(popUp.is(':visible') && (event.which == ria.dom.Keys.UP.valueOf()
                     || event.which == ria.dom.Keys.DOWN.valueOf() || event.which == ria.dom.Keys.ENTER.valueOf())
@@ -679,12 +679,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                                     selected.removeClass('selected');
                                     selected.previous().addClass('selected');
                                 }
+                                return false;
                                 break;
                             case ria.dom.Keys.DOWN.valueOf():
                                 if(selected.next().exists()){
                                     selected.removeClass('selected');
                                     selected.next().addClass('selected');
                                 }
+                                return false;
                                 break;
                             case ria.dom.Keys.ENTER.valueOf():
                                 this.setCommentByNode(next);
@@ -701,7 +703,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('keydown', '.comment-input')],
+            /*[ria.mvc.DomEventBind('keydown', '.comment-input')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function commentKeyDown(node, event, options_){
                 var popUp = node.parent().find('.grading-comments-list');
@@ -716,7 +718,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.parent('.small-pop-up').hide();
                     node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
                 }
-            },
+            },*/
 
             [ria.mvc.DomEventBind('change', '.cant-drop')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
