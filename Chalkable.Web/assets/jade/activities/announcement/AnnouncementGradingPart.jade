@@ -45,9 +45,9 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                         if !readonly
                             .grade-options.selected
                                 +ActionLink('grading', 'getGradeComments').comment-text= (item.getComment() ? Msg.Commented : Msg.Comment)
-                                    .small-pop-up.chat-bubble.top
-                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment(), placeholder=Msg.Enter_when_done).comment-input= item.getComment()
-                                        .grading-comments-list
+                                .small-pop-up.chat-bubble.top
+                                    +TextArea(name="comment", maxlength=500, data-comment=item.getComment(), placeholder=Msg.Enter_when_done).comment-input.with-grid-focus= item.getComment()
+                                    .grading-comments-list
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
                         div(class=item.getAttachments() && item.getAttachments().length ? "" : "no-attachments").grade-triangle
                         .grade-container

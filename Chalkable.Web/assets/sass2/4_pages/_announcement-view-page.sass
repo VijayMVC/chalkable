@@ -1,3 +1,47 @@
+.grading-comments-list
+  position: absolute
+  background: white
+  width: 162px
+  margin-top: -4px
+  box-shadow: 0 0 3px #aaa
+
+  .item
+    padding: 4px 8px
+    font: bold 12px Arial
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+    text-shadow: none
+    cursor: pointer
+
+    &.selected
+      background: #26647e
+      color: white
+
+.autocomplete-list
+  display: none
+  background: #fff
+  position: absolute
+  z-index: 9999
+  border: 1px solid #d1d1d1
+
+  .autocomplete-item
+    line-height: 28px
+    font-size: 13px
+    text-overflow: ellipsis
+    overflow: hidden
+    padding: 0 2px
+    width: 77px
+    white-space: nowrap
+    cursor: pointer
+    text-align: center
+
+    &:not(:last-child)
+      border-bottom: 1px solid #ececec
+
+    &.hovered
+      background: #f2f2f2
+
 .announcement-view-page
   position: relative
 
@@ -40,6 +84,9 @@
     +text-shadow(transparentize(#fff, .5) 0 1px 1px)
     color: #2b2a28
     font-family: 'Open Sans', sanf-serif
+
+    .edit-question-input
+      display: none
 
     h3
       margin: 0 0 8px
@@ -171,7 +218,7 @@
 
     .small-pop-up
       position: absolute
-      top: 40px
+      top: 55px
       left: 2px
       display: none
       border-radius: 5px
@@ -201,6 +248,9 @@
       width: 75px
       text-align: center
       color: #000
+
+      &.error
+        border: 1px solid red
 
     .letters
       position: absolute

@@ -90,7 +90,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.make-visible-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             function makeVisibleClick(node, event){
-                node.parent().parent().addClass('x-hidden');
+                node.parent().parent().hide();
             },
 
             [ria.mvc.DomEventBind('focus', '.grade-input')],
@@ -170,9 +170,9 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function editAnswerClick(node, event){
                 var row = node.parent('.row');
-                row.find('.edit-answer-text, .edit-question-text').fadeOut(function(){
+                row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeOut(function(){
                     var node = row.find('.edit-answer-input, .edit-question-input');
-                    node.removeClass('x-hidden').fadeIn(function(){
+                    node.fadeIn(function(){
                         node.trigger('focus');
                     });
                 });
@@ -193,10 +193,10 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function blurAnswer(node, event){
                 var row = node.parent('.row');
-                if(!row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
+                if(node.getValue() && !row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
                     row.find('.edit-answer-input, .edit-answer-btn, .edit-question-input, .edit-question-btn').fadeOut(function(){
                         setTimeout(function(){
-                            row.find('.edit-answer-block, .edit-question-block').removeClass('x-hidden').fadeIn();
+                            row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeIn();
                         }, 500);
 
                     });
@@ -243,7 +243,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function wholeDomClick(node, event){
                 var target = new ria.dom.Dom(event.target);
-                if(!target.hasClass('comment-text') && !target.parent('.comment-text').exists())
+                if(!target.isOrInside('.chat-bubble') && !target.hasClass('comment-text') && !target.parent('.comment-text').exists())
                     this.dom.find(('.small-pop-up:visible')).hide();
             },
 
@@ -375,8 +375,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     });
                     if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
-                    var top = node.offset().top - list.parent().offset().top + node.height() + 50;
-                    var left = node.offset().left - list.parent().offset().left + 61;
+                    var top = node.offset().top - list.parent().offset().top + node.height();
+                    var left = node.offset().left - list.parent().offset().left;
                     list.setCss('top', top)
                         .setCss('left', left);
                     list.setHTML(html)

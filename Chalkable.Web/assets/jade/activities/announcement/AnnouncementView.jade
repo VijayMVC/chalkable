@@ -23,6 +23,7 @@ mixin Glue_()
     -var gradeViewApps = self.getGradeViewApps()
     -var grade = self.getGrade()
     -var hasGrade = self.isDropped() || self.isExempt() || grade || grade == 0
+    .autocomplete-list.announcement-view
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
 
@@ -91,9 +92,12 @@ mixin Glue_()
                         userRole = self.getUserRole()
                     )
 
-        +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
-            userRole = self.getUserRole()
-        )
+        -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
+        if showPostQuestion || self.getAnnouncementQnAs().length
+            .close-open-control.questions-and-answers
+                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
+                    userRole = self.getUserRole()
+                )
 
         if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
             .close-open-control
