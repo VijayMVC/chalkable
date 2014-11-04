@@ -126,6 +126,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new UserDataAccess(uow);
                 var user = da.GetUser(confirmationKey);
+                if (user == null) return null;
+                
                 var districtId = user.DistrictRef;
                 if (user.SisUserId.HasValue)
                     throw new NotImplementedException();
