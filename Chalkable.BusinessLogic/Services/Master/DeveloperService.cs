@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -10,8 +11,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         Developer GetDeveloperByDictrict(Guid districtId);
         Developer GetDeveloperById(Guid developerId);
         IList<Developer> GetDevelopers();
-        Developer Add(string login, string password, string name, string webSite);
-        Developer Edit(Guid developerId, string name, string email, string webSite);
+        Developer Add(string login, string password, string name, string webSite, string paypalLogin);
+        Developer Edit(Guid developerId, string name, string email, string webSite, string paypalLogin);
+        Developer ChangePayPalLogin(Guid developerId, string paypalLogin);
     }
     public class DeveloperService : MasterServiceBase, IDeveloperService
     {
@@ -45,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public Developer Edit(Guid developerId, string name, string email, string webSite)
+        public Developer Edit(Guid developerId, string name, string email, string webSite, string paypalLogin)
         {
             using (var uow = Update())
             {
@@ -54,6 +56,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 ServiceLocator.UserService.ChangeUserLogin(developerId, email); // security here 
                 developer.Name = name;
                 developer.WebSite = webSite;
+                developer.PayPalLogin = paypalLogin;
                 da.Update(developer);
                 uow.Commit();
                 return developer;
@@ -61,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public Developer Add(string login, string password, string name, string webSite)
+        public Developer Add(string login, string password, string name, string webSite, string paypalLogin)
         {
             using (var uow = Update())
             {
@@ -72,12 +75,30 @@ namespace Chalkable.BusinessLogic.Services.Master
                         Name = name,
                         WebSite = webSite,
                         User = user,
-                        DistrictRef = user.Id
+                        DistrictRef = user.Id,
+                        PayPalLogin = paypalLogin
                     };
                 new DeveloperDataAccess(uow).Insert(res);
                 uow.Commit();
                 return res;
             }
+        }
+
+
+        public Developer ChangePayPalLogin(Guid developerId, string paypalLogin)
+        {
+            if(Context.DeveloperId != developerId)
+                throw new ChalkableSecurityException();
+            using (var uow = Update())
+            {
+                var da = new DeveloperDataAccess(uow);
+                var developer = da.GetById(developerId);
+                developer.PayPalLogin = paypalLogin;
+                da.Update(developer);
+                uow.Commit();
+                return developer;
+            }
+
         }
     }
 }

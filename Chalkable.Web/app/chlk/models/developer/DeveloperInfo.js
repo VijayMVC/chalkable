@@ -18,6 +18,9 @@ NAMESPACE('chlk.models.developer', function () {
             [ria.serialize.SerializeProperty('schoolid')],
             chlk.models.id.SchoolId, 'schoolId',
             [ria.serialize.SerializeProperty('websitelink')],
-            String, 'webSite'
+            String, 'webSite',
+
+            [ria.serialize.SerializeProperty('paypallogin')],
+            String, 'payPalAddress'
         ]);
 });

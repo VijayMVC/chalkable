@@ -37,7 +37,10 @@ NAMESPACE('chlk.activities.grading', function () {
     }
 
     function strcmp(_1, _2) {
-        return _1 < _2 ? -1 : _1 > _2 ? 1 : 0
+        var v1 = _1[1], v2 = _2[1];
+        v1 = v1 != null ? v1 : Number.NEGATIVE_INFINITY;
+        v2 = v2 != null ? v2 : Number.NEGATIVE_INFINITY;
+        return v1 < v2 ? -1 : v1 > v2 ? 1 : _1[0] - _2[0];
     }
 
     /** @class chlk.activities.grading.GradingClassSummaryGridPage */
@@ -1207,13 +1210,13 @@ NAMESPACE('chlk.activities.grading', function () {
                             [0]
                             .getStudentAnnouncements()
                             .getItems()
-                            .map(function (_) { return [_.getStudentId(), _.getNumericGradeValue()]; });
+                            .map(function (_, index) { return [_.getStudentId(), _.getNumericGradeValue(), index]; });
                         break;
                     default:
                         return;
                 }
 
-                ordered = ordered.sort(function (_1, _2) { return multiplier * strcmp(_1[1], _2[1]); });
+                ordered = ordered.sort(function (_1, _2) { return multiplier * strcmp(_1, _2); });
 
                 if (sortOrder == 'asc')
                     ordered = ordered.reverse();

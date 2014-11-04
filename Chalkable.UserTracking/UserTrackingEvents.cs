@@ -26,5 +26,6 @@ namespace Chalkable.UserTracking
         public const string SetFinalGrade = "set final grade";
         public const string SetScore = "set score";
         public const string SetAttendance = "set attendance";
+        public const string PostedGrades = "posted grades";
     }
 }

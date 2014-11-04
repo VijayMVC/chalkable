@@ -136,5 +136,9 @@ namespace Chalkable.UserTracking
         public void SetAttendance(string login, int classId)
         {
         }
+
+        public void PostedGrades(string login, int classId, int gradingPeriodId)
+        {
+        }
     }
 }

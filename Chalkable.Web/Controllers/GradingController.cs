@@ -110,6 +110,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult PostGradebook(int classId, int gradingPeriodId)
         {
             SchoolLocator.GradingStatisticService.PostGradebook(classId, gradingPeriodId);
+            MasterLocator.UserTrackingService.PostedGrades(Context.Login, classId, gradingPeriodId);
             return Json(true);
         }
 

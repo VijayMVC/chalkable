@@ -91,6 +91,8 @@ namespace Chalkable.Data.Master.Model
         [DataEntityAttr]
         public User User { get; set; }
 
+        public string PayPalLogin { get; set; }
+
         [NotDbFieldAttr]
         public string DisplayName
         {

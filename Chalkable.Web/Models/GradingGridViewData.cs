@@ -88,7 +88,7 @@ namespace Chalkable.Web.Models
                 foreach (var stId in stIds)
                 {
                     var totalpoint = gradeBook.StudentTotalPoints.FirstOrDefault(x => x.StudentId == stId);
-                    res.TotalPoints.Add(totalpoint == null ? new TotalPointViewData() : TotalPointViewData.Create(totalpoint));
+                    res.TotalPoints.Add(totalpoint == null ? new TotalPointViewData{ StudentId = stId } : TotalPointViewData.Create(totalpoint));
                 }
             }
             res.GradingItems = gradeBook.Announcements

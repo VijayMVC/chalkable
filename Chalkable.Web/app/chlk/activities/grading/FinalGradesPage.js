@@ -425,6 +425,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     input.setValue('');
                 container.addClass('loading');
                 this.updateCodes(node);
+                this.hideDropDown();
                 return true;
             },
 

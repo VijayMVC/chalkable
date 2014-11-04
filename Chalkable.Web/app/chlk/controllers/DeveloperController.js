@@ -41,6 +41,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
 
+
             [[ArrayOf(chlk.models.apps.Application)]],
             VOID, function refresh_(apps) {
                 var footerTpl = new chlk.templates.common.footers.DeveloperFooter();
@@ -62,15 +63,12 @@ NAMESPACE('chlk.controllers', function (){
                return this.PushView(chlk.activities.developer.DeveloperDocsPage, new ria.async.DeferredData(devDocsModel));
             },
 
-            [chlk.controllers.AccessForRoles([
-                chlk.models.common.RoleEnum.DEVELOPER
-            ])],
+            [chlk.controllers.AccessForRoles([chlk.models.common.RoleEnum.DEVELOPER])],
             function paypalSettingsAction(){
-                var paypalSettings = new chlk.models.developer.PayPalInfo();
-                //todo: get info from server
+                var developer = this.developerService.getCurrentDeveloper();
+                var paypalSettings = new chlk.models.developer.PayPalInfo(developer.getPayPalAddress());
                 return this.PushView(chlk.activities.developer.PayPalSettingsPage, new ria.async.DeferredData(paypalSettings));
             },
-
 
             [chlk.controllers.SidebarButton('settings')],
             [chlk.controllers.AccessForRoles([
@@ -87,14 +85,13 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.developer.PayPalInfo]],
             function updatePaymentInfoAction(info){
+                var developer = this.developerService.getCurrentDeveloper();
                 var result = this.developerService.updatePaymentInfo(
-                    this.getCurrentPerson().getId(),
+                    developer.getId(),
                     info.getEmail()
-                )
+                );
                 return this.UpdateView(chlk.activities.developer.PayPalSettingsPage, result);
             },
-
-
 
             [chlk.controllers.SidebarButton('api')],
             [chlk.controllers.AccessForRoles([

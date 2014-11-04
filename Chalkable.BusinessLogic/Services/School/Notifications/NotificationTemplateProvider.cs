@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private const string ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE = "Reminder about announcement: announcement <a href='#announcement/view/^.Notification.AnnouncementRef'>^.Other.AnnouncementTitle</a>";
 
         public const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR = "ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR";
-        private const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE = "Student <a href='#students/details/^.Notification.QuestionPerson.Id'>^.Notification.QuestionPerson.FullName</a> " +
+        private const string ANNOUNCEMENT_QUESTION_NOTIFICATION_TOAUTHOR_TEMPLATE = "<a href='#students/details/^.Notification.QuestionPerson.Id'>^.Notification.QuestionPerson.FullName</a> " +
                                                                                     "asked question about announcement <a href='#announcement/view/^.Notification.AnnouncementRef'>" +
                                                                                    "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion";
 

@@ -31,8 +31,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 exempt = false;
             else value = null;
 
-            decimal numericScore = 0;
-            if (gradingStyle.HasValue)
+            decimal numericScore = -1;
+            if (gradingStyle.HasValue && value != null)
             {
                 if (gradingStyle.Value != GradingStyleEnum.Numeric100)
                 {
@@ -54,17 +54,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
             }
 
+            var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
+
+            if (numericScore < 0)
+            {
+                gradeComment = "";
+            }
+
             var stAnn = new StudentAnnouncement
             {
                 ExtraCredit = extraCredits,
-                Comment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "",
+                Comment = gradeComment,
                 Dropped = dropped,
                 Incomplete = incomplete,
                 Late = late,
                 Exempt = exempt,
-                ScoreValue = numericScore.ToString(CultureInfo.InvariantCulture),
-                NumericScore = numericScore,
-                
+                ScoreValue = numericScore >= 0 ? numericScore.ToString(CultureInfo.InvariantCulture) : "",
+                NumericScore = numericScore >= 0 ? numericScore : (decimal?) null,
                 ActivityId = ann.SisActivityId.Value,
                 AnnouncementId = announcementId,
                 StudentId = studentId

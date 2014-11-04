@@ -8,6 +8,7 @@ var ChlkSessionConstants = {
     GRADING_PERIOD: 'gradingPeriod',
     FINALIZED_CLASS_IDS: 'finalizedClassesIds',
     CURRENT_CHLK_PERSON: 'currentChlkPerson',
+    CURRENT_DEVELOPER: 'currentDeveloper',
     CURRENT_PERSON: 'currentPerson',
     AZURE_PICTURE_URL: 'azurePictureUrl',
     DEMO_AZURE_PICTURE_URL: 'demoAzurePictureUrl',
