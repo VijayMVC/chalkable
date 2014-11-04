@@ -375,6 +375,7 @@
     <Content Include="Content\fonts\MYRIADPROREGULAR.png" />
     <Content Include="Content\fonts\oswald-webfont.svg" />
     <Content Include="Content\fonts\saginawbold-webfont.svg" />
+    <Content Include="favicon.ico" />
     <Content Include="Scripts\api\chlk-post-message-api.js" />
     <Content Include="Global.asax" />
     <Content Include="loaderio-5b599a813535f4cd31553b713ccbec90.html" />
