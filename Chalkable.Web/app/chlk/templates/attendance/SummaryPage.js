@@ -70,8 +70,10 @@ NAMESPACE('chlk.templates.attendance', function () {
                     },
                     xAxis: {
                         type: 'datetime',
-                        dateTimeLabelFormats: {
-                           day: '%b. %e'
+                        labels: {
+                            formatter: function() {
+                                return Highcharts.dateFormat('%b %e', this.value);
+                            }
                         }
                     },
 
