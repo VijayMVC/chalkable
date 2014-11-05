@@ -558,25 +558,46 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('keydown', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeUpDownKeyDown(node, event){
-                var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
-                var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
+                var curCell = node.parent('.grade-value'), cell, curBlock, valueInput;
                 if(!list.is(':visible')){
-                    var curCell = node.parent('.grade-value'), cell;
-                    if(isUp){
-                        cell = curCell.previous('.grade-value');
-                        if(cell.exists() && cell.hasClass('gradable')){
-                            this.submitActiveForm();
-                            this.showCell(cell);
-                        }
+                    switch(event.keyCode){
+                        case ria.dom.Keys.UP.valueOf():
+                            cell = curCell.previous('.grade-value');
+                            break;
+                        case ria.dom.Keys.DOWN.valueOf():
+                            cell = curCell.next('.grade-value');
+                            break;
                     }
-                    if(isDown){
-                        cell = curCell.next('.grade-value');
-                        if(cell.exists() && cell.hasClass('gradable')){
-                            this.submitActiveForm();
-                            this.showCell(cell);
+                }
+
+                switch(event.keyCode){
+                    case ria.dom.Keys.LEFT.valueOf():
+                        valueInput = curCell.find('.value-input');
+                        if(valueInput.getSelectedText() || valueInput.getCursorPosition() == 0){
+                            curBlock = curCell.parent('.grade-container').previous('.grade-container');
+                            if(curBlock.exists() && curBlock.hasClass('total-points'))
+                                curBlock = curBlock.previous('.grade-container');
+                            var nameContainer = curBlock.parent('.ann-types-container').find('.name-container');
+                            if(curBlock.exists() && curBlock.offset().left >= (nameContainer.offset().left + nameContainer.width()))
+                                cell = curBlock.find('.grade-value[row-index=' + curCell.getAttr('row-index') + ']');
                         }
-                    }
+                        break;
+                    case ria.dom.Keys.RIGHT.valueOf():
+                        valueInput = curCell.find('.value-input');
+                        var value = valueInput.getValue() || '';
+                        if(valueInput.getSelectedText() || valueInput.getCursorPosition() == value.length){
+                            curBlock = curCell.parent('.grade-container').next('.grade-container:not(.transparent-container)');
+                            if(curBlock.exists() && curBlock.hasClass('total-points'))
+                                curBlock = curBlock.next('.grade-container:not(.transparent-container)');
+                            if(curBlock.exists())
+                                cell = curBlock.find('.grade-value[row-index=' + curCell.getAttr('row-index') + ']');
+                        }
+                        break;
+                }
+                if(cell && cell.exists() && cell.hasClass('gradable')){
+                    this.submitActiveForm();
+                    this.showCell(cell);
                 }
             },
 
