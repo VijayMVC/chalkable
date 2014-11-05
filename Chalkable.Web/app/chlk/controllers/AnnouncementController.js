@@ -351,7 +351,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcementTypeId_ = types[0].getId();
             }
             var result = this.announcementService
-                .addAnnouncement(classId_, announcementTypeId_)
+                .addAnnouncement(classId_, announcementTypeId_, date_)
                 .catchError(function(error){
                     if(error.getStatus && error.getStatus() == 500){
                         var res = JSON.parse(error.getResponse());
