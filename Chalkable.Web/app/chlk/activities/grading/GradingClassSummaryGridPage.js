@@ -492,11 +492,11 @@ NAMESPACE('chlk.activities.grading', function () {
                                         node.addClass('not-equals');
                                     }
                                 }
-                                this.updateDropDown(suggestions, node);
                             }
                         }
                     }
-                    this.updateDropDown(suggestions, node);
+                    if(!(event.keyCode == ria.dom.Keys.ENTER.valueOf() && list.exists()))
+                        this.updateDropDown(suggestions, node);
                 }
                 setTimeout(function(cell){
                     var node = cell.find('.grade-autocomplete');
@@ -515,18 +515,19 @@ NAMESPACE('chlk.activities.grading', function () {
                 var list = this.dom.find('.autocomplete-list:visible'), canGoDown, hovered;
 
                 if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
-                    if(node.hasClass('error')){
-                        return false;
-                    }else{
-                        if(list.exists()){
-                            hovered = list.find('.hovered');
-                            if(hovered.exists()){
-                                hovered.trigger('click');
-                                return false;
-                            }
+                    if(list.exists()){
+                        hovered = list.find('.hovered');
+                        if(hovered.exists()){
+                            hovered.trigger('click');
+
+                            return false;
                         }
-                        this.setItemValue(node.getValue(), node, true);
                     }
+                    if(node.hasClass('error'))
+                        return false;
+
+                    this.setItemValue(node.getValue(), node, true);
+
                 }
                 var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
                 var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
@@ -825,7 +826,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
                 input.removeClass('not-equals');
                 this.setItemValue(value, input, !isFill);
-                var that = this;
                 if(isFill){
                     this.fillAllOneValue(cell, value);
                 }
@@ -1287,7 +1287,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 _DEBUG && console.time('repainting');
 
                 var pIndex = chlk.controls.LeftRightToolbarControl.GET_CURRENT_PAGE(this.dom.find('.ann-types-container .grid-toolbar'));
-                console.info(pIndex);
                 this.refreshD(ria.async.Future.$fromData(this._lastModel))
                     .then(function () {
                         var node = this.dom.find('.ann-types-container .grid-toolbar');

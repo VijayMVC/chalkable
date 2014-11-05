@@ -224,17 +224,15 @@ NAMESPACE('chlk.activities.grading', function () {
                 var list = this.dom.find('.autocomplete-list:visible'),
                     activeCell = node.parent('.active-cell'), canGoDown;
                 if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){
-                    if(!node.hasClass('error') && !node.hasClass('blocked')){
-                        if(list.exists()){
-                            var hovered = list.find('.hovered');
-                            if(hovered.exists()){
-                                hovered.trigger('click');
-                                return false;
-                            }
+                    if(list.exists()){
+                        var hovered = list.find('.hovered');
+                        if(hovered.exists()){
+                            hovered.trigger('click');
+                            return false;
                         }
-                        this.setItemValue(activeCell, null, true);
-
                     }
+                    if(!node.hasClass('error') && !node.hasClass('blocked'))
+                        this.setItemValue(activeCell, null, true);
                 }
 
                 //setTimeout(function(node, event){
@@ -351,7 +349,6 @@ NAMESPACE('chlk.activities.grading', function () {
                             node.removeClass('blocked');
                         else
                             node.addClass('blocked');
-                        this.updateDropDown(suggestions, node);
                     }
                     this.updateDropDown(suggestions, node);
                 }
@@ -399,7 +396,6 @@ NAMESPACE('chlk.activities.grading', function () {
             function listItemBtnClick(node, event){
                 var text = node.getHTML().trim();
                 this.hideDropDown();
-                console.info('listItemBtnClick');
                 var value = text, isFill = false;
                 var cell = this.dom.find('.active-cell');
                 cell.find('.error').removeClass('error');
@@ -467,7 +463,6 @@ NAMESPACE('chlk.activities.grading', function () {
                         .show();
                 }else{
                     this.hideDropDown();
-                    console.info('updateDropDown');
                 }
             },
 
@@ -555,7 +550,6 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('submit', '.grade-container form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitForm(node, event){
-                console.info('submitForm');
                 this.hideDropDown();
                 var res = !node.find('input[name="gradevalue"]').hasClass('error');
                 var valueInput = node.find('.value-input'), value = valueInput.getValue() || '';
@@ -585,7 +579,6 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.value-input, .grading-input-popup')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeClick(node, event){
-                console.info('gradeClick');
                 this.hideDropDown();
             },
 
@@ -666,7 +659,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 _DEBUG && console.time('repainting');
 
                 var pIndex = chlk.controls.LeftRightToolbarControl.GET_CURRENT_PAGE(this.dom.find('.ann-types-container .grid-toolbar'));
-                console.info(pIndex);
                 this.refreshD(ria.async.Future.$fromData(this._lastModel))
                     .then(function () {
                         var node = this.dom.find('.ann-types-container .grid-toolbar');
