@@ -2,9 +2,12 @@
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionResults;
+using Chalkable.Web.Authentication;
+using Chalkable.Web.Controllers;
 using Chalkable.Web.Tools;
 using Mindscape.Raygun4Net;
 
@@ -51,6 +54,16 @@ namespace Chalkable.Web.ActionFilters
                 };
                 filterContext.Result = jsonresult;
             }
+
+            if (!filterContext.HttpContext.Request.IsAjaxRequest() && filterContext.Exception is HttpException && ((HttpException)filterContext.Exception).GetHttpCode() == 401)
+            {
+                filterContext.ExceptionHandled = true;
+                filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+                filterContext.Result = new RedirectToRouteResult(HtmlExtensions.ParseExpression<HomeController>(c => c.Index() ));
+
+                ChalkableAuthentication.SignOut();
+            }
+
             base.OnException(filterContext);
         }
     }
