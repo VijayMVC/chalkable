@@ -41,10 +41,11 @@
       <!-- DB Settings -->
       <Setting name="ChalkableMaster" value="" />
       <Setting name="ChalkableSchool" value="" />
-      <Setting name="ChalkableSchoolTemplate" value="" />
+      <!--<Setting name="ChalkableSchoolTemplate" value="" />-->
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />
@@ -66,10 +67,11 @@
       <!-- DB Settings -->
       <Setting name="ChalkableMaster" value="" />
       <Setting name="ChalkableSchool" value="" />
-      <Setting name="ChalkableSchoolTemplate" value="" />
+      <!--<Setting name="ChalkableSchoolTemplate" value="" />-->
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />

@@ -22,11 +22,11 @@
     <ConfigurationSettings>
       <!-- DB settings -->
       <Setting name="ChalkableMaster"/>
-      <Setting name="ChalkableSchoolTemplateDbName"/>
       <Setting name="ChalkableSchool"/>
       <Setting name="ChalkableSchoolDbUser"/>
       <Setting name="ChalkableSchoolDbPwd"/>
       <Setting name="ChalkableSchoolDbServers"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
       
       <!-- CDN and content settings-->
       <Setting name="Domain"/>
@@ -56,6 +56,7 @@
       <!-- DB settings -->
       <Setting name="ChalkableMaster"/>
       <Setting name="ChalkableSchool"/>
+      <!--<Setting name="ChalkableSchoolTemplate"/>-->
       <Setting name="ChalkableSchoolDbUser"/>
       <Setting name="ChalkableSchoolDbPwd"/>
       <Setting name="ChalkableSchoolDbServers"/>
@@ -82,6 +83,7 @@
       <!-- DB settings -->
       <Setting name="ChalkableMaster"/>
       <Setting name="ChalkableSchool"/>
+      <!--<Setting name="ChalkableSchoolTemplate"/>-->
       <Setting name="ChalkableSchoolDbUser"/>
       <Setting name="ChalkableSchoolDbPwd"/>
       <Setting name="ChalkableSchoolDbServers"/>
