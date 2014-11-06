@@ -163,7 +163,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionFilters\AjaxHandleError.cs" />
+    <Compile Include="ActionFilters\HandleErrorFilter.cs" />
     <Compile Include="ActionFilters\AuthorizationFilter.cs" />
     <Compile Include="ActionFilters\TraceControllerFilter.cs" />
     <Compile Include="Authentication\ChalkableAuthentication.cs" />
