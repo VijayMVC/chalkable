@@ -444,8 +444,6 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeKeyUp(node, event){
                 var suggestions = [], cell = node.parent('.active-cell');
-                var isDown = event.keyCode == ria.dom.Keys.DOWN.valueOf();
-                var isUp = event.keyCode == ria.dom.Keys.UP.valueOf();
                 var list = this.dom.find('.autocomplete-list:visible');
                 var value = (node.getValue() || '').trim(), fillItem = node.parent().find('.fill-grade');
                 if(!value){
@@ -462,7 +460,10 @@ NAMESPACE('chlk.activities.grading', function () {
                     case Msg.Late.toLowerCase(): fillItem.setAttr('disabled', true);break;
                     default: value ? fillItem.setAttr('disabled', false) : fillItem.setAttr('disabled', true);
                 }
-                if(!isDown && !isUp){
+                if(!node.hasClass('cell-showed') &&
+                    event.keyCode != ria.dom.Keys.UP.valueOf() &&
+                    event.keyCode != ria.dom.Keys.DOWN.valueOf()
+                ){
                     if(event.keyCode == ria.dom.Keys.ENTER.valueOf() && !node.hasClass('error')){
 
                     }else{
@@ -498,6 +499,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(!(event.keyCode == ria.dom.Keys.ENTER.valueOf() && list.exists()))
                         this.updateDropDown(suggestions, node);
                 }
+                node.removeClass('cell-showed');
                 setTimeout(function(cell){
                     var node = cell.find('.grade-autocomplete');
                     var numericValue = parseFloat(node.getValue());
@@ -605,8 +607,10 @@ NAMESPACE('chlk.activities.grading', function () {
                     this.submitActiveForm();
                     if(needsTimeout)
                         setTimeout(function(){this.showCell(cell)}.bind(this), 500);
-                    else
+                    else{
                         this.showCell(cell);
+                        cell.find('.value-input').addClass('cell-showed');
+                    }
                 }
             },
 
@@ -825,7 +829,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     value = text.split('(fill all)')[0].trim();
                 }
                 input.removeClass('not-equals');
-                this.setItemValue(value, input, !isFill);
+                this.setItemValue(value, input, true);
                 if(isFill){
                     this.fillAllOneValue(cell, value);
                 }
@@ -1024,6 +1028,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     this.dom.find('[row-index=' + index + ']').addClass('active-row');
                 }
                 parent.addClass('active-cell');
+
                 var mp = parent.parent('.marking-period-container');
                 this.addFormToActiveCell(parent);
                 if(!parent.hasClass('avg-value-container')){
