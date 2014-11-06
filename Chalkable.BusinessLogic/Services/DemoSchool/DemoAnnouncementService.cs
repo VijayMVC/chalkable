@@ -106,7 +106,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
+            var draft = GetLastDraft();
             var res = Storage.AnnouncementStorage.Create(classAnnType.Id, classId, expiresDate, Context.PersonId ?? 0);
+
+            if (draft != null)
+            {
+                res.Content = draft.Content;
+            }
             return res;
         }
 
