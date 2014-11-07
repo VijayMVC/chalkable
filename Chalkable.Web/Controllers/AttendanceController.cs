@@ -54,9 +54,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult NotTakenAttendanceClasses(DateTime date)
+        public ActionResult NotTakenAttendanceClasses(DateTime? date)
         {
-            var notTakenAttendanceClasses = SchoolLocator.AttendanceService.GetNotTakenAttendanceClasses(date);
+            date = (date ?? SchoolLocator.Context.NowSchoolYearTime);
+            var notTakenAttendanceClasses = SchoolLocator.AttendanceService.GetNotTakenAttendanceClasses(date.Value);
             return Json(ClassViewData.Create(notTakenAttendanceClasses));
         }
 
