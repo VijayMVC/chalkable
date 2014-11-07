@@ -1,3 +1,20 @@
+mixin TeacherClassStandardsGridSummaryCell(info, ableEdit)
+    -var value = self.displayGrade(info.getGradeValue())
+    div(
+        class= (value ? "" : "empty-grade"),
+        data-standardid= info.getStandardId(),
+        data-studentid= info.getStudentId(),
+        data-classid= info.getClassId(),
+        data-gradeid= info.getGradeId(),
+        data-gradingperiodid= info.getGradingPeriodId(),
+        data-comment= info.getComment()
+    ).grade-info
+        span(data-grade-value=info.getGradeValue()).grade-text=value
+        if info.getComment()
+            .with-comment
+        if ableEdit
+            .edit-cell
+
 .ann-types-container
     if !self.getGradingItems().length || !self.getStudents().length
         .no-items-text=Msg.No_grades_yet
@@ -27,6 +44,4 @@
                             data-grading-period-id=self.getGradingPeriod().getId().valueOf()
                             class=(self.isGradable() ? 'gradable' : '')
                         ).dotted-h.grade-value.letter
-                            +RenderWith(info, chlk.templates.grading.TeacherClassGradingGridStandardsItemTpl)(
-                                ableEdit = self.isAbleEdit()
-                            )
+                            +TeacherClassStandardsGridSummaryCell(info, self.isGradable())
