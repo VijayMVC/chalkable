@@ -158,6 +158,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return null;
         }
 
+        public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
+        {
+            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
+            var studentId = Context.Role == CoreRoles.STUDENT_ROLE ? Context.PersonId : null;
+            var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
+            var classPeriods = ServiceLocator.ClassPeriodService.GetClassPeriods(dateTime, null, null, studentId, teacherId);
+            var res = new List<ClassDetails>();
+            foreach (var classDetailse in classes)
+            {
+                var sa = Storage.StiAttendanceStorage.GetSectionAttendance(dateTime, classDetailse.Id);
+                if(sa == null || !sa.IsPosted)
+                res.Add(classDetailse);
+            }
+            if (dateTime.Date == Context.NowSchoolTime.Date)
+            {
+                var time = (int)((dateTime - dateTime.Date).TotalMinutes) - 3;
+                classPeriods = classPeriods.Where(x => x.Period.StartTime <= time).ToList();
+            }
+            return res.Where(x => classPeriods.Any(y => y.ClassRef == x.Id)).ToList();
+        }
+
         public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
         {
             throw new NotImplementedException();
