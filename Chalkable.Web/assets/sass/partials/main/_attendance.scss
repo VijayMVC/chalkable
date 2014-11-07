@@ -1,5 +1,21 @@
 $blue-color: #2f7790;
 
+.class-list-page{
+  .class-button{
+    overflow: visible !important;
+
+    .alerts-icon{
+      right: -9px;
+      display: none;
+    }
+  }
+
+  .classes-bar, .classes-bar .first-container{
+    margin-top: -20px;
+    padding-top: 20px;
+  }
+}
+
 BODY {
   #submit-attendance-button{
     font-weight: bold;
