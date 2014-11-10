@@ -32,7 +32,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom]],
             OVERRIDE, function loadGradingPeriod(container){
                 clearTimeout(gradingGridTimer);
-                BASE();
+                BASE(container);
             },
 
             [ria.mvc.DomEventBind('change', '.dropped-checkbox')],
