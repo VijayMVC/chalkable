@@ -43,6 +43,7 @@ namespace Chalkable.Web.Controllers
             }
             catch (Exception exception)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = 500;
                 return new ChalkableJsonResult(false)
                 {
@@ -162,6 +163,7 @@ namespace Chalkable.Web.Controllers
             }
             catch (Exception exception)
             {
+                Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = 500;
                 return new ChalkableJsonResult(false)
                 {

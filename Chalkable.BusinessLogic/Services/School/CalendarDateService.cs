@@ -33,7 +33,10 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new DateDataAccess(uow, Context.SchoolLocalId);
-                return da.GetDateOrNull(new DateQuery {FromDate = date, ToDate = date});
+                var dateQuery = new DateQuery {FromDate = date, ToDate = date};
+                if (Context.SchoolYearId.HasValue)
+                    dateQuery.SchoolYearId = Context.SchoolYearId.Value;
+                return da.GetDateOrNull(dateQuery);
             }
         }
 

@@ -79,6 +79,7 @@ Get-Item "Chalkable.Web\app\chlk\chlk-constants.js" | PutFile -dbase "app\chlk"
 
 Get-Item "Chalkable.Web\app\chlk\index" | PutDir -dbase "app\chlk\index"
 Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
+Get-Item "Chalkable.Web\app\lib" | PutDir -dbase "app\lib"
 Get-Item "Chalkable.Web\app\highcharts" | PutDir -dbase "app\highcharts"
 
 Get-Item "Chalkable.Web\Content" | PutDir -dbase "Content"

@@ -124,11 +124,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, Number]],
-            ria.async.Future, function addAnnouncement(classId_, classAnnouncementTypeId_) {
+            [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate]],
+            ria.async.Future, function addAnnouncement(classId_, classAnnouncementTypeId_, expiresDate_) {
                 return this.get('Announcement/Create.json', chlk.models.announcement.AnnouncementForm, {
                     classId: classId_ ? classId_.valueOf() : null,
-                    classAnnouncementTypeId: classAnnouncementTypeId_
+                    classAnnouncementTypeId: classAnnouncementTypeId_,
+                    expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
                 }).catchException(ria.ajax.AjaxException, function (ex) {
                     if (ex.getStatus() == 500) {
                         var res = JSON.parse(error.getResponse());

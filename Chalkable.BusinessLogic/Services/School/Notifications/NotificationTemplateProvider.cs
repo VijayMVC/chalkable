@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                                             "^.Other.AnnouncementTitle ^.Other.AnnouncementTypeName</a> ^.Other.PersonQuestion"; 
 
         public const string ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION_TO_PERSON";
-        private const string ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "Student <a href='#students/details/^.Notification.QuestionPerson.Id'>^.Notification.QuestionPerson.FullName</a> added  new attachment";
+        private const string ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "<a href='#students/details/^.Notification.QuestionPerson.Id'>^.Notification.QuestionPerson.FullName</a> added  new attachment";
 
         public const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON";
         private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a> ^.Other.AnnouncementOwner.ShortSalutationName </a> graded or commented your <a href='#announcement/view/^.Notification.AnnouncementRef'> ^.Other.AnnouncementTitle</a> ^.Other.AnnouncementTypeName";

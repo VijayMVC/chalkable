@@ -339,6 +339,15 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
         ])],
         [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+        function classListFromBarAction(date_, classId_) {
+            return this.classListAction(classId_, date_);
+        },
+
+        [chlk.controllers.Permissions([
+            [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
+        ])],
+        [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean]],
         function classListAction(classId, date_, isUpdate_, isProfile_, byPostButton_) {
             if(!classId.valueOf())
@@ -347,6 +356,16 @@ NAMESPACE('chlk.controllers', function (){
                 .getClassList(classId, date_)
                 .attach(this.validateResponse_())
                 .then(function(items){
+                    if(!isProfile_){
+                        var res = this.attendanceService
+                            .getNotTakenAttendanceClasses(date_)
+                            .attach(this.validateResponse_())
+                            .then(function(items){
+                                return new chlk.models.attendance.NotTakenAttendanceClassesViewData(items);
+                            }.bind(this));
+                        this.BackgroundUpdateView(chlk.activities.attendance.ClassListPage, res, chlk.activities.lib.DontShowLoader());
+                    }
+
                     date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
                     this.getContext().getSession().set(ChlkSessionConstants.ATTENDANCE_DATA, items);
                     var classes = this.classService.getClassesForTopBar(true);

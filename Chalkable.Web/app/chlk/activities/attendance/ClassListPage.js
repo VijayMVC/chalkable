@@ -2,6 +2,8 @@ REQUIRE('chlk.activities.attendance.BasePostAttendancePage');
 REQUIRE('chlk.templates.attendance.ClassAttendanceTpl');
 REQUIRE('chlk.templates.attendance.ClassList');
 REQUIRE('chlk.templates.common.InfoMsg');
+REQUIRE('chlk.templates.attendance.NotTakenAttendanceClassesTpl');
+REQUIRE('chlk.templates.attendance.TopBar');
 
 NAMESPACE('chlk.activities.attendance', function () {
     "use strict";
@@ -39,6 +41,14 @@ NAMESPACE('chlk.activities.attendance', function () {
                 if(row.hasClass('selected') && !row.hasClass('reason-changed')){
                     this.showDropDown();
                 }
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.NotTakenAttendanceClassesTpl)],
+            VOID, function doUpdateClasses(tpl, model, msg_) {
+                var dom = this.dom;
+                model.getItems().forEach(function(item){
+                    dom.find('.alerts-icon[data-id=' + item.getId() + ']').show();
+                })
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.KEY_DOWN.valueOf(), '.chlk-grid')],

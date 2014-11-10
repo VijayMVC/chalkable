@@ -170,7 +170,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new List<ClassPeriod>();            
 
             if (d.SchoolYearRef != mp.SchoolYearRef)
-                throw new Exception("d.SchoolYearRef != mp.SchoolYearRef");
+                throw new ChalkableException("d.SchoolYearRef != mp.SchoolYearRef");
 
             return GetClassPeriods(mp.SchoolYearRef, mp.Id, classId, roomId, null, d.DayTypeRef, studentId, teacherId, time);
         }

@@ -137,6 +137,7 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                                 div(data-tooltip="The suggested grade is the system calculated average determined by your iNow settings") ?
             .disciplines-block
                 h2=Msg.Discipline
+
                 if self.getDisciplines()
                     items = self.getSortedDisciplines()
                     empty = !self.getDisciplines().length
@@ -147,10 +148,11 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10
                         each block in items
                             .disciplines-items-block
                                 each discipline in block
-                                    .discipline-item
-                                        .count=discipline.getCount()
-                                        name = discipline.getType().getName()
-                                        div(data-tooltip=name, data-tooltip-type="overflow").description=name
+                                    if discipline.getCount() > 0
+                                        .discipline-item
+                                            .count=discipline.getCount()
+                                            name = discipline.getType().getName()
+                                            div(data-tooltip=name, data-tooltip-type="overflow").description=name
                         if empty
                             .empty-disciplines=Msg.No_discipline_issues
         .comments-notes-block

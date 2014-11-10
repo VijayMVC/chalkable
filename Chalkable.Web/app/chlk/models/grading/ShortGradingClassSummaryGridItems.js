@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.grading', function () {
         String, function displayTotalPoint(){
             var totalPoint = this.getTotalPoint();
             return this.getMaxTotalPoint() && (totalPoint || totalPoint == 0)
-                ? (totalPoint.toString() + '/' + this.getMaxTotalPoint().toString()) : '';
+                ? (totalPoint.toFixed(2).toString() + '/' + this.getMaxTotalPoint().toString()) : '';
         }
     ]);
 

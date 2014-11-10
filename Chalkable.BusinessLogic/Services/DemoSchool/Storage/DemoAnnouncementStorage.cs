@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web.WebSockets;
@@ -165,10 +166,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             SetAnnouncementProcessor(new BaseAnnouncementProcessor(storage));
         }
 
-        public DemoAnnouncementStorage(DemoStorage storage, Dictionary<int, AnnouncementComplex> anns)
+        public DemoAnnouncementStorage(DemoStorage storage, Dictionary<int, AnnouncementComplex> anns, int lastIndex)
             : base(storage, x => x.Id)
         {
             data = anns;
+            Index = lastIndex;
             SetAnnouncementProcessor(new BaseAnnouncementProcessor(storage));
         }
 
@@ -179,7 +181,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IDemoAnnouncementStorage GetTeacherStorage()
         {
-            var storage = new DemoAnnouncementStorage(Storage, data);
+            var storage = new DemoAnnouncementStorage(Storage, data, Index);
             storage.SetAnnouncementProcessor(new TeacherAnnouncementProcessor(Storage));
             return storage;
         }
@@ -199,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public virtual AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
             if (Storage.Context.PersonId == null)
-                throw new ChalkableException("User is local id is null");
+                throw new ChalkableException("User local id is null");
             var announcements = data.Select(x => x.Value);
             if (query.Id.HasValue)
                 announcements = announcements.Where(x => x.Id == query.Id);
@@ -469,6 +471,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return res;
         }
 
+        private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
+
         public void DuplicateAnnouncement(int id, IList<int> classIds)
         {
             var sourceAnnouncement = GetDetails(id, Storage.Context.PersonId.Value, Storage.Context.Role.Id);
@@ -560,7 +564,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                 foreach (var sourceAnnouncementAttachment in sourceAnnouncement.AnnouncementAttachments)
                 {
-                    Storage.AnnouncementAttachmentStorage.Add(new AnnouncementAttachment()
+                    var newAnnAttachment = Storage.AnnouncementAttachmentStorage.Add(new AnnouncementAttachment()
                     {
                         AnnouncementRef = resAnnouncement.Id,
                         AttachedDate = sourceAnnouncementAttachment.AttachedDate,
@@ -569,6 +573,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         PersonRef = sourceAnnouncementAttachment.PersonRef,
                         SisActivityId = resAnnouncement.SisActivityId
                     });
+
+
+                    var content = Storage.BlobStorage.GetBlob(ATTACHMENT_CONTAINER_ADDRESS, sourceAnnouncementAttachment.Id.ToString(CultureInfo.InvariantCulture));
+                    if (content != null)
+                    {
+                        Storage.BlobStorage.Add(ATTACHMENT_CONTAINER_ADDRESS, newAnnAttachment.Id.ToString(CultureInfo.InvariantCulture), content);
+                    }
                 }
                 
                 var announcementAttachments = Storage.AnnouncementAttachmentStorage.GetAll(resAnnouncement.Id);

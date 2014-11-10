@@ -38,6 +38,12 @@ NAMESPACE('chlk.templates.grading', function () {
                 return (this.gradingItems || []).sort(function (_1, _2) {
                     return _1.getTitle() < _2.getTitle() ? -1 : _1.getTitle() > _2.getTitle() ? 1 : 0;
                 });
+            },
+
+            String, function displayGrade(grade){
+                if(isNaN(parseFloat(grade)))
+                    return grade;
+                return grade || grade == 0 ? parseFloat(grade).toFixed(2) : '';
             }
         ]);
 });

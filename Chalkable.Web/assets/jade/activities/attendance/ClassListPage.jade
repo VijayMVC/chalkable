@@ -20,7 +20,7 @@ h2.page-title Attendance
 .loader
 .students-list.loader-container
     if(self.hasLeftRightToolBar())
-        +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
+        +LeftRightToolbar(topItems, chlk.templates.attendance.TopBar, 'attendance', 'classListFromBar', [self.getDate().format('mm-dd-yy')])(
             selectedItemId=selectedId ? selectedId.valueOf() : "",
             disabledClass = 'x-hidden'
         ).classes-bar

@@ -22,7 +22,7 @@ namespace Chalkable.Web.Controllers
     {
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult Create(int? classAnnouncementTypeId, int? classId)
+        public ActionResult Create(int? classAnnouncementTypeId, int? classId, DateTime? expiresDate)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -62,7 +62,15 @@ namespace Chalkable.Web.Controllers
 
             if (classId.HasValue && classAnnType != null)
             {
-                var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnType, classId.Value);
+                var annExpiredDate = expiresDate.HasValue ? expiresDate.Value : 
+                                    Context.SchoolYearEndDate.HasValue ? Context.SchoolYearEndDate.Value : 
+                                    DateTime.MaxValue;
+                var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnType, classId.Value, annExpiredDate);
+
+                // annExporedDate was assigned to have a correct announcements orderings, lets clear it if not user-provided
+                if (!expiresDate.HasValue)
+                    annDetails.Expires = DateTime.MinValue;
+
                 var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x => x.PersonRef).ToList();
                 var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
                 Debug.Assert(Context.PersonId.HasValue);

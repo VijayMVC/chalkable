@@ -351,7 +351,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcementTypeId_ = types[0].getId();
             }
             var result = this.announcementService
-                .addAnnouncement(classId_, announcementTypeId_)
+                .addAnnouncement(classId_, announcementTypeId_, date_)
                 .catchException(chlk.services.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
@@ -859,6 +859,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setStandards(model.getStandards());
                         announcement.setGradable(model.isGradable());
                         announcement.setGradingStudentsCount(model.getGradingStudentsCount());
+                        announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
                     }

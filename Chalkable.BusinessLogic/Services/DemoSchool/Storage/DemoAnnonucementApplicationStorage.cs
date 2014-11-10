@@ -51,5 +51,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
             return announcementApplications.ToList();
         }
+
+        public void DeleteByAnnouncementId(int announcementId)
+        {
+            var announcementAttachments = GetAll(announcementId, false);
+            Delete(announcementAttachments);
+        }
     }
 }

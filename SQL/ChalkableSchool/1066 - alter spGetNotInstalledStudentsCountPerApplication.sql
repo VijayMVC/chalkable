@@ -3,7 +3,7 @@ as
 declare @schoolYearId int = (select SchoolYearRef from MarkingPeriod where Id = @markingPeriodId)
 
 declare @appsIdsT table(id uniqueidentifier)
-insert into @appsIdsT 
+insert into @appsIdsT
 select ApplicationRef from ApplicationInstall
 where PersonRef = @staffId and Active = 1 and SchoolYearRef = @schoolYearId
 
@@ -18,18 +18,27 @@ and ssy.EnrollmentStatus = 0
 and ssy.SchoolYearRef = @schoolYearId
 group by ClassPerson.PersonRef
 
-declare @appStudentT table(appId uniqueidentifier, personId int)
-insert into @appStudentT
-select ApplicationRef, PersonRef from ApplicationInstall
-where Active = 1
-and ApplicationRef in (select app.id from @appsIdsT app)
-and SchoolYearRef = @schoolYearId
-and PersonRef in (select id from @personIdsT)
-
 declare @classStudentCount int = (select count(*) from @personIdsT)
-select appSt.appId as ApplicationId,
-@classStudentCount - count(appSt.personId) as NotInstalledStudentCount
-from @appStudentT appSt
-group by appSt.appId
+if @classStudentCount = 0
+begin
+	 select id as ApplicationId, 0 as NotInstalledStudentCount from @appsIdsT app
+end
+else 
+begin 
+	declare @appStudentT table(appId uniqueidentifier, studentCount int)
+	insert into @appStudentT
+	select ApplicationRef, count(PersonRef) from ApplicationInstall
+	where Active = 1
+	and ApplicationRef in (select app.id from @appsIdsT app)
+	and SchoolYearRef = @schoolYearId
+	and PersonRef in (select id from @personIdsT)
+	group by ApplicationRef
+
+
+	select app.id as ApplicationId,
+		   (case when appSt.appId is null then 0 else @classStudentCount - appSt.studentCount end) as NotInstalledStudentCount 
+	from @appsIdsT app
+	left join @appStudentT appSt on appSt.appId = app.id
+end
 
 GO

@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
         void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
         AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
+        IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime date);
         
         //TODO: OLD!!!!
         IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null);
@@ -236,6 +237,26 @@ namespace Chalkable.BusinessLogic.Services.School
             ConnectorLocator.SeatingChartConnector.UpdateChart(classId, markingPeriodId, seatingChart);
         }
 
+
+        public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
+        {
+            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
+            var studentId = Context.Role == CoreRoles.STUDENT_ROLE ? Context.PersonId : null;
+            var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
+            var classPeriods = ServiceLocator.ClassPeriodService.GetClassPeriods(dateTime, null, null, studentId, teacherId);
+            var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
+
+            classes = classes.Where(x => postedAttendances.All(y => y.SectionId != x.Id)).ToList();
+            if (dateTime.Date == Context.NowSchoolTime.Date)
+            {
+                var time = (int)((dateTime - dateTime.Date).TotalMinutes) - 3;
+                classPeriods = classPeriods.Where(x => x.Period.StartTime <= time).ToList();
+            }
+            return classes.Where(x => classPeriods.Any(y => y.ClassRef == x.Id)).ToList();
+        }
+
+
         public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
         {
             throw new NotImplementedException();
@@ -335,5 +356,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             throw new NotImplementedException();
         }
+
+
+
     }
 }

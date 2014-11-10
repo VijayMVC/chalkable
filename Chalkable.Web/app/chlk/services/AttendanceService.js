@@ -33,6 +33,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.common.ChlkDate]],
+            ria.async.Future, function getNotTakenAttendanceClasses(date_) {
+                return this.get('Attendance/NotTakenAttendanceClasses.json', ArrayOf(chlk.models.common.NameId), {
+                    date: date_ && date_.toStandardFormat()
+                });
+            },
+
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             ria.async.Future, function getSeatingChartInfo(classId, date_) {
                 return this.get('Attendance/SeatingChart.json', chlk.models.attendance.SeatingChart, {
