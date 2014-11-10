@@ -91,4 +91,4 @@ mixin SummaryInfo(presentCount, allStudentsCount)
                                         )
                             .clear
     else
-        .black-arrow.no-class-scheduled=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy'))
+        .black-arrow.no-class-scheduled=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy')) + ' or no students in this class'
