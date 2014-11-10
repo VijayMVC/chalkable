@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -29,10 +30,17 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var isAdmin = BaseSecurity.IsAdminViewer(SchoolLocator.Context);
              var schoolYearId = GetCurrentSchoolYearId();
              var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, !isAdmin ? classId : null);
+
+             
              if (schoolPersonId.HasValue)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, schoolPersonId);
                  announcements = announcements.Where(x => classes.Any(y => y.Id == x.ClassRef)).ToList();
+             }
+
+             if (DemoUserService.IsDemoUser(Context))
+             {
+                 announcements = announcements.Where(x => x.State == AnnouncementState.Created).ToList();
              }
              var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, true, start, end);
              return Json(PrepareMonthCalendar(start, end, date.Value, (dateTime, isCurrentMonth) => 
