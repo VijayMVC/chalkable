@@ -27,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStudent(IList<ClassPerson> classPersons);
         ClassDetails GetClassDetailsById(int id);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
+        IList<ClassDetails> GetClassesSortedByPeriod(int schoolYearId, int personId, int start = 0, int count = int.MaxValue); 
         IList<ClassDetails> GetClasses(string filter);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue);
         ClassPerson GetClassPerson(int classId, int personId);
@@ -427,6 +428,24 @@ namespace Chalkable.BusinessLogic.Services.School
                             MarkingPeriodId = markingPeriodId
                         });
             }
+        }
+
+
+        public IList<ClassDetails> GetClassesSortedByPeriod(int schoolYearId, int personId, int start = 0, int count = int.MaxValue)
+        {
+            var classes = GetClasses(schoolYearId, null, personId, start, count).ToList();
+            var classPeriods = ServiceLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, null, null)
+                                .OrderBy(x=>x.Period.Order).ToList();
+
+            var res = new List<ClassDetails>();
+            foreach (var classPeriod in classPeriods)
+            {
+                var c = classes.FirstOrDefault(x => x.Id == classPeriod.ClassRef);
+                if(c != null) res.Add(c);
+            }
+            classes = classes.Where(x => res.All(y => y.Id != x.Id)).OrderBy(x=>x.Name).ToList();
+            
+            return res.Concat(classes).ToList();
         }
     }
 }

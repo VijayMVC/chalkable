@@ -242,7 +242,7 @@ namespace Chalkable.Web.Controllers
 
             if (!CanTeacherViewChalkable()) return;
 
-            var classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, null, Context.PersonId.Value);
+            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod(mp.SchoolYearRef, Context.PersonId.Value);
             var gradeLevels = classes.Select(x => x.GradeLevel.Name).Distinct().ToList();
             var classNames = classes.Select(x => x.Name).ToList();
 
