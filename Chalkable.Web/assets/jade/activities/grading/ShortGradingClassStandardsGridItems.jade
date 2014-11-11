@@ -1,0 +1,47 @@
+mixin TeacherClassStandardsGridSummaryCell(info, ableEdit)
+    -var value = self.displayGrade(info.getGradeValue())
+    div(
+        class= (value ? "" : "empty-grade"),
+        data-standardid= info.getStandardId(),
+        data-studentid= info.getStudentId(),
+        data-classid= info.getClassId(),
+        data-gradeid= info.getGradeId(),
+        data-gradingperiodid= info.getGradingPeriodId(),
+        data-comment= info.getComment()
+    ).grade-info
+        span(data-grade-value=info.getGradeValue()).grade-text=value
+        if info.getComment()
+            .with-comment
+        if ableEdit
+            .edit-cell
+
+.ann-types-container
+    if !self.getGradingItems().length || !self.getStudents().length
+        .no-items-text=Msg.No_grades_yet
+    else
+        .dotted-container.name-container.with-horizontal-dots
+            .type-name(data-sort-type="name", data-sort-order="asc")=Msg.Student(true)
+            each student,i in self.getStudents()
+                name = student.getStudentInfo().getDisplayName()
+                div(row-index=i).student-name
+                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
+                    if student.isWithdrawn()
+                        div(data-tooltip="Withdrawn").withdrawn
+        +LeftRightToolbar()(
+            needDots = true,
+            roundedDots = true,
+            padding = 77
+        ).grid-toolbar.i-b.big-arrows
+            each gradingItem in self.getGradingItemsOrdered()
+                -var stId = gradingItem.getStandard().getStandardId().valueOf()
+                .dotted-container.grade-container.with-horizontal-dots
+                    .type-name(data-tooltip=gradingItem.getTooltip(), data-sort-type="standard", data-sort-id = stId)= gradingItem.getTitle()
+                    each info,i in gradingItem.getItems()
+                        div(
+                            row-index=i,
+                            data-student-id=info.getStudentId().valueOf(),
+                            data-standard-id=info.getStandardId().valueOf(),
+                            data-grading-period-id=self.getGradingPeriod().getId().valueOf()
+                            class=(self.isGradable() ? 'gradable' : '')
+                        ).dotted-h.grade-value.letter
+                            +TeacherClassStandardsGridSummaryCell(info, self.isGradable())
