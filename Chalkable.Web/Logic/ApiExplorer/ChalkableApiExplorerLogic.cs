@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Web.Compilation;
 using System.Web.Mvc;
 using System.Xml;
 using Chalkable.BusinessLogic.Services.Master;
@@ -307,9 +308,20 @@ namespace Chalkable.Web.Logic.ApiExplorer
 
         private static Dictionary<string, IList<ChalkableApiControllerDescription>> BuildApiExplorerDescriptions()
         {
+            Trace.WriteLine("#123 API LIST START");
             descriptions = new Dictionary<string, IList<ChalkableApiControllerDescription>>();
-            var asm = AppDomain.CurrentDomain.GetAssemblies().
-                Single(assembly => assembly.GetName().Name == ASSEMBLY_FILE);
+
+
+            Trace.WriteLine("#123 API LIST TEST 1");
+            var asm =
+                BuildManager.GetReferencedAssemblies()
+                    .Cast<Assembly>()
+                    .Single(assembly => assembly.GetName().Name == ASSEMBLY_FILE);
+            Trace.WriteLine("controller enum start 1{0}", asm.FullName);
+            Trace.WriteLine("#123 API LIST TEST 2");
+            var asm2 = AppDomain.CurrentDomain.GetAssemblies().
+               Single(assembly => assembly.GetName().Name == ASSEMBLY_FILE);
+            Trace.WriteLine("controller enum start 2{0}", asm2.FullName);
 
             Trace.WriteLine("controller enum start {0}", asm.FullName);
             var controllers = asm.GetExportedTypes().Where(IsChalkableController);
