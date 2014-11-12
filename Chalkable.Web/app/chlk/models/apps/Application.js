@@ -76,6 +76,9 @@ NAMESPACE('chlk.models.apps', function () {
 
             ArrayOf(chlk.models.apps.AppPlatform), 'platforms',
 
+            [ria.serialize.SerializeProperty('standardscodes')],
+            ArrayOf(String), 'standardsCodes',
+
             chlk.models.apps.BannedAppData, 'banInfo'
         ]);
 
