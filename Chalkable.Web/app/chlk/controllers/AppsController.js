@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.PictureService');
 REQUIRE('chlk.services.DeveloperService');
+REQUIRE('chlk.services.StandardService');
 
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
@@ -56,6 +57,9 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.DeveloperService, 'developerService',
 
+        [ria.mvc.Inject],
+        chlk.services.StandardService, 'standardService',
+
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.GetAppsPostData]],
         function listAction(postData_) {
@@ -104,8 +108,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.apps.Application, Boolean, Boolean]],
         ria.async.Future, function prepareAppInfo(app_, readOnly, isDraft) {
-            var result = this.categoryService
-                .getCategories()
+            var result = this.categoryService.getCategories()
                 .attach(this.validateResponse_())
                 .then(function(data){
                     var cats = data.getItems();
@@ -118,6 +121,8 @@ NAMESPACE('chlk.controllers', function (){
                     if (!appCategories) app_.setCategories([]);
                     var appPlatforms = app_.getPlatforms();
                     if (!appPlatforms) app_.setPlatforms([]);
+                    var standardsCodes = app_.getStandardsCodes();
+                    if(!standardsCodes) app_.setStandardsCodes([]);
 
                     if (!app_.getState()){
                         var appState = new chlk.models.apps.AppState();
@@ -145,7 +150,6 @@ NAMESPACE('chlk.controllers', function (){
 
                     app_.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshotPictures, readOnly));
 		    
-
                     return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, platforms, isDraft);
 
                 }, this);
