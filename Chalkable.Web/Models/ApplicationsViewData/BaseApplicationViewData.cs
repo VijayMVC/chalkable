@@ -68,6 +68,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
+        public IList<string> StandardsCodes { get; set; } 
 
         protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey)
             : base(application)
@@ -79,6 +80,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             categories = categories.Where(x => application.Categories.Any(y => y.CategoryRef == x.Id)).ToList();
             Categories = CategoryViewData.Create(categories);
             GradeLevels = application.GradeLevels.Select(x => x.GradeLevel).ToList();
+            StandardsCodes = application.ApplicationStandards.Select(x => x.StandardCode).ToList();
         }
         public static ApplicationViewData Create(Application application, IList<Category> categories, bool canGetSecretKey = false)
         {

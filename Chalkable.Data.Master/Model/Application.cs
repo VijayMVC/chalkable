@@ -171,13 +171,6 @@ namespace Chalkable.Data.Master.Model
         public int GradeLevel { get; set; }
     }
 
-    public class CommonCoreStandard
-    {
-        [PrimaryKeyFieldAttr]
-        public string Code { get; set; }
-        public string Description { get; set; }
-    }
-
     public class ApplicationStandard
     {
         public const string APPLICATION_REF_FIELD = "ApplicationRef";

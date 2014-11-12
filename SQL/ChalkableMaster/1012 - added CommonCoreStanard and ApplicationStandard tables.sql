@@ -1,10 +1,19 @@
-create table CommonCoreStandard
+create table CC_StandardCategory
 (
-	[Code] nvarchar(255) not null primary key,
-	[Description] nvarchar(max)
+	Id  uniqueidentifier not null primary key,
+	ParentCategoryRef uniqueidentifier null constraint FK_CC_StandardCategory_ParentCategory foreign key references CC_StandardCategory(Id),
+	Name nvarchar(max)
 )
 go
 
+
+create table CommonCoreStandard
+(
+	[Code] nvarchar(255) not null primary key,
+	[Description] nvarchar(max),
+	[StandardCategoryRef] uniqueidentifier not null constraint FK_CommonCoreStandard_StandardCategory foreign key references CC_StandardCategory(Id)
+)
+go
 
 create table ApplicationStandard
 (

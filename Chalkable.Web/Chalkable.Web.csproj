@@ -248,6 +248,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementStandardViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
+    <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\AppsBudgetViewData.cs" />

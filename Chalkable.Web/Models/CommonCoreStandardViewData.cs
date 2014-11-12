@@ -10,13 +10,15 @@ namespace Chalkable.Web.Models
     {
         public string StandardCode { get; set; }
         public string Description { get; set; }
+        public Guid StandardCategoryId { get; set; }
 
         public static CommonCoreStandardViewData Create(CommonCoreStandard commonCoreStandard)
         {
             return new CommonCoreStandardViewData
                 {
                     Description = commonCoreStandard.Description,
-                    StandardCode = commonCoreStandard.Code
+                    StandardCode = commonCoreStandard.Code,
+                    StandardCategoryId = commonCoreStandard.StandardCategoryRef
                 };
         }
 
