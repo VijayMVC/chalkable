@@ -52,7 +52,9 @@ NAMESPACE('chlk.services', function () {
                 var apps = this.getContext().getSession().get(ChlkSessionConstants.DEV_APPS) || [];
 
                 return apps.length == 0 || refresh_
-                    ? this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {})
+                    ? this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
+                            state: chlk.models.apps.AppStateEnum.DRAFT.valueOf()
+                        })
                           .then(function(data){
                                 this.getContext().getSession().set(ChlkSessionConstants.DEV_APPS, data.getItems());
                                 return data.getItems();
