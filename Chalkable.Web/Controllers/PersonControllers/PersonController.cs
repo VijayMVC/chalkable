@@ -28,23 +28,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Apps(int personId)
-        {
-            throw new NotImplementedException();
-            //var person = SchoolLocator.PersonService.GetPerson(personId);
-            //var appsInstalls = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            //var instaledApps = SchoolLocator.AppMarketService.ListInstalled(personId, true);
-            //var balance = personId == SchoolLocator.Context.UserLocalId
-            //                  ? MasterLocator.FundService.GetUserBalance(personId, false)
-            //                  : MasterLocator.FundService.GetUserBalance(personId);
-            //decimal? reserve = null;
-            //if (BaseSecurity.IsAdminViewer(Context) && Context.SchoolId.HasValue)
-            //    reserve = MasterLocator.FundService.GetSchoolReserve(Context.SchoolId.Value);
-            
-            //var res = PersonAppsViewData.Create(person, reserve, balance, instaledApps, appsInstalls);
-            //return Json(res, 5);
-        }
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Schedule(int personId)
         {
             var person = SchoolLocator.PersonService.GetPerson(personId);
@@ -58,7 +41,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (MasterLocator.Context.PersonId == id)
             {
                 MasterLocator.UserService.ChangePassword(MasterLocator.Context.Login, newPassword);
-                //MixPanelService.ChangedPassword(ServiceLocator.Context.UserName);
                 return Json(true);
             }
             throw new ChalkableException(ChlkResources.ERR_NOT_CURRENT_USER);

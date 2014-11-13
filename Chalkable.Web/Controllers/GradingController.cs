@@ -223,10 +223,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult StudentSummary(int studentId, int? classId)
         {
-            //throw new NotImplementedException();
-            // var announcements = ;
-            //var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime.Date, true);
-            //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentGradePerDate(studentId, mp.Id, classId);
             var res = new GradingStudentSummaryViewData {Announcements = GetGradedItems()};
             return Json(res);
         }
@@ -320,22 +316,5 @@ namespace Chalkable.Web.Controllers
 
             return Json(StudentAveragesViewData.Create(res));
         }
-
-        /*[AuthorizationFilter("Teacher ,AdminGrade, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
-        public ActionResult SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
-        {
-            //var res = SchoolLocator.StudentAnnouncementService.SetAutoGrade(studentAnnouncementId, value, applicationId);
-            //return PrepareStudentAnnouncementResponse(res);
-            throw new NotImplementedException();
-        }
-
-        private ActionResult PrepareStudentAnnouncementResponse(StudentAnnouncement studentAnn)
-        {
-            var studentAnnsInfo = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(studentAnn.AnnouncementId);
-            var res = studentAnnsInfo.First(x => x.AnnouncementId == studentAnn.AnnouncementId && x.StudentId == studentAnn.StudentId);
-            var attachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(res.AnnouncementId, 0, 1000).ToList();
-            var attc = AttachmentLogic.PrepareAttachmentsInfo(attachments.Where(x => x.PersonRef == res.StudentId).ToList());
-            return Json(StudentAnnouncementViewData.Create(res, attc));
-        }*/
     }
 }

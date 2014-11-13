@@ -21,8 +21,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date)
         {
-            var classPeriod = ServiceLocator.ClassPeriodService.GetNearestClassPeriod(classId, date);
-            if (classPeriod == null) return null;
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
             if (mp == null) return null;
             var disciplineRefferals = Storage.StiDisciplineStorage.GetList(classId, date);

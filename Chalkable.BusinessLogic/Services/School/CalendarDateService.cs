@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -14,14 +13,12 @@ namespace Chalkable.BusinessLogic.Services.School
         DateTime GetDbDateTime();
         IList<Date> GetDays(int markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue);
         IList<Date> GetLastDays(int schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = int.MaxValue);
-        Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId);
         void Add(IList<Date> days);
         void Edit(IList<Date> dates);
         void Delete(DateTime date);
         void Delete(IList<DateTime> date);
     }
 
-    //TODO: needs tests
     public class CalendarDateService : SchoolServiceBase, ICalendarDateService
     {
         public CalendarDateService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
@@ -83,11 +80,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DateDataAccess(uow, Context.SchoolLocalId).Insert(days);
-                uow.Commit();
-            }
+            DoUpdate(u => new DateDataAccess(u, Context.SchoolLocalId).Insert(days));
         }
 
         public void Delete(DateTime date)
@@ -108,36 +101,11 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         
-        public Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId);
-                var res = new Date
-                    {
-                        Day = date,
-                        IsSchoolDay = schoolDay,
-                        SchoolYearRef = schoolYearId,
-                        DayTypeRef = dateTypeId,
-                        SchoolRef = sy.SchoolRef
-                    };
-                new DateDataAccess(uow, Context.SchoolLocalId).Insert(res);
-                uow.Commit();
-                return res;
-            }
-        }
-
         public void Edit(IList<Date> dates)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DateDataAccess(uow, Context.SchoolLocalId).Update(dates);
-                uow.Commit();
-            }
+            DoUpdate(u => new DateDataAccess(u, Context.SchoolLocalId).Update(dates));
         }
 
         public void Delete(IList<DateTime> dates)

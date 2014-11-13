@@ -52,6 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IStudentService StudentService { get; }
         IStaffService StaffService { get; }
         IUserSchoolService UserSchoolService { get; }
+        IBellScheduleService BellScheduleService { get; }
         IDbService SchoolDbService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -103,6 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IStudentService studentService;
         private IUserSchoolService userSchoolService;
         private IStaffService staffService;
+        private IBellScheduleService bellScheduleService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -154,6 +156,7 @@ namespace Chalkable.BusinessLogic.Services.School
             studentService = new StudentService(this);
             staffService = new StaffService(this);
             userSchoolService = new UserSchoolService(this);
+            bellScheduleService = new BellScheduleService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -202,6 +205,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IStudentService StudentService { get { return studentService; } }
         public IStaffService StaffService { get { return staffService; } }
         public IUserSchoolService UserSchoolService { get { return userSchoolService; } }
+        public IBellScheduleService BellScheduleService { get { return bellScheduleService; } }
         public IDbService SchoolDbService
         {
             get { return schoolDbService; }

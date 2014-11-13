@@ -1,4 +1,5 @@
-﻿using Chalkable.Data.Common;
+﻿using System;
+using Chalkable.Data.Common;
 using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -24,6 +25,23 @@ namespace Chalkable.BusinessLogic.Services.School
         protected UnitOfWork Update()
         {
             return ServiceLocator.SchoolDbService.GetUowForUpdate();
+        }
+
+        public void DoUpdate(Action<UnitOfWork> action)
+        {
+            using (var uow = Update())
+            {
+                action(uow);
+                uow.Commit();
+            }
+        }
+
+        public T DoRead<T>(Func<UnitOfWork, T> func)
+        {
+            using (var uow = Update())
+            {
+                return func(uow);
+            }
         }
     }
 

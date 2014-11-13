@@ -14,7 +14,6 @@ namespace Chalkable.Data.School.Model
         public int DayTypeRef { get; set; }
         [PrimaryKeyFieldAttr]
         public int ClassRef { get; set; }
-        public int SchoolRef { get; set; }
 
         private Period period;
         [DataEntityAttr]
@@ -28,11 +27,5 @@ namespace Chalkable.Data.School.Model
                     PeriodRef = value.Id;
             }
         }
-    }
-
-    public class ClassPeriodDetails : ClassPeriod
-    {
-        //[DataEntityAttr]
-        //public Room Room { get; set; }
     }
 }

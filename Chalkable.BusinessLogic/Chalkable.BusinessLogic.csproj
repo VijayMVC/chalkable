@@ -274,6 +274,7 @@
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\BellScheduleService.cs" />
     <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
     <Compile Include="Services\School\ApplicationSchoolService.cs" />
     <Compile Include="Services\School\AppMarketService.cs" />

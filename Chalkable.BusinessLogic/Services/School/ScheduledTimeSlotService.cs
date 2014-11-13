@@ -20,41 +20,22 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<ScheduledTimeSlot> scheduledTimeSlots)
         {
-            using (var uow = Update())
-            {
-                var da = new ScheduledTimeSlotDataAccess(uow, null);
-                da.Insert(scheduledTimeSlots);
-                uow.Commit();
-            }
+            DoUpdate(u => new ScheduledTimeSlotDataAccess(u, null).Insert(scheduledTimeSlots));
         }
 
         public void Edit(IList<ScheduledTimeSlot> scheduledTimeSlots)
         {
-            using (var uow = Update())
-            {
-                var da = new ScheduledTimeSlotDataAccess(uow, null);
-                da.Update(scheduledTimeSlots);
-                uow.Commit();
-            }
+            DoUpdate(u => new ScheduledTimeSlotDataAccess(u, null).Update(scheduledTimeSlots));
         }
 
         public void Delete(IList<ScheduledTimeSlot> scheduledTimeSlots)
         {
-            using (var uow = Update())
-            {
-                var da = new ScheduledTimeSlotDataAccess(uow, null);
-                da.Delete(scheduledTimeSlots);
-                uow.Commit();
-            }
+            DoUpdate(u => new ScheduledTimeSlotDataAccess(u, null).Delete(scheduledTimeSlots));
         }
 
         public IList<ScheduledTimeSlot> GetAll()
         {
-            using (var uow = Read())
-            {
-                var da = new ScheduledTimeSlotDataAccess(uow, null);
-                return da.GetAll();
-            }
+            return DoRead(u => new ScheduledTimeSlotDataAccess(u, null).GetAll());
         }
     }
 }

@@ -5,6 +5,7 @@ using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
 using AlphaGrade = Chalkable.StiConnector.SyncModel.AlphaGrade;
 using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
+using BellSchedule = Chalkable.StiConnector.SyncModel.BellSchedule;
 using ClassroomOption = Chalkable.StiConnector.SyncModel.ClassroomOption;
 using DayType = Chalkable.StiConnector.SyncModel.DayType;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
@@ -54,10 +55,12 @@ namespace Chalkable.StiImport.Services
             DeleteClassPersons();
             Log.LogInfo("delete class periods");
             DeleteClassPeriods();
-            Log.LogInfo("delete periods");
-            DeletePeriods();
             Log.LogInfo("delete schedule time slot");
             DeleteScheduledTimeSlots();
+            Log.LogInfo("delete bell schedules");
+            DeleteBellSchedules();
+            Log.LogInfo("delete periods");
+            DeletePeriods();
             Log.LogInfo("delete marking period classes");
             DeleteMarkingPeriodClasses();
             Log.LogInfo("delete class standards");
@@ -224,6 +227,19 @@ namespace Chalkable.StiImport.Services
             }
         }
 
+        private void DeleteScheduledTimeSlots()
+        {
+            if (context.GetSyncResult<ScheduledTimeSlot>().Deleted == null)
+                return;
+            IList<Data.School.Model.ScheduledTimeSlot> sts =
+                context.GetSyncResult<ScheduledTimeSlot>().Deleted.Select(x => new Data.School.Model.ScheduledTimeSlot
+                {
+                    BellScheduleRef = x.BellScheduleID,
+                    PeriodRef = x.TimeSlotID
+                }).ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.Delete(sts);
+        }
+
         private void DeletePeriods()
         {
             if (context.GetSyncResult<TimeSlot>().Deleted == null)
@@ -232,19 +248,17 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.PeriodService.Delete(ids);
         }
 
-        private void DeleteScheduledTimeSlots()
+        private void DeleteBellSchedules()
         {
-            if (context.GetSyncResult<ScheduledTimeSlot>().Deleted == null)
+            if (context.GetSyncResult<BellSchedule>().Deleted == null)
                 return;
-            IList<Data.School.Model.ScheduledTimeSlot> sts =
-                context.GetSyncResult<ScheduledTimeSlot>().Deleted.Select(x => new Data.School.Model.ScheduledTimeSlot
-                    {
-                        BellScheduleID = x.BellScheduleID,
-                        TimeSlotID = x.TimeSlotID
-                    }).ToList();
-            ServiceLocatorSchool.ScheduledTimeSlotService.Delete(sts);
+            var bs = context.GetSyncResult<BellSchedule>().Deleted.Select(x => new Data.School.Model.BellSchedule
+            {
+                Id = x.BellScheduleID
+            }).ToList();
+            ServiceLocatorSchool.BellScheduleService.Delete(bs);
         }
-
+        
         private void DeleteMarkingPeriodClasses()
         {
             if (context.GetSyncResult<SectionTerm>().Deleted == null)

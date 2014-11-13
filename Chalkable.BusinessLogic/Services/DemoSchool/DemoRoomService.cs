@@ -5,7 +5,6 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -58,17 +57,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.RoomStorage.Update(rooms);
         }
 
-        public void DeleteRoom(int id)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-
-            if (Storage.ClassPeriodStorage.Exists(new ClassPeriodQuery { RoomId = id }))
-                throw new ChalkableException(ChlkResources.ERR_ROOM_CANT_DELETE_ROOM_TYPE_ASSIGNED_TO_CLASSPERIOD);
-            Storage.RoomStorage.Delete(id);
-        }
-
         public void DeleteRooms(IList<int> ids)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -84,9 +72,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Room WhereIsPerson(int personId, DateTime dateTime)
         {
-            var classPeriod = ServiceLocator.ClassPeriodService.GetClassPeriodForSchoolPersonByDate(personId, dateTime);
-            if (classPeriod == null) return null;
-            var c = ServiceLocator.ClassService.GetClassDetailsById(classPeriod.ClassRef);
+            var c = ServiceLocator.ClassPeriodService.CurrentClassForTeacher(personId, dateTime);
             return c.RoomRef.HasValue ? GetRoomById(c.RoomRef.Value) : null;
         }
 

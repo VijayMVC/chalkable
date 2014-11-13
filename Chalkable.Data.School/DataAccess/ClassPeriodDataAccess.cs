@@ -141,7 +141,8 @@ namespace Chalkable.Data.School.DataAccess
             {
                 dbQuery.Parameters.Add("time", query.Time);
                 dbQuery.Sql.AppendFormat(" and [{0}].[{1}] <= @time and [{0}].[{2}] >= @time"
-                    , "Period", Period.START_TIME_FIELD, Period.END_TIME_FIELD);
+                    , "Period", "StartTime", "EndTime");
+                throw new NotImplementedException();
             }
             if (query.ClassIds != null && query.ClassIds.Count > 0)
             {
@@ -158,6 +159,20 @@ namespace Chalkable.Data.School.DataAccess
             return dbQuery;
         }
 
+        public Class CurrentClassForTeacher(int schoolYearId, int personId, DateTime date, int time)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@schoolYearId", schoolYearId},
+                {"@teacherId", personId},
+                {"@date", date},
+                {"@time", time},
+            };
+            using (var reader = ExecuteStoredProcedureReader("spCurrentClassForTeacher", ps))
+            {
+                return reader.ReadOrNull<Class>();
+            }
+        }
     }
 
     public class ClassPeriodQuery

@@ -9,6 +9,7 @@ using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
 using AlphaGrade = Chalkable.StiConnector.SyncModel.AlphaGrade;
 using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
+using BellSchedule = Chalkable.StiConnector.SyncModel.BellSchedule;
 using ClassroomOption = Chalkable.StiConnector.SyncModel.ClassroomOption;
 using DayType = Chalkable.StiConnector.SyncModel.DayType;
 using Person = Chalkable.StiConnector.SyncModel.Person;
@@ -89,10 +90,12 @@ namespace Chalkable.StiImport.Services
             InsertClassStandard();
             Log.LogInfo("insert marking period classes");
             InsertMarkingPeriodClasses();
-            Log.LogInfo("insert scheduled time slots");
-            InsertScheduledTimeSlots();
             Log.LogInfo("insert periods");
             InsertPeriods();
+            Log.LogInfo("insert Bell Schedules");
+            InsertBellSchedules();
+            Log.LogInfo("insert scheduled time slots");
+            InsertScheduledTimeSlots();
             Log.LogInfo("insert class periods");
             InsertClassPeriods();
             Log.LogInfo("insert class persons");
@@ -386,7 +389,7 @@ namespace Chalkable.StiImport.Services
         private void InsertGradingPeriods()
         {
             var gPeriods = context.GetSyncResult<GradingPeriod>().All
-                .Select(x=>new Data.School.Model.GradingPeriod()
+                .Select(x=>new Data.School.Model.GradingPeriod
                     {
                         Id = x.GradingPeriodID,
                         AllowGradePosting = x.AllowGradePosting,
@@ -406,26 +409,26 @@ namespace Chalkable.StiImport.Services
         private void InsertDayTypes()
         {
             var dayTypes = context.GetSyncResult<DayType>().All
-                                      .ToList();
-            foreach (var dayType in dayTypes)
-            {
-                ServiceLocatorSchool.DayTypeService.Add(dayType.DayTypeID, dayType.Sequence, dayType.Name, dayType.AcadSessionID);
-            }
+                .Select(x=>new Data.School.Model.DayType
+                {
+                    Id = x.DayTypeID,
+                    Name = x.Name,
+                    Number = x.Sequence,
+                    SchoolYearRef = x.AcadSessionID
+                }).ToList();
+            ServiceLocatorSchool.DayTypeService.Add(dayTypes);
         }
 
         private void InsertDays()
         {
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
-
             var days = context.GetSyncResult<CalendarDay>().All
                 .ToList()
-                .Where(x => years.ContainsKey(x.AcadSessionID))
                 .Select(x => new Date
                 {
                     DayTypeRef = x.DayTypeID,
                     IsSchoolDay = x.InSchool,
-                    SchoolRef = years[x.AcadSessionID].SchoolRef,
                     SchoolYearRef = x.AcadSessionID,
+                    BellScheduleRef = x.BellScheduleID,
                     Day = x.Date
                 }).ToList();
             ServiceLocatorSchool.CalendarDateService.Add(days);
@@ -574,64 +577,61 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.ClassService.AssignClassToMarkingPeriod(cts);
         }
 
+        private void InsertPeriods()
+        {
+            var periods = context.GetSyncResult<TimeSlot>().All
+                .Select(x => new Period
+                {
+                    Id = x.TimeSlotID,
+                    Order = x.Sequence,
+                    SchoolYearRef = x.AcadSessionID
+                })
+                .ToList();
+            ServiceLocatorSchool.PeriodService.AddPeriods(periods);
+        }
+
+        private void InsertBellSchedules()
+        {
+            var bellSchedules = context.GetSyncResult<BellSchedule>().All.Select(x => new Data.School.Model.BellSchedule
+            {
+                Id = x.BellScheduleID,
+                Code = x.Code,
+                Description = x.Description,
+                IsActive = x.IsActive,
+                IsSystem = x.IsSystem,
+                Name = x.Name,
+                SchoolYearRef = x.AcadSessionID,
+                TotalMinutes = x.TotalMinutes,
+                UseStartEndTime = x.UseStartEndTime
+            }).ToList();
+            ServiceLocatorSchool.BellScheduleService.Add(bellSchedules);
+        }
+        
         private void InsertScheduledTimeSlots()
         {
             var allSts = context.GetSyncResult<StiConnector.SyncModel.ScheduledTimeSlot>().All
                 .Select(x=>new ScheduledTimeSlot
                     {
-                        BellScheduleID = x.BellScheduleID,
+                        BellScheduleRef = x.BellScheduleID,
                         Description = x.Description,
                         EndTime = x.EndTime,
                         IsDailyAttendancePeriod = x.IsDailyAttendancePeriod,
                         StartTime = x.StartTime,
-                        TimeSlotID = x.TimeSlotID
+                        PeriodRef = x.TimeSlotID
                     })
                 .ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.Add(allSts);
         }
 
-        private void InsertPeriods()
-        {
-            //TODO: this logic is not exact how it is in INOW
-            var periods = context.GetSyncResult<TimeSlot>().All.ToList();
-            var allSts = ServiceLocatorSchool.ScheduledTimeSlotService.GetAll();
-            foreach (var timeSlot in periods)
-            {
-                var sts = allSts.FirstOrDefault(x => x.TimeSlotID == timeSlot.TimeSlotID);
-                int startTime = 0;
-                int endTime = 1;
-                if (sts != null)
-                {
-                    startTime = sts.StartTime ?? 0;
-                    endTime = sts.EndTime ?? startTime + 1;
-                }
-                ServiceLocatorSchool.PeriodService.Add(timeSlot.TimeSlotID, timeSlot.AcadSessionID, startTime, endTime, timeSlot.Sequence);
-            }
-        }
-
         private void InsertClassPeriods()
         {
             var scheduledSections = context.GetSyncResult<ScheduledSection>().All;
-            Dictionary<int, Class> classes;
-            if (scheduledSections.Length <= 30)
-            {
-                classes = new Dictionary<int, Class>();
-                foreach (var scheduledSection in scheduledSections)
-                    if (!classes.ContainsKey(scheduledSection.SectionID))
-                    {
-                        var c = ServiceLocatorSchool.ClassService.GetById(scheduledSection.SectionID);
-                        classes.Add(c.Id, c);
-                    }
-            }
-            else
-                classes = ServiceLocatorSchool.ClassService.GetAll().ToDictionary(x => x.Id);   
             var classPeriods = scheduledSections
                 .Select(x => new ClassPeriod
                 {
                     ClassRef = x.SectionID,
                     DayTypeRef = x.DayTypeID,
                     PeriodRef = x.TimeSlotID,
-                    SchoolRef = classes[x.SectionID].SchoolRef.Value
                 }).ToList();
             ServiceLocatorSchool.ClassPeriodService.Add(classPeriods);
         }

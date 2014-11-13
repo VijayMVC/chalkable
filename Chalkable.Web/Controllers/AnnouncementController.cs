@@ -213,23 +213,7 @@ namespace Chalkable.Web.Controllers
             }
             return Json(true, 5);
         }
-
-
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
-        public ActionResult SubmitForAdmin(AnnouncementInfo announcement, ListOfStringList annRecipients)
-        {
-            //if (!Context.UserLocalId.HasValue)
-            //    throw new UnassignedUserException();
-            //if (annRecipients.Count == 0)
-            //    throw new ChalkableException();
-            //var recipientInfos = RecipientInfo.Create(annRecipients);
-            //var res = Save(announcement, null, recipientInfos);
-            //SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);
-            //SchoolLocator.AnnouncementService.DeleteAnnouncements(Context.UserLocalId.Value);
-            //return Json(true, 5);
-            throw new NotImplementedException();
-        }
-
+        
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult ListLast(int personId, int classId, int classAnnouncementTypeId)
         {

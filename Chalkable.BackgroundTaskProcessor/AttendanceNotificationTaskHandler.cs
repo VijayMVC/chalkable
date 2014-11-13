@@ -1,3 +1,4 @@
+using System;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Master.Model;
@@ -14,8 +15,9 @@ namespace Chalkable.BackgroundTaskProcessor
                 log.LogError(string.Format("attendance notification task {0} should contains school id", task.Id));
                 return false;
             }
-            var schoolSl = sl.SchoolServiceLocator(task.DistrictRef.Value, null);
-            schoolSl.AttendanceService.ProcessClassAttendance(schoolSl.Context.NowSchoolTime);
+            //var schoolSl = sl.SchoolServiceLocator(task.DistrictRef.Value, null);
+            //schoolSl.AttendanceService.ProcessClassAttendance(schoolSl.Context.NowSchoolTime);
+            throw new NotImplementedException();
             return true;
         }
     }
@@ -30,8 +32,9 @@ namespace Chalkable.BackgroundTaskProcessor
                 log.LogError(string.Format("teacher attendance notification task {0} should contains school id", task.Id));
                 return false;
             }
-            var schoolSl = sl.SchoolServiceLocator(task.DistrictRef.Value, null);
-            schoolSl.AttendanceService.NotAssignedAttendanceProcess();
+            //var schoolSl = sl.SchoolServiceLocator(task.DistrictRef.Value, null);
+            //schoolSl.AttendanceService.NotAssignedAttendanceProcess();
+            throw new NotImplementedException();
             return true;
         }
     }

@@ -16,7 +16,7 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int SchoolYearRef { get; set; }
         public bool IsSchoolDay { get; set; }
-        public int SchoolRef { get; set; }
+        public int? BellScheduleRef { get; set; }
         
         [NotDbFieldAttr]
         public DayType DayType { get; set; }

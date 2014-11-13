@@ -18,22 +18,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
         
-        public ClassPeriod Add(int periodId, int classId, int? roomId, int dateTypeId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            var res = new ClassPeriod
-            {
-                ClassRef = classId,
-                PeriodRef = periodId,
-                DayTypeRef = dateTypeId,
-                SchoolRef = Storage.PeriodStorage.GetById(periodId).SchoolRef
-            };
-            Storage.ClassPeriodStorage.Add(res);
-            return res;
-        }
-
         public void Add(IList<ClassPeriod> classPeriods)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -70,17 +54,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             });
         }
 
-        public IList<Class> GetAvailableClasses(int periodId)
-        {
-            return Storage.ClassPeriodStorage.GetAvailableClasses(periodId);
-        }
-
-        public IList<Room> GetAvailableRooms(int periodId)
-        {
-            return Storage.ClassPeriodStorage.GetAvailableRooms(periodId);
-        }
-
-        public ClassPeriod GetClassPeriodForSchoolPersonByDate(int personId, DateTime dateTime)
+        public Class CurrentClassForTeacher(int personId, DateTime dateTime)
         {
             var person = Storage.PersonStorage.GetPerson(new PersonQuery
             {
@@ -91,33 +65,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : default(int?);
             var studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : default(int?);
             var time = (int)(dateTime - dateTime.Date).TotalMinutes;
-            return GetClassPeriods(dateTime.Date, null, null, studentId, teacherId, time).FirstOrDefault();  
-        }
-
-        public ClassPeriod GetNearestClassPeriod(int? classId, DateTime dateTime)
-        {
-            int? studentId = null, teacherId = null;
-            if (!classId.HasValue)
-            {
-                if (Context.Role == CoreRoles.STUDENT_ROLE)
-                    studentId = Context.PersonId;
-                if (Context.Role == CoreRoles.TEACHER_ROLE)
-                    teacherId = Context.PersonId;
-            }
-            var classPeriods = GetClassPeriods(dateTime, classId, null, studentId, teacherId);
-
-            var nearest = int.MaxValue;
-            var time = (int)((dateTime - dateTime.Date).TotalMinutes);
-            ClassPeriod result = null;
-            foreach (var classPeriod in classPeriods)
-            {
-                if (classPeriod.Period.EndTime > time && classPeriod.Period.EndTime < nearest)
-                {
-                    nearest = classPeriod.Period.EndTime;
-                    result = classPeriod;
-                }
-            }
-            return result;
+            throw new NotImplementedException();
         }
 
         public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)
