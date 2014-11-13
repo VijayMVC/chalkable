@@ -410,6 +410,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 allScores = allScores.concat([['Incomplete', ''], ['Incomplete (fill all)', ''], ['Late', ''], ['Late (fill all)', '']]);
                 this.setAllScores(allScores);
                 this.setStandardScores(standardScores);
+                this.setGradingComments(model.getGradingComments());
             },
 
             function afterCellShow(parent){
