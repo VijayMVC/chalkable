@@ -67,11 +67,12 @@ NAMESPACE('chlk.activities.grading', function () {
                             this.loadGradingPeriod(parent);
                         }
                         dom.find('.mp-data.with-data')
-                            .setHTML('')
-                            .removeClass('with-data');
+                            .removeClass('with-data')
+                            .find('.grades-contaner')
+                            .setHTML('');
                         setTimeout(function(){
                             items.removeClass('open');
-                            itemsMp.setHTML('');
+                            itemsMp.find('.grades-contaner').setHTML('');
                         }, 500);
                         //parent.addClass('open');
 
@@ -89,15 +90,16 @@ NAMESPACE('chlk.activities.grading', function () {
                 var annContainer = container.find('.ann-types-container');
                 container.setCss('height', 0);
                 jQuery(container.valueOf()).animate({
-                    height: (annContainer.height() + parseInt(annContainer.getCss('margin-bottom'), 10))
+                    height: (annContainer.height() + container.find('.grading-selects').height() + parseInt(annContainer.getCss('margin-bottom'), 10))
                 }, 500);
             },
 
             /* Partial Update rules */
 
             VOID, function updateGradingPeriodPartRule_(tpl, model) {
-                var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
-                var tooltipText = model.getTooltipText(), parent = container.parent();
+                var mpData = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
+                var container = mpData.find('.grades-container');
+                var tooltipText = model.getTooltipText(), parent = mpData.parent();
                 tpl.options({
                     classId: this.getClassId()
                 });
@@ -108,7 +110,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     parent.addClass('no-items');
                 }
                 setTimeout(function(){
-                    this.openGradingPeriod(container);
+                    this.openGradingPeriod(mpData);
                     parent.find('.mp-name').setData('tooltip', tooltipText);
                 }.bind(this), 1);
             },
@@ -140,12 +142,14 @@ NAMESPACE('chlk.activities.grading', function () {
                     });
                     if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
-                    var top = node.offset().top - list.parent().offset().top + node.height() + 43;
-                    var left = node.offset().left - list.parent().offset().left + 61;
+                    var top = node.offset().top - list.parent().offset().top + node.height() + 3;
+                    var left = node.offset().left - list.parent().offset().left + 130;
                     list.setCss('top', top)
-                        .setCss('left', left);
+                        .setCss('left', left)
+                        .setCss('width', node.width());
                     list.setHTML(html)
                         .show();
+                    this.hideGradingPopUp();
                 }else{
                     this.hideDropDown();
                 }
@@ -155,6 +159,10 @@ NAMESPACE('chlk.activities.grading', function () {
                 var list = this.dom.find('.autocomplete-list');
                 list.setHTML('')
                     .hide();
+            },
+
+            VOID, function hideGradingPopUp(){
+                this.dom.find('.grading-input-popup').hide();
             },
 
             /* Dropdown events */
@@ -205,14 +213,17 @@ NAMESPACE('chlk.activities.grading', function () {
                 var active = this.dom.find('.active-cell');
                 var popUp = this.dom.find('.chlk-pop-up-container.comment');
                 var main = this.dom.parent('#main');
-                var bottom = main.height() + main.offset().top - active.offset().top + 73;
-                var left = active.offset().left - main.offset().left - 54;
-                popUp.setCss('bottom', bottom);
-                popUp.setCss('left', left);
                 var comment = active.find('.comment-value').getValue();
                 popUp.find('textarea').setValue(comment);
                 popUp.show();
                 popUp.find('.grading-comments-list').show();
+                var container = active.parent('.mps-container');
+                var left = active.offset().left - container.offset().left - (popUp.width() + parseInt(popUp.getCss('padding-left'), 10)
+                    + parseInt(popUp.getCss('padding-right'), 10) - active.width())/2;
+                var bottom = container.height() - active.offset().top + container.offset().top;
+
+                popUp.setCss('bottom', bottom);
+                popUp.setCss('left', left);
                 if(comment)
                     popUp.find('.grading-comments-list').hide();
                 setTimeout(function(){
@@ -299,7 +310,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var form = activeCell.find('form');
                 activeCell.removeClass('active-cell');
                 activeCell.find('.grade-info').removeClass('empty-grade');
-                activeCell.find('.grading-input-popup').hide();
+                this.hideGradingPopUp();
                 if(submitCurrent_)
                     form.trigger('submit');
                 var value = form.find('.value-input').getValue();
@@ -317,7 +328,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var form = activeCell.find('form');
                 activeCell.removeClass('active-cell');
                 activeCell.find('.grade-info').removeClass('empty-grade');
-                activeCell.find('.grading-input-popup').hide();
+                this.hideGradingPopUp();
                 var that = this;
                 activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
                     var cell = item.parent('.grade-value');
@@ -354,6 +365,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var cell = node.parent('.grade-value');
                 if(!cell.hasClass('avg-value-container') || cell.find('.grade-info').getData('may-be-exempt')){
                     node.parent().find('.grading-input-popup').show();
+                    this.hideDropDown();
                     return false;
                 }
                 return true;
@@ -453,7 +465,7 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(curBlock.exists() && curBlock.hasClass('total-points'))
                                 curBlock = curBlock.next('.grade-container');
                             if(curBlock.exists()){
-                                if(curBlock.hasClass('transparent-container')){
+                                if(curBlock.hasClass('last-container')){
                                     curBlock.parent('.grid-toolbar').find('.next-button').trigger('click');
                                     needsTimeout = true;
                                 }
@@ -643,7 +655,7 @@ NAMESPACE('chlk.activities.grading', function () {
             function gradingFormSubmit(node, event){
                 var input = node.find('.value-input');
                 if(!input.hasClass('error') && !input.hasClass('not-equals')){
-                    node.find('.grading-input-popup').hide();
+                    this.hideGradingPopUp();
                     var value = (input.getValue() || '').toLowerCase();
                     var isAvg = node.hasClass('avg-form');
                     if(value == 'dropped' || value == 'exempt'){
@@ -712,17 +724,31 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), '.grid-toolbar')],
             [[ria.dom.Dom, ria.dom.Event, Boolean, Number]],
             function beforeTbAnimation(toolbar, event_, isLeft_, index_){
-                var num = this.getColumns();
-                this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+                var num = this.recalculateTbWidth_(toolbar);
+                this.dom.find('.last-container').removeClass('last-container').removeClass('delay');
                 var startIndex = index_ ? index_ * num + num : num;
                 var node = toolbar.find('.dotted-container:eq(' + startIndex + ')');
                 if(!node.is(':last-child')){
                     if(isLeft_)
                         node.addClass('delay');
                     setTimeout(function(){
-                        node.addClass('transparent-container');
+                        node.addClass('last-container');
                     },1);
                 }
+            },
+
+            [[ria.dom.Dom]],
+            Number, function recalculateTbWidth_(toolbar_){
+                var toolbar = toolbar_ || this.dom.find('.grid-toolbar'),
+                    padding = 412, maxWidth, count, width,
+                    columnWidth = 117;
+                maxWidth = ria.dom.Dom('#content').width() - padding;
+                count = Math.floor((maxWidth + 1) / columnWidth);
+                toolbar.find('.dotted-container').setCss('width', Math.ceil(maxWidth/count));
+                //width = count * columnWidth - 1;
+                toolbar.setCss('width', maxWidth);
+                toolbar.find('.first-container').setCss('width', maxWidth);
+                return count;
             },
 
             /* Activity events */
@@ -738,6 +764,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 BASE();
                 new ria.dom.Dom().off('click.grading_popup');
                 new ria.dom.Dom().off('click.grade');
+                jQuery(window).off('resize.grade')
             },
 
             OVERRIDE, VOID, function onRender_(model){
@@ -779,9 +806,13 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
 
                     if(!node.isOrInside('.grading-input-popup')){
-                        dom.find('.grading-input-popup').hide();
+                        that.hideGradingPopUp();
                     }
                 });
+
+                jQuery(window).on('resize.grade', function(){
+                    that.recalculateTbWidth_();
+                })
             },
 
             Boolean, function getBooleanValue_(value){
@@ -809,6 +840,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
             },
 
-            function updateFlagByModel(model, cell){},
+            function updateFlagByModel(model, cell){}
         ]);
 });

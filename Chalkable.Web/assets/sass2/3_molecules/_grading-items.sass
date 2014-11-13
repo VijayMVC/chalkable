@@ -1,0 +1,42 @@
+.alert-flag
+  position: absolute
+  width: 12px
+  height: 18px
+  background-position: center center
+  background-repeat: no-repeat
+
+  &.incomplete
+    background-image: url(images/grading/incomplete-flag.png)
+
+  &.late
+    background-image: url(images/grading/orange-flag.png)
+
+  &.absent
+    background-image: url(images/grading/blue-flag.png)
+
+  &.multiple
+    background-image: url(images/grading/alerts.png)
+
+  &.error
+    background-image: url(images/grading/red-flag.png)
+
+.grading-input-popup
+  z-index: 100
+  left: 0
+  top: 78px
+  text-align: left
+  background: #EEE
+  border-color: #B7B7B7
+  box-shadow: 0 0 4px 0px #888
+  text-shadow: white 0px 1px 1px
+  position: absolute
+  display: none
+
+  .popup-content
+    padding: 12px
+
+  .labeled-checkbox
+    margin: 0 0 3px 0
+    line-height: initial
+    display: block
+    font: normal 14px Arial

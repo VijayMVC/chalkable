@@ -157,7 +157,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
 
                         setTimeout(function () {
-                            this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+                            this.dom.find('.last-container').removeClass('last-container').removeClass('delay');
 
                             this.dom.find('[data-sort-type][data-sort-order]').removeData('sort-order');
                             var newSortOrder = sortOrder == 'asc' ? 'desc' : 'asc';

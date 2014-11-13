@@ -58,6 +58,10 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.StudentTotalPoint), 'studentTotalPoints',
 
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            function getTbWidth(){
+                return ria.dom.Dom('#content').width() - 412;
+            }
         ]);
 });

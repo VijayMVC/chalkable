@@ -20,7 +20,8 @@ mixin TeacherClassStandardsGridSummaryCell(info, ableEdit)
         .no-items-text=Msg.No_grades_yet
     else
         .dotted-container.name-container.with-horizontal-dots
-            .type-name(data-sort-type="name", data-sort-order="asc")=Msg.Student(true)
+            .grading-grid-th
+                .type-name(data-sort-type="name", data-sort-order="asc")=Msg.Student(true)
             each student,i in self.getStudents()
                 name = student.getStudentInfo().getDisplayName()
                 div(row-index=i).student-name
@@ -35,7 +36,8 @@ mixin TeacherClassStandardsGridSummaryCell(info, ableEdit)
             each gradingItem in self.getGradingItemsOrdered()
                 -var stId = gradingItem.getStandard().getStandardId().valueOf()
                 .dotted-container.grade-container.with-horizontal-dots
-                    .type-name(data-tooltip=gradingItem.getTooltip(), data-sort-type="standard", data-sort-id = stId)= gradingItem.getTitle()
+                    .grading-grid-th
+                        .type-name(data-tooltip=gradingItem.getTooltip(), data-sort-type="standard", data-sort-id = stId)= gradingItem.getTitle()
                     each info,i in gradingItem.getItems()
                         div(
                             row-index=i,

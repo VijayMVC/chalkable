@@ -177,8 +177,10 @@ NAMESPACE('chlk.activities.grading', function () {
                     model.getValue().rowIndex = rowIndex;
                     var avgs = container.find('.avgs-container');
                     var html = new ria.dom.Dom().fromHTML(tpl.render());
+                    var width = avgs.next().width();
                     html.prependTo(avgs.parent());
                     avgs.remove();
+                    container.find('.avgs-container').setCss('width', width);
                 }else{
                     value.totalavarages.forEach(function(item){
                         var grade = item.totalaverage;
@@ -602,7 +604,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
 
                         setTimeout(function () {
-                            this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+                            this.dom.find('.last-container').removeClass('last-container').removeClass('delay');
 
                             this.dom.find('[data-sort-type][data-sort-order]').removeData('sort-order');
                             var newSortOrder = sortOrder == 'asc' ? 'desc' : 'asc';

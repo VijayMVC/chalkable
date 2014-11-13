@@ -44,7 +44,6 @@ NAMESPACE('chlk.controls', function () {
             ],
             Object, function prepareData(attributes_, data_, controller_, action_, params_) {
                 var configs = {
-                    //width: 630,
                     itemsCount: 8,
                     fixedPadding: false,
                     hideArrows: false,
@@ -55,7 +54,8 @@ NAMESPACE('chlk.controls', function () {
                     pressedClass: 'pressed',
                     pressAfterClick: true,
                     equalItems: true,
-                    padding: 0
+                    padding: 0,
+                    itemClass: ''
                 };
                 if (attributes_) {
                     configs = Object.extend(configs, attributes_);
@@ -160,7 +160,55 @@ NAMESPACE('chlk.controls', function () {
                                     toolbar.setData('currentIndex', ++index);
                                 }
                                 toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_CLICK.valueOf(), [node, isLeft, index]);
-                                that.setPageByCurrentDot(null, toolbar, index, isLeft);
+                                var configs = toolbar.getData('configs');
+                                if (configs.needDots) {
+                                    var dot = toolbar.find('.paginator A[index="' + index + '"]');
+                                    var current =  toolbar.find('.paginator .current');
+                                    current.removeClass('current');
+                                    dot.addClass('current');
+                                }
+                                toolbar.trigger(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), [isLeft, index]);
+                                toolbar.setData('currentIndex', index);
+                                var nextButton = toolbar.find('.next-button');
+                                var prevButton = toolbar.find('.prev-button');
+                                var width = toolbar.find('.first-container').width();
+                                var secondContainer = toolbar.find('.second-container');
+                                var hasLeft = false, hasRight = false;
+                                if(toolbar.is(':visible')){
+                                    var currentLeft = parseInt(secondContainer.getCss('left'), 10),
+                                        diff = width - configs.padding;
+                                    var left = isLeft ? currentLeft + diff : currentLeft - diff;
+                                    var thirdContainer = secondContainer.find('.third-container');
+                                    if (thirdContainer.exists() && thirdContainer.width() <= secondContainer.width() - left) {
+                                        //left = secondContainer.width() - thirdContainer.width();
+                                        nextButton.addClass(configs.disabledClass);
+                                    } else {
+                                        nextButton.removeClass(configs.disabledClass);
+                                        hasRight = true;
+                                    }
+                                    if(left > 0)
+                                        left = 0;
+                                    else
+                                        if(left && configs.itemClass){
+                                            var itemWidth = toolbar.find('.' + configs.itemClass).width();
+                                            left = Math.floor(left/itemWidth + 0.5) * itemWidth;
+                                        }
+
+                                    secondContainer.setCss('left', left);
+                                    if (left == 0) {
+                                        prevButton.addClass(configs.disabledClass);
+                                    } else {
+                                        prevButton.removeClass(configs.disabledClass);
+                                        hasLeft = true;
+                                    }
+                                    var interval = setInterval(function(){
+                                        var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
+                                        if(curLeft > left - eps && curLeft < left + eps){
+                                            toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft, index, hasLeft, hasRight]);
+                                            clearInterval(interval);
+                                        }
+                                    }, 10)
+                                }
                             });
                             toolbar.find('.paginator').on('click', 'a:not(.current)', function (node, event) {
                                 that.setPageByCurrentDot(node, toolbar);
