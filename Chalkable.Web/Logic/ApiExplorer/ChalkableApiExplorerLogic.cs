@@ -306,7 +306,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
         private const string ASSEMBLY_FILE = "Chalkable.Web";
         private const string CONTROLLER = "Controller";
 
-        private static Dictionary<string, IList<ChalkableApiControllerDescription>> BuildApiExplorerDescriptions()
+        private static void BuildApiExplorerDescriptions()
         {
             Trace.WriteLine("#123 API LIST START");
             descriptions = new Dictionary<string, IList<ChalkableApiControllerDescription>>();
@@ -417,8 +417,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
                         Name = controllerDescr.Name
                     });
                 }
-            }
-            return descriptions;
+            }            
         }
 
         private const string FAKE_RESPONSES_FILE = "pathfinder/{0}_fake_method_responses.json";
@@ -477,7 +476,15 @@ namespace Chalkable.Web.Logic.ApiExplorer
 
         public static Dictionary<string, IList<ChalkableApiControllerDescription>> GetApi()
         {
-            return descriptions ?? BuildApiExplorerDescriptions();
+            Trace.WriteLine("#123 GetApi() ENTERED");
+            if (descriptions != null && descriptions.Count > 0)
+                return descriptions;
+
+            Trace.WriteLine("#123 BuildApiExplorerDescriptions() ENTERED");
+            BuildApiExplorerDescriptions();
+            Trace.WriteLine("#123 BuildApiExplorerDescriptions() COMPLETE");
+
+            return descriptions;
         }
 
 
