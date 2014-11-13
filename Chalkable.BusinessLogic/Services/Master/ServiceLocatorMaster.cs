@@ -30,6 +30,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IDeveloperService DeveloperService { get; }
         IDbService DbService { get; }
         IUserTrackingService UserTrackingService { get; }
+        ICommonCoreStandardService CommonCoreStandardService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -51,6 +52,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IFundService fundService;
         private IDeveloperService developerService;
         private IUserTrackingService userTrackingService;
+        private ICommonCoreStandardService commonCoreStandardService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -72,6 +74,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             fundRequestPictureService = new FundRequestPictureService(this);
             developerService = new DeveloperService(this);
             applicationPictureService = new ApplicationPictureService(this);
+            commonCoreStandardService = new CommonCoreStandardService(this);
             DbService = new DbService(Context != null ? Context.MasterConnectionString : null);
             userTrackingService = new MixPanelService(Settings.MixPanelToken);
         }
@@ -96,6 +99,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
         public IDbService DbService { get; protected set; }
         public IUserTrackingService UserTrackingService { get { return userTrackingService; } }
+        public ICommonCoreStandardService CommonCoreStandardService { get { return commonCoreStandardService; } }
+
+
         public virtual IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)
         {
             if (Context.DistrictId != districtId || Context.SchoolLocalId != schoolLocalId)
@@ -109,6 +115,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             return serviceLocator;
         }
 
-        
+
     }
 }

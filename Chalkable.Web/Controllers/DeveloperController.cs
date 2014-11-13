@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
@@ -48,6 +49,7 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult ListApi()
         {
+            Trace.WriteLine("#123 Developer/ListApi start");
             var result = new List<ApiExplorerViewData>();
 
             var descriptions = ChalkableApiExplorerLogic.GetApi();
@@ -56,7 +58,12 @@ namespace Chalkable.Web.Controllers
             foreach (var description in descriptions)
             {
                 var roleName = description.Key.ToLowerInvariant();
-                if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || roleName == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
+                Trace.WriteLine("#123 Developer/GetAccessToken for role", roleName);
+                if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName 
+                    || roleName == CoreRoles.CHECKIN_ROLE.LoweredName 
+                    || roleName == CoreRoles.ADMIN_GRADE_ROLE.LoweredName
+                    || roleName == CoreRoles.ADMIN_VIEW_ROLE.LoweredName
+                    || roleName == CoreRoles.ADMIN_EDIT_ROLE.LoweredName) continue;
                 apiRoles.Add(roleName);
                 var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
                 var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, context.SchoolYearId, MasterLocator);

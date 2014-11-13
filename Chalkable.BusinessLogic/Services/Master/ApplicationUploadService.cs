@@ -88,6 +88,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 application.Pictures = da.UpdatePictures(application.Id, applicationInfo.PicturesId);
                 application.GradeLevels = da.UpdateGradeLevels(application.Id, applicationInfo.GradeLevels);
                 application.Permissions = da.UpdatePermissions(application.Id, applicationInfo.PermissionIds);
+                application.ApplicationStandards = da.UpdateApplicationStandards(application.Id, applicationInfo.StandardsCodes);
                 if (addToOauth)
                 {
                     if (!string.IsNullOrEmpty(application.Url))

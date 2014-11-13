@@ -5,6 +5,9 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.StandardSubjectId');
 REQUIRE('chlk.models.id.StandardId');
 
+REQUIRE('chlk.models.standard.CommonCoreStandard');
+
+
 NAMESPACE('chlk.services', function () {
     "use strict";
 
@@ -22,6 +25,10 @@ NAMESPACE('chlk.services', function () {
                     subjectId: subjectId_ && subjectId_.valueOf(),
                     parentStandardId: standardId_ && standardId_.valueOf()
                 });
+            },
+
+            ria.async.Future, function getCommonCoreStandards() {
+                return this.get('Standard/GetCommonCoreStandard.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {});
             }
         ])
 });

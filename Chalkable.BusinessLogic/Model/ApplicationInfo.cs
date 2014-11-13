@@ -16,6 +16,7 @@ namespace Chalkable.BusinessLogic.Model
         public IList<int> GradeLevels { get; set; }
         public Guid DeveloperId { get; set; }
         public IList<AppPermissionType> PermissionIds { get; set; }
+        public IList<string> StandardsCodes { get; set; }
 
         protected BaseApplicationInfo()
         {
@@ -27,7 +28,7 @@ namespace Chalkable.BusinessLogic.Model
         public static BaseApplicationInfo Create(ShortApplicationInfo shortApplicationInfo, Guid developerId
             , IList<AppPermissionType> permissionIds = null,  IList<Guid> picturesId = null
             , ApplicationPricesInfo applicationPricesInfo = null, IList<Guid> categories = null
-            , ApplicationAccessInfo applicationAccess = null, IList<int> gradeLevels = null)
+            , ApplicationAccessInfo applicationAccess = null, IList<int> gradeLevels = null, IList<string> standardsCodes = null)
         {
             return new BaseApplicationInfo
             {
@@ -38,7 +39,8 @@ namespace Chalkable.BusinessLogic.Model
                 ApplicationAccessInfo = applicationAccess ?? new ApplicationAccessInfo(),
                 GradeLevels = gradeLevels,
                 DeveloperId = developerId,
-                PermissionIds = permissionIds ?? new List<AppPermissionType>()
+                PermissionIds = permissionIds ?? new List<AppPermissionType>(),
+                StandardsCodes = standardsCodes ?? new List<string>()
             };
         }
 
@@ -53,7 +55,8 @@ namespace Chalkable.BusinessLogic.Model
                 Categories = application.Categories.Select(x => x.CategoryRef).ToList(),
                 PicturesId = application.Pictures.Select(x => x.Id).ToList(),
                 GradeLevels = application.GradeLevels.Select(x => x.GradeLevel).ToList(),
-                PermissionIds = application.Permissions.Select(x=>x.Permission).ToList()
+                PermissionIds = application.Permissions.Select(x=>x.Permission).ToList(),
+                StandardsCodes = application.ApplicationStandards.Select(x=>x.StandardCode).ToList()
             };
         }
     }

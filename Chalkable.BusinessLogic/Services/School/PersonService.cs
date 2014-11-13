@@ -157,6 +157,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 
                 if (!(CanChangeEmail(id)))
                     throw new ChalkableSecurityException();
+
                 if (user.Login != email)
                 {
                     var newUser = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(email);
@@ -165,6 +166,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     else
                     {
                         ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
+                        var stiPersonEmail = new StiPersonEmail
+                            {
+                                Description = "",
+                                EmailAddress = email,
+                                IsListed = true,
+                                IsPrimary = true,
+                                PersonId = id
+                            };
+                        ConnectorLocator.UsersConnector.UpdatePrimaryPersonEmail(id, stiPersonEmail);                           
                         ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(person, oldEmail, email);
                     }
                 }

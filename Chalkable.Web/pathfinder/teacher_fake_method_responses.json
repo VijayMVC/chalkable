@@ -2,8 +2,46 @@
     "controllers": {
          "Application": {
              "GetAnnouncementApplication": {
-                  "Test": "response teacher"
-             }
-         }         
+		"announcementapplicationid":2,
+		"announcementid":11,
+		"currentpersonid":null,
+		"active":true,
+		"viewurl":"http://127.0.0.1:3000/home/index?mode=view&announcementapplicationid=2&",
+		"editurl":"http://127.0.0.1:3000/home/index?mode=edit&announcementapplicationid=2&",
+		"gradingviewurl":"http://127.0.0.1:3000/home/index?mode=gradingview&announcementapplicationid=2&",
+		"order":0,
+		"isinstalledforme":false,
+		"id":"561259b7-e775-4aa3-ae41-01a0ac9a9659",
+		"name":"eq",
+		"url":"http://127.0.0.1:3000/home/index",
+		"videodemourl":"",
+		"shortdescription":"equations",
+		"description":"its equations time",
+		"smallpictureid":"ad4201aa-4d9b-4c61-86cc-03eb08ff35a1",
+		"bigpictureid":"28607a11-c587-4735-83eb-9283a36fce89",
+		"myappsurl":null,
+		"secretkey":null,
+		"state":5,
+		"developerid":"21d87c28-4b03-44c7-81e4-7356e423c430",
+		"liveappid":null,
+		"isinternal":false,
+		"applicationaccess":
+		{
+			"hasstudentmyapps":true,
+			"hasteachermyapps":true,
+			"hasadminmyapps":true,
+			"hasparentmyapps":true,
+			"canattach":true,
+			"showingradeview":true
+		},
+		"applicationprice":
+		{
+			"price":0.0000,
+			"priceperclass":null,
+			"priceperschool":null
+		},
+		"picturesid":[]
+	}
+             }     
     }
 }

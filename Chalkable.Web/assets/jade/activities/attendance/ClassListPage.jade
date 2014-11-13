@@ -40,7 +40,7 @@ h2.page-title Attendance
                             data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
                         )#attendance-date.tb-date-picker.tr
             .grid-container.people-list
-                .black-arrow.no-class-scheduled.row=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy'))
+                .black-arrow.no-class-scheduled.row=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy')) + ' or no students in this class'
     if self.getItems().length > 0
         .people-list-container.not-transparent
             .saved-pop-up

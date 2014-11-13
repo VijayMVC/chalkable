@@ -64,7 +64,9 @@
     <Compile Include="DataAccess\ApplicationRatingDataAccess.cs" />
     <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />
     <Compile Include="DataAccess\CategoryDataAccess.cs" />
+    <Compile Include="DataAccess\CC_StandardCategoryDataAccess.cs" />
     <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
+    <Compile Include="DataAccess\CommonCoreStandardDataAccess.cs" />
     <Compile Include="DataAccess\DeveloperDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
     <Compile Include="DataAccess\FundDataAccess.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\BackgroundTask.cs" />
     <Compile Include="Model\ChalkableDepartment.cs" />
+    <Compile Include="Model\CommonCoreStandard.cs" />
     <Compile Include="Model\DatabaseBackupRestoreTaskData.cs" />
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />
     <Compile Include="Model\District.cs" />

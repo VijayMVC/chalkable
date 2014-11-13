@@ -23,6 +23,7 @@ namespace Chalkable.Data.Master.DataAccess
             app.Permissions = SelectMany<ApplicationPermission>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, app.Id } });
             app.Categories = SelectMany<ApplicationCategory>(new AndQueryCondition { { ApplicationCategory.APPLICATION_REF_FIELD, app.Id } });
             app.GradeLevels = SelectMany<ApplicationGradeLevel>(new AndQueryCondition { { ApplicationGradeLevel.APPLICATION_REF_FIELD, app.Id } });
+            app.ApplicationStandards = SelectMany<ApplicationStandard>(new AndQueryCondition { {ApplicationStandard.APPLICATION_REF_FIELD, app.Id} });
         }
 
         public Application GetApplicationById(Guid id)
@@ -269,6 +270,27 @@ namespace Chalkable.Data.Master.DataAccess
             SimpleInsert(applicationPermissions);
             return SelectMany<ApplicationPermission>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
         }
+
+
+        public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<string> standardsCodes)
+        {
+            SimpleDelete<ApplicationStandard>(new AndQueryCondition{{ApplicationStandard.APPLICATION_REF_FIELD, id}});
+            IList<ApplicationStandard> applicationStandards = new List<ApplicationStandard>();
+            if (standardsCodes != null)
+            {
+                foreach (var standardCode in standardsCodes)
+                {
+                    if (string.IsNullOrEmpty(standardCode)) continue;
+                    applicationStandards.Add(new ApplicationStandard
+                    {
+                        ApplicationRef = id,
+                        StandardCode = standardCode
+                    });
+                }
+            }
+            SimpleInsert(applicationStandards);
+            return SelectMany<ApplicationStandard>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
+        } 
 
         public bool AppExists(Guid? currentApplicationId, string name, string url)
         {
