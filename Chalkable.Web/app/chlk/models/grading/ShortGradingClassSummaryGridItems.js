@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.grading.StudentWithAvg');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
@@ -10,64 +11,70 @@ REQUIRE('chlk.models.school.SchoolOption');
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
 
-    /** @class chlk.models.grading.StudentTotalPoint*/
-    CLASS('StudentTotalPoint',[
+    var SJX = ria.serialize.SJX;
 
-        [ria.serialize.SerializeProperty('studentid')],
-        chlk.models.id.SchoolPersonId, 'studentId',
-        [ria.serialize.SerializeProperty('totalpoint')],
-        Number, 'totalPoint',
-        [ria.serialize.SerializeProperty('maxtotalpoint')],
-        Number, 'maxTotalPoint',
+    /** @class chlk.models.grading.StudentTotalPoint */
+    CLASS(
+        UNSAFE, 'StudentTotalPoint', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-        String, function displayTotalPoint(){
-            var totalPoint = this.getTotalPoint();
-            return this.getMaxTotalPoint() && (totalPoint || totalPoint == 0)
-                ? (totalPoint.toFixed(2).toString() + '/' + this.getMaxTotalPoint().toString()) : '';
-        }
-    ]);
+            VOID, function deserialize(raw) {
+                this.studentId = SJX.fromValue(raw.studentid, chlk.models.id.SchoolPersonId);
+                this.totalPoint = SJX.fromValue(raw.totalpoint, Number);
+                this.maxTotalPoint = SJX.fromValue(raw.maxtotalpoint, Number);
+            },
+
+            READONLY, chlk.models.id.SchoolPersonId, 'studentId',
+            READONLY, Number, 'totalPoint',
+            READONLY, Number, 'maxTotalPoint',
+
+            String, function displayTotalPoint(){
+                var totalPoint = this.getTotalPoint();
+                return this.getMaxTotalPoint() && (totalPoint || totalPoint == 0)
+                    ? (totalPoint.toFixed(2).toString() + '/' + this.getMaxTotalPoint().toString()) : '';
+            }
+        ]);
 
     /** @class chlk.models.grading.ShortGradingClassSummaryGridItems*/
     CLASS(
-        'ShortGradingClassSummaryGridItems', [
+        UNSAFE, 'ShortGradingClassSummaryGridItems', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+            VOID, function deserialize(raw) {
+                this.standardId = SJX.fromValue(raw.standardId, chlk.models.id.StandardId);
+                this.categoryId = SJX.fromValue(raw.categoryId, chlk.models.id.AnnouncementTypeGradingId);
+                this.ableEdit = SJX.fromValue(raw.ableEdit, Boolean);
+                this.avg = SJX.fromValue(raw.avg, Number);
+                this.rowIndex = SJX.fromValue(raw.rowIndex, Number);
+                this.autoUpdate = SJX.fromValue(raw.autoUpdate, Boolean);
+                this.ableDisplayAlphaGrades = SJX.fromValue(raw.displayalphagrades, Boolean);
+                this.ableDisplayStudentAverage = SJX.fromValue(raw.displaystudentaverage, Boolean);
+                this.ableDisplayTotalPoints = SJX.fromValue(raw.displaytotalpoints, Boolean);
+                this.roundDisplayedAverages = SJX.fromValue(raw.rounddisplayedaverages, Boolean);
+                this.gradingPeriod = SJX.fromDeserializable(raw.gradingperiod, chlk.models.schoolYear.GradingPeriod);
+                this.students = SJX.fromArrayOfDeserializables(raw.students, chlk.models.grading.StudentWithAvg);
+                this.studentAverages = SJX.fromArrayOfDeserializables(raw.totalavarages, chlk.models.grading.StudentAverageInfo);
+                this.studentTotalPoints = SJX.fromArrayOfDeserializables(raw.totalpoints, chlk.models.grading.StudentTotalPoint);
+                this.gradingItems = SJX.fromArrayOfDeserializables(raw.gradingitems, chlk.models.announcement.ShortAnnouncementViewData);
+
+                if (raw.schoolOptions) {
+                    this.schoolOptions = chlk.models.school.SchoolOption.$fromRaw(raw.schoolOptions.allowscoreentryforunexcused);
+                }
+            },
+
             ArrayOf(chlk.models.grading.StudentWithAvg), 'students',
-
             chlk.models.school.SchoolOption, 'schoolOptions',
-
-            [ria.serialize.SerializeProperty('gradingitems')],
             ArrayOf(chlk.models.announcement.ShortAnnouncementViewData), 'gradingItems',
-
-            [ria.serialize.SerializeProperty('gradingperiod')],
             chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
-
             chlk.models.id.StandardId, 'standardId',
-
             chlk.models.id.AnnouncementTypeGradingId, 'categoryId',
-
             Boolean, 'ableEdit',
-
             Number, 'avg',
-
             Number, 'rowIndex',
-
             Boolean, 'autoUpdate',
-
-            [ria.serialize.SerializeProperty('displayalphagrades')],
             Boolean , 'ableDisplayAlphaGrades',
-
-            [ria.serialize.SerializeProperty('displaystudentaverage')],
             Boolean , 'ableDisplayStudentAverage',
-
-            [ria.serialize.SerializeProperty('displaytotalpoints')],
             Boolean , 'ableDisplayTotalPoints',
-
-            [ria.serialize.SerializeProperty('rounddisplayedaverages')],
             Boolean, 'roundDisplayedAverages',
-
-            [ria.serialize.SerializeProperty('totalavarages')],
             ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
-
-            [ria.serialize.SerializeProperty('totalpoints')],
             ArrayOf(chlk.models.grading.StudentTotalPoint), 'studentTotalPoints',
 
             function getTooltipText(){

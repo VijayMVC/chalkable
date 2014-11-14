@@ -1,42 +1,43 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.announcement.BaseAnnouncementViewData*/
     CLASS(
-        'BaseAnnouncementViewData', [
-            [ria.serialize.SerializeProperty('announcementtypename')],
+        UNSAFE, 'BaseAnnouncementViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+            VOID, function deserialize(raw) {
+                this.announcementTypeName = SJX.fromValue(raw.announcementtypename, String);
+                this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
+                this.ableExemptStudentScore = SJX.fromValue(raw.maybeexempt, Boolean);
+                this.order = SJX.fromValue(raw.order, Number);
+                this.title = SJX.fromValue(raw.title, String);
+                this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
+                this.avg = SJX.fromValue(raw.avg, Number);
+                this.id = SJX.fromValue(Number(raw.id), chlk.models.id.AnnouncementId);
+                this.dropped = SJX.fromValue(raw.dropped, Boolean);
+                this.maxScore = SJX.fromValue(raw.maxscore, Number);
+                this.annOwner = SJX.fromValue(raw.isowner, Boolean);
+                this.gradable = SJX.fromValue(raw.gradable, Boolean);
+                this.ableToGrade = SJX.fromValue(raw.cangrade, Boolean);
+            },
+
             String, 'announcementTypeName',
-
-            [ria.serialize.SerializeProperty('candropstudentscore')],
             Boolean, 'ableDropStudentScore',
-
-            [ria.serialize.SerializeProperty('maybeexempt')],
             Boolean, 'ableExemptStudentScore',
-
             Number, 'order',
-
             String, 'title',
-
-            [ria.serialize.SerializeProperty('expiresdate')],
             chlk.models.common.ChlkDate, 'expiresDate',
-
             Number, 'avg',
-
             chlk.models.id.AnnouncementId, 'id',
-
             Boolean, 'dropped',
-
-            [ria.serialize.SerializeProperty('maxscore')],
             Number, 'maxScore',
-
-            [ria.serialize.SerializeProperty('isowner')],
             Boolean, 'annOwner',
-
             Boolean, 'gradable',
-
-            [ria.serialize.SerializeProperty('cangrade')],
             Boolean, 'ableToGrade',
 
             function calculateGradesAvg(count_){

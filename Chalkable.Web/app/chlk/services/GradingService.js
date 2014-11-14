@@ -169,7 +169,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId, Boolean, Boolean]],
             ria.async.Future, function getClassSummaryGridForPeriod(classId, gradingPeriodId, standardId_, classAnnouncementTypeId_, notCalculateGrid_, autoUpdate_) {
-                return this.get('Grading/ClassGradingGrid', autoUpdate_ ? null : chlk.models.grading.ShortGradingClassSummaryGridItems, {
+                return this.get('Grading/ClassGradingGrid', chlk.models.grading.ShortGradingClassSummaryGridItems, {
                     classId: classId.valueOf(),
                     gradingPeriodId: gradingPeriodId.valueOf(),
                     standardId: standardId_ && standardId_.valueOf(),

@@ -198,10 +198,10 @@ NAMESPACE('chlk.controllers', function (){
                         model.isAutoUpdate()
                     )
                     .then(function(newModel){
-                        if(model.isAutoUpdate()){
+                        /*if(model.isAutoUpdate()){
                             newModel.isAvg = model.isAvg();
                             return new chlk.models.common.SimpleObject(newModel);
-                        }
+                        }*/
                         newModel.setAutoUpdate(model.isAutoUpdate());
                         newModel.setCategoryId(model.getCategoryId());
                         newModel.setStandardId(model.getStandardId());

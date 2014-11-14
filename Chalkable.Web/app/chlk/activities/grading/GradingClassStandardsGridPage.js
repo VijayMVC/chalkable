@@ -84,9 +84,21 @@ NAMESPACE('chlk.activities.grading', function () {
             OVERRIDE, VOID, function onModelReady_(model, msg_) {
                 BASE(model, msg_);
 
-                this._lastModel = null;
+                _DEBUG && console.info(model);
                 if (model instanceof chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData)
                     this._lastModel = model;
+
+                if (model instanceof chlk.models.standard.StandardGrading && this._lastModel) {
+                    this._lastModel.getCurrentGradingGrid().getGradingItems()
+                        .filter(function (_) {
+                            return _.getStandard().getStandardId() == model.getStandardId();
+                        })
+                        .forEach(function (_) {
+                            _.setItems(_.getItems().map(function (_) {
+                                return _.getStudentId() == model.getStudentId() ? model : _;
+                            }))
+                        });
+                }
             },
 
             [ria.mvc.DomEventBind('click', '[data-sort-type]')],

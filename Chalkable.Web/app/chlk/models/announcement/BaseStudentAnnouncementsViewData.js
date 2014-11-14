@@ -3,7 +3,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
     /** @class chlk.models.announcement.BaseStudentAnnouncementsViewData*/
     CLASS(
-        'BaseStudentAnnouncementsViewData', [
+        UNSAFE, 'BaseStudentAnnouncementsViewData', [
             function getGradesAvg(count_){
                 var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
                 var items = this.getItems() || [], classAvg = null;
@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.announcement', function () {
                     if(count_)
                         classAvg = (sum / gradedStudentCount).toFixed(count_);
                     else
-                        classAvg = Math.floor(sum / gradedStudentCount + 0.5);
+                        classAvg = Math.floor(sum / gradedStudentCount + 0.5).toString();
                 }
                 return classAvg;
             }

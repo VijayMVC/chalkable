@@ -59,7 +59,7 @@ mixin DisplayTotalPoints(model)
             .time
             .max-score.dotted-h
             each studentTotalPoint, i in studentTotalPoints
-                div(row-index=i).dotted-h.grade-value.total-point=studentTotalPoint.displayTotalPoint()
+                div(row-index=i, data-student-id=studentTotalPoint.getStudentId().valueOf()).dotted-h.grade-value.total-point=studentTotalPoint.displayTotalPoint()
 
             .dotted-h.grade-value
 
@@ -97,7 +97,7 @@ mixin DisplayTotalPoints(model)
                     +ActionLink('announcement', 'view', announcement.getId())
                         div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
                     .time=announcement.getExpiresDate().format('M d')
-                    .max-score.dotted-h(data-sort-type="anno", data-sort-anno-id=announcement.getId())=maxScore
+                    .max-score.dotted-h(data-sort-type="anno", data-sort-anno-id=announcement.getId().valueOf())=maxScore
                     studentItems = announcement.getStudentAnnouncements().getItems()
                     each info,i in studentItems
                         gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent())

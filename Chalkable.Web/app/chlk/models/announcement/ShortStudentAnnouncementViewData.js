@@ -1,4 +1,4 @@
-
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.school.SchoolOption');
@@ -6,51 +6,46 @@ REQUIRE('chlk.models.school.SchoolOption');
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.announcement.ShortStudentAnnouncementViewData*/
     CLASS(
-        'ShortStudentAnnouncementViewData', [
-            [ria.serialize.SerializeProperty('announcementid')],
+        UNSAFE, 'ShortStudentAnnouncementViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+            VOID, function deserialize(raw) {
+                this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
+                this.studentId = SJX.fromValue(raw.studentid, chlk.models.id.SchoolPersonId);
+                this.comment = SJX.fromValue(raw.comment, String);
+                this.dropped = SJX.fromValue(raw.dropped, Boolean);
+                this.gradeValue = SJX.fromValue(raw.gradevalue, String);
+                this.numericGradeValue = SJX.fromValue(raw.numericgradevalue, Number);
+                this.id = SJX.fromValue(raw.id, chlk.models.id.StudentAnnouncementId);
+                this.state = SJX.fromValue(raw.state, Number);
+                this.late = SJX.fromValue(raw.islate, Boolean);
+                this.absent = SJX.fromValue(raw.isabsent, Boolean);
+                this.unExcusedAbsent = SJX.fromValue(raw.isunexcusedabsent, Boolean);
+                this.incomplete = SJX.fromValue(raw.isincomplete, Boolean);
+                this.exempt = SJX.fromValue(raw.isexempt, Boolean);
+                this.passed = SJX.fromValue(raw.ispassed, Boolean);
+                this.complete = SJX.fromValue(raw.iscomplete, Boolean);
+                this.includeInAverage = SJX.fromValue(raw.includeinaverage, Boolean);
+            },
+
             chlk.models.id.AnnouncementId, 'announcementId',
-
-            [ria.serialize.SerializeProperty('studentid')],
             chlk.models.id.SchoolPersonId, 'studentId',
-
             String, 'comment',
-
             Boolean, 'dropped',
-
-            [ria.serialize.SerializeProperty('gradevalue')],
             String, 'gradeValue',
-
-            [ria.serialize.SerializeProperty('numericgradevalue')],
             Number, 'numericGradeValue',
-
             chlk.models.id.StudentAnnouncementId, 'id',
-
             Number, 'state',
-
-            [ria.serialize.SerializeProperty('islate')],
             Boolean, 'late',
-
-            [ria.serialize.SerializeProperty('isabsent')],
             Boolean, 'absent',
-
-            [ria.serialize.SerializeProperty('isunexcusedabsent')],
             Boolean, 'unExcusedAbsent',
-
-            [ria.serialize.SerializeProperty('isincomplete')],
             Boolean, 'incomplete',
-
-            [ria.serialize.SerializeProperty('isexempt')],
             Boolean, 'exempt',
-
-            [ria.serialize.SerializeProperty('ispassed')],
             Boolean, 'passed',
-
-            [ria.serialize.SerializeProperty('iscomplete')],
             Boolean, 'complete',
-
-            [ria.serialize.SerializeProperty('includeinaverage')],
             Boolean, 'includeInAverage',
 
             [[chlk.models.id.StudentAnnouncementId, chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId,
