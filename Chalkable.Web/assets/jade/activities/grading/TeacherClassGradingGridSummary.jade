@@ -62,6 +62,9 @@
                                     +Option('', Msg.All_categories , true)
                                     each item in self.getClassAnnouncementTypes()
                                         +Option(item.getId(), item.getName() , false)
+                        .arrows-row
+                            .prev-arrow.grid-arrow
+                            .next-arrow.grid-arrow
                         +ActionButton('grading', 'getGradeComments').blue-button.button-like.comment-button.gp-button=Msg.Comment
                         +ActionButton('grading', 'getGradeComments').blue-button.button-like.codes-button.gp-button=Msg.Code(true)
                     .grades-container

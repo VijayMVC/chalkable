@@ -314,9 +314,11 @@ NAMESPACE('chlk.activities.grading', function () {
                     var popUp = this.dom.find('.chlk-pop-up-container.codes');
                     popUp.find('.codes-content').setHTML(tpl.render());
 
-                    var main = this.dom.parent('#main');
-                    var bottom = main.height() + main.offset().top - active.offset().top + 73;
-                    var left = active.offset().left - main.offset().left - 260;
+                    var container = active.parent('.mps-container');
+                    var left = active.offset().left - container.offset().left - (popUp.width() + parseInt(popUp.getCss('padding-left'), 10)
+                        + parseInt(popUp.getCss('padding-right'), 10) - active.width())/2;
+                    var bottom = container.height() - active.offset().top + container.offset().top;
+
                     popUp.setCss('bottom', bottom);
                     popUp.setCss('left', left);
                     popUp.show();
@@ -412,6 +414,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 allScores = allScores.concat([['Incomplete', ''], ['Incomplete (fill all)', ''], ['Late', ''], ['Late (fill all)', '']]);
                 this.setAllScores(allScores);
                 this.setStandardScores(standardScores);
+                this.setGradingComments(model.getGradingComments());
             },
 
             function afterCellShow(parent){

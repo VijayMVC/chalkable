@@ -48,9 +48,9 @@ div(
                             ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus
                             .letters=Msg.Direct
                             if avg.isMayBeExempt()
-                                .grading-input-popup.chlk-pop-up-container.popup-bottom
-                                    .pop-up-triangle.big
-                                    +LabeledCheckbox(Msg.Exempt, 'isexempt', avg.isExempt())(data-value=avg.isExempt(), addCallBack = true).with-value.exempt-checkbox
+                                .grading-input-popup
+                                    .popup-content
+                                        +LabeledCheckbox(Msg.Exempt, 'isexempt', avg.isExempt())(data-value=avg.isExempt(), addCallBack = true).with-value.exempt-checkbox
                             else
                                 +Hidden('isexempt', avg.isExempt())
                 else

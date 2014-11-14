@@ -717,6 +717,18 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.beforeTbAnimation(node);
             },
 
+            [ria.mvc.DomEventBind('click', '.next-arrow')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function nextArrowClick(node, event){
+                node.parent('.marking-period-container').find('.next-button').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('click', '.prev-arrow')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function prevArrowClick(node, event){
+                node.parent('.marking-period-container').find('.prev-button').trigger('click');
+            },
+
             Number, function getColumns(){
                 return 5;
             },
@@ -747,7 +759,14 @@ NAMESPACE('chlk.activities.grading', function () {
                 toolbar.find('.dotted-container').setCss('width', Math.ceil(maxWidth/count));
                 //width = count * columnWidth - 1;
                 toolbar.setCss('width', maxWidth);
-                toolbar.find('.first-container').setCss('width', maxWidth);
+                var firstContainer = toolbar.find('.first-container'),
+                    thirdContainer = toolbar.find('.third-container');
+                firstContainer.setCss('width', maxWidth);
+
+                if(thirdContainer.offset().left + thirdContainer.width() > firstContainer.offset().left + firstContainer.width())
+                    toolbar.find('.next-button').removeClass('disabled');
+                else
+                    toolbar.find('.next-button').addClass('disabled');
                 return count;
             },
 

@@ -1,4 +1,33 @@
 .grades-page
+  .marking-period-container
+    position: relative
+
+  .arrows-row
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    text-align: center
+    padding-top: 9px
+
+  .grid-arrow
+    width: 72px
+    height: 27px
+    cursor: pointer
+    display: inline-block
+
+    &:first-child
+      margin-right: 10px
+
+    &.prev-arrow
+      background: url(images/grading/arrow-prevr.png) 0 0 no-repeat
+
+    &.next-arrow
+      background: url(images/grading/arrow-next.png) 0 0 no-repeat
+
+    &:active
+      opacity: 0.5
+
   .autocomplete-list
     .autocomplete-item
       width: auto
@@ -25,14 +54,19 @@
     +text-shadow(transparentize(#fff, .5) 0 2px 1px)
     line-height: 62px
     padding: 0 17px
+    position: relative
 
     .blue-button
       float: right
       margin: 17px 0
       width: 148px
+      position: relative
+      z-index: 10
 
   .grading-selects
     display: inline-block
+    position: relative
+    z-index: 10
 
   .grading-select
     min-width: 137px
@@ -171,6 +205,9 @@
       border-color: #d16060
       outline: none
 
+  .standards-select + DIV
+    margin-right: 16px
+
   .grading-input-popup
     left: 0
     top: 77px
@@ -256,16 +293,24 @@
 
             .code-input
               width: 82px
-              height: 10px
+              height: 20px
 
           &.comment
             width: 331px
 
-            .chzn-container
-              width: 322px !important
+            .codes-select
+              width: 322px
 
-              .chzn-single
-                height: 21px
+  .edited
+    font: normal 10px Arial italic
+    text-align: left
+    position: absolute
+    color: #b1b1b1
+    text-shadow: 0 1px 0 white
+    padding-left: 13px
+    bottom: 1px
+    left: 46px
+    background: url(images/grading/edited-avg.png) 0 center no-repeat
 
   .chlk-pop-up-container.comment
     h5
@@ -279,3 +324,9 @@
 
     BUTTON
       width: 68px
+
+.student-avg-popup-dialog
+  width: 472px
+  top: 80px
+  left: 411px
+  position: fixed
