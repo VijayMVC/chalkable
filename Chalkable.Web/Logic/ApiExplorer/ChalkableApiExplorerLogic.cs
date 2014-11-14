@@ -317,12 +317,6 @@ namespace Chalkable.Web.Logic.ApiExplorer
                 BuildManager.GetReferencedAssemblies()
                     .Cast<Assembly>()
                     .Single(assembly => assembly.GetName().Name == ASSEMBLY_FILE);
-            Trace.WriteLine("controller enum start 1{0}", asm.FullName);
-            Trace.WriteLine("#123 API LIST TEST 2");
-            var asm2 = AppDomain.CurrentDomain.GetAssemblies().
-               Single(assembly => assembly.GetName().Name == ASSEMBLY_FILE);
-            Trace.WriteLine("controller enum start 2{0}", asm2.FullName);
-
             Trace.WriteLine("controller enum start {0}", asm.FullName);
             var controllers = asm.GetExportedTypes().Where(IsChalkableController);
 
@@ -432,7 +426,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
                 if (File.Exists(fname))
                 {
                     var json = "";
-                    using (var fs = new FileStream(fname, FileMode.Open))
+                    using (var fs = new FileStream(fname, FileMode.Open, FileAccess.Read))
                     {
                         using (var sr = new StreamReader(fs))
                         {

@@ -544,9 +544,6 @@
     <Content Include="Content\icons-templates\banner.psd" />
     <Content Include="Content\icons-templates\icon.psd" />
     <Content Include="Content\icons-templates\screenshot.psd" />
-    <Content Include="pathfinder\adminedit_fake_method_responses.json" />
-    <Content Include="pathfinder\admingrade_fake_method_responses.json" />
-    <Content Include="pathfinder\adminview_fake_method_responses.json" />
     <Content Include="pathfinder\student_fake_method_responses.json" />
     <Content Include="pathfinder\teacher_fake_method_responses.json" />
   </ItemGroup>
