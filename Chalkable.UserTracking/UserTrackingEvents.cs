@@ -7,6 +7,8 @@ namespace Chalkable.UserTracking
         public static string SelectedLive = "Selected \"Live\"";
         public static string CreatedApp = "Created App";
         public static string UpdatedDraft = "Updated draft";
+        public static string LoggedInFromINow = "Logged in from INow";
+        public static string LoggedInFromChalkable = "Logged in from Chalkable";
         public const string AttachedDocument = "Attached document";
         public const string AttachedApp = "Attached App";
         public const string OpenedAnnouncement = "opened announcement";

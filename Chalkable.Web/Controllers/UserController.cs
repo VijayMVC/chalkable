@@ -18,7 +18,11 @@ namespace Chalkable.Web.Controllers
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
             var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime, acadSessionId));
             if (context != null)
-               return RedirectToHome(context.Role);
+            {
+                MasterLocator.UserTrackingService.LoggedInFromINow(context.Login);
+                return RedirectToHome(context.Role); 
+            }
+               
             return Redirect<HomeController>(x => x.Index());
         }
         
@@ -42,7 +46,11 @@ namespace Chalkable.Web.Controllers
             string error = null;
             var context = LogOn(remember, us => us.Login(userName, password, out error));
             if (context != null)
+            {
+                MasterLocator.UserTrackingService.LoggedInFromChalkable(context.Login);
                 return Json(new { Success = true, data = new { Role = context.Role.LoweredName } }, JsonRequestBehavior.AllowGet);
+            }
+                
             return Json(new { Success = false, ErrorMessage = error, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
 
