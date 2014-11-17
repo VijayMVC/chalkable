@@ -3,10 +3,10 @@
 
 require "animation"
 
-http_path = "/"
+#http_path = "./"
 css_dir = "Content"
 sass_dir = "assets/sass2"
 images_dir = "Content"
 javascripts_dir = "Scripts"
 # To enable relative paths to assets via compass helper functions. Uncomment:
-# relative_assets = true
+relative_assets = true
