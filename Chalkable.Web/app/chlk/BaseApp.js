@@ -281,13 +281,15 @@ NAMESPACE('chlk', function (){
                     tooltip.html('');
                 });
 
-                 jQuery(document).on('click', '.demo-role-button:not(.coming)', function(){
-                    if(!jQuery(this).hasClass('active')){
-                        window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json?rolename='
-                            + jQuery(this).attr('rolename') + '&prefix=' + window.school.demoprefix;
-                    }
-                    return false;
-                });
+                ria.dom.Dom('#demo-footer')
+                    .on('click', '[data-rolename]', function($node, event) {
+                        if(!$node.hasClass('pressed')) {
+                            window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json'
+                                + '?rolename=' + $node.getData('rolename')
+                                + '&prefix=' + window.school.demoprefix;
+                        }
+                        return false;
+                    });
 
                 this.apiHost_.onStart(this.context);
 
