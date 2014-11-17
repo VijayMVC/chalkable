@@ -140,5 +140,13 @@ namespace Chalkable.UserTracking
         public void PostedGrades(string login, int classId, int gradingPeriodId)
         {
         }
+
+        public void LoggedInFromChalkable(string login)
+        {
+        }
+
+        public void LoggedInFromINow(string login)
+        {
+        }
     }
 }

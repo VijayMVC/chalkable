@@ -1,70 +1,70 @@
 mixin ApiCallForm(controllerInfo, role)
-    .controller
-        .controller-header
-            .name=controllerInfo.getName()
-            .fill
-                div
-            .collapse-all
-        .content
-            methods = controllerInfo.getMethods() || []
-            each cntMethod in methods
-                .method
-                    methodType = cntMethod.getMethodType().toLowerCase()
-                    .header(class=methodType)
-                        span.header-line
-                        .header-body
-                            .call-type(class=methodType)
-                            .action(data-method-name=controllerInfo.getName() + "/" + cntMethod.getName())="/" + controllerInfo.getName() + "/" + cntMethod.getName() + ".json"
-                            .toggle
-                            .description=cntMethod.getDescription()
-                    .details
-                        .det-content
-                            methodParams = cntMethod.getParams() || []
-                            apiFormId = ria.dom.Dom.GID()
-                            +ActionForm('developer', 'makeApiCall')(id = apiFormId)
-                                +Hidden('apiCallRole', role)
-                                +Hidden('controllerName', controllerInfo.getName())
-                                +Hidden('methodName', cntMethod.getName())
-                                +Hidden('response', cntMethod.getResponse())
-                                +Hidden('apiFormId', apiFormId)
-                                if methodParams.length > 0
-                                    table
-                                        thead
-                                            th Parameter
-                                            th Value
-                                            th Description
-                                        tbody
-                                            each methodParam in methodParams
-                                                tr
-                                                    td.param-name=methodParam.getName()
-                                                    td.param-value
-                                                        input(type="text",
-                                                            data-param-type = methodParam.getParamType().valueOf(),
-                                                            data-formid = apiFormId,
-                                                            name = methodParam.getName()).value-field(class = methodParam.isOptional() ? "optional" : undefined)
-                                                    td.param-description=methodParam.getDescription()
-                                else
-                                    .no-params No parameters required
-                                .code-examples
-                                    tabContentId = "tab-" + apiFormId
-                                    .text-title Code Examples
-                                    .tab-headers(tabId=tabContentId)
-                                        .tab-header.active(data-example-type="0")
-                                            span.triangle
-                                            |cUrl
-                                        .tab-header(data-example-type="1")
-                                            span.triangle
-                                            |ruby
-                                        .tab-header(data-example-type="2")
-                                            span.triangle
-                                            |python
-                                    .tab-content(formId = apiFormId, id="tab-" + apiFormId)
-                                        pre.prettyprint.lang-python
+    methods = controllerInfo.getMethods() || []
+    if methods.length > 0
+        .controller
+            .controller-header
+                .name=controllerInfo.getName()
+                .fill
+                    div
+                .collapse-all
+            .content
 
+                each cntMethod in methods
+                    .method
+                        methodType = cntMethod.getMethodType().toLowerCase()
+                        .header(class=methodType)
+                            span.header-line
+                            .header-body
+                                .call-type(class=methodType)
+                                .action(data-method-name=controllerInfo.getName() + "/" + cntMethod.getName())="/" + controllerInfo.getName() + "/" + cntMethod.getName() + ".json"
+                                .toggle
+                                .description=cntMethod.getDescription()
+                        .details
+                            .det-content
+                                methodParams = cntMethod.getParams() || []
+                                apiFormId = ria.dom.Dom.GID()
+                                +ActionForm('developer', 'makeApiCall')(id = apiFormId)
+                                    +Hidden('apiCallRole', role)
+                                    +Hidden('controllerName', controllerInfo.getName())
+                                    +Hidden('methodName', cntMethod.getName())
+                                    +Hidden('response', cntMethod.getResponse())
+                                    +Hidden('apiFormId', apiFormId)
+                                    if methodParams.length > 0
+                                        table
+                                            thead
+                                                th Parameter
+                                                th Value
+                                                th Description
+                                            tbody
+                                                each methodParam in methodParams
+                                                    tr
+                                                        td.param-name=methodParam.getName()
+                                                        td.param-value
+                                                            input(type="text",
+                                                                data-param-type = methodParam.getParamType().valueOf(),
+                                                                data-formid = apiFormId,
+                                                                name = methodParam.getName()).value-field(class = methodParam.isOptional() ? "optional" : undefined)
+                                                        td.param-description=methodParam.getDescription()
+                                    else
+                                        .no-params No parameters required
+                                    .code-examples
+                                        tabContentId = "tab-" + apiFormId
+                                        .text-title Code Examples
+                                        .tab-headers(tabId=tabContentId)
+                                            .tab-header.active(data-example-type="0")
+                                                span.triangle
+                                                |cUrl
+                                            .tab-header(data-example-type="1")
+                                                span.triangle
+                                                |ruby
+                                            .tab-header(data-example-type="2")
+                                                span.triangle
+                                                |python
+                                        .tab-content(formId = apiFormId, id="tab-" + apiFormId)
+                                            pre.prettyprint.lang-python
 
-
-                                +Button()(type="submit").submit-draft-btn.special-button.blue-button.try-btn Try it out
-                                .response
+                                    +Button()(type="submit").submit-draft-btn.special-button.blue-button.try-btn Try it out
+                                    .response
 
 apiInfo = self.getApiInfo()
 

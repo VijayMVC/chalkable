@@ -2,7 +2,6 @@ REQUIRE('chlk.templates.grading.GradingClassSummaryGridTpl');
 REQUIRE('chlk.templates.grading.GradingInputTpl');
 REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl');
 REQUIRE('chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl');
-REQUIRE('chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.grading.StudentAverageTpl');
 REQUIRE('chlk.templates.grading.AvgCodesPopupTpl');
@@ -137,69 +136,53 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.updateGradingPeriodPartRule_(tpl, model);
             },
 
-            function calculateGradesAvg(gradingitem, round_){
-                var studentAnnouncements = gradingitem.studentannouncements;
-                if (!studentAnnouncements)
-                    return null;
-
-                var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
-                var items = studentAnnouncements.items || [], classAvg = null;
-                items.forEach(function(item){
-                    numericGrade = item.numericgradevalue;
-                    gradeValue = item.gradevalue;
-                    if(!item.dropped
-                        && !item.isincomplete
-                        && (gradeValue && gradeValue.toLowerCase() != 'ps'
-                            && gradeValue.toLowerCase() != 'wd'
-                            && gradeValue.toLowerCase() != 'nc')
-                        && item.includeinaverage
-                        && (numericGrade || numericGrade == 0 || item.gradevalue == 0 || item.gradevalue)){
-                            gradedStudentCount++;
-                            sum += (numericGrade || 0);
-                    }
-                });
-                studentAnnouncements.gradedStudentCount = gradedStudentCount;
-                if(gradedStudentCount){
-                    classAvg = (sum / gradedStudentCount).toFixed(round_ ? 0 : 2)
-                }
-                studentAnnouncements.classAvg = classAvg;
-                return classAvg;
-            },
-
-            [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)],
+            [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl, 'no-loading')],
+            [[Object, Object, String]],
             VOID, function updateGradingPeriodAvgs(tpl, model, msg_) {
-                var value = model.getValue(), calculateGradesAvg, that = this;
-                var container = this.dom.find('.mp-data[data-grading-period-id=' + value.gradingperiod.id + ']');
-                var tooltipText = (value.avg != null ? Msg.Avg + " " + value.avg : 'No grades yet');
+                var calculateGradesAvg, that = this;
+                var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
+                var tooltipText = (model.getAvg() != null ? Msg.Avg + " " + model.getAvg() : 'No grades yet');
                 var dom = this.dom;
-                if(!value.isAvg){
-                    var rowIndex = parseInt(dom.find('.active-row').getAttr('row-index'), 10);
-                    model.getValue().rowIndex = rowIndex;
-                    var avgs = container.find('.avgs-container');
-                    var html = new ria.dom.Dom().fromHTML(tpl.render());
-                    var width = avgs.next().width();
-                    html.prependTo(avgs.parent());
-                    avgs.remove();
-                    container.find('.avgs-container').setCss('width', width);
-                }else{
-                    value.totalavarages.forEach(function(item){
-                        var grade = item.totalaverage;
-                        var value = grade || grade == 0 ? grade.toFixed(value && value.rounddisplayedaverages ? 0 :2) : '';
-                        dom.find('.total-average[data-average-id=' + item.averageid + ']').setHTML(value.toString());
+                //var width = dom.find('.avgs-container').next().width();
+
+                (model.getStudentAverages() || [])
+                    .forEach(function(item){
+                        var grade = item.getTotalAverage();
+                        var value = grade != null ? grade.toFixed(model.isRoundDisplayedAverages() ? 0 : 2) : '';
+                        dom.find('.total-average[data-average-id=' + item.getAverageId().valueOf() + ']').setHTML(value.toString());
                     });
-                }
 
-                value.totalpoints && value.totalpoints.forEach(function(item, index){
-                    var value = item.maxtotalpoint ? (item.totalpoint + '/' + item.maxtotalpoint) : '';
-                    dom.find('.total-point[row-index=' + index + ']').setHTML(value);
-                });
+                var avgTpl = chlk.templates.grading.StudentAverageTpl();
+                (model.getStudentAverages() || [])
+                    .forEach(function(item){
+                        item.getAverages()
+                            .forEach(function (average) {
+                                avgTpl.assign(average);
+                                avgTpl.options({
+                                    ableDisplayAlphaGrades: model.isAbleDisplayAlphaGrades(),
+                                    roundDisplayedAverages: model.isRoundDisplayedAverages(),
+                                    gradingPeriodId: model.getGradingPeriod().getId()
+                                });
 
-                value.gradingitems.forEach(function(item){
-                    calculateGradesAvg = that.calculateGradesAvg(item, value.rounddisplayedaverages);
-                    dom.find('.avg-' + item.id).setHTML(calculateGradesAvg || calculateGradesAvg === 0 ? calculateGradesAvg.toString() : '');
-                });
+                                avgTpl.renderTo(dom.find('.avg-value-container[data-average-id=' + average.getAverageId().valueOf() + '][data-student-id=' + average.getStudentId().valueOf() + ']:not(.active-cell)').empty());
+                            });
+                    });
+
+                (model.getStudentTotalPoints() || [])
+                    .forEach(function (item, index) {
+                        var value = item.getMaxTotalPoint() ? (item.getTotalPoint().toFixed(model.isRoundDisplayedAverages() ? 0 : 2) + '/' + item.getMaxTotalPoint()) : '';
+                        dom.find('.total-point[data-student-id=' + item.getStudentId().valueOf() + ']').setHTML(value);
+                    });
+
+                model.getGradingItems()
+                    .forEach(function (item) {
+                        var calcAvg = item.getStudentAnnouncements().getGradesAvg(model.isRoundDisplayedAverages() ? 0 : 2);
+                        dom.find('.avg-' + item.getId().valueOf())
+                            .setHTML(calcAvg || '');
+                    });
+
+                //container.find('.avgs-container').setCss('width', width);
                 container.parent().find('.mp-name').setData('tooltip', tooltipText);
-
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.TeacherClassGradingGridSummaryCellTpl, chlk.activities.lib.DontShowLoader())],
@@ -500,9 +483,25 @@ NAMESPACE('chlk.activities.grading', function () {
             OVERRIDE, VOID, function onModelReady_(model, msg_) {
                 BASE(model, msg_);
 
-                this._lastModel = null;
+                _DEBUG && console.info(model);
                 if (model instanceof chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData)
                     this._lastModel = model;
+
+                if (model instanceof chlk.models.grading.ShortGradingClassSummaryGridItems && this._lastModel)
+                    this._lastModel.setCurrentGradingGrid(model);
+
+                if (model instanceof chlk.models.grading.ShortStudentAverageInfo && this._lastModel) {
+                    this._lastModel.getStudentAverages()
+                        .filter(function (_) {
+                            return _.getAverageId() == model.getAverageId();
+                        })
+                        .forEach(function (_) {
+                            _.setAverages(
+                                _.getAverages().map(function(_) {
+                                    return _.getStudentId() == model.getStudentId() ? model : _;
+                                }));
+                        })
+                }
             },
 
             [ria.mvc.DomEventBind('click', '[data-sort-type]')],

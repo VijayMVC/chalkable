@@ -1,4 +1,5 @@
 h3 #{self.getStudentName()}, #{self.getGradingPeriodName()}
+-var comments = self.getComments() || []
 .codes-grid
     .row.header
         .check
@@ -19,7 +20,7 @@ h3 #{self.getStudentName()}, #{self.getGradingPeriodName()}
             .comment
                 +Select('select-'+header.getHeaderId().valueOf()).codes-select
                     +Option('', 'Select an Option').empty-option
-                    each comment in self.getComments()
+                    each comment in comments
                         +Option(comment.getId().valueOf(), comment.getComment(), header.getGradingComment() && comment.getId() == header.getGradingComment().getId())(
                             data-code=comment.getCode()
                         )
