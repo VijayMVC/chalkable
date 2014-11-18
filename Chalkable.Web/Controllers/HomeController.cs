@@ -272,7 +272,6 @@ namespace Chalkable.Web.Controllers
                 classesAdvancedData.Add(new
                 {
                     ClassId = classId,
-                    Mask = new List<int>(),
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
                     AlphaGrades = classDetails.GradingScaleRef.HasValue
                                         ? SchoolLocator.AlphaGradeService.GetAlphaGradesForClass(classDetails.Id)

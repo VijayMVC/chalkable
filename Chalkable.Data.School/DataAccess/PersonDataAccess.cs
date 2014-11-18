@@ -113,35 +113,29 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
-            IDictionary<string, object> ps = new Dictionary<string, object>()
+            IDictionary<string, object> ps = new Dictionary<string, object>
             {
                 {"@teacherId", teacherId},
                 {"@schoolYearId", schoolYearId}
             };
-            using (var r = ExecuteStoredProcedureReader("spGetStudentsByTeacher", ps))
-            {
-                return r.ReadList<StudentDetails>();
-            }
+            return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByTeacher", ps);
         }
 
         public IList<StudentDetails> GetStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
-            IDictionary<string, object> ps = new Dictionary<string, object>()
+            IDictionary<string, object> ps = new Dictionary<string, object>
             {
                 {"@classId", classId},
                 {"@markingPeriodId", markingPeriodId},
                 {"@isEnrolled", isEnrolled}
 
             };
-            using (var r = ExecuteStoredProcedureReader("spGetStudentsByClass", ps))
-            {
-                return r.ReadList<StudentDetails>();
-            }
+            return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByClass", ps);
         }
 
         public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count)
         {
-            var ps = new Dictionary<string, object>()
+            var ps = new Dictionary<string, object>
             {
                 {"@start", start},
                 {"@count", count},

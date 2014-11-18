@@ -12,10 +12,12 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<ClassPeriod> classPeriods);
         void Delete(int periodId, int classId, int dayTypeId);
-        IList<ClassPeriod> GetClassPeriods(int schoolYearId,  int? markingPeriodId, int? classId, int? roomId, int? periodId, int? dateTypeId, int? studentId = null, int? teacherId = null, int? time = null);
 
         Class CurrentClassForTeacher(int personId, DateTime dateTime);
+
+        IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime from, DateTime to);
         IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null);
+        IList<ClassPeriod> GetClassPeriods(int schoolYearId, int? markingPeriodId, int? classId, int? roomId, int? periodId, int? dateTypeId, int? studentId = null, int? teacherId = null, int? time = null);
     }
 
     public class ClassPeriodService : SchoolServiceBase, IClassPeriodService
@@ -77,6 +79,13 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 return new ClassPeriodDataAccess(uow, null).CurrentClassForTeacher(Context.SchoolYearId.Value, personId,date, time);
             }  
+        }
+
+        public IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime @from, DateTime to)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            return DoRead( u => new ScheduleDataAccess(u, null).GetSchedule(Context.SchoolYearId.Value, teacherId, studentId, classId, from, to));
+
         }
 
         public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)

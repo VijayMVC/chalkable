@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
 
@@ -15,7 +15,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string CurrentClassName { get; set; }
         public string CurrentAttendanceLevel { get; set; }
         public int MaxPeriodNumber { get; set; }
-        public IList<AnnouncementsClassPeriodViewData> PeriodSection { get; set; }
         public IList<ClassViewData> ClassesSection { get; set; }
         public StudentHoverBoxViewData<TotalAbsencesPerClassViewData> AttendanceBox { get; set; }
         public StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> DisciplineBox { get; set; }
@@ -70,7 +69,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             var res = new StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>
                 {
                     Hover = DisciplineTotalPerTypeViewData.Create(infractionSummaryInfos).OrderByDescending(x => x.Total).ToList(),
-                    Title = totalDisciplineOccurrences.ToString()
+                    Title = totalDisciplineOccurrences.ToString(CultureInfo.InvariantCulture)
                 };
             return res;
         }

@@ -86,6 +86,7 @@
     <Compile Include="DataAccess\InfractionDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\PersonEmailDataAccess.cs" />
+    <Compile Include="DataAccess\ScheduleDataAccess.cs" />
     <Compile Include="DataAccess\ScheduledTimeSlotDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolOptionDataAccess.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Model\Room.cs" />
     <Compile Include="Model\DayType.cs" />
     <Compile Include="Model\ScheduledTimeSlot.cs" />
+    <Compile Include="Model\ScheduleItem.cs" />
     <Compile Include="Model\School.cs" />
     <Compile Include="Model\SchoolGradeLevel.cs" />
     <Compile Include="Model\SchoolOption.cs" />

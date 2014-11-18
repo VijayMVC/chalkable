@@ -297,6 +297,14 @@ namespace Chalkable.Data.Common
             }
         }
 
+        public IList<T> ExecuteStoredProcedureList<T>(string name, IDictionary<string, object> parameters) where T : new()
+        {
+            using (var reader = ExecuteStoredProcedureReader(name, parameters))
+            {
+                return reader.ReadList<T>();
+            }
+        }
+
         protected bool Exists<T>(QueryCondition conditions) where T : new()
         {
             var q = Orm.Orm.CountSelect<T>(FilterConditions(conditions), ALL_COUNT_FIELD);

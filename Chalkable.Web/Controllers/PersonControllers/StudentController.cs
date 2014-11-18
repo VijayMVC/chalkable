@@ -36,10 +36,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
 
-            //var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.StartTime).Select(cp => cp.ClassRef).Distinct().ToList();
-            throw new NotImplementedException();
+            var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.Order).Select(cp => cp.ClassRef).Distinct().ToList();
 
-            /*var classList = sortedClassRefs.Select(sortedClassRef => classes.FirstOrDefault(cls => cls.Id == sortedClassRef)).Where(c => c != null).ToList();
+            var classList = sortedClassRefs.Select(sortedClassRef => classes.FirstOrDefault(cls => cls.Id == sortedClassRef)).Where(c => c != null).ToList();
             classList.AddRange(classes.Where(cls => !sortedClassRefs.Contains(cls.Id)));
 
             Room currentRoom = null;
@@ -54,7 +53,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(schoolPersonId);
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
-            return Json(res);*/
+            return Json(res);
 
         }
         

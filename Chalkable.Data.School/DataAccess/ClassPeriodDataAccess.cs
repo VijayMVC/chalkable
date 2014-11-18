@@ -24,57 +24,6 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete(conds);
         }
 
-        public bool Exists(ClassPeriodQuery query)
-        {
-            return Exists(BuildGetClassPeriodsQuery(query));
-        }
-
-        public bool IsClassStudentsAssignedToPeriod(int periodId, int classId, int dateTypeId)
-        {
-            var sql = @"select * from ClassPerson
-                        where ClassRef = @classId and PersonRef in (
-	                        select csp.PersonRef from ClassPerson csp
-	                        join ClassPeriod cgp on cgp.ClassRef = csp.ClassRef and cgp.PeriodRef = @periodId and cgp.DayTypeRef = @dayTypeId)";
-
-            var conds = new Dictionary<string, object> { { "periodId", periodId }, { "classId", classId }, { "dayTypeId", dateTypeId } };
-            var query = new DbQuery(sql, conds);
-            return Exists(query);
-        }
-
-        public bool IsStudentAlreadyAssignedToClassPeriod(int personId, int classId)
-        {
-            var sql = @"select * from ClassPeriod cPeriod1 
-                        where cPeriod1.ClassRef = @classId and exists(
-	                        select * from ClassPeriod cPeriod2
-	                        join ClassPerson cPerson on cPerson.ClassRef = cPeriod2.ClassRef and cPerson.PersonRef = @personId
-                            where cPeriod2.PeriodRef = cPeriod1.PeriodRef and cPeriod1.DayTypeRef = cPeriod2.DayTypeRef)";
-
-            var conds = new Dictionary<string, object> { { "personId", personId }, { "classId", classId } };
-            var query = new DbQuery(sql, conds);
-            return Exists(query);
-        }
-
-
-        public IList<Class> GetAvailableClasses(int periodId)
-        {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.Append(@"select c.* from ClassPeriod 
-                                 join Class c on c.Id = ClassPeriod.ClassRef");
-            var conds = new AndQueryCondition { { ClassPeriod.PERIOD_REF_FIELD, periodId } };
-            conds.BuildSqlWhere(dbQuery, typeof(ClassPeriod).Name);
-            return ReadMany<Class>(dbQuery);
-        }
-        public IList<Room> GetAvailableRooms(int periodId)
-        {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.Append(@"select r.* from ClassPeriod  
-                                 join Class c on c.Id = ClassPeriod.ClassRef
-                                 join Room r on r.Id = c.RoomRef");
-            var conds = new AndQueryCondition {{ClassPeriod.PERIOD_REF_FIELD, periodId}};
-            conds.BuildSqlWhere(dbQuery, typeof(ClassPeriod).Name);
-            return ReadMany<Room>(dbQuery);
-        } 
-        
         public IList<ClassPeriod> GetClassPeriods(ClassPeriodQuery query)
         {
             var res = BuildGetClassPeriodsQuery(query);

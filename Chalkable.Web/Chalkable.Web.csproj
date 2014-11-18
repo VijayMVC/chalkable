@@ -212,7 +212,6 @@
     <Compile Include="Controllers\PreferenceController.cs" />
     <Compile Include="Controllers\PrivateMessageController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
-    <Compile Include="Controllers\ScheduleSectionController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\SchoolYearController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -242,7 +241,6 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementDetailedViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
-    <Compile Include="Models\AnnouncementsViewData\AnnouncementsClassPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementStandardViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
@@ -269,7 +267,6 @@
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\CalendarsViewData\AdminDayCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementCalendarWeekViewData.cs" />
-    <Compile Include="Models\CalendarsViewData\AnnouncementDayCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementMonthCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AttendanceCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\DisciplineCalendarViewData.cs" />
@@ -295,6 +292,7 @@
     <Compile Include="Models\ClassPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\ScheduleItemViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\ClassDisciplineInputModel.cs" />

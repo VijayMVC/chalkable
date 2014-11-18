@@ -86,14 +86,6 @@ NAMESPACE('chlk.services', function () {
                 return new ria.async.DeferredData(res);
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            ria.async.Future, function getTeacherClassWeek(classId_, date_) {
-                return this.get('AnnouncementCalendar/TeacherClassWeek.json', ArrayOf(chlk.models.calendar.TeacherSettingsCalendarDay), {
-                    classId: classId_ && classId_.valueOf(),
-                    date: date_ && date_.toString('mm-dd-yy')
-                });
-            },
-
             [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getDayInfo(date_, schoolPersonId_) {
                 return this.get('AnnouncementCalendar/Day.json', ArrayOf(chlk.models.calendar.announcement.DayItem), {
