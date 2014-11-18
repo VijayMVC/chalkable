@@ -316,12 +316,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                     }, 501);
                 }
 
-                var dom = this.dom;
+                var dom = this.dom, that = this;
                 new ria.dom.Dom().on('click.grading_popup', function(doc, event){
                     var node = new ria.dom.Dom(event.target);
                     if(!node.isOrInside('.grading-input-popup')){
                         var popUp = node.find('.grading-input-popup:visible');
-                        dom.find('.grading-input-popup').hide();
+                        that.hideGradingPopUp();
                         if(popUp.hasClass('changed'))
                             popUp.parent('form').trigger('submit');
                     }
@@ -395,6 +395,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         .setCss('left', left);
                     list.setHTML(html)
                         .show();
+                    this.hideGradingPopUp();
                 }else{
                     this.hideDropDown();
                 }
@@ -404,6 +405,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var list = this.dom.find('.autocomplete-list');
                 list.setHTML('')
                     .hide();
+            },
+
+            VOID, function hideGradingPopUp(){
+                this.dom.find('.grading-input-popup').hide();
             },
 
             [ria.mvc.DomEventBind('keydown', '.grade-autocomplete')],
@@ -742,7 +747,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function fillGradeClick(node, event){
                 if(!node.find('.checkbox').getAttr('disabled')){
-                    node.parent('.grading-input-popup').hide();
+                    this.hideGradingPopUp();
                     var form = node.parent('form');
                     form.trigger('submit');
                     var input = form.find('input[name=gradevalue]');
@@ -802,6 +807,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var res = node.find('.input-container').find('.error').valueOf().length == 0;
                 if(res){
                     this.hideDropDown();
+                    this.hideGradingPopUp();
                     var input = node.find('.grade-input');
                     var value = (input.getValue() || '').toLowerCase();
                     if(!this.canUpdate(input))
@@ -814,7 +820,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var row = node.parent('.row');
                     var container = row.find('.top-content');
                     container.addClass('loading');
-                    row.find('.grading-input-popup').hide();
                     if(!node.getData('able-drop')){
                         node.find('.dropped-checkbox').setValue(false);
                         node.find('.dropped-hidden').setValue(false);

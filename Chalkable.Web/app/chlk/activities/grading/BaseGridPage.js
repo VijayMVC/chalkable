@@ -146,6 +146,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         .setCss('left', left);
                     list.setHTML(html)
                         .show();
+                    this.hideGradingPopUp();
                 }else{
                     this.hideDropDown();
                 }
@@ -155,6 +156,10 @@ NAMESPACE('chlk.activities.grading', function () {
                 var list = this.dom.find('.autocomplete-list');
                 list.setHTML('')
                     .hide();
+            },
+
+            VOID, function hideGradingPopUp(){
+                this.dom.find('.grading-input-popup').hide();
             },
 
             /* Dropdown events */
@@ -299,7 +304,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var form = activeCell.find('form');
                 activeCell.removeClass('active-cell');
                 activeCell.find('.grade-info').removeClass('empty-grade');
-                activeCell.find('.grading-input-popup').hide();
+                this.hideGradingPopUp();
                 if(submitCurrent_)
                     form.trigger('submit');
                 var value = form.find('.value-input').getValue();
@@ -317,7 +322,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var form = activeCell.find('form');
                 activeCell.removeClass('active-cell');
                 activeCell.find('.grade-info').removeClass('empty-grade');
-                activeCell.find('.grading-input-popup').hide();
+                this.hideGradingPopUp();
                 var that = this;
                 activeCell.parent('.grade-container').find('.empty-grade').forEach(function(item){
                     var cell = item.parent('.grade-value');
@@ -354,6 +359,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var cell = node.parent('.grade-value');
                 if(!cell.hasClass('avg-value-container') || cell.find('.grade-info').getData('may-be-exempt')){
                     node.parent().find('.grading-input-popup').show();
+                    this.hideDropDown();
                     return false;
                 }
                 return true;
@@ -643,7 +649,7 @@ NAMESPACE('chlk.activities.grading', function () {
             function gradingFormSubmit(node, event){
                 var input = node.find('.value-input');
                 if(!input.hasClass('error') && !input.hasClass('not-equals')){
-                    node.find('.grading-input-popup').hide();
+                    this.hideGradingPopUp();
                     var value = (input.getValue() || '').toLowerCase();
                     var isAvg = node.hasClass('avg-form');
                     if(value == 'dropped' || value == 'exempt'){
@@ -779,7 +785,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
 
                     if(!node.isOrInside('.grading-input-popup')){
-                        dom.find('.grading-input-popup').hide();
+                        that.hideGradingPopUp();
                     }
                 });
             },
