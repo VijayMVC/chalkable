@@ -81,15 +81,9 @@ namespace Chalkable.Web.Models
             var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
             res.TotalAvarages = StudentTotalAveragesViewData.Create(gradeBook.Averages, stIds);
 
-            if (res.DisplayTotalPoints  && gradeBook.StudentTotalPoints != null && gradeBook.StudentTotalPoints.Count > 0)
-            {
-                res.TotalPoints = new List<TotalPointViewData>();
-                foreach (var stId in stIds)
-                {
-                    var totalpoint = gradeBook.StudentTotalPoints.FirstOrDefault(x => x.StudentId == stId);
-                    res.TotalPoints.Add(totalpoint == null ? new TotalPointViewData() : TotalPointViewData.Create(totalpoint));
-                }
-            }
+            if (res.DisplayTotalPoints)
+                BuildTotalPoints(res, stIds, gradeBook.StudentTotalPoints);
+            
             res.GradingItems = gradeBook.Announcements
                                         .OrderByDescending(x=>x.Expires)
                                         .Select(x => ShortAnnouncementGradeViewData.Create(x, x.StudentAnnouncements, stIds))
@@ -97,6 +91,23 @@ namespace Chalkable.Web.Models
 
             return res;
         }
+
+        private static void BuildTotalPoints(GradingGridViewData res, IList<int> studentIds, IList<StudentTotalPoint> studentTotalPoints)
+        {
+
+            if (studentTotalPoints != null && studentTotalPoints.Count > 0)
+            {
+                res.TotalPoints = new List<TotalPointViewData>();
+                foreach (var stId in studentIds)
+                {
+                    var totalpoint = studentTotalPoints.FirstOrDefault(x => x.StudentId == stId);
+                    res.TotalPoints.Add(totalpoint == null ? new TotalPointViewData { StudentId = stId } : TotalPointViewData.Create(totalpoint));
+                }
+            }
+            else res.TotalPoints = studentIds.Select(x => new TotalPointViewData { StudentId = x }).ToList();
+        }
+
+
         public static IList<GradingGridViewData> Create(IList<ChalkableGradeBook> gradeBooks)
         {
             return gradeBooks.Select(Create).ToList();
@@ -105,18 +116,17 @@ namespace Chalkable.Web.Models
 
     public class TotalPointViewData
     {
+        public int StudentId { get; set; }
         public decimal? TotalPoint { get; set; }
         public decimal? MaxTotalPoint { get; set; }
-        
-        public static TotalPointViewData Create(decimal totalPoint, decimal maxTotalPoint)
-        {
-            return new TotalPointViewData {TotalPoint = totalPoint, MaxTotalPoint = maxTotalPoint};
-        }
 
         public static TotalPointViewData Create(StudentTotalPoint studentTotalPoint)
         {
-            return Create(studentTotalPoint.TotalPointsEarned, studentTotalPoint.TotalPointsPossible);
+            return new TotalPointViewData {TotalPoint = studentTotalPoint.TotalPointsEarned, MaxTotalPoint = studentTotalPoint.TotalPointsPossible, StudentId = studentTotalPoint.StudentId};
         }
+
+
+
     }
 
     public class StudentTotalAveragesViewData

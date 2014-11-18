@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
@@ -41,9 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     .ToList();
         }
 
-        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int value, int? personId, IList<int> roleIds,
-            IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, 
-            bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int value, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
 
             var callerRoleId = Storage.Context.RoleId;
@@ -137,12 +136,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var personRefs = personsForInstall.Select(x => x.Key).ToList();
 
+
+            var mpId = Storage.MarkingPeriodStorage.GetMarkingPeriod(Storage.Context.NowSchoolTime).Id;
             var filtered =
                 Storage.ClassPersonStorage.GetAll().Where(x =>
                 {
                     var cls = Storage.ClassStorage.GetById(x.ClassRef);
                     return personRefs.Contains(x.PersonRef) && cls.ChalkableDepartmentRef != null &&
-                           departmentIds.Contains(cls.ChalkableDepartmentRef.Value);
+                           departmentIds.Contains(cls.ChalkableDepartmentRef.Value) && x.MarkingPeriodRef == mpId;
                 }).Select(x =>
                 {
                     var chalkableDepartmentRef = Storage.ClassStorage.GetById(x.ClassRef).ChalkableDepartmentRef;
@@ -168,11 +169,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             if (classIds == null) return;
             var ids = personsForInstall.Select(x => x.Key).ToList();
+
+            var mpId = Storage.MarkingPeriodStorage.GetMarkingPeriod(Storage.Context.NowSchoolTime).Id;
             foreach (var classId in classIds)
             {
                 result.AddRange(
                     Storage.ClassPersonStorage.GetAll()
-                        .Where(x => x.ClassRef == classId && ids.Contains(x.PersonRef))
+                        .Where(x => x.ClassRef == classId && ids.Contains(x.PersonRef) && x.MarkingPeriodRef == mpId)
+                        .Distinct()
                         .Select(x => new PersonsForApplicationInstall()
                         {
                             GroupId = classId.ToString(CultureInfo.InvariantCulture),

@@ -23,6 +23,7 @@ NAMESPACE('chlk', function (){
             OVERRIDE, ria.mvc.ISession, function initSession_() {
                 var session = BASE();
                 session.set('role', new chlk.models.common.Role(chlk.models.common.RoleEnum.DEVELOPER, 'Developer'));
+                this.saveInSession(session, ChlkSessionConstants.CURRENT_CHLK_PERSON, chlk.models.developer.DeveloperInfo, ChlkSessionConstants.CURRENT_DEVELOPER);
                 this.saveInSession(session, 'application', chlk.models.apps.Application, 'currentApp');
 
 

@@ -52,7 +52,9 @@ NAMESPACE('chlk.services', function () {
                 var apps = this.getContext().getSession().get(ChlkSessionConstants.DEV_APPS) || [];
 
                 return apps.length == 0 || refresh_
-                    ? this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {})
+                    ? this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
+                            state: chlk.models.apps.AppStateEnum.DRAFT.valueOf()
+                        })
                           .then(function(data){
                                 this.getContext().getSession().set(ChlkSessionConstants.DEV_APPS, data.getItems());
                                 return data.getItems();
@@ -215,11 +217,12 @@ NAMESPACE('chlk.services', function () {
                 ArrayOf(chlk.models.id.PictureId),
                 ArrayOf(chlk.models.id.GradeLevelId),
                 ArrayOf(chlk.models.apps.AppPlatformTypeEnum),
-                Boolean
+                Boolean,
+                ArrayOf(String)
             ]],
             ria.async.Future, function updateApp(
                 appId, shortAppInfo, permissionIds, appPricesInfo, devId, appAccess, categories, pictures_,
-                gradeLevels, platforms, forSubmit){
+                gradeLevels, platforms, forSubmit, standards){
                 return this.post('Application/Update.json', chlk.models.apps.Application,  {
                     applicationId: appId.valueOf(),
                     shortApplicationInfo: shortAppInfo.getPostData(),
@@ -231,7 +234,8 @@ NAMESPACE('chlk.services', function () {
                     picturesid: this.arrayToIds(pictures_ || ""),
                     gradeLevels: this.arrayToIds(gradeLevels),
                     platforms: this.arrayToIds(platforms),
-                    forSubmit: forSubmit
+                    forSubmit: forSubmit,
+                    standardsCodes : this.arrayToIds(standards)
                 })
                 .then(function(newApp){
                     return this.switchApp(newApp);

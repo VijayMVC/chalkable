@@ -14,10 +14,28 @@ mixin TextArea(tName, val, isReadonly, validationRule)
         -attributes.disabled = isReadonly
     textarea(name=tName, class=rule)(attributes)=val
 
-mixin MyAppsPermission(prefix, app, suffix, shortText)
-    .myapps-permission(class= shortText ? shortText : undefined)
+mixin MyAppsPermission(prefix, appName, suffix, shortText)
+    permissionCls = shortText ? "app-name " + shortText : "app-name"
+    .myapps-permission
         label=prefix
-        span.app-name=app + " " + suffix
+        if appName.length > 0
+            span(data-tooltip=prefix +  " " + appName + " " + suffix, data-tooltip-type="overflow", class=permissionCls)=appName
+        span.my-apps=suffix
+
+mixin MyAppsPermissions(myAppsAccess, appName, readOnly)
+    .my-apps
+        .permission
+            +MyAppsPermission("Can Teachers Launch", appName, "in My Apps?")
+            +SlideCheckbox("teacherMyAppsEnabled", myAppsAccess.isTeacherMyAppsEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Students Launch", appName, "in My Apps?")
+            +SlideCheckbox("studentMyAppsEnabled", myAppsAccess.isStudentMyAppsEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Admins Launch", appName, "in My Apps?")
+            +SlideCheckbox("adminMyAppsEnabled", myAppsAccess.isAdminMyAppsEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Parents Launch", appName, "in My Apps?", "short")
+            +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), readOnly)
 
 mixin AppPricing(appPrice, isReadOnly)
     isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
@@ -134,19 +152,7 @@ appPlatforms = appPlatforms.join(',')
         .section
             .elem
                 label.top.hint My Apps:
-                .my-apps
-                    .permission
-                        +MyAppsPermission("Can Teachers Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("teacherMyAppsEnabled", myAppsAccess.isTeacherMyAppsEnabled(), self.isReadOnly())
-                    .permission
-                        +MyAppsPermission("Can Students Launch", app.getName(), "in My Apps?")
-                        +SlideCheckbox("studentMyAppsEnabled", myAppsAccess.isStudentMyAppsEnabled(), self.isReadOnly())
-                    .permission
-                        +MyAppsPermission("Can Admins Launch", app.getName(), "in My Apps?", "short")
-                        +SlideCheckbox("adminMyAppsEnabled", myAppsAccess.isAdminMyAppsEnabled(), self.isReadOnly())
-                    .permission
-                        +MyAppsPermission("Can Parents Launch", app.getName(), "in My Apps?", "short")
-                        +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), self.isReadOnly())
+                +MyAppsPermissions(myAppsAccess, app.getName(), self.isReadOnly())
         .section.small
             .elem.first
                 label.hint New Item:
@@ -158,16 +164,18 @@ appPlatforms = appPlatforms.join(',')
                 label.hint Grading View:
                 .my-apps
                     .permission
-                        +MyAppsPermission("Will Teachers be", '', 'viewing student output', "short-gd")
+                        +MyAppsPermission("Will Teachers be", '', 'viewing student output?', "short-gd")
                         +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
         .section.small
             .elem.standarts
+                isAdjustToStandards = app.getStandards() && app.getStandards().length > 0
                 label.hint Standards:
                 .info
                     label.description Is your app aligned with common core standards?
-                    +SlideCheckbox("adjustedToStandarts", myAppsAccess.isAdjustedToStandarts(), self.isReadOnly()).toggle-standarts
-                .add-standarts(class = myAppsAccess.isAdjustedToStandarts() ?  "x-hidden" : undefined)
-                    .title Standards
+                    +SlideCheckbox("adjustedToStandarts", isAdjustToStandards, self.isReadOnly()).toggle-standarts
+                .add-standards-container(class = isAdjustToStandards ? undefined :  "x-hidden")
+                    .add-standards
+                        +RenderWith(self.prepareStandardListData(), chlk.templates.standard.ApplicationStandardsTpl)
         .section
             .elem
                 label.hint API Access:

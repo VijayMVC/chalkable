@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementService
     {
-        AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId);
+        AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId, DateTime expiresDate);
         AnnouncementDetails GetAnnouncementDetails(int announcementId);
         void DeleteAnnouncement(int announcementId);
         void DeleteAnnouncements(int classId, int? announcementType, AnnouncementState state);
@@ -299,7 +299,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId)
+        public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId, DateTime expiresDate)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -309,7 +309,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var annDa = CreateAnnoucnementDataAccess(uow);
-                var res = annDa.Create(classAnnType.Id, classId, Context.NowSchoolTime, Context.NowSchoolYearTime, Context.PersonId.Value);
+                var res = annDa.Create(classAnnType.Id, classId, Context.NowSchoolTime, expiresDate, Context.PersonId.Value);
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime);
                 annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassRef);
@@ -318,7 +318,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     res.ClassAnnouncementTypeName = classAnnType.Name;
                     res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
-                }
+                }               
                 return res;
             }
         }
@@ -468,8 +468,13 @@ namespace Chalkable.BusinessLogic.Services.School
                     ann.WeightMultiplier = announcement.WeightMultiplier;
                     ann.MayBeDropped = announcement.CanDropStudentScore;
                     ann.VisibleForStudent = !announcement.HideFromStudents;
+                    
                     if (classId.HasValue && ann.ClassRef != classId.Value && ann.State == AnnouncementState.Draft)
+                    {
+                        // clearing some data before switching between classes
                         ann.Title = null;
+                        new AnnouncementApplicationDataAccess(uow).DeleteByAnnouncementId(ann.Id);
+                    }
                 }
                 if (BaseSecurity.IsAdminViewer(Context))
                     throw new NotImplementedException();
@@ -477,7 +482,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(announcement.ExpiresDate.HasValue)
                     ann.Expires = announcement.ExpiresDate.Value;
 
-                SetClassToAnnouncement(ann, classId, ann.Expires);
+                SetClassToAnnouncement(ann, classId);
                 da.Update(ann);
                 
                 var stDa = new AnnouncementStandardDataAccess(uow);
@@ -534,7 +539,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             var dateNow = Context.NowSchoolTime.Date;
             if(classId.HasValue)
-                SetClassToAnnouncement(res, classId.Value, res.Expires);
+                SetClassToAnnouncement(res, classId.Value);
             if (res.State == AnnouncementState.Draft)
             {
                 res.State = AnnouncementState.Created;
@@ -587,7 +592,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         
-        private void SetClassToAnnouncement(Announcement announcement, int? classId, DateTime expiresDate)
+        private void SetClassToAnnouncement(Announcement announcement, int? classId)
         {
             if (classId.HasValue)
             {

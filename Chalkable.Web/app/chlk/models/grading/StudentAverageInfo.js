@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.GradingPeriodId');
@@ -6,52 +7,48 @@ REQUIRE('chlk.models.grading.AvgCodeHeaderViewData');
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.grading.ShortStudentAverageInfo*/
     CLASS(
-        'ShortStudentAverageInfo', [
-            [ria.serialize.SerializeProperty('averageid')],
+        UNSAFE, 'ShortStudentAverageInfo', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+            VOID, function deserialize(raw) {
+                this.averageId = SJX.fromValue(raw.averageid, Number);
+                this.averageName = SJX.fromValue(raw.averagename, String);
+                this.calculatedAvg = SJX.fromValue(raw.calculatedavg, Number);
+                this.enteredAvg = SJX.fromValue(raw.enteredavg, Number);
+                this.calculatedAlphaGrade = SJX.fromValue(raw.calculatedalphagrade, String);
+                this.enteredAlphaGrade = SJX.fromValue(raw.enteredalphagrade, String);
+                this.mayBeExempt = SJX.fromValue(raw.maybeexempt, Boolean);
+                this.exempt = SJX.fromValue(raw.isexempt, Boolean);
+                this.studentId = SJX.fromValue(raw.studentid, chlk.models.id.SchoolPersonId);
+                this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
+                this.gradingPeriodId = SJX.fromValue(raw.gradingPeriodId, chlk.models.id.GradingPeriodId);
+                this.averageValue = SJX.fromValue(raw.averageValue, String);
+                this.note = SJX.fromValue(raw.note, String);
+                this.oldValue = SJX.fromValue(raw.oldValue, String);
+                this.oldExempt = SJX.fromValue(raw.oldExempt, String);
+                this.codes = SJX.fromArrayOfValues(raw.codes, null);
+                this.codesString = SJX.fromValue(raw.codesString, String);
+            },
+
             Number, 'averageId',
-
-            [ria.serialize.SerializeProperty('averagename')],
             String, 'averageName',
-
-            [ria.serialize.SerializeProperty('calculatedavg')],
             Number, 'calculatedAvg',
-
-            [ria.serialize.SerializeProperty('enteredavg')],
             Number, 'enteredAvg',
-
-            [ria.serialize.SerializeProperty('calculatedalphagrade')],
             String, 'calculatedAlphaGrade',
-
-            [ria.serialize.SerializeProperty('enteredalphagrade')],
             String, 'enteredAlphaGrade',
-
-            [ria.serialize.SerializeProperty('maybeexempt')],
             Boolean, 'mayBeExempt',
-
-            [ria.serialize.SerializeProperty('isexempt')],
             Boolean, 'exempt',
-
-            [ria.serialize.SerializeProperty('studentid')],
             chlk.models.id.SchoolPersonId, 'studentId',
-
             chlk.models.id.ClassId, 'classId',
-
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
-
             String, 'averageValue',
-
             String, 'note',
-
             String, 'oldValue',
-
             Boolean, 'oldExempt',
-
-            //ArrayOf(chlk.models.grading.AvgCodeHeaderViewData), 'codes',
-
             Array, 'codes',
-
             String, 'codesString',
 
             [[Number, chlk.models.id.GradingPeriodId, Number, Number, String, String, Boolean, Boolean, chlk.models.id.SchoolPersonId, String]],
@@ -102,25 +99,24 @@ NAMESPACE('chlk.models.grading', function () {
             String, function displayGrade(grade, idRounded_){
                 return grade || grade == 0 ? grade.toFixed(idRounded_ ? 0 : 2) : '';
             }
-
-    ]);
+        ]);
 
     /** @class chlk.models.grading.StudentAverageInfo*/
-    CLASS('StudentAverageInfo',[
+    CLASS(
+        UNSAFE, 'StudentAverageInfo', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-        [ria.serialize.SerializeProperty('averageid')],
-        Number, 'averageId',
+            VOID, function deserialize(raw) {
+                this.averageId = SJX.fromValue(raw.averageid, Number);
+                this.averageName = SJX.fromValue(raw.averagename, Number);
+                this.gradingPeriodAverage = SJX.fromValue(raw.isgradingperiodaverage, Boolean);
+                this.totalAverage = SJX.fromValue(raw.totalaverage, Number);
+                this.averages = SJX.fromArrayOfDeserializables(raw.averages, chlk.models.grading.ShortStudentAverageInfo);
+            },
 
-        [ria.serialize.SerializeProperty('averagename')],
-        String, 'averageName',
-
-        ArrayOf(chlk.models.grading.ShortStudentAverageInfo), 'averages',
-
-        [ria.serialize.SerializeProperty('isgradingperiodaverage')],
-        Boolean, 'gradingPeriodAverage',
-
-        [ria.serialize.SerializeProperty('totalaverage')],
-        Number, 'totalAverage'
-
-    ]);
+            Number, 'averageId',
+            String, 'averageName',
+            ArrayOf(chlk.models.grading.ShortStudentAverageInfo), 'averages',
+            Boolean, 'gradingPeriodAverage',
+            Number, 'totalAverage'
+        ]);
 });

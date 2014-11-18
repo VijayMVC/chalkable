@@ -163,7 +163,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionFilters\AjaxHandleError.cs" />
+    <Compile Include="ActionFilters\HandleErrorFilter.cs" />
     <Compile Include="ActionFilters\AuthorizationFilter.cs" />
     <Compile Include="ActionFilters\TraceControllerFilter.cs" />
     <Compile Include="Authentication\ChalkableAuthentication.cs" />
@@ -244,6 +244,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementStandardViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
+    <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\AppsBudgetViewData.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
     <Compile Include="Models\ClassPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
+    <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\ScheduleItemViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />
@@ -374,13 +376,11 @@
     <Content Include="Content\fonts\MYRIADPROREGULAR.png" />
     <Content Include="Content\fonts\oswald-webfont.svg" />
     <Content Include="Content\fonts\saginawbold-webfont.svg" />
+    <Content Include="favicon.ico" />
     <Content Include="Scripts\api\chlk-post-message-api.js" />
     <Content Include="Global.asax" />
     <Content Include="loaderio-5b599a813535f4cd31553b713ccbec90.html" />
     <Content Include="loaderio-e721e158fdd474be0e20e8973ea389f0.html" />
-    <Content Include="pathfinder\adminedit_methods.xml" />
-    <Content Include="pathfinder\admingrade_methods.xml" />
-    <Content Include="pathfinder\adminview_methods.xml" />
     <Content Include="pathfinder\student_methods.xml" />
     <Content Include="pathfinder\teacher_methods.xml" />
     <Content Include="Web.config">
@@ -540,9 +540,6 @@
     <Content Include="Content\icons-templates\banner.psd" />
     <Content Include="Content\icons-templates\icon.psd" />
     <Content Include="Content\icons-templates\screenshot.psd" />
-    <Content Include="pathfinder\adminedit_fake_method_responses.json" />
-    <Content Include="pathfinder\admingrade_fake_method_responses.json" />
-    <Content Include="pathfinder\adminview_fake_method_responses.json" />
     <Content Include="pathfinder\student_fake_method_responses.json" />
     <Content Include="pathfinder\teacher_fake_method_responses.json" />
   </ItemGroup>

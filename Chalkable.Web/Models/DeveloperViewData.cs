@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models
         public string DisplayName { get; set; }
         public Guid? DistrictId { get; set; }
         public RoleViewData Role { get; set; }
+        public string PayPalLogin { get; set; }
 
         private DeveloperViewData() { }
 
@@ -26,7 +27,8 @@ namespace Chalkable.Web.Models
                 Email = developer.Email,
                 DisplayName = developer.DisplayName,
                 Role = RoleViewData.Create(CoreRoles.DEVELOPER_ROLE),
-                DistrictId = developer.DistrictRef
+                DistrictId = developer.DistrictRef,
+                PayPalLogin = developer.PayPalLogin
             };
         }
     }

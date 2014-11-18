@@ -3,6 +3,7 @@ REQUIRE('chlk.models.apps.AppInfoViewData');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.id.AppGradeLevelId');
 REQUIRE('chlk.models.apps.AppGradeLevel');
+REQUIRE('chlk.models.standard.ApplicationStandardsViewData');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -28,9 +29,10 @@ NAMESPACE('chlk.templates.apps', function () {
             ArrayOf(chlk.models.apps.AppPermission), 'permissions',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.AppPlatform), 'supportedPlatforms'
+            ArrayOf(chlk.models.apps.AppPlatform), 'supportedPlatforms',
 
-
-
+            chlk.models.standard.ApplicationStandardsViewData, function prepareStandardListData(){
+                return new chlk.models.standard.ApplicationStandardsViewData(this.getApp().getId(), this.getApp().getStandards());
+            }
         ])
 });

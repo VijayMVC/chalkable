@@ -114,18 +114,31 @@ BODY {
                       .description{
                         margin-right: 6px;
                       }
+                      .info{
+                        display: inline-block;
+                      }
 
-                      .add-standarts{
+                      .add-standards{
                         margin: 10px 190px;
                         text-align: center;
                         height: 60px;
-                        line-height: 60px;
-                      }
-                      .info{
-                        display: inline-block;
-                        .title{
-                          border: 1px dashed black;
+                        background-color: #ffffff;
+                        @include border-radius(3px 3px 3px 3px);
+                        border: 1px solid #999999;
+
+                        >.title{
+                          margin: 7px;
+                          border: dashed 3px #e0e0e0 !important;
+
+                          &.add-more-title{
+                            border: none !important;
+                            padding: 0px;
+                          }
                         }
+                        .standards-list{
+                          padding: 0px 5px;
+                        }
+
                       }
                     }
 
@@ -342,6 +355,7 @@ BODY {
                       margin-top: -23px;
                       margin-left: -36px;
                       .myapps-permission{
+                        width: 320px;
                         padding-top: 25px;
                         margin-left: 225px;
                         display: inline-block;
@@ -372,7 +386,6 @@ BODY {
                           }
                         }
                         label{
-                          width: 121px;
                           text-align: left;
                           display: inline-block;
                           padding: 0;
@@ -384,14 +397,21 @@ BODY {
                         }
                         .app-name{
                           display: inline-block;
-                          width: 190px;
-                          max-width: 190px;
+                          max-width: 110px;
                           overflow: hidden;
                           text-overflow: ellipsis;
                           white-space: nowrap;
-                          margin-right: 5px;
                           vertical-align: top;
-                          margin-left: 2px;
+                          margin-left: 4px;
+                        }
+
+                        .my-apps{
+                          display: inline-block;
+                          overflow: hidden;
+                          text-overflow: ellipsis;
+                          vertical-align: top;
+                          margin-top: 0px;
+                          margin-left: 4px;
                         }
                       }
                     }

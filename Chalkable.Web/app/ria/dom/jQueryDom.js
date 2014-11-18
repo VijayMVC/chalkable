@@ -372,11 +372,6 @@ NAMESPACE('ria.dom', function () {
                 return res;
             },
 
-            OVERRIDE, ria.dom.Dom, function select() {
-                this._dom.select();
-                return this;
-            },
-
             /* attributes */
 
             OVERRIDE, Object, function getAllAttrs() {},
@@ -547,6 +542,56 @@ NAMESPACE('ria.dom', function () {
                     }
                 });
                 return o;
+            },
+
+            /* Text selection*/
+
+            OVERRIDE, ria.dom.Dom, function select() {
+                this._dom.select();
+                return this;
+            },
+
+            [[Number]],
+            VOID, function setCursorPosition(pos) {
+                var el = this._dom.valueOf()[0];
+                if (pos > el.value.length)
+                    pos = el.value.length;
+                if (el.setSelectionRange) {
+                    el.setSelectionRange(pos, pos);
+                } else if (el.createTextRange) {
+                    // IE
+                    var range = el.createTextRange();
+                    range.collapse(true);
+                    range.moveStart('character', pos);
+                    range.moveEnd('character', pos);
+                    range.select();
+                }
+            },
+
+            Number, function getCursorPosition() {
+                var el = this._dom.valueOf()[0];
+                var pos = 0;
+                if('selectionStart' in el) {
+                    pos = el.selectionStart;
+                } else if('selection' in document) {
+                    el.focus();
+                    var Sel = document.selection.createRange();
+                    var SelLength = document.selection.createRange().text.length;
+                    Sel.moveStart('character', -el.value.length);
+                    pos = Sel.text.length - SelLength;
+                }
+                return pos;
+            },
+
+            String, function getSelectedText(){
+                var el = this._dom.valueOf()[0],text = el.value || '';
+                if('selectionStart' in el) {
+                    text = text.slice(el.selectionStart, el.selectionEnd);
+                } else if('selection' in document) {
+                    el.focus();
+                    text = document.selection.createRange().text;
+                }
+                return text;
             }
         ]);
 

@@ -57,6 +57,8 @@ namespace Chalkable.Data.Master.Model
         [NotDbFieldAttr]
         public IList<ApplicationGradeLevel> GradeLevels { get; set; }
         public const string AVG_FIELD = "Avg";
+        [NotDbFieldAttr]
+        public IList<ApplicationStandard> ApplicationStandards { get; set; }
     }
 
     public enum ApplicationStateEnum
@@ -90,6 +92,8 @@ namespace Chalkable.Data.Master.Model
         public Guid? DistrictRef { get; set; }
         [DataEntityAttr]
         public User User { get; set; }
+
+        public string PayPalLogin { get; set; }
 
         [NotDbFieldAttr]
         public string DisplayName
@@ -165,5 +169,14 @@ namespace Chalkable.Data.Master.Model
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public Guid ApplicationRef { get; set; }
         public int GradeLevel { get; set; }
+    }
+
+    public class ApplicationStandard
+    {
+        public const string APPLICATION_REF_FIELD = "ApplicationRef";
+        [PrimaryKeyFieldAttr]
+        public Guid ApplicationRef { get; set; }
+        [PrimaryKeyFieldAttr]
+        public string StandardCode { get; set; }
     }
 }

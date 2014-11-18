@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.announcement.ShortStudentAnnouncementViewData');
 REQUIRE('chlk.models.announcement.BaseStudentAnnouncementsViewData');
 
@@ -6,7 +7,12 @@ NAMESPACE('chlk.models.announcement', function () {
 
     /** @class chlk.models.announcement.ShortStudentAnnouncementsViewData*/
     CLASS(
-        'ShortStudentAnnouncementsViewData', EXTENDS(chlk.models.announcement.BaseStudentAnnouncementsViewData), [
+        UNSAFE, 'ShortStudentAnnouncementsViewData', EXTENDS(chlk.models.announcement.BaseStudentAnnouncementsViewData), IMPLEMENTS(ria.serialize.IDeserializable), [
+
+            VOID, function deserialize(raw) {
+                this.items = ria.serialize.SJX.fromArrayOfDeserializables(raw.items, chlk.models.announcement.ShortStudentAnnouncementViewData);
+            },
+
             ArrayOf(chlk.models.announcement.ShortStudentAnnouncementViewData), 'items',
 
             function $(items_){

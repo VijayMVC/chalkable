@@ -21,11 +21,7 @@ personId = summaryInfo.getId()
         +UserProfileTopBar(self, 'discipline')
         .profile-info.discipline-view
             .summary-info
-                .person-info.standard-short-info
-                    .avarar-container.standard-small-container
-                        .img-container
-                            +PersonImg(summaryInfo, 64, true)
-                    h1.profile-person-name=summaryInfo.getDisplayName()
+                +ShortPersonInfoSection(schedule, 64)
                     label=summaryInfo.getSummary()
                 h2.mp-conteiner.profile-drop-down-container
                     +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())

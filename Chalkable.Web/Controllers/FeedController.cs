@@ -2,10 +2,13 @@
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
@@ -40,9 +43,13 @@ namespace Chalkable.Web.Controllers
         public static IList<AnnouncementViewData> GetAnnouncementForFeedList(IServiceLocatorSchool schoolL, int? start, int? count
             , bool? complete, int? classId, bool ownerOnly =false, bool? graded = null)
         {
+            var isDemoUser = DemoUserService.IsDemoUser(schoolL.Context);
+
             start = start ?? 0;
-            count = count ?? 10;
+            count = count ?? (isDemoUser ? int.MaxValue : 10);
             var list = schoolL.AnnouncementService.GetAnnouncements(complete, start.Value, count.Value, classId, null, ownerOnly, graded);
+            if (isDemoUser)
+                list = list.Where(x => x.State == AnnouncementState.Created).Take(10).ToList();
             var annsIdsWithApp = list.Where(x => x.ApplicationCount == 1).Select(x => x.Id).ToList();
             var annApps = schoolL.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(annsIdsWithApp, true);
             var apps = schoolL.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(annApps.Select(x => x.ApplicationRef).ToList());

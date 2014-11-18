@@ -121,6 +121,8 @@
     <Compile Include="Connectors\Model\Gradebook.cs" />
     <Compile Include="Connectors\Model\GradebookReportParams.cs" />
     <Compile Include="Connectors\Model\NowDashboard.cs" />
+    <Compile Include="Connectors\Model\StiPersonEmail.cs" />
+    <Compile Include="Connectors\Model\PostedAttendance.cs" />
     <Compile Include="Connectors\Model\ProgressReportParams.cs" />
     <Compile Include="Connectors\Model\Score.cs" />
     <Compile Include="Connectors\Model\Seat.cs" />

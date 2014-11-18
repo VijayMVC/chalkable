@@ -35,6 +35,7 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/lib/date-en-US.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autosize-min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autoresize.min.js")"></script>
@@ -162,8 +163,9 @@
                 ><a class="demo-role-button @if (isTeacher)
                                             {
                     @:active
-                }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
-                ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
+                                            }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
+                                                                                                                                                     ><a class="demo-role-button coming" rolename="Admin"><span><span></span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
+                                                                                                                                                         ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
                 ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
             </div>
             </div>

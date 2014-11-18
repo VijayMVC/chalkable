@@ -22,11 +22,12 @@
     <ConfigurationSettings>
       <!-- DB settings -->
       <Setting name="ChalkableMaster"/>
-      <Setting name="ChalkableSchoolTemplateDbName"/>
       <Setting name="ChalkableSchool"/>
       <Setting name="ChalkableSchoolDbUser"/>
       <Setting name="ChalkableSchoolDbPwd"/>
       <Setting name="ChalkableSchoolDbServers"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
+      
       <!-- CDN and content settings-->
       <Setting name="Domain"/>
       <Setting name="ScriptsRoot"/>
@@ -54,11 +55,12 @@
     <ConfigurationSettings>
       <!-- DB settings -->
       <Setting name="ChalkableMaster"/>
-      <Setting name="ChalkableSchoolTemplate"/>
       <Setting name="ChalkableSchool"/>
+      <!--<Setting name="ChalkableSchoolTemplate"/>-->
       <Setting name="ChalkableSchoolDbUser"/>
       <Setting name="ChalkableSchoolDbPwd"/>
       <Setting name="ChalkableSchoolDbServers"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
       <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>
@@ -80,11 +82,12 @@
     <ConfigurationSettings>
       <!-- DB settings -->
       <Setting name="ChalkableMaster"/>
-      <Setting name="ChalkableSchoolTemplate"/>
       <Setting name="ChalkableSchool"/>
+      <!--<Setting name="ChalkableSchoolTemplate"/>-->
       <Setting name="ChalkableSchoolDbUser"/>
       <Setting name="ChalkableSchoolDbPwd"/>
       <Setting name="ChalkableSchoolDbServers"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
       <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>

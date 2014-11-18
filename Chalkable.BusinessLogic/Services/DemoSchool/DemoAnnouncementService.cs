@@ -24,7 +24,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             query.RoleId = Context.Role.Id;
             query.PersonId = Context.PersonId;
             query.Now = Context.NowSchoolTime.Date;
-
             return Storage.AnnouncementStorage.GetAnnouncements(query);
         }
 
@@ -103,12 +102,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId)
+        public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId, DateTime expiresDate)
         {
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
-            var nowLocalDate = Context.NowSchoolTime;
-            var res = Storage.AnnouncementStorage.Create(classAnnType.Id, classId, nowLocalDate, Context.PersonId ?? 0);
+            var draft = GetLastDraft();
+            var res = Storage.AnnouncementStorage.Create(classAnnType.Id, classId, expiresDate, Context.PersonId ?? 0);
+
+            if (draft != null)
+            {
+                res.Content = draft.Content;
+            }
             return res;
         }
 
@@ -161,6 +165,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
       
         public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null)
         {
+
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             
@@ -186,6 +191,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     var studentIds = ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id).Select(x => x.StudentId);
 
                     Storage.StiActivityScoreStorage.ResetScores(ann.SisActivityId.Value, studentIds);
+                }
+
+                if (classId.HasValue && ann.ClassRef != classId.Value && ann.State == AnnouncementState.Draft)
+                {
+                    // clearing some data before switching between classes
+                    ann.Title = null;
+                    Storage.AnnouncementApplicationStorage.DeleteByAnnouncementId(ann.Id);
                 }
             }
             if (BaseSecurity.IsAdminViewer(Context))

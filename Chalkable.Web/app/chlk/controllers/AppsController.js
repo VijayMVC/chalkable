@@ -6,12 +6,14 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.PictureService');
 REQUIRE('chlk.services.DeveloperService');
+REQUIRE('chlk.services.StandardService');
 
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
 REQUIRE('chlk.activities.apps.AppGeneralInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperDialog');
+REQUIRE('chlk.activities.apps.AddCCStandardDialog');
 
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -31,6 +33,9 @@ REQUIRE('chlk.models.apps.AppsListViewData');
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
 
+REQUIRE('chlk.models.standard.AddCCStandardViewData');
+REQUIRE('chlk.models.standard.CCStandardListViewData');
+REQUIRE('chlk.models.standard.AddCCStandardsInputModel');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -55,6 +60,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.DeveloperService, 'developerService',
+
+        [ria.mvc.Inject],
+        chlk.services.StandardService, 'standardService',
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.GetAppsPostData]],
@@ -104,8 +112,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.apps.Application, Boolean, Boolean]],
         ria.async.Future, function prepareAppInfo(app_, readOnly, isDraft) {
-            var result = this.categoryService
-                .getCategories()
+            var result = this.categoryService.getCategories()
                 .attach(this.validateResponse_())
                 .then(function(data){
                     var cats = data.getItems();
@@ -118,6 +125,10 @@ NAMESPACE('chlk.controllers', function (){
                     if (!appCategories) app_.setCategories([]);
                     var appPlatforms = app_.getPlatforms();
                     if (!appPlatforms) app_.setPlatforms([]);
+                    var standards = app_.getStandards();
+                    if(!standards) app_.setStandards([]);
+
+                    this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, app_.getStandards() || []);
 
                     if (!app_.getState()){
                         var appState = new chlk.models.apps.AppState();
@@ -145,7 +156,6 @@ NAMESPACE('chlk.controllers', function (){
 
                     app_.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshotPictures, readOnly));
 		    
-
                     return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, platforms, isDraft);
 
                 }, this);
@@ -153,7 +163,77 @@ NAMESPACE('chlk.controllers', function (){
             return result;
         },
 
+        [[chlk.models.id.AppId]],
+        function showStandardsAction(applicationId){
+            var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
+            var res = this.standardService.getCCStandardCategories()
+                .attach(this.validateResponse_())
+                .then(function (data){
+                    var standardCodes = standards.map(function(s){return s.getStandardCode()});
+                    return new chlk.models.standard.AddCCStandardViewData(applicationId, data, standardCodes);
+                }, this);
+            return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
+        },
 
+        [[chlk.models.id.CCStandardCategoryId, String]],
+        function showStandardsByCategoryAction(standardCategoryId, currentCategoryName){
+            var res = this.standardService.getCommonCoreStandards(standardCategoryId)
+                .attach(this.validateResponse_())
+                .then(function(items){
+                    return new  chlk.models.standard.CCStandardListViewData(currentCategoryName, standardCategoryId, null, items);
+                }, this);
+            return this.UpdateView(chlk.activities.apps.AddCCStandardDialog, res);
+        },
+
+        [[chlk.models.id.CCStandardCategoryId, String]],
+        function showStandardCategoriesAction(parentStandardCategoryId, currentCategoryName){
+            var res = this.standardService.getCCStandardCategories(parentStandardCategoryId)
+                .attach(this.validateResponse_())
+                .then(function(items){
+                    if(items.length == 0)
+                       return this.BackgroundNavigate('apps', 'showStandardsByCategory', [parentStandardCategoryId, currentCategoryName]);
+                    return new  chlk.models.standard.CCStandardListViewData(currentCategoryName, parentStandardCategoryId, items);
+                }, this);
+            return this.UpdateView(chlk.activities.apps.AddCCStandardDialog, res);
+        },
+
+        [[chlk.models.standard.AddCCStandardsInputModel]],
+        function addStandardsAction(model){
+            var res = this.standardService.getCommonCoreStandards()
+                .then(function(standards){
+                    this.BackgroundCloseView(chlk.activities.apps.AddCCStandardDialog);
+                    return this.addStandards_(model.getStandardCodes(), standards, model.getApplicationId());
+                }, this);
+            return this.UpdateView(chlk.activities.apps.AppInfoPage, res);
+        },
+
+        [[Array, ArrayOf(chlk.models.standard.CommonCoreStandard), chlk.models.id.AppId]],
+            chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standardsCodes, standards, appId){
+            standards = standards.filter(function(standard){
+                return standardsCodes.filter(function(sc){
+                    return sc == standard.getStandardCode();
+                }).length > 0;
+            }, this);
+            this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, standards);
+            return new chlk.models.standard.ApplicationStandardsViewData(appId, standards);
+        },
+
+        [[chlk.models.id.AppId, String]],
+        function removeStandardAction(appId, standardCode){
+            var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
+            if(standards)
+                standards = standards.filter(function(s){return s.getStandardCode() != standardCode});
+            this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, standards);
+            var res = new chlk.models.standard.ApplicationStandardsViewData(appId, standards);
+            return this.UpdateView(chlk.activities.apps.AppInfoPage, new ria.async.DeferredData(res));
+        },
+
+        [[chlk.models.id.AppId]],
+        function removeAllStandardsAction(appId){
+            this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, []);
+            var res = new chlk.models.standard.ApplicationStandardsViewData(appId, []);
+            return this.UpdateView(chlk.activities.apps.AppInfoPage, new ria.async.DeferredData(res))
+        },
 
         [chlk.controllers.SidebarButton('apps-info')],
         [chlk.controllers.AccessForRoles([
@@ -563,20 +643,21 @@ NAMESPACE('chlk.controllers', function (){
              var isFreeApp = model.isFree();
 
              var isSchoolFlatRateEnabled = model.isSchoolFlatRateEnabled();
-             var isClassFlatRateEnabled = model.isSchoolFlatRateEnabled();
+             var isClassFlatRateEnabled = model.isClassFlatRateEnabled();
 
              var appPriceInfo = isFreeApp ? new chlk.models.apps.AppPrice()
                                           :
                                             new chlk.models.apps.AppPrice(
                                                 model.getCostPerUser(),
-                                                isSchoolFlatRateEnabled ? model.getCostPerClass() : null,
-                                                isClassFlatRateEnabled  ? model.getCostPerSchool(): null
+                                                isClassFlatRateEnabled ? model.getCostPerClass() : null,
+                                                isSchoolFlatRateEnabled ? model.getCostPerSchool(): null
                                             );
             var cats = this.getIdsList(model.getCategories(), chlk.models.id.AppCategoryId);
             var gradeLevels = this.getIdsList(model.getGradeLevels(), chlk.models.id.GradeLevelId);
             var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.apps.AppPermissionTypeEnum);
             var appScreenShots = this.getIdsList(model.getAppScreenshots(), chlk.models.id.PictureId);
             var appPlatforms = this.getIdsList(model.getPlatforms(), chlk.models.apps.AppPlatformTypeEnum);
+            var standards = model.getStandards() ? model.getStandards().split(',') : [];
 
             if (!model.isDraft()){
                 var appIconId = null;
@@ -632,7 +713,8 @@ NAMESPACE('chlk.controllers', function (){
                      appScreenShots,
                      gradeLevels,
                      appPlatforms,
-                     !model.isDraft()
+                     !model.isDraft(),
+                     standards
                  )
                  .attach(this.validateResponse_())
                  .then(function(newApp){

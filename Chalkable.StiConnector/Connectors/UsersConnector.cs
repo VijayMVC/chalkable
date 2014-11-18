@@ -25,6 +25,18 @@ namespace Chalkable.StiConnector.Connectors
             return Download(url);
         }
 
+        public StiPersonEmail GetPrimaryPersonEmail(int personId)
+        {
+            var url = string.Format("{0}persons/{1}/emailaddresses/primary", BaseUrl, personId);
+            return Call<StiPersonEmail>(url);
+        }
+
+        public void UpdatePrimaryPersonEmail(int personId, StiPersonEmail personEmail)
+        {
+            var url = string.Format("{0}persons/{1}/emailaddresses/primary", BaseUrl, personId);
+            Post<Object, StiPersonEmail>(url, personEmail);
+        }
+
         public int[] GetUserAcadSessionsIds()
         {
             return Call<int[]>(string.Format("{0}users/me/acadsessions", BaseUrl));

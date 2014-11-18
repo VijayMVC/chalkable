@@ -26,6 +26,23 @@ NAMESPACE('chlk.models.standard', function () {
             [ria.serialize.SerializeProperty('gradevalue')],
             String, 'gradeValue',
 
-            String, 'comment'
+            String, 'comment',
+
+            [[String, chlk.models.id.StandardId, chlk.models.id.GradingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, String]],
+            function $(gradeValue_, standardId_, gradingPeriodId_, studentId_, classId_, comment_){
+                BASE();
+                if(gradeValue_)
+                    this.gradeValue = gradeValue_;
+                if(standardId_)
+                    this.standardId = standardId_;
+                if(gradingPeriodId_)
+                    this.gradingPeriodId = gradingPeriodId_;
+                if(studentId_)
+                    this.studentId = studentId_;
+                if(classId_)
+                    this.classId = classId_;
+                if(comment_)
+                    this.comment = comment_;
+            }
         ]);
 });

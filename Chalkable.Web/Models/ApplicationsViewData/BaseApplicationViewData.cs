@@ -67,8 +67,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
+        public IList<CommonCoreStandardViewData> Standards { get; set; } 
 
-        protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey)
+        protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey, IList<CommonCoreStandard> standards)
             : base(application)
         {
             Developer = DeveloperViewData.Create(application.Developer);
@@ -78,14 +79,18 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             categories = categories.Where(x => application.Categories.Any(y => y.CategoryRef == x.Id)).ToList();
             Categories = CategoryViewData.Create(categories);
             GradeLevels = application.GradeLevels.Select(x => x.GradeLevel).ToList();
+            if (application.ApplicationStandards != null && standards != null)
+                Standards = CommonCoreStandardViewData.Create(
+                        standards.Where(x => application.ApplicationStandards.Any(y => y.StandardCode == x.Code))
+                                 .ToList());
         }
-        public static ApplicationViewData Create(Application application, IList<Category> categories, bool canGetSecretKey = false)
+        public static ApplicationViewData Create(Application application, IList<Category> categories, IList<CommonCoreStandard> standards, bool canGetSecretKey = false)
         {
-            return new ApplicationViewData(application,  categories, canGetSecretKey);
+            return new ApplicationViewData(application, categories, canGetSecretKey, standards);
         }
         public static IList<ApplicationViewData> Create(IList<Application> applications, IList<CoreRole> roles, IList<Category> categories)
         {
-            return applications.Select(x => Create(x, categories)).ToList();
+            return applications.Select(x => Create(x, categories, null)).ToList();
         } 
     }
 
@@ -96,7 +101,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<InstalledForPersonsGroupViewData> InstalledForPersonsGroup { get; set; } 
 
         protected ApplicationDetailsViewData(Application application,  IList<Category> categories, bool canGetSecretKey) 
-            : base(application, categories, canGetSecretKey)
+            : base(application, categories, canGetSecretKey, null)
         {
         }
         public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories

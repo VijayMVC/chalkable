@@ -95,7 +95,7 @@ NAMESPACE('chlk.models.common', function () {
             [[Date]],
             VOID, function initBaseData_(date_){
                 date_ && this.setDate(date_);
-                this._STANDART_FORMAT = 'mm-dd-yy'
+                this._STANDART_FORMAT = 'mm-dd-yy';
                 this._DEFAULT_FORMAT = 'm-dd-yy';
                 this._USA_DATE_FORMAT = 'm/dd/yy';
                 this._USA_DATE_TIME_FORMAT = 'm/dd/yy hh:min:ss tt'
@@ -118,20 +118,9 @@ NAMESPACE('chlk.models.common', function () {
 
             [[chlk.models.common.ChlkDateEnum, Number]],
             SELF, function add(type, count){
-                var dateEnum = chlk.models.common.ChlkDateEnum;
-                var thisDate = this.getDate();
-                var sec = thisDate.getSeconds();
-                var min = thisDate.getMinutes();
-                var h = thisDate.getHours();
-                var day = thisDate.getDate();
-                var mon = thisDate.getMinutes();
-                var y = thisDate.getFullYear();
+                var thisDate = new Date(this.getDate().getTime());
                 var date = new chlk.models.common.ChlkDate(), res;
-                switch (type){
-                    case dateEnum.YEAR: res = this.getServerDate_(y + count, mon, day, h, min, sec); break;
-                    case dateEnum.MONTH: res = this.getServerDate_(y, mon + count, day, h, min, sec); break;
-                    default: res = thisDate.getTime() + count * chlk.models.common.MillisecondsEnum[type.valueOf()].valueOf();
-                }
+                res = thisDate.add(count)[type.valueOf().toLowerCase() + 's']();
                 date.setDate(this.getServerDate_(res));
                 return date;
             },

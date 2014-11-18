@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
@@ -7,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Logic.ApiExplorer;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ChalkableApiExplorerViewData;
 using Chalkable.Web.Tools;
@@ -28,7 +30,7 @@ namespace Chalkable.Web.Controllers
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             if (sysLocator.UserService.GetByLogin(email) == null)
             {
-                sysLocator.DeveloperService.Add(email, password, null, null);
+                sysLocator.DeveloperService.Add(email, password, null, null, null);
                 return LogOn(email, password, false);
             }
             return Json(new ChalkableException(ChlkResources.ERR_SIGNUP_USER_WITH_EMAIL_ALREADY_EXISTS));            
@@ -47,6 +49,7 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult ListApi()
         {
+            Trace.WriteLine("#123 Developer/ListApi start");
             var result = new List<ApiExplorerViewData>();
 
             var descriptions = ChalkableApiExplorerLogic.GetApi();
@@ -55,7 +58,12 @@ namespace Chalkable.Web.Controllers
             foreach (var description in descriptions)
             {
                 var roleName = description.Key.ToLowerInvariant();
-                if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName || roleName == CoreRoles.CHECKIN_ROLE.LoweredName) continue;
+                Trace.WriteLine("#123 Developer/GetAccessToken for role", roleName);
+                if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName 
+                    || roleName == CoreRoles.CHECKIN_ROLE.LoweredName 
+                    || roleName == CoreRoles.ADMIN_GRADE_ROLE.LoweredName
+                    || roleName == CoreRoles.ADMIN_VIEW_ROLE.LoweredName
+                    || roleName == CoreRoles.ADMIN_EDIT_ROLE.LoweredName) continue;
                 apiRoles.Add(roleName);
                 var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
                 var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, context.SchoolYearId, MasterLocator);
@@ -131,7 +139,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult UpdateInfo(Guid developerId, string name, string websiteLink, string email)
         {
-            var res = MasterLocator.DeveloperService.Edit(developerId, name, email, websiteLink);
+            var res = MasterLocator.DeveloperService.Edit(developerId, name, email, websiteLink, null);
             MasterLocator.UserTrackingService.ChangedEmail(Context.Login, email);
             if (Context.Role.LoweredName == CoreRoles.DEVELOPER_ROLE.LoweredName)
             {
@@ -141,6 +149,15 @@ namespace Chalkable.Web.Controllers
                     string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
             }
             return Json(DeveloperViewData.Create(res));
+        }
+
+        [AuthorizationFilter("Developer")]
+        public ActionResult ChangePayPalLogin(Guid developerId, string paypalAddress)
+        {
+            if (string.IsNullOrEmpty(paypalAddress))
+                return Json(new ChalkableException("paypal address field is empty"));
+            MasterLocator.DeveloperService.ChangePayPalLogin(developerId, paypalAddress);
+            return Json(true);
         }
 
         public ActionResult GoLive(string key, Guid applicationId)

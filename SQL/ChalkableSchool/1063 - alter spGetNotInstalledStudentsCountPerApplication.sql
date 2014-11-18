@@ -7,7 +7,6 @@ insert into @appsIdsT
 select ApplicationRef from ApplicationInstall
 where PersonRef = @staffId and Active = 1 and SchoolYearRef = @schoolYearId
 
-
 declare @personIdsT table(id int)
 insert into @personIdsT
 select PersonRef from ClassPerson

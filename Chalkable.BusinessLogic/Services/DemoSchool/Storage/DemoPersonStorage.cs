@@ -115,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 Persons = enumerable.ToList(),
                 Query = query,
-                SourceCount = data.Count
+                SourceCount = enumerable.Count
             };
         }
 

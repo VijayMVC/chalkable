@@ -662,7 +662,7 @@ BODY {
                   }
 
                 }
-                .title{
+                >.title{
                   color: #e0e0e0;
                   font-weight: bold;
                   font-size: 12px;
@@ -752,6 +752,51 @@ BODY {
                 background: #26647e;
                 color: white;
               }
+            }
+          }
+          .add-standards{
+            .standards-list{
+            text-align: left;
+
+            .grey-button{
+              min-width: 44px;
+              padding: 4px 8px 6px 9px;
+              font-size: 12px;
+              margin-bottom: 2px;
+              margin-right: 8px;
+              cursor: pointer;
+              position: relative;
+              vertical-align: top;
+
+              .remove-standard{
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url(images/icons/remove.png) center center no-repeat;
+              }
+
+              &:hover{
+                .remove-standard{
+                  display: block;
+                }
+
+                SPAN{
+                  opacity: 0.3;
+                }
+              }
+            }
+
+          }
+            .title{
+              color: #e0e0e0;
+              font-weight: bold;
+              font-size: 12px;
+              padding-top: 12px;
+              padding-bottom: 12px;
+              cursor: pointer;
             }
           }
         }

@@ -28,18 +28,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public Developer Add(string login, string password, string name, string webSite, Guid districtId)
+        public Developer Add(string login, string password, string name, string webSite, string paypalLogin)
         {
             throw new NotImplementedException();
         }
 
-        public Developer Edit(Guid developerId, string name, string email, string webSite)
+        public Developer Edit(Guid developerId, string name, string email, string webSite, string paypalLogin)
         {
             throw new NotImplementedException();
         }
 
-
-        public Developer Add(string login, string password, string name, string webSite)
+        public Developer ChangePayPalLogin(Guid developerId, string paypalLogin)
         {
             throw new NotImplementedException();
         }

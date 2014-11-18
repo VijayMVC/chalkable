@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Web;
+using System.Web.Compilation;
 using System.Web.Mvc;
 using System.Xml;
 using Chalkable.BusinessLogic.Services.Master;
@@ -16,7 +16,7 @@ using Chalkable.Web.Models.ChalkableApiExplorerViewData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Chalkable.Web.Logic
+namespace Chalkable.Web.Logic.ApiExplorer
 {
     public class ApiPathFinderData
     {
@@ -303,26 +303,31 @@ namespace Chalkable.Web.Logic
 
         }
 
-        private const string ASSEMBLY_FILE = "/bin/Chalkable.Web.dll";
+        private const string ASSEMBLY_FILE = "Chalkable.Web";
         private const string CONTROLLER = "Controller";
 
-        private static Dictionary<string, IList<ChalkableApiControllerDescription>> BuildApiExplorerDescriptions()
+        private static void BuildApiExplorerDescriptions()
         {
-
-            
-
+            Trace.WriteLine("#123 API LIST START");
             descriptions = new Dictionary<string, IList<ChalkableApiControllerDescription>>();
 
-            var controllers =
-                Assembly.LoadFrom(AppDomain.CurrentDomain.BaseDirectory + ASSEMBLY_FILE).GetExportedTypes().
-                    Where(IsChalkableController);
 
-            var roles = new List<string>();
+            Trace.WriteLine("#123 API LIST TEST 1");
+            var asm =
+                BuildManager.GetReferencedAssemblies()
+                    .Cast<Assembly>()
+                    .Single(assembly => assembly.GetName().Name == ASSEMBLY_FILE);
+            Trace.WriteLine("controller enum start {0}", asm.FullName);
+            var controllers = asm.GetExportedTypes().Where(IsChalkableController);
+
+            var roles = new HashSet<string>();
             var callTypes = Enum.GetNames(typeof(CallType));
             var controllersList = new List<ChalkableApiControllerDescription>();
 
             foreach (var controller in controllers)
             {
+
+                Trace.WriteLine("enumerating {0}", controller.Name);
                 var controllerName = controller.Name.Replace(CONTROLLER, "");
                 var methodsInfo = controller.GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
@@ -330,67 +335,53 @@ namespace Chalkable.Web.Logic
 
                 foreach (var info in methodsInfo)
                 {
-                    if (info.ReturnType == typeof(ActionResult))
-                    {
-                        var methodParams = info.GetParameters();
+                    if (info.ReturnType != typeof (ActionResult)) continue;
 
-                        var attribute = info.GetCustomAttributes(typeof(AuthorizationFilter), true)
-                            .Cast<AuthorizationFilter>()
+                    var methodParams = info.GetParameters();
+
+                    var attribute = info.GetCustomAttributes(typeof(AuthorizationFilter), true)
+                        .Cast<AuthorizationFilter>()
+                        .FirstOrDefault();
+
+                    var obsoleteAttr =
+                        info.GetCustomAttributes(typeof(ObsoleteAttribute), true)
+                            .Cast<ObsoleteAttribute>()
                             .FirstOrDefault();
 
-                        var obsoleteAttr =
-                            info.GetCustomAttributes(typeof(ObsoleteAttribute), true)
-                                .Cast<ObsoleteAttribute>()
-                                .FirstOrDefault();
 
+                    if (attribute == null || !attribute.ApiAccess || obsoleteAttr != null) 
+                        continue;
 
-                        if (attribute != null && attribute.ApiAccess && obsoleteAttr == null)
+                    var paramsList = new List<Param>();
+                    foreach (var param in methodParams)
+                    {
+                        var description = attribute.ParamsDescriptions != null && param.Position < attribute.ParamsDescriptions.Length
+                            ? attribute.ParamsDescriptions[param.Position] : "";
+                        paramsList.Add(new Param
                         {
+                            Name = param.Name,
+                            Value = param.DefaultValue.ToString(),
+                            Description = description,
+                            IsNullable = IsNullableType(param),
+                            ParamType = GetParameterType(param.ParameterType)
+                        });
 
-                            var paramsList = new List<Param>();
-                            foreach (var param in methodParams)
-                            {
-                                var description = attribute.ParamsDescriptions != null
-                                    && param.Position < attribute.ParamsDescriptions.Length
-                                    ? attribute.ParamsDescriptions[param.Position] : "";
-                                paramsList.Add(new Param
-                                {
-                                    Name = param.Name,
-                                    Value = param.DefaultValue.ToString(),
-                                    Description = description,
-                                    IsNullable = IsNullableType(param),
-                                    ParamType = GetParameterType(param.ParameterType)
-                                });
-
-                            }
-
-                            string[] avRoles = attribute.Roles;
-
-                            if (avRoles != null)
-                            {
-                                for (int i = 0; i < avRoles.Length; ++i)
-                                {
-                                    var role = avRoles[i].ToLowerInvariant();
-                                    avRoles[i] = role;
-
-                                    if (!roles.Contains(role))
-                                    {
-                                        roles.Add(role);
-                                    }
-                                }
-                            }
-
-                            mList.Add(new ChalkableApiMethodDescription
-                            {
-                                Name = info.Name,
-                                Description = attribute.Description ?? "",
-                                Method = callTypes[(int)attribute.Type],
-                                Parameters = paramsList,
-                                AvailableForRoles = avRoles.ToList()
-                            });
-                        }
                     }
 
+                    var avRoles = attribute.Roles.Select(x => x.ToLowerInvariant()).ToList();
+                    foreach (var role in avRoles)
+                    {
+                        roles.Add(role);
+                    }
+
+                    mList.Add(new ChalkableApiMethodDescription
+                    {
+                        Name = info.Name,
+                        Description = attribute.Description ?? "",
+                        Method = callTypes[(int)attribute.Type],
+                        Parameters = paramsList,
+                        AvailableForRoles = avRoles
+                    });
                 }
                 controllersList.Add(new ChalkableApiControllerDescription
                 {
@@ -420,8 +411,7 @@ namespace Chalkable.Web.Logic
                         Name = controllerDescr.Name
                     });
                 }
-            }
-            return descriptions;
+            }            
         }
 
         private const string FAKE_RESPONSES_FILE = "pathfinder/{0}_fake_method_responses.json";
@@ -436,7 +426,7 @@ namespace Chalkable.Web.Logic
                 if (File.Exists(fname))
                 {
                     var json = "";
-                    using (var fs = new FileStream(fname, FileMode.Open))
+                    using (var fs = new FileStream(fname, FileMode.Open, FileAccess.Read))
                     {
                         using (var sr = new StreamReader(fs))
                         {
@@ -480,7 +470,15 @@ namespace Chalkable.Web.Logic
 
         public static Dictionary<string, IList<ChalkableApiControllerDescription>> GetApi()
         {
-            return descriptions ?? BuildApiExplorerDescriptions();
+            Trace.WriteLine("#123 GetApi() ENTERED");
+            if (descriptions != null && descriptions.Count > 0)
+                return descriptions;
+
+            Trace.WriteLine("#123 BuildApiExplorerDescriptions() ENTERED");
+            BuildApiExplorerDescriptions();
+            Trace.WriteLine("#123 BuildApiExplorerDescriptions() COMPLETE");
+
+            return descriptions;
         }
 
 

@@ -4,6 +4,7 @@ REQUIRE('chlk.models.common.ActionLinkModel');
 NAMESPACE('chlk.templates.profile', function(){
     "use strict";
 
+    ASSET('~/assets/jade/activities/profile/ShortPersonInfoSection.jade')();
     ASSET('~/assets/jade/activities/profile/ProfileTopBar.jade')();
     /**@class chlk.templates.profile.BaseProfileTpl*/
     CLASS(

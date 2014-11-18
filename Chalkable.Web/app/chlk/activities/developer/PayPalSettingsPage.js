@@ -27,8 +27,5 @@ NAMESPACE('chlk.activities.developer', function () {
                 this.dom.find('.paypal-btn').toggleClass('x-hidden');
                 event.preventDefault();
             }
-
-
-
-        ]);
+    ]);
 });

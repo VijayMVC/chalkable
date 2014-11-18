@@ -406,7 +406,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public FinalGradeInfo GetFinalGrade(int classId, GradingPeriodDetails gradingPeriod)
         {
             var averageDashBoard = ConnectorLocator.GradebookConnector.GetAveragesDashboard(classId, gradingPeriod.Id);
-            var gradeBook = GetGradeBook(classId, gradingPeriod);
+            var gradeBook = GetGradeBook(classId, gradingPeriod, null, null, false);
             gradeBook.Averages = averageDashBoard.StudentAverages.Select(ChalkableStudentAverage.Create).ToList();
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             return new FinalGradeInfo

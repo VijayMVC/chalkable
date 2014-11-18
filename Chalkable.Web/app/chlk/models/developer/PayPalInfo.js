@@ -3,6 +3,15 @@ NAMESPACE('chlk.models.developer', function () {
     /** @class chlk.models.developer.PayPalInfo*/
     CLASS(
         'PayPalInfo', [
-            String, 'email'
+            String, 'email',
+
+            String, 'confirmation',
+
+            [[String]],
+            function $(email_){
+                BASE();
+                if(email_)
+                    this.setEmail(email_);
+            }
         ]);
 });

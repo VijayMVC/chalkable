@@ -12,6 +12,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AttendancesViewData;
+using Chalkable.Web.Models.ClassesViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -33,7 +34,16 @@ namespace Chalkable.Web.Controllers
             MasterLocator.UserTrackingService.SetAttendance(Context.Login, data.ClassId);
             return Json(true);
         }
-        
+        //TODO: implement this method later
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult NotTakenAttendanceClasses(DateTime? date)
+        {
+            //date = (date ?? SchoolLocator.Context.NowSchoolYearTime);
+            //var notTakenAttendanceClasses = SchoolLocator.AttendanceService.GetNotTakenAttendanceClasses(date.Value);
+            //return Json(ClassViewData.Create(notTakenAttendanceClasses));
+            return Json(new List<ClassViewData>());
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE_FOR_CLASS, true, CallType.Post, new[] { AppPermissionType.Attendance })]
         public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date)
         {

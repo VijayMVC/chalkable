@@ -36,12 +36,32 @@ NAMESPACE('chlk.services', function () {
                     }, this);
             },
 
-            [[chlk.models.id.SchoolPersonId, String]],
-            ria.async.Future, function updatePaymentInfo(id ,email){
-                //todo: response from server
-                var mdl = new chlk.models.developer.PayPalInfo();
-                mdl.setEmail(email);
-                return ria.async.DeferredData(mdl);
+//            [[chlk.models.id.SchoolPersonId, String]],
+//            ria.async.Future, function updatePaymentInfo(id ,email){
+//                //todo: response from server
+//                var mdl = new chlk.models.developer.PayPalInfo();
+//                mdl.setEmail(email);
+//                return ria.async.DeferredData(mdl);
+//            },
+
+            [[chlk.models.id.SchoolPersonId, String, String]],
+            ria.async.Future, function updatePaymentInfo(developerId, paypalAddress){
+                return this.post('Developer/ChangePayPalLogin.json', Boolean, {
+                    developerId: developerId.valueOf(),
+                    paypalAddress: paypalAddress
+                })
+                .then(function(data){
+                    if(data === true){
+                        var developer = this.getCurrentDeveloper();
+                        developer.setPayPalAddress(paypalAddress);
+                        this.getContext().getSession().set(ChlkSessionConstants.CURRENT_DEVELOPER, developer);
+                        return new chlk.models.developer.PayPalInfo(paypalAddress);
+                    }
+                }, this);
+            },
+
+            chlk.models.developer.DeveloperInfo, function getCurrentDeveloper(){
+                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_DEVELOPER, null);
             }
 
         ])

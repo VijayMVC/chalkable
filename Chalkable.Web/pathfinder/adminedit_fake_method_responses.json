@@ -1,9 +1,0 @@
-﻿{
-    "controllers": {
-         "Application": {
-             "GetAnnouncementApplication": {
-                  "Test": "response teacher"
-             }
-         }         
-    }
-}

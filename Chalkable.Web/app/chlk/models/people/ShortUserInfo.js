@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.Role');
@@ -7,59 +8,57 @@ REQUIRE('chlk.models.people.HealthCondition');
 NAMESPACE('chlk.models.people', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.people.ShortUserInfo*/
     CLASS(
-        'ShortUserInfo', [
+        UNSAFE, 'ShortUserInfo', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-            [ria.serialize.SerializeProperty('displayname')],
-            String, 'displayName',
+            VOID, function deserialize(raw) {
+                this.displayName = SJX.fromValue(raw.displayname, String);
+                this.email = SJX.fromValue(raw.email, String);
+                this.firstName = SJX.fromValue(raw.firstname, String);
+                this.fullName = SJX.fromValue(raw.fullname, String);
+                this.gender = SJX.fromValue(raw.gender, String);
+                this.id = SJX.fromValue(raw.id, chlk.models.id.SchoolPersonId);
+                this.lastName = SJX.fromValue(raw.lastname, String);
+                this.password = SJX.fromValue(raw.password, String);
+                this.roleName = SJX.fromValue(raw.roleName, String);
+                this.genderFullText = SJX.fromValue(raw.genderFullText, String);
+                this.salutation = SJX.fromValue(raw.salutation, String);
+                this.withdrawn = SJX.fromValue(raw.iswithdrawn, Boolean);
+                this.withMedicalAlert = SJX.fromValue(raw.hasmedicalalert, Boolean);
+                this.allowedInetAccess = SJX.fromValue(raw.isallowedinetaccess, Boolean);
+                this.specialInstructions = SJX.fromValue(raw.specialinstructions, String);
+                this.spedStatus = SJX.fromValue(raw.spedstatus, String);
+                this.healthConditions = SJX.fromArrayOfDeserializables(raw.healthconditions, chlk.models.people.HealthCondition);
 
-            String, 'email',
+                this.role = null;
+                if(raw.role && raw.role.id != undefined) {
+                    var objRole =  raw.role;
+                    this.role = new chlk.models.people.Role.$create(objRole.id, objRole.name, objRole.namelowered, objRole.description);
+                }
+            },
 
-            [ria.serialize.SerializeProperty('firstname')],
-            String, 'firstName',
-
-            [ria.serialize.SerializeProperty('fullname')],
-            String, 'fullName',
-
-            String, 'gender',
-
+            READONLY, String, 'displayName',
+            READONLY, String, 'email',
+            READONLY, String, 'firstName',
+            READONLY, String, 'fullName',
+            READONLY, String, 'gender',
             chlk.models.id.SchoolPersonId, 'id',
-
-            [ria.serialize.SerializeProperty('lastname')],
-            String, 'lastName',
-
-            String, 'password',
-
-            String, 'pictureUrl',
-
-            String, 'roleName',
-
-            [ria.serialize.SerializeProperty('role')],
-            chlk.models.people.Role, 'role',
-
+            READONLY, String, 'lastName',
+            READONLY, String, 'password',
+            READONLY, String, 'pictureUrl',
+            READONLY, String, 'roleName',
+            READONLY, chlk.models.people.Role, 'role',
             String, 'genderFullText',
-
-            String, 'salutation',
-
-            [ria.serialize.SerializeProperty('iswithdrawn')],
-            Boolean, 'withdrawn',
-
-            [ria.serialize.SerializeProperty('hasmedicalalert')],
-            Boolean, 'withMedicalAlert',
-
-            [ria.serialize.SerializeProperty('isallowedinetaccess')],
-            Boolean, 'allowedInetAccess',
-
-            [ria.serialize.SerializeProperty('specialinstructions')],
-            String, 'specialInstructions',
-
-            [ria.serialize.SerializeProperty('spedstatus')],
-            String, 'spedStatus',
-
-
-            [ria.serialize.SerializeProperty('healthconditions')],
-            ArrayOf(chlk.models.people.HealthCondition), 'healthConditions',
+            READONLY, String, 'salutation',
+            READONLY, Boolean, 'withdrawn',
+            READONLY, Boolean, 'withMedicalAlert',
+            READONLY, Boolean, 'allowedInetAccess',
+            READONLY, String, 'specialInstructions',
+            READONLY, String, 'spedStatus',
+            READONLY, ArrayOf(chlk.models.people.HealthCondition), 'healthConditions',
 
             [[Array]],
             VOID, function addMedicalAlerts_(alerts){

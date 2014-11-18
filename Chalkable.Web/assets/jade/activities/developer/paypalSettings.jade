@@ -6,7 +6,7 @@ btnTitle = self.email == null ? "Add PayPal" : "Change PayPal"
     div.paypal-info.x-hidden
         +ActionForm('developer', 'updatePaymentInfo')
             input(type="text", name="email", value=self.email, class="validate[required, custom[email]]", placeholder="PayPal Email")#payPalEmail
-            input(type="text", name="paypalMailCheck", value="", class="validate[required, custom[email], equals[payPalEmail]]", placeholder="Confirm PayPal Email")
+            input(type="text", name="confirmation", value="", class="validate[required, custom[email], equals[payPalEmail]]", placeholder="Confirm PayPal Email")
             +Button()(type="submit").yellow-button.special-button.save-btn Save
             a(href='#').cancel-btn Cancel
     +Button()(type="button").yellow-button.special-button.paypal-btn=btnTitle

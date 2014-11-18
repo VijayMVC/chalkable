@@ -8,10 +8,16 @@
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
-/** @class chlk.models.school.SchoolOption*/
 
-    CLASS('SchoolOption', [
+    /** @class chlk.models.school.SchoolOption*/
+    CLASS(UNSAFE, 'SchoolOption', [
         [ria.serialize.SerializeProperty('allowscoreentryforunexcused')],
-        Boolean, 'allowScoreEntryForUnexcused'
+        Boolean, 'allowScoreEntryForUnexcused',
+
+        [[Boolean]],
+        function $fromRaw(allowScoreEntryForUnexcused) {
+            BASE();
+            this.allowScoreEntryForUnexcused = allowScoreEntryForUnexcused;
+        }
     ]);
 });
