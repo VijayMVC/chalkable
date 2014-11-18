@@ -87,10 +87,10 @@ NAMESPACE('chlk.activities.grading', function () {
 
             function openGradingPeriod(container){
                 container.parent('.marking-period-container').addClass('open');
-                var annContainer = container.find('.ann-types-container');
+                var annContainer = container.find('.grades-container');
                 container.setCss('height', 0);
                 jQuery(container.valueOf()).animate({
-                    height: (annContainer.height() + container.find('.grading-selects').height() + parseInt(annContainer.getCss('margin-bottom'), 10))
+                    height: (annContainer.height() + container.find('.buttons-row').height() + parseInt(annContainer.getCss('margin-bottom'), 10))
                 }, 500);
             },
 
@@ -465,7 +465,8 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(curBlock.exists() && curBlock.hasClass('total-points'))
                                 curBlock = curBlock.next('.grade-container');
                             if(curBlock.exists()){
-                                if(curBlock.hasClass('last-container')){
+                                var parentBlock = curBlock.parent('.grades-container');
+                                if(curBlock.offset().left > parentBlock.offset().left + parentBlock.width()){
                                     curBlock.parent('.grid-toolbar').find('.next-button').trigger('click');
                                     needsTimeout = true;
                                 }
@@ -717,6 +718,18 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.beforeTbAnimation(node);
             },
 
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Boolean, Number]],
+            function arrowEnabled(node, event, arrow, isLeft_, index_){
+                arrow.parent('.marking-period-container').find(isLeft_ ? '.prev-arrow' : '.next-arrow').removeClass('disabled');
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Boolean, Number]],
+            function arrowDisabled(node, event, arrow, isLeft_, index_){
+                arrow.parent('.marking-period-container').find(isLeft_ ? '.prev-arrow' : '.next-arrow').addClass('disabled');
+            },
+
             [ria.mvc.DomEventBind('click', '.next-arrow')],
             [[ria.dom.Dom, ria.dom.Event]],
             function nextArrowClick(node, event){
@@ -754,6 +767,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 var toolbar = toolbar_ || this.dom.find('.grid-toolbar'),
                     padding = 412, maxWidth, count, width,
                     columnWidth = 117;
+                if(!toolbar.exists())
+                    return 0;
                 maxWidth = ria.dom.Dom('#content').width() - padding;
                 count = Math.floor((maxWidth + 1) / columnWidth);
                 toolbar.find('.dotted-container').setCss('width', Math.ceil(maxWidth/count));
@@ -763,10 +778,18 @@ NAMESPACE('chlk.activities.grading', function () {
                     thirdContainer = toolbar.find('.third-container');
                 firstContainer.setCss('width', maxWidth);
 
-                if(thirdContainer.offset().left + thirdContainer.width() > firstContainer.offset().left + firstContainer.width())
+                if(thirdContainer.offset().left + thirdContainer.width() > firstContainer.offset().left + firstContainer.width()){
+                    this.dom.find('.next-arrow').removeClass('disabled');
                     toolbar.find('.next-button').removeClass('disabled');
-                else
+                }
+                else{
                     toolbar.find('.next-button').addClass('disabled');
+                    this.dom.find('.next-arrow').addClass('disabled');
+                }
+                if(toolbar.find('.prev-button').hasClass('disabled'))
+                    this.dom.find('.prev-arrow').addClass('disabled');
+                else
+                    this.dom.find('.prev-arrow').removeClass('disabled');
                 return count;
             },
 
@@ -792,6 +815,17 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.openGradingPeriod(this.dom.find('.open.marking-period-container').find('.mp-data'));
                 this.prepareAllScores(model);
                 this.addEvents();
+                var toolbar = this.dom.find('.grid-toolbar');
+                if(toolbar.exists()){
+                    var parent = toolbar.parent('.marking-period-container');
+                    if(toolbar.find('.prev-button').hasClass('disabled'))
+                        parent.find('.prev-arrow').addClass('disabled');
+                    if(toolbar.find('.next-button').hasClass('disabled'))
+                        parent.find('.next-arrow').addClass('disabled');
+                }else{
+                    this.dom.find('.prev-arrow').addClass('disabled');
+                    this.dom.find('.next-arrow').addClass('disabled');
+                }
             },
 
             function prepareAllScores(model){},

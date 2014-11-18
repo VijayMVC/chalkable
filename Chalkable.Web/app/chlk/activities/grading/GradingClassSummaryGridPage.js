@@ -430,8 +430,10 @@ NAMESPACE('chlk.activities.grading', function () {
                         JSON.stringify(node.getData('codes-string'))
                     );
                 else{
-                    var grade = cell.find('.grade-text').getData('grade-value');
+                    var grade = cell.find('.grade-text').getData('grade-value'),
+                        comment = node.getData('comment');
                     grade = grade ? grade.toString() : '';
+                    comment = comment ? comment.toString() : '';
                     model = new chlk.models.announcement.ShortStudentAnnouncementViewData(
                         new chlk.models.id.StudentAnnouncementId(node.getData('id')),
                         new chlk.models.id.AnnouncementId(node.getData('announcementid')),
@@ -441,7 +443,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.getBooleanValue_(node.getData('isexempt')),
                         this.getBooleanValue_(node.getData('isabsent')),
                         this.getBooleanValue_(node.getData('isincomplete')),
-                        node.getData('comment'),
+                        comment,
                         grade,
                         this.getBooleanValue_(node.getData('isincludeinaverage'))
                     );

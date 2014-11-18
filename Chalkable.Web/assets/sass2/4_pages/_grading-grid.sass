@@ -2,6 +2,19 @@
   .marking-period-container
     position: relative
 
+    &.open
+      .collapse
+        @include transform(rotate(90deg))
+
+  .collapse
+    position: absolute
+    right: 25px
+    top: 26px
+    width: 8px
+    height: 12px
+    background: url(images/grading/gp-arrow.png) 0 0 no-repeat
+    +transition(all, .2s, easy-in-out)
+
   .arrows-row
     position: absolute
     left: 0
@@ -27,6 +40,10 @@
 
     &:active
       opacity: 0.5
+
+    &.disabled
+      opacity: 0
+      cursor: default
 
   .autocomplete-list
     .autocomplete-item
@@ -55,10 +72,11 @@
     line-height: 62px
     padding: 0 17px
     position: relative
+    height: 62px
 
     .blue-button
       float: right
-      margin: 17px 0
+      margin: 16px 3px
       width: 148px
       position: relative
       z-index: 10

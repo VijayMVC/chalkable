@@ -18,6 +18,12 @@ NAMESPACE('chlk.controls', function () {
         //ria.dom.Dom dot, Boolean isLeft, Number index
         DOT_CLICK: 'dotclick',
 
+        //ria.dom.Dom arrow, Boolean isLeft, Number index
+        ARROW_ENABLED: 'arrowenabled',
+
+        //ria.dom.Dom arrow, Boolean isLeft, Number index
+        ARROW_DISABLED: 'arrowdisabled',
+
         AFTER_RENDER: 'afterrender'
     });
 
@@ -179,11 +185,12 @@ NAMESPACE('chlk.controls', function () {
                                         diff = width - configs.padding;
                                     var left = isLeft ? currentLeft + diff : currentLeft - diff;
                                     var thirdContainer = secondContainer.find('.third-container');
-                                    if (thirdContainer.exists() && thirdContainer.width() <= secondContainer.width() - left) {
-                                        //left = secondContainer.width() - thirdContainer.width();
+                                    if (thirdContainer.exists() && (thirdContainer.width() <= secondContainer.width() || thirdContainer.width() <= secondContainer.width() - left)) {
                                         nextButton.addClass(configs.disabledClass);
+                                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [nextButton, false, index]);
                                     } else {
                                         nextButton.removeClass(configs.disabledClass);
+                                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [nextButton, false, index]);
                                         hasRight = true;
                                     }
                                     if(left > 0)
@@ -197,8 +204,10 @@ NAMESPACE('chlk.controls', function () {
                                     secondContainer.setCss('left', left);
                                     if (left == 0) {
                                         prevButton.addClass(configs.disabledClass);
+                                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [prevButton, true, index]);
                                     } else {
                                         prevButton.removeClass(configs.disabledClass);
+                                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [prevButton, true, index]);
                                         hasLeft = true;
                                     }
                                     var interval = setInterval(function(){
@@ -248,15 +257,19 @@ NAMESPACE('chlk.controls', function () {
                 if(toolbar.is(':visible')){
                     if (index_ == 0) {
                         prevButton.addClass(configs.disabledClass);
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [prevButton, true, index_]);
                     } else {
                         prevButton.removeClass(configs.disabledClass);
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [prevButton, true, index_]);
                         hasLeft = true;
                     }
                     var thirdContainer = secondContainer.find('.third-container');
                     if ((index_ == configs.pagesCount - 1 ) || !configs.pagesCount || (thirdContainer.exists() && thirdContainer.width() == secondContainer.width() - left)) {
                         nextButton.addClass(configs.disabledClass);
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [nextButton, false, index_]);
                     } else {
                         nextButton.removeClass(configs.disabledClass);
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [nextButton, false, index_]);
                         hasRight = true;
                     }
                     var interval = setInterval(function(){

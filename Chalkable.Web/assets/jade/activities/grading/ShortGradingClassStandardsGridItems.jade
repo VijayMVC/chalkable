@@ -29,9 +29,8 @@ mixin TeacherClassStandardsGridSummaryCell(info, ableEdit)
                     if student.isWithdrawn()
                         div(data-tooltip="Withdrawn").withdrawn
         +LeftRightToolbar()(
-            needDots = true,
-            roundedDots = true,
-            padding = 77
+            style="width:" + self.getTbWidth() + "px",
+            itemClass='grade-container'
         ).grid-toolbar.i-b.big-arrows
             each gradingItem in self.getGradingItemsOrdered()
                 -var stId = gradingItem.getStandard().getStandardId().valueOf()
