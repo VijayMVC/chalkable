@@ -441,7 +441,8 @@ namespace Chalkable.BusinessLogic.Services.School
             foreach (var classPeriod in classPeriods)
             {
                 var c = classes.FirstOrDefault(x => x.Id == classPeriod.ClassRef);
-                if(c != null) res.Add(c);
+                if (c != null && res.All(x => x.Id != c.Id))
+                    res.Add(c);
             }
             classes = classes.Where(x => res.All(y => y.Id != x.Id)).OrderBy(x=>x.Name).ToList();
             
