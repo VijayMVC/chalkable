@@ -12,6 +12,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Name { get; set; }
         public string Description { get; set; }
         public int StandardSubjectId { get; set; }
+        public string CCStandardCode { get; set; }
  
         public static AnnouncementStandardViewData Create(Standard standard)
         {
@@ -21,7 +22,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                     Description = standard.Description,
                     Name = standard.Name,
                     ParentStandardId = standard.ParentStandardRef, 
-                    StandardSubjectId = standard.StandardSubjectRef
+                    StandardSubjectId = standard.StandardSubjectRef,
+                    CCStandardCode = standard.CCStandardCode
                 };
         }
 
