@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var conds = new AndQueryCondition();
                 if (!allCategories || paretnCategoryId.HasValue)
                     conds.Add(CC_StandardCategory.PARENT_CATEGORY_REF_FIELD, paretnCategoryId);
-                return new CC_StandardCategoryDataAccess(uow).GetAll();
+                return new CC_StandardCategoryDataAccess(uow).GetAll(conds);
             }
         }
     }

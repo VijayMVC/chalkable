@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AppInstallGroupId');
 
@@ -15,20 +16,23 @@ NAMESPACE('chlk.models.apps', function () {
         CURRENT_USER: 6
     });
 
+    var SJX = ria.serialize.SJX;
 
     /** @class chlk.models.apps.AppInstallGroup*/
     CLASS(
-        'AppInstallGroup',[
+        UNSAFE, FINAL, 'AppInstallGroup', IMPLEMENTS(ria.serialize.IDeserializable), [
+            VOID, function deserialize(raw){
+                this.description = SJX.fromValue(raw.description, String);
+                this.tooltipHint = SJX.fromValue(raw.tooltiphint, String);
+                this.groupType = SJX.fromValue(raw.grouptype, chlk.models.apps.AppInstallGroupTypeEnum);
+                this.id = SJX.fromValue(raw.id, chlk.models.id.AppInstallGroupId);
+                this.installed = SJX.fromValue(raw.isinstalled, Boolean);
+            },
 
             String, 'description',
             String, 'tooltipHint',
-
-            [ria.serialize.SerializeProperty('grouptype')],
             chlk.models.apps.AppInstallGroupTypeEnum, 'groupType',
-
             chlk.models.id.AppInstallGroupId, 'id',
-
-            [ria.serialize.SerializeProperty('isinstalled')],
             Boolean, 'installed',
 
             [[chlk.models.id.AppInstallGroupId, chlk.models.apps.AppInstallGroupTypeEnum, Boolean, String]],

@@ -16,6 +16,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'videoDemoUrl',
             String, 'shortDescription',
             String, 'longDescription',
+            String, 'standards',
 
             Boolean, 'teacherMyAppsEnabled',
             Boolean, 'adminMyAppsEnabled',

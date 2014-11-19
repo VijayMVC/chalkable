@@ -1,7 +1,8 @@
+REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AnnouncementQnAId');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.announcement.AnnouncementMessage');
-
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -13,21 +14,26 @@ NAMESPACE('chlk.models.announcement', function () {
         UNANSWERED: 2
     });
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.announcement.AnnouncementQnA*/
     CLASS(
-        'AnnouncementQnA', [
+        UNSAFE, FINAL, 'AnnouncementQnA', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+            VOID, function deserialize(raw){
+                this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementQnAId);
+                this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
+                this.question = SJX.fromDeserializable(raw.question, chlk.models.announcement.AnnouncementMessage);
+                this.answer = SJX.fromDeserializable(raw.answer, chlk.models.announcement.AnnouncementMessage);
+                this.owner = SJX.fromValue(raw.isowner, Boolean);
+                this.state = SJX.fromValue(raw.state, chlk.models.announcement.QnAState);
+            },
+
             chlk.models.id.AnnouncementQnAId, 'id',
-
-            [ria.serialize.SerializeProperty('announcementid')],
             chlk.models.id.AnnouncementId, 'announcementId',
-
             chlk.models.announcement.AnnouncementMessage, 'question',
-
             chlk.models.announcement.AnnouncementMessage, 'answer',
-
-            [ria.serialize.SerializeProperty('isowner')],
             Boolean, 'owner',
-
             chlk.models.announcement.QnAState, 'state'
         ]);
 });

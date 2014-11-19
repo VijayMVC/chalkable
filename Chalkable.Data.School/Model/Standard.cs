@@ -9,6 +9,7 @@ namespace Chalkable.Data.School.Model
         public const string LOWER_GRADE_LEVEL_REF_FIELD = "LowerGradeLevelRef";
         public const string UPPER_GRADE_LEVEL_REF_FIELD = "UpperGradeLevelRef";
         public const string PARENT_STANDARD_REF_FIELD = "ParentStandardRef";
+        public const string CC_STANDARD_CODE = "CCStandardCode";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
@@ -18,6 +19,7 @@ namespace Chalkable.Data.School.Model
         public int StandardSubjectRef { get; set; }
         public int? LowerGradeLevelRef { get; set; }
         public int? UpperGradeLevelRef { get; set; }
-        public bool IsActive { get; set; } 
+        public bool IsActive { get; set; }
+        public string CCStandardCode { get; set; }
     }
 }

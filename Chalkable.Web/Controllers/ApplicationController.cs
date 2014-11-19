@@ -222,12 +222,13 @@ namespace Chalkable.Web.Controllers
             bool canGetSecretKey = false;
             if (needsSecretKey)
                 canGetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
+            var standards = locator.CommonCoreStandardService.GetStandards(null);
             var categories = locator.CategoryService.ListCategories();
-            var res = ApplicationViewData.Create(application, categories, canGetSecretKey);
+            var res = ApplicationViewData.Create(application, categories, standards, canGetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)
             {
                 var liveApp = locator.ApplicationService.GetApplicationById(application.Id);
-                res.LiveApplication = ApplicationViewData.Create(liveApp,  categories, canGetSecretKey);
+                res.LiveApplication = ApplicationViewData.Create(liveApp, categories, standards, canGetSecretKey);
             }
             return res;
         }

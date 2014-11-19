@@ -49,6 +49,8 @@ var ChlkSessionConstants = {
     ANNOUNCEMENT_ATTACHMENTS: 'AnnouncementAttachments',
     ANNOUNCEMENT: 'announcement',
     STANDARD_IDS: 'StandardsIds',
+    CC_STANDARD_CODES: 'StandardCodes',
+    CC_STANDARDS: 'CCStandards',
     DONT_SAVE: 'noSave',
     USER_MODEL: 'userModel',
     DEMO_SCHOOL: 'DEMO_SCHOOL',

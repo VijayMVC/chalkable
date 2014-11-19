@@ -1,4 +1,5 @@
 REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -38,16 +39,6 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'maxScore',
             Boolean, 'annOwner',
             Boolean, 'gradable',
-            Boolean, 'ableToGrade',
-
-            function calculateGradesAvg(count_){
-                var studentAnnouncements = this.getStudentAnnouncements();
-                if (!studentAnnouncements)
-                    return null;
-
-                var classAvg = studentAnnouncements.getGradesAvg(count_);
-                studentAnnouncements.setClassAvg && studentAnnouncements.setClassAvg(classAvg);
-                return classAvg;
-            }
+            Boolean, 'ableToGrade'
         ]);
 });

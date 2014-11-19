@@ -2,13 +2,20 @@ REQUIRE('chlk.models.id.AddressId');
 
 NAMESPACE('chlk.models.people', function () {
     "use strict";
+
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.people.Address*/
-    CLASS(
-        'Address', [
-            chlk.models.id.AddressId, 'id',
+    CLASS(UNSAFE, FINAL, 'Address', IMPLEMENTS(ria.serialize.IDeserializable),  [
 
-            Number, 'type',
+        VOID, function deserialize(raw){
+            this.id = SJX.fromValue(data.id, chlk.models.id.AddressId);
+            this.type = SJX.fromValue(data.type, Number);
+            this.value = SJX.fromValue(data.value, String);
+        },
 
-            String, "value"
-        ]);
+        chlk.models.id.AddressId, 'id',
+        Number, 'type',
+        String, "value"
+    ]);
 });

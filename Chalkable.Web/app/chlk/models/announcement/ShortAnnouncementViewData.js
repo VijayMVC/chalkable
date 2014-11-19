@@ -13,6 +13,16 @@ NAMESPACE('chlk.models.announcement', function () {
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
                 this.studentAnnouncements = ria.serialize.SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.ShortStudentAnnouncementsViewData);
+            },
+
+            String, function calculateGradesAvg(count_) {
+                var studentAnnouncements = this.getStudentAnnouncements();
+                if (!studentAnnouncements)
+                    return null;
+
+                var classAvg = studentAnnouncements.getGradesAvg(count_);
+                studentAnnouncements.setClassAvg(classAvg);
+                return classAvg;
             }
         ]);
 });

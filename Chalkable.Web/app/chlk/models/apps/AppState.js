@@ -1,4 +1,6 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
+
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
     /** @class chlk.models.apps.AppStateEnum*/
@@ -12,10 +14,11 @@ NAMESPACE('chlk.models.apps', function () {
             LIVE: 5
         });
 
+    var SJX = ria.serialize.SJX;
 
     /** @class chlk.models.apps.AppState*/
     CLASS(
-        'AppState', IMPLEMENTS(ria.serialize.IDeserializable),  [
+        UNSAFE, FINAL, 'AppState',IMPLEMENTS(ria.serialize.IDeserializable),  [
             chlk.models.apps.AppStateEnum, 'stateId',
 
             READONLY, String, 'status',
@@ -61,7 +64,7 @@ NAMESPACE('chlk.models.apps', function () {
             [[Object]],
             VOID, function deserialize(raw) {
                 VALIDATE_ARG('raw', Number, raw);
-                this.setStateId(new chlk.models.apps.AppStateEnum(Number(raw)));
+                this.stateId = SJX.fromValue(Number(raw), chlk.models.apps.AppStateEnum);
             }
         ]);
 });

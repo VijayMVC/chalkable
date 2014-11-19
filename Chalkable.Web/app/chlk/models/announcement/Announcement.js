@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
@@ -15,10 +16,10 @@ REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 
-
-
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
+
+    var SJX = ria.serialize.SJX;
 
     /** @class chlk.models.announcement.StateEnum*/
     ENUM('StateEnum', {
@@ -28,8 +29,78 @@ NAMESPACE('chlk.models.announcement', function () {
 
     /** @class chlk.models.announcement.Announcement*/
     CLASS(
-        'Announcement', EXTENDS(chlk.models.announcement.BaseAnnouncementViewData), [
+        UNSAFE, 'Announcement',
+                EXTENDS(chlk.models.announcement.BaseAnnouncementViewData),
+                IMPLEMENTS(ria.serialize.IDeserializable), [
 
+            OVERRIDE, VOID, function deserialize(raw) {
+                BASE(raw);
+                this.canAddStandard = SJX.fromValue(raw.canaddstandard, Boolean);
+                this.ableToRemoveStandard = SJX.fromValue(raw.canremovestandard, Boolean);
+                this.setAnnouncementTypeId(SJX.fromValue(raw.announcementtypeid, Number));
+                this.chalkableAnnouncementType = SJX.fromValue(raw.chalkableannouncementtypeid, Number);
+                this.classId = SJX.fromValue(Number(raw.classid), chlk.models.id.ClassId);
+                this.applicationName = SJX.fromValue(raw.applicationname, String);
+                this.applicationsCount = SJX.fromValue(raw.applicationscount, Number);
+                this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
+                this.attachmentsSummary = SJX.fromValue(raw.attachmentsummary, Number);
+                this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, String);
+                this.avgNumeric = SJX.fromValue(raw.avgnumeric, Number);
+                this.clazz = raw['class'] || null;
+                this.className = SJX.fromValue(raw.fullclassname, String);
+                this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
+                this.announcementReminders = SJX.fromArrayOfDeserializables(raw.announcementreminders, chlk.models.announcement.Reminder);
+                this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
+                this.gradesSummary = SJX.fromValue(raw.gradesummary, Number);
+                this.gradingStudentsCount = SJX.fromValue(raw.gradingstudentscount, Number);
+                this.gradingStyle = SJX.fromValue(raw.gradingstyle, Number);
+                this.nonGradingStudentsCount = SJX.fromValue(raw.nongradingstudentscount, Number);
+                this.ownerAttachmentsCount = SJX.fromValue(raw.ownerattachmentscount, Number);
+                this.qnaCount = SJX.fromValue(raw.qnacount, Number);
+                this.recipientId = SJX.fromValue(raw.recipientid, chlk.models.id.ClassId);
+                this.schoolPersonGender = SJX.fromValue(raw.schoolpersongender, String);
+                this.schoolPersonName = SJX.fromValue(raw.schoolpersonname, String);
+                this.personId = SJX.fromValue(raw.personid, chlk.models.id.SchoolPersonId);
+                this.personName = SJX.fromValue(raw.personname, String);
+                this.shortContent = SJX.fromValue(raw.shortcontent, String);
+                this.showGradingIcon = SJX.fromValue(raw.showgradingicon, Boolean);
+                this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
+                this.stateTyped = SJX.fromValue(raw.statetyped, Number);
+                this.studentAnnouncementId = SJX.fromValue(raw.studentannouncementid, chlk.models.id.StudentAnnouncementId);
+                this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
+                this.studentsCount = SJX.fromValue(raw.studentscount, Number);
+                this.studentsWithAttachmentsCount = SJX.fromValue(raw.studentscountwithoutattachments, Number);
+                this.studentsWithoutAttachmentsCount = SJX.fromValue(raw.studentscountwithoutattachments, Number);
+                this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
+                this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
+                this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
+                this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
+                this.ableToExempt = SJX.fromValue(raw.maybeexempt, Boolean);
+                this.systemType = SJX.fromValue(raw.systemtype, Number);
+                this.wasAnnouncementTypeGraded = SJX.fromValue(raw.wasannouncementtypegraded, Boolean);
+                this.wasSubmittedToAdmin = SJX.fromValue(raw.wassubmittedtoadmin, Boolean);
+                this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
+                this.chalkableAnnouncementType = SJX.fromValue(raw.chalkableannouncementtypeid, Number);
+                this.setChalkableAnnouncementType(this.chalkableAnnouncementType);
+                this.setAdminAnnouncement(SJX.fromValue(raw.adminannouncement, Boolean));
+                this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
+                this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
+                this.attachments = SJX.fromValue(raw.attachments, String);
+                this.applicationsIds = SJX.fromValue(raw.applicationsids, String);
+                this.comment = SJX.fromValue(raw.comment, String);
+                this.content = SJX.fromValue(raw.content, String);
+                this.created = SJX.fromDeserializable(raw.created, chlk.models.common.ChlkDate);
+                this.expiresDateText = SJX.fromValue(raw.expiresdatetext, String);
+                this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
+                this.currentUser = SJX.fromDeserializable(raw.currentuser, chlk.models.people.User);
+                this.complete = SJX.fromValue(raw.complete, Boolean);
+                this.state = SJX.fromValue(raw.state, Number);
+                this.grade = SJX.fromValue(raw.grade, Number);
+                this.subject = SJX.fromValue(raw.subject, String);
+                this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
+                this.annRecipients = SJX.fromValue(raw.annrecipients, String);
+                this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
+            },
             function $(){
                 BASE();
                 this._chalkableAnnouncementType = null;
@@ -38,19 +109,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this._annTypeEnum = chlk.models.announcement.AnnouncementTypeEnum;
             },
 
-            [ria.serialize.SerializeProperty('canaddstandard')],
-            Boolean, 'canAddStandard',
-
-            [ria.serialize.SerializeProperty('canremovestandard')],
-            Boolean, 'ableToRemoveStandard',
-
-            [ria.serialize.SerializeProperty('announcementattachments')],
-            ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
-
-            [ria.serialize.SerializeProperty('announcementreminders')],
-            ArrayOf(chlk.models.announcement.Reminder), 'announcementReminders',
-
-            [ria.serialize.SerializeProperty('announcementtypeid')],
             Number, 'announcementTypeId',
             [[Number]],
             VOID, function setAnnouncementTypeId(announcementTypeId){
@@ -58,10 +116,59 @@ NAMESPACE('chlk.models.announcement', function () {
                 if(!announcementTypeId)
                     this.setChalkableAnnouncementType(this.isAdminAnnouncement() ? this._annTypeEnum.ADMIN.valueOf() : this._annTypeEnum.ANNOUNCEMENT.valueOf())
             },
-            //Number, function getAnnouncementTypeId(){return this._announcementTypeId; },
 
-            [ria.serialize.SerializeProperty('chalkableannouncementtypeid')], // make enum
+            Boolean, 'canAddStandard',
+            Boolean, 'ableToRemoveStandard',
+            ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+            ArrayOf(chlk.models.announcement.Reminder), 'announcementReminders',
+            String, 'applicationName',
+            Number, 'applicationsCount',
+            Number, 'attachmentsCount',
+            Number, 'attachmentsSummary',
+            ArrayOf(String), 'autoGradeApps',
+            Number ,'avgNumeric',
+            Object, 'clazz',
+            String, 'className',
+            [ria.serialize.SerializeProperty('classname')],
+            String, 'shortClassName',
+
+            chlk.models.id.DepartmentId, 'departmentId',
+            Number, 'gradesSummary',
+            Number, 'gradingStudentsCount',
+            Number, 'gradingStyle',
+            Number, 'nonGradingStudentsCount',
+            Number, 'ownerAttachmentsCount',
+            Number, 'qnaCount',
+            chlk.models.id.ClassId, 'recipientId',
+            String, 'schoolPersonGender',
+            String, 'schoolPersonName',
+            chlk.models.id.SchoolPersonId, 'personId',
+            String, 'personName',
+            String, 'shortContent',
+            Boolean, 'showGradingIcon',
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+            Number, 'stateTyped',
+            chlk.models.id.StudentAnnouncementId, 'studentAnnouncementId',
+            chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
+            Number, 'studentsCount',
+            Number, 'studentsWithAttachmentsCount',
+            Number, 'studentsWithoutAttachmentsCount',
+            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
+            Number, 'weightMultiplier',
+            Number, 'weightAddition',
+            Boolean, 'hiddenFromStudents',
+            Boolean, 'ableToExempt',
+            Number, 'systemType',
+            Boolean, 'wasAnnouncementTypeGraded',
+            Boolean, 'wasSubmittedToAdmin',
+            chlk.models.id.ClassId, 'classId',
+
+            VOID, function setClassId(classId){
+                this.classId = classId;
+                this.setAdminAnnouncement(!classId);
+            },
             Number, 'chalkableAnnouncementType',
+
             [[Number]],
             VOID, function setChalkableAnnouncementType(chalkableAnnouncementType){
                 this._chalkableAnnouncementType = chalkableAnnouncementType
@@ -69,179 +176,39 @@ NAMESPACE('chlk.models.announcement', function () {
             },
             Number, function getChalkableAnnouncementType(){ return this._chalkableAnnouncementType;},
 
-
             Boolean, 'adminAnnouncement',
+            Boolean, function setAdminAnnouncement(isAdminAnnouncement){
+                if(isAdminAnnouncement === null)
+                    this.adminAnnouncement = !this.classId;
+            },
 
             READONLY, Boolean, 'standartAnnouncement',
             Boolean, function isStandartAnnouncement(){
                 return !this.getAnnouncementTypeId();
             },
 
+
+
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
-
-            [ria.serialize.SerializeProperty('applicationname')],
-            String, 'applicationName',
-
-            [ria.serialize.SerializeProperty('applicationscount')],
-            Number, 'applicationsCount',
-
             String, 'attachments',
-
             String, 'applicationsIds',
-
-            [ria.serialize.SerializeProperty('attachmentscount')],
-            Number, 'attachmentsCount',
-
-            [ria.serialize.SerializeProperty('attachmentsummary')],
-            Number, 'attachmentsSummary',
-
-            [ria.serialize.SerializeProperty('autogradeapps')],
-            ArrayOf(String), 'autoGradeApps',
-
-            [ria.serialize.SerializeProperty('avgnumeric')],
-            Number ,'avgNumeric',
-
-            [ria.serialize.SerializeProperty('class')],
-            Object, 'clazz',
-
-            [ria.serialize.SerializeProperty('fullclassname')],
-            String, 'className',
-
-            [ria.serialize.SerializeProperty('classname')],
-            String, 'shortClassName',
-
-            [ria.serialize.SerializeProperty('departmentid')],
-            chlk.models.id.DepartmentId, 'departmentId',
-
             String, 'comment',
-
             String, 'content',
-
             chlk.models.common.ChlkDate, 'created',
-
             String, 'expiresDateColor',
-
             String, 'expiresDateText',
-
-            [ria.serialize.SerializeProperty('classid')],
-            chlk.models.id.ClassId, 'classId',
-
-            chlk.models.id.ClassId, function setClassId(classId){
-                this.classId = classId;
-                this.setAdminAnnouncement(!classId);
-            },
-
-            Boolean, function setAdminAnnouncement(isAdminAnnouncement){
-                if(isAdminAnnouncement === null)
-                    this.adminAnnouncement = !this.classId;
-            },
-
             Number, 'grade',
-
-            [ria.serialize.SerializeProperty('gradesummary')],
-            Number, 'gradesSummary',
-
-            [ria.serialize.SerializeProperty('gradingstudentscount')],
-            Number, 'gradingStudentsCount',
-
-            [ria.serialize.SerializeProperty('gradingstyle')],
-            Number, 'gradingStyle',
-
-            [ria.serialize.SerializeProperty('nongradingstudentscount')],
-            Number, 'nonGradingStudentsCount',
-
-            [ria.serialize.SerializeProperty('ownerattachmentscount')],
-            Number, 'ownerAttachmentsCount',
-
             chlk.models.people.User, 'owner',
-
             chlk.models.people.User, 'currentUser',
-
-            [ria.serialize.SerializeProperty('qnacount')],
-            Number, 'qnaCount',
-
-            [ria.serialize.SerializeProperty('recipientid')],
-            chlk.models.id.ClassId, 'recipientId',
-
-            [ria.serialize.SerializeProperty('schoolpersongender')],
-            String, 'schoolPersonGender',
-
-            [ria.serialize.SerializeProperty('schoolpersonname')],
-            String, 'schoolPersonName',
-
-            [ria.serialize.SerializeProperty('personid')],
-            chlk.models.id.SchoolPersonId, 'personId',
-
-            [ria.serialize.SerializeProperty('personname')],
-            String, 'personName',
-
-            [ria.serialize.SerializeProperty('shortcontent')],
-            String, 'shortContent',
-
-            [ria.serialize.SerializeProperty('showgradingicon')],
-            Boolean, 'showGradingIcon',
-
-            ArrayOf(chlk.models.standard.Standard), 'standards',
-
             Boolean, 'complete',
-
             Number, 'state',
-
-            [ria.serialize.SerializeProperty('statetyped')],
-            Number, 'stateTyped',
-
-            [ria.serialize.SerializeProperty('studentannouncementid')],
-            chlk.models.id.StudentAnnouncementId, 'studentAnnouncementId',
-
-            [ria.serialize.SerializeProperty('studentannouncements')],
-            chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
-
-            [ria.serialize.SerializeProperty('studentscount')],
-            Number, 'studentsCount',
-
-            [ria.serialize.SerializeProperty('studentscountwithattachments')],
-            Number, 'studentsWithAttachmentsCount',
-
-            [ria.serialize.SerializeProperty('studentscountwithoutattachments')],
-            Number, 'studentsWithoutAttachmentsCount',
-
             String, 'subject',
-
-            [ria.serialize.SerializeProperty('systemtype')],
-            Number, 'systemType',
-
-            [ria.serialize.SerializeProperty('wasannouncementtypegraded')],
-            Boolean, 'wasAnnouncementTypeGraded',
-
-            [ria.serialize.SerializeProperty('wassubmittedtoadmin')],
-            Boolean, 'wasSubmittedToAdmin',
-
             chlk.models.id.MarkingPeriodId, 'markingPeriodId',
-
             String, 'submitType',
-
             Boolean, 'needButtons',
-
             Boolean, 'needDeleteButton',
-
-            [ria.serialize.SerializeProperty('announcementqnas')],
-            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
-
-            [ria.serialize.SerializeProperty('weightmultiplier')],
-            Number, 'weightMultiplier',
-
-            [ria.serialize.SerializeProperty('weightaddition')],
-            Number, 'weightAddition',
-
-            [ria.serialize.SerializeProperty('hidefromstudents')],
-            Boolean, 'hiddenFromStudents',
-
-            [ria.serialize.SerializeProperty('maybeexempt')],
-            Boolean, 'ableToExempt',
-
             String, 'annRecipients',
-
             Boolean, 'ableEdit',
 
             function prepareExpiresDateText(){
@@ -269,10 +236,20 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setExpiresDateText(expTxt);
                 }
             },
-
             function getTitleModel(){
                 var title = this.getTitle();
                 return new chlk.models.announcement.AnnouncementTitleViewData(title);
+            },
+
+            String, function calculateGradesAvg(count_) {
+                var studentAnnouncements = this.getStudentAnnouncements();
+                console.log("calculateGradesAvg", studentAnnouncements);
+                if (!studentAnnouncements)
+                    return null;
+
+                var classAvg = studentAnnouncements.getGradesAvg(count_);
+                studentAnnouncements.setClassAvg(classAvg);
+                return classAvg;
             }
 
         ]);

@@ -20,7 +20,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'announcementTitle',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'classAvg',
+            String, 'classAvg',
 
             [ria.templates.ModelPropertyBind],
             String, 'className',

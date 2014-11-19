@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models
     public class CCStandardCategoryViewData
     {
         public Guid Id { get; set; }
-        public Guid? ParentCategoryRef { get; set; }
+        public Guid? ParentCategoryId { get; set; }
         public string Name { get; set; }
 
         public static CCStandardCategoryViewData Create(CC_StandardCategory standardCategory)
@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models
             return new CCStandardCategoryViewData
                 {
                     Id = standardCategory.Id,
-                    ParentCategoryRef = standardCategory.ParentCategoryRef,
+                    ParentCategoryId = standardCategory.ParentCategoryRef,
                     Name = standardCategory.Name
                 };
         }

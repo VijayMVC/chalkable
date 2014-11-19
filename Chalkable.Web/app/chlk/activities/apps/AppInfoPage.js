@@ -3,6 +3,7 @@ REQUIRE('chlk.templates.apps.AppInfo');
 REQUIRE('chlk.templates.apps.AppPicture');
 REQUIRE('chlk.templates.apps.AppScreenshots');
 REQUIRE('chlk.templates.SuccessTpl');
+REQUIRE('chlk.templates.standard.ApplicationStandardsTpl');
 
 NAMESPACE('chlk.activities.apps', function () {
 
@@ -14,6 +15,7 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppInfo)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.standard.ApplicationStandardsTpl, '' , '.add-standards', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, 'icon', '.icon', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppPicture, 'banner', '.banner', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppScreenshots, 'screenshots', '.elem.screenshots', ria.mvc.PartialUpdateRuleActions.Replace)],
@@ -36,8 +38,9 @@ NAMESPACE('chlk.activities.apps', function () {
             [ria.mvc.DomEventBind('change', 'input.toggle-standarts')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleStandarts(node, event){
-                var addStandartsBlock = this.dom.find('.add-standarts');
-                addStandartsBlock.toggleClass(HIDDEN_CLASS, node.checked());
+                var addStandardsBlock = this.dom.find('.add-standards-container');
+                addStandardsBlock.toggleClass(HIDDEN_CLASS, !node.checked());
+                jQuery(addStandardsBlock.find('.remove-all-standards-btn').valueOf()).click();
             },
 
             [[ria.dom.Dom, ria.dom.Event]],
@@ -100,6 +103,12 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function toggleClassFlatRate(node, event){
                 var classFlatRate = this.dom.find('.class-flat-rate');
                 classFlatRate.toggleClass(HIDDEN_CLASS, !node.checked());
+            },
+
+            [ria.mvc.DomEventBind('click', '.add-standards .title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addStandardClick(node, event){
+                jQuery(node.parent('.add-standards').find('.add-standards-btn').valueOf()).click();
             }
         ]);
 });

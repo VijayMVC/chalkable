@@ -1,3 +1,5 @@
+REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
@@ -7,45 +9,42 @@ REQUIRE('chlk.models.announcement.BaseStudentAnnouncementsViewData');
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.announcement.StudentAnnouncements*/
     CLASS(
-        'StudentAnnouncements', EXTENDS(chlk.models.announcement.BaseStudentAnnouncementsViewData), [
-            [ria.serialize.SerializeProperty('announcementtypeid')],
+        FINAL, UNSAFE, 'StudentAnnouncements',
+                EXTENDS(chlk.models.announcement.BaseStudentAnnouncementsViewData.OF(chlk.models.announcement.StudentAnnouncement)),
+                IMPLEMENTS(ria.serialize.IDeserializable),  [
+
+            VOID, function deserialize(raw) {
+                this.announcementTypeId = SJX.fromValue(raw.announcementtypeid, Number);
+                this.schoolOptions = SJX.fromDeserializable(raw.schooloptions, chlk.models.school.SchoolOption);
+                this.chalkableAnnouncementTypeId = SJX.fromValue(raw.chalkableannouncementtypeid, Number);
+                this.announcementTitle = SJX.fromValue(raw.announcmenttitel, String);
+                this.classAvg = SJX.fromValue(raw.classavg, String);
+                this.className = SJX.fromValue(raw.classname, String);
+                this.courseId = SJX.fromValue(raw.courseid, chlk.models.id.CourseId);
+                this.gradedStudentCount = SJX.fromValue(raw.gradedstudentcount, Number);
+                this.gradingStyle = SJX.fromValue(raw.gradingstyle, Number);
+                this.items = SJX.fromArrayOfDeserializables(raw.items, chlk.models.announcement.StudentAnnouncement);
+                this.mapping = SJX.fromDeserializable(raw.gradingstylemapper, chlk.models.grading.Mapping);
+                this.showToStudents = SJX.fromValue(raw.showtostudents, Boolean);
+                this.currentItem = SJX.fromDeserializable(raw.currentitem, chlk.models.announcement.StudentAnnouncement);
+                this.selectedIndex = SJX.fromDeserializable(raw.selectedindex, Number);
+            },
+
             Number, 'announcementTypeId',
-
             chlk.models.school.SchoolOption, 'schoolOptions',
-
-            [ria.templates.ModelPropertyBind],
             Number, 'chalkableAnnouncementTypeId',
-
-            [ria.serialize.SerializeProperty('announcmenttitel')],
             String, 'announcementTitle',
 
-            [ria.serialize.SerializeProperty('classavg')],
-            Number, 'classAvg',
-
-            [ria.serialize.SerializeProperty('classname')],
             String, 'className',
-
-            [ria.serialize.SerializeProperty('courseid')],
             chlk.models.id.CourseId, 'courseId',
-
-            [ria.serialize.SerializeProperty('gradedstudentcount')],
-            Number, 'gradedStudentCount',
-
-            [ria.serialize.SerializeProperty('gradingstyle')],
             Number, 'gradingStyle',
-
-            ArrayOf(chlk.models.announcement.StudentAnnouncement), 'items',
-
-            [ria.serialize.SerializeProperty('gradingstylemapper')],
             chlk.models.grading.Mapping, 'mapping',
-
-            [ria.serialize.SerializeProperty('showtostudents')],
             Boolean, 'showToStudents',
-
             chlk.models.announcement.StudentAnnouncement, 'currentItem',
-
             Number, 'selectedIndex'
         ]);
 });

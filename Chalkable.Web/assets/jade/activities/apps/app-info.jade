@@ -168,12 +168,14 @@ appPlatforms = appPlatforms.join(',')
                         +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
         .section.small
             .elem.standarts
+                isAdjustToStandards = app.getStandards() && app.getStandards().length > 0
                 label.hint Standards:
                 .info
                     label.description Is your app aligned with common core standards?
-                    +SlideCheckbox("adjustedToStandarts", myAppsAccess.isAdjustedToStandarts(), self.isReadOnly()).toggle-standarts
-                .add-standarts(class = myAppsAccess.isAdjustedToStandarts() ?  "x-hidden" : undefined)
-                    .title Standards
+                    +SlideCheckbox("adjustedToStandarts", isAdjustToStandards, self.isReadOnly()).toggle-standarts
+                .add-standards-container(class = isAdjustToStandards ? undefined :  "x-hidden")
+                    .add-standards
+                        +RenderWith(self.prepareStandardListData(), chlk.templates.standard.ApplicationStandardsTpl)
         .section
             .elem
                 label.hint API Access:

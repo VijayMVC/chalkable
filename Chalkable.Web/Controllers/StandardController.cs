@@ -25,14 +25,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
-        public ActionResult GetCommonCoreStandardCategory(Guid? parentCategoryId, bool? allCategories)
+        public ActionResult GetCommonCoreStandardCategories(Guid? parentCategoryId, bool? allCategories)
         {
             var standardCategories = MasterLocator.CommonCoreStandardService.GetCCStandardCategories(parentCategoryId, allCategories ?? false);
             return Json(CCStandardCategoryViewData.Create(standardCategories));
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]
-        public ActionResult GetCommonCoreStandard(Guid? standardCategoryId)
+        public ActionResult GetCommonCoreStandards(Guid? standardCategoryId)
         {
             var standards = MasterLocator.CommonCoreStandardService.GetStandards(standardCategoryId);
             return Json(CommonCoreStandardViewData.Create(standards));

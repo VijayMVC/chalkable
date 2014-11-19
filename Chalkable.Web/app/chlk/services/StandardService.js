@@ -6,7 +6,8 @@ REQUIRE('chlk.models.id.StandardSubjectId');
 REQUIRE('chlk.models.id.StandardId');
 
 REQUIRE('chlk.models.standard.CommonCoreStandard');
-
+REQUIRE('chlk.models.standard.CCStandardCategory');
+REQUIRE('chlk.models.id.CCStandardCategoryId');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -27,8 +28,18 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            ria.async.Future, function getCommonCoreStandards() {
-                return this.get('Standard/GetCommonCoreStandard.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {});
+            [[chlk.models.id.CCStandardCategoryId]],
+            ria.async.Future, function getCommonCoreStandards(standardCategoryId_) {
+                return this.get('Standard/GetCommonCoreStandards.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {
+                    standardCategoryId: standardCategoryId_ && standardCategoryId_.valueOf()
+                });
+            },
+
+            [[chlk.models.id.CCStandardCategoryId]],
+            ria.async.Future, function getCCStandardCategories(parentCategoryId_){
+                return this.get('Standard/GetCommonCoreStandardCategories.json', ArrayOf(chlk.models.standard.CCStandardCategory), {
+                    parentCategoryId: parentCategoryId_ && parentCategoryId_.valueOf()
+                });
             }
         ])
 });

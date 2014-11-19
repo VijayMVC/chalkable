@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.schoolYear', function () {
                 this.description = SJX.fromValue(raw.description, String);
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
-                this.ablePostGradeBook = SJX.fromValue(raw.allowgradeposting, String);
+                this.ablePostGradeBook = SJX.fromValue(raw.allowgradeposting, Boolean);
             },
 
             READONLY, chlk.models.id.GradingPeriodId, 'id',

@@ -1,3 +1,5 @@
+REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
 /**
  * Created with JetBrains WebStorm.
  * User: Yuran
@@ -9,9 +11,14 @@
 NAMESPACE('chlk.models.school', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.school.SchoolOption*/
-    CLASS(UNSAFE, 'SchoolOption', [
-        [ria.serialize.SerializeProperty('allowscoreentryforunexcused')],
+    CLASS(
+        UNSAFE, FINAL,  'SchoolOption', IMPLEMENTS(ria.serialize.IDeserializable), [
+        VOID, function deserialize(raw) {
+            this.allowScoreEntryForUnexcused = SJX.fromValue(raw.allowscoreentryforunexcused, Boolean);
+        },
         Boolean, 'allowScoreEntryForUnexcused',
 
         [[Boolean]],
