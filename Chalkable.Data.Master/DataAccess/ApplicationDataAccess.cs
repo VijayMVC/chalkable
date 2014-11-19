@@ -329,7 +329,24 @@ namespace Chalkable.Data.Master.DataAccess
             var res = ReadMany<Application>(dbQuery);
             if (res.Count == 0) return res;
             return PreparePicturesData(res);
-        } 
+        }
+
+        public IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count)
+        {
+            IDictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"start", start},
+                    {"count", count},
+                    {"installedAppsIds", installedAppsIds != null ? installedAppsIds.Select(x=> x.ToString()).JoinString(",") : null},
+                    {"standardsCodes", standardsCodes != null ? standardsCodes.JoinString(",") : null}
+                };
+            IList<Application> res;
+            using (var reader = ExecuteStoredProcedureReader("spGetSuggestedApplications", parameters))
+            {
+                res = reader.ReadList<Application>();
+            }
+            return PreparePicturesData(res);
+        }
     }
 
     public class ApplicationQuery

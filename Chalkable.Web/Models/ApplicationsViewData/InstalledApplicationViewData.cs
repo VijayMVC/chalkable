@@ -23,7 +23,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
         public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp)
         {
-            return applications.Select(x => Create(x, notInstalledStCountPerApp[x.Id])).ToList();
+            return applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id])).ToList();
         } 
     }
 

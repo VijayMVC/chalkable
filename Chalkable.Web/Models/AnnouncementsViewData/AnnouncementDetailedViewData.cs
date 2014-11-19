@@ -22,7 +22,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool Exempt { get; set; }
 
         public bool CanRemoveStandard { get; set; }
-        
+
+        public IList<ApplicationForAttachViewData> SuggestedApps { get; set; }
+
 
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, int currentSchoolPersonId)
             : base(announcementDetails, studentAnnouncements, mapper, null)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -56,8 +57,22 @@ namespace Chalkable.Web.Controllers
                 if (stAnnouncements.Count > 0 && annDetails.GradableType)
                     annViewData.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annDetails, attInfo);
             }
-            if(!isRead)
+            if (!isRead)
+            {
                 annViewData.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId);
+                if (annViewData.Standards != null && annViewData.Standards.Count > 0)
+                {
+                    var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
+                    if(mp == null)
+                        throw new NoMarkingPeriodException();
+                    var codes = annDetails.AnnouncementStandards.Where(x=>!string.IsNullOrEmpty(x.Standard.CCStandardCode))
+                        .Select(x => x.Standard.CCStandardCode).ToList();
+                    annViewData.SuggestedApps = AppMarketController.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                                                              Context.PersonId.Value, annDetails.ClassRef, codes, mp.Id);
+                }
+
+            }
+
             return annViewData;
         }
     }
