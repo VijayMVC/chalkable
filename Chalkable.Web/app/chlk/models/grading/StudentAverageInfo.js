@@ -107,7 +107,7 @@ NAMESPACE('chlk.models.grading', function () {
 
             VOID, function deserialize(raw) {
                 this.averageId = SJX.fromValue(raw.averageid, Number);
-                this.averageName = SJX.fromValue(raw.averagename, Number);
+                this.averageName = SJX.fromValue(raw.averagename, String);
                 this.gradingPeriodAverage = SJX.fromValue(raw.isgradingperiodaverage, Boolean);
                 this.totalAverage = SJX.fromValue(raw.totalaverage, Number);
                 this.averages = SJX.fromArrayOfDeserializables(raw.averages, chlk.models.grading.ShortStudentAverageInfo);
