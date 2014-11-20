@@ -29,6 +29,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<ApplicationRating> GetRatings(Guid applicationId);
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
+
+        IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count);
     }
 
 
@@ -219,7 +221,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        
+        public IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count)
+        {
+            using (var uow = Read())
+            {
+                return new ApplicationDataAccess(uow).GetSuggestedApplications(standardsCodes, installedAppsIds, start, count);
+            }
+        }
     }
 
     public  enum AppSortingMode

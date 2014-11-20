@@ -1,7 +1,10 @@
+REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
+
 NAMESPACE('chlk.models.common', function () {
     "use strict";
 
-
+    var SJX = ria.serialize.SJX;
     /** @class chlk.models.common.RoleEnum*/
     ENUM(
         'RoleEnum', {
@@ -34,9 +37,15 @@ NAMESPACE('chlk.models.common', function () {
 
     /** @class chlk.models.common.Role*/
     CLASS(
-        'Role', [
+        FINAL, UNSAFE, 'Role',IMPLEMENTS(ria.serialize.IDeserializable),  [
+            VOID, function deserialize(raw){
+                this.roleId = SJX.fromValue(raw.roleid, chlk.models.common.RoleEnum);
+                this.roleName = SJX.fromValue(raw.rolename, String);
+            },
+
             chlk.models.common.RoleEnum, 'roleId',
             String, 'roleName',
+
             [[chlk.models.common.RoleEnum, String]],
             function $(roleId_, roleName_){
                 BASE();

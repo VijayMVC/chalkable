@@ -1,24 +1,31 @@
+REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
+
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
+
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.apps.AppAccess*/
     CLASS(
-        'AppAccess', [
-            [ria.serialize.SerializeProperty('hasstudentmyapps')],
+        UNSAFE, FINAL,   'AppAccess',IMPLEMENTS(ria.serialize.IDeserializable), [
+            VOID, function deserialize(raw){
+                this.studentMyAppsEnabled = SJX.fromValue(raw.hasstudentmyapps, Boolean);
+                this.teacherMyAppsEnabled = SJX.fromValue(raw.hasteachermyapps, Boolean);
+                this.adminMyAppsEnabled = SJX.fromValue(raw.hasadminmyapps, Boolean);
+                this.parentMyAppsEnabled = SJX.fromValue(raw.hasparentmyapps, Boolean);
+                this.attachEnabled = SJX.fromValue(raw.canattach, Boolean);
+                this.visibleInGradingView = SJX.fromValue(raw.showingradeview, Boolean);
+                this.adjustedToStandards = SJX.fromValue(raw.adjustedtostandards, Boolean);
+                this.myAppsForCurrentRoleEnabled = SJX.fromValue(raw.myappsforcurrentroleenabled, Boolean);
+            },
             Boolean, 'studentMyAppsEnabled',
-            [ria.serialize.SerializeProperty('hasteachermyapps')],
             Boolean, 'teacherMyAppsEnabled',
-            [ria.serialize.SerializeProperty('hasadminmyapps')],
             Boolean, 'adminMyAppsEnabled',
-            [ria.serialize.SerializeProperty('hasparentmyapps')],
             Boolean, 'parentMyAppsEnabled',
-
-            [ria.serialize.SerializeProperty('canattach')],
             Boolean, 'attachEnabled',
-            [ria.serialize.SerializeProperty('showingradeview')],
             Boolean, 'visibleInGradingView',
-
-            Boolean, 'adjustedToStandarts',
-
+            Boolean, 'adjustedToStandards',
             Boolean, 'myAppsForCurrentRoleEnabled',
 
             Object, function getPostData(){

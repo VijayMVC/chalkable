@@ -1,3 +1,5 @@
+REQUIRE('ria.serialize.SJX');
+
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
@@ -8,11 +10,19 @@ NAMESPACE('chlk.models.apps', function () {
         ANDROID: 2
     });
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.apps.AppPlatform*/
     CLASS(
-        'AppPlatform', IMPLEMENTS(ria.serialize.IDeserializable),  [
+        UNSAFE, FINAL ,'AppPlatform', IMPLEMENTS(ria.serialize.IDeserializable),  [
+            VOID, function deserialize(raw){
+                this.id = SJX.fromValue(raw.type, chlk.models.apps.AppPlatformTypeEnum);
+                this.name = SJX.fromValue(raw.name, String);
+            },
+
             chlk.models.apps.AppPlatformTypeEnum, 'id',
             String, 'name',
+
             [[chlk.models.apps.AppPlatformTypeEnum, String]],
             function $(id_, name_){
                 BASE();
@@ -20,11 +30,6 @@ NAMESPACE('chlk.models.apps', function () {
                     this.setId(id_);
                 if (name_)
                     this.setName(name_);
-            },
-
-            VOID, function deserialize(raw){
-                this.setId(new chlk.models.apps.AppPlatformTypeEnum(raw.type));
-                this.setName(raw.name);
             }
         ]);
 });

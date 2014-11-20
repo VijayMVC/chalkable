@@ -1,6 +1,9 @@
+REQUIRE('ria.serialize.SJX');
+
 NAMESPACE('chlk.models.people', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
      /**@class chlk.models.people.UserPermissionEnum*/
     ENUM('UserPermissionEnum',{
         ACCESS_FUTURE_ACADEMIC_SESSIONS: 'Access Future Academic Sessions',
@@ -69,13 +72,10 @@ NAMESPACE('chlk.models.people', function () {
     });
 
     /** @class chlk.models.people.Claim*/
-    CLASS('Claim',  [
-        String, 'type',
-        ArrayOf(String), 'values',
+    CLASS(
+        UNSAFE, FINAL, 'Claim', IMPLEMENTS(ria.serialize.IDeserializable),  [
 
-        READONLY, ArrayOf(chlk.models.people.UserPermissionEnum), 'permissions',
-
-        ArrayOf(chlk.models.people.UserPermissionEnum), function getPermissions(){
+        function preparePermisssions_(){
             if(this.permissions == null){
                 this.permissions = [];
                 var values = this.getValues();
@@ -89,6 +89,21 @@ NAMESPACE('chlk.models.people', function () {
                     return res;
                 }.bind(this));
             }
+        },
+
+        VOID, function deserialize(raw){
+            this.type = SJX.fromValue(raw.type, String);
+            this.values = SJX.fromArrayOfValues(raw.values, String);
+            this.preparePermisssions_();
+
+        },
+        String, 'type',
+        ArrayOf(String), 'values',
+
+        READONLY, ArrayOf(chlk.models.people.UserPermissionEnum), 'permissions',
+
+        ArrayOf(chlk.models.people.UserPermissionEnum), function getPermissions(){
+            this.preparePermisssions_();
             return this.permissions;
         },
 

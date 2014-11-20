@@ -15,8 +15,8 @@ NAMESPACE('chlk.models.grading', function () {
                 this.avg = SJX.fromValue(raw.avg, Number);
             },
 
-            READONLY, chlk.models.people.ShortUserInfo, 'studentInfo',
-            READONLY, Boolean, 'withdrawn',
-            READONLY, Number, 'avg'
+            chlk.models.people.ShortUserInfo, 'studentInfo',
+            Boolean, 'withdrawn',
+            Number, 'avg'
         ]);
 });

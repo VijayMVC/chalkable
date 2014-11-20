@@ -1,8 +1,11 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AppPermissionId');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
+
+    var SJX = ria.serialize.SJX;
 
     /** @class chlk.models.apps.AppPermissionTypeEnum*/
     ENUM('AppPermissionTypeEnum',{
@@ -19,7 +22,12 @@ NAMESPACE('chlk.models.apps', function () {
 
     /** @class chlk.models.apps.AppPermission*/
     CLASS(
-        'AppPermission', IMPLEMENTS(ria.serialize.IDeserializable),  [
+        UNSAFE, FINAL, 'AppPermission', IMPLEMENTS(ria.serialize.IDeserializable),  [
+            VOID, function deserialize(raw){
+                this.id = SJX.fromValue(raw.type, chlk.models.apps.AppPermissionTypeEnum);
+                this.name = SJX.fromValue(raw.name, String);
+            },
+
             chlk.models.apps.AppPermissionTypeEnum, 'id',
             String, 'name',
             [[chlk.models.apps.AppPermissionTypeEnum, String]],
@@ -29,11 +37,6 @@ NAMESPACE('chlk.models.apps', function () {
                     this.setId(id_);
                 if (name_)
                     this.setName(name_);
-            },
-
-            VOID, function deserialize(raw){
-                this.setId(new chlk.models.apps.AppPermissionTypeEnum(raw.type));
-                this.setName(raw.name);
             }
         ]);
 });

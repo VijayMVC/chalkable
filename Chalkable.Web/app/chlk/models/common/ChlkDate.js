@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
 
 window.currentDate = new Date();
@@ -72,6 +73,8 @@ NAMESPACE('chlk.models.common', function () {
         MONTH: 'MONTH',
         YEAR: 'YEAR'
     });
+
+    var SJX = ria.serialize.SJX;
 
     /** @class chlk.models.common.ChlkDate*/
     CLASS(
@@ -158,7 +161,7 @@ NAMESPACE('chlk.models.common', function () {
 
             VOID, function deserialize(raw) {
                 var date = raw ? this.getServerDate_(raw) : this.getServerDate_();
-                this.setDate(date);
+                this.initBaseData_(date);
             },
 
             [[Number]],

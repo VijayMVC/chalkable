@@ -12,20 +12,22 @@ NAMESPACE('chlk.models.people', function () {
 
 
     /** @class chlk.models.people.Phone*/
-    CLASS(
-        'Phone', [
-            chlk.models.id.PhoneId, 'id',
+    CLASS(FINAL, UNSAFE, 'Phone', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-            [ria.serialize.SerializeProperty('isprimary')],
-            Boolean, 'isPrimary',
+        VOID, function deserialize(raw){
+           this.id = SJX.fromValue(data.id, chlk.models.id.PhoneId);
+           this.isPrimary = SJX.fromValue(data.isprimary, Boolean);
+           this.type = SJX.fromValue(data.type, Number);
+           this.value = SJX.fromValue(data.value, String);
+        },
 
-            Number, 'type',
+        chlk.models.id.PhoneId, 'id',
+        Boolean, 'isPrimary',
+        Number, 'type',
+        String, "value",
 
-            String, "value",
-
-
-            Boolean, function isHomePhone(){
-                return this.getType() == chlk.models.people.PhoneTypeEnum.Home.valueOf();
-            }
-        ]);
+        Boolean, function isHomePhone(){
+            return this.getType() == chlk.models.people.PhoneTypeEnum.Home.valueOf();
+        }
+    ]);
 });

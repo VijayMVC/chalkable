@@ -7,13 +7,13 @@ NAMESPACE('chlk.models.announcement', function () {
 
     /** @class chlk.models.announcement.ShortStudentAnnouncementsViewData*/
     CLASS(
-        UNSAFE, 'ShortStudentAnnouncementsViewData', EXTENDS(chlk.models.announcement.BaseStudentAnnouncementsViewData), IMPLEMENTS(ria.serialize.IDeserializable), [
+        UNSAFE, 'ShortStudentAnnouncementsViewData',
+                EXTENDS(chlk.models.announcement.BaseStudentAnnouncementsViewData.OF(chlk.models.announcement.ShortStudentAnnouncementViewData)),
+                IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
                 this.items = ria.serialize.SJX.fromArrayOfDeserializables(raw.items, chlk.models.announcement.ShortStudentAnnouncementViewData);
             },
-
-            ArrayOf(chlk.models.announcement.ShortStudentAnnouncementViewData), 'items',
 
             function $(items_){
                 BASE();

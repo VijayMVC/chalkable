@@ -1,15 +1,22 @@
+REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
+
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.apps.AppPrice*/
     CLASS(
-        'AppPrice', [
+        UNSAFE, FINAL,   'AppPrice',IMPLEMENTS(ria.serialize.IDeserializable), [
+            VOID, function deserialize(raw){
+                this.price = SJX.fromValue(raw.price, Number);
+                this.pricePerClass = SJX.fromValue(raw.priceperclass, Number);
+                this.pricePerSchool = SJX.fromValue(raw.priceperschool, Number);
+            },
             Number, 'price',
-            [ria.serialize.SerializeProperty('priceperclass')],
             Number, 'pricePerClass',
-            [ria.serialize.SerializeProperty('priceperschool')],
             Number, 'pricePerSchool',
-
 
             function $(price_, pricePerClass_, pricePerSchool_){
                 BASE();

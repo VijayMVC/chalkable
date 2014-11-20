@@ -1,10 +1,19 @@
+REQUIRE('chlk.models.announcement.ShortStudentAnnouncementViewData');
+
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
     /** @class chlk.models.announcement.BaseStudentAnnouncementsViewData*/
     CLASS(
+        GENERIC('T', ClassOf(chlk.models.announcement.ShortStudentAnnouncementViewData)),
         UNSAFE, 'BaseStudentAnnouncementsViewData', [
-            function getGradesAvg(count_){
+
+            Number, 'gradedStudentCount',
+            String, 'classAvg',
+            Array, 'items', // Of(T)
+
+            [[Number]],
+            String, function getGradesAvg(count_){
                 var gradedStudentCount = 0, sum = 0, numericGrade, gradeValue;
                 var items = this.getItems() || [], classAvg = null;
                 items.forEach(function(item){
@@ -21,12 +30,9 @@ NAMESPACE('chlk.models.announcement', function () {
                             sum += (numericGrade || 0);
                     }
                 });
-                this.setGradedStudentCount && this.setGradedStudentCount(gradedStudentCount);
+                this.setGradedStudentCount(gradedStudentCount);
                 if(gradedStudentCount){
-                    if(count_)
-                        classAvg = (sum / gradedStudentCount).toFixed(count_);
-                    else
-                        classAvg = Math.floor(sum / gradedStudentCount + 0.5).toString();
+                    classAvg = (sum / gradedStudentCount).toFixed(count_ || 0);
                 }
                 return classAvg;
             }

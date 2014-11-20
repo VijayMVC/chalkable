@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
@@ -38,6 +39,29 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<ApplicationForAttachViewData>(res, st / cnt, cnt, totalCount));
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult SuggestedApps(int personId, int classId, StringList standardsCodes, int markingPeriodId, int? start, int? count)
+        {
+            return Json(GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, personId, classId, standardsCodes, markingPeriodId, start, count));
+        }
+
+        public static IList<ApplicationForAttachViewData> GetSuggestedAppsForAttach(IServiceLocatorMaster masterLocator, IServiceLocatorSchool schooLocator
+            , int personId, int classId, IList<string> standardsCodes, int markingPeriodId, int? start = null, int? count = null)
+        {
+            start = start ?? 0;
+            count = count ?? 3;
+            var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
+            var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
+            var applications = masterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, start.Value, count.Value);
+            var classSize = schooLocator.ClassService.GetClassPersons(null, classId, true, markingPeriodId).Count;
+            foreach (var application in applications)
+            {
+                if(!studentCountPerApp.ContainsKey(application.Id))
+                    studentCountPerApp.Add(application.Id, classSize);
+            }
+            return ApplicationForAttachViewData.Create(applications, studentCountPerApp);
+        }
+        
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ListInstalled(int personId, string filter, int? start, int? count)
         {
