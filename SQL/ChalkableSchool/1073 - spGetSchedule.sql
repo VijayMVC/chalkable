@@ -1,4 +1,4 @@
---Drop Procedure spTeacherSchedule
+--Drop Procedure spGetSchedule
 Create Procedure spGetSchedule
 	@schoolYearId int,
 	@teacherId int,
@@ -26,20 +26,21 @@ select
 from 
 	[Date]
 	cross join Period
-	left join ClassPeriod on ClassPeriod.PeriodRef = Period.Id and [Date].DayTypeRef = ClassPeriod.DayTypeRef
 	left join 
 	(
 		Select * from 
 			Class
+			join ClassPeriod on Class.Id = ClassPeriod.ClassRef
 		where 
 			(@classId is null or Class.Id = @classId)
-			and (@studentId is null or Class.Id in (select ClassRef from ClassStudent where ClassStudent.PersonRef = @studentId))
-			and (@teacherId is null or Class.Id in (select ClassRef from ClassTeacher where ClassTeacher.PersonRef = @teacherId))
-	) C on ClassPeriod.ClassRef = C.Id
-	left join Room on Class.RoomRef = Room.Id
-	left join ScheduledTimeSlot on ScheduledTimeSlot.BellScheduleRef = [Date].BellScheduleRef and ScheduledTimeSlot.PeriodRef = Period.Id	
+			and (@studentId is null or Class.Id in (select ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId))
+			and (@teacherId is null or Class.PrimaryTeacherRef = @teacherId)
+	) C on C.PeriodRef = Period.Id and C.DayTypeRef = [Date].DayTypeRef
+	left join Room on C.RoomRef = Room.Id	
+	left join ScheduledTimeSlot on ScheduledTimeSlot.BellScheduleRef = [Date].BellScheduleRef and ScheduledTimeSlot.PeriodRef = Period.Id
 Where
 	[Date].SchoolYearRef = @schoolYearId
 	and Period.SchoolYearRef = @schoolYearId
 	and [Date].[Day] >= @from 
 	and [Date].[Day] <= @to
+

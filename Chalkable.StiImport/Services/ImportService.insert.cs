@@ -72,6 +72,8 @@ namespace Chalkable.StiImport.Services
             InsertGradingPeriods();
             Log.LogInfo("insert day types");
             InsertDayTypes();
+            Log.LogInfo("insert Bell Schedules");
+            InsertBellSchedules();
             Log.LogInfo("insert days");
             InsertDays();
             Log.LogInfo("insert rooms");
@@ -92,8 +94,6 @@ namespace Chalkable.StiImport.Services
             InsertMarkingPeriodClasses();
             Log.LogInfo("insert periods");
             InsertPeriods();
-            Log.LogInfo("insert Bell Schedules");
-            InsertBellSchedules();
             Log.LogInfo("insert scheduled time slots");
             InsertScheduledTimeSlots();
             Log.LogInfo("insert class periods");

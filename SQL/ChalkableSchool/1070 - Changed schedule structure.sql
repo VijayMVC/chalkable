@@ -57,3 +57,50 @@ GO
 Delete From SyncVersion where TableName = 'CalendarDay'
 GO
 
+Create Type [dbo].[TBellSchedule] as Table
+(
+		Id int not null,
+        SchoolYearRef int not null,
+        Name nvarchar(255),
+        Description nvarchar(1024),
+        TotalMinutes int not null,
+        Code nvarchar(255),
+        IsActive bit not null,
+        IsSystem bit not null,
+        UseStartEndTime bit not null
+)
+GO
+Drop Type [dbo].[TDate]
+GO
+Create Type [dbo].[TDate] AS TABLE(
+	[Day] [datetime2](7) NOT NULL,
+	[DayTypeRef] [int] NULL,
+	[SchoolYearRef] [int] NOT NULL,
+	[IsSchoolDay] [bit] NOT NULL,
+	BellScheduleRef int
+)
+GO
+
+Drop Type [dbo].[TScheduledTimeSlot]
+GO
+Create Type [dbo].[TScheduledTimeSlot] AS TABLE(
+	[BellScheduleRef] [int] NOT NULL,
+	[PeriodRef] [int] NOT NULL,
+	[StartTime] [int] NULL,
+	[EndTime] [int] NULL,
+	[Description] [varchar](255) NOT NULL,
+	[IsDailyAttendancePeriod] [bit] NOT NULL
+)
+GO
+
+Drop Type [dbo].[TPeriod]
+GO
+Create Type [dbo].[TPeriod] AS TABLE(
+	[Id] [int] NOT NULL,
+	[SchoolYearRef] [int] NOT NULL,
+	[Order] [int] NOT NULL
+)
+GO
+
+
+

@@ -57,8 +57,6 @@ namespace Chalkable.StiImport.Services
             DeleteClassPeriods();
             Log.LogInfo("delete schedule time slot");
             DeleteScheduledTimeSlots();
-            Log.LogInfo("delete bell schedules");
-            DeleteBellSchedules();
             Log.LogInfo("delete periods");
             DeletePeriods();
             Log.LogInfo("delete marking period classes");
@@ -79,6 +77,8 @@ namespace Chalkable.StiImport.Services
             DeleteRooms();
             Log.LogInfo("delete days");
             DeleteDays();
+            Log.LogInfo("delete bell schedules");
+            DeleteBellSchedules();
             Log.LogInfo("delete day types");
             DeleteDayTypes();
             Log.LogInfo("delete grading periods");

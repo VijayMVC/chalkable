@@ -198,8 +198,7 @@ namespace Chalkable.Web.Controllers
             
             //todo: move this logic to getClass stored procedure later
             var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
-            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod(mp.SchoolYearRef, Context.PersonId.Value)
-                                       .Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod().Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
             
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             PrepareCommonViewData(mp);
@@ -243,7 +242,7 @@ namespace Chalkable.Web.Controllers
 
             if (!CanTeacherViewChalkable()) return;
 
-            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod(mp.SchoolYearRef, Context.PersonId.Value);
+            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod();
             var gradeLevels = classes.Select(x => x.GradeLevel.Name).Distinct().ToList();
             var classNames = classes.Select(x => x.Name).ToList();
 

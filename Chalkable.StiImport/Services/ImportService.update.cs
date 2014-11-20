@@ -63,6 +63,8 @@ namespace Chalkable.StiImport.Services
             UpdateGradingPeriods();
             Log.LogInfo("update day types");
             UpdateDayTypes();
+            Log.LogInfo("update Bell schedules");
+            UpdateBellSchedules();
             Log.LogInfo("update days");
             UpdateDays();
             Log.LogInfo("update rooms");
@@ -83,8 +85,6 @@ namespace Chalkable.StiImport.Services
             UpdateMarkingPeriodClasses();
             Log.LogInfo("update periods");
             UpdatePeriods();
-            Log.LogInfo("update Bell schedules");
-            UpdateBellSchedules();
             Log.LogInfo("update scheduled time slots");
             UpdateScheduledTimeSlots();
             Log.LogInfo("update class periods");

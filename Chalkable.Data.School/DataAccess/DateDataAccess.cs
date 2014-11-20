@@ -34,7 +34,7 @@ namespace Chalkable.Data.School.DataAccess
             if(query.SchoolDaysOnly)
                 condition.Add(Date.IS_SCHOOL_DAY_FIELD, true, ConditionRelation.Equal);
 
-            FilterBySchool(condition).BuildSqlWhere(dbQuery, "Date");
+            condition.BuildSqlWhere(dbQuery, "Date");
             if (query.MarkingPeriodId.HasValue)
             {
                 dbQuery.Parameters.Add("@markingPeriodId", query.MarkingPeriodId);

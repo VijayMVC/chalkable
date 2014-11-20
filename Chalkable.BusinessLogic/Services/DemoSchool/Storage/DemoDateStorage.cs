@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
             if (query.DayType.HasValue)
-                dates = dates.Where(x => x.DayType.Id == query.DayType);
+                dates = dates.Where(x => x.DayTypeRef == query.DayType);
 
             return dates.ToList();
         }
