@@ -19,6 +19,7 @@ select
 	C.Description as ClassDescription,
 	C.ClassNumber,
 	C.GradeLevelRef as GradeLevelId,
+	C.ChalkableDepartmentRef as ChalkableDepartmentId,
 	Room.Id as RoomId,
 	Room.RoomNumber,
 	ScheduledTimeSlot.StartTime,
@@ -43,4 +44,3 @@ Where
 	and Period.SchoolYearRef = @schoolYearId
 	and [Date].[Day] >= @from 
 	and [Date].[Day] <= @to
-

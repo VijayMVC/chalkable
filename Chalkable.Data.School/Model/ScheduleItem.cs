@@ -19,5 +19,6 @@ namespace Chalkable.Data.School.Model
         public string RoomNumber { get; set; }
         public int? StartTime { get; set; }
         public int? EndTime { get; set; }
+        public Guid? ChalkableDepartmentId { get; set; }
     }
 }

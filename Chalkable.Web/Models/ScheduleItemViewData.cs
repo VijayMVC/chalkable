@@ -14,6 +14,7 @@ namespace Chalkable.Web.Models
         public string ClassDescription { get; set; }
         public string ClassNumber { get; set; }
         public string RoomNumber { get; set; }
+        public Guid? DepartmentId { get; set; }
 
         protected ScheduleItemViewData(ScheduleItem scheduleItem)
             : base(scheduleItem.PeriodId, scheduleItem.SchoolYearId, scheduleItem.PeriodOrder)
@@ -27,6 +28,7 @@ namespace Chalkable.Web.Models
             ClassNumber = scheduleItem.ClassNumber;
             RoomId = scheduleItem.RoomId;
             RoomNumber = scheduleItem.RoomNumber;
+            DepartmentId = scheduleItem.ChalkableDepartmentId;
         }
 
         public static ScheduleItemViewData Create(ScheduleItem scheduleItem)
