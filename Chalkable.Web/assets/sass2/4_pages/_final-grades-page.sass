@@ -1,0 +1,41 @@
+.final-grades-page
+  .grade-block2
+    width: 170px
+
+    .input-container
+      display: inline-block
+
+  .attachments-container
+    &:not(.loading)
+      .saving-text
+        visibility: hidden
+
+  .people-list.grading .attachments-container
+    padding: 0
+
+  .avg-item
+    display: inline-block
+    height: 40px
+    width: 100px
+    padding: 0 8px
+    background: #d7d7d7
+    border: 1px solid #c2c2c2
+    border-width: 0 1px 1px 0
+    vertical-align: top
+    font: normal 14px/40px Arial
+    color: #383838
+    text-shadow: 0 1px 0 white
+    overflow: hidden
+    text-overflow: ellipsis
+    text-align: center
+    cursor: pointer
+
+    &.selected
+      background: #2f7790
+      border-bottom-color: #143f4e
+      border-right-color: #2f7790
+      color: #fff
+      text-shadow: 0 1px 0 #173b48
+
+      &:last-child
+        border-right-color: #143f4e

@@ -54,7 +54,6 @@ NAMESPACE('chlk.activities.grading', function () {
 
                         setTimeout(function(){
                             parent.removeClass('open');
-                            //mpData.setHTML('');
                         }, 500);
                     }else{
                         var items = this.dom.find('.marking-period-container.open');

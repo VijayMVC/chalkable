@@ -11,7 +11,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
 
 .silver-panel.student-announcements-top-panel
     +RenderWith(self.getModel(), chlk.templates.announcement.StudentAnnouncementsTpl)
-+ListView(self)().grades-individual.people-list
++ListView(self)().grades-individual.people-list.grading
     items = self.getSortedStudentAnnouncements()
     if autoCount > 0
         div(class=(autoCount == 1 ? 'double' : '')).grid-modal

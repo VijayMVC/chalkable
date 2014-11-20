@@ -42,12 +42,108 @@
     &.hovered
       background: #f2f2f2
 
+.people-list.grading
+  .row
+    z-index: auto
+
+  .row:not(.readonly) .selected
+    display: none
+
+  .row.selected:not(.readonly)
+    .not-selected
+      display: none
+
+    .selected
+      display: block
+
+    .empty-grade-form
+      .grade-options.selected
+        display: none
+
+  .update-grade-form
+    display: table
+    width: 100%
+    > *
+      display: table-cell
+      vertical-align: top
+
+    .image-container
+      padding-right: 25px
+
+  .name-block
+    position: relative
+    width: 100%
+
+    .wrapper, p
+      display: inline-block
+
+
+    A
+      text-decoration: none
+
+    > A
+      color: #2f7790
+      font-size: 20px
+
+    .grade-options
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+
+    .small-pop-up
+      position: absolute
+      top: 55px
+      left: 2px
+      display: none
+      border-radius: 5px
+      +box-shadow(transparentize(#000, .8) 0 2px 16px)
+      z-index: 11
+      line-height: 15px
+
+  .grade-block
+    position: relative
+    width: 100px
+
+    .text-value
+      color: #2f7790
+      display: inline-block
+      width: 85px
+      text-align: center
+
+      &.dropped
+        text-decoration: line-through
+
+    .text-value, input[type=text]
+      font-size: 20px
+      font-weight: 600
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+    input[type=text]
+      width: 75px
+      text-align: center
+      color: #000
+
+      &.error
+        border: 1px solid red
+
+    .letters
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+      width: 85px
+      text-align: center
+      z-index: -1
+      pointer-events: none
+
+  .attachments-container
+    padding-right: 10px
+
 .announcement-view-page
   position: relative
-
-  .people-list
-    .row
-      z-index: auto
 
   .close-open-control
     margin-top: 24px
@@ -170,99 +266,6 @@
   .grades-individual
     border: 1px solid #c8c7c3
 
-  .row:not(.readonly) .selected
-    display: none
-
-  .row.selected:not(.readonly)
-    .not-selected
-      display: none
-
-    .selected
-      display: block
-
-    .empty-grade-form
-      .grade-options.selected
-        display: none
-
-  .update-grade-form
-    display: table
-    width: 100%
-    > *
-      display: table-cell
-      vertical-align: top
-
-    .image-container
-      padding-right: 25px
-
-  .name-block
-    position: relative
-    width: 100%
-
-    .wrapper, p
-      display: inline-block
-
-
-    A
-      text-decoration: none
-
-    > A
-      color: #2f7790
-      font-size: 20px
-
-    .grade-options
-      position: absolute
-      bottom: -20px
-      left: 0
-      font-style: italic
-      font-size: 12px
-
-    .small-pop-up
-      position: absolute
-      top: 55px
-      left: 2px
-      display: none
-      border-radius: 5px
-      +box-shadow(transparentize(#000, .8) 0 2px 16px)
-      z-index: 11
-      line-height: 15px
-
-  .grade-block
-    position: relative
-    width: 100px
-
-    .text-value
-      color: #2f7790
-      display: inline-block
-      width: 85px
-      text-align: center
-
-      &.dropped
-        text-decoration: line-through
-
-    .text-value, input[type=text]
-      font-size: 20px
-      font-weight: 600
-      +text-shadow(transparentize(#fff, .5) 0 1px 0)
-
-    input[type=text]
-      width: 75px
-      text-align: center
-      color: #000
-
-      &.error
-        border: 1px solid red
-
-    .letters
-      position: absolute
-      bottom: -20px
-      left: 0
-      font-style: italic
-      font-size: 12px
-      width: 85px
-      text-align: center
-      z-index: -1
-      pointer-events: none
-
   .loading .grade-block .text-value
     font-size: 0
     background: image-url("images/loader.gif") 50% 50% no-repeat
@@ -283,9 +286,6 @@
     &::before
       left: 50%
       margin-left: -7px
-
-  .attachments-container
-    padding-right: 10px
 
   .comment-grade-container
     background: #f8e6a5
