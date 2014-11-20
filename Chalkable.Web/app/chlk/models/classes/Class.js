@@ -4,7 +4,6 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.DepartmentId');
 
-
 NAMESPACE('chlk.models.classes', function () {
     "use strict";
 

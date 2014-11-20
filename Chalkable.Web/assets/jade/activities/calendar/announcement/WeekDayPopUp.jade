@@ -2,10 +2,10 @@
     announcements = self.getAnnouncements();
     period = self.getPeriod();
     roomNumber = self.getRoomNumber();
-    if announcements.length > 0
+    if period.getClassId()
         .class-name
             h3.day-day
-                +ActionLink('class', 'info', announcements[0].getClassId().valueOf())=announcements[0].getClassName()
+                +ActionLink('class', 'info', period.getClassId().valueOf())=period.getClassName()
     .info
         if roomNumber
             p.day-down
@@ -26,7 +26,7 @@
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
     if !self.getUserRole().isStudent()
-        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann
+        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || period.getClassId() || '').ann-button.plus-ann
 
 
 
