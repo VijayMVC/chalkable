@@ -174,7 +174,9 @@ NAMESPACE('chlk.activities.grading', function () {
                 container.setCss('height', 0);
                 jQuery(container.valueOf()).animate({
                     height: (annContainer.height() + container.find('.buttons-row').height() + parseInt(annContainer.getCss('margin-bottom'), 10))
-                }, 500);
+                }, 500, function(){
+                    container.setCss('height', 'auto');
+                });
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingPeriodFinalGradeTpl, 'load-gp')],
@@ -275,7 +277,8 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeFocus(node, event){
                 setTimeout(function(){
-                    node.select();
+                    //node.select();
+                    node.valueOf()[0].setSelectionRange(0, (node.getValue() || '').length);
                 }, 1);
 
             },
