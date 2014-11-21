@@ -73,6 +73,7 @@
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForTeacherDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationInstallDataAccess.cs" />
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
+    <Compile Include="DataAccess\BellScheduleDataAccess.cs" />
     <Compile Include="DataAccess\ClassDisciplineDataAccess.cs" />
     <Compile Include="DataAccess\ClassroomOptionDataAccess.cs" />
     <Compile Include="DataAccess\ClassTeacherDataAccess.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="DataAccess\InfractionDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\PersonEmailDataAccess.cs" />
+    <Compile Include="DataAccess\ScheduleDataAccess.cs" />
     <Compile Include="DataAccess\ScheduledTimeSlotDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolOptionDataAccess.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionGradeLevel.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionRole.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
+    <Compile Include="Model\BellSchedule.cs" />
     <Compile Include="Model\Class.cs" />
     <Compile Include="Model\ClassAnnouncementType.cs" />
     <Compile Include="Model\ClassDiscipline.cs" />
@@ -161,6 +164,7 @@
     <Compile Include="Model\Room.cs" />
     <Compile Include="Model\DayType.cs" />
     <Compile Include="Model\ScheduledTimeSlot.cs" />
+    <Compile Include="Model\ScheduleItem.cs" />
     <Compile Include="Model\School.cs" />
     <Compile Include="Model\SchoolGradeLevel.cs" />
     <Compile Include="Model\SchoolOption.cs" />

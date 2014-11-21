@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.Common;
@@ -90,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (!string.IsNullOrEmpty(query.Filter))
             {
                 var filter = query.Filter.ToLowerInvariant();
-                persons = persons.Where(x => x.FullName.ToLowerInvariant().Contains(filter));
+                persons = persons.Where(x => x.FullName().ToLowerInvariant().Contains(filter));
             }
                 
             
@@ -194,5 +195,53 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             roleId = res.Value;
             return res.Key;
         }
+    }
+
+
+    public class PersonQuery
+    {
+        public int Start { get; set; }
+        public int Count { get; set; }
+        public int? RoleId { get; set; }
+        public int? ClassId { get; set; }
+        public int? TeacherId { get; set; }
+        public int? PersonId { get; set; }
+        public int? CallerId { get; set; }
+        public int CallerRoleId { get; set; }
+        public int? CallerGradeLevelId { get; set; }
+
+        public IList<int> RoleIds { get; set; }
+
+        public string StartFrom { get; set; }
+        public string Filter { get; set; }
+        public IEnumerable<int> GradeLevelIds { get; set; }
+        public SortTypeEnum SortType { get; set; }
+
+        public int? MarkingPeriodId { get; set; }
+        public int? SchoolYearId { get; set; }
+
+        public bool? IsEnrolled { get; set; }
+        public bool OnlyMyTeachers { get; set; }
+
+        public PersonQuery()
+        {
+            Start = 0;
+            Count = int.MaxValue;
+            SortType = SortTypeEnum.ByLastName;
+            OnlyMyTeachers = false;
+        }
+    }
+
+    public class PersonQueryResult
+    {
+        public List<Person> Persons { get; set; }
+        public int SourceCount { get; set; }
+        public PersonQuery Query { get; set; }
+    }
+
+    public enum SortTypeEnum
+    {
+        ByFirstName = 0,
+        ByLastName = 1
     }
 }

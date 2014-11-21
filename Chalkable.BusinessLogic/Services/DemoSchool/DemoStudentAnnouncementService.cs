@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -27,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                                            bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            Trace.Assert(ann.SisActivityId.HasValue);
             if (!string.IsNullOrEmpty(value) && value.Trim() != "")
                 exempt = false;
             else value = null;
@@ -93,20 +93,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
+            Trace.Assert(Context.SchoolYearId.HasValue);
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(ann.Expires, true);
+            Trace.Assert(mp != null);
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
-                IList<Person> persons = new List<Person>();
+                IList<StudentDetails> persons = new List<StudentDetails>();
                 if (CoreRoles.STUDENT_ROLE == Context.Role)
                 {
                     scores.Add(Storage.StiActivityScoreStorage.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
-                    persons.Add(ServiceLocator.PersonService.GetPerson(Context.PersonId.Value));
+                    persons.Add(ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value));
                 }
                 else
                 {
                     scores = Storage.StiActivityScoreStorage.GetSores(ann.SisActivityId.Value);
-                    persons = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery { ClassId = ann.ClassRef });
+                    persons = ServiceLocator.PersonService.GetClassStudents(ann.ClassRef, mp.Id);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)

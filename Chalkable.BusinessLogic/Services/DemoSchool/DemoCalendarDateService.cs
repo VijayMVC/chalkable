@@ -95,31 +95,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.DateStorage.Delete(query);
             
         }
-        
-        public Date Add(DateTime date, bool schoolDay, int schoolYearId, int? dateTypeId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            if (!schoolDay && dateTypeId.HasValue)
-                throw new ChalkableException("Incorrect parameters data");
-
-            var sy = Storage.SchoolYearStorage.GetById(schoolYearId);
-            if (dateTypeId.HasValue && !Storage.DayTypeStorage.Exists(schoolYearId))
-                throw new ChalkableException("day type is not assigned to current school year");
-
-            var res = new Date
-            {
-                Day = date,
-                IsSchoolDay = schoolDay,
-                SchoolYearRef = schoolYearId,
-                DayTypeRef = dateTypeId,
-                SchoolRef = sy.SchoolRef
-            };
-            Storage.DateStorage.Add(res);
-            return res;
-            
-        }
-
- 
     }
 }

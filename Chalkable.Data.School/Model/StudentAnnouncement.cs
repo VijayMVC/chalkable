@@ -1,7 +1,4 @@
-﻿using System;
-using Chalkable.Data.Common;
-
-namespace Chalkable.Data.School.Model
+﻿namespace Chalkable.Data.School.Model
 {
 
     public enum StudentAnnouncementStateEnum
@@ -64,7 +61,7 @@ namespace Chalkable.Data.School.Model
     public class StudentAnnouncementDetails : StudentAnnouncement
     {
         public int ClassId { get; set; }
-        public Person Student { get; set; }
+        public StudentDetails Student { get; set; }
     }
 
     public class StudentAnnouncementGrade : StudentAnnouncement

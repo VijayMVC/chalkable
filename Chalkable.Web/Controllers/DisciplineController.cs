@@ -53,7 +53,7 @@ namespace Chalkable.Web.Controllers
             start = start ?? 0;
             count = count ?? int.MaxValue;
             var currentDate = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;
-            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(classId, currentDate, null);
+            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(classId, currentDate);
             IList<DisciplineView> res = new List<DisciplineView>();
             if (disciplines != null)
             {

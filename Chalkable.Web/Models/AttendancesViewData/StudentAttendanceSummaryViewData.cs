@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
 {
     public class StudentAttendanceSummaryViewData
     {
-        public ShortPersonViewData Student { get; set; }
+        public StudentViewData Student { get; set; }
         public IList<AttendanceTotalPerTypeViewData> AttendanceTotalPerType { get; set; }
 
         public static IList<StudentAttendanceSummaryViewData> Create(IList<ClassAttendanceDetails> attendances)
@@ -21,7 +20,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
                 var recDic = records.GroupBy(x => x.Level).ToDictionary(x => x.Key, x => x.Count());
                 res.Add(new StudentAttendanceSummaryViewData
                     {
-                        Student = ShortPersonViewData.Create(records.First().Student),
+                        Student = StudentViewData.Create(records.First().Student),
                         AttendanceTotalPerType = AttendanceTotalPerTypeViewData.Create(recDic)
                     });
             }

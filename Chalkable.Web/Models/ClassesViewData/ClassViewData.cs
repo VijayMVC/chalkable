@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -41,7 +42,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             if (classComplex.PrimaryTeacherRef.HasValue && classComplex.PrimaryTeacher != null)
             {
                 Teacher = ShortPersonViewData.Create(classComplex.PrimaryTeacher);
-                Teacher.DisplayName = classComplex.PrimaryTeacher.ShortSalutationName;
+                Teacher.DisplayName = classComplex.PrimaryTeacher.DisplayName();
             }
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
@@ -250,11 +249,11 @@ namespace Chalkable.Web.Models
     public class GradeStudentViewData
     {
         public bool? IsWithDrawn { get; set; }
-        public ShortPersonViewData StudentInfo { get; set; }
+        public StudentViewData StudentInfo { get; set; }
 
-        public static GradeStudentViewData Create(Person person, bool? isWithDrawn)
+        public static GradeStudentViewData Create(StudentDetails person, bool? isWithDrawn)
         {
-            var res = new GradeStudentViewData { StudentInfo = ShortPersonViewData.Create(person), IsWithDrawn = isWithDrawn };
+            var res = new GradeStudentViewData { StudentInfo = StudentViewData.Create(person), IsWithDrawn = isWithDrawn };
             res.StudentInfo.IsWithDrawn = isWithDrawn;
             return res;
         }

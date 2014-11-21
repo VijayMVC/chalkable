@@ -18,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditStudentSchools(IList<StudentSchool> studentSchools);
         void DeleteStudentSchools(IList<StudentSchool> studentSchools);
 
+        StudentDetails GetById(int id, int schoolYearId);
     }
 
     public class StudentService : SchoolServiceBase, IStudentService
@@ -69,6 +70,15 @@ namespace Chalkable.BusinessLogic.Services.School
         public void DeleteStudentSchools(IList<StudentSchool> studentSchools)
         {
             ModifyStudentSchool(da => da.Delete(studentSchools));
+        }
+
+        public StudentDetails GetById(int id, int schoolYearId)
+        {
+            using (var uow = Read())
+            {
+                var da = new StudentDataAccess(uow);
+                return da.GetDetailsById(id, schoolYearId);
+            }
         }
     }
 }

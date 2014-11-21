@@ -44,5 +44,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public StudentDetails GetById(int id, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

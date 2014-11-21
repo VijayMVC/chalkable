@@ -184,7 +184,6 @@
     <Compile Include="Controllers\AnnouncementTypeController.cs" />
     <Compile Include="Controllers\BackgroundTaskController.cs" />
     <Compile Include="Controllers\BaseAnnouncementController.cs" />
-    <Compile Include="Controllers\CalendarControllers\AttendanceCalendarController.cs" />
     <Compile Include="Controllers\CalendarControllers\CalendarController.cs" />
     <Compile Include="Controllers\CalendarControllers\DisciplineCalendarController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -213,7 +212,6 @@
     <Compile Include="Controllers\PreferenceController.cs" />
     <Compile Include="Controllers\PrivateMessageController.cs" />
     <Compile Include="Controllers\ReportingController.cs" />
-    <Compile Include="Controllers\ScheduleSectionController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\SchoolYearController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -233,7 +231,6 @@
     <Compile Include="Logic\AttachmentLogic.cs" />
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\GradingStyleLogic.cs" />
-    <Compile Include="Logic\PersonLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AdminFeedViewData.cs" />
@@ -244,7 +241,6 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementDetailedViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
-    <Compile Include="Models\AnnouncementsViewData\AnnouncementsClassPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementStandardViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
@@ -272,7 +268,6 @@
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
     <Compile Include="Models\CalendarsViewData\AdminDayCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementCalendarWeekViewData.cs" />
-    <Compile Include="Models\CalendarsViewData\AnnouncementDayCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementMonthCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AttendanceCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\DisciplineCalendarViewData.cs" />
@@ -299,6 +294,7 @@
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\ScheduleItemViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\ClassDisciplineInputModel.cs" />
@@ -332,13 +328,16 @@
     <Compile Include="Models\PersonViewDatas\PersonViewData.cs" />
     <Compile Include="Models\PersonViewDatas\PersonSummaryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\ShortPersonViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StaffViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentCommentViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentGradingViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentHealthConditionViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentSummaryViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherInfoViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherSummaryViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\UserViewData.cs" />
     <Compile Include="Models\PhoneViewData.cs" />
     <Compile Include="Models\PreferenceViewData.cs" />
     <Compile Include="Models\Binders\StringConstructedObjectBinder.cs" />

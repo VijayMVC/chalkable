@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 GradeLevelId = announcementRecipient.GradeLevelRef,
                 RoleId = announcementRecipient.RoleRef,
                 Person = !announcementRecipient.PersonRef.HasValue ? null
-                              : IdNameViewData<int>.Create(announcementRecipient.PersonRef.Value, announcementRecipient.Person.FullName)
+                              : IdNameViewData<int>.Create(announcementRecipient.PersonRef.Value, announcementRecipient.Person.FullName())
             };
         }
     }

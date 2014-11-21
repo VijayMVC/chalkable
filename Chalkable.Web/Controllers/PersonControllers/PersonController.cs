@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
-using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -9,7 +7,6 @@ using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -31,23 +28,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Apps(int personId)
-        {
-            throw new NotImplementedException();
-            //var person = SchoolLocator.PersonService.GetPerson(personId);
-            //var appsInstalls = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            //var instaledApps = SchoolLocator.AppMarketService.ListInstalled(personId, true);
-            //var balance = personId == SchoolLocator.Context.UserLocalId
-            //                  ? MasterLocator.FundService.GetUserBalance(personId, false)
-            //                  : MasterLocator.FundService.GetUserBalance(personId);
-            //decimal? reserve = null;
-            //if (BaseSecurity.IsAdminViewer(Context) && Context.SchoolId.HasValue)
-            //    reserve = MasterLocator.FundService.GetSchoolReserve(Context.SchoolId.Value);
-            
-            //var res = PersonAppsViewData.Create(person, reserve, balance, instaledApps, appsInstalls);
-            //return Json(res, 5);
-        }
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Schedule(int personId)
         {
             var person = SchoolLocator.PersonService.GetPerson(personId);
@@ -61,7 +41,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (MasterLocator.Context.PersonId == id)
             {
                 MasterLocator.UserService.ChangePassword(MasterLocator.Context.Login, newPassword);
-                //MixPanelService.ChangedPassword(ServiceLocator.Context.UserName);
                 return Json(true);
             }
             throw new ChalkableException(ChlkResources.ERR_NOT_CURRENT_USER);
@@ -83,23 +62,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetPersons(IntList roleIds, IntList gradeLevelIds, int? start, int? count, bool? byLastName, string filter)
+        public ActionResult GetPersons(int? start, int? count, string filter)
         {
-            var res = new List<PersonViewData>();
-            if (roleIds != null && roleIds.Count > 0)
-            {
-                foreach (var roleId in roleIds)
-                {
-                    var roleName = CoreRoles.GetById(roleId).Name;
-                    res.AddRange(PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, null, gradeLevelIds));
-                }
-                res = byLastName.HasValue && byLastName.Value
-                          ? res.OrderBy(x => x.LastName).ToList()
-                          : res.OrderBy(x => x.FirstName).ToList();
-            }
-            else res = PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, null, null, gradeLevelIds);
-            //var roleName = roleId.HasValue ? CoreRoles.GetById(roleId.Value).Name : null;
-            return Json(res);
+            var res = SchoolLocator.PersonService.SearchPersons(filter, true, start ?? 0, count ?? 30);
+            return Json(res.Transform(ShortPersonViewData.Create));
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

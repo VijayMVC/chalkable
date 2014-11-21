@@ -73,45 +73,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.setup.StartPage, result);
             },
 
-
-
-            //TODO: refactor
-            [[Number]],
-            function teacherSettingsAction(index){
-                var classes = this.classService.getClassesForTopBar();
-                var classId = classes[index].getId();
-
-                var result = ria.async.wait([
-                        this.finalGradeService.getFinalGrades(classId, false),
-                        this.calendarService.getTeacherClassWeek(classId)
-                    ])
-                    .then(function(result){
-                        var model = new chlk.models.setup.TeacherSettings();
-                        var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId, true);
-                        model.setTopData(topModel);
-                        model.setCalendarInfo(result[1]);
-                        var gradesInfo = result[0].getFinalGradeAnnType(), sum=0;
-                        gradesInfo.forEach(function(item, index){
-                            item.setIndex(index);
-                            sum+=(item.getValue() || 0);
-                        });
-                        gradesInfo.sort(function(a,b){
-                            return b.getValue() > a.getValue();
-                        });
-                        result[0].setNextClassNumber(++index);
-                        this.getContext().getSession().set(ChlkSessionConstants.SETTINGS_MODEL, result[0]);
-                        sum+=(result[0].getAttendance() || 0);
-                        sum+=(result[0].getParticipation() || 0);
-                        sum+=(result[0].getDiscipline() || 0);
-                        model.setPercentsSum(sum);
-                        model.setGradingInfo(result[0]);
-                        return model;
-                    }, this);
-                return this.PushView(chlk.activities.setup.TeacherSettingsPage, result);
-            },
-
-
-
             //TODO: refactor
             [[chlk.models.grading.Final]],
             function teacherSettingsEditAction(model){

@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.Data.School.Model;
 
 
@@ -10,8 +11,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             : base(person)
         {
             Salutation = person.Salutation;
-            FullName = person.SalutationName;
-            DisplayName = person.ShortSalutationName;
+            FullName = person.FullName();
+            DisplayName = person.DisplayName();
         }
         public static new  TeacherInfoViewData Create(PersonDetails person)
         {

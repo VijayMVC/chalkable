@@ -1362,82 +1362,79 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             PeriodStorage.Add(new Period
             {
-                StartTime = 615,
-                EndTime = 659,
                 Order = 1,
-                SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 663,
-                EndTime = 707,
+                //StartTime = 663,
+                //EndTime = 707,
                 Order = 2,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 710,
-                EndTime = 740,
+                //StartTime = 710,
+                //EndTime = 740,
                 Order = 3,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 744,
-                EndTime = 783,
+                //StartTime = 744,
+                //EndTime = 783,
                 Order = 4,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 787,
-                EndTime = 826,
+                //StartTime = 787,
+                //EndTime = 826,
                 Order = 5,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 830,
-                EndTime = 869,
+                //StartTime = 830,
+                //EndTime = 869,
                 Order = 6,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 873,
-                EndTime = 912,
+                //StartTime = 873,
+                //EndTime = 912,
                 Order = 7,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 916,
-                EndTime = 955,
+                //StartTime = 916,
+                //EndTime = 955,
                 Order = 8,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                StartTime = 959,
-                EndTime = 1000,
+                //StartTime = 959,
+                //EndTime = 1000,
                 Order = 9,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
         }
@@ -1875,7 +1872,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = id,
                 DayTypeRef = 19,
                 PeriodRef = DemoSchoolConstants.FirstPeriodId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 Period = PeriodStorage.GetById(DemoSchoolConstants.FirstPeriodId)
             });
 
@@ -1884,7 +1881,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = id,
                 DayTypeRef = 20,
                 PeriodRef = DemoSchoolConstants.SecondPeriodId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
+                //SchoolRef = DemoSchoolConstants.SchoolId,
                 Period = PeriodStorage.GetById(DemoSchoolConstants.SecondPeriodId)
             });
 

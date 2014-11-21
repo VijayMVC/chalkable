@@ -100,6 +100,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
                 this.annRecipients = SJX.fromValue(raw.annrecipients, String);
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
+                this.submitType = SJX.fromValue(raw.submitType, String);
             },
             function $(){
                 BASE();
@@ -186,9 +187,6 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, function isStandartAnnouncement(){
                 return !this.getAnnouncementTypeId();
             },
-
-
-
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
             String, 'attachments',

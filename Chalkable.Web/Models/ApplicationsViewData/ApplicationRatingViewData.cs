@@ -2,7 +2,6 @@
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
@@ -14,18 +13,15 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public double Avg { get; set; }
         private ApplicationRatingViewData() { }
 
-        public static ApplicationRatingViewData Create(IList<ApplicationRating> ratings, IList<Person> persons)
+        public static ApplicationRatingViewData Create(IList<ApplicationRating> ratings)
         {
-            //TODO: it could be user id from staff or student
-            ratings = ratings.Where(x => persons.Any(y => y.UserId == x.User.SisUserId)).ToList();
-            persons = persons.Where(x => ratings.Any(y => y.User.SisUserId == x.UserId)).ToList();
-
-            var ratingsbyrole = persons.GroupBy(x => x.RoleRef)
-                                       .ToDictionary(x => CoreRoles.GetById(x.Key),
-                                                     x => ratings.Where(y => x.Any(z => z.Id == y.User.SisUserId)).ToList());
+            var ratingsbyrole = new Dictionary<CoreRole, List<ApplicationRating>> //we don't have roles in the master db
+            {
+                {CoreRoles.CHECKIN_ROLE, ratings.ToList()}
+            };
             var res = new ApplicationRatingViewData
             {
-                RatingByPerson = ApplicationRatingByPersonViewData.Create(ratings, persons),
+                RatingByPerson = ApplicationRatingByPersonViewData.Create(ratings),
                 RatingByRoles = ApplicationRatingByRoleViewData.Create(ratingsbyrole)
             };
             res.Avg = res.RatingByPerson.Count != 0 ? res.RatingByPerson.Average(x => x.Rating) : 0;
@@ -37,26 +33,26 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
     public class ApplicationRatingByPersonViewData
     {
-        public ShortPersonViewData Person { get; set; }
+        public UserViewData Person { get; set; }
         public int Rating { get; set; }
         public string Review { get; set; }
 
         private ApplicationRatingByPersonViewData() { }
 
-        public static ApplicationRatingByPersonViewData Create(ApplicationRating rating, IList<Person> persons)
+        public static ApplicationRatingByPersonViewData Create(ApplicationRating rating)
         {
             var res = new ApplicationRatingByPersonViewData
             {
                 Rating = rating.Rating,
                 Review = rating.Review,
-                Person = ShortPersonViewData.Create(persons.First(x=>x.Id == rating.User.SisUserId)) 
+                Person = UserViewData.Create(rating.User) 
             };
             return res;
         }
 
-        public static IList<ApplicationRatingByPersonViewData> Create(IList<ApplicationRating> ratings, IList<Person> persons)
+        public static IList<ApplicationRatingByPersonViewData> Create(IList<ApplicationRating> ratings)
         {
-            return ratings.Select(x => Create(x, persons)).ToList();
+            return ratings.Select(Create).ToList();
         }
     }
 

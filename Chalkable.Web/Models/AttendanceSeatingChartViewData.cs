@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AttendancesViewData;
@@ -26,7 +24,7 @@ namespace Chalkable.Web.Models
         public bool IsScheduled { get; set; }
 
         public static AttendanceSeatingChartViewData Create(SeatingChartInfo seatingChart
-            , IList<ClassAttendanceViewData> classAttendance, IList<Person> students)
+            , IList<ClassAttendanceViewData> classAttendance, IList<StudentDetails> students)
         {
             var res = new AttendanceSeatingChartViewData
                 {
@@ -40,7 +38,7 @@ namespace Chalkable.Web.Models
             foreach (var notSeatingStudent in notSeatingStudents)
             {
                 var classAtt = classAttendance.FirstOrDefault(x => x.Student.Id == notSeatingStudent.Id) ??
-                    new ClassAttendanceViewData {Student = ShortPersonViewData.Create(notSeatingStudent)};
+                    new ClassAttendanceViewData { Student = StudentViewData.Create(notSeatingStudent) };
                 res.NotSeatingStudents.Add(classAtt);
             }
             
@@ -54,7 +52,7 @@ namespace Chalkable.Web.Models
                     var student = students.FirstOrDefault(x => x.Id == seat.StudentId);
                     if (student != null)
                         classAtt = classAttendance.FirstOrDefault(x => x.Student.Id == student.Id) ??
-                                   new ClassAttendanceViewData {Student = ShortPersonViewData.Create(student)};
+                                   new ClassAttendanceViewData { Student = StudentViewData.Create(student) };
                     
                     seatingItems.Add(AttendanceSeatingChartItemViewData.Create(seat, classAtt));
                 }

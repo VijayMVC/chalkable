@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
@@ -45,7 +46,7 @@ namespace Chalkable.Web.Models
 
     public class StudentFinalGradeViewData
     {
-        public ShortPersonViewData Student { get; set; }
+        public StudentViewData Student { get; set; }
         public StudentAveragesViewData CurrentStudentAverage { get; set; }
         public IList<StudentAveragesViewData> StudentAverages { get; set; }
         public IList<StudentGradingByTypeStatsViewData> StatsByType { get; set; }
@@ -58,7 +59,7 @@ namespace Chalkable.Web.Models
             var gradeBook = finalGrade.GradeBook;
             foreach (var student in gradeBook.Students)
             {
-                var studentFinalGrade = new StudentFinalGradeViewData {Student = ShortPersonViewData.Create(student)};
+                var studentFinalGrade = new StudentFinalGradeViewData { Student = StudentViewData.Create(student) };
                 if (average != null)
                 {
                     var stAvg = gradeBook.Averages.FirstOrDefault(x => x.AverageId == average.AverageId && x.StudentId == student.Id);
@@ -138,6 +139,7 @@ namespace Chalkable.Web.Models
             foreach (var typeAnns in dicbyType)
             {
                 var ann = typeAnns.Value.First();
+                Trace.Assert(ann.ClassAnnouncementTypeRef.HasValue);
                 res.Add(new StudentGradingByTypeStatsViewData
                     {
                         ClassAnnouncementTypeId = ann.ClassAnnouncementTypeRef.Value,

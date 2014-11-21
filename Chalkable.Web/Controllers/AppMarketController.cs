@@ -7,7 +7,6 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
@@ -162,13 +161,11 @@ namespace Chalkable.Web.Controllers
         public ActionResult Read(Guid applicationId)
         {
             var application = MasterLocator.ApplicationService.GetApplicationById(applicationId);
-            //TODO: application ratings 
             var categories = MasterLocator.CategoryService.ListCategories();
-            
             var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
-            var allPersons = SchoolLocator.PersonService.GetPaginatedPersons(new PersonQuery());
             
-            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, allPersons);
+            
+            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings);
             var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.PersonId, null, null, null, null);
             res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);
             res.IsInstalledOnlyForMe = persons.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count == 0;

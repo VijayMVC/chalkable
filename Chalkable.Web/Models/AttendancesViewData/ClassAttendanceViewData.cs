@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public DateTime Date { get; set; }
         public string Level { get; set; }
         public PeriodViewData Period { get; set; }
-        public ShortPersonViewData Student { get; set; }
+        public StudentViewData Student { get; set; }
         public int? AttendanceReasonId { get; set; }
         public AttendanceReasonViewData AttendanceReason { get; set; }
 
@@ -37,7 +37,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     ClassName = attendance.Class.Name,
                     Date = attendance.Date,
                     AttendanceReasonId = attendance.AttendanceReasonRef,
-                    Student = ShortPersonViewData.Create(attendance.Student),
+                    Student = StudentViewData.Create(attendance.Student),
                     Level = attendance.Level,
                     IsPosted = attendance.IsPosted,
                     AbsentPreviousDay = attendance.AbsentPreviousDay,

@@ -19,5 +19,19 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleDelete(students);
         }
+
+        public StudentDetails GetDetailsById(int id, int schoolYearId)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@id", id},
+                {"@schoolYearId", schoolYearId}
+
+            };
+            using (var r = ExecuteStoredProcedureReader("spGetStudentDetails", ps))
+            {
+                return r.Read<StudentDetails>();
+            }
+        }
     }
 }

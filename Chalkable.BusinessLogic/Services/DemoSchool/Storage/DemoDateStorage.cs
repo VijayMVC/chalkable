@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
             if (query.DayType.HasValue)
-                dates = dates.Where(x => x.DayType.Id == query.DayType);
+                dates = dates.Where(x => x.DayTypeRef == query.DayType);
 
             return dates.ToList();
         }
@@ -87,7 +87,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     Day = day,
                     SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                    SchoolRef = DemoSchoolConstants.SchoolId,
                     IsSchoolDay = day.DayOfWeek != DayOfWeek.Thursday && day.DayOfWeek != DayOfWeek.Friday,
                     DayTypeRef = typeRef
                 });

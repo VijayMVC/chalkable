@@ -21,6 +21,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return data.Where(x => x.Value.AnnouncementId == announcementId).Select(x =>
             {
                 var ann = Storage.AnnouncementStorage.GetById(announcementId);
+
+                var student = Storage.StudentStorage.GetById(x.Value.StudentId);
+                var details = new StudentDetails
+                {
+                    BirthDate = student.BirthDate,
+                    FirstName = student.FirstName,
+                    Gender = student.Gender,
+                    HasMedicalAlert = student.HasMedicalAlert,
+                    Id = student.Id,
+                    IsAllowedInetAccess = student.IsAllowedInetAccess,
+                    IsWithdrawn = null,
+                    LastName = student.LastName,
+                    PhotoModifiedDate = null,
+                    SpecialInstructions = student.SpecialInstructions,
+                    SpEdStatus = student.SpEdStatus,
+                    UserId = student.UserId
+                };
+
                 return new StudentAnnouncementDetails
                 {
                     AnnouncementId = x.Value.AnnouncementId,
@@ -39,7 +57,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     NumericScore = x.Value.NumericScore,
                     OverMaxScore = x.Value.OverMaxScore,
                     ScoreValue = x.Value.ScoreValue,
-                    Student = Storage.PersonStorage.GetById(x.Value.StudentId),
+                    Student = details,
                     StudentId = x.Value.StudentId,
                     Withdrawn = x.Value.Withdrawn
                 };

@@ -61,26 +61,5 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             } while (start <= end);
             return res;
         }
-
-        [AuthorizationFilter("Teacher")]
-        public ActionResult TeacherClassWeek(DateTime? date, int classId)
-        {
-            DateTime start, end;
-            WeekCalendar(ref date, out start, out end);
-
-            var res = new List<TeacherClassWeekCalendarViewData>();
-            var schoolYearId = GetCurrentSchoolYearId();
-            var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, false, start, end);
-            var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(schoolYearId, null, classId, null, null, null);
-
-            for (var i = 0; i < days.Count; i++)
-            {
-                var d = days[i];
-                if (d == null || !d.DayTypeRef.HasValue) continue;
-                var currentClassPeriods = classPeriods.Where(x => x.DayTypeRef == d.DayTypeRef).ToList();
-                res.Add(TeacherClassWeekCalendarViewData.Create(d.Day.Date, currentClassPeriods));
-            }
-            return Json(res);
-        }
     }
 }

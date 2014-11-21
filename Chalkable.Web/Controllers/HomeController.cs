@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
@@ -185,7 +187,7 @@ namespace Chalkable.Web.Controllers
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonInfoViewData.Create(person);
-            personView.DisplayName = person.FullName;
+            personView.DisplayName = person.FullName();
             if (!person.FirstLoginDate.HasValue)
             {
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
@@ -196,8 +198,7 @@ namespace Chalkable.Web.Controllers
             
             //todo: move this logic to getClass stored procedure later
             var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
-            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod(mp.SchoolYearRef, Context.PersonId.Value)
-                                       .Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod().Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
             
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             PrepareCommonViewData(mp);
@@ -208,10 +209,10 @@ namespace Chalkable.Web.Controllers
 
         private void PrepareAdminJsonData()
         {
+            Trace.Assert(Context.PersonId.HasValue);
             var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonViewData.Create(person);
-            personView.DisplayName = person.ShortSalutationName;
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
             var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
             PrepareJsonData(GradeLevelViewData.Create(gradeLevels), ViewConstants.GRADE_LEVELS);
@@ -230,7 +231,6 @@ namespace Chalkable.Web.Controllers
 
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonInfoViewData.Create(person);
-            personView.DisplayName = person.ShortSalutationName;           
             if (!person.FirstLoginDate.HasValue)
             {
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
@@ -242,7 +242,7 @@ namespace Chalkable.Web.Controllers
 
             if (!CanTeacherViewChalkable()) return;
 
-            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod(mp.SchoolYearRef, Context.PersonId.Value);
+            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod();
             var gradeLevels = classes.Select(x => x.GradeLevel.Name).Distinct().ToList();
             var classNames = classes.Select(x => x.Name).ToList();
 
@@ -261,7 +261,6 @@ namespace Chalkable.Web.Controllers
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailsList)
         {
             var classesAdvancedData = new List<object>();
-            //var classesMaskDic = ClassController.BuildClassesUsageMask(SchoolLocator, mp.Id, SchoolLocator.Context.SchoolTimeZoneId);
             var allAlphaGrades = SchoolLocator.AlphaGradeService.GetAlphaGrades();
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailsList.Select(x => x.Id).ToList());
             foreach (var classDetails in classDetailsList)
@@ -271,9 +270,7 @@ namespace Chalkable.Web.Controllers
                 var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
                 classesAdvancedData.Add(new
                 {
-                    //Mask = classesMaskDic.ContainsKey(classId) ? classesMaskDic[classId] : new List<int>()
                     ClassId = classId,
-                    Mask = new List<int>(),
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
                     AlphaGrades = classDetails.GradingScaleRef.HasValue
                                         ? SchoolLocator.AlphaGradeService.GetAlphaGradesForClass(classDetails.Id)

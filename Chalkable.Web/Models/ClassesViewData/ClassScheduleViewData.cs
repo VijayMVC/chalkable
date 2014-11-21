@@ -7,11 +7,11 @@ namespace Chalkable.Web.Models.ClassesViewData
     public class ClassScheduleViewData
     {
         public ClassViewData Class { get; set; }
-        public IList<AnnouncementDayCalendarViewData> Schedule { get; set; }
+        public IList<AnnouncementCalendarWeekViewData> Schedule { get; set; }
         private ClassScheduleViewData() { }
 
 
-        public static ClassScheduleViewData Create(ClassDetails classDetails, IList<AnnouncementDayCalendarViewData> schedule)
+        public static ClassScheduleViewData Create(ClassDetails classDetails, IList<AnnouncementCalendarWeekViewData> schedule)
         {
             var res = new ClassScheduleViewData
             {

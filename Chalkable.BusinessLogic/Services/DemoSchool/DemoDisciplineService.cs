@@ -19,25 +19,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date, int? personId)
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date)
         {
-            var classPeriod = ServiceLocator.ClassPeriodService.GetNearestClassPeriod(classId, date);
-            if (classPeriod == null) return null;
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
             if (mp == null) return null;
             var disciplineRefferals = Storage.StiDisciplineStorage.GetList(classId, date);
             var options = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
             if (disciplineRefferals != null)
             {
-                IList<Person> students = new List<Person>();
-                if (personId.HasValue)
-                {
-                    disciplineRefferals = disciplineRefferals.Where(x => x.StudentId == personId).ToList();
-                    var student = ServiceLocator.PersonService.GetPerson(personId.Value);
-                    var cp = ServiceLocator.ClassService.GetClassPerson(classId, student.Id);
-                    if ((cp.IsEnrolled || (options != null && options.IncludeWithdrawnStudents)) && cp.MarkingPeriodRef == mp.Id) students.Add(student);
-                }
-                else students = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id
+                var students = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id
                     , options != null && options.IncludeWithdrawnStudents ? (bool?)null : true);
                 var cClass = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var res = new List<ClassDisciplineDetails>();
@@ -90,7 +80,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Infractions = classDiscipline.Infractions,
                 StudentId = classDiscipline.StudentId,
                 Class = ServiceLocator.ClassService.GetClassDetailsById(classDiscipline.ClassId.Value),
-                Student = ServiceLocator.PersonService.GetPerson(classDiscipline.StudentId)
+                Student = ServiceLocator.StudentService.GetById(classDiscipline.StudentId, Context.SchoolYearId.Value)
             };
         }
 
@@ -113,12 +103,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
-
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(int studentId, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate)
         {
             throw new NotImplementedException();

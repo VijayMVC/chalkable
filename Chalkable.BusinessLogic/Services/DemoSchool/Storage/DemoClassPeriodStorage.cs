@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -25,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             throw new System.NotImplementedException();
         }
 
+        [Obsolete]
         public IList<ClassPeriod> GetClassPeriods(ClassPeriodQuery classPeriodQuery)
         {
 
@@ -43,11 +42,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             if (classPeriodQuery.Time.HasValue)
             {
-                classPeriods =
+                throw new NotImplementedException();
+                /*classPeriods =
                     classPeriods.Where(
                         x =>
                             x.Period.StartTime <= classPeriodQuery.Time.Value &&
-                            x.Period.EndTime >= classPeriodQuery.Time.Value);
+                            x.Period.EndTime >= classPeriodQuery.Time.Value);*/
             }
 
             if (classPeriodQuery.SchoolYearId.HasValue)

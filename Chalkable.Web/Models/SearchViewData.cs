@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
@@ -46,7 +47,7 @@ namespace Chalkable.Web.Models
         {
             return new PersonSearchViewData
             {
-                Description = person.FullName,
+                Description = person.FullName(),
                 Id = person.Id.ToString(),
                 SearchType = (int)SearchTypeEnum.Persons,
                 ShortPersonInfo = ShortPersonViewData.Create(person)

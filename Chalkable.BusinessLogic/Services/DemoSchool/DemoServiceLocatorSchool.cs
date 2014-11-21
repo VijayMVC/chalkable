@@ -149,6 +149,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IUserSchoolService UserSchoolService { get { return userSchoolService; } }
 
         public IScheduledTimeSlotService ScheduledTimeSlotService { get{throw new NotImplementedException();} }
+        public IBellScheduleService BellScheduleService { get { throw new NotImplementedException(); } }
 
         public IDbService SchoolDbService
         {

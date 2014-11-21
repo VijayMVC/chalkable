@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
@@ -32,7 +33,7 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.PrivateMessageService.SendMessage(personId, subject, body);
             if (res != null)
             {
-                MasterLocator.UserTrackingService.SentMessageTo(Context.Login, res.Recipient.FullName);
+                MasterLocator.UserTrackingService.SentMessageTo(Context.Login, res.Recipient.FullName());
             }
             return Json(PrivateMessageViewData.Create(res));
         }

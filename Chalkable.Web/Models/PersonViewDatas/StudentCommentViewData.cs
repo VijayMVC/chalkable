@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
-    public class StudentCommentViewData : ShortPersonViewData
+    public class StudentCommentViewData : StudentViewData
     {
         public string Comment { get; set; }
 
-        protected StudentCommentViewData(Person person) : base(person)
+        protected StudentCommentViewData(StudentDetails student) : base(student)
         {
         }
 

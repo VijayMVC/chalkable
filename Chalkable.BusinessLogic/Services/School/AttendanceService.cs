@@ -4,7 +4,6 @@ using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -240,7 +239,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
-            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            throw new NotImplementedException();
+            /*var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
             var studentId = Context.Role == CoreRoles.STUDENT_ROLE ? Context.PersonId : null;
             var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
@@ -253,7 +253,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var time = (int)((dateTime - dateTime.Date).TotalMinutes) - 3;
                 classPeriods = classPeriods.Where(x => x.Period.StartTime <= time).ToList();
             }
-            return classes.Where(x => classPeriods.Any(y => y.ClassRef == x.Id)).ToList();
+            return classes.Where(x => classPeriods.Any(y => y.ClassRef == x.Id)).ToList();*/
         }
 
 

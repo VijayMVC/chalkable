@@ -17,94 +17,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public Period Add(int periodId, int schoolYearId, int startTime, int endTime, int order)
-        {
-            if (startTime >= endTime)
-                throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            var sy = Storage.SchoolYearStorage.GetById(schoolYearId);
-            var period = new Period
-            {
-                Id = periodId,
-                EndTime = endTime,
-                StartTime = startTime,
-                SchoolYearRef = schoolYearId,
-                Order = order,
-                SchoolRef = sy.SchoolRef
-            };
-            Storage.PeriodStorage.Add(period);
-            return period;
-        }
-
-        public IList<Period> AddPeriods(IList<Period> periods)
+        public void AddPeriods(IList<Period> periods)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-
-            foreach (var period in periods)
-            {
-                if (period.StartTime >= period.EndTime)
-                    throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
-            }
             Storage.PeriodStorage.Add(periods);
-            return periods;
-        }
-
-        public void Delete(int id)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.PeriodStorage.Delete(id);
-
         }
 
         public void Delete(IList<int> ids)
         {
             Storage.PeriodStorage.Delete(ids);
         }
-
-        public Period Edit(int id, int startTime, int endTime)
-        {
-            if (startTime >= endTime)
-                throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            var period = Storage.PeriodStorage.GetById(id);
-            period.StartTime = startTime;
-            period.EndTime = endTime;
-            Storage.PeriodStorage.Update(period);
-            return period;
-        }
-
-        public IList<Period> Edit(IList<Period> periods)
+        
+        public void Edit(IList<Period> periods)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            ValidatePeriods(periods);
-            return Storage.PeriodStorage.Update(periods);
-        }
-
-        private void ValidatePeriods(IEnumerable<Period> periods)
-        {
-            if (periods.Any(period => period.StartTime >= period.EndTime))
-                throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);
-        }
-
-        public Period GetPeriod(int time)
-        {
-            return GetPeriod(time, Context.NowSchoolTime.Date);
-        }
-
-        //TODO: remove those methods later
-        public Period GetPeriod(int time, DateTime date)
-        {
-            var sy = Storage.SchoolYearStorage.GetByDate(date);
-
-            if (sy == null) return null;
-            return Storage.PeriodStorage.GetPeriodOrNull(time, sy.Id);
+            Storage.PeriodStorage.Update(periods);
         }
 
         public IList<Period> GetPeriods(int schoolYearId)

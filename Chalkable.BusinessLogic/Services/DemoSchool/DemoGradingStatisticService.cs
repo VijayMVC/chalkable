@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
-using ClassroomOption = Chalkable.StiConnector.Connectors.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -74,36 +71,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 stiGradeBook = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, classAnnouncementType
                 , gradingPeriod.Id, standardId);
             }
-            return GetGradeBooks(classId, new List<GradingPeriodDetails> { gradingPeriod }, stiGradeBook).First();
+            return GetGradeBooks(classId, gradingPeriod, stiGradeBook);
         }
 
-        public IList<ChalkableGradeBook> GetGradeBooks(int classId)
+        private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriodDetails gradingPeriod, Gradebook gradebook)
         {
-            var stiGradeBook = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId);
-            var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            var gradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYear.Id);
-            return GetGradeBooks(classId, gradingPeriods, stiGradeBook);
-        }
-
-        private IList<ChalkableGradeBook> GetGradeBooks(int classId, IList<GradingPeriodDetails> gradingPeriods, Gradebook gradebook)
-        {
-            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-            {
-                ClassId = classId,
-                RoleId = CoreRoles.STUDENT_ROLE.Id
-            });
+            var students = ServiceLocator.PersonService.GetClassStudents(classId, gradingPeriod.MarkingPeriodRef);
             var annQuery = new AnnouncementsQuery { ClassId = classId };
-            if (gradingPeriods.Count == 1)
-            {
-                annQuery.FromDate = gradingPeriods.First().StartDate;
-                annQuery.ToDate = gradingPeriods.First().EndDate;
-            }
+            annQuery.FromDate = gradingPeriod.StartDate;
+            annQuery.ToDate = gradingPeriod.EndDate;
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
-            return gradingPeriods.Select(gradingPeriod => BuildGradeBook(gradebook, gradingPeriod, anns, students)).ToList();
+            return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
-                                                  IList<AnnouncementComplex> anns, IList<Person> students)
+                                                  IList<AnnouncementComplex> anns, IList<StudentDetails> students)
         {
             var gradeBook = new ChalkableGradeBook
             {
@@ -121,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             gradeBook.Announcements = PrepareAnnouncementDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
             if (!stiGradeBook.Options.IncludeWithdrawnStudents)
             {
-                gradeBook.Students = new List<Person>();
+                gradeBook.Students = new List<StudentDetails>();
                 foreach (var student in students)
                 {
                     var score = stiGradeBook.Scores.FirstOrDefault(x => x.StudentId == student.Id);
@@ -133,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         private IList<AnnouncementDetails> PrepareAnnouncementDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
-            , IList<AnnouncementComplex> anns, IList<Person> students)
+            , IList<AnnouncementComplex> anns, IList<StudentDetails> students)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
                                                            && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();
@@ -246,17 +228,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId)
         {
+            Trace.Assert(Context.SchoolYearId.HasValue);
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var classesDetails = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, (int?)gradingPeriod.MarkingPeriodRef, (int?)teacherId);
             var classesIds = classesDetails.Select(x => x.Id).ToList();
 
 
             var stiSectionsGrades = Storage.StiGradeBookStorage.GetSectionGradesSummary(classesIds, gradingPeriodId);
-            var students = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-            {
-                RoleId = CoreRoles.STUDENT_ROLE.Id,
-                TeacherId = teacherId
-            });
+            var students = ServiceLocator.PersonService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
             var res = new List<ShortClassGradesSummary>();
             foreach (var sectionGrade in stiSectionsGrades)
             {
@@ -276,7 +255,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var gb = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, null, gradingPeriod.Id);
 
-            var chlkGradeBook = GetGradeBooks(classId, new List<GradingPeriodDetails>() { gradingPeriod }, gb).First();
+            var chlkGradeBook = GetGradeBooks(classId, gradingPeriod, gb);
 
             var startDate = new DateTime(DateTime.Today.Year, 1, 1);
             var attendance = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(new List<int>(){classId}, startDate, DateTime.Today).First();

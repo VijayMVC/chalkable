@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
@@ -106,10 +105,10 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         {
         }
         public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories
-            , IList<ApplicationRating> appRatings, IList<Person> persons)
+            , IList<ApplicationRating> appRatings)
         {
             var res = new ApplicationDetailsViewData(application, categories, false);
-            res.ApplicationRating = ApplicationRatingViewData.Create(appRatings, persons);
+            res.ApplicationRating = ApplicationRatingViewData.Create(appRatings);
 
             return res;
         }

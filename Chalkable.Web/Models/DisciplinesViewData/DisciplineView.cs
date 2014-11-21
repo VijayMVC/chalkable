@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -12,7 +11,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         public int? Id { get; set; }
         public int StudentId { get; set; }
         public int? ClassId { get; set; }
-        public ShortPersonViewData Student { get; set; }
+        public StudentViewData Student { get; set; }
         public string ClassName { get; set; }
         public int? TeacherId { get; set; }
         public IList<DisciplineTypeViewData> DisciplineTypes { get; set; }
@@ -23,7 +22,7 @@ namespace Chalkable.Web.Models.DisciplinesViewData
         {
             Id = discipline.Id;
             StudentId = discipline.StudentId;
-            Student = ShortPersonViewData.Create(discipline.Student);
+            Student = StudentViewData.Create(discipline.Student);
             DisciplineTypes = DisciplineTypeViewData.Create(discipline.Infractions.ToList());
             ClassName = discipline.Class.Name;
             TeacherId = discipline.Class.PrimaryTeacherRef;

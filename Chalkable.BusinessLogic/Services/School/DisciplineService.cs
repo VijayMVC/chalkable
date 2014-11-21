@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -17,14 +14,14 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IDisciplineService
     {
 
-        IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date, int? personId);
+        IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date);
         ClassDisciplineDetails SetClassDiscipline(ClassDiscipline classDiscipline);
         //TODO: old
         ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description);
         void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<int> gradeLevelIds = null);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, int personId, DateTime start, DateTime end, bool needsAllData = false);
-        IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date);
+        //IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date);
         //IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(int studentId, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate);
         //IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudents(IList<int> studentIds, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate);
     }
@@ -36,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date, int? personId)
+        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date)
         {
             //var classPeriod = ServiceLocator.ClassPeriodService.GetNearestClassPeriod(classId, date);
             //if (classPeriod == null) return null;
@@ -46,15 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var options = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
             if (disciplineRefferals != null)
             {
-                IList<Person> students = new List<Person>();
-                if (personId.HasValue)
-                {
-                    disciplineRefferals = disciplineRefferals.Where(x => x.StudentId == personId).ToList();
-                    var student = ServiceLocator.PersonService.GetPerson(personId.Value);
-                    var cp = ServiceLocator.ClassService.GetClassPerson(classId, student.Id);
-                    if((cp.IsEnrolled || (options != null && options.IncludeWithdrawnStudents)) && cp.MarkingPeriodRef == mp.Id) students.Add(student);
-                }
-                else students = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id
+                var students = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id
                     , options != null && options.IncludeWithdrawnStudents ? (bool?)null : true);
                 var cClass = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var res = new List<ClassDisciplineDetails>();
@@ -87,6 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if(!classDiscipline.ClassId.HasValue)
                 throw new ChalkableException("Invalid classId param");
+            Trace.Assert(Context.SchoolYearId.HasValue);
             
             var stiDiscipline = new DisciplineReferral();
             MapperFactory.GetMapper<DisciplineReferral, ClassDiscipline>().Map(stiDiscipline, classDiscipline);
@@ -106,6 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 stiDiscipline = ConnectorLocator.DisciplineConnector.Create(stiDiscipline);
                 MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>().Map(classDiscipline, stiDiscipline);
             }
+            
             return new ClassDisciplineDetails
                 {
                     Date = classDiscipline.Date,
@@ -115,7 +106,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     Infractions = classDiscipline.Infractions,
                     StudentId = classDiscipline.StudentId,
                     Class = ServiceLocator.ClassService.GetClassDetailsById(classDiscipline.ClassId.Value),
-                    Student = ServiceLocator.PersonService.GetPerson(classDiscipline.StudentId)
+                    Student = ServiceLocator.StudentService.GetById(classDiscipline.StudentId, Context.SchoolYearId.Value)
+                    
                 };
         }
         
@@ -268,10 +260,10 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date)
+        /*public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date)
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         //public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(int studentId, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate)
         //{

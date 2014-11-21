@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void Delete(IList<int> ids)
         {
-            SimpleDelete<Period>(ids.Select(x => new Period {Id = x}).ToList());
+            SimpleDelete(ids.Select(x => new Period {Id = x}).ToList());
         }
 
         public IList<Period> GetPeriods(int schoolYearId)
@@ -28,15 +28,6 @@ namespace Chalkable.Data.School.DataAccess
             return SelectMany<Period>(GetCondsBySchoolYear(schoolYearId));
         }
 
-        public Period GetPeriodOrNull(int time, int schoolYearId)
-        {
-            return SelectOneOrNull<Period>(new AndQueryCondition
-                {
-                    {Period.START_TIME_FIELD, time, ConditionRelation.LessEqual},
-                    {Period.END_TIME_FIELD, time, ConditionRelation.GreaterEqual},
-                    GetCondsBySchoolYear(schoolYearId)
-                });
-        }
         private QueryCondition GetCondsBySchoolYear(int? schoolYearId)
         {
             var res = new AndQueryCondition();

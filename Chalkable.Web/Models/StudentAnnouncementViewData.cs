@@ -36,33 +36,9 @@ namespace Chalkable.Web.Models
         {
             var res = Create(items, attachments, gradingStyle);
             res.ClassName = anouncement.ClassName;
-            //res.CourseId = anouncement.CourseId;
-            //res.AnnouncmentTitle = anouncement.Title;
             res.AnnouncementTypeId = anouncement.ClassAnnouncementTypeRef;
             res.ChalkableAnnouncementTypeId = anouncement.ChalkableAnnouncementType;
             return res;
-        }
-        private static void CalculateClassAvg(StudentAnnouncementsViewData res, IEnumerable<StudentAnnouncementDetails> items)
-        {
-            int count = 0;
-            decimal? classAvg = 0;
-            foreach (var studentAnnouncement in items)
-            {
-                if (IncludeToAvg(studentAnnouncement))
-                {
-                    classAvg += studentAnnouncement.NumericScore.Value;
-                    count++;
-                }
-            }
-            classAvg = count != 0 ? classAvg / count : null;
-            res.ClassAvg = classAvg;
-            res.GradedStudentCount = count;
-        }
-
-        private static bool IncludeToAvg(StudentAnnouncementDetails item)
-        {
-            return item.NumericScore.HasValue && !item.Incomplete && !item.Exempt && !item.Dropped && !item.Absent
-                && item.State == StudentAnnouncementStateEnum.Manual;
         }
     }
 
@@ -112,7 +88,7 @@ namespace Chalkable.Web.Models
 
     public class StudentAnnouncementViewData : ShortStudentAnnouncementViewData
     {
-        public ShortPersonViewData StudentInfo { get; set; }
+        public StudentViewData StudentInfo { get; set; }
         public string Raw { get; set; }
         public IList<AnnouncementAttachmentViewData> Attachments { get; set; }
 
@@ -136,7 +112,7 @@ namespace Chalkable.Web.Models
         {
             return new StudentAnnouncementViewData(studentAnnouncement)
             {
-                StudentInfo = ShortPersonViewData.Create(studentAnnouncement.Student),
+                StudentInfo = StudentViewData.Create(studentAnnouncement.Student),
                 Attachments = attachments.Select(x => AnnouncementAttachmentViewData.Create(x, true)).ToList(),
             };
         }

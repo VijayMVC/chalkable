@@ -215,7 +215,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
 
-        private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<Person> students)
+        private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<StudentDetails> students)
         {
             var gradeBook = new ChalkableGradeBook
             {
@@ -237,7 +237,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!includeWithdrawnStudents)
             {
                 Trace.WriteLine("includeWithdrawnStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-                gradeBook.Students = new List<Person>();
+                gradeBook.Students = new List<StudentDetails>();
                 foreach (var student in students)
                 {
                    var score = stiGradeBook.Scores.FirstOrDefault(x => x.StudentId == student.Id);
@@ -255,7 +255,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         private IList<AnnouncementDetails> PrepareAnnounceemntDetailsForGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod
-            , IList<AnnouncementComplex> anns, IList<Person> students, bool inludeWithdrawnStudent)
+            , IList<AnnouncementComplex> anns, IList<StudentDetails> students, bool inludeWithdrawnStudent)
         {
             var activities = stiGradeBook.Activities.Where(x => x.Date >= gradingPeriod.StartDate
                                                            && x.Date <= gradingPeriod.EndDate && x.IsScored).ToList();

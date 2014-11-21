@@ -27,16 +27,16 @@ namespace Chalkable.Web.Models
 
     public class DailyAttendanceViewData : ShortDailyAttendanceViewData
     {
-        public ShortPersonViewData Person { get; set; }
+        public StudentViewData Person { get; set; }
         protected DailyAttendanceViewData(StudentDailyAttendance dailyAttendance) : base(dailyAttendance)
         {
         }    
         
-        public static DailyAttendanceViewData Create(StudentDailyAttendance dailyAttendance, Person person)
+        public static DailyAttendanceViewData Create(StudentDailyAttendance dailyAttendance, StudentDetails person)
         {
             return new DailyAttendanceViewData(dailyAttendance)
                 {
-                    Person = ShortPersonViewData.Create(person)
+                    Person = StudentViewData.Create(person)
                 };
         }
     }

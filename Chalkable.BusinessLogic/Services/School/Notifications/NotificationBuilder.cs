@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -232,9 +233,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                         ShortedMessage = StringTools.BuildShortText(privateMessage.Body, 30),
                         MessageSubject = privateMessage.Subject,
                         SenderId = privateMessage.Sender.Id,
-                        SenderName = privateMessage.Sender.RoleRef == CoreRoles.STUDENT_ROLE.Id
-                                        ? privateMessage.Sender.FullName
-                                        : privateMessage.Sender.ShortSalutationName 
+                        SenderName = privateMessage.Sender.DisplayName()
                     };
             return BuildNotificationFromTemplate(NotificationTemplateProvider.PRIVATE_MESSAGE_NOTIFICATION,
                                                     NotificationType.Message, toPerson, null, null, null,

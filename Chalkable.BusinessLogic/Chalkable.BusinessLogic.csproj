@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AppTools.cs" />
+    <Compile Include="Common\NameHelper.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
     <Compile Include="Mapping\ModelMappers\ActivityToAnnouncementMapper.cs" />
     <Compile Include="Mapping\ModelMappers\AnnouncementAttToActivityAttMapper.cs" />
@@ -274,6 +275,7 @@
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\BellScheduleService.cs" />
     <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
     <Compile Include="Services\School\ApplicationSchoolService.cs" />
     <Compile Include="Services\School\AppMarketService.cs" />

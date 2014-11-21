@@ -37,11 +37,11 @@ namespace Chalkable.Tests.Sis
             var cl = ConnectorLocator.Create("Chalkable", "k8Xz3Ka2D", "http://208.83.95.80:8222/api/");
             //var cl = ConnectorLocator.Create("Chalkable", "r3Hp1Dm5Q", "http://208.83.95.80:8222/API/");
 
-            var items = (cl.SyncConnector.GetDiff(typeof(Student), null) as SyncResult<Student>).All.Where(x => x.StudentID == 3624);
+            var items = (cl.SyncConnector.GetDiff(typeof(BellSchedule), null) as SyncResult<BellSchedule>).All;
                 
             foreach (var s in items)
             {
-                Debug.WriteLine(s.UserID + " " + s.SpecialInstructions);
+                Debug.WriteLine(s.BellScheduleID + " " + s.AcadSessionID + " " + s.Name);
             }
 
 

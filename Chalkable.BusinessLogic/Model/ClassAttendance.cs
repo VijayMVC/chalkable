@@ -66,7 +66,7 @@ namespace Chalkable.BusinessLogic.Model
 
     public class ClassAttendanceDetails : ClassAttendance
     {
-        public Person Student { get; set; }
+        public StudentDetails Student { get; set; }
         public Class Class { get; set; }
         public bool IsPosted { get; set; }
     }
@@ -147,10 +147,10 @@ namespace Chalkable.BusinessLogic.Model
 
     public class StudentAttendanceSummary
     {
-        public Person Student { get; set; }
+        public StudentDetails Student { get; set; }
         public IList<StudentClassAttendanceSummary> ClassAttendanceSummaries { get; set; }
 
-        public static IList<StudentAttendanceSummary> Create(IList<StudentSectionAttendanceSummary> studentSectionAttendances, IList<Person> students, IList<ClassDetails> classes)
+        public static IList<StudentAttendanceSummary> Create(IList<StudentSectionAttendanceSummary> studentSectionAttendances, IList<StudentDetails> students, IList<ClassDetails> classes)
         {
             var stSectionAttsDic = studentSectionAttendances.GroupBy(x => x.StudentId).ToDictionary(x => x.Key, x => x.ToList());
             var res = new List<StudentAttendanceSummary>();

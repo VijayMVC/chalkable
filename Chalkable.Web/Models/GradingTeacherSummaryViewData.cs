@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
@@ -46,11 +44,11 @@ namespace Chalkable.Web.Models
         }
     }
 
-    public class ShortStudentGradingViewData : ShortPersonViewData
+    public class ShortStudentGradingViewData : StudentViewData
     {
         public decimal? Avg { get; set; }
         public bool Exempt { get; set; }
-        protected ShortStudentGradingViewData(Person person) : base(person)
+        protected ShortStudentGradingViewData(StudentDetails person) : base(person)
         {
         }
 

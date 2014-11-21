@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 using Chalkable.Common;
@@ -83,11 +82,7 @@ namespace Chalkable.Data.School.DataAccess
                     LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
                     Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
                     Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
-                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD)),
-                    HasMedicalAlert = SqlTools.ReadBool(reader, string.Format(template, Person.HAS_MEDICAL_ALERT_FIELD)),
-                    IsAllowedInetAccess = SqlTools.ReadBool(reader, string.Format(template, Person.IS_ALLOWED_INET_ACCESS_FIELD)),
-                    SpecialInstructions = SqlTools.ReadStringNull(reader, string.Format(template, Person.SPECIAL_INSTRUCTIONS_FIELD)),
-                    SpEdStatus = SqlTools.ReadStringNull(reader, string.Format(template, Person.SP_ED_STATUS_FIELD)),
+                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
                 };
         }
 

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -13,6 +13,7 @@ namespace Chalkable.Web.Controllers
     {
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, bool needsAllAttachments = true, bool isRead = false)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             var annDetails = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             if (annDetails.SisActivityId.HasValue)
             {
@@ -33,21 +34,9 @@ namespace Chalkable.Web.Controllers
 
             if (isRead && annDetails.State == AnnouncementState.Created)
             {
-                var ids = new HashSet<Guid>();
                 IList<string> appNames = new List<string>();  
-                //TODO : think about appNames 
-                //foreach (var sa in annDetails.StudentAnnouncements)
-                //{
-                //    var appRef = sa.ApplicationRef;
-                //    if (appRef.HasValue && !ids.Contains(appRef.Value))
-                //    {
-                //        var app = applications.First(x => x.Id == appRef);
-                //        ids.Add(appRef.Value);
-                //        appNames.Add(app.Name);
-                //    }
-                //}
                 var stAnnouncements = annDetails.StudentAnnouncements;
-                annViewData.autoGradeApps = appNames;
+                annViewData.AutoGradeApps = appNames;
                 if (SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
                 {
                     annViewData.Dropped = stAnnouncements.Count > 0 && stAnnouncements[0].Dropped;

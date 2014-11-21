@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.Common;
@@ -75,15 +76,16 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
+            Trace.Assert(Context.SchoolYearId.HasValue);
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
-                IList<Person> persons = new List<Person>();
+                IList<StudentDetails> persons = new List<StudentDetails>();
                 if (CoreRoles.STUDENT_ROLE == Context.Role)
                 {
                     scores.Add(ConnectorLocator.ActivityScoreConnector.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
-                    persons.Add(ServiceLocator.PersonService.GetPerson(Context.PersonId.Value));
+                    persons.Add(ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value));
                 }
                 else
                 {

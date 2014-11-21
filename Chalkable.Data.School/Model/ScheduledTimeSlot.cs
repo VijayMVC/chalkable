@@ -5,9 +5,9 @@ namespace Chalkable.Data.School.Model
     public class ScheduledTimeSlot
     {
         [PrimaryKeyFieldAttr]
-        public int BellScheduleID { get; set; }
+        public int BellScheduleRef { get; set; }
         [PrimaryKeyFieldAttr]
-        public int TimeSlotID { get; set; }
+        public int PeriodRef { get; set; }
         public int? StartTime { get; set; }
         public int? EndTime { get; set; }
         public string Description { get; set; }

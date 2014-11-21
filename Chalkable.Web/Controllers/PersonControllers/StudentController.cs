@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -8,7 +8,6 @@ using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -37,7 +36,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
 
-            var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.StartTime).Select(cp => cp.ClassRef).Distinct().ToList();
+            var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.Order).Select(cp => cp.ClassRef).Distinct().ToList();
 
             var classList = sortedClassRefs.Select(sortedClassRef => classes.FirstOrDefault(cls => cls.Id == sortedClassRef)).Where(c => c != null).ToList();
             classList.AddRange(classes.Where(cls => !sortedClassRefs.Contains(cls.Id)));
@@ -74,13 +73,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GET_STUDENTS, true, CallType.Get, new[] { AppPermissionType.User, })]
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName)
         {
-            //TODO: I think we need use particular methods like get teacher students and get class students
-            var roleName = CoreRoles.STUDENT_ROLE.Name;
+            Trace.Assert(Context.SchoolYearId.HasValue);
             int? teacherId = null;
             if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
                 teacherId = SchoolLocator.Context.PersonId;
-            var res = PersonLogic.GetPersons(SchoolLocator, start, count, byLastName, filter, roleName, classId, null, teacherId);
-            return Json(res);
+            var res = SchoolLocator.PersonService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, filter, byLastName != true, start ?? 0, count ?? 10);
+            return Json(res.Transform(StudentViewData.Create));
         }
 
         //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GRADING_STAT, true, CallType.Get, new[] {AppPermissionType.User, AppPermissionType.Grade})]

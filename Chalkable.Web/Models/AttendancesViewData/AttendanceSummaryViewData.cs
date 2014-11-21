@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -92,14 +91,14 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
     public class ShortStudentAttendanceViewData
     {
-        public ShortPersonViewData StudentInfo { get; set; }
+        public StudentViewData StudentInfo { get; set; }
         public IList<string> Alerts { get; set; }
         public IList<AttendanceStatByClassViewData> StatByClass { get; set; }
         public int TotalAttendanceCount { get; set; }
 
-        private ShortStudentAttendanceViewData(Person student, IList<string> alerts, IList<AttendanceStatByClassViewData> statByClassView)
+        private ShortStudentAttendanceViewData(StudentDetails student, IList<string> alerts, IList<AttendanceStatByClassViewData> statByClassView)
         {
-            StudentInfo = ShortPersonViewData.Create(student);
+            StudentInfo = StudentViewData.Create(student);
             Alerts = alerts;
             StatByClass = statByClassView;
             TotalAttendanceCount = statByClassView.Sum(x => x.AttendanceCount);

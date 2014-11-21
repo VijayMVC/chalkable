@@ -22,9 +22,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public IList<Person> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
-            IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
+            throw new NotImplementedException();
+            /*IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
             {
                 ClassId = classId,
                 CallerId = Context.PersonId,
@@ -46,7 +47,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 res = res.Where(x => classPersons.Any(y => y.PersonRef == x.Id)).ToList();
             }
 
-            return res;
+            return res;*/
+        }
+
+        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName,
+            int start, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,
+            int start, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count)
+        {
+            throw new NotImplementedException();
         }
 
         public void Add(IList<Person> persons)
@@ -307,13 +325,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<Person> GetTeacherStudents(int teacherId, int schoolYearId)
+        public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
-            return GetPersons(new PersonQuery()
-                {
-                    SchoolYearId = schoolYearId,
-                    TeacherId = teacherId
-                }).Persons;
+            throw new NotImplementedException();
         }
     }
 }

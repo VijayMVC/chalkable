@@ -282,6 +282,29 @@ namespace Chalkable.Data.Common
             return ReadPaginatedResult(dbQuery, start, count, x => x.ReadList<T>());
         }
 
+        protected PaginatedList<T> ExecuteStoredProcedurePaginated<T>(string name, IDictionary<string, object> parameters, int start, int count) where T : new()
+        {
+            using (var reader = ExecuteStoredProcedureReader(name, parameters))
+            {
+                if (reader.Read())
+                {
+                    var allCount = SqlTools.ReadInt32(reader, ALL_COUNT_FIELD);
+                    reader.NextResult();
+                    var res = reader.ReadList<T>();
+                    return new PaginatedList<T>(res, start / count, count, allCount);
+                }
+                return new PaginatedList<T>(new List<T>(), start / count, count, 0);
+            }
+        }
+
+        public IList<T> ExecuteStoredProcedureList<T>(string name, IDictionary<string, object> parameters) where T : new()
+        {
+            using (var reader = ExecuteStoredProcedureReader(name, parameters))
+            {
+                return reader.ReadList<T>();
+            }
+        }
+
         protected bool Exists<T>(QueryCondition conditions) where T : new()
         {
             var q = Orm.Orm.CountSelect<T>(FilterConditions(conditions), ALL_COUNT_FIELD);

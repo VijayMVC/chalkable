@@ -6,6 +6,7 @@ using Chalkable.StiConnector.SyncModel;
 using Address = Chalkable.StiConnector.SyncModel.Address;
 using AlphaGrade = Chalkable.StiConnector.SyncModel.AlphaGrade;
 using AlternateScore = Chalkable.StiConnector.SyncModel.AlternateScore;
+using BellSchedule = Chalkable.StiConnector.SyncModel.BellSchedule;
 using ClassroomOption = Chalkable.StiConnector.SyncModel.ClassroomOption;
 using DayType = Chalkable.StiConnector.SyncModel.DayType;
 using GradeLevel = Chalkable.StiConnector.SyncModel.GradeLevel;
@@ -34,7 +35,6 @@ namespace Chalkable.StiImport.Services
             UpdateSchools();
             Log.LogInfo("update adresses");
             UpdateAddresses();
-            
             Log.LogInfo("update users");
             UpdateUsers();
             Log.LogInfo("update persons");
@@ -47,8 +47,6 @@ namespace Chalkable.StiImport.Services
             UpdateStudentSchool();
             Log.LogInfo("update StaffSchool");
             UpdateStaffSchool();
-            
-            
             Log.LogInfo("update persons emails");
             UpdatePersonsEmails();
             Log.LogInfo("update phones");
@@ -65,6 +63,8 @@ namespace Chalkable.StiImport.Services
             UpdateGradingPeriods();
             Log.LogInfo("update day types");
             UpdateDayTypes();
+            Log.LogInfo("update Bell schedules");
+            UpdateBellSchedules();
             Log.LogInfo("update days");
             UpdateDays();
             Log.LogInfo("update rooms");
@@ -83,10 +83,10 @@ namespace Chalkable.StiImport.Services
             UpdateClassStandard();
             Log.LogInfo("update marking period classes");
             UpdateMarkingPeriodClasses();
-            Log.LogInfo("update scheduled time slots");
-            UpdateScheduledTimeSlots();
             Log.LogInfo("update periods");
             UpdatePeriods();
+            Log.LogInfo("update scheduled time slots");
+            UpdateScheduledTimeSlots();
             Log.LogInfo("update class periods");
             UpdateClassPeriods();
             Log.LogInfo("update class persons");
@@ -428,12 +428,11 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<CalendarDay>().Updated == null)
                 return;
-            var sys = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var ds = context.GetSyncResult<CalendarDay>().Updated.Select(x => new Date
                 {
                     DayTypeRef = x.DayTypeID,
                     IsSchoolDay = x.InSchool,
-                    SchoolRef = sys[x.AcadSessionID].SchoolRef,
+                    BellScheduleRef = x.BellScheduleID,
                     SchoolYearRef = x.AcadSessionID
                 }).ToList();
             ServiceLocatorSchool.CalendarDateService.Edit(ds);
@@ -547,6 +546,40 @@ namespace Chalkable.StiImport.Services
         {
             //TODO: no way to update. delete or insert only
         }
+        
+        private void UpdatePeriods()
+        {
+            if (context.GetSyncResult<TimeSlot>().Updated == null)
+                return;
+            var periods = context.GetSyncResult<TimeSlot>().Updated
+                .Select(x=>new Period
+                {
+                    Id = x.TimeSlotID,
+                    Order = x.Sequence,
+                    SchoolYearRef = x.AcadSessionID
+                })
+                .ToList();
+            ServiceLocatorSchool.PeriodService.Edit(periods);
+        }
+
+        private void UpdateBellSchedules()
+        {
+            if (context.GetSyncResult<BellSchedule>().Updated == null)
+                return;
+            var bellSchedules = context.GetSyncResult<BellSchedule>().Updated.Select(x => new Data.School.Model.BellSchedule
+            {
+                Id = x.BellScheduleID,
+                Code = x.Code,
+                Description = x.Description,
+                IsActive = x.IsActive,
+                IsSystem = x.IsSystem,
+                Name = x.Name,
+                SchoolYearRef = x.AcadSessionID,
+                TotalMinutes = x.TotalMinutes,
+                UseStartEndTime = x.UseStartEndTime
+            }).ToList();
+            ServiceLocatorSchool.BellScheduleService.Edit(bellSchedules);
+        }
 
         private void UpdateScheduledTimeSlots()
         {
@@ -555,42 +588,22 @@ namespace Chalkable.StiImport.Services
             var allSts = context.GetSyncResult<StiConnector.SyncModel.ScheduledTimeSlot>().Updated
                 .Select(x => new Data.School.Model.ScheduledTimeSlot
                 {
-                    BellScheduleID = x.BellScheduleID,
+                    BellScheduleRef = x.BellScheduleID,
                     Description = x.Description,
                     EndTime = x.EndTime,
                     IsDailyAttendancePeriod = x.IsDailyAttendancePeriod,
                     StartTime = x.StartTime,
-                    TimeSlotID = x.TimeSlotID
+                    PeriodRef = x.TimeSlotID
                 })
                 .ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.Edit(allSts);
-        }
-
-        private void UpdatePeriods()
-        {
-            if (context.GetSyncResult<TimeSlot>().Updated == null)
-                return;
-            var periods = context.GetSyncResult<TimeSlot>().Updated.ToList();
-            var allSts = ServiceLocatorSchool.ScheduledTimeSlotService.GetAll();
-            foreach (var timeSlot in periods)
-            {
-                var sts = allSts.FirstOrDefault(x => x.TimeSlotID == timeSlot.TimeSlotID);
-                int startTime = 0;
-                int endTime = 1;
-                if (sts != null)
-                {
-                    startTime = sts.StartTime ?? 0;
-                    endTime = sts.EndTime ?? startTime + 1;
-                }
-                ServiceLocatorSchool.PeriodService.Edit(timeSlot.TimeSlotID, startTime, endTime);//TODO: sequence update is not supported yet
-            }
         }
 
         private void UpdateClassPeriods()
         {
             //TODO: no way to update. delete or insert only
         }
-
+        
         private void UpdateClassPersons()
         {
             if (context.GetSyncResult<StudentScheduleTerm>().Updated == null)

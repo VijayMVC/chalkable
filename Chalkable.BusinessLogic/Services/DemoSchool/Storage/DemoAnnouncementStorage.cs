@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Web.WebSockets;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Models;
@@ -347,7 +346,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 ClassAnnouncementTypeName = Storage.ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId.Value).Name,
                 ChalkableAnnouncementType = classAnnouncementTypeId,
-                PrimaryTeacherName = person.FullName,
+                PrimaryTeacherName = person.FullName(),
                 ClassName = cls.Name,
                 GradeLevelId = gradeLevelRef,
                 PrimaryTeacherGender = person.Gender,

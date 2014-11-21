@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models
@@ -9,18 +7,21 @@ namespace Chalkable.Web.Models
     public class PeriodViewData
     {
         public int Id { get; set; }
-        public int StartTime { get; set; }
-        public int EndTime { get; set; }
         public int Order { get; set; }
         public int SchoolYearId { get; set; }
 
         protected PeriodViewData(Period period)
         {
-            StartTime = period.StartTime;
-            EndTime = period.EndTime;
             Id = period.Id;
             SchoolYearId = period.SchoolYearRef;
             Order = period.Order;
+        }
+
+        protected PeriodViewData(int id, int schoolYearId, int order)
+        {
+            Id = id;
+            SchoolYearId = schoolYearId;
+            Order = order;
         }
 
         public static PeriodViewData Create(Period period)

@@ -16,7 +16,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<AnnouncementApplicationViewData> Applications { get; set; }
         public IList<AnnouncementStandardViewData> Standards { get; set; }
         public StudentAnnouncementsViewData StudentAnnouncements { get; set; }
-        public IList<String> autoGradeApps { get; set; }
+        public IList<String> AutoGradeApps { get; set; }
 
         public ShortPersonViewData Owner { get; set; }
         public bool Exempt { get; set; }
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<ApplicationForAttachViewData> SuggestedApps { get; set; }
 
 
-        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, int currentSchoolPersonId)
+        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper)
             : base(announcementDetails, studentAnnouncements, mapper, null)
         {
             if (announcementDetails.AnnouncementQnAs != null)
@@ -37,12 +37,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             if(announcementDetails.AnnouncementStandards != null)
                 Standards = AnnouncementStandardViewData.Create(announcementDetails.AnnouncementStandards);
             if (announcementDetails.AnnouncementApplications == null) return;
-            //TODO: applicationViewData
-            //Applications = new List<AnnouncementApplicationViewData>();
-            //foreach (var announcementApplication in announcementDetails.AnnouncementApplications)
-            //{
-            //    Applications.Add(AnnouncementApplicationViewData.Create(announcementApplication, currentSchoolPersonId));
-            //}
             Exempt = studentAnnouncements.Count > 0 && studentAnnouncements.All(x => x.Exempt);
             CanRemoveStandard = studentAnnouncements.Count == 0
                                 || studentAnnouncements.All(x => string.IsNullOrEmpty(x.ScoreValue));
@@ -71,7 +65,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 NumericScore = x.NumericScore,
                 IsWithdrawn = x.Student.IsWithdrawn
             }).ToList();
-            return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements, mapper, currentSchoolPersonId);
+            return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements, mapper);
         }
 
         public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, IGradingStyleMapper mapper,

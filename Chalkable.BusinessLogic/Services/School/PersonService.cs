@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -20,7 +19,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<Person> personInfos);
         void Delete(int id);
         void Delete(IList<int> ids);
-        PaginatedList<Person> GetPaginatedPersons(PersonQuery query); 
         PersonDetails GetPersonDetails(int id);
         Person GetPerson(int id);
         void ActivatePerson(int id);
@@ -29,8 +27,11 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
         IList<Person> GetAll();
         int GetSisUserId(int personId);
-        IList<Person> GetTeacherStudents(int teacherId, int schoolYearId);
-        IList<Person> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null);
+        IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId);
+        IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null);
+        PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count);
+        PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
+        PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -77,47 +78,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public PaginatedList<Person> GetPaginatedPersons(PersonQuery query)
-        {
-            var res = GetPersons(query);
-            return new PaginatedList<Person>(res.Persons, query.Start / query.Count, query.Count, res.SourceCount);
-        }
-
-        private PersonQueryResult GetPersons(PersonQuery query)
+        public Person GetPerson(int id)
         {
             using (var uow = Read())
             {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                query.CallerId = Context.PersonId;
-                query.CallerRoleId = Context.Role.Id;
-                if (!query.SchoolYearId.HasValue)
-                    query.SchoolYearId = Context.SchoolYearId;
-                if (query.CallerRoleId == CoreRoles.STUDENT_ROLE.Id)
-                {
-                    var stSchoolYear = new StudentSchoolYearDataAccess(uow).GetStudentSchoolYear(query.SchoolYearId, Context.PersonId.Value);
-                    if (stSchoolYear != null)
-                        query.CallerGradeLevelId = stSchoolYear.GradeLevelRef;
-                }
-                var res = da.GetPersons(query);
-                return res;
+                return new PersonDataAccess(uow, null).GetById(id);
             }
-        }
-
-
-        public Person GetPerson(int id)
-        {
-            var res = GetPersons(new PersonQuery
-                {
-                    PersonId = id,
-                    Count = 1, 
-                    Start = 0
-                }).Persons.FirstOrDefault();
-            if (res == null) //in case if there is no corresponding school person
-                using (var uow = Read())
-                {
-                    res = new PersonDataAccess(uow, Context.SchoolLocalId).GetById(id);
-                }
-            return res;
         }
 
         public PersonDetails GetPersonDetails(int id)
@@ -295,7 +261,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Person> GetTeacherStudents(int teacherId, int schoolYearId)
+        public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
             using (var uow = Read())
             {
@@ -304,12 +270,40 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Person> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
+        public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 return da.GetStudents(classId, markingPeriodId, isEnrolled);
+            }
+        }
+
+        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count)
+        {
+            using (var uow = Read())
+            {
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                return da.SearchStudents(schoolYearId, classId, teacherId, filter, orderByFirstName, start, count);
+            }
+        }
+
+        public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,
+            int start, int count)
+        {
+            using (var uow = Read())
+            {
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                return da.SearchStaff(schoolYearId, classId, studentId, filter, orderByFirstName, start, count);
+            }
+        }
+
+        public PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count)
+        {
+            using (var uow = Read())
+            {
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                return da.SearchPersons(filter, orderByFirstName, start, count);
             }
         }
     }

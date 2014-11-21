@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -14,33 +15,19 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string LastName { get; set; }
         public string Gender { get; set; }
         public RoleViewData Role { get; set; }
-        public bool HasMedicalAlert { get; set; }
-        public bool IsAllowedInetAccess { get; set; }
-        public string SpecialInstructions { get; set; }
-        public string SpEdStatus { get; set; }
-        public bool? IsWithDrawn { get; set; }
 
         protected ShortPersonViewData(Person person)
         {
             Id = person.Id;
-            DisplayName = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.FullName : person.ShortSalutationName; //TODO: think about this
-            FullName = person.FullName;
-            FirstName = person.CapitilizedFirstName;
-            LastName = person.CapitilizedLastName;
+            DisplayName = person.DisplayName();
+            FullName = person.FullName();
+            FirstName = person.FirstName;
+            LastName = person.LastName;
             Gender = person.Gender;
             if (person.RoleRef > 0)
             {
                 Role = RoleViewData.Create(CoreRoles.GetById(person.RoleRef));
-                if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                {
-                    HasMedicalAlert = person.HasMedicalAlert;
-                    IsAllowedInetAccess = person.IsAllowedInetAccess;
-                    SpecialInstructions = person.SpecialInstructions;
-                    SpEdStatus = person.SpEdStatus;    
-                }
             }
-            IsWithDrawn = person.IsWithdrawn;
-
         }
         public static ShortPersonViewData Create(Person person)
         {

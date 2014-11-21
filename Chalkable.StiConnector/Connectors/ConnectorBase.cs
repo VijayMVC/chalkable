@@ -5,17 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Web;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
-using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Exceptions;
 using Chalkable.StiConnector.Mapping;
 using Newtonsoft.Json;
-using System.Configuration;
 
 
 namespace Chalkable.StiConnector.Connectors

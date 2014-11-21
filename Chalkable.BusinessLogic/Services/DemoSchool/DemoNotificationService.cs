@@ -76,12 +76,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var fromPerson = ServiceLocator.PersonService.GetPerson(fromPersonId);
-            var teachers = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-                {
-                    RoleId = CoreRoles.TEACHER_ROLE.Id,
-                    ClassId = announcement.ClassRef
-                });
-            var notifications = teachers.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(announcement, x, fromPerson)).ToList();
+            var teachers = ServiceLocator.PersonService.SearchStaff(null, announcement.ClassRef, null, null, true, 0,int.MaxValue);
+            var authors = teachers.Select(x => ServiceLocator.PersonService.GetPerson(x.Id));
+            var notifications = authors.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(announcement, x, fromPerson)).ToList();
             AddNotifications(notifications);
         }
 
@@ -89,7 +86,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            var authors = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery { ClassId = ann.ClassRef, RoleId = CoreRoles.TEACHER_ROLE.Id });
+            var teachers = ServiceLocator.PersonService.SearchStaff(null, ann.ClassRef, null, null, true, 0, int.MaxValue);
+            var authors = teachers.Select(x => ServiceLocator.PersonService.GetPerson(x.Id));
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
             IList<Notification> notifications = authors.Select(author => builder.BuildAnnouncementQnToAuthorNotifiaction(annQnA, ann, author)).ToList();
             AddNotifications(notifications);

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -23,5 +19,10 @@ namespace Chalkable.Data.School.Model
         public string SpEdStatus { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
         public int UserId { get; set; }
+    }
+
+    public class StudentDetails : Student
+    {
+        public bool? IsWithdrawn { get; set; }
     }
 }
