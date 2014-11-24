@@ -23,6 +23,9 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
             ArrayOf(chlk.models.announcement.AnnouncementPeriod), 'announcementPeriods',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements'
+            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'selectedClassId'
         ])
 });

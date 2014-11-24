@@ -8,7 +8,6 @@ REQUIRE('chlk.activities.calendar.announcement.DayPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthDayPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekBarPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekDayPopUp');
-REQUIRE('chlk.activities.calendar.announcement.DayPeriodPopUp');
 REQUIRE('chlk.activities.calendar.announcement.AdminDayCalendarPage');
 
 REQUIRE('chlk.models.calendar.announcement.Month');
@@ -46,7 +45,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
         },
 
-        [chlk.controllers.SidebarButton('calendar')],
+        /*[chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, Number, chlk.models.id.ClassId]],
         function showDayPopUpAction(date, periodNumber, classId_) {
             var result = this.calendarService
@@ -60,23 +59,20 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 });
             return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
-        },
+        },*/
 
         [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, Number, chlk.models.id.ClassId]],
         function showWeekBarPopUpAction(date, periodNumber_, classId_) {
-            var result = this.calendarService
-                .getWeekDayInfo(date, periodNumber_)
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
-                    if(periodNumber_ >= 0)
-                        model.setDate(date);
-                    if(classId_)
-                        model.setSelectedClassId(classId_);
-                    return model;
-                });
-            if(periodNumber_ >= 0)
+            var model = this.calendarService
+                .getWeekDayInfo(date, periodNumber_);
+            model.setTarget(chlk.controls.getActionLinkControlLastNode());
+            if(periodNumber_ === 0 || periodNumber_ > 0)
+                model.setDate(date);
+            if(classId_)
+                model.setSelectedClassId(classId_);
+            var result = new ria.async.DeferredData(model);
+            if(periodNumber_ === 0 || periodNumber_ > 0)
                 return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, result);
             return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);
         },
@@ -85,7 +81,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.common.ChlkDate, String]],
         function dayAction(date_, gradeLevels_){
             var result = this.calendarService
-                .getDayInfo(date_)
+                .getDayWeekInfo(date_)
                 .attach(this.validateResponse_());
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.DayPage, result);
         },
@@ -124,7 +120,7 @@ NAMESPACE('chlk.controllers', function (){
             var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
 
             var result = this.calendarService
-                .getWeekInfo(classId_, date_, gradeLevels_)
+                .getDayWeekInfo(date_, null, classId_, gradeLevels_)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     var classes = this.classService.getClassesForTopBar(true);

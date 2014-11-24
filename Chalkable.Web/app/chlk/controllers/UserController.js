@@ -130,7 +130,7 @@ NAMESPACE('chlk.controllers', function (){
             function scheduleByRole(personId, date_, role){
                 var result = ria.async.wait([
                         this.personService.getSchedule(personId),
-                        this.calendarService.getDayInfo(date_, personId)
+                        this.calendarService.getDayWeekInfo(date_, personId)
                     ])
                     .attach(this.validateResponse_())
                     .then(function(results){

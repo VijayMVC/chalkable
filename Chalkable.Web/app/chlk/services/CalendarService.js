@@ -75,27 +75,17 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.common.ChlkDate, Number]],
-            ria.async.Future, function getWeekDayInfo(date, periodNumber_){
+            function getWeekDayInfo(date, periodNumber_){
                 var weekCalendarData = this.getContext().getSession().get(ChlkSessionConstants.WEEK_CALENDAR_DATA, []), res = null;
                 weekCalendarData.forEach(function(day){
                     if(day.getDate().isSameDay(date))
                         res = day;
                 });
-                if(periodNumber_ >= 0)
+                if(periodNumber_ === 0 || periodNumber_ > 0)
                     res = res.getAnnouncementPeriods()[periodNumber_];
-                return new ria.async.DeferredData(res);
+                return res;
             },
 
-            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            ria.async.Future, function getDayInfo(date_, schoolPersonId_) {
-                return this.get('AnnouncementCalendar/Day.json', ArrayOf(chlk.models.calendar.announcement.DayItem), {
-                    date: date_ && date_.toString('mm-dd-yy'),
-                    schoolPersonId: schoolPersonId_ && schoolPersonId_.valueOf()
-                }).then(function(model){
-                    this.saveDayCalendarDataInSession(model);
-                    return this.prepareDayData(model, date_);
-                }.bind(this));
-            },
             [[ArrayOf(chlk.models.calendar.announcement.DayItem)]],
             function saveDayCalendarDataInSession(model){
                 this.getContext().getSession().set(ChlkSessionConstants.DAY_CALENDAR_DATA, model);
@@ -109,8 +99,8 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String, chlk.models.id.SchoolPersonId]],
-            ria.async.Future, function getWeekInfo(classId_, date_, gradeLevels_, schoolPersonId_) {
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, String]],
+            ria.async.Future, function getDayWeekInfo(date_, schoolPersonId_, classId_, gradeLevels_) {
                 return this.get('AnnouncementCalendar/Week.json', ArrayOf(chlk.models.calendar.announcement.WeekItem), {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy'),
