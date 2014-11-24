@@ -1,0 +1,81 @@
+.app-market-page
+  .app-market > DIV
+    margin-bottom: 24px
+
+  .app-filter
+    margin: 16px 0 24px
+    > div
+      display: inline-block
+      margin-right: 24px
+      color: #8f8f8f
+
+  .subject-filter
+    position: relative
+
+    .items
+      position: absolute
+      top: 25px
+      +box-shadow(transparentize(#000, .5) 0 0 16px)
+      z-index: 99
+      width: 150px
+      &::after
+        left: 25px
+
+  .slider-wrapper
+    margin-left: 40px
+    vertical-align: middle
+    margin-top: 3px
+    display: inline-block
+    width: 150px
+
+    &:hover
+      label
+        display: block
+    
+    .ui-slider
+      background: none
+      outline: none
+      border: 0
+      color: #8f8f8f
+
+      &.ui-slider-horizontal
+        border-radius: 10px
+        height: 0.6em
+        background: #fff
+        border: 1px inset #c8c7c3
+        @include box-shadow(0 1px 5px transparentize(#000, .79) inset, 0 1px 0 transparentize(#fff, 0))
+
+      .ui-widget-header
+        background: none
+
+      .ui-slider-handle
+        position: absolute
+        z-index: 2
+        width: 1.0em
+        height: 1.0em
+        @include background(#2e657c linear-gradient(top, #568ea8 0%, #2e657c 100%))
+        border-radius: 50%
+        border: 1px outset #010a0e !important
+        @include box-shadow(0 1px 0 transparentize(#fff, .6) inset, 0 1px 3px transparentize(#000, .55))
+        cursor: pointer
+
+    .start-range
+      margin-left: -24%
+      margin-top: -5px
+
+    .end-range
+      margin-left: 108%
+      margin-top: -19px
+
+    label
+      position: absolute
+      width: 20px
+      margin-top: 20px
+      margin-left: -10px
+      text-align: center
+      font-size: 10px
+      display: none
+
+      &.notch
+        margin-top: -15px
+        font-size: 6px

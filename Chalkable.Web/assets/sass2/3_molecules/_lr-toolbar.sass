@@ -1,0 +1,15 @@
+.lr-toolbar
+  .first-container
+    white-space: nowrap
+    overflow: hidden
+
+    .second-container
+      position: relative
+      left: 0
+
+      &:not(.freezed)
+        @include transition-property("all")
+        @include transition-duration("0.5s")
+
+      .third-container
+        display: table
