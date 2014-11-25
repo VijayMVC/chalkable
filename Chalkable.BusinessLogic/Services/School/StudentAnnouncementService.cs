@@ -97,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
                     }
-                    persons = ServiceLocator.PersonService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
+                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();

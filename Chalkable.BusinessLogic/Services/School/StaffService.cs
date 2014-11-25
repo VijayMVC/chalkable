@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
@@ -22,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditStaffSchools(IList<StaffSchool> staffSchools);
         void DeleteStaffSchools(IList<StaffSchool> staffSchools);
         IList<StaffSchool> GetStaffSchools();
+        PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
     }
 
     public class StaffService : SchoolServiceBase, IStaffService
@@ -86,5 +85,13 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             throw new NotImplementedException();
         }
+        
+        public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,
+            int start, int count)
+        {
+            return DoRead(u => new StaffDataAccess(u).SearchStaff(schoolYearId, classId, studentId, filter, orderByFirstName,
+                            start, count));
+        }
+
     }
 }

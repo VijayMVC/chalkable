@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 else
                 {
                     scores = Storage.StiActivityScoreStorage.GetSores(ann.SisActivityId.Value);
-                    persons = ServiceLocator.PersonService.GetClassStudents(ann.ClassRef, mp.Id);
+                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)

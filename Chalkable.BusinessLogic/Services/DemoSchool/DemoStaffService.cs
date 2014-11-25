@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -52,6 +50,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public IList<StaffSchool> GetStaffSchools()
+        {
+            throw new NotImplementedException();
+        }
+
+        public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,
+            int start, int count)
         {
             throw new NotImplementedException();
         }
