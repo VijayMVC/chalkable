@@ -21,16 +21,21 @@
     &.quick-app-install{
 
       .x-window-header{
-        border-bottom: 1px solid #d7d7d7;
-        padding-bottom: 15px;
-        margin-left: 0px;
-        margin-right: 12px;
+        border-bottom: 1px solid #d7d7d7 !important;
+        margin-left: 0px !important;
+        margin-right: 12px !important;
       }
+
+      .x-window-body{
+        margin-top: 20px !important;
+      }
+
       .transaction-result-view{
         text-align: center;
         .transaction-success-view{
           .desciption{
             font-weight: bold;
+            margin-bottom: 30px;
           }
           .text{
             background-position-x: 160px;
