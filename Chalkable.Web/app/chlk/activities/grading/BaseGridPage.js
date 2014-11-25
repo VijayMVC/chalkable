@@ -748,8 +748,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), '.grid-toolbar')],
             [[ria.dom.Dom, ria.dom.Event, Boolean, Number]],
             function beforeTbAnimation(toolbar, event_, isLeft_, index_){
-                var num = this.recalculateTbWidth_(toolbar);
-                toolbar.trigger(chlk.controls.LRToolbarEvents.UPDATE.valueOf());
+                var num = toolbar.getData('currentCount');
                 this.dom.find('.last-container').removeClass('last-container').removeClass('delay');
                 var startIndex = index_ ? index_ * num + num : num;
                 var node = toolbar.find('.dotted-container:eq(' + startIndex + ')');
@@ -762,35 +761,15 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
             },
 
-            [[ria.dom.Dom]],
-            Number, function recalculateTbWidth_(toolbar_){
-                var toolbar = toolbar_ || this.dom.find('.grid-toolbar'),
-                    padding = 412, maxWidth, count, width,
-                    columnWidth = 117;
-                if(!toolbar.exists())
-                    return 0;
-                maxWidth = ria.dom.Dom('#content').width() - padding;
-                count = Math.floor((maxWidth + 1) / columnWidth);
-                toolbar.find('.dotted-container').setCss('width', Math.ceil(maxWidth/count));
-                //width = count * columnWidth - 1;
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.BEFORE_RESIZE.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function beforeTbResize(toolbar, event_){
+                var padding = 412;
+                var maxWidth = ria.dom.Dom('#content').width() - padding;
                 toolbar.setCss('width', maxWidth);
                 var firstContainer = toolbar.find('.first-container'),
                     thirdContainer = toolbar.find('.third-container');
                 firstContainer.setCss('width', maxWidth);
-
-                /*if(thirdContainer.offset().left + thirdContainer.width() > firstContainer.offset().left + firstContainer.width()){
-                    this.dom.find('.next-arrow').removeClass('disabled');
-                    toolbar.find('.next-button').removeClass('disabled');
-                }
-                else{
-                    toolbar.find('.next-button').addClass('disabled');
-                    this.dom.find('.next-arrow').addClass('disabled');
-                }
-                if(toolbar.find('.prev-button').hasClass('disabled'))
-                    this.dom.find('.prev-arrow').addClass('disabled');
-                else
-                    this.dom.find('.prev-arrow').removeClass('disabled');*/
-                return count;
             },
 
             /* Activity events */
@@ -862,10 +841,6 @@ NAMESPACE('chlk.activities.grading', function () {
                         that.hideGradingPopUp();
                     }
                 });
-
-                jQuery(window).on('resize.grade', function(){
-                    that.recalculateTbWidth_();
-                })
             },
 
             Boolean, function getBooleanValue_(value){

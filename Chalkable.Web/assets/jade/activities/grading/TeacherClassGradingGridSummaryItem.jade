@@ -88,7 +88,10 @@ mixin DisplayTotalPoints(model)
         +LeftRightToolbar()(
             style="width:" + self.getTbWidth() + "px",
             itemClass='grade-container',
-            fixedElementMargin=true
+            fixedElementMargin=true,
+            fixedElementWidth=false,
+            rightPadding=-1,
+            elWidth=117
         ).grid-toolbar.i-b.big-arrows
             if self.isAbleDisplayStudentAverage()
                 +StudentAverages(self)
