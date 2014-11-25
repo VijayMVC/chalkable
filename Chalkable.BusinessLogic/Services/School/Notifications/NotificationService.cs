@@ -28,9 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         void AddAttendanceNotificationToStudent(int toPersonId, int classAttendanceId);
         void MarkAsShown(int[] notificationIds);
     }
-
-
-    //TODO: implement service
+    
     public class NotificationService : SchoolServiceBase, INotificationService
     {
         NotificationBuilder builder;

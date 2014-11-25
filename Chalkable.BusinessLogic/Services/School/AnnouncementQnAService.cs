@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -29,11 +28,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public AnnouncementQnAService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
-
-
+        
         //TODO : notification sending 
-        //TODO : tests 
-
+        
         public AnnouncementQnA AskQuestion(int announcementId, string question)
         {
             using (var uow = Update())

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
@@ -30,14 +29,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
             Storage.AlphaGradeStorage.Update(alphaGrades);
 
-        }
-
-        public void Delete(int id)
-        {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            Storage.AlphaGradeStorage.Delete(id);
         }
 
         public void Delete(IList<int> ids)
