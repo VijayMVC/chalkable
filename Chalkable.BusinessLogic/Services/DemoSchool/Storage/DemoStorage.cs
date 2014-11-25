@@ -419,9 +419,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
 
             StudentStorage.Add(new Student
-            {
-                UserId = id
-            });
+                {
+                    Id = id,
+                    BirthDate = birthDate,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Gender = gender,
+                    UserId = id
+                });
+
+            //StudentStorage.Add(new Student
+            //{
+            //    UserId = id
+            //});
 
             SchoolPersonStorage.Add(new SchoolPerson
             {
