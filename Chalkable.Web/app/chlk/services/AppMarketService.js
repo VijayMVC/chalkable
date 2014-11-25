@@ -13,7 +13,6 @@ REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.apps.AppTotalPrice');
 REQUIRE('chlk.models.apps.ApplicationForAttach');
 
-
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
 REQUIRE('chlk.models.funds.PersonBalance');
@@ -51,7 +50,6 @@ NAMESPACE('chlk.services', function () {
                 Number,
                 Number
             ]],
-
             ria.async.Future, function getApps(categories, gradeLevels,
                 filter, filterMode_, sortingMode_, start_, count_) {
 

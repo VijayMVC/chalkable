@@ -28,10 +28,14 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
 topData = self.getTopData()
 announcement = self.getAnnouncement()
 topItems = topData.getTopItems()
+-console.log(announcement.getClassId)
+-console.log(announcement.getClassId())
+-console.log(announcement.getClassId().valueOf)
 classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
 typeId = self.getSelectedTypeId()
 state = announcement && announcement.getState()
 types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+-console.log(announcement.getClassId().valueOf())
 
 .announcement-form.loader-container
     .loader
@@ -46,7 +50,7 @@ types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                 .container.panel-bg
                     +AnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
-                +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
+                +BaseAnnouncementFormContainer(self, announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
                 if announcement.getState()
                     .duplicate-btn-container
                         +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()

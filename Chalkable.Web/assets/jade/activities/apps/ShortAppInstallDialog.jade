@@ -1,0 +1,28 @@
+app =self.getApp()
+.dialog.app-market-install.quick-app-install
+    .x-window-header
+        a.close.close-btn.dark
+        h1=app.getName()
+    .x-window-body
+        .install-for
+        .details-info
+            .app-screenshots-panel
+                +Carousel()
+                    -videoUrl = app.getVideoDemoUrl() || ''
+                    if videoUrl
+                        +CarouselItem().img(data-page = 1)
+                            +Video(true)(src=videoUrl, width="450", height="300")
+                    each picture, index in app.getScreenshotPictures().getItems()
+                        +CarouselItem().img(data-page= index + 2)
+                            img(src=picture.getPictureUrl())
+            .app-description-panel
+                .description=app.getDescription()
+        +ActionForm('appmarket', 'quickInstall').instal-form
+            .install-for
+                +Hidden('appId', app.getId().valueOf())
+                +Hidden('classes', self.getClassId().valueOf())
+            .install-info
+                .install-btn
+                    +Button().special-button.green-button.install-app-btn Install App
+                    +ActionLinkButton('appmarket', 'quickAppAttach', self.getAnnouncementId(), app.getId().valueOf()).special-button.green-button.open-app-btn.x-hidden Open App
+                +ShortPayCheck(app.getId().valueOf(), self.getClassId().valueOf())

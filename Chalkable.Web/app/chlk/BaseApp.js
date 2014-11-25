@@ -37,6 +37,7 @@ REQUIRE('chlk.controls.PayCheckControl');
 REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
 REQUIRE('chlk.controls.MaskedInputControl');
+REQUIRE('chlk.controls.SimplePayCheckControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -156,6 +157,7 @@ NAMESPACE('chlk', function (){
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();
                 var serviceRoot = "/";
+
                 session.set('siteRoot', siteRoot + serviceRoot);
                 return session;
             },

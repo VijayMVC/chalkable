@@ -3,7 +3,7 @@
         h1=self.getAnnouncementTypeName() + ' STANDARDS'
         span Choose a standard that describe the item
     +ActionForm('announcement', 'addStandards').add-standards-form
-        +Hidden('announcementId', self.getAnnouncementId())
+        +Hidden('announcementid', self.getAnnouncementId())
         +Hidden('standardid', null)
         +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
         .standards-list-container

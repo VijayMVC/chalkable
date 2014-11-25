@@ -13,7 +13,7 @@ REQUIRE('chlk.models.apps.AppPlatform');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppPicture');
 REQUIRE('chlk.models.apps.AppState');
-REQUIRE('chlk.models.apps.AppScreenshots');
+REQUIRE('chlk.models.apps.AppScreenShots');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.BannedAppData');
@@ -70,7 +70,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.PictureId, 'bigPictureId',
             chlk.models.apps.AppPicture, 'iconPicture',
             chlk.models.apps.AppPicture, 'bannerPicture',
-            chlk.models.apps.AppScreenshots,  'screenshotPictures',
+            chlk.models.apps.AppScreenShots,  'screenshotPictures',
             String, 'myAppsUrl',
             String, 'secretKey',
             chlk.models.apps.AppState, 'state',

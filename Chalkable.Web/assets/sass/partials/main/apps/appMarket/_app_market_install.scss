@@ -17,7 +17,44 @@
   }
 
   .dialog{
+
+    &.quick-app-install{
+
+      .app-screenshots-panel{
+        .carousel-wrapper{
+          width: auto;
+          .carousel{
+            height: 300px;
+            .img{
+              >IMG{
+                width: 450px;
+                height: 300px;
+              }
+            }
+            .picture-button{
+              top: 118px !important;
+              &.picture-left{
+                left: 9px;
+              }
+              &.picture-right{
+                right: 9px;
+              }
+            }
+          }
+        }
+      }
+      .app-description-panel{
+        margin-top: 15px;
+        .description{
+          color: #515151;
+          text-shadow: 1px 1px 0 white;
+          font-size: 16px;
+        }
+      }
+    }
+
     &.app-market-install{
+
 
 
       .install-app-dialog-model-wait{

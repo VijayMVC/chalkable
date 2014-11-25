@@ -13,9 +13,10 @@ NAMESPACE('chlk.models.standard', function () {
         VOID, function deserialize(raw) {
             this.name = SJX.fromValue(raw.name, String);
             this.description = SJX.fromValue(raw.description, String);
-            this.announcementId = SJX.fromValue(raw.announcementId);
+            this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
             this.standardId = SJX.fromValue(raw.standardid, chlk.models.id.StandardId);
             this.grade = SJX.fromValue(raw.grade, String);
+            this.commonCoreStandardCode = SJX.fromValue(raw.ccstandardcode, String);
         },
 
         String, 'name',
@@ -24,8 +25,10 @@ NAMESPACE('chlk.models.standard', function () {
         chlk.models.id.StandardId, 'standardId',
         String, 'grade',
 
-        [[chlk.models.id.StandardId, String, String]],
-        function $(standardId_, name_, grade_){
+        String, 'commonCoreStandardCode',
+
+        [[chlk.models.id.StandardId, String, String, String]],
+        function $(standardId_, name_, grade_, ccStandardCode_){
             BASE();
             if(standardId_)
                 this.setStandardId(standardId_);
@@ -33,6 +36,8 @@ NAMESPACE('chlk.models.standard', function () {
                 this.setName(name_);
             if(grade_)
                 this.setGrade(grade_);
-            }
+            if(ccStandardCode_)
+                this.setCommonCoreStandardCode(ccStandardCode_);
+        }
         ]);
 });
