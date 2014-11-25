@@ -1,6 +1,6 @@
 NAMESPACE('chlk.models.standard', function () {
     "use strict";
-    /** @class chlk.models.standard.CommonCoreStandard*/
+    /** @class chlk.models.standard.CCStandardsCodesList*/
     CLASS(
         'CCStandardsCodesList', [
 

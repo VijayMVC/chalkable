@@ -188,7 +188,7 @@ button.disabled, button[disabled]{
   &.upper-case{
     >SPAN{
       >SPAN{
-        >BUTTON{
+        >BUTTON, >A{
           text-transform: uppercase;
         }
       }
