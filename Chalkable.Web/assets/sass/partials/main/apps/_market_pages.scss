@@ -27,7 +27,15 @@
 
 }
 
+.reviews .rating > input{
+  position: static;
+  top: 0;
+  display: none;
+}
+
 .app-market, .my-apps, .app-market-details, .apps-funds{
+
+
   .buttons-toolbar{
     .toolbar-btn{
       padding: 0 7px;
