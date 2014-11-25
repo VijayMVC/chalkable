@@ -380,6 +380,9 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('keydown', '.value-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeUpDownKeyDown(node, event){
+                if(event.keyCode == ria.dom.Keys.TAB.valueOf())
+                    return false;
+
                 var list = this.dom.find('.autocomplete-list:visible'), canGoDown, hovered;
 
                 if(event.keyCode == ria.dom.Keys.ENTER.valueOf()){

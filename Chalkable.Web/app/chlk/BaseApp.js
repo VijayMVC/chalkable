@@ -142,6 +142,8 @@ NAMESPACE('chlk', function (){
 
                 if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');
+                }else{
+                    ria.dom.Dom('#first-login-video').remove();
                 }
 
                 window.gradeLevels = window.gradeLevels || [];
