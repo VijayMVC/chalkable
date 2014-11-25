@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Chalkable.BusinessLogic.Mapping.ModelMappers;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -23,14 +19,8 @@ namespace Chalkable.BusinessLogic.Services.School
         Person GetPerson(int id);
         void ActivatePerson(int id);
         void EditEmail(int id, string email, out string error);
-        IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
-        StudentSummaryInfo GetStudentSummaryInfo(int studentId);
         IList<Person> GetAll();
         int GetSisUserId(int personId);
-        IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId);
-        IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null);
-        PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count);
-        PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
         PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count);
     }
 
@@ -194,58 +184,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
-
-
-        public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
-        {
-            if (CanGetHealthConditions())
-            {
-                var healthConditions = ConnectorLocator.StudentConnector.GetStudentConditions(studentId);
-
-                if (healthConditions == null) 
-                    return new List<StudentHealthCondition>();
-
-                var result = (from studentCondition in healthConditions
-                    where studentCondition != null
-                    select new StudentHealthCondition
-                    {
-                        Id = studentCondition.Id, 
-                        Name = studentCondition.Name, 
-                        Description = studentCondition.Description, 
-                        IsAlert = studentCondition.IsAlert, 
-                        MedicationType = studentCondition.MedicationType, 
-                        Treatment = studentCondition.Treatment
-                    }).ToList();
-                return result;
-            }
-            return new List<StudentHealthCondition>();
-        }
-
-        private bool CanGetHealthConditions()
-        {
-            return Context.Role != CoreRoles.STUDENT_ROLE
-                   && (ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_HEALTH_CONDITION})
-                       || ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_MEDICAL}));
-        }
-
-        public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
-        {
-            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
-            var student = GetPerson(studentId);
-            var infractions = ServiceLocator.InfractionService.GetInfractions();
-            var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
-            IList<AnnouncementComplex> anns;
-            using (var uow = Read())
-            {
-                var da = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
-                anns = da.GetByActivitiesIds(activitiesIds);
-            }
-            var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
-            return res;
-        }
-
-
+        
         public int GetSisUserId(int personId)
         {
             using (var uow = Read())
@@ -258,43 +197,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (person != null && person.UserId.HasValue) return person.UserId.Value;
 
                 throw new ChalkableException("Current person doesn't have user data");
-            }
-        }
-
-        public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
-        {
-            using (var uow = Read())
-            {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                return da.GetTeacherStudents(teacherId, schoolYearId);
-            }
-        }
-
-        public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
-        {
-            using (var uow = Read())
-            {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                return da.GetStudents(classId, markingPeriodId, isEnrolled);
-            }
-        }
-
-        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count)
-        {
-            using (var uow = Read())
-            {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                return da.SearchStudents(schoolYearId, classId, teacherId, filter, orderByFirstName, start, count);
-            }
-        }
-
-        public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,
-            int start, int count)
-        {
-            using (var uow = Read())
-            {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                return da.SearchStaff(schoolYearId, classId, studentId, filter, orderByFirstName, start, count);
             }
         }
 

@@ -30,7 +30,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 var student = SchoolLocator.PersonService.GetPerson(schoolPersonId);
                 return Json(ShortPersonViewData.Create(student));
             }
-            var studentSummaryInfo = SchoolLocator.PersonService.GetStudentSummaryInfo(schoolPersonId);
+            var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(schoolPersonId);
             var classes = SchoolLocator.ClassService.GetClasses(Context.SchoolYearId, null, schoolPersonId).ToList();
             var classPersons = SchoolLocator.ClassService.GetClassPersons(schoolPersonId, true);
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
@@ -50,7 +50,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
 
             }
-            var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(schoolPersonId);
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             return Json(res);
@@ -62,7 +62,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             var syId = GetCurrentSchoolYearId();
             var res = (StudentInfoViewData)GetInfo(personId, studentInfo=> StudentInfoViewData.Create(studentInfo, syId));
-            var stHealsConditions = SchoolLocator.PersonService.GetStudentHealthConditions(personId);
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             //parents functionality are not implemanted yet
             //var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
@@ -77,7 +77,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             int? teacherId = null;
             if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
                 teacherId = SchoolLocator.Context.PersonId;
-            var res = SchoolLocator.PersonService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, filter, byLastName != true, start ?? 0, count ?? 10);
+            var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, filter, byLastName != true, start ?? 0, count ?? 10);
             return Json(res.Transform(StudentViewData.Create));
         }
 

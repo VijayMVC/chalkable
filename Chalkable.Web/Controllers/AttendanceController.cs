@@ -53,7 +53,7 @@ namespace Chalkable.Web.Controllers
                 throw new ChalkableException("No marking period scheduled on this date");
             }
 
-            var persons = SchoolLocator.PersonService.GetClassStudents(classId, mp.Id);
+            var persons = SchoolLocator.StudentService.GetClassStudents(classId, mp.Id);
             SchoolLocator.AttendanceService.SetClassAttendances(date, classId, persons.Select(x => new ClassAttendance
             {
                 AttendanceReasonRef = attendanceReasonId,
@@ -116,7 +116,7 @@ namespace Chalkable.Web.Controllers
             if (seatingChart != null)
             {
                 var attendances = ClassAttendanceList(d, classId);
-                var students = SchoolLocator.PersonService.GetClassStudents(classId, markingPeriod.Id, true);
+                var students = SchoolLocator.StudentService.GetClassStudents(classId, markingPeriod.Id, true);
                 return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);               
             }
             return null;

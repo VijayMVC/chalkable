@@ -76,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriodDetails gradingPeriod, Gradebook gradebook)
         {
-            var students = ServiceLocator.PersonService.GetClassStudents(classId, gradingPeriod.MarkingPeriodRef);
+            var students = ServiceLocator.StudentService.GetClassStudents(classId, gradingPeriod.MarkingPeriodRef);
             var annQuery = new AnnouncementsQuery { ClassId = classId };
             annQuery.FromDate = gradingPeriod.StartDate;
             annQuery.ToDate = gradingPeriod.EndDate;
@@ -235,7 +235,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
 
             var stiSectionsGrades = Storage.StiGradeBookStorage.GetSectionGradesSummary(classesIds, gradingPeriodId);
-            var students = ServiceLocator.PersonService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
+            var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
             var res = new List<ShortClassGradesSummary>();
             foreach (var sectionGrade in stiSectionsGrades)
             {

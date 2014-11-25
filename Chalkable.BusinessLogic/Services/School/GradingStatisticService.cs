@@ -208,7 +208,7 @@ namespace Chalkable.BusinessLogic.Services.School
             annQuery.ToDate = gradingPeriod.EndDate;
             var classRoomOptions = gradebook.Options;
             Trace.WriteLine("GetClassStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            var students = ServiceLocator.PersonService.GetClassStudents(classId, mpId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true);
+            var students = ServiceLocator.StudentService.GetClassStudents(classId, mpId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true);
             Trace.WriteLine("GetAnnouncementsComplex " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
             Trace.WriteLine("BuildGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
@@ -384,7 +384,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             var classesIds = classesDetails.Select(x => x.Id).ToList();
             var stiSectionsGrades = ConnectorLocator.GradebookConnector.GetSectionGradesSummary(classesIds, gradingPeriodId);
-            var students = ServiceLocator.PersonService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
+            var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
             var res = new List<ShortClassGradesSummary>();
             foreach (var sectionGrades in stiSectionsGrades)
             {
