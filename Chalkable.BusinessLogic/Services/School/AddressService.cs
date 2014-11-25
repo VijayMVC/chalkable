@@ -71,12 +71,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int id)
         {
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
             {
                 var da = new AddressDataAccess(uow);
-                var address = da.GetById(id);
-                if (!AddressSecurity.CanModify(address, Context))
-                    throw new ChalkableSecurityException();
                 da.Delete(id);
                 uow.Commit();
             }

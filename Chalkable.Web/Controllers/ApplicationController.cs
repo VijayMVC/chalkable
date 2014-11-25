@@ -211,10 +211,10 @@ namespace Chalkable.Web.Controllers
             
         }
 
-        private const string contentType = "text/html";
+        private const string CONTENT_TYPE = "text/html";
         private ActionResult PrepareAppInfo(Application application, bool needsliveApp = false, bool needsSecretKey = false)
         {
-            return Json(PrepareAppInfo(MasterLocator, application, needsliveApp, needsSecretKey), contentType);
+            return Json(PrepareAppInfo(MasterLocator, application, needsliveApp, needsSecretKey), CONTENT_TYPE);
         }
         public static ApplicationViewData PrepareAppInfo(IServiceLocatorMaster locator, Application application, 
             bool needsliveApp = false, bool needsSecretKey = false)

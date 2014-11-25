@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Mime;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -28,29 +26,25 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public ChalkableDepartment Add(string name, IList<string> keywords, byte[] icon)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
+            BaseSecurity.EnsureSysAdmin(Context);
+            var res = new ChalkableDepartment
+            {
+                Id = Guid.NewGuid(),
+                Keywords = keywords.JoinString(","),
+                Name = name
+            };
             using (var uow = Update())
             {
-                var res = new ChalkableDepartment
-                    {
-                        Id = Guid.NewGuid(),
-                        Keywords = keywords.JoinString(","),
-                        Name = name
-                    };
                 new ChalkableDepartmentDataAccess(uow).Insert(res);
                 ServiceLocator.DepartmentIconService.UploadPicture(res.Id, icon);
                 uow.Commit();
-                return res;
             }
+            return res;
         }
 
         public ChalkableDepartment Edit(Guid id, string name, IList<string> keywords, byte[] icon)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            
+            BaseSecurity.EnsureSysAdmin(Context);
             using (var uow = Update())
             {
                 var da = new ChalkableDepartmentDataAccess(uow);
@@ -66,9 +60,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void Delete(Guid id)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
+            BaseSecurity.EnsureSysAdmin(Context);
             using (var uow = Update())
             {
                 new ChalkableDepartmentDataAccess(uow).Delete(id);
@@ -76,21 +68,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 uow.Commit();
             }
         }
-
-
+        
         public IList<ChalkableDepartment> GetChalkableDepartments()
         {
-            using (var uow = Read())
-            {
-                return new ChalkableDepartmentDataAccess(uow).GetAll();
-            }
+            return DoRead(u => new ChalkableDepartmentDataAccess(u).GetAll());
         }
+
         public ChalkableDepartment GetChalkableDepartmentById(Guid id)
         {
-            using (var uow = Read())
-            {
-                return new ChalkableDepartmentDataAccess(uow).GetByIdOrNull(id);
-            }
+            return DoRead(u => new ChalkableDepartmentDataAccess(u).GetByIdOrNull(id));
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -15,7 +14,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
         PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = int.MaxValue);
         void Update(District district);
-        void DeleteDistrict(Guid id);
         bool IsOnline(Guid id);
     }
 
@@ -32,6 +30,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone)
         {
+            BaseSecurity.EnsureSysAdmin(Context);
             string server;
             District res;
             using (var uow = Update())
@@ -73,30 +72,19 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = Int32.MaxValue)
         {
-            using (var uow = Read())
-            {
-                return new DistrictDataAccess(uow).GetSyncStatuses(start, count);
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            return DoRead(u => new DistrictDataAccess(u).GetSyncStatuses(start, count));
         }
 
         public void Update(District district)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DistrictDataAccess(uow).Update(district);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DistrictDataAccess(u).Update(district));
         }
         
         public District GetByIdOrNull(Guid id)
         {
-            using (var uow = Read())
-            {
-                var da = new DistrictDataAccess(uow);
-                return da.GetByIdOrNull(id);
-            }
+            return DoRead(u => new DistrictDataAccess(u).GetByIdOrNull(id));
         }
         
         private static string FindServer(UnitOfWork uow)
@@ -114,23 +102,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (s == null)
                 throw new NullReferenceException();
             return s;
-        }
-
-        public void DeleteDistrict(Guid id)
-        {
-            var district = GetByIdOrNull(id);
-            using (var uow = Update())
-            {
-                var da = new DistrictDataAccess(uow);
-                da.Delete(id);
-                uow.Commit();
-            }
-
-            using (var unitOfWork = new UnitOfWork(Settings.GetSchoolConnectionString(district.ServerUrl, "Master"), false))
-            {
-                var da = new DistrictDataAccess(unitOfWork);
-                da.DeleteDistrictDataBase(district.Id.ToString());
-            }
         }
 
         public bool IsOnline(Guid id)

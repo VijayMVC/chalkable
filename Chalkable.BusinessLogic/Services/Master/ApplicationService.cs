@@ -13,7 +13,6 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IApplicationService
     {
-        IList<AppPermissionType> GetPermisions(Guid applicationId);
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
         PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
@@ -39,17 +38,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public ApplicationService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
-
-        public IList<AppPermissionType> GetPermisions(Guid applicationId)
-        {
-            using (var uow = Read())
-            {
-                var app = new ApplicationDataAccess(uow).
-                    GetApplicationById(applicationId);
-                return app.Permissions.Select(x => x.Permission).ToList();
-            }
-        }
-
+        
         public IList<AppPermissionType> GetPermisions(string applicationUrl)
         {
             using (var uow = Read())
@@ -152,17 +141,10 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        //TODO: do we ned this?
+        //TODO: can we apply thin on service leyer get methods?
         public bool CanGetSecretKey(IList<Application> applications)
         {
-            if (Context.Role.Id == CoreRoles.STUDENT_ROLE.Id)//WHY???
-                return true;
-            if (Context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id)
-            {
-                var developer = ServiceLocator.DeveloperService.GetDeveloperById(Context.UserId);
-                return applications.All(x => x.DeveloperRef == developer.Id);
-            }
-            return false;
+            return applications.All(x => x.DeveloperRef == Context.UserId);
         }
 
         public bool HasMyApps(Application application)

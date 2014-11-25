@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
@@ -24,14 +23,17 @@ namespace Chalkable.BusinessLogic.Services.Master
 
     public class EmailService : MasterServiceBase, IEmailService
     {
+        private const string CONFIRM_URL_FORMAT = "{0}/User/Confirm?key={1}";
+        private const string DEVELOPER_CONFIRM_URL_FORMAT = "{0}/Developer/GoLive?key={1}&applicationId={2}";
+
         public EmailService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
-        private const string confirmUrlFormat = "{0}/User/Confirm?key={1}";
+        
         public void SendResettedPasswordToPerson(User user, string confirmationKey)
         {
             var bodyTemplate = PreferenceService.Get(Preference.RESETTED_PASSWORD_EMAIL_BODY).Value;
-            var url = string.Format(confirmUrlFormat, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
+            var url = string.Format(CONFIRM_URL_FORMAT, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
             var body = string.Format(bodyTemplate, user.FullName, url);
             SendResettedPassword(user.Login, body);
             user.LoginInfo.LastPasswordReset = DateTime.UtcNow;
@@ -40,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public void SendResettedPasswordToDeveloper(Developer developer, string confirmationKey)
         {
             var bodyTemplate = PreferenceService.Get(Preference.RESETTED_PASSWORD_EMAIL_BODY).Value;
-            var url = string.Format(confirmUrlFormat, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
+            var url = string.Format(CONFIRM_URL_FORMAT, PreferenceService.Get(Preference.APPLICATION_URL).Value, confirmationKey);
             var body = string.Format(bodyTemplate, developer.DisplayName, "", url);
             SendResettedPassword(developer.Email, body);
         }
@@ -88,8 +90,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             mailMessage.Subject = subject;
             SendMail(mailMessage, sysEMail);
         }
-
-        private const string developerConfirmUrlFormat = "{0}/Developer/GoLive?key={1}&applicationId={2}";
+        
         public void SendApplicationEmailToDeveloper(Application application)
         {
 
@@ -101,7 +102,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 case ApplicationStateEnum.Approved:
                     mail.Subject = PreferenceService.Get(Preference.APPLICATION_APPROVED_EMAIL_SUBJECT).Value;
                     var confirmationKey = developer.User.ConfirmationKey;
-                    var url = string.Format(developerConfirmUrlFormat, PreferenceService.Get(Preference.APPLICATION_URL).Value
+                    var url = string.Format(DEVELOPER_CONFIRM_URL_FORMAT, PreferenceService.Get(Preference.APPLICATION_URL).Value
                         , confirmationKey, application.Id);
                     mail.Body = string.Format(PreferenceService.Get(Preference.APPLICATION_APPROVED_EMAIL_BODY).Value,
                         application.Name, developer.Name, url);

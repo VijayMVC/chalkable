@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.Master;
@@ -131,13 +132,11 @@ namespace Chalkable.Web.Controllers
                 if (departmentids == null) departmentids = new GuidList();
                 if (gradelevelids == null) gradelevelids = new IntList();
                 if (classids == null) classids = new IntList();
-
-                string description = ChlkResources.APP_WAS_BOUGHT;
+                
                 //todo: person payment
-                // MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, description);   
-                var classes = classids.Select(x => x.ToString()).ToList();
-                ////var departments = appinstallAction.ApplicationInstallActionDepartments.Select(x => x.ChalkableDepartment.Name).ToList();//TODO: fix after DB remapping
-                var gradeLevels = gradelevelids.Select(x => x.ToString()).ToList();
+                // MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, ChlkResources.APP_WAS_BOUGHT);   
+                var classes = classids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
+                var gradeLevels = gradelevelids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
                 var departments = departmentids.Select(x => x.ToString()).ToList();
                 MasterLocator.UserTrackingService.BoughtApp(Context.Login, applicationId.ToString(), classes, departments, gradeLevels);
             }

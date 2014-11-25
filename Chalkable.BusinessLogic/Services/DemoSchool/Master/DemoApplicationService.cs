@@ -79,16 +79,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Storage.ApplicationRatingStorage.Exists(applicationId, Context.UserId);
         }
 
-        public IList<AppPermissionType> GetPermisions(Guid applicationId)
-        {
-            using (var uow = Read())
-            {
-                var app = new ApplicationDataAccess(uow).
-                    GetApplicationById(applicationId);
-                return app.Permissions.Select(x => x.Permission).ToList();
-            }
-        }
-
         public IList<AppPermissionType> GetPermisions(string applicationUrl)
         {
             using (var uow = Read())
@@ -155,7 +145,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 return true;
             if (Context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id)
             {
-                var developer = ServiceLocator.DeveloperService.GetDeveloperById(Context.UserId);
+                var developer = ServiceLocator.DeveloperService.GetById(Context.UserId);
                 return applications.All(x => x.DeveloperRef == developer.Id);
             }
             return false;

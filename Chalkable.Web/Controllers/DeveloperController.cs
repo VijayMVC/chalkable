@@ -53,33 +53,31 @@ namespace Chalkable.Web.Controllers
             var result = new List<ApiExplorerViewData>();
 
             var descriptions = ChalkableApiExplorerLogic.GetApi();
-            var apiRoles = new List<string>();
-
             foreach (var description in descriptions)
             {
                 var roleName = description.Key.ToLowerInvariant();
                 Trace.WriteLine("#123 Developer/GetAccessToken for role", roleName);
-                if (roleName == CoreRoles.SUPER_ADMIN_ROLE.LoweredName 
-                    || roleName == CoreRoles.CHECKIN_ROLE.LoweredName 
-                    || roleName == CoreRoles.ADMIN_GRADE_ROLE.LoweredName
-                    || roleName == CoreRoles.ADMIN_VIEW_ROLE.LoweredName
-                    || roleName == CoreRoles.ADMIN_EDIT_ROLE.LoweredName) continue;
-                apiRoles.Add(roleName);
-                var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
-                var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, context.SchoolYearId, MasterLocator);
-                result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
+                if (ChalkableApiExplorerLogic.IsValidApiRole(roleName))
+                {
+                    var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
+                    var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, context.SchoolYearId, MasterLocator);
+                    result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
+                }
+                    
             }
             return Json(result, 8);
         }
 
         public ActionResult GetRequiredMethodCallsFor(string query, bool isMethod, string role)
         {
-            var list = ApiPathfinder.GetRequiredMethodCallsFor(query, isMethod, role);
+            var list = ChalkableApiExplorerLogic.IsValidApiRole(role) ? ApiPathfinder.GetRequiredMethodCallsFor(query, isMethod, role) 
+                                                                      : new List<ApiExplorerDropdownItemViewData>();
             return Json(list);
         }
         public ActionResult MethodParamList(string query, string role)
         {
-            var list = ApiPathfinder.GetParamsListByQuery(query, role);
+            var list = ChalkableApiExplorerLogic.IsValidApiRole(role) ? ApiPathfinder.GetParamsListByQuery(query, role)
+                                                                      : new List<ApiExplorerDropdownItemViewData>();
             return Json(list);
         }
 
@@ -91,7 +89,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult DeveloperInfo(Guid developerId)
         {
-            var developer = MasterLocator.DeveloperService.GetDeveloperById(developerId);
+            var developer = MasterLocator.DeveloperService.GetById(developerId);
             return Json(DeveloperViewData.Create(developer));
         }
 

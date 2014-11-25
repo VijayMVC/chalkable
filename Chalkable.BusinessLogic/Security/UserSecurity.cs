@@ -6,7 +6,7 @@ namespace Chalkable.BusinessLogic.Security
 {
     public static class UserSecurity
     {
-        public static bool CanCreate(UserContext context, Guid? districtId)
+        private static bool CanCreate(UserContext context, Guid? districtId)
         {
             return BaseSecurity.IsSysAdmin(context) ||
                    (BaseSecurity.IsAdminEditor(context) && context.DistrictId == districtId);

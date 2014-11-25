@@ -32,7 +32,7 @@ namespace Chalkable.BackgroundTaskProcessor
             if (task.DistrictRef.HasValue)
             {
                 var d = sl.DistrictService.GetByIdOrNull(task.DistrictRef.Value);
-                logFlushSize = d.SyncLogFlushSize;
+                logFlushSize = d.LastSync.HasValue ? d.SyncLogFlushSize : 1;
             }
             using (var log = new BackgroundTaskService.BackgroundTaskLog(task.Id, logFlushSize))
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -41,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         bool ResetPassword(string email);
         User GetSysAdmin();
         void DeleteUsers(IList<int> localIds, Guid districtId);
-        void ImportEdit(IList<User> users);
+        void Edit(IList<User> users);
         void Add(IList<User> users);
         void CreateUserLoginInfos();
     }
@@ -60,42 +61,32 @@ namespace Chalkable.BusinessLogic.Services.Master
             return b64;
         }
 
-        public void ImportEdit(IList<User> users)
+        public void Edit(IList<User> users)
         {
-            using (var uow = Update())
-            {
-                var da = new UserDataAccess(uow);
-                da.UpdateUsersForImport(users);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new UserDataAccess(u).UpdateUsersForImport(users));
         }
 
         public void Add(IList<User> users)
         {
-            using (var uow = Update())
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u =>
             {
-                var da = new UserDataAccess(uow);
-                da.Insert(users);
-                var loginInfos = users.Where(x=>x.LoginInfo != null).Select(x => x.LoginInfo).ToList();
+                new UserDataAccess(u).Insert(users);
+                var loginInfos = users.Where(x => x.LoginInfo != null).Select(x => x.LoginInfo).ToList();
                 if (loginInfos.Count > 0)
-                    new UserLoginInfoDataAccess(uow).Insert(loginInfos);
-                uow.Commit();
-            }
+                    new UserLoginInfoDataAccess(u).Insert(loginInfos);
+            });
         }
 
         public void CreateUserLoginInfos()
         {
-            using (var uow = Update())
-            {
-                var da = new UserDataAccess(uow);
-                da.CreateUserLoginInfos();
-                uow.Commit();
-            };
+            DoUpdate(u => new UserDataAccess(u).CreateUserLoginInfos());
         }
 
         public UserContext Login(string login, string password)
         {
-            string error = null;
+            string error;
             var res = Login(login, password, out error);
             return res;
         }
@@ -201,13 +192,13 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 try
                 {
-                    user = SaveSisToken(user, uow, ref iNowConnector);
+                    SaveSisToken(user, uow, ref iNowConnector);
                 }
-                catch (HttpException ex)
+                catch (HttpException)
                 {
                     return null;
                 }
-
+                Trace.Assert(user.DistrictRef.HasValue);
                 var schoolL = ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
                 Data.School.Model.SchoolYear schoolYear;
                 SchoolUser schoolUser;
@@ -259,7 +250,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private UserContext DeveloperLogin(User user)
         {
-            var developer = ServiceLocator.DeveloperService.GetDeveloperById(user.Id);
+            var developer = ServiceLocator.DeveloperService.GetById(user.Id);
             return GetDeveloperContext(developer);
         }
 
@@ -270,9 +261,10 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private UserContext GetDeveloperContext(Developer developer)
         {
+            Trace.Assert(developer.DistrictRef.HasValue);
             var user = developer.User;
             user.DistrictRef = developer.DistrictRef;
-            user.LoginInfo = new UserLoginInfo() {Id = user.Id};
+            user.LoginInfo = new UserLoginInfo {Id = user.Id};
             user.District = DemoDistrictStorage.CreateDemoDistrict(developer.DistrictRef.Value);
             return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id, null);
         }
@@ -303,7 +295,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 throw new ChalkableException(string.Format("There is no school in current District with such schoolYearId : {0}", schoolYear.Id));    
         }
         
-        private User SaveSisToken(User user, UnitOfWork uow, ref ConnectorLocator iNowConnector)
+        private void SaveSisToken(User user, UnitOfWork uow, ref ConnectorLocator iNowConnector)
         {
             if (user.SisUserName != null)
             {
@@ -318,7 +310,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                     UpdateUserLoginInfo(user, iNowConnector.Token, iNowConnector.TokenExpires, null, uow);
                 }
             }
-            return user;
         }
 
         private User GetDemoUser(string roleName, string prefix)
@@ -452,7 +443,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var key = GenerateConfirmationKey();
                 if (user.IsDeveloper)
                 {
-                    var developer = ServiceLocator.DeveloperService.GetDeveloperById(user.Id);
+                    var developer = ServiceLocator.DeveloperService.GetById(user.Id);
                     ServiceLocator.EmailService.SendResettedPasswordToDeveloper(developer, key);
                 }
                 else if (user.SisUserId.HasValue)

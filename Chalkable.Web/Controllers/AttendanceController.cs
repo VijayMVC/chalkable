@@ -84,20 +84,6 @@ namespace Chalkable.Web.Controllers
             return listClassAttendance;
         } 
         
-        public ActionResult AttendanceTest()
-        {
-            if (HttpContext.Cache["CONTEXT"] == null)
-            {
-                var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-                var c = serviceLocator.UserService.Login("user1195_6cf8e8ab-2cae-4d17-8b7c-59bc3b1134fe@chalkable.com",
-                                                         "Qwerty1@");
-                HttpContext.Cache["CONTEXT"] = c;
-            }
-            var context = HttpContext.Cache["CONTEXT"] as UserContext;
-            InitServiceLocators(context);
-            return ClassList(new DateTime(2013, 11, 18), 635);
-        }
-        
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetAttendanceForStudent(DateTime? datetime, int studentId)
         {

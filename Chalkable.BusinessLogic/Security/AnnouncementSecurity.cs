@@ -21,23 +21,9 @@ namespace Chalkable.BusinessLogic.Security
             return BaseSecurity.IsSysAdmin(context) || announcement.IsOwner;
         }
 
-
-       
-
-        //public static bool CanModifyAnnouncementQnA(AnnouncementQnAComplex announcementQnA, UserContext context)
-        //{
-        //    return BaseSecurity.IsSysAdmin(context) || context.UserLocalId == announcementQnA.Answerer.Id;
-        //}
-
         public static bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment, UserContext context)
         {
             return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.PersonId;
         }
-        //public static bool CanAttach(AnnouncementDetails announcementDetails, UserContext context)
-        //{
-        //    return CanModifyAnnouncement(announcementDetails, context) ||
-        //           announcementDetails.StudentAnnouncements.Any(x => x.Student.Id == context.UserLocalId);
-            
-        //}
     }
 }

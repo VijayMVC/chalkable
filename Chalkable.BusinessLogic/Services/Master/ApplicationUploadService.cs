@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
                 uow.Commit();
             }
-            application.Developer = ServiceLocator.DeveloperService.GetDeveloperById(application.DeveloperRef);
+            application.Developer = ServiceLocator.DeveloperService.GetById(application.DeveloperRef);
             return application;
         }
         private string GenerateSecretKey()
