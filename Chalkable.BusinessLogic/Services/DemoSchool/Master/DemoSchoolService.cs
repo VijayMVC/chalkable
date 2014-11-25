@@ -10,15 +10,10 @@ using Chalkable.Common.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
-    public class DemoSchoolService : DemoMasterServiceBase, Services.Master.ISchoolService
+    public class DemoSchoolService : DemoMasterServiceBase, ISchoolService
     {
         public DemoSchoolService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
         {
-        }
-
-        public void Update(Data.Master.Model.School school)
-        {
-            Storage.MasterSchoolStorage.Update(school);
         }
 
         public PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count)
@@ -90,11 +85,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             return
                 Storage.MasterSchoolStorage.GetAll().FirstOrDefault(x => x.DistrictRef == districtRef && x.LocalId == localId);
-        }
-
-        public Data.Master.Model.School GetByIdOrNull(Guid id)
-        {
-            return Storage.MasterSchoolStorage.GetByIdOrNull(id);
         }
     }
 }

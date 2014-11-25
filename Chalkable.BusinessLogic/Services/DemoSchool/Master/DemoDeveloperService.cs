@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public Developer GetDeveloperById(Guid developerId)
+        public Developer GetById(Guid developerId)
         {
             throw new NotImplementedException();
         }

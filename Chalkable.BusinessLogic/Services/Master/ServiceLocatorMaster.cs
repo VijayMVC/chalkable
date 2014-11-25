@@ -17,7 +17,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         IPreferenceService PreferenceService { get; }
         IChalkableDepartmentService ChalkableDepartmentService { get; }
         IPersonPictureService PersonPictureService { get; }
-        IPictureService CourseIconService { get; }
         IPictureService DepartmentIconService { get; }
         IPictureService FundRequestPictureService { get; }
         IPictureService ApplicationPictureService { get; }
@@ -42,7 +41,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IPreferenceService preferenceService;
         private IChalkableDepartmentService chalkableDepartmentService;
         private IPersonPictureService personPictureService;
-        private IPictureService courseIconService;
         private IPictureService departmentIconService;
         private IPictureService fundRequestPictureService;
         private IPictureService applicationPictureService;
@@ -62,7 +60,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             preferenceService = new PreferenceService(this);
             chalkableDepartmentService = new ChalkableDepartmentService(this);
             personPictureService = new PersonPictureService(this);
-            courseIconService = new CourseIconService(this);
             departmentIconService = new DepartmentIconService(this);
             districtService = new DistrictService(this);
             applicationService = new ApplicationService(this);
@@ -86,7 +83,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPreferenceService PreferenceService { get { return preferenceService; } }
         public IChalkableDepartmentService ChalkableDepartmentService { get { return chalkableDepartmentService; } }
         public IPersonPictureService PersonPictureService { get { return personPictureService; } }
-        public IPictureService CourseIconService { get { return courseIconService; } }
         public IPictureService DepartmentIconService { get { return departmentIconService; } }
         public IApplicationService ApplicationService { get { return applicationService; } }
         public ICategoryService CategoryService { get { return categoryService; } }

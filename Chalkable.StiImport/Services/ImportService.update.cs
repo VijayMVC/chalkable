@@ -191,7 +191,7 @@ namespace Chalkable.StiImport.Services
                 SisUserId = x.UserID,
                 SisUserName = x.UserName
             }).ToList();
-            ServiceLocatorMaster.UserService.ImportEdit(users);
+            ServiceLocatorMaster.UserService.Edit(users);
         }
 
         private void UpdatePersons()

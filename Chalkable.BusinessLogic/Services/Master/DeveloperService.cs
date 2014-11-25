@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.Common.Exceptions;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IDeveloperService
     {
         Developer GetDeveloperByDictrict(Guid districtId);
-        Developer GetDeveloperById(Guid developerId);
+        Developer GetById(Guid developerId);
         IList<Developer> GetDevelopers();
         Developer Add(string login, string password, string name, string webSite, string paypalLogin);
         Developer Edit(Guid developerId, string name, string email, string webSite, string paypalLogin);
@@ -21,84 +21,65 @@ namespace Chalkable.BusinessLogic.Services.Master
         public DeveloperService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
-
-        //TODO: needs test 
+        
         public Developer GetDeveloperByDictrict(Guid districtId)
         {
-            using (var uow = Read())
-            {
-                return new DeveloperDataAccess(uow).GetDeveloper(districtId);
-            }
+            return DoRead(u => new DeveloperDataAccess(u).GetDeveloper(districtId));
         }
 
-        public Developer GetDeveloperById(Guid developerId)
+        public Developer GetById(Guid developerId)
         {
-            using (var uow = Read())
-            {
-                return new DeveloperDataAccess(uow).GetById(developerId);
-            }
+            return DoRead(u => new DeveloperDataAccess(u).GetById(developerId));
         }
 
         public IList<Developer> GetDevelopers()
         {
-            using (var uow = Read())
-            {
-                return new DeveloperDataAccess(uow).GetAll();
-            }
+            return DoRead(u => new DeveloperDataAccess(u).GetAll());
         }
 
         public Developer Edit(Guid developerId, string name, string email, string webSite, string paypalLogin)
         {
-            using (var uow = Update())
+            BaseSecurity.EnsureSysAdminOrCurrentUser(developerId, Context);
+
+            var user = ServiceLocator.UserService.GetById(developerId);
+            user.Login = email;
+            var developer = GetById(developerId);
+            developer.Name = name;
+            developer.WebSite = webSite;
+            developer.PayPalLogin = paypalLogin;
+            DoUpdate(u =>
             {
-                var da = new DeveloperDataAccess(uow);
-                var developer = da.GetById(developerId);
-                ServiceLocator.UserService.ChangeUserLogin(developerId, email); // security here 
-                developer.Name = name;
-                developer.WebSite = webSite;
-                developer.PayPalLogin = paypalLogin;
-                da.Update(developer);
-                uow.Commit();
-                return developer;
-            }
+                new DeveloperDataAccess(u).Update(developer);
+                new UserDataAccess(u).Update(user);
+            });
+            return developer;
         }
 
 
         public Developer Add(string login, string password, string name, string webSite, string paypalLogin)
         {
-            using (var uow = Update())
+            var user = ServiceLocator.UserService.CreateDeveloperUser(login, password);
+            var res = new Developer
             {
-                var user = ServiceLocator.UserService.CreateDeveloperUser(login, password); // security here 
-                var res = new Developer
-                    {
-                        Id = user.Id,
-                        Name = name,
-                        WebSite = webSite,
-                        User = user,
-                        DistrictRef = user.Id,
-                        PayPalLogin = paypalLogin
-                    };
-                new DeveloperDataAccess(uow).Insert(res);
-                uow.Commit();
-                return res;
-            }
+                Id = user.Id,
+                Name = name,
+                WebSite = webSite,
+                User = user,
+                DistrictRef = user.Id,
+                PayPalLogin = paypalLogin
+            };
+            DoUpdate(u => new DeveloperDataAccess(u).Insert(res));
+            return res;
         }
 
 
         public Developer ChangePayPalLogin(Guid developerId, string paypalLogin)
         {
-            if(Context.DeveloperId != developerId)
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var da = new DeveloperDataAccess(uow);
-                var developer = da.GetById(developerId);
-                developer.PayPalLogin = paypalLogin;
-                da.Update(developer);
-                uow.Commit();
-                return developer;
-            }
-
+            BaseSecurity.EnsureSysAdminOrCurrentUser(developerId, Context);
+            var developer = GetById(developerId);
+            developer.PayPalLogin = paypalLogin;
+            DoUpdate(u=>new DeveloperDataAccess(u).Update(developer));
+            return developer;
         }
     }
 }

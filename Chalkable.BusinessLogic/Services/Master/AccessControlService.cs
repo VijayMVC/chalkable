@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Security.Authentication;
@@ -28,7 +27,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         private const string GRANT_TYPE = "authorization_code";
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
         private const string REQUEST_METHOD = "POST";
-        private const string API_EXPLORER_SCOPE = "api.explorer.scope";
 
         public AccessControlService(IServiceLocatorMaster locator)
             : base(locator)
@@ -52,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private AccessTokenResponse Authorize(Uri accessTokenUri, string clientId,
             string clientSecret, string scope, Uri redirectUri, string refreshToken)
         {
-            AccessTokenResponse result = null;
+            AccessTokenResponse result;
             var authorizeRequest = BuildAccessTokenRequest(accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken);
 
             var serializer = new OAuthMessageSerializer();

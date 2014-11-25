@@ -258,6 +258,18 @@ namespace Chalkable.Web.Logic.ApiExplorer
 
     public static class ChalkableApiExplorerLogic
     {
+
+        public static Boolean IsValidApiRole(string roleName)
+        {
+            var loweredRoleName = roleName.ToLowerInvariant();
+            return
+                loweredRoleName != CoreRoles.SUPER_ADMIN_ROLE.LoweredName &&
+                loweredRoleName != CoreRoles.CHECKIN_ROLE.LoweredName &&
+                loweredRoleName != CoreRoles.ADMIN_GRADE_ROLE.LoweredName &&
+                loweredRoleName != CoreRoles.ADMIN_VIEW_ROLE.LoweredName &&
+                loweredRoleName != CoreRoles.ADMIN_EDIT_ROLE.LoweredName;
+        }
+
         private static Dictionary<string, IList<ChalkableApiControllerDescription>> descriptions;
         private static Dictionary<string, Dictionary<string, string>> fakeResponses;
 
@@ -365,13 +377,15 @@ namespace Chalkable.Web.Logic.ApiExplorer
                             IsNullable = IsNullableType(param),
                             ParamType = GetParameterType(param.ParameterType)
                         });
-
                     }
 
-                    var avRoles = attribute.Roles.Select(x => x.ToLowerInvariant()).ToList();
+                    var avRoles = attribute.Roles
+                        .Select(x => x.ToLowerInvariant()).ToList();
+
                     foreach (var role in avRoles)
                     {
-                        roles.Add(role);
+                       if (IsValidApiRole(role))
+                            roles.Add(role);
                     }
 
                     mList.Add(new ChalkableApiMethodDescription

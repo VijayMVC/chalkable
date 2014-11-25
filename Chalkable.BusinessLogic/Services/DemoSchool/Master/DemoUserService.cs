@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public void ImportEdit(IList<User> users)
+        public void Edit(IList<User> users)
         {
             throw new NotImplementedException();
         }

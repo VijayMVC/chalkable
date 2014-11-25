@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.Master.DataAccess;
@@ -114,10 +115,10 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data)
         {
-            DateTime now = DateTime.UtcNow;
+            BaseSecurity.EnsureSysAdmin(Context);
             var task = new BackgroundTask
                 {
-                    Created = now,
+                    Created = DateTime.UtcNow,
                     Data = data,
                     Id = Guid.NewGuid(),
                     Scheduled = scheduled,
@@ -125,54 +126,37 @@ namespace Chalkable.BusinessLogic.Services.Master
                     State = BackgroundTaskStateEnum.Created,
                     Type = type
                 };
-            using (var uow = Update())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                da.Insert(task);
-                uow.Commit();
-            }
+            DoUpdate(u => new BackgroundTaskDataAccess(u).Insert(task));
             return task;
         }
 
         public BackgroundTask GetTaskToProcess(DateTime now)
         {
-            using (var uow = Read())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                return da.GetTaskForProcessing(now);
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            return DoRead(u => new BackgroundTaskDataAccess(u).GetTaskForProcessing(now));
         }
 
         public PaginatedList<BackgroundTask> GetTasks(int start, int count)
         {
-            using (var uow = Read())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                return da.GetTasks(start, count);
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            return DoRead(u => new BackgroundTaskDataAccess(u).GetTasks(start, count));
         }
 
         public void Complete(Guid id, bool success)
         {
-            using (var uow = Update())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                da.Complete(id, success);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new BackgroundTaskDataAccess(u).Complete(id, success));
         }
 
         public PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state, BackgroundTaskTypeEnum? type, bool allDistricts = false, int start = 0, int count = int.MaxValue)
         {
-            using (var uow = Read())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                return da.Find(districtId, state, type, allDistricts, start, count);
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            return DoRead(u => new BackgroundTaskDataAccess(u).Find(districtId, state, type, allDistricts, start, count));
         }
 
         public PaginatedList<BackgroundTaskLogItem> GetLogItems(Guid backgroundTaskId, int start, int count)
         {
+            BaseSecurity.EnsureSysAdmin(Context);
             var helper = new TableHelper<BackgroundTaskLogItem>();
             var items = helper.GetByPartKey(backgroundTaskId.ToString(), start, count);
             return items;
@@ -180,32 +164,20 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void Delete(Guid taskId)
         {
-            using (var uow = Update())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                da.Delete(taskId);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new BackgroundTaskDataAccess(u).Delete(taskId));
         }
 
         public void Cancel(Guid taskId)
         {
-            using (var uow = Update())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                da.Cancel(taskId);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new BackgroundTaskDataAccess(u).Cancel(taskId));
         }
 
         public void DeleteOlder(Guid? districtId, DateTime dateTime)
         {
-            using (var uow = Update())
-            {
-                var da = new BackgroundTaskDataAccess(uow);
-                da.DeleteOlder(districtId, dateTime);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new BackgroundTaskDataAccess(u).DeleteOlder(districtId, dateTime));
         }
     }
 }

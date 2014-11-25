@@ -63,11 +63,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Storage.DistrictStorage.GetByIdOrNull(id);
         }
  
-        public void DeleteDistrict(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsOnline(Guid id)
         {
             return true;

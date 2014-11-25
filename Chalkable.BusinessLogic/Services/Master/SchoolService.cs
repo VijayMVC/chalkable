@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 
@@ -12,8 +11,6 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface ISchoolService
     {
         Data.Master.Model.School GetById(Guid districtRef, int localId);
-        Data.Master.Model.School GetByIdOrNull(Guid id);
-        void Update(Data.Master.Model.School school);
         PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count);
         IList<Data.Master.Model.School> GetAll();
         void Add(IList<SchoolInfo> schools, Guid districtId);
@@ -27,31 +24,14 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public void Update(Data.Master.Model.School school)
-        {
-            using (var uow = Update())
-            {
-                new SchoolDataAccess(uow).Update(school);
-                uow.Commit();
-            }
-        }
-
         public PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count)
         {
-            using (var uow = Read())
-            {
-                var da = new SchoolDataAccess(uow);
-                return da.GetSchools(districtId, start, count);
-            }
+            return DoRead(u => new SchoolDataAccess(u).GetSchools(districtId, start, count));
         }
 
         public IList<Data.Master.Model.School> GetAll()
         {
-            using (var uow = Read())
-            {
-                var da = new SchoolDataAccess(uow);
-                return da.GetAll();
-            }
+            return DoRead(u => new SchoolDataAccess(u).GetAll());
         }
         
         public Data.Master.Model.School GetById(Guid districtRef, int localId)
@@ -68,20 +48,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public Data.Master.Model.School GetByIdOrNull(Guid id)
-        {
-            using (var uow = Read())
-            {
-                var da = new SchoolDataAccess(uow);
-                return da.GetByIdOrNull(id);
-            }
-        }
-
-
         public void Add(IList<SchoolInfo> schools, Guid districtId)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
+            BaseSecurity.EnsureSysAdmin(Context);
             using (var uow = Update())
             {
                 new SchoolDataAccess(uow).Insert(schools.Select(x => new Data.Master.Model.School
@@ -98,8 +67,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void Edit(IList<SchoolInfo> schoolInfos, Guid districtId)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
+            BaseSecurity.EnsureSysAdmin(Context);
             using (var uow = Update())
             {
                 var da = new SchoolDataAccess(uow);
@@ -121,9 +89,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void Delete(IList<int> localIds, Guid districtId)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
+            BaseSecurity.EnsureSysAdmin(Context);
             using (var uow = Update())
             {
                 var da = new SchoolDataAccess(uow);

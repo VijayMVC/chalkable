@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services
 
         public UnitOfWork GetUowForRead()
         {
-            return new UnitOfWork(connectionString, false, IsolationLevel.ReadCommitted);
+            return new UnitOfWork(connectionString, false);
         }
 
         public UnitOfWork GetUowForUpdate(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)

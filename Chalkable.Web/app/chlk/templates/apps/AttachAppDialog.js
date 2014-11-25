@@ -23,11 +23,14 @@ NAMESPACE('chlk.templates.apps', function () {
 
             [[chlk.models.apps.ApplicationForAttach]],
             String, function getAppIconToolTip(app){
-                var res = null
-                if(app && app.getNotInstalledStudentsCount() > 0){
-                    res = app.getNotInstalledStudentsCount();
-                    res += res > 1 ? ' students have ' : ' student has ';
-                    res += ' no this application installed';
+                var res = null;
+
+                if(app){
+                    var notInstalledCount = app.getNotInstalledStudentsCount();
+                    if (notInstalledCount > 0){
+                        res = "This application isn't installed for " + notInstalledCount;
+                        res += notInstalledCount > 1 ? ' students' : ' student';
+                    }
                 }
                 return res;
             }

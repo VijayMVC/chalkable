@@ -1,7 +1,6 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -15,8 +14,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Category Edit(Guid id, string name, string description);
         void Delete(Guid id);
     }
-
-    //TODO: needs test
+    
     public class CategoryService : MasterServiceBase, ICategoryService
     {
         public CategoryService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
@@ -25,62 +23,41 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public PaginatedList<Category> ListCategories(int start = 0, int count = Int32.MaxValue)
         {
-            using (var uow = Read())
-            {
-                return new CategoryDataAccess(uow).GetPage(start, count);
-            }
+            return DoRead(u => new CategoryDataAccess(u).GetPage(start, count));
         }
+
         public Category GetById(Guid id)
         {
-            using (var uow = Read())
-            {
-                return new CategoryDataAccess(uow).GetById(id);
-            }
+            return DoRead(u => new CategoryDataAccess(u).GetById(id));
         }
 
         public Category Add(string name, string description)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
+            BaseSecurity.EnsureSysAdmin(Context);
+            var res = new Category
             {
-                var res = new Category
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = name,
-                        Description = description
-                    };
-                new CategoryDataAccess(uow).Insert(res);
-                uow.Commit();
-                return res;
-            }
+                Id = Guid.NewGuid(),
+                Name = name,
+                Description = description
+            };
+            DoUpdate(u => new CategoryDataAccess(u).Insert(res));
+            return res;
         }
 
         public Category Edit(Guid id, string name, string description)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var da = new CategoryDataAccess(uow);
-                var res = da.GetById(id);
-                res.Description = description;
-                res.Name = name;
-                da.Update(res);
-                uow.Commit();
-                return res;
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            var res = GetById(id);
+            res.Description = description;
+            res.Name = name;
+            DoUpdate(u => new CategoryDataAccess(u).Update(res));
+            return res;
         }
 
         public void Delete(Guid id)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new CategoryDataAccess(uow).Delete(id);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u=>new CategoryDataAccess(u).Delete(id));
         }
 
     }

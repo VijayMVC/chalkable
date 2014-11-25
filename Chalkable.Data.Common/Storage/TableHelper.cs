@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Chalkable.Common;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -8,7 +7,7 @@ namespace Chalkable.Data.Common.Storage
     public class TableHelper<T> : BaseStorageHelper where T : TableEntity, new()
     {
         private string tableName;
-        private CloudTable table = null;
+        private CloudTable table;
         
         protected CloudTable GetTable()
         {
@@ -46,17 +45,6 @@ namespace Chalkable.Data.Common.Storage
             var res = t.ExecuteQuerySegmented(new TableQuery<T>(), token);
             token = res.ContinuationToken;
             return res.Results;
-
-            /*TableQuery<T> rangeQuery;
-            if (lastKey != null)
-            {
-                var tableQuery = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.GreaterThan, lastKey);
-                rangeQuery = new TableQuery<T>().Where(tableQuery).Take(count);    
-            }
-            else
-                rangeQuery = new TableQuery<T>().Take(count);    
-            var res = t.ExecuteQuery(rangeQuery);
-            return res.ToList();*/
         }
 
         public T GetByKey(string partKey, string key)

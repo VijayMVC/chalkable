@@ -60,7 +60,7 @@ namespace Chalkable.Web.Controllers
             if (isPwdReset.HasValue && isPwdReset.Value)
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = UrlsConstants.DEV_RESET_PASSWORD_URL;
 
-            var developer = MasterLocator.DeveloperService.GetDeveloperById(MasterLocator.Context.UserId);
+            var developer = MasterLocator.DeveloperService.GetById(MasterLocator.Context.UserId);
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
             var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, false);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();

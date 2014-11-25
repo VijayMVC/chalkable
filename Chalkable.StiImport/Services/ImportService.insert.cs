@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -222,6 +223,7 @@ namespace Chalkable.StiImport.Services
         
         private void InsertSchoolUsers()
         {
+            Trace.Assert(ServiceLocatorSchool.Context.DistrictId.HasValue);
             var masterUserSchool = context.GetSyncResult<UserSchool>().All.Select(x => new SchoolUser
                 {
                     DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value,
@@ -754,7 +756,7 @@ namespace Chalkable.StiImport.Services
 
         private void InsertClassroomOptions()
         {
-            var cro = context.GetSyncResult<ClassroomOption>().All.Select(x => new Data.School.Model.ClassroomOption()
+            var cro = context.GetSyncResult<ClassroomOption>().All.Select(x => new Data.School.Model.ClassroomOption
                 {
                     Id = x.SectionID,
                     DefaultActivitySortOrder = x.DefaultActivitySortOrder,

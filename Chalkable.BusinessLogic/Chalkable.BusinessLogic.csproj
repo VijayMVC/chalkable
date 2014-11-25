@@ -125,15 +125,14 @@
     <Compile Include="Model\StudentSummaryInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Security\AddressSecurity.cs" />
     <Compile Include="Security\AnnouncementSecurity.cs" />
     <Compile Include="Security\ApplicationSecurity.cs" />
-    <Compile Include="Security\AttendanceSecurity.cs" />
     <Compile Include="Security\BaseSecurity.cs" />
     <Compile Include="Security\NotificationSecurity.cs" />
     <Compile Include="Security\PrivateMessageSecurity.cs" />
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\CrocodocService.cs" />
+    <Compile Include="Services\DbService.cs" />
     <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassroomOptionService.cs" />
@@ -256,9 +255,7 @@
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
     <Compile Include="Services\Master\EmailService.cs" />
     <Compile Include="Services\Master\FundService.cs" />
-    <Compile Include="Services\MasterDbService.cs" />
     <Compile Include="Services\Master\PictureServices\ApplicationPictureService.cs" />
-    <Compile Include="Services\Master\PictureServices\CourseIconService.cs" />
     <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
     <Compile Include="Services\Master\PictureServices\FundRequestPictureService.cs" />
     <Compile Include="Services\Master\PictureServices\PersonPictureService.cs" />

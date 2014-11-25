@@ -48,8 +48,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Delete(int id)
         {
-            var address = Storage.AddressStorage.GetById(id);
-            if (!AddressSecurity.CanModify(address, Context))
+            if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             Storage.AddressStorage.Delete(id);
         }
