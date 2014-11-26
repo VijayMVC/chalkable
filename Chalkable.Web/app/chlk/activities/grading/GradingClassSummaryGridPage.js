@@ -596,7 +596,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 _DEBUG && console.time('repainting');
 
                 var pIndex = chlk.controls.LeftRightToolbarControl.GET_CURRENT_PAGE(this.dom.find('.ann-types-container .grid-toolbar'));
-                this.refreshD(ria.async.Future.$fromData(this._lastModel))
+                this.partialRefreshD(ria.async.Future.$fromData(this._lastModel.getCurrentGradingGrid()), null)
                     .then(function () {
                         var node = this.dom.find('.ann-types-container .grid-toolbar');
                         chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
