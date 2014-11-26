@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Chalkable.Common;
@@ -23,7 +24,7 @@ namespace Chalkable.Data.School.DataAccess
             if (ids.Count == 0)
                 return;
             var res = new StringBuilder();
-            var idsS = ids.Select(x => x.ToString()).JoinString(",");
+            var idsS = ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(",");
             var sqlFormat = " delete from [{0}] where [{0}].[{1}] in ({2})";
             res.AppendFormat(sqlFormat, typeof(SchoolPerson).Name, SchoolPerson.PERSON_REF_FIELD, idsS);
             res.AppendFormat(sqlFormat, typeof(StudentSchoolYear).Name, StudentSchoolYear.STUDENT_FIELD_REF_FIELD, idsS);
@@ -109,58 +110,6 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 throw new ChalkableException("User is not identified");
             }
-        }
-
-        public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
-        {
-            IDictionary<string, object> ps = new Dictionary<string, object>
-            {
-                {"@teacherId", teacherId},
-                {"@schoolYearId", schoolYearId}
-            };
-            return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByTeacher", ps);
-        }
-
-        public IList<StudentDetails> GetStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
-        {
-            IDictionary<string, object> ps = new Dictionary<string, object>
-            {
-                {"@classId", classId},
-                {"@markingPeriodId", markingPeriodId},
-                {"@isEnrolled", isEnrolled}
-
-            };
-            return ExecuteStoredProcedureList<StudentDetails>("spGetStudentsByClass", ps);
-        }
-
-        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count)
-        {
-            var ps = new Dictionary<string, object>
-            {
-                {"@start", start},
-                {"@count", count},
-                {"@classId", classId},
-                {"@teacherId", teacherId},
-                {"@schoolYearId", schoolYearId},
-                {"@filter", "%" + filter + "%"},
-                {"@orderByFirstName", orderByFirstName}
-            };
-            return ExecuteStoredProcedurePaginated<StudentDetails>("spSearchStudents", ps, start, count);
-        }
-
-        public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count)
-        {
-            var ps = new Dictionary<string, object>
-            {
-                {"@start", start},
-                {"@count", count},
-                {"@classId", classId},
-                {"@studentId", studentId},
-                {"@schoolYearId", schoolYearId},
-                {"@filter", "%" + filter + "%"},
-                {"@orderByFirstName", orderByFirstName}
-            };
-            return ExecuteStoredProcedurePaginated<Staff>("spSearchStaff", ps, start, count);
         }
 
         public PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count)

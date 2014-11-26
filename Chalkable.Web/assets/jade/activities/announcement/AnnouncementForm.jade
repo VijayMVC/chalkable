@@ -33,6 +33,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
 -var state = announcement && announcement.getState()
 -var classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+-console.log(announcement.getClassId().valueOf())
 
 .announcement-form.loader-container
     if announcement
@@ -46,7 +47,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
             .not-transparent(class=(classId ? '' : 'x-hidden'))
                 +AnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
-                +BaseAnnouncementFormContainer(announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
+                +BaseAnnouncementFormContainer(self, announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
                 if announcement.getState()
                     .duplicate-btn-container
                         +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()

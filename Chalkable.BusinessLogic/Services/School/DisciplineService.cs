@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var options = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
             if (disciplineRefferals != null)
             {
-                var students = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id
+                var students = ServiceLocator.StudentService.GetClassStudents(classId, mp.Id
                     , options != null && options.IncludeWithdrawnStudents ? (bool?)null : true);
                 var cClass = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var res = new List<ClassDisciplineDetails>();

@@ -103,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.PersonService.GetClassStudents(classId, mp.Id);
+                var persons = ServiceLocator.StudentService.GetClassStudents(classId, mp.Id);
                 var attendances = new List<ClassAttendanceDetails>();
                 foreach (var ssa in sa.StudentAttendance)
                 {
@@ -160,7 +160,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
 
             var classesIds = classes.Select(x => x.Id).ToList();
-            var students = ServiceLocator.PersonService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
+            var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
         
             var sectionsAttendanceSummary = ConnectorLocator.AttendanceConnector.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
             var res = new AttendanceSummary();
@@ -213,7 +213,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = classId,
                 };
             var stiSeats = new List<Seat>();
-            var students = ServiceLocator.PersonService.GetClassStudents(classId, markingPeriodId, true);
+            var students = ServiceLocator.StudentService.GetClassStudents(classId, markingPeriodId, true);
             var defaultStudent = students.FirstOrDefault(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
             if (defaultStudent == null)
                 defaultStudent = students.First();

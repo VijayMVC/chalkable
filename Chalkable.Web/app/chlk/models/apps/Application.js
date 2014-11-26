@@ -13,10 +13,11 @@ REQUIRE('chlk.models.apps.AppPlatform');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppPicture');
 REQUIRE('chlk.models.apps.AppState');
-REQUIRE('chlk.models.apps.AppScreenshots');
+REQUIRE('chlk.models.apps.AppScreenShots');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.BannedAppData');
+REQUIRE('chlk.models.standard.CommonCoreStandard');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -54,6 +55,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.validRoles = SJX.fromArrayOfDeserializables(raw.canlaunchroles, chlk.models.people.Role);
                 this.gradeLevels = SJX.fromArrayOfValues(raw.gradelevels, chlk.models.id.AppGradeLevelId);
                 this.standardsCodes = SJX.fromArrayOfValues(raw.standardscodes, String);
+                this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.CommonCoreStandard);
                 this.platforms = SJX.fromArrayOfDeserializables(raw.platforms, chlk.models.apps.AppPlatform);
                 this.banInfo = SJX.fromDeserializable(raw.baninfo, chlk.models.apps.BannedAppData);
             },
@@ -70,7 +72,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.PictureId, 'bigPictureId',
             chlk.models.apps.AppPicture, 'iconPicture',
             chlk.models.apps.AppPicture, 'bannerPicture',
-            chlk.models.apps.AppScreenshots,  'screenshotPictures',
+            chlk.models.apps.AppScreenShots,  'screenshotPictures',
             String, 'myAppsUrl',
             String, 'secretKey',
             chlk.models.apps.AppState, 'state',
@@ -86,6 +88,7 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels',
             ArrayOf(chlk.models.apps.AppPlatform), 'platforms',
             ArrayOf(String), 'standardsCodes',
+            ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
             chlk.models.apps.BannedAppData, 'banInfo'
         ]);
 

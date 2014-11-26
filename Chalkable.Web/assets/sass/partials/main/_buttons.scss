@@ -188,7 +188,7 @@ button.disabled, button[disabled]{
   &.upper-case{
     >SPAN{
       >SPAN{
-        >BUTTON{
+        >BUTTON, >A{
           text-transform: uppercase;
         }
       }
@@ -268,9 +268,10 @@ button.disabled, button[disabled]{
       background-position: right -112px;
       > SPAN {
         background-image: url(images/buttons/xbutton-green-center.png);
-        > BUTTON {
+        > BUTTON, >A{
           color: #126100;
         }
+
       }
     }
 
@@ -283,7 +284,7 @@ button.disabled, button[disabled]{
         >SPAN{
           background-position: 0px -57px;
           background-size: auto 170px;
-          > BUTTON{
+          > BUTTON, >A{
             color: white;
           }
         }

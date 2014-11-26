@@ -17,7 +17,68 @@
   }
 
   .dialog{
+
+    &.quick-app-install{
+
+      .x-window-header{
+        border-bottom: 1px solid #d7d7d7 !important;
+        margin-left: 0px !important;
+        margin-right: 12px !important;
+      }
+
+      .x-window-body{
+        margin-top: 20px !important;
+      }
+
+      .transaction-result-view{
+        text-align: center;
+        .transaction-success-view{
+          .desciption{
+            font-weight: bold;
+            margin-bottom: 30px;
+          }
+          .text{
+            background-position-x: 160px;
+            height: 30px;
+          }
+        }
+      }
+
+      .app-screenshots-panel{
+        .carousel-wrapper{
+          width: auto;
+          .carousel{
+            height: 300px;
+            .img{
+              >IMG{
+                width: 450px;
+                height: 300px;
+              }
+            }
+            .picture-button{
+              top: 118px !important;
+              &.picture-left{
+                left: 9px;
+              }
+              &.picture-right{
+                right: 9px;
+              }
+            }
+          }
+        }
+      }
+      .app-description-panel{
+        margin-top: 15px;
+        .description{
+          color: #515151;
+          text-shadow: 1px 1px 0 white;
+          font-size: 16px;
+        }
+      }
+    }
+
     &.app-market-install{
+
 
 
       .install-app-dialog-model-wait{

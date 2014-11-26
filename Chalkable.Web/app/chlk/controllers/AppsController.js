@@ -21,7 +21,7 @@ REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppPicture');
 REQUIRE('chlk.models.apps.AppState');
-REQUIRE('chlk.models.apps.AppScreenshots');
+REQUIRE('chlk.models.apps.AppScreenShots');
 REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
 REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.developer.HomeAnalytics');
@@ -154,7 +154,7 @@ NAMESPACE('chlk.controllers', function (){
                         return new chlk.models.apps.AppPicture(pictureId, pictureUrl, 640, 390, 'screenshot', !readOnly);
                     }, this);
 
-                    app_.setScreenshotPictures(new chlk.models.apps.AppScreenshots(screenshotPictures, readOnly));
+                    app_.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshotPictures, readOnly));
 		    
                     return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, platforms, isDraft);
 
@@ -300,7 +300,7 @@ NAMESPACE('chlk.controllers', function (){
                     var pictureUrl = this.pictureService.getPictureUrl(pictureId, width, height);
                     return new chlk.models.apps.AppPicture(pictureId, pictureUrl, width, height, msg, true);
                 }, this);
-            var result = new ria.async.DeferredData(new chlk.models.apps.AppScreenshots(imgs, false));
+            var result = new ria.async.DeferredData(new chlk.models.apps.AppScreenShots(imgs, false));
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 
@@ -337,7 +337,7 @@ NAMESPACE('chlk.controllers', function (){
                             var pictureUrl = this.pictureService.getPictureUrl(pictureId, width, height);
                             return new chlk.models.apps.AppPicture(pictureId, pictureUrl, width, height, msg, true);
                         }, this);
-                    return new chlk.models.apps.AppScreenshots(screenshots, false);
+                    return new chlk.models.apps.AppScreenShots(screenshots, false);
                 }, this);
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
@@ -382,7 +382,7 @@ NAMESPACE('chlk.controllers', function (){
                     var pictureUrl = this.pictureService.getPictureUrl(pictureId, width, height);
                     return new chlk.models.apps.AppPicture(pictureId, pictureUrl, width, height, msg, true);
                 }, this);
-            var result = new ria.async.DeferredData(new chlk.models.apps.AppScreenshots(screenshots, false));
+            var result = new ria.async.DeferredData(new chlk.models.apps.AppScreenShots(screenshots, false));
             return this.UpdateView(chlk.activities.apps.AppInfoPage, result, msg.toLowerCase());
         },
 

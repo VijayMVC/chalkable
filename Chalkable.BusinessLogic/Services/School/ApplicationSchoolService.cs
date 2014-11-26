@@ -142,7 +142,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             try
             {
-                //TODO: thing about security
                 using (var uow = Update())
                 {
                     var da = new AnnouncementApplicationDataAccess(uow);

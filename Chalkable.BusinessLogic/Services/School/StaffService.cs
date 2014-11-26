@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
@@ -17,11 +15,13 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<Staff> staffs);
         void Delete(IList<Staff> staffs);
         IList<Staff> GetStaffs();
+        Staff GetStaff(int staffId);
 
         void AddStaffSchools(IList<StaffSchool> staffSchools);
         void EditStaffSchools(IList<StaffSchool> staffSchools);
         void DeleteStaffSchools(IList<StaffSchool> staffSchools);
         IList<StaffSchool> GetStaffSchools();
+        PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
     }
 
     public class StaffService : SchoolServiceBase, IStaffService
@@ -55,16 +55,17 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                modifyAction(uow);
-                uow.Commit();
-            }          
+            DoUpdate(modifyAction);
+        }
+
+        public Staff GetStaff(int staffId)
+        {
+            return DoRead(uow => new StaffDataAccess(uow).GetById(staffId));
         }
 
         public IList<Staff> GetStaffs()
         {
-            throw new NotImplementedException();
+            return DoRead(uow => new StaffDataAccess(uow).GetAll());
         }
 
         public void AddStaffSchools(IList<StaffSchool> staffSchools)
@@ -84,7 +85,15 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StaffSchool> GetStaffSchools()
         {
-            throw new NotImplementedException();
+            return DoRead(uow => new StaffSchoolDataAccess(uow, Context.SchoolLocalId).GetAll());
         }
+        
+        public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,
+            int start, int count)
+        {
+            return DoRead(u => new StaffDataAccess(u).SearchStaff(schoolYearId, classId, studentId, filter, orderByFirstName,
+                            start, count));
+        }
+
     }
 }

@@ -195,6 +195,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             roleId = res.Value;
             return res.Key;
         }
+
+        public PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count)
+        {
+            var persons = GetAll().AsEnumerable();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                 filter = filter.ToLowerInvariant();
+                 persons = persons.Where(x => x.FullName().ToLowerInvariant().Contains(filter));
+            }
+            persons = orderByFirstName ? persons.OrderBy(x => x.FirstName) : persons.OrderBy(x => x.LastName);
+            return new PaginatedList<Person>(persons.ToList(), start / count, count);
+        }
     }
 
 

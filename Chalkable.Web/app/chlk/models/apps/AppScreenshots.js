@@ -5,9 +5,9 @@ NAMESPACE('chlk.models.apps', function () {
 
     var SJX = ria.serialize.SJX;
 
-    /** @class chlk.models.apps.AppScreenshots*/
+    /** @class chlk.models.apps.AppScreenShots*/
     CLASS(
-        UNSAFE, FINAL, 'AppScreenshots',IMPLEMENTS(ria.serialize.IDeserializable),  [
+        UNSAFE, FINAL, 'AppScreenShots',IMPLEMENTS(ria.serialize.IDeserializable),  [
             VOID, function deserialize(raw){
                 this.ids = SJX.fromValue(raw.ids, String);
                 this.items = SJX.fromArrayOfDeserializables(raw.items, chlk.models.apps.AppPicture);

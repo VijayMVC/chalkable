@@ -288,12 +288,50 @@ BODY {
               }
             }
 
+            .suggested-apps-block{
+              margin-top: 40px;
+              .separator-line{
+                height: 1px;
+                border-top: 1px solid #c7c7c7;
+                border-bottom: 1px solid #ffffff;
+              }
+              .title{
+                font-family: Myriad Pro;
+                color: #2f7790;
+                text-shadow: 0 1px 0 white;
+                font-size: 20px;
+                font-style: italic;
+                padding: 12px 0px 25px 0px;
+              }
+              .suggested-apps-conteiner{
+                .app-icon-link{
+                  display: inline-block;
+                  margin-right: 35px;
+                  position: relative;
+                  .attach-icon{
+                    position: absolute;
+                    left: 158px;
+                    top: -9px;
+                    width: 25px;
+                    height: 25px;
+                    background: url(images/announcement/attach-app-icon.png) 0 0 no-repeat;
+                  }
+                  .icon{
+                    img{
+                      width: 170px;
+                      height: 120px;
+                    }
+                  }
+                }
+              }
+            }
+
             .ann-form-container{
               padding: 9px 0 0 4px;
 
               .duplicate-btn-container{
                 position: absolute !important;
-                bottom: -3px !important;
+                bottom: 217px !important;
                 left: 400px !important;
                 A{
                   font-weight: bold;

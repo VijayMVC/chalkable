@@ -37,6 +37,7 @@ REQUIRE('chlk.controls.PayCheckControl');
 REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
 REQUIRE('chlk.controls.MaskedInputControl');
+REQUIRE('chlk.controls.SimplePayCheckControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -136,6 +137,8 @@ NAMESPACE('chlk', function (){
                 session.set(ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL, newClasses);
                 if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');
+                }else{
+                    ria.dom.Dom('#first-login-video').remove();
                 }
 
                 window.gradeLevels = window.gradeLevels || [];
@@ -151,6 +154,7 @@ NAMESPACE('chlk', function (){
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();
                 var serviceRoot = "/";
+
                 session.set('siteRoot', siteRoot + serviceRoot);
                 return session;
             },

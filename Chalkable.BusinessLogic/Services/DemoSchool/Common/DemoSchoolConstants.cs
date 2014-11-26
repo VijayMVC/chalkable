@@ -98,7 +98,10 @@
         public const int PhysicsClassId = 3;
         public const int PreCalculusClassId = 4;
 
+        public const int BellScheduleId = 2;
 
-
+        public const int DayTypeId1 = 1;
+        public const int DayTypeId2 = 2;
+        public const int DayTypeId3 = 3;
     }
 }

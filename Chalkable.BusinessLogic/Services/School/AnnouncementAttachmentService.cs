@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -77,8 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     if (ann.SisActivityId.HasValue)
                     {
                         var activityAtt = ActivityAttachment.Create(ann.SisActivityId.Value, lastStiAtts, null);
-                        activityAtt = ConnectorLocator.ActivityAttachmentsConnector
-                            .CreateActivityAttachments(ann.SisActivityId.Value, activityAtt);
+                        ConnectorLocator.ActivityAttachmentsConnector.CreateActivityAttachments(ann.SisActivityId.Value, activityAtt);
                     }
                     annAtt.SisAttachmentId = lastStiAtts.AttachmentId;
                 }
@@ -103,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private string GenerateKeyForBlob(AnnouncementAttachment announcementAttachment)
         {
-            var res = announcementAttachment.Id.ToString();
+            var res = announcementAttachment.Id.ToString(CultureInfo.InvariantCulture);
             if (Context.DistrictId.HasValue)
                 return string.Format("{0}_{1}", res, Context.DistrictId.Value);
             return res;
@@ -142,10 +143,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         if(att != null)
                             ConnectorLocator.ActivityAttachmentsConnector.Delete(ann.SisActivityId.Value, att.Id);
                     }
-                    else ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
-
-                    //else 
-                    //    ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
+                    else 
+                        ConnectorLocator.AttachmentConnector.DeleteAttachment(annAtt.SisAttachmentId.Value);
                 }
                 uow.Commit();
             }
@@ -153,21 +152,24 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Read())
             {
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
                     var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
                         .GetAnnouncement(announcementId, Context.RoleId, Context.PersonId.Value);
+                    Trace.Assert(ann.SisActivityId.HasValue);
                     return MapStiAttsToAnnAtts(GetActivityAttachments(ann.SisActivityId.Value));
                 }
                 var da = new AnnouncementAttachmentDataAccess(uow);
-                return da.GetPaginatedList(announcementId, Context.PersonId ?? 0, Context.Role.Id, start, count, needsAllAttachments).ToList();
+                return da.GetPaginatedList(announcementId, Context.PersonId.Value, Context.Role.Id, start, count, needsAllAttachments).ToList();
             }
         }
 
         private IList<AnnouncementAttachment> MapStiAttsToAnnAtts(IEnumerable<StiAttachment> activityAtts)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             var res = new List<AnnouncementAttachment>();
             foreach (var stiAttachment in activityAtts)
             {
@@ -177,7 +179,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(stiAttachment.AttachmentId);
                     atts.Uuid = ServiceLocator.CrocodocService.UploadDocument(stiAttachment.Name, content).uuid;
-                    //ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, atts.Id.ToString(), content);
                 }
                 res.Add(atts);
             }
@@ -210,10 +211,6 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var res = new AnnouncementAttachmentDataAccess(uow).GetList(Context.PersonId ?? 0, Context.Role.Id, filter);
-                //if (CoreRoles.TEACHER_ROLE == Context.Role)
-                //{
-                //    var atts = GetActivityAttachments()
-                //}
                 return res;
             }
         }

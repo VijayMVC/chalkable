@@ -33,7 +33,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             int? studentId = null;
             if (onlyMyTeachers == true)
                 studentId = Context.PersonId;
-            var res = SchoolLocator.PersonService.SearchStaff(Context.SchoolYearId.Value, classId, studentId, filter,
+            var res = SchoolLocator.StaffService.SearchStaff(Context.SchoolYearId.Value, classId, studentId, filter,
                 byLastName == false, start ?? 0, count ?? 10);
             return Json(res.Transform(StaffViewData.Create));
         }

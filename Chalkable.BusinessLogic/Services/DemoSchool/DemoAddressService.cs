@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -17,40 +14,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
       
-
-        public Address Add(Address addressInfo)
+        public void Add(IList<Address> addresses)
         {
-            if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
-                throw new ChalkableSecurityException();
-            Storage.AddressStorage.Add(addressInfo);
-            return addressInfo;
+            BaseSecurity.EnsureSysAdmin(Context);
+            Storage.AddressStorage.Add(addresses);
         }
 
-        public void Add(IList<Address> addressInfos)
+        public void Edit(IList<Address> addressInfos)
         {
-            if (!BaseSecurity.IsDistrict(Context))//TODO:can teacher do this?
-                throw new ChalkableSecurityException();
-            Storage.AddressStorage.Add(addressInfos);
-        }
-
-        public Address Edit(Address addressInfo)
-        {
-            return Edit(new List<Address> { addressInfo }).First();
-        }
-
-        public IList<Address> Edit(IList<Address> addressInfos)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            return Storage.AddressStorage.Update(addressInfos);
-        }
-
-        public void Delete(int id)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.AddressStorage.Delete(id);
+            BaseSecurity.EnsureSysAdmin(Context);
+            Storage.AddressStorage.Update(addressInfos);
         }
 
         public void Delete(IList<int> ids)

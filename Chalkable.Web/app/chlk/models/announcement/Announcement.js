@@ -15,6 +15,7 @@ REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
+REQUIRE('chlk.models.apps.ApplicationForAttach');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -101,6 +102,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.annRecipients = SJX.fromValue(raw.annrecipients, String);
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
                 this.submitType = SJX.fromValue(raw.submitType, String);
+                this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
             },
             function $(){
                 BASE();
@@ -148,6 +150,8 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'shortContent',
             Boolean, 'showGradingIcon',
             ArrayOf(chlk.models.standard.Standard), 'standards',
+            ArrayOf(chlk.models.apps.ApplicationForAttach), 'suggestedApps',
+
             Number, 'stateTyped',
             chlk.models.id.StudentAnnouncementId, 'studentAnnouncementId',
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',

@@ -50,7 +50,7 @@ namespace Chalkable.Web.Controllers
             Room curentRoom = null;
             if (c.RoomRef.HasValue)
                 curentRoom = SchoolLocator.RoomService.GetRoomById(c.RoomRef.Value);
-            var students = SchoolLocator.PersonService.GetClassStudents(classId, mp.Id);
+            var students = SchoolLocator.StudentService.GetClassStudents(classId, mp.Id);
             if (!BaseSecurity.IsAdminViewerOrClassTeacher(c, Context))
                 return Json(ClassSummaryViewData.Create(c, curentRoom, students));
             var disciplineTypes = SchoolLocator.InfractionService.GetInfractions();

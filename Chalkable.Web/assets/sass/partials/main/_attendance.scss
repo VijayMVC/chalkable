@@ -466,6 +466,8 @@ BODY {
           .attendance-summary{
             .highcharts-container{
               overflow: visible !important;
+              left: -32px !important;
+              top: 13px !important;
             }
 
             .students-container{
