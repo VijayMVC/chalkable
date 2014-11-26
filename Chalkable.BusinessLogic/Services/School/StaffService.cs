@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<Staff> staffs);
         void Delete(IList<Staff> staffs);
         IList<Staff> GetStaffs();
+        Staff GetStaff(int staffId);
 
         void AddStaffSchools(IList<StaffSchool> staffSchools);
         void EditStaffSchools(IList<StaffSchool> staffSchools);
@@ -54,16 +55,17 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                modifyAction(uow);
-                uow.Commit();
-            }          
+            DoUpdate(modifyAction);
+        }
+
+        public Staff GetStaff(int staffId)
+        {
+            return DoRead(uow => new StaffDataAccess(uow).GetById(staffId));
         }
 
         public IList<Staff> GetStaffs()
         {
-            throw new NotImplementedException();
+            return DoRead(uow => new StaffDataAccess(uow).GetAll());
         }
 
         public void AddStaffSchools(IList<StaffSchool> staffSchools)
@@ -83,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StaffSchool> GetStaffSchools()
         {
-            throw new NotImplementedException();
+            return DoRead(uow => new StaffSchoolDataAccess(uow, Context.SchoolLocalId).GetAll());
         }
         
         public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,

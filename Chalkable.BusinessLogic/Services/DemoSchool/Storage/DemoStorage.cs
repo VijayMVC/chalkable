@@ -372,19 +372,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void AddTeacher()
         {
-            PersonStorage.Add(new Person
-            {
-                Active = true,
-                Gender = "M",
-                FirstName = "ROCKY",
-                LastName = "STEIN",
-                Id = DemoSchoolConstants.TeacherId,
-                RoleRef = CoreRoles.TEACHER_ROLE.Id,
-                FirstLoginDate = DateTime.Now
-            });
+            var person = new Person
+                {
+                    Active = true,
+                    Gender = "M",
+                    FirstName = "ROCKY",
+                    LastName = "STEIN",
+                    Id = DemoSchoolConstants.TeacherId,
+                    RoleRef = CoreRoles.TEACHER_ROLE.Id,
+                    FirstLoginDate = DateTime.Now
+                };
+
+            PersonStorage.Add(person);
 
             StaffStorage.Add(new Staff
             {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                BirthDate = person.BirthDate,
+                Gender = person.Gender,
                 UserId = DemoSchoolConstants.TeacherId,
             });
 
@@ -393,7 +400,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PersonRef = DemoSchoolConstants.TeacherId,
                 RoleRef = CoreRoles.TEACHER_ROLE.Id,
                 SchoolRef = DemoSchoolConstants.SchoolId
-                
             });
 
             PersonBalanceStorage.Add(new DemoPersonBalance
