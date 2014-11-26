@@ -1,0 +1,33 @@
+h3 #{self.getStudentName()}, #{self.getGradingPeriodName()}
+-var comments = self.getComments() || []
+.codes-grid
+    .row.header
+        .check
+        .name=Msg.Name
+        .code=Msg.Code
+        .comment=Msg.Comment
+    each header in self.getHeaders()
+        .row
+            .check
+                +Checkbox('check-'+header.getHeaderId().valueOf(), false).code-checkbox
+            .name=header.getHeaderName()
+            .code
+                INPUT(
+                    value=header.getGradingComment() ? header.getGradingComment().getCode() : '',
+                    data-header-id = header.getHeaderId().valueOf(),
+                    data-header-name = header.getHeaderName()
+                ).code-input
+            .comment
+                +Select('select-'+header.getHeaderId().valueOf()).codes-select
+                    +Option('', 'Select an Option').empty-option
+                    each comment in comments
+                        +Option(comment.getId().valueOf(), comment.getComment(), header.getGradingComment() && comment.getId() == header.getGradingComment().getId())(
+                            data-code=comment.getCode()
+                        )
+.buttons-bottom.no-border
+    BUTTON(
+        type="button",
+        data-average-id= self.getAverageId(),
+        data-row-index= self.getRowIndex()
+    ).chlk-button.blue-gradient-btn.save-codes=Msg.Save
+    BUTTON(type="button").chlk-button.grey-button.cancel-codes=Msg.Cancel

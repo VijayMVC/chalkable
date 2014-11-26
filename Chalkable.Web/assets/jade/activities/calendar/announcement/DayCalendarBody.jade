@@ -1,0 +1,25 @@
+.day-calendar-body
+    .day-names.day
+        each item,i in self.getItems()
+            div(class=item.getTodayClassName()).day
+                if(item.getDate().getDate().getDay())
+                    p=item.getDate().format('DD')
+    .items
+        each item in self.getItems()
+            div(class = item.getTodayClassName()).gradient-cnt.item.week-day.day
+                ul
+                    items = item.getAnnouncementPeriods() || [];
+                    each calendarDayItem,i in items
+                        period = calendarDayItem.getPeriod();
+                        +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().format('mm-dd-yy'), i)(class = period.getStartTime() && self.isMainCalendar() ? "" : "disabled").period-item.day
+                            if(item.getDayOfWeek() == 0)
+                                .period-info=(i+1)
+                            else
+                                li
+                                    -var className = period.getFullClassName()
+                                    if className
+                                        .course-icon
+                                            +ClassImg(period, 45, 80)
+                                        .p-container
+                                            p.title.day-title
+                                                span(data-tooltip=className, data-tooltip-type ="overflow")=className
