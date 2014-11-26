@@ -384,6 +384,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('submit', 'form.update-grade-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitFormEvent(node, event){
+                this.hideDropDown();
                 var input = node.find('.grade-input');
                 var value = (input.getValue() || '').toLowerCase(), wasExempt = false;
                 var checkbox = node.find('.exempt-checkbox');
