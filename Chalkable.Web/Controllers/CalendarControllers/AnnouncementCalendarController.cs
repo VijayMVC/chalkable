@@ -119,7 +119,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              }
              else
              {
-                 var person = locator.PersonService.GetPerson(personId.Value);
+                 var person = locator.PersonService.GetPersonDetails(personId.Value);
                  teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : (int?)null;
                  studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : (int?)null;
              }

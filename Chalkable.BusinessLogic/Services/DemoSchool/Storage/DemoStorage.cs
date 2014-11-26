@@ -100,6 +100,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStudentSchoolStorage StudentSchoolStorage { get; private set; }
         public DemoStaffSchoolStorage StaffSchoolStorage { get; private set; }
 
+        public DemoScheduledTimeSlotStorage ScheduledTimeSlotStorage { get; private set; }
+
         public UserContext Context { get; private set; }
 
         public void UpdateContext(UserContext context)
@@ -198,6 +200,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StaffSchoolStorage = new DemoStaffSchoolStorage(this);
             StaffStorage = new DemoStaffStorage(this);
             StudentSchoolStorage = new DemoStudentSchoolStorage(this);
+            ScheduledTimeSlotStorage = new DemoScheduledTimeSlotStorage(this);
 
             CreateAnnouncementStorage(Context);
             Setup();
@@ -512,6 +515,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddPeriods();
             AddMarkingPeriods();
             AddDayTypes();
+            AddScheduleTimeSlots();
             AddGradingPeriods();
             AddSchool();
             AddSchoolYear();
@@ -979,7 +983,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             DayTypeStorage.Add(new DayType
             {
-                Id = 1,
+                Id = DemoSchoolConstants.DayTypeId1,
                 Name = "M",
                 Number = 0,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
@@ -987,7 +991,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             DayTypeStorage.Add(new DayType
             {
-                Id = 2,
+                Id = DemoSchoolConstants.DayTypeId2,
                 Name = "TTh",
                 Number = 1,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
@@ -995,7 +999,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             DayTypeStorage.Add(new DayType
             {
-                Id = 3,
+                Id = DemoSchoolConstants.DayTypeId3,
                 Name = "WF",
                 Number = 2,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
@@ -1455,6 +1459,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
         }
 
+        private void AddScheduleTimeSlots()
+        {
+            ScheduledTimeSlotStorage.Add(new ScheduledTimeSlot
+                {
+                    BellScheduleRef = DemoSchoolConstants.BellScheduleId,
+                    StartTime = 663,
+                    EndTime = 707,
+                    PeriodRef = DemoSchoolConstants.FirstPeriodId,
+                    IsDailyAttendancePeriod = true
+                });
+            ScheduledTimeSlotStorage.Add(new ScheduledTimeSlot
+            {
+                BellScheduleRef = DemoSchoolConstants.BellScheduleId,
+                StartTime = 710,
+                EndTime = 740,
+                PeriodRef = DemoSchoolConstants.SecondPeriodId,
+                IsDailyAttendancePeriod = false
+            });
+        }
+
         private void AddSchool()
         {
             SchoolStorage.Add(new Data.School.Model.School
@@ -1886,7 +1910,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassPeriodStorage.Add(new ClassPeriod
             {
                 ClassRef = id,
-                DayTypeRef = 19,
+                DayTypeRef = DemoSchoolConstants.DayTypeId1,
                 PeriodRef = DemoSchoolConstants.FirstPeriodId,
                 //SchoolRef = DemoSchoolConstants.SchoolId,
                 Period = PeriodStorage.GetById(DemoSchoolConstants.FirstPeriodId)
@@ -1895,7 +1919,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             ClassPeriodStorage.Add(new ClassPeriod
             {
                 ClassRef = id,
-                DayTypeRef = 20,
+                DayTypeRef = DemoSchoolConstants.DayTypeId2,
                 PeriodRef = DemoSchoolConstants.SecondPeriodId,
                 //SchoolRef = DemoSchoolConstants.SchoolId,
                 Period = PeriodStorage.GetById(DemoSchoolConstants.SecondPeriodId)

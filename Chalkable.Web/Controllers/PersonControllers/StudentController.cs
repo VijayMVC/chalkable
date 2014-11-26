@@ -34,12 +34,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var classes = SchoolLocator.ClassService.GetClasses(Context.SchoolYearId, null, schoolPersonId).ToList();
             var classPersons = SchoolLocator.ClassService.GetClassPersons(schoolPersonId, true);
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
-            var classPeriods = SchoolLocator.ClassPeriodService.GetClassPeriods(Context.NowSchoolYearTime, null, null, studentSummaryInfo.StudentInfo.Id, null);
+            var schedule = SchoolLocator.ClassPeriodService.GetSchedule(null, studentSummaryInfo.StudentInfo.Id, null,
+                Context.NowSchoolYearTime.Date, Context.NowSchoolYearTime.Date);
+            var sortedSchedule = schedule.OrderBy(si => si.PeriodOrder).Select(si => si.ClassId).Distinct().ToList();
 
-            var sortedClassRefs = classPeriods.OrderBy(cp => cp.Period.Order).Select(cp => cp.ClassRef).Distinct().ToList();
-
-            var classList = sortedClassRefs.Select(sortedClassRef => classes.FirstOrDefault(cls => cls.Id == sortedClassRef)).Where(c => c != null).ToList();
-            classList.AddRange(classes.Where(cls => !sortedClassRefs.Contains(cls.Id)));
+            var classList = sortedSchedule.Select(sortedClassRef => classes.First(cls => cls.Id == sortedClassRef)).ToList();
+            classList.AddRange(classes.Where(cls => !sortedSchedule.Contains(cls.Id)));
 
             Room currentRoom = null;
             ClassDetails currentClass = null;
