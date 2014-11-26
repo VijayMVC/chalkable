@@ -430,7 +430,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                 }
 
-                var curCell = node.parent('.grade-value'), cell, curBlock, valueInput, needsTimeout;
+                var curCell = node.parent('.grade-value'), cell, curBlock, valueInput, needsTimeout, eps = 10;
                 switch(event.keyCode){
                     case ria.dom.Keys.UP.valueOf():
                         if(!list.is(':visible') || !list.find('.hovered').previous().exists())
@@ -451,7 +451,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 curBlock = curBlock.previous('.grade-container');
                             var nameContainer = curBlock.parent('.ann-types-container').find('.name-container');
                             if(curBlock.exists()){
-                                if(curBlock.offset().left < (nameContainer.offset().left + nameContainer.width())){
+                                if(curBlock.offset().left < (nameContainer.offset().left + nameContainer.width() - eps)){
                                     curBlock.parent('.grid-toolbar').find('.prev-button').trigger('click');
                                     needsTimeout = true;
                                 }
@@ -468,7 +468,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 curBlock = curBlock.next('.grade-container');
                             if(curBlock.exists()){
                                 var parentBlock = curBlock.parent('.grades-container');
-                                if(curBlock.offset().left > parentBlock.offset().left + parentBlock.width()){
+                                if(curBlock.offset().left > parentBlock.offset().left + parentBlock.width() - eps){
                                     curBlock.parent('.grid-toolbar').find('.next-button').trigger('click');
                                     needsTimeout = true;
                                 }

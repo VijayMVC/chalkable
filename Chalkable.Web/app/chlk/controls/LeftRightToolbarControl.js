@@ -105,7 +105,8 @@ NAMESPACE('chlk.controls', function () {
                                 if(configs.fixedElementWidth)
                                     thirdContainer.find('>*:not(:last-child)').setCss('margin-right', baseMargin + additionalMargin);
                                 else
-                                    thirdContainer.find('>*').setCss('width', elWidthWithoutBorders + additionalMargin);
+                                    thirdContainer.find('>*').setCss('width', elWidthWithoutBorders + additionalMargin)
+                                        .setData('width', elWidthWithoutBorders + additionalMargin);
 
                             if(left < 0){
                                 var baseLeft = Math.ceil(left / baseAllWidth) * baseAllWidth;
@@ -277,7 +278,7 @@ NAMESPACE('chlk.controls', function () {
                                 });
                             }
                             toolbar.on('click', '.arrow:not(.disabled)', function (node, event) {
-                                var configs = toolbar.getData('configs');
+                                var configs = toolbar.getData('configs'), eps = 10;
                                 toolbar.find('.arrow').addClass(configs.disabledClass);
                                 var index = toolbar.getData('currentIndex'), isLeft = false;
                                 if (node.hasClass('prev-button')) {
@@ -302,15 +303,17 @@ NAMESPACE('chlk.controls', function () {
                                     var currentLeft = parseInt(secondContainer.getCss('left'), 10),
                                         diff = width - configs.padding;
                                     var left = isLeft ? currentLeft + diff : currentLeft - diff;
-                                    if(left > 0)
+                                    if(left > -eps)
                                         left = 0;
-                                    else
-                                        if(left && configs.itemClass){
-                                            var itemWidth = toolbar.find('.' + configs.itemClass).width();
+                                    else{
+                                        /*if(left && configs.itemClass){
+                                            var itemWidth = toolbar.find('.' + configs.itemClass).getData('width');
                                             left = Math.floor(left/itemWidth + 0.5) * itemWidth;
-                                        }
+                                        }*/
+                                        left = left + configs.rightPadding;
+                                    }
 
-                                    secondContainer.setCss('left', left + configs.rightPadding);
+                                    secondContainer.setCss('left', left);
 
                                     var interval = setInterval(function(){
                                         var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
