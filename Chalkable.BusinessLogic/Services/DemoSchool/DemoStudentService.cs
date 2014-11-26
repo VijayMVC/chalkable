@@ -55,6 +55,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
+            return Storage.StudentStorage.GetClassStudents(classId, markingPeriodId, isEnrolled);
+
             throw new NotImplementedException();
             /*IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
             {
@@ -84,12 +86,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName,
             int start, int count)
         {
-            throw new NotImplementedException();
+            return Storage.StudentStorage.SearStudents(schoolYearId, classId, teacherId, filter, orderByFirstName, start, count);
         }
         
         public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
-            throw new NotImplementedException();
+            return Storage.StudentStorage.GetTeacherStudents(teacherId, schoolYearId);
         }
 
         public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)

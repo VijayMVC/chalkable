@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         
         public PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count)
         {
-            throw new NotImplementedException();
+            return Storage.PersonStorage.SearchPersons(filter, orderByFirstName, start, count);
         }
 
         public void Add(IList<Person> persons)
