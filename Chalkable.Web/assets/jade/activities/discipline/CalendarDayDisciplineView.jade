@@ -1,0 +1,44 @@
+mixin DisciplinesContainer(disciplineTypes, item)
+    .disciplines-container
+        .editable-list
+            each discType in disciplineTypes
+                div(
+                class = discType.visible ? '' : 'x-hidden',
+                data-disciplineTypeId= discType.id.valueOf()
+                ).list-item
+                    .title=discType.name
+                    if item.isEditable()
+                        .del X
+
+.daily-pop-up
+    +ActionForm('discipline', 'setDisciplines')
+        h2.popup-title=Msg.Discipline
+        input(name="disciplinesJson", type="hidden")
+        +Hidden('controller', self.getController())
+        +Hidden('action', self.getAction())
+        +Hidden('params', self.getParams())
+        table.disciplines-table.discipline-popup-table
+            thead.dsc-row
+                th=Msg.Period
+                th=Msg.Class
+                th=Msg.Discipline
+            tbody
+                each item in self.getDisciplines()
+                    tr(
+                        name="discipline",
+                        data-class-period-id = item.getClassPeriodId().valueOf(),
+                        data-class-person-id = item.getClassPersonId().valueOf(),
+                        data-date=self.getDate().getDate(),
+                    ).dsc-row.row
+                        td=item.getPeriod().getSerialOrder()
+                        td=item.getClassName()
+                        td
+                            if item.isEditable()
+                                .discipline-dropdown
+                                    +Select('disciplineTypes').discipline-type-select.grey-select
+                                        each discType in self.getDisciplineTypes()
+                                            +Option(discType.getId(), discType.getName())
+                        td
+                            div
+                                +DisciplinesContainer(self.prepareItemForDisciplinesContainer(item), item)
+                                +TextArea(name='description').notes=item.getDescription()
