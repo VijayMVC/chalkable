@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<controllers>
+	<Person>
+		<Me>
+			<requires />
+		</Me>
+	</Person>
+	<AnnouncementCalendar>
+		<List>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+				<param name="gradelevelids"  needToCall="Class/List"/>
+			</requires>
+		</List>
+		<Day>
+			<requires>
+				<param name="schoolPersonId"  needToCall="Student/GetStudents"/>
+			</requires>
+		</Day>
+		<Week>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+				<param name="gradelevelids"  needToCall="Class/List"/>
+				<param name="gradelevelids"  needToCall="Class/List"/>
+			</requires>
+		</Week>
+	</AnnouncementCalendar>
+	<Announcement>
+		<Read>
+			<requires>
+				<param name="announcementId"  needToCall="Feed/List"/>
+			</requires>
+		</Read>
+	</Announcement>
+	<Application>
+		<GetAnnouncementApplication>
+			<requires>
+				<param name="announcementApplicationId"  needToCall="Announcement/Read"/>
+			</requires>
+		</GetAnnouncementApplication>
+	</Application>
+	<Feed>
+		<List>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>	
+			</requires>
+		</List>
+	</Feed>
+	<Grading>
+		<ItemGradingStat>
+			<requires>
+				<param name="announcementId"  needToCall="Announcement/Read"/>
+			</requires>
+		</ItemGradingStat>
+	</Grading>
+	<Teacher>
+		<Summary>
+			<requires>
+				<param name="personId"  needToCall="Student/GetStudents" />
+			</requires>
+		</Summary>
+		<GetTeachers>
+			<requires/>
+		</GetTeachers>
+	</Teacher>
+	<Class>
+		<List>
+			<requires>
+				<param name="schoolYearId"  needToCall="SchoolYear/List"/>
+			</requires>
+		</List>
+	</Class>
+	<MarkingPeriod>
+		<List>
+			<requires>
+				<param name="schoolYearId"  needToCall="SchoolYear/List" />
+			</requires>
+		</List>
+	</MarkingPeriod>
+	<PrivateMessage>
+		<Send>
+			<requires>
+				<param name="personId"  needToCall="Student/GetStudents" />
+			</requires>
+		</Send>
+		<ListPossibleRecipients>
+			<requires>
+			</requires>
+		</ListPossibleRecipients>
+	</PrivateMessage>
+	<Search>
+		<Search>
+			<requires />
+		</Search>
+	</Search>
+	<Student>
+		<Info>
+			<requires>
+				<param name="schoolPersonId"  needToCall="Student/GetStudents"/>
+			</requires>			
+		</Info>
+		<GetStudents>
+			<requires>
+				<param name="classId"  needToCall="Class/List" />
+			</requires>
+		</GetStudents>
+	</Student>
+</controllers>
