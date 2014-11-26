@@ -28,14 +28,10 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
 topData = self.getTopData()
 announcement = self.getAnnouncement()
 topItems = topData.getTopItems()
--console.log(announcement.getClassId)
--console.log(announcement.getClassId())
--console.log(announcement.getClassId().valueOf)
 classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
 typeId = self.getSelectedTypeId()
 state = announcement && announcement.getState()
 types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
--console.log(announcement.getClassId().valueOf())
 
 .announcement-form.loader-container
     .loader

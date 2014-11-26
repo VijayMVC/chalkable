@@ -34,26 +34,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.ClassPeriodStorage.FullDelete(periodId, classId, dayTypeId);
         }
 
-        public IList<ClassPeriod> GetClassPeriods(int schoolYearId, int? markingPeriodId, int? classId, int? roomId, int? periodId, int? sectionId,
-                                     int? studentId = null, int? teacherId = null, int? time = null)
-        {
-            var classIds = new List<int>();
-            if (classId.HasValue)
-                classIds.Add(classId.Value);
-
-            return Storage.ClassPeriodStorage.GetClassPeriods(new ClassPeriodQuery
-            {
-                MarkingPeriodId = markingPeriodId,
-                ClassIds = classIds,
-                PeriodId = periodId,
-                RoomId = roomId,
-                DateTypeId = sectionId,
-                StudentId = studentId,
-                TeacherId = teacherId,
-                Time = time
-            });
-        }
-
         public Class CurrentClassForTeacher(int personId, DateTime dateTime)
         {
             var person = Storage.PersonStorage.GetPerson(new PersonQuery
@@ -72,16 +52,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             return Storage.ClassPeriodStorage.GetSchedule(syId, teacherId, studentId, classId, from, to);
-        }
-
-        public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)
-        {
-
-            var d = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date.Date);
-            if (d == null || !d.DayTypeRef.HasValue)
-                return new List<ClassPeriod>();
-
-            return GetClassPeriods(d.SchoolYearRef, null, classId, roomId, null, d.DayTypeRef, studentId, teacherId, time);
         }
     }
 }

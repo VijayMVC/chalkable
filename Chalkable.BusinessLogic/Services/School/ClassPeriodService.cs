@@ -12,12 +12,8 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<ClassPeriod> classPeriods);
         void Delete(int periodId, int classId, int dayTypeId);
-
         Class CurrentClassForTeacher(int personId, DateTime dateTime);
-
         IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime from, DateTime to);
-        IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null);
-        IList<ClassPeriod> GetClassPeriods(int schoolYearId, int? markingPeriodId, int? classId, int? roomId, int? periodId, int? dateTypeId, int? studentId = null, int? teacherId = null, int? time = null);
     }
 
     public class ClassPeriodService : SchoolServiceBase, IClassPeriodService
@@ -45,31 +41,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<ClassPeriod> GetClassPeriods(int schoolYearId, int? markingPeriodId, int? classId, int? roomId, int? periodId, int? sectionId,
-                                     int? studentId = null, int? teacherId = null, int? time = null)
-        {
-            using (var uow = Read())
-            {
-                var classIds = new List<int>();
-                if(classId.HasValue)
-                    classIds.Add(classId.Value);
-
-                return new ClassPeriodDataAccess(uow, Context.SchoolLocalId)
-                            .GetClassPeriods(new ClassPeriodQuery
-                                {
-                                    SchoolYearId = schoolYearId,
-                                    MarkingPeriodId = markingPeriodId,
-                                    ClassIds = classIds,
-                                    PeriodId = periodId,
-                                    RoomId = roomId,
-                                    DateTypeId = sectionId,
-                                    StudentId = studentId,
-                                    TeacherId = teacherId,
-                                    Time = time
-                                });
-            }
-        }
-
         public Class CurrentClassForTeacher(int personId, DateTime dateTime)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
@@ -86,19 +57,6 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolYearId.HasValue);
             return DoRead( u => new ScheduleDataAccess(u, null).GetSchedule(Context.SchoolYearId.Value, teacherId, studentId, classId, from, to));
 
-        }
-
-        public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)
-        {
-            var d = ServiceLocator.CalendarDateService.GetCalendarDateByDate(date.Date);
-            var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(date.Date);
-            if (mp == null || d == null || !d.DayTypeRef.HasValue)
-                return new List<ClassPeriod>();            
-
-            if (d.SchoolYearRef != mp.SchoolYearRef)
-                throw new ChalkableException("d.SchoolYearRef != mp.SchoolYearRef");
-
-            return GetClassPeriods(mp.SchoolYearRef, mp.Id, classId, roomId, null, d.DayTypeRef, studentId, teacherId, time);
         }
     }
 }
