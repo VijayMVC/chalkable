@@ -70,7 +70,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime @from, DateTime to)
         {
-            throw new NotImplementedException();
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            return Storage.ClassPeriodStorage.GetSchedule(syId, teacherId, studentId, classId, from, to);
         }
 
         public IList<ClassPeriod> GetClassPeriods(DateTime date, int? classId, int? roomId, int? studentId, int? teacherId, int? time = null)
