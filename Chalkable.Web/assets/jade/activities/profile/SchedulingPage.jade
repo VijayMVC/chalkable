@@ -1,0 +1,16 @@
+schedule = self.getUser()
+.profile-calendar.scheduling-view
+    .loader-container
+        .loader
+        +UserProfileTopBar(self, 'schedule')
+        .profile-info.scheduling-view
+            .summary-info
+                +ShortPersonInfoSection(schedule, 64)
+                    label= 'Currently' + ( self.getUser().getRole() && self.getUser().getRole().getId() == chlk.models.common.RoleEnum.TEACHER ? 'teaching' : 'enrolled in ' ) + schedule.getClassesNumber() + ' classes'
+        actions = {currentAction: 'daySchedule'}
+        if self.getControllerName() == 'students'
+            -actions.day= 'daySchedule';
+            -actions.week= 'weekSchedule';
+            -actions.month= 'monthSchedule';
+        .calendar-section
+            +Calendar(self, chlk.templates.calendar.announcement.DayCalendarBodyTpl, self.calendar, self.getControllerName(), actions, [schedule.getId()])

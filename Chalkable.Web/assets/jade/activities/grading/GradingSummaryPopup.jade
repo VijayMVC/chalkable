@@ -1,0 +1,18 @@
+div(class="announcement-popup-" + self.getId().valueOf())#chlk-pop-up-container.popup-right.ann-grade-pop-up
+    #pop-up-triangle
+    .grading-pop-up
+        .separator.big-text=self.getTitle()
+        .separator.small-text #{Msg.Due}: #{self.getExpiresDate().format('mm/dd/yy')}
+
+        .grading-chart-container.small
+            .separator.small-text #{Msg.Class_average}: ...
+            .chart-loader
+        if self.isAnnOwner()
+            +ActionLink('grading', 'unDropFromPopup', self.getId())(
+                class=self.isDropped() ? "" : "x-hidden",
+                data-announcementId = self.getId().valueOf()
+            ).dropped.grey-button=Msg.Undrop
+            +ActionLink('grading', 'dropFromPopup', self.getId())(
+                class=self.isDropped() ? "x-hidden" : "",
+                data-announcementId = self.getId().valueOf()
+            ).grey-button=Msg.Drop
