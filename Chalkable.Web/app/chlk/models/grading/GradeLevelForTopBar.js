@@ -2,6 +2,7 @@ REQUIRE('chlk.models.grading.GradeLevel');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
+    var SJX = ria.serialize.SJX;
     /** @class chlk.models.grading.GradeLevelForTopBar*/
     CLASS(
         UNSAFE, FINAL ,'GradeLevelForTopBar', EXTENDS(chlk.models.grading.GradeLevel), IMPLEMENTS(ria.serialize.IDeserializable),  [
