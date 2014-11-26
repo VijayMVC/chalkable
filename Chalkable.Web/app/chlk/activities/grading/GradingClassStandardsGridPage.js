@@ -88,6 +88,11 @@ NAMESPACE('chlk.activities.grading', function () {
                 if (model instanceof chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData)
                     this._lastModel = model;
 
+                if (model instanceof chlk.models.grading.GradingClassSummaryGridItems && this._lastModel) {
+                    this._lastModel.setCurrentGradingGrid(model);
+                    this._lastModel.setGradingPeriodId(chlk.models.id.GradingPeriodId(model.getGradingPeriod().getId()));
+                }
+
                 if (model instanceof chlk.models.standard.StandardGrading && this._lastModel) {
                     this._lastModel.getCurrentGradingGrid().getGradingItems()
                         .filter(function (_) {
@@ -99,6 +104,8 @@ NAMESPACE('chlk.activities.grading', function () {
                             }))
                         });
                 }
+
+                _DEBUG && console.info(this._lastModel);
             },
 
             [ria.mvc.DomEventBind('click', '[data-sort-type]')],
@@ -163,7 +170,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 _DEBUG && console.time('repainting');
 
                 var pIndex = chlk.controls.LeftRightToolbarControl.GET_CURRENT_PAGE(this.dom.find('.ann-types-container .grid-toolbar'));
-                this.partialRefreshD(ria.async.Future.$fromData(this._lastModel.getCurrentGradingGrid()), null)
+                this.refreshD(ria.async.Future.$fromData(this._lastModel))
                     .then(function () {
                         var node = this.dom.find('.ann-types-container .grid-toolbar');
                         chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
