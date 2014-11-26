@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 Context.NowSchoolYearTime.Date, Context.NowSchoolYearTime.Date);
             var sortedSchedule = schedule.OrderBy(si => si.PeriodOrder).Select(si => si.ClassId).Distinct().ToList();
 
-            var classList = sortedSchedule.Select(sortedClassRef => classes.First(cls => cls.Id == sortedClassRef)).ToList();
+            var classList = sortedSchedule.Where(x=>x.HasValue).Select(sortedClassRef => classes.First(cls => cls.Id == sortedClassRef)).ToList();
             classList.AddRange(classes.Where(cls => !sortedSchedule.Contains(cls.Id)));
 
             Room currentRoom = null;
