@@ -1,0 +1,180 @@
+.chlk-calendar
+  margin: 25px 0
+  border-radius: 5px
+  border: 1px solid #c8c7c3
+  background: #fff
+  //overflow: hidden
+
+  .day-calendar-list-item
+    >DIV
+      display: inline-block
+      vertical-align: middle
+      overflow: hidden
+
+    .course-icon
+      width: 45px
+      height: 40px
+
+    .p-container
+      width: 120px
+      font-size: 12px
+      font-style: italic
+      white-space: nowrap
+      line-height: 84px
+
+  .header
+    text-align: center
+    position: relative
+    z-index: 2
+    > *
+      display: inline-block
+      font-weight: 600
+      font-size: 18px
+
+    border-bottom: 1px solid #c8c7c3
+    +box-shadow(transparentize(#000, .91) 0 2px 3px)
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+
+    line-height: 63px
+
+    .current-month-container
+      padding: 0 50px
+
+  .day-names
+    background: #f7f7f5
+    color: #2b2a28
+    +text-shadow(transparentize(#fff, .5) 0 0 1px)
+    display: table
+    width: 100%
+    border-collapse: collapse
+    line-height: 36px
+
+  .calendar-body
+    text-align: center
+
+    .day-names > DIV
+      display: table-cell
+      width: 100 / 7 * 1%
+      border: solid #c8c7c3
+      border-width: 0 1px 1px 1px
+      color: #2b2a28
+
+      &:first-child
+        border-left-width: 0
+
+      &:last-child
+        border-right-width: 0
+
+    .items
+      padding: 1px 0 0 1px
+      font-size: 0
+      display: table
+      width: 100%
+      border-collapse: collapse
+
+    .items > A, .week-day
+      width: 100 / 7 * 1%
+
+    .items > A
+      display: inline-block
+      height: 116px
+      text-decoration: none
+      margin-left: -1px
+      margin-top: -1px
+      border: solid #ededed
+      border-width: 0 1px 1px 0
+      overflow: hidden
+
+      &:hover
+        background-color: transparentize(#000, .95)
+
+      &.today:hover
+        background-color: #2f7790
+
+      position: relative
+      &.with-anns::after
+        content: ' '
+        position: absolute
+        bottom: 9px
+        left: 50%
+        margin-left: -4px
+        border-radius: 50%
+        background: #2f7790
+        width: 8px
+        height: 8px
+
+      &.today.with-anns::after
+        background-color: #fff
+
+      h2
+        margin: 0
+        font-size: 24px
+        line-height: 116px
+
+      &.not-current-month
+        color: #d0d0ce
+
+    .today
+      border-color: #13495c
+      background: #2f7790
+      color: #fff
+      &, *
+        +text-shadow(none)
+
+
+    .week-day
+      $height: 116px - 32px
+      vertical-align: top
+      display: table-cell
+      border-right: 1px solid #ededed
+      &:last-child
+        border-right: none
+
+      UL
+        display: block
+        margin: 0
+        padding: 0
+
+      A
+        display: inline-block
+        height: $height
+        width: 100%
+        position: relative
+        color: inherit
+
+        &:hover
+          background-color: transparentize(#000, .95)
+
+        .period-info
+          position: absolute
+          left: -16px
+          top: 50%
+          margin-top: - 16px
+          width: 24px
+          height: 24px
+          border-radius: 50%
+          background: #fff
+          text-align: center
+          line-height: 24px
+          border: 3px solid #eee
+          color: #000
+          font-size: 13px
+          pointer-events: none
+
+      .announcement-calendar-item
+        margin: 16px
+        max-height: $height - 32px
+        font-size: 12px
+        line-height: 18px
+        overflow: hidden
+        font-style: italic
+        > *
+          display: inline-block
+
+        strong
+          font-weight: 600
+
+    .today.week-day A:hover
+      background-color: transparentize(#fff, .95)
+

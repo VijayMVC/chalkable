@@ -1,0 +1,68 @@
+.message-list-page
+  .buttons, .action-bar
+    margin-bottom: 24px
+
+  > FORM
+    position: relative
+    z-index: 1
+
+  .row
+    border: 1px solid #c8c7c3
+    border-radius: 5px
+    margin: 8px 0 0
+    +box-shadow(transparentize(#000, .91) 0 2px 3px)
+
+    padding: 0 24px 0
+
+  .item-container
+    position: relative
+    line-height: 80px
+    vertical-align: middle
+
+    width: 100%
+
+  .chk
+    width: 40px
+
+  .av
+    width: 70px
+
+  .avatar-wrapper
+    display: inline-block
+    vertical-align: middle
+
+  .sent
+    left: 0
+    bottom: 15px
+    width: 262px
+    position: absolute
+
+    font-size: 11px
+    line-height: 15px
+    color: #7b7974
+    +text-shadow(transparentize(#fff, .25) 0 1px 0)
+
+  .msg-info
+    position: relative
+
+    .details
+      width: 100%
+
+    .title
+      width: 300px
+      font-size: 20px
+      font-weight: 700
+      color: #2f7790
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+      line-height: 80px
+      vertical-align: middle
+
+    .content
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      word-break: break-all
+      font-size: 13px
+      line-height: 80px
+      color: #2b2a28
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)

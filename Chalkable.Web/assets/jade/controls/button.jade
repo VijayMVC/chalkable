@@ -1,0 +1,10 @@
+mixin Button()
+    value = attributes.value;
+    type = attributes.type;
+    -delete attributes.type;
+    name = attributes.name;
+    attributes = self.processAttrs(attributes);
+    isDisabled = (attributes.disabled===true ? "disabled" : undefined);
+
+    button(type=type, name=name, value=value, disabled=isDisabled).chlk-button(attributes)
+        block
