@@ -83,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         
-        public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId)
+        public void AddAnnouncementNotificationQnToTeacher(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var teachers = ServiceLocator.StaffService.SearchStaff(null, ann.ClassRef, null, null, true, 0, int.MaxValue);
@@ -93,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNotificationAnswerToPerson(int announcementQnAId, int announcementId)
+        public void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
@@ -101,11 +101,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AddNotification(notification);
         }
 
-        public void AddAnnouncementSetGradeNotificationToPerson(int announcementId, int recipientId)
+        public void AddAnnouncementSetGradeNotificationToStudent(int announcementId, int recipientId)
         {
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var recipient = ServiceLocator.PersonService.GetPerson(recipientId);
-            var notification = builder.BuildAnnouncementSetGradeToPersonNotifiaction(announcement, recipient);
+            var notification = builder.BuildAnnouncementSetGradeToStudentNotifiaction(announcement, recipient);
             AddNotification(notification);
         }
 

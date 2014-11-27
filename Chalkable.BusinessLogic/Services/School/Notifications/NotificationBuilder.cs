@@ -164,7 +164,11 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON,
                                                  NotificationType.Announcement, toPerson, announcement, null, null,  
-                                                 null, fromschoolPerson, new { AnnouncementTitle = announcement.Title});
+                                                 null, fromschoolPerson, new
+                                                     {
+                                                         AnnouncementTitle = announcement.Title,
+                                                         AttachmentOwnerFullName = fromschoolPerson.FullName()
+                                                     });
         }
 
         public Notification BuildAnnouncementReminderNotification(AnnouncementComplex announcement, Person recipient)
@@ -182,7 +186,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                      {
                                                          AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                                                          PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 35),
-                                                         AnnouncementTitle = announcement.Title
+                                                         AnnouncementTitle = announcement.Title,
+                                                         AskerName = announcementQnA.Asker.DisplayName()
                                                      });
         }
 
@@ -195,18 +200,20 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                      {
                                                          AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                                                          AnnouncementTitle = announcement.Title,
-                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40)
+                                                         PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40),
+                                                         AnswererName = announcementQnA.Answerer.DisplayName()
                                                      });
         }
 
-        public Notification BuildAnnouncementSetGradeToPersonNotifiaction(AnnouncementDetails announcement, Person recipient)
+        public Notification BuildAnnouncementSetGradeToStudentNotifiaction(AnnouncementDetails announcement, Person recipient)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON,
                                                  NotificationType.Announcement, recipient, announcement, null, null, null, null, 
                                                  new {
                                                          AnnouncementOwner = announcement.Owner,
                                                          AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
-                                                         AnnouncementTitle = announcement.Title
+                                                         AnnouncementTitle = announcement.Title,
+                                                         AnnouncementOwnerName = announcement.Owner.DisplayName()
                                                      });
         }
 

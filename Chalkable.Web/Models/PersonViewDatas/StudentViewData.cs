@@ -17,8 +17,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             Id = student.Id;
             DisplayName = student.DisplayName();
             FullName = student.FullName();
-            FirstName = student.LastName;
-            LastName = student.FirstName;
+            FirstName = student.FirstName;
+            LastName = student.LastName;
             Gender = student.Gender;
             HasMedicalAlert = student.HasMedicalAlert;
             IsAllowedInetAccess = student.IsAllowedInetAccess;
