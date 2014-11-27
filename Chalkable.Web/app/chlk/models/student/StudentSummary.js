@@ -12,6 +12,8 @@ REQUIRE('chlk.models.attendance.ClassAttendance');
 NAMESPACE('chlk.models.student', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.student.StudentSummary*/
     CLASS(
         'StudentSummary', EXTENDS(chlk.models.people.PersonSummary), [
@@ -21,13 +23,29 @@ NAMESPACE('chlk.models.student', function () {
                 this._attendanceTypeMapper = new chlk.models.attendance.AttendanceTypeMapper();
             },
 
-            [ria.serialize.SerializeProperty('gradelevelnumber')],
+            OVERRIDE, VOID, function deserialize(raw){
+                BASE(raw);
+                this.gradeLevelNumber = SJX.fromValue(raw.gradelevelnumber, Number);
+                this.currentClassName = SJX.fromValue(raw.currentclassname, String);
+                this.currentAttendanceLevel = SJX.fromValue(raw.currentattendancelevel, String);
+                this.maxPeriodNumber = SJX.fromValue(raw.maxperiodnumber, Number);
+
+                this.classesSection = SJX.fromArrayOfDeserializables(raw.classessection, chlk.models.classes.Class);
+                this.periodSection = SJX.fromArrayOfDeserializables(raw.periodsection, chlk.models.announcement.AnnouncementClassPeriod);
+
+                this.attendanceBox = SJX.fromDeserializable(raw.attendancebox, chlk.models.common.HoverBox.OF(chlk.models.common.AttendanceHoverBoxItem));
+                this.disciplineBox = SJX.fromDeserializable(raw.disciplinebox, chlk.models.common.HoverBox.OF(chlk.models.common.DisciplineHoverBoxItem));
+                this.gradesBox = SJX.fromDeserializable(raw.gradesbox, chlk.models.common.HoverBox.OF(chlk.models.student.StudentGradesHoverBoxItem));
+                this.rankBox = SJX.fromDeserializable(raw.ranksbox, chlk.models.common.HoverBox.OF(chlk.models.student.StudentRankHoverBoxItem));
+            },
+
+//            [ria.serialize.SerializeProperty('gradelevelnumber')],
             Number, 'gradeLevelNumber',
 
-            [ria.serialize.SerializeProperty('currentclassname')],
+//            [ria.serialize.SerializeProperty('currentclassname')],
             String, 'currentClassName',
 
-            [ria.serialize.SerializeProperty('currentattendancelevel')],
+//            [ria.serialize.SerializeProperty('currentattendancelevel')],
             String, 'currentAttendanceLevel',
 
             Boolean, 'ableViewTranscript',
@@ -37,7 +55,7 @@ NAMESPACE('chlk.models.student', function () {
                 return this._attendanceTypeMapper.map(this.getCurrentAttendanceLevel()).valueOf();
             },
 
-            [ria.serialize.SerializeProperty('maxPeriodNumber')],
+//            [ria.serialize.SerializeProperty('maxPeriodNumber')],
             Number, 'maxPeriodNumber',
 
 
@@ -53,10 +71,11 @@ NAMESPACE('chlk.models.student', function () {
             [ria.serialize.SerializeProperty('ranksbox')],
             chlk.models.common.HoverBox.OF(chlk.models.student.StudentRankHoverBoxItem), 'rankBox',
 
-            [ria.serialize.SerializeProperty('classessection')],
+//            [ria.serialize.SerializeProperty('classessection')],
             ArrayOf(chlk.models.classes.Class), 'classesSection',
 
-            [ria.serialize.SerializeProperty('periodsection')],
+//            [ria.serialize.SerializeProperty('periodsection')],
             ArrayOf(chlk.models.announcement.AnnouncementClassPeriod), 'periodSection'
+
         ]);
 });

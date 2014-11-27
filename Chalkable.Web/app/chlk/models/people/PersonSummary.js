@@ -4,17 +4,21 @@ REQUIRE('chlk.models.id.RoomId');
 NAMESPACE('chlk.models.people', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.people.PersonSummary*/
     CLASS(
-        'PersonSummary', EXTENDS(chlk.models.people.User),[
+        'PersonSummary', EXTENDS(chlk.models.people.User), IMPLEMENTS(ria.serialize.IDeserializable),[
 
-            [ria.serialize.SerializeProperty('roomid')],
             chlk.models.id.RoomId, 'roomId',
-
-            [ria.serialize.SerializeProperty('roomname')],
             String, 'roomName',
+            Number, 'roomNumber',
 
-            [ria.serialize.SerializeProperty('roomnumber')],
-            Number, 'roomNumber'
+            OVERRIDE, VOID, function deserialize(raw){
+                BASE(raw);
+                this.roomId = SJX.fromValue(raw.roomid, chlk.models.id.SchoolPersonId);
+                this.roomName = SJX.fromValue(raw.roomname, String);
+                this.roomNumber = SJX.fromValue(raw.roomnumber, Number);
+            }
     ]);
 });

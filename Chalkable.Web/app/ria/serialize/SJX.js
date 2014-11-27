@@ -25,12 +25,18 @@ NAMESPACE('ria.serialize', function () {
         },
 
         fromDeserializable: function (raw, Type) {
+            var specs = [];
+            if (ria.__API.isSpecification(Type)) {
+                specs = Type.specs;
+                Type = Type.type;
+            }
+
             Assert(ria.__API.isClassConstructor(Type) && ria.__API.implements(Type, ria.serialize.IDeserializable));
 
             if (raw == undefined || raw == null)
                 return null;
 
-            var obj = Type();
+            var obj = Type.apply(_GLOBAL, specs);
             obj.deserialize(raw);
             return obj;
         },
