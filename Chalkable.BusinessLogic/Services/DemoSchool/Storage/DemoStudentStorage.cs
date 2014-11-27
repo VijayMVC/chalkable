@@ -16,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
+
         public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
             var students = GetAll();
@@ -25,9 +26,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             students = students.Where(s => classPersons.Any(cp => cp.PersonRef == s.Id)).ToList();
             var stWithDrawDic = Storage.StudentSchoolYearStorage.GetList(schoolYearId, null)
-                                            .GroupBy(x=>x.StudentRef).ToDictionary(x=>x.Key, x=>x.First().IsEnrolled);
+                                            .GroupBy(x=>x.StudentRef).ToDictionary(x=>x.Key, x=>!x.First().IsEnrolled);
 
-            return PrepareStudentDetailsData(students, stWithDrawDic);
+            return PrepareStudentListDetailsData(students, stWithDrawDic);
         }
 
 
@@ -57,10 +58,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 var isEnrolled = stSchoolYears.Any(x => x.StudentRef == student.Id && x.IsEnrolled) 
                                 && classPersons.Any(x => x.PersonRef == student.Id && x.IsEnrolled);
                 if (!stWithDrawDic.ContainsKey(student.Id))
-                    stWithDrawDic.Add(student.Id, isEnrolled);
-                else stWithDrawDic[student.Id] = isEnrolled;
+                    stWithDrawDic.Add(student.Id, !isEnrolled);
+                else stWithDrawDic[student.Id] = !isEnrolled;
             }
-            return new PaginatedList<StudentDetails>(PrepareStudentDetailsData(res, stWithDrawDic), start / count, count);
+            return new PaginatedList<StudentDetails>(PrepareStudentListDetailsData(res, stWithDrawDic), start / count, count);
         }
 
         public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled)
@@ -71,27 +72,41 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                         ClassId = classId,
                         MarkingPeriodId = markingPeriodId,
                         IsEnrolled = isEnrolled
-                    }).GroupBy(x=>x.PersonRef).ToDictionary(x=>x.Key, x=>x.First().IsEnrolled);
+                    }).GroupBy(x=>x.PersonRef).ToDictionary(x=>x.Key, x=>!x.First().IsEnrolled);
             students = students.Where(s => stWithDrawDic.ContainsKey(s.Id)).ToList();
-            return PrepareStudentDetailsData(students, stWithDrawDic);
+            return PrepareStudentListDetailsData(students, stWithDrawDic);
         }
 
-        private IList<StudentDetails> PrepareStudentDetailsData(IEnumerable<Student> students, IDictionary<int, bool> stWithDrawDic)
+        public StudentDetails GetStudentDeatils(int id, int schoolYearId)
         {
-            return students.Select(s => new StudentDetails
-            {
-                Id = s.Id,
-                FirstName = s.FirstName,
-                LastName = s.LastName,
-                BirthDate = s.BirthDate,
-                Gender = s.Gender,
-                HasMedicalAlert = s.HasMedicalAlert,
-                IsAllowedInetAccess = s.IsAllowedInetAccess,
-                PhotoModifiedDate = s.PhotoModifiedDate,
-                SpEdStatus = s.SpEdStatus,
-                SpecialInstructions = s.SpecialInstructions,
-                IsWithdrawn = stWithDrawDic.ContainsKey(s.Id) && stWithDrawDic[s.Id]
-            }).ToList();
-        } 
+            var student = GetById(id);
+            var isEnrolled = Storage.StudentSchoolYearStorage.GetData().Any(x => x.Value.StudentRef == id
+                                          && x.Value.SchoolYearRef == schoolYearId && x.Value.IsEnrolled);
+            return PrepareStudentDetailsData(student, !isEnrolled);
+        }
+
+        private IList<StudentDetails> PrepareStudentListDetailsData(IEnumerable<Student> students, IDictionary<int, bool> stWithDrawDic)
+        {
+            return students.Select(s => PrepareStudentDetailsData(s, stWithDrawDic.ContainsKey(s.Id) ? stWithDrawDic[s.Id] : default(bool?))).ToList();
+        }
+
+        private StudentDetails PrepareStudentDetailsData(Student student, bool? isWithdrawn)
+        {
+            return new StudentDetails
+                {
+                    Id = student.Id,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    BirthDate = student.BirthDate,
+                    Gender = student.Gender,
+                    HasMedicalAlert = student.HasMedicalAlert,
+                    IsAllowedInetAccess = student.IsAllowedInetAccess,
+                    PhotoModifiedDate = student.PhotoModifiedDate,
+                    SpEdStatus = student.SpEdStatus,
+                    SpecialInstructions = student.SpecialInstructions,
+                    IsWithdrawn = isWithdrawn
+                };
+        }
+
     }
 }
