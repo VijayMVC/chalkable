@@ -83,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;*/
         }
 
-        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName,
+        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName,
             int start, int count)
         {
             return Storage.StudentStorage.SearStudents(schoolYearId, classId, teacherId, filter, orderByFirstName, start, count);

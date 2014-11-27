@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId);
         IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null);
-        PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count);
+        PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count);
 
         StudentDetails GetById(int id, int schoolYearId);
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
@@ -103,9 +103,9 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new StudentDataAccess(u).GetStudents(classId, markingPeriodId, isEnrolled));
         }
 
-        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, string filter, bool orderByFirstName, int start, int count)
+        public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count)
         {
-            return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, teacherId, filter,
+            return DoRead( u => new StudentDataAccess(u).SearchStudents(schoolYearId, classId, teacherId, classmatesToId, filter,
                             orderByFirstName, start, count));
         }
 
