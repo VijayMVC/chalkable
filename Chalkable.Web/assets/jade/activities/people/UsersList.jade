@@ -4,7 +4,7 @@
     .left
         input(type="hidden", name="byLastName", value=(self.isByLastName() ? 'true' : 'false'))
         .buttons-group
-        BUTTON(class=self.isByLastName()?"":"pressed", data-value="false").first-last First name
+            BUTTON(class=self.isByLastName()?"":"pressed", data-value="false").first-last First name
             BUTTON(class=self.isByLastName()?"pressed":"", data-value="true").first-last Last name
     .right.wrapper
         input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter()).people-search.search-input
@@ -15,7 +15,7 @@
     .clear-fix
 
 .people-list-container.not-transparent
-    .header: .title= self.getTotalText()
+    .header: .title.total-count= self.getTotalText()
     .grid-container.loader-container
         +RenderWith(self.getModel(), chlk.templates.people.UsersGridTpl)(
             userRole = self.getUserRole(),
