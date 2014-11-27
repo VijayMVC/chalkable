@@ -1,0 +1,34 @@
+noComplete = self.completeOnly && !self.items.length
+div(class = noComplete ? "no-complete" : "").feed-container
+    topData = self.getTopData();
+    topItems = topData.getTopItems();
+    selectedId = topData.getSelectedItemId();
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.importantOnly])(
+        selectedItemId=selectedId
+        ).classes-bar
+    h2.page-title Inbox
+    .action-bar
+        .items
+            if self.importantOnly
+                .pressed= Msg.ToDo
+                +ActionLinkButton('feed', 'list', true, false, selectedId || '', 0)= Msg.All
+            else
+                +ActionLinkButton('feed', 'list', true, true, selectedId || '', 0)= Msg.ToDo
+                .pressed= Msg.All
+    //+ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
+    if noComplete
+        label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
+        label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
+    else
+        .wrapper
+            +ListView(self.items)(
+                infiniteScroll = true,
+                needGoToButton = true,
+                service = chlk.services.AnnouncementService,
+                method = "getAnnouncements",
+                tpl = chlk.templates.announcement.FeedItemTpl,
+                pageSize = 10,
+                paramsPrepend = [selectedId, self.importantOnly]
+            )
+                each item in self.items
+                    +FeedItem(item)

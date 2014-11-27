@@ -1,0 +1,350 @@
+.grades-page
+  .marking-period-container
+    position: relative
+
+    &.open
+      .collapse
+        @include transform(rotate(90deg))
+
+  .collapse
+    position: absolute
+    right: 25px
+    top: 26px
+    width: 8px
+    height: 12px
+    background: url(images/grading/gp-arrow.png) 0 0 no-repeat
+    +transition(all, .2s, easy-in-out)
+
+  .arrows-row
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    text-align: center
+    padding-top: 9px
+
+  .grid-arrow
+    width: 72px
+    height: 27px
+    cursor: pointer
+    display: inline-block
+
+    &:first-child
+      margin-right: 10px
+
+    &.prev-arrow
+      background: url(images/grading/arrow-prevr.png) 0 0 no-repeat
+
+    &.next-arrow
+      background: url(images/grading/arrow-next.png) 0 0 no-repeat
+
+    &:active
+      opacity: 0.5
+
+    &.disabled
+      opacity: 0
+      cursor: default
+
+  .autocomplete-list
+    .autocomplete-item
+      width: auto
+
+  .chlk-pop-up-container.codes, .chlk-pop-up-container.comment
+    display: none
+
+  .mps-container
+    position: relative
+
+  .gp-button
+    display: none
+
+  .mp-data
+    height: 0
+    overflow: hidden
+
+  .buttons-group
+    margin-top: 15px
+
+  .buttons-row
+    border-bottom: 1px solid #c8c7c3
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+    line-height: 62px
+    padding: 0 17px
+    position: relative
+    height: 62px
+
+    .blue-button
+      float: right
+      margin: 16px 3px
+      width: 148px
+      position: relative
+      z-index: 10
+
+  .grading-selects
+    display: inline-block
+    position: relative
+    z-index: 10
+
+  .grading-select
+    min-width: 137px
+    
+    >DIV.chzn-container
+      margin-right: 20px
+
+  .ann-types-container
+    white-space: nowrap
+
+  .dotted-container, .lr-toolbar
+    display: inline-block
+    vertical-align: top
+
+  .grading-grid-th
+    height: 56px
+    border-bottom: 1px solid #c7c8c3
+    border-right: 1px solid #c7c8c3
+    text-align: center
+    background: #f7f7f5
+
+    .time, .max-score
+      font: normal 13px/19px 'Open Sans'
+      font-style: italic
+
+    a
+      text-decoration: none
+
+  .announcement-container
+    .type-name
+      line-height: 19px
+      width: 110px
+      text-overflow: ellipsis
+      overflow: hidden
+
+  .grid-toolbar
+    .dotted-container:last-child
+      .grading-grid-th2
+        border-right: none
+
+  .type-name
+    font: bold 13px/56px 'Open Sans'
+    color: #2b2a28
+    padding: 0 3px
+
+  .name-container
+    .type-name
+      width: 214px
+      text-align: left
+      padding: 0 0 0 19px
+
+  .dotted-container
+    >.dotted-h, >.student-name
+      border-bottom: 1px solid #c7c8c3
+      border-right: 1px solid #c7c8c3
+      height: 76px
+      line-height: 76px
+
+    .student-name
+      padding-left: 19px
+
+    >.dotted-h
+      text-align: center
+
+  .alert-flag
+    top: -1px
+    right: 5px
+    z-index: -10
+
+    &.incomplete, &.late, &.absent, &.multiple, &.error
+      z-index: 10
+
+  .dotted-h
+    position: relative
+
+    &.grade-value
+      cursor: pointer
+
+    &:not(.gradable)
+      .edit-cell
+        display: none
+
+    &.active-cell
+      .value-input
+        display: block
+
+      .edit-cell
+        display: none
+
+    &.top-popup
+      .grading-input-popup
+        top: auto
+        bottom: 47px
+
+    &.avg-value-container
+      font-weight: bold
+
+  .with-comment
+    position: absolute
+    top: 7px
+    left: 6px
+    width: 11px
+    height: 12px
+    background: url(images/grading/comment-icon2.png) 0 0 no-repeat
+    z-index: 2
+
+  .edit-cell
+    position: absolute
+    left: 0
+    right: 1px
+    top: 0
+    bottom: 1px
+    background: url(images/grading/edit-cell.png) center center no-repeat, #eeeeee
+    z-index: 1
+    opacity: 0
+
+    &:hover
+      opacity: 1
+
+  .value-input
+    position: absolute
+    left: -1px
+    right: 0px
+    top: -1px
+    bottom: 0px
+    width: 100%
+    border-radius: 0
+    border: 1px solid #d1d1d1
+    display: none
+    text-align: center
+    z-index: 3
+    height: 74px
+    color: #2d788f
+
+    &.error
+      border-color: #d16060
+      outline: none
+
+  .standards-select + DIV
+    margin-right: 16px
+
+  .grading-input-popup
+    left: 0
+    top: 77px
+    width: 100%
+
+  .active-row
+    background: #fafafa
+
+  .dropped-value
+    text-decoration: line-through
+
+  .chlk-pop-up-container
+    padding: 8px 18px
+    position: absolute
+    border-radius: 3px
+    background: #EEE
+    border-color: #B7B7B7
+    box-shadow: 0 0 4px 0px #888
+    text-shadow: white 0px 1px 1px
+    z-index: 100
+
+    .pop-up-triangle
+      left: 0
+      right: 0
+      height: 10px
+      background: url(images/common/window-triangle-top.png) center 0 no-repeat
+      position: absolute
+      bottom: -10px
+      @include transform(rotate(180deg))
+
+    &.comment
+      padding: 8px 18px
+
+    &.comment, &.codes
+      border-radius: 3px
+      display: none
+
+    &.codes
+      padding: 10px
+      color: #333333
+
+      h3
+        text-align: center
+        font: bold 18px Arial
+        margin-bottom: 20px
+
+      .buttons-bottom
+        margin-top: 14px
+        text-align: center
+
+        .chlk-button
+          margin-bottom: 0
+          width: 80px
+
+        button:first-child
+          margin-right: 10px
+
+      .row
+        &.header
+          font: bold 14px Arial
+          margin-bottom: 7px
+
+        &:not(.header)
+          margin-top: 4px
+
+          >DIV.name
+            font: normal 14px Arial
+
+        >DIV
+          display: inline-block
+          vertical-align: middle
+
+          &.check
+            width: 26px
+
+          &.name
+            width: 93px
+            overflow: hidden
+            text-overflow: ellipsis
+
+          &.code
+            width: 128px
+
+            .code-input
+              width: 82px
+              height: 20px
+
+          &.comment
+            width: 331px
+
+            .codes-select
+              width: 322px
+
+  .edited
+    font: normal 10px Arial italic
+    text-align: left
+    position: absolute
+    color: #b1b1b1
+    text-shadow: 0 1px 0 white
+    padding-left: 13px
+    bottom: 1px
+    left: 46px
+    background: url(images/grading/edited-avg.png) 0 center no-repeat
+
+  .chlk-pop-up-container.comment
+    h5
+      font: normal 10px Georgia italic
+      text-align: center
+      margin-bottom: 6px
+
+    textarea
+      width: 137px
+      min-height: 54px
+
+    BUTTON
+      width: 68px
+
+.student-avg-popup-dialog
+  width: 472px
+  top: 80px
+  left: 411px
+  position: fixed

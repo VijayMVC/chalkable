@@ -1,0 +1,28 @@
+if self.getStudent()
+    typeName = self.getTypeName()
+    reason = self.getAttendanceReason()
+    type = self.getType()
+    reasonId = self.getAttendanceReasonId() ? self.getAttendanceReasonId().valueOf() : null
+    level = reason ? reason.getLevel(type) : null
+    div(class=typeName ? typeName.toLowerCase() : '').not-empty
+        .remove-red-btn.remove-student
+        student = self.getStudent()
+        A(
+            data-id=student.getId().valueOf(),
+            data-type=type,
+            data-level=level,
+            data-old-level=level,
+            data-reason-id=reasonId,
+            data-old-reason-id=reasonId,
+            data-reason-text=reason ? reason.getName() : null
+        ).image-container.white.shadow.attendance-data
+            +PersonImg(student, 70)
+            .reason-container
+                .reason-text(data-tooltip=reason ? reason.getName() : '', data-tooltip-type='overflow')
+        div(data-tooltip=student.getDisplayName(), data-tooltip-type="overflow").student-seating-name
+            = student.getFirstName() + ' ' + student.getLastName()[0] + '.'
+        .student-seating-type
+        .chlk-pop-up-container.popup-top.seating-attendance-popup
+else
+    .empty
+

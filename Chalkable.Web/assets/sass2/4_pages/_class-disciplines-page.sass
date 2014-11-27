@@ -1,0 +1,63 @@
+.class-disciplines-page
+  .table
+    width: 100%
+
+  .l
+    width: 120px
+  .r
+    width: 120px
+    text-align: right
+
+  .title
+    position: relative
+
+  .tr
+    opacity: 0
+    position: absolute
+    top: 0
+    left: 50%
+    margin-left: -130px
+    width: 260px
+    height: 100%
+    z-index: 5
+    cursor: pointer
+
+  .discipline-desciption-container
+    width: 400px
+
+    textarea
+      width: 100%
+      height: 100px
+
+  .discipline-types
+    margin-right: 50%
+
+  .labeled-checkbox
+    label
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+
+    width: 40%
+
+    &:nth-child(2n - 1)
+      margin-right: 5%
+
+
+  .saving-block, .saved-block
+    display: none
+    font: bold 12px Arial
+    color: #5d5d5d
+    margin-top: 35px
+
+
+  .saved-block
+    background: url(images/discipline/saved.png) 0 center no-repeat
+    padding-left: 25px
+
+
+  .saving .saving-block
+    display: block
+
+  .saved .saved-block
+    display: block
