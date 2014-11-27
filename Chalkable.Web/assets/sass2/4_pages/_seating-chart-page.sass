@@ -50,20 +50,21 @@
 
   .reason-container
     position: absolute
-    bottom: 0
-    right: 0
-    width: 18px
-    height: 18px
+    bottom: 1px
+    right: 3px
+    width: 16px
+    height: 16px
     border-radius: 50%
-    background: green
-    border: 4px solid white
+    background: #41b768
+    border: 1px solid silver
     font-size: 0
+    +box-shadow(#fff 0 0 0 3px)
 
   .absent .reason-container
-    background: red
+    background: #d45151
 
   .late .reason-container
-    background: orange
+    background: #f0ca19
 
   .empty-box
     &.absolute
