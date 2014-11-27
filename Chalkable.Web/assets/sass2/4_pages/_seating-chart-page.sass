@@ -80,12 +80,34 @@
     vertical-align: top
     height: 70px
 
-
-  .student-seating-name
-    text-align: center
-
   .seating-chart-popup
     position: absolute
     display: none
     z-index: 999
     +box-shadow(transparentize(#000, .8) 0 0 16px)
+
+  #submit-chart
+    display: none
+
+  .show-edit-grid-form
+    display: inline
+
+.student-seating-name
+  text-align: center
+
+.seating-chart-people
+  display: none
+  position: fixed
+  bottom: 0
+  padding: 0 15px
+  background: white
+  left: 0
+  right: 0
+  border-top: 1px solid #c8c7c3
+  z-index: 899
+
+  .student-block
+    display: inline-block
+    margin: 15px 10px 25px
+    vertical-align: top
+    height: 70px
