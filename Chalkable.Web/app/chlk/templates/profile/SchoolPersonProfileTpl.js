@@ -35,6 +35,24 @@ NAMESPACE('chlk.templates.profile', function(){
                     return this._studentControllerName;
             },
 
+            [[Object, Number]],
+            String, function getPersonEnrollmentStatus(user, classesNumber){
+                var result = '';
+                var role = user.getRole();
+
+                if (role.getId()){
+                    result = "Currently ";
+                    if (classesNumber > 0){
+                        result += role.getId() == chlk.models.common.RoleEnum.TEACHER ? 'teaching ' : 'enrolled in ' + classesNumber;
+                        result += classesNumber > 1 ? ' classes' : ' class';
+                    }
+                    else{
+                        result += role.getId() == chlk.models.common.RoleEnum.TEACHER ? 'doesn\'t teach any class' : 'unenrolled';
+                    }
+                }
+                return result;
+            },
+
             [[String]],
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){
                 var controller = this.getControllerName();

@@ -14,5 +14,8 @@ NAMESPACE('chlk.templates.people', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.calendar.announcement.Month, 'calendar'
+
+
+
         ])
 });
