@@ -1,8 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -78,14 +76,18 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(PrepareScheduleData(StudentViewData.Create(student)));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GET_STUDENTS, true, CallType.Get, new[] { AppPermissionType.User, })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GET_STUDENTS, true, CallType.Get, new[] { AppPermissionType.User })]
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
+            PaginatedList<StudentDetails> res;
             int? teacherId = null;
             if (myStudentsOnly == true && CoreRoles.TEACHER_ROLE == SchoolLocator.Context.Role)
                 teacherId = SchoolLocator.Context.PersonId;
-            var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, filter, byLastName != true, start ?? 0, count ?? 10);
+            int? classMatesToId = null;
+            if (CoreRoles.STUDENT_ROLE == SchoolLocator.Context.Role)
+                classMatesToId = Context.PersonId;
+            res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, classMatesToId, filter, byLastName != true, start ?? 0, count ?? 10);
             return Json(res.Transform(StudentViewData.Create));
         }
 
