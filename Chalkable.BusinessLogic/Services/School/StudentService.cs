@@ -113,7 +113,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
-            var student = ServiceLocator.PersonService.GetPerson(studentId);
+            var student = ServiceLocator.StudentService.GetById(studentId, syId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
             IList<AnnouncementComplex> anns;

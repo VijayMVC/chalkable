@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public StudentDetails GetById(int id, int schoolYearId)
         {
-            throw new NotImplementedException();
+            return Storage.StudentStorage.GetStudentDeatils(id, schoolYearId);
         }
 
         public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
@@ -160,7 +160,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 SectionAttendance = attendances,
                 Scores = Storage.StiActivityScoreStorage.GetScores(studentId)
             };
-            var student = ServiceLocator.PersonService.GetPerson(studentId);
+            var student = ServiceLocator.StudentService.GetById(studentId, syId);
             var activitiesids = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
             var anns = Storage.AnnouncementStorage.GetAnnouncements(new AnnouncementsQuery { SisActivitiesIds = activitiesids }).Announcements;
             var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());

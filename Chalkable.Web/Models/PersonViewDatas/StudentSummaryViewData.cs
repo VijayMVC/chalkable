@@ -8,7 +8,7 @@ using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
-    public class StudentSummaryViewData : PersonSummaryViewData
+    public class StudentSummaryViewData : StudentViewData
     {
 
         public int GradeLevelNumber { get; set; }
@@ -24,9 +24,17 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
 
+        public int? RoomId { get; set; }
+        public string RoomName { get; set; }
+        public string RoomNumber { get; set; }
 
-        protected StudentSummaryViewData(Person person, Room room) : base(person, room)
+
+        protected StudentSummaryViewData(StudentDetails student, Room room) : base(student)
         {
+            if (room == null) return;
+            RoomId = room.Id;
+            RoomName = room.Description;
+            RoomNumber = room.RoomNumber;
         }
 
         public static StudentSummaryViewData Create(StudentSummaryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes)
