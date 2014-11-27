@@ -57,7 +57,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                     CallerId = annQnA.AskerRef,
                                     SchoolId = Context.SchoolLocalId.Value
                                 }).AnnouncementQnAs.OrderByDescending(x=>x.Id).First();
-                ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
+                ServiceLocator.NotificationService.AddAnnouncementNotificationQnToTeacher(annQnA.Id, ann.Id);
                 return annQnA;
             }
         }
@@ -88,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(annQnA.AnnouncementRef);
                 if(ann.VisibleForStudent)
-                    ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
+                    ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToStudent(annQnA.Id, annQnA.AnnouncementRef);
                 return annQnA;
             }
         }

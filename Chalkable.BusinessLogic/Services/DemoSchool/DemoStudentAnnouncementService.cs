@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (stAnn.AlternateScoreId.HasValue)
                 stAnn.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(stAnn.AlternateScoreId.Value);
             if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
-                ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToPerson(announcementId, stAnn.StudentId);
+                ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, stAnn.StudentId);
             return stAnn;
         }
 

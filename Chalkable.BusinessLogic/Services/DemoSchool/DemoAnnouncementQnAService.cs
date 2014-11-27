@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 AnnouncementId = announcementId,
                 CallerId = annQnA.AskerRef
             }).AnnouncementQnAs.OrderByDescending(x => x.Id).First();
-            ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
+            ServiceLocator.NotificationService.AddAnnouncementNotificationQnToTeacher(annQnA.Id, ann.Id);
             return annQnA;
         }
 
@@ -83,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
         
             Storage.AnnouncementQnAStorage.Update(annQnA);
-            ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToPerson(annQnA.Id, annQnA.AnnouncementRef);
+            ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToStudent(annQnA.Id, annQnA.AnnouncementRef);
             return annQnA;
         }
 
