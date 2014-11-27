@@ -1,4 +1,6 @@
 .seating-chart-page
+  position: relative
+
   .table
     width: 100%
 
@@ -26,7 +28,7 @@
   .buttons
     padding: 10px 25px 0
 
-  .third-container
+  //.third-container
     display: block !important
 
   .seating-chart-container
@@ -55,6 +57,13 @@
     border-radius: 50%
     background: green
     border: 4px solid white
+    font-size: 0
+
+  .absent .reason-container
+    background: red
+
+  .late .reason-container
+    background: orange
 
   .empty-box
     &.absolute
@@ -70,3 +79,13 @@
     margin: 25px 10px
     vertical-align: top
     height: 70px
+
+
+  .student-seating-name
+    text-align: center
+
+  .seating-chart-popup
+    position: absolute
+    display: none
+    z-index: 999
+    +box-shadow(transparentize(#000, .8) 0 0 16px)
