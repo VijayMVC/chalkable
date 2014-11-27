@@ -1,9 +1,8 @@
 //requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
 mixin ProfileTopBar(tplObj, pressedActionName)
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .left
-                +ActionLinkList(tplObj.buildActionLinkModels(pressedActionName))
+    .action-bar
+        .items
+            +ActionLinkList(tplObj.buildActionLinkModels(pressedActionName))
             block
 
 //requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl

@@ -544,6 +544,7 @@ var Msg = {
     Student_Number: 'Student Number',
     Student_ID: 'Student ID',
     Student_marked_absent: 'Student marked as absent on the date of that item',
+    Student_profile: 'Student profile',
     Students_are_in_trouble: function(count){
         return count > 1 ? 'Students are in trouble' : 'Student is in trouble';
     },

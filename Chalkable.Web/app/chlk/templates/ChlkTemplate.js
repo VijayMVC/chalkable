@@ -22,9 +22,25 @@ NAMESPACE('chlk.templates', function () {
                 return this.formatPictureURL_(url, sizeW_, sizeH_);
             },
 
+            function getClosestSize_(size){
+                var pictureSizes = [40, 47, 55, 64, 70, 128, 256];
+                if(pictureSizes.indexOf(size) > -1)
+                    return size;
+                var res = pictureSizes[pictureSizes.length - 1];
+                for(var i = 0; i < pictureSizes.length; i++){
+                    if(pictureSizes[i] > size){
+                        res = pictureSizes[i];
+                        break;
+                    }
+                }
+                return res;
+            },
+
             [[String, Number, Number]],
             String, function formatPictureURL_(url, sizeW_, sizeH_)
             {
+                sizeW_ = sizeW_ &&  this.getClosestSize_(sizeW_);
+                sizeH_ = sizeH_ &&  this.getClosestSize_(sizeH_);
                 if (sizeW_ && sizeH_)
                     return url + '-' + sizeW_ + 'x' + sizeH_;
                 if (sizeW_)
