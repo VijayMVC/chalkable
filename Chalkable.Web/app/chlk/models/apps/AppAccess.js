@@ -36,7 +36,7 @@ NAMESPACE('chlk.models.apps', function () {
                     hasparentmyapps: this.isParentMyAppsEnabled(),
                     canattach: this.isAttachEnabled(),
                     showingradeview: this.isVisibleInGradingView(),
-                    adjustedtostandarts: this.isAdjustedToStandarts()
+                    adjustedtostandarts: this.isAdjustedToStandards()
                 }
             },
 
