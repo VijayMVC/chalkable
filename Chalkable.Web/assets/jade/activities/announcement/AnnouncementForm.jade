@@ -50,6 +50,8 @@ types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
                 if announcement.getState()
                     .duplicate-btn-container
                         +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+                if announcement.getStandards() && announcement.getStandards().length > 0
+                    +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
             .choose-type(class=(classId && !typeId && !state && types.length ? '' : 'x-hidden'))
             if !classId
                 if topItems.length

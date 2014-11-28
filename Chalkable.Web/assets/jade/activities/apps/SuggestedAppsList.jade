@@ -1,0 +1,23 @@
+.suggested-apps-block
+    .separator-line
+    if self.getSuggestedApps()
+        .title Suggested Apps
+        .suggested-apps-conteiner
+            each app in self.getSuggestedApps()
+                div.app-icon-link
+                    -console.log(app)
+                    if app.needToInstall()
+                        +ActionLink('appmarket', 'tryToQuickInstall', app.getId(), self.getClassId(), self.getAnnouncementId()).app-link
+                            .app-list-item
+                                div(data-tooltip='').icon
+                                    pictureUrl = self.getAppPictureURL(app.getBigPictureId(), 170, 110)
+                                img(src=pictureUrl)
+                    else
+                        +ActionLink('apps', 'tryToAttach', self.getAnnouncementId(), app.getId().valueOf()).app-link
+                            .app-list-item
+                                div(data-tooltip='Attach').attach-icon
+                                div(data-tooltip='').icon
+                                    pictureUrl = self.getAppPictureURL(app.getBigPictureId(), 170, 110)
+                                img(src=pictureUrl)
+    else
+        .title No recomended apps

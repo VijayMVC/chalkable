@@ -7,6 +7,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.classes.TopBar');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
+REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
@@ -23,6 +24,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementTitleTpl, '.title-block-container', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.SuggestedAppsListTpl, '', '.suggested-apps-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'AnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
 
