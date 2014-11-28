@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-06.2.4">
+  <WebRole name="Chalkable.Web" vmsize="Medium">
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="Endpoint2" endpointName="Endpoint2" />
+          <Binding name="Endpoint1" endpointName="Endpoint1" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Endpoints>
+      <InputEndpoint name="Endpoint2" protocol="https" port="443" certificate="Certificate1" />
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+    </Endpoints>
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <Certificates>
+      <Certificate name="Certificate1" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
+    <ConfigurationSettings>
+      <!-- DB settings -->
+      <Setting name="ChalkableMaster"/>
+      <Setting name="ChalkableSchool"/>
+      <Setting name="ChalkableSchoolDbUser"/>
+      <Setting name="ChalkableSchoolDbPwd"/>
+      <Setting name="ChalkableSchoolDbServers"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
+      
+      <!-- CDN and content settings-->
+      <Setting name="Domain"/>
+      <Setting name="ScriptsRoot"/>
+      <!-- OAuth -->
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"/>
+      <!-- API Explorer -->
+      <Setting name="api.explorer.client-id"/>
+      <Setting name="api.explorer.secret"/>
+      <Setting name="api.explorer.redirecturi"/>
+      <Setting name="api.explorer.client-name"/>
+      <Setting name="api.explorer.scope"/>
+      <!--tracking-->
+      <Setting name="mixpanel-token"/>
+    </ConfigurationSettings>
+  </WebRole>
+  <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Small">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <ConfigurationSettings>
+      <!-- DB settings -->
+      <Setting name="ChalkableMaster"/>
+      <Setting name="ChalkableSchool"/>
+      <!--<Setting name="ChalkableSchoolTemplate"/>-->
+      <Setting name="ChalkableSchoolDbUser"/>
+      <Setting name="ChalkableSchoolDbPwd"/>
+      <Setting name="ChalkableSchoolDbServers"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
+      <!-- OAuth -->
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"/>
+      <!-- other settings -->
+      <Setting name="TaskProcessorDelay"/>
+      <Setting name="DbBackupServiceUrl"/>
+      <!--tracking-->
+      <Setting name="mixpanel-token"/>
+    </ConfigurationSettings>
+  </WorkerRole>
+  <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="ExtraSmall">
+    <Imports>
+      <Import moduleName="Diagnostics" />
+    </Imports>
+    <ConfigurationSettings>
+      <!-- DB settings -->
+      <Setting name="ChalkableMaster"/>
+      <Setting name="ChalkableSchool"/>
+      <!--<Setting name="ChalkableSchoolTemplate"/>-->
+      <Setting name="ChalkableSchoolDbUser"/>
+      <Setting name="ChalkableSchoolDbPwd"/>
+      <Setting name="ChalkableSchoolDbServers"/>
+      <Setting name="ChalkableSchoolTemplateDbName"/>
+      <!-- OAuth -->
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName"/>
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName"/>
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey"/>
+      <!-- Task settings -->
+      <Setting name="TaskProducer.SisImportProducer.Interval"/>
+      <Setting name="TaskProducer.SisImportProducer.IntervalStart"/>
+      <Setting name="TaskProducer.SisImportProducer.IntervalEnd"/>
+      <Setting name="TaskProducer.CleanupManager.Interval"/>
+      <Setting name="TaskProducer.CleanupManager.IntervalStart"/>
+      <Setting name="TaskProducer.CleanupManager.IntervalEnd"/>
+      <!--tracking-->
+      <Setting name="mixpanel-token"/>
+    </ConfigurationSettings>
+  </WorkerRole>
+</ServiceDefinition>

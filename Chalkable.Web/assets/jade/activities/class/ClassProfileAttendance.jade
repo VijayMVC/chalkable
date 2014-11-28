@@ -1,0 +1,14 @@
+clazz = self.getClassAttendanceSummary()
+.class-attendance.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self, 'attendance')
+    .info-view
+        .top-panel
+            h1.info.with-line
+                .class-icon-container
+                    +ClassImg(clazz, 45, 80)
+                =clazz.getName()
+            h2
+                div
+            .calendar-section
+                +RenderWith(self.getMonthCalendar(), chlk.templates.calendar.attendance.ClassAttendanceMonthCalendarTpl)
