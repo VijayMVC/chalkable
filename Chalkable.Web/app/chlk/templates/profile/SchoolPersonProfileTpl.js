@@ -43,7 +43,8 @@ NAMESPACE('chlk.templates.profile', function(){
                 if (role.getId()){
                     result = "Currently ";
                     if (classesNumber > 0){
-                        result += role.getId() == chlk.models.common.RoleEnum.TEACHER ? 'teaching ' : 'enrolled in ' + classesNumber;
+                        result += role.getId() == chlk.models.common.RoleEnum.TEACHER ? 'teaching ' : 'enrolled in ';
+                        result += classesNumber;
                         result += classesNumber > 1 ? ' classes' : ' class';
                     }
                     else{
