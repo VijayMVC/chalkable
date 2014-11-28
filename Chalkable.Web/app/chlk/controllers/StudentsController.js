@@ -35,12 +35,6 @@ NAMESPACE('chlk.controllers', function (){
         'StudentsController', EXTENDS(chlk.controllers.UserController), [
 
             [ria.mvc.Inject],
-            chlk.services.StudentService, 'studentService',
-
-            [ria.mvc.Inject],
-            chlk.services.TeacherService, 'teacherService',
-
-            [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
             [ria.mvc.Inject],
@@ -183,60 +177,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.student.StudentProfileSummaryPage, result);
             },
 
-            [[chlk.models.id.SchoolPersonId]],
-            function scheduleAction(personId){
-                return this.Redirect('students', 'daySchedule', [null, personId]);
-            },
-
-            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            function dayScheduleAction(date_, personId){
-                return this.scheduleByRole(personId, date_
-                    , chlk.models.common.RoleNamesEnum.STUDENT.valueOf()
-                    , this.studentService.getSchedule(personId));
-            },
-
-            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            function weekScheduleAction(date_, personId){
-                var result = ria.async.wait([
-                        this.personService.getSchedule(personId),
-                        this.calendarService.getWeekInfo(null, date_, null, personId)
-                    ])
-                    .attach(this.validateResponse_())
-                    .then(function(results){
-                        var schedule = results[0];
-                        schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
-                        return new chlk.models.people.UserProfileScheduleViewData(
-                            chlk.models.calendar.announcement.Week,
-                            this.getCurrentRole(),
-                            schedule,
-                            results[1],
-                            this.getUserClaims_()
-                        );
-                    }, this);
-                return this.PushView(chlk.activities.profile.ScheduleWeekPage, result);
-            },
-
-            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            function monthScheduleAction(date_, personId){
-                var result = ria.async.wait([
-                        this.personService.getSchedule(personId),
-                        this.calendarService.listForMonth(null, date_, null, personId)
-                    ])
-                    .attach(this.validateResponse_())
-                    .then(function(results){
-                        var schedule = results[0];
-                        schedule.setRoleName(chlk.models.common.RoleNamesEnum.STUDENT.valueOf());
-                        return new chlk.models.people.UserProfileScheduleViewData(
-                            chlk.models.calendar.announcement.Month,
-                            this.getCurrentRole(),
-                            schedule,
-                            results[1],
-                            this.getUserClaims_()
-                        );
-                    }, this);
-                return this.PushView(chlk.activities.profile.ScheduleMonthPage, result);
-            },
-
             [[chlk.models.id.MarkingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function attendanceAction(markingPeriodId_, personId, date_){
                 markingPeriodId_ = this.prepareMarkingPeriodId(markingPeriodId_);
@@ -337,6 +277,53 @@ NAMESPACE('chlk.controllers', function (){
                         );
                     }, this);
                 return this.PushView(chlk.activities.student.StudentProfileGradingPage, res);
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function scheduleAction(personId){
+                return this.Redirect('students', 'daySchedule', [null, personId]);
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function dayScheduleAction(date_, personId){
+                return this.schedule_(
+                    chlk.models.common.RoleNamesEnum.STUDENT.valueOf(),
+                    personId,
+                    date_,
+                    this.calendarService.getDayWeekInfo(date_, personId),
+                    chlk.models.calendar.announcement.Week,
+                    chlk.activities.profile.SchedulePage,
+                    'daySchedule',
+                    chlk.templates.calendar.announcement.DayCalendarBodyTpl
+                );
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function weekScheduleAction(date_, personId){
+                return this.schedule_(
+                    chlk.models.common.RoleNamesEnum.STUDENT.valueOf(),
+                    personId,
+                    date_,
+                    this.calendarService.getDayWeekInfo(date_, personId),
+                    chlk.models.calendar.announcement.Week,
+                    chlk.activities.profile.ScheduleWeekPage,
+                    'weekSchedule',
+                    chlk.templates.calendar.announcement.WeekCalendarBodyTpl
+                );
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function monthScheduleAction(date_, personId){
+                return this.schedule_(
+                    chlk.models.common.RoleNamesEnum.STUDENT.valueOf(),
+                    personId,
+                    date_,
+                    this.calendarService.listForMonth(null, date_, null, personId),
+                    chlk.models.calendar.announcement.Month,
+                    chlk.activities.profile.ScheduleMonthPage,
+                    'monthSchedule',
+                    chlk.templates.calendar.announcement.MonthCalendarBodyTpl
+                );
             }
         ])
 });

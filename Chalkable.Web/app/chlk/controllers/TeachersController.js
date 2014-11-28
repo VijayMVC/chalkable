@@ -12,9 +12,6 @@ NAMESPACE('chlk.controllers', function (){
     CLASS(
         'TeachersController', EXTENDS(chlk.controllers.UserController), [
 
-            [ria.mvc.Inject],
-            chlk.services.TeacherService, 'teacherService',
-
             function getInfoPageClass(){
                 return chlk.activities.profile.SchoolPersonInfoPage;
             },
@@ -56,11 +53,47 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('teachers', 'daySchedule', [null, personId]);
             },
 
+
             [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
             function dayScheduleAction(date_, personId){
-                return this.scheduleByRole(personId, date_
-                    , chlk.models.common.RoleNamesEnum.TEACHER.valueOf()
-                    , this.teacherService.getSchedule(personId));
+                return this.schedule_(
+                    chlk.models.common.RoleNamesEnum.TEACHER.valueOf(),
+                    personId,
+                    date_,
+                    this.calendarService.getDayWeekInfo(date_, personId),
+                    chlk.models.calendar.announcement.Week,
+                    chlk.activities.profile.SchedulePage,
+                    'daySchedule',
+                    chlk.templates.calendar.announcement.DayCalendarBodyTpl
+                );
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function weekScheduleAction(date_, personId){
+                return this.schedule_(
+                    chlk.models.common.RoleNamesEnum.TEACHER.valueOf(),
+                    personId,
+                    date_,
+                    this.calendarService.getDayWeekInfo(date_, personId),
+                    chlk.models.calendar.announcement.Week,
+                    chlk.activities.profile.ScheduleWeekPage,
+                    'weekSchedule',
+                    chlk.templates.calendar.announcement.WeekCalendarBodyTpl
+                );
+            },
+
+            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
+            function monthScheduleAction(date_, personId){
+                return this.schedule_(
+                    chlk.models.common.RoleNamesEnum.TEACHER.valueOf(),
+                    personId,
+                    date_,
+                    this.calendarService.listForMonth(null, date_, null, personId),
+                    chlk.models.calendar.announcement.Month,
+                    chlk.activities.profile.ScheduleMonthPage,
+                    'monthSchedule',
+                    chlk.templates.calendar.announcement.MonthCalendarBodyTpl
+                );
             }
         ])
 });
