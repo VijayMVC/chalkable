@@ -11,11 +11,7 @@ NAMESPACE('chlk.models.student', function(){
         UNSAFE, 'StudentGradesHoverBoxItem', IMPLEMENTS(ria.serialize.IDeserializable), [
 
         String, 'grade',
-
-        [ria.serialize.SerializeProperty('announcementid')],
         chlk.models.id.AnnouncementId, 'announcementId',
-
-        [ria.serialize.SerializeProperty('announcmenttitle')],
         String, 'announcementTitle',
 
         String, function getMappedGrade(){
