@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<Staff> staffs)
         {
-            throw new NotImplementedException();
+            Storage.StaffStorage.Add(staffs);
         }
 
         public void Edit(IList<Staff> staffs)

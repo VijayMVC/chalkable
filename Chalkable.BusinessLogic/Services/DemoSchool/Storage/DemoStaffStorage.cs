@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
     public class DemoStaffStorage : BaseDemoIntStorage<Staff>
     {
         public DemoStaffStorage(DemoStorage storage)
-            : base(storage, x => x.Id, true)
+            : base(storage, x => x.Id)
         {
         }
     }
