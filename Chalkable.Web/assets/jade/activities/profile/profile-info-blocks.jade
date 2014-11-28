@@ -3,14 +3,16 @@ mixin ProfileInfoView(model)
     primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-view
-        .title
-            div(style="overflow: visible").avarar-container.standard-small-container
-                div(style="overflow: visible").img-container
-                    +PersonImg(model, 128, true)
-            .short-info
-                h1=model.getFullName()
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(model, 140, true)
+            #info-panel.central-block.panel-block
+                displayName =model.getDisplayName() || model.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
                 if model.getGradeLevel && model.getGradeLevel() && model.getGradeLevel().getName()
-                    .grade-level= 'Grade: ' + model.getGradeLevel().getName()
+                    .status= 'Grade: ' + model.getGradeLevel().getName()
+
         .sections
             .sections-info
                 .section-title=model.getRole().getName()
@@ -54,17 +56,15 @@ mixin ProfileInfoForm(controller, model)
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-edit
         +ActionForm(controller, 'infoEdit')#info-edit-form.with-ok
-            .title
-                .avatar-block
-                    .avatar-container.with-border
-                        +PersonImg(model, 128, true)
-                    //button(type="button").simple-gray-button.file Upload
-                        +FileUpload(controller, 'uploadPicture', [model.getId().valueOf()])#add-attachment.simple-gray-button
-                .name-block
-                    input(name="firstname", value=model.getFirstName(), readonly)
-                    input(name="lastname", value=model.getLastName(), readonly)
-                    input(type="hidden", name="id", value=model.getId())
-                    input(type="hidden", name="salutation", value=model.getSalutation())
+            #top-panel
+                #avatar-photo-conainer.left-block.panel-block
+                    .img-container
+                        +PersonImg(model, 140, true)
+            .name-block
+                input(name="firstname", value=model.getFirstName(), readonly)
+                input(name="lastname", value=model.getLastName(), readonly)
+                input(type="hidden", name="id", value=model.getId())
+                input(type="hidden", name="salutation", value=model.getSalutation())
             .sections
                 .sections-info
                     .section-title=model.getRole().getName()

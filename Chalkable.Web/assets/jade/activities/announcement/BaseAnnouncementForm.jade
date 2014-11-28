@@ -130,7 +130,7 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
         else
             +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
 
-    if announcement.getStandards() && announcement.getStandards().length > 0
+    if announcement.getSuggestedApps() && announcement.getSuggestedApps().length > 0
         .suggested-apps-block
             .separator-line
             .title Suggested Apps

@@ -37,10 +37,13 @@ NAMESPACE('chlk.templates', function () {
             },
 
             [[String, Number, Number]],
-            String, function formatPictureURL_(url, sizeW_, sizeH_)
+            String, function formatPictureURL_(url, sizeW_, sizeH_, noClosest_)
             {
-                sizeW_ = sizeW_ &&  this.getClosestSize_(sizeW_);
-                sizeH_ = sizeH_ &&  this.getClosestSize_(sizeH_);
+                if(!noClosest_){
+                    sizeW_ = sizeW_ &&  this.getClosestSize_(sizeW_);
+                    sizeH_ = sizeH_ &&  this.getClosestSize_(sizeH_);
+                }
+
                 if (sizeW_ && sizeH_)
                     return url + '-' + sizeW_ + 'x' + sizeH_;
                 if (sizeW_)
@@ -53,7 +56,7 @@ NAMESPACE('chlk.templates', function () {
                 if(!id)
                     return null;
                 var url = window.azurePictureUrl + id.valueOf();
-                return this.formatPictureURL_(url, sizeW_, sizeH_);
+                return this.formatPictureURL_(url, sizeW_, sizeH_, true);
             },
 
             [[Object, Number]],

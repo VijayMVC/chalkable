@@ -22,6 +22,12 @@ mixin PersonImg(person, size, needAlerts)
 
 mixin ClassImg(clazz, width, height)
     -defaultSrc =joinUrls(window.scriptsRoot, '/Content/images/common/course-icons/all.png');
+    if width
+        -attributes.width = width
+
+    if height
+        -attributes.height = height
+
     if clazz && clazz.getDepartmentId()
         -attributes.src = chlk.templates.ChlkTemplate.prototype.getPictureURL(clazz.getDepartmentId(), width, height, true)
     else

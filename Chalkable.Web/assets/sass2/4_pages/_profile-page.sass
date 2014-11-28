@@ -1,9 +1,30 @@
 .profile-page
   font-family: "Open Sans", sanf-serif
 
-  #top-summary-panel
+  &.view-mode
+    .info-edit
+      display: none
+
+  &.edit-mode
+    .info-view
+      display: none
+
+  #top-panel
     margin-bottom: 84px
     margin-top: 48px
+
+  .class-image
+    width: 140px
+    height: 140px
+    border-radius: 70px
+    background: #3f7d96
+
+    .img-container
+      overflow: hidden
+      width: 92px
+      height: 82px
+      display: inline-block
+      margin-top: 24px
 
   .classes-tb-container
     margin: 0 21px
@@ -16,8 +37,8 @@
     vertical-align: middle
     display: inline-block
 
-  #student-info-panel
-    margin: 53px 29px 0 17px
+  .central-block
+    margin: 13px 29px 0 17px
 
   .status
     font-size: 14px

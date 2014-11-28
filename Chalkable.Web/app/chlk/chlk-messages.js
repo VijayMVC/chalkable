@@ -63,6 +63,7 @@ var Msg = {
     Check: 'Check',
     CheckIn: 'Check-in',
     Class: 'Class',
+    Class_profile: 'Class profile',
     Classes: 'Classes',
     Click: 'Click',
     Code: oneOrMany('Code'),

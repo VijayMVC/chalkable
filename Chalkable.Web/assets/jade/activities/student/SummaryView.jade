@@ -6,11 +6,11 @@ statusData = self.getStatusData()
 
     +ProfileTopBar(self, 'details')
     .summary-view
-        #top-summary-panel
+        #top-panel
             #avatar-photo-conainer.left-block.panel-block
                 .img-container
                     +PersonImg(user, 140, true)
-            #student-info-panel.central-block.panel-block
+            #info-panel.central-block.panel-block
                 displayName =user.getDisplayName() || user.getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
                 .status

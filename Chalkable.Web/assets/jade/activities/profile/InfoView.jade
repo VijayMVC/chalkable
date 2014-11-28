@@ -18,10 +18,14 @@ mixin ProfileTopBar(actionLinksData, model)
 
 mixin ProfileInfoView(model)
     .info-view
-        .title
-            div(style="overflow: visible").avatar-container.with-border
-                +PersonImg(model, 128, true)
-            h1=model.getFullName()
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(model, 140, true)
+            #info-panel.central-block.panel-block
+                displayName =model.getDisplayName() || model.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+
         .sections
             .sections-info
                 .section-title.pacifico=model.getRole().getName()
