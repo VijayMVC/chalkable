@@ -5,7 +5,6 @@
         .suggested-apps-conteiner
             each app in self.getSuggestedApps()
                 div.app-icon-link
-                    -console.log(app)
                     if app.needToInstall()
                         +ActionLink('appmarket', 'tryToQuickInstall', app.getId(), self.getClassId(), self.getAnnouncementId()).app-link
                             .app-list-item
