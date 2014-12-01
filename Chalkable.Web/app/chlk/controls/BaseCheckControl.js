@@ -11,7 +11,6 @@ NAMESPACE('chlk.controls', function () {
         'BaseCheckControl', EXTENDS(chlk.controls.Base), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
-
                 var service = this.getContext().getService(chlk.services.AppMarketService);
                 this.setAppMarketService(service);
             },

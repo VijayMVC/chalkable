@@ -5,7 +5,7 @@ NAMESPACE('chlk.controls', function () {
     /** @class chlk.controls.PayCheckControl*/
     CLASS(
         'PayCheckControl', EXTENDS(chlk.controls.BaseCheckControl), [
-            OVERRIDE, VOID, function onCreate_() {
+            OVERRIDE, VOID, function onCreate_()  {
                 BASE();
                 ASSET('~/assets/jade/controls/paycheck.jade')(this);
             },
