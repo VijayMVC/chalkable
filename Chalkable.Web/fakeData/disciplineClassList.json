@@ -1,0 +1,84 @@
+{"pageindex":0,"pagesize":2147483647,"totalcount":0,"totalpages":0,"haspreviouspage":false,"hasnextpage":false,"data":[
+    {
+        "studentid":1,
+        "classpersonid":1,
+        "classperiodid":1,
+        "teacherid":1,
+        "classname":"Some Class",
+        "date":"12-11-2013",
+        "description":"Some description",
+        "summary":"Some summary",
+        "period":{
+            "id":2,
+            "starttime":700,
+            "endtime":800,
+            "order":1,
+            "markingperiodid":1
+        },
+        "student":{
+            "email":"TestElizabethBrown@chalkable.com",
+            "roledescription":"Student",
+            "rolename":"Student",
+            "localid":"600927213",
+            "grade":"9th",
+            "active":true,
+            "schoolid":12622,
+            "id":1291893,
+            "displayname":"Elizabeth Brown",
+            "fullname":"Elizabeth Brown",
+            "firstname":"Elizabeth",
+            "lastname":"Brown",
+            "gender":"F",
+            "pictureid":110582,
+            "picturewidth":283,
+            "pictureheight":424
+        },
+        "disciplinetypes":[
+            {"name":"Fighting","id":1,"count":0,"periodorder":0,"score":10,"schoolinfoid":1},
+            {"name":"Cursing","id":2,"count":0,"periodorder":0,"score":3,"schoolinfoid":1},
+            {"name":"Talking In Class","id":3,"count":0,"periodorder":0,"score":1,"schoolinfoid":1},
+            {"name":"Weapon","id":4,"count":0,"periodorder":0,"score":50,"schoolinfoid":1},
+            {"name":"Dress code","id":5,"count":0,"periodorder":0,"score":5,"schoolinfoid":1}
+        ]
+    },
+    {
+        "studentid":2,
+        "classpersonid":2,
+        "classperiodid":2,
+        "teacherid":2,
+        "classname":"Some Class",
+        "date":"12-11-2013",
+        "description":"Some description2",
+        "summary":"Some summary2",
+        "period":{
+            "id":2,
+            "starttime":700,
+            "endtime":800,
+            "order":1,
+            "markingperiodid":1
+        },
+        "student":{
+            "email":"TestElizabethBrown@chalkable.com",
+            "roledescription":"Student",
+            "rolename":"Student",
+            "localid":"600927213",
+            "grade":"9th",
+            "active":true,
+            "schoolid":12622,
+            "id":1291894,
+            "displayname":"Elizabeth2 Brown2",
+            "fullname":"Elizabeth2 Brown2",
+            "firstname":"Elizabeth2",
+            "lastname":"Brown2",
+            "gender":"F",
+            "pictureid":110582,
+            "picturewidth":283,
+            "pictureheight":424
+        },
+        "disciplinetypes":[
+            {"name":"Fighting","id":1,"count":0,"periodorder":0,"score":10,"schoolinfoid":1},
+            {"name":"Talking In Class","id":3,"count":0,"periodorder":0,"score":1,"schoolinfoid":1},
+            {"name":"Dress code","id":5,"count":0,"periodorder":0,"score":5,"schoolinfoid":1}
+        ]
+    }
+],"success":true}
