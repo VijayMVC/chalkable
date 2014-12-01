@@ -1,0 +1,363 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Chalkable.BusinessLogic.Model;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
+
+namespace Chalkable.BusinessLogic.Services.School
+{
+    public interface IAttendanceService
+    {
+        IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId);
+        void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items);
+        SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
+        void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
+        AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
+        IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime date);
+        
+        //TODO: OLD!!!!
+        IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null);
+        StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId,  int? timeIn, int? timeOut);
+        StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId);
+        IList<StudentDailyAttendance> GetDailyAttendances(DateTime date); 
+        ClassAttendanceDetails GetClassAttendanceDetailsById(Guid classAttendanceId);
+        IList<ClassAttendanceDetails> GetClassAttendanceDetails(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, string level, DateTime date);
+        ClassAttendanceDetails SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId);
+
+
+        int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate);
+
+        IDictionary<string, int> CalcAttendanceTotalPerTypeForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate);
+        IList<PersonAttendanceTotalPerType> CalcAttendanceTotalPerTypeForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate);
+        IDictionary<Guid, int> CalcAttendanceTotalForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate, string level); 
+        
+        IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds);
+        IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds); 
+        IList<StudentCountAbsentFromPeriod> GetStudentCountAbsentFromPeriod(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds, int fromPeriodOrder, int toPeriodOrder);
+        IList<StudentAbsentFromPeriod> GetStudentsAbsentFromPeriod(DateTime date, IList<Guid> gradeLevelsIds, int periodOrder);
+
+        IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate, int fromPeriodOrder, int toPeriodOrder, string level, IList<Guid> gradeLevelsIds);
+        IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, string level, IList<Guid> gradeLevelsIds);
+        void ProcessClassAttendance(DateTime date);
+        void NotAssignedAttendanceProcess();
+
+    }
+
+    public class AttendanceService : SisConnectedService, IAttendanceService
+    {
+        public AttendanceService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
+        {
+        }
+
+        public void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items)
+        {
+            var dataStr = date.ToString("yyyy-MM-dd");
+            var sa = new SectionAttendance
+            {
+                Date = dataStr,
+                SectionId = classId,
+                StudentAttendance = new List<StudentSectionAttendance>()
+            };
+            foreach (var item in items)
+            {
+
+                sa.StudentAttendance.Add(new StudentSectionAttendance
+                {
+                    Category = item.Category,
+                    Date = dataStr,
+                    ClassroomLevel = LevelToClassRoomLevel(item.Level),
+                    ReasonId = (short)(item.AttendanceReasonRef.HasValue ? item.AttendanceReasonRef.Value : 0),
+                    SectionId = classId,
+                    StudentId = item.PersonRef,
+                });
+            }
+            if (!Context.SchoolYearId.HasValue)
+                throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
+            ConnectorLocator.AttendanceConnector.SetSectionAttendance(Context.SchoolYearId.Value, date, classId, sa);
+        }
+
+        private string LevelToClassRoomLevel(string level)
+        {
+            if (level == null)
+                return "Present";
+            if (level == "T")
+                return "Tardy";
+            if (level == "A" || level == "AO")
+                return "Absent";
+            return "Missing";
+        }
+
+        public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
+        {
+            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            if (mp == null)
+            {
+                //throw new ChalkableException("No marking period is scheduled on this date");
+                return null;
+            }
+
+            var sa = ConnectorLocator.AttendanceConnector.GetSectionAttendance(date, classId);
+            if (sa != null)
+            {
+                var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
+                var persons = ServiceLocator.StudentService.GetClassStudents(classId, mp.Id);
+                var attendances = new List<ClassAttendanceDetails>();
+                foreach (var ssa in sa.StudentAttendance)
+                {
+                    var student = persons.FirstOrDefault(x => x.Id == ssa.StudentId);
+                    if (student != null)
+                    {
+                        attendances.Add(new ClassAttendanceDetails
+                        {
+                            ClassRef = ssa.SectionId,
+                            AttendanceReasonRef = ssa.ReasonId,
+                            Date = date,
+                            PersonRef = ssa.StudentId,
+                            Level = ClassroomLevelToLevelCvt(ssa.ClassroomLevel),
+                            Class = clazz,
+                            Student = student,
+                            Category = ssa.Category,
+                            IsPosted = sa.IsPosted,
+                            AbsentPreviousDay = ssa.AbsentPreviousDay,
+                            ReadOnly = sa.ReadOnly,
+                            ReadOnlyReason = sa.ReadOnlyReason
+                        });
+                    }
+                }
+                return attendances;    
+            }
+            return null;
+        }
+
+        private static string ClassroomLevelToLevelCvt(string classroomLevel)
+        {
+            switch (classroomLevel)
+            {
+                case "Present":
+                    return null;
+                case "Absent":
+                    return "A";
+                case "Tardy":
+                    return "T";
+                default:
+                    return "H";
+            }
+        }
+
+        public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
+        {
+            var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
+            if (classes.Count == 0)
+            {
+                return new AttendanceSummary
+                    {
+                        ClassesDaysStat = new List<ClassDailyAttendanceSummary>(),
+                        Students = new List<StudentAttendanceSummary>()
+                    };
+            }
+
+            var classesIds = classes.Select(x => x.Id).ToList();
+            var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
+        
+            var sectionsAttendanceSummary = ConnectorLocator.AttendanceConnector.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
+            var res = new AttendanceSummary();
+            var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
+            var studentAtts = new List<StudentSectionAttendanceSummary>();
+            var sectionStSet = new HashSet<Pair<int, int>>();
+            var sectionDaySet = new HashSet<Pair<int, DateTime>>();
+            foreach (var sectionAttendanceSummary in sectionsAttendanceSummary)
+            {
+
+                foreach (var dailySectionAtt in sectionAttendanceSummary.Days)
+                {
+                    var pair = new Pair<int, DateTime>(dailySectionAtt.SectionId, dailySectionAtt.Date);
+                    if (!sectionDaySet.Contains(pair))
+                    {
+                        sectionDaySet.Add(pair);
+                        dailySectionAttendances.Add(dailySectionAtt);
+                    }
+                }
+                foreach (var student in sectionAttendanceSummary.Students)
+                {
+                    var pair = new Pair<int, int>(student.SectionId, student.StudentId);
+                    if (!sectionStSet.Contains(pair))
+                    {
+                        sectionStSet.Add(pair);
+                        studentAtts.Add(student); 
+                    }
+                }
+            }
+            res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
+            studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
+            res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
+            return res;
+
+        }
+
+        public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
+        {
+            var seatingChart = ConnectorLocator.SeatingChartConnector.GetChart(classId, markingPeriodId);
+            if (seatingChart == null) return null;
+            return SeatingChartInfo.Create(seatingChart);
+        }
+
+        public void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChartInfo)
+        {
+            var seatingChart = new SeatingChart
+                {
+                    Columns = seatingChartInfo.Columns,
+                    Rows = seatingChartInfo.Rows,
+                    SectionId = classId,
+                };
+            var stiSeats = new List<Seat>();
+            var students = ServiceLocator.StudentService.GetClassStudents(classId, markingPeriodId, true);
+            var defaultStudent = students.FirstOrDefault(x => seatingChartInfo.SeatingList.All(y => y.All(z => z.StudentId != x.Id)));
+            if (defaultStudent == null)
+                defaultStudent = students.First();
+            foreach (var seats in seatingChartInfo.SeatingList)
+            {
+                foreach (var seatInfo in seats)
+                {
+                    var seat = new Seat();
+                    if (seatInfo.StudentId.HasValue)
+                    {
+                        seat.Column = seatInfo.Column;
+                        seat.Row = seatInfo.Row;
+                        seat.StudentId = seatInfo.StudentId.Value;
+                    }
+                    else seat.StudentId = defaultStudent.Id;
+                    stiSeats.Add(seat);
+                }
+            }
+            seatingChart.Seats = stiSeats;
+            ConnectorLocator.SeatingChartConnector.UpdateChart(classId, markingPeriodId, seatingChart);
+        }
+
+
+        public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
+        {
+            throw new NotImplementedException();
+            /*var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
+            var studentId = Context.Role == CoreRoles.STUDENT_ROLE ? Context.PersonId : null;
+            var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
+            var classPeriods = ServiceLocator.ClassPeriodService.GetClassPeriods(dateTime, null, null, studentId, teacherId);
+            var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
+
+            classes = classes.Where(x => postedAttendances.All(y => y.SectionId != x.Id)).ToList();
+            if (dateTime.Date == Context.NowSchoolTime.Date)
+            {
+                var time = (int)((dateTime - dateTime.Date).TotalMinutes) - 3;
+                classPeriods = classPeriods.Where(x => x.Period.StartTime <= time).ToList();
+            }
+            return classes.Where(x => classPeriods.Any(y => y.ClassRef == x.Id)).ToList();*/
+        }
+
+
+        public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId, int? timeIn, int? timeOut)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<StudentDailyAttendance> GetDailyAttendances(DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        /*public IList<ClassAttendanceDetails> GetClassAttendanceDetails(ClassAttendanceQuery attendanceQuery, IList<Guid> gradeLevelIds = null)
+        {
+            throw new NotImplementedException();
+        }*/
+
+        public ClassAttendanceDetails GetClassAttendanceDetailsById(Guid classAttendanceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<ClassAttendanceDetails> GetClassAttendanceDetails(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, string level, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ClassAttendanceDetails SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<string, int> CalcAttendanceTotalPerTypeForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<PersonAttendanceTotalPerType> CalcAttendanceTotalPerTypeForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<Guid, int> CalcAttendanceTotalForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate, string level)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<StudentCountAbsentFromPeriod> GetStudentCountAbsentFromPeriod(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds, int fromPeriodOrder, int toPeriodOrder)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<StudentAbsentFromPeriod> GetStudentsAbsentFromPeriod(DateTime date, IList<Guid> gradeLevelsIds, int periodOrder)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate, int fromPeriodOrder, int toPeriodOrder, string level, IList<Guid> gradeLevelsIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, string level, IList<Guid> gradeLevelsIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ProcessClassAttendance(DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void NotAssignedAttendanceProcess()
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+    }
+}
