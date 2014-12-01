@@ -139,7 +139,12 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var fromPerson = ServiceLocator.PersonService.GetPerson(fromPersonId);
             var teachers = ServiceLocator.StaffService.SearchStaff(null, announcement.ClassRef, null, null, false, 0, int.MaxValue);
-            var persons = teachers.Select(x => ServiceLocator.PersonService.GetPerson(x.Id));
+            var persons = teachers.Select(x => 
+                { 
+                    var res = ServiceLocator.PersonService.GetPerson(x.Id);
+                    res.RoleRef = CoreRoles.TEACHER_ROLE.Id;
+                    return res;
+                });
             var notification = persons.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(announcement, x, fromPerson)).ToList();
             AddNotifications(notification);
         }

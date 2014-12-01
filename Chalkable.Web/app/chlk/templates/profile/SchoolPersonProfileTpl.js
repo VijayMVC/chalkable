@@ -22,7 +22,6 @@ NAMESPACE('chlk.templates.profile', function(){
 
             String, function getControllerName(){
                 var roleEnums = chlk.models.common.RoleEnum;
-                console.log(this.getUser().getRole());
                 var roleId = this.getUser().getRole().getId();
                 if(roleId == roleEnums.ADMINGRADE.valueOf()
                     || roleId == roleEnums.ADMINEDIT.valueOf()
@@ -33,6 +32,40 @@ NAMESPACE('chlk.templates.profile', function(){
                     return this._teacherControllerName;
                 if(roleId == roleEnums.STUDENT.valueOf())
                     return this._studentControllerName;
+            },
+
+            [[Object, Number]],
+            String, function getPersonEnrollmentStatus(user, classesNumber){
+                var result = '';
+                var role = user.getRole();
+
+                if (role.getId()){
+                    result = "Currently ";
+                    if (classesNumber > 0){
+                        result += role.getId() == chlk.models.common.RoleEnum.TEACHER ? 'teaching ' : 'enrolled in ';
+                        result += classesNumber;
+                        result += classesNumber > 1 ? ' classes' : ' class';
+                    }
+                    else{
+                        result += role.getId() == chlk.models.common.RoleEnum.TEACHER ? 'doesn\'t teach any class' : 'unenrolled';
+                    }
+                }
+                return result;
+            },
+
+            [[Object, String]],
+            Object, function getProfileScheduleTplParams(user, currentAction){
+                var role = user.getRole();
+                var scheduleActions = {
+                    day: 'daySchedule',
+                    week: 'weekSchedule',
+                    month: 'monthSchedule',
+                    currentAction: currentAction
+                };
+                return {
+                    controllerName: this.getControllerName(),
+                    actions: scheduleActions
+                };
             },
 
             [[String]],

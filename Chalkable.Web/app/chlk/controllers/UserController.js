@@ -2,6 +2,9 @@ REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.CalendarService');
+REQUIRE('chlk.services.TeacherService');
+REQUIRE('chlk.services.StudentService');
+
 REQUIRE('chlk.activities.profile.SchedulePage');
 REQUIRE('chlk.activities.profile.SchoolPersonAppsPage');
 
@@ -26,6 +29,11 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.CalendarService, 'calendarService',
 
+            [ria.mvc.Inject],
+            chlk.services.StudentService, 'studentService',
+
+            [ria.mvc.Inject],
+            chlk.services.TeacherService, 'teacherService',
 
             [[chlk.models.common.PaginatedList, Number, Boolean, String]],
             chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_, rolesText_){
@@ -112,39 +120,34 @@ NAMESPACE('chlk.controllers', function (){
                     || roleName === chlk.models.common.RoleNamesEnum.ADMINVIEW.valueOf();
             },
 
-            [[chlk.models.id.SchoolPersonId, String]],
-            function infoByRoleAction(personId, roleName){
-                var action = "details",
-                    controller = null,
-                    loweredRoleName = roleName.toLowerCase();
+            [[String]],
+            String, function getControllerNameByRole(roleName){
+                var controller = null, loweredRoleName = roleName.toLowerCase();
                 if(this.isAdminRoleName_(loweredRoleName))
                     controller = "admins";
                 if(loweredRoleName == chlk.models.common.RoleNamesEnum.TEACHER.valueOf())
                     controller = "teachers";
                 if(loweredRoleName == chlk.models.common.RoleNamesEnum.STUDENT.valueOf())
                     controller = "students";
-                return this.Redirect(controller, action, [personId.valueOf()]);
+                return controller;
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, ria.async.Future]],
-            function scheduleByRole(personId, date_, role, scheduleFuture){
-                var result = ria.async.wait([
-                        scheduleFuture,
-                        this.calendarService.getDayWeekInfo(date_, personId)
-                    ])
-                    .attach(this.validateResponse_())
-                    .then(function(results){
-                        var schedule = results[0];
-                        schedule.setRoleName(role);
-                        return new chlk.models.people.UserProfileScheduleViewData(
-                            chlk.models.calendar.announcement.Week,
-                            this.getCurrentRole(),
-                            schedule,
-                            results[1],
-                            this.getUserClaims_()
-                        );
-                    }, this);
-                return this.PushView(chlk.activities.profile.SchedulePage, result);
+            [[String]],
+            function getUserServiceByRole(roleName){
+                var services = {}
+                services[chlk.models.common.RoleNamesEnum.TEACHER.valueOf()] = this.teacherService;
+                services[chlk.models.common.RoleNamesEnum.STUDENT.valueOf()] = this.studentService;
+                //no admin service for now
+                services[chlk.models.common.RoleNamesEnum.ADMINGRADE.valueOf()] = null;
+                services[chlk.models.common.RoleNamesEnum.ADMINEDIT.valueOf()] = null;
+                services[chlk.models.common.RoleNamesEnum.ADMINVIEW.valueOf()] = null;
+                return services[roleName.toLowerCase()];
+            },
+
+            [[chlk.models.id.SchoolPersonId, String]],
+            function infoByRoleAction(personId, roleName){
+                var action = "details", controller = this.getControllerNameByRole(roleName);
+                return this.Redirect(controller, action, [personId.valueOf()]);
             },
 
             [[chlk.models.people.UserProfileViewData]],
@@ -198,6 +201,67 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         return new modelClass(this.getCurrentRole(), this.prepareProfileData(data));
                     }, this);
+            },
+
+
+            [[
+                chlk.models.id.SchoolPersonId,
+                chlk.models.common.ChlkDate,
+                String,
+                ria.async.Future,
+                ria.async.Future,
+                ClassOf(chlk.models.calendar.BaseCalendar),
+                ClassOf(chlk.activities.lib.TemplatePage),
+                String,
+                ClassOf(chlk.templates.calendar.announcement.BaseCalendarBodyTpl)
+            ]],
+            function scheduleByRole(personId, date_, roleName, scheduleFuture,
+                                    calendarFuture, modelType, pageType, currentAction, bodyTpl){
+                var result = ria.async.wait([
+                    scheduleFuture,
+                    calendarFuture
+                ])
+                    .attach(this.validateResponse_())
+                    .then(function(results){
+                        var schedule = results[0];
+                        schedule.setRoleName(roleName);
+                        return new chlk.models.people.UserProfileScheduleViewData(
+                            modelType,
+                            this.getCurrentRole(),
+                            schedule,
+                            results[1],
+                            this.getUserClaims_(),
+                            currentAction,
+                            bodyTpl
+                        );
+                    }, this);
+                return this.PushView(pageType, result);
+            },
+
+            [[
+                String,
+                chlk.models.id.SchoolPersonId,
+                chlk.models.common.ChlkDate,
+                ria.async.Future,
+                ClassOf(chlk.models.calendar.BaseCalendar),
+                ClassOf(chlk.activities.lib.TemplatePage),
+                String,
+                ClassOf(chlk.templates.calendar.announcement.BaseCalendarBodyTpl)
+            ]],
+            function schedule_(roleName, personId, date_,calendarServiceAction, calendarModel, schedulePageType, currentAction, bodyTpl){
+                var userService = this.getUserServiceByRole(roleName);
+
+                return this.scheduleByRole(
+                    personId,
+                    date_,
+                    roleName,
+                    userService.getSchedule(personId),
+                    calendarServiceAction,
+                    calendarModel,
+                    schedulePageType,
+                    currentAction,
+                    bodyTpl
+                );
             }
         ])
 });

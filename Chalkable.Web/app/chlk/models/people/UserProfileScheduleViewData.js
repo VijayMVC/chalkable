@@ -19,12 +19,24 @@ NAMESPACE('chlk.models.people', function () {
             VOID, function setSchedule(userSchedule){return this.setUser_(userSchedule);},
 
             TCalendar, 'calendar',
+            String, 'currentAction',
 
-            [[chlk.models.common.Role, chlk.models.people.Schedule, TCalendar, ArrayOf(chlk.models.people.Claim)]],
-            function $(role, schedule_, calendar_, claims_){
+            ClassOf(chlk.templates.calendar.announcement.BaseCalendarBodyTpl), 'bodyTpl',
+
+            [[
+                chlk.models.common.Role,
+                chlk.models.people.Schedule,
+                TCalendar,
+                ArrayOf(chlk.models.people.Claim),
+                String,
+                ClassOf(chlk.templates.calendar.announcement.BaseCalendarBodyTpl)
+            ]],
+            function $(role, schedule_, calendar_, claims_, currentAction, bodyTpl){
                 BASE(role, schedule_, claims_);
                 if(calendar_)
                     this.setCalendar(calendar_);
+                this.setCurrentAction(currentAction);
+                this.setBodyTpl(bodyTpl);
             }
         ]);
 });

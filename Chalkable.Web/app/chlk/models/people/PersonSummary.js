@@ -16,7 +16,7 @@ NAMESPACE('chlk.models.people', function () {
 
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
-                this.roomId = SJX.fromValue(raw.roomid, chlk.models.id.SchoolPersonId);
+                this.roomId = SJX.fromValue(raw.roomid, chlk.models.id.RoomId);
                 this.roomName = SJX.fromValue(raw.roomname, String);
                 this.roomNumber = SJX.fromValue(raw.roomnumber, Number);
             }

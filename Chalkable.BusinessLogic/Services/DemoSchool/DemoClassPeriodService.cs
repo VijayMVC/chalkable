@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -36,16 +37,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Class CurrentClassForTeacher(int personId, DateTime dateTime)
         {
-            var person = Storage.PersonStorage.GetPerson(new PersonQuery
-            {
-                CallerId = Context.PersonId,
-                CallerRoleId = Context.Role.Id,
-                PersonId = personId
-            });
-            var teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : default(int?);
-            var studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : default(int?);
-            var time = (int)(dateTime - dateTime.Date).TotalMinutes;
-            throw new NotImplementedException();
+            return Storage.ClassStorage.GetById(DemoSchoolConstants.AlgebraClassId);
         }
 
         public IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime @from, DateTime to)

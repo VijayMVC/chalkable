@@ -1,7 +1,8 @@
 mixin GlanceItem(item, converter, useTooltip, inverse)
-    summary = (item.getSummaryMethod || item.data.getSummary)()
+    summary = item.summary
     summary = converter ? converter(summary) : summary
-    total = (item.getTotalMethod || item.data.getTotal)()
+    total = item.total
+
     if useTooltip
         .glance-item
             if inverse

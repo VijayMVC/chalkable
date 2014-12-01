@@ -55,22 +55,28 @@ NAMESPACE('chlk.templates.student', function () {
 
             Object, function buildAttendanceGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getAttendanceBox()
-                    , function(item){ return item.getAbsences}
-                    , function(item){ return item.getClazz().getName}
+                    , function(item){
+                        console.log(item.getAbsences());
+                        return item.getAbsences()
+                    }
+                    , function(item){
+                        console.log(item.getClazz().getName());
+                        return item.getClazz().getName()
+                    }
                     , Msg.Attendance);
             },
 
             Object, function buildDisciplineGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getDisciplineBox()
-                    , function(item){ return item.getTotal}
-                    , function(item){ return item.getDisciplineType().getName}
+                    , function(item){ return item.getTotal()}
+                    , function(item){ return item.getDisciplineType().getName()}
                     , Msg.Discipline);
             },
 
             Object, function buildGradesGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getGradesBox()
-                    , function(item){ return item.getGrade}
-                    , function(item){ return item.getAnnouncementTitle}
+                    , function(item){ return item.getGrade()}
+                    , function(item){ return item.getAnnouncementTitle()}
                     , Msg.Recent, null, 'announcement', 'view'
                     , function(item){ return [item.getAnnouncementId()]});
             },
@@ -83,8 +89,8 @@ NAMESPACE('chlk.templates.student', function () {
                     for(var i = 0; i < hoverItems.length; i++){
                         items.push({
                             data: hoverItems[i],
-                            getTotalMethod: getTotalMethod(hoverItems[i]),
-                            getSummaryMethod: getSummaryMethod(hoverItems[i]),
+                            total: getTotalMethod(hoverItems[i]),
+                            summary: getSummaryMethod(hoverItems[i]),
                             controller: controller_,
                             action: action_,
                             params: paramsMethod_ ? paramsMethod_(hoverItems[i]) : []

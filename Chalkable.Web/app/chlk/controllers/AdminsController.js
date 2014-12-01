@@ -101,13 +101,6 @@ NAMESPACE('chlk.controllers', function (){
             function infoEditAction(model){
                 var res = this.infoEdit_(model, chlk.models.people.UserProfileInfoViewData);
                 return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, res);
-            },
-
-            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
-            function scheduleAction(personId, date_){
-                return this.scheduleByRole(personId, date_
-                    , chlk.models.common.RoleNamesEnum.ADMINGRADE.valueOf()
-                    , this.adminService.getSchedule(personId));
             }
         ])
 });

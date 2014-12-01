@@ -14,7 +14,7 @@ NAMESPACE('chlk.models.common', function () {
 
             VOID, function deserialize(raw){
                 this.total = SJX.fromValue(raw.total, Number);
-                this.disciplineType = SJX.fromValue(raw.disciplinetype, chlk.models.common.NameId);
+                this.disciplineType = SJX.fromDeserializable(raw.disciplinetype, chlk.models.common.NameId);
             }
     ]);
 });
