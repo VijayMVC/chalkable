@@ -39,8 +39,7 @@ namespace Chalkable.StiConnector.Connectors
             string url = string.Format("{0}chalkable/attendance/summary", BaseUrl);
             return Call<IList<SectionAttendanceSummary>>(url, parmeters);
         } 
-
-
+        
         public IList<PostedAttendance> GetPostedAttendances(int acadSessionId, DateTime date)
         {
             string url = string.Format("{0}chalkable/{1}/postedattendance/{2}", BaseUrl, acadSessionId, date.ToString(Constants.DATE_FORMAT));
