@@ -1,0 +1,45 @@
+.grades-page.grading-summary-grid
+    -var topData = self.getTopData()
+    -var topItems = topData.getTopItems()
+    -var selectedId = topData.getSelectedItemId()
+
+    h2.page-title=Msg.Final_Grade(true)
+
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'finalGrades')(
+        selectedItemId=selectedId,
+        disabledClass = 'x-hidden'
+    ).classes-bar
+    .autocomplete-list.final-grades
+    .action-bar
+        .items
+            +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+            +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
+            +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
+    .mps-container
+        each gradingPeriod,i in self.getGradingPeriods()
+            -var ableEdit = self.isAbleEdit()
+            -var ableEditDirectValue = self.isAbleEditDirectValue()
+            div(
+                class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "",
+                data-index=i,
+                data-grading-period-id=gradingPeriod.getId(),
+                data-able-edit=ableEdit,
+                data-able-edit-direct-value=ableEditDirectValue
+            ).chlk-calendar.marking-period-container.big-grading-period-container
+                .header.mp-title
+                    span.mp-name=gradingPeriod.getFinalTitleText()
+
+                    .collapse
+                div(data-grading-period-id=gradingPeriod.getId()).mp-data
+                    if gradingPeriod.getId() == self.getGradingPeriodId()
+                        -var gp = self.getCurrentFinalGrade()
+                        +RenderWith(gp, chlk.templates.grading.GradingPeriodFinalGradeTpl)(
+                            classId = selectedId,
+                            ableEdit = ableEdit,
+                            ableEditDirectValue = ableEditDirectValue,
+                            gradingComments = self.getGradingComments()
+                        )
+                    else
+                        +ActionForm('grading', 'loadGradingPeriodFinalGradesSummary').load-grading-period
+                            +Hidden('classId', selectedId)
+                            +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())

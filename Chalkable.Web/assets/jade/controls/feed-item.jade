@@ -1,0 +1,28 @@
+mixin Glue_()
+    =[].slice.call(arguments).filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ')
+
+mixin FeedItem(item, disabled)
+    -VALIDATE_ARG('item', [chlk.models.announcement.FeedAnnouncementViewData, chlk.templates.announcement.AnnouncementView, chlk.models.announcement.Announcement], item)
+    -VALIDATE_ARG('disabled_', [Boolean], disabled)
+
+    -var isAdminAnnouncement = item.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
+    -var itemClasses = attributes['class'] || []
+
+    - itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
+    - itemClasses.push(item.isShowGradingIcon() ? 'is-gradable' : 'non-gradable')
+    - itemClasses.push(item.getOwnerAttachmentsCount() == 0 ? 'no-attachment-icon' : 'has-attachments-icon')
+    - itemClasses.push(item.isHiddenFromStudents() ? 'invisible-for-students' : 'visible-for-students')
+    -if (isAdminAnnouncement)         itemClasses.push('is-admin')
+    -if (item.isComplete())           itemClasses.push('complete')
+    -if (item.getApplicationsCount()) itemClasses.push('app-icon')
+
+    div(class = itemClasses).feed-item
+        +ActionLink('announcement', 'star', item.getId().valueOf(), false)(data-tooltip=Msg.Done).star.complete
+        +ActionLink('announcement', 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
+        +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').announcement-link
+            .title: +Glue_(item.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), item.getClassName())
+            .date= item.getExpiresDate() ? item.getExpiresDate().toString('m/d/y') : ''
+            .attachment
+                .grades
+                    .visible
+                        .content: +Glue_(item.getTitle(), item.getShortContent())

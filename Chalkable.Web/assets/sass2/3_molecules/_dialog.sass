@@ -1,0 +1,56 @@
+.dialog
+  position: absolute
+  z-index: 1000
+  background: #fff
+  border-radius: 5px
+  overflow: hidden
+  +box-shadow(transparentize(#000, .8) 0 0 5px)
+
+  h1
+    background: #f7f7f5
+    border-bottom: 1px solid #e6e7e2
+    height: 62px
+    line-height: 58px
+    font-size: 18px
+    text-align: center
+
+  h2
+    text-align: center
+    font-size: 16px
+
+  .dialog-content
+    padding: 25px
+
+  &.fixed
+    position: fixed
+
+  .x-window-body
+
+  .buttons-bottom
+    text-align: center
+    padding-top: 10px
+
+    button
+      min-width: 70px
+
+      &:not(:last-child)
+        margin-right: 10px
+
+
+#chlk-dialogs
+  position: absolute
+  top: 70px
+  left: 6%
+  right: 6%
+  height: 0
+  z-index: 1000
+
+
+#chlk-overlay
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  z-index: 999
+  background: transparentize(#2f7790, .2)

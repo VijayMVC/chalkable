@@ -1,0 +1,87 @@
+.carousel-wrapper{
+  padding: 10px;
+  text-align: center;
+  width: 800px;
+  background: #fff;
+  border: 1px solid #e7e6e2;
+  @include box-shadow(0 1px 3px transparentize(#000, .9));
+  margin: 0 auto;
+  border-radius: 7px;
+
+  .carousel{
+    position: relative;
+    overflow: hidden;
+    height: 330px;
+    text-align: center;
+
+    a{
+      display: inline-block;
+      float: right;
+    }
+
+    li{
+      background: #eee;
+      float: left;
+      IMG, embed, iframe{
+        width:800px;
+        height: 330px;
+      }
+    }
+
+    ul{
+      width: 20000em;
+      position: absolute;
+      list-style: none;
+      margin: 0;
+    }
+
+    .picture-button{
+      top: 137px;
+      position: absolute;
+      width: image-width('images/app/photo-left.png');
+      height: image-height('images/app/photo-right.png');
+
+      &.picture-left{
+        left: 31px;
+        background: url(images/app/photo-left.png) 0 0 no-repeat;
+      }
+
+      &.picture-right{
+        right: 31px;
+        background: url(images/app/photo-right.png) 0 0 no-repeat;
+      }
+
+      &:hover:not(:disabled){
+        opacity: 0.85;
+      }
+
+      &:active{
+        opacity: 0.7;
+      }
+    }
+
+
+}
+}
+
+.carousel-pagination{
+  text-align: center;
+  position: relative;
+  width: 100%;
+  bottom: 0px;
+  margin-top: 10px;
+
+  .dot{
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    background: url(images/app/dot.png) 0 0 no-repeat;
+    margin: 0 2px;
+    cursor: pointer;
+
+    &.selected{
+      background: url(images/app/dot-active.png) 0 0 no-repeat;
+    }
+  }
+}
+
