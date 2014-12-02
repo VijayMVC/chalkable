@@ -44,6 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Person> GetAnnouncementRecipientPersons(int announcementId); 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
+        void SetAnnouncementsComplete(DateTime? date, bool complete);
         Announcement SetVisibleForStudent(int id, bool visible);
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
         bool CanAddStandard(int announcementId);
@@ -839,6 +840,17 @@ namespace Chalkable.BusinessLogic.Services.School
             if(!ann.SisActivityId.HasValue)
                 throw new ChalkableException("Current announcement doesn't have activityId");
             ConnectorLocator.ActivityConnector.CopyActivity(ann.SisActivityId.Value, classIds);
+        }
+
+        public void SetAnnouncementsComplete(DateTime? toDate, bool complete)
+        {
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            if(CoreRoles.TEACHER_ROLE == Context.Role)
+                ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, complete, toDate);
+            if(CoreRoles.STUDENT_ROLE == Context.Role)
+                ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, complete, toDate);
         }
     }
 }
