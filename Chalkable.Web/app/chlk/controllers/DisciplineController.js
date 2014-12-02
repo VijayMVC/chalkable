@@ -216,18 +216,18 @@ NAMESPACE('chlk.controllers', function(){
             [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.discipline.SetDisciplineModel]],
             function setDisciplineAction(model){
-//                var disciplines = model.getDisciplines();
-//                var disc = disciplines.length > 0 ? disciplines[0] : null;
                 var result = this.disciplineService
                     .setDiscipline(model)
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        /*var controller = model.getController() || 'discipline';
-                        var action = model.getAction() || 'list';
-                        var params = JSON.parse(model.getParams()) || [];
-                        return this.Redirect(controller, action, params);*/
+                        var dispModel = this.getContext().getSession().get(ChlkSessionConstants.DISCIPLINE_PAGE_DATA);
+                        dispModel.getDisciplines().forEach(function(item){
+                            if(item.getStudentId() == data.getStudentId())
+                                item.setDisciplineTypes(data.getDisciplineTypes());
+                        });
+                        this.getContext().getSession().set(ChlkSessionConstants.DISCIPLINE_PAGE_DATA, dispModel);
                         model.setId(data.getId());
-                        return model;//model.getDisciplines()[0];
+                        return model;
                     }, this);
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
             },

@@ -182,17 +182,16 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(MarkingPeriodViewData.Create(SchoolLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId)), ViewConstants.MARKING_PERIODS);
         }
         
+
         private void PrepareStudentJsonData()
         {
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonInfoViewData.Create(person);
             personView.DisplayName = person.FullName();
 
-            //ToDO: think about to move this to login  
             if (!person.FirstLoginDate.HasValue)
             {
-                SchoolLocator.PersonService.SetPersonFirstLoginDate(person.Id, Context.NowSchoolTime);
-                SchoolLocator.AnnouncementService.SetAnnouncementsComplete(Context.NowSchoolYearTime, true);
+                SchoolLocator.PersonService.ProcessPersonFirstLogin(person.Id);
             }
             if (!person.Active)
             {
@@ -239,8 +238,7 @@ namespace Chalkable.Web.Controllers
             var personView = PersonInfoViewData.Create(person);
             if (!person.FirstLoginDate.HasValue)
             {
-                SchoolLocator.PersonService.SetPersonFirstLoginDate(person.Id, Context.NowSchoolTime);
-                SchoolLocator.AnnouncementService.SetAnnouncementsComplete(Context.NowSchoolYearTime, true);
+                SchoolLocator.PersonService.ProcessPersonFirstLogin(person.Id);
             }
             if (!person.Active)
             {
