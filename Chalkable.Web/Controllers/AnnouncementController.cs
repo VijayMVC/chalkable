@@ -77,6 +77,7 @@ namespace Chalkable.Web.Controllers
                 var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
                 avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
                 avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
+                avd.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(annDetails);
                 return Json(new CreateAnnouncementViewData
                 {
                     Announcement = avd,

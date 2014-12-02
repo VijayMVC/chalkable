@@ -6,6 +6,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -63,6 +64,21 @@ namespace Chalkable.Web.Controllers
             }
 
             return annViewData;
+        }
+
+        protected IList<ApplicationForAttachViewData> PrepareSuggestedAppsForAnnouncementViewData(AnnouncementDetails announcementDetails)
+        {
+            if (announcementDetails.AnnouncementStandards != null && announcementDetails.AnnouncementStandards.Count > 0)
+            {
+                var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
+                if (mp == null)
+                    throw new NoMarkingPeriodException();
+                var codes = announcementDetails.AnnouncementStandards.Where(x => !string.IsNullOrEmpty(x.Standard.CCStandardCode))
+                    .Select(x => x.Standard.CCStandardCode).ToList();
+                return AppMarketController.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                                                          Context.PersonId.Value, announcementDetails.ClassRef, codes, mp.Id);
+            }
+            return new List<ApplicationForAttachViewData>();
         }
     }
 }
