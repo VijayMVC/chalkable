@@ -1,0 +1,40 @@
+items = self.getStudentFinalGrades()
+selectedIndex = self.getSelectedIndex()
+gradingPeriod = self.getGradingPeriod()
+currentAvg = self.getCurrentAverage()
++ActionForm('grading', 'loadGradingPeriodFinalGradesSummary').load-grading-period
+    +Hidden('classId', self.getClassId())
+    +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+    +Hidden('selectedIndex', selectedIndex).selected-value
+    .gp-title-block
+        if items.length && currentAvg
+            .grading-selects.no-loading
+                +Select('averageId').avg-select
+                    each item in self.getAverages()
+                        +Option(item.getAverageId().valueOf(), item.getAverageName(), item.getAverageId() == self.getCurrentAverage().getAverageId())
+        .gp-title=gradingPeriod.getFinalTitleText()
+        if items.length && currentAvg
+            if self.isAbleEdit() && gradingPeriod.isAblePostGradeBook()
+                +ActionLinkButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId(), null, null, true).message-button.blue-gradient-btn.post-gradebook-button.no-loading=Msg.Post
+        .gp-triangle
+div(class = (self.isAvgChanged() ? "opened slided" : "")).gp-data
+    if !items.length
+        .no-items-text=Msg.No_grades_yet
+    else
+        if !currentAvg
+            .no-items-text There are no averages
+        else
+            isAbleDisplayAlphaGrades = true
+            +ListView(items)(
+                selectedIndex = selectedIndex,
+                scrollToElementTimeout = 550
+            ).grades-individual.people-list.final-grid
+                each item, i in items
+                    +RenderWith(item, chlk.templates.grading.FinalGradeStudentBlockTpl)(
+                        selected = selectedIndex == i,
+                        ableEdit = self.isAbleEdit(),
+                        ableEditDirectValue = self.isAbleEditDirectValue(),
+                        index = i,
+                        gradingPeriodId = gradingPeriod.getId(),
+                        gradingComments = self.getGradingComments()
+                    )
