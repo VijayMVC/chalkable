@@ -7,7 +7,6 @@ NAMESPACE('chlk.controls', function () {
         'SimplePayCheckControl', EXTENDS(chlk.controls.BaseCheckControl), [
             OVERRIDE, VOID, function onCreate_() {
                 BASE();
-                ASSET('~/assets/jade/controls/paycheck.jade')(this);
                 ASSET('~/assets/jade/controls/short-pay-check.jade')(this);
             },
 

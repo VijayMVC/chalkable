@@ -127,6 +127,7 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
                     class=disableDeleteBtn ? 'disabled' : ''
                 ).special-button.red-button.submit-btn.add-loader-btn
                     =Msg.Delete
+            +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), tplData.getTopData().getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
         else
             +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
 

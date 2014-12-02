@@ -44,6 +44,34 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
+            [[Object, Object, String]],
+            VOID, function updateStandardsAndSuggestedApps(tpl, model, msg_) {
+                var standardsData = new chlk.models.standard.StandardsListViewData(
+                    null, model.getClassId(),
+                    null, model.getStandards(),
+                    model.getId());
+                var standardsTpl =  new chlk.templates.standard.AnnouncementStandardsTpl();
+                standardsTpl.assign(standardsData);
+                var stsListNode = this.dom.find('.standards-list');
+                stsListNode.setHTML('');
+                standardsTpl.renderTo(stsListNode);
+
+                var suggestedAppsNode = this.dom.find('.suggested-apps');
+                suggestedAppsNode.setHTML('');
+
+                if(model.getStandards() && model.getStandards().length > 0){
+                    var suggestedApps = model.getSuggestedApps();
+                    var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
+                        model.getClassId(),
+                        model.getId(),
+                        suggestedApps);
+                    var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
+                    suggestedAppsTpl.assign(suggestedAppsListData);
+                    suggestedAppsTpl.renderTo(suggestedAppsNode);
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '#check-title-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function checkTitleClick(node, event){

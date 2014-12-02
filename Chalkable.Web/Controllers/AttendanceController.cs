@@ -110,15 +110,17 @@ namespace Chalkable.Web.Controllers
         private AttendanceSeatingChartViewData GetSeatingChart(DateTime? date, int classId) {
             var d = (date ?? Context.NowSchoolYearTime).Date;
             var markingPeriod = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d, true);
-            if(markingPeriod == null)
-                throw new NoMarkingPeriodException();
-            var seatingChart = SchoolLocator.AttendanceService.GetSeatingChart(classId, markingPeriod.Id);
-            if (seatingChart != null)
+            if (markingPeriod != null)
             {
-                var attendances = ClassAttendanceList(d, classId);
-                var students = SchoolLocator.StudentService.GetClassStudents(classId, markingPeriod.Id, true);
-                return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);               
+                var seatingChart = SchoolLocator.AttendanceService.GetSeatingChart(classId, markingPeriod.Id);
+                if (seatingChart != null)
+                {
+                    var attendances = ClassAttendanceList(d, classId);
+                    var students = SchoolLocator.StudentService.GetClassStudents(classId, markingPeriod.Id, true);
+                    return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);
+                }    
             }
+            
             return null;
         }
 

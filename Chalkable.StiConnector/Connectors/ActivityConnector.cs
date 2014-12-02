@@ -101,6 +101,24 @@ namespace Chalkable.StiConnector.Connectors
             Put<Object>(url, null);
         }
 
+        public void CompleteStudentActivities(int acadSessionId, int studentId, bool complete, DateTime? date)
+        {
+            var url = string.Format(BaseUrl + "chalkable/{0}/students/{1}/activities/complete/{2}", acadSessionId, studentId, complete);
+            var nvc = new NameValueCollection();
+            if(date.HasValue)
+                nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
+            Put<Object>(url, null);
+        }
+
+        public void CompleteTeacherActivities(int acadSessionId, int teacherId, bool complete, DateTime? date)
+        {
+            var url = string.Format(BaseUrl + "chalkable/{0}/teachers/{1}/activities/complete/{2}", acadSessionId, teacherId, complete);
+            var nvc = new NameValueCollection();
+            if (date.HasValue)
+                nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
+            Put<Object>(url, null);
+        }
+
         public void DeleteActivity(int id)
         {
             Delete(string.Format(urlFormat, id));           

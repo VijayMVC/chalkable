@@ -1,2 +1,9 @@
 mixin ShortPayCheck(appId, classId)
-    +PayCheck()(appId=appId, classId=classId)
+    -attributes.appId = appId;
+    -attributes.classId = classId;
+    -attributes = self.processAttrs(attributes);
+    .paycheck
+        .container
+            .top
+                .middle
+                    .bottom

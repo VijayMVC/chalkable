@@ -19,7 +19,8 @@ NAMESPACE('chlk.templates.people', function () {
                 var currentRole = this.getUserRole();
                 var currentUser = this.getCurrentUser();
                 return !currentRole || !currentUser || currentUser.getId() == user.getId()
-                    || currentRole.isTeacher() || currentRole.isAdmin();
+                    || currentRole.isTeacher() || currentRole.isAdmin()
+                    || currentRole.isStudent() && user.getRole().getId() == chlk.models.common.RoleEnum.TEACHER.valueOf();
             }
         ])
 });

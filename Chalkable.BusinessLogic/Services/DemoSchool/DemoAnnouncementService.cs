@@ -425,5 +425,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             Storage.AnnouncementStorage.DuplicateAnnouncement(id, classIds);
         }
+
+
+        public void SetAnnouncementsComplete(DateTime? toDate, bool complete)
+        {
+            if (!Context.PersonId.HasValue)
+                throw new Exception("User local id doesn't have a valid value");
+            var annsResult = Storage.AnnouncementStorage.GetAnnouncements(new AnnouncementsQuery
+                {
+                    ToDate = toDate,
+                    PersonId = Context.PersonId,
+                    Complete = !complete,
+                    RoleId = Context.RoleId,
+                });
+            foreach (var ann in annsResult.Announcements)
+                Storage.AnnouncementStorage.SetComplete(ann.Id, Context.PersonId.Value, complete);
+        }
     }
 }
