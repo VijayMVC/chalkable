@@ -243,16 +243,16 @@ namespace Chalkable.BusinessLogic.Services.School
             var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
             var studentId = Context.Role == CoreRoles.STUDENT_ROLE ? Context.PersonId : null;
             var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
-            var classPeriods = ServiceLocator.ClassPeriodService.GetSchedule(teacherId, studentId, null, dateTime, dateTime);
+            var scheduleItems = ServiceLocator.ClassPeriodService.GetSchedule(teacherId, studentId, null, dateTime, dateTime);
             var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
 
-            classes = classes.Where(x => postedAttendances.All(y => y.SectionId != x.Id)).ToList();
+            classes = classes.Where(x => postedAttendances.Any(y => y.SectionId == x.Id && !y.AttendancePosted)).ToList();
             if (dateTime.Date == Context.NowSchoolTime.Date)
             {
                 var time = (int)((dateTime - dateTime.Date).TotalMinutes) - 3;
-                classPeriods = classPeriods.Where(x => x.StartTime <= time).ToList();
+                scheduleItems = scheduleItems.Where(x => x.StartTime <= time).ToList();
             }
-            return classes.Where(x => classPeriods.Any(y => y.ClassId == x.Id)).ToList();
+            return classes.Where(x => scheduleItems.Any(y => y.ClassId == x.Id)).ToList();
         }
 
 
