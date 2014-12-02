@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Person> GetAnnouncementRecipientPersons(int announcementId); 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
-        void SetAnnouncementsComplete(DateTime? date, bool complete);
+        void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         Announcement SetVisibleForStudent(int id, bool visible);
         IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType);
         bool CanAddStandard(int announcementId);
@@ -842,7 +842,7 @@ namespace Chalkable.BusinessLogic.Services.School
             ConnectorLocator.ActivityConnector.CopyActivity(ann.SisActivityId.Value, classIds);
         }
 
-        public void SetAnnouncementsComplete(DateTime? toDate, bool complete)
+        public void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();

@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PersonDetails GetPersonDetails(int id);
         Person GetPerson(int id);
         void ActivatePerson(int id);
-        void SetPersonFirstLoginDate(int id, DateTime firstLoginDate);
+        void ProcessPersonFirstLogin(int id);
         void EditEmail(int id, string email, out string error);
         IList<Person> GetAll();
         int GetSisUserId(int personId);
@@ -211,19 +211,19 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-
-        public void SetPersonFirstLoginDate(int id, DateTime firstLoginDate)
+        public void ProcessPersonFirstLogin(int id)
         {
-            if (!BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
+            if (Context.PersonId != id)
                 throw new ChalkableSecurityException();
             DoUpdate(uow =>
-                {
-                    var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                    var p = da.GetById(id);
-                    if (p.FirstLoginDate.HasValue) return;
-                    p.FirstLoginDate = firstLoginDate;   
-                    da.Update(p);
-                });
+            {
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var p = da.GetById(id);
+                if (p.FirstLoginDate.HasValue) return;
+                p.FirstLoginDate = Context.NowSchoolTime;
+                da.Update(p);
+                ServiceLocator.AnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+            });
         }
     }
 }

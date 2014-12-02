@@ -209,12 +209,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-
-        public void SetPersonFirstLoginDate(int id, DateTime firstLoginDate)
+        public void ProcessPersonFirstLogin(int id)
         {
             if (BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
                 throw new ChalkableSecurityException();
             var person = GetPerson(id);
+            if (person.FirstLoginDate.HasValue) return;
             person.FirstLoginDate = Context.NowSchoolTime;
             Storage.PersonStorage.Update(person);
         }

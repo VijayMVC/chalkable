@@ -427,7 +427,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public void SetAnnouncementsComplete(DateTime? toDate, bool complete)
+        public void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
         {
             if (!Context.PersonId.HasValue)
                 throw new Exception("User local id doesn't have a valid value");
