@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.BusinessLogic</RootNamespace>
+    <AssemblyName>Chalkable.BusinessLogic</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'STAGING|AnyCPU'">
+    <OutputPath>bin\STAGING\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\AppTools.cs" />
+    <Compile Include="Common\NameHelper.cs" />
+    <Compile Include="Mapping\GradingStyleMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\ActivityToAnnouncementMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\AnnouncementAttToActivityAttMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\AnnouncementComplexToActivityMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\BaseMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\ClassDisciplineToDisciplineReferralMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\DisciplineReferralToClassDisciplineMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\MapperFactory.cs" />
+    <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\StiAttachmentToAnnouncementAttMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
+    <Compile Include="Model\AnnouncementInfo.cs" />
+    <Compile Include="Model\ApplicationInfo.cs" />
+    <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
+    <Compile Include="Model\AttachmentContentInfo.cs" />
+    <Compile Include="Model\BlobContainerInfo.cs" />
+    <Compile Include="Model\BlobInfo.cs" />
+    <Compile Include="Model\ChalkableAnnouncementType.cs" />
+    <Compile Include="Model\ChalkableGradeBook.cs" />
+    <Compile Include="Model\ClaimInfo.cs" />
+    <Compile Include="Model\ClassAttendance.cs" />
+    <Compile Include="Model\EmailInfo.cs" />
+    <Compile Include="Model\FinalGradeInfo.cs" />
+    <Compile Include="Model\GradingStandardInfo.cs" />
+    <Compile Include="Model\RecipientInfo.cs" />
+    <Compile Include="Model\SeatingChartInfo.cs" />
+    <Compile Include="Model\StudentCommentInfo.cs" />
+    <Compile Include="Model\StudentSummaryInfo.cs" />
+    <Compile Include="Model\UserInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AnnouncementSecurity.cs" />
+    <Compile Include="Security\ApplicationSecurity.cs" />
+    <Compile Include="Security\BaseSecurity.cs" />
+    <Compile Include="Security\NotificationSecurity.cs" />
+    <Compile Include="Security\PrivateMessageSecurity.cs" />
+    <Compile Include="Security\UserSecurity.cs" />
+    <Compile Include="Services\CrocodocService.cs" />
+    <Compile Include="Services\DbService.cs" />
+    <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
+    <Compile Include="Services\DemoSchool\DemoClassroomOptionService.cs" />
+    <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
+    <Compile Include="Services\DemoSchool\DemoClassService.cs" />
+    <Compile Include="Services\DemoSchool\DemoClassPeriodService.cs" />
+    <Compile Include="Services\DemoSchool\DemoClassAnnouncementTypeService.cs" />
+    <Compile Include="Services\DemoSchool\DemoCalendarDateService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAttendanceService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAttendanceReasonService.cs" />
+    <Compile Include="Services\DemoSchool\DemoDisciplineService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradeLevelService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingScaleService.cs" />
+    <Compile Include="Services\DemoSchool\Common\DemoSchoolConstants.cs" />
+    <Compile Include="Services\DemoSchool\DemoPersonEmailService.cs" />
+    <Compile Include="Services\DemoSchool\DemoStaffService.cs" />
+    <Compile Include="Services\DemoSchool\DemoStudentParentService.cs" />
+    <Compile Include="Services\DemoSchool\DemoStudentAnnouncementService.cs" />
+    <Compile Include="Services\DemoSchool\DemoStandardService.cs" />
+    <Compile Include="Services\DemoSchool\DemoSchoolPersonService.cs" />
+    <Compile Include="Services\DemoSchool\DemoRoomService.cs" />
+    <Compile Include="Services\DemoSchool\DemoPrivateMessageService.cs" />
+    <Compile Include="Services\DemoSchool\DemoPhoneService.cs" />
+    <Compile Include="Services\DemoSchool\DemoPeriodService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingStatisticService.cs" />
+    <Compile Include="Services\DemoSchool\DemoInfractionService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingCommentService.cs" />
+    <Compile Include="Services\DemoSchool\DemoUserSchoolService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoBackgroundTaskService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoApplicationUploadService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoApplicationService.cs" />
+    <Compile Include="Services\DemoSchool\DemoNotificationService.cs" />
+    <Compile Include="Services\DemoSchool\DemoStorageBlobService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoUserService.cs" />
+    <Compile Include="Services\DemoSchool\Models\AnnouncementComplete.cs" />
+    <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoPersonBalanceStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoPersonEmailStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoScheduledTimeSlotStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStaffSchoolStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStaffStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStudentSchoolStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStudentStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\StudentHealthConditionStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementCompleteStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoSchoolOptionStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassRoomOptionSorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassTeacherStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoGradingScaleRangeStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoGradingScaleStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoBlobStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoInfractionStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementApplicationStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionRoleStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionDepartmentStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionGradeLevelStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionClassesStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallActionStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoDistrictStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementStandardStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnonucementRecipientStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementQnAStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationInstallStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoNotificationStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoApplicationRatingStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAttendanceLevelReasonStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAttendanceReasonStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementAttachmentStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoMasterSchoolStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoChalkableDepartmentStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoCategoryStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassAnnouncementTypeStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassPersonStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoDateStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoDayTypeStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoSchoolGradeLevelStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoGradeLevelStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoGradingPeriodStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoMarkingPeriodClassStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoMarkingPeriodStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoPeriodStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoPersonStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoPhoneStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassPeriodStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoRoomStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoSchoolPersonStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoSchoolStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoClassStandardStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStandardSubjectStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStandardStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStudentParentStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAlternateScoreStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAlphaGradeStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAddressStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStudentAnnouncementStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStudentSchoolYearStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoSchoolYearStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoPrivateMessageStorage.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingStandardService.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiActivityStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiInfractionStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiActivityScoreStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\StiSeatingChartStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiAttendanceStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiStandartScoreStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiGradeBookStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\sti\DemoStiDisciplineStorage.cs" />
+    <Compile Include="Services\DemoSchool\DemoStudentService.cs" />
+    <Compile Include="Services\Master\AccessControlService.cs" />
+    <Compile Include="Services\Master\ApplicationService.cs" />
+    <Compile Include="Services\Master\ApplicationUploadService.cs" />
+    <Compile Include="Services\Master\CategoryService.cs" />
+    <Compile Include="Services\Master\CommonCoreStandardService.cs" />
+    <Compile Include="Services\Master\DeveloperService.cs" />
+    <Compile Include="Services\Master\DistrictService.cs" />
+    <Compile Include="Services\Master\ChalkableDepartmentService.cs" />
+    <Compile Include="Services\Master\EmailService.cs" />
+    <Compile Include="Services\Master\FundService.cs" />
+    <Compile Include="Services\Master\PictureServices\ApplicationPictureService.cs" />
+    <Compile Include="Services\Master\PictureServices\DepartmentIconService.cs" />
+    <Compile Include="Services\Master\PictureServices\FundRequestPictureService.cs" />
+    <Compile Include="Services\Master\PictureServices\PersonPictureService.cs" />
+    <Compile Include="Services\Master\PictureServices\PictureService.cs" />
+    <Compile Include="Services\Master\PreferenceService.cs" />
+    <Compile Include="Services\Master\SchoolService.cs" />
+    <Compile Include="Services\Master\MasterServiceBase.cs" />
+    <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
+    <Compile Include="Services\Master\BackgroundTaskService.cs" />
+    <Compile Include="Services\Master\UserService.cs" />
+    <Compile Include="Services\School\AddressService.cs" />
+    <Compile Include="Services\School\AlphaGradeService.cs" />
+    <Compile Include="Services\School\AlternateScoreService.cs" />
+    <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
+    <Compile Include="Services\School\AnnouncementQnAService.cs" />
+    <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\BellScheduleService.cs" />
+    <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
+    <Compile Include="Services\School\ApplicationSchoolService.cs" />
+    <Compile Include="Services\School\AppMarketService.cs" />
+    <Compile Include="Services\School\AttendanceReasonService.cs" />
+    <Compile Include="Services\School\AttendanceService.cs" />
+    <Compile Include="Services\School\CalendarDateService.cs" />
+    <Compile Include="Services\School\ClassroomOptionService.cs" />
+    <Compile Include="Services\School\DayTypeService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAnnouncementAttachmentService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAlternateScoreService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAlphaGradeService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAddressService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAnnouncementService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradingStyleService.cs" />
+    <Compile Include="Services\DemoSchool\DemoMarkingPeriodService.cs" />
+    <Compile Include="Services\DemoSchool\DemoPersonService.cs" />
+    <Compile Include="Services\DemoSchool\DemoSchoolService.cs" />
+    <Compile Include="Services\DemoSchool\DemoSchoolServiceBase.cs" />
+    <Compile Include="Services\DemoSchool\DemoSchoolYearService.cs" />
+    <Compile Include="Services\DemoSchool\DemoServiceLocatorSchool.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoCategoryService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoChalkableDepartmentService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoDistrictService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoMasterServiceBase.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoSchoolService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoFundService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoEmailService.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoDeveloperService.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoStorage.cs" />
+    <Compile Include="Services\DemoSchool\Master\DemoServiceLocatorMaster.cs" />
+    <Compile Include="Services\School\DisciplineService.cs" />
+    <Compile Include="Services\School\ClassPeriodService.cs" />
+    <Compile Include="Services\School\ClassService.cs" />
+    <Compile Include="Services\School\GradingCommentService.cs" />
+    <Compile Include="Services\School\GradingScaleService.cs" />
+    <Compile Include="Services\School\InfractionService.cs" />
+    <Compile Include="Services\School\GradeLevelService.cs" />
+    <Compile Include="Services\School\GradingPeriodService.cs" />
+    <Compile Include="Services\School\GradingStandardService.cs" />
+    <Compile Include="Services\School\GradingStatisticService.cs" />
+    <Compile Include="Services\School\GradingStyleService.cs" />
+    <Compile Include="Services\School\MarkingPeriodService.cs" />
+    <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
+    <Compile Include="Services\School\Notifications\NotificationService.cs" />
+    <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />
+    <Compile Include="Services\School\PeriodService.cs" />
+    <Compile Include="Services\School\PersonEmailService.cs" />
+    <Compile Include="Services\School\PersonService.cs" />
+    <Compile Include="Services\School\PhoneService.cs" />
+    <Compile Include="Services\School\PrivateMessageService.cs" />
+    <Compile Include="Services\School\ReportingService.cs" />
+    <Compile Include="Services\School\RoomService.cs" />
+    <Compile Include="Services\School\ScheduledTimeSlotService.cs" />
+    <Compile Include="Services\School\SchoolPersonService.cs" />
+    <Compile Include="Services\School\SchoolService.cs" />
+    <Compile Include="Services\School\SchoolServiceBase.cs" />
+    <Compile Include="Services\School\SchoolYearService.cs" />
+    <Compile Include="Services\School\ServiceLocatorSchool.cs" />
+    <Compile Include="Services\School\StaffService.cs" />
+    <Compile Include="Services\School\StandardService.cs" />
+    <Compile Include="Services\School\StudentAnnouncementService.cs" />
+    <Compile Include="Services\School\StudentParentService.cs" />
+    <Compile Include="Services\School\StudentService.cs" />
+    <Compile Include="Services\School\SyncService.cs" />
+    <Compile Include="Services\School\UserSchoolService.cs" />
+    <Compile Include="Services\StorageBlobService.cs" />
+    <Compile Include="Services\UserContext.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Common\Chalkable.Data.Common.csproj">
+      <Project>{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}</Project>
+      <Name>Chalkable.Data.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
+      <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
+      <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
+      <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
+      <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
+      <Name>Chalkable.StiConnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.UserTracking\Chalkable.UserTracking.csproj">
+      <Project>{A0F02AE8-991B-4080-A49A-9428F2B87181}</Project>
+      <Name>Chalkable.UserTracking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCObjectRenderer\GCObjectRenderer.csproj">
+      <Project>{ccd7266b-94bb-45ef-bc49-0f608da006f3}</Project>
+      <Name>GCObjectRenderer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WindowsAzure.Acs.Oauth2\WindowsAzure.Acs.Oauth2.csproj">
+      <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
+      <Name>WindowsAzure.Acs.Oauth2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logic\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
