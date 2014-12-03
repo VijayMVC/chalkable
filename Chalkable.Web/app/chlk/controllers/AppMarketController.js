@@ -337,6 +337,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         function quickInstallFailAction(){
+            //todo: show dialog for adding funds
             return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error')
                 .then(function(){
                     this.BackgroundCloseView(chlk.activities.apps.ShortInstallAppDialog);

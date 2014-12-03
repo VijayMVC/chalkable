@@ -451,6 +451,22 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
+        function openSuggestedAppTeacherAction(appId, classId, annId){
+            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
+            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    if(data.getTotalPersonsCount() > 0)
+                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, classId, annId]);
+                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId]);
+                }, this);
+            return null;
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId]],
         function tryToAttachTeacherAction(announcementId, appId) {
 
