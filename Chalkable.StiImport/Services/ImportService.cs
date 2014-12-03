@@ -25,6 +25,7 @@ namespace Chalkable.StiImport.Services
         private IList<Person> personsForImportPictures = new List<Person>();
         private UserContext sysadminCntx;
 
+        private Guid districtId;
         protected IServiceLocatorMaster ServiceLocatorMaster { get; set; }
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
         protected BackgroundTaskService.BackgroundTaskLog Log { get; private set; }
@@ -34,11 +35,10 @@ namespace Chalkable.StiImport.Services
         {
             ConnectionInfo = connectionInfo;
             Log = log;
-            
+            this.districtId = districtId;
             var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
             sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
-            ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
-            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
+            
         }
 
         void PingConnection(object o)
@@ -69,6 +69,14 @@ namespace Chalkable.StiImport.Services
             importedSchoolIds.Clear();
             personsForImportPictures.Clear();
 
+            ServiceLocatorMaster = new ServiceLocatorMaster(sysadminCntx);
+            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
+            Log.LogInfo("download data to sync");
+            DownloadSyncData();
+
+            ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
+            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
+
             var masterDb = (ImportDbService)ServiceLocatorMaster.DbService;
             var schoolDb = (ImportDbService)ServiceLocatorSchool.SchoolDbService;
             Log.LogInfo("begin master transaction");
@@ -80,8 +88,6 @@ namespace Chalkable.StiImport.Services
             t1.Start(masterDb);
             t2.Start(schoolDb);
             
-            Log.LogInfo("download data to sync");
-            DownloadSyncData();//TODO: can we do this before transaction opens?
             
             bool schoolCommited = false;
             try

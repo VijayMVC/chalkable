@@ -77,6 +77,7 @@ namespace Chalkable.Web.Controllers
                 var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
                 avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
                 avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
+                avd.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(annDetails);
                 return Json(new CreateAnnouncementViewData
                 {
                     Announcement = avd,
@@ -247,14 +248,14 @@ namespace Chalkable.Web.Controllers
         public ActionResult AddStandard(int announcementId, int standardId)
         {
             SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcementId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcementId, true, true));
+            return Json(PrepareFullAnnouncementViewData(announcementId, true, false));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult RemoveStandard(int announcementId, int standardId)
         {
             SchoolLocator.AnnouncementService.RemoveStandard(announcementId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcementId, true, true));
+            return Json(PrepareFullAnnouncementViewData(announcementId, true, false));
         }
 
     }

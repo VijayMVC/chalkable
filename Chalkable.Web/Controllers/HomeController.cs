@@ -182,13 +182,18 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(MarkingPeriodViewData.Create(SchoolLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId)), ViewConstants.MARKING_PERIODS);
         }
         
+
         private void PrepareStudentJsonData()
         {
-            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonInfoViewData.Create(person);
             personView.DisplayName = person.FullName();
+
             if (!person.FirstLoginDate.HasValue)
+            {
+                SchoolLocator.PersonService.ProcessPersonFirstLogin(person.Id);
+            }
+            if (!person.Active)
             {
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
                 var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
@@ -199,7 +204,8 @@ namespace Chalkable.Web.Controllers
             //todo: move this logic to getClass stored procedure later
             var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
             var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod().Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
-            
+            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
+           
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             PrepareCommonViewData(mp);
 
@@ -228,10 +234,13 @@ namespace Chalkable.Web.Controllers
                 throw new UnassignedUserException();
 
             PrepareCommonViewData(mp);
-
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonInfoViewData.Create(person);
             if (!person.FirstLoginDate.HasValue)
+            {
+                SchoolLocator.PersonService.ProcessPersonFirstLogin(person.Id);
+            }
+            if (!person.Active)
             {
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
                 var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);

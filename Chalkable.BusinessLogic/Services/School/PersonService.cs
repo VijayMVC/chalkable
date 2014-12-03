@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -18,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PersonDetails GetPersonDetails(int id);
         Person GetPerson(int id);
         void ActivatePerson(int id);
+        void ProcessPersonFirstLogin(int id);
         void EditEmail(int id, string email, out string error);
         IList<Person> GetAll();
         int GetSisUserId(int personId);
@@ -154,7 +156,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var person = GetPerson(id);
                 //TODO: change school status 
                 person.Active = true;
-                person.FirstLoginDate = Context.NowSchoolTime;
+                //person.FirstLoginDate = Context.NowSchoolTime;
                 da.Update(person);
                 uow.Commit();
             }
@@ -207,6 +209,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
                 return da.SearchPersons(filter, orderByFirstName, start, count);
             }
+        }
+
+        public void ProcessPersonFirstLogin(int id)
+        {
+            if (Context.PersonId != id)
+                throw new ChalkableSecurityException();
+            DoUpdate(uow =>
+            {
+                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var p = da.GetById(id);
+                if (p.FirstLoginDate.HasValue) return;
+                p.FirstLoginDate = Context.NowSchoolTime;
+                da.Update(p);
+                ServiceLocator.AnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+            });
         }
     }
 }

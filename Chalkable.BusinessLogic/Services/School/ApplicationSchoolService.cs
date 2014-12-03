@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -66,6 +67,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public AnnouncementApplication AddToAnnouncement(int announcementId, Guid applicationId)
         {
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            if(!CanAddToAnnouncement(app.Id))
+                throw new ChalkableSecurityException("Application is not installed yet");
             using (var uow = Update())
             {
                 var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
@@ -105,6 +108,8 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementAppId);
+                if(CanAddToAnnouncement(aa.ApplicationRef))
+                    throw new ChalkableSecurityException("Application is not installed yet");
                 var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
                     .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
                 if (!ann.IsOwner)
@@ -113,6 +118,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Update(aa);
                 uow.Commit();
             }
+        }
+
+        private bool CanAddToAnnouncement(Guid appId)
+        {
+            var appInstall = ServiceLocator.AppMarketService.GetInstallationForPerson(appId, Context.PersonId.Value);
+            return appInstall != null && appInstall.Active;
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)

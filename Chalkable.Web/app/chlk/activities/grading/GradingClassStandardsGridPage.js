@@ -46,14 +46,36 @@ NAMESPACE('chlk.activities.grading', function () {
                 parent.parent('.marking-period-container').find('.comment-button').show();
             },
 
-            OVERRIDE, function beforeFormSubmit_(form, value, isAvg_){
-                BASE(form, value, isAvg_);
+            OVERRIDE, function beforeFormSubmit_(form, value, model, isAvg_){
+                BASE(form, value, model, isAvg_);
                 var gradeId;
                 this.getAllScores().forEach(function(score){
                     if(score[0].toLowerCase() == value.toLowerCase())
                         gradeId = score[1].valueOf()
                 });
                 gradeId && form.find('input[name=gradeid]').setValue(gradeId);
+                if(this._lastModel){
+                    var items = this._lastModel.getCurrentGradingGrid().getGradingItems(),
+                        len = items.length;
+
+                    for(var i=0; i<len; i++){
+                        var item = items[i];
+                        if(item.getStandard().getStandardId() == model.getStandardId()){
+                            var standards = item.getItems();
+                            for(var j=0; j<standards.length; j++){
+                                var standard = standards[j];
+                                if(standard.getStudentId() == model.getStudentId()){
+                                    gradeId && standard.setGradeId(new chlk.models.id.GradeId(gradeId));
+                                    standard.setGradeValue(model.getGradeValue());
+                                    standard.setComment(model.getComment());
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+
             },
 
             [[ria.dom.Dom]],

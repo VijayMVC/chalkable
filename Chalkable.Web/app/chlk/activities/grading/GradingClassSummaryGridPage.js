@@ -367,8 +367,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 popUp.hide();
             },
 
-            OVERRIDE, function beforeFormSubmit_(form, value, isAvg_){
-                BASE(form, value, isAvg_);
+            OVERRIDE, function beforeFormSubmit_(form, value, model, isAvg_){
+                BASE(form, value, model, isAvg_);
                 var autoUpdateForm = form.parent('.marking-period-container').find('.load-grading-period');
                 clearTimeout(gradingGridTimer);
                 gradingGridTimer = setTimeout(function(){
@@ -380,6 +380,54 @@ NAMESPACE('chlk.activities.grading', function () {
                         autoUpdateForm.find('.avg-value').setValue(false);
                     }, 1);
                 }, 5000);
+                if(this._lastModel){
+                    var i, items, len, item, j;
+                    if(model instanceof chlk.models.grading.ShortStudentAverageInfo){
+                        items = this._lastModel.getCurrentGradingGrid().getStudentAverages();
+                        len = items.length;
+
+                        for(i=0; i<len; i++){
+                            item = items[i];
+                            if(item.getAverageId() == model.getAverageId()){
+                                var averages = item.getAverages();
+                                for(j=0; j < averages.length; j++){
+                                    var average = averages[j];
+                                    if(average.getStudentId() == model.getStudentId()){
+                                        average.setEnteredAvg(model.getEnteredAvg());
+                                        average.setEnteredAlphaGrade(model.getEnteredAlphaGrade());
+                                        average.setCodesString(model.getCodesString());
+                                        average.setExempt(model.isExempt());
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }else{
+                        items = this._lastModel.getCurrentGradingGrid().getGradingItems();
+                        len = items.length;
+
+                        for(i=0; i<len; i++){
+                            item = items[i];
+                            if(item.getId() == model.getAnnouncementId()){
+                                var studentAnnouncements = item.getStudentAnnouncements().getItems();
+                                for(j=0; j < studentAnnouncements.length; j++){
+                                    var studentAnnouncement = studentAnnouncements[j];
+                                    if(studentAnnouncement.getId() == model.getId()){
+                                        studentAnnouncement.setGradeValue(model.getGradeValue());
+                                        studentAnnouncement.setDropped(model.isDropped());
+                                        studentAnnouncement.setLate(model.isLate());
+                                        studentAnnouncement.setIncomplete(model.isIncomplete());
+                                        studentAnnouncement.setExempt(model.isExempt());
+                                        studentAnnouncement.setComment(model.getComment());
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
             },
 
             OVERRIDE, function prepareAllScores(model){

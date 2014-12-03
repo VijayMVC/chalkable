@@ -649,7 +649,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 return js.deserialize(o, this.getFormModelClass_())
             },
 
-            function beforeFormSubmit_(form, value, isAvg_){},
+            function beforeFormSubmit_(form, value, model, isAvg_){},
 
             function afterFormSubmit_(form, isAvg_){},
 
@@ -703,7 +703,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.updateFlagByModel(model, activeCell);
                         activeCell.find('.grade-text').setHTML('...');
                     }
-                    this.beforeFormSubmit_(node, value, isAvg);
+                    this.beforeFormSubmit_(node, value, resModel, isAvg);
                     var mp = node.parent('.marking-period-container');
                     mp.find('.comment-button').hide();
                 }else{

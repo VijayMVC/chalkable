@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using Chalkable.StiConnector.SyncModel;
 using Newtonsoft.Json;
 
@@ -30,16 +26,12 @@ namespace Chalkable.StiConnector.Connectors
                 var data = client.DownloadData(url);
                 using (var ms = new MemoryStream(data))
                 {
-                    using (var unzipped = new GZipStream(ms, CompressionMode.Decompress))
-                    {
-                        var serializer = new JsonSerializer();
-                        var reader = new StreamReader(unzipped);
-                        var jsonReader = new JsonTextReader(reader);
-
-
-                        var resType = (typeof(SyncResult<>)).MakeGenericType(new[] { type });
-                        return serializer.Deserialize(jsonReader, resType);
-                    }    
+                    var serializer = new JsonSerializer();
+                    var reader = new StreamReader(ms);
+                    var jsonReader = new JsonTextReader(reader);
+                    var resType = (typeof(SyncResult<>)).MakeGenericType(new[] { type });
+                    return serializer.Deserialize(jsonReader, resType);
+                        
                 }
             }
             catch (WebException ex)

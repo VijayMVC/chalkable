@@ -190,7 +190,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
             var person = GetPerson(id);
             person.Active = true;
-            person.FirstLoginDate = Context.NowSchoolTime;
             Storage.PersonStorage.Update(person);
         }
 
@@ -208,6 +207,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public int GetSisUserId(int personId)
         {
             throw new NotImplementedException();
+        }
+
+        public void ProcessPersonFirstLogin(int id)
+        {
+            if (BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
+                throw new ChalkableSecurityException();
+            var person = GetPerson(id);
+            if (person.FirstLoginDate.HasValue) return;
+            person.FirstLoginDate = Context.NowSchoolTime;
+            Storage.PersonStorage.Update(person);
         }
     }
 }
