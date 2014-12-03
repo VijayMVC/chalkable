@@ -38,17 +38,20 @@
   bottom: 0
   left: 0
   right: 0
+  z-index: 1000
 
   >DIV
     display: none
 
 .dialog-model-wait
   background: image-url("images/loaders/horizontal.gif") center center no-repeat
-  position: absolute !important
+  position: fixed !important
   top: 0
   bottom: 0
   left: 0
   right: 0
+  z-index: 1000
+  pointer-events: none
 
   >DIV
     display: none
