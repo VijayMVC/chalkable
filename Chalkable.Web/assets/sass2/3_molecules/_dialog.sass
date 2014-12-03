@@ -1,10 +1,22 @@
-.dialog
-  position: absolute
-  z-index: 1000
+.dialog, .dialog-window
+  position: fixed
+  z-index: 1005
   background: #fff
   border-radius: 5px
   overflow: hidden
   +box-shadow(transparentize(#000, .8) 0 0 5px)
+  transform: translate(-50%, -50%)
+
+  //opacity: 0
+  //&.visible
+    opacity: 1
+    +transition(opacity, .3s, easy-in-out)
+
+  .under-overlay > &
+    z-index: 998
+
+  top: 50%
+  left: 50%
 
   h1
     background: #f7f7f5
@@ -24,7 +36,7 @@
   &.fixed
     position: fixed
 
-  .x-window-body
+  //.x-window-body
 
   .buttons-bottom
     text-align: center
@@ -38,12 +50,10 @@
 
 
 #chlk-dialogs
-  position: absolute
-  top: 70px
-  left: 6%
-  right: 6%
+  //position: absolute
+  width: 0
   height: 0
-  z-index: 1000
+  z-index: 0
 
 
 #chlk-overlay
