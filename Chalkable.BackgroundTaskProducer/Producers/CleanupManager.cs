@@ -20,7 +20,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var districts = sl.DistrictService.GetDistricts().ToDictionary(x=>x.Id);
 
             var processingTasks = sl.BackgroundTaskService.Find(null, BackgroundTaskStateEnum.Processing, null, true);
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             foreach (var processingTask in processingTasks)
                 if (processingTask.Started.HasValue)
                 {
