@@ -3,7 +3,7 @@ mixin ProfileInfoView(model)
     primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
     .info-view
-        #top-panel
+        //#top-panel
             #avatar-photo-conainer.left-block.panel-block
                 .img-container
                     +PersonImg(model, 140, true)
@@ -14,35 +14,34 @@ mixin ProfileInfoView(model)
                     .status= 'Grade: ' + model.getGradeLevel().getName()
 
         .sections
-            .sections-info
-                .section-title=model.getRole().getName()
-                .info
-                    .section-data.left
-                        .info-title=Msg.Email.toUpperCase()
-                        .data-info=model.getEmail()
+            .close-open-control.today-work-panel
+                h3 #{model.getRole().getName()} info
+                .sections-info
+                    if model.getEmail()
+                        .section-data
+                            .info-title=Msg.Email
+                            .data-info=model.getEmail()
                     if primaryPhone
-                        .section-data.right
-                            .info-title=Msg.CellPhone.toUpperCase()
+                        .section-data
+                            .info-title=Msg.Cell
                             .data-info=primaryPhone
                     if model.getBirthDateText()
-                        .section-data.left
-                            .info-title=Msg.Birthday.toUpperCase()
+                        .section-data
+                            .info-title=Msg.Birthday
                             .data-info=model.getBirthDateText()
-                    //.section-data.gender-box
-                        div(class=model.getGender() ? model.getGender().toLowerCase() : '').gender-img-box
-                        p=model.getGenderFullText()
-            if address || homePhone
-                .sections-info
-                    .section-title=Msg.Home
-                    .info
-                        if address
-                            .section-data.left
-                                .info-title=Msg.Home_Address.toUpperCase()
-                                .data-info=address.getValue()
+
+            if homePhone || address
+                .close-open-control.today-work-panel
+                    h3=Msg.Home_info
+                    .sections-info
                         if homePhone
-                            .section-data.right
-                                .info-title=Msg.Home_Phone.toUpperCase()
+                            .section-data
+                                .info-title=Msg.Home_Phone
                                 .data-info=homePhone
+                        if address
+                            .section-data
+                                .info-title=Msg.Address
+                                .data-info=address.getValue()
             block
         //.sections-info.other-section
             .section-title.pacifico=Msg.Other(true)

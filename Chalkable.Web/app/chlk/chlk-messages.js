@@ -36,6 +36,7 @@ var Msg = {
     Add: 'Add',
     Add_File: 'Add File',
     Added: 'Added',
+    Address: 'Address',
     Admin: oneOrMany('Admin'),
     Adjusted: 'Adjusted',
     All: 'All',
@@ -402,6 +403,7 @@ var Msg = {
     Grading_Period: 'Grading Period',
     Grading_view: 'Grading view',
     Grading_style: 'Grading style',
+    Home_info: 'Home info',
     Hide_from_Students: 'Hide from Students',
     Highest_rated: 'Highest rated',
     hours_ago: function(hrs){
@@ -540,6 +542,7 @@ var Msg = {
     Student: oneOrMany('Student'),
     Student_comment: 'Student comment',
     Student_display_name: 'Student display name',
+    Student_info: 'Student info',
     Student_mailing_address: 'Student mailing address',
     Student_name: 'Student name',
     Student_Number: 'Student Number',

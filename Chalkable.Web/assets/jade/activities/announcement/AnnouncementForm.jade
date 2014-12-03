@@ -16,13 +16,13 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
         .action-bar
             .items
                 each item in types
-                    A.item.announcement-type-button(
-                        href = "javascript:;"
+                    a.item.announcement-type-button(
                         class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
                         data-typeid=item.getId(),
                         data-typename=item.getName(),
                         name="submitType",
-                        value="save"
+                        value="save",
+                        type="submit"
                     )= item.getDescription()
 
 -var topData = self.getTopData()

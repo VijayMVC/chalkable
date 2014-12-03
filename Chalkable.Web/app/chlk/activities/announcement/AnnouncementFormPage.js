@@ -152,6 +152,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var typeName = node.getData('typename');
                 this.dom.find('input[name=announcementtypeid]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
+                setTimeout(function(){
+                    node.parent('form').trigger('submit');
+                },1);
+
             },
 
             [ria.mvc.DomEventBind('change', '#type-select')],
