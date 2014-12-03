@@ -864,6 +864,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setGradable(model.isGradable());
                         announcement.setGradingStudentsCount(model.getGradingStudentsCount());
                         announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
+                        announcement.setSuggestedApps(model.getSuggestedApps());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
                     }
