@@ -190,6 +190,7 @@ namespace Chalkable.Web.Controllers
                 , SchoolLocator.GradingStyleService.GetMapper(), Context.SchoolLocalId.Value);
             res.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
             res.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
+            res.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(ann);
             return Json(res);
         }
         

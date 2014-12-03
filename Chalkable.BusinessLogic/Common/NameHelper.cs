@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Common
         public static string DisplayName(this Person person, bool upper = true)
         {
             if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                return FullName(person.LastName, person.Gender, upper); 
+                return FullName(person.FirstName, person.LastName, upper); 
             return StaffDisplayName(person.LastName, person.Gender, upper);
         }
 

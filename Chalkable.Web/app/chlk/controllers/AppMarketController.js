@@ -299,7 +299,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId]],
         function quickAppAttachAction(announcementId, applicationId){
             this.BackgroundCloseView(chlk.activities.apps.ShortInstallAppDialog);
-            return this.BackgroundNavigate('apps', 'tryToAttach', [announcementId, applicationId]);
+            return this.Redirect('apps', 'tryToAttach', [announcementId, applicationId]);
         },
 
 
@@ -313,14 +313,14 @@ NAMESPACE('chlk.controllers', function (){
                 action: 'myApps',
                 params: [],
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
-            }], 'center');
+            }], 'center'), null;
         },
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppInstallPostData]],
         function installFailAction(){
-            this.ShowMsgBox('You have insufficient funds to buy this app', 'Error');
-            return ria.async.BREAK;
+            return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error'), null;
+            //return ria.async.BREAK;
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -337,9 +337,12 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         function quickInstallFailAction(){
-
+            //todo: show dialog for adding funds
+            return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error')
+                .then(function(){
+                    this.BackgroundCloseView(chlk.activities.apps.ShortInstallAppDialog);
+                }, this), null;
         },
-
 
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppInstallPostData]],
@@ -359,15 +362,16 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.apps.AppInstallPostData, String, Array, String, Array]],
         function install_(appInstallData, installCompleteAction, completeActionArgs, installFailAction, failActionArgs){
+            var appInstallArgs = [
+                appInstallData.getAppId(),
+                this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
+                this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
+                this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
+                this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
+                appInstallData.getCurrentPerson()];
+
             var res = ria.async.wait([
-                this.appMarketService.getApplicationTotalPrice(
-                    appInstallData.getAppId(),
-                    this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
-                    this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
-                    this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
-                    this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
-                    appInstallData.getCurrentPerson()
-                ),
+                this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs),
                 this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
             ])
                 .attach(this.validateResponse_())
@@ -375,25 +379,28 @@ NAMESPACE('chlk.controllers', function (){
                     var totalAppPrice = res[0].getTotalPrice() || 0;
                     var personBalance = res[1];
                     var userBalance = personBalance.getBalance();
-                    if (totalAppPrice > userBalance){
-                        this.BackgroundNavigate('appmarket', (installFailAction || []));
+                    if(res[0].getTotalPersonsCount() <= 0){
+                        return this.ShowMsgBox('This app is already installed.', 'Error')
+                            .then(function(){
+                                this.BackgroundCloseView(chlk.activities.apps.ShortInstallAppDialog);
+                                return ria.async.BREAK;
+                            }, this);
                     }
-                    return this.appMarketService
-                        .installApp(
-                        appInstallData.getAppId(),
-                        this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
-                        this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
-                        this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
-                        this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
-                        appInstallData.getCurrentPerson()
-                    )
-                        .attach(this.validateResponse_())
-                        .then(function(result){
-                            completeActionArgs = completeActionArgs || [];
-                            completeActionArgs.push(result);
-                            return this.BackgroundNavigate('appmarket', installCompleteAction, completeActionArgs);
-                        }, this);
+                    if (totalAppPrice > userBalance){
+                        return this.BackgroundNavigate('appmarket', installFailAction, (failActionArgs || []))
+                            , ria.async.BREAK;
+                    }
+
+                    return null;
+                }, this)
+                .thenCall(this.appMarketService.installApp, appInstallArgs)
+                .attach(this.validateResponse_())
+                .then(function(result){
+                    completeActionArgs = completeActionArgs || [];
+                    completeActionArgs.push(result);
+                    return this.BackgroundNavigate('appmarket', installCompleteAction, completeActionArgs);
                 }, this);
+
             return res;
         },
 
@@ -449,7 +456,7 @@ NAMESPACE('chlk.controllers', function (){
                     action: 'uninstall',
                     params: [data.getApplicationInstallIds()],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
-                }], 'delete-app', true);
+                }], 'delete-app', true), null;
 
             }
             return this.ShadeLoader();

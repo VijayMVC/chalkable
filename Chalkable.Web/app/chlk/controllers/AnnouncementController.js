@@ -518,7 +518,7 @@ NAMESPACE('chlk.controllers', function (){
             }, {
                 text: Msg.Cancel.toUpperCase(),
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
-            }]);
+            }]), null;
         },
 
         [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
@@ -745,7 +745,7 @@ NAMESPACE('chlk.controllers', function (){
                 controller: 'announcement',
                 action: 'closeTitlePopUp',
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
-            }]);
+            }]), null;
         },
 
         function closeTitlePopUpAction(){
@@ -860,6 +860,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setGradable(model.isGradable());
                         announcement.setGradingStudentsCount(model.getGradingStudentsCount());
                         announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
+                        announcement.setSuggestedApps(model.getSuggestedApps());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
                     }

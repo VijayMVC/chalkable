@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public T DoRead<T>(Func<UnitOfWork, T> func)
         {
-            using (var uow = Update())
+            using (var uow = Read())
             {
                 return func(uow);
             }

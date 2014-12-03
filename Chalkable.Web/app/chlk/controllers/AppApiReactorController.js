@@ -38,7 +38,7 @@ NAMESPACE('chlk.controllers', function (){
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
                          }],
                          'app-wrapper-error centered'
-                     );
+                     ), null;
                 }
             },
 
@@ -57,7 +57,7 @@ NAMESPACE('chlk.controllers', function (){
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
                         }],
                         'app-wrapper-error centered'
-                    );
+                    ), null;
                 }
             },
 
@@ -79,7 +79,7 @@ NAMESPACE('chlk.controllers', function (){
                     action: 'closeCurrentApp',
                     params: [data],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
-                }], 'center');
+                }], 'center'), null;
             },
 
             [[Object]],

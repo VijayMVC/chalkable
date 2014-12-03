@@ -108,7 +108,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementAppId);
-                if(CanAddToAnnouncement(aa.ApplicationRef))
+                if(!CanAddToAnnouncement(aa.ApplicationRef))
                     throw new ChalkableSecurityException("Application is not installed yet");
                 var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
                     .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);

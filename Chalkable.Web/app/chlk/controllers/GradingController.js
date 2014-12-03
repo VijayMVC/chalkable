@@ -511,7 +511,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
-                    return this.ShowMsgBox('Not available for demo', 'Error');
+                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
                 var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate));
                 return this.ShadeView(chlk.activities.grading.GradeBookReportDialog, res);
             },

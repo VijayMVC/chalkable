@@ -92,7 +92,7 @@ NAMESPACE('chlk.controllers', function (){
                         }, {
                             text: Msg.Cancel,
                             color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                        }], 'center');
+                        }], 'center'), null;
                     }else{
                         return this.Redirect('setup', action, params);
                     }
@@ -144,7 +144,7 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(model){
                         if(model.message){
                             this.getView().pop();
-                            return this.ShowMsgBox(model.message, '');
+                            return this.ShowMsgBox(model.message, ''), null;
                         }
                         return this.BackgroundNavigate('feed', 'list');
                     }, this);

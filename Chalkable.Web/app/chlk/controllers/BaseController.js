@@ -83,7 +83,7 @@ NAMESPACE('chlk.controllers', function (){
                    .catchException(chlk.lib.exception.InvalidPictureException, function(exception){
                        return this.ShowMsgBox('You need to upload valid picture for you app', 'Error', [{
                            text: 'Ok'
-                       }], 'center');
+                       }], 'center'), null;
                    }, this)
                    .catchError(this.handleServerError, this);
                return head;
@@ -96,7 +96,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(response.exceptiontype == 'ChalkableSisException')
                        return this.ShowMsgBox(response.message, 'oops',[{
                            text: Msg.GOT_IT.toUpperCase()
-                       }]);
+                       }]), null;
                     if(response.exceptiontype == 'NoAnnouncementException')
                        return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
                }
@@ -172,10 +172,9 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            [[String, String, Array, String, Boolean]],
-           function ShowMsgBox(text_, header_, buttons_, clazz_, isHtmlText_) {
-               var instance = new chlk.activities.common.InfoMsgDialog();
+           ria.async.Future, function ShowMsgBox(text_, header_, buttons_, clazz_, isHtmlText_) {
                var model = this.getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_);
-               this.view.shadeD(instance, ria.async.DeferredData(model));
+               return this.view.showModal(chlk.activities.common.InfoMsgDialog, model);
            },
 
            [[String, String, Array, String, Boolean]],

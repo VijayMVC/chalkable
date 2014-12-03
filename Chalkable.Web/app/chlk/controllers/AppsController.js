@@ -277,7 +277,7 @@ NAMESPACE('chlk.controllers', function (){
                     controller: 'apps',
                     action: 'invalidPictureFormat',
                     params: [width, height, msg]
-                }]);
+                }]), null;
 
             var result = this.appsService
                 .uploadPicture(file, width, height)
@@ -320,7 +320,7 @@ NAMESPACE('chlk.controllers', function (){
                     controller: 'apps',
                     action: 'invalidScreenShotPictureFormat',
                     params: [(screenshots_ || ""), width, height, msg]
-                }]);
+                }]), null;
 
             var result = this.appsService
                 .uploadPicture(file, width, height)
@@ -446,6 +446,22 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     return this.BackgroundNavigate('apps', 'general', []);
                 }, this);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
+        function openSuggestedAppTeacherAction(appId, classId, annId){
+            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
+            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    if(data.getTotalPersonsCount() > 0)
+                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, classId, annId]);
+                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId]);
+                }, this);
+            return null;
         },
 
         [chlk.controllers.AccessForRoles([
@@ -610,7 +626,7 @@ NAMESPACE('chlk.controllers', function (){
                 action: 'delete',
                 params: [id.valueOf()],
                 color: chlk.models.common.ButtonColor.RED.valueOf()
-            }], 'center');
+            }], 'center'), null;
         },
 
 
@@ -678,7 +694,7 @@ NAMESPACE('chlk.controllers', function (){
                     if (appIconId == null || appBannerId == null){
                         return this.ShowMsgBox('You need to upload icon and banner picture for you app', 'Error', [{
                             text: 'Ok'
-                        }], 'center');
+                        }], 'center'), null;
                     }
                 }
                 else
@@ -686,7 +702,7 @@ NAMESPACE('chlk.controllers', function (){
                     if (appIconId == null){
                         return this.ShowMsgBox('You need to upload icon picture for you app', 'Error', [{
                             text: 'Ok'
-                        }], 'center');
+                        }], 'center'), null;
                     }
                 }
 
@@ -697,7 +713,7 @@ NAMESPACE('chlk.controllers', function (){
                     (developerName == null || developerName == "")){
                     return this.ShowMsgBox('We just need you to enter your Developer Name and Website. You can do that in settings, on the left.', null, [{
                         text: 'Ok'
-                    }], 'center');
+                    }], 'center'), null;
                 }
             }
 

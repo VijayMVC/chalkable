@@ -76,7 +76,7 @@ NAMESPACE('chlk.controllers', function (){
                     text: 'LOG OUT',
                     controller: 'account',
                     action: 'logout'
-                }], 'center');
+                }], 'center'), null;
             }
 
             var result = this
