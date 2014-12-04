@@ -27,7 +27,7 @@ h2.page-title Messages
                 .buttons
                     .left
                         +Checkbox('checkboxall', false)#checkboxall
-                        +Button()(type="submit", , name="submitType", value="delete").plain-button#delete-button Delete
+                        +Button()(type="submit", , name="submitType", value="delete").plain-button.negative-button#delete-button Delete
                     if self.isInbox()
                         .left
                             span Mark:

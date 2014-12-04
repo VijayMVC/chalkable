@@ -34,6 +34,13 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     color: #fff
     +text-shadow(transparentize(#000, .8) 0 1px 1px)
 
+  &.negative-button
+    border-color: #BC5153
+    background-color: #D45252
+    +box-shadow(transparentize(#000, .55) 0 1px 3px, transparentize(#fff, .6) 0 1px 0px inset)
+    +background-image(linear-gradient(top, #ea6462 0%, transparentize(#ea6462, 1) 100%))
+    color: #fff
+    +text-shadow(transparentize(#000, .8) 0 1px 1px)
 
   &.disabled, &[disabled]
     background-color: #999

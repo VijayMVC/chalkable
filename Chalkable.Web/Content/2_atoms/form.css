@@ -11,11 +11,11 @@
 }
 
 /* line 10, ../../assets/sass2/2_atoms/form.sass */
-.form-buttons {
+.form-buttons, .buttons-container {
   margin-top: 10px;
   text-align: center;
 }
 /* line 14, ../../assets/sass2/2_atoms/form.sass */
-.form-buttons > * {
+.form-buttons > *, .buttons-container > * {
   margin: 0 3px;
 }
