@@ -12,8 +12,8 @@
                     +TextArea()(readonly).text=self.body
                 br
                 .form-buttons
-                    +ActionLinkButton('message', 'sendPage', self.isInbox(), self.id).special-button.blue-button.submit-btn= self.isReplay() ? 'Reply' : 'Send'
-                    a(href="javascript:").special-button.cancel-button.close=Msg.Cancel
+                    +ActionLinkButton('message', 'sendPage', self.isInbox(), self.id).button-like.blue-button.submit-btn= self.isReplay() ? 'Reply' : 'Send'
+                    a(href="javascript:").button-like.cancel-button.close=Msg.Cancel
 
     .bg-bottom
 
