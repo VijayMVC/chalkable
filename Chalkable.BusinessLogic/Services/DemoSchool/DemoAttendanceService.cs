@@ -153,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
-            throw new NotImplementedException();
+            return new List<ClassDetails>();
         }
 
         public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
