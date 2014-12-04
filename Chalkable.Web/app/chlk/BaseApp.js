@@ -38,6 +38,7 @@ REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
 REQUIRE('chlk.controls.MaskedInputControl');
 REQUIRE('chlk.controls.SimplePayCheckControl');
+REQUIRE('chlk.controls.CloseOpenControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');

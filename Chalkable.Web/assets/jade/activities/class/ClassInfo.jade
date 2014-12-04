@@ -12,8 +12,7 @@ classInfo = self.getClassInfo()
                         +ClassImg(classInfo, 92, 164)
             #info-panel.central-block.panel-block
                 h1.display-name(data-tooltip=classInfo.getFullClassName(), data-tooltip-type="overflow")=classInfo.getName()
-        .close-open-control.detail-info
-            h3=' '
+        +CloseOpen(' ').detail-info
             each item in sectionsInfo
                 .section
                     .title=item.title

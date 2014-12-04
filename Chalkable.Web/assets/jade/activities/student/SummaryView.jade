@@ -32,12 +32,11 @@ statusData = self.getStatusData()
 
 
         if user.getPeriodSection()
-            .close-open-control.today-work-panel
-                h3=Msg.Classes
+            +CloseOpen('Periods').today-work-panel
                 .period-toolbar
                     +LeftRightToolbar(user.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered.big-arrows
         if user.getClassesSection()
-            .close-open-control.today-work-panel
-                h3=Msg.Classes
+            +CloseOpen(Msg.Classes).today-work-panel
                 .classes-tb-container
                     +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).classes-tb
+

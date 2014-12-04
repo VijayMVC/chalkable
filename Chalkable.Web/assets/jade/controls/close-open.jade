@@ -1,0 +1,8 @@
+mixin CloseOpen(title)
+    -attributes = self.processAttrs(attributes)
+    .close-open-control(attributes).opened
+        h3=title
+            .open=Msg.Open
+            .close=Msg.Close
+        .close-open-block
+            block

@@ -15,3 +15,29 @@
       bottom: 0
       height: 1px
       background: #e7e6e2
+
+    .open, .close
+      float: right
+      font-size: 12px
+      font-weight: normal
+      font-style: italic
+      color: #434341
+      cursor: pointer
+
+  &.opened
+    .open
+      display: none
+
+  &:not(.opened)
+    >h3
+      color: #aba9a5
+
+    .close
+      display: none
+
+
+
+  .close-open-block
+    overflow: hidden
+    +transition(height, .2s, easy-in-out)
+

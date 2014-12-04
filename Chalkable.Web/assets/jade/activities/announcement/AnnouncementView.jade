@@ -77,16 +77,14 @@ mixin Glue_()
         -var attachments = self.getAnnouncementAttachments() || []
         -var applications = self.getApplications() || []
         if attachments.length + applications.length
-            .close-open-control
-                h3 Apps
+            +CloseOpen('Apps')
                 .content.attachments-and-applications
                     +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
                         userRole = self.getUserRole()
                     )
 
         if self.getUserRole().isStudent()
-            .close-open-control
-                h3 Attachments
+            +CloseOpen('Attachments')
                 .student-attachments.content
                     +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
                         userRole = self.getUserRole()
@@ -94,27 +92,24 @@ mixin Glue_()
 
         -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
         if showPostQuestion || self.getAnnouncementQnAs().length
-            .close-open-control.questions-and-answers
-                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
-                    userRole = self.getUserRole()
-                )
+            +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
+                userRole = self.getUserRole()
+            )
 
         if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
-            .close-open-control
-                h3 Grades
-
-            div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
-                +Hidden('maxScore', self.getMaxScore())#max-score
-                +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
-                    autoGradeApps = self.getAutoGradeApps(),
-                    readonly = isReadonly,
-                    gradeViewApps = self.getGradeViewApps(),
-                    applications = self.getApplications(),
-                    userRole = self.getUserRole(),
-                    owner = self.getOwner(),
-                    announcementId = self.getId(),
-                    maxScore = self.getMaxScore(),
-                    ableDropStudentScore = self.isAbleDropStudentScore(),
-                    ableToExempt = self.isAbleToExempt(),
-                    gradable = self.isGradable()
-                )
+            +CloseOpen('Grades')
+                div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
+                    +Hidden('maxScore', self.getMaxScore())#max-score
+                    +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
+                        autoGradeApps = self.getAutoGradeApps(),
+                        readonly = isReadonly,
+                        gradeViewApps = self.getGradeViewApps(),
+                        applications = self.getApplications(),
+                        userRole = self.getUserRole(),
+                        owner = self.getOwner(),
+                        announcementId = self.getId(),
+                        maxScore = self.getMaxScore(),
+                        ableDropStudentScore = self.isAbleDropStudentScore(),
+                        ableToExempt = self.isAbleToExempt(),
+                        gradable = self.isGradable()
+                    )

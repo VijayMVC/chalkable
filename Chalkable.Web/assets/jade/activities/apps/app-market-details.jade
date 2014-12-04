@@ -26,8 +26,8 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
             span="by "
             a(href=webSiteLink, target="blank").dev-web-site=devName
 
-    .close-open-control
-        h3 Info
+
+    +CloseOpen('Info')
         .content
             .table.app-info-details
                 .app-description
@@ -38,14 +38,12 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                     +Rating("appRating", app.getApplicationRating().getAverage(), false).all
 
 
-    .close-open-control
-        h3 Reviews
+    +CloseOpen('Reviews')
         .content
             .reviews
                 +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)
 
-    .close-open-control
-        h3 App Features
+    +CloseOpen('App Features')
         .content.table.permissions
             .row
                 .group-header.first This app is for:

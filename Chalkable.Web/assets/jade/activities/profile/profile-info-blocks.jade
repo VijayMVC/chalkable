@@ -14,8 +14,7 @@ mixin ProfileInfoView(model)
                     .status= 'Grade: ' + model.getGradeLevel().getName()
 
         .sections
-            .close-open-control.today-work-panel
-                h3 #{model.getRole().getName()} info
+            +CloseOpen(model.getRole().getName() + 'info').today-work-panel
                 .sections-info
                     if model.getEmail()
                         .section-data
@@ -31,8 +30,7 @@ mixin ProfileInfoView(model)
                             .data-info=model.getBirthDateText()
 
             if homePhone || address
-                .close-open-control.today-work-panel
-                    h3=Msg.Home_info
+                +CloseOpen(Msg.Home_info).today-work-panel
                     .sections-info
                         if homePhone
                             .section-data
