@@ -1,0 +1,59 @@
+mixin StudentGradingItem(student)
+    if !student.getId()
+        a.empty-container
+    else
+        tooltipText = student.getFullName() + '<br/>'
+        if student.getAvg() || student.getAvg() == 0
+            tooltipText = tooltipText + student.getAvg().toFixed(2) + '%'
+        -attributes['data-tooltip'] = tooltipText
+        -attributes['studentId'] = student.getId().valueOf()
+        +ProfileLink(student, 'student')(attributes).image-container.white.student-item
+            +PersonImg(student, 47)
+
+topData = self.getTopData()
+topItems = topData.getTopItems() || []
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid').classes-bar
+.grading-summary
+    if !self.getItems().length
+        .no-items-text There is no grading summary data for current term
+    each item in self.getItems()
+        troubleCount = item.getTrouble().length
+        wellCount = item.getWell().length
+        restCount = item.getAllStudents().length - troubleCount - wellCount
+        maxIndex = restCount + troubleCount - 1
+        students = self.getPreparedStudents(item)
+        typeEnum = chlk.models.grading.StudentWellTroubleEnum
+        .class-block
+            h2.with-line
+                +ActionLink('grading', 'summaryGrid', item.getClazz().getId())=item.getClazz().getFullClassName()
+                span.show-less
+                    span –
+                    |#{Msg.Show_less}
+            .students-block.with-line
+                if troubleCount == 0 && wellCount == 0 && restCount == 0
+                    .no-items-text.small=Msg.No_grades_yet
+                else
+                    each student in item.getUpdatedTrouble()
+                        +StudentGradingItem(student).trouble
+                    button(
+                        data-empty-count = 5 - troubleCount
+                    ).all-button=Msg.All
+                    if restCount > 0
+                        each student,i in item.getAllStudents()
+                            if i > troubleCount - 1 && i <= maxIndex
+                                +StudentGradingItem(student)
+                    each student in item.getWell()
+                        +StudentGradingItem(student).well
+            .students-line
+                SPAN.n-0 0
+                SPAN.n-100=item.getMaxScore()
+                each student in students
+                    div(
+                        class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),
+                        style = "right:" + student.getRight() + "px",
+                        studentId=student.getId().valueOf()
+                    ).student-pic-container
+                        .student-pic
+                        br
+                        .student-triangle
+

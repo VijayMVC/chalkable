@@ -1,0 +1,97 @@
+.profile-page
+  font-family: "Open Sans", sanf-serif
+
+  &.view-mode
+    .info-edit
+      display: none
+
+  &.edit-mode
+    .info-view
+      display: none
+
+  #top-panel
+    margin-bottom: 84px
+    margin-top: 48px
+
+  .class-image
+    width: 140px
+    height: 140px
+    border-radius: 70px
+    background: #3f7d96
+
+    .img-container
+      overflow: hidden
+      width: 92px
+      height: 82px
+      display: inline-block
+      margin-top: 24px
+
+  .classes-tb-container
+    margin: 0 21px
+
+  h1
+    font-size: 30px
+    font-weight: normal
+
+  .panel-block
+    vertical-align: middle
+    display: inline-block
+
+  .central-block
+    margin: 13px 29px 0 17px
+
+  .status
+    font-size: 14px
+    color: #7b7974
+    margin-top: 2px
+
+    >DIV
+      display: inline-block
+      height: 13px
+      width: 13px
+      vertical-align: middle
+      border-radius: 7px
+      margin: 0 7px 0 -3px
+      position: relative
+      border: 1px solid #c9b47a
+
+      &.absent
+        background: #d45151
+        border-color: #d45151
+
+      &.present
+        background: #40e900
+        border-color: #40e900
+
+      &.excused
+        background: #79c9f1
+        border-color: #79c9f1
+
+      &.late
+        background: #f3f006
+        border-color: #f3f006
+
+.info-view, .info-edit
+  h3
+    font-size: 22px
+    margin-top: 43px
+
+  .section-data
+    >DIV
+      display: inline-block
+      font-size: 18px
+
+    .info-title
+      font-weight: bold
+      color: #3f7d96
+      margin-right: 16px
+      position: relative
+
+      &::before
+        position: absolute
+        content: ':'
+        right: -6px
+
+
+
+

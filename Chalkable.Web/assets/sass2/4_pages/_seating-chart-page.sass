@@ -1,0 +1,117 @@
+.seating-chart-page
+  position: relative
+
+  .table
+    width: 100%
+
+  .title
+    position: relative
+
+  .l
+    width: 120px
+  .r
+    width: 120px
+    text-align: right
+
+  .tr
+    opacity: 0
+    position: absolute
+    top: 0
+    left: 50%
+    margin-left: -130px
+    width: 260px
+    height: 100%
+    z-index: 5
+    cursor: pointer
+
+
+  .buttons
+    padding: 10px 25px 0
+
+  //.third-container
+    display: block !important
+
+  .seating-chart-container
+    padding: 25px
+
+    > .table
+      width: 100%
+
+  .seating-row
+    display: block
+
+    > div
+      display: inline-block
+      width: 75px
+
+  .attendance-data
+    position: relative
+    display: block
+
+  .reason-container
+    position: absolute
+    bottom: 1px
+    right: 3px
+    width: 16px
+    height: 16px
+    border-radius: 50%
+    background: #41b768
+    border: 1px solid silver
+    font-size: 0
+    +box-shadow(#fff 0 0 0 3px)
+
+  .absent .reason-container
+    background: #d45151
+
+  .late .reason-container
+    background: #f0ca19
+
+  .empty-box
+    &.absolute
+      margin-left: -85px
+
+    .empty
+      height: 64px
+      width: 64px
+      border-radius: 50%
+      border: 3px dashed silver
+
+  .student-block
+    margin: 25px 10px
+    vertical-align: top
+    height: 70px
+
+  .seating-chart-popup
+    position: absolute
+    display: none
+    z-index: 999
+    +box-shadow(transparentize(#000, .8) 0 0 16px)
+
+  #submit-chart
+    display: none
+
+  .show-edit-grid-form
+    display: inline
+
+.student-seating-name
+  text-align: center
+
+.seating-chart-people
+  display: none
+  position: fixed
+  bottom: 0
+  padding: 0 15px
+  background: white
+  left: 0
+  right: 0
+  border-top: 1px solid #c8c7c3
+  z-index: 299
+
+  .student-block
+    display: inline-block
+    margin: 15px 10px 25px
+    vertical-align: top
+    height: 70px
+
+  &.demo
+    bottom: 72px

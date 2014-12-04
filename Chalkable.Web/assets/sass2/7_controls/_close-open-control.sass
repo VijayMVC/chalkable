@@ -1,0 +1,17 @@
+.close-open-control
+  > h3
+    font-size: 18px
+    line-height: 36px
+    color: #2b2a28
+    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+    margin: 0 0 24px
+
+    position: relative
+    &::after
+      content: ' '
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
+      height: 1px
+      background: #e7e6e2

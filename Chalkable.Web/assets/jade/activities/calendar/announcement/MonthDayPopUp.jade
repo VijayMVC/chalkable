@@ -1,0 +1,29 @@
+.calendar-popup.chat-bubble.top
+    announcements = self.getAnnouncements();
+    items = self.getItems();
+    if announcements.length > 0
+        h2=Msg.Announcement(true)
+        .announcements-list
+            ul.day-announcements
+                each item in announcements
+                    li.items
+                        //A(href="#announcement/view/" + item.getId().valueOf()).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
+                            div
+                                +TooltipWithOverflow(item.getSubject() || item.getTitle()).title
+                                +TooltipWithOverflow(item.getClassName() || item.getPersonName()).under
+    .items-list
+        if items.length > 0
+            h2=Msg.Item(true)
+            ul.day-items
+                each item in items
+                    li(class="announcement-type-" + item.getChalkableAnnouncementType().valueOf()).items
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-item
+                            div
+                                +TooltipWithOverflow(item.getTitle()).item-title
+                                +TooltipWithOverflow(item.getClassName()).classname-under
+    if !self.getUserRole().isStudent()
+        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann New item
+
+
+

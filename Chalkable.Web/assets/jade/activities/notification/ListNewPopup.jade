@@ -1,0 +1,28 @@
+.list-new.chat-bubble.top
+    if self.getNotifications().getItems().length > 0
+        each item in self.getNotifications().getItems()
+            .row
+                +ActionLinkWithModel(item.prepareActionModel()).notification-link
+                .image.left
+                    if item.getType() == chlk.models.notification.NotificationTypeEnum.MESSAGE
+                        .notification-person
+                            a
+                                +PersonImg(item.getPerson(), 47)
+                            span Message
+                    if item.getType() == chlk.models.notification.NotificationTypeEnum.QUESTION
+                        .notification-person
+                            a
+                                +PersonImg(item.getPerson(), 47)
+                            span Question
+                    if item.getType() == chlk.models.notification.NotificationTypeEnum.ANNOUNCEMENT
+                        .notification-announcement
+                            a
+                                div(class="announcement-type-" + item.getChalkableAnnouncementType()).icon.blue
+                            span= item.getAnnouncementTypeName()
+
+                div(class=item.isShown()? 'content' : 'content unshown')
+                    .inner-content!= item.getMessage()
+                div(class=self.convertNotificationTypeToStyleName(item)).small-icon.time=item.getCreatedTime()
+        +ActionLink('notification', 'listByDays').see-all-link See All Notifications
+    else
+        .no-notifications=Msg.No_notifications_to_display
