@@ -1,7 +1,13 @@
+.popup-bubble
+  position: absolute
+
 .chat-bubble
   position: relative
+
+.chat-bubble, .popup-bubble
   padding: 17px 19px 34px
   border-radius: 3px
+  +box-shadow(transparentize(#000, .8) 0 2px 16px)
 
   &, &::before
     background: #fff

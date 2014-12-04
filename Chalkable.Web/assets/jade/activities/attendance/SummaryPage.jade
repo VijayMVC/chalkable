@@ -31,7 +31,7 @@ mixin AbsentLatePage(data, header)
                                 student = info.getStudentInfo()
                                 if alerts && alerts.length > 0
                                     div(data-tooltip='<div class="p7">' + alerts.join('<hr>') + '</div>').alerts
-                                .chlk-pop-up-container.popup-top.chat-bubble.bottom
+                                .chlk-pop-up-container.popup-top.popup-bubble.bottom
                                     .pop-up-triangle
                                     .info-container
                                         +ProfileLink(student, 'student')

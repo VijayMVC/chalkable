@@ -28,7 +28,7 @@ mixin AppIconLink(app)
             .subject
                 .subject-filter
                     A.title.btn(href="javascript:;") Subject...
-                    .items.x-hidden.chat-bubble.top
+                    .items.x-hidden.popup-bubble.top
                         +Hidden('selectedCategories', self.getAllCategoriesIds(self.categories))
                         +LabeledCheckbox('All Categories', 'app-category-all', true, true)
                         each subject in self.categories

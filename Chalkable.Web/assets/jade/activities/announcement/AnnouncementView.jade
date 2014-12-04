@@ -62,7 +62,7 @@ mixin Glue_()
                             ).image-container
                                 +PersonImg(self.getOwner(), 47)
                 .description
-                    .chat-bubble
+                    .popup-bubble
                         h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
                         p: +Glue_(self.getTitle(), self.getContent())
 
