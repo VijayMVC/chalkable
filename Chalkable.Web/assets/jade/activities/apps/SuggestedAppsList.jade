@@ -7,7 +7,7 @@
                 div.app-icon-link
                     +ActionLink('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId()).app-link
                         .app-list-item
-                        if app.needToInstall()
+                        if !app.needToInstall()
                             div(data-tooltip='Attach').attach-icon
                         div(data-tooltip='').icon
                             pictureUrl = self.getAppPictureURL(app.getBigPictureId(), 170, 110)
