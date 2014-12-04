@@ -243,7 +243,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function wholeDomClick(node, event){
                 var target = new ria.dom.Dom(event.target);
-                if(!target.isOrInside('.chat-bubble') && !target.hasClass('comment-text') && !target.parent('.comment-text').exists())
+                if(!target.isOrInside('.popup-bubble') && !target.hasClass('comment-text') && !target.parent('.comment-text').exists())
                     this.dom.find(('.small-pop-up:visible')).hide();
             },
 

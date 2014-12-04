@@ -59,7 +59,7 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
                                     .title=Msg.Click_to_add_standard
                                     +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
                     .drawer-icon
-                .drop-down-container.chat-bubble.top.x-hidden
+                .drop-down-container.popup-bubble.top.x-hidden
                 input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
                 if !announcement.getState()
                     input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
@@ -85,7 +85,7 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
                     .advanced-options
                         A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
                         .separator.x-hidden
-                        .advanced-options-container.x-hidden.chat-bubble.top
+                        .advanced-options-container.x-hidden.popup-bubble.top
                             .weight-multiplier.new-input-container
                                 label(for="ann-weightmultiplier")= Msg.Weight_Multiplier
                                 input#ann-weightmultiplier(type="text", name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
