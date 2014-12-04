@@ -26,12 +26,9 @@ NAMESPACE('chlk.controllers', function (){
                         }, this)
                         .attach(this.validateResponse_())
                         .then(function(result){
-                            this.BackgroundClose(chlk.activities.apps.AppWrapperDialog);
-                            this.BackgroundClose(chlk.activities.apps.AttachAppDialog);
-
-//                            this.getView().pop();
-//                            this.getView().pop();
-                            return this.BackgroundNavigate('announcement', 'addAppAttachment', [result]);
+                            this.BackgroundCloseView(chlk.activities.apps.AppWrapperDialog);
+                            this.BackgroundCloseView(chlk.activities.apps.AttachAppDialog);
+                            return this.Redirect('announcement', 'addAppAttachment', [result]);
                         }, this);
                 }
                 else {
