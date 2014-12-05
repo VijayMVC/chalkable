@@ -294,6 +294,7 @@
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
     <Compile Include="Models\ScheduleItemViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />

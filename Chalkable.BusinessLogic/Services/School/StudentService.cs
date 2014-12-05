@@ -31,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentDetails GetById(int id, int schoolYearId);
         IList<StudentHealthCondition> GetStudentHealthConditions(int studentId);
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
+        StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -116,12 +117,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var student = ServiceLocator.StudentService.GetById(studentId, syId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
-            IList<AnnouncementComplex> anns;
-            using (var uow = Read())
-            {
-                var da = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
-                anns = da.GetByActivitiesIds(activitiesIds);
-            }
+            var anns = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(activitiesIds));
             var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
@@ -156,6 +152,32 @@ namespace Chalkable.BusinessLogic.Services.School
             return Context.Role != CoreRoles.STUDENT_ROLE
                    && (ClaimInfo.HasPermission(Context.Claims, new List<string> { ClaimInfo.VIEW_HEALTH_CONDITION })
                        || ClaimInfo.HasPermission(Context.Claims, new List<string> { ClaimInfo.VIEW_MEDICAL }));
+        }
+
+
+        public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
+        {
+            var date = Context.NowSchoolYearTime;
+            var student = GetById(studentId, schoolYearId);
+            var classes = ServiceLocator.ClassService.GetClasses(schoolYearId, null, studentId).ToList();
+            var classPersons = ServiceLocator.ClassService.GetClassPersons(studentId, true);
+            classes = classes.Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            var inowStExpolorer = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(schoolYearId, student.Id, date);
+            var standards = ServiceLocator.StandardService.GetStandards(null, null, null);
+            IList<int> importanActivitiesIds = new List<int>();
+            IList<AnnouncementComplex> announcements = new List<AnnouncementComplex>();
+            if (inowStExpolorer != null && inowStExpolorer.Activities != null && inowStExpolorer.Activities.Any())
+            {
+                foreach (var classDetailse in classes)
+                {
+                    var activity = inowStExpolorer.Activities.Where(x => x.SectionId == classDetailse.Id)
+                                                .OrderByDescending(x => x.MaxScore * x.WeightMultiplier + x.WeightAddition).FirstOrDefault();
+                    if (activity == null) continue;
+                    importanActivitiesIds.Add(activity.Id);
+                }
+                announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(importanActivitiesIds));
+            }
+            return StudentExplorerInfo.Create(student, classes, inowStExpolorer, announcements, standards);
         }
     }
 }

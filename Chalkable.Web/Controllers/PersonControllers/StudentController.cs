@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -103,6 +104,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var gradingMapper = SchoolLocator.GradingStyleService.GetMapper();
             var res = StudentGradingViewData.Create(student, gardingStats, gradingMapper);
             return Json(res);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult Explorer(int personId)
+        {
+            var syId = GetCurrentSchoolYearId();
+            var studentExplorerInfo = SchoolLocator.StudentService.GetStudentExplorerInfo(personId, syId);
+            return Json(StudentExplorerViewData.Create(studentExplorerInfo));
         }
     }
 }

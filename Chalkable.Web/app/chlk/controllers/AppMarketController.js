@@ -320,7 +320,6 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.AppInstallPostData]],
         function installFailAction(){
             return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error'), null;
-            //return ria.async.BREAK;
         },
 
         [chlk.controllers.SidebarButton('apps')],

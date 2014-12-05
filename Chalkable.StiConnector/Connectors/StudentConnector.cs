@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
@@ -23,6 +25,15 @@ namespace Chalkable.StiConnector.Connectors
         {
             var url = string.Format("{0}chalkable/{1}/students/{2}/dashboard/now", BaseUrl, acadSessionId, studentId);
             return Call<NowDashboard>(url);
+        }
+
+        public StudentExplorerDashboard GetStudentExplorerDashboard(int acadSessionId, int studentId, DateTime? date = null)
+        {
+            var nvc = new NameValueCollection();
+            if(date.HasValue)
+                nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
+            var url = string.Format("{0}chlkable/{1}/students/{2}/dashboard/explorer", BaseUrl, acadSessionId, studentId);
+            return Call<StudentExplorerDashboard>(url, nvc);
         }
     }
 }

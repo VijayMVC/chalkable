@@ -49,7 +49,7 @@ namespace Chalkable.Web.Controllers
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
             if (mp == null)
             {
-                throw new ChalkableException("No marking period scheduled on this date");
+                throw new NoMarkingPeriodException("No marking period scheduled on this date");
             }
 
             var persons = SchoolLocator.StudentService.GetClassStudents(classId, mp.Id);

@@ -118,6 +118,7 @@
     <Compile Include="Connectors\Model\AverageDashboard.cs" />
     <Compile Include="Connectors\Model\ClassroomOption.cs" />
     <Compile Include="Connectors\Model\DisciplineReferral.cs" />
+    <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
     <Compile Include="Connectors\Model\GradebookReportParams.cs" />
     <Compile Include="Connectors\Model\NowDashboard.cs" />

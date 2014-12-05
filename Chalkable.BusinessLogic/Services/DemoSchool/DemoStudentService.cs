@@ -166,5 +166,36 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
+
+
+        public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
+        {
+            //var date = Context.NowSchoolYearTime;
+            var student = GetById(studentId, schoolYearId);
+            var classes = ServiceLocator.ClassService.GetClasses(schoolYearId, null, studentId).ToList();
+            var classPersons = ServiceLocator.ClassService.GetClassPersons(studentId, true);
+            classes = classes.Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            var inowStExpolorer = new StudentExplorerDashboard
+                {
+                    Averages = new List<StudentAverage>(),
+                    Standards = new Stack<StandardScore>(),
+                    Activities = new List<Activity>()
+                };
+            var standards = ServiceLocator.StandardService.GetStandards(null, null, null);
+            IList<int> importanActivitiesIds = new List<int>();
+            IList<AnnouncementComplex> announcements = new List<AnnouncementComplex>();
+            if (inowStExpolorer.Activities.Any())
+            {
+                foreach (var classDetailse in classes)
+                {
+                    var activity = inowStExpolorer.Activities.Where(x => x.SectionId == classDetailse.Id)
+                                                .OrderByDescending(x => x.MaxScore * x.WeightMultiplier + x.WeightAddition).FirstOrDefault();
+                    if (activity == null) continue;
+                    importanActivitiesIds.Add(activity.Id);
+                }
+                announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(importanActivitiesIds));
+            }
+            return StudentExplorerInfo.Create(student, classes, inowStExpolorer, announcements, standards);
+        }
     }
 }
