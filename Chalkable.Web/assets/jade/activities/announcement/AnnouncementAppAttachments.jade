@@ -40,5 +40,8 @@ if self.needButtons
         .simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each item, i in items
-    if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION || item.isTeachersAttachment()
-        +AnnouncementFormAttachmentItem(item, i)
+    if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
+        +AnnouncementFormApplicationItem(item, i)
+    else
+        if item.isTeachersAttachment()
+            +AnnouncementFormAttachmentItem(item, i)
