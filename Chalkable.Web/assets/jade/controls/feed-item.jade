@@ -1,7 +1,7 @@
 mixin Glue_()
     =[].slice.call(arguments).filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ')
 
-mixin FeedItem(item, disabled)
+mixin FeedItem(item, disabled, isStudentGrading)
     -VALIDATE_ARG('item', [chlk.models.announcement.FeedAnnouncementViewData, chlk.templates.announcement.AnnouncementView, chlk.models.announcement.Announcement], item)
     -VALIDATE_ARG('disabled_', [Boolean], disabled)
 
@@ -17,8 +17,8 @@ mixin FeedItem(item, disabled)
     -if (item.getApplicationsCount()) itemClasses.push('app-icon')
 
     div(class = itemClasses).feed-item
-        +ActionLink('announcement', 'star', item.getId().valueOf(), false)(data-tooltip=Msg.Done).star.complete
-        +ActionLink('announcement', 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
+        +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false)(data-tooltip=Msg.Done).star.complete
+        +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
         +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').announcement-link
             .title: +Glue_(item.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), item.getClassName())
             .date= item.getExpiresDate() ? item.getExpiresDate().toString('m/d/y') : ''

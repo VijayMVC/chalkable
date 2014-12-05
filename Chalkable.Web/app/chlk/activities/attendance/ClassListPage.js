@@ -4,6 +4,7 @@ REQUIRE('chlk.templates.attendance.ClassList');
 REQUIRE('chlk.templates.common.InfoMsg');
 REQUIRE('chlk.templates.attendance.NotTakenAttendanceClassesTpl');
 REQUIRE('chlk.templates.attendance.TopBar');
+REQUIRE('chlk.templates.attendance.ClassListPeopleTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
     "use strict";
@@ -13,6 +14,7 @@ NAMESPACE('chlk.activities.attendance', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.attendance.ClassList)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassList, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassListPeopleTpl, 'sort', '.people-list-container' , ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassListPage', EXTENDS(chlk.activities.attendance.BasePostAttendancePage), [
 
 

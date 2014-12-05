@@ -230,7 +230,7 @@ NAMESPACE('chlk.controllers', function (){
             });
             model.setByLastName(byLastName);
             var result = new ria.async.DeferredData(model);
-            return this.UpdateView(this.getActivityClass_(isProfile_), result);
+            return this.UpdateView(this.getActivityClass_(isProfile_), result, 'sort');
         },
 
         [[chlk.models.attendance.SeatingChart, chlk.models.id.ClassId, chlk.models.common.ChlkDate]],

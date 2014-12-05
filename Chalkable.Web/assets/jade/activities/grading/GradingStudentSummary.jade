@@ -26,4 +26,4 @@ topItems = topData.getTopItems()
             paramsPrepend = [null]
         )
             each announcement in self.announcements
-                +FeedItem(announcement)
+                +FeedItem(announcement, false, true)

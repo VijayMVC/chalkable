@@ -958,6 +958,12 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.SidebarButton('statistic')],
+        [[chlk.models.id.AnnouncementId, Boolean]],
+        function starFromStudentGradesAction(id, complete_){
+            return this.starAction(id, complete_);
+        },
+
         [[chlk.models.id.AnnouncementId]],
         function makeVisibleAction(id){
             this.announcementService
