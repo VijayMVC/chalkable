@@ -222,8 +222,11 @@ NAMESPACE('chlk.controllers', function(){
                     .then(function(data){
                         var dispModel = this.getContext().getSession().get(ChlkSessionConstants.DISCIPLINE_PAGE_DATA);
                         dispModel.getDisciplines().forEach(function(item){
-                            if(item.getStudentId() == data.getStudentId())
+                            if(item.getStudentId() == data.getStudentId()){
                                 item.setDisciplineTypes(data.getDisciplineTypes());
+                                item.setId(data.getId());
+                            }
+
                         });
                         this.getContext().getSession().set(ChlkSessionConstants.DISCIPLINE_PAGE_DATA, dispModel);
                         model.setId(data.getId());
