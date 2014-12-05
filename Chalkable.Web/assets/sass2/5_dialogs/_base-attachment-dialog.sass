@@ -1,0 +1,32 @@
+.base-attachment-dialog
+  width: 90%
+  height: 85%
+
+  .toolbar
+    position: absolute
+    top: -16px
+
+    &.right-toolbar
+      right: 25px
+      text-align: right
+
+    &:not(.right-toolbar)
+      left: 0
+
+    >DIV, >A
+      display: inline-block
+      padding: 11px 15px 12px 11px
+      background: #4387fd
+      color: white
+      font: bold 14px Arial
+      word-spacing: 3px
+      +box-shadow(inset 0px 0 0px 1px #3A3A3A)
+      border: 1px solid #070707
+      text-decoration: none
+      cursor: pointer
+
+      &:hover
+        opacity: 0.7
+    
+  
+  
