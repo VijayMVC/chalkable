@@ -19,7 +19,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.FeedService, 'feedService',
 
             function listNewAction() {
-                var result = this.notificationService.getNotifications(0, 5)
+                var result = this.notificationService
+                    .getNotifications(0, 5)
                     .attach(this.validateResponse_())
                     .then(function (model) {
                         this.view.setNewNotificationCount(0);
@@ -33,11 +34,12 @@ NAMESPACE('chlk.controllers', function (){
                         return res;
                     }, this);
                     
-                this.notificationService.markAllAsShown().then(function(data){
-                    return this.notificationService.getUnShownNotificationCount().then(function(data2){
-                        this.setNewNotificationCount_(data2);
+                this.notificationService
+                    .markAllAsShown()
+                    .thenCall(this.notificationService.getUnShownNotificationCount, [])
+                    .then(function(data2){
+                        this.view.setNewNotificationCount(data2);
                     }, this);
-                }, this);
 
                 return this.ShadeView(chlk.activities.notification.ListNewPopup, result);
             },
