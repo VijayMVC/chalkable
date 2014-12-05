@@ -6,6 +6,7 @@ REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.student.StudentInfo');
 REQUIRE('chlk.models.student.StudentGradingInfo');
 REQUIRE('chlk.models.people.Schedule');
+REQUIRE('chlk.models.student.StudentExplorer');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -70,6 +71,13 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getSchedule(personId) {
                 return this.get('Student/Schedule.json', chlk.models.people.Schedule, {
+                    personId: personId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function getExplorer(personId){
+                return this.get('Student/Explorer.json', chlk.models.student.StudentExplorer, {
                     personId: personId.valueOf()
                 });
             }

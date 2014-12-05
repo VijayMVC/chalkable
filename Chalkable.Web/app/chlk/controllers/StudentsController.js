@@ -17,6 +17,8 @@ REQUIRE('chlk.activities.student.StudentProfileDisciplinePage');
 REQUIRE('chlk.activities.student.StudentProfileGradingPage');
 REQUIRE('chlk.activities.profile.ScheduleWeekPage');
 REQUIRE('chlk.activities.profile.ScheduleMonthPage');
+REQUIRE('chlk.activities.student.StudentProfileExplorerPage');
+
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -324,6 +326,18 @@ NAMESPACE('chlk.controllers', function (){
                     'monthSchedule',
                     chlk.templates.calendar.announcement.MonthCalendarBodyTpl
                 );
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function explorerAction(personId){
+                var res = this.studentService.getExplorer(personId)
+                    .attach(this.validateResponse_())
+                    .then(function(studentExplorer){
+                        return new chlk.models.student.StudentExplorerViewData(
+                            this.getCurrentRole(), studentExplorer, this.getUserClaims_()
+                        )
+                    }, this);
+                return this.PushView(chlk.activities.student.StudentProfileExplorerPage, res);
             }
         ])
 });
