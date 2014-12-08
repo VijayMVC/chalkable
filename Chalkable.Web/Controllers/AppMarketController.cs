@@ -41,26 +41,25 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult SuggestedApps(int personId, int classId, StringList standardsCodes, int markingPeriodId, int? start, int? count)
+        public ActionResult SuggestedApps(int classId, StringList standardsCodes, int markingPeriodId, int? start, int? count)
         {
-            return Json(GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, personId, classId, standardsCodes, markingPeriodId, start, count));
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var st = start ?? 0;
+            var cnt = count ?? 3;
+            var appInstalls = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
+            var installedAppsIds = appInstalls.GroupBy(x=>x.ApplicationRef).Select(x => x.Key).Distinct().ToList();
+            var applications = MasterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, st, cnt);
+            var hasMyAppsDic = applications.ToDictionary(app=> app.Id, app => MasterLocator.ApplicationService.HasMyApps(app));
+            return Json(InstalledApplicationViewData.Create(appInstalls, Context.PersonId.Value, applications, hasMyAppsDic));
         }
 
-        public static IList<ApplicationForAttachViewData> GetSuggestedAppsForAttach(IServiceLocatorMaster masterLocator, IServiceLocatorSchool schooLocator
-            , int personId, int classId, IList<string> standardsCodes, int markingPeriodId, int? start = null, int? count = null)
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult SuggestedAppsForAttach(int classId, StringList standardsCodes, int markingPeriodId, int? start, int? count)
         {
-            start = start ?? 0;
-            count = count ?? 3;
-            var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
-            var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
-            var applications = masterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, start.Value, count.Value);
-            var classSize = schooLocator.ClassService.GetClassPersons(null, classId, true, markingPeriodId).Count;
-            foreach (var application in applications)
-            {
-                if(!studentCountPerApp.ContainsKey(application.Id))
-                    studentCountPerApp.Add(application.Id, classSize);
-            }
-            return ApplicationForAttachViewData.Create(applications, studentCountPerApp);
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            return Json(ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, classId, standardsCodes, markingPeriodId, start, count));
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
