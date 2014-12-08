@@ -1,0 +1,304 @@
+.grading-comments-list
+  position: absolute
+  background: white
+  width: 162px
+  margin-top: -4px
+  box-shadow: 0 0 3px #aaa
+
+  .item
+    padding: 4px 8px
+    font: bold 12px Arial
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+    text-shadow: none
+    cursor: pointer
+
+    &.selected
+      background: #26647e
+      color: white
+
+.autocomplete-list
+  display: none
+  background: #fff
+  position: absolute
+  z-index: 9999
+  border: 1px solid #d1d1d1
+
+  .autocomplete-item
+    line-height: 28px
+    font-size: 13px
+    text-overflow: ellipsis
+    overflow: hidden
+    padding: 0 2px
+    width: 77px
+    white-space: nowrap
+    cursor: pointer
+    text-align: center
+
+    &:not(:last-child)
+      border-bottom: 1px solid #ececec
+
+    &.hovered
+      background: #f2f2f2
+
+.people-list.grading
+  .row
+    z-index: auto
+
+  .row:not(.readonly) .selected
+    display: none
+
+  .row.selected:not(.readonly)
+    .not-selected
+      display: none
+
+    .selected
+      display: block
+
+    .empty-grade-form
+      .grade-options.selected
+        display: none
+
+  .update-grade-form
+    display: table
+    width: 100%
+    > *
+      display: table-cell
+      vertical-align: top
+
+    .image-container
+      padding-right: 25px
+
+  .name-block
+    position: relative
+    width: 100%
+
+    .wrapper, p
+      display: inline-block
+
+
+    A
+      text-decoration: none
+
+    > A
+      color: #2f7790
+      font-size: 20px
+
+    .grade-options
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+
+    .small-pop-up
+      position: absolute
+      top: 55px
+      left: 2px
+      display: none
+      border-radius: 5px
+      z-index: 11
+      line-height: 15px
+
+  .grade-block
+    position: relative
+    width: 100px
+
+    .text-value
+      color: #2f7790
+      display: inline-block
+      width: 85px
+      text-align: center
+
+      &.dropped
+        text-decoration: line-through
+
+    .text-value, input[type=text]
+      font-size: 20px
+      font-weight: 600
+      +text-shadow(transparentize(#fff, .5) 0 1px 0)
+
+    input[type=text]
+      width: 75px
+      text-align: center
+      color: #000
+
+      &.error
+        border: 1px solid red
+
+    .letters
+      position: absolute
+      bottom: -20px
+      left: 0
+      font-style: italic
+      font-size: 12px
+      width: 85px
+      text-align: center
+      z-index: -1
+      pointer-events: none
+
+  .attachments-container
+    padding-right: 10px
+
+.announcement-view-page
+  position: relative
+
+  .close-open-control
+    margin-top: 24px
+
+  .description
+    min-width: 736px
+    display: inline-block
+    font-size: 15px
+    line-height: 22px
+    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+    color: #2b2a28
+
+    h2
+      color: #2f7790
+      margin: 0 0 8px
+      padding: 0
+      font-size: inherit
+
+    p
+      margin: 0
+
+  .standards-container
+    margin-top: 24px
+
+  .questions-and-answers .row
+    margin-top: 24px
+
+  .qna
+    width: 350px
+    position: relative
+
+    font-size: 14px
+    line-height: 22px
+    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+    color: #2b2a28
+    font-family: 'Open Sans', sanf-serif
+
+    .edit-question-input
+      display: none
+
+    h3
+      margin: 0 0 8px
+      padding: 0
+      font-size: inherit
+
+    p
+      margin: 0
+
+    .chat-bubble + span
+      font-size: 10px
+      line-height: 40px
+      color: #9c9c9c
+      font-style: italic
+
+    .submit-btn
+      display: none
+      position: absolute
+      bottom: 0
+      right: 0
+
+    input[type=text]
+      //display: block
+      border: none
+      +box-shadow(none)
+      background: transparent
+      font-size: inherit
+      line-height: inherit
+      padding: 0
+      color: inherit
+      width: 100%
+
+  .student-announcements-top-panel
+    border: 1px solid #c8c7c3
+    border-top-left-radius: 5px
+    border-top-right-radius: 5px
+    line-height: 37px
+    +box-shadow(#fff 0px 1px 0px inset)
+    background: #f7f7f5
+    padding: 19px
+
+    position: relative
+    &::after
+      content: ' '
+      position: absolute
+      bottom: -3px
+      right: 0
+      left: 0
+      height: 3px
+      +background-image(linear-gradient(top, #c8c7c3 0%, transparentize(#c8c7c3, 1) 100%))
+
+    .right
+      float: right
+
+    .section
+      display: inline-block
+      color: #56554f
+      text-transform: uppercase
+      font-weight: 600
+
+    .section + .section
+      padding-left: 40px
+      position: relative
+      &::after, &::before
+        content: ' '
+        position: absolute
+        top: 10px
+        bottom: 10px
+        width: 1px
+
+      &::before
+        left: 20px
+        background-color: #e3e3e1
+      &::after
+        left: 21px
+        background-color: #efefed
+
+
+
+
+  .grades-individual
+    border: 1px solid #c8c7c3
+
+  .loading .grade-block .text-value
+    font-size: 0
+    background: image-url("images/loader.gif") 50% 50% no-repeat
+    height: 20px
+
+  .grading-input-popup.chlk-pop-up-container
+    position: absolute
+    display: none
+    padding: 12px
+    text-align: left
+    left: -15px
+    top: 60px
+    white-space: normal !important
+    line-height: 24px
+    +box-shadow(transparentize(#000, .8) 0 0 16px)
+    width: 100px
+
+    &::before
+      left: 50%
+      margin-left: -7px
+
+  .comment-grade-container
+    background: #f8e6a5
+    border-radius: 5px
+    padding: 16px
+    line-height: 60px - 32px
+    overflow: hidden
+    margin-bottom: 16px
+
+    .grade-value
+      background: #2f7790
+      line-height: 60px
+      padding: 0 20px
+      font-family: 'Reenie Beanie', serif
+      font-size: 34pt
+      color: #fff
+      margin: -16px -16px -16px 0

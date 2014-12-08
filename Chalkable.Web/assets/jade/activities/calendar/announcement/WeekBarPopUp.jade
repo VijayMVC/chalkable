@@ -1,0 +1,15 @@
+.calendar-popup
+    announcements = self.getAnnouncements();
+    .announcements-list
+        h2=Msg.Announcement(true)
+        ul.day-announcements
+            each item in announcements
+                li.items
+                    +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
+                        div
+                            +TooltipWithOverflow(item.getTitle()).item-title
+    if !self.getUserRole().isStudent()
+        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann
+
+
+

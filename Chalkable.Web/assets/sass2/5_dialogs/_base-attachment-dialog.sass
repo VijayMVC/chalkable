@@ -1,0 +1,64 @@
+.base-attachment-dialog
+  top: 50px
+  left: 90px
+  right: 90px
+  bottom: 10px
+  transform: none
+  background-color: transparent
+  overflow: visible
+  z-index: 2000
+
+  .x-close-btn
+    margin-top: -24px
+
+  .toolbar
+    position: absolute
+    top: -40px
+
+    &.right-toolbar
+      right: 25px
+      text-align: right
+
+    &:not(.right-toolbar)
+      left: 0
+
+    >DIV, >A
+      display: inline-block
+      padding: 11px 15px 12px 11px
+      background: #4387fd
+      color: white
+      font: bold 14px Arial
+      word-spacing: 3px
+      +box-shadow(inset 0px 0 0px 1px #3A3A3A)
+      border: 1px solid #070707
+      text-decoration: none
+      cursor: pointer
+
+      &:hover
+        opacity: 0.7
+
+  .iframe-wrap
+    background: url(images/app/debut_dark.png)
+    border: 1px solid black
+    overflow-y: hidden
+    overflow-x: hidden
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+
+
+    .picture-container
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)
+
+    .picture-container-2
+      overflow-y: auto
+
+    iframe
+      border: 0
+      height: 100%
+      width: 100%

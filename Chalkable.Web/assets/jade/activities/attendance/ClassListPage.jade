@@ -1,0 +1,66 @@
+mixin SummaryInfo(presentCount, allStudentsCount)
+    -presentPersent = Math.round((presentCount * 100) / allStudentsCount)
+    .summary-info
+        .title= presentCount + '/' + allStudentsCount + ' ' + Msg.Present
+        .slide-bar
+            div(style="width: " + presentPersent + "%").inner-bar
+
+h2.page-title Attendance
+
+-var topData = self.getTopData()
+-var topItems = topData.getTopItems()
+-var selectedId = topData.getSelectedItemId()
+-var valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+-var additionalParams = self.getAdditionalParams()
+
+.action-bar
+    .items
+        +ActionLink('attendance', 'classList', selectedId, self.getDate().toStandardFormat()).pressed=Msg.List
+        +ActionLink('attendance', 'seatingChart', selectedId, self.getDate().toStandardFormat())=Msg.Seating_Chart
+.loader
+.students-list.loader-container
+    -var topData = self.getTopData()
+    -var topItems = topData.getTopItems()
+    -var selectedId = topData.getSelectedItemId()
+    -var additionalParams = self.getAdditionalParams()
+   
+    if(self.hasLeftRightToolBar())
+        +LeftRightToolbar(topItems, chlk.templates.attendance.TopBar, 'attendance', 'classListFromBar', [self.getDate().format('mm-dd-yy')])(
+            selectedItemId=selectedId ? selectedId.valueOf() : ""
+        ).classes-bar
+    if self.getItems().length == 0
+        .people-list-container
+            .header
+                .table
+                    .title
+                        = self.getDate().toString('MM dd, yy')
+                        +DatePicker('attendanceDate', self.getDate())(
+                            data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true
+                            },
+                            data-controller= "attendance",
+                            data-action="classList",
+                            data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
+                        )#attendance-date.tb-date-picker.tr
+            .grid-container.people-list
+                .black-arrow.no-class-scheduled.row=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy')) + ' or no students in this class'
+    if self.getItems().length > 0
+        .people-list-container.not-transparent
+           +RenderWith(self.getModel(), chlk.templates.attendance.ClassListPeopleTpl)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

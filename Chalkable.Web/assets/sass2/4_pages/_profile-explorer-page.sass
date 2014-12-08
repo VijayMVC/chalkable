@@ -1,0 +1,78 @@
+.explorer-view
+  font: normal 14px Arial
+
+  .title
+    margin: 29px 2px 22px
+
+  .title, .left-block
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+
+  .classes-blocks
+    width: 295px
+    margin-left: 14px
+    margin-top: 44px
+
+  .hidden-item
+    display: none
+
+  .block-item
+    border: 1px solid #b4b4b4
+    height: 38px
+    line-height: 35px
+    padding: 0 10px 0 14px
+    border-radius: 4px
+    margin-bottom: 5px
+
+    &.no-standards-block
+      height: 175px
+      line-height: 175px
+
+    &.standard, &.announcement
+      cursor: pointer
+
+      &:not(.active)
+        background: #eaeaea
+        +box-shadow(#fff 0 1px 0 inset)
+
+    .right-block
+      font: bold 15px Arial
+      width: 42px
+
+    .left-block
+      width: 225px
+
+    .right-block, .left-block
+      display: inline-block
+      vertical-align: middle
+
+    .circle
+      width: 10px
+      height: 10px
+      border-radius: 6px
+      display: inline-block
+      float: right
+      margin-top: 4px
+
+      &.red
+        background: #d45151
+
+      &.green
+        background: #41b768
+
+      &.yellow
+        background: yellow
+
+      &.white
+        background: #fff
+        border: 1px solid #4b4b4b
+        margin-top: 3px
+
+  .more-button, .no-standards-block
+    text-align: center
+
+  .more-button
+    font-weight: bold
+    cursor: pointer
+

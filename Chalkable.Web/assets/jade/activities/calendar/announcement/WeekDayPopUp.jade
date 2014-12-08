@@ -1,0 +1,26 @@
+.calendar-popup.popup-bubble
+    announcements = self.getAnnouncements();
+    period = self.getPeriod();
+    roomNumber = self.getRoomNumber();
+    if period.getClassId()
+        .class-name
+            h3.day-day
+                +ActionLink('class', 'info', period.getClassId().valueOf())=period.getClassName()
+    .info
+        if roomNumber
+            .day-down Rm #{roomNumber}
+        .day-down #{period.displayPeriodTimeRange()}
+        .day-down= self.getDate().format('DD, MM d')
+    if announcements.length > 0
+        .announcements-list
+            .day-announcements
+                each item in announcements
+                    .items
+                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
+                            div
+                                +TooltipWithOverflow(item.getTitle()).item-title
+    if !self.getUserRole().isStudent()
+        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || period.getClassId() || '').ann-button.plus-ann New item
+
+
+

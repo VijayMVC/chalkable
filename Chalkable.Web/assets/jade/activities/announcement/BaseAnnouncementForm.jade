@@ -1,0 +1,152 @@
+//TODO refactor
+mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges)
+    +Hidden('id', announcement.getId().valueOf())
+    +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
+    +Hidden('statetyped', announcement.getStateTyped())
+    +Hidden('systemtype', announcement.getSystemType())
+    +Hidden('personid', announcement.getPersonId().valueOf())
+    +Hidden('gradingstyle', announcement.getGradingStyle())
+    +Hidden('markingperiodid', announcement.getCreated())
+    +Hidden('state', announcement.getState())
+    +Hidden('isedit', !!announcement.getState())(data-isedit = !!announcement.getState()).is-edit
+    +Hidden('classid', classId)
+    +Hidden('order', announcement.getOrder()).order-value
+    +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
+
+    //+AnnouncementFormDescriptionBlock(announcement)
+    typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+    isAdminAnnouncement = adminRecipients && tplData.getUserRole().isAdmin()
+    isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
+    disableDeleteBtn = !!(announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0)
+    standards = announcement.getStandards() || []
+    if !isAdminAnnouncement
+        +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
+        div(class=announcement.getExpiresDate() ? 'with-date' : '').title-block-container
+            +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+        needStandardsBlock = standards.length > 0 || (!isAdminAnnouncement && announcement.isCanAddStandard())
+        .table
+            .left-block(class=needStandardsBlock ? 'with-standards' : '')
+                if isAdminAnnouncement
+                    .buttons-container
+                        rolesEnum = chlk.models.common.RoleEnum
+                        buttons = ['Student', 'Teacher', 'Parent', 'Admin']
+                        each button in buttons
+                            roleName = button.toUpperCase();
+                            roleId = rolesEnum[roleName] ? rolesEnum[roleName].valueOf() : null
+                            text = Msg[button](true).toLowerCase().capitalize()
+                            Button(
+                                type="button",
+                                data-roleId = roleId,
+                                data-id = roleId ? '0|' + roleId + '|-1|-1' : adminRecipientId,
+                                disabled = roleId == rolesEnum.PARENT.valueOf()
+                                class = button.toLowerCase() + '-button',
+                                value = roleId ? "All " + text : text
+                            ).admin-gray.new-input=text
+                    .recipient-part
+                        +RenderWith(adminRecipients, chlk.templates.announcement.AdminRecipients)
+                .left-block-container
+                    +TextArea(name="content", placeholder=isAnnouncement ? "Message" : "Assignment")= announcement.getContent()
+                    if needStandardsBlock
+                        .add-standards-container
+                            .add-standards
+                                .standards-list
+                                    each standard in standards
+                                        BUTTON(data-tooltip = standard.getDescription()).grey-button.same-on-hover
+                                            = standard.getName()
+                                            if announcement.isAbleToRemoveStandard()
+                                                +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
+                                if !isAdminAnnouncement && announcement.isCanAddStandard()
+                                    .title=Msg.Click_to_add_standard
+                                    +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
+                    .drawer-icon
+                .drop-down-container.popup-bubble.top.x-hidden
+                input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
+                if !announcement.getState()
+                    input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
+            .right-block
+                .date-picker-container
+                    label(for="expiresdate") Due Date
+                    +DatePicker('expiresdate', announcement.getExpiresDate())(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            dateRanges: classScheduleDateRanges
+                        },
+                        data-value=announcement.getExpiresDate() ? announcement.getExpiresDate().format('mm/dd/yy') : ''
+                        placeholder=Msg.Due_date,
+                        class='validate[required]'
+                    )#expiresdate
+                    .calendar-mark ?
+                if !isAdminAnnouncement
+                    .max-score-container
+                        label(for="ann-max-score") Max Score
+                        input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=announcement.isGradable() ? announcement.getMaxScore() : '0')
+                        .question-mark(data-tooltip=Msg.Max_Score_Tooltip_Message) ?
+                    .advanced-options
+                        A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
+                        .separator.x-hidden
+                        .advanced-options-container.x-hidden.popup-bubble.top
+                            .weight-multiplier.new-input-container
+                                label(for="ann-weightmultiplier")= Msg.Weight_Multiplier
+                                input#ann-weightmultiplier(type="text", name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
+                                .question-mark(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message) ?
+                            .weight-addition.new-input-container
+                                label(for="ann-weightaddition")=Msg.Weight_Addition
+                                input#ann-weightaddition(type="text", name='weightaddition', class="validate[required,custom[double],min[0]]", placeholder="0.00", value=announcement.getWeightAddition() || 0.00)
+                                .question-mark(data-tooltip=Msg.Weight_Addition_Tooltip_Message) ?
+                            .check-box-container
+                                label(for="ann-hidefromstudents")=Msg.Hide_from_Students
+                                +SlideCheckbox('hidefromstudents', announcement.isHiddenFromStudents(), false)
+                                .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
+                            .check-box-container
+                                label(for="ann-candropstudentscore")=Msg.Can_drop_student_score
+                                +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
+                                .question-mark(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message) ?
+
+    .attachments-and-applications
+        ann = announcement
+        -ann.setNeedButtons(true)
+        -ann.setNeedDeleteButton(true)
+            +RenderWith(ann, chlk.templates.announcement.Announcement)(
+                userRole = userRole
+            )
+    .bottom-block
+        +Button()(
+            type="submit",
+            name="submitType",
+            value=announcement.getState() ? "submitOnEdit" : "submit"
+        ).special-button.blue-button.submit-btn.submit-announcement
+            =(announcement.getState() ? Msg.Save : Msg.Submit)
+        if announcement.getState()
+            +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(
+                disabled=disableDeleteBtn
+            )
+                +Button()(
+                    type="button",
+                    data-tooltip = disableDeleteBtn ? Msg.Delete_announcement_btn_tooltip : '',
+                    class=disableDeleteBtn ? 'disabled' : ''
+                ).special-button.red-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
+            +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), tplData.getTopData().getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+        else
+            +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
+
+    if announcement.getSuggestedApps() && announcement.getSuggestedApps().length > 0
+        .suggested-apps-block
+            .separator-line
+            .title Suggested Apps
+            .suggested-apps-conteiner
+                each app in announcement.getSuggestedApps()
+                    div.app-icon-link
+                        if app.needToInstall()
+                            +ActionLink('appmarket', 'tryToQuickInstall', app.getId(), announcement.getClassId(), announcement.getId()).app-link
+                                .app-list-item
+                                    div(data-tooltip='').icon
+                                        pictureUrl = tplData.getAppPictureURL(app.getBigPictureId(), 170, 110)
+                                        img(src=pictureUrl)
+                        else
+                            +ActionLink('apps', 'tryToAttach', announcement.getId(), app.getId().valueOf()).app-link
+                                .app-list-item
+                                    div(data-tooltip='Attach').attach-icon
+                                    .icon
+                                        pictureUrl = tplData.getAppPictureURL(app.getBigPictureId(), 170, 110)
+                                        img(src=pictureUrl)
