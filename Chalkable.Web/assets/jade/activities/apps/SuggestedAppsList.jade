@@ -1,0 +1,16 @@
+.suggested-apps-block
+    .separator-line
+    if self.getSuggestedApps()
+        .title Suggested Apps
+        .suggested-apps-conteiner
+            each app in self.getSuggestedApps()
+                div.app-icon-link
+                    +ActionLink('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId()).app-link
+                        .app-list-item
+                        if !app.needToInstall()
+                            div(data-tooltip='Attach').attach-icon
+                        div(data-tooltip='').icon
+                            pictureUrl = self.getAppPictureURL(app.getBigPictureId(), 170, 110)
+                        img(src=pictureUrl)
+    else
+        .title No recomended apps

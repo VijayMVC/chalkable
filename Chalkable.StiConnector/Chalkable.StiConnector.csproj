@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3D16203E-D19D-41E1-9918-2A9448427BFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chalkable.StiConnector</RootNamespace>
+    <AssemblyName>Chalkable.StiConnector</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'STAGING|AnyCPU'">
+    <OutputPath>bin\STAGING\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Connectors\ActivityAttachmentsConnector.cs" />
+    <Compile Include="Connectors\ActivityCategoryConnnector.cs" />
+    <Compile Include="Connectors\ActivityConnector.cs" />
+    <Compile Include="Connectors\ActivityScoreConnector.cs" />
+    <Compile Include="Connectors\AttachmentConnector.cs" />
+    <Compile Include="Connectors\AttendanceConnector.cs" />
+    <Compile Include="Connectors\ConnectorBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Connectors\ConnectorLocator.cs" />
+    <Compile Include="Connectors\DisciplineConnector.cs" />
+    <Compile Include="Connectors\GradebookConnector.cs" />
+    <Compile Include="Connectors\LinkConnector.cs" />
+    <Compile Include="Connectors\Model\Activity.cs" />
+    <Compile Include="Connectors\Model\ActivityAttachment.cs" />
+    <Compile Include="Connectors\Model\ActivityCategory.cs" />
+    <Compile Include="Connectors\Model\ActivityStandard.cs" />
+    <Compile Include="Connectors\Model\AverageDashboard.cs" />
+    <Compile Include="Connectors\Model\ClassroomOption.cs" />
+    <Compile Include="Connectors\Model\DisciplineReferral.cs" />
+    <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
+    <Compile Include="Connectors\Model\Gradebook.cs" />
+    <Compile Include="Connectors\Model\GradebookReportParams.cs" />
+    <Compile Include="Connectors\Model\NowDashboard.cs" />
+    <Compile Include="Connectors\Model\StiPersonEmail.cs" />
+    <Compile Include="Connectors\Model\PostedAttendance.cs" />
+    <Compile Include="Connectors\Model\ProgressReportParams.cs" />
+    <Compile Include="Connectors\Model\Score.cs" />
+    <Compile Include="Connectors\Model\Seat.cs" />
+    <Compile Include="Connectors\Model\SeatingChart.cs" />
+    <Compile Include="Connectors\Model\SectionAttendance.cs" />
+    <Compile Include="Connectors\Model\SectionAttendanceSummary.cs" />
+    <Compile Include="Connectors\Model\SectionGradesSummary.cs" />
+    <Compile Include="Connectors\Model\StandardScore.cs" />
+    <Compile Include="Connectors\Model\StiAttachment.cs" />
+    <Compile Include="Connectors\Model\StudentAverageComment.cs" />
+    <Compile Include="Connectors\Model\StudentAverages.cs" />
+    <Compile Include="Connectors\Model\StudentCondition.cs" />
+    <Compile Include="Connectors\Model\StudentProgressReportComment.cs" />
+    <Compile Include="Connectors\Model\StudentTotalPoints.cs" />
+    <Compile Include="Connectors\Model\User.cs" />
+    <Compile Include="Connectors\Model\WorksheetReportParams.cs" />
+    <Compile Include="Connectors\ReportConnector.cs" />
+    <Compile Include="Connectors\SeatingChartConnector.cs" />
+    <Compile Include="Connectors\SectionStandardConnector.cs" />
+    <Compile Include="Connectors\StandardScoreConnector.cs" />
+    <Compile Include="Connectors\StudentConnector.cs" />
+    <Compile Include="Connectors\SyncConnector.cs" />
+    <Compile Include="Connectors\UsersConnector.cs" />
+    <Compile Include="Exceptions\ChalkableSisException.cs" />
+    <Compile Include="Mapping\ErrorMapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyncModel\AbsenceLevelReason.cs" />
+    <Compile Include="SyncModel\AbsenceReason.cs" />
+    <Compile Include="SyncModel\AcadSession.cs" />
+    <Compile Include="SyncModel\ActivityCategory.cs" />
+    <Compile Include="SyncModel\Address.cs" />
+    <Compile Include="SyncModel\AlphaGrade.cs" />
+    <Compile Include="SyncModel\AlternateScore.cs" />
+    <Compile Include="SyncModel\AttendanceCalendar.cs" />
+    <Compile Include="SyncModel\AttendanceCalendarDay.cs" />
+    <Compile Include="SyncModel\AttendanceSetting.cs" />
+    <Compile Include="SyncModel\BellSchedule.cs" />
+    <Compile Include="SyncModel\CalendarDay.cs" />
+    <Compile Include="SyncModel\ClassroomOption.cs" />
+    <Compile Include="SyncModel\Course.cs" />
+    <Compile Include="SyncModel\CourseSchool.cs" />
+    <Compile Include="SyncModel\CourseStandard.cs" />
+    <Compile Include="SyncModel\CourseType.cs" />
+    <Compile Include="SyncModel\DayType.cs" />
+    <Compile Include="SyncModel\Document.cs" />
+    <Compile Include="SyncModel\Enrollment.cs" />
+    <Compile Include="SyncModel\Ethnicity.cs" />
+    <Compile Include="SyncModel\Gender.cs" />
+    <Compile Include="SyncModel\GradeLevel.cs" />
+    <Compile Include="SyncModel\GradingComment.cs" />
+    <Compile Include="SyncModel\GradingPeriod.cs" />
+    <Compile Include="SyncModel\GradingScale.cs" />
+    <Compile Include="SyncModel\GradingScaleRange.cs" />
+    <Compile Include="SyncModel\Infraction.cs" />
+    <Compile Include="SyncModel\OrganizationAddress.cs" />
+    <Compile Include="SyncModel\Person.cs" />
+    <Compile Include="SyncModel\PersonAddress.cs" />
+    <Compile Include="SyncModel\PersonEmail.cs" />
+    <Compile Include="SyncModel\PersonEthnicity.cs" />
+    <Compile Include="SyncModel\PersonTelephone.cs" />
+    <Compile Include="SyncModel\Room.cs" />
+    <Compile Include="SyncModel\ScheduledBlock.cs" />
+    <Compile Include="SyncModel\ScheduledSection.cs" />
+    <Compile Include="SyncModel\ScheduledTimeSlot.cs" />
+    <Compile Include="SyncModel\School.cs" />
+    <Compile Include="SyncModel\SchoolGradeLevel.cs" />
+    <Compile Include="SyncModel\SchoolOption.cs" />
+    <Compile Include="SyncModel\SectionStaff.cs" />
+    <Compile Include="SyncModel\SectionTerm.cs" />
+    <Compile Include="SyncModel\SpEdStatus.cs" />
+    <Compile Include="SyncModel\Staff.cs" />
+    <Compile Include="SyncModel\StaffClassification.cs" />
+    <Compile Include="SyncModel\StaffContact.cs" />
+    <Compile Include="SyncModel\StaffRole.cs" />
+    <Compile Include="SyncModel\StaffSchool.cs" />
+    <Compile Include="SyncModel\Standard.cs" />
+    <Compile Include="SyncModel\StandardSubject.cs" />
+    <Compile Include="SyncModel\Student.cs" />
+    <Compile Include="SyncModel\StudentAcadSession.cs" />
+    <Compile Include="SyncModel\StudentAttendanceMinute.cs" />
+    <Compile Include="SyncModel\StudentCheckInOut.cs" />
+    <Compile Include="SyncModel\StudentDailyAbsence.cs" />
+    <Compile Include="SyncModel\StudentGradeLevel.cs" />
+    <Compile Include="SyncModel\StudentPeriodAbsence.cs" />
+    <Compile Include="SyncModel\StudentSchedule.cs" />
+    <Compile Include="SyncModel\StudentScheduleTerm.cs" />
+    <Compile Include="SyncModel\StudentSchool.cs" />
+    <Compile Include="SyncModel\SyncContext.cs" />
+    <Compile Include="SyncModel\Term.cs" />
+    <Compile Include="SyncModel\TimeSlot.cs" />
+    <Compile Include="SyncModel\User.cs" />
+    <Compile Include="SyncModel\UserLogin.cs" />
+    <Compile Include="SyncModel\UserPassword.cs" />
+    <Compile Include="SyncModel\UserSchool.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
+      <Name>Chalkable.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
+      <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
+      <Name>Chalkable.Data.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Data.School\Chalkable.Data.School.csproj">
+      <Project>{C5753C2A-F2BC-4F96-846B-548FC67191B2}</Project>
+      <Name>Chalkable.Data.School</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
