@@ -85,6 +85,11 @@ namespace Chalkable.StiConnector.Connectors.Model
         public string ReportCardNote { get; set; }
 
         /// <summary>
+        /// Id of the section
+        /// </summary>
+        public int SectionId { get; set; }
+
+        /// <summary>
         /// Id of the student
         /// </summary>
         public int StudentId { get; set; }
