@@ -196,7 +196,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 AverageId = averageId,
                 StudentId = studentId,
                 GradingPeriodId = gradingPeriodId,
-                EnteredAverageValue = averageValue
+                EnteredAverageValue = averageValue,
+                SectionId = classId
             };
             if (comments != null)
             {
@@ -251,34 +252,70 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        private IList<StudentDisciplineSummary> GetStudentDisciplineSummaries(IEnumerable<StudentDetails> students, int classId, DateTime startDate, DateTime endDate)
+        {
+            var classDisciplines = Storage.StiDisciplineStorage.GetSectionDisciplineSummary(classId, startDate, endDate);
+            var result = new List<StudentDisciplineSummary>();
+
+            var studentDetailsList = students as IList<StudentDetails> ?? students.ToList();
+            foreach (var student in studentDetailsList)
+            {
+                var infractionsList = classDisciplines.Where(x => x.StudentId == student.Id).SelectMany(x => x.Infractions);
+
+                var groupedInfractions = infractionsList.GroupBy(x => x.Id).Select(y => new
+                {
+                    Id = y.Key,
+                    Count = y.Count()
+                });
+
+                result.AddRange(groupedInfractions.Select(groupedInfraction => new StudentDisciplineSummary
+                {
+                    InfractionId = groupedInfraction.Id, 
+                    Occurrences = groupedInfraction.Count,
+                    StudentId = student.Id
+                }));
+            }
+
+            return result;
+        } 
+
+        private AverageDashboard GetAveragesDashboard(ChalkableGradeBook chlkGradeBook, int classId, int gradingPeriodId)
+        {
+            var startDate = new DateTime(DateTime.Today.Year, 1, 1);
+            var endDate = DateTime.Today;
+            var attendance = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(
+                new List<int> { classId }, startDate, endDate).First();
+
+            var attendances = chlkGradeBook.Students.Select(x => new StudentTotalSectionAttendance()
+            {
+                Absences= attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Absences).FirstOrDefault(),
+                Tardies = attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Tardies).FirstOrDefault(),
+                StudentId = x.Id,
+                SectionId = classId,
+                DaysPresent = attendance.Students.Count(y => y.StudentId == x.Id && y.Absences == 0)
+            }).ToList();
+
+            return new AverageDashboard
+            {
+                AttendanceSummary = attendances,
+                DisciplineSummary = GetStudentDisciplineSummaries(chlkGradeBook.Students, classId, startDate, endDate)
+            };
+        }
+
         public FinalGradeInfo GetFinalGrade(int classId, GradingPeriodDetails gradingPeriod)
         {
-            var gb = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, null, gradingPeriod.Id);
-
-            var chlkGradeBook = GetGradeBooks(classId, gradingPeriod, gb);
-
-            var startDate = new DateTime(DateTime.Today.Year, 1, 1);
-            var attendance = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(new List<int>(){classId}, startDate, DateTime.Today).First();
-
-            var attendances = chlkGradeBook.Students.Select(x => new FinalStudentAttendance
+        
+            var gradeBook = GetGradeBook(classId, gradingPeriod, null, null, false);
+            var averageDashBoard = GetAveragesDashboard(gradeBook, classId, gradingPeriod.Id);
+            var infractions = ServiceLocator.InfractionService.GetInfractions();
+            return new FinalGradeInfo
             {
-                Absenses = attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Absences).FirstOrDefault(),
-                Tardies = attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Tardies).FirstOrDefault(),
-                StudentId = x.Id
-            }).ToList();
-
-
-            var disciplines = chlkGradeBook.Students.Select(student => new FinalStudentDiscipline()
-            {
-                StudentId = student.Id,
-                Infraction = new Chalkable.Data.School.Model.Infraction()
-            }).ToList();
-            return new FinalGradeInfo()
-            {
-                Attendances = attendances,
-                Averages = chlkGradeBook.Students.Select(x => new ChalkableAverage()).ToList(),
-                Disciplines = disciplines,
-                GradeBook = chlkGradeBook
+                Attendances = FinalStudentAttendance.Create(averageDashBoard.AttendanceSummary),
+                Disciplines = FinalStudentDiscipline.Create(averageDashBoard.DisciplineSummary, infractions),
+                GradeBook = gradeBook,
+                Averages = gradeBook.Averages.GroupBy(x => x.AverageId)
+                       .Select(x => ChalkableAverage.Create(x.Key, x.First().AverageName))
+                       .ToList()
             };
         }
     }
