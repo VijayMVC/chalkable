@@ -32,7 +32,7 @@ namespace Chalkable.StiConnector.Connectors
             var nvc = new NameValueCollection();
             if(date.HasValue)
                 nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
-            var url = string.Format("{0}chlkable/{1}/students/{2}/dashboard/explorer", BaseUrl, acadSessionId, studentId);
+            var url = string.Format("{0}chalkable/{1}/students/{2}/dashboard/explorer", BaseUrl, acadSessionId, studentId);
             return Call<StudentExplorerDashboard>(url, nvc);
         }
     }

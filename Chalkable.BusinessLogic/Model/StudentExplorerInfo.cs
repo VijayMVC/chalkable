@@ -39,10 +39,10 @@ namespace Chalkable.BusinessLogic.Model
             {
                 if (studentExplorer != null)
                 {
-                    var averages = studentExplorer.Averages;
+                    var averages = studentExplorer.Averages.Where(avg=>avg.SectionId == classDetailse.Id).ToList();
                     var standardScores = studentExplorer.Standards.Where(x => x.SectionId == classDetailse.Id).ToList();
                     var importantItem = announcements.FirstOrDefault(x => x.ClassRef == classDetailse.Id);
-                    res.Add(Create(classDetailse, averages.ToList(), standardScores, standards, importantItem));                   
+                    res.Add(Create(classDetailse, averages, standardScores, standards, importantItem));                   
                 }
                 else res.Add(Create(classDetailse, new List<StudentAverage>(), new List<StandardScore>(), standards, null));
 
