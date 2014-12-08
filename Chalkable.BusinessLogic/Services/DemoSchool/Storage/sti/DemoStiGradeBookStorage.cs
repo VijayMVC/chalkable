@@ -81,6 +81,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 StudentAverages = gbOld != null ? gbOld.StudentAverages : defaultStudentAvgs
             };
 
+
+            PrepareGradeBook(classId, gradeBook);
+
             if (classAnnouncementType.HasValue)
             {
                 gradeBook.Activities = gradeBook.Activities.Where(x => x.CategoryId == classAnnouncementType.Value);
@@ -108,7 +111,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             for (var i = 0; i < avgs.Count; ++i)
             {
                 var avg = avgs[i];
-                if (avg.AverageId == studentAverage.AverageId)
+                if (avg.SectionId == classId && 
+                    avg.StudentId == studentAverage.StudentId && 
+                    avg.GradingPeriodId == studentAverage.GradingPeriodId)
                 {
                     id = i;
                     break;
