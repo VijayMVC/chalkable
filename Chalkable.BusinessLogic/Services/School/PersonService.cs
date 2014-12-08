@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -204,10 +204,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             using (var uow = Read())
             {
                 var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                return da.SearchPersons(filter, orderByFirstName, start, count);
+                return da.SearchPersons(Context.SchoolLocalId.Value, filter, orderByFirstName, start, count);
             }
         }
 
