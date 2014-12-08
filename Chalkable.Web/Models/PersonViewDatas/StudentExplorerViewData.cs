@@ -27,7 +27,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public ShortClassViewData Class { get; set; }
         public decimal? Avg { get; set; }
         public AnnouncementShortViewData ImportantAnnouncement { get; set; }
-        public IList<StandardGradingItemViewData> Standards { get; set; }
+        public IList<StudentStandardGradeViewData> Standards { get; set; }
 
         public static StudentClassExplorerViewData Create(StudentClassExplorerInfo classExplorerInfo)
         {
@@ -37,7 +37,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             res.Avg = classExplorerInfo.Avg;
             if (classExplorerInfo.MostImportantAnnouncement != null)
                 res.ImportantAnnouncement = AnnouncementShortViewData.Create(classExplorerInfo.MostImportantAnnouncement);
-            res.Standards = classExplorerInfo.Standards.Select(StandardGradingItemViewData.Create).ToList();
+            res.Standards = classExplorerInfo.Standards.Select(StudentStandardGradeViewData.Create).ToList();
             return res;
         }
 
@@ -45,5 +45,20 @@ namespace Chalkable.Web.Models.PersonViewDatas
         {
             return classExplorerInfos.Select(Create).ToList();
         } 
+    }
+
+    public class StudentStandardGradeViewData : AnnouncementStandardViewData
+    {
+        public StandardGradingItemViewData StandardGrading { get; set; }
+
+        public StudentStandardGradeViewData(Standard standard) : base(standard) {}
+
+        public static StudentStandardGradeViewData Create(GradingStandardInfo gradingStandard)
+        {
+            return new StudentStandardGradeViewData(gradingStandard.Standard)
+                {
+                    StandardGrading = StandardGradingItemViewData.Create(gradingStandard)
+                };
+        }
     }
 }
