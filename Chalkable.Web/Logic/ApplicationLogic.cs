@@ -88,5 +88,24 @@ namespace Chalkable.Web.Logic
             }
             return res;
         }
+
+
+        public static IList<ApplicationForAttachViewData> GetSuggestedAppsForAttach(IServiceLocatorMaster masterLocator, IServiceLocatorSchool schooLocator
+            , int personId, int classId, IList<string> standardsCodes, int markingPeriodId, int? start = null, int? count = null)
+        {
+            start = start ?? 0;
+            count = count ?? 3;
+            var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
+            var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
+            var applications = masterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, start.Value, count.Value);
+            var classSize = schooLocator.ClassService.GetClassPersons(null, classId, true, markingPeriodId).Count;
+            foreach (var application in applications)
+            {
+                if (!studentCountPerApp.ContainsKey(application.Id))
+                    studentCountPerApp.Add(application.Id, classSize);
+            }
+            return ApplicationForAttachViewData.Create(applications, studentCountPerApp);
+        }
+
     }
 }

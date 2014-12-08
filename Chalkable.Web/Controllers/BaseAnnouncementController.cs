@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers
                         throw new NoMarkingPeriodException();
                     var codes = annDetails.AnnouncementStandards.Where(x=>!string.IsNullOrEmpty(x.Standard.CCStandardCode))
                         .Select(x => x.Standard.CCStandardCode).ToList();
-                    annViewData.SuggestedApps = AppMarketController.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                    annViewData.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
                                                               Context.PersonId.Value, annDetails.ClassRef, codes, mp.Id);
                 }
 
@@ -75,7 +75,7 @@ namespace Chalkable.Web.Controllers
                     throw new NoMarkingPeriodException();
                 var codes = announcementDetails.AnnouncementStandards.Where(x => !string.IsNullOrEmpty(x.Standard.CCStandardCode))
                     .Select(x => x.Standard.CCStandardCode).ToList();
-                return AppMarketController.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
                                                           Context.PersonId.Value, announcementDetails.ClassRef, codes, mp.Id);
             }
             return new List<ApplicationForAttachViewData>();

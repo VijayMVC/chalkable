@@ -15,6 +15,8 @@ REQUIRE('chlk.models.apps.ApplicationForAttach');
 
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
+REQUIRE('chlk.models.apps.InstalledApp');
+
 REQUIRE('chlk.models.funds.PersonBalance');
 
 
@@ -130,6 +132,17 @@ NAMESPACE('chlk.services', function () {
                         data.setItems(apps);
                         return data;
                     })
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId, String, String, Number]],
+            ria.async.Future, function getSuggestedApps(classId, markingPeriodId, standardsCodes, start_, count_){
+                return this.get('AppMarket/SuggestedApps.json', ArrayOf(chlk.models.apps.Application),{
+                    classId : classId.valueOf(),
+                    markingPeriodId: markingPeriodId && markingPeriodId.valueOf(),
+                    standardsCodes : standardsCodes,
+                    start: start_ | 0,
+                    count: count_
+                });
             },
 
             [[chlk.models.id.SchoolPersonId, Boolean, Number, String, Number]],
