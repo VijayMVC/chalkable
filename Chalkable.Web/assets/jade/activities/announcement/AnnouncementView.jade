@@ -59,7 +59,7 @@ mixin AnnouncementTooltip()
                                 +PersonImg(self.getOwner(), 47)
                 .right-block
                     h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
-                    p=self.getContent()
+                    p!= self.linkify(self.getContent())
                     .attachments-and-applications
                         +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
                             userRole = self.getUserRole()
