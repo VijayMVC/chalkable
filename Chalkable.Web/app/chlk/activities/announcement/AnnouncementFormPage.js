@@ -88,18 +88,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('click', '.class-button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function classClick(node, event){
-                if(!this.dom.find('.is-edit').getData('isedit')){
-                    var classId = node.getAttr('classId');
-                    this.dom.find('input[name=classid]').setValue(classId);
-                    var defaultType = node.getData('default-announcement-type-id');
-                    if(defaultType)
-                        this.dom.find('input[name=announcementtypeid]').setValue(defaultType);
-                }
-            },
-
             [ria.mvc.DomEventBind('click', '.title-text')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleClick(node, event){
@@ -312,11 +300,30 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     }
                 });
+
+                new ria.dom.Dom().on('click.save', '.class-button[type=submit]', function($target, event){
+                    if(!that.dom.find('.is-edit').getData('isedit')){
+                        var classId = $target.getAttr('classId');
+                        that.dom.find('input[name=classid]').setValue(classId);
+                        var defaultType = $target.getData('default-announcement-type-id');
+                        if(defaultType)
+                            that.dom.find('input[name=announcementtypeid]').setValue(defaultType);
+                    }
+
+                    if($target.getAttr('type') == 'submit'){
+                        var $form = that.dom.find('form');
+                        $form.setData('submit-name', $target.getAttr('name'));
+                        $form.setData('submit-value', $target.getValue() || $target.getAttr('value'));
+                        $form.setData('submit-skip', $target.hasClass('validate-skip'));
+                        $form.trigger('submit');
+                    }
+                });
             },
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom().off('click.title');
+                new ria.dom.Dom().off('click.save', '.class-button[type=submit]');
             }
          ]
     );
