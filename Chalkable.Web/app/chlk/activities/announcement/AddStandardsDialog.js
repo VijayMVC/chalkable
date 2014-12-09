@@ -39,7 +39,10 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.DomEventBind('click', '.add-standard-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function submitClick(node, event){
-                node.setAttr('disabled', true);
+                setTimeout(function(){
+                    node.setAttr('disabled', true);
+                }, 1);
+
             }
         ]);
 });

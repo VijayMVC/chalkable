@@ -110,12 +110,15 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
             +RenderWith(ann, chlk.templates.announcement.Announcement)(
                 userRole = userRole
             )
+    .suggested-apps
+        if announcement.getStandards() && announcement.getStandards().length > 0
+            +RenderWith(tplData.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
     .bottom-block
         +Button()(
             type="submit",
             name="submitType",
             value=announcement.getState() ? "submitOnEdit" : "submit"
-        ).special-button.blue-button.submit-btn.submit-announcement
+        ).special-button.blue-button.submit-btn.submit-announcement.big-button
             =(announcement.getState() ? Msg.Save : Msg.Submit)
         if announcement.getState()
             +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())(
@@ -125,28 +128,6 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
                     type="button",
                     data-tooltip = disableDeleteBtn ? Msg.Delete_announcement_btn_tooltip : '',
                     class=disableDeleteBtn ? 'disabled' : ''
-                ).special-button.red-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
-            +ActionLinkButton('announcement', 'showDuplicateForm', announcement.getId(), tplData.getTopData().getSelectedItemId()).special-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
+                ).special-button.red-button.big-button.submit-btn.add-loader-btn.negative-button= Msg.Delete
         else
             +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
-
-    if announcement.getSuggestedApps() && announcement.getSuggestedApps().length > 0
-        .suggested-apps-block
-            .separator-line
-            .title Suggested Apps
-            .suggested-apps-conteiner
-                each app in announcement.getSuggestedApps()
-                    div.app-icon-link
-                        if app.needToInstall()
-                            +ActionLink('appmarket', 'tryToQuickInstall', app.getId(), announcement.getClassId(), announcement.getId()).app-link
-                                .app-list-item
-                                    div(data-tooltip='').icon
-                                        pictureUrl = tplData.getAppPictureURL(app.getBigPictureId(), 170, 110)
-                                        img(src=pictureUrl)
-                        else
-                            +ActionLink('apps', 'tryToAttach', announcement.getId(), app.getId().valueOf()).app-link
-                                .app-list-item
-                                    div(data-tooltip='Attach').attach-icon
-                                    .icon
-                                        pictureUrl = tplData.getAppPictureURL(app.getBigPictureId(), 170, 110)
-                                        img(src=pictureUrl)
