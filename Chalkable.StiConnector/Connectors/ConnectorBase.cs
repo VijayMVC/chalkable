@@ -150,11 +150,12 @@ namespace Chalkable.StiConnector.Connectors
             Trace.TraceError(string.Format(ERROR_FORMAT, ex.Response.ResponseUri, msg));
             if (ex.Response is HttpWebResponse)
             {
-                if ((ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
+                HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+
+                if (status == HttpStatusCode.NotFound || status == HttpStatusCode.MethodNotAllowed)
                     return default(T);
                 else
                 {
-                    HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
                     if (status == HttpStatusCode.BadRequest)
                     {
                         var inowErrorModel = JsonConvert.DeserializeObject<InowErrorMessageModel>(msg);

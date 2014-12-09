@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.people.User');
+REQUIRE('lib/autolinker.min.js');
 
 NAMESPACE('chlk.templates', function () {
     "use strict";
@@ -91,6 +92,15 @@ NAMESPACE('chlk.templates', function () {
 
             Date, function getSchoolYearServerDate(str_, a_, b_){
                 return chlk.models.common.ChlkSchoolYearDate.GET_SCHOOL_YEAR_SERVER_DATE(str_, a_, b_);
+            },
+
+            [[String]],
+            String, function linkify(text) {
+                return Autolinker.link(String(text || ''), {
+                    "newWindow": true,
+                    truncate: 80,
+                    className: 'extenal'
+                });
             }
         ])
 });

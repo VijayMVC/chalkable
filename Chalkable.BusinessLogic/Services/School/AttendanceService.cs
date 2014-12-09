@@ -241,21 +241,14 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
-            var studentId = Context.Role == CoreRoles.STUDENT_ROLE ? Context.PersonId : null;
-            var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
-            var scheduleItems = ServiceLocator.ClassPeriodService.GetSchedule(teacherId, studentId, null, dateTime, dateTime);
             var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
-
-            classes = classes.Where(x => postedAttendances.Any(y => y.SectionId == x.Id && !y.AttendancePosted)).ToList();
-            if (dateTime.Date == Context.NowSchoolTime.Date)
-            {
-                var time = (int)((dateTime - dateTime.Date).TotalMinutes) - 3;
-                scheduleItems = scheduleItems.Where(x => x.StartTime <= time).ToList();
-            }
-            return classes.Where(x => scheduleItems.Any(y => y.ClassId == x.Id)).ToList();
+            if (postedAttendances != null)
+                classes = classes.Where(x => postedAttendances.Any(y => y.SectionId == x.Id && !y.AttendancePosted)).ToList();
+            else
+                classes = new List<ClassDetails>();
+            return classes;
         }
-
-
+        
         public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
         {
             throw new NotImplementedException();

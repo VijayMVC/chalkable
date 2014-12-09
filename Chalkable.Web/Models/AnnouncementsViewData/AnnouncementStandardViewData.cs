@@ -14,17 +14,21 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int StandardSubjectId { get; set; }
         public string CCStandardCode { get; set; }
  
+        protected AnnouncementStandardViewData(){}
+
+        protected AnnouncementStandardViewData(Standard standard)
+        {
+            StandardId = standard.Id;
+            Description = standard.Description;
+            Name = standard.Name;
+            ParentStandardId = standard.ParentStandardRef;
+            StandardSubjectId = standard.StandardSubjectRef;
+            CCStandardCode = standard.CCStandardCode;
+        }
+
         public static AnnouncementStandardViewData Create(Standard standard)
         {
-            return new AnnouncementStandardViewData
-                {
-                    StandardId = standard.Id,
-                    Description = standard.Description,
-                    Name = standard.Name,
-                    ParentStandardId = standard.ParentStandardRef, 
-                    StandardSubjectId = standard.StandardSubjectRef,
-                    CCStandardCode = standard.CCStandardCode
-                };
+            return new AnnouncementStandardViewData(standard);
         }
 
         public static IList<AnnouncementStandardViewData> Create(IList<Standard> standards)
