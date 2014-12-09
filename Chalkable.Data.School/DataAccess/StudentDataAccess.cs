@@ -65,7 +65,7 @@ namespace Chalkable.Data.School.DataAccess
                 {"@teacherId", teacherId},
                 {"@classmatesToid", classmatesToId},
                 {"@schoolYearId", schoolYearId},
-                {"@filter", "%" + filter + "%"},
+                {"@filter", string.IsNullOrEmpty(filter) ? null : string.Format(FILTER_FORMAT, filter)},
                 {"@orderByFirstName", orderByFirstName}
             };
             return ExecuteStoredProcedurePaginated<StudentDetails>("spSearchStudents", ps, start, count);

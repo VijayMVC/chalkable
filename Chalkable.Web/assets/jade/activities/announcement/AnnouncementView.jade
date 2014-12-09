@@ -11,8 +11,10 @@ mixin AnnouncementTooltip()
         .comment-triangle
             .white.comment-triangle
 
+-function glue() { return [].slice.call(arguments).filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ') }
+            
 mixin Glue_()
-    =[].slice.call(arguments).filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ')
+    = glue.apply(null, arguments) 
 
 .announcement-view.not-transparent
     -var isAdminAnnouncement = self.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
@@ -64,7 +66,7 @@ mixin Glue_()
                 .description
                     .chat-bubble
                         h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
-                        p: +Glue_(self.getTitle(), self.getContent())
+                        p!= glue(self.getTitle(), self.linkify(self.getContent()))
 
                         if self.getStandards() && self.getStandards().length > 0
                             .standards-container

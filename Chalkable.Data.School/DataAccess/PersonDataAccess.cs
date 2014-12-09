@@ -111,10 +111,11 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count)
+        public PaginatedList<Person> SearchPersons(int schoolId, string filter, bool orderByFirstName, int start, int count)
         {
             var ps = new Dictionary<string, object>
             {
+                {"@schoolId", schoolId},
                 {"@start", start},
                 {"@count", count},
                 {"@filter", "%" + filter + "%"},

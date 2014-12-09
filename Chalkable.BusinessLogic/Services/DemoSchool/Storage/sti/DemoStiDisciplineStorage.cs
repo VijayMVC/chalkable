@@ -27,5 +27,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             Add(stiDiscipline);
             return stiDiscipline;
         }
+
+        public IList<DisciplineReferral> GetSectionDisciplineSummary(int classId, DateTime startDate, DateTime endDate)
+        {
+            var result = new List<DisciplineReferral>();
+            for (var start = startDate; start <= endDate; start = start.AddDays(1))
+            {
+                result.AddRange(GetList(classId, start));
+            }
+            return result;
+        }
     }
 }
