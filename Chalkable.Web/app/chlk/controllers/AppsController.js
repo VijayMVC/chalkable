@@ -464,6 +464,19 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean]],
+        function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned){
+            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
+            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    if(data.getTotalPersonsCount() > 0)
+                        return this.BackgroundNavigate('apps', 'viewApp', [appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, appId, isBanned]);
+                    return this.BackgroundNavigate('appmarket', 'details', [appId]);
+                }, this);
+            return null;
+        },
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],

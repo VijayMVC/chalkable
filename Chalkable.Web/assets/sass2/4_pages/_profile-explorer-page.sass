@@ -1,6 +1,10 @@
 .explorer-view
   font: normal 14px Arial
 
+  .announcement-block
+    height: 177px
+    overflow: auto
+
   .title
     margin: 29px 2px 22px
 
@@ -10,12 +14,16 @@
     white-space: nowrap
 
   .classes-blocks
-    width: 295px
+    width: 315px
     margin-left: 14px
     margin-top: 44px
 
-  .hidden-item
-    display: none
+  .suggested-apps-container, .classes-blocks
+    display: inline-block
+    vertical-align: top
+
+  .suggested-apps-container
+    position: relative
 
   .block-item
     border: 1px solid #b4b4b4
@@ -23,7 +31,11 @@
     line-height: 35px
     padding: 0 10px 0 14px
     border-radius: 4px
-    margin-bottom: 5px
+    width: 269px
+    display: block
+
+    &:not(:last-child)
+      margin-bottom: 5px
 
     &.no-standards-block
       height: 175px
@@ -32,7 +44,7 @@
     &.standard, &.announcement
       cursor: pointer
 
-      &:not(.active)
+      &:not(.pressed)
         background: #eaeaea
         +box-shadow(#fff 0 1px 0 inset)
 
@@ -75,4 +87,39 @@
   .more-button
     font-weight: bold
     cursor: pointer
+
+  .hidden-item
+    display: none
+
+  .app-icon-link-container
+    width: 324px
+    height: 184px
+    background: image_url('images2/explorer/default-item.png')
+    background-repeat: no-repeat
+    background-position: 0 0
+
+    &:first-child
+      background-image: image_url('images2/explorer/first-item.png')
+
+      &:last-child
+        background-image: image_url('images2/explorer/first-last-item.png')
+
+    &:last-child
+      background-image: image_url('images2/explorer/last-item.png')
+
+  .app-link
+    margin-left: 152px
+    width: 170px
+    height: 110px
+    border: 1px solid #d4d4d4
+    +box-shadow(#d4d4d4 0 1px 1px)
+    display: inline-block
+
+  h3
+    font: normal 11px 'Open Sans'
+    margin: 0 0 5px 154px
+
+
+
+
 

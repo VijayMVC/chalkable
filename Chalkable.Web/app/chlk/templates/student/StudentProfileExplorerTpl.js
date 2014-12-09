@@ -22,9 +22,9 @@ NAMESPACE('chlk.templates.student', function(){
                 return res;
             },
 
-            [[chlk.models.standard.StandardGrading]],
+            [[chlk.models.standard.StandardForExplorer]],
             String, function getStandardColor(item){
-                var grade = item.getGradeValue();
+                var grade = item.getStandardGrading().getGradeValue();
                 if(!grade)
                     return '';
                 if(grade >= 75)
@@ -43,7 +43,7 @@ NAMESPACE('chlk.templates.student', function(){
             Boolean, function showStandard(item, index){
                 var announcementsLength = (item.getAnnouncement() ? 1 : 0);
 
-                return this.showMoreButton(item) && (announcementsLength + index < 3)
+                return !this.showMoreButton(item) || (announcementsLength + index < 3);
             }
 
         ]);

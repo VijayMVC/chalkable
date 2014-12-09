@@ -6,24 +6,6 @@
     +ProfileTopBar(self, 'explorer')
     .explorer-view
         .classes-blocks
-            .class-block
-                .title Kate's weakest class is Algebra - Avg. 56
-                .announcement-block
-                    .block-item.announcement
-                        .left-block Kate has
-                            b Test 4
-                            | in 3 days
-                        .right-block __
-                            .circle.white
-                    .block-item.standard
-                        .left-block Standard topic 1
-                        .right-block 56
-                            .circle.red
-                    .block-item.standard
-                        .left-block Standard topic 2
-                        .right-block 57
-                            .circle.red
-                    .block-item.more-button Show more
             each classItem, i in classesInfo
                 .class-block
                     -var title = self.getClassBlockTitle(classItem, i)
@@ -43,9 +25,13 @@
                                 .right-block __
                                     .circle.white
                         each standard, i in classItem.getStandards()
-                            .block-item.standard(class = self.showStandard(classItem, i) ? '' : 'hidden-item')
-                                .left-block Standard topic 1
-                                .right-block=standard.getGradeValue()
+                            -var code = standard.getCommonCoreStandardCode()
+                            +ActionLink('appmarket', 'getSuggestedApps', classItem.getClazz().getId(), code)(
+                                class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (code ? 'with-code' : '')
+                            ).block-item.standard
+                                .left-block=standard.getName()
+                                .right-block=standard.getStandardGrading().getGradeValue()
                                     .circle(class=self.getStandardColor(standard))
                         if self.showMoreButton(classItem)
                             .block-item.more-button Show more
+        .suggested-apps-container
