@@ -1,0 +1,27 @@
+mixin DemoRoleButton(name, title, notReady)
+    a.demo-role-button(rolename=name)(attributes)
+
+        span #{title ? title : name}
+            if notReady
+                span
+            .mark.left
+            .mark.right
+
+
+
+-apps = self.getDeveloperApps()
+-currentAppId = self.getCurrentAppId()
+
+#dev-apps
+    +AppsList('dev-apps-list', apps, currentAppId)#dev-apps-list
+.border.demo-end.hidden
+.demo-end.hidden
+    h3 Demo
+    #demo-end-container
+.border
+#roles-buttons
+    +DemoRoleButton('Student')
+    +DemoRoleButton('Teacher')
+    +DemoRoleButton('Admin', null, true).coming
+    +DemoRoleButton('Parent', null, true).coming
+    +DemoRoleButton('District', null, true).coming
