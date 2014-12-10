@@ -1,11 +1,5 @@
-+ActionLink('apps', 'general')#home-logo
-#sidebar-controls
-    .search-wrapper
-        #search-bar
-    .wrapper
-        .buttons-row
-            +ActionLink('apps', 'details').one-third-button.apps-info(title="App info") App Info
-            +ActionLink('developer', 'api').one-third-button.api(title="API") API Explorer
-            +ActionLink('developer', 'docs').one-third-button.docs(title="Docs") Docs
-        .buttons-row
-            +ActionLink('settings', 'dashboard').one-third-button.settings(title="View Settings") Settings
++ActionLink('apps', 'general').apps(title="My Apps") My Apps
++ActionLink('apps', 'add').new-item(title="New App") New App
++ActionLink('developer', 'api').api(title="API") API Explorer
++ActionLink('developer', 'docs').docs(title="Docs") Docs
++ActionLink('settings', 'dashboard').settings(title="View Settings") Settings

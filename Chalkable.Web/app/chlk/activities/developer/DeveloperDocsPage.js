@@ -7,7 +7,7 @@ NAMESPACE('chlk.activities.developer', function () {
     /** @class chlk.activities.developer.DeveloperDocsPage*/
 
     CLASS(
-        [ria.mvc.DomAppendTo('#content')],
+        [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.BodyClass('developer-docs')],
         [ria.mvc.TemplateBind(chlk.templates.developer.DeveloperDocs)],
         'DeveloperDocsPage', EXTENDS(chlk.activities.lib.TemplatePage), [

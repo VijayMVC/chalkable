@@ -7,7 +7,7 @@ REQUIRE('chlk.models.developer.HomeAnalytics');
 NAMESPACE('chlk.templates.apps', function () {
 
     ASSET('~/assets/jade/activities/apps/app-rating.jade')();
-    /** @class chlk.templates.apps.AppGeneral*/
+    /** @class chlk.templates.apps.AppGeneralTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-general-info.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData)],
