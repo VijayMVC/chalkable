@@ -201,6 +201,7 @@
     <Compile Include="Controllers\FeedController.cs" />
     <Compile Include="Controllers\FundController.cs" />
     <Compile Include="Controllers\GradingController.cs" />
+    <Compile Include="Controllers\GradingPeriodController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
     <Compile Include="Controllers\GradingStyleController.cs" />

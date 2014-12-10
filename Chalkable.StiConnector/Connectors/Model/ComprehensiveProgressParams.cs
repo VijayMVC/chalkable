@@ -8,16 +8,6 @@ namespace Chalkable.StiConnector.Connectors.Model
 {
     public class ComprehensiveProgressParams
     {
-         public enum OrderByMethod {
-            StudentDisplayName = 1,
-            StudentIdentifier = 2,
-            GradeLevel = 3,
-            Homeroom = 4,
-            PostalCode = 5,
-            DistributionPeriod = 6
-        }
-
-        
         public int[] AbsenceReasonIds { get; set; }
 
         public int AcadSessionId { get; set; }
@@ -45,7 +35,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         public decimal? MaxStandardAverage { get; set; }
 
         public decimal? MinStandardAverage { get; set; }
-        public OrderByMethod OrderBy { get; set; }
+        public int OrderBy { get; set; }
         public int SectionId { get; set; }
         public int? StaffId { get; set; }
         public DateTime? StartDate { get; set; }
@@ -53,5 +43,8 @@ namespace Chalkable.StiConnector.Connectors.Model
         public int[] StudentIds { get; set; }
         public int? UserId { get; set; }
         public bool WindowEnvelope { get; set; }
+
+        public bool IncludePicture { get; set; }
+        public bool IncludeWithdrawn { get; set; }
     }
 }
