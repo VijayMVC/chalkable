@@ -48,7 +48,7 @@ mixin AbsentLatePage(data, header)
 topData = self.getTopData()
 topItems = topData.getTopItems() || []
 h2.page-title= Msg.Attendance
-+LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
+    +LeftRightToolbar(topItems, chlk.templates.attendance.TopBar, 'attendance', 'classList')(
     selectedItemId=""
 ).classes-bar
 .action-bar

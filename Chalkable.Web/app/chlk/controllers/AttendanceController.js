@@ -49,6 +49,14 @@ NAMESPACE('chlk.controllers', function (){
                 .getSummary()
                 .attach(this.validateResponse_())
                 .then(function(summary){
+                    var res = this.attendanceService
+                        .getNotTakenAttendanceClasses()
+                        .attach(this.validateResponse_())
+                        .then(function(items){
+                            return new chlk.models.attendance.NotTakenAttendanceClassesViewData(items);
+                        }.bind(this));
+                    this.BackgroundUpdateView(chlk.activities.attendance.SummaryPage, res, chlk.activities.lib.DontShowLoader());
+
                     var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(true));
                     return new chlk.models.attendance.SummaryPage(topModel, summary);
                 }, this);

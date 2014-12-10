@@ -21,10 +21,23 @@ namespace Chalkable.Web.Controllers
         {
             return Report(gradebookReportInput, SchoolLocator.ReportService.GetGradebookReport, "GradeBookReport");
         }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult WorksheetReport(WorksheetReportInputModel worksheetReportInput)
         {
             return Report(worksheetReportInput, SchoolLocator.ReportService.GetWorksheetReport, "WorksheetReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult ComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput)
+        {
+            return Report(comprehensiveProgressInput, SchoolLocator.ReportService.GetComprehensiveProgressReport, "ComprehensiveProgressReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult MissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput)
+        {
+            return Report(missingAssignmentsInput, SchoolLocator.ReportService.GetMissingAssignmentsReport, "MissingAssignmentsReport");
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]

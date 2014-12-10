@@ -1,15 +1,15 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
-REQUIRE('chlk.templates.grading.WorksheetReportTpl');
-REQUIRE('chlk.templates.grading.WorksheetReportGridTpl');
+REQUIRE('chlk.templates.reports.WorksheetReportTpl');
+REQUIRE('chlk.templates.reports.WorksheetReportGridTpl');
 
-NAMESPACE('chlk.activities.grading', function(){
+NAMESPACE('chlk.activities.reports', function(){
 
-    /**@class chlk.activities.grading.WorksheetReportDialog*/
+    /**@class chlk.activities.reports.WorksheetReportDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.ActivityGroup('ReportDialog')],
-        [ria.mvc.TemplateBind(chlk.templates.grading.WorksheetReportTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.grading.WorksheetReportGridTpl, 'grid', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.TemplateBind(chlk.templates.reports.WorksheetReportTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.reports.WorksheetReportGridTpl, 'grid', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         'WorksheetReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
             [ria.mvc.DomEventBind('change', '.report-date-picker')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -39,7 +39,7 @@ NAMESPACE('chlk.activities.grading', function(){
                     });
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.grading.WorksheetReportGridTpl, 'stop')],
+            [ria.mvc.PartialUpdateRule(chlk.templates.reports.WorksheetReportGridTpl, 'stop')],
             function stopWorking(tpl, model, msg){
                 this.dom.find('.report-form').removeClass('working');
             },

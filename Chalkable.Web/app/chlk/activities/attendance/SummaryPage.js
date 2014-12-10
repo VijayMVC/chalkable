@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.attendance.SummaryPage');
+REQUIRE('chlk.templates.attendance.NotTakenAttendanceClassesTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
 
@@ -15,6 +16,14 @@ NAMESPACE('chlk.activities.attendance', function () {
                 this.dom.addClass('refreshed');
                 var panelToShow = this.dom.find('.absent-late-page[data-page=1]');
                 this.startInterval(panelToShow);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.NotTakenAttendanceClassesTpl)],
+            VOID, function doUpdateClasses(tpl, model, msg_) {
+                var dom = this.dom;
+                model.getItems().forEach(function(item){
+                    dom.find('.alerts-icon[data-id=' + item.getId() + ']').show();
+                })
             },
 
             [[ria.dom.Dom, Boolean]],

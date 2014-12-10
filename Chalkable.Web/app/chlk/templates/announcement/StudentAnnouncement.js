@@ -74,7 +74,7 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Object, function getNormalValue(){
                 var value = this.getGradeValue();
-                if(this.isDropped() && !this.getGradeValue())
+                if(this.isDropped() && !value)
                     return Msg.Dropped;
                 if(this.isExempt())
                     return Msg.Exempt;

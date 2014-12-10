@@ -22,16 +22,17 @@ mixin ActionLinkWithPrepend(controller, action, prependParams)
 // requires: actionLinkModel instanceOf chlk.models.common.ActionLinkModel
 mixin ActionLinkWithModel(actionLinkModel)
     -VALIDATE_ARG('actionLinkModel', [chlk.models.common.ActionLinkModel], actionLinkModel)
-    classesNames = actionLinkModel.getClassesNames() || []
+    -var classesNames = actionLinkModel.getClassesNames() || [];
+    -var title = (actionLinkModel.getTitle() || '');
     +ActionLinkWithPrepend(actionLinkModel.getControllerName(), actionLinkModel.getActionName(), actionLinkModel.getArgs()
-    )(class = classesNames && classesNames.length > 0 ? classesNames.join(' ') : '')(attributes)=(actionLinkModel.getTitle() || '')
-        block
+        )(class=classesNames)(attributes)=title
+            block
 
 // requires: actionLinksModel instanceOf ArrayOf(chlk.models.common.ActionLinkModel)
 mixin ActionLinkList(actionLinksModel)
     -VALIDATE_ARG('actionLinksModel', [ArrayOf(chlk.models.common.ActionLinkModel)], actionLinksModel)
     each item in actionLinksModel
-        +ActionLinkWithModel(item)
+        +ActionLinkWithModel(item)(attributes)
 
 mixin ActionLinkButton(controller, action)
     -VALIDATE_ARG('controller', [String], controller)

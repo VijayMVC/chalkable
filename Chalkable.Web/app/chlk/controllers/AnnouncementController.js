@@ -830,6 +830,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.Announcement, chlk.models.announcement.AnnouncementForm]],
         function saveAnnouncementTeacherAction(model, form_) {
+            if(!model.getAnnouncementTypeId() || !model.getAnnouncementTypeId().valueOf())
+                return this.Redirect('error', 'createAnnouncementError', []);
             var res = this.announcementService
                 .saveAnnouncement(
                     model.getId(),

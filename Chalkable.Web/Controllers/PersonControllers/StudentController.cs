@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -15,8 +14,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class StudentController : PersonController
     {
-
-        //TODO: stduent grade rank ... get last grades 
         //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Summary(int schoolPersonId)
@@ -36,10 +33,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var schedule = SchoolLocator.ClassPeriodService.GetSchedule(null, studentSummaryInfo.StudentInfo.Id, null,
                 Context.NowSchoolYearTime.Date, Context.NowSchoolYearTime.Date);
-            var sortedSchedule = schedule.OrderBy(si => si.PeriodOrder).Select(si => si.ClassId).Distinct().ToList();
+            var classIdsSortedBySchedule = schedule.OrderBy(si => si.PeriodOrder).Select(si => si.ClassId).Distinct().ToList();
 
-            var classList = sortedSchedule.Where(x=>x.HasValue).Select(sortedClassRef => classes.First(cls => cls.Id == sortedClassRef)).ToList();
-            classList.AddRange(classes.Where(cls => !sortedSchedule.Contains(cls.Id)));
+            var classList = classIdsSortedBySchedule.Where(x=>x.HasValue && classes.Any(y=>y.Id == x.Value))
+                .Select(sortedClassRef => classes.First(cls => cls.Id == sortedClassRef)).ToList();
+            classList.AddRange(classes.Where(cls => !classIdsSortedBySchedule.Contains(cls.Id)));
 
             Room currentRoom = null;
             ClassDetails currentClass = null;
