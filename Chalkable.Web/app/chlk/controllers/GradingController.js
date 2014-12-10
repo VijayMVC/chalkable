@@ -584,7 +584,7 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isAlternateScoresOnly(),
                     reportViewData.isConsiderZerosAsMissingGrades(),
                     reportViewData.isIncludeWithdrawnStudents(),
-                    reportViewData.getOnePerPage(),
+                    reportViewData.isOnePerPage(),
                     reportViewData.isSuppressStudentName()
                 );
                 this.BackgroundCloseView(chlk.activities.reports.MissingAssignmentsReportDialog);

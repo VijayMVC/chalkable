@@ -13,6 +13,7 @@ NAMESPACE('chlk.models.reports', function () {
         Boolean, 'considerZerosAsMissingGrades',
         Boolean, 'includeWithdrawnStudents',
         Boolean, 'suppressStudentName',
+        Boolean, 'onePerPage',
         Number, 'orderBy',
 
         String, 'alternateScoreIds',

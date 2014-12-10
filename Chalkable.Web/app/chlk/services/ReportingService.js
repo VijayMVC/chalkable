@@ -157,7 +157,8 @@ NAMESPACE('chlk.services', function () {
                 alternateScoreIds_, alternateScoresOnly_, considerZerosAsMissingGrades_, includeWithdrawn_, onePerPage_,
                 suppressStudentName_){
             return this.getUrl('Reporting/MissingAssignmentsReport.json',{
-                classId: classId,
+                classId: classId.valueOf(),
+                gradingPeriodId : gradingPeriodId.valueOf(),
                 idToPrint: idToPrint,
                 format: format,
                 orderBy: orderBy,

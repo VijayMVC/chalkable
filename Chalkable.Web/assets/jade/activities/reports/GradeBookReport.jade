@@ -1,3 +1,9 @@
+mixin ReportTypeSelect()
+    h3=Msg.Report_type
+    +Select('reportType').report-type
+        +Option(0, Msg.Summary, true)
+        +Option(1, Msg.Detail, false)
+
 .dialog-window.report-window
     .close.close-btn.dark
     date = new chlk.models.common.ChlkDate()
@@ -36,24 +42,11 @@
                 TD.item-3
             TR
                 TD.item-3
-                    h3=Msg.Report_type
-                    +Select('reportType').report-type
-                        +Option(0, Msg.Summary, true)
-                        +Option(1, Msg.Detail, false)
+                    +ReportTypeSelect()
                 TD.item-3
-                    h3=Msg.Order_by
-                    +Select('orderBy').order-by
-                        +Option(1, Msg.Student_ID, true)
-                        +Option(2, Msg.Section_average, false)
-                        +Option(0, Msg.Student_display_name, false)
+                    +OrderBySelect(true)
                 TD.item-3
-                    h3=Msg.ID_to_print
-                    +Select('idToPrint').id-to-print
-                        +Option(1, Msg.Student_Number, true)
-                        +Option(2, Msg.State_ID_number, false)
-                        +Option(3, Msg.Alt_student_number, false)
-                        +Option(4, Msg.SS_number, false)
-                        +Option(0, Msg.None, false)
+                    +IdToPriintSelect(true)
             TR
                 TD.item-3
                     h3=Msg.Option(true)

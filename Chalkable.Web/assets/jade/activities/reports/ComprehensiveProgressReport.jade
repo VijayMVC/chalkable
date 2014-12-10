@@ -1,16 +1,16 @@
 .dialog-window.report-window
    .close.close-btn.dark
-      h1=Msg.Create_Report
-      .report-buttons.panel-bg
-         +ActionLinkList(self.buildReportLinksData('comprehensiveProgressReport'))
-      +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working
-         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
-         +Hidden('classId', self.getClassId().valueOf())
-         +Hidden('absenceReasonIds', '')#absence-reasons
-         +Hidden('gradingPeriodIds', '')#grading-periods
-         +Hidden('dailyAttendanceDisplayMethod', 0)#daily-attendance-display-method
-         .report-content no data now
-         .report-bottom
-            +ReportFormatSelect()
-            BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
-            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
+   h1=Msg.Create_Report
+   .report-buttons.panel-bg
+      +ActionLinkList(self.buildReportLinksData('comprehensiveProgressReport'))
+   +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working
+      +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+      +Hidden('classId', self.getClassId().valueOf())
+      +Hidden('absenceReasonIds', '')#absence-reasons
+      +Hidden('gradingPeriodIds', '')#grading-periods
+      +Hidden('dailyAttendanceDisplayMethod', 0)#daily-attendance-display-method
+      .report-content no data now
+      .report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

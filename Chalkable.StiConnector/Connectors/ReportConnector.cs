@@ -58,7 +58,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public byte[] MissingAssignmentsReport(MissingAssignmentsParams ps)
         {
-            var url = string.Format(BaseUrl + "report/missingassignments");
+            var url = string.Format(BaseUrl + "reports/missingassignments");
             return Download(url, ps);
         }
     }

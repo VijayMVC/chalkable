@@ -21,7 +21,6 @@ NAMESPACE('chlk.templates.reports', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'endDate',
 
-
             [[String]],
             ArrayOf(chlk.models.common.ActionLinkModel), function buildReportLinksData(pressedAction){
                 var controllerName = 'grading';

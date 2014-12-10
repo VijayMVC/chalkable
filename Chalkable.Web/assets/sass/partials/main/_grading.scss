@@ -1067,7 +1067,8 @@ BODY {
   right: 10px;
 }
 
-.grade-book-report-dialog, .worksheet-report-dialog, .progress-report-dialog{
+.grade-book-report-dialog, .worksheet-report-dialog, .progress-report-dialog,
+.missing-assignments-report-dialog, .comprehensive-progress-report-dialog{
   width: 628px;
 
   .report-content{
