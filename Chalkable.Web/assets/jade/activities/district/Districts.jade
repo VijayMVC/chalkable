@@ -1,7 +1,8 @@
 .districts
-    .action-bar.not-transparent
-        .container.panel-bg
-            +ActionLink('district', 'list') refresh
+    h2.page-title Districts
+
+    +ActionButton('district', 'list').refresh Refresh
+
     +Grid('district', 'page', self).not-transparent
         +GridHead()
             .th Name
@@ -9,8 +10,8 @@
             .th SIS User name
             .th
             .th
-        +GridBody()
-            each item in self.items
+        each item in self.items
+            +GridBody()
                 +GridRow()
                     .td= item.getName()
                     .td= item.getSisUrl()

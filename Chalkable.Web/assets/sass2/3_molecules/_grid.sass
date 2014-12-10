@@ -1,0 +1,33 @@
+.grid
+  position: relative
+
+  .container
+    display: table
+    border-collapse: collapse
+    width: 100%
+
+  .head, .row
+    display: table-row
+
+  .body
+    display: table-row-group
+
+  .th, .td, .col
+    display: table-cell
+    padding: 2px
+
+  .head
+    font-weight: 600
+    font-size: 15px
+
+    .th
+      background: #eee
+      border: 1px solid white
+      padding: 5px 2px
+
+
+  .body .row:first-child
+    font-weight: 600
+
+  .body .row:nth-child(2n)
+    background-color: #eee

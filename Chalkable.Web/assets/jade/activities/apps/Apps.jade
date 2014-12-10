@@ -24,16 +24,13 @@ mixin AppsFilterSelect(name, items)
         +Hidden('actualCount', self.applications.getActualCount())
         +Hidden('pageSize', self.applications.getPageSize())
 
-        .action-bar.not-transparent.buttons
-            .container.panel-bg
-                .left
-                    .action-button.select-btn
-                        span  Developer:
-                        +AppsFilterSelect('developerid', self.prepareDevelopersSelectModel())#developers-select
-                    .action-button.select-btn
-                        span States:
-                        +AppsFilterSelect('state', self.prepareStatesSelectModel())#states-select
-                .right
+        .x-form-field
+            label  Developer:
+            +AppsFilterSelect('developerid', self.prepareDevelopersSelectModel())#developers-select
+        .x-form-field
+            label States:
+            +AppsFilterSelect('state', self.prepareStatesSelectModel())#states-select
+
 
         +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
             +GridHead()
@@ -48,7 +45,7 @@ mixin AppsFilterSelect(name, items)
                     +GridRow()
                         pictureLink = item.getSmallPictureId() ? self.getAppPictureURL(item.getSmallPictureId(), 74, 74) : '#'
                         .td
-                            img.app-icon(src=pictureLink)
+                            img.app-icon(src=pictureLink, width=24, height=24)
                         .td= item.getName()
                         .td= item.getShortDescription()
                         .td.app-state
