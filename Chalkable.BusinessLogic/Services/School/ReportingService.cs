@@ -207,7 +207,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     WindowEnvelope = comprehensiveProgressInput.WindowEnvelope,
                     StudentFilterId = comprehensiveProgressInput.StudentFilterId,
                     StudentIds = classPersons.Select(cp=>cp.PersonRef).ToArray(),
-                    StaffId = Context.PersonId,
                     IncludePicture = comprehensiveProgressInput.IncludePicture,
                     IncludeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn
                 };

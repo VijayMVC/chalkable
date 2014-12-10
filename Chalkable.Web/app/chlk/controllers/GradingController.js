@@ -538,16 +538,7 @@ NAMESPACE('chlk.controllers', function (){
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
                 var res = this.reportingService.getStudentsForReport(classId, gradingPeriodId)
                     .then(function(students){
-                        var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
-                        var absenceReasons = reasons.filter(function(item){
-                            var len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
-                                /*return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
-                                    reason.getLevel() == 'H' || reason.getLevel() == 'HO';*/
-                                return reason.getLevel() == 'A';
-                            }).length;
-                            return !!len;
-                        });
-                        return new chlk.models.reports.SubmitProgressReportViewData(absenceReasons, students, gradingPeriodId, classId, startDate, endDate);
+                        return new chlk.models.reports.SubmitProgressReportViewData(this.getReasonsForReport_(), students, gradingPeriodId, classId, startDate, endDate);
                     }, this);
                 return this.ShadeView(chlk.activities.reports.ProgressReportDialog, res);
             },
@@ -600,7 +591,7 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.getClassId(),
                     reportViewData.getIdToPrint(),
                     reportViewData.getFormat(),
-                    this,getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
+                    this.getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
                     this.getIdsList(reportViewData.getAbsenceReasonIds(), chlk.models.id.AttendanceReasonId),
                     reportViewData.getOrderBy(),
                     reportViewData.getStartDate(),
@@ -843,10 +834,21 @@ NAMESPACE('chlk.controllers', function (){
                 return this.gradingPeriodService.getList()
                     .attach(this.validateResponse_())
                     .then(function(gradingPeriods){
-                        var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
                         return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
-                            selectedGradingPeriodId, startDate, endDate, gradingPeriods, reasons);
+                            selectedGradingPeriodId, startDate, endDate, gradingPeriods, this.getReasonsForReport_());
                     }, this);
+            },
+
+            ArrayOf(chlk.models.attendance.AttendanceReason), function getReasonsForReport_(){
+                var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
+                return reasons.filter(function(item){
+                    var len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
+                        /*return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
+                         reason.getLevel() == 'H' || reason.getLevel() == 'HO';*/
+                        return reason.getLevel() == 'A';
+                    }).length;
+                    return !!len;
+                });
             }
         ])
 });

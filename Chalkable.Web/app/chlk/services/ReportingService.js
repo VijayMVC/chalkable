@@ -130,7 +130,7 @@ NAMESPACE('chlk.services', function () {
                 gradingPeriodIds : this.arrayToCsv(gradingPeriodIds),
                 absenceReasonIds: this.arrayToCsv(absenceReasonIds),
                 startDate: startDate_ && startDate_.toStandardFormat(),
-                endDate: endDate_ && endDate.toStandardFormat(),
+                endDate: endDate_ && endDate_.toStandardFormat(),
                 maxStandardAverage: maxStandardAverage_,
                 minStandardAverage: minStandardAverage_,
                 additionalMailings: additionalMailings_,
