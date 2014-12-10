@@ -3,9 +3,7 @@
     date = new chlk.models.common.ChlkDate()
     h1=Msg.Create_Report
     .report-buttons.panel-bg
-        a(href="javascript:").report-button.pressed=Msg.Grade_Book_Report
-        +ActionLink('grading', 'worksheetReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Worksheet_Report
-        +ActionLink('grading', 'progressReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Progress_Report
+        +ActionLinkList(self.buildReportLinksData('gradeBookReport'))
     +ActionForm('grading', 'submitGradeBookReport')
         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
         +Hidden('classId', self.getClassId().valueOf())
@@ -69,13 +67,7 @@
                     +LabeledCheckbox(Msg.Non_graded_activities, 'includeNonGradedActivities', false)
                 TD.item-3
                     h3=Msg.Format
-                    +Select('format').format
-                        +Option(0, "PDF", true)
-                        +Option(1, "CSV", false)(disabled)
-                        +Option(2, "Excel", false)(disabled)
-                        +Option(3, "HTML", false)(disabled)
-                        +Option(4, "TIFF", false)(disabled)
-                        +Option(5, "XML (" + Msg.With_report_data + ")", false)(disabled)
+                    +ReportFormatSelect()
         .report-bottom
             BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

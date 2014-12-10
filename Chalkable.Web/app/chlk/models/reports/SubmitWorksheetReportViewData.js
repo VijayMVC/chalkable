@@ -2,49 +2,34 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.GradingPeriodId');
 REQUIRE('chlk.models.common.ChlkDate');
 
-NAMESPACE('chlk.models.grading', function () {
+NAMESPACE('chlk.models.reports', function () {
     "use strict";
 
-    /** @class chlk.models.grading.SubmitWorksheetReportViewData*/
-    CLASS('SubmitWorksheetReportViewData', [
-        chlk.models.id.ClassId, 'classId',
-
-        chlk.models.id.GradingPeriodId, 'gradingPeriodId',
-
-        chlk.models.common.ChlkDate, 'startDate',
-
-        chlk.models.common.ChlkDate, 'endDate',
+    /** @class chlk.models.reports.SubmitWorksheetReportViewData*/
+    CLASS('SubmitWorksheetReportViewData', EXTENDS(chlk.models.reports.BaseSubmitReportViewData), [
 
         String, 'announcementIds',
 
         String, 'title1',
-
         String, 'title2',
-
         String, 'title3',
-
         String, 'title4',
-
         String, 'title5',
 
-        Number, 'idToPrint',
-
-        Number, 'format',
-
         Boolean, 'printAverage',
-
         Boolean, 'printLetterGrade',
-
         Boolean, 'printScores',
-
         Boolean, 'printStudent',
-
         Boolean, 'workingFilter',
-
         Boolean, 'appendToExisting',
-
         Boolean, 'overwriteExisting',
 
-        String, 'submitType'
+        String, 'submitType',
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId,
+            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        function $(classId_, gradingPeriodId_, startDate_, endDate_){
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_);
+        }
     ]);
 });
