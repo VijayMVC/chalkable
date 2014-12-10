@@ -11,8 +11,11 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         byte[] GetGradebookReport(GradebookReportInputModel gradebookReportInput);
         byte[] GetWorksheetReport(WorksheetReportInputModel worksheetReportInput);
-        byte[] GetProgressReport(ProgressReportInputModel progressReportInput);
+        byte[] GetProgressReport(ProgressReportInputModel inputModel);
 
+        byte[] GetComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput);
+        byte[] GetMissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput);
+        
         IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId);
         void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
     }
@@ -171,19 +174,79 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
             ConnectorLocator.ReportConnector.UpdateProgressReportComment(classId, inowStudentReportComments);
         }
+
+
+        public byte[] GetComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput)
+        {
+            bool includeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn;
+            var classPersons = ServiceLocator.ClassService.GetClassPersons(null, comprehensiveProgressInput.ClassId, includeWithdrawn ? (bool?)null : true, null).ToList();
+            var defaultGp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(comprehensiveProgressInput.GradingPeriodId);
+            var stiModel = new ComprehensiveProgressParams
+                {
+                    EndDate = comprehensiveProgressInput.EndDate,
+                    StartDate = comprehensiveProgressInput.StartDate,
+                    AbsenceReasonIds = comprehensiveProgressInput.AbsenceReasonIds != null ? comprehensiveProgressInput.AbsenceReasonIds.ToArray() : null,
+                    IdToPrint = comprehensiveProgressInput.IdToPrint,
+                    AcadSessionId = defaultGp.SchoolYearRef,
+                    GradingPeriodIds =  comprehensiveProgressInput.GradingPeriodIds.ToArray(),
+                    AdditionalMailings = comprehensiveProgressInput.AdditionalMailings,
+                    ClassAverageOnly = comprehensiveProgressInput.ClassAverageOnly,
+                    DailyAttendanceDisplayMethod = comprehensiveProgressInput.DailyAttendanceDisplayMethod,
+                    DisplayCategoryAverages = comprehensiveProgressInput.DisplayCategoryAverages,
+                    DisplayClassAverage = comprehensiveProgressInput.DisplayClassAverage,
+                    DisplayPeriodAttendance = comprehensiveProgressInput.DisplayPeriodAttendance,
+                    DisplaySignatureLine = comprehensiveProgressInput.DisplaySignatureLine,
+                    DisplayStudentComment = comprehensiveProgressInput.DisplayStudentComment,
+                    DisplayStudentMailingAddress = comprehensiveProgressInput.DisplayStudentMailingAddress,
+                    DisplayTotalPoints = comprehensiveProgressInput.DisplayTotalPoints,
+                    MaxStandardAverage = comprehensiveProgressInput.MaxStandardAverage,
+                    MinStandardAverage = comprehensiveProgressInput.MinStandardAverage,
+                    GoGreen = comprehensiveProgressInput.GoGreen,
+                    OrderBy = comprehensiveProgressInput.OrderBy,
+                    SectionId = comprehensiveProgressInput.ClassId,
+                    WindowEnvelope = comprehensiveProgressInput.WindowEnvelope,
+                    StudentFilterId = comprehensiveProgressInput.StudentFilterId,
+                    StudentIds = classPersons.Select(cp=>cp.PersonRef).ToArray(),
+                    StaffId = Context.PersonId,
+                    IncludePicture = comprehensiveProgressInput.IncludePicture,
+                    IncludeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn
+                };
+            return ConnectorLocator.ReportConnector.ComprehensiveProgressReport(stiModel);
+        }
+
+        public byte[] GetMissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput)
+        {
+            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(missingAssignmentsInput.GradingPeriodId);
+            var stiModel = new MissingAssignmentsParams
+                {
+                    AcadSessionId = gradingPeriod.SchoolYearRef,
+                    AlternateScoreIds = missingAssignmentsInput.AlternateScoreIds != null ? missingAssignmentsInput.AlternateScoreIds.ToArray() : null,
+                    AlternateScoresOnly = missingAssignmentsInput.AlternateScoresOnly,
+                    EndDate = missingAssignmentsInput.EndDate,
+                    ConsiderZerosAsMissingGrades = missingAssignmentsInput.ConsiderZerosAsMissingGrades,
+                    IdToPrint = missingAssignmentsInput.IdToPrint,
+                    IncludeWithdrawn = missingAssignmentsInput.IncludeWithdrawn,
+                    OnePerPage = missingAssignmentsInput.OnePerPage,
+                    OrderBy = missingAssignmentsInput.OrderBy,
+                    SectionId = missingAssignmentsInput.ClassId,
+                    StartDate = missingAssignmentsInput.StartDate,
+                    SuppressStudentName = missingAssignmentsInput.SuppressStudentName,
+                };
+            return ConnectorLocator.ReportConnector.MissingAssignmentsReport(stiModel);
+        }
     }
 
     public class BaseReportInputModel
     {
-        public int IdToPrint { get; set; }
+        public virtual int IdToPrint { get; set; }
         public ReportingFormat FormatTyped
         {
             get { return (ReportingFormat)Format; }
             set { Format = (int) value; }
         }
-        public int Format { get; set; }
-        public int GradingPeriodId { get; set; }
-        public int ClassId { get; set; }
+        public virtual int Format { get; set; }
+        public virtual int GradingPeriodId { get; set; }
+        public virtual int ClassId { get; set; }
     }
 
     public class GradebookReportInputModel : BaseReportInputModel
@@ -246,6 +309,66 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public string ClassComment { get; set; }
         public IList<StudentCommentInputModel> StudentComments { get; set; }
+    }
+
+    public class MissingAssignmentsInputModel: BaseReportInputModel
+    {
+        public IntList AlternateScoreIds { get; set; }
+        public bool AlternateScoresOnly { get; set; }
+        public bool ConsiderZerosAsMissingGrades { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; set; }
+      
+        public bool IncludeWithdrawn { get; set; }
+        public bool OnePerPage { get; set; }
+        public int OrderBy { get; set; }
+        public bool SuppressStudentName { get; set; }
+    }
+
+    public class ComprehensiveProgressInputModel : BaseReportInputModel
+    {
+        public IntList GradingPeriodIds { get; set; }
+        public IntList AbsenceReasonIds { get; set; }
+
+        public DateTime? EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        
+        public decimal? MaxStandardAverage { get; set; }
+        public decimal? MinStandardAverage { get; set; }
+
+        public bool AdditionalMailings { get; set; }
+        public bool ClassAverageOnly { get; set; }
+        public bool DisplayCategoryAverages { get; set; }
+        public bool DisplayClassAverage { get; set; }
+        public int DailyAttendanceDisplayMethod { get; set; }
+        public bool DisplayPeriodAttendance { get; set; }
+        public bool DisplaySignatureLine { get; set; }
+        public bool DisplayStudentComment { get; set; }
+        public bool DisplayStudentMailingAddress { get; set; }
+        public bool DisplayTotalPoints { get; set; }
+        public bool IncludePicture { get; set; }
+        public bool IncludeWithdrawn { get; set; }
+        
+        
+        public int? StudentFilterId { get; set; }
+        public bool GoGreen { get; set; }
+        public int OrderBy { get; set; }
+        public bool WindowEnvelope { get; set; }
+
+
+        public override int GradingPeriodId
+        {
+            get
+            {
+                if (GradingPeriodIds != null && GradingPeriodIds.Count > 0)
+                    return GradingPeriodIds.First();
+                return base.GradingPeriodId;
+            }
+            set
+            {
+                base.GradingPeriodId = value;
+            }
+        }
     }
 
     public class StudentCommentInputModel

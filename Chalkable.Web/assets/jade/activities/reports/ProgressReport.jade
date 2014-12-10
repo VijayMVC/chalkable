@@ -3,9 +3,7 @@
     date = new chlk.models.common.ChlkDate()
     h1=Msg.Create_Report
     .report-buttons.panel-bg
-        +ActionLink('grading', 'gradeBookReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Grade_Book_Report
-        +ActionLink('grading', 'worksheetReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Worksheet_Report
-        a(href="javascript:").report-button.pressed=Msg.Progress_Report
+        +ActionLinkList(self.buildReportLinksData('progressReport'))
     +ActionForm('grading', 'submitProgressReport').progress-report-form.no-working
         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
         +Hidden('classId', self.getClassId().valueOf())
@@ -18,13 +16,7 @@
             TABLE.report-table
                 TR
                     TD.item-3
-                        h3=Msg.ID_to_print
-                        +Select('idToPrint').id-to-print
-                            +Option(1, Msg.Student_Number, true)
-                            +Option(2, Msg.State_ID_number, false)
-                            +Option(3, Msg.Alt_student_number, false)
-                            +Option(4, Msg.SS_number, false)
-                            +Option(0, Msg.None, false)
+                        +IdToPriintSelect(true)
                     TD.item-3
                         h3=Msg.Absence_reasons
                         +Select('absenceReason')(multiple).reasons-select
@@ -90,12 +82,6 @@
                                         minLength = 0,class="student-comment", id="comments-" + id
                                     )
         .report-bottom
-            +Select('format').format
-                +Option(0, "PDF", true)
-                +Option(1, "CSV", false)(disabled)
-                +Option(2, "Excel", false)(disabled)
-                +Option(3, "HTML", false)(disabled)
-                +Option(4, "TIFF", false)(disabled)
-                +Option(5, "XML (" + Msg.With_report_data + ")", false)(disabled)
+            +ReportFormatSelect()
             BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

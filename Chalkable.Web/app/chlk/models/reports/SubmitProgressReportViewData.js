@@ -1,26 +1,14 @@
-REQUIRE('chlk.models.id.ClassId');
-REQUIRE('chlk.models.id.GradingPeriodId');
-REQUIRE('chlk.models.grading.UserForReport');
-REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.reports.BaseSubmitReportViewData');
+REQUIRE('chlk.models.reports.UserForReport');
+REQUIRE('chlk.models.attendance.AttendanceReason');
 
-NAMESPACE('chlk.models.grading', function () {
+NAMESPACE('chlk.models.reports', function () {
     "use strict";
 
-    /** @class chlk.models.grading.SubmitProgressReportViewData*/
-    CLASS('SubmitProgressReportViewData', [
-        chlk.models.id.ClassId, 'classId',
-
-        chlk.models.id.GradingPeriodId, 'gradingPeriodId',
-
-        chlk.models.common.ChlkDate, 'startDate',
-
-        chlk.models.common.ChlkDate, 'endDate',
+    /** @class chlk.models.reports.SubmitProgressReportViewData*/
+    CLASS('SubmitProgressReportViewData', EXTENDS(chlk.models.reports.BaseSubmitReportViewData), [
 
         Number, 'notSelectedCount',
-
-        Number, 'idToPrint',
-
-        Number, 'format',
 
         String, 'commentsList',
 
@@ -64,25 +52,21 @@ NAMESPACE('chlk.models.grading', function () {
 
         String, 'studentIds',
 
-        ArrayOf(chlk.models.grading.UserForReport), 'students',
+        ArrayOf(chlk.models.reports.UserForReport), 'students',
 
         ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
-        [[ArrayOf(chlk.models.attendance.AttendanceReason), ArrayOf(chlk.models.grading.UserForReport), chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        [[ArrayOf(chlk.models.attendance.AttendanceReason),
+            ArrayOf(chlk.models.reports.UserForReport),
+            chlk.models.id.GradingPeriodId, chlk.models.id.ClassId,
+            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate
+        ]],
         function $(reasons_, students_, gradingPeriodId_, classId_, startDate_, endDate_){
-            BASE();
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_);
             if(students_)
                 this.setStudents(students_);
             if(reasons_)
                 this.setReasons(reasons_);
-            if(gradingPeriodId_)
-                this.setGradingPeriodId(gradingPeriodId_);
-            if(classId_)
-                this.setClassId(classId_);
-            if(startDate_)
-                this.setStartDate(startDate_);
-            if(endDate_)
-                this.setEndDate(endDate_);
         }
     ]);
 });

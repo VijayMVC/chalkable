@@ -271,7 +271,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             if (!Context.DistrictId.HasValue) throw new Exception("District id is null");
 
-            var districtRef = Context.DistrictId.Value.ToString();
             AddStudent(DemoSchoolConstants.Student1,"KAYE", "BURGESS", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 11, 27));
             AddStudentAddress(DemoSchoolConstants.Student1, new Address());
 
@@ -428,19 +427,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
 
             StudentStorage.Add(new Student
-                {
-                    Id = id,
-                    BirthDate = birthDate,
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Gender = gender,
-                    UserId = id
-                });
+            {
+                Id = id,
+                BirthDate = birthDate,
+                FirstName = firstName,
+                LastName = lastName,
+                Gender = gender,
+                UserId = id
+            });
 
-            //StudentStorage.Add(new Student
-            //{
-            //    UserId = id
-            //});
 
             SchoolPersonStorage.Add(new SchoolPerson
             {
@@ -1388,95 +1383,40 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             PeriodStorage.Add(new Period
             {
-                //StartTime = 663,
-                //EndTime = 707,
                 Order = 2,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                //StartTime = 710,
-                //EndTime = 740,
                 Order = 3,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
-                //StartTime = 744,
-                //EndTime = 783,
                 Order = 4,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-
-            PeriodStorage.Add(new Period
-            {
-                //StartTime = 787,
-                //EndTime = 826,
-                Order = 5,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-
-            PeriodStorage.Add(new Period
-            {
-                //StartTime = 830,
-                //EndTime = 869,
-                Order = 6,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-
-            PeriodStorage.Add(new Period
-            {
-                //StartTime = 873,
-                //EndTime = 912,
-                Order = 7,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-
-            PeriodStorage.Add(new Period
-            {
-                //StartTime = 916,
-                //EndTime = 955,
-                Order = 8,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
-                SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
-            });
-
-            PeriodStorage.Add(new Period
-            {
-                //StartTime = 959,
-                //EndTime = 1000,
-                Order = 9,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
         }
 
         private void AddScheduleTimeSlots()
         {
-            ScheduledTimeSlotStorage.Add(new ScheduledTimeSlot
-                {
-                    BellScheduleRef = DemoSchoolConstants.BellScheduleId,
-                    StartTime = 663,
-                    EndTime = 707,
-                    PeriodRef = DemoSchoolConstants.FirstPeriodId,
-                    IsDailyAttendancePeriod = true
-                });
-            ScheduledTimeSlotStorage.Add(new ScheduledTimeSlot
+            var times = new Dictionary<int, KeyValuePair<int, int>>();
+            times[1] = new KeyValuePair<int, int>(663, 707);
+            times[2] = new KeyValuePair<int, int>(710, 740);
+            times[3] = new KeyValuePair<int, int>(744, 783);
+            times[4] = new KeyValuePair<int, int>(787, 826);
+
+            var periods = PeriodStorage.GetAll();
+            ScheduledTimeSlotStorage.Add(periods.Select(period => new ScheduledTimeSlot()
             {
+                PeriodRef = period.Id,
                 BellScheduleRef = DemoSchoolConstants.BellScheduleId,
-                StartTime = 710,
-                EndTime = 740,
-                PeriodRef = DemoSchoolConstants.SecondPeriodId,
-                IsDailyAttendancePeriod = false
-            });
+                IsDailyAttendancePeriod = true,
+                StartTime = times[period.Id].Key,
+                EndTime = times[period.Id].Value,
+            }).ToList());
         }
 
         private void AddSchool()
@@ -1903,27 +1843,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = id,
                 Description = "Academic Practice",
                 Gradable = true,
-                Name = "Task",
+                Name = "Academic Practice",
                 Percentage = 50
             });
 
-            ClassPeriodStorage.Add(new ClassPeriod
+
+            var periods = PeriodStorage.GetAll();
+
+            ClassPeriodStorage.Add(periods.Select(period => new ClassPeriod()
             {
                 ClassRef = id,
                 DayTypeRef = DemoSchoolConstants.DayTypeId1,
-                PeriodRef = DemoSchoolConstants.FirstPeriodId,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
-                Period = PeriodStorage.GetById(DemoSchoolConstants.FirstPeriodId)
-            });
-
-            ClassPeriodStorage.Add(new ClassPeriod
-            {
-                ClassRef = id,
-                DayTypeRef = DemoSchoolConstants.DayTypeId2,
-                PeriodRef = DemoSchoolConstants.SecondPeriodId,
-                //SchoolRef = DemoSchoolConstants.SchoolId,
-                Period = PeriodStorage.GetById(DemoSchoolConstants.SecondPeriodId)
-            });
+                PeriodRef = period.Id,
+                Period = period
+            }).ToList());
 
             ClassTeacherStorage.Add(new ClassTeacher
             {
@@ -1931,7 +1864,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 PersonRef = DemoSchoolConstants.TeacherId,
                 IsPrimary = true
             });
-
 
             ClassRoomOptionStorage.Add(new ClassroomOption()
             {

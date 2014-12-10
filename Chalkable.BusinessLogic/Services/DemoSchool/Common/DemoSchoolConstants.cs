@@ -74,9 +74,6 @@
         public const int GradingScale2 = 2;
         public const int GradingScale3 = 3;
 
-        public const int FirstPeriodId = 1;
-        public const int SecondPeriodId = 2;
-
         public const int TeacherId = 1195;
         public const int AdminGradeId = 1197;
         public const int AdminEditId = 1198;

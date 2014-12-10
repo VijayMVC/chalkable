@@ -40,24 +40,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 foreach (var period in periods)
                 {
                     var scheduleSlot = scheduleTimeSlots.FirstOrDefault(x => x.BellScheduleRef == date.BellScheduleRef && x.PeriodRef == period.Id);
-                    if (classsPeriods.Count > 0)
-                    {
-                        foreach (var classsPeriod in classsPeriods)
-                        {
-                            var c = classes.FirstOrDefault(x => x.Id == classsPeriod.ClassRef);
+                    var cp = classsPeriods.First(x => x.PeriodRef == period.Id);
+                    
+                           var c = classes.FirstOrDefault(x => x.Id == cp.ClassRef);
                             Room room = null;
                             if (c != null)
                                 room = rooms.FirstOrDefault(x => x.Id == c.RoomRef);
                             res.Add(CreateScheduleItem(date, period, scheduleSlot, c, room));
-                        }       
-                    }
-                    else res.Add(CreateScheduleItem(date, period, scheduleSlot, null, null));
                 }
             }
             return res;
         }
 
-        private ScheduleItem CreateScheduleItem(Date date, Period period, ScheduledTimeSlot scheduledTime, Class c, Room room)
+        private static ScheduleItem CreateScheduleItem(Date date, Period period, ScheduledTimeSlot scheduledTime, Class c, Room room)
         {
             var res = new ScheduleItem
                 {
