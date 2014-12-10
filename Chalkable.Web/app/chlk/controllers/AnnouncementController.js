@@ -765,6 +765,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.Announcement]],
         function saveAnnouncementFormAction(announcement){
+            if(!announcement.getAnnouncementTypeId() || !announcement.getAnnouncementTypeId().valueOf())
+                return this.Redirect('error', 'createAnnouncementError', []);
             var announcementForm = this.prepareAnnouncementForm_(announcement);
             return this.Redirect('announcement', 'saveAnnouncement', [announcement, announcementForm]);
         },
@@ -834,8 +836,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.Announcement, chlk.models.announcement.AnnouncementForm]],
         function saveAnnouncementTeacherAction(model, form_) {
-            if(!model.getAnnouncementTypeId() || !model.getAnnouncementTypeId().valueOf())
-                return this.Redirect('error', 'createAnnouncementError', []);
+            if(!(model.getClassId() && model.getClassId().valueOf() && model.getAnnouncementTypeId() && model.getAnnouncementTypeId().valueOf()))
+                return null;
             var res = this.announcementService
                 .saveAnnouncement(
                     model.getId(),
