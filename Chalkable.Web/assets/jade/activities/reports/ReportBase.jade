@@ -1,0 +1,8 @@
+mixin ReportFormatSelect()
+   +Select('format').format
+      +Option(0, "PDF", true)
+      +Option(1, "CSV", false)(disabled)
+      +Option(2, "Excel", false)(disabled)
+      +Option(3, "HTML", false)(disabled)
+      +Option(4, "TIFF", false)(disabled)
+      +Option(5, "XML (" + Msg.With_report_data + ")", false)(disabled)

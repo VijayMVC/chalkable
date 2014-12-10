@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.ReportingService');
 REQUIRE('chlk.services.CalendarService');
+REQUIRE('chlk.services.GradingPeriodService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
@@ -15,16 +16,22 @@ REQUIRE('chlk.activities.grading.GradingStudentSummaryPage');
 REQUIRE('chlk.activities.grading.GradingStudentClassSummaryPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryGridPage');
 REQUIRE('chlk.activities.grading.GradingClassStandardsGridPage');
-REQUIRE('chlk.activities.grading.GradeBookReportDialog');
-REQUIRE('chlk.activities.grading.WorksheetReportDialog');
-REQUIRE('chlk.activities.grading.ProgressReportDialog');
 REQUIRE('chlk.activities.grading.StudentAvgPopupDialog');
 REQUIRE('chlk.activities.grading.FinalGradesPage');
 
+REQUIRE('chlk.activities.reports.GradeBookReportDialog');
+REQUIRE('chlk.activities.reports.WorksheetReportDialog');
+REQUIRE('chlk.activities.reports.ProgressReportDialog');
+REQUIRE('chlk.activities.reports.ComprehensiveProgressReportDialog');
+REQUIRE('chlk.activities.reports.MissingAssignmentsReportDialog');
+
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
-REQUIRE('chlk.models.grading.SubmitGradeBookReportViewData');
-REQUIRE('chlk.models.grading.SubmitProgressReportViewData');
-REQUIRE('chlk.models.grading.SubmitWorksheetReportViewData');
+
+REQUIRE('chlk.models.reports.SubmitGradeBookReportViewData');
+REQUIRE('chlk.models.reports.SubmitProgressReportViewData');
+REQUIRE('chlk.models.reports.SubmitWorksheetReportViewData');
+REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
+REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -49,6 +56,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.CalendarService , 'calendarService',
+
+            [ria.mvc.Inject],
+            chlk.services.GradingPeriodService, 'gradingPeriodService',
 
             Array, function getClassForGrading_(withAll_, forCurrentMp_){
                 return this.classService.getClassesForTopBar(withAll_, forCurrentMp_);
@@ -512,15 +522,15 @@ NAMESPACE('chlk.controllers', function (){
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
-                var res = new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate));
-                return this.ShadeView(chlk.activities.grading.GradeBookReportDialog, res);
+                var res = new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate));
+                return this.ShadeView(chlk.activities.reports.GradeBookReportDialog, res);
             },
 
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function worksheetReportAction(gradingPeriodId, classId, startDate, endDate){
-                var res = this.getWorksheetReportInfo(gradingPeriodId, classId, startDate, endDate);
-                return this.ShadeView(chlk.activities.grading.WorksheetReportDialog, res);
+                var res = this.getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate);
+                return this.ShadeView(chlk.activities.reports.WorksheetReportDialog, res);
             },
 
             [chlk.controllers.SidebarButton('statistic')],
@@ -537,13 +547,89 @@ NAMESPACE('chlk.controllers', function (){
                             }).length;
                             return !!len;
                         });
-                        return new chlk.models.grading.SubmitProgressReportViewData(absenceReasons, students, gradingPeriodId, classId, startDate, endDate);
+                        return new chlk.models.reports.SubmitProgressReportViewData(absenceReasons, students, gradingPeriodId, classId, startDate, endDate);
                     }, this);
-                return this.ShadeView(chlk.activities.grading.ProgressReportDialog, res);
+                return this.ShadeView(chlk.activities.reports.ProgressReportDialog, res);
             },
 
             [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.grading.SubmitGradeBookReportViewData]],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function comprehensiveProgressReportAction(gradingPeriodId, classId, startDate, endDate){
+                var res = this.getComprehensiveProgressReportInfo_(gradingPeriodId, classId, startDate, endDate);
+                return this.ShadeView(chlk.activities.reports.ComprehensiveProgressReportDialog, res);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function missingAssignmentsReportAction(gradingPeriodId, classId, startDate, endDate){
+                var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
+                var model = new chlk.models.reports.SubmitMissingAssignmentsReportViewData(classId,
+                    gradingPeriodId, startDate, endDate, alternateScores);
+                return this.ShadeView(chlk.activities.reports.MissingAssignmentsReportDialog, new ria.async.DeferredData(model));
+            },
+
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitMissingAssignmentsReportViewData]],
+            function submitMissingAssignmentsReportAction(reportViewData){
+                var src = this.reportingService.submitMissingAssignmentsReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getIdToPrint(),
+                    reportViewData.getFormat(),
+                    reportViewData.getOrderBy(),
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    this.getIdsList(reportViewData.getAlternateScoreIds(), chlk.models.id.AlternateScoreId),
+                    reportViewData.isAlternateScoresOnly(),
+                    reportViewData.isConsiderZerosAsMissingGrades(),
+                    reportViewData.isIncludeWithdrawnStudents(),
+                    reportViewData.getOnePerPage(),
+                    reportViewData.isSuppressStudentName()
+                );
+                this.BackgroundCloseView(chlk.activities.reports.MissingAssignmentsReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitComprehensiveProgressViewData]],
+            function submitComprehensiveProgressReportAction(reportViewData){
+                var src = this.reportingService.submitComprehensiveProgressReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getIdToPrint(),
+                    reportViewData.getFormat(),
+                    this,getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
+                    this.getIdsList(reportViewData.getAbsenceReasonIds(), chlk.models.id.AttendanceReasonId),
+                    reportViewData.getOrderBy(),
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.getMaxStandardAverage(),
+                    reportViewData.getMinStandardAverage(),
+                    reportViewData.isAdditionalMailings(),
+                    reportViewData.isClassAverageOnly(),
+                    reportViewData.isDisplayCategoryAverages(),
+                    reportViewData.isDisplayClassAverages(),
+                    reportViewData.getDailyAttendanceDisplayMethod(),
+                    reportViewData.isDisplayPeriodAttendance(),
+                    reportViewData.isDisplaySignatureLine(),
+                    reportViewData.isDisplayStudentComments(),
+                    reportViewData.isDisplayStudentMailingAddress(),
+                    reportViewData.isDisplayTotalPoints(),
+                    reportViewData.isIncludePicture(),
+                    reportViewData.isIncludeWithdrawnStudents(),
+                    reportViewData.isWindowEnvelope(),
+                    reportViewData.isGoGreen(),
+                    reportViewData.getStudentFilterId()
+                );
+                this.BackgroundCloseView(chlk.activities.reports.ComprehensiveProgressReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(reportViewData){
                 var src = this.reportingService.submitGradeBookReport(
                     reportViewData.getClassId(),
@@ -561,13 +647,13 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isIncludeNonGradedActivities(),
                     reportViewData.isSuppressStudentName()
                 );
-                this.BackgroundCloseView(chlk.activities.grading.GradeBookReportDialog);
+                this.BackgroundCloseView(chlk.activities.reports.GradeBookReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },
 
             [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.grading.SubmitProgressReportViewData]],
+            [[chlk.models.reports.SubmitProgressReportViewData]],
             function downloadProgressReportAction(progressReportViewData){
                 progressReportViewData = progressReportViewData.getClassId() ? progressReportViewData
                     : this.getContext().getSession().get('modelForSubmit', null);
@@ -598,13 +684,13 @@ NAMESPACE('chlk.controllers', function (){
                     progressReportViewData.getStudentIds(),
                     progressReportViewData.getCommentsList()
                 );
-                this.BackgroundCloseView(chlk.activities.grading.ProgressReportDialog);
+                this.BackgroundCloseView(chlk.activities.reports.ProgressReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },
 
             [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.grading.SubmitProgressReportViewData]],
+            [[chlk.models.reports.SubmitProgressReportViewData]],
             function submitProgressReportAction(model){
                 if(!model.getAbsenceReasonIds()){
                     this.ShowMsgBox(Msg.Progress_Report_No_Reasons_msg);
@@ -631,7 +717,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.grading.SubmitWorksheetReportViewData]],
+            [[chlk.models.reports.SubmitWorksheetReportViewData]],
             function submitWorksheetReportAction(model){
                 if(model.getSubmitType() == 'submit'){
                     var len = 0;
@@ -642,7 +728,7 @@ NAMESPACE('chlk.controllers', function (){
                         this.ShowMsgBox(Msg.Worksheet_report_msg, 'fyi.', [{
                             text: Msg.GOT_IT.toUpperCase()
                         }]);
-                        return this.UpdateView(chlk.activities.grading.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData), 'stop');
+                        return this.UpdateView(chlk.activities.reports.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData), 'stop');
                     }
 
                     var src = this.reportingService.submitWorksheetReport(
@@ -665,17 +751,17 @@ NAMESPACE('chlk.controllers', function (){
                         model.isAppendToExisting(),
                         model.isOverwriteExisting()
                     );
-                    this.BackgroundCloseView(chlk.activities.grading.WorksheetReportDialog);
+                    this.BackgroundCloseView(chlk.activities.reports.WorksheetReportDialog);
                     this.getContext().getDefaultView().submitToIFrame(src);
                     return null;
                 }
-                var res = this.getWorksheetReportInfo(
+                var res = this.getWorksheetReportInfo_(
                     model.getGradingPeriodId(),
                     model.getClassId(),
                     model.getStartDate(),
                     model.getEndDate()
                 );
-                return this.UpdateView(chlk.activities.grading.WorksheetReportDialog, res, 'grid');
+                return this.UpdateView(chlk.activities.reports.WorksheetReportDialog, res, 'grid');
             },
 
             [chlk.controllers.SidebarButton('statistic')],
@@ -743,12 +829,24 @@ NAMESPACE('chlk.controllers', function (){
                 return this.updateStudentAvgFromModel(model);
             },
 
-            function getWorksheetReportInfo(gradingPeriodId, classId, startDate, endDate){
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate){
                 var res = this.calendarService.listByDateRange(startDate, endDate, classId)
                     .then(function(announcements){
-                        return new ria.async.DeferredData(new chlk.models.grading.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, announcements));
+                        return new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, announcements));
                     });
                 return res;
+            },
+
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            ria.async.Future, function getComprehensiveProgressReportInfo_(selectedGradingPeriodId, classId, startDate, endDate){
+                return this.gradingPeriodService.getList()
+                    .attach(this.validateResponse_())
+                    .then(function(gradingPeriods){
+                        var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
+                        return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
+                            selectedGradingPeriodId, startDate, endDate, gradingPeriods, reasons);
+                    }, this);
             }
         ])
 });

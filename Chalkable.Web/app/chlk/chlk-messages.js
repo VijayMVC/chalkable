@@ -335,6 +335,7 @@ var Msg = {
     Coming_soon: 'Coming soon',
     Comments_for: 'Comments for',
     Cost_per_user: 'Cost per user',
+    Comprehensive_Progress_Report : 'Comprehensive Progress Report',
     Create_AutoEmail: 'Create AutoEmail',
     Create_grid: 'Create grid',
     Create_Report: 'Create Report',
@@ -451,6 +452,7 @@ var Msg = {
             return '1 minute ago';
         return String.format("{0} mins ago", mins);
     },
+    Missing_Assignments_Report: 'Missing Assignments Report',
     More_students: 'More students',
     My_Apps: 'My Apps',
     My_Students: 'My Students',

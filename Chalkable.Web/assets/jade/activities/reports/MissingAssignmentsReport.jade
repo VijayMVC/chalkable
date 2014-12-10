@@ -1,0 +1,14 @@
+.dialog-window.report-window
+   .close.close-btn.dark
+      h1=Msg.Create_Report
+      .report-buttons.panel-bg
+         +ActionLinkList(self.buildReportLinksData('missingAssignmentsReport'))
+      +ActionForm('grading', 'submitMissingAssignmentsReport').missing-assignments-report-form.no-working
+         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('classId', self.getClassId().valueOf())
+         +Hidden('alternateScoreIds', '')#alternate-scores
+         .report-content no data now
+         .report-bottom
+            +ReportFormatSelect()
+            BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

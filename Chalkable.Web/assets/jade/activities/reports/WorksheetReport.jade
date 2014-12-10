@@ -3,9 +3,7 @@
     date = new chlk.models.common.ChlkDate()
     h1=Msg.Create_Report
     .report-buttons.panel-bg
-        +ActionLink('grading', 'gradeBookReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Grade_Book_Report
-        a(href="javascript:").report-button.pressed=Msg.Worksheet_Report
-        +ActionLink('grading', 'progressReport', self.getGradingPeriodId(), self.getClassId(), self.getStartDate().toStandardFormat(), self.getEndDate().toStandardFormat()).report-button=Msg.Progress_Report
+        +ActionLinkList(self.buildReportLinksData('worksheetReport'))
     +ActionForm('grading', 'submitWorksheetReport').report-form
         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
         +Hidden('classId', self.getClassId().valueOf())
@@ -46,7 +44,7 @@
             TR
                 TD(colspan="3").item-1
                     .grid-container
-                        +RenderWith(self.getModel(), chlk.templates.grading.WorksheetReportGridTpl)
+                        +RenderWith(self.getModel(), chlk.templates.reports.WorksheetReportGridTpl)
             TR
                 TD(colspan="3").item-1.blank-columns
                     h3=Msg.Blank_columns
@@ -69,13 +67,7 @@
                     +LabeledCheckbox(Msg.Overwrite_existing, 'overwriteExisting', false)
                 TD.item-3
                     h3=Msg.Format
-                    +Select('format').format
-                        +Option(0, "PDF", true)
-                        +Option(1, "CSV", false)(disabled)
-                        +Option(2, "Excel", false)(disabled)
-                        +Option(3, "HTML", false)(disabled)
-                        +Option(4, "TIFF", false)(disabled)
-                        +Option(5, "XML (" + Msg.With_report_data + ")", false)(disabled)
+                    +ReportFormatSelect()
         .report-bottom
             BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-gradient-btn=Msg.Download
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

@@ -1,14 +1,15 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
-REQUIRE('chlk.templates.grading.ProgressReportTpl');
+REQUIRE('chlk.templates.reports.ProgressReportTpl');
 
-NAMESPACE('chlk.activities.grading', function(){
+NAMESPACE('chlk.activities.reports', function(){
 
-    /**@class chlk.activities.grading.ProgressReportDialog*/
+    /**@class chlk.activities.reports.ProgressReportDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.ActivityGroup('ReportDialog')],
-        [ria.mvc.TemplateBind(chlk.templates.grading.ProgressReportTpl)],
+        [ria.mvc.TemplateBind(chlk.templates.reports.ProgressReportTpl)],
         'ProgressReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
+
             [ria.mvc.DomEventBind('change', '.category-average')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function categoryAverageChange(node, event){

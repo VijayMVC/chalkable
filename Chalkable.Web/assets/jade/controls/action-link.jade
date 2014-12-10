@@ -16,15 +16,16 @@ mixin ActionLinkWithPrepend(controller, action, prependParams)
 
 // requires: actionLinkModel instanceOf chlk.models.common.ActionLinkModel
 mixin ActionLinkWithModel(actionLinkModel)
-    classesNames = actionLinkModel.getClassesNames() || []
+    -var classesNames = actionLinkModel.getClassesNames() || [];
+    -var title = (actionLinkModel.getTitle() || '');
     +ActionLinkWithPrepend(actionLinkModel.getControllerName(), actionLinkModel.getActionName(), actionLinkModel.getArgs()
-    )(class = classesNames && classesNames.length > 0 ? classesNames.join(' ') : '')(attributes)=(actionLinkModel.getTitle() || '')
-        block
+        )(class=classesNames)(attributes)=title
+            block
 
 // requires: actionLinksModel instanceOf ArrayOf(chlk.models.common.ActionLinkModel)
 mixin ActionLinkList(actionLinksModel)
     each item in actionLinksModel
-        +ActionLinkWithModel(item)
+        +ActionLinkWithModel(item)(attributes)
 
 mixin  ActionLinkButton(controller, action)
     span.chlk-button.action-button(attributes)
