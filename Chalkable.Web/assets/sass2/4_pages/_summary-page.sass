@@ -1,0 +1,59 @@
+.summary-page
+  .attendance-summary
+    margin: 24px 0
+
+  .chart-container > *
+    width: 800px
+    margin: 0 auto
+
+  .legend-item
+    display: inline-block
+    margin: 0 2px
+    border-radius: 3px
+    border: 1px solid transparent
+    position: relative
+    padding: 0 4px 0 24px
+    line-height: 25px
+
+    .box
+      position: absolute
+      left: 4px
+      width: 12px
+      height: 12px
+      top: 50%
+      margin-top: -6px
+
+  .hidden-students-block-2
+    margin-right: -16px
+
+  .student-with-picture
+    display: inline-block
+    position: relative
+    margin: 24px 16px 0 0
+
+  .popup-top
+    display: none
+    position: absolute
+    bottom: 107px
+    left: -30px
+    right: -30px
+    +box-shadow(transparentize(#000, .8) 0 0 16px)
+    z-index: 1
+
+    text-align: center
+
+    h1
+      font-size: 13px
+      line-height: 24px
+
+    A
+      text-decoration: none
+
+    &::before
+      left: 50%
+      margin-left: -9px
+
+
+  .avatar-wrapper > DIV
+    width: 100px
+    height: 100px

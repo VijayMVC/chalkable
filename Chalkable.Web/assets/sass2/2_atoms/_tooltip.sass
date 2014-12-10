@@ -1,0 +1,25 @@
+.chlk-tooltip
+  position: absolute
+  min-width: 55px
+  display: none
+  z-index: 99999
+
+  .tooltip-content
+    background: rgba(0,0,0,0.8)
+    color: white
+    text-shadow: none
+    border-radius: 5px
+    font-size: 13px
+    padding: 10px
+    line-height: 15px
+    max-width: 150px
+    text-align: left
+    white-space: nowrap
+
+  &.pre-wrap
+    .tooltip-content
+      white-space: pre-wrap
+
+  .tooltip-triangle
+    height: 7px
+    background: url(images/feed/triangle.png) center bottom no-repeat

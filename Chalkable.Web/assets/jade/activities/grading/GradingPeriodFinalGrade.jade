@@ -1,0 +1,38 @@
+-var items = self.getStudentFinalGrades()
+-var selectedIndex = self.getSelectedIndex()
+-var gradingPeriod = self.getGradingPeriod()
+-var currentAvg = self.getCurrentAverage()
+
+.buttons-row
+    +ActionForm('grading', 'loadGradingPeriodFinalGradesSummary').load-grading-period
+        +Hidden('classId', self.getClassId())
+        +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+        +Hidden('selectedIndex', selectedIndex).selected-value
+        if items.length && currentAvg
+            .grading-selects
+                +Select('averageId').avg-select
+                    each item in self.getAverages()
+                        +Option(item.getAverageId().valueOf(), item.getAverageName(), item.getAverageId() == self.getCurrentAverage().getAverageId())
+
+            +ActionButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId(), null, null, true).blue-button.post-gradebook-button.gp-button=Msg.Post
+.grades-container
+    if !items.length
+        .no-items-text=Msg.No_grades_yet
+    else
+        if !currentAvg
+            .no-items-text There are no averages
+        else
+            isAbleDisplayAlphaGrades = true
+            +ListView(items)(
+                selectedIndex = selectedIndex,
+                scrollToElementTimeout = 550
+            ).grades-individual.people-list.final-grid.grading
+                each item, i in items
+                    +RenderWith(item, chlk.templates.grading.FinalGradeStudentBlockTpl)(
+                        selected = selectedIndex == i,
+                        ableEdit = self.isAbleEdit(),
+                        ableEditDirectValue = self.isAbleEditDirectValue(),
+                        index = i,
+                        gradingPeriodId = gradingPeriod.getId(),
+                        gradingComments = self.getGradingComments()
+                    )

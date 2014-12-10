@@ -1,0 +1,27 @@
+/* line 1, ../../assets/sass2/5_dialogs/add-message.sass */
+.add-message {
+  width: 450px;
+}
+/* line 4, ../../assets/sass2/5_dialogs/add-message.sass */
+.add-message .general-info {
+  margin-top: -15px;
+}
+/* line 7, ../../assets/sass2/5_dialogs/add-message.sass */
+.add-message TEXTAREA {
+  margin-top: 5px;
+  display: block;
+  width: 100%;
+  min-height: 175px;
+}
+/* line 13, ../../assets/sass2/5_dialogs/add-message.sass */
+.view-gia .add-message TEXTAREA {
+  color: #333333;
+  border: transparent;
+  box-shadow: none;
+}
+/* line 18, ../../assets/sass2/5_dialogs/add-message.sass */
+.add-message .subject .text {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 26px;
+}
