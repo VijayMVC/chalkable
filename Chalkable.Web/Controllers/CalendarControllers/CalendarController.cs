@@ -21,8 +21,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             date = date ?? context.NowSchoolYearTime;
             var cal = new GregorianCalendar();
             var today = date.Value;
-            start = cal.AddDays(today, -((int)today.DayOfWeek));
-            end = cal.AddDays(start, 6);
+            start = cal.AddDays(today, -((int)today.DayOfWeek)).Date;
+            end = cal.AddDays(start, 6).Date;
         }
 
 
