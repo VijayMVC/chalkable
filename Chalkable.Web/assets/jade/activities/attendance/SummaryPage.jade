@@ -48,7 +48,7 @@ mixin AbsentLatePage(data, header)
 .attendance-summary
     topData = self.getTopData();
     topItems = topData.getTopItems();
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'classList')(
+    +LeftRightToolbar(topItems, chlk.templates.attendance.TopBar, 'attendance', 'classList')(
         selectedItemId="",
         disabledClass = 'x-hidden'
     ).classes-bar
