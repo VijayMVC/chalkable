@@ -20,17 +20,61 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-
-        //TODO : needs testing 
-        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
-                                           bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
+        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, 
+            string comment, bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+
             Trace.Assert(ann.SisActivityId.HasValue);
+
             if (!string.IsNullOrEmpty(value) && value.Trim() != "")
                 exempt = false;
-            else value = null;
+            else 
+                value = null;
 
+            var numericScore = GetNumericScore(value, gradingStyle);
+            var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
+
+            var oldScore = Storage.StiActivityScoreStorage.GetScore(announcementId, studentId);
+            var studentAnnouncement = new StudentAnnouncement();
+
+            MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(studentAnnouncement, oldScore);
+            studentAnnouncement.AnnouncementId = oldScore.ActivityId;
+
+            if (numericScore >= 0)
+            {
+                studentAnnouncement.NumericScore = numericScore;
+                studentAnnouncement.ScoreValue = numericScore.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (studentAnnouncement.NumericScore.HasValue || studentAnnouncement.Late ||
+                studentAnnouncement.Incomplete)
+            {
+                studentAnnouncement.Dropped = dropped;
+                studentAnnouncement.Comment = gradeComment;
+            }
+
+            studentAnnouncement.Exempt = exempt;
+            studentAnnouncement.Late = late;
+            studentAnnouncement.Incomplete = incomplete;
+            studentAnnouncement.ExtraCredit = extraCredits;
+            
+            var score = new Score();
+            MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, studentAnnouncement);
+            score = Storage.StiActivityScoreStorage.UpdateScore(score.ActivityId, score.StudentId, score);
+            score.ActivityDate = ann.Expires;
+            score.ActivityName = ann.Title;
+            MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnnouncement, score);
+
+            if (studentAnnouncement.AlternateScoreId.HasValue)
+                studentAnnouncement.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(studentAnnouncement.AlternateScoreId.Value);
+            if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
+                ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, studentAnnouncement.StudentId);
+            return studentAnnouncement;
+        }
+
+        private decimal GetNumericScore(string value, GradingStyleEnum? gradingStyle)
+        {
             decimal numericScore = -1;
             if (gradingStyle.HasValue && value != null)
             {
@@ -39,13 +83,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     var numScore = Storage.AlphaGradeStorage.GetAll().FirstOrDefault(x => x.Name.ToLowerInvariant() == value);
                     if (numScore != null)
                     {
-                        var gs =
-                            Storage.GradingScaleRangeStorage.GetAll().FirstOrDefault(x => x.AlphaGradeRef == numScore.Id);
+                        var gradingScaleRange = Storage.GradingScaleRangeStorage
+                            .GetAll()
+                            .FirstOrDefault(x => x.AlphaGradeRef == numScore.Id);
 
-                        if (gs != null)
-                        {
-                            numericScore = gs.AveragingEquivalent;
-                        }
+                        if (gradingScaleRange != null)
+                            numericScore = gradingScaleRange.AveragingEquivalent;
                     }
                 }
                 else
@@ -53,40 +96,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     decimal.TryParse(value, out numericScore);
                 }
             }
-
-            var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
-
-            if (numericScore < 0)
-            {
-                gradeComment = "";
-            }
-
-            var stAnn = new StudentAnnouncement
-            {
-                ExtraCredit = extraCredits,
-                Comment = gradeComment,
-                Dropped = dropped,
-                Incomplete = incomplete,
-                Late = late,
-                Exempt = exempt,
-                ScoreValue = numericScore >= 0 ? numericScore.ToString(CultureInfo.InvariantCulture) : "",
-                NumericScore = numericScore >= 0 ? numericScore : (decimal?) null,
-                ActivityId = ann.SisActivityId.Value,
-                AnnouncementId = announcementId,
-                StudentId = studentId
-            };
-            var score = new Score();
-            MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, stAnn);
-            score = Storage.StiActivityScoreStorage.UpdateScore(score.ActivityId, score.StudentId, score);
-            score.ActivityDate = ann.Expires;
-            score.ActivityName = ann.Title;
-            MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(stAnn, score);
-
-            if (stAnn.AlternateScoreId.HasValue)
-                stAnn.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(stAnn.AlternateScoreId.Value);
-            if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
-                ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, stAnn.StudentId);
-            return stAnn;
+            return numericScore;
         }
 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)
