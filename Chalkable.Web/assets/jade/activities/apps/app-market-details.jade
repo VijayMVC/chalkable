@@ -1,0 +1,70 @@
+app = self.getApp()
+devName = app.getDeveloperInfo().getName()
+webSiteLink = app.getDeveloperInfo().getWebSite()
+
+.app-market-details
+    if self.currentBalance
+        .user-balance= "$" + self.currentBalance
+    h2.page-title= app.getName()
+    .action-bar
+        .items
+            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn.pressed App Store
+    .app-screenshots-panel
+        +Carousel()
+            -videoUrl = app.getVideoDemoUrl() || ''
+            if videoUrl
+                +CarouselItem().img(data-page = 1)
+                    +Video(true)(src=videoUrl, width="640", height="390")
+            each picture, index in app.getScreenshotPictures().getItems()
+                +CarouselItem().img(data-page= index + 2)
+                    img(src=picture.getPictureUrl())
+    .app-price-info
+        .right
+            +ActionButton('appmarket', 'tryToInstall', app.getId()).blue-button(class=self.isInstalled()? "installed" : undefined)=self.installBtnTitle
+        .app-title
+            span="by "
+            a(href=webSiteLink, target="blank").dev-web-site=devName
+
+
+    +CloseOpen('Info')
+        .content
+            .table.app-info-details
+                .app-description
+                    textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
+    
+                .side-panel
+                    span.review-link User Ratings
+                    +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+
+
+    +CloseOpen('Reviews')
+        .content
+            .reviews
+                +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)
+
+    +CloseOpen('App Features')
+        .content.table.permissions
+            .row
+                .group-header.first This app is for:
+                .items
+                    each validRole in app.getValidRoles()
+                        .permission
+                            .icon(class=self.getRoleTypeClass(validRole.getId()))
+                            .description=validRole.getName()
+            .row
+                .group-header Info used:
+                .items
+                    each permission in app.getPermissions()
+                        .permission
+                            .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
+                            .description=permission.getName()
+            .row
+                .group-header.first Works on:
+                .items
+                    each platform in app.getPlatforms()
+                        .permission
+                            .icon(class=self.getPlatformTypeClass(platform.getId().valueOf()))
+                            .description=platform.getName()
+    .ban-app
+        +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)

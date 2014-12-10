@@ -1,0 +1,93 @@
+.dialog, .dialog-window, .base-attachment-dialog
+  position: fixed
+  z-index: 1005
+  background: #fff
+  //border-radius: 5px
+  overflow: hidden
+  +box-shadow(transparentize(#000, .8) 0 2px 16px)
+  transform: translate(-50%, -30%)
+
+  //opacity: 0
+  //&.visible
+    opacity: 1
+    +transition(opacity, .3s, easy-in-out)
+
+  .under-overlay > &
+    z-index: 998
+
+  top: 30%
+  left: 50%
+
+  h1
+    height: 62px
+    line-height: 58px
+    font-size: 18px
+    text-align: center
+
+  h2
+    text-align: center
+    font-size: 16px
+
+  .dialog-content
+    padding: 25px
+
+  &.fixed
+    position: fixed
+
+  //.x-window-body
+
+  .buttons-bottom
+    text-align: center
+    padding-top: 10px
+
+    button
+      min-width: 70px
+
+      &:not(:last-child)
+        margin-right: 10px
+
+  .x-window-body
+    margin: 25px
+
+  .x-window-header
+    background: #F8E6A4
+    text-align: center
+
+    SPAN, h1
+      line-height: 62px
+      color: #BCAA53
+
+#chlk-dialogs
+  //position: absolute
+  width: 0
+  height: 0
+  z-index: 0
+
+
+#chlk-overlay
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  z-index: 999
+  background: transparentize(#2f7790, .2)
+
+.x-close-btn
+  background: #000 url(images/ui/white-close-btn.png) center center no-repeat
+  display: inline-block
+  width: 24px
+  height: 24px
+  float: right
+  cursor: pointer
+
+  &.absolute
+    top: -24px
+    right: 0
+
+  &:hover
+    opacity: 0.8
+
+
+.info-msg-dialog .dialog
+  padding: 25px

@@ -1,0 +1,21 @@
+.dialog.add-message
+    .bg-top
+    .bg-middle
+        .x-window-header
+            span= self.getSender().getFirstName() + " " + self.getSender().getLastName()
+        .x-window-body
+            .general-info
+                .subject
+                    .text=self.subject
+                .body
+                    lable.title Message:
+                    +TextArea()(readonly).text=self.body
+                br
+                .form-buttons
+                    +ActionButton('message', 'sendPage', self.isInbox(), self.id).blue-button.submit-btn= self.isReplay() ? 'Reply' : 'Send'
+                    BUTTON.cancel-button.close=Msg.Cancel
+
+    .bg-bottom
+
+
+
