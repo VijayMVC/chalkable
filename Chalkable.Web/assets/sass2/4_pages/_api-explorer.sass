@@ -1,0 +1,218 @@
+.api-explorer
+  .action-bar
+    margin-bottom: 25px
+
+  .api-description
+    margin-bottom: 25px
+
+  .controller-header
+    text-transform: uppercase
+    font-weight: 600
+    font-size: 15px
+    line-height: 32px
+
+  .collapse-all
+    background: #eee
+    border-radius: 3px
+    line-height: 28px
+    font-weight: 600
+    display: block
+    padding: 0 15px
+    font-size: 12px
+    cursor: pointer
+
+  .collapse
+    position: absolute
+    right: 25px
+    top: 26px
+    width: 8px
+    height: 12px
+    background: url(images/grading/gp-arrow.png) 0 0 no-repeat
+    +single-transition(all, .2s, ease-in-out)
+
+  .method
+    margin: 5px 0 15px
+
+    &.open .collapse
+      +transform(rotate(90deg))
+
+    &.open .details
+      //display: block
+      max-height: 10000px
+      opacity: 1
+      +single-transition(all, .3s, ease-in-out)
+
+  .header
+    font-size: 12px
+    text-align: left
+    font-weight: 400
+    padding: 0 15px
+    white-space: nowrap
+    position: relative
+
+  .details
+    max-height: 0
+    opacity: 0
+    box-sizing: border-box
+    overflow-y: hidden
+    //display: none
+    +single-transition(all, .2s, ease-in-out)
+
+    .det-content
+      margin: 15px
+
+  .description
+    font-size: 12px
+    white-space: normal
+    line-height: 15px
+    width: 80%
+    font-weight: 300
+
+  .header-body
+    color: #aaa
+    width: 95%
+
+    > *
+      display: inline-block
+      vertical-align: middle
+      margin-right: 5px
+
+    .action
+      font-weight: 600
+      font-size: 14px
+
+  .call-type
+    color: white
+    font-weight: 900
+    text-align: center
+    width: 71px
+    height: 32px
+    line-height: 32px
+    border-radius: 3px
+    text-transform: uppercase
+    font-size: 14px
+    +text-shadow(none)
+
+    &.get
+      background: #f5ce28
+
+    &.post
+      background: #42b76b
+
+    &.put
+      background: #f78927
+
+    &.delete
+      background: #d3514f
+
+  .prettyprint
+    overflow: auto
+    padding: 25px
+    border: 1px solid #c8c7c3
+    border-radius: 5px
+    margin-top: 0
+    
+
+  table
+    width: 100%
+    border-collapse: collapse
+    margin: 0 auto 15px
+
+    tbody tr
+      border-bottom: 1px solid #eee
+      margin-bottom: 5px
+
+
+    th
+      height: 25px
+      width: 33%
+      color: #333
+      //font-family: Arial
+      font-weight: bold
+      font-size: 11px
+      text-transform: uppercase
+      text-align: left
+  
+
+    td
+      width: 33%
+      height: 45px
+      color: #666
+      font-size: 13px
+
+
+    .param-value
+      .error
+        color: red
+        display: inline-block
+    
+  
+
+    .value-field
+      &.error
+        border: 1px solid red
+    
+
+  
+  .response pre.sh_sourceCode
+    +box-shadow(none)
+    border: 1px solid #c8c7c3
+    border-radius: 4px
+    
+
+  .code-examples
+    margin-top: 50px
+    position: relative
+
+
+    .text-title
+      color: #999
+      font-weight: 600
+      font-size: 12px
+      display: inline-block
+  
+    .tab-headers
+      width: 480px
+      margin-left: 10px
+      display: inline-block
+      cursor: pointer
+      position: relative
+      z-index: 1
+
+    .tab-header
+      position: relative
+      display: inline-block
+      width: 102px
+      font-weight: bold
+      +background(linear-gradient(top, transparentize(#ccc, 1) 30%, transparentize(#ccc, .7) 100%))
+      z-index: 777
+      height: 21px
+      font-size: 12px
+      text-transform: uppercase
+      border: 1px solid #c8c7c3
+      border-bottom-color: transparent
+      color: #333
+      text-align: center
+      padding-top: 5px
+
+      &.active
+        border-bottom-color: white
+        background: white
+
+      & + .tab-header
+        border-left: none
+
+      &:first-child
+        border-top-left-radius: 3px
+
+      &:last-child
+        border-top-right-radius: 3px
+
+    .tab-content
+      top: -1px
+      position: relative
+
+
+    
+
+  

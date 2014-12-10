@@ -559,7 +559,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         function addDeveloperAction(){
            var app = new chlk.models.apps.Application();
-           return this.PushView(chlk.activities.apps.AddAppDialog, new ria.async.DeferredData(app));
+           return this.ShadeView(chlk.activities.apps.AddAppDialog, new ria.async.DeferredData(app));
         },
 
         [chlk.controllers.AccessForRoles([
