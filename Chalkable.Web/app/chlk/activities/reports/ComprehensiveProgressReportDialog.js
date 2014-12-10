@@ -15,14 +15,10 @@ NAMESPACE('chlk.activities.reports', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
 
-                //if(valuesArray.length){
-                //    studentIdsNode.setValue(valuesArray.join(','));
-                //    commentsNode.setValue(commentsArray.join(','));
-                //}
 
-                //var yearToDate = node.find('#year-to-date-chk').checked();
-                //var gradingPeriod = node.find('#grading-period-chk').checked();
-                //var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
+                var yearToDate = node.find('#year-to-date-chk').checked();
+                var gradingPeriod = node.find('#grading-period-chk').checked();
+                var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
                 var reasonsNode = node.find('#absence-reasons'),
                     reasonsArray = node.find('.reasons-select').getValue();
                 if(reasonsArray && reasonsArray.length)
@@ -33,16 +29,17 @@ NAMESPACE('chlk.activities.reports', function(){
                 if(gradingPeriodsIds && gradingPeriodsIds.length > 0)
                     gradingPeriodsIdsNode.setValue(gradingPeriodsIds.join(','));
 
-                //if(yearToDate){
-                //    dailyAttendanceDisplayMethodNode.setValue(3);
-                //    if(gradingPeriod){
-                //        dailyAttendanceDisplayMethodNode.setValue(1);
-                //    }
-                //}else{
-                //    if(gradingPeriod){
-                //        dailyAttendanceDisplayMethodNode.setValue(2);
-                //    }
-                //}
+                //todo: create enum dailyAttendanceDisplayMethod
+                if(yearToDate){
+                    dailyAttendanceDisplayMethodNode.setValue(3);
+                    if(gradingPeriod){
+                        dailyAttendanceDisplayMethodNode.setValue(1);
+                    }
+                }else{
+                    if(gradingPeriod){
+                        dailyAttendanceDisplayMethodNode.setValue(2);
+                    }
+                }
             }
     ]);
 });
