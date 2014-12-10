@@ -51,6 +51,8 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
+
+            ViewData[ViewConstants.ROLE_NAME] = CoreRoles.SUPER_ADMIN_ROLE.LoweredName;
             return View();
         }
 

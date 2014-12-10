@@ -4,13 +4,20 @@
   padding-top: 10px
   height: 33px
 
+
+
   .left-container
     float: left
 
+    > *
+      vertical-align: inherit
+
   .first-page, .prev-page, .next-page, .last-page, .info-container
-    background-position: center center
-    background-repeat: no-repeat
-    position: relative
+    background: center center no-repeat
+    width: 16px
+    height: 16px
+    display: inline-block
+    margin-top: 3px
 
   .first-page
     background-image: url(images/common/navigation-first.png)

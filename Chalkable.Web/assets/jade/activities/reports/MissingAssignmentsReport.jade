@@ -1,5 +1,6 @@
 .dialog-window.report-window
    .close.close-btn.dark
+   date = new chlk.models.common.ChlkDate()
    h1=Msg.Create_Report
    .report-buttons.panel-bg
       +ActionLinkList(self.buildReportLinksData('missingAssignmentsReport'))
@@ -52,7 +53,7 @@
                   +LabeledCheckbox(Msg.Withdrawn_students, 'includeWithdrawnStudents', false)
                TD.item-3
                   h3=Msg.Options
-                  +LabeledCheckbox(Msg.Count_Zeros_as_Missing, 'considerZerosAsMissingGrades', false)
+                  +LabeledCheckbox(Msg.Count_Zeros_as_Missing, 'considerZerosAsMissingGrades', true)
                   +LabeledCheckbox(Msg.One_Per_Page, 'onePerPage', false)
                   +LabeledCheckbox(Msg.Suppress_student_name, 'suppressStudentName', false)
                TD.item-3
