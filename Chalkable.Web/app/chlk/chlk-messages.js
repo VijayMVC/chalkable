@@ -323,6 +323,7 @@ var Msg = {
     Choose_picture: 'Choose picture',
     Class_Avg: 'Class Avg',
     Class_average: 'Class average',
+    Class_Average_Only: 'Class Average Only',
     Class_cost: 'Class cost',
     Class_size: 'Class size',
     Class_flat_rate: 'Class flat rate',
@@ -404,6 +405,7 @@ var Msg = {
     Grade_type: oneOrMany('Grade type'),
     Grading_period: 'Grading period',
     Grading_Period: 'Grading Period',
+    Grading_Periods: 'Grading Periods',
     Grading_view: 'Grading view',
     Grading_style: 'Grading style',
     Hide_from_Students: 'Hide from Students',
@@ -551,6 +553,7 @@ var Msg = {
     Student_Number: 'Student Number',
     Student_ID: 'Student ID',
     Student_marked_absent: 'Student marked as absent on the date of that item',
+    Student_Photo: 'Student Photo',
     Students_are_in_trouble: function(count){
         return count > 1 ? 'Students are in trouble' : 'Student is in trouble';
     },
@@ -607,6 +610,7 @@ var Msg = {
     Worksheet_Report: 'Worksheet Report',
     Whole_day: 'Whole day',
     Whole_School: 'Whole School',
+    Window_Envelope: 'Window Envelope',
     Will_teachers_be_viewing_student_output: 'Will teachers be viewing student output?',
     With_report_data: 'with report data',
     Withdrawn_students: 'Withdrawn students',
