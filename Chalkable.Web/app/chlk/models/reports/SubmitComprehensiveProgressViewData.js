@@ -8,6 +8,8 @@ NAMESPACE('chlk.models.reports', function () {
 
     CLASS('SubmitComprehensiveProgressViewData', EXTENDS(chlk.models.reports.BaseSubmitReportViewData), [
 
+        Number, 'orderBy',
+
         String, 'gradingPeriodIds',
 
         String, 'absenceReasonIds',

@@ -70,6 +70,6 @@ selectedId = topData.getSelectedItemId()
                 paramsPrepend = [selectedId]
             )
                 each announcement in self.announcements
-                    +FeedItem(announcement)
+                    +FeedItem(announcement, false, true)
 
 
