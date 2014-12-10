@@ -185,10 +185,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     EndDate = comprehensiveProgressInput.EndDate,
                     StartDate = comprehensiveProgressInput.StartDate,
-                    AbsenceReasonIds = comprehensiveProgressInput.AbsenceReasonIds.ToArray(),
+                    AbsenceReasonIds = comprehensiveProgressInput.AbsenceReasonIds != null ? comprehensiveProgressInput.AbsenceReasonIds.ToArray() : null,
                     IdToPrint = comprehensiveProgressInput.IdToPrint,
                     AcadSessionId = defaultGp.SchoolYearRef,
-                    GradingPeriodIds = comprehensiveProgressInput.GradingPeriodIds.ToArray(),
+                    GradingPeriodIds =  comprehensiveProgressInput.GradingPeriodIds.ToArray(),
                     AdditionalMailings = comprehensiveProgressInput.AdditionalMailings,
                     ClassAverageOnly = comprehensiveProgressInput.ClassAverageOnly,
                     DailyAttendanceDisplayMethod = comprehensiveProgressInput.DailyAttendanceDisplayMethod,
@@ -220,7 +220,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var stiModel = new MissingAssignmentsParams
                 {
                     AcadSessionId = gradingPeriod.SchoolYearRef,
-                    AlternateScoreIds = missingAssignmentsInput.AlternateScoreIds.ToArray(),
+                    AlternateScoreIds = missingAssignmentsInput.AlternateScoreIds != null ? missingAssignmentsInput.AlternateScoreIds.ToArray() : null,
                     AlternateScoresOnly = missingAssignmentsInput.AlternateScoresOnly,
                     EndDate = missingAssignmentsInput.EndDate,
                     ConsiderZerosAsMissingGrades = missingAssignmentsInput.ConsiderZerosAsMissingGrades,
