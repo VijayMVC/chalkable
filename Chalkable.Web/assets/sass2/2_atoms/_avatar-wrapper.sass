@@ -1,23 +1,23 @@
-.avatar-wrapper
-  position: relative
-  z-index: 0
-  overflow: hidden
+.alerts-icon
+  background: image-url("images/icons/alerts-white.png") 0 0 no-repeat
+  width: 38px
+  height: 37px
+  right: 0
+  top: 0
+  position: absolute
+  z-index: 1000
 
-  .alerts-icon
-    background: image-url("images/icons/alerts-white.png") 0 0 no-repeat
-    width: 38px
-    height: 37px
-    right: 0
-    top: 0
-    position: absolute
-    z-index: 1000
-
-  .small
+  &.small
     background: image-url("images/attendance/alerts.png") 0 0 no-repeat
     width: 25px
     height: 27px
     right: -13px
     top: -12px
+
+.avatar-wrapper
+  position: relative
+  z-index: 0
+  overflow: hidden
 
 @each $size in 40, 47, 55, 64, 70, 128, 140
   .person-avatar-m-#{$size}, .person-avatar-w-#{$size}

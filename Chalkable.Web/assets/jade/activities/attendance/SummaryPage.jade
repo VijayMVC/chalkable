@@ -50,7 +50,7 @@ topItems = topData.getTopItems() || []
 h2.page-title= Msg.Attendance
     +LeftRightToolbar(topItems, chlk.templates.attendance.TopBar, 'attendance', 'classList')(
     selectedItemId=""
-).classes-bar
+).classes-bar.attendance
 .action-bar
     .items
         a(data-page=1).action-button.absent-late-button.absent-button.pressed=Msg.Absent

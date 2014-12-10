@@ -20,7 +20,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.NotTakenAttendanceClassesTpl)],
             VOID, function doUpdateClasses(tpl, model, msg_) {
-                var dom = this.dom;
+                var dom = ria.dom.Dom();
                 model.getItems().forEach(function(item){
                     dom.find('.alerts-icon[data-id=' + item.getId() + ']').show();
                 })

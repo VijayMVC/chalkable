@@ -27,7 +27,7 @@ h2.page-title Attendance
     if(self.hasLeftRightToolBar())
         +LeftRightToolbar(topItems, chlk.templates.attendance.TopBar, 'attendance', 'classListFromBar', [self.getDate().format('mm-dd-yy')])(
             selectedItemId=selectedId ? selectedId.valueOf() : ""
-        ).classes-bar
+        ).classes-bar.attendance
     if self.getItems().length == 0
         .people-list-container
             .header
