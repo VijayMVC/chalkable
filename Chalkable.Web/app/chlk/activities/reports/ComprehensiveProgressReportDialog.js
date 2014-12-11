@@ -16,19 +16,18 @@ NAMESPACE('chlk.activities.reports', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
 
-                var yearToDate = node.find('#year-to-date-chk').checked();
-                var gradingPeriod = node.find('#grading-period-chk').checked();
-                var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
                 var reasonsNode = node.find('#absence-reasons'),
                     reasonsArray = node.find('.reasons-select').getValue();
                 if(reasonsArray && reasonsArray.length)
                     reasonsNode.setValue(reasonsArray.join(','));
 
-                var gradingPeriodsIdsNode = node.find('#grading-periods'),
-                    gradingPeriodsIds = node.find('.grading-periods-select').getValue();
-                if(gradingPeriodsIds && gradingPeriodsIds.length > 0)
-                    gradingPeriodsIdsNode.setValue(gradingPeriodsIds.join(','));
-
+                //var gradingPeriodsIdsNode = node.find('#grading-periods'),
+                //    gradingPeriodsIds = node.find('.grading-periods-select').getValue();
+                //if(gradingPeriodsIds && gradingPeriodsIds.length > 0)
+                //    gradingPeriodsIdsNode.setValue(gradingPeriodsIds.join(','));
+                var yearToDate = node.find('#year-to-date-chk').checked();
+                var gradingPeriod = node.find('#grading-period-chk').checked();
+                var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
                 dailyAttendanceDisplayMethodNode.setValue(this.getAttDisplayMethod(yearToDate, gradingPeriod).valueOf());
             },
 
