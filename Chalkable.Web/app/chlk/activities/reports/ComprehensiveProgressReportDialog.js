@@ -3,6 +3,8 @@ REQUIRE('chlk.templates.reports.ComprehensiveProgressReportTpl');
 
 NAMESPACE('chlk.activities.reports', function(){
 
+    var attDisplayMethodEnum = chlk.models.reports.AttendanceDisplayMethodEnum;
+
     /**@class chlk.activities.reports.ComprehensiveProgressReportDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
@@ -10,11 +12,9 @@ NAMESPACE('chlk.activities.reports', function(){
         [ria.mvc.TemplateBind(chlk.templates.reports.ComprehensiveProgressReportTpl)],
         'ComprehensiveProgressReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
 
-
             [ria.mvc.DomEventBind('submit', '.comprehensive-progress-report-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
-
 
                 var yearToDate = node.find('#year-to-date-chk').checked();
                 var gradingPeriod = node.find('#grading-period-chk').checked();
@@ -29,17 +29,18 @@ NAMESPACE('chlk.activities.reports', function(){
                 if(gradingPeriodsIds && gradingPeriodsIds.length > 0)
                     gradingPeriodsIdsNode.setValue(gradingPeriodsIds.join(','));
 
-                //todo: create enum dailyAttendanceDisplayMethod
-                if(yearToDate){
-                    dailyAttendanceDisplayMethodNode.setValue(3);
-                    if(gradingPeriod){
-                        dailyAttendanceDisplayMethodNode.setValue(1);
-                    }
-                }else{
-                    if(gradingPeriod){
-                        dailyAttendanceDisplayMethodNode.setValue(2);
-                    }
-                }
+                dailyAttendanceDisplayMethodNode.setValue(this.getAttDisplayMethod(yearToDate, gradingPeriod).valueOf());
+            },
+
+            [[Boolean, Boolean]],
+            attDisplayMethodEnum, function getAttDisplayMethod(isYearToDate, isGradingPeriodNode){
+                if(isYearToDate && isGradingPeriodNode)
+                    return attDisplayMethodEnum.BOTH;
+                if(isYearToDate)
+                    return attDisplayMethodEnum.YEAR_TO_DATE;
+                if(isGradingPeriodNode)
+                    return attDisplayMethodEnum.GRADING_PERIOD;
+                return attDisplayMethodEnum.NONE;
             }
     ]);
 });

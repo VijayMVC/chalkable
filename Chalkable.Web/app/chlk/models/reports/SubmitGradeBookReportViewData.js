@@ -10,7 +10,7 @@ NAMESPACE('chlk.models.reports', function () {
 
         Number, 'reportType',
 
-        Number, 'orderBy',
+        chlk.models.reports.OrderByEnum, 'orderBy',
 
         Boolean, 'displayLetterGrade',
         Boolean, 'displayTotalPoints',
