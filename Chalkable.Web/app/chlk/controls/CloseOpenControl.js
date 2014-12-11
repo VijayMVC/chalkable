@@ -14,18 +14,14 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id),
-                            container = node.find('.close-open-block'),
-                            height = container.height();
-                        container
-                            .setCss('height', height)
-                            .setData('height', height);
+                            container = node.find('.close-open-block');
                         node.on('click', '.open, .close', function(){
                             if(node.hasClass('opened')){
                                 container.setCss('height', 0);
                                 node.removeClass('opened');
                             }
                             else{
-                                container.setCss('height', container.getData('height'));
+                                container.setCss('height', 'auto');
                                 node.addClass('opened');
                             }
                         })
