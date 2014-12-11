@@ -4,6 +4,13 @@ REQUIRE('chlk.models.grading.AlternateScore');
 NAMESPACE('chlk.models.reports', function () {
     "use strict";
 
+
+    /** @class chlk.models.reports.MissingAssignmentsOrderByMethod*/
+    ENUM('MissingAssignmentsOrderByMethod',{
+        STUDENT_IDENTIFIER: 0,
+        SECTION_NUMBER: 1
+    });
+
     /** @class chlk.models.reports.SubmitMissingAssignmentsReportViewData*/
 
     CLASS('SubmitMissingAssignmentsReportViewData', EXTENDS(chlk.models.reports.BaseSubmitReportViewData), [
@@ -14,7 +21,8 @@ NAMESPACE('chlk.models.reports', function () {
         Boolean, 'includeWithdrawnStudents',
         Boolean, 'suppressStudentName',
         Boolean, 'onePerPage',
-        Number, 'orderBy',
+
+        chlk.models.reports.MissingAssignmentsOrderByMethod, 'orderBy',
 
         String, 'alternateScoreIds',
 

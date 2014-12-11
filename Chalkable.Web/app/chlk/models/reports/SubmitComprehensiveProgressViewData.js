@@ -1,14 +1,24 @@
-REQUIRE('chlk.models.reports.BaseReportViewData');
+REQUIRE('chlk.models.reports.BaseSubmitReportViewData');
 REQUIRE('chlk.models.id.SchoolPersonId');
 
 NAMESPACE('chlk.models.reports', function () {
     "use strict";
 
+    /** @class chlk.models.reports.ComprehensiveProgressOrderByMethod*/
+    ENUM('ComprehensiveProgressOrderByMethod', {
+        STUDENT_DISPLAY_NAME: 1,
+        STUDNET_IDENTIFIER: 2,
+        GRADE_LEVEL: 3,
+        HOME_ROOM: 4,
+        POSTAL_CODE: 5,
+        DISTRIBUTION_PERIOD: 6
+    });
+
     /** @class chlk.models.reports.SubmitComprehensiveProgressViewData*/
 
     CLASS('SubmitComprehensiveProgressViewData', EXTENDS(chlk.models.reports.BaseSubmitReportViewData), [
 
-        Number, 'orderBy',
+        chlk.models.reports.ComprehensiveProgressOrderByMethod, 'orderBy',
 
         String, 'gradingPeriodIds',
 
@@ -16,7 +26,7 @@ NAMESPACE('chlk.models.reports', function () {
 
         Boolean, 'additionalMailings',
 
-        Number, 'dailyAttendanceDisplayMethod',
+        chlk.models.reports.AttendanceDisplayMethodEnum, 'dailyAttendanceDisplayMethod',
 
         Boolean, 'classAverageOnly',
 

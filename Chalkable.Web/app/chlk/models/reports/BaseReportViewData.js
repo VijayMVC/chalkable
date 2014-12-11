@@ -6,7 +6,6 @@ NAMESPACE('chlk.models.reports', function () {
     "use strict";
 
     /** @class chlk.models.reports.BaseReportViewData*/
-
     CLASS('BaseReportViewData', [
 
         chlk.models.id.ClassId, 'classId',

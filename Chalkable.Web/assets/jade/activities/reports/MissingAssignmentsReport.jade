@@ -1,3 +1,4 @@
+
 .dialog-window.report-window
    .close.close-btn.dark
    date = new chlk.models.common.ChlkDate()
@@ -38,7 +39,10 @@
                TD.item-3
             TR
                TD.item-3
-                  +OrderBySelect(true)
+                  h3=Msg.Order_by
+                  +Select('orderBy').order-by
+                     +Option(chlk.models.reports.MissingAssignmentsOrderByMethod.STUDENT_IDENTIFIER.valueOf(), Msg.Student, true)
+                     +Option(chlk.models.reports.MissingAssignmentsOrderByMethod.SECTION_NUMBER.valueOf(), 'Section Number', false)
                TD.item-3
                   +IdToPriintSelect(true)
                TD.item-3

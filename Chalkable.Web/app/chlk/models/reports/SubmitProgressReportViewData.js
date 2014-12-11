@@ -18,7 +18,7 @@ NAMESPACE('chlk.models.reports', function () {
 
         Boolean, 'additionalMailings',
 
-        Number, 'dailyAttendanceDisplayMethod',
+        chlk.models.reports.AttendanceDisplayMethodEnum, 'dailyAttendanceDisplayMethod',
 
         Boolean, 'displayCategoryAverages',
 

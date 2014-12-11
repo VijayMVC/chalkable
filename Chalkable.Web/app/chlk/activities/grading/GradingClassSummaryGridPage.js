@@ -413,7 +413,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 var studentAnnouncements = item.getStudentAnnouncements().getItems();
                                 for(j=0; j < studentAnnouncements.length; j++){
                                     var studentAnnouncement = studentAnnouncements[j];
-                                    if(studentAnnouncement.getId() == model.getId()){
+                                    if(studentAnnouncement.getStudentId() == model.getStudentId()){
                                         studentAnnouncement.setGradeValue(model.getGradeValue());
                                         studentAnnouncement.setDropped(model.isDropped());
                                         studentAnnouncement.setLate(model.isLate());
