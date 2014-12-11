@@ -150,7 +150,8 @@ NAMESPACE('chlk.services', function () {
                 includeWithdrawn: includeWithdrawn_,
                 goGreen: goGreen_,
                 windowEnvelope: windowEnvelope_,
-                studentFilterId_: studentFilterId_
+                studentFilterId_: studentFilterId_,
+                orderBy: orderBy.valueOf()
             });
         },
 
