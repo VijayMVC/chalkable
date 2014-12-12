@@ -55,7 +55,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.KEY_DOWN.valueOf(), '.chlk-grid')],
             [[ria.dom.Dom, ria.dom.Event, Number]],
-            VOID, function gridKeyDownSelect(node, event, key_) {
+            VOID, function gridKeyDownSelect(node, event, key_) {console.info('gridKeyDownSelect');
                 switch(event.which){
                     case ria.dom.Keys.ENTER.valueOf(): node.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());break;
                     case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
@@ -106,9 +106,10 @@ NAMESPACE('chlk.activities.attendance', function () {
                 event.stopPropagation();
             },
 
-            VOID, function showDropDown(){
+            VOID, function showDropDown(){console.info('showDropDown');console.info('---------------------');
                 clearTimeout(this._comboTimer);
-                var row = this.dom.find('#class-attendance-list-panel').find('.row.selected');
+                var row = this.dom.find('#class-attendance-list-panel').find('.row.selected'),
+                    gridFocus = this.dom.find('#class-attendance-list-panel').find('.grid-focus');
                 if(this._canChangeReasons){
                     this._comboTimer = setTimeout(function(){
                         var list = row.find('.combo-list:hidden');
@@ -116,21 +117,22 @@ NAMESPACE('chlk.activities.attendance', function () {
                             row.find('.combo-list').show();
                             row.find('.student-attendance-container').addClass('active');
                         }
-                        row.find('input.combo-input').trigger('focus');
+                        var input = row.find('input.combo-input');
+                        if(input.exists())
+                            input.trigger('focus');
+                        else
+                            gridFocus.trigger('focus');
                     }, 500);
-                }else
-                    this._comboTimer = setTimeout(function(){
-                        row.find('input.combo-input').trigger('focus');
-                    }, 500);
+                }
             },
 
             [ria.mvc.DomEventBind('keydown', '.combo-input')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function keyComboArrowsClick(node, event) {
+            VOID, function keyComboArrowsClick(node, event) {console.info('keyComboArrowsClick');
                 var parent = node.parent('.combo-list'), prev, next;
                 var selected = parent.find('.option.selected');
                 switch (event.which){
-                    case ria.dom.Keys.DOWN.valueOf():
+                    case ria.dom.Keys.DOWN.valueOf():trigger('click')
                         next = selected.next('.option');
                         if(next.exists()){
                             selected.removeClass('selected');
@@ -148,8 +150,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                         }; break;
                     case ria.dom.Keys.ENTER.valueOf():
                         this.updateReasons();event.preventDefault();break;
-                    case ria.dom.Keys.LEFT.valueOf(): node.parent('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
-                    case ria.dom.Keys.RIGHT.valueOf(): node.parent('.row.selected').find('.' + this._RIGHT_ARROW).trigger('click');break;
+                    //case ria.dom.Keys.LEFT.valueOf(): node.parent('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
+                    //case ria.dom.Keys.RIGHT.valueOf(): node.parent('.row.selected').find('.' + this._RIGHT_ARROW).trigger('click');break;
                 }
             },
 
