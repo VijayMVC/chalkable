@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<controllers>
+	<Person>
+		<Me>
+			<requires />
+		</Me>
+	</Person>
+	<AnnouncementCalendar>
+		<List>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+				<param name="gradelevelids"  needToCall="Class/List"/>
+			</requires>
+		</List>
+		<Day>
+			<requires>
+				<param name="schoolPersonId"  needToCall="Student/GetStudents"/>
+			</requires>
+		</Day>
+		<Week>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+				<param name="gradelevelids"  needToCall="Class/List"/>
+			</requires>
+		</Week>
+	</AnnouncementCalendar>
+	<Announcement>
+		<Read>
+			<requires>
+				<param name="announcementId"  needToCall="Feed/List"/>
+			</requires>
+		</Read>
+	</Announcement>
+	<Application>
+		<GetAnnouncementApplication>
+			<requires>
+				<param name="announcementApplicationId"  needToCall="Announcement/Read"/>
+			</requires>
+		</GetAnnouncementApplication>
+	</Application>
+	<Attendance>
+		<SetAttendanceForClass>
+			<requires>
+				<param name="attendanceReason"  needToCall="AttendanceReason/List"/>
+				<param name="classId" needToCall="Class/List"/>
+			</requires>
+		</SetAttendanceForClass>
+		<ClassList>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+			</requires>
+		</ClassList>
+		<SeatingChart>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+			</requires>
+		</SeatingChart>
+		<AttendanceSummary>
+			<requires />
+		</AttendanceSummary>
+	</Attendance>
+	<AttendanceReason>
+		<List>
+			<requires />
+		</List>
+	</AttendanceReason>
+	<AnnouncementType>
+		<List>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+			</requires>
+		</List>
+	</AnnouncementType>
+	<Feed>
+		<List>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>	
+			</requires>
+		</List>
+	</Feed>
+	<Grading>
+		<ClassSummary>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+			</requires>
+		</ClassSummary>
+		<ItemGradingStat>
+			<requires>
+				<param name="announcementId"  needToCall="Feed/List"/>
+			</requires>
+		</ItemGradingStat>
+		<ClassSummaryGrids>
+			<requires>
+				<param name="classId"  needToCall="Class/List"/>
+			</requires>
+		</ClassSummaryGrids>
+	</Grading>
+	<GradingStyle>
+		<List>
+			<requires />
+		</List>
+	</GradingStyle>
+	<Teacher>
+		<Summary>
+			<requires>
+				<param name="personId"  needToCall="Person/Me" />
+			</requires>
+		</Summary>
+		<Me>
+			<requires />
+		</Me>
+	</Teacher>
+	<Class>
+		<List>
+			<requires>
+				<param name="schoolYearId"  needToCall="SchoolYear/List"/>
+			</requires>
+		</List>
+	</Class>
+	<Discipline>
+		<ClassList>
+			<requires>
+				<param name="classId"  needToCall="Class/List" />
+			</requires>
+		</ClassList>
+		<StudentDisciplineSummary>
+			<requires>
+				<param name="personId"  needToCall="Student/GetStudents"/>
+				<param name="markingPeriodId"  needToCall="MarkingPeriod/List"/>
+			</requires>
+		</StudentDisciplineSummary>
+	</Discipline>
+	<DisciplineType>
+		<List>
+			<requires />
+		</List>
+	</DisciplineType>
+	<MarkingPeriod>
+		<List>
+			<requires>
+				<param name="schoolYearId"  needToCall="SchoolYear/List" />
+			</requires>
+		</List>
+	</MarkingPeriod>
+	<PrivateMessage>
+		<Send>
+			<requires>
+				<param name="personId"  needToCall="Student/GetStudents" />
+			</requires>
+		</Send>
+		<ListPossibleRecipients>
+      <requires />
+		</ListPossibleRecipients>
+	</PrivateMessage>
+	<SchoolYear>
+		<List>
+			<requires />
+		</List>
+	</SchoolYear>
+	<Search>
+		<Search>
+      <requires />
+		</Search>
+	</Search>
+	<Student>
+		<Info>
+			<requires>
+				<param name="personId"  needToCall="Student/GetStudents"/>
+			</requires>			
+		</Info>
+		<GetStudents>
+			<requires>
+				<param name="classId"  needToCall="Class/List" />
+			</requires>
+		</GetStudents>
+	</Student>
+</controllers>

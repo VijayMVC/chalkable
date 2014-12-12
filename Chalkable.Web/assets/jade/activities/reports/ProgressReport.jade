@@ -1,0 +1,87 @@
+.dialog-window.report-window
+    .close.close-btn.dark
+    date = new chlk.models.common.ChlkDate()
+    h1=Msg.Create_Report
+    .report-buttons.panel-bg
+        +ActionLinkList(self.buildReportLinksData('progressReport'))
+    +ActionForm('grading', 'submitProgressReport').progress-report-form.no-working
+        +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+        +Hidden('classId', self.getClassId().valueOf())
+        +Hidden('commentsList', '')#coments-list
+        +Hidden('studentIds', '')#student-ids-value
+        +Hidden('notSelectedCount', 0)#not-selected-count
+        +Hidden('absenceReasonIds', '')#absence-reasons
+        +Hidden('dailyAttendanceDisplayMethod', 0)#daily-attendance-display-method
+        .report-content
+            TABLE.report-table
+                TR
+                    TD.item-3
+                        +IdToPriintSelect(true)
+                    TD.item-3
+                        h3=Msg.Absence_reasons
+                        +Select('absenceReason')(multiple).reasons-select
+                            each reason in self.getReasons()
+                                +Option(reason.getId().valueOf(), reason.getName(), true)
+                    TD.item-3
+                        h3=Msg.Include_students
+                        .min-max
+                            input(placeholder=Msg.Min_avg, name="minStandardAverage").min-max-input.min
+                            |-
+                            input(placeholder=Msg.Max_avg, name="maxStandardAverage").min-max-input.max
+                TR
+                    TD.item-3
+                        h3=Msg.Include
+                        +LabeledCheckbox(Msg.Class_average, 'displayClassAverages', false)
+                        +LabeledCheckbox(Msg.Period_attendance, 'displayPeriodAttendance', false)
+                        +LabeledCheckbox(Msg.Total_points, 'displayTotalPoints', false)
+                        +LabeledCheckbox(Msg.Signal_line, 'displaySignatureLine', false)
+                    TD.item-3
+                        h3
+                        +LabeledCheckbox(Msg.Additional_mailings, 'additionalMailings', false)
+                        +LabeledCheckbox(Msg.Letter_grade, 'displayLetterGrade', false)
+                        +LabeledCheckbox(Msg.Student_comment, 'displayStudentComments', false)
+                        +LabeledCheckbox(Msg.Student_mailing_address, 'displayStudentMailingAddress', false)
+                    TD.item-3
+                        h3
+                        +LabeledCheckbox(Msg.Category_averages, 'displayCategoryAverages', false).category-average
+                        .small-block
+                            label=Msg.Min
+                            input(name="minCategoryClassAverage", disabled="true").small-input
+                        .small-block
+                            label=Msg.Max
+                            input(name="maxCategoryClassAverage", disabled="true").small-input
+                TR
+                    TD.item-3
+                        h3=Msg.Section_comment
+                        TEXTAREA(name="classComment").section-comment
+                    TD.item-3
+                        h3=Msg.Daily_attendance
+                        +LabeledCheckbox(Msg.Year_to_date, 'yearToDate', false)#year-to-date-chk
+                        +LabeledCheckbox(Msg.Grading_period, 'gradingPeriod', false)#grading-period-chk
+                    TD.item-3
+                        h3=Msg.Other
+                        +LabeledCheckbox(Msg.Go_green, 'goGreen', false)
+                TR
+                    TD(colspan=3).item-1
+                        +Checkbox('select all', false)#select-all
+                        label(for="select-all")=Msg.Select_all
+                        .students-block
+                            each student, i in self.getStudents()
+                                .student-item
+                                    .chk
+                                        id = student.getId().valueOf()
+                                        +Checkbox('student', !!student.getComment())(value=id, data-id=id).student-chk
+                                    +ProfileLink(student, 'student').image-container.white.shadow
+                                        +PersonImg(student, 47)
+                                    p=student.getDisplayName()
+
+                                    +SearchBox(chlk.services.GradingService, "getGradeComments", chlk.templates.grading.GradingCommentsDropdownTpl)(
+                                        value=student.getComment(),
+                                        default-value=""
+                                        keepNonExsistentValue != true
+                                        minLength = 0,class="student-comment", id="comments-" + id
+                                    )
+        .report-bottom
+            +ReportFormatSelect()
+            BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
