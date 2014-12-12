@@ -1,7 +1,8 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
 REQUIRE('ria.async.Observable');
-
+REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
+REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -13,11 +14,11 @@ NAMESPACE('chlk.services', function () {
 
         Number, 'reportType',
 
-        Number, 'orderBy',
+        chlk.models.reports.OrderByEnum, 'orderBy',
 
-        Number, 'idToPrint',
+        chlk.models.reports.StudentIdentifierEnum, 'idToPrint',
 
-        Number, 'format',
+        chlk.models.reports.ReportFormatEnum, 'format',
 
         Boolean, 'displayLetterGrade',
 
@@ -30,7 +31,8 @@ NAMESPACE('chlk.services', function () {
         Boolean, 'includeNonGradedActivities',
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            Number, Number, Number, Number, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
+            Number, chlk.models.reports.OrderByEnum, chlk.models.reports.StudentIdentifierEnum,
+            chlk.models.reports.ReportFormatEnum, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
         String, function submitGradeBookReport(classId, gradingPeriodId, startDate, endDate, reportType, orderBy,
                                                          idToPrint, format, displayLetterGrade_, displayTotalPoints_,
                                                          displayStudentAverage_, includeWithdrawnStudents_, includeNonGradedActivities_,
@@ -41,9 +43,9 @@ NAMESPACE('chlk.services', function () {
                 startDate: startDate.toStandardFormat(),
                 endDate: endDate.toStandardFormat(),
                 reportType: reportType,
-                orderBy: orderBy,
-                idToPrint: idToPrint,
-                format: format,
+                orderBy: orderBy.valueOf(),
+                idToPrint: idToPrint.valueOf(),
+                format: format.valueOf(),
                 displayLetterGrade: displayLetterGrade_,
                 displayTotalPoints: displayTotalPoints_,
                 displayStudentAverage: displayStudentAverage_,
@@ -53,7 +55,7 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Number,
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.reports.StudentIdentifierEnum,
             String, String, String, String, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
         String, function submitWorksheetReport(classId, gradingPeriodId, startDate, endDate, idToPrint, announcementIds, title1, title2, title3,
                     title4, title5, printAverage_, printLetterGrade_, printScores_, printStudent_, workingFilter_, appendToExisting_, overwriteExisting_) {
@@ -62,7 +64,7 @@ NAMESPACE('chlk.services', function () {
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 startDate: startDate.toStandardFormat(),
                 endDate: endDate.toStandardFormat(),
-                idToPrint: idToPrint,
+                idToPrint: idToPrint.valueOf(),
                 announcementIds: announcementIds,
                 title1: title1,
                 title2: title2,
@@ -79,8 +81,8 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[chlk.models.id.ClassId, Number, Number, chlk.models.id.GradingPeriodId, String, Boolean, Number,
-            Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean,
+        [[chlk.models.id.ClassId, chlk.models.reports.StudentIdentifierEnum, chlk.models.reports.ReportFormatEnum, chlk.models.id.GradingPeriodId,
+            String, Boolean, chlk.models.reports.AttendanceDisplayMethodEnum, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean,
             Number, Number, Number, Number, Boolean, String, String, String]],
         String, function submitProgressReport(classId, idToPrint, format, gradingPeriodId, absenceReasonIds, additionalMailings_, dailyAttendanceDisplayMethod,
                 displayCategoryAverages_, displayClassAverages_, displayLetterGrade_, displayPeriodAttendance_, displaySignatureLine_, displayStudentComments_,
@@ -89,11 +91,11 @@ NAMESPACE('chlk.services', function () {
             return this.getUrl('Reporting/ProgressReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
-                idToPrint: idToPrint,
-                format: format,
+                idToPrint: idToPrint.valueOf(),
+                format: format.valueOf(),
                 absenceReasonIds: absenceReasonIds,
                 additionalMailings: additionalMailings_,
-                dailyAttendanceDisplayMethod: dailyAttendanceDisplayMethod,
+                dailyAttendanceDisplayMethod: dailyAttendanceDisplayMethod.valueOf(),
                 displayCategoryAverages: displayCategoryAverages_,
                 displayClassAverages: displayClassAverages_,
                 displayLetterGrade: displayLetterGrade_,
@@ -115,9 +117,10 @@ NAMESPACE('chlk.services', function () {
         },
 
 
-        [[chlk.models.id.ClassId, Number, Number, ArrayOf(chlk.models.id.GradingPeriodId), ArrayOf(chlk.models.id.AttendanceReasonId),
-            Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Number, Number, Boolean, Boolean, Boolean, Boolean, Number,
-            Boolean, Boolean, Boolean,  Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.SchoolPersonId]],
+        [[chlk.models.id.ClassId, chlk.models.reports.StudentIdentifierEnum, chlk.models.reports.ReportFormatEnum, ArrayOf(chlk.models.id.GradingPeriodId),
+            ArrayOf(chlk.models.id.AttendanceReasonId), chlk.models.reports.ComprehensiveProgressOrderByMethod, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
+            Number, Number, Boolean, Boolean, Boolean, Boolean, chlk.models.reports.AttendanceDisplayMethodEnum, Boolean, Boolean,
+            Boolean,  Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.SchoolPersonId]],
 
         String, function submitComprehensiveProgressReport(classId, idToPrint, format, gradingPeriodIds, absenceReasonIds, orderBy,  startDate_, endDate_,
                maxStandardAverage_, minStandardAverage_, additionalMailings_, classAverageOnly_, displayCategoryAverages_, displayClassAverage_,
@@ -125,8 +128,8 @@ NAMESPACE('chlk.services', function () {
                displayTotalPoints_, includePicture_, includeWithdrawn_, windowEnvelope_, goGreen_, studentFilterId_){
             return this.getUrl('Reporting/ComprehensiveProgressReport.json', {
                 classId : classId.valueOf(),
-                idToPrint: idToPrint,
-                format: format,
+                idToPrint: idToPrint.valueOf(),
+                format: format.valueOf(),
                 gradingPeriodIds : this.arrayToCsv(gradingPeriodIds),
                 absenceReasonIds: this.arrayToCsv(absenceReasonIds),
                 startDate: startDate_ && startDate_.toStandardFormat(),
@@ -135,7 +138,7 @@ NAMESPACE('chlk.services', function () {
                 minStandardAverage: minStandardAverage_,
                 additionalMailings: additionalMailings_,
                 classAverageOnly: classAverageOnly_,
-                dailyAttendanceDisplayMethod: dailyAttendanceDisplayMethod,
+                dailyAttendanceDisplayMethod: dailyAttendanceDisplayMethod.valueOf(),
                 displayCategoryAverages: displayCategoryAverages_,
                 displayClassAverage: displayClassAverage_,
                 displayPeriodAttendance: displayPeriodAttendance_,
@@ -147,21 +150,23 @@ NAMESPACE('chlk.services', function () {
                 includeWithdrawn: includeWithdrawn_,
                 goGreen: goGreen_,
                 windowEnvelope: windowEnvelope_,
-                studentFilterId_: studentFilterId_
+                studentFilterId_: studentFilterId_,
+                orderBy: orderBy.valueOf()
             });
         },
 
-        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Number, Number, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            ArrayOf(chlk.models.id.AlternateScoreId), Boolean, Boolean, Boolean, Boolean, Boolean]],
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.StudentIdentifierEnum,
+            chlk.models.reports.ReportFormatEnum, chlk.models.reports.MissingAssignmentsOrderByMethod, chlk.models.common.ChlkDate,
+            chlk.models.common.ChlkDate, ArrayOf(chlk.models.id.AlternateScoreId), Boolean, Boolean, Boolean, Boolean, Boolean]],
         String, function submitMissingAssignmentsReport(classId, gradingPeriodId, idToPrint, format, orderBy, startDate, endDate,
                 alternateScoreIds_, alternateScoresOnly_, considerZerosAsMissingGrades_, includeWithdrawn_, onePerPage_,
                 suppressStudentName_){
             return this.getUrl('Reporting/MissingAssignmentsReport.json',{
                 classId: classId.valueOf(),
                 gradingPeriodId : gradingPeriodId.valueOf(),
-                idToPrint: idToPrint,
-                format: format,
-                orderBy: orderBy,
+                idToPrint: idToPrint.valueOf(),
+                format: format.valueOf(),
+                orderBy: orderBy.valueOf(),
                 startDate: startDate.toStandardFormat(),
                 endDate: endDate.toStandardFormat(),
                 alternateScoreIds: this.arrayToCsv(alternateScoreIds_),

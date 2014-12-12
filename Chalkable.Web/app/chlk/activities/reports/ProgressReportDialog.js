@@ -75,16 +75,19 @@ NAMESPACE('chlk.activities.reports', function(){
                     reasonsArray = node.find('.reasons-select').getValue();
                 if(reasonsArray && reasonsArray.length)
                     reasonsNode.setValue(reasonsArray.join(','));
-                if(yearToDate){
-                    dailyAttendanceDisplayMethodNode.setValue(3);
-                    if(gradingPeriod){
-                        dailyAttendanceDisplayMethodNode.setValue(1);
-                    }
-                }else{
-                    if(gradingPeriod){
-                        dailyAttendanceDisplayMethodNode.setValue(2);
-                    }
-                }
+
+                dailyAttendanceDisplayMethodNode.setValue(this.getAttDisplayMethod(yearToDate, gradingPeriod).valueOf());
+            },
+
+            [[Boolean, Boolean]],
+            chlk.models.reports.AttendanceDisplayMethodEnum, function getAttDisplayMethod(isYearToDate, isGradingPeriodNode){
+                if(isYearToDate && isGradingPeriodNode)
+                    return chlk.models.reports.AttendanceDisplayMethodEnum.BOTH;
+                if(isYearToDate)
+                    return chlk.models.reports.AttendanceDisplayMethodEnum.YEAR_TO_DATE;
+                if(isGradingPeriodNode)
+                    return chlk.models.reports.AttendanceDisplayMethodEnum.GRADING_PERIOD;
+                return chlk.models.reports.AttendanceDisplayMethodEnum.NONE;
             }
         ]);
 });

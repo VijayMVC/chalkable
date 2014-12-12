@@ -202,7 +202,6 @@ namespace Chalkable.StiImport.Services
             var persons = context.GetSyncResult<Person>().Updated
                 .Select(x => new Data.School.Model.Person
                 {
-                    Active = true,
                     AddressRef = x.PhysicalAddressID,
                     BirthDate = x.DateOfBirth,
                     FirstName = x.FirstName,
@@ -211,7 +210,7 @@ namespace Chalkable.StiImport.Services
                     LastName = x.LastName,
                     PhotoModifiedDate = x.PhotoModifiedDate
                 }).ToList();
-            ServiceLocatorSchool.PersonService.Edit(persons);
+            ServiceLocatorSchool.PersonService.UpdateForImport(persons);
             foreach (var person in context.GetSyncResult<Person>().Updated)
                 if (person.PhotoModifiedDate.HasValue)
                     personsForImportPictures.Add(person);

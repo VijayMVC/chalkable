@@ -3,6 +3,8 @@ REQUIRE('chlk.templates.reports.ComprehensiveProgressReportTpl');
 
 NAMESPACE('chlk.activities.reports', function(){
 
+    var attDisplayMethodEnum = chlk.models.reports.AttendanceDisplayMethodEnum;
+
     /**@class chlk.activities.reports.ComprehensiveProgressReportDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
@@ -10,36 +12,34 @@ NAMESPACE('chlk.activities.reports', function(){
         [ria.mvc.TemplateBind(chlk.templates.reports.ComprehensiveProgressReportTpl)],
         'ComprehensiveProgressReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
 
-
             [ria.mvc.DomEventBind('submit', '.comprehensive-progress-report-form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
 
-
-                var yearToDate = node.find('#year-to-date-chk').checked();
-                var gradingPeriod = node.find('#grading-period-chk').checked();
-                var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
                 var reasonsNode = node.find('#absence-reasons'),
                     reasonsArray = node.find('.reasons-select').getValue();
                 if(reasonsArray && reasonsArray.length)
                     reasonsNode.setValue(reasonsArray.join(','));
 
-                var gradingPeriodsIdsNode = node.find('#grading-periods'),
-                    gradingPeriodsIds = node.find('.grading-periods-select').getValue();
-                if(gradingPeriodsIds && gradingPeriodsIds.length > 0)
-                    gradingPeriodsIdsNode.setValue(gradingPeriodsIds.join(','));
+                //var gradingPeriodsIdsNode = node.find('#grading-periods'),
+                //    gradingPeriodsIds = node.find('.grading-periods-select').getValue();
+                //if(gradingPeriodsIds && gradingPeriodsIds.length > 0)
+                //    gradingPeriodsIdsNode.setValue(gradingPeriodsIds.join(','));
+                var yearToDate = node.find('#year-to-date-chk').checked();
+                var gradingPeriod = node.find('#grading-period-chk').checked();
+                var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
+                dailyAttendanceDisplayMethodNode.setValue(this.getAttDisplayMethod(yearToDate, gradingPeriod).valueOf());
+            },
 
-                //todo: create enum dailyAttendanceDisplayMethod
-                if(yearToDate){
-                    dailyAttendanceDisplayMethodNode.setValue(3);
-                    if(gradingPeriod){
-                        dailyAttendanceDisplayMethodNode.setValue(1);
-                    }
-                }else{
-                    if(gradingPeriod){
-                        dailyAttendanceDisplayMethodNode.setValue(2);
-                    }
-                }
+            [[Boolean, Boolean]],
+            attDisplayMethodEnum, function getAttDisplayMethod(isYearToDate, isGradingPeriodNode){
+                if(isYearToDate && isGradingPeriodNode)
+                    return attDisplayMethodEnum.BOTH;
+                if(isYearToDate)
+                    return attDisplayMethodEnum.YEAR_TO_DATE;
+                if(isGradingPeriodNode)
+                    return attDisplayMethodEnum.GRADING_PERIOD;
+                return attDisplayMethodEnum.NONE;
             }
     ]);
 });

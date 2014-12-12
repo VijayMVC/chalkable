@@ -8,8 +8,8 @@
       +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
       +Hidden('classId', self.getClassId().valueOf())
       +Hidden('absenceReasonIds', '')#absence-reasons
-      +Hidden('gradingPeriodIds', '')#grading-periods
-      +Hidden('dailyAttendanceDisplayMethod', 0)#daily-attendance-display-method
+      +Hidden('gradingPeriodIds', self.getGradingPeriodId().valueOf().toString())#grading-periods
+      +Hidden('dailyAttendanceDisplayMethod', chlk.models.reports.AttendanceDisplayMethodEnum.NONE.valueOf())#daily-attendance-display-method
       .report-content
          TABLE.report-table
             TR
@@ -38,13 +38,17 @@
                      class="validate[required]"
                   ).report-date-picker
                TD.item-3
-                  h3=Msg.Grading_Periods
-                  +Select('gradingPeriod')(multiple).grading-periods-select
-                     each gradingPeriod in self.getGradingPeriods()
-                        +Option(gradingPeriod.getId().valueOf(), gradingPeriod.getDescription(), gradingPeriod.getId() == self.getGradingPeriodId())
             TR
                TD.item-3
-                  +OrderBySelect(true)
+                  h3=Msg.Order_by
+                  +Select('orderBy').order-by
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, true)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.STUDNET_IDENTIFIER.valueOf(), Msg.Student_ID, false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.GRADE_LEVEL.valueOf(), Msg.Grade_Level, false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.HOME_ROOM.valueOf(), 'Homeroom', false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.POSTAL_CODE.valueOf(), 'Postal code', false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.DISTRIBUTION_PERIOD.valueOf(), 'Distribution Period', false)
+
                TD.item-3
                   +IdToPriintSelect(true)
                TD.item-3

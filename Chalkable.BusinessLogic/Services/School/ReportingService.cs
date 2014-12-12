@@ -178,9 +178,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput)
         {
-            bool includeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn;
-            var classPersons = ServiceLocator.ClassService.GetClassPersons(null, comprehensiveProgressInput.ClassId, includeWithdrawn ? (bool?)null : true, null).ToList();
+            bool? isEnrolled = comprehensiveProgressInput.IncludeWithdrawn ? (bool?)null : true;
             var defaultGp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(comprehensiveProgressInput.GradingPeriodId);
+            var students = ServiceLocator.StudentService.GetClassStudents(comprehensiveProgressInput.ClassId, defaultGp.MarkingPeriodRef, isEnrolled);
             var stiModel = new ComprehensiveProgressParams
                 {
                     EndDate = comprehensiveProgressInput.EndDate,
@@ -206,9 +206,10 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = comprehensiveProgressInput.ClassId,
                     WindowEnvelope = comprehensiveProgressInput.WindowEnvelope,
                     StudentFilterId = comprehensiveProgressInput.StudentFilterId,
-                    StudentIds = classPersons.Select(cp=>cp.PersonRef).ToArray(),
+                    StudentIds = students.Select(student=>student.Id).ToArray(),
                     IncludePicture = comprehensiveProgressInput.IncludePicture,
-                    IncludeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn
+                    IncludeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn,
+                   
                 };
             return ConnectorLocator.ReportConnector.ComprehensiveProgressReport(stiModel);
         }
