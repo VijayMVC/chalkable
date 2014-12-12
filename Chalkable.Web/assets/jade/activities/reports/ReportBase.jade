@@ -1,3 +1,23 @@
+mixin ReportDatePicker(header, date, name, minDate, maxDate)
+   if header && header != ''
+      h3=header
+   +DatePicker(name, date || new chlk.models.common.ChlkDate())(
+   data-options={
+         showOtherMonths: true,
+         selectOtherMonths: true,
+         calendarCls: 'for-dialog',
+         minDate: minDate.getDate(),
+         maxDate: maxDate.getDate()
+      },
+   class="validate[required]"
+   )
+
+mixin ReportDatePickers(startDate, endDate)
+   TD.item-3
+      +ReportDatePicker(Msg.Start_date, startDate, 'startDate', startDate, endDate)
+   TD.item-3
+      +ReportDatePicker(Msg.End_date, endDate, 'endDate', startDate, endDate)
+
 mixin ReportFormatSelect()
    +Select('format').format
       +Option(chlk.models.reports.ReportFormatEnum.PDF.valueOf(), "PDF", true)

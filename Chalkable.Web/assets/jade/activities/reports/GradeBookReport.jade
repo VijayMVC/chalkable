@@ -6,7 +6,6 @@ mixin ReportTypeSelect()
 
 .dialog-window.report-window
     .close.close-btn.dark
-    date = new chlk.models.common.ChlkDate()
     h1=Msg.Create_Report
     .report-buttons.panel-bg
         +ActionLinkList(self.buildReportLinksData('gradeBookReport'))
@@ -15,30 +14,7 @@ mixin ReportTypeSelect()
         +Hidden('classId', self.getClassId().valueOf())
         TABLE.report-table
             TR
-                TD.item-3
-                    h3=Msg.Start_date
-                    +DatePicker('startDate', self.getStartDate() || date)(
-                        data-options={
-                            showOtherMonths: true,
-                            selectOtherMonths: true,
-                            calendarCls: 'for-dialog',
-                            minDate: self.getStartDate().getDate(),
-                            maxDate: self.getEndDate().getDate()
-                        },
-                        class="validate[required]"
-                    )
-                TD.item-3
-                    h3=Msg.End_date
-                    +DatePicker('endDate', self.getEndDate() || date)(
-                        data-options={
-                            showOtherMonths: true,
-                            selectOtherMonths: true,
-                            calendarCls: 'for-dialog',
-                            minDate: self.getStartDate().getDate(),
-                            maxDate: self.getEndDate().getDate()
-                        },
-                        class="validate[required]"
-                    )
+                +ReportDatePickers(self.getStartDate(), self.getEndDate())
                 TD.item-3
             TR
                 TD.item-3
