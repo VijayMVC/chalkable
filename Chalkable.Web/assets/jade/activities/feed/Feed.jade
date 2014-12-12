@@ -4,29 +4,23 @@ div(class = noComplete ? "no-complete" : "").feed-container
     topItems = topData.getTopItems();
     selectedId = topData.getSelectedItemId();
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'feed', 'list', [true, self.importantOnly])(
-        selectedItemId=selectedId,
-        disabledClass = 'x-hidden'
+        selectedItemId=selectedId
         ).classes-bar
-    .action-bar.not-transparent
-        .container.panel-bg
-            .left
-                .i-b
-                    if self.importantOnly
-                        BUTTON.grey-button.blue-on-active.pressed.done-undone-button=Msg.ToDo
-                        +ActionLinkButton('feed', 'list', true, false, selectedId || '', 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.All
-                    else
-                        +ActionLinkButton('feed', 'list', true, true, selectedId || '', 0).grey-button.blue-on-active.done-undone-button.no-action-link-styles=Msg.ToDo
-                        BUTTON.grey-button.blue-on-active.done-undone-button.pressed=Msg.All
-            .right
-                .notification-btn-container
-                    .feed-notifications
-                        +RenderWith(self.getModel(), chlk.templates.feed.NotificationsCount)
-    +ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
+    h2.page-title Inbox
+    .action-bar
+        .items
+            if self.importantOnly
+                .pressed= Msg.ToDo
+                +ActionLinkButton('feed', 'list', true, false, selectedId || '', 0)= Msg.All
+            else
+                +ActionLinkButton('feed', 'list', true, true, selectedId || '', 0)= Msg.ToDo
+                .pressed= Msg.All
+    //+ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
     if noComplete
         label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
         label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
     else
-        .not-transparent
+        .wrapper
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,

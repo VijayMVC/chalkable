@@ -15,11 +15,9 @@
                             if(item.getDayOfWeek() == 0)
                                 .period-info=(i+1)
                             else
-                                li
+                                li.day-calendar-list-item
                                     -var className = period.getFullClassName()
                                     if className
                                         .course-icon
                                             +ClassImg(period, 45, 80)
-                                        .p-container
-                                            p.title.day-title
-                                                span(data-tooltip=className, data-tooltip-type ="overflow")=className
+                                        .p-container(data-tooltip=className, data-tooltip-type ="overflow")=className

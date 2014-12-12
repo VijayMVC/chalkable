@@ -38,6 +38,7 @@ REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
 REQUIRE('chlk.controls.MaskedInputControl');
 REQUIRE('chlk.controls.SimplePayCheckControl');
+REQUIRE('chlk.controls.CloseOpenControl');
 
 REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
@@ -127,7 +128,6 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
                 this.saveInSession(session, ChlkSessionConstants.CLASSES_TO_FILTER, ArrayOf(chlk.models.classes.ClassForTopBar));
 
-                var notifications = window[ChlkSessionConstants.NEW_NOTIFICATIONS];
                 var newClasses = session.get(ChlkSessionConstants.CLASSES_TO_FILTER, []).slice();
                 newClasses.unshift(chlk.lib.serialize.ChlkJsonSerializer().deserialize({
                     name: 'All',
@@ -136,10 +136,6 @@ NAMESPACE('chlk', function (){
                 }, chlk.models.classes.ClassForTopBar));
 
                 session.set(ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL, newClasses);
-
-                if(notifications)
-                   document.title = document.title + ' (' + notifications + ')';
-
                 if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');
                 }else{
@@ -266,7 +262,7 @@ NAMESPACE('chlk', function (){
                             tpl.assign(model);
                             tooltip.html(tpl.render());
                             tooltip.show();
-                            var top = offset.top - (tooltip.height() - node.height()) / 2;
+                            var top = offset.top - (tooltip.height() - node.height()) / 2 - 20;
                             tooltip.css('left', offset.left + node.width() + 20)
                                 .css('top', top > 0 ? top : 0);
                             if(top < 0)
@@ -290,13 +286,15 @@ NAMESPACE('chlk', function (){
                     tooltip.html('');
                 });
 
-                 jQuery(document).on('click', '.demo-role-button:not(.coming)', function(){
-                    if(!jQuery(this).hasClass('active')){
-                        window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json?rolename='
-                            + jQuery(this).attr('rolename') + '&prefix=' + window.school.demoprefix;
-                    }
-                    return false;
-                });
+                ria.dom.Dom('#demo-footer')
+                    .on('click', '[data-rolename]', function($node, event) {
+                        if(!$node.hasClass('pressed')) {
+                            window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json'
+                                + '?rolename=' + $node.getData('rolename')
+                                + '&prefix=' + window.school.demoprefix;
+                        }
+                        return false;
+                    });
 
                 this.apiHost_.onStart(this.context);
 
@@ -304,8 +302,8 @@ NAMESPACE('chlk', function (){
                     .then(function(data){
                         if(this.getCurrentPerson())
                             new ria.dom.Dom()
-                                .fromHTML(ASSET('~/assets/jade/common/logout.jade')(this))
-                                .appendTo("#logout-block");
+                                .fromHTML(ASSET('~/assets/jade/common/header.jade')(this))
+                                .appendTo("header");
                         return data;
                     }, this);
             },

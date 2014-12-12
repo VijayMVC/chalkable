@@ -82,6 +82,14 @@ NAMESPACE('chlk.activities.profile', function () {
                 this.dom.find('.view-mode')
                     .removeClass('view-mode')
                     .addClass('edit-mode');
+                var blocks = this.dom.find('.info-edit').find('.close-open-block');
+                blocks.setCss('height', 'auto');
+                setTimeout(function(){
+                    blocks.forEach(function(item){
+                        item.setCss('height', item.height())
+                            .setData('height', item.height());
+                    })
+                }, 1);
             },
 
             [ria.mvc.DomEventBind('click', '#cancell-edit-info-button')],

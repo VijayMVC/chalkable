@@ -3,7 +3,13 @@ devName = app.getDeveloperInfo().getName()
 webSiteLink = app.getDeveloperInfo().getWebSite()
 
 .app-market-details
-    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels, true, true)
+    if self.currentBalance
+        .user-balance= "$" + self.currentBalance
+    h2.page-title= app.getName()
+    .action-bar
+        .items
+            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn My Apps
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn.pressed App Store
     .app-screenshots-panel
         +Carousel()
             -videoUrl = app.getVideoDemoUrl() || ''
@@ -14,35 +20,51 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                 +CarouselItem().img(data-page= index + 2)
                     img(src=picture.getPictureUrl())
     .app-price-info
+        .right
+            +ActionButton('appmarket', 'tryToInstall', app.getId()).blue-button(class=self.isInstalled()? "installed" : undefined)=self.installBtnTitle
         .app-title
-            h1=app.getName()
             span="by "
-            a(href = webSiteLink).dev-web-site=devName
-        .app-buy
-            +ActionLinkButton('appmarket', 'tryToInstall', app.getId()).special-button.blue-button(class=self.isInstalled()? "installed" : undefined)=self.installBtnTitle
+            a(href=webSiteLink, target="blank").dev-web-site=devName
 
-        pre(name = "app-description", class ="app-description", readonly)=app.getDescription()
-        .app-general-info
+
+    +CloseOpen('Info')
+        .content
+            .table.app-info-details
+                .app-description
+                    textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
+    
+                .side-panel
+                    span.review-link User Ratings
+                    +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+
+
+    +CloseOpen('Reviews')
+        .content
             .reviews
                 +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)
-            .permissions
-                .permissions-group
-                    .group-header.first This app is for:
+
+    +CloseOpen('App Features')
+        .content.table.permissions
+            .row
+                .group-header.first This app is for:
+                .items
                     each validRole in app.getValidRoles()
                         .permission
                             .icon(class=self.getRoleTypeClass(validRole.getId()))
                             .description=validRole.getName()
-                .permissions-group
-                    .group-header Info this app uses:
+            .row
+                .group-header Info used:
+                .items
                     each permission in app.getPermissions()
                         .permission
                             .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
                             .description=permission.getName()
-                .permissions-group.last
-                    .group-header.first Works on:
+            .row
+                .group-header.first Works on:
+                .items
                     each platform in app.getPlatforms()
                         .permission
                             .icon(class=self.getPlatformTypeClass(platform.getId().valueOf()))
                             .description=platform.getName()
-            .ban-app
-                +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)
+    .ban-app
+        +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)

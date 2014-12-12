@@ -2,7 +2,14 @@
 @using Chalkable.Web.Common
 @using Chalkable.Web.Models.PersonViewDatas
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+@{
+    var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
+    var isDemoSchool = ViewData.ContainsKey(ViewConstants.DEMO_PREFIX_KEY) && !string.IsNullOrEmpty(ViewData[ViewConstants.DEMO_PREFIX_KEY].ToString());
+    var demoSchoolPictureDistrictRef = ViewData.GetJsConstantValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
+
+}
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
 <head>
     <title>@ViewBag.Title</title>
@@ -13,8 +20,14 @@
     <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <!-- Whole Site CSS -->
-    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="@Url.StaticContent("/Content/" + ViewData[ViewConstants.ROLE_NAME] + ".css")" rel="stylesheet" media="screen, projection" type="text/css" />
+@if (isDemoSchool || isDeveloperSchool)
+{
+    <link href="@Url.StaticContent("/Content/demo.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+}
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700' rel='stylesheet' type='text/css'>
     <link href="~/Content/fonts.css" rel="stylesheet" media="screen, projection" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
@@ -59,121 +72,71 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
 
 </head>
-
-     @{
-             var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-             var isDemoSchool = ViewData.ContainsKey(ViewConstants.DEMO_PREFIX_KEY) && !string.IsNullOrEmpty(ViewData[ViewConstants.DEMO_PREFIX_KEY].ToString());
-             var demoSchoolPictureDistrictRef = ViewData.GetJsConstantValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
-             
-        }
-
-    <body class ="@ViewData[ViewConstants.ROLE_NAME]">
+<body class ="@ViewData[ViewConstants.ROLE_NAME]">
         <div id="fb-root"></div>
-        <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
-        <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
-
-        <div id="page-header">
+        <!--
+            ServerTime :  @ViewData["CurrentServerDateTime"]
+            ServerDbTime :  @ViewData["CurrentServerDBDateTime"]
+    
             Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
             @if (!isDemoSchool)
             {
-                @:Last Sync Date: @ViewData[ViewConstants.LAST_SYNC_DATE] 
+                @:Last Sync Date : @ViewData[ViewConstants.LAST_SYNC_DATE]
             }
-        </div>
+            --> 
+                                      
+        <div id="page">
+            <header class="@(!isDemoSchool && !isDeveloperSchool?"has-inow-link":"")"></header>
         
-        
-        
-        
-        
-        <div id="logout-block">
-        @if (!isDemoSchool && !isDeveloperSchool)
-        {
-            @Html.ActionLink("Go to INOW", "RedirectToINow", "User")
-        }
-        </div>
-        
+            <div id="classes-bar-holder"></div>
 
-        <div class="page 
-        @if (isDemoSchool || isDeveloperSchool)
-        {
-            @:demo
-        }
-        ">
-            <div id="sidebar"></div>
-            <div id="content">
-                <div class="ribbon"></div>
-                <div id="content-wrapper">
-                    <div id="main-top">
-                    </div>
-                    <div id="main-wrapper">
-                        <div id="main">
-                            @RenderBody()
-                       
-                        </div>
-                        <div id = "chlk-dialogs" class = "x-hidden"></div>
-                    </div>
-                    @ChlkHelpers.RenderChlkCopyrightYear()
-                </div>
+            <div id="content" class="@(isDemoSchool||isDeveloperSchool?"demo":"")">
+                <div id="sidebar"></div
+                ><div id="main">@RenderBody()</div>
             </div>
             
             
+            @ChlkHelpers.RenderChlkCopyrightYear()
         </div>
+        
         @if (isDemoSchool || isDeveloperSchool)
         {
-
             var currentRoleId = (int)ViewData[ViewConstants.CURRENT_USER_ROLE_ID];
             var isDeveloper = currentRoleId == CoreRoles.DEVELOPER_ROLE.Id;
             var isTeacher = currentRoleId == CoreRoles.TEACHER_ROLE.Id;
             var isStudent = currentRoleId == CoreRoles.STUDENT_ROLE.Id;
                 
             <div id="demo-footer" class="top">
-            @if (isDeveloper)
-            {
-                <div id="dev-apps-list"></div>
-            }
-            else if (!isDeveloperSchool)
-            {
-                <div id="fb">
-                    <h>Don't be shy</h>
-                    <div class="fb-like" data-href="https://chalkable.com" data-layout="button_count" data-send="true" data-width="55" data-show-faces="true"></div>
-                    <a id="principal"></a>
-                </div>
-                <div class="border demo-end"></div>
-                <div class="demo-end">
-                    <h>Demo</h>
-                    <div id="demo-end-container"></div>
-                </div>
-                <div class="border"></div>
-                <div>
-                    <h>Sign up</h>
-                    <div id="demo-sign-up-container"></div>
-                </div>
-                
-                <div class="border"></div>
-            }
-
-            
-            <div id="roles-buttons">
-                @if (isDeveloperSchool)
+                @if (isDeveloper)
                 {
-                    <a class="demo-role-button" rolename="Developer"><span><div class="mark left"></div><div class="mark right"></div>Developer</span></a
-                >}<a class="demo-role-button  @if (isStudent)
-                                              {
-                    @:active
-                }" rolename="Student"><span><div class="mark left"></div><div class="mark right"></div>Student</span></a
-                ><a class="demo-role-button @if (isTeacher)
-                                            {
-                    @:active
-                                            }" rolename="Teacher"><span><div class="mark left"></div><div class="mark right"></div>Teacher</span></a
-                                                                                                                                                     ><a class="demo-role-button coming" rolename="Admin"><span><span></span><div class="mark left"></div><div class="mark right"></div>Admin</span></a
-                                                                                                                                                         ><a class="demo-role-button coming" rolename="Parent"><span><span></span><div class="mark left"></div><div class="mark right"></div>Parent</span></a
-                ><a class="demo-role-button coming" rolename="District"><span><span></span><div class="mark left"></div><div class="mark right"></div>District</span></a>
-            </div>
+                    <div id="dev-apps-list" class="left"></div>
+                }
+                else if (!isDeveloperSchool)
+                {
+                    <div class="left">
+                        <button class="blue-button">Sign up</button>
+                    </div>
+                }
+            
+                <div id="roles-buttons">
+                    @if (isDeveloperSchool)
+                    {
+                        <button data-rolename="Developer">Developer</button>
+                    }
+                    <button class="@(isTeacher?"pressed":"")" data-rolename="Teacher">Teacher</button>
+                    <button class="@(isStudent?"pressed":"")" data-rolename="Student">Student</button>
+                    <button class="coming" data-tooltip="Coming soom">Admin</button>
+                    <button class="coming" data-tooltip="Coming soom">Parent</button>
+                    <button class="coming" data-tooltip="Coming soom">District</button>
+                </div>
             </div>
         }
         <div id = "chlk-overlay" class ="x-hidden"></div>
         <div id = "first-login-overlay"></div>
-        <a id="first-login-video" href="https://www.youtube.com/watch?v=sDdfBOYpduU"></a>
-        <input id="first-login-input" />
+        <div id="chlk-dialogs" class="x-hidden"></div>
+
+        <!--<a id="first-login-video" href="https://www.youtube.com/watch?v=sDdfBOYpduU"></a>
+        <input id="first-login-input" />-->
         <div id="chlk-pop-up-container" class="x-hidden">
             <div id="pop-up-triangle"></div>
         </div>
@@ -181,7 +144,7 @@
             <div class="tooltip-content"></div>
             <div class="tooltip-triangle"></div>
         </div>
-        <div class="alerts-pop-up"></div>
+        <div class="alerts-pop-up popup-bubble"></div>
         @RenderSection("MixPanelTracking", false)
         
 <script type="text/json" id="application-value" class="valuable-script">

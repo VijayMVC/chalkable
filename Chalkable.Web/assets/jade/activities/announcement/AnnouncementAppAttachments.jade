@@ -4,14 +4,12 @@ mixin AnnouncementFormAttachmentItem(attachment, i)
         if self.needDeleteButton
             +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId()).close-btn
         if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
-            A(href=attachment.getUrl()).download-link
-                .title
-                    div=attachment.getName()
+            A(href=attachment.getUrl()).download-link Download
+            .title= attachment.getName()
         else
-            +ActionLink('announcement', 'viewAttachment', attachment.getId(), self.getId())
-                +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
-                .title
-                    div=attachment.getName()
+            +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
+            .title= attachment.getName()
+            +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId()) Open
 
 mixin AnnouncementFormApplicationItem(app, i)
     viewUrl = app.getViewUrl()
@@ -23,10 +21,9 @@ mixin AnnouncementFormApplicationItem(app, i)
     div.announcement-item.application
         if self.needDeleteButton
             +ActionLink('announcement', 'deleteApp', app.getId()).close-btn
-        +ActionLink('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned)
-            +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
-            .title
-                div=app.getName()
+        +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
+        .title= app.getName()
+        +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned) Open
 
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
@@ -39,7 +36,7 @@ items = self.getSortedAppsAndAttachments();
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement
-            +ActionLink('announcement', 'attachApp', self.getId(), self.getClassId())#add-application.simple-gray-button Attach App
+            +ActionButton('announcement', 'attachApp', self.getId(), self.getClassId())#add-application.simple-gray-button Attach App
         .simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each item, i in items

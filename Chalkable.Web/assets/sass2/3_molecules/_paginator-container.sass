@@ -1,0 +1,67 @@
+.paginator-container
+  border-top: 1px solid #eee
+  margin-top: 10px
+  padding-top: 10px
+  height: 33px
+
+
+
+  .left-container
+    float: left
+
+    > *
+      vertical-align: inherit
+
+  .first-page, .prev-page, .next-page, .last-page, .info-container
+    background: center center no-repeat
+    width: 16px
+    height: 16px
+    display: inline-block
+    margin-top: 3px
+
+  .first-page
+    background-image: url(images/common/navigation-first.png)
+
+  .prev-page
+    background-image: url(images/common/navigation-prev.png)
+
+  .next-page
+    background-image: url(images/common/navigation-next.png)
+
+  .last-page
+    background-image: url(images/common/navigation-last.png)
+
+  .info-container
+    display: inline-block
+    width: 107px
+    height: 30px
+
+  INPUT
+    width: 30px
+    text-align: right
+    margin-left: 10px
+    height: 14px
+    resize: none
+
+    &[type="submit"]
+      display: none
+
+  > A
+    height: 30px
+    width: 26px
+    display: inline-block
+
+    &.disabled
+      opacity: 0.6
+
+    &:not(.disabled)
+      cursor: pointer
+      &:hover
+        opacity: 0.8
+
+  > *
+    vertical-align: top
+    margin-right: 2px
+
+  .right-container
+    float: right

@@ -14,21 +14,42 @@ NAMESPACE('chlk.activities.attendance', function () {
 
     var activeDragging = false;
 
-    var vertical = 148, horizontal = 110, top = 304, left = 381, height = 74, width = 74, topPadding = 14, leftPadding = 18, hKil, vKil;
-
     var droppableOptions = {
         activeClass: "active",
         hoverClass: "hover",
 
         drop: function(event, ui) {
+            console.info('drop', event, ui);
+
+            var $uiDroppable = jQuery('.ui-droppable'),
+                $studentBox = $uiDroppable.find('.student-block').first();
+
             var $node = $(this);
-            var draggable = ui.draggable, topPos = event.pageY, leftPos = event.pageX - (parseInt($node.parents('.second-container').css('left'), 10) || 0);
-            vKil = Math.floor((leftPos - left)/horizontal);
-            hKil = Math.floor((topPos - top)/vertical);
+            var draggable = ui.draggable,
+                topPos = event.pageY,
+                leftPos = event.pageX,
+                toolbarLeftOffset = (parseInt($node.parents('.second-container').css('left'), 10) || 0),
+                uidrOffset = $uiDroppable.offset(),
+                uidrLeft = uidrOffset.left,
+                top = uidrOffset.top,
+                horizontal = $studentBox.outerWidth(true),
+                vertical = $studentBox.outerHeight(true),
+                width = $studentBox.innerWidth(),
+                height = $studentBox.innerHeight(),
+                topPadding = vertical - height,
+                leftPadding = horizontal - width;
+
+            console.info(leftPos, uidrLeft, horizontal, toolbarLeftOffset);
+            console.info(topPos, top, vertical);
+
+            var vKil = Math.floor((leftPos - uidrLeft)/horizontal);
+            var hKil = Math.floor((topPos - top)/vertical);
+
             var columns = $node.data('columns');
             var index = columns * hKil + vKil;
             var newTop = top + hKil * vertical, diffTop = topPos - newTop;
-            var newLeft = left + vKil * horizontal, diffLeft = leftPos - newLeft;
+            var newLeft = uidrLeft + vKil * horizontal, diffLeft = leftPos - newLeft;
+
             if((diffTop > topPadding) && (diffTop < topPadding + height) && (diffLeft > leftPadding) && (diffLeft < leftPadding + width)){
                 jQuery('#submit-chart').show(100);
                 jQuery('.seating-chart-page').addClass('edited');
@@ -36,7 +57,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 if(droppable.find('.empty')[0]){
                     droppable.html(draggable.html()).removeClass('empty-box');
                     if(!droppable.next('.absolute')[0])
-                        jQuery('<div class="empty-box student-block absolute"></div>').insertAfter(droppable);
+                        jQuery('<div class="empty-box student-block absolute"><div class="empty"></div></div>').insertAfter(droppable);
                     if(draggable.parents('.seating-chart-people')[0]){
                         draggable.css('opacity', 0);
                         draggable.animate({

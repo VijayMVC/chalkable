@@ -29,9 +29,10 @@ mixin StudentAverages(tpl)
     each studentAvg, i in tpl.getStudentAverages()
         .dotted-container.grade-container.with-horizontal-dots.avgs-container
             text = tpl.getModel().displayAvgName(studentAvg)
-            div(data-tooltip=text, data-sort-type = "avg", data-sort-avg-index = i).type-name=text
-            .time
-            .max-score.dotted-h
+            .grading-grid-th
+                div(data-tooltip=text, data-sort-type = "avg", data-sort-avg-index = i).type-name=text
+                .time
+                .max-score.dotted-h
             each average,i in studentAvg.getAverages()
                 .dotted-h.grade-value.avg-value-container(
                     row-index=i,
@@ -55,9 +56,10 @@ mixin DisplayTotalPoints(model)
     -var studentTotalPoints = model.getStudentTotalPoints()
     if studentTotalPoints && model.isAbleDisplayTotalPoints()
         .dotted-container.grade-container.with-horizontal-dots.total-points
-            div(data-tooltip=Msg.Total_Points, data-sort-type = "total").type-name= Msg.Total_Points
-            .time
-            .max-score.dotted-h
+            .grading-grid-th
+                div(data-tooltip=Msg.Total_Points, data-sort-type = "total").type-name= Msg.Total_Points
+                .time
+                .max-score.dotted-h
             each studentTotalPoint, i in studentTotalPoints
                 div(row-index=i, data-student-id=studentTotalPoint.getStudentId().valueOf()).dotted-h.grade-value.total-point=studentTotalPoint.displayTotalPoint()
 
@@ -68,12 +70,13 @@ mixin DisplayTotalPoints(model)
         .no-items-text=Msg.No_grades_yet
     else
         .dotted-container.name-container.with-horizontal-dots
-            .type-name(data-sort-type = "name", data-sort-order="asc")
-                =Msg.Student(true)
-                +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
-            .time
-            .student-name
-                .max-score.dotted-h
+            .grading-grid-th
+                .type-name(data-sort-type = "name", data-sort-order="asc")
+                    =Msg.Student(true)
+                    +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
+                .time
+                .student-name
+                    .max-score.dotted-h
             each student,i in self.getStudents()
                 name = student.getStudentInfo().getDisplayName()
                 div(row-index=i).student-name
@@ -83,21 +86,24 @@ mixin DisplayTotalPoints(model)
             .student-name
                 .dotted-h=Msg.Avg
         +LeftRightToolbar()(
-            needDots = true,
-            roundedDots = true,
-            padding = 77
+            style="width:" + self.getTbWidth() + "px",
+            itemClass='grade-container',
+            fixedElementMargin=true,
+            fixedElementWidth=false,
+            rightPadding=-1,
+            elWidth=117
         ).grid-toolbar.i-b.big-arrows
             if self.isAbleDisplayStudentAverage()
-                //+RenderWith(self.getModel(), chlk.templates.grading.ShortGradingClassSummaryGridAvgsTpl)
                 +StudentAverages(self)
             +DisplayTotalPoints(self)
             each announcement in self.getGradingItems()
                 maxScore = announcement.getMaxScore()
-                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots
-                    +ActionLink('announcement', 'view', announcement.getId())
-                        div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
-                    .time=announcement.getExpiresDate().format('M d')
-                    .max-score.dotted-h(data-sort-type="anno", data-sort-anno-id=announcement.getId().valueOf())=maxScore
+                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots.announcement-container
+                    .grading-grid-th
+                        +ActionLink('announcement', 'view', announcement.getId())
+                            div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
+                        .time=announcement.getExpiresDate().format('M d')
+                        .max-score.dotted-h(data-sort-type="anno", data-sort-anno-id=announcement.getId().valueOf())=maxScore
                     studentItems = announcement.getStudentAnnouncements().getItems()
                     each info,i in studentItems
                         gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent())

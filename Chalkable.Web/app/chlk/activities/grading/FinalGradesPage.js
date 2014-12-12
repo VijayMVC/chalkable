@@ -27,7 +27,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     ableEdit: ableEdit,
                     ableEditDirectValue: ableEditDirectValue
                 });
-                tpl.renderTo(container.setHTML(''));
+                tpl.renderTo(container.find('.mp-data').setHTML(''));
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
@@ -109,44 +109,43 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.changeLineOpacity(item, needOpacity);
             },
 
-            [ria.mvc.DomEventBind('click', '.gp-title-block')],
+            [ria.mvc.DomEventBind('click', '.mp-title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function collapseClick(node, event){
                 var nodeT = new ria.dom.Dom(event.target);
                 var dom = this.dom;
-                if(!nodeT.isOrInside('.no-loading')){
-                    var parent = node.parent('.big-grading-period-container');
+                if(!nodeT.hasClass('gp-button')){
+                    var parent = node.parent('.marking-period-container');
 
-                    var gpData = parent.find('.gp-data');
-                    gpData.removeClass('slided');
+                    var mpData = parent.find('.mp-data');
 
                     if(parent.hasClass('open')){
-                        jQuery(gpData.valueOf()).animate({
+                        jQuery(mpData.valueOf()).animate({
                             height: 0
                         }, 500);
 
-                        gpData.addClass('with-data');
+                        mpData.addClass('with-data');
 
                         setTimeout(function(){
                             parent.removeClass('open');
                         }, 500);
                     }else{
-                        var items = this.dom.find('.big-grading-period-container.open');
-                        var itemsGp = items.find('.gp-data');
-                        itemsGp.removeClass('slided');
-                        jQuery(itemsGp.valueOf()).animate({height: 0}, 500);
-                        if(gpData.hasClass('with-data')){
-                            gpData.removeClass('with-data');
-                            this.openGradingPeriod(gpData);
+                        var items = this.dom.find('.marking-period-container.open');
+                        var itemsMp = items.find('.mp-data');
+                        jQuery(itemsMp.valueOf()).animate({height: 0}, 500);
+                        if(mpData.hasClass('with-data')){
+                            mpData.removeClass('with-data');
+                            this.openGradingPeriod(mpData);
                         }else{
-                            parent.find('.load-grading-period').trigger('submit');
+                            this.loadGradingPeriod(parent);
                         }
-                        dom.find('.gp-data.with-data')
-                            .setHTML('')
-                            .removeClass('with-data');
+                        dom.find('.mp-data.with-data')
+                            .removeClass('with-data')
+                            .find('.grades-contaner')
+                            .setHTML('');
                         setTimeout(function(){
                             items.removeClass('open');
-                            itemsGp.setHTML('');
+                            itemsMp.find('.grades-contaner').setHTML('');
                         }, 500);
                     }
                 }
@@ -155,7 +154,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('change', '.avg-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function selectChange(node, event, selected_){
-                node.parent('form').trigger('submit');
+                this.loadGradingPeriod(node.parent('.marking-period-container'));
             },
 
             [ria.mvc.DomEventBind('click', '.avg-item:not(.selected)')],
@@ -164,15 +163,19 @@ NAMESPACE('chlk.activities.grading', function () {
                 node.parent('.big-grading-period-container').find('.avg-select').setValue(node.getData('id'));
             },
 
+            [[ria.dom.Dom]],
+            function loadGradingPeriod(container){
+                container.find('.load-grading-period').trigger('submit');
+            },
+
             function openGradingPeriod(container){
-                container.parent('.big-grading-period-container').addClass('open');
-                var annContainer = container.find('.people-list');
+                container.parent('.marking-period-container').addClass('open');
+                var annContainer = container.find('.grades-container');
                 container.setCss('height', 0);
                 jQuery(container.valueOf()).animate({
-                    height: (annContainer.height() + parseInt(annContainer.getCss('margin-bottom'), 10))
+                    height: (annContainer.height() + container.find('.buttons-row').height() + parseInt(annContainer.getCss('margin-bottom'), 10))
                 }, 500, function(){
                     container.setCss('height', 'auto');
-                    container.addClass('slided');
                 });
             },
 
@@ -188,9 +191,10 @@ NAMESPACE('chlk.activities.grading', function () {
                         ableEdit: ableEdit,
                         ableEditDirectValue: ableEditDirectValue
                     });
-                    tpl.renderTo(container.setHTML(''));
+                    var mpData = container.find('.mp-data');
+                    tpl.renderTo(mpData.setHTML(''));
                     setTimeout(function(){
-                        this.openGradingPeriod(container.find('.gp-data'));
+                        this.openGradingPeriod(mpData);
                     }.bind(this), 1);
                 }
             },
@@ -273,7 +277,8 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function gradeFocus(node, event){
                 setTimeout(function(){
-                    node.select();
+                    //node.select();
+                    node.valueOf()[0].setSelectionRange(0, (node.getValue() || '').length);
                 }, 1);
 
             },
@@ -586,7 +591,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     allScores.push(item.getName());
                 });
                 this.setAllScores(allScores);
-                this.openGradingPeriod(this.dom.find('.open.big-grading-period-container').find('.gp-data'));
+                this.openGradingPeriod(this.dom.find('.open.big-grading-period-container').find('.mp-data'));
                 document.addEventListener('click', this.documentClickHandler, true);
             },
 

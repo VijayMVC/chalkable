@@ -3,6 +3,9 @@ mixin Image()
     img(attributes)
 
 mixin PersonImg(person, size, needAlerts)
+    -VALIDATE_ARG('person', [Object], person)
+    -VALIDATE_ARG('size', [Number], size)
+    -VALIDATE_ARG('needAlerts_', [Boolean], needAlerts)
     if(person && person.getGender())
         src = chlk.templates.ChlkTemplate.prototype.getStudentPictureURL(person.getId(), size, size)
         isWoman = person.getGender().toLowerCase() == 'f';
@@ -19,6 +22,12 @@ mixin PersonImg(person, size, needAlerts)
 
 mixin ClassImg(clazz, width, height)
     -defaultSrc =joinUrls(window.scriptsRoot, '/Content/images/common/course-icons/all.png');
+    if width
+        -attributes.width = width
+
+    if height
+        -attributes.height = height
+
     if clazz && clazz.getDepartmentId()
         -attributes.src = chlk.templates.ChlkTemplate.prototype.getPictureURL(clazz.getDepartmentId(), width, height, true)
     else

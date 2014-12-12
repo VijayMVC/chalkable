@@ -47,7 +47,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.NotTakenAttendanceClassesTpl)],
             VOID, function doUpdateClasses(tpl, model, msg_) {
-                var dom = this.dom;
+                var dom = ria.dom.Dom();
                 model.getItems().forEach(function(item){
                     dom.find('.alerts-icon[data-id=' + item.getId() + ']').show();
                 })
@@ -61,7 +61,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                     case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
                     case ria.dom.Keys.RIGHT.valueOf(): node.find('.row.selected').find('.' + this._RIGHT_ARROW).trigger('click');break;
                     case ria.dom.Keys.ESC.valueOf(): this.hideDropDown();break;
+                    //default: return true;
                 }
+                //return false;
             },
 
             VOID, function hideDropDown(){

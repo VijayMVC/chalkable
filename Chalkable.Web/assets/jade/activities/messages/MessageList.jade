@@ -1,18 +1,22 @@
 items = self.getMessages().getItems()
-+ActionForm('message', 'do')
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .left
-                +ActionLink('message', 'sendPage', self.isInbox())#new-message-link
-                    span New message
+h2.page-title Messages
 
-            .right
-                +ActionLink('message', 'page', true, true, self.getRole())(class=self.isInbox() ? "pressed" : "") Inbox
-                +ActionLink('message', 'page', true, false, self.getRole())(class=self.isInbox() ? "" : "pressed") Sent
-                input(name="role", type="hidden", value=self.getRole())
-                input(name="inbox", type="hidden", value=self.isInbox())
-                input(name="keyword", type="text", value=self.getKeyword())#keyword
-                +Button()(type="submit", submitType="search")#search-message-btn
++ActionForm('message', 'do')
+    input(name="role", type="hidden", value=self.getRole())
+    input(name="inbox", type="hidden", value=self.isInbox())
+
+    .right.wrapper
+        input(name="keyword", type="text", value=self.getKeyword(), placeholder="Filter list...")#keyword.search-input
+        .search-glass
+.action-bar
+    .items
+        +ActionLink('message', 'page', true, true, self.getRole(), self.getKeyword())(class=self.isInbox() ? "pressed" : "") Inbox
+        +ActionLink('message', 'page', true, false, self.getRole(), self.getKeyword())(class=self.isInbox() ? "" : "pressed") Sent
+        +ActionLink('message', 'sendPage', self.isInbox())#new-message-link New message
+
++ActionForm('message', 'do')
+    input(name="role", type="hidden", value=self.getRole())
+    input(name="inbox", type="hidden", value=self.isInbox())
 
     DIV(class=items.length ? '' : 'no-messages').grid-container
         input(name="inbox", type="hidden", value=self.isInbox().toString())
@@ -20,22 +24,23 @@ items = self.getMessages().getItems()
         +Hidden('start', self.getStart())
         +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword()])
             +GridBody()
-                .action-bar.filter
-                    .container.panel-bg
+                .buttons
+                    .left
+                        +Checkbox('checkboxall', false)#checkboxall
+                        +Button()(type="submit", , name="submitType", value="delete").plain-button.negative-button#delete-button Delete
+                    if self.isInbox()
                         .left
-                            +Checkbox('checkboxall', false)#checkboxall
-                            +Button()(type="submit", , name="submitType", value="delete").plain-button#delete-button Delete
-                            if self.isInbox()
-                                |Mark:
-                                +Button()(type="submit", name="submitType", value="markAsRead").plain-button#mark-read-button Read
-                                +Button()(type="submit", name="submitType", value="markAsUnread").plain-button#mark-unread-button Unread
-                        .right
-                            |View:
-                            +ActionLink('message', 'page', true, self.isInbox(), '') All
-                            +ActionLink('message', 'page', true, self.isInbox(), 'parent') Parent
-                            +ActionLink('message', 'page', true, self.isInbox(), 'student') Student
-                            +ActionLink('message', 'page', true, self.isInbox(), 'teacher') Teacher
-                            +ActionLink('message', 'page', true, self.isInbox(), 'admingrade,adminedit,adminview') Admin
+                            span Mark:
+                            +Button()(type="submit", name="submitType", value="markAsRead").plain-button#mark-read-button Read
+                            +Button()(type="submit", name="submitType", value="markAsUnread").plain-button#mark-unread-button Unread
+                    .right
+                        .buttons-group
+                            +ActionButton('message', 'page', true, self.isInbox(), '', self.getKeyword()).pressed All
+                            +ActionButton('message', 'page', true, self.isInbox(), 'parent', self.getKeyword()) Parent
+                            +ActionButton('message', 'page', true, self.isInbox(), 'student', self.getKeyword()) Student
+                            +ActionButton('message', 'page', true, self.isInbox(), 'teacher', self.getKeyword()) Teacher
+                            +ActionButton('message', 'page', true, self.isInbox(), 'admingrade,adminedit,adminview', self.getKeyword()) Admin
+                    .clear-fix
 
                 if !items.length
                     .no-messages-text=self.getNoMessagesText()
@@ -44,7 +49,8 @@ items = self.getMessages().getItems()
                         div(
                             class= item.isRead() ? "read" : "unread",
                             data-can-read = self.getCurrentUser().getId() == item.getRecipient().getId()
-                        ).item-container
+                        ).item-container.table
+
                             .chk
                                 +Checkbox('ch',false)(data-id=item.getId().valueOf())
                             .av
@@ -54,14 +60,12 @@ items = self.getMessages().getItems()
                                     else
                                         +PersonImg(item.getRecipient(), 47)
 
-                            .item
-                                +ActionLink('message', 'viewPage', item.getId(), self.isInbox())
-                                    h2
+                            +ActionLink('message', 'viewPage', item.getId(), self.isInbox()).msg-info
+                                .table.details
+                                    .title
                                         if self.isInbox()
                                             =item.getSender().getFirstName() + " " + item.getSender().getLastName()
                                         else
                                             =item.getRecipient().getFirstName()+ " "  + item.getRecipient().getLastName()
-                                        |, &nbsp;
-                                        small= item.getShortSubject()
-                                    p= item.getShortBody()
-                                    .sent= item.getSent().toUSADateTimeFormat()
+                                    .content= item.getShortSubject() + ' - ' + item.getShortBody()
+                                .sent= item.getSent().toUSADateTimeFormat()

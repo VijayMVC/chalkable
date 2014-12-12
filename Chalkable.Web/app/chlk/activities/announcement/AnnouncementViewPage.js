@@ -90,7 +90,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.make-visible-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             function makeVisibleClick(node, event){
-                node.parent().parent().addClass('x-hidden');
+                node.parent().parent().hide();
             },
 
             [ria.mvc.DomEventBind('focus', '.grade-input')],
@@ -170,29 +170,13 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function editAnswerClick(node, event){
                 var row = node.parent('.row');
-                row.find('.edit-answer-block, .edit-question-block').fadeOut(function(){
+                row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeOut(function(){
                     var node = row.find('.edit-answer-input, .edit-question-input');
-                    node.removeClass('x-hidden').fadeIn(function(){
+                    node.fadeIn(function(){
                         node.trigger('focus');
                     });
                 });
             },
-
-            [ria.mvc.DomEventBind('click', '.edit-question-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function saveQuestionClick(node, event){
-                var updateTypeNode = node.parent().parent().parent().find('[name="updateType"]');
-                updateTypeNode.setValue('editQuestion');
-            },
-
-            [ria.mvc.DomEventBind('click', '.edit-answer-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function saveAnswerClick(node, event){
-                var value = node.getAttr('value');
-                var updateTypeNode = node.parent().parent().parent().find('[name="updateType"]');
-                updateTypeNode.setValue(value);
-            },
-
 
             [ria.mvc.DomEventBind('keyup', '.edit-answer-input, .edit-question-input')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -209,28 +193,30 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function blurAnswer(node, event){
                 var row = node.parent('.row');
-                if(!row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
+                if(node.getValue() && !row.find('.edit-answer-btn:visible, .edit-question-btn:visible').exists())
                     row.find('.edit-answer-input, .edit-answer-btn, .edit-question-input, .edit-question-btn').fadeOut(function(){
                         setTimeout(function(){
-                            row.find('.edit-answer-block, .edit-question-block').removeClass('x-hidden').fadeIn();
+                            row.find('.edit-answer-text, .edit-question-text, .edit-question-link, .edit-answer-link').fadeIn();
                         }, 500);
 
                     });
             },
 
-            [ria.mvc.DomEventBind('click', '.comment-grade')],
+            [ria.mvc.DomEventBind('click', '.comment-text')],
             [[ria.dom.Dom, ria.dom.Event]],
             function commentClick(node, event){
-                var popUp = node.find('.small-pop-up');
+                var popUp = node.parent().find('.small-pop-up'),
+                    comments = popUp.find('.grading-comments-list'),
+                    $textarea = popUp.find('.comment-input');
+
                 popUp.show();
-                var comments = popUp.find('.grading-comments-list');
-                if(popUp.find('.comment-input').getValue())
-                    comments.hide();
-                else
-                    comments.show();
+
+                if($textarea.getValue()) comments.hide();
+                else                     comments.show();
+
                 setTimeout(function(){
-                    jQuery(popUp.find('textarea').valueOf()).focus();
-                }, 10);
+                    jQuery($textarea.valueOf()).focus();
+                }, 1);
             },
 
             [ria.mvc.DomEventBind('click', '.grade-input')],
@@ -257,7 +243,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             function wholeDomClick(node, event){
                 var target = new ria.dom.Dom(event.target);
-                if(!target.hasClass('comment-grade') && !target.parent('.comment-grade').exists())
+                if(!target.isOrInside('.popup-bubble') && !target.hasClass('comment-text') && !target.parent('.comment-text').exists())
                     this.dom.find(('.small-pop-up:visible')).hide();
             },
 
@@ -389,8 +375,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     });
                     if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
-                    var top = node.offset().top - list.parent().offset().top + node.height() + 50;
-                    var left = node.offset().left - list.parent().offset().left + 61;
+                    var top = node.offset().top - list.parent().offset().top + node.height();
+                    var left = node.offset().left - list.parent().offset().left;
                     list.setCss('top', top)
                         .setCss('left', left);
                     list.setHTML(html)
@@ -682,9 +668,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('keyup', '.comment-input')],
+            [ria.mvc.DomEventBind('keydown', '.comment-input')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function commentKeyUp(node, event, options_){
+            function commentKeyUp(node, event, options_){
                 var popUp = node.parent().find('.grading-comments-list');
                 if(popUp.is(':visible') && (event.which == ria.dom.Keys.UP.valueOf()
                     || event.which == ria.dom.Keys.DOWN.valueOf() || event.which == ria.dom.Keys.ENTER.valueOf())
@@ -698,12 +684,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                                     selected.removeClass('selected');
                                     selected.previous().addClass('selected');
                                 }
+                                return false;
                                 break;
                             case ria.dom.Keys.DOWN.valueOf():
                                 if(selected.next().exists()){
                                     selected.removeClass('selected');
                                     selected.next().addClass('selected');
                                 }
+                                return false;
                                 break;
                             case ria.dom.Keys.ENTER.valueOf():
                                 this.setCommentByNode(next);
@@ -720,7 +708,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('keydown', '.comment-input')],
+            /*[ria.mvc.DomEventBind('keydown', '.comment-input')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function commentKeyDown(node, event, options_){
                 var popUp = node.parent().find('.grading-comments-list');
@@ -735,7 +723,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.parent('.small-pop-up').hide();
                     node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
                 }
-            },
+            },*/
 
             [ria.mvc.DomEventBind('change', '.cant-drop')],
             [[ria.dom.Dom, ria.dom.Event, Object]],

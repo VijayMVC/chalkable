@@ -83,9 +83,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var dropDown = this.dom.find('.new-item-dropdown');
                 if(!dropDown.is(':visible')){
                     this.dom.find('#list-last-button').trigger('click');
-
+                    this.dom.find('.drop-down-container').removeClass('x-hidden');
                 }else{
                     dropDown.hide();
+                    this.dom.find('.drop-down-container').addClass('x-hidden');
                 }
             },
 
@@ -101,8 +102,9 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.autofill-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             function autoFillMouseOver(node, event){
-                this.dom.find('#content').setValue(node.getData('value'));
+                this.dom.find('textarea[name=content]').setValue(node.getData('value'));
                 this.dom.find('.new-item-dropdown').hide();
+                this.dom.find('.drop-down-container').addClass('x-hidden');
             },
 
             [ria.mvc.DomEventBind('keydown', '#content')],

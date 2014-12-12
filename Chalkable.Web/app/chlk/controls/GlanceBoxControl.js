@@ -45,7 +45,7 @@ NAMESPACE('chlk.controls', function () {
                             var parentWidth = textItem.parent().width();
                             var width = textItem.valueOf()[0].scrollWidth;
                             if(width > parentWidth){
-                                var currentFontSize = parseInt(textItems.getCss('font-size'), 10);
+                                var currentFontSize = parseInt(textItem.getCss('font-size'), 10);
                                 var newFontSize = Math.floor(currentFontSize * parentWidth / width);
                                 textItem.setCss('font-size', newFontSize).addClass('processed');
                             }

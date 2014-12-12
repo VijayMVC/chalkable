@@ -1,7 +1,8 @@
 mixin AppAttachmentBlock(item, pictureHref, i)
-    +LoadingImage(src=pictureHref, id="loading-image-" + i)
-        .title
-            div=item.getName()
+    div(attributes)
+        .title= item.getName()
+        +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        block
 
 autoCount = self.getAutoGradeCount()
 studentAnnouncements = self.getItems()
@@ -10,7 +11,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
 
 .silver-panel.student-announcements-top-panel
     +RenderWith(self.getModel(), chlk.templates.announcement.StudentAnnouncementsTpl)
-+ListView(self)().grades-individual.people-list
++ListView(self)().grades-individual.people-list.grading
     items = self.getSortedStudentAnnouncements()
     if autoCount > 0
         div(class=(autoCount == 1 ? 'double' : '')).grid-modal
@@ -35,28 +36,18 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     +Hidden('studentid', student.getId())
                     +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
                         +PersonImg(student, 47)
-                    .i-b.name-block
-                        .p-container
-                            +ProfileLink(student, 'student')
-                                .wrapper
-                                    p= student.getFullName()
-                                    if student.isWithdrawn()
-                                        div(data-tooltip=Msg.Withdrawn).withdrawn
+                    .name-block
+                        +ProfileLink(student, 'student')
+                            .wrapper
+                                p= student.getFullName()
+                                if student.isWithdrawn()
+                                    div(data-tooltip=Msg.Withdrawn).withdrawn
                         if !readonly
-                            SPAN.container
-                                SPAN.comment-grade
-                                    +ActionLink('grading', 'getGradeComments').comment-text=(item.getComment() ? Msg.Commented : Msg.Comment)
-                                    if !readonly
-                                        .small-pop-up
-                                            .container
-                                                .triangle
-                                                div
-                                                    div
-                                                        +PersonImg(owner, 24)
-                                                    div
-                                                        +TextArea(name="comment", maxlength=500, data-comment=item.getComment()).comment-input.with-grid-focus=item.getComment()
-                                                        .grading-comments-list
-                                                        span.enter=Msg.Enter_when_done
+                            .grade-options.selected
+                                +ActionLink('grading', 'getGradeComments').comment-text= (item.getComment() ? Msg.Commented : Msg.Comment)
+                                .small-pop-up.popup-bubble.top
+                                    +TextArea(name="comment", maxlength=500, data-comment=item.getComment(), placeholder=Msg.Enter_when_done).comment-input.with-grid-focus= item.getComment()
+                                    .grading-comments-list
                     div(id = "grade-container-" + item.getStudentInfo().getId()).i-b.grade-block
                         div(class=item.getAttachments() && item.getAttachments().length ? "" : "no-attachments").grade-triangle
                         .grade-container
@@ -68,19 +59,20 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                 readonly = readonly,
                                 rowIndex = i
                             )
-        .attachments-container.z-10
+        .attachments-container.z-10.sub-row
             .attachments-container-2
                 each attachment, i in item.getAttachments()
                     if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
-                        A(href=attachment.getUrl()).download-link
-                            .title
-                                div=attachment.getName()
+                        .announcement-item.attachment
+                            A(href=attachment.getUrl()).download-link Download
+                            .title=attachment.getName()
                     else
-                        +ActionLink('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()).announcement-item.attachment
-                            +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i)
+                        +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
+                            +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
+
                 each app, i in self.getApplications()
                     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+                    +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
+                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()) Open
 
-                    +ActionLink('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()).announcement-item.application
-                        +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i)
 

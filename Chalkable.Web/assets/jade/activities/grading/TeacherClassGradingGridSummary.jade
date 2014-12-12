@@ -1,22 +1,22 @@
-.class-grading.grading-summary-grid
-    topData = self.getTopData()
-    topItems = topData.getTopItems()
-    selectedId = topData.getSelectedItemId()
+.grading-summary-grid.grades-page
+    -var topData = self.getTopData()
+    -var topItems = topData.getTopItems()
+    -var selectedId = topData.getSelectedItemId()
+
+    h2.page-title=Msg.Grade(true)
+
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid')(
-        selectedItemId=selectedId,
-        disabledClass = 'x-hidden'
+        selectedItemId=selectedId
     ).classes-bar
     .autocomplete-list
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .left.no-border
-                .small-grey-buttons-block
-                    +ActionLink('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes
-                    +ActionLink('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid.pressed
-            .center
-                +ActionLink('grading', "summaryGrid", selectedId).pressed=Msg.Item(true)
-                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
-                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+    .action-bar
+        .items
+            +ActionLink('grading', "summaryGrid", selectedId).pressed=Msg.Item(true)
+            +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
+            +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+    .buttons-group
+        +ActionButton('grading', 'summary', selectedId).no-action-link-styles.small-grey-button.boxes=Msg.Box(true)
+        +ActionButton('grading', 'summaryGrid', selectedId).no-action-link-styles.small-grey-button.grid.pressed=Msg.Grid
     .mps-container
         #codes-popup.chlk-pop-up-container.popup-top.codes.new-style
             .pop-up-triangle
@@ -28,40 +28,46 @@
                 .text-container
                     textarea(maxlength=500).comment-value
                     .grading-comments-list
-                a(href="javascript:").grey-button.small.cancel-comment=Msg.Cancel
+                BUTTON.grey-button.small.cancel-comment=Msg.Cancel
                 if self.isAbleEdit()
-                    a(href="javascript:").blue-button.small.add-comment.right=Msg.Add
+                    BUTTON.blue-button.small.add-comment.right=Msg.Add
         each gradingPeriod,i in self.getGradingPeriods()
-            item = self.getCurrentGradingGrid()
+            -var item = self.getCurrentGradingGrid()
             div(
                 class=((gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "") + ((!item.getGradingItems().length || !item.getStudents().length) ? 'no-items' : ''),
                 data-index=i
-            ).marking-period-container
-                .mp-title
-                    mpName = gradingPeriod.getName()
+            ).chlk-calendar.marking-period-container
+                .header.mp-title
+                    -var mpName = gradingPeriod.getName()
                     span(
                         data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
                     ).mp-name=mpName
-                    .grading-selects
-                        +ActionForm('grading', 'loadGradingPeriodGridSummary').load-grading-period
-                            +Hidden('autoUpdate', false).auto-update
-                            +Hidden('avg', false).avg-value
-                            +Hidden('classId', selectedId)
-                            +Hidden('notCalculateGrid', false).not-calculate-grid
-                            +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
-                            +Select('standardId')(data-placeholder=Msg.All_standards).standards-select.grading-select
-                                +Option('', Msg.All_standards , true)
-                                each item in self.getStandards()
-                                    +Option(item.getStandardId().valueOf(), item.getName() , false)
-                            +Select('categoryId')(data-placeholder=Msg.All_categories).categories-select.grading-select
-                                +Option('', Msg.All_categories , true)
-                                each item in self.getClassAnnouncementTypes()
-                                    +Option(item.getId(), item.getName() , false)
-                    +ActionLink('grading', 'getGradeComments').grey-button.comment-button.gp-button=Msg.Comment
-                    +ActionLink('grading', 'getGradeComments').grey-button.codes-button.gp-button=Msg.Code(true)
+
                     .collapse
                 div(data-grading-period-id=gradingPeriod.getId()).mp-data
-                    if gradingPeriod.getId() == self.getGradingPeriodId()
-                        +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)(
-                            classId = selectedId
-                        )
+                    .buttons-row
+                        .grading-selects
+                            +ActionForm('grading', 'loadGradingPeriodGridSummary').load-grading-period
+                                +Hidden('autoUpdate', false).auto-update
+                                +Hidden('avg', false).avg-value
+                                +Hidden('classId', selectedId)
+                                +Hidden('notCalculateGrid', false).not-calculate-grid
+                                +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                                +Select('standardId')(data-placeholder=Msg.All_standards).standards-select.grading-select
+                                    +Option('', Msg.All_standards , true)
+                                    each item in self.getStandards()
+                                        +Option(item.getStandardId().valueOf(), item.getName() , false)
+                                +Select('categoryId')(data-placeholder=Msg.All_categories).categories-select.grading-select
+                                    +Option('', Msg.All_categories , true)
+                                    each item in self.getClassAnnouncementTypes()
+                                        +Option(item.getId(), item.getName() , false)
+                        .arrows-row
+                            .prev-arrow.grid-arrow
+                            .next-arrow.grid-arrow
+                        +ActionButton('grading', 'getGradeComments').blue-button.button-like.comment-button.gp-button=Msg.Comment
+                        +ActionButton('grading', 'getGradeComments').blue-button.button-like.codes-button.gp-button=Msg.Code(true)
+                    .grades-container
+                        if gradingPeriod.getId() == self.getGradingPeriodId()
+                            +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)(
+                                classId = selectedId
+                            )

@@ -59,12 +59,13 @@ NAMESPACE('chlk.activities.person', function () {
 
             [ria.mvc.DomEventBind('click', '.first-last:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function firstLastClick(node, event){
+            Boolean, function firstLastClick(node, event){
                 var value = node.getData('value');
                 this.dom.find('input[name=byLastName]').setValue(value);
                 this.dom.find('.first-last.pressed').removeClass('pressed');
                 node.addClass('pressed');
                 this.submitFormWithStart(node);
+                return false;
             },
 
             [ria.mvc.DomEventBind('click', '.people-search-close')],

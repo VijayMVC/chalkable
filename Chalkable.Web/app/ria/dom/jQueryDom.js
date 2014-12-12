@@ -323,6 +323,12 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            [[SELF]],
+            OVERRIDE, SELF, function removeSelf() {
+                this._dom.each(function(){ this.parentNode && this.parentNode.removeChild(this); });
+                return this;
+            },
+
             // reference https://github.com/julienw/dollardom
 
             [[String]],
@@ -438,6 +444,17 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, ria.dom.Dom, function setData(name, value) {
                 this.setAttr('data-' + name, value);
                 this._dom.data(name, value);
+                return this;
+            },
+
+            /* text */
+            OVERRIDE, String, function getText() {
+                return this._dom.text();
+            },
+
+            [[String]],
+            OVERRIDE, SELF, function setText(value) {
+                this._dom.text(value);
                 return this;
             },
 

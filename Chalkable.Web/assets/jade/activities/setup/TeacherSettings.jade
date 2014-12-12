@@ -6,8 +6,7 @@
     .loader
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar)(
         selectedItemId=gradingInfo.getClazz().getId().valueOf(),
-        pressAfterClick=false,
-        disabledClass = 'x-hidden'
+        pressAfterClick=false
     ).classes-bar
     +ActionForm('setup', 'teacherSettingsEdit')#update-ann-type-submit-form
         +Hidden('id', gradingInfo.getId())

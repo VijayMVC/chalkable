@@ -19,19 +19,28 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.FeedService, 'feedService',
 
             function listNewAction() {
-                var result = this.notificationService.getNotifications(0, 5)
+                var result = this.notificationService
+                    .getNotifications(0, 5)
                     .attach(this.validateResponse_())
+                    .then(function (model) {
+                        this.view.setNewNotificationCount(0);
+
+                        return model;
+                    }, this)
                     .then(function(model){
-                        this.notificationService.markAllAsShown().then(function(data){
-                            return this.notificationService.getUnShownNotificationCount().then(function(data2){
-                                this.setNewNotificationCount_(data2);
-                            }, this);
-                        }, this);
                         var res = new chlk.models.notification.NotificationList();
                         res.setNotifications(model);
                         res.setTarget(new ria.dom.Dom('.notifications-link'));
                         return res;
                     }, this);
+                    
+                this.notificationService
+                    .markAllAsShown()
+                    .thenCall(this.notificationService.getUnShownNotificationCount, [])
+                    .then(function(data2){
+                        this.view.setNewNotificationCount(data2);
+                    }, this);
+
                 return this.ShadeView(chlk.activities.notification.ListNewPopup, result);
             },
 

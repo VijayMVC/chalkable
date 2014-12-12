@@ -15,7 +15,7 @@ NAMESPACE('chlk.controls', function () {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        jQuery('textarea#'+attributes.id).autosize();
+                        jQuery('#'+attributes.id).autosize();
                     }.bind(this));
                 return attributes;
             }

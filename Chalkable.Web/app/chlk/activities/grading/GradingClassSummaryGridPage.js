@@ -143,6 +143,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
                 var tooltipText = (model.getAvg() != null ? Msg.Avg + " " + model.getAvg() : 'No grades yet');
                 var dom = this.dom;
+                //var width = dom.find('.avgs-container').next().width();
 
                 (model.getStudentAverages() || [])
                     .forEach(function(item){
@@ -180,6 +181,7 @@ NAMESPACE('chlk.activities.grading', function () {
                             .setHTML(calcAvg || '');
                     });
 
+                //container.find('.avgs-container').setCss('width', width);
                 container.parent().find('.mp-name').setData('tooltip', tooltipText);
             },
 
@@ -295,9 +297,11 @@ NAMESPACE('chlk.activities.grading', function () {
                     var popUp = this.dom.find('.chlk-pop-up-container.codes');
                     popUp.find('.codes-content').setHTML(tpl.render());
 
-                    var main = this.dom.parent('#main');
-                    var bottom = main.height() + main.offset().top - active.offset().top + 73;
-                    var left = active.offset().left - main.offset().left - 260;
+                    var container = active.parent('.mps-container');
+                    var left = active.offset().left - container.offset().left - (popUp.width() + parseInt(popUp.getCss('padding-left'), 10)
+                        + parseInt(popUp.getCss('padding-right'), 10) - active.width())/2;
+                    var bottom = container.height() - active.offset().top + container.offset().top;
+
                     popUp.setCss('bottom', bottom);
                     popUp.setCss('left', left);
                     popUp.show();
@@ -474,8 +478,10 @@ NAMESPACE('chlk.activities.grading', function () {
                         JSON.stringify(node.getData('codes-string'))
                     );
                 else{
-                    var grade = cell.find('.grade-text').getData('grade-value');
+                    var grade = cell.find('.grade-text').getData('grade-value'),
+                        comment = node.getData('comment');
                     grade = grade ? grade.toString() : '';
+                    comment = comment ? comment.toString() : '';
                     model = new chlk.models.announcement.ShortStudentAnnouncementViewData(
                         new chlk.models.id.StudentAnnouncementId(node.getData('id')),
                         new chlk.models.id.AnnouncementId(node.getData('announcementid')),
@@ -485,7 +491,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         this.getBooleanValue_(node.getData('isexempt')),
                         this.getBooleanValue_(node.getData('isabsent')),
                         this.getBooleanValue_(node.getData('isincomplete')),
-                        node.getData('comment'),
+                        comment,
                         grade,
                         this.getBooleanValue_(node.getData('isincludeinaverage'))
                     );
@@ -650,7 +656,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
 
                         setTimeout(function () {
-                            this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+                            this.dom.find('.last-container').removeClass('last-container').removeClass('delay');
 
                             this.dom.find('[data-sort-type][data-sort-order]').removeData('sort-order');
                             var newSortOrder = sortOrder == 'asc' ? 'desc' : 'asc';

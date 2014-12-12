@@ -6,7 +6,7 @@ NAMESPACE('chlk.activities.announcement', function(){
 
     /**@class chlk.activities.announcement.AddStandardsDialog*/
     CLASS(
-        [ria.mvc.DomAppendTo('body')],
+        [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.StandardsListTpl, '', '.standards-row', ria.mvc.PartialUpdateRuleActions.Append)],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AddStandardsTpl)],
         'AddStandardsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
@@ -39,7 +39,10 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.DomEventBind('click', '.add-standard-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function submitClick(node, event){
-                node.setAttr('disabled', true);
+                setTimeout(function(){
+                    node.setAttr('disabled', true);
+                }, 1);
+
             }
         ]);
 });

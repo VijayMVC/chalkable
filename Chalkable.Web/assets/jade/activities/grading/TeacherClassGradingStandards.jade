@@ -4,8 +4,7 @@ selectedId = topData.getSelectedItemId()
 action = self.getAction() || "summary"
 gridAction = self.getGridAction() || "summaryGrid"
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', action)(
-    selectedItemId=selectedId,
-    disabledClass = 'x-hidden'
+    selectedItemId=selectedId
 ).classes-bar
 .action-bar.not-transparent.buttons
     .container.panel-bg

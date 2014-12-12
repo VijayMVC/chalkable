@@ -12,6 +12,7 @@ NAMESPACE('chlk.activities.grading', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.grading.GradingClassStandardsGridTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         'GradingClassStandardsGridPage', EXTENDS(chlk.activities.grading.BaseGridPage), [
 
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassStandardsGridItemsTpl)],
@@ -80,15 +81,17 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom]],
             Object, function getModelFromCell(cell){
                 var node = cell.find('.grade-info'), model;
-                var grade = cell.find('.grade-text').getData('grade-value');
+                var grade = cell.find('.grade-text').getData('grade-value'),
+                    comment = node.getData('comment');
                 grade = grade ? grade.toString() : '';
+                comment = comment ? comment.toString() : '';
                 model = new chlk.models.standard.StandardGrading(
                     grade,
                     new chlk.models.id.StandardId(node.getData('standardid')),
                     new chlk.models.id.GradingPeriodId(node.getData('gradingperiodid')),
                     new chlk.models.id.SchoolPersonId(node.getData('studentid')),
                     new chlk.models.id.ClassId(node.getData('classid')),
-                    node.getData('comment')
+                    comment
                 );
 
                 return model;
@@ -198,7 +201,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         chlk.controls.LeftRightToolbarControl.SET_CURRENT_PAGE(node, pIndex);
 
                         setTimeout(function () {
-                            this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+                            this.dom.find('.last-container').removeClass('last-container').removeClass('delay');
 
                             this.dom.find('[data-sort-type][data-sort-order]').removeData('sort-order');
                             var newSortOrder = sortOrder == 'asc' ? 'desc' : 'asc';

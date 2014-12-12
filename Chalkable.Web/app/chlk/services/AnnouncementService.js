@@ -23,6 +23,14 @@ REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 NAMESPACE('chlk.services', function () {
     "use strict";
 
+    /** @class chlk.services.NoClassAnnouncementTypeException */
+    EXCEPTION(
+        'NoClassAnnouncementTypeException', [
+            function $(inner_) {
+                BASE('NoClassAnnouncementTypeException', inner_);
+            }
+        ]);
+
     /** @class chlk.services.AnnouncementService */
     CLASS(
         'AnnouncementService', EXTENDS(chlk.services.BaseService), [
@@ -122,6 +130,13 @@ NAMESPACE('chlk.services', function () {
                     classId: classId_ ? classId_.valueOf() : null,
                     classAnnouncementTypeId: classAnnouncementTypeId_,
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
+                }).catchException(ria.ajax.AjaxException, function (ex) {
+                    if (ex.getStatus() == 500) {
+                        var res = JSON.parse(error.getResponse());
+                        if(res.exceptiontype == 'NoClassAnnouncementTypeException')
+                            throw chlk.services.NoClassAnnouncementTypeException(ex);
+                    }
+                    throw ex;
                 });
             },
 

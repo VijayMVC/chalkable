@@ -53,5 +53,20 @@ NAMESPACE('chlk.activities.lib', function () {
             OVERRIDE, ria.dom.Dom, function onDomCreate_() {
                 return new ria.dom.Dom().fromHTML('<div></div>');
             },
+
+            OVERRIDE, VOID, function onRender_(model) {
+                BASE(model);
+
+                this.dom.find('.classes-bar').removeSelf().appendTo(ria.dom.Dom('#classes-bar-holder').empty());
+            },
+
+            OVERRIDE, VOID, function onPartialRender_(model, msg_) {
+                BASE(model, msg_);
+
+                var $classesBar = this.dom.find('.classes-bar');
+                if ($classesBar.exists()) {
+                    $classesBar.removeSelf().appendTo(ria.dom.Dom('#classes-bar-holder').empty());
+                }
+            }
         ]);
 });

@@ -5,24 +5,39 @@
 
 .saved-pop-up
 .not-saved-pop-up
-+ActionForm('attendance', 'setClassAttendanceList').set-attendance-list-form
++ActionForm('attendance', 'setClassAttendanceList').set-attendance-list-form.header
     input(name="attendancesJson", type="hidden")
     +Hidden('date', self.getDate().toStandardFormat())
     +Hidden('classList', true)
     +Hidden('classId', selectedId && selectedId.valueOf())
     items = self.getItems()
-    .top.panel-bg
-        +SummaryInfo(self.getPresentStudents().length, items.length)
-        if self.canPost()
-            A#submit-attendance-button.chlk-button.action-button.message-button.blue-gradient-btn POST IT
-        else
-            if self.getReadOnlyReason()
-                div=self.getReadOnlyReason()
-        if(self.getItems().length > 0 && self.canPost())
-            +ActionLinkWithPrepend('attendance', 'markAll',
+    .table
+        .l: +SummaryInfo(self.getPresentStudents().length, items.length)
+        if self.getItems().length > 0 && self.canPost()
+            .l &nbsp;
+        .title
+            = self.getDate().toString('MM dd, yy')
+            +DatePicker('attendanceDate', self.getDate())#attendance-date.tb-date-picker.tr(
+                data-options={
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    inCurrentMp: true
+                },
+                data-controller= "attendance",
+                data-action="classList",
+                data-params=selectedId ? [selectedId.valueOf()].concat(additionalParams) : null
+            )
+        if self.getItems().length > 0 && self.canPost()
+            .r
+                +ActionLinkWithPrepend('attendance', 'markAll',
                 [selectedId.valueOf(), self.getDate().toStandardFormat()].concat(additionalParams)
-            )#all-present-link=Msg.Mark_all_Present
-    .action-bar.buttons.filter
+                )#all-present-link=Msg.Mark_all_Present
+        .r
+            if self.canPost()
+                BUTTON#submit-attendance-button.blue-button POST IT
+            else if self.getReadOnlyReason()
+                div=self.getReadOnlyReason()
+    .action-bar.buttons.filter.x-hidden
         .container.panel-bg
             .left
                 +ActionLinkWithPrepend('attendance', 'sortStudents', ['false'].concat(additionalParams))(class=self.isByLastName()?"":"pressed").action-button.first-last=Msg.First_name
@@ -33,26 +48,24 @@
         each item, i in self.getItems()
             needPresent = (i == 0 && item.getType() == valuesEnum.NA.valueOf());
             .row(index=i)
+                .student-attendance-container.right
+                    len = self.getItems().length;
+                    if (needSuggestion && (i== 5 || (i == len - 1 && len < 6 && len > 2)))
+                        .keyboard-suggestion
+                    div(class="container-" + item.getStudentId().valueOf())
+                        -item.setReasons(self.getReasons());
+                        +RenderWith(item, self.getItemClassType())(
+                            needPresent = needPresent
+                        )
                 if needPresent
                     -item.setType(valuesEnum.PRESENT.valueOf());
                 student = item.getStudent();
                 +ProfileLink(student, 'student').left.image-container.white.shadow
                     +PersonImg(student, 47)
-                div.p.left
-                    .user-name-container.i-b.relative
-                        SPAN.name=student.getFullName()
-                        if student.isWithdrawn()
-                            div(data-tooltip=Msg.Withdrawn).withdrawn
+                .user-name-container.i-b.relative
+                    SPAN.name=student.getFullName()
+                    if student.isWithdrawn()
+                        div(data-tooltip=Msg.Withdrawn).withdrawn
                     if item.isAbsentPreviousDay()
                         SPAN(data-tooltip=Msg.Absent_yesterday).absent-yesterday
-                .right
-                    .student-attendance-container
-                        len = self.getItems().length;
-                        if (needSuggestion && (i== 5 || (i == len - 1 && len < 6 && len > 2)))
-                            .keyboard-suggestion
-                        div(class="container-" + item.getStudentId().valueOf())
-                            -item.setReasons(self.getReasons());
-                            +RenderWith(item, self.getItemClassType())(
-                                needPresent = needPresent
-                            )
-                .clear
+                .clear-fix

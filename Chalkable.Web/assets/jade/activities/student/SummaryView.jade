@@ -1,22 +1,24 @@
 user = self.getUser()
 gradeLevel = user.getGradeLevelNumber();
 statusData = self.getStatusData()
-.loader-container
-    .loader
+.profile-page
+    h2.page-title=Msg.Student_profile
+
     +ProfileTopBar(self, 'details')
     .summary-view
-        #top-summary-panel
-            #avatar-photo-conainer
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
                 .img-container
-                    +PersonImg(user, 256, true)
-            #student-info-panel
+                    +PersonImg(user, 140, true)
+            #info-panel.central-block.panel-block
                 displayName =user.getDisplayName() || user.getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
                 .status
                     div(class=statusData.status, data-tooltip=statusData.statusName)
                     |#{user.getCurrentClassName()}
                     if(user.getCurrentClassName() && user.getRoomName() && user.getCurrentClassName().toLowerCase() != 'no class now')
-                        |&nbsp;- #{user.getRoomName()}
+                        |&nbsp;- #{user.getRoomName()})
+            #glance-block-panel.right-block.panel-block
                 .glance-container
                     if user.getRankBox() && user.isAbleViewTranscript()
                         +GlanceBox(null, null, self.buildRankGlanceBoxData())
@@ -26,13 +28,15 @@ statusData = self.getStatusData()
                         +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null, null)
                     if user.getGradesBox()
                         +GlanceBox(null, null, self.buildGradesGlanceBoxData(), null, null, true, true)
+
+
+
         if user.getPeriodSection()
-            .today-work-panel
-                h2=Msg.Todays_work
+            +CloseOpen('Periods').today-work-panel
                 .period-toolbar
                     +LeftRightToolbar(user.getPeriodSection(), chlk.templates.announcement.AnnouncementClassPeriod)(hideArrows).centered.big-arrows
         if user.getClassesSection()
-            .today-work-panel
-                h2.stats=Msg.Classes
-                .classes-tb
-                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class)(hideArrows, itemsCount = 7).centered.big-arrows
+            +CloseOpen(Msg.Classes).today-work-panel
+                .classes-tb-container
+                    +LeftRightToolbar(user.getClassesSection(), chlk.templates.classes.Class).classes-tb
+

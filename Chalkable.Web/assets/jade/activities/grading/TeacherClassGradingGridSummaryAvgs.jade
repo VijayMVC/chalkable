@@ -2,9 +2,10 @@ value = self.getValue()
 each studentAvg, i in value.totalavarages
     .dotted-container.grade-container.with-horizontal-dots.avgs-container
         text = self.displayAvgName(studentAvg)
-        div(data-tooltip=text).type-name=text
-        .time
-        .max-score.dotted-h
+        .grading-grid-th
+            div(data-tooltip=text).type-name=text
+            .time
+            .max-score.dotted-h
         each average,i in studentAvg.averages
             div(
                 row-index=i,

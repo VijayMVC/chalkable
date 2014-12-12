@@ -11,10 +11,8 @@ mixin StudentGradingItem(student)
             +PersonImg(student, 47)
 
 topData = self.getTopData()
-topItems = topData.getTopItems()
-+LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid')(
-    disabledClass = 'x-hidden'
-).classes-bar
+topItems = topData.getTopItems() || []
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summaryGrid').classes-bar
 .grading-summary
     if !self.getItems().length
         .no-items-text There is no grading summary data for current term

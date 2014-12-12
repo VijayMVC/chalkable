@@ -24,14 +24,13 @@ div(
         =(reason ? reason.getDescription() : '')
     div(class=name.toLowerCase().replace(/\//g, '-')).attendance-text
         =(value == valuesEnum.NA.valueOf() ? '_______' : name)
-    .attendance-combo
-        BUTTON(href="javascript:", type="button", value="leftArrow").left-arrow
-            span
-        div(class=needDropdown ? "with-dropdown" : '').current-attendance=name
-        BUTTON(href="javascript:", type="button", value="rightArrow").right-arrow
-            span
+    .attendance-combo.buttons
+        .buttons-group
+            BUTTON(href="javascript:", type="button", value="leftArrow").left-arrow &lt;
+            .button-like(class=needDropdown ? "with-dropdown" : '').current-attendance=name
+            BUTTON(href="javascript:", type="button", value="rightArrow").right-arrow &gt;
         if value > valuesEnum.PRESENT.valueOf()
-            .combo-list.no-row-click
+            .combo-list.no-row-click.popup-bubble.top
                 input.combo-input.x-zero
                 .connector
                 firstSelected = true
@@ -41,4 +40,4 @@ div(
                         data-id=reasonItem.getId().valueOf(),
                         data-level=reasonItem.getLevel(value)
                     ).option=reasonItem.getDescription()
-                .press-enter=Msg.Press_enter
+                .x-hidden.press-enter=Msg.Press_enter

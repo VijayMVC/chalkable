@@ -9,15 +9,16 @@ div(
     data-able-edit = self.isAbleEdit(),
     data-able-edit-direct-value = self.isAbleEditDirectValue()
 ).row.fixed-bg
-    +ActionForm('grading', 'updateStudentAvgFromFinalPage').grading-form.avg-form.update-grade-form
-        .top-content
+    .top-content
+        +ActionForm('grading', 'updateStudentAvgFromFinalPage').grading-form.avg-form.update-grade-form
             +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
                 +PersonImg(student, 47)
-            .i-b.name-block
-                .name-container.i-b.relative
-                    p= student.getFullName()
-                    if student.isWithdrawn()
-                        div(data-tooltip=Msg.Withdrawn).withdrawn
+            .name-block
+                +ProfileLink(student, 'student')
+                    .wrapper
+                        p= student.getFullName()
+                        if student.isWithdrawn()
+                            div(data-tooltip=Msg.Withdrawn).withdrawn
             div(id = "grade-container-" + self.getStudent().getId()).i-b.grade-block
                 +Hidden('note', avg.getNote())
                 +Hidden('averageid', avg.getAverageId().valueOf())
@@ -31,7 +32,7 @@ div(
                 .grade-triangle
                 div(class = self.isAbleEdit() && self.isAbleEditDirectValue() ? "not-selected" : "").i-b.text-value=displayValue
                 if self.isAbleEdit() && self.isAbleEditDirectValue()
-                    .i-b.selected
+                    .i-b.selected.grade-block2
                         .input-container
                             ent = avg.getEnteredAvg()
                             div(class=(((ent || ent === 0) && (ent != avg.getCalculatedAvg())) ? "opacity05" : "" )).text-value=value
@@ -48,15 +49,15 @@ div(
                             ).no-padding.grade-input.grade-autocomplete.grey-input.with-grid-focus
                             .letters=Msg.Direct
                             if avg.isMayBeExempt()
-                                .grading-input-popup.chlk-pop-up-container.popup-bottom
-                                    .pop-up-triangle.big
-                                    +LabeledCheckbox(Msg.Exempt, 'isexempt', avg.isExempt())(data-value=avg.isExempt(), addCallBack = true).with-value.exempt-checkbox
+                                .grading-input-popup
+                                    .popup-content
+                                        +LabeledCheckbox(Msg.Exempt, 'isexempt', avg.isExempt())(data-value=avg.isExempt(), addCallBack = true).with-value.exempt-checkbox
                             else
                                 +Hidden('isexempt', avg.isExempt())
                 else
                     +Hidden('isexempt', avg.isExempt())
                     +Hidden('averageValue', displayValue)
-div(class=(selected ? "opened" : "")).attachments-container.z-10
+div(class=(selected ? "opened" : "")).attachments-container.z-10.sub-row
     .attachments-container-2
         .avgs-block
             each item in self.getStudentAverages()

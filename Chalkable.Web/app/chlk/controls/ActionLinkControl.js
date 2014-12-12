@@ -108,6 +108,12 @@ NAMESPACE('chlk.controls', function () {
                 return this.onActionLinkClick(node.find('a'), event);
             },
 
+            [ria.mvc.DomEventBind('click', 'BUTTON.action-button:not(.disabled)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            Boolean, function onActionButtonClick(node, event) {
+                return this.onActionLinkClick(node, event);
+            },
+
             VOID, function updateState(controller, action, args){
                 var state = this.context.getState();
                 state.setController(controller);
