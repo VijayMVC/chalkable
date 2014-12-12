@@ -1,0 +1,9 @@
++ActionLinkWithPrepend(self.getController(), self.getAction(), self.getParams(), self.getId())(
+    class=self.isPressed() ? "pressed " : "",
+    index=self.getIndex(),
+    data-tooltip=self.getId() ? self.getFullClassName() : ''
+).item.class-button.button-link
+    .alerts-icon.small(data-id=self.getId())
+    .img-wrapper
+        +ClassImg(self, 45, 80)
+    SPAN.text-container= self.getName()
