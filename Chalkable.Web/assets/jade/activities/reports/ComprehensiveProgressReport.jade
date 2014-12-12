@@ -8,7 +8,7 @@
       +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
       +Hidden('classId', self.getClassId().valueOf())
       +Hidden('absenceReasonIds', '')#absence-reasons
-      +Hidden('gradingPeriodIds', '')#grading-periods
+      +Hidden('gradingPeriodIds', self.getGradingPeriodId().valueOf().toString())#grading-periods
       +Hidden('dailyAttendanceDisplayMethod', chlk.models.reports.AttendanceDisplayMethodEnum.NONE.valueOf())#daily-attendance-display-method
       .report-content
          TABLE.report-table
@@ -38,10 +38,6 @@
                      class="validate[required]"
                   ).report-date-picker
                TD.item-3
-                  h3=Msg.Grading_Periods
-                  +Select('gradingPeriod')(multiple).grading-periods-select
-                     each gradingPeriod in self.getGradingPeriods()
-                        +Option(gradingPeriod.getId().valueOf(), gradingPeriod.getDescription(), gradingPeriod.getId() == self.getGradingPeriodId())
             TR
                TD.item-3
                   h3=Msg.Order_by
