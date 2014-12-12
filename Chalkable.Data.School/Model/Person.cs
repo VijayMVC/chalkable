@@ -15,6 +15,8 @@ namespace Chalkable.Data.School.Model
 
         public const string SALUTATION_FIELD = "Salutation";
         public const string ADDRESS_REF_FIELD = "AddressRef";
+        public const string BIRTH_DATE = "BirthDate";
+        public const string PHOTO_MODIFIED_DATE = "PhotoModifiedDate";
         //public const string EMAIL_FIELD = "Email";
         
         public const string USER_ID_FIELD = "UserId";
