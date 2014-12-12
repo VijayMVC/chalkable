@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
@@ -10,6 +12,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
@@ -38,6 +41,35 @@ namespace Chalkable.Web.Controllers
         public ActionResult Terms()
         {
             return View();
+        }
+
+
+        //[AuthorizationFilter("AppTester")]
+        public ActionResult AppTester()
+        {
+            var appTester = new User
+            {
+                Id = Guid.NewGuid(),
+                Login = "apptester@chalkable.com",
+                FullName = "App Tester"
+            };
+            //var appTester = MasterLocator.UserService.GetById(Context.UserId);
+            ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+            ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
+            PrepareJsonData(AppTesterViewData.Create(appTester), ViewConstants.CURRENT_PERSON);
+            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
+            ViewData[ViewConstants.SERVER_TIME] = serverTime;
+            //var ip = RequestHelpers.GetClientIpAddress(Request);
+            //MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
+            return View();
+        }
+
+        public static string PasswordMd5(string password)
+        {
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = new MD5CryptoServiceProvider().ComputeHash(bytes);
+            var b64 = Convert.ToBase64String(hash);
+            return b64;
         }
 
         [AuthorizationFilter("SysAdmin")]

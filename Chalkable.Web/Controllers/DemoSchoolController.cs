@@ -54,7 +54,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, AppTester")]
         public ActionResult TestApps(string prefix)
         {
             var context = LogOn(false, userService => userService.DemoLogin(CoreRoles.TEACHER_ROLE.LoweredName, prefix));

@@ -93,7 +93,7 @@ namespace Chalkable.Web.Controllers
             return Json(DeveloperViewData.Create(developer));
         }
 
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, AppTester")]
         public ActionResult GetDevelopers()
         {
             var developers = MasterLocator.DeveloperService.GetDevelopers();

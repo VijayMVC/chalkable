@@ -26,6 +26,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'stateId',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'readOnly',
+
             Array, function prepareDevelopersSelectModel(){
                 var res = [{
                     value: null,

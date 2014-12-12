@@ -103,8 +103,15 @@ NAMESPACE('chlk.controllers', function (){
                         new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.REJECTED),
                         new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.LIVE)
                     ];
-                    return new chlk.models.apps.AppsListViewData(res[0], res[1], states, developerId_, state_);
-                });
+                    return new chlk.models.apps.AppsListViewData(
+                        res[0],
+                        res[1],
+                        states,
+                        developerId_,
+                        state_,
+                        this.userInRole(chlk.models.common.RoleEnum.APPTESTER)
+                    );
+                }, this);
             if(startIndex_ || developerId_ || state_ || filter_)
                 return this.UpdateView(chlk.activities.apps.AppsListPage, result);
             return this.PushView(chlk.activities.apps.AppsListPage, result);
@@ -387,10 +394,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.SYSADMIN
+            chlk.models.common.RoleEnum.SYSADMIN,
+            chlk.models.common.RoleEnum.APPTESTER,
         ])],
         [[chlk.models.id.SchoolPersonId]],
-        function testApplicationSysAdminAction(devId) {
+        function testApplicationAction(devId) {
             this.appsService
                 .testDevApps(devId);
             return null;

@@ -180,7 +180,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         
-        private double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
+        private static double? CalculateAvgByAnnTypes(IEnumerable<GradedClassAnnouncementType> classAnnouncementTypes)
         {
             var res = classAnnouncementTypes.Where(classAnnType => classAnnType.Avg.HasValue).ToList();
             if (res.Count > 0)

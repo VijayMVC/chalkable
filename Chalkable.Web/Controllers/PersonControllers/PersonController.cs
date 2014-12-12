@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -84,6 +85,5 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = SchoolLocator.PersonService.GetPersonDetails(personId);
             return Json(PersonInfoViewData.Create(res));
         }
-
     }
 }

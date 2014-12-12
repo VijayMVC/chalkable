@@ -53,6 +53,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
+
         public static string PasswordMd5(string password)
         {
             var bytes = Encoding.UTF8.GetBytes(password);
@@ -181,8 +182,17 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null, null);
             if (user.IsDeveloper)
                 return DeveloperLogin(user);
+
+
+
+            //todo: remove this
+            user.IsAppTester = user.DistrictRef.HasValue &&  user.DistrictRef.Value.ToString() == "ce8f981b-2851-4d2d-9127-9622aadfe662";
+
+            if (user.IsAppTester)
+                return new UserContext(user, CoreRoles.APP_TESTER_ROLE, user.District, null, null, null);
             throw new UnknownRoleException();
         }
+
 
         private UserContext SisUserLogin(User user, UnitOfWork uow, ConnectorLocator iNowConnector = null
                                          , StiConnector.Connectors.Model.User iNowUser = null, int? schoolYearId = null)

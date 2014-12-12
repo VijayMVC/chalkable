@@ -59,7 +59,9 @@ mixin AppsFilterSelect(name, items)
                                 +Hidden('appId', item.getId())
 
                         .td.action-links
-                            +ActionLink('apps', 'details', item.getId()).profile
+                            if !self.isReadOnly
+                                +ActionLink('apps', 'details', item.getId()).profile
                             +ActionLink('apps', 'testApplication', item.getDeveloperId()).profile
-                            +ActionLink('apps', 'tryDeleteApplication', item.getId(), item.getName()).remove
+                            if !self.isReadOnly
+                                +ActionLink('apps', 'tryDeleteApplication', item.getId(), item.getName()).remove
 
