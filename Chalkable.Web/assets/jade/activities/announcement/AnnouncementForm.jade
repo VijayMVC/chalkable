@@ -1,0 +1,69 @@
+mixin AnnouncementTypeToolBar(types, announcement, typeId)
+    if types.length > 6
+        SPAN.type-text #{Msg.Type} :
+        +Select('typeid')#type-select
+            each item in types
+                +Option(item.getId(), item.getName(), typeId==item.getId())(
+                    data-typeid=item.getId(),
+                    data-typename=item.getName()
+                )
+        BUTTON(
+            type = announcement && announcement.getState() ? "button" : "submit",
+            name="submitType",
+            value="save"
+        )#announcement-type-btn.validate-skip.x-hidden
+    else
+        each item in types
+            BUTTON(
+            class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
+            data-typeid=item.getId(),
+            data-typename=item.getName(),
+            type = "submit",
+            name="submitType",
+            value="save"
+            ).action-button.announcement-type-button= item.getDescription()
+
+
+
+topData = self.getTopData()
+announcement = self.getAnnouncement()
+topItems = topData.getTopItems()
+classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
+typeId = self.getSelectedTypeId()
+state = announcement && announcement.getState()
+types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+
+.announcement-form.loader-container
+    .loader
+    if announcement
+        +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
+            +LeftRightToolbar(topItems, chlk.templates.classes.TopBar)(
+                selectedItemId=topData.getSelectedItemId(),
+                pressAfterClick=!announcement.getState(),
+                disabledClass = 'x-hidden'
+            ).classes-bar
+            .action-bar.not-transparent.buttons(class=(classId ? '' : 'x-hidden'))
+                .container.panel-bg
+                    +AnnouncementTypeToolBar(types, announcement, typeId)
+            .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
+                +BaseAnnouncementFormContainer(self, announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
+                .suggested-apps
+                    if announcement.getStandards() && announcement.getStandards().length > 0
+                        +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
+            .choose-type(class=(classId && !typeId && !state && types.length ? '' : 'x-hidden'))
+            if !classId
+                if topItems.length
+                    .choose-class
+                else
+                    .no-items-text There are no classes for current term
+    else
+        +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'announcement', 'add')(
+            selectedItemId=topData.getSelectedItemId(),
+            pressAfterClick=true,
+            disabledClass = 'x-hidden'
+        ).classes-bar
+        if !classId
+            if topItems.length
+                .choose-class
+            else
+                .no-items-text There are no classes for current term
