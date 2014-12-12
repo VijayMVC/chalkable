@@ -1,0 +1,26 @@
+mixin ReportFormatSelect()
+   +Select('format').format
+      +Option(chlk.models.reports.ReportFormatEnum.PDF.valueOf(), "PDF", true)
+      +Option(chlk.models.reports.ReportFormatEnum.CSV.valueOf(), "CSV", false)(disabled)
+      +Option(chlk.models.reports.ReportFormatEnum.EXCEL.valueOf(), "Excel", false)(disabled)
+      +Option(chlk.models.reports.ReportFormatEnum.HTML.valueOf(), "HTML", false)(disabled)
+      +Option(chlk.models.reports.ReportFormatEnum.TIFF.valueOf(), "TIFF", false)(disabled)
+      +Option(chlk.models.reports.ReportFormatEnum.XML.valueOf(), "XML (" + Msg.With_report_data + ")", false)(disabled)
+
+mixin IdToPriintSelect(withHeader)
+   if withHeader
+      h3=Msg.ID_to_print
+   +Select('idToPrint').id-to-print
+      +Option(chlk.models.reports.StudentIdentifierEnum.STUDENT_NUMBER.valueOf(), Msg.Student_Number, true)
+      +Option(chlk.models.reports.StudentIdentifierEnum.STATE_ID_NUMBER.valueOf(), Msg.State_ID_number, false)
+      +Option(chlk.models.reports.StudentIdentifierEnum.ALT_STUDENT_NUMBER.valueOf(), Msg.Alt_student_number, false)
+      +Option(chlk.models.reports.StudentIdentifierEnum.SOCIAL_SECURITY_NUMBER.valueOf(), Msg.SS_number, false)
+      +Option(chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, false)
+
+mixin OrderBySelect(withHeader)
+   if withHeader
+      h3=Msg.Order_by
+   +Select('orderBy').order-by
+      +Option(chlk.models.reports.OrderByEnum.STUDENT_ID.valueOf(), Msg.Student_ID, true)
+      +Option(chlk.models.reports.OrderByEnum.STATE_AVERAGE, Msg.Section_average, false)
+      +Option(chlk.models.reports.OrderByEnum.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, false)

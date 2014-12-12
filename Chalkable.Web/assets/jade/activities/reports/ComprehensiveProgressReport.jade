@@ -1,0 +1,93 @@
+.dialog-window.report-window
+   .close.close-btn.dark
+   date = new chlk.models.common.ChlkDate()
+   h1=Msg.Create_Report
+   .report-buttons.panel-bg
+      +ActionLinkList(self.buildReportLinksData('comprehensiveProgressReport'))
+   +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working
+      +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+      +Hidden('classId', self.getClassId().valueOf())
+      +Hidden('absenceReasonIds', '')#absence-reasons
+      +Hidden('gradingPeriodIds', self.getGradingPeriodId().valueOf().toString())#grading-periods
+      +Hidden('dailyAttendanceDisplayMethod', chlk.models.reports.AttendanceDisplayMethodEnum.NONE.valueOf())#daily-attendance-display-method
+      .report-content
+         TABLE.report-table
+            TR
+               TD.item-3
+                  h3=Msg.Start_date
+                  +DatePicker('startDate', self.getStartDate() || date)(
+                  data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true,
+                        calendarCls: 'for-dialog',
+                        minDate: self.getStartDate().getDate(),
+                        maxDate: self.getEndDate().getDate()
+                     },
+                     class="validate[required]"
+                  ).report-date-picker
+               TD.item-3
+                  h3=Msg.End_date
+                  +DatePicker('endDate', self.getEndDate() || date)(
+                  data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true,
+                        calendarCls: 'for-dialog',
+                        minDate: self.getStartDate().getDate(),
+                        maxDate: self.getEndDate().getDate()
+                     },
+                     class="validate[required]"
+                  ).report-date-picker
+               TD.item-3
+            TR
+               TD.item-3
+                  h3=Msg.Order_by
+                  +Select('orderBy').order-by
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, true)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.STUDNET_IDENTIFIER.valueOf(), Msg.Student_ID, false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.GRADE_LEVEL.valueOf(), Msg.Grade_Level, false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.HOME_ROOM.valueOf(), 'Homeroom', false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.POSTAL_CODE.valueOf(), 'Postal code', false)
+                     +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.DISTRIBUTION_PERIOD.valueOf(), 'Distribution Period', false)
+
+               TD.item-3
+                  +IdToPriintSelect(true)
+               TD.item-3
+                  h3=Msg.Absence_reasons
+                  +Select('absenceReason')(multiple).reasons-select
+                     each reason in self.getReasons()
+                        +Option(reason.getId().valueOf(), reason.getName(), true)
+            TR
+               TD.item-3
+                  h3=Msg.Include
+                  +LabeledCheckbox(Msg.Class_average, 'displayClassAverages', false)
+                  +LabeledCheckbox(Msg.Class_Average_Only, 'classAverageOnly', false)
+                  +LabeledCheckbox(Msg.Category_averages, 'displayCategoryAverages', false)
+                  +LabeledCheckbox(Msg.Period_attendance, 'displayPeriodAttendance', false)
+                  +LabeledCheckbox(Msg.Total_points, 'displayTotalPoints', false)
+                  +LabeledCheckbox(Msg.Signal_line, 'displaySignatureLine', false)
+               TD.item-3
+                  h3
+                  +LabeledCheckbox(Msg.Additional_mailings, 'additionalMailings', false)
+                  +LabeledCheckbox(Msg.Student_comment, 'displayStudentComments', false)
+                  +LabeledCheckbox(Msg.Student_mailing_address, 'displayStudentMailingAddress', false)
+                  +LabeledCheckbox(Msg.Student_Photo, 'includePicture', false)
+                  +LabeledCheckbox(Msg.Withdrawn_students, 'includeWithdrawnStudents', false)
+            TR
+               TD.item-3
+                  h3=Msg.Include_students
+                  .min-max
+                     input(placeholder=Msg.Min_avg, name="minStandardAverage").min-max-input.min
+                     | -
+                     input(placeholder=Msg.Max_avg, name="maxStandardAverage").min-max-input.max
+               TD.item-3
+                  h3=Msg.Daily_attendance
+                  +LabeledCheckbox(Msg.Year_to_date, 'yearToDate', false)#year-to-date-chk
+                  +LabeledCheckbox(Msg.Grading_period, 'gradingPeriod', false)#grading-period-chk
+               TD.item-3
+                  h3=Msg.Other
+                  +LabeledCheckbox(Msg.Go_green, 'goGreen', false)
+                  +LabeledCheckbox(Msg.Window_Envelope, 'windowEnvelope', false)
+      .report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
