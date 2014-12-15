@@ -36,7 +36,7 @@
             if self.canPost()
                 BUTTON#submit-attendance-button.blue-button POST IT
             else if self.getReadOnlyReason()
-                div=self.getReadOnlyReason()
+                .readonly-banner= self.getReadOnlyReason()
     .action-bar.buttons.filter.x-hidden
         .container.panel-bg
             .left
