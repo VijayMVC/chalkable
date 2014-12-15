@@ -380,6 +380,11 @@ NAMESPACE('ria.dom', function () {
 
             /* attributes */
 
+            [[String]],
+            OVERRIDE, Boolean, function hasAttr(name) {
+                return this._dom[0] && this._dom[0].hasAttribute ? this._dom[0].hasAttribute(name) || null : null;
+            },
+
             OVERRIDE, Object, function getAllAttrs() {},
             [[String]],
             OVERRIDE, Object, function getAttr(name) {
