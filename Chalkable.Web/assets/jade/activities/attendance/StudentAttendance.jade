@@ -34,10 +34,15 @@ div(
                 input.combo-input.x-zero
                 .connector
                 firstSelected = true
-                div(class=(firstSelected ? "selected" : "")).option=name
+                div(class=(firstSelected ? "selected " : "") + name.toLowerCase()).option.item
+                    .student-seating-type
+                    .text=name
                 each reasonItem in reasons
                     div(
                         data-id=reasonItem.getId().valueOf(),
-                        data-level=reasonItem.getLevel(value)
-                    ).option=reasonItem.getDescription()
+                        data-level=reasonItem.getLevel(value),
+                        class=name.toLowerCase()
+                    ).option.item
+                        .student-seating-type
+                        .text=reasonItem.getDescription()
                 .x-hidden.press-enter=Msg.Press_enter
