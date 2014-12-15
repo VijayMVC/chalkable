@@ -1,0 +1,7 @@
+.profile-page.view-mode
+    h2.page-title=Msg.Profile
+    +UserProfileTopBar(self, 'info')
+    +ProfileInfoView(self.getUser())
+        //todo rewrite this
+
+    +ProfileInfoForm(self.getControllerName(), self.getUser())

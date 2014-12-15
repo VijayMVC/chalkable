@@ -1,0 +1,42 @@
+mixin ReportTypeSelect()
+    h3=Msg.Report_type
+    +Select('reportType').report-type
+        +Option(0, Msg.Summary, true)
+        +Option(1, Msg.Detail, false)
+
+.dialog-window.report-window
+    .close.close-btn.dark
+    h1=Msg.Create_Report
+    .report-buttons.panel-bg
+        +ActionLinkList(self.buildReportLinksData('gradeBookReport'))
+    +ActionForm('grading', 'submitGradeBookReport')
+        +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+        +Hidden('classId', self.getClassId().valueOf())
+        TABLE.report-table
+            TR
+                +ReportDatePickers(self.getStartDate(), self.getEndDate())
+                TD.item-3
+            TR
+                TD.item-3
+                    +ReportTypeSelect()
+                TD.item-3
+                    +OrderBySelect(true)
+                TD.item-3
+                    +IdToPriintSelect(true)
+            TR
+                TD.item-3
+                    h3=Msg.Option(true)
+                    +LabeledCheckbox(Msg.Display_letter_grade, 'displayLetterGrade', false)
+                    +LabeledCheckbox(Msg.Suppress_student_name, 'suppressStudentName', false)
+                    +LabeledCheckbox(Msg.Display_total_points, 'displayTotalPoints', false)
+                    +LabeledCheckbox(Msg.Display_student_average, 'displayStudentAverage', false)
+                TD.item-3
+                    h3=Msg.Include
+                    +LabeledCheckbox(Msg.Withdrawn_students, 'includeWithdrawnStudents', false)
+                    +LabeledCheckbox(Msg.Non_graded_activities, 'includeNonGradedActivities', false)
+                TD.item-3
+                    h3=Msg.Format
+                    +ReportFormatSelect()
+        .report-bottom
+            BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

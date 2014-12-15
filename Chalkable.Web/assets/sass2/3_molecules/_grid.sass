@@ -1,0 +1,53 @@
+.grid
+  position: relative
+
+  .container
+    display: table
+    border-collapse: collapse
+    width: 100%
+
+  .head, .row
+    display: table-row
+
+  .body
+    display: table-row-group
+
+  .th, .td, .col
+    display: table-cell
+    padding: 2px
+
+  .head
+    font-weight: 600
+    font-size: 15px
+
+    .th
+      background: #eee
+      border: 1px solid white
+      padding: 5px 2px
+
+  .body .row:nth-child(2n)
+    background-color: #eee
+    
+  .action-links A
+    display: inline-block
+    width: 16px
+    height: 16px
+    vertical-align: middle
+
+    &.profile
+      background: url(images/controls/grid/report.png) 0 0 no-repeat
+
+    &.view
+      background: url(images/controls/grid/information.png) 0 0 no-repeat
+
+    &.remove
+      background: url(images/controls/grid/delete.gif) 0 0 no-repeat
+
+    &.persons
+      background: url(images/controls/grid/user.png) 0 0 no-repeat
+
+    &.plugin
+      background: url(images/controls/grid/plugin.gif) 0 0 no-repeat
+    
+  
+  

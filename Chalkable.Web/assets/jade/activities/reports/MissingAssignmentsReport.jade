@@ -1,0 +1,43 @@
+.dialog-window.report-window
+   .close.close-btn.dark
+   h1=Msg.Create_Report
+   .report-buttons.panel-bg
+      +ActionLinkList(self.buildReportLinksData('missingAssignmentsReport'))
+   +ActionForm('grading', 'submitMissingAssignmentsReport').missing-assignments-report-form.no-working
+      +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+      +Hidden('classId', self.getClassId().valueOf())
+      +Hidden('alternateScoreIds', '')#alternate-scores
+      .report-content
+         TABLE.report-table
+            TR
+               +ReportDatePickers(self.getStartDate(), self.getEndDate())
+               TD.item-3
+            TR
+               TD.item-3
+                  h3=Msg.Order_by
+                  +Select('orderBy').order-by
+                     +Option(chlk.models.reports.MissingAssignmentsOrderByMethod.STUDENT_IDENTIFIER.valueOf(), Msg.Student, true)
+                     +Option(chlk.models.reports.MissingAssignmentsOrderByMethod.SECTION_NUMBER.valueOf(), 'Section Number', false)
+               TD.item-3
+                  +IdToPriintSelect(true)
+               TD.item-3
+                  h3=Msg.Alternate_Scores
+                  +Select('alternateScore')(multiple).alternate-scores-select
+                     each scores in self.getAlternateScores()
+                        +Option(scores.getId().valueOf(), scores.getName(), true)
+            TR
+               TD.item-3
+                  h3=Msg.Include
+                  +LabeledCheckbox(Msg.Alternate_Scores_Only, 'alternateScoresOnly', false)
+                  +LabeledCheckbox(Msg.Withdrawn_students, 'includeWithdrawnStudents', false)
+               TD.item-3
+                  h3=Msg.Options
+                  +LabeledCheckbox(Msg.Count_Zeros_as_Missing, 'considerZerosAsMissingGrades', true)
+                  +LabeledCheckbox(Msg.One_Per_Page, 'onePerPage', false)
+                  +LabeledCheckbox(Msg.Suppress_student_name, 'suppressStudentName', false)
+               TD.item-3
+                  h3=Msg.Format
+                  +ReportFormatSelect()
+      .report-bottom
+         BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
