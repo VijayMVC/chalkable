@@ -94,14 +94,14 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var parent = node.parent('.title-block');
                 parent.addClass('active');
                 setTimeout(function(){
-                    parent.find('#title').trigger('focus');
+                    parent.find('input[name=title]').trigger('focus');
                 }, 1)
             },
 
             [ria.mvc.DomEventBind('click', '.save-title-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function saveClick(node, event){
-                var input = this.dom.find('#title'),
+                var input = this.dom.find('input[name=title]'),
                     value = input.getValue();
                 this.dom.find('.title-text').setHTML(value);
                 input.setData('title', value);
@@ -122,7 +122,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.submit-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function setTitleOnSubmitClick(node, event){
-                this.dom.find('#title').setValue(this.dom.find('.title-text').getHTML());
+                this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
             },
 
             [ria.mvc.DomEventBind('change', '.announcement-types-combo')],
@@ -165,7 +165,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var block = this.dom.find('.title-text:visible'),
                     saveBtn = this.dom.find('.save-title-btn'),
                     titleBlock = this.dom.find('.title-block');
-                if(!model.isData() && this.dom.find('#title').getValue()){
+                if(!model.isData() && this.dom.find('input[name=title]').getValue()){
                     saveBtn.setAttr('disabled', false);
                     if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
                         saveBtn.trigger('click');
@@ -176,7 +176,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         this.dom.find('#show-title-popup').trigger('click');
                     saveBtn.setAttr('disabled', true);
                     titleBlock.addClass('exists');
-                    var titleInput = titleBlock.find('#title');
+                    var titleInput = titleBlock.find('input[name=title]');
                     var text = titleInput.getValue();
                     var oldText = titleInput.getData('title');
                     if(oldText == text)
@@ -202,7 +202,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
-            [ria.mvc.DomEventBind('keydown', '#title')],
+            [ria.mvc.DomEventBind('keydown', 'input[name=title]')],
             [[ria.dom.Dom, ria.dom.Event]],
             function titleKeyDown(node, event){
                 if(event.which == ria.dom.Keys.ENTER.valueOf()){
@@ -218,7 +218,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             function expiresDateChange(node, event){
                 var block = this.dom.find('.title-block-container'),
                     value = node.getValue(),
-                    titleNode = this.dom.find('#title');
+                    titleNode = this.dom.find('input[name=title]');
                 if(value){
                     if(!block.hasClass('with-date'))
                         block.addClass('was-empty');
@@ -238,7 +238,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     block.removeClass('with-date').removeClass('was-empty');
             },
 
-            [ria.mvc.DomEventBind('keyup', '#title')],
+            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleKeyUp(node, event){
                 wasDateChanged = false;
@@ -282,7 +282,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var target = new ria.dom.Dom(event.target), dom = that.dom;
                     if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
                         var titleBlock = dom.find('.title-block');
-                        var titleInput = titleBlock.find('#title');
+                        var titleInput = titleBlock.find('input[name=title]');
                         titleBlock.removeClass('active');
                         var text = titleInput.getValue();
                         if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == '' || text == null || text == undefined)){
