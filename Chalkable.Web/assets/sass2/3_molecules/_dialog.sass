@@ -3,9 +3,11 @@
   z-index: 1005
   background: #fff
   //border-radius: 5px
-  overflow: hidden
+  overflow: initial
   +box-shadow(transparentize(#000, .8) 0 2px 16px)
   transform: translate(-50%, -30%)
+
+  max-height: 99%
 
   //opacity: 0
   //&.visible
@@ -49,22 +51,23 @@
   .x-window-body
     margin: 25px
 
-  .x-window-header
+  .x-window-header, .x-window-footer
     background: #F8E6A4
     text-align: center
 
+  .x-window-header
     SPAN, h1
       line-height: 62px
       color: #BCAA53
+
+  .x-window-footer
+    padding: 15px
 
 #chlk-dialogs
   //position: absolute
   width: 0
   height: 0
   z-index: 0
-
-  *
-    overflow: visible
 
 #chlk-overlay
   position: fixed

@@ -27,11 +27,11 @@ NAMESPACE('chlk.templates.reports', function () {
                 var args = [this.getGradingPeriodId(), this.getClassId(), this.getStartDate().toStandardFormat(), this.getEndDate().toStandardFormat()];
                 var classNames = ['report-button'];
                 return [
-                    new chlk.models.common.ActionLinkModel(controllerName, 'gradeBookReport', Msg.Grade_Book_Report, 'gradeBookReport' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'worksheetReport', Msg.Worksheet_Report, 'worksheetReport' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'progressReport', Msg.Progress_Report, 'progressReport' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'comprehensiveProgressReport', Msg.Comprehensive_Progress_Report, 'comprehensiveProgressReport' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'missingAssignmentsReport', Msg.Missing_Assignments_Report, 'missingAssignmentsReport' == pressedAction, args, classNames)
+                    new chlk.models.common.ActionLinkModel(controllerName, 'gradeBookReport', 'Grade Book', 'gradeBookReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'worksheetReport', 'Worksheet', 'worksheetReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'progressReport', 'Progress', 'progressReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'comprehensiveProgressReport', 'Comprehensive Progress', 'comprehensiveProgressReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'missingAssignmentsReport', 'Missing Assignments', 'missingAssignmentsReport' == pressedAction, args, classNames)
                 ];
             }
         ])
