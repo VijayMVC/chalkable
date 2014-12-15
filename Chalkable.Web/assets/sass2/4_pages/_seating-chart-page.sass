@@ -50,6 +50,10 @@
     .first-part
       display: none
 
+.seating-chart-page, .seating-chart-people
+  .remove-red-btn
+    display: none
+
 .seating-chart-page
   position: relative
 
@@ -128,8 +132,12 @@
       border-radius: 50%
       border: 3px dashed transparent
 
-  .ui-droppable .empty-box .empty
-    border-color: silver
+  .ui-droppable
+    .remove-red-btn
+      display: block
+
+    .empty-box .empty
+      border-color: silver
 
   .student-block
     margin: 25px 10px
