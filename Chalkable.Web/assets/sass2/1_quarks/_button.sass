@@ -43,13 +43,14 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     +text-shadow(transparentize(#000, .8) 0 1px 1px)
 
   &.disabled, &[disabled]
-    background-color: #999
-    color: #888
-    +box-shadow(transparentize(#000, .5) 0 1px 3px, transparentize(#fff, .22) 0 1px 0px inset)
-    border-color: #666
-    +background-image(linear-gradient(top, #ccc 0%, transparentize(#ccc, 1) 100%))
-    +text-shadow(transparentize(#fff, .5) 0 1px 1px)
-    cursor: default
+    &, &:active, &:hover
+      background-color: #999
+      color: #888
+      +box-shadow(transparentize(#000, .5) 0 1px 3px, transparentize(#fff, .22) 0 1px 0px inset)
+      border-color: #666
+      +background-image(linear-gradient(top, #ccc 0%, transparentize(#ccc, 1) 100%))
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      cursor: default
 
 
   &.pressed, &.hover, &.pressed:hover, &:active
