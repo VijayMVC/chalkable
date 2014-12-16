@@ -1,0 +1,60 @@
+.people-list-container
+  margin: 25px 0
+  border-radius: 5px
+  border: 1px solid #c8c7c3
+  background: #fff
+
+  .header
+    padding: 0 24px
+    border-bottom: 1px solid #c8c7c3
+    +box-shadow(transparentize(#000, .91) 0 2px 3px)
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+    line-height: 63px
+
+  .title
+    text-align: center
+    font-weight: 600
+    font-size: 18px
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+
+.people-list
+  .sub-row
+    display: none
+    background: #f7f7f5
+    border-bottom: 1px solid #c8c7c3
+    z-index: 1
+    position: relative
+    padding: 30px
+
+  .row
+    display: block
+    line-height: 80px
+    vertical-align: middle
+    border-bottom: 1px solid #e7e6e2
+    padding: 0 25px
+    z-index: 8
+    position: relative
+
+    &.selected
+      +box-shadow(transparentize(#000, .82) 0 0 5px)
+      z-index: 100
+      background-color: #fafafa
+
+    &:not(.selected)
+      .message-button
+        display: none
+
+  .avatar-wrapper
+    display: inline-block
+    vertical-align: middle
+    margin-right: 24px
+
+  .user-name-container
+    font-size: 20px
+    font-weight: 700
+    color: #2f7790
+    +text-shadow(transparentize(#fff, .5) 0 1px 0)
+    line-height: 80px
+    vertical-align: middle
