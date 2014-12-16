@@ -26,9 +26,9 @@
                         TD.item-3
                             h3=Msg.Include_students
                             .min-max
-                                input(placeholder=Msg.Min_avg, name="minStandardAverage").min-max-input.min
+                                input(placeholder=Msg.Min_avg, name="minStandardAverage", type="number").min-max-input.min
                                 |-
-                                input(placeholder=Msg.Max_avg, name="maxStandardAverage").min-max-input.max
+                                input(placeholder=Msg.Max_avg, name="maxStandardAverage", type="number").min-max-input.max
                     TR
                         TD.item-3
                             h3=Msg.Include
@@ -45,12 +45,10 @@
                         TD.item-3
                             h3
                             +LabeledCheckbox(Msg.Category_averages, 'displayCategoryAverages', false).category-average
-                            .small-block
-                                label=Msg.Min
-                                input(name="minCategoryClassAverage", disabled="true").small-input
-                            .small-block
-                                label=Msg.Max
-                                input(name="maxCategoryClassAverage", disabled="true").small-input
+                            .min-max
+                                input(name="minCategoryClassAverage", placeholder=Msg.Min, disabled="true", type="number").small-input
+                                | -
+                                input(name="maxCategoryClassAverage", placeholder=Msg.Max, disabled="true", type="number").small-input
                     TR
                         TD.item-3
                             h3=Msg.Section_comment
@@ -84,5 +82,5 @@
                                         )
     .x-window-footer.report-bottom
         +ReportFormatSelect()
-        BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+        BUTTON(type="submit").chlk-button.blue-button=Msg.Download
         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

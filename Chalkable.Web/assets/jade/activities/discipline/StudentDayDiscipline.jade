@@ -51,4 +51,4 @@ date = self.getDate().format('mm-dd-yy')
                             +DisciplinesContainer(self.prepareItemForDisciplinesContainer(item), item)
                             +TextArea(name='description', placeholder=Msg.Add_a_comment + '...').notes=item.getDescription()
         if(canEdit)
-            +Button().blue-gradient-btn.save-btn=Msg.Save
+            +Button().blue-button.save-btn=Msg.Save

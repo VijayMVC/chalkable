@@ -54,9 +54,9 @@
                   TD.item-3
                      h3=Msg.Include_students
                      .min-max
-                        input(placeholder=Msg.Min_avg, name="minStandardAverage").min-max-input.min
+                        input(placeholder=Msg.Min_avg, name="minStandardAverage", type="number").min-max-input.min
                         | -
-                        input(placeholder=Msg.Max_avg, name="maxStandardAverage").min-max-input.max
+                        input(placeholder=Msg.Max_avg, name="maxStandardAverage", type="number").min-max-input.max
                   TD.item-3
                      h3=Msg.Daily_attendance
                      +LabeledCheckbox(Msg.Year_to_date, 'yearToDate', false)#year-to-date-chk
@@ -67,5 +67,5 @@
                      +LabeledCheckbox(Msg.Window_Envelope, 'windowEnvelope', false)
    .x-window-footer.report-bottom
       +ReportFormatSelect()
-      BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+      BUTTON(type="submit").chlk-button.blue-button=Msg.Download
       BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

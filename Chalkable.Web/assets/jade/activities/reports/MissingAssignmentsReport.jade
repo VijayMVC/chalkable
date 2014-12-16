@@ -37,9 +37,7 @@
                      +LabeledCheckbox(Msg.Count_Zeros_as_Missing, 'considerZerosAsMissingGrades', true)
                      +LabeledCheckbox(Msg.One_Per_Page, 'onePerPage', false)
                      +LabeledCheckbox(Msg.Suppress_student_name, 'suppressStudentName', false)
-                  TD.item-3
-                     h3=Msg.Format
-                     +ReportFormatSelect()
    .x-window-footer.report-bottom
-      BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
+      +ReportFormatSelect()
+      BUTTON(type="submit").chlk-button.blue-button=Msg.Download
       BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
