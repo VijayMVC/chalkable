@@ -117,7 +117,9 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             div(
                 data-id=item.getId().valueOf(),
                 data-type=typesEnum.LATE.valueOf(),
-                data-level=item.getLevel(typesEnum.LATE.valueOf())
+                data-level=item.getLevel(typesEnum.LATE.valueOf()),
+                data-tooltip-type="overflow",
+                data-tooltip=item.getName()
             ).item.late.reason-item
                 .student-seating-type
                 span.text=item.getName()
@@ -132,7 +134,9 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             div(
                 data-id=item.getId().valueOf(),
                 data-type=typesEnum.ABSENT.valueOf(),
-                data-level=item.getLevel(typesEnum.ABSENT.valueOf())
+                data-level=item.getLevel(typesEnum.ABSENT.valueOf()),
+                data-tooltip-type="overflow",
+                data-tooltip=item.getName()
             ).item.absent.reason-item
                 .student-seating-type
                 span.text=item.getName()
