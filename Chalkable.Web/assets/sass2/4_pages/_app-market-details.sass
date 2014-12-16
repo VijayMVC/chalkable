@@ -1,0 +1,68 @@
+.app-market-details-page
+  .app-market-details > DIV
+    margin-bottom: 24px
+
+  .rating
+    border: none
+    padding: 0
+    margin: 0
+    display: inline-block
+
+    &.all
+      margin-left: 25px
+
+    > input 
+      position: absolute
+      top: -9999px
+      clip: rect(0,0,0,0)
+
+    &.editable > label:hover, &.editable > label:hover ~ label, > input:checked ~ label  
+      background: image-url("images/app/new-stars.png") 0 0 no-repeat
+
+    > label 
+      float: right
+      cursor: pointer
+      width: 20px
+      height: 20px
+      background: image-url("images/app/new-stars.png") -20px 0 no-repeat
+
+    &.editable > label:active
+      position: relative
+      top: 2px
+      left: 2px
+
+  .app-info-details
+    width: 100%
+
+  .app-description TEXTAREA
+    border: none
+    background: none
+    box-shadow: none
+    width: 100%
+    min-height: 200px
+
+  .side-panel
+    width: 320px
+    padding-left: 20px
+
+
+  .permissions
+    width: 100%
+
+    .row
+      display: table-row
+
+      > *
+        display: table-cell
+        padding-bottom: 8px
+
+  .group-header
+    width: 200px
+    padding-right: 25px
+
+  .permission
+    display: inline-block
+    margin-right: 8px
+    background: #eee
+    border-radius: 5px
+    padding: 5px
