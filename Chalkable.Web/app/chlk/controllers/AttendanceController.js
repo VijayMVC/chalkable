@@ -398,9 +398,7 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 }, this);
 
-            if(!(date_ && isUpdate_))
-                return this.PushView(this.getActivityClass_(isProfile_), result);
-            return this.UpdateView(this.getActivityClass_(isProfile_), result, byPostButton_ ? 'saved' : '');
+            return this.PushOrUpdateView(this.getActivityClass_(isProfile_), result, byPostButton_ ? 'saved' : '');
         },
 
         [chlk.controllers.SidebarButton('attendance')],
