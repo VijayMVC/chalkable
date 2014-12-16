@@ -1,0 +1,12 @@
+.dialog.fixed
+    h1=Msg.Edit_Average.toUpperCase()
+    .dialog-content
+        h2=Msg.Are_you_sure
+        p
+            b #{Msg.Note}:
+            |#{Msg.Edit_Average_Text_1}
+            br
+            |#{Msg.Edit_Average_Text_2}
+        .buttons-bottom
+            +ActionButton('grading', 'updateStudentAvgFromPopup')#avg-cancel=Msg.Cancel
+            +ActionButton('grading', 'updateStudentAvgFromPopup', true).blue-button=Msg.Save

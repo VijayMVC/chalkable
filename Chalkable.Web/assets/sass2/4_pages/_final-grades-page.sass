@@ -1,0 +1,218 @@
+.final-grades-page
+  .grading-chart-part
+    margin: 0 auto
+    width: 650px
+
+  .grade-block2
+    width: 170px
+
+    .input-container
+      display: inline-block
+
+  .center-block
+    margin-top: -15px
+
+    h2
+      text-align: center
+
+    >DIV
+      display: inline-block
+      vertical-align: top
+      width: 33%
+
+  .attendance-item
+    padding: 11px 0 0 30px
+
+    .name
+      color: #3d3d3d
+      text-shadow: 0 1px 0 white
+      font: bold 14px Arial
+      margin-bottom: 9px
+
+    .chart
+      height: 21px
+      width: 170px
+      @include box-shadow(0 1px 0 #fff,inset 0 1px 2px grey)
+      border-radius: 11px
+      background: #2f7790
+      overflow: hidden
+
+      >DIV
+        display: inline-block
+        vertical-align: top
+        height: 100%
+        cursor: pointer
+
+        &:first-child
+          border-radius: 10px 0 0 10px
+
+        &.present
+          background: #2f7790
+
+        &.late
+          background: #e07400
+
+        &.absent
+          background: #9a4545
+
+  .suggested-block
+    .grade-container
+      margin: 39px 0
+      text-align: center
+
+    .grade
+      display: inline-block
+      position: relative
+      font: bold 40px Arial
+
+    .circle
+      position: absolute
+      font: normal 11px Arial
+      background: #fff
+      padding: 7px
+      border-radius: 12px
+      right: -21px
+      top: 8px
+      cursor: pointer
+
+      >DIV
+        position: absolute
+        top: 0px
+        left: 3px
+
+  .disciplines-block
+    text-align: center
+
+    &.empty
+      .arrow
+        display: none
+
+    .empty-disciplines
+      text-align: center
+      width: 100px
+      white-space: normal
+      margin: 23px 58px
+      font: bold 15px Arial
+      text-shadow: 1px 1px 0 white
+
+    .disciplines-toolbar
+      margin: 20px 10px 0 0px
+
+    .lr-toolbar.big-arrows .arrow
+      width: 20px
+      top: -5px
+      bottom: -4px
+      background-size: 34% auto
+
+    .disciplines-items-block
+      display: inline-block
+      width: 177px
+      vertical-align: top
+      margin-right: 30px
+
+    .discipline-item
+      height: 37px
+      padding-left: 22px
+
+      >DIV
+        display: inline-block
+        vertical-align: top
+
+      .count
+        background: url(images/grading/discipline-tooltip.png) 0 0 no-repeat
+        width: 37px
+        height: 30px
+        text-align: center
+        font: bold 12px/26px Arial
+        text-indent: -3px
+
+      .description
+        color: #3d3d3d
+        text-shadow: 1px 1px 0 white
+        margin-left: 10px
+        font: bold 13px/26px Arial
+        width: 110px
+        overflow: hidden
+        text-overflow: ellipsis
+
+  .comments-notes-block
+    padding: 30px
+
+    >DIV
+      display: inline-block
+      vertical-align: top
+
+    .notes-block
+      width: 324px
+
+      .notes-textarea
+        width: 281px
+        height: 62px
+
+      .saving-text
+        font-size: 11px
+        margin-left: 2px
+        color: #9a9a9a
+
+    SELECT
+      width: 275px
+
+    .comments-block
+      width: 275px
+
+    .chzn-container:nth-child(2)
+      margin-bottom: 20px
+
+  .attachments-container
+    &:not(.loading)
+      .saving-text
+        visibility: hidden
+
+    h2
+      margin: 40px 0 0 26px
+      font-size: 16px
+      text-transform: uppercase
+      color: #2f7790
+      text-shadow: 0 1px 0 white
+
+      div
+        text-transform: none
+
+  .chart-top-legend
+    margin: -9px 10px 0 0
+    float: right
+    width: 430px
+    text-align: right
+
+  .legend-item
+    margin-right: 13px
+
+  .people-list.grading .attachments-container
+    padding: 0
+
+  .avg-item
+    display: inline-block
+    height: 40px
+    width: 100px
+    padding: 0 8px
+    background: #d7d7d7
+    border: 1px solid #c2c2c2
+    border-width: 0 1px 1px 0
+    vertical-align: top
+    font: normal 14px/40px Arial
+    color: #383838
+    text-shadow: 0 1px 0 white
+    overflow: hidden
+    text-overflow: ellipsis
+    text-align: center
+    cursor: pointer
+
+    &.selected
+      background: #2f7790
+      border-bottom-color: #143f4e
+      border-right-color: #2f7790
+      color: #fff
+      text-shadow: 0 1px 0 #173b48
+
+      &:last-child
+        border-right-color: #143f4e
