@@ -11,7 +11,7 @@ div(
 ).row.fixed-bg
     .top-content
         +ActionForm('grading', 'updateStudentAvgFromFinalPage').grading-form.avg-form.update-grade-form
-            +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
+            +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow.person-img-container
                 +PersonImg(student, 47)
             .name-block
                 +ProfileLink(student, 'student')

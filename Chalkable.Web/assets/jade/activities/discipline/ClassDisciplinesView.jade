@@ -41,7 +41,7 @@ redirectData = self.getRedirectData()
                                 div(data-tooltip=typesToolTip).with-discipline
                         .right.saving-block=Msg.Saving.toLowerCase()
                         .right.saved-block=Msg.Saved.toLowerCase()
-                        +ProfileLink(student, 'student').image-container.white.shadow.left
+                        +ProfileLink(student, 'student').image-container.white.shadow.left.person-img-container
                             +PersonImg(student, 47)
                         .user-name-container.i-b.relative
                             SPAN.name=student.getFullName()
