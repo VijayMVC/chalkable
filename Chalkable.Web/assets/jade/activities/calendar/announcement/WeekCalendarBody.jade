@@ -28,8 +28,8 @@ mixin TooltipWithOverflow(text)
                                 each ann in announcementPeriod.getAnnouncements()
                                     -VALIDATE_ARG('ann', [chlk.models.announcement.Announcement], ann)
                                     .ann-line
-                                        strong= ann.getAnnouncementTypeName()
-                                        =' - ' + ann.getShortClassName()
+                                        strong= ann.getTitle()
+                                        =' - ' + ann.getClassName()
                                         .x-hidden
                                             +TooltipWithOverflow(ann.getTitle()).typename
                                             +TooltipWithOverflow(ann.getClassName()).title
