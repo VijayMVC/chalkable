@@ -1,0 +1,23 @@
+mixin CreditCardForm(cardData, controller, addCreditAction, removeCreditAction)
+    +ActionForm(controller, addCreditAction).funds-payment-form.add-credit-card-form
+        +Hidden('amount', cardData.getAmount())
+        +Hidden('cardtype', cardData.getCardType())
+        div(class=cardData.hasCardData() ? "x-hidden" : "").edit-form
+            +MaskedInput('cardnumber','9999 9999 9999 9999')(placeholder="Card Number", value=cardData.getCardNumber()).card-number.funds-text-field
+            +MaskedInput('month', '99')(placeholder="MM", size="1", maxlength="2", value=cardData.getMonth()).card-month.funds-text-field
+            span /
+            +MaskedInput('year', '9999')(placeholder="YY", size="1", maxlength="4", value=cardData.getYear()).card-year.funds-text-field
+            div(class=cardData.getCardCssClass()).credit-card-icon
+            +MaskedInput('cvcnumber', '9999')(placeholder="CVC", size="2", maxlength="4", value=cardData.getCvcNumber()).card-cvc-number.funds-text-field
+        div(class=!cardData.hasCardData() ? "x-hidden" : "").saved-card-form
+            div(class=cardData.getCardCssClass()).credit-card-icon
+            +MaskedInput('cardviewnumber', '^^^^ ^^^^ ^^^^ 9999')(value=cardData.getHiddenCreditNumber(), readonly).view-text-field
+            .close-btn.close-icon
+            +ActionLink(controller, removeCreditAction)#remove-credit-card-btn.remove-credit-btn.grey-button.x-hidden Remove
+        //+Button().remove-credit-card-btn
+        +Button()(type="submit").blue-gradient-btn.add-credit-btn
+            span=Msg.Add
+            span.amount-btn-text= '$' + cardData.getAmount()
+            span=Msg.Credits
+        .funds-payment-form-title=Msg.Click_to_complete_transaction
+        block

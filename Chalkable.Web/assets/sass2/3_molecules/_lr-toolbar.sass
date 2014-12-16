@@ -1,0 +1,38 @@
+.lr-toolbar
+  position: relative
+  .first-container
+    white-space: nowrap
+    overflow: hidden
+
+    .second-container
+      position: relative
+      left: 0
+
+      &:not(.freezed)
+        @include transition-property("all")
+        @include transition-duration("0.5s")
+
+      .third-container
+        display: table
+
+  .arrow
+    position: absolute
+    width: 10px
+    height: 17px
+    background-position: 0 0
+    background-repeat: no-repeat
+    top: 50%
+    margin-top: -9px
+    cursor: pointer
+
+    &.disabled
+      opacity: 0.5
+      cursor: default
+
+  .next-button
+    right: -21px
+    background-image: image-url("images2/common/classesbar-arrow-right.png")
+
+  .prev-button
+    left: -21px
+    background-image: image-url("images2/common/classesbar-arrow-left.png")

@@ -1,0 +1,54 @@
+mixin AppIconLink(app)
+    appId = app.getId().valueOf()
+    +ActionLink('appmarket', 'details', appId).app-icon-link
+        .app-list-item
+            .icon
+                pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
+                img(src=pictureUrl)
+            .description
+                .name=app.getName()
+                .shortdesc=app.getShortDescription()
+
+.app-market
+    +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels, true)
+    .app-screenshots-panel
+        +Carousel()
+            each item, index in self.getMarketScreenshots()
+                +CarouselItem().img(data-page= index + 1)
+                    +ActionLink('appmarket', 'details', item.getAppId())(title=item.getPicture().getTitle())
+                        img(src=item.getPicture().getPictureUrl())
+
+    +ActionForm('appmarket', 'list')#app-market-filter
+        +Hidden('start', self.apps.getPageIndex())
+        +Hidden('totalCount', self.apps.getTotalCount())
+        +Hidden('actualCount', self.apps.getActualCount())
+        +Hidden('pageSize', self.apps.getPageSize())
+        +Hidden('scroll', 0)
+        .app-filter
+            .subject
+                .subject-filter
+                    A.title.btn(href="javascript:;") Subject...
+                    .items.x-hidden.popup-bubble.top
+                        +Hidden('selectedCategories', self.getAllCategoriesIds(self.categories))
+                        +LabeledCheckbox('All Categories', 'app-category-all', true, true)
+                        each subject in self.categories
+                           +LabeledCheckbox(subject.getName(), 'app-category-' + subject.getId().valueOf(), false, false)
+
+            .price
+                .buttons-group
+                    BUTTON.price-type.all.btn(data-price-type=chlk.models.apps.AppPriceType.ALL.valueOf()).pressed All
+                    BUTTON.price-type.paid.btn(data-price-type=chlk.models.apps.AppPriceType.PAID.valueOf()) Paid
+                    BUTTON.price-type.free.btn(data-price-type=chlk.models.apps.AppPriceType.FREE.valueOf()) Free
+                +Hidden('priceType', chlk.models.apps.AppPriceType.ALL.valueOf())
+
+            .sort
+                span Sorted By:&nbsp;
+                +Select('sortingMode')#app-sort-type
+                    +Option(chlk.models.apps.AppSortingMode.POPULAR.valueOf(), 'Popular', true)
+                    +Option(chlk.models.apps.AppSortingMode.NEWEST.valueOf(), 'Newest')
+                    +Option(chlk.models.apps.AppSortingMode.HIGHEST_RATED.valueOf(), 'Highest Rated')
+            .app-grade-levels
+                +RangeSlider("gradeLevels", "gradeLevels", 1, 12)
+    +ScrollBox('app-market-filter')
+        .apps
+            +RenderWith(self.getModel(), chlk.templates.apps.AppMarketAppsTpl)

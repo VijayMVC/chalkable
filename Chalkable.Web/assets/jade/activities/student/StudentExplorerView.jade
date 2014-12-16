@@ -1,0 +1,37 @@
+-var classesInfo = self.getStudentExplorer().getClassesGradingInfo()
+-var studentName = self.getStudentExplorer().getFirstName()
+
+.profile-page
+    h2.page-title=Msg.Student_profile
+    +ProfileTopBar(self, 'explorer')
+    .explorer-view
+        .classes-blocks
+            each classItem, i in classesInfo
+                .class-block
+                    -var title = self.getClassBlockTitle(classItem, i)
+                    .title(data-tooltip = title, data-tooltip-type="overflow")=title
+                    .announcement-block
+                        -var announcement = classItem.getAnnouncement()
+                        if !announcement && !classItem.getStandards().length
+                            .block-item.no-standards-block No Standards
+                        if announcement
+                            .block-item.announcement
+                                .left-block(
+                                    data-tooltip = studentName + ' has ' + announcement.getTitle() + ' ' + self.getDaysForAnnouncement(announcement),
+                                    data-tooltip-type="overflow"
+                                ) #{studentName} has
+                                    b=announcement.getTitle()
+                                    |#{self.getDaysForAnnouncement(announcement)}
+                                .right-block __
+                                    .circle.white
+                        each standard, i in classItem.getStandards()
+                            -var code = standard.getCommonCoreStandardCode()
+                            +ActionLink('appmarket', 'getSuggestedApps', classItem.getClazz().getId(), code)(
+                                class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (code ? 'with-code' : '')
+                            ).block-item.standard
+                                .left-block=standard.getName()
+                                .right-block=standard.getStandardGrading().getGradeValue()
+                                    .circle(class=self.getStandardColor(standard))
+                        if self.showMoreButton(classItem)
+                            .block-item.more-button Show more
+        .suggested-apps-container
