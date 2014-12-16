@@ -31,17 +31,6 @@
     display: inline-block
     vertical-align: middle
 
-  .sent
-    left: 0
-    bottom: 15px
-    width: 262px
-    position: absolute
-
-    font-size: 11px
-    line-height: 15px
-    color: #7b7974
-    +text-shadow(transparentize(#fff, .25) 0 1px 0)
-
   .msg-info
     position: relative
 
@@ -56,6 +45,16 @@
       +text-shadow(transparentize(#fff, .5) 0 1px 0)
       line-height: 80px
       vertical-align: middle
+      position: relative
+
+      .sent
+        top: 55px
+        width: 262px
+        position: absolute
+        font-size: 11px
+        line-height: 15px
+        color: #7b7974
+        +text-shadow(transparentize(#fff, .25) 0 1px 0)
 
     .content
       overflow: hidden
