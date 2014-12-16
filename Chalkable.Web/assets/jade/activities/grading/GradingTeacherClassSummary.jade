@@ -44,16 +44,16 @@ topItems = topData.getTopItems() || []
                                 +StudentGradingItem(student)
                     each student in item.getWell()
                         +StudentGradingItem(student).well
-            .students-line
-                SPAN.n-0 0
-                SPAN.n-100=item.getMaxScore()
-                each student in students
-                    div(
-                        class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),
-                        style = "right:" + student.getRight() + "px",
-                        studentId=student.getId().valueOf()
-                    ).student-pic-container
-                        .student-pic
-                        br
-                        .student-triangle
+                    .students-line
+                        SPAN.n-0 0
+                        SPAN.n-100=item.getMaxScore()
+                        each student in students
+                            div(
+                                class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),
+                                style = "right:" + student.getRight() + "px",
+                                studentId=student.getId().valueOf()
+                            ).student-pic-container
+                                .student-pic
+                                br
+                                .student-triangle
 
