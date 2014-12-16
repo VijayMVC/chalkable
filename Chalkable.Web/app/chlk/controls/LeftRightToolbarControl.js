@@ -127,22 +127,24 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function updateArrows(toolbar){
-                var secondContainer = toolbar.find('.second-container'),
-                    thirdContainer = toolbar.find('.third-container'),
-                    left = parseInt(secondContainer.getCss('left'), 10),
-                    rightWidth = thirdContainer.width() + left,
-                    nextArrow = toolbar.find('.next-button'),
-                    prevArrow = toolbar.find('.prev-button'),
-                    eps = 10;
-                if(rightWidth <= secondContainer.width())
-                    toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [nextArrow, false]);
-                else
-                    toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [nextArrow, false]);
+                setTimeout(function(){
+                    var secondContainer = toolbar.find('.second-container'),
+                        thirdContainer = toolbar.find('.third-container'),
+                        left = parseInt(secondContainer.getCss('left'), 10),
+                        rightWidth = thirdContainer.width() + left,
+                        nextArrow = toolbar.find('.next-button'),
+                        prevArrow = toolbar.find('.prev-button'),
+                        eps = 10;
+                    if(rightWidth <= secondContainer.width() + eps)
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [nextArrow, false]);
+                    else
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [nextArrow, false]);
 
-                if(left >= -eps)
-                    toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [prevArrow, true]);
-                else
-                    toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [prevArrow, true]);
+                    if(left >= -eps)
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), [prevArrow, true]);
+                    else
+                        toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), [prevArrow, true]);
+                }, 100);
             },
 
             //Object, 'configs',
