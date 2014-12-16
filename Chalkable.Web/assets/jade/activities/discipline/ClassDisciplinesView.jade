@@ -1,0 +1,74 @@
+selectedId = self.getSelectedItemId()
+redirectData = self.getRedirectData()
+.students-list.loader-container
+    h2.page-title Discipline
+    +LeftRightToolbar(self.getTopData().getTopItems(), chlk.templates.classes.TopBar, 'discipline', 'classList')(
+        selectedItemId=selectedId ? selectedId.valueOf() : ""
+    ).classes-bar
+    .loader
+    .buttons
+        .buttons-group
+            +ActionButton('discipline', 'sortStudents', false)(class=self.isByLastName()?"":"pressed")= Msg.First_name
+            +ActionButton('discipline', 'sortStudents', true)(class=self.isByLastName()?"pressed":"")= Msg.Last_name
+    .people-list-container.not-transparent
+        .header
+            .table
+                .l &nbsp;
+                .title
+                    =self.getDate().toString('MM dd, yy')
+                    +DatePicker('disciplineDate', self.getDate())(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true
+                        },
+                        data-controller= "discipline",
+                        data-action="classList",
+                        data-params=selectedId ? [selectedId.valueOf()] : null
+                    )#discipline-date.tb-date-picker.tr
+                .r.total-count=self.getTotalText()
+        .grid-container.disciplines-individual.loader-container
+            +ListView(self.getDisciplines())#class-attendance-list-panel.people-list
+                each item, i in self.getDisciplines()
+                    .row(index=i)
+                        student = item.getStudent();
+                        .right
+                            .short-discipline-info-block
+                                .status-block
+                                .triangle
+                        typesToolTip = self.getTypesForToolTip(i);
+                        .right.tooltip-container
+                            if typesToolTip
+                                div(data-tooltip=typesToolTip).with-discipline
+                        .right.saving-block=Msg.Saving.toLowerCase()
+                        .right.saved-block=Msg.Saved.toLowerCase()
+                        +ProfileLink(student, 'student').image-container.white.shadow.left
+                            +PersonImg(student, 47)
+                        .user-name-container.i-b.relative
+                            SPAN.name=student.getFullName()
+                            if student.isWithdrawn()
+                                div(data-tooltip=Msg.Withdrawn).withdrawn
+                    +ActionForm('discipline','setDiscipline')(style='display: none;').discipline-form-block.sub-row
+                        //input(name="disciplinesJson", type="hidden")
+                        +Hidden('controller', redirectData.controller)
+                        +Hidden('action', redirectData.action)
+                        +Hidden('params', redirectData.params)
+                        +Hidden('time').save-time
+                        +Hidden('id', item.getId() && item.getId().valueOf())
+                        +Hidden('studentId', item.getStudentId().valueOf())
+                        +Hidden('classId', item.getClassId().valueOf())
+                        +Hidden('date', self.getDate().toStandardFormat())
+                        .discipline-info.table
+                            div
+                                +CheckboxList('disciplineTypeIds', 'disciplineTypeIds', self.getSelectedTypeIds(item)).discipline-types.table
+                                    each column in self.getGroupDisciplineTypes(item)
+                                        if column.length > 0
+                                            .column
+                                                each discType in column
+                                                    +LabeledCheckbox(
+                                                    discType.disciplineTypeData.getName(),
+                                                        discType.disciplineTypeData.getId().valueOf().toString(),
+                                                        discType.selected,
+                                                        !self.isAblePostDiscipline()).change-discipline
+                            .discipline-desciption-container
+                                textarea(name='description', placeholder="Occurrence note...", disabled=self.isAblePostDiscipline() && self.getSelectedTypeIds(item) ? undefined : "disabled").notes-area.change-discipline=item.getDescription()
+
