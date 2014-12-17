@@ -1,21 +1,27 @@
-topData = self.getTopData()
-topItems = topData.getTopItems()
-selectedId = topData.getSelectedItemId()
-action = self.getAction() || "summary"
-gridAction = self.getGridAction() || "summaryGrid"
-+LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', action)(
-    selectedItemId=selectedId
-).classes-bar
-.action-bar.not-transparent.buttons
-    .container.panel-bg
-        .left.no-border
-            .small-grey-buttons-block
-                +ActionLink('grading', action, selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes.pressed
-                +ActionLink('grading', gridAction, selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid
-        .center
+-var topData = self.getTopData()
+-var topItems = topData.getTopItems()
+-var selectedId = topData.getSelectedItemId()
+-var action = self.getAction() || "summary"
+-var gridAction = self.getGridAction() || "summaryGrid"
+
+.grading-summary-grid.grades-page
+
+    h2.page-title=Msg.Standard(true)
+
+    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', action)(
+        selectedItemId=selectedId
+    ).classes-bar
+
+    .action-bar
+        .items
             +ActionLink('grading', "summary", selectedId)(class = (action == "summary") ? "pressed" : "")=Msg.Item(true)
             +ActionLink('grading', "standards", selectedId)(class = (action == "summary") ? "" : "pressed")=Msg.Standard(true)
             +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
-+RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)(
-    gradingPeriodId = self.getGradingPeriodId()
-)
+
+    .buttons-group
+        +ActionButton('grading', action, selectedId)(data-tooltip=Msg.Box(true)).boxes.pressed=Msg.Box(true)
+        +ActionButton('grading', gridAction, selectedId)(data-tooltip=Msg.Grid).grid=Msg.Grid
+
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)(
+        gradingPeriodId = self.getGradingPeriodId()
+    )

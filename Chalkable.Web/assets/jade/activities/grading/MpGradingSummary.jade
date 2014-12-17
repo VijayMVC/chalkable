@@ -18,4 +18,4 @@ div(data-index=self.getIndex()).ann-type-container
                 +ActionLink('announcement', 'add', self.getClassId(), itemDescription.getId(), null, true).ann-button.plus-ann
     if announcements.length == 0 && itemDescription.isCanCreate && itemDescription.isCanCreate()
         .announcements-type-item
-            +ActionLink('announcement', 'add', self.getClassId(), itemDescription.getId(), null, true).ann-button.plus-ann
+            +ActionButton('announcement', 'add', self.getClassId(), itemDescription.getId(), null, true).negative-button

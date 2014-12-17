@@ -1,35 +1,40 @@
-.class-grading
-    topData = self.getTopData()
-    topItems = topData.getTopItems()
-    selectedId = topData.getSelectedItemId()
+.class-grading.grades-page
+    -var topData = self.getTopData()
+    -var topItems = topData.getTopItems()
+    -var selectedId = topData.getSelectedItemId()
+
+    h2.page-title=Msg.Grade(true)
+
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
         selectedItemId=selectedId
     ).classes-bar
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .left.no-border
-                .small-grey-buttons-block
-                    +ActionLink('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).no-action-link-styles.small-grey-button.boxes.pressed
-                    +ActionLink('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).no-action-link-styles.small-grey-button.grid
-            .center
-                +ActionLink('grading', "summary", selectedId).pressed=Msg.Item(true)
-                +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
-                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+
+    .action-bar
+        .items
+            +ActionLink('grading', "summary", selectedId).pressed=Msg.Item(true)
+            +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
+            +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+
+    .buttons-group
+        +ActionButton('grading', 'summary', selectedId)(data-tooltip=Msg.Box(true)).boxes.pressed=Msg.Box(true)
+        +ActionButton('grading', 'summaryGrid', selectedId)(data-tooltip=Msg.Grid).grid=Msg.Grid
+
     .mps-container
         each gradingPeriod,i in self.getGradingPeriods()
-            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
-                item = self.getCurrentGradingBox()
-                div(
+            .chlk-calendar.marking-period-container(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i)
+                -var item = self.getCurrentGradingBox()
+                .header.mp-title(
                     data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
-                ).mp-title
-                    mpName = gradingPeriod.getName()
-                    span(data-tooltip=mpName, data-tooltip-type="overflow")=mpName
+                )
+                    -var mpName = gradingPeriod.getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow").mp-name= mpName
                     .grading-selects
                         +ActionForm('grading', 'loadGradingPeriodSummary').load-grading-period
                             +Hidden('classId', selectedId)
                             +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
                     //a(href="javascript:").grey-button.comment-button=Msg.Comment
                     .collapse
-                div(data-grading-period-id=gradingPeriod.getId()).mp-data
-                    if gradingPeriod.getId() == self.getGradingPeriodId()
-                        +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)
+                .mp-data(data-grading-period-id=gradingPeriod.getId())
+                    .grades-container
+                        if gradingPeriod.getId() == self.getGradingPeriodId()
+                            +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)
