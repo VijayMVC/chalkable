@@ -201,9 +201,9 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function studentClick(node, event){
                 if(!this.dom.hasClass('dragging-on') && this.dom.find('.page-content').hasClass('can-post')){
                     var popUp = this.dom.find('.seating-chart-popup');
-                    var main = this.dom.parent('#main');
+                    var main = node.parent('.seating-chart-page');
                     var bottom = main.height() + main.offset().top - node.offset().top;
-                    var left = node.offset().left - main.offset().left - 45;
+                    var left = node.offset().left - main.offset().left + 10;
                     popUp.setCss('bottom', bottom);
                     popUp.setCss('left', left);
                     var reasonId = node.getData('reason-id') || -1;
