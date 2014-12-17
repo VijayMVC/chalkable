@@ -121,7 +121,8 @@ NAMESPACE('chlk.controllers', function (){
                 var controllerName = data.controllerName;
                 var methodName = data.methodName;
                 var apiFormId = data.apiFormId;
-                var apiCallData = chlk.models.api.ApiCallRequestData.$create(controllerName, methodName, data);
+                var methodCallType = data.callType;
+                var apiCallData = chlk.models.api.ApiCallRequestData.$create(controllerName, methodName, data, methodCallType);
                 var fakeResponse = data.response;
                 var result = fakeResponse !== ""
                     ? ria.async.DeferredData(chlk.models.api.ApiResponse.$create(apiFormId, JSON.parse(fakeResponse)))

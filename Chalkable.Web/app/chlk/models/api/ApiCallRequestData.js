@@ -6,14 +6,16 @@ NAMESPACE('chlk.models.api', function () {
         'ApiCallRequestData', [
             String, 'controllerName',
             String, 'actionName',
+            String, 'callType',
             Object, 'params',
 
-            [[String, String, Object]],
-            function $create(controller, action, params){
+            [[String, String, Object, String]],
+            function $create(controller, action, params, callType){
                 BASE();
                 this.setControllerName(controller);
                 this.setActionName(action);
                 this.setParams(params);
+                this.setCallType(callType);
             },
 
             String, function getApiRole(){

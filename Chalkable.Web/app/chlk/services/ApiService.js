@@ -74,7 +74,8 @@ NAMESPACE('chlk.services', function () {
                         var token = data.getToken();
                         var url = requestData.getControllerName() + "/" + requestData.getActionName()+ ".json";
                         var params = requestData.getApiCallParams();
-                        return this.makeApiCall(url, token,  params);
+                        var requestMethod = requestData.getCallType();
+                        return this.makeApiCall(url, token,  params, requestMethod);
                     }, this)
             },
 
