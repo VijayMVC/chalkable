@@ -336,13 +336,11 @@ NAMESPACE('chlk.controllers', function (){
                 if(!p && item.getId() == classId_)
                     p = true;
             });
-            if(!p)
-                classId_ = null;
+            if(!p) classId_ = null;
             if(classId_ && announcementTypeId_ && announcementTypeId_.valueOf()){
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 var types = classInfo.getTypesByClass();
                 var typeId = null;
-
                 types.forEach(function(item){
                     if(item.getId() == announcementTypeId_)
                         typeId = announcementTypeId_;

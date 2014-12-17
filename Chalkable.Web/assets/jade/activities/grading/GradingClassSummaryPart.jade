@@ -2,8 +2,9 @@
     if self.getItems()
         each item,i in self.getItems()
             gradingPeriod = item.getGradingPeriod()
-            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container
-                div(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet')).mp-title=Msg.Grading_Period + ' ' +  gradingPeriod.getName()
+            div(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i).marking-period-container.chlk-calendar
+                .header.mp-title(data-tooltip=(item.getAvg() != null ? Msg.Avg + " " + item.getAvg() : 'No grades yet'))
+                    span.mp-name=Msg.Grading_Period + ' ' +  gradingPeriod.getName()
                     .collapse
                 .mp-data
                     .ann-types-container

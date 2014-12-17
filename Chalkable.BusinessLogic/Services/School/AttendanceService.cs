@@ -243,7 +243,15 @@ namespace Chalkable.BusinessLogic.Services.School
             var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
             var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
             if (postedAttendances != null)
+            {
+                if (dateTime.Date == Context.NowSchoolYearTime.Date)
+                {
+                    var time = (int)(Context.NowSchoolYearTime - Context.NowSchoolYearTime.Date).TotalMinutes - 3;
+                    postedAttendances = postedAttendances.Where(x => x.StartTime.TotalMinutes <= time).ToList();    
+                }
                 classes = classes.Where(x => postedAttendances.Any(y => y.SectionId == x.Id && !y.AttendancePosted)).ToList();
+            }
+
             else
                 classes = new List<ClassDetails>();
             return classes;
