@@ -58,9 +58,10 @@
   .gp-button
     display: none
 
-  .mp-data
-    height: 0
-    overflow: hidden
+  .marking-period-container:not(.open)
+    .mp-data
+      height: 0
+      overflow: hidden
 
   .buttons-group
     margin-top: 15px
@@ -144,6 +145,7 @@
     border-right: 1px solid #c7c8c3
     text-align: center
     background: #f7f7f5
+    position: relative
 
     .time, .max-score
       font: normal 13px/19px 'Open Sans'
