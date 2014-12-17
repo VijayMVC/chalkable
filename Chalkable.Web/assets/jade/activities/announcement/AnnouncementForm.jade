@@ -35,7 +35,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 
 .announcement-form.loader-container
-    if announcement
+    if announcement && announcement.getClassId()
         h2.page-title= announcement.getClassName()
         .loader
         +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
