@@ -41,12 +41,12 @@ NAMESPACE('chlk.activities.messages', function () {
                 );
             },
 
-            [ria.mvc.DomEventBind('click', '.unread')],
+            [ria.mvc.DomEventBind('click', '.unread .msg-info')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function clickUnRead(node, event){
-                if(node.getData('can-read'))
-                    node.removeClass('unread').addClass('read');
+                var unReadNode = node.parent();
+                if(unReadNode.hasClass('unread') && unReadNode.getData('can-read'))
+                    unReadNode.removeClass('unread').addClass('read');
             }
-
         ]);
 });
