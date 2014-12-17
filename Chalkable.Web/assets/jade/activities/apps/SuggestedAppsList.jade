@@ -1,0 +1,15 @@
+.suggested-apps-block
+    .separator-line
+    if self.getSuggestedApps()
+        +CloseOpen('Suggested Apps')
+            .suggested-apps-container.attachments-and-applications
+                each app, i in self.getSuggestedApps()
+                    div.app-icon-link.announcement-item.application
+                        -var pictureUrl = self.getAppPictureURL(app.getBigPictureId(), 170, 110)
+                        if !app.needToInstall()
+                            div(data-tooltip='Attach').attach-icon
+                        +LoadingImage(src=pictureUrl, id="loading-image-" + i)
+                        .title= app.getName()
+                        +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId()) Open
+    else
+        .title No recomended apps

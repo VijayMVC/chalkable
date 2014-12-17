@@ -1,0 +1,11 @@
+mixin AppIconLink(app)
+    appId = app.getId().valueOf()
+    +ActionLink('appmarket', 'details', appId).application
+        img(src=self.getAppPictureURL(app.getSmallPictureId(), 74, 74))
+        .title=app.getName()
+        .shortdesc=app.getShortDescription()
+        BUTTON.blue-button Quick Install
+
+
+each app in self.getApps().getItems()
+    +AppIconLink(app)
