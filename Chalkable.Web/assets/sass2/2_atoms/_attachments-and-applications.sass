@@ -1,0 +1,115 @@
+.attachments-and-applications, .student-attachments, .apps
+  margin-right: -20px
+
+  .attach-file-area
+    border: 5px dashed #ececec
+    padding: 34px 29px
+    display: inline-block
+    margin-right: 20px
+    margin-bottom: 20px
+    vertical-align: top
+    height: 31px + 31px + 17px
+
+    > *
+      font-weight: 600
+
+    button
+      width: 120px
+      margin-bottom: 17px
+
+    > DIV
+      width: 100px
+
+.attachments-and-applications, .attachments-container, .student-attachments, .apps
+  .attachment, .application
+    border-radius: 5px
+    background: #fff
+    border: 1px solid #c8c7c3
+    display: inline-block
+    margin-right: 20px
+    margin-bottom: 20px
+    $padding: 9px
+    padding: $padding
+    width: 188px - 2 * $padding
+    height: 155px - 2 * $padding
+    position: relative
+    overflow: hidden
+
+    &::after
+      content: ' '
+      position: absolute
+      bottom: 0
+      right: 0
+      left: 0
+      height: 36px
+      +background(linear-gradient(top, transparentize(#fff, 1) 0%, #fff 25%, #fff 100%))
+      z-index: 3
+
+    IMG
+      position: absolute
+      width: 188px - 2 * $padding
+      z-index: 1
+      opacity: 1
+      +transition(opacity, .2s, easy-in-out)
+
+    &:hover IMG
+      opacity: 0
+
+    .title
+      position: absolute
+      bottom: 0
+      left: 0
+      padding: 0 19px
+      color: #56554f
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      font-size: 13px
+      font-weight: 600
+      line-height: 36px
+      //+transition(bottom, .05s, easy-in-out)
+      z-index: 5
+      width: 188px - 2 * 19px
+
+    &:hover .title
+      bottom: 155px - 36px - $padding
+
+    .shortdesc
+      position: absolute
+      top: 40px
+      left: 0
+      padding: 0 19px
+      color: #56554f
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      font-size: 12px
+      font-weight: 600
+      line-height: 16px
+      +transition(opacity, .2s, easy-in-out)
+      z-index: 5
+      width: 188px - 2 * 19px
+      opacity: 0
+
+    &:hover .shortdesc
+      opacity: 1
+
+    BUTTON, .download-link
+      opacity: 0
+      display: none
+      position: absolute
+      bottom: 20px
+      left: 20px
+      width: 148px
+      +transition(opacity, .2s, easy-in-out)
+      z-index: 5
+
+    &:hover BUTTON, &:hover .download-link
+      opacity: 1
+      display: block
+      +transition(opacity, .2s, easy-in-out)
+
+    .download-link
+      text-align: center
+
+    .close-btn
+      display: none
+
+    &:hover .close-btn
+      display: block
