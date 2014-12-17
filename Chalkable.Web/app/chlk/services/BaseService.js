@@ -120,9 +120,10 @@ NAMESPACE('chlk.services', function () {
                return result;
            },
 
-            [[String, String, Object]],
-            ria.async.Future, function makeApiCall(uri, token, gParams) {
-                return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
+            [[String, String, Object, String]],
+            ria.async.Future, function makeApiCall(uri, token, gParams, requestMethod) {
+                var taskType = requestMethod == "Get" ? chlk.lib.ajax.ChlkJsonGetTask : chlk.lib.ajax.ChlkJsonPostTask;
+                return new taskType(this.resolveUri(uri))
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({
                         "Content-Type": "application/json; charset=utf-8",
@@ -137,7 +138,7 @@ NAMESPACE('chlk.services', function () {
                             };
                         }
                         else{
-                            result = data.data;
+                            result = data;
                         }
                         return result;
                     });
