@@ -33,7 +33,7 @@ h2.page-title Attendance
             .header
                 .table
                     .title
-                        = self.getDate().toString('MM dd, yy')
+                        span.date-text= self.getDate().toString('MM dd, yy')
                         +DatePicker('attendanceDate', self.getDate())(
                             data-options={
                                 showOtherMonths: true,

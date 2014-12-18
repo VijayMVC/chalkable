@@ -1,3 +1,15 @@
+.date-text
+  position: relative
+
+  &::before
+    +icons-sprite(calendar-mark)
+    content: ''
+    position: absolute
+    width: 24px
+    height: 24px
+    right: -35px
+    top: 1px
+
 .class-disciplines-page
   .table
     width: 100%

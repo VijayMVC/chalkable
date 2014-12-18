@@ -16,7 +16,7 @@
         if self.getItems().length > 0 && self.canPost()
             .l &nbsp;
         .title
-            = self.getDate().toString('MM dd, yy')
+            span.date-text= self.getDate().toString('MM dd, yy')
             +DatePicker('attendanceDate', self.getDate())#attendance-date.tb-date-picker.tr(
                 data-options={
                     showOtherMonths: true,

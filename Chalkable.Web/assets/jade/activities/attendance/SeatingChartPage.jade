@@ -37,7 +37,7 @@ div(class=showButtons ? 'can-post' : '').page-content.people-list-container
                 //: +SummaryInfo(self.getPresentStudents().length, seatingList.length)
                 .l &nbsp;
             .title
-                =self.getDate().toString('MM dd, yy')
+                span.date-text=self.getDate().toString('MM dd, yy')
                 +DatePicker('date', self.getDate())(
                     data-options={
                         showOtherMonths: true,
