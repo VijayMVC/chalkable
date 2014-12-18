@@ -38,7 +38,9 @@ from
 		where
 		(@classId is null or Class.Id = @classId)
 		and (@studentId is null or Class.Id in (select ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId and ClassPerson.MarkingPeriodRef = @mpId))
-		and (@teacherId is null or Class.PrimaryTeacherRef = @teacherId)
+		and (@teacherId is null or Class.PrimaryTeacherRef = @teacherId 
+			and exists(select * from MarkingPeriodClass where MarkingPeriodClass.ClassRef = Class.Id and MarkingPeriodClass.MarkingPeriodRef = @mpId)
+					)
 		) C on C.PeriodRef = Period.Id and C.DayTypeRef = [Date].DayTypeRef
 	left join Room on C.RoomRef = Room.Id
 	left join ScheduledTimeSlot on ScheduledTimeSlot.BellScheduleRef = [Date].BellScheduleRef and ScheduledTimeSlot.PeriodRef = Period.Id
