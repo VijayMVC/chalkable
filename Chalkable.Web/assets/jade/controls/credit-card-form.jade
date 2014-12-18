@@ -15,7 +15,7 @@ mixin CreditCardForm(cardData, controller, addCreditAction, removeCreditAction)
             .close-btn.close-icon
             +ActionLink(controller, removeCreditAction)#remove-credit-card-btn.remove-credit-btn.grey-button.x-hidden Remove
         //+Button().remove-credit-card-btn
-        +Button()(type="submit").blue-gradient-btn.add-credit-btn
+        +Button()(type="submit").blue-button.add-credit-btn
             span=Msg.Add
             span.amount-btn-text= '$' + cardData.getAmount()
             span=Msg.Credits

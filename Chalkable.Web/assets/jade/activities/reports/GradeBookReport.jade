@@ -5,13 +5,14 @@ mixin ReportTypeSelect()
         +Option(1, Msg.Detail, false)
 
 .dialog.report-window
-    .x-window-header
-        .close.close-btn.dark
-        h1=Msg.Create_Report
+    +ActionForm('grading', 'submitGradeBookReport')
+        .x-window-header
+            .close.close-btn.dark
+            h1=Msg.Create_Report
 
-    .x-window-body
-        .action-bar: .items: +ActionLinkList(self.buildReportLinksData('gradeBookReport'))
-        +ActionForm('grading', 'submitGradeBookReport')
+        .x-window-body
+            .action-bar: .items: +ActionLinkList(self.buildReportLinksData('gradeBookReport'))
+
             +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
             +Hidden('classId', self.getClassId().valueOf())
             TABLE.report-table
@@ -36,9 +37,7 @@ mixin ReportTypeSelect()
                         h3=Msg.Include
                         +LabeledCheckbox(Msg.Withdrawn_students, 'includeWithdrawnStudents', false)
                         +LabeledCheckbox(Msg.Non_graded_activities, 'includeNonGradedActivities', false)
-                    TD.item-3
-                        h3=Msg.Format
-                        +ReportFormatSelect()
-    .x-window-footer.report-bottom
-        BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
-        BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
+        .x-window-footer.report-bottom
+            +ReportFormatSelect()
+            BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

@@ -27,6 +27,11 @@
 
     .title-text
       line-height: 31px
+      width: 250px
+
+    BUTTON
+      vertical-align: top
+      margin-left: 3px
 
   .table, .left-block
     width: 100%
@@ -52,7 +57,18 @@
     padding-top: 8px
 
     BUTTON
-      line-height: 25px
+      position: relative
+      padding-right: 29px
+
+    .remove-standard
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-sprite(close-btn)
+      position: absolute
+      top: -2px
+      right: -2px
 
   .add-standards .title
     color: #e0e0e0
@@ -88,6 +104,10 @@
     background: #fff
     //border: 1px solid #000
     margin-top: -80px
+
+    .new-item-dropdown
+      white-space: normal
+      text-align: left
 
     h1
       padding: 0

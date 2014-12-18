@@ -103,6 +103,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
+                this.shortClassName = SJX.fromValue(raw.classname, String);
             },
             function $(){
                 BASE();
@@ -132,7 +133,6 @@ NAMESPACE('chlk.models.announcement', function () {
             Number ,'avgNumeric',
             Object, 'clazz',
             String, 'className',
-            [ria.serialize.SerializeProperty('classname')],
             String, 'shortClassName',
 
             chlk.models.id.DepartmentId, 'departmentId',

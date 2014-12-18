@@ -11,7 +11,7 @@ div(
 ).row.fixed-bg
     .top-content
         +ActionForm('grading', 'updateStudentAvgFromFinalPage').grading-form.avg-form.update-grade-form
-            +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
+            +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow.person-img-container
                 +PersonImg(student, 47)
             .name-block
                 +ProfileLink(student, 'student')
@@ -143,8 +143,10 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10.sub-row
                     items = self.getSortedDisciplines()
                     empty = !self.getDisciplines().length
                     +LeftRightToolbar(items)(
-                        itemsCount = 1
-                        needDots = false
+                        itemClass='discipline-item',
+                        fixedElementMargin=true,
+                        fixedElementWidth=false,
+                        elWidth=207
                     )(class=empty ? "empty" : "").disciplines-toolbar.big-arrows
                         each block in items
                             .disciplines-items-block

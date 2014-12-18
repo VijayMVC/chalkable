@@ -38,7 +38,7 @@ NAMESPACE('chlk.activities.announcement', function(){
                     sBt.find('button').removeAttr('disabled');
                 }else{
                     sBt.find('button').setAttr('disabled', 'disabled');
-                    sBt.setAttr('disabled');
+                    sBt.setAttr('disabled', 'disabled');
                     sBt.addClass('disabled');
                 }
             }

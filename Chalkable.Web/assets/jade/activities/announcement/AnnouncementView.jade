@@ -56,12 +56,12 @@ mixin Glue_()
                     if self.getOwner()
                         if self.getUserRole().isStudent()
                             a(data-tooltip=self.getOwner().getFullName(),
-                            ).image-container
+                            ).image-container.person-img-container
                                 +PersonImg(self.getOwner(), 47)
                         else
                             +ProfileLink(self.getOwner(), 'teacher')(
                                 data-tooltip=self.getOwner().getFullName(),
-                            ).image-container
+                            ).image-container.person-img-container
                                 +PersonImg(self.getOwner(), 47)
                 .description
                     .chat-bubble

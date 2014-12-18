@@ -58,9 +58,10 @@
   .gp-button
     display: none
 
-  .mp-data
-    height: 0
-    overflow: hidden
+  .marking-period-container:not(.open)
+    .mp-data
+      height: 0
+      overflow: hidden
 
   .buttons-group
     margin-top: 15px
@@ -94,6 +95,45 @@
 
   .ann-types-container
     white-space: nowrap
+    position: relative
+
+    &::before
+      content: ' '
+      position: absolute
+      top: 0
+      right: 0
+      left: 0
+      height: 56px
+      background: #f7f7f5
+      border-bottom: 1px solid #ededed
+
+  .ann-type-container
+    width: 200px
+    text-align: center
+    border-right: 1px solid #ededed
+    display: table-cell
+    vertical-align: top
+
+    //&:last-child
+      border-right: 0
+
+  .announcements-type-item
+    //display: inline-block
+    width: 100%
+    position: relative
+    border: 1px solid transparent
+
+    &:hover
+      background-color: transparentize(#000, .95)
+
+    > A
+      display: block
+      margin: 15px
+      max-height: 52px
+      font-size: 12px
+      line-height: 18px
+      overflow: hidden
+      font-style: italic
 
   .dotted-container, .lr-toolbar
     display: inline-block
@@ -105,6 +145,7 @@
     border-right: 1px solid #c7c8c3
     text-align: center
     background: #f7f7f5
+    position: relative
 
     .time, .max-score
       font: normal 13px/19px 'Open Sans'
@@ -350,12 +391,6 @@
   .lr-toolbar .prev-button
     left: -21px - 234px
 
-.student-avg-popup-dialog
-  width: 472px
-  top: 80px
-  left: 411px
-  position: fixed
-
 .report-link
   position: absolute
   width: 27px
@@ -363,3 +398,12 @@
   background: image_url('images/icons/printer-icon.png') center center no-repeat
   right: 10px
   top: 17px
+
+.grading-chart-container
+  width: 185px
+  height: 100px
+  margin: 10px 0
+  background: image-url("images/loader.gif") 50% 50% no-repeat
+
+  .chart-container
+    background: #ffffff

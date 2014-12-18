@@ -1,11 +1,12 @@
 .dialog.report-window
-    .x-window-header
-        .close.close-btn.dark
-        h1=Msg.Create_Report
+    +ActionForm('grading', 'submitWorksheetReport').report-form
+        .x-window-header
+            .close.close-btn.dark
+            h1=Msg.Create_Report
 
-    .x-window-body
-        .action-bar: .items: +ActionLinkList(self.buildReportLinksData('worksheetReport'))
-        +ActionForm('grading', 'submitWorksheetReport').report-form
+        .x-window-body
+            .action-bar: .items: +ActionLinkList(self.buildReportLinksData('worksheetReport'))
+
             +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
             +Hidden('classId', self.getClassId().valueOf())
             TABLE.report-table
@@ -37,9 +38,7 @@
                         +LabeledCheckbox(Msg.Save_to_Working_filter, 'workingFilter', false)
                         +LabeledCheckbox(Msg.Append_to_existing, 'appendToExisting', false)
                         +LabeledCheckbox(Msg.Overwrite_existing, 'overwriteExisting', false)
-                    TD.item-3
-                        h3=Msg.Format
-                        +ReportFormatSelect()
-    .x-window-footer.report-bottom
-        BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-gradient-btn=Msg.Download
-        BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
+        .x-window-footer.report-bottom
+            +ReportFormatSelect()
+            BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-button=Msg.Download
+            BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

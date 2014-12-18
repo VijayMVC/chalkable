@@ -44,5 +44,8 @@ div(
                         class=name.toLowerCase()
                     ).option.item
                         .student-seating-type
-                        .text=reasonItem.getDescription()
+                        .text(
+                            data-tooltip-type="overflow",
+                            data-tooltip=reasonItem.getDescription()
+                        )=reasonItem.getDescription()
                 .x-hidden.press-enter=Msg.Press_enter

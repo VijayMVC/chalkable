@@ -1,6 +1,6 @@
 mixin CloseOpen(title)
     -attributes = self.processAttrs(attributes)
-    .close-open-control(attributes).opened
+    .close-open-control(attributes).opened.finished
         h3=title
             .open=Msg.Open
             .close=Msg.Close

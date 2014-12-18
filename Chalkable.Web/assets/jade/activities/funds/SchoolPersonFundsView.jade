@@ -22,7 +22,7 @@ mixin RadioButtonsListWithModel(name, list)
 mixin PayPalContainer(amount)
     +ActionForm('funds', 'payPal').funds-payment-form.pay-pal-form(attributes)
         +Hidden('amount', amount)
-        +Button()(type="submit").blue-gradient-btn
+        +Button()(type="submit").blue-button
             span Add Credits via
             span.amount-btn-text= '$' + amount
             span.pay-pal-btn-text PayPal
@@ -38,7 +38,7 @@ mixin SendMessageContainer(data)
     -persons = data.getSendToPersons()
     -index = 0
     .funds-payment-form.send-message-form(attributes)
-        +Button().blue-gradient-btn Send Message
+        +Button().blue-button Send Message
         if (isTeacher || isStudent) && persons.length > 0
             .funds-payment-form-title
                 .send-message-icon

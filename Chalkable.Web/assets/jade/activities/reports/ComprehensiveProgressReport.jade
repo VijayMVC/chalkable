@@ -1,11 +1,11 @@
 .dialog.report-window
-   .x-window-header
-      .close.close-btn.dark
-      h1=Msg.Create_Report
+   +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
 
-   .x-window-body
-      .action-bar: .items: +ActionLinkList(self.buildReportLinksData('comprehensiveProgressReport'))
-      +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('comprehensiveProgressReport'))
          +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
          +Hidden('classId', self.getClassId().valueOf())
          +Hidden('absenceReasonIds', '')#absence-reasons
@@ -54,9 +54,9 @@
                   TD.item-3
                      h3=Msg.Include_students
                      .min-max
-                        input(placeholder=Msg.Min_avg, name="minStandardAverage").min-max-input.min
+                        input(placeholder=Msg.Min_avg, name="minStandardAverage", type="number").min-max-input.min
                         | -
-                        input(placeholder=Msg.Max_avg, name="maxStandardAverage").min-max-input.max
+                        input(placeholder=Msg.Max_avg, name="maxStandardAverage", type="number").min-max-input.max
                   TD.item-3
                      h3=Msg.Daily_attendance
                      +LabeledCheckbox(Msg.Year_to_date, 'yearToDate', false)#year-to-date-chk
@@ -65,7 +65,8 @@
                      h3=Msg.Other
                      +LabeledCheckbox(Msg.Go_green, 'goGreen', false)
                      +LabeledCheckbox(Msg.Window_Envelope, 'windowEnvelope', false)
-   .x-window-footer.report-bottom
-      +ReportFormatSelect()
-      BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
-      BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
+
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

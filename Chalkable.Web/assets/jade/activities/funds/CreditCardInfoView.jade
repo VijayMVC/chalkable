@@ -14,7 +14,7 @@
         .close-btn.close-icon
         +ActionLink('funds', 'removeCreditCard')#remove-credit-card-btn.remove-credit-btn.grey-button.x-hidden Remove
             //+Button().remove-credit-card-btn
-    +Button()(type="submit").blue-gradient-btn.add-credit-btn
+    +Button()(type="submit").blue-button.add-credit-btn
         span=Msg.Add
         span.amount-btn-text= '$' + self.getAmount()
         span=Msg.Credits

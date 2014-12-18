@@ -23,13 +23,13 @@ topItems = topData.getTopItems() || []
         maxIndex = restCount + troubleCount - 1
         students = self.getPreparedStudents(item)
         typeEnum = chlk.models.grading.StudentWellTroubleEnum
-        .class-block
-            h2.with-line
-                +ActionLink('grading', 'summaryGrid', item.getClazz().getId())=item.getClazz().getFullClassName()
+        .class-block.chlk-calendar
+            .header.mp-title
+                +ActionLink('grading', 'summaryGrid', item.getClazz().getId()).mp-name=item.getClazz().getFullClassName()
                 span.show-less
                     span –
                     |#{Msg.Show_less}
-            .students-block.with-line
+            .students-block
                 if troubleCount == 0 && wellCount == 0 && restCount == 0
                     .no-items-text.small=Msg.No_grades_yet
                 else
@@ -50,7 +50,7 @@ topItems = topData.getTopItems() || []
                 each student in students
                     div(
                         class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),
-                        style = "right:" + student.getRight() + "px",
+                        style = "right:" + student.getRight() + "%",
                         studentId=student.getId().valueOf()
                     ).student-pic-container
                         .student-pic

@@ -51,7 +51,7 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
                             .add-standards
                                 .standards-list
                                     each standard in standards
-                                        BUTTON(data-tooltip = standard.getDescription()).grey-button.same-on-hover
+                                        button(data-tooltip = standard.getDescription()).grey-button.same-on-hover
                                             = standard.getName()
                                             if announcement.isAbleToRemoveStandard()
                                                 +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard

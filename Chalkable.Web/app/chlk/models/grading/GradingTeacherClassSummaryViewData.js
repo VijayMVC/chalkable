@@ -23,11 +23,12 @@ NAMESPACE('chlk.models.grading', function () {
             ArrayOf(chlk.models.grading.StudentGradingViewData), 'allStudents',
 
             function getUpdatedTrouble(){
-                var res = [], item;
-                for(var i = 0; i < 5; i++){
-                    item = this.getTrouble()[i] || new chlk.models.grading.StudentGradingViewData();
-                    res.unshift(item);
-                }
+                var res = [], i, len = this.getTrouble().length;
+                for(i = 0; i < 5 - len; i++)
+                    res.push(new chlk.models.grading.StudentGradingViewData());
+
+                for(i = 0; i < len; i++)
+                    res.push(this.getTrouble()[i])
                 return res;
             }
         ]);

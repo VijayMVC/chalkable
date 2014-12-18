@@ -74,21 +74,18 @@ NAMESPACE('chlk.activities.attendance', function () {
                 BASE(model);
                 this._needPopUp = false;
                 var that = this;
-                new ria.dom.Dom('.page').on('click.leave', '.action-link:not(.class-button):not(#all-present-link)', function(node, event){
+                new ria.dom.Dom('#page').on('click.leave', '.action-link:not(.pressed):not(#all-present-link)', function(node, event){
                     return that.tryToLeave(node);
                 });
 
-                this.dom.find('.class-button:not(.pressed)').on('click.leave', function(node, event){
-                    return that.tryToLeave(node);
-                });
 
                 document.addEventListener('click', this.datePickerHandler, true);
             },
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();
-                new ria.dom.Dom('.page').off('click.leave', '.action-link:not(.class-button)');
-                this.dom.find('.class-button:not(.pressed)').off('click.leave');
+                new ria.dom.Dom('#page').off('click.leave', '.action-link:not(.class-button)');
+                //this.dom.find('.class-button:not(.pressed)').off('click.leave');
                 document.removeEventListener('click', this.datePickerHandler, true);
             },
 

@@ -8,10 +8,10 @@ each item, i in self.getItems()
     index = item.getIndex ? (item.getIndex() || i) : i
     .row(class=(index == 0 ? 'selected' : ''), index=index)
         if self.canViewInfo(item)
-            +ProfileLink(item).left.image-container.white.shadow
+            +ProfileLink(item).left.image-container.white.shadow.person-img-container
                 +PersonImg(item, 47)
         else
-            .left.image-container.white.shadow
+            .left.image-container.white.shadow.person-img-container
                 +PersonImg(item, 47)
         if self.canViewInfo(item)
             +ProfileLink(item)

@@ -87,9 +87,10 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
         .apps
             .application
                 +ActionLink('apps', 'delete', self.liveAppId).close-btn
-                +LoadingImage(src=self.appThumbnail, id="loading-image")
-                .title= self.appName
-                +ActionButton('apps', 'details', self.liveAppId) Details
+                .wrapper
+                    +LoadingImage(src=self.appThumbnail, id="loading-image")
+                    .title= self.appName
+                    +ActionButton('apps', 'details', self.liveAppId) Details
         .app-description
             .title=self.appName
             +AppStatus_(self.appState, self.draftAppId, self.liveAppId)

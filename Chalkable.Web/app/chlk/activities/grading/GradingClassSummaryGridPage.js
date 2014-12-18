@@ -540,8 +540,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 if (model instanceof chlk.models.grading.ShortGradingClassSummaryGridItems && this._lastModel)
                     this._lastModel.setCurrentGradingGrid(model);
 
-                if (model instanceof chlk.models.grading.ShortStudentAverageInfo && this._lastModel) {
-                    this._lastModel.getStudentAverages()
+                if (model instanceof chlk.models.grading.ShortStudentAverageInfo && this._lastModel && this._lastModel.getCurrentGradingGrid()) {
+                    this._lastModel.getCurrentGradingGrid().getStudentAverages()
                         .filter(function (_) {
                             return _.getAverageId() == model.getAverageId();
                         })

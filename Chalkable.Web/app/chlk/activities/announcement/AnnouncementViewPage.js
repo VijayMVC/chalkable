@@ -700,11 +700,15 @@ NAMESPACE('chlk.activities.announcement', function () {
                                 node.parent('.comment-grade').find('.comment-text').setHTML(node.getValue() ? Msg.Commented : Msg.Comment);
                                 break;
                         }
-                }else{
-                    if(node.getValue() && node.getValue().trim())
-                        popUp.hide();
-                    else
-                        popUp.show();
+                }
+                else{
+                    if(node.getValue() && node.getValue().trim()) popUp.hide();
+                    else popUp.show();
+
+                    if (ria.dom.Keys.ENTER.valueOf() == event.which){
+                        node.parent('form').trigger('submit');
+                        node.parent('.small-pop-up').hide();
+                    }
                 }
             },
 

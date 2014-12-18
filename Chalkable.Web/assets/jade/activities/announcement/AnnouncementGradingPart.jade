@@ -34,7 +34,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                     +Hidden('id', item.getId())
                     +Hidden('announcementid', item.getAnnouncementId())
                     +Hidden('studentid', student.getId())
-                    +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow
+                    +ProfileLink(student, 'student')(data-tooltip=student.getFullName()).left.image-container.white.shadow.person-img-container
                         +PersonImg(student, 47)
                     .name-block
                         +ProfileLink(student, 'student')
@@ -64,15 +64,18 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                 each attachment, i in item.getAttachments()
                     if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
                         .announcement-item.attachment
-                            A(href=attachment.getUrl()).download-link Download
-                            .title=attachment.getName()
+                            .wrapper
+                                A(href=attachment.getUrl()).download-link Download
+                                .title=attachment.getName()
                     else
                         +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
-                            +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
+                            .wrapper
+                                +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
 
                 each app, i in self.getApplications()
                     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
                     +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
-                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()) Open
+                        .wrapper
+                            +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()) Open
 
 

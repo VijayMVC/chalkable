@@ -15,8 +15,8 @@
             +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
             +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
     .buttons-group
-        +ActionButton('grading', 'summary', selectedId).no-action-link-styles.small-grey-button.boxes=Msg.Box(true)
-        +ActionButton('grading', 'summaryGrid', selectedId).no-action-link-styles.small-grey-button.pressed.grid=Msg.Grid
+        +ActionButton('grading', 'standards', selectedId).boxes=Msg.Box(true)
+        +ActionButton('grading', 'standardsGrid', selectedId).pressed.grid=Msg.Grid
     .mps-container
         .chlk-pop-up-container.popup-top.comment
             .pop-up-triangle

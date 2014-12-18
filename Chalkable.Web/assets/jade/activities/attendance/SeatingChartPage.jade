@@ -59,11 +59,11 @@ div(class=showButtons ? 'can-post' : '').page-content.people-list-container
         .buttons
             if self.getColumns() == 0 || self.getRows() == 0
                 +UpdateGridForm(Msg.Create_grid, self.getRows(), self.getColumns(), 0, 0, selectedId.valueOf())
-                BUTTON.black-arrow.start=Msg.Start_by_creating_a_grid
+                .black-arrow.start=Msg.Start_by_creating_a_grid
             else
                 +UpdateGridForm(Msg.Edit_grid, self.getRows(), self.getColumns(), self.getMinData().rows, self.getMinData().columns, selectedId.valueOf())
                 BUTTON.grey-button.add-remove-students= hasStudentOnChart ? Msg.Edit_students : Msg.Add_students
-                BUTTON(type="submit")#submit-chart.chlk-button.blue-gradient-btn=Msg.Save.toUpperCase()
+                BUTTON(type="submit")#submit-chart.chlk-button.blue-button=Msg.Save.toUpperCase()
                 if !hasStudentOnChart
                     .black-arrow.add= Msg.Add_your_students
                 else
@@ -117,7 +117,9 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             div(
                 data-id=item.getId().valueOf(),
                 data-type=typesEnum.LATE.valueOf(),
-                data-level=item.getLevel(typesEnum.LATE.valueOf())
+                data-level=item.getLevel(typesEnum.LATE.valueOf()),
+                data-tooltip-type="overflow",
+                data-tooltip=item.getName()
             ).item.late.reason-item
                 .student-seating-type
                 span.text=item.getName()
@@ -132,7 +134,9 @@ typesEnum = chlk.models.attendance.AttendanceTypeEnum
             div(
                 data-id=item.getId().valueOf(),
                 data-type=typesEnum.ABSENT.valueOf(),
-                data-level=item.getLevel(typesEnum.ABSENT.valueOf())
+                data-level=item.getLevel(typesEnum.ABSENT.valueOf()),
+                data-tooltip-type="overflow",
+                data-tooltip=item.getName()
             ).item.absent.reason-item
                 .student-seating-type
                 span.text=item.getName()

@@ -3,6 +3,9 @@
     margin: 0 auto
     width: 650px
 
+  .avg-select
+    width: 90px
+
   .grade-block2
     width: 170px
 
@@ -83,6 +86,13 @@
   .disciplines-block
     text-align: center
 
+    .lr-toolbar
+      .prev-button
+        left: -5px
+
+      .next-button
+        right: -5px
+
     &.empty
       .arrow
         display: none
@@ -98,40 +108,41 @@
     .disciplines-toolbar
       margin: 20px 10px 0 0px
 
-    .lr-toolbar.big-arrows .arrow
-      width: 20px
-      top: -5px
-      bottom: -4px
-      background-size: 34% auto
+    .lr-toolbar
+      width: 100%
+      position: relative
+
+      .arrow
+        top: 52px
 
     .disciplines-items-block
       display: inline-block
-      width: 177px
+      width: 207px
       vertical-align: top
-      margin-right: 30px
 
     .discipline-item
       height: 37px
-      padding-left: 22px
+      padding: 0 30px 0 22px
+      text-align: left
+      overflow: hidden
 
       >DIV
-        display: inline-block
         vertical-align: top
 
       .count
-        background: url(images/grading/discipline-tooltip.png) 0 0 no-repeat
+        background: image_url('images/grading/discipline-tooltip.png') 0 0 no-repeat
         width: 37px
         height: 30px
         text-align: center
         font: bold 12px/26px Arial
         text-indent: -3px
+        position: absolute
 
       .description
         color: #3d3d3d
         text-shadow: 1px 1px 0 white
-        margin-left: 10px
+        margin-left: 45px
         font: bold 13px/26px Arial
-        width: 110px
         overflow: hidden
         text-overflow: ellipsis
 

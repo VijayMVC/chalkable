@@ -1,4 +1,5 @@
 REQUIRE('ria.serialize.SJX');
+REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.people.ShortUserInfo');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.people.Address');

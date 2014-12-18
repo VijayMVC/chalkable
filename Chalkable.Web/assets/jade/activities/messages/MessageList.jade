@@ -72,5 +72,5 @@ h2.page-title Messages
                                             =item.getSender().getFirstName() + " " + item.getSender().getLastName()
                                         else
                                             =item.getRecipient().getFirstName()+ " "  + item.getRecipient().getLastName()
+                                        .sent= item.getSent().toUSADateTimeFormat()
                                     .content= item.getShortSubject() + ' - ' + item.getShortBody()
-                                .sent= item.getSent().toUSADateTimeFormat()

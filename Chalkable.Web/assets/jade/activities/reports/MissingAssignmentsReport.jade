@@ -1,11 +1,12 @@
 .dialog.report-window
-   .x-window-header
-      .close.close-btn.dark
-      h1=Msg.Create_Report
+   +ActionForm('grading', 'submitMissingAssignmentsReport').missing-assignments-report-form.no-working
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
 
-   .x-window-body
-      .action-bar: .items: +ActionLinkList(self.buildReportLinksData('missingAssignmentsReport'))
-      +ActionForm('grading', 'submitMissingAssignmentsReport').missing-assignments-report-form.no-working
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('missingAssignmentsReport'))
+
          +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
          +Hidden('classId', self.getClassId().valueOf())
          +Hidden('alternateScoreIds', '')#alternate-scores
@@ -37,9 +38,7 @@
                      +LabeledCheckbox(Msg.Count_Zeros_as_Missing, 'considerZerosAsMissingGrades', true)
                      +LabeledCheckbox(Msg.One_Per_Page, 'onePerPage', false)
                      +LabeledCheckbox(Msg.Suppress_student_name, 'suppressStudentName', false)
-                  TD.item-3
-                     h3=Msg.Format
-                     +ReportFormatSelect()
-   .x-window-footer.report-bottom
-      BUTTON(type="submit").chlk-button.blue-gradient-btn=Msg.Download
-      BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

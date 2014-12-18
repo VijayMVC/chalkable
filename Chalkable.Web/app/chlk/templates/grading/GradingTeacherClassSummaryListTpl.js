@@ -14,9 +14,9 @@ NAMESPACE('chlk.templates.grading', function () {
             [[chlk.models.grading.GradingTeacherClassSummaryViewData, Number, Number]],
             ArrayOf(chlk.models.grading.StudentGradingViewData), function getPreparedStudents(item, width_, interval_){
                 var students = item.getAllStudents(), well = item.getWell(), trouble = item.getTrouble();
-                var width = width_ || 670, maxScore = 100;
+                var width = 100, maxScore = 100;
                 var interval = interval_ || 0;
-                var lastRight = - 2*interval-10, avg;
+                var lastRight = - 2*interval, avg;
                 students.forEach(function(student){
                     avg = student.getAvg();
                     if (avg > maxScore)
@@ -26,7 +26,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 for(var i = students.length - 1; i >= 0; i--){
                     var student = students[i];
                     avg = student.getAvg();
-                    var right = Math.floor(width - avg * width / maxScore)-10;
+                    var right = Math.floor(width - avg * width / maxScore);
                     if(interval && right - lastRight < interval)
                         right = lastRight + interval;
                     lastRight = right;

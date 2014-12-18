@@ -60,7 +60,7 @@
                 if needPresent
                     -item.setType(valuesEnum.PRESENT.valueOf());
                 student = item.getStudent();
-                +ProfileLink(student, 'student').left.image-container.white.shadow
+                +ProfileLink(student, 'student').left.image-container.white.shadow.person-img-container
                     +PersonImg(student, 47)
                 .user-name-container.i-b.relative
                     SPAN.name=student.getFullName()

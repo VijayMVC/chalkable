@@ -100,12 +100,7 @@ NAMESPACE('chlk.controllers', function(){
 
                       }, this);
 
-                var activityClass = chlk.activities.discipline.ClassDisciplinesPage;
-                var currentActivity = this.getView().getCurrent();
-                if(currentActivity && activityClass == currentActivity.getClass()){
-                    return this.UpdateView(activityClass, res);
-                }
-                return this.PushView(activityClass, res);
+                return this.PushOrUpdateView(chlk.activities.discipline.ClassDisciplinesPage, res);
             },
 
             //TODO: refactor this copy past
