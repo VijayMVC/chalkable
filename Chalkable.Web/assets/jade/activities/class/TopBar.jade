@@ -1,0 +1,23 @@
+if self.getController()
+    +ActionLinkWithPrepend(self.getController(), self.getAction(), self.getParams(), self.getId())(
+        class=self.isPressed() ? "pressed " : "",
+        index=self.getIndex(),
+        data-tooltip=self.getId() ? self.getFullClassName() : ''
+    ).item.class-button.button-link
+        .img-wrapper
+            +ClassImg(self, 45, 80)
+        SPAN.text-container= self.getName()
+else
+    BUTTON(
+        classId=self.getId(),
+        index=self.getIndex(),
+        class=self.isPressed() ? "pressed " : "",
+        type=self.isDisabled() ? "button" : "submit",
+        data-default-announcement-type-id = self.getDefaultAnnouncementTypeId(),
+        name="submitType",
+        value="save",
+        data-tooltip=self.getId() ? self.getFullClassName() : ''
+    ).item.class-button.validate-skip
+        .img-wrapper
+            +ClassImg(self, 45, 80).avatar
+        SPAN.text-container= self.getName()
