@@ -8,8 +8,7 @@
         .main-container
             +LeftRightToolbar(self.getClasses(), chlk.templates.classes.TopBar)(
                 selectedItemId=selectedClassId && selectedClassId.valueOf(),
-                pressAfterClick=false,
-                disabledClass = 'x-hidden'
+                pressAfterClick=false
             ).classes-bar
             .text-container
                 .tooltip-text

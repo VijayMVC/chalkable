@@ -2,8 +2,7 @@ topData = self.getTopData()
 topItems = topData.getTopItems()
 selectedId = topData.getSelectedItemId()
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
-    selectedItemId=selectedId,
-    disabledClass = 'x-hidden'
+    selectedItemId=selectedId
 ).classes-bar
 .student-grading-summary.student-grading-class-summary
     clazz = self.getClazz()

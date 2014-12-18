@@ -19,6 +19,50 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
         
+        public void UpdateForImport(IList<Person> persons)
+        {
+            //if(persons.Count == 0) return;
+
+            //var fieldsCount = 8;
+            //if (fieldsCount*persons.Count > MAX_PARAMETER_NUMBER)
+            //{
+            //    var list1 = persons.Take(persons.Count/2).ToList();
+            //    UpdateForImport(list1);
+            //    UpdateForImport(persons.Skip(list1.Count).ToList());
+            //}
+            //else
+            //{
+            //    var dbQuery = BuildQueryForImportUpdate(persons);
+            //    ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);
+            //}
+            ModifyList(persons, UpdateForImport, BuildQueryForImportUpdate);
+        }
+
+        private DbQuery BuildQueryForImportUpdate(IEnumerable<Person> persons)
+        {
+            IList<DbQuery> queries = new List<DbQuery>();
+            var index = 0;
+            foreach (var person in persons)
+            {
+                var p = new Dictionary<string, object>
+                    {
+                        {Person.FIRST_NAME_FIELD, person.FirstName},
+                        {Person.LAST_NAME_FIELD, person.LastName},
+                        {Person.GENDER_FIELD, person.Gender},
+                        {Person.ADDRESS_REF_FIELD, person.AddressRef},
+                        {Person.USER_ID_FIELD, person.UserId},
+                        {Person.BIRTH_DATE, person.BirthDate},
+                        {Person.PHOTO_MODIFIED_DATE, person.PhotoModifiedDate},
+                    };
+                queries.Add(Orm.SimpleUpdate(person.GetType(), p, new AndQueryCondition
+                                     {
+                                         {Person.ID_FIELD, string.Format("{0}_{1}", Person.ID_FIELD, index), person.Id, ConditionRelation.Equal}
+                                     }, index));
+                index++;
+            }
+            return new DbQuery(queries);
+        }
+
         public void Delete(IList<int> ids)
         {
             if (ids.Count == 0)

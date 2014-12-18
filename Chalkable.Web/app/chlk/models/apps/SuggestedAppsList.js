@@ -15,11 +15,14 @@ NAMESPACE('chlk.models.apps', function() {
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [[chlk.models.id.ClassId, chlk.models.id.AnnouncementId, ArrayOf(chlk.models.apps.ApplicationForAttach)]],
-            function $(classId, announcementId, suggestedApps){
+            function $(classId_, announcementId_, suggestedApps_){
                 BASE();
-                this.setClassId(classId);
-                this.setAnnouncementId(announcementId);
-                this.setSuggestedApps(suggestedApps);
+                if(classId_)
+                    this.setClassId(classId_);
+                if(announcementId_)
+                    this.setAnnouncementId(announcementId_);
+                if(suggestedApps_)
+                    this.setSuggestedApps(suggestedApps_);
             }
     ]);
 

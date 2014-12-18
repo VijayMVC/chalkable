@@ -64,14 +64,14 @@
         }
 
         &.saving{
-          .saving-block{
-            display: block;
+            .saving-block{
+              display: block;
+            }
           }
-        }
 
-        &.saved{
-          .saved-block{
-            display: block;
+            &.saved{
+              .saved-block{
+                display: block;
           }
         }
       }

@@ -16,11 +16,11 @@ if self.getStudent()
             data-old-reason-id=reasonId,
             data-reason-text=reason ? reason.getName() : null
         ).image-container.white.shadow.attendance-data
-            .reason-container
-                text = reason ? reason.getName() : ''
-                div(data-tooltip=text, data-tooltip-type='overflow').reason-text=text
             +PersonImg(student, 70)
-        div(data-tooltip=student.getDisplayName(), data-tooltip-type="overflow").student-seating-name=student.getDisplayName()
+            .reason-container
+                .reason-text(data-tooltip=reason ? reason.getName() : '', data-tooltip-type='overflow')
+        div(data-tooltip=student.getDisplayName(), data-tooltip-type="overflow").student-seating-name
+            = student.getFirstName() + ' ' + student.getLastName()[0] + '.'
         .student-seating-type
         .chlk-pop-up-container.popup-top.seating-attendance-popup
 else

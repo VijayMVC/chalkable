@@ -131,15 +131,15 @@ NAMESPACE('ria.dom', function () {
                 return this;
             }, */
 
-            [[Number]],
-            ria.dom.Dom, function slideDown(time_){
-                time_ ? this._dom.slideDown(time_) : this._dom.slideDown();
+            [[Number, Function]],
+            ria.dom.Dom, function slideDown(time_, complete_){
+                time_ ? this._dom.slideDown(time_, complete_) : this._dom.slideDown();
                 return this;
             },
 
-            [[Number]],
-            ria.dom.Dom, function slideUp(time_){
-                time_ ? this._dom.slideUp(time_) : this._dom.slideUp();
+            [[Number, Function]],
+            ria.dom.Dom, function slideUp(time_, complete_){
+                time_ ? this._dom.slideUp(time_, complete_) : this._dom.slideUp();
                 return this;
             },
 
@@ -323,6 +323,12 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            [[SELF]],
+            OVERRIDE, SELF, function removeSelf() {
+                this._dom.each(function(){ this.parentNode && this.parentNode.removeChild(this); });
+                return this;
+            },
+
             // reference https://github.com/julienw/dollardom
 
             [[String]],
@@ -373,6 +379,11 @@ NAMESPACE('ria.dom', function () {
             },
 
             /* attributes */
+
+            [[String]],
+            OVERRIDE, Boolean, function hasAttr(name) {
+                return this._dom[0] && this._dom[0].hasAttribute ? this._dom[0].hasAttribute(name) || null : null;
+            },
 
             OVERRIDE, Object, function getAllAttrs() {},
             [[String]],
@@ -438,6 +449,17 @@ NAMESPACE('ria.dom', function () {
             OVERRIDE, ria.dom.Dom, function setData(name, value) {
                 this.setAttr('data-' + name, value);
                 this._dom.data(name, value);
+                return this;
+            },
+
+            /* text */
+            OVERRIDE, String, function getText() {
+                return this._dom.text();
+            },
+
+            [[String]],
+            OVERRIDE, SELF, function setText(value) {
+                this._dom.text(value);
                 return this;
             },
 

@@ -1,13 +1,12 @@
 autoCount = self.getAutoGradeCount()
-.auto-grade-buttons.right
+.right.x-hidden
     //do not delete this commented code ... we will need this later
-    //+ActionLinkButton('announcement', 'applyAutoGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.green
-        =Msg.Auto_grade
-    //+ActionLinkButton('announcement', 'applyManualGrade', self.getAnnouncementId())(disabled = autoCount == 0).special-button2.red
-        =Msg.Grade_manually
-div(data-tooltip=Msg.Class_Avg).class-avg=self.getClassAvg()
-//self.getGrade(self.getClassAvg())
-div(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowToStudents()}").show-student-grades.x-hidden
+    +ActionButton('announcement', 'applyAutoGrade', self.getAnnouncementId())(disabled = autoCount == 0).green-button= Msg.Auto_grade
+    +ActionButton('announcement', 'applyManualGrade', self.getAnnouncementId())(disabled = autoCount == 0).blue-button= Msg.Grade_manually
+.section= Msg.Class_Avg + ': ' + (self.getClassAvg() != null ? self.getClassAvg() : 'N/A')
+.section= self.getGradedStudentCount() + '/' + self.getItems().length + ' ' + Msg.Graded
+.section.x-hidden= Msg.Show_grades_to_students
+.section(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowToStudents()}").show-student-grades.x-hidden
     .chlk-pop-up-container.popup-top
         .pop-up-triangle
         .show-student-grades-container
@@ -17,6 +16,4 @@ div(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowTo
                     +SlideCheckbox("showGradesToStudents", self.isShowToStudents())
                     +Hidden('showToStudents', self.isShowToStudents()).show-grades-input
                     +Hidden('announcementId', self.getAnnouncementId())
-div(data-tooltip=self.getGradedStudentCount() + '/' + self.getItems().length + " " + Msg.Graded).graded-student
-    div(style="width:#{self.getGradedWidth()};").graded-bg
 .clear-right

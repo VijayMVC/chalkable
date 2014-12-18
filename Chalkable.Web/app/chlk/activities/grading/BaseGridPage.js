@@ -54,7 +54,6 @@ NAMESPACE('chlk.activities.grading', function () {
 
                         setTimeout(function(){
                             parent.removeClass('open');
-                            //mpData.setHTML('');
                         }, 500);
                     }else{
                         var items = this.dom.find('.marking-period-container.open');
@@ -67,11 +66,12 @@ NAMESPACE('chlk.activities.grading', function () {
                             this.loadGradingPeriod(parent);
                         }
                         dom.find('.mp-data.with-data')
-                            .setHTML('')
-                            .removeClass('with-data');
+                            .removeClass('with-data')
+                            .find('.grades-contaner')
+                            .setHTML('');
                         setTimeout(function(){
                             items.removeClass('open');
-                            itemsMp.setHTML('');
+                            itemsMp.find('.grades-contaner').setHTML('');
                         }, 500);
                         //parent.addClass('open');
 
@@ -86,18 +86,19 @@ NAMESPACE('chlk.activities.grading', function () {
 
             function openGradingPeriod(container){
                 container.parent('.marking-period-container').addClass('open');
-                var annContainer = container.find('.ann-types-container');
+                var annContainer = container.find('.grades-container');
                 container.setCss('height', 0);
                 jQuery(container.valueOf()).animate({
-                    height: (annContainer.height() + parseInt(annContainer.getCss('margin-bottom'), 10))
+                    height: (annContainer.height() + container.find('.buttons-row').height() + parseInt(annContainer.getCss('margin-bottom'), 10))
                 }, 500);
             },
 
             /* Partial Update rules */
 
             VOID, function updateGradingPeriodPartRule_(tpl, model) {
-                var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
-                var tooltipText = model.getTooltipText(), parent = container.parent();
+                var mpData = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
+                var container = mpData.find('.grades-container');
+                var tooltipText = model.getTooltipText(), parent = mpData.parent();
                 tpl.options({
                     classId: this.getClassId()
                 });
@@ -108,7 +109,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     parent.addClass('no-items');
                 }
                 setTimeout(function(){
-                    this.openGradingPeriod(container);
+                    this.openGradingPeriod(mpData);
                     parent.find('.mp-name').setData('tooltip', tooltipText);
                 }.bind(this), 1);
             },
@@ -140,10 +141,11 @@ NAMESPACE('chlk.activities.grading', function () {
                     });
                     if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
-                    var top = node.offset().top - list.parent().offset().top + node.height() + 43;
-                    var left = node.offset().left - list.parent().offset().left + 61;
+                    var top = node.offset().top - list.parent().offset().top + node.height() + 3;
+                    var left = node.offset().left - list.parent().offset().left + 130;
                     list.setCss('top', top)
-                        .setCss('left', left);
+                        .setCss('left', left)
+                        .setCss('width', node.width());
                     list.setHTML(html)
                         .show();
                     this.hideGradingPopUp();
@@ -210,14 +212,17 @@ NAMESPACE('chlk.activities.grading', function () {
                 var active = this.dom.find('.active-cell');
                 var popUp = this.dom.find('.chlk-pop-up-container.comment');
                 var main = this.dom.parent('#main');
-                var bottom = main.height() + main.offset().top - active.offset().top + 73;
-                var left = active.offset().left - main.offset().left - 54;
-                popUp.setCss('bottom', bottom);
-                popUp.setCss('left', left);
                 var comment = active.find('.comment-value').getValue();
                 popUp.find('textarea').setValue(comment);
                 popUp.show();
                 popUp.find('.grading-comments-list').show();
+                var container = active.parent('.mps-container');
+                var left = active.offset().left - container.offset().left - (popUp.width() + parseInt(popUp.getCss('padding-left'), 10)
+                    + parseInt(popUp.getCss('padding-right'), 10) - active.width())/2;
+                var bottom = container.height() - active.offset().top + container.offset().top;
+
+                popUp.setCss('bottom', bottom);
+                popUp.setCss('left', left);
                 if(comment)
                     popUp.find('.grading-comments-list').hide();
                 setTimeout(function(){
@@ -425,7 +430,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     }
                 }
 
-                var curCell = node.parent('.grade-value'), cell, curBlock, valueInput, needsTimeout;
+                var curCell = node.parent('.grade-value'), cell, curBlock, valueInput, needsTimeout, eps = 10;
                 switch(event.keyCode){
                     case ria.dom.Keys.UP.valueOf():
                         if(!list.is(':visible') || !list.find('.hovered').previous().exists())
@@ -446,7 +451,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 curBlock = curBlock.previous('.grade-container');
                             var nameContainer = curBlock.parent('.ann-types-container').find('.name-container');
                             if(curBlock.exists()){
-                                if(curBlock.offset().left < (nameContainer.offset().left + nameContainer.width())){
+                                if(curBlock.offset().left < (nameContainer.offset().left + nameContainer.width() - eps)){
                                     curBlock.parent('.grid-toolbar').find('.prev-button').trigger('click');
                                     needsTimeout = true;
                                 }
@@ -462,7 +467,8 @@ NAMESPACE('chlk.activities.grading', function () {
                             if(curBlock.exists() && curBlock.hasClass('total-points'))
                                 curBlock = curBlock.next('.grade-container');
                             if(curBlock.exists()){
-                                if(curBlock.hasClass('transparent-container')){
+                                var parentBlock = curBlock.parent('.grades-container');
+                                if(curBlock.offset().left > parentBlock.offset().left + parentBlock.width() - eps){
                                     curBlock.parent('.grid-toolbar').find('.next-button').trigger('click');
                                     needsTimeout = true;
                                 }
@@ -714,6 +720,30 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.beforeTbAnimation(node);
             },
 
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.ARROW_ENABLED.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Boolean, Number]],
+            function arrowEnabled(node, event, arrow, isLeft_, index_){
+                arrow.parent('.marking-period-container').find(isLeft_ ? '.prev-arrow' : '.next-arrow').removeClass('disabled');
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event, ria.dom.Dom, Boolean, Number]],
+            function arrowDisabled(node, event, arrow, isLeft_, index_){
+                arrow.parent('.marking-period-container').find(isLeft_ ? '.prev-arrow' : '.next-arrow').addClass('disabled');
+            },
+
+            [ria.mvc.DomEventBind('click', '.next-arrow')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function nextArrowClick(node, event){
+                node.parent('.marking-period-container').find('.next-button').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('click', '.prev-arrow')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function prevArrowClick(node, event){
+                node.parent('.marking-period-container').find('.prev-button').trigger('click');
+            },
+
             Number, function getColumns(){
                 return 5;
             },
@@ -721,17 +751,28 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), '.grid-toolbar')],
             [[ria.dom.Dom, ria.dom.Event, Boolean, Number]],
             function beforeTbAnimation(toolbar, event_, isLeft_, index_){
-                var num = this.getColumns();
-                this.dom.find('.transparent-container').removeClass('transparent-container').removeClass('delay');
+                var num = toolbar.getData('currentCount');
+                this.dom.find('.last-container').removeClass('last-container').removeClass('delay');
                 var startIndex = index_ ? index_ * num + num : num;
                 var node = toolbar.find('.dotted-container:eq(' + startIndex + ')');
                 if(!node.is(':last-child')){
                     if(isLeft_)
                         node.addClass('delay');
                     setTimeout(function(){
-                        node.addClass('transparent-container');
+                        node.addClass('last-container');
                     },1);
                 }
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.BEFORE_RESIZE.valueOf(), '.grid-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function beforeTbResize(toolbar, event_){
+                var padding = 412;
+                var maxWidth = ria.dom.Dom('#content').width() - padding;
+                toolbar.setCss('width', maxWidth);
+                var firstContainer = toolbar.find('.first-container'),
+                    thirdContainer = toolbar.find('.third-container');
+                firstContainer.setCss('width', maxWidth);
             },
 
             /* Activity events */
@@ -747,6 +788,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 BASE();
                 new ria.dom.Dom().off('click.grading_popup');
                 new ria.dom.Dom().off('click.grade');
+                jQuery(window).off('resize.grade')
             },
 
             OVERRIDE, VOID, function onRender_(model){
@@ -755,6 +797,17 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.openGradingPeriod(this.dom.find('.open.marking-period-container').find('.mp-data'));
                 this.prepareAllScores(model);
                 this.addEvents();
+                var toolbar = this.dom.find('.grid-toolbar');
+                if(toolbar.exists()){
+                    var parent = toolbar.parent('.marking-period-container');
+                    if(toolbar.find('.prev-button').hasClass('disabled'))
+                        parent.find('.prev-arrow').addClass('disabled');
+                    if(toolbar.find('.next-button').hasClass('disabled'))
+                        parent.find('.next-arrow').addClass('disabled');
+                }else{
+                    this.dom.find('.prev-arrow').addClass('disabled');
+                    this.dom.find('.next-arrow').addClass('disabled');
+                }
             },
 
             function prepareAllScores(model){},
@@ -818,6 +871,6 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
             },
 
-            function updateFlagByModel(model, cell){},
+            function updateFlagByModel(model, cell){}
         ]);
 });

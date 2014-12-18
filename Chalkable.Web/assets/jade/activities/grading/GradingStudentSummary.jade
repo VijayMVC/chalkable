@@ -1,8 +1,6 @@
 topData = self.getTopData()
 topItems = topData.getTopItems()
-+LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
-    disabledClass = 'x-hidden'
-).classes-bar
++LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary').classes-bar
 .student-grading-summary
     if topItems && self.getTotalAvgPerDate() && self.getPeersAvgPerDate()
         .grading-chart-part.relative

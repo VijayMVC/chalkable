@@ -26,11 +26,11 @@ NAMESPACE('chlk.models.common', function(){
                 this.setTitle(title_);
             if(isPressed_){
                 this.setPressed(isPressed_);
-                classesNames_ = classesNames_ || [].concat(['pressed']);
+                classesNames_ = (classesNames_ || []).concat(['pressed']);
             }
             if(disabled_){
                 this.setDisabled(disabled_);
-                classesNames_ = classesNames_ || [].concat(['disabled']);
+                classesNames_ = (classesNames_ || []).concat(['disabled']);
             }
             if(classesNames_)
                 this.setClassesNames(classesNames_);

@@ -193,7 +193,7 @@ namespace Chalkable.Data.Common.Orm
              return SimpleUpdate(t, updateParams, BuildCondsByProperties(t, obj, primaryKeyFields, index + "_"), index);
          }
 
-         private static DbQuery SimpleUpdate(Type t, IEnumerable<KeyValuePair<string, object>> updateParams, QueryCondition queryCondition, int index = 0)
+         public static DbQuery SimpleUpdate(Type t, IEnumerable<KeyValuePair<string, object>> updateParams, QueryCondition queryCondition, int index = 0)
          {
              var setParamsPrefix = "set_param_" + index + "_";
              var setParamMapper = new Dictionary<string, string>();

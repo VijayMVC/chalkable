@@ -1,4 +1,3 @@
-addresses = self.getAddresses() || [];
 primaryPhone = self.getPrimaryPhone() ? self.getPrimaryPhone().getValue() : '';
 homePhone = self.getHomePhone() ? self.getHomePhone().getValue() : '';
 controller = self.getRole().getNameLowered() + 's';
@@ -18,37 +17,40 @@ mixin ProfileTopBar(actionLinksData, model)
 
 mixin ProfileInfoView(model)
     .info-view
-        .title
-            div(style="overflow: visible").avatar-container.with-border
-                +PersonImg(model, 128, true)
-            h1=model.getFullName()
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(model, 140, true)
+            #info-panel.central-block.panel-block
+                displayName =model.getDisplayName() || model.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+
         .sections
-            .sections-info
-                .section-title.pacifico=model.getRole().getName()
-                div
+            +CloseOpen(Msg.Student_info).today-work-panel
+                .sections-info
                     .section-data
                         .info-title=Msg.Email
-                        .data-info.low-font-size
-                            input(type="text", value=model.getEmail())
+                        .data-info
+                            input(type="text", value=model.getEmail(), readonly)
                     .section-data
                         .info-title=Msg.Cell
-                        .data-info.big-font-size=primaryPhone
+                        .data-info
+                            input(type="text", value=primaryPhone, readonly)
                     .section-data
                         .info-title=Msg.Birthday
-                        .data-info.low-font-size=model.getBirthDateText()
-                    .section-data.gender-box
-                        div(class=model.getGender() ? model.getGender().toLowerCase() : '').gender-img-box
-                        p=model.getGenderFullText()
-            .sections-info
-                .section-title.pacifico=Msg.Home
-                div
+                        .data-info
+                            input(type="text", value=model.getBirthDateText(), readonly)
+
+            +CloseOpen(Msg.Home_info).today-work-panel
+                .sections-info
                     .section-data
                         .info-title=Msg.Home_Phone
-                        .data-info.big-font-size=homePhone
+                        .data-info
+                            input(type="text", value=homePhone, readonly)
                     .section-data
-                        .info-title=Msg.Home_Address
-                        each address in addresses
-                            .data-info.low-font-size=address.getValue()
+                        .info-title=Msg.Address
+                        .data-info
+                            input(type="text", value=model.getAddress().getValue(), readonly)
             block
         //.sections-info.other-section
             .section-title.pacifico=Msg.Other(true)

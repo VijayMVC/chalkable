@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<Person> persons);
         void Edit(IList<Person> personInfos);
+        void UpdateForImport(IList<Person> persons);
         void Delete(int id);
         void Delete(IList<int> ids);
         PersonDetails GetPersonDetails(int id);
@@ -226,5 +227,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 ServiceLocator.AnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
             });
         }
+
+        public void UpdateForImport(IList<Person> persons)
+        {
+            DoUpdate(uow => new PersonDataAccess(uow, Context.SchoolLocalId).UpdateForImport(persons));
+        }
+        
     }
 }

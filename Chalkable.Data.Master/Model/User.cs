@@ -30,6 +30,8 @@ namespace Chalkable.Data.Master.Model
         public bool IsDemoUser { get; set; }
         public bool IsSysAdmin { get; set;}
         public bool IsDeveloper { get; set; }
+        [NotDbFieldAttr]
+        public bool IsAppTester { get; set; }
         public string ConfirmationKey { get; set; }
         public string SisUserName { get; set; }
         public int? SisUserId { get; set; }

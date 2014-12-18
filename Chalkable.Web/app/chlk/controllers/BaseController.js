@@ -51,7 +51,7 @@ NAMESPACE('chlk.controllers', function (){
 
     var PRESSED_CLS = 'active';
     var ACTION_SUFFIX = 'Action';
-    var SIDEBAR_CONTROLS_ID = '#sidebar-controls';
+    var SIDEBAR_CONTROLS_ID = '#sidebar';
 
     /** @class chlk.controllers.BaseController */
    CLASS(ABSTRACT,
@@ -207,23 +207,6 @@ NAMESPACE('chlk.controllers', function (){
                return this.getContext().getSession().get(ChlkSessionConstants.DEMO_SCHOOL, false);
            },
 
-           [[Number]],
-           VOID, function setNewNotificationCount_(value){
-               var title = document.title;
-               var pos = title.indexOf('(');
-               if(pos > -1)
-                   title = title.slice(0, pos - 1);
-               if(value)
-                   document.title = title + ' (' + value + ')';
-               else{
-                   document.title = title;
-               };
-               this.getContext().getSession().set(ChlkSessionConstants.NEW_NOTIFICATIONS, value);
-           },
-           Number, function getNewNotificationCount_(){
-               return this.getContext().getSession().get(ChlkSessionConstants.NEW_NOTIFICATIONS);
-           },
-
            chlk.models.people.User, function getCurrentPerson(){
                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
            },
@@ -308,13 +291,17 @@ NAMESPACE('chlk.controllers', function (){
            OVERRIDE, VOID, function postDispatchAction_() {
                BASE();
 
-               var state = this.context.getState();
-               new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + PRESSED_CLS).removeClass(PRESSED_CLS);
+               var state = this.context.getState(),
+                   $sidebar = ria.dom.Dom(SIDEBAR_CONTROLS_ID);
+
+               $sidebar.find('A.' + PRESSED_CLS).removeClass(PRESSED_CLS);
+
                var methodReflector = this.resolveRoleAction_(state);
                if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton) && !this.isNotAblePressSidebarButton()){
                    var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
-                   new ria.dom.Dom(SIDEBAR_CONTROLS_ID + ' .' + buttonCls).addClass(PRESSED_CLS);
+                   $sidebar.find('A.' + buttonCls).addClass(PRESSED_CLS);
                }
+
                this.setNotAblePressSidebarButton(false);
            },
 

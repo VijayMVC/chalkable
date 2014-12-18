@@ -210,5 +210,7 @@
 
 
 @helper RenderChlkCopyrightYear(){
-    <div id="footer">&copy; <script type="text/javascript">var dt = new Date(); document.write(dt.getFullYear());</script> Chalkable</div>
+    <footer>
+        &copy; @DateTime.Now.Year Chalkable. Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
+    </footer>
 }    

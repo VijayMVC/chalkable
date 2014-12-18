@@ -380,6 +380,11 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            function $fromHTML(html) {
+                BASE();
+                return ria.dom.Dom().fromHTML(html);
+            },
+
             /* DOM manipulations & navigation */
 
             SELF, function empty() {

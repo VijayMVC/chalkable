@@ -28,14 +28,17 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.id.SchoolPersonId, 'developerId',
             Number, 'stateId',
+            Boolean, 'readOnly',
 
             [[chlk.models.common.PaginatedList
                 , ArrayOf(chlk.models.developer.DeveloperInfo)
                 , ArrayOf(chlk.models.apps.AppState)
                 , chlk.models.id.SchoolPersonId
                 , Number
+                , Boolean
+
             ]],
-            function $(applications_, developers_, appStates_, developerId_, stateId_){
+            function $(applications_, developers_, appStates_, developerId_, stateId_, readOnly_){
                 BASE();
                 if(applications_)
                     this.setApplications(applications_);
@@ -47,6 +50,8 @@ NAMESPACE('chlk.models.apps', function () {
                     this.setDeveloperId(developerId_);
                 if(stateId_)
                     this.setStateId(stateId_);
+                if (readOnly_)
+                    this.setReadOnly(readOnly_);
             }
         ]);
 

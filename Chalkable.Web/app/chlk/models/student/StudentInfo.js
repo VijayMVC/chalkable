@@ -11,7 +11,7 @@ NAMESPACE('chlk.models.student', function(){
 
         [ria.serialize.SerializeProperty('gradelevel')],
         chlk.models.grading.GradeLevel, 'gradeLevel',
-        ArrayOf(chlk.models.people.User), 'parents',
+        ArrayOf(chlk.models.people.User), 'parents'
 
     ]);
 });

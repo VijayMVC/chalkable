@@ -84,6 +84,9 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.common.ChlkDate, 'expiresDate',
 
             [ria.serialize.SerializeProperty('applicationname')],
-            String, 'applicationName'
+            String, 'applicationName',
+
+            [ria.serialize.SerializeProperty('hidefromstudents')],
+            Boolean, 'hiddenFromStudents'
         ]);
 });

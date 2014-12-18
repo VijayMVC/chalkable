@@ -240,6 +240,20 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.apps.AppMarketPage, result);
         },
 
+        [[chlk.models.id.ClassId, String]],
+        function getSuggestedAppsAction(classId, commonCoreStandardCode) {
+            if(commonCoreStandardCode){
+                var result = this.appMarketService
+                    .getSuggestedApps(classId, null, commonCoreStandardCode)
+                    .attach(this.validateResponse_())
+                    .then(function(apps){
+                        return new chlk.models.apps.SuggestedAppsList(classId, null, apps)
+                    });
+                return this.UpdateView(this.getView().getCurrent().getClass(), result, 'apps');
+            }
+            return null;
+        },
+
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
         function tryToInstallAction(appId) {

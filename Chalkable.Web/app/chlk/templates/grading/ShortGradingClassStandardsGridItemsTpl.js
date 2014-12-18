@@ -44,6 +44,10 @@ NAMESPACE('chlk.templates.grading', function () {
                 if(isNaN(parseFloat(grade)))
                     return grade;
                 return grade || grade == 0 ? parseFloat(grade).toFixed(2) : '';
+            },
+
+            function getTbWidth(){
+                return ria.dom.Dom('#content').width() - 412;
             }
         ]);
 });

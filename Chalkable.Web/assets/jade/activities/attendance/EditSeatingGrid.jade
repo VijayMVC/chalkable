@@ -1,28 +1,34 @@
 .dialog-window.edit-seating-grid
-    .close.close-btn.dark
-    +ActionForm('attendance', 'editSeatingGrid').edit-seating-grid-form
+    .x-window-header
+        h1=Msg.Edit_the_student_grid
+        .close.close-btn.dark
+    +ActionForm('attendance', 'editSeatingGrid').edit-seating-grid-form.x-window-body
         +Hidden('classId', self.getClassId().valueOf())
         +Hidden('date', self.getDate().format('mm/dd/yy'))
         +Hidden('seatingChartInfo', self.getSeatingChartInfo())
-        h1=Msg.Edit_the_student_grid
-        div
-            span=Msg.Number_of_rows
+        .x-form-field
+            label=Msg.Number_of_rows
             input(
+                type="number",
+                min=0,
                 name='rows',
                 value=(self.getRows() || 0),
                 class='validate[required, custom[number],min[' + (self.getMinRows() || 1) + '], max[99]]',
                 data-min-value=self.getMinRows()
             )
-        div
-            span=Msg.Number_of_columns
+        .x-form-field
+            label=Msg.Number_of_columns
             input(
+                type="number",
+                min=0
                 name='columns',
                 value=(self.getColumns() || 0),
                 class='validate[required, custom[number],min[' + (self.getMinColumns() || 1) + '], max[99]]',
                 data-min-value=self.getMinColumns()
             )
-        div
-            BUTTON(type="submit").blue-gradient-btn=Msg.Save.toUpperCase()
+        .form-buttons
+            BUTTON(type="submit").blue-gradient-btn.positive-button=Msg.Save.toUpperCase()
+            BUTTON(type="submit").blue-gradient-btn.close=Msg.Cancel
 
 
 

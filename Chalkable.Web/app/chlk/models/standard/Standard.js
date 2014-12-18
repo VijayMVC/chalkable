@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.standard', function () {
     var SJX = ria.serialize.SJX;
 
     /** @class chlk.models.standard.Standard*/
-    CLASS(UNSAFE, FINAL, 'Standard', IMPLEMENTS(ria.serialize.IDeserializable),  [
+    CLASS(UNSAFE, 'Standard', IMPLEMENTS(ria.serialize.IDeserializable),  [
         VOID, function deserialize(raw) {
             this.name = SJX.fromValue(raw.name, String);
             this.description = SJX.fromValue(raw.description, String);

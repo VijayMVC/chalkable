@@ -1,26 +1,24 @@
 mixin AppIconLink(announcementId, app, iconTooltip)
-   appId = app.getId().valueOf()
-   div(data-tooltip=iconTooltip).app-icon-link
-       +ActionLink('apps', 'tryToAttach', announcementId, appId)(disabled=app.needToInstall() ? "disabled" : null).app-link
-       div(disabled=app.needToInstall() ? "disabled" : null).app-list-item
-            .icon
-                pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
-                img(src=pictureUrl)
-            .description
-                .name=app.getName()
-                .shortdesc=app.getShortDescription()
-                if app.needToInstall()
-                   +ActionLink('appmarket', 'details', app.getId()) Install
+    -var appId = app.getId().valueOf()
+    -var pictureUrl = self.getAppPictureURL(app.getSmallPictureId(), 74, 74)
+    .announcement-item.application(data-tooltip=iconTooltip)
+        +LoadingImage(src=pictureUrl, id="loading-image-" + appId)
+        .title= app.getName()
+        .shortdesc= app.getShortDescription()
+        if app.needToInstall()
+            +ActionButton('appmarket', 'details', app.getId()) Install
+        else
+            +ActionButton('apps', 'tryToAttach', announcementId, appId) Attach
 
 teacherId = self.teacherId.valueOf()
 announcementId = self.announcementId.valueOf()
 .dialog.attach-app
     .x-window-header
+        h1 Attach an App
         a.close.close-btn
     .x-window-body
-        .header Attach an App
         if self.apps.getItems().length > 0
-            .apps
+            .attachments-and-applications
                 each app in self.apps.getItems()
                     +AppIconLink(announcementId, app, self.getAppIconToolTip(app))
             .paging

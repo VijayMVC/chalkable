@@ -89,6 +89,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //}
         }
 
+        public void UpdateForImport(IList<Person> persons)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete(int id)
         {
             if (!BaseSecurity.IsAdminEditor(Context))

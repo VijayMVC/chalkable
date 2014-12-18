@@ -208,7 +208,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     StudentFilterId = comprehensiveProgressInput.StudentFilterId,
                     StudentIds = students.Select(student=>student.Id).ToArray(),
                     IncludePicture = comprehensiveProgressInput.IncludePicture,
-                    IncludeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn
+                    IncludeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn,
+                   
                 };
             return ConnectorLocator.ReportConnector.ComprehensiveProgressReport(stiModel);
         }

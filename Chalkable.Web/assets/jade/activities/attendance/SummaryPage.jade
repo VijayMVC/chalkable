@@ -1,24 +1,24 @@
 mixin AbsentLatePage(data, header)
-    .chart-container
-        h2=Msg.Attendance
-        .chart-top-legend
-            each stat,i in data.getClassesStats()
-                clazz = stat.getClazz()
-                div(
-                    data-color=self.getColor(i),
-                    data-opacity-color=self.getColor(i, 0.2),
-                    data-index=i,
-                    data-id=clazz.getId()
-                ).legend-item
-                    text = clazz.getName() + ' ' + (clazz.getClassNumber() || '')
-                    div(style="background:" + self.getColor(i) + ";").box
-                    div(data-tooltip=text, data-tooltip-type="overflow").name=text
-        .chart-block.relative
-            .wide-chart-bg
-                +Chart()(
-                    data-options=self.getChartOptions(data),
-                    data-tooltip-padding=28
-                ).main-chart
+    if data.getClassesStats().length
+        .chart-container
+            .chart-top-legend
+                each stat,i in data.getClassesStats()
+                    clazz = stat.getClazz()
+                    div(
+                        data-color=self.getColor(i),
+                        data-opacity-color=self.getColor(i, 0.2),
+                        data-index=i,
+                        data-id=clazz.getId()
+                    ).legend-item.button-like
+                        text = clazz.getName() + ' ' + (clazz.getClassNumber() || '')
+                        div(style="background:" + self.getColor(i) + ";").box
+                        div(data-tooltip=text, data-tooltip-type="overflow").name=text
+            .chart-block.relative
+                .wide-chart-bg
+                    +Chart()(
+                        data-options=self.getChartOptions(data),
+                        data-tooltip-padding=28
+                    ).main-chart
     .students-container.relative
         items = self.getGroupedStudents(data.getStudents())
         each item,i in items
@@ -31,7 +31,7 @@ mixin AbsentLatePage(data, header)
                                 student = info.getStudentInfo()
                                 if alerts && alerts.length > 0
                                     div(data-tooltip='<div class="p7">' + alerts.join('<hr>') + '</div>').alerts
-                                .chlk-pop-up-container.popup-top
+                                .chlk-pop-up-container.popup-top.popup-bubble.bottom
                                     .pop-up-triangle
                                     .info-container
                                         +ProfileLink(student, 'student')
@@ -45,20 +45,19 @@ mixin AbsentLatePage(data, header)
         if !items.length
             .no-items-text=Msg.No_attendance_issues
 
-.attendance-summary
-    topData = self.getTopData();
-    topItems = topData.getTopItems();
+topData = self.getTopData()
+topItems = topData.getTopItems() || []
+h2.page-title= Msg.Attendance
     +LeftRightToolbar(topItems, chlk.templates.attendance.TopBar, 'attendance', 'classList')(
-        selectedItemId="",
-        disabledClass = 'x-hidden'
-    ).classes-bar
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .center.absent-late-buttons
-                a(data-page=1).action-button.absent-late-button.absent-button.pressed=Msg.Absent
-                a(data-page=2).action-button.absent-late-button.late-button=Msg.Late
+    selectedItemId=""
+).classes-bar.attendance
+.action-bar
+    .items
+        a(data-page=1).action-button.absent-late-button.absent-button.pressed=Msg.Absent
+        a(data-page=2).action-button.absent-late-button.late-button=Msg.Late
+.attendance-summary
     summary = self.getSummary();
     div(data-page=1).absent-late-page.absent-page
         +AbsentLatePage(summary.getAbsent(), Msg.Absent_students)
-    div(data-page=2).absent-late-page.late-page
+    div(data-page=2).absent-late-page.late-page(style="display:none")
         +AbsentLatePage(summary.getLate(), Msg.Late_students)

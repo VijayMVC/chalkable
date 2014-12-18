@@ -132,6 +132,9 @@ NAMESPACE('chlk.models.announcement', function () {
             Number ,'avgNumeric',
             Object, 'clazz',
             String, 'className',
+            [ria.serialize.SerializeProperty('classname')],
+            String, 'shortClassName',
+
             chlk.models.id.DepartmentId, 'departmentId',
             Number, 'gradesSummary',
             Number, 'gradingStudentsCount',

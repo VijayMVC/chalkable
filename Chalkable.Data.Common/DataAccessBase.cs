@@ -127,7 +127,7 @@ namespace Chalkable.Data.Common
         }
 
         protected const int MAX_PARAMETER_NUMBER = 2000;
-        private void ModifyList<T>(IList<T> objs, Action<IList<T>> modifyAction, Func<IList<T>, DbQuery> buildQueryAction)
+        protected void ModifyList<T>(IList<T> objs, Action<IList<T>> modifyAction, Func<IList<T>, DbQuery> buildQueryAction)
         {
             if (objs.Count > 0)
             {

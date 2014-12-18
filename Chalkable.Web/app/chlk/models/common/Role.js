@@ -17,7 +17,8 @@ NAMESPACE('chlk.models.common', function () {
             PARENT: 4,
             DEVELOPER: 9,
             CHECKIN: 6,
-            DISTRICTADMIN: 7
+            DISTRICTADMIN: 7,
+            APPTESTER: 11
         });
 
     /** @class chlk.models.common.RoleNamesEnum*/
@@ -32,7 +33,8 @@ NAMESPACE('chlk.models.common', function () {
             PARENT: 'parent',
             DEVELOPER: 'developer',
             CHECKIN: 'checkin',
-            DISTRICTADMIN: 'districtadmin'
+            DISTRICTADMIN: 'districtadmin',
+            APPTESTER: 'apptester'
         });
 
     /** @class chlk.models.common.Role*/

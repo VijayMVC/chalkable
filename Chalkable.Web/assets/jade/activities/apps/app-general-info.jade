@@ -76,12 +76,20 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
         .app-status=appStatus
 
 .app-general-info
-    .action-bar.not-transparent.dev-app-info
-        .container.panel-bg
+    h2.page-title My Apps
 
-    .app-header
-        .app-icon
-            img(src=self.appThumbnail, width=80, height=80)
+    .action-bar
+        .items
+            A.item.pressed App1
+            A.item App2
+
+    .table
+        .apps
+            .application
+                +ActionLink('apps', 'delete', self.liveAppId).close-btn
+                +LoadingImage(src=self.appThumbnail, id="loading-image")
+                .title= self.appName
+                +ActionButton('apps', 'details', self.liveAppId) Details
         .app-description
             .title=self.appName
             +AppStatus_(self.appState, self.draftAppId, self.liveAppId)

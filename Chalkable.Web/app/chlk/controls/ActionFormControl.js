@@ -86,10 +86,20 @@ NAMESPACE('chlk.controls', function () {
                 ASSET('~/assets/jade/controls/action-form.jade')(this);
             },
 
+            [ria.mvc.DomEventBind('click', 'FORM BUTTON')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function buttonClicked($target, event) {
+                if ($target.hasClass('disabled') || $target.hasAttr('disabled'))
+                    return false;
+            },
+
             [ria.mvc.DomEventBind('click', 'FORM [type=submit]')],
             [[ria.dom.Dom, ria.dom.Event]],
             function submitClicked($target, event) {
                 var $form = $target.parent('FORM');
+
+                if ($target.hasClass('disabled') || $target.hasAttr('disabled'))
+                    return false;
 
                 $form.setData('submit-name', $target.getAttr('name'));
                 $form.setData('submit-value', $target.getValue() || $target.getAttr('value'));

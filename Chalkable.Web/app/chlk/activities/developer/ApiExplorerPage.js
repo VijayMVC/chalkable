@@ -46,7 +46,7 @@ NAMESPACE('chlk.activities.developer', function () {
             [ria.mvc.DomEventBind('click', '.header')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleDetails(node, event){
-                node.find('.description').toggleClass('long');
+                node.parent('.method').toggleClass('open').find('.description').toggleClass('long');
 
                 var detailsNode = jQuery(node.parent().find('.details').valueOf());
                 var codeExample = jQuery(detailsNode).find('pre');
@@ -54,15 +54,15 @@ NAMESPACE('chlk.activities.developer', function () {
                     jQuery(detailsNode).find('.tab-header.active').click();
                 }
 
-                jQuery(node.parent().find('.details').valueOf()).slideToggle();
+                //jQuery(node.parent().find('.details').valueOf()).slideToggle();
             },
 
             [ria.mvc.DomEventBind('click', '.collapse-all')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function collapseAll(node, event){
                 var parentNode = jQuery(node.valueOf()).parent().parent();
-                parentNode.find('.details').slideUp();
-                parentNode.find('.header').find('.description').removeClass('long');
+                //parentNode.find('.details').slideUp();
+                parentNode.find('.method').removeClass('open').find('.description').removeClass('long');
             },
 
             [[Object]],

@@ -352,12 +352,8 @@ NAMESPACE('chlk.controllers', function (){
             }
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_, date_)
-                .catchError(function(error){
-                    if(error.getStatus && error.getStatus() == 500){
-                        var res = JSON.parse(error.getResponse());
-                        if(res.exceptiontype == 'NoClassAnnouncementTypeException')
-                            return this.redirectToErrorPage_(error.toString(), 'error', 'createAnnouncementError', []);
-                    }
+                .catchException(chlk.services.NoClassAnnouncementTypeException, function(ex){
+                    return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
                 }, this)
                 .attach(this.validateResponse_())
@@ -869,6 +865,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setGradingStudentsCount(model.getGradingStudentsCount());
                         announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
                         announcement.setSuggestedApps(model.getSuggestedApps());
+                        announcement.setClassName(model.getClassName());
                         form_.setAnnouncement(announcement);
                         return this.addEditAction(form_, false);
                     }

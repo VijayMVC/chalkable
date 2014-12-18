@@ -1,4 +1,4 @@
-.calendar-popup
+.calendar-popup.popup-bubble.top
     announcements = self.getAnnouncements();
     items = self.getItems();
     if announcements.length > 0
@@ -23,7 +23,7 @@
                                 +TooltipWithOverflow(item.getTitle()).item-title
                                 +TooltipWithOverflow(item.getClassName()).classname-under
     if !self.getUserRole().isStudent()
-        +ActionLink('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann
+        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann New item
 
 
 

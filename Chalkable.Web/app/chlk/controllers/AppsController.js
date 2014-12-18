@@ -103,8 +103,15 @@ NAMESPACE('chlk.controllers', function (){
                         new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.REJECTED),
                         new chlk.models.apps.AppState(chlk.models.apps.AppStateEnum.LIVE)
                     ];
-                    return new chlk.models.apps.AppsListViewData(res[0], res[1], states, developerId_, state_);
-                });
+                    return new chlk.models.apps.AppsListViewData(
+                        res[0],
+                        res[1],
+                        states,
+                        developerId_,
+                        state_,
+                        this.userInRole(chlk.models.common.RoleEnum.APPTESTER)
+                    );
+                }, this);
             if(startIndex_ || developerId_ || state_ || filter_)
                 return this.UpdateView(chlk.activities.apps.AppsListPage, result);
             return this.PushView(chlk.activities.apps.AppsListPage, result);
@@ -387,10 +394,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.SYSADMIN
+            chlk.models.common.RoleEnum.SYSADMIN,
+            chlk.models.common.RoleEnum.APPTESTER,
         ])],
         [[chlk.models.id.SchoolPersonId]],
-        function testApplicationSysAdminAction(devId) {
+        function testApplicationAction(devId) {
             this.appsService
                 .testDevApps(devId);
             return null;
@@ -460,6 +468,19 @@ NAMESPACE('chlk.controllers', function (){
                     if(data.getTotalPersonsCount() > 0)
                         return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, classId, annId]);
                     return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId]);
+                }, this);
+            return null;
+        },
+
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean]],
+        function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned){
+            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
+            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    if(data.getTotalPersonsCount() > 0)
+                        return this.BackgroundNavigate('apps', 'viewApp', [appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, appId, isBanned]);
+                    return this.BackgroundNavigate('appmarket', 'details', [appId]);
                 }, this);
             return null;
         },
@@ -546,7 +567,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         function addDeveloperAction(){
            var app = new chlk.models.apps.Application();
-           return this.PushView(chlk.activities.apps.AddAppDialog, new ria.async.DeferredData(app));
+           return this.ShadeView(chlk.activities.apps.AddAppDialog, new ria.async.DeferredData(app));
         },
 
         [chlk.controllers.AccessForRoles([

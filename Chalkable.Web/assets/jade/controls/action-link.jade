@@ -1,4 +1,6 @@
 mixin ActionLink(controller, action)
+    -VALIDATE_ARG('controller', [String], controller)
+    -VALIDATE_ARG('action', [String], action)
     link = self.getLink(ria.__API.clone(arguments))
     -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
     -attributes['data-link'] = link
@@ -6,6 +8,9 @@ mixin ActionLink(controller, action)
         block
 
 mixin ActionLinkWithPrepend(controller, action, prependParams)
+    -VALIDATE_ARG('controller', [String], controller)
+    -VALIDATE_ARG('action', [String], action)
+    -VALIDATE_ARG('prependParams', [Array], prependParams)
     args = ria.__API.clone(arguments)
     - [].splice.apply(args, [2, 1].concat(prependParams || []))
     link = self.getLink(args)
@@ -16,6 +21,7 @@ mixin ActionLinkWithPrepend(controller, action, prependParams)
 
 // requires: actionLinkModel instanceOf chlk.models.common.ActionLinkModel
 mixin ActionLinkWithModel(actionLinkModel)
+    -VALIDATE_ARG('actionLinkModel', [chlk.models.common.ActionLinkModel], actionLinkModel)
     -var classesNames = actionLinkModel.getClassesNames() || [];
     -var title = (actionLinkModel.getTitle() || '');
     +ActionLinkWithPrepend(actionLinkModel.getControllerName(), actionLinkModel.getActionName(), actionLinkModel.getArgs()
@@ -24,10 +30,13 @@ mixin ActionLinkWithModel(actionLinkModel)
 
 // requires: actionLinksModel instanceOf ArrayOf(chlk.models.common.ActionLinkModel)
 mixin ActionLinkList(actionLinksModel)
+    -VALIDATE_ARG('actionLinksModel', [ArrayOf(chlk.models.common.ActionLinkModel)], actionLinksModel)
     each item in actionLinksModel
         +ActionLinkWithModel(item)(attributes)
 
-mixin  ActionLinkButton(controller, action)
+mixin ActionLinkButton(controller, action)
+    -VALIDATE_ARG('controller', [String], controller)
+    -VALIDATE_ARG('action', [String], action)
     span.chlk-button.action-button(attributes)
         span
             span
@@ -37,3 +46,12 @@ mixin  ActionLinkButton(controller, action)
                 -attributes['data-link'] = link
                 a.action-link(attributes).not-blue
                     block
+
+mixin ActionButton(controller, action)
+    -VALIDATE_ARG('controller', [String], controller)
+    -VALIDATE_ARG('action', [String], action)
+    -var link = self.getLink(ria.__API.clone(arguments))
+    -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
+    -attributes['data-link'] = link
+    BUTTON.action-button(attributes)
+        block

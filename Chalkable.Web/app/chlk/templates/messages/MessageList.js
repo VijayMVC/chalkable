@@ -29,5 +29,6 @@ NAMESPACE('chlk.templates.messages', function () {
                 var role = this.getRole().indexOf('admin') > -1 ? 'admin' : this.getRole();
                 return 'No messages ' + (this.isInbox() ? 'from ' : 'sent to ') + role  + 's';
             }
+
         ])
 });

@@ -245,7 +245,7 @@ namespace Chalkable.StiImport.Services
             var persons = context.GetSyncResult<Person>().All
                 .Select(x=>new Data.School.Model.Person
                     {
-                        Active = true,
+                        Active = false,
                         AddressRef = x.PhysicalAddressID,
                         BirthDate = x.DateOfBirth,
                         FirstName = x.FirstName,

@@ -38,7 +38,7 @@ classSummary = self.getClassSummary()
                         +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null)
                     if(classSummary.getClassSize())
                         +GlanceBox(null, null, {value: classSummary.getClassSize(), title: Msg.Class_size}, 'brown')
-        .today-work-panelf
+        .today-work-panel
             h2=Msg.Upcoming_assignments
             .period-toolbar
                 if classSummary.getAnnouncementsByDate()

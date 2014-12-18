@@ -40,7 +40,7 @@ NAMESPACE('chlk', function (){
                 return BASE()
                     .then(function(data){
                         new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/sidebars/DeveloperSideBar.jade')())
+                            .fromHTML(ASSET('~/assets/jade/sidebars/DeveloperSidebar.jade')())
                             .appendTo("#sidebar");
                         return data;
                     });

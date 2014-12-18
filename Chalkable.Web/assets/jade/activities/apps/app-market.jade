@@ -27,21 +27,22 @@ mixin AppIconLink(app)
         .app-filter
             .subject
                 .subject-filter
-                    .title.btn Subject
-                    .items.x-hidden
+                    A.title.btn(href="javascript:;") Subject...
+                    .items.x-hidden.popup-bubble.top
                         +Hidden('selectedCategories', self.getAllCategoriesIds(self.categories))
                         +LabeledCheckbox('All Categories', 'app-category-all', true, true)
                         each subject in self.categories
                            +LabeledCheckbox(subject.getName(), 'app-category-' + subject.getId().valueOf(), false, false)
 
             .price
-                .price-type.all.btn(data-price-type=chlk.models.apps.AppPriceType.ALL.valueOf()).pressed All
-                .price-type.paid.btn(data-price-type=chlk.models.apps.AppPriceType.PAID.valueOf()) Paid
-                .price-type.free.btn(data-price-type=chlk.models.apps.AppPriceType.FREE.valueOf()) Free
+                .buttons-group
+                    BUTTON.price-type.all.btn(data-price-type=chlk.models.apps.AppPriceType.ALL.valueOf()).pressed All
+                    BUTTON.price-type.paid.btn(data-price-type=chlk.models.apps.AppPriceType.PAID.valueOf()) Paid
+                    BUTTON.price-type.free.btn(data-price-type=chlk.models.apps.AppPriceType.FREE.valueOf()) Free
                 +Hidden('priceType', chlk.models.apps.AppPriceType.ALL.valueOf())
 
             .sort
-                span Sorted By:
+                span Sorted By:&nbsp;
                 +Select('sortingMode')#app-sort-type
                     +Option(chlk.models.apps.AppSortingMode.POPULAR.valueOf(), 'Popular', true)
                     +Option(chlk.models.apps.AppSortingMode.NEWEST.valueOf(), 'Newest')

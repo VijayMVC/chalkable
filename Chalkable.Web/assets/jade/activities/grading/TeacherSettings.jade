@@ -4,8 +4,7 @@
     gradingInfo = self.getGradingInfo();
     .loader
     +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'teacherSettings')(
-        selectedItemId=gradingInfo && gradingInfo.getClazz().getId().valueOf(),
-        disabledClass = 'x-hidden'
+        selectedItemId=gradingInfo && gradingInfo.getClazz().getId().valueOf()
     ).classes-bar
     if gradingInfo
         classInfo = gradingInfo.getClazz();

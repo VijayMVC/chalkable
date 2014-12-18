@@ -88,32 +88,20 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('click', '.class-button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function classClick(node, event){
-                if(!this.dom.find('.is-edit').getData('isedit')){
-                    var classId = node.getAttr('classId');
-                    this.dom.find('input[name=classid]').setValue(classId);
-                    var defaultType = node.getData('default-announcement-type-id');
-                    if(defaultType)
-                        this.dom.find('input[name=announcementtypeid]').setValue(defaultType);
-                }
-            },
-
             [ria.mvc.DomEventBind('click', '.title-text')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleClick(node, event){
                 var parent = node.parent('.title-block');
                 parent.addClass('active');
                 setTimeout(function(){
-                    parent.find('#title').trigger('focus');
+                    parent.find('input[name=title]').trigger('focus');
                 }, 1)
             },
 
             [ria.mvc.DomEventBind('click', '.save-title-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function saveClick(node, event){
-                var input = this.dom.find('#title'),
+                var input = this.dom.find('input[name=title]'),
                     value = input.getValue();
                 this.dom.find('.title-text').setHTML(value);
                 input.setData('title', value);
@@ -134,7 +122,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.submit-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function setTitleOnSubmitClick(node, event){
-                this.dom.find('#title').setValue(this.dom.find('.title-text').getHTML());
+                this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
             },
 
             [ria.mvc.DomEventBind('change', '.announcement-types-combo')],
@@ -152,6 +140,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var typeName = node.getData('typename');
                 this.dom.find('input[name=announcementtypeid]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
+                setTimeout(function(){
+                    node.parent('form').trigger('submit');
+                },1);
+
             },
 
             [ria.mvc.DomEventBind('change', '#type-select')],
@@ -173,7 +165,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var block = this.dom.find('.title-text:visible'),
                     saveBtn = this.dom.find('.save-title-btn'),
                     titleBlock = this.dom.find('.title-block');
-                if(!model.isData() && this.dom.find('#title').getValue()){
+                if(!model.isData() && this.dom.find('input[name=title]').getValue()){
                     saveBtn.setAttr('disabled', false);
                     if(block.exists() && this.dom.find('.title-block-container').hasClass('was-empty'))
                         saveBtn.trigger('click');
@@ -184,7 +176,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         this.dom.find('#show-title-popup').trigger('click');
                     saveBtn.setAttr('disabled', true);
                     titleBlock.addClass('exists');
-                    var titleInput = titleBlock.find('#title');
+                    var titleInput = titleBlock.find('input[name=title]');
                     var text = titleInput.getValue();
                     var oldText = titleInput.getData('title');
                     if(oldText == text)
@@ -210,7 +202,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
-            [ria.mvc.DomEventBind('keydown', '#title')],
+            [ria.mvc.DomEventBind('keydown', 'input[name=title]')],
             [[ria.dom.Dom, ria.dom.Event]],
             function titleKeyDown(node, event){
                 if(event.which == ria.dom.Keys.ENTER.valueOf()){
@@ -226,7 +218,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             function expiresDateChange(node, event){
                 var block = this.dom.find('.title-block-container'),
                     value = node.getValue(),
-                    titleNode = this.dom.find('#title');
+                    titleNode = this.dom.find('input[name=title]');
                 if(value){
                     if(!block.hasClass('with-date'))
                         block.addClass('was-empty');
@@ -246,7 +238,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     block.removeClass('with-date').removeClass('was-empty');
             },
 
-            [ria.mvc.DomEventBind('keyup', '#title')],
+            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function titleKeyUp(node, event){
                 wasDateChanged = false;
@@ -290,7 +282,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var target = new ria.dom.Dom(event.target), dom = that.dom;
                     if(!target.parent('.title-block').exists() || target.hasClass('save-title-btn')){
                         var titleBlock = dom.find('.title-block');
-                        var titleInput = titleBlock.find('#title');
+                        var titleInput = titleBlock.find('input[name=title]');
                         titleBlock.removeClass('active');
                         var text = titleInput.getValue();
                         if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == '' || text == null || text == undefined)){
@@ -308,11 +300,30 @@ NAMESPACE('chlk.activities.announcement', function () {
                         }
                     }
                 });
+
+                new ria.dom.Dom().on('click.save', '.class-button[type=submit]', function($target, event){
+                    if(!that.dom.find('.is-edit').getData('isedit')){
+                        var classId = $target.getAttr('classId');
+                        that.dom.find('input[name=classid]').setValue(classId);
+                        var defaultType = $target.getData('default-announcement-type-id');
+                        if(defaultType)
+                            that.dom.find('input[name=announcementtypeid]').setValue(defaultType);
+                    }
+
+                    if($target.getAttr('type') == 'submit'){
+                        var $form = that.dom.find('form');
+                        $form.setData('submit-name', $target.getAttr('name'));
+                        $form.setData('submit-value', $target.getValue() || $target.getAttr('value'));
+                        $form.setData('submit-skip', $target.hasClass('validate-skip'));
+                        $form.trigger('submit');
+                    }
+                });
             },
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 new ria.dom.Dom().off('click.title');
+                new ria.dom.Dom().off('click.save', '.class-button[type=submit]');
             }
          ]
     );
