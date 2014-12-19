@@ -18,26 +18,48 @@ mixin InstallItem(item)
         )
 
 app = self.getApp()
+webSiteLink = app.getDeveloperInfo().getWebSite()
+devName = app.getDeveloperInfo().getName()
 
 .dialog.app-market-install
     .x-window-header
         a.close.close-btn.dark
         h1=app.getName()
     .x-window-body
-        +ActionForm('appmarket', 'install')
-            .install-for
-                +Hidden('appId', app.getId().valueOf())
-                +Hidden('classes', "")
-                +Hidden('gradeLevels', "")
-                +Hidden('departments', "")
-                +Hidden('roles', "")
-                +Hidden('currentPerson', "")
+        .app-screenshots-panel.content
+            +Carousel()
+                -videoUrl = app.getVideoDemoUrl() || ''
+                if videoUrl
+                    +CarouselItem().img(data-page = 1)
+                        +Video(true)(src=videoUrl, width="640", height="390")
+                each picture, index in app.getScreenshotPictures().getItems()
+                    +CarouselItem().img(data-page= index + 2)
+                        img(src=picture.getPictureUrl())
+        .content
+            .app-title
+                span="by "
+                a(href=webSiteLink, target="blank").dev-web-site=devName
+            .right
+                +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+        .content
+            .table.app-info-details
+                .app-description
+                    textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
+        +ActionForm('appmarket', 'install').content.table
+            +Hidden('appId', app.getId().valueOf())
+            +Hidden('classes', "")
+            +Hidden('gradeLevels', "")
+            +Hidden('departments', "")
+            +Hidden('roles', "")
+            +Hidden('currentPerson', "")
 
-                each column in self.getInstallGroupColumns()
-                    .column(style="width:" + self.getInstallGroupColumnWidth())
-                        each item in column
-                            +InstallItem(item)
-            .install-info
-                .install-btn
-                    +Button(disabled = true).special-button.green-button Install App
-                +PayCheck()
+            .row
+                .group-header.first User:
+                .items
+                    each item in app.getInstalledForGroups()
+                        +InstallItem(item)
+
+        .install-info
+            .install-btn
+                +Button(disabled = true).action-button.blue-button Install App
+            +PayCheck()

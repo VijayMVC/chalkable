@@ -157,6 +157,14 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.apps.MyAppsPage, result);
         },
 
+
+        [[chlk.models.apps.AppMarketApplication]],
+        chlk.models.apps.AppMarketApplication, function prepareAppPictures_(app) {
+            var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
+            app.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshots, false));
+            return app;
+        },
+
         //todo: refactor
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
@@ -165,10 +173,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getDetails(id)
                 .attach(this.validateResponse_())
                 .then(function(app){
-                    //todo: make picture dimensions constants
-                    var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
-                    app.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshots, false));
-
+                    app = this.prepareAppPictures_(app);
                     var appPermissions = app.getPermissions() || [];
 
                     appPermissions = appPermissions.map(function(permission){
@@ -254,6 +259,40 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+
+        [[chlk.models.apps.AppMarketApplication]],
+        chlk.models.apps.AppMarketApplication, function prepareApplicationInstallGroups_(app){
+            var installedForGroups = app.getInstalledForGroups() || [];
+            installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
+                new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
+                chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
+                app.isInstalledOnlyForCurrentUser(), Msg.Just_me
+            ));
+            var installedCount = 0;
+            installedForGroups = installedForGroups.map(function(item){
+                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL && this.userIsAdmin())
+                    item.setDescription(Msg.Whole_School);
+                if (item.isInstalled()) ++installedCount;
+
+                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
+                    var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.getId().valueOf()));
+                    var classNumber = cls && cls.getClassNumber() ? cls.getClassNumber()+ " " : "";
+                    item.setTooltipHint(classNumber + item.getDescription());
+                }
+                return item;
+            }, this);
+
+            if (this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
+                installedForGroups = installedForGroups.filter(function(item){
+                    return item.getGroupType() != chlk.models.apps.AppInstallGroupTypeEnum.ALL;
+                });
+            }
+
+            app.setInstalledForGroups(installedForGroups);
+            app.setAlreadyInstalled(installedCount == installedForGroups.length);
+            return app;
+        },
+
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
         function tryToInstallAction(appId) {
@@ -261,34 +300,9 @@ NAMESPACE('chlk.controllers', function (){
                 .getDetails(appId)
                 .attach(this.validateResponse_())
                 .then(function(app){
-                    var installedForGroups = app.getInstalledForGroups() || [];
-                    installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
-                        new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
-                        chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
-                        app.isInstalledOnlyForCurrentUser(), Msg.Just_me
-                    ));
-                    var installedCount = 0;
-                    installedForGroups = installedForGroups.map(function(item){
-                        if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL && this.userIsAdmin())
-                            item.setDescription(Msg.Whole_School);
-                        if (item.isInstalled()) ++installedCount;
-
-                        if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
-                            var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.getId().valueOf()));
-                            var classNumber = cls && cls.getClassNumber() ? cls.getClassNumber()+ " " : "";
-                                item.setTooltipHint(classNumber + item.getDescription());
-                        }
-                        return item;
-                    }, this);
-
-                    if (this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
-                        installedForGroups = installedForGroups.filter(function(item){
-                            return item.getGroupType() != chlk.models.apps.AppInstallGroupTypeEnum.ALL;
-                        });
-                    }
-                    app.setInstalledForGroups(installedForGroups);
-
-                    return new chlk.models.apps.AppMarketInstallViewData(app, installedCount == installedForGroups.length);
+                    app = this.prepareAppPictures_(app);
+                    app = this.prepareApplicationInstallGroups_(app);
+                    return new chlk.models.apps.AppMarketInstallViewData(app);
                 }, this);
             return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
