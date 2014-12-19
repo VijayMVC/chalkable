@@ -12,13 +12,6 @@ NAMESPACE('chlk.templates.apps', function () {
             chlk.models.apps.AppMarketApplication, 'app',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(ArrayOf(chlk.models.apps.AppInstallGroup)), 'installGroupColumns',
-
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'alreadyInstalled',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'installGroupColumnWidth'
+            Boolean, 'alreadyInstalled'
         ])
 });
