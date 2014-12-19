@@ -1,0 +1,41 @@
+{
+    "data":{
+        "fundshistory":{
+            "items": [
+                {
+                    "title" : "App purchase: YouTube",
+                    "created" : "6/23/13",
+                    "amount" : 0,
+                    "balance" : 21.25
+                },
+                {
+                    "title" : "Funds: Visa ",
+                    "created" : "6/23/13",
+                    "amount" : 20,
+                    "balance" : 21.25
+                },
+                {
+                    "title" : "App purchase: BioDigitalHuman",
+                    "created" : "6/23/13",
+                    "amount" : -1.75,
+                    "balance" : 1.25
+                },
+                {
+                    "title" : "App purchase: BioDigitalHuman",
+                    "created" : "6/23/13",
+                    "amount" : -5.00,
+                    "balance" : 3.00
+                }
+            ],
+            "hasnextpage": false,
+            "haspreviouspage": false,
+            "pageindex": 0,
+            "pagesize": 4,
+            "totalcount": 4,
+            "totalpages": 1
+        },
+        "creditcardinfo" : null,
+        "currentbalance" : 22.25
+    },
+    "success" : true
+}
