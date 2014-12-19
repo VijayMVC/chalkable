@@ -103,7 +103,7 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
                                 +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
                                 .question-mark(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message) ?
 
-    .attachments-and-applications
+    .apps-attachments-bock.attachments-and-applications
         ann = announcement
         -ann.setNeedButtons(true)
         -ann.setNeedDeleteButton(true)
