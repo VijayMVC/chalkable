@@ -1,0 +1,18 @@
+mixin AppsList(name, apps, currentApp)
+    -attributes.name = name
+    -attributes = self.processAttrs(attributes);
+    apps = apps || []
+    selectedApp = {}
+    selectedAppId = currentAppId ? currentAppId : null
+    select(attributes)#dev-apps-list.app-list-combobox
+        each item in apps
+            isSelected = selectedAppId == item.getId()
+            +AppOption(item.getName(), 'apps', 'details', [item.getId().valueOf()], isSelected)
+        +AppOption('Add application', 'apps', 'add')
+
+mixin AppOption(displayName, controller, action, params, selected)
+    -attributes.selected = selected
+    -attributes['data-controller'] = controller
+    -attributes['data-action'] = action
+    -attributes['data-params'] = params
+        option(attributes)=displayName

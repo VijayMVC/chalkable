@@ -1,0 +1,71 @@
+#classes-bar-container
+  margin: 0 -1px
+
+.classes-bar, .classes-tb
+  margin: 0 0 16px
+  position: relative
+
+  .item
+    position: relative
+    display: inline-block
+    width: 80px
+    border-radius: 5px
+    border: 1px solid #c8c7c3
+    +box-shadow(transparentize(#020202, 0.84) 0 1px 2px) // , transparentize(#fff, .22) 0 1px 0px inset
+    background: #fff
+
+    color: #7b7974
+    text-align: center
+    text-decoration: none
+    line-height: 32px
+    padding-top: 48px
+    font-size: 12px
+    font-weight: 300
+    +text-shadow(transparentize(#fff, .5) 0 1px 0px)
+
+    cursor: pointer
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+
+    &:not(:last-child)
+      margin-right: 10px
+
+    .img-wrapper
+      position: absolute
+      top: 8px
+      left: 17px
+      height: 40px
+      width: 45px
+      opacity: .75
+      overflow: hidden
+
+      IMG
+        position: absolute
+        top: 0
+        left: 0
+        border: 0
+
+        //-webkit-filter: invert(100%)
+        //filter: invert(100%)
+
+    &:hover
+      color: #7b7974
+      .img-wrapper
+        opacity: 1
+
+
+    &.pressed
+      &, &:hover
+        +box-shadow(transparentize(#fff, 1) 0 1px 0, transparentize(#000, .2) 0 1px 1px inset)
+        background-color: #56554f
+        color: #ffffff
+        +text-shadow(transparentize(#000, .5) 0 1px 0px)
+        .img-wrapper
+          opacity: 1
+
+        IMG
+          //-webkit-filter: invert(0%)
+          //filter: invert(0%)
+
+

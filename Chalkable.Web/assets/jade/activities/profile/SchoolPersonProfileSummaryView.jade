@@ -1,0 +1,14 @@
+user = self.getUser()
+.profile-page
+    h2.page-title=Msg.Profile
+    +UserProfileTopBar(self, 'details')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(user, 140, true)
+                    .grades-container
+            #student-info-panel.right-block.panel-block
+                displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                .status=self.getStatusText()
