@@ -15,7 +15,7 @@ redirectData = self.getRedirectData()
             .table
                 .l &nbsp;
                 .title
-                    =self.getDate().toString('MM dd, yy')
+                    span.date-text=self.getDate().toString('MM dd, yy')
                     +DatePicker('disciplineDate', self.getDate())(
                         data-options={
                             showOtherMonths: true,
