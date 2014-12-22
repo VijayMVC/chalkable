@@ -11,4 +11,4 @@ user = self.getUser()
             #student-info-panel.right-block.panel-block
                 displayName =user.getDisplayName() || user.getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
-                .status=self.getStatusText()
+                .status=self.getCurrentLocation()
