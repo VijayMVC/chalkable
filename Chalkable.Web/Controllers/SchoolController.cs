@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
-using Chalkable.Common;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models.SchoolsViewData;
 
 
@@ -13,9 +9,9 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class SchoolController : ChalkableController
     {
-        //TODO: add
-        /*[AuthorizationFilter("SysAdmin")]
-        public ActionResult List(Guid districtId, int? start, int? count, bool? demoOnly, bool? unimportedOnly)
+        
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult List(Guid districtId, int? start, int? count)
         {
             count = count ?? 10;
             start = start ?? 0;
@@ -23,7 +19,13 @@ namespace Chalkable.Web.Controllers
             return Json(schools.Transform(SchoolViewData.Create));
         }
 
-        [AuthorizationFilter("SysAdmin")]
+        public ActionResult UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill)
+        {
+            MasterLocator.SchoolService.UpdateStudyCenterEnabled(districtId, schoolId, enabledTill);
+            return Json(true);
+        }
+
+        /*[AuthorizationFilter("SysAdmin")]
         public ActionResult Summary(Guid schoolId)
         {
             if (SchoolLocator.Context.SchoolId != schoolId)

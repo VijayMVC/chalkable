@@ -97,7 +97,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds,
                                                 IList<Guid> departmentIds, IList<int> gradeLevelIds, int schoolYearId, DateTime dateTime)
         {
-
+            if (!Context.SCEnabled)
+                throw new StudyCenterDisabledException();
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 

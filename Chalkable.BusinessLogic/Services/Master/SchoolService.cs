@@ -16,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Add(IList<SchoolInfo> schools, Guid districtId);
         void Edit(IList<SchoolInfo> schoolInfos, Guid districtId);
         void Delete(IList<int> localIds, Guid districtId);
+        void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -98,6 +99,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                 da.Delete(schools.Select(x=>x.Id).ToList());
                 uow.Commit();
             }
+        }
+
+        public void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(uow => new SchoolDataAccess(uow).UpdateStudyCenterEnabled(districtId, schoolId, enabledTill));
         }
     }
 

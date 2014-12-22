@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -59,6 +60,18 @@ namespace Chalkable.Data.Master.DataAccess
         public void Delete(IList<Guid> ids)
         {
             SimpleDelete(ids.Select(x => new School {Id = x}).ToList());
+        }
+
+        public void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill)
+        {
+            Trace.Assert(districtId.HasValue != schoolId.HasValue);
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@districtId", districtId},
+                {"@schoolId", schoolId},
+                {"@enabledTill", enabledTill}
+            };
+            ExecuteStoredProcedureReader("spUpdateStudyCenterEnabled", ps);
         }
     }
 }

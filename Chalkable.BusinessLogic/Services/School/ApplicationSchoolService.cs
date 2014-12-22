@@ -66,6 +66,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementApplication AddToAnnouncement(int announcementId, Guid applicationId)
         {
+            if (!Context.SCEnabled)
+                throw new StudyCenterDisabledException();
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             if(!CanAddToAnnouncement(app.Id))
                 throw new ChalkableSecurityException("Application is not installed yet");

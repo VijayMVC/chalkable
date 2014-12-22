@@ -74,6 +74,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Add(IList<Data.Master.Model.School> schools)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
