@@ -110,6 +110,7 @@
     <Compile Include="Exceptions\NoAnnouncementException.cs" />
     <Compile Include="Exceptions\NoClassAnnouncementTypeException.cs" />
     <Compile Include="Exceptions\NoMarkingPeriodException.cs" />
+    <Compile Include="Exceptions\StudyCenterDisabledException.cs" />
     <Compile Include="Exceptions\UnassignedUserException.cs" />
     <Compile Include="Exceptions\UnknownRoleException.cs" />
     <Compile Include="ImageUtils.cs" />
