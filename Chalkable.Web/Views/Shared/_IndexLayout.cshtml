@@ -1,0 +1,209 @@
+@using System.Configuration
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<title>Chalkable</title>
+	<meta name="description" content="Web Apps for your school">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="~/Content/fonts.css" rel="stylesheet" media="screen, projection" type="text/css" />
+	<link href="@Url.StaticContent("/Content/screen-home.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/modernizr-ck.js")"></script>
+    <style>
+        .formErrorContent {
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    @RenderBody()
+	<header role="banner">
+		<div class="wrap">
+			<div class="logo">
+				<h1><a href="@Url.Content("~/")">Chalkable</a></h1>
+			</div>
+			<nav>
+				<ul class="mainNav">
+					<li><a data-type="feature" href="#appStore">App Store</a></li>
+					<li><a data-type="feature" href="#developers">Developers</a></li>
+					<li><a href="#" class='lg'>Login</a></li>
+				</ul>
+			</nav>
+			<a href="#" class="listMenu"></a> <!-- clicked -->
+		</div>
+	</header>
+
+	<section id="tagline">
+		<div class="wrap">
+			<div class="taglineMessage">
+				<h1>Web Apps<br> for your school</h1>
+				<p>Chalkable is an app store for school and platform to make those apps work.</p>
+				<a href="@Url.Content("~/DemoSchool/Index")" class="btnBig">Launch demo</a>
+				<p class="signup"><a href="mailto:pilot@chalkable.com?subject=I'm interested in piloting Chalkable at my school">Get your school on Chalkable</a></p>
+			</div>
+		</div>
+	</section>
+
+	<section id="features">
+			<div id="appStore" class="feature feature1">
+				<div class="wrap">
+					<figure>
+						<img src="@Url.StaticContent("/Content/images/illustration-1.png")" alt="App store image">
+					</figure>
+					<div class="description">
+						<h1>App store</h1>
+						<p>Amazing digital tools and content can transform the way students learn in school. The Chalkable app store lists the best educational apps from across the web. You can browse apps by category or common core standard. Purchase, install, and set up the app for your whole class in just one click.</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="feature feature2">
+				<div class="wrap">
+					<figure>
+						<img src="@Url.StaticContent("/Content/images/illustration-2.png")" alt="Platform image">
+					</figure>
+					<div class="description">
+						<h1>Platform</h1>
+						<p>Lots of Apps. One login. One calendar. One gradebook. It all just works. The Chalkable platform is a basic set of tools for students, teachers, admins, and parents. We built Feed, Calendar, Attendance, Gradebook, Messaging and more to get the day to day done, and make using Apps simple.</p>
+					</div>
+				</div>
+			</div>
+
+			<div id="developers" class="feature feature1">
+				<div class="wrap">
+					<figure>
+						<img src="@Url.StaticContent("/Content/images/illustration-3.png")" alt="Developers image">
+					</figure>
+					<div class="description">
+						<h1>Developers</h1>
+						<p>Integrating your web app with the Chalkable App Store gives you the opportunity to be exposed to millions of users, collect payments, and deeply integrate into the core Chalkable experience. Using the API, your app will be able to leverage the Chalkable platform (user info, schedule, grading, attendance, discipline, messaging, notifications, etc) to help you deliver a great experience to students, teachers, parents, or administrators.</p>
+						<a href="@Url.Content("~/Developer/Info")" class="btn">Submit your app</a>
+					</div>
+				</div>
+			</div>
+	</section>
+
+	<footer>
+		<div class="wrap">
+			<div class="footerTop">
+				<ul>
+					<li>
+						<ul class="links">
+							<li><a target="_blank" href="http://blog.chalkable.com/">Blog</a></li>
+							<li><a target="_blank" href="http://chalkable.uservoice.com/">Feedback</a></li>
+							<li><a href="mailto:info@chalkable.com">Email us</a></li>
+							<li><a href="mailto:jobs@chalkable.com">Jobs</a></li>
+						</ul>
+
+					<li>
+						<ul class="address">
+							<li>Chalkable</li>
+							<li>500 7th Ave.</li>
+							<li>17th Floor</li>
+							<li>New York, NY 10018</li>
+						</ul>
+
+					<li>
+						<ul class="socials">
+							<li>
+								<a target="_blank" href="https://twitter.com/chalkable">Follow us</a>
+							</li>
+
+							<li>
+								<a target="_blank" href="https://www.facebook.com/chalkable">Like us</a>
+							</li>
+
+							<li>(800) 844-0884</li>
+						</ul>
+
+					<li>
+						<ul>
+							<li><a href="http://cl.ly/361V222N3T213e1m1J0Z">Press</a></li>
+							<li><a href="@Url.Content("~/Home/Terms")">Terms</a></li>
+						</ul>
+				</ul>
+			</div> <!-- /footerTop -->
+
+			<div class="footerBottom">
+				<p>&copy; 2014 STI</p>
+			</div>
+		</div>
+	</footer>
+
+	<div id="login">
+		<div id="makeLogin" class="loginContainer">
+			<header>
+				<h1>Login</h1>
+				<span class="close"></span>
+			</header>
+
+			<form id="login-form" action="" method="post">
+				<p>
+					<label for="email">Email</label>
+					<input type="email" name="UserName" id="email" data-validation-engine="validate[required,custom[email]]"
+                        data-errormessage-value-missing="Enter your email" 
+                        data-errormessage-custom-error="Invalid email address" 
+                        >
+				</p>
+
+				<p>
+					<label for="password">Password</label>
+					<input type="password" name="Password" id="password" class="pw field-password validate[required]">
+                    <input type="hidden" name="remember" id="remember" value="false">
+				</p>
+
+				<p>
+					<input type="submit" value="LOGIN">	
+				</p>
+				<p class="forgotPassword">
+					<a href="#">Forgot your password?</a>
+				</p>
+			</form>
+			<footer>
+				<p>iNow user? You'll have to log into iNow to set up your Chalkable account. Sign into iNow and click the Chalkable link on the top right corner.</p>
+			</footer>
+		</div>
+
+		<div id="resetPassword" class="loginContainer hide">
+			<header>
+				<h1>Reset password</h1>
+				<span class="close"></span>
+			</header>
+
+			<form id="reset-form" action="@Url.Content("~/User/ResetPassword")" method="post">
+				<p>
+					<label for="email">Email</label>
+					<input type="email" name="email" id="email" class="validate[required,custom[email]]">
+				</p>
+
+				<p>
+					<input type="submit" value="SUBMIT">	
+				</p>
+				<p class="forgotPassword">
+					<a href="#">Back to login</a>
+				</p>
+			</form>
+			<footer>
+				<p>Check out your email. We just sent you an email with a link to reset your password.</p>
+			</footer>
+		</div>
+	</div>
+    <script type="text/javascript">
+        var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
+        var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
+    </script>
+<script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
+<script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
+<script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-ui.min.js")"></script>
+<script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
+<script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+<script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
+<script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
+<script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    
+    @ChlkHelpers.MixPanel()    
+    @RenderSection("MixPanelTracking", false)
+</body>
+</html>
