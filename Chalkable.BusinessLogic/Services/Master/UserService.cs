@@ -183,11 +183,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (user.IsDeveloper)
                 return DeveloperLogin(user);
 
-
-
-            //todo: remove this
-            user.IsAppTester = user.DistrictRef.HasValue &&  user.DistrictRef.Value.ToString() == "ce8f981b-2851-4d2d-9127-9622aadfe662";
-
             if (user.IsAppTester)
                 return new UserContext(user, CoreRoles.APP_TESTER_ROLE, user.District, null, null, null);
             throw new UnknownRoleException();

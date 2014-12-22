@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Id = id,
                 IsDemoDistrict = true,
                 Name = "Demo District",
-                TimeZone = "UTC"
+                TimeZone = "Central Standard Time"
             };
         }
 
