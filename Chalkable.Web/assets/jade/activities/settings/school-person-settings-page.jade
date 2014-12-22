@@ -1,8 +1,9 @@
 mixin ProfileResetPasswordBlock()
     .password-info
         .header Password
-        .block1 Your Chalkable password and your iNow password are the same.
-        .block2 You can change your password in iNow.
+        .text
+            .block1 Your Chalkable password and your iNow password are the same.
+            .block2 You can change your password in iNow.
     if !window.DEMO_SCHOOL
         .inow-btn
             a(href=href='/User/RedirectToINow.aspx', class="special-button yellow-button")

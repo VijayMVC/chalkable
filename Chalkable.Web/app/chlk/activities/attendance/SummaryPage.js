@@ -74,7 +74,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('mouseover mouseleave', '.legend-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function itemTypeHover(node, event){
-                if(!node.hasClass('hover')){
+                if(!node.hasClass('hovered')){
                     var needOpacity = event.type == 'mouseleave';
                     this.changeLineOpacity(node, needOpacity);
                 }
@@ -98,9 +98,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var item = node.parent('.chart-container').find('.legend-item[data-index=' + chart_.index + ']:visible');
                 if(!item.hasClass('pressed')){
                     if(needOpacity)
-                        item.removeClass('hover');
+                        item.removeClass('hovered');
                     else
-                        item.addClass('hover');
+                        item.addClass('hovered');
                     this.changeLineOpacity(item, needOpacity);
                 }
 

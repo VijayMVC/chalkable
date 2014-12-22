@@ -23,7 +23,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return color;
             },
 
-            [[ArrayOf(chlk.models.attendance.StudentSummaryItem)]],
+            /*[[ArrayOf(chlk.models.attendance.StudentSummaryItem)]],
             ArrayOf(Array), function getGroupedStudents(students){
                 if(!students.length) return [];
                 var res = [], res1=[];
@@ -40,7 +40,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                         res1.push(false);
                 res.push(res1);
                 return res;
-            },
+            },*/
 
             [[chlk.models.attendance.AbsentLateSummaryItem]],
             Object, function getChartOptions(data){
