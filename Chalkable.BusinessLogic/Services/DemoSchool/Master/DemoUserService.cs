@@ -129,7 +129,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 District = district,
                 LoginInfo = new UserLoginInfo()
                 {
-                    Id = userRef,
+                    Id = userRef
                 }
             };
 
