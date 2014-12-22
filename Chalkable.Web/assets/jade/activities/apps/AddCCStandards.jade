@@ -1,0 +1,23 @@
+.dialog.add-standards
+    .header
+        h1 STANDARDS
+        span Choose a standard that describe the item
+    +ActionForm('apps', 'addStandards').add-standards-form
+        +Hidden('applicationId', self.getApplicationId())
+        +Hidden('standardCodesStr', self.getStandardCodes().join(',')).standard-ids
+        .standards-list-container
+            standardCategories = self.getItems() || []
+            table
+                tr.standards-row
+                    td.name-td
+                        .standards-names.column
+                            each category in standardCategories
+                                +ActionLink('apps', 'showStandardCategories', category.getId(), category.getName()).standard-name.column-cell
+                                    .name=category.getName()
+                                    .right-triangle
+                    td
+                        .standards-description
+        .buttons-container
+            +Button.special-button2.cancel.close Cancel
+            +Button()(type="submit", disabled).special-button2.blue.add.add-standard-btn Submit
+
