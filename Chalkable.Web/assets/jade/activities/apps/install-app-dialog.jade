@@ -58,11 +58,11 @@ devName = app.getDeveloperInfo().getName()
                 .items
                     each item in app.getInstalledForGroups()
                         +InstallItem(item)
-        .content
+        //.content
             .row
                 .group-header Price:
                 .items
-        .content
+        //.content
             .row
                 .group-header TOT:
                 .items
@@ -71,4 +71,4 @@ devName = app.getDeveloperInfo().getName()
         .install-info
             .install-btn
                 +Button(disabled = true).action-button.blue-button Install App
-            +PayCheck()
+            //+PayCheck()
