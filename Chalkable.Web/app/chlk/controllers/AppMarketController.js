@@ -383,20 +383,35 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
-            var res = this.install_(appInstallData, 'installComplete', null, 'installFail', null);
-            return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
+            switch(appInstallData.getSubmitActionType()){
+                case 'install':{
+                    var res = this.install_(appInstallData, 'installComplete', null, 'installFail', null);
+                    return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
+                } break;
+                case 'getAppPrice': {
+                    var appInstallArgs = this.prepareAppTotalPriceCallParams_(appInstallData);
+                    var res = this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs);
+                    return this.UpdateView(chlk.activities.apps.InstallAppDialog, res, 'getAppPrice');
+                } break;
+            }
         },
 
-        [[chlk.models.apps.AppInstallPostData, String, Array, String, Array]],
-        function install_(appInstallData, installCompleteAction, completeActionArgs, installFailAction, failActionArgs){
-            var appInstallArgs = [
+        [[chlk.models.apps.AppInstallPostData]],
+        Array, function prepareAppTotalPriceCallParams_(appInstallData){
+            return [
                 appInstallData.getAppId(),
                 this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
                 this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
                 this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
                 this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
-                appInstallData.getCurrentPerson()];
+                appInstallData.getCurrentPerson()
+            ];
+        },
 
+        [[chlk.models.apps.AppInstallPostData, String, Array, String, Array]],
+        function install_(appInstallData, installCompleteAction, completeActionArgs, installFailAction, failActionArgs){
+
+            var appInstallArgs = this.prepareAppTotalPriceCallParams_(appInstallData);
             var res = ria.async.wait([
                 this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs),
                 this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())

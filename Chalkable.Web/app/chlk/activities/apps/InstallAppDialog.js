@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
 REQUIRE('chlk.templates.apps.InstallAppDialogTpl');
-
+REQUIRE('chlk.templates.apps.InstallAppPriceTpl');
 NAMESPACE('chlk.activities.apps', function () {
     /** @class chlk.activities.apps.InstallAppDialog*/
     CLASS(
@@ -8,6 +8,9 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.TemplateBind(chlk.templates.apps.InstallAppDialogTpl)],
         [chlk.activities.lib.ModelWaitClass('install-app-dialog-model-wait dialog-model-wait')],
         [chlk.activities.lib.PartialUpdateClass('app-market-install')],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.InstallAppDialogTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.apps.InstallAppPriceTpl, 'getAppPrice', '.calculated-price', ria.mvc.PartialUpdateRuleActions.Replace)],
+
         'InstallAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
             [ria.mvc.DomEventBind('click', '.chlk-button')],
@@ -45,6 +48,8 @@ NAMESPACE('chlk.activities.apps', function () {
 
                     this.dom.find('input[name=' + ids[i].name + ']').setValue(selectedIds.join(','));
                 }
+
+                this.dom.find('input[name=submitActionType]').setValue('install');
             },
 
             [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
@@ -75,6 +80,14 @@ NAMESPACE('chlk.activities.apps', function () {
                     this.dom.find('input[install-group=5]').trigger(event, [false]);
                     this.dom.find('input[install-group=6]').trigger(event, [false]);
                 }
+
+                this.dom.find('input[name=submitActionType]').setValue('getAppPrice');
+
+
+                setTimeout(function(){
+                    this.dom.find('form').trigger('submit');
+                }.bind(this), 3000);
+
             }
         ]);
 });

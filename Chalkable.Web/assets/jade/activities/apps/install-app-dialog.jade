@@ -45,9 +45,10 @@ devName = app.getDeveloperInfo().getName()
             .app-info-details
                 .app-description
                     textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
-        +ActionForm('appmarket', 'install').content.table
+        +ActionForm('appmarket', 'install').content
             +Hidden('appId', app.getId().valueOf())
             +Hidden('classes', "")
+            +Hidden('submitActionType', "")
             +Hidden('gradeLevels', "")
             +Hidden('departments', "")
             +Hidden('roles', "")
@@ -58,17 +59,7 @@ devName = app.getDeveloperInfo().getName()
                 .items
                     each item in app.getInstalledForGroups()
                         +InstallItem(item)
-        //.content
-            .row
-                .group-header Price:
-                .items
-        //.content
-            .row
-                .group-header TOT:
-                .items
-
-
-        .install-info
-            .install-btn
-                +Button(disabled = true).action-button.blue-button Install App
-            //+PayCheck()
+            .calculated-price
+            .install-info
+                .install-btn
+                    +Button(disabled = true, type="submit").special-button.blue-button Install App
