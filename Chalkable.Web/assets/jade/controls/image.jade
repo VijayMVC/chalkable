@@ -32,4 +32,5 @@ mixin ClassImg(clazz, width, height)
         -attributes.src = chlk.templates.ChlkTemplate.prototype.getPictureURL(clazz.getDepartmentId(), width, height, true)
     else
         -attributes.src = defaultSrc;
-    +Image()(attributes)
+    .class-img-wrapper(style="width:" + width + "px; height:" + height/2 + "px;")
+        +Image()(attributes)

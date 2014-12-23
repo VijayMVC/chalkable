@@ -4,8 +4,7 @@ if self.getController()
         index=self.getIndex(),
         data-tooltip=self.getId() ? self.getFullClassName() : ''
     ).item.class-button.button-link
-        .img-wrapper
-            +ClassImg(self, 45, 80)
+        +ClassImg(self, 45, 80)
         SPAN.text-container= self.getName()
 else
     BUTTON(
@@ -18,6 +17,5 @@ else
         value="save",
         data-tooltip=self.getId() ? self.getFullClassName() : ''
     ).item.class-button.validate-skip
-        .img-wrapper
-            +ClassImg(self, 45, 80).avatar
+        +ClassImg(self, 45, 80).avatar
         SPAN.text-container= self.getName()

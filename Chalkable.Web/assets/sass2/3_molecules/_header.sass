@@ -124,6 +124,34 @@ header
 
 
 .ui-menu-item
+  .action-link:hover
+    background: #f5f5f5
+
   .site-search
     >*
       width: 97%
+
+.ui-autocomplete
+  max-height: 500px
+  overflow-y: auto
+
+  li.ui-menu-item
+    width: 99%
+
+.search-item
+  border-bottom: 1px solid #eeeeee
+  padding-bottom: 5px
+  white-space: nowrap
+
+  >*
+    display: inline-block
+    vertical-align: middle
+
+    &:first-child
+      width: 53px
+
+    &:last-child
+      width: 167px
+      overflow: hidden
+      text-overflow: ellipsis
+      line-height: 50px

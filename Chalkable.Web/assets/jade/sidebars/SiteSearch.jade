@@ -5,35 +5,39 @@ li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|'
                 -roleId = self.getPersonInfo() && self.getPersonInfo().getRole() ? self.getPersonInfo().getRole().getId() : 0
                 -cntrl = roleId == 2 ? "teachers" : roleId == 3 ? "students" : "admins";
                 +ActionLink(cntrl, 'details', self.getId()).image-container.white.shadow
-                    div.site-search-person
-                        +PersonImg(self.getPersonInfo(), 47)
+                    div.site-search-person.search-item
+                        .icon-item
+                            +PersonImg(self.getPersonInfo(), 47)
                         div.title= self.getDescription()
             when 4
                 +ActionLink('class', 'info', self.getId()).image-container.white.shadow
-                    div.site-search-class
-                        .img-wrapper
+                    div.site-search-class.search-item
+                        .icon-item
                             +ClassImg(self, 45, 80).avatar
                         div.title= self.getDescription()
             when 3
                 +ActionLink('announcement', 'view', self.getAnnouncementId()).image-container.white.shadow
-                    div.site-search-attachment
-                        .image
+                    div.site-search-attachment.search-item
+                        .icon-item
                         div.title= self.getDescription()
             when 2
                 +ActionLink('announcement', 'view', self.getId()).image-container.white.shadow
-                    div.site-search-announcement
-                        div(class="announcement-type-" + self.getChalkableAnnouncementType()).icon.blue.image
+                    div.site-search-announcement.search-item
+                        .icon-item
+                            div(class="announcement-type-" + self.getChalkableAnnouncementType()).icon.blue.image
                         div.title= self.getDescription()
             when 1
                 +ActionLink('appmarket', 'details', self.getId()).image-container.white.shadow
-                    div.site-search-class
-                        .img-wrapper
-                            -var pictureUrl = self.getAppPictureURL(self.getSmallPictureId(), 74, 74)
-                            img(src=pictureUrl, width="74", height="74").avatar
+                    div.site-search-class.search-item
+                        .icon-item
+                            .img-wrapper
+                                -var pictureUrl = self.getAppPictureURL(self.getSmallPictureId(), 74, 74)
+                                img(src=pictureUrl, width="47", height="47").avatar
                         div.title= self.getDescription()
             default
                 A(href="jvascript:'").image-container.white.shadow
-                    .site-search-class
-                        .img-wrapper
-                            img(width="45", height="80").avatar
+                    .site-search-class.search-item
+                        .icon-item
+                            .img-wrapper
+                                img(width="45", height="80").avatar
                         div.title= self.getDescription()
