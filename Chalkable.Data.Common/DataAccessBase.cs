@@ -21,6 +21,14 @@ namespace Chalkable.Data.Common
             this.unitOfWork = unitOfWork;
         }
 
+        protected void ExecuteStoredProcedure(string name, IDictionary<string, object> parameters)
+        {
+            using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
         protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters)
         {
             using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))

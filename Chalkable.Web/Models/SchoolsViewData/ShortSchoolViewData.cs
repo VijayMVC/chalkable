@@ -17,14 +17,14 @@ namespace Chalkable.Web.Models.SchoolsViewData
             Id = school.Id;
             Name = school.Name;
             DistrictId = school.DistrictRef;
-            if (school.District != null)
-                DemoPrefix = school.District.Id.ToString();
-            
+            DemoPrefix = school.DistrictRef.ToString();
         }
+
         public static ShortSchoolViewData Create(School school)
         {
             return new ShortSchoolViewData(school);
         }
+
         public static ShortSchoolViewData Create(Guid id, string name, string timeZone, string prefix)
         {
             var res = Create(new School

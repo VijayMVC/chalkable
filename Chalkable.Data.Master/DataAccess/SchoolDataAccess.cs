@@ -71,7 +71,7 @@ namespace Chalkable.Data.Master.DataAccess
                 {"@schoolId", schoolId},
                 {"@enabledTill", enabledTill}
             };
-            ExecuteStoredProcedureReader("spUpdateStudyCenterEnabled", ps);
+            ExecuteStoredProcedure("spUpdateStudyCenterEnabled", ps);
         }
     }
 }

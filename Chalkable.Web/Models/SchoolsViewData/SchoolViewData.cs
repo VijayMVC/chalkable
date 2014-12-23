@@ -14,8 +14,6 @@ namespace Chalkable.Web.Models.SchoolsViewData
         
         protected SchoolViewData(School school) : base(school)
         {
-            DistrictId = school.DistrictRef;
-            //ImportSystemType = (int) ImportSystemType.Sti;
         }
 
         public static new SchoolViewData Create(School school)
