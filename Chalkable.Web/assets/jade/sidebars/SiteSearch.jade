@@ -19,6 +19,10 @@ li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|'
                 +ActionLink('announcement', 'view', self.getAnnouncementId()).image-container.white.shadow
                     div.site-search-attachment.search-item
                         .icon-item
+                            .img-wrapper
+                                -var pictureUrl = self.getAttachmentUrl()
+                                img(src=pictureUrl, width="47", height="47").avatar
+                            getAttachmentUrl()
                         div.title= self.getDescription()
             when 2
                 +ActionLink('announcement', 'view', self.getId()).image-container.white.shadow

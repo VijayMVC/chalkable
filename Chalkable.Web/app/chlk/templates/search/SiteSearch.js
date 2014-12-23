@@ -38,7 +38,11 @@ NAMESPACE('chlk.templates.search', function () {
             String, 'smallPictureId',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.DepartmentId, 'departmentId'
+            chlk.models.id.DepartmentId, 'departmentId',
+
+            function getAttachmentUrl(){
+                return "/AnnouncementAttachment/DownloadAttachment.json?width=47&height=47&needsDownload=false&announcementAttachmentId=" + this.id
+            }
 
         ])
 });
