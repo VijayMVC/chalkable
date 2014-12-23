@@ -1,16 +1,15 @@
 .alerts-pop-up
   display: none
-  padding: 4px 10px 4px 0
+  padding: 4px 10px 4px
   z-index: 99999999999
   width: 268px
-  @include box-shadow(0 0 2px gray)
   text-align: left
 
   .alert-item
     text-overflow: ellipsis
 
     &:not(:last-child)
-      border-bottom: 1px solid #ebe6d9
+      border-bottom: 1px solid #eee
 
     .alert-icon
       display: inline-block
@@ -19,17 +18,11 @@
       background-position: center
       width: 61px
       height: 61px
-      &.internet
-        background-image: image_url('images/icons/internet-alert.png')
 
-      &.medical
-        background-image: image_url('images/icons/medical-alert.png')
+      @each $item in internet, medical, special, sped
+        &.#{$item}
+          +alerts-icons-sprite($item)
 
-      &.special
-        background-image: image_url('images/icons/bubble-alert.png')
-
-      &.sped
-        background-image: image_url('images/icons/graduating-cap-alert.png')
 
     .alert-description
       display: inline-block
