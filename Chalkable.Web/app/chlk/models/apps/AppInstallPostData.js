@@ -9,6 +9,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'departments',
             String, 'gradeLevels',
             String, 'roles',
+            String, 'submitActionType',
             chlk.models.id.AppInstallGroupId, 'currentPerson'
         ]);
 });
