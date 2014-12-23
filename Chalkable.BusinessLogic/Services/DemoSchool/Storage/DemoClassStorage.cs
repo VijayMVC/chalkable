@@ -91,6 +91,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     ChalkableDepartmentRef = cls.ChalkableDepartmentRef,
                     CourseRef = cls.CourseRef,
+                    ClassNumber = cls.ClassNumber,
                     Description = cls.Description,
                     GradeLevelRef = cls.GradeLevelRef,
                     Id = cls.Id,

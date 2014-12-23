@@ -58,6 +58,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(AppTesterViewData.Create(appTester), ViewConstants.CURRENT_PERSON);
             var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
+            ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
             //var ip = RequestHelpers.GetClientIpAddress(Request);
             //MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);

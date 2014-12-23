@@ -255,10 +255,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void AddClasses()
         {
-            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12);
-            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12);
-            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12);
-            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12);
+            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12, "MA103.01");
+            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12, "MA201.01");
+            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12, "SC103.G");
+            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12, "MA203.11");
             
         }
 
@@ -1798,7 +1798,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             InfractionStorage.Add(infractions);
         }
 
-        private void AddClass(int id, string name, int gradeLevelRef)
+        private void AddClass(int id, string name, int gradeLevelRef, string classNumber)
         {
             ClassStorage.Add(new Class
             {
@@ -1807,7 +1807,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Description = name,
                 GradeLevelRef = gradeLevelRef,
                 ChalkableDepartmentRef = null,
-                ClassNumber = "12" + "." + id.ToString(),
+                ClassNumber =  classNumber,
                 PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
                 SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId

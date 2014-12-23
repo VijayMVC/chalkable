@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
@@ -38,6 +37,7 @@ namespace Chalkable.BusinessLogic.Services
         public CoreRole Role { get; set; }
         public string DistrictServerUrl { get; set; }
         public string DistrictTimeZone { get; set; }
+        public bool SCEnabled { get; set; }
 
         public int? SchoolLocalId { get; set; }
         public Guid? DeveloperId { get; set; }
@@ -110,6 +110,8 @@ namespace Chalkable.BusinessLogic.Services
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;
+                    SCEnabled = school.StudyCenterEnabledTill.HasValue &&
+                                school.StudyCenterEnabledTill.Value > NowSchoolTime;
                 }
                 if (schoolYear != null)
                 {
@@ -172,6 +174,8 @@ namespace Chalkable.BusinessLogic.Services
                             v = Guid.Parse(sl[i]);
                         else if (propertyInfo.PropertyType == typeof (DateTime) || propertyInfo.PropertyType == typeof (DateTime?))
                             v = DateTime.Parse(sl[i]);
+                        else if (propertyInfo.PropertyType == typeof(bool) || propertyInfo.PropertyType == typeof(bool?))
+                            v = bool.Parse(sl[i]);
                         else
                             v = sl[i];
                         propertyInfo.SetValue(res, v);

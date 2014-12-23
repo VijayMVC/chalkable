@@ -4,16 +4,20 @@ selectedId = topData.getSelectedItemId()
 +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
     selectedItemId=selectedId
 ).classes-bar
-.student-grading-summary.student-grading-class-summary
+.profile-page
     clazz = self.getClazz()
     if clazz && self.getCurrentMarkingPeriod() && clazz.getTeacher()
-        h1
-            div
-                +PersonImg(clazz.getTeacher(), 47)
-            =clazz.getName()
-            .mp-info
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(clazz.getTeacher(), 140)
+                    .grades-container
+            #student-info-panel.right-block.panel-block
+                displayName =clazz.getName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
                 -mp=self.getCurrentMarkingPeriod()
-                =mp.getName() + mp.getStartDate().format(' M d - ') + mp.getEndDate().format('M d')
+                .status=mp.getName() + mp.getStartDate().format(' M d - ') + mp.getEndDate().format('M d')
+
     if self.getAnnTypesGradeStats()
         .chart-top-legend
             each item,i in self.getAnnTypesGradeStats()
@@ -57,9 +61,7 @@ selectedId = topData.getSelectedItemId()
             gradingPeriodId = self.getGradingPeriodId()
         )
     if self.announcements
-        h1=Msg.Recently_Graded_Items
-
-        .not-transparent
+        +CloseOpen(Msg.Recently_Graded_Items)
             +ListView(self.announcements)(
                 infiniteScroll = true,
                 needGoToButton = true,

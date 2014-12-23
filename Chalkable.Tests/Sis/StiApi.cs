@@ -50,8 +50,8 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void Test3()
         {
-            //var hash = UserService.PasswordMd5("Hellowebapps1!");
-            //Debug.WriteLine(hash);
+            var hash = UserService.PasswordMd5("tester");
+            Debug.WriteLine(hash);
         }
     }
 }

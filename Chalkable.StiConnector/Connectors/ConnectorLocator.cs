@@ -92,15 +92,20 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
-                 
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                var msg = reader.ReadToEnd();
-                if (ex.Response is HttpWebResponse)
+                if (ex.Response != null)
                 {
-                    HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
-                    throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
+                    var reader = new StreamReader(ex.Response.GetResponseStream());
+
+                    var msg = reader.ReadToEnd();
+                    if (ex.Response is HttpWebResponse)
+                    {
+                        HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+                        throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
+                    }
+                    throw new ChalkableException(ex.Message + Environment.NewLine + msg);    
                 }
-                throw new ChalkableException(ex.Message + Environment.NewLine + msg);
+                throw new ChalkableException(ex.Message);
+
             }
             finally
             {
