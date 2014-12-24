@@ -105,7 +105,7 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10.sub-row
                                     data-tooltip=Msg.Late + ' (' + studentInfo.getLateCount() + ')',
                                     style="width:" + self.getLateWidth(studentInfo)
                                 ).late
-                            if self.getLateWidth(studentInfo)
+                            if self.getAbsentWidth(studentInfo)
                                 div(
                                     data-tooltip=Msg.Absent + ' (' + studentInfo.getAbsentCount() + ')',
                                     style="width:" + self.getAbsentWidth(studentInfo)
