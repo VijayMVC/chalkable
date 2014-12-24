@@ -1,0 +1,19 @@
+mixin ReportCell(value)
+    .cell
+        div(data-tooltip=value, data-tooltip-type="overflow").text=value
+
+.grid
+    +Hidden('announcementIds', self.getAnnouncementIds())
+    .row.header
+        .cell
+            +Checkbox('allchecks', true).all-checkboxes
+        .cell= Msg.Date
+        .cell= Msg.Category
+        .cell= Msg.Activity
+    each announcement in self.getAnnouncements()
+        .row
+            div(data-id=announcement.getId().valueOf()).cell
+                +Checkbox('announcementId', true)
+            +ReportCell(announcement.getExpiresDate().format('mm/dd/yy'))
+            +ReportCell(announcement.getAnnouncementTypeName())
+            +ReportCell(announcement.getTitle())

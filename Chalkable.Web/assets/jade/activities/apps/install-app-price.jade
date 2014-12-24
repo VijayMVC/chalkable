@@ -1,0 +1,9 @@
+price = self.getPrice() > 0 ? "$" + self.formatPrice(self.getPrice()) : "Free"
+totalPrice = self.getTotalPrice() > 0 ? "$" + self.formatPrice(self.getTotalPrice()) : "Free"
+
+.price-item
+    span.price-header Price:
+    span.price= price + "(x " + self.getTotalPersonsCount() + ")"
+.price-item.last
+    span.price-header TOT:
+    span.price= totalPrice
