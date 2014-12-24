@@ -5,7 +5,11 @@
     if period.getClassId()
         .class-name
             h3.day-day
-                +ActionLink('class', 'info', period.getClassId().valueOf())=period.getClassName()
+                -console.log('role id', self.getCurrentUser().getRole().getId())
+                if self.getCurrentUser().getRole().getId() != chlk.models.common.RoleEnum.STUDENT.valueOf()
+                    +ActionLink('class', 'info', period.getClassId().valueOf())=period.getClassName()
+                else
+                    span=period.getClassName()
     .info
         if roomNumber
             .day-down Rm #{roomNumber}
