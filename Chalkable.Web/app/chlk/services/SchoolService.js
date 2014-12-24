@@ -18,15 +18,16 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.SchoolService */
     CLASS(
         'SchoolService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.DistrictId, Number, Boolean, Boolean]],
-            ria.async.Future, function getSchools(districtId, start_, demoOnly_, unimportedOnly_) {
+            [[chlk.models.id.DistrictId, Number, Number]],
+            ria.async.Future, function getSchools(districtId, start_, count_) {
                 return this.getPaginatedList('School/List.json', chlk.models.school.School, {
                     start: start_,
                     districtId: districtId.valueOf(),
-                    demoOnly: demoOnly_,
-                    unimportedOnly: unimportedOnly_
+                    count: count_
                 });
             },
+
+
             [[chlk.models.id.DistrictId]],
             ria.async.Future, function getSchoolsForImport(districtId) {
                 return this.getPaginatedList('School/GetSchoolsForImport.json', chlk.models.schoolImport.School, {
@@ -85,6 +86,15 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function getTimezones() {
                 return this.getPaginatedList('School/ListTimezones.json', chlk.models.school.Timezone, {});
+            },
+
+            [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],
+            ria.async.Future, function updateStudyCenter(districtId_, schoolId_, enabledTill_){
+                return this.post('School/UpdateStudyCenterEnabled.json', Boolean,{
+                    districtId: districtId_ && districtId_.valueOf(),
+                    schoolId: schoolId_ && schoolId_.valueOf(),
+                    enabledTill: enabledTill_ && enabledTill_.toStandardFormat()
+                });
             }
         ])
 });

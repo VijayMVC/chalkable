@@ -11,9 +11,11 @@ namespace Chalkable.Web.Models.SchoolsViewData
         //public string SchoolUrl { get; set; }
         public bool SendEmailNotifications { get; set; }
         //public int ImportSystemType { get; set; }
+        public DateTime? StudyCenterEnabledTill { get; set; }
         
         protected SchoolViewData(School school) : base(school)
         {
+            StudyCenterEnabledTill = school.StudyCenterEnabledTill;
         }
 
         public static new SchoolViewData Create(School school)

@@ -3,7 +3,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.services.GradeLevelService');
-
+REQUIRE('chlk.services.DistrictService');
 
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
@@ -12,6 +12,7 @@ REQUIRE('chlk.controls.ActionLinkControl');
 REQUIRE('chlk.activities.school.SchoolSisPage');
 REQUIRE('chlk.activities.school.SchoolsListPage');
 REQUIRE('chlk.activities.school.ImportSchoolDialog');
+REQUIRE('chlk.activities.school.UpgradeDistrictsPage');
 
 REQUIRE('chlk.models.school.SchoolPeople');
 REQUIRE('chlk.models.district.District');
@@ -19,6 +20,9 @@ REQUIRE('chlk.models.id.DistrictId');
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.schoolImport.ImportTaskData');
 REQUIRE('chlk.models.common.NameId');
+REQUIRE('chlk.models.common.ChlkDate');
+
+REQUIRE('chlk.models.school.UpgradeDistrictsViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -35,30 +39,31 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
+        [ria.mvc.Inject],
+        chlk.services.DistrictService, 'districtService',
 
         [chlk.controllers.SidebarButton('schools')],
         [[chlk.models.id.DistrictId, Number]],
         function pageAction(districtId_, start_) {
-            var result = this.schoolService
-                .getSchools(districtId_, start_ || 0)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
-                });
-            return this.UpdateView(chlk.activities.school.SchoolsListPage, result);
+            return this.UpdateView(chlk.activities.school.SchoolsListPage, this.getSchools_(districtId_, start_ || 0));
         },
 
         [chlk.controllers.SidebarButton('schools')],
         [[chlk.models.id.DistrictId, Number]],
         function listAction(districtId, pageIndex_) {
-            var result = this.schoolService
-                .getSchools(districtId, pageIndex_ | 0,  false, false)
+            return this.PushView(chlk.activities.school.SchoolsListPage, this.getSchools_(districtId, pageIndex_ | 0));
+        },
+
+        [[chlk.models.id.DistrictId, Number, Number]],
+        ria.async.Future, function getSchools_(distrcitId, start_, count_){
+            return this.schoolService
+                .getSchools(distrcitId, start_, count_)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(districtId, data));
-                });
-            return this.PushView(chlk.activities.school.SchoolsListPage, result);
+                    return new ria.async.DeferredData(new chlk.models.school.SchoolListViewData(distrcitId, data));
+                }, this);
         },
+
 
         [[chlk.models.id.DistrictId]],
         VOID, function importAction(districtId) {
@@ -182,6 +187,39 @@ NAMESPACE('chlk.controllers', function (){
         function actionLinkAction(form_){
             if(confirm(form_.index + ' ' + form_.email))
                 this.context.getDefaultView().getCurrent().close();
-        }
+        },
+
+        function tryToUpgradeSchoolsSysAdminAction(){
+            var res = this.districtService.getDistricts()
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.school.UpgradeDistrictsViewData(data, null);
+                }, this);
+            return this.PushView(chlk.activities.school.UpgradeDistrictsPage, res);
+        },
+
+        [[chlk.models.id.DistrictId]],
+        function showSchoolsForUpgradeAction(districtId){
+            var res = this.getSchools_(districtId, 0, 10000);
+            return this.UpdateView(chlk.activities.school.UpgradeDistrictsPage, res);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.common.ChlkDate]],
+        function upgradeDistrictSysAdminAction(distrcitId, tillDate){
+            return this.schoolService.updateStudyCenter(distrcitId, null, tillDate)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
+                }, this);
+        },
+
+        [[chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],
+        function upgradeSchoolSysAdminAction(schoolId, tillDate){
+            return this.schoolService.updateStudyCenter(null, schoolId, tillDate)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
+                }, this);
+        },
     ])
 });

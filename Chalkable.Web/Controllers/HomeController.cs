@@ -309,7 +309,6 @@ namespace Chalkable.Web.Controllers
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailsList.Select(x => x.Id).ToList());
             foreach (var classDetails in classDetailsList)
             {
-
                 int classId = classDetails.Id;
                 var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
                 classesAdvancedData.Add(new

@@ -12,7 +12,7 @@
             .th URL
             .th
         +GridBody()
-            each item in self.items.getItems()
+            each item in self.getPaginatedSchools().getItems()
                 +GridRow()
                     .td= item.getName()
                     .td= item.getId().valueOf()

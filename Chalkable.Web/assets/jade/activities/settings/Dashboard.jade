@@ -21,6 +21,9 @@
         .item
             if self.isDbMaintenanceVisible()
                 +ActionLink('dbmaintenance', 'listBackups') Db Maintenance
+        .item
+            if self.isUpgradeSchoolsVisible()
+                +ActionLink('schools', 'tryToUpgradeSchools') Upgrade Districts and Schools
 
 
 

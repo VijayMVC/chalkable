@@ -34,7 +34,7 @@ NAMESPACE('chlk.controllers', function (){
                 dashboard.setPreferencesVisible(true);
                 dashboard.setAppCategoriesVisible(true);
                 dashboard.setDepartmentsVisible(true);
-
+                dashboard.setUpgradeSchoolsVisible(true);
                 return this.PushView(chlk.activities.settings.DashboardPage, ria.async.DeferredData(dashboard));
             },
 

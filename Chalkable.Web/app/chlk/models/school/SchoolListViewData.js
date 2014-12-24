@@ -7,13 +7,17 @@ REQUIRE('chlk.models.id.DistrictId');
     /** @class chlk.models.school.SchoolListViewData*/
      CLASS(
         'SchoolListViewData', [
-            chlk.models.common.PaginatedList, 'items',
+            chlk.models.common.PaginatedList, 'paginatedSchools',
             chlk.models.id.DistrictId, 'districtId',
 
             [[chlk.models.id.DistrictId, chlk.models.common.PaginatedList]],
-            function $(districtId, items){
+            function $(districtId, paginatedSchools){
                 BASE();
-                this.setItems(items);
+
+                VALIDATE_ARG('paginatedSchools', [ClassOf(chlk.models.school.School)], paginatedSchools.getItemClass());
+                VALIDATE_ARG('paginatedSchools', [ArrayOf(chlk.models.school.School)], paginatedSchools.getItems());
+
+                this.setPaginatedSchools(paginatedSchools);
                 this.setDistrictId(districtId);
             }
 

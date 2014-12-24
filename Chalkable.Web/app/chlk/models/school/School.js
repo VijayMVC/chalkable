@@ -23,6 +23,15 @@ NAMESPACE('chlk.models.school', function () {
             String, 'timezoneId',
             ArrayOf(chlk.models.school.Timezone), 'timezones',
             [ria.serialize.SerializeProperty('districtid')],
-            chlk.models.id.DistrictId, 'districtId'
+            chlk.models.id.DistrictId, 'districtId',
+
+            [ria.serialize.SerializeProperty('studycenterenabledtill')],
+            chlk.models.common.ChlkDate, 'studyCenterEnabledTill',
+
+            READONLY, Boolean, 'upgraded',
+            Boolean, function isUpgraded(){
+                var upgradedDate = this.getStudyCenterEnabledTill();
+                return upgradedDate && upgradedDate.toStandardFormat() ==  (new chlk.models.common.ChlkDate()).toStandardFormat();
+            }
         ]);
 });
