@@ -31,6 +31,11 @@ NAMESPACE('chlk.controllers', function (){
         [[Array]],
         function Permissions(permissions){});
 
+    /** @class chlk.controllers.StudyCenterEnabled*/
+    ANNOTATION(
+        function StudyCenterEnabled(){});
+
+
     function toCamelCase(str) {
         return str.replace(/(\-[a-z])/g, function($1){
             return $1.substring(1).toUpperCase();
@@ -46,6 +51,15 @@ NAMESPACE('chlk.controllers', function (){
             function $(permissions, inner_) {
                 BASE('Permissions ' + JSON.stringify(permissions) + ' is required.', inner_);
                 this.permissions = permissions;
+            }
+        ]);
+
+    /** @class chlk.controllers.StudyCenterDisabledException*/
+    EXCEPTION(
+        'StudyCenterDisabledException', [
+            [[Object]],
+            function $(inner_) {
+                BASE('Required study center access', inner_);
             }
         ]);
 
@@ -256,6 +270,10 @@ NAMESPACE('chlk.controllers', function (){
                    throw new chlk.controllers.MissingPermissionException(missingPermissions);
                }
 
+               var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED);
+               if(!this.checkStudyCenterEnabled_(method,isStudyCenterEnabled))
+                   throw new chlk.controllers.StudyCenterDisabledException();
+
                return method;
            },
 
@@ -288,6 +306,12 @@ NAMESPACE('chlk.controllers', function (){
                    });
            },
 
+           [[ria.reflection.ReflectionMethod, Boolean]],
+           Boolean, function checkStudyCenterEnabled_(method, isStudyCenterEnabled){
+               var annotations = method.findAnnotation(chlk.controllers.StudyCenterEnabled);
+               return !annotations.length || isStudyCenterEnabled == true;
+           },
+
            OVERRIDE, VOID, function postDispatchAction_() {
                BASE();
 
@@ -316,9 +340,16 @@ NAMESPACE('chlk.controllers', function (){
                        state.setController('error');
                        state.setAction('permissions');
                        state.setParams([e.getPermissions()]);
-                   } else {
-                       throw e;
+                       return;
                    }
+                   if(e instanceof chlk.controllers.StudyCenterDisabledException){
+                       state.setDispatched(false);
+                       state.setController('error');
+                       state.setAction('studyCenterAccess');
+                       state.setParams([]);
+                       return;
+                   }
+                   throw e;
                }
            }
    ])

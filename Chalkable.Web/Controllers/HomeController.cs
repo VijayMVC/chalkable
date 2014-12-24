@@ -196,6 +196,7 @@ namespace Chalkable.Web.Controllers
             var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss tt");
+            ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);

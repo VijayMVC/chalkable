@@ -375,6 +375,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
+
+        [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
