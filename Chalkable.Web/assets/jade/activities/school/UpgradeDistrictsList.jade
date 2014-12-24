@@ -20,4 +20,5 @@
                            placeholder='Upgraded till date'
                         ).upgrade-district-date-picker
                      +Button().special-button.blue-button.upgrade-district-btn Upgrade District
+                     +ActionLinkButton('schools', 'upgradeDistrict', item.getId(), null) Un-upgrade District
                   .schools-list-container(data-districtId=item.getId().valueOf())
