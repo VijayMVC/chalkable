@@ -1,0 +1,17 @@
+.schools.grid-container.schools-individual
+   each school in self.getPaginatedSchools().getItems()
+      .row.school-info
+         span(class= school.isUpgraded() ? '.saved-icon' : '').title.school-name=school.getName() + ' School'
+         .date-picker-container
+            +DatePicker('tillDate', school.getStudyCenterEnabledTill())(
+               data-options={
+                  showOtherMonths: true,
+                  selectOtherMonths: true
+               },
+               data-controller='schools',
+               data-action='upgradeSchool',
+               data-params=[school.getId()],
+               class='validate[required]',
+               placeholder='Upgraded till date'
+            ).upgrade-school-date-picker
+         +Button().special-button.blue-button.upgrade-school-btn Upgrade School
