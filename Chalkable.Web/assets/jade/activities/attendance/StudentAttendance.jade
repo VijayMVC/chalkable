@@ -22,7 +22,7 @@ div(
     //+Hidden('attendanceReasonDescription', reason && reason.getDescription())
     .attendance-option
         =(reason ? reason.getDescription() : '')
-    div(class=name.toLowerCase().replace(/\//g, '-')).attendance-text
+    div(data-tooltip=name, class=name.toLowerCase().replace(/\//g, '-')).attendance-text
         =(value == valuesEnum.NA.valueOf() ? '_______' : name)
     .attendance-combo.buttons
         .buttons-group
