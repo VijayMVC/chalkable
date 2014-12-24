@@ -113,6 +113,8 @@ NAMESPACE('chlk.controllers', function (){
                        }]), null;
                     if(response.exceptiontype == 'NoAnnouncementException')
                        return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
+                    if(response.exceptiontype == 'NoClassAnnouncementTypeException')
+                       return this.redirectToErrorPage_(error.toString(), 'error', 'createAnnouncementError', []);
                }
                return this.redirectToErrorPage_(error.toString(), 'error', 'error404', []);
            },
