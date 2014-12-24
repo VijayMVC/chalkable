@@ -7,6 +7,7 @@ namespace Chalkable.Web.Common
 {
     public static class ViewConstants
     {
+        public const string STUDY_CENTER_ENABLED = "StudyCenterEnabled";
         public const string SCHOOL_OPTIONS="SchoolOptions";
         public const string CLASSES = "Classes";
         public const string CLASSES_ADV_DATA = "ClassesAdvancedData";

@@ -300,9 +300,10 @@
             var alphaGrades = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ALPHA_GRADES));
             var alternateScores = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ALTERNATE_SCORES));
             var gradingComments = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_COMMMENTS));
+            var studyCenterEnabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.STUDY_CENTER_ENABLED)';
             var DEMO_SCHOOL = @isDemoSchool.ToString().ToLowerInvariant();
             var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
-            
+
             var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
         </script>
     

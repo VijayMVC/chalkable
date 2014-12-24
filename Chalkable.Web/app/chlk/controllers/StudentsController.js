@@ -328,6 +328,7 @@ NAMESPACE('chlk.controllers', function (){
                 );
             },
 
+            [chlk.controllers.StudyCenterEnabled()],
             [[chlk.models.id.SchoolPersonId]],
             function explorerAction(personId){
                 var res = this.studentService.getExplorer(personId)

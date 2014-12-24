@@ -128,6 +128,8 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
                 this.saveInSession(session, ChlkSessionConstants.CLASSES_TO_FILTER, ArrayOf(chlk.models.classes.ClassForTopBar));
 
+                this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
+
                 var newClasses = session.get(ChlkSessionConstants.CLASSES_TO_FILTER, []).slice();
                 newClasses.unshift(chlk.lib.serialize.ChlkJsonSerializer().deserialize({
                     name: 'All',
