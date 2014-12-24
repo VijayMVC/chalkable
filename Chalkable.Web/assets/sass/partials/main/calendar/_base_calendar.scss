@@ -1,0 +1,30 @@
+BODY {
+  DIV.page {
+    #content {
+      > DIV {
+        #main-wrapper {
+          #main {
+            DIV.chlk-calendar {
+              .calendar-body{
+
+                .period-info{
+                  position: absolute;
+                  left: -10px;
+                  font-size: 16px;
+                  color: #DE9155;
+                  background: url(images/common/week-period-bg.png) no-repeat;
+                  height: 25px;
+                  width: 30px;
+                  font-family: Arial;
+                  font-weight: bold;
+                  text-align: center;
+                  padding-top: 1px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
