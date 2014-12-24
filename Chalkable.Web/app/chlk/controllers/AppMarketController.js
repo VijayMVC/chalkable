@@ -141,6 +141,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[Boolean]],
         function myAppsAction(isEdit_) {
             var isEdit = isEdit_ ? isEdit_ : false;
@@ -294,6 +295,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId]],
         function tryToInstallAction(appId) {
             var appInfo = this.appMarketService
@@ -308,6 +310,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
         function tryToQuickInstallAction(applicationId, classId, announcementId){
             var res = this.appMarketService
@@ -372,6 +375,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.apps.AppInstallPostData]],
         function quickInstallAction(appInstallData){
             var res = this.install_(appInstallData, 'quickInstallComplete'
@@ -381,6 +385,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
             switch(appInstallData.getSubmitActionType()){

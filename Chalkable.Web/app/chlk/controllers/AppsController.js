@@ -456,6 +456,8 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
+
+        [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
@@ -472,6 +474,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean]],
         function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned){
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
@@ -485,6 +488,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
@@ -504,6 +508,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
+
+        [chlk.controllers.StudyCenterEnabled()],
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId]],
         function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_) {
             var result = this.appsService

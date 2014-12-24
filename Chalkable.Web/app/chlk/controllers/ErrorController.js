@@ -55,6 +55,11 @@ NAMESPACE('chlk.controllers', function (){
                 var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(true));
                 var result = new ria.async.DeferredData(new chlk.models.common.PermissionsError(topModel, null, permissions));
                 return this.PushView(chlk.activities.common.PermissionsErrorPage, result);
+            },
+
+            function studyCenterAccessAction(){
+                var message = 'Current school doesn\'t support applications, study center, profile explorer';
+                return this.generalServerErrorAction(message);
             }
     ])
 });
