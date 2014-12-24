@@ -93,7 +93,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('School/UpdateStudyCenterEnabled.json', Boolean,{
                     districtId: districtId_ && districtId_.valueOf(),
                     schoolId: schoolId_ && schoolId_.valueOf(),
-                    enabledTill_: enabledTill_ && enabledTill_.toStandardFormat()
+                    enabledTill: enabledTill_ && enabledTill_.toStandardFormat()
                 });
             }
         ])

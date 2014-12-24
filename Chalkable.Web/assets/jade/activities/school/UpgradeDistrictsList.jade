@@ -16,7 +16,8 @@
                            data-controller='schools',
                            data-action='upgradeDistrict',
                            data-params=[item.getId()],
-                           class='validate[required]'
+                           class='validate[required]',
+                           placeholder='Upgraded till date'
                         ).upgrade-district-date-picker
                      +Button().special-button.blue-button.upgrade-district-btn Upgrade District
                   .schools-list-container(data-districtId=item.getId().valueOf())
