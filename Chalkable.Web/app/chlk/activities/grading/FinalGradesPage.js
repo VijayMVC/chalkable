@@ -617,7 +617,11 @@ NAMESPACE('chlk.activities.grading', function () {
                 slideTimeout = setTimeout(function(){
                     var target = node.find('.attachments-container:eq(' + index + ')');
                     if(!target.hasClass('opened')){
-                        node.find('.attachments-container:eq(' + index + ')').slideDown(500);
+                        var container = node.find('.attachments-container:eq(' + index + ')');
+                        container.slideDown(500);
+                        setTimeout(function(){
+                            container.find('.lr-toolbar').trigger(chlk.controls.LRToolbarEvents.UPDATE.valueOf());
+                        }, 600);
                         row.find('.grade-triangle').addClass('down');
                     }
                 }, 500);
