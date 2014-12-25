@@ -1,5 +1,5 @@
 standards = self.getItemStandards() || []
     each standard in standards
-        button(data-tooltip = standard.getDescription()).grey-button.same-on-hover
+        button(data-tooltip = standard.getDescription(), type="button").grey-button.same-on-hover
             = standard.getName()
             +ActionLink('announcement', 'removeStandard', self.getAnnouncementId(), standard.getStandardId()).remove-standard
