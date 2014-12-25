@@ -195,7 +195,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 StudentId = studentId,
                 GradingPeriodId = gradingPeriodId,
                 EnteredAverageValue = averageValue,
-                SectionId = classId
+                SectionId = classId,
+                IsGradingPeriodAverage = true
             };
 
             decimal numericScore = -1;
@@ -248,7 +249,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             if (note != null)
                 studentAverage.ReportCardNote = note;
-            studentAverage = Storage.StiGradeBookStorage.UpdateStudentAverage(classId, studentAverage);
+            studentAverage = Storage.StiGradeBookStorage.UpdateStudentAverage(studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
         }
 
