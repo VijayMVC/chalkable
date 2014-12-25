@@ -8,7 +8,6 @@ NAMESPACE('chlk.models.classes', function () {
     /** @class chlk.models.classes.ClassForWeekMask*/
     CLASS(
         'ClassForWeekMask', [
-            [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId',
 
             ArrayOf(Number), 'mask',

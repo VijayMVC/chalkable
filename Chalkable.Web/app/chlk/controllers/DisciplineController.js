@@ -220,8 +220,8 @@ NAMESPACE('chlk.controllers', function(){
                             if(item.getStudentId() == data.getStudentId()){
                                 item.setDisciplineTypes(data.getDisciplineTypes());
                                 item.setId(data.getId());
+                                item.setDescription(data.getDescription());
                             }
-
                         });
                         this.getContext().getSession().set(ChlkSessionConstants.DISCIPLINE_PAGE_DATA, dispModel);
                         model.setId(data.getId());

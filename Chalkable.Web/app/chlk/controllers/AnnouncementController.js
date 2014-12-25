@@ -230,10 +230,10 @@ NAMESPACE('chlk.controllers', function (){
                     if(currentClassInfo && classId_ && classId_ == item.getId()){
                         classInfo = currentClassInfo;
                         model.setClassInfo(classInfo);
-                        if(savedClassInfo && savedClassInfo.getId() == item.getId()){
+                        if(savedClassInfo && savedClassInfo.getClassId() == item.getId()){
                             currentClassInfo = savedClassInfo;
                         }else{
-                            var hasType = types.filter(function(item){return item.getId() == announcementTypeId_}).length;
+                            var hasType = types.filter(function(type){return type.getId() == announcementTypeId_}).length;
                             if(!hasType && announcement.getState() && currentClassInfo && announcementTypeId_){
                                 currentClassInfo.getTypesByClass().push(new chlk.models.announcement.ClassAnnouncementType(announcementTypeId_, announcement.getAnnouncementTypeName()));
                                 this.getContext().getSession().set('classInfo', currentClassInfo);
