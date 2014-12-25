@@ -3,7 +3,7 @@ totalPrice = self.getTotalPrice() > 0 ? "$" + self.formatPrice(self.getTotalPric
 
 .price-item
     span.price-header Price:
-    span.price= price + "(x " + self.getTotalPersonsCount() + ")"
+    span.price= price + (price > 0  ? "(x " + self.getTotalPersonsCount() + ")" : "")
 .price-item.last
     span.price-header TOT:
     span.price= totalPrice

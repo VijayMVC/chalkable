@@ -13,28 +13,25 @@ NAMESPACE('chlk.activities.apps', function () {
 
         'InstallAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
-            [ria.mvc.DomEventBind('click', '.chlk-button')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function submitClick(node, event){
-
+            VOID, function prepareAppInstallPostData_(){
                 var ids = [{
-                        id: chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ,
-                        name: 'classes' }, {
-                        id:chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL,
-                       name: 'gradeLevels'
-                    }, {
-                        id: chlk.models.apps.AppInstallGroupTypeEnum.DEPARTMENT,
-                        name: 'departments'
-                    }, {
-                        id: chlk.models.apps.AppInstallGroupTypeEnum.ROLE,
-                        name: 'roles'
-                    }, {
-                        id: chlk.models.apps.AppInstallGroupTypeEnum.ALL,
-                        name: 'forAll'
-                    }, {
-                        id: chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
-                        name: 'currentPerson'
-                    }
+                    id: chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ,
+                    name: 'classes' }, {
+                    id:chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL,
+                    name: 'gradeLevels'
+                }, {
+                    id: chlk.models.apps.AppInstallGroupTypeEnum.DEPARTMENT,
+                    name: 'departments'
+                }, {
+                    id: chlk.models.apps.AppInstallGroupTypeEnum.ROLE,
+                    name: 'roles'
+                }, {
+                    id: chlk.models.apps.AppInstallGroupTypeEnum.ALL,
+                    name: 'forAll'
+                }, {
+                    id: chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
+                    name: 'currentPerson'
+                }
                 ];
 
                 for(var i = 0; i < ids.length; ++i){
@@ -48,7 +45,12 @@ NAMESPACE('chlk.activities.apps', function () {
 
                     this.dom.find('input[name=' + ids[i].name + ']').setValue(selectedIds.join(','));
                 }
+            },
 
+            [ria.mvc.DomEventBind('click', '.chlk-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function submitClick(node, event){
+                this.prepareAppInstallPostData_();
                 this.dom.find('input[name=submitActionType]').setValue('install');
             },
 
@@ -83,8 +85,8 @@ NAMESPACE('chlk.activities.apps', function () {
 
                 this.dom.find('input[name=submitActionType]').setValue('getAppPrice');
 
-
                 setTimeout(function(){
+                    this.prepareAppInstallPostData_();
                     this.dom.find('form').trigger('submit');
                 }.bind(this), 3000);
 

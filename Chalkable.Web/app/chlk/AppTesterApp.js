@@ -3,7 +3,7 @@ REQUIRE('chlk.controllers.AppsController');
 
 NAMESPACE('chlk', function (){
 
-    /** @class chlk.SysAdminApp */
+    /** @class chlk.AppTesterApp */
     CLASS(
         'AppTesterApp', EXTENDS(chlk.BaseApp), [
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {
