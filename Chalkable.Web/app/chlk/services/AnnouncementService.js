@@ -132,7 +132,7 @@ NAMESPACE('chlk.services', function () {
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
                 }).catchException(ria.ajax.AjaxException, function (ex) {
                     if (ex.getStatus() == 500) {
-                        var res = JSON.parse(error.getResponse());
+                        var res = JSON.parse(ex.getResponse());
                         if(res.exceptiontype == 'NoClassAnnouncementTypeException')
                             throw chlk.services.NoClassAnnouncementTypeException(ex);
                     }
