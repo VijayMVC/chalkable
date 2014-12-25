@@ -12,7 +12,6 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
