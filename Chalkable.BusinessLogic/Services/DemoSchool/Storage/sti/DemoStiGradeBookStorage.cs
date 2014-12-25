@@ -17,20 +17,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
         }
 
-        public Gradebook Calculate(int classId, int gradingPeriodId)
-        {
-            var gb = data.First(x => x.Value.SectionId == classId && x.Value.StudentAverages.Select(y => y.GradingPeriodId).ToList().Contains(gradingPeriodId)).Value;
-            return PrepareGradeBook(classId, gb);
-        }
-
-        private Gradebook PrepareGradeBook(int classId, Gradebook gb)
-        {
-            gb.Activities = Storage.StiActivityStorage.GetAll().Where(x => x.SectionId == classId);
-            var activityIds = gb.Activities.Select(x => x.Id).ToList();
-            gb.Scores = Storage.StiActivityScoreStorage.GetAll().Where(x => activityIds.Contains(x.ActivityId));
-            return gb;
-        }
-
         public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType = null, int? gradingPeriodId = null, int? standardId = null)
         {
             var gradeBooks = data.Select(x => x.Value);
@@ -40,7 +26,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             if (classAnnouncementType.HasValue)
             {
                 gradeBooks = gradeBooks.Where(gb => gb.Activities.Count(x => x.CategoryId == classAnnouncementType.Value) > 0);
-
             }
 
             if (standardId.HasValue)
@@ -56,33 +41,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                         x => x.StudentAverages.Select(y => y.GradingPeriodId).ToList().Contains(gradingPeriodId));
             }
 
-
-            var gbOld = gradeBooks.FirstOrDefault();
-
-
-            var defaultStudentAvgs = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery()
-            {
-                ClassId = classId
-            }).Select(x => new StudentAverage()
-            {
-                CalculatedNumericAverage = 100,
-                EnteredNumericAverage = 100,
-                IsGradingPeriodAverage = true,
-                GradingPeriodId = gradingPeriodId,
-                StudentId = x.PersonRef
-            });
-            
-            var gradeBook = new Gradebook()
-            {
-                SectionId = classId,
-                Scores = gbOld != null ? gbOld.Scores : new List<Score>(),
-                Options = gbOld != null ? gbOld.Options : new ClassroomOption(),
-                Activities = gbOld != null ? gbOld.Activities : new List<Activity>(),
-                StudentAverages = gbOld != null ? gbOld.StudentAverages : defaultStudentAvgs
-            };
-
-
-            PrepareGradeBook(classId, gradeBook);
+            var gradeBook = gradeBooks.First();
+            gradeBook.Activities = Storage.StiActivityStorage.GetAll().Where(x => x.SectionId == classId);
+            var activityIds = gradeBook.Activities.Select(x => x.Id).ToList();
+            gradeBook.Scores = Storage.StiActivityScoreStorage.GetAll().Where(x => activityIds.Contains(x.ActivityId));
 
             if (classAnnouncementType.HasValue)
             {
