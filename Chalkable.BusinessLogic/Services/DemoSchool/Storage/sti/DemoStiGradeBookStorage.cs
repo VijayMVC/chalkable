@@ -62,9 +62,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             return new List<string>();
         }
 
-        public StudentAverage UpdateStudentAverage(int classId, StudentAverage studentAverage)
+        public StudentAverage UpdateStudentAverage(StudentAverage studentAverage)
         {
-            var gb = data.First(x => x.Value.SectionId == classId).Value;
+            var gb = GetBySectionAndGradingPeriod(studentAverage.SectionId, null, studentAverage.GradingPeriodId);
 
             var avgs = gb.StudentAverages.ToList();
 
@@ -73,13 +73,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             for (var i = 0; i < avgs.Count; ++i)
             {
                 var avg = avgs[i];
-                if (avg.SectionId == classId && 
-                    avg.StudentId == studentAverage.StudentId && 
-                    avg.GradingPeriodId == studentAverage.GradingPeriodId)
-                {
-                    id = i;
-                    break;
-                }
+                if (avg.SectionId != studentAverage.SectionId || avg.StudentId != studentAverage.StudentId ||
+                    avg.GradingPeriodId != studentAverage.GradingPeriodId) continue;
+                id = i;
             }
 
             if (id == -1)
