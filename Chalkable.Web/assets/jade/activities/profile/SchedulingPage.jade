@@ -1,0 +1,22 @@
+-var schedule = self.getUser()
+-var isStudent = self.getUser().getRole().getName() == 'Student'
+.profile-page.scheduling-view
+    h2.page-title= isStudent ? Msg.Student_profile : Msg.Profile
+    if isStudent
+        +ProfileTopBar(self, 'schedule')
+    else
+        +UserProfileTopBar(self, 'schedule')
+
+    #top-panel
+        #avatar-photo-conainer.left-block.panel-block
+            .img-container
+                +PersonImg(schedule, 140, true)
+                .grades-container
+        #student-info-panel.right-block.panel-block
+            displayName =schedule.getDisplayName() || schedule.getFullName()
+            h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+            .status=self.getPersonEnrollmentStatus(self.getUser(), schedule.getClassesNumber())
+
+    calendarData = self.getProfileScheduleTplParams(self.getUser(), self.getCurrentAction())
+    .calendar-section
+        +Calendar(self, self.bodyTpl, self.calendar, calendarData.controllerName, calendarData.actions, [schedule.getId()])
