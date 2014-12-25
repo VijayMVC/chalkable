@@ -1,0 +1,8 @@
+mixin DatePicker(name, value_)
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="text")(attributes)
+
+
+mixin ButtonDatePicker(name, text_, value_)
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="button", text=text_)(attributes).chlk-button
