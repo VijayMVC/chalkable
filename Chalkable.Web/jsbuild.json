@@ -53,7 +53,20 @@
             "jQuery",
             "jade"
         ]
-    },{
+    }, {
+        "name": "AppTesterApp",
+        "app": "chlk.AppTesterApp",
+        "out": "app/AppTesterApp.compiled.js",
+
+        "prepend": [
+            "lib/jade.runtime.js"
+        ],
+
+        "globals": [
+            "jQuery",
+            "jade"
+        ]
+    }, {
         "name": "AdminApp",
         "app": "chlk.AdminApp",
         "out": "app/AdminApp.compiled.js",
