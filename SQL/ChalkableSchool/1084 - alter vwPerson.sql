@@ -40,7 +40,5 @@ SELECT
 	Staff.UserId as UserId
 FROM Staff
 JOIN Person on Person.Id = Staff.Id
-JOIN StaffSchool on StaffSchool.StaffRef = Staff.UserId
-
-
+JOIN StaffSchool on StaffSchool.StaffRef = Staff.Id
 GO
