@@ -10,6 +10,7 @@ NAMESPACE('chlk.activities.announcement', function(){
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.StandardsListTpl, '', '.standards-row', ria.mvc.PartialUpdateRuleActions.Append)],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AddStandardsTpl)],
         'AddStandardsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
+
             [ria.mvc.DomEventBind('click', '.column-cell')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function cellClick(node, event){
