@@ -2,18 +2,8 @@
    each school in self.getPaginatedSchools().getItems()
       .row.school-info
          span(class= school.isUpgraded() ? '.saved-icon' : '').title.school-name=school.getName() + ' School'
-         .date-picker-container
-            +DatePicker('tillDate', school.getStudyCenterEnabledTill())(
-               data-options={
-                  showOtherMonths: true,
-                  selectOtherMonths: true
-               },
-               data-controller='schools',
-               data-action='upgradeSchool',
-               data-params=[school.getId()],
-               class='validate[required]',
-               placeholder='Upgraded till date'
-            ).upgrade-school-date-picker
-         +Button().special-button.blue-button.upgrade-school-btn Upgrade School
+         span.upgraded-date=school.getStudyCenterEnabledTill() || ''
+         +ActionButton('schools', 'upgradeSchool', school.getId()).special-button.blue-button.upgrade-school-btn Upgrade School
+         -console.log(school.isUpgraded())
          if school.isUpgraded()
-            +ActionButton('schools', 'upgradeSchool', school.getId(), null).negative-button.special-button.red-button Un-upgrade School
+            +ActionButton('schools', 'downgradeSchool', school.getId()).negative-button.special-button.red-button Un-upgrade School

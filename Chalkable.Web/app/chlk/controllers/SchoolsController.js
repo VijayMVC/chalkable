@@ -204,22 +204,51 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.school.UpgradeDistrictsPage, res);
         },
 
-        [[chlk.models.id.DistrictId, chlk.models.common.ChlkDate]],
-        function upgradeDistrictSysAdminAction(distrcitId, tillDate){
-            return this.schoolService.updateStudyCenter(distrcitId, null, tillDate)
+        [[chlk.models.id.DistrictId]],
+        function upgradeDistrictSysAdminAction(distrcitId){
+            return this.upgradeSchools_(distrcitId, null);
+        },
+        [[chlk.models.id.SchoolId]],
+        function upgradeSchoolSysAdminAction(schoolId){
+            return this.upgradeSchools_(null, schoolId);
+        },
+        [[chlk.models.id.DistrictId]],
+        function downgradeDistrictSysAdminAction(distrcitId){
+            return this.downgradeSchools_(distrcitId, null);
+        },
+        [[chlk.models.id.SchoolId]],
+        function downgradeSchoolSysAdminAction(schoolId){
+            return this.downgradeSchools_(null, schoolId);
+        },
+
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
+        function upgradeSchools_(distrcitId, schoolId){
+            this.ShowPromptBox('Pleace choose upgrade till date', ''
+                , (new chlk.models.common.ChlkDate()).toStandardFormat()
+                , null, 'datepicker')
+                .then(function(selectedDate){
+                    var date = new chlk.models.common.ChlkDate(new Date(selectedDate));
+                    return this.upgradeDownGradeSchools_(distrcitId, schoolId, date);
+                }, this);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
+        function downgradeSchools_(distrcitId, schoolId){
+            this.ShowConfirmBox('Do you realy want to downGrade current school or district', '')
+                .then(function(data){
+                   return this.upgradeDownGradeSchools_(distrcitId, schoolId, null);
+                }, this);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],
+        function upgradeDownGradeSchools_(districtId, schoolId, tillDate){
+            return this.schoolService.updateStudyCenter(districtId, schoolId, tillDate)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
                 }, this);
         },
 
-        [[chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],
-        function upgradeSchoolSysAdminAction(schoolId, tillDate){
-            return this.schoolService.updateStudyCenter(null, schoolId, tillDate)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
-                }, this);
-        },
     ])
 });
