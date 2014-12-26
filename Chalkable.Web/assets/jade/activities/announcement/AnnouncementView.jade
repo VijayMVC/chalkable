@@ -37,7 +37,7 @@ mixin Glue_()
     h2.page-title: +Glue_(self.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), self.getClassName())
     .announcement-details-panel
         .details-container.silver-panel
-            if self.getUserRole().isStudent() && self.isStudentGraded()
+            if self.getUserRole().isStudent() && ( hasGrade || self.getComment() )
                 .comment-grade-container
                     .grade-value.right= self.displayStudentGradeValue()
                     .comment(

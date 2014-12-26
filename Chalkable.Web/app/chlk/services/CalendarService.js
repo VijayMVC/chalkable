@@ -74,15 +74,16 @@ NAMESPACE('chlk.services', function () {
                 return new ria.async.DeferredData(res);
             },
 
-            [[chlk.models.common.ChlkDate, Number]],
-            function getWeekDayInfo(date, periodNumber_){
-                var weekCalendarData = this.getContext().getSession().get(ChlkSessionConstants.WEEK_CALENDAR_DATA, []), res = null;
-                weekCalendarData.forEach(function(day){
-                    if(day.getDate().isSameDay(date))
-                        res = day;
-                });
-                if(periodNumber_ === 0 || periodNumber_ > 0)
-                    res = res.getAnnouncementPeriods()[periodNumber_];
+            [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+            function getWeekDayInfo(date, classId_){
+                var res = this.getContext()
+                    .getSession().get(ChlkSessionConstants.WEEK_CALENDAR_DATA, [])
+                    .filter(function(day){ return day.getDate().isSameDay(date) })[0];
+
+                if(classId_ != undefined)
+                    res = res.getAnnouncementPeriods()
+                        .filter(function (item) { return item.getPeriod().getClassId() == classId_ })[0];
+
                 return res;
             },
 

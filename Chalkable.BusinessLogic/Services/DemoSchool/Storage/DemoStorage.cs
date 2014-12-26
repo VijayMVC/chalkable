@@ -240,16 +240,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 IsGradingPeriodAverage = true,
                 GradingPeriodId = gradingPeriodId,
-                StudentId = x
+                StudentId = x,
+                SectionId = classId
             });
             StiGradeBookStorage.Add(new Gradebook()
             {
                 SectionId = classId,
-                Activities = new List<Activity>(),
-                Options = new Chalkable.StiConnector.Connectors.Model.ClassroomOption(),
-                Scores = new List<Score>(),
+                Options = new StiConnector.Connectors.Model.ClassroomOption(),
                 StudentAverages = studentAverages
             });
+
+
         }
 
 

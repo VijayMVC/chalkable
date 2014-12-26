@@ -62,18 +62,24 @@ NAMESPACE('chlk.controllers', function (){
         },*/
 
         [chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, Number, chlk.models.id.ClassId]],
-        function showWeekBarPopUpAction(date, periodNumber_, classId_) {
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, chlk.models.id.ClassId]],
+        function showWeekBarPopUpAction(date, periodClassId_, classId_) {
             var model = this.calendarService
-                .getWeekDayInfo(date, periodNumber_);
+                .getWeekDayInfo(date, periodClassId_);
+
+            Assert(model);
+
             model.setTarget(chlk.controls.getActionLinkControlLastNode());
-            if(periodNumber_ === 0 || periodNumber_ > 0)
+            if(periodClassId_ != undefined)
                 model.setDate(date);
+
             if(classId_)
                 model.setSelectedClassId(classId_);
+
             var result = new ria.async.DeferredData(model);
-            if(periodNumber_ === 0 || periodNumber_ > 0)
+            if(periodClassId_ != undefined)
                 return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, result);
+
             return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);
         },
 

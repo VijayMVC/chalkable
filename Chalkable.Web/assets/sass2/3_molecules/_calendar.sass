@@ -11,16 +11,17 @@
       vertical-align: middle
       overflow: hidden
 
-    .course-icon
-      width: 45px
-      height: 40px
+  .course-icon
+    width: 45px
+    height: 40px
+    overflow: hidden
 
-    .p-container
-      width: 120px
-      font-size: 12px
-      font-style: italic
-      white-space: nowrap
-      line-height: 84px
+  .p-container
+    width: 120px
+    font-size: 12px
+    font-style: italic
+    white-space: nowrap
+    line-height: 84px
 
   .header
     text-align: center
@@ -118,9 +119,12 @@
     .today
       border-color: #13495c
       background: #2f7790
-      color: #fff
       &, *
         +text-shadow(none)
+        color: #fff
+
+      A:hover
+        background-color: transparentize(#fff, .95) !important
 
 
     .week-day
@@ -146,22 +150,6 @@
         &:hover
           background-color: transparentize(#000, .95)
 
-        .period-info
-          position: absolute
-          left: -16px
-          top: 50%
-          margin-top: - 16px
-          width: 24px
-          height: 24px
-          border-radius: 50%
-          background: #fff
-          text-align: center
-          line-height: 24px
-          border: 3px solid #eee
-          color: #000
-          font-size: 13px
-          pointer-events: none
-
       .announcement-calendar-item
         margin: 16px
         max-height: $height - 32px
@@ -175,6 +163,63 @@
         strong
           font-weight: 600
 
-    .today.week-day A:hover
-      background-color: transparentize(#fff, .95)
+    .period-info
+      position: absolute
+      left: -16px
+      top: 58px
+      margin-top: - 16px
+      width: 24px
+      height: 24px
+      border-radius: 50%
+      background: #fff
+      text-align: center
+      line-height: 24px
+      border: 3px solid #eee
+      color: #000
+      font-size: 13px
+      pointer-events: none
 
+    .items-table
+      display: table
+      width: 100%
+      table-layout: fixed
+
+      .item
+        display: table-row !important
+
+      .cell
+        display: table-cell !important
+        width: 100 / 7 * 1%
+        height: 74px
+        vertical-align: top
+
+        &:not(:first-child)
+          border-left: 1px solid #ededed
+
+        A
+          display: block
+          position: relative
+
+          &:hover
+            background-color: transparentize(#000, .95)
+
+      A .period-info
+        top: 24px
+        margin-top: 0
+
+      .course-icon
+        position: absolute
+        left: 5px
+        top: 50%
+        transform: translate(0, -50%)
+
+      .p-container
+        margin: 0 5px 0 55px
+        width: auto
+        line-height: 74px
+        vertical-align: middle
+        text-align: left
+
+      .announcement
+        padding: 20px 10px
+        white-space: nowrap

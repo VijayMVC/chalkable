@@ -110,7 +110,8 @@ namespace Chalkable.BusinessLogic.Services
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;
-                    SCEnabled = school.StudyCenterEnabledTill.HasValue &&
+                    SCEnabled = district.IsDemoDistrict ||
+                        school.StudyCenterEnabledTill.HasValue &&
                                 school.StudyCenterEnabledTill.Value > NowSchoolTime;
                 }
                 if (schoolYear != null)
