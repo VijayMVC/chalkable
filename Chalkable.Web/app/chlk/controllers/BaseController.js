@@ -188,13 +188,13 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            [[String, String, Array, String, Boolean]],
-           ria.async.Future, function ShowMsgBox(text_, header_, buttons_, clazz_, isHtmlText_) {
-               var model = this.getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_);
+           ria.async.Future, function ShowMsgBox(text_, header_, buttons_, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_) {
+               var model = this.getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_);
                return this.view.showModal(chlk.activities.common.InfoMsgDialog, model);
            },
 
-           [[String, String, Array, String, Boolean]],
-           chlk.models.common.InfoMsg, function getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_){
+           [[String, String, Array, String, Boolean, String, Object]],
+           chlk.models.common.InfoMsg, function getMessageBoxModel_(text_, header_, buttons_, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_){
                var buttons = [];
                if(buttons_){
                    var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
@@ -204,7 +204,32 @@ NAMESPACE('chlk.controllers', function (){
                }else{
                    buttons.push(new chlk.models.common.Button('Ok'));
                }
-               return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_);
+               return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_, inputType_, inputAttrs_);
+           },
+
+           ria.async.Future, function ShowAlertBox(text, header_) {
+               return this.ShowMsgBox(text, header_)
+                   .then(function (activity) { return null; });
+           },
+
+           ria.async.Future, function ShowPromptBox(text, header_, inputValue_, inputAttrs_, inputType_) {
+               return this.ShowMsgBox(text, header_, [{text: 'OK', clazz: 'blue-button', value: 'ok'}, {text: 'Cancel'}], null, false, inputType_ || 'text', inputValue_, inputAttrs_)
+                   .then(function (mrResult) {
+                       if (!mrResult)
+                            return ria.async.BREAK;
+
+                       return mrResult;
+                   });
+           },
+
+           ria.async.Future, function ShowConfirmBox(text, header_, buttonText_, buttonClass_) {
+               return this.ShowMsgBox(text, header_, [{text: buttonText_ || 'OK', clazz: buttonClass_ || 'blue-button', value: 'ok'}, {text: 'Cancel'}])
+                   .then(function (mrResult) {
+                       if (!mrResult)
+                           return ria.async.BREAK;
+
+                       return mrResult;
+                   });
            },
 
            [[chlk.models.common.RoleEnum]],

@@ -17,6 +17,8 @@ NAMESPACE('chlk.models.common', function () {
             chlk.models.common.ButtonColor, 'color',
             Object, 'attributes',
             String, 'text',
+            String, 'value',
+            String, 'clazz',
             [[String, chlk.models.common.ButtonColor]],
             function $(title_, color_){
                 BASE();
