@@ -9,25 +9,5 @@ NAMESPACE('chlk.activities.calendar.announcement', function () {
         [chlk.activities.lib.PageClass('calendar')],
         [ria.mvc.TemplateBind(chlk.templates.calendar.announcement.MonthPage)],
         'MonthPage', EXTENDS(chlk.activities.lib.TemplatePage), [
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.classes.ClassesForTopBar, 'topData',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'selectedTypeId',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'currentTitle',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'nextDate',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'prevDate',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.common.ChlkDate, 'currentDate'
         ]);
 });
