@@ -20,6 +20,12 @@ NAMESPACE('chlk.templates.common', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'htmlText',
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.Button), 'buttons'
+            ArrayOf(chlk.models.common.Button), 'buttons',
+            [ria.templates.ModelPropertyBind],
+            String, 'inputType',
+            [ria.templates.ModelPropertyBind],
+            String, 'inputValue',
+            [ria.templates.ModelPropertyBind],
+            Object, 'inputAttrs'
         ])
 });

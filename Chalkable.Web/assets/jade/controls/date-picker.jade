@@ -2,7 +2,15 @@ mixin DatePicker(name, value_)
     -attributes = self.processAttrs(name, value_, attributes)
     input(type="text")(attributes)
 
-
+mixin DatePickerInline(name, value_)
+    -var altHiddenId = ria.dom.Dom.GID()
+    -attributes['data-options'] = attributes['data-options'] || {}
+    -attributes['data-options'].altField = '#' + altHiddenId
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="hidden", name=name, value=value_, id = altHiddenId)
+    div(attributes)
+    
 mixin ButtonDatePicker(name, text_, value_)
     -attributes = self.processAttrs(name, value_, attributes)
     input(type="button", text=text_)(attributes).chlk-button
+    
