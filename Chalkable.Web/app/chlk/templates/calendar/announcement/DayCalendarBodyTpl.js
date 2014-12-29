@@ -22,7 +22,6 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
                 }, [0]).slice(1);
             },
 
-            ArrayOf(ArrayOf(ArrayOf(chlk.models.announcement.AnnouncementPeriod))),
             function groupItemsAsTable() {
                 var rows = [], that = this;
                 this.items.forEach(function (day, index) {

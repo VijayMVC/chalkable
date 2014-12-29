@@ -13,7 +13,6 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
             [ria.templates.ModelPropertyBind],
             chlk.models.classes.ClassesForTopBar, 'topData',
 
-            ArrayOf(ArrayOf(ArrayOf(chlk.models.announcement.Announcement))),
             function groupAnnouncementsAsTable() {
                 var rows = [], that = this;
                 this.items.forEach(function (day, index) {
