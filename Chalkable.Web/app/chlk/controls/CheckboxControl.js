@@ -57,7 +57,14 @@ NAMESPACE('chlk.controls', function () {
                 var hidden = node.parent().find('.hidden-checkbox');
                 hidden.setData('value', value);
                 hidden.setValue(value);
-                value ? node.setAttr('checked', 'checked') : node.removeAttr('checked');
+                var parent = node.parent('.slide-checkbox');
+                if(value){
+                    node.setAttr('checked', 'checked');
+                    parent.setAttr('checked', 'checked');
+                }else{
+                    node.removeAttr('checked');
+                    parent.removeAttr('checked');
+                }
             },
 
             [[ria.dom.Dom, Object]],

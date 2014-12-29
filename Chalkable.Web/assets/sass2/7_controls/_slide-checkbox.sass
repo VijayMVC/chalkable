@@ -2,61 +2,64 @@
   padding: 0
   display: inline-block
 
+  &[checked]
+    >DIV
+      background: #41b768
+
+      &:before
+        content: 'YES'
+        font: 12px/25px Arial, sans-serif
+        color: #fff
+        position: absolute
+        left: 9px
+        z-index: 0
+        top: 0
+        font-weight: bold
+
+      &:after
+        content: ''
+
   >DIV
-    width: 76px
-    height: 21px
-    background: #487991
-    border: 1px solid #2A4653
-    +background(linear-gradient(top, #487991, #5E95B1))
-    //margin: 20 auto
-    border-radius: 3px
+    width: 60px
+    height: 24px
+    background: #56554f
+    border-radius: 12px
     position: relative
-    //+box-shadow(inset 0 1px 1px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.2))
 
     &:after 
       content: 'NO'
-      font: 12px/23px Arial, sans-serif
+      font: 12px/25px Arial, sans-serif
       color: #fff
       position: absolute
-      right: 10px
+      right: 13px
       z-index: 0
       font-weight: bold
       top: 0
       text-shadow: 1px 1px 0 rgba(255,255,255,.15)
   
 
-    &:before 
-      content: 'YES'
-      font: 12px/23px Arial, sans-serif
-      color: #fff
-      position: absolute
-      left: 10px
-      z-index: 0
-      top: 0
-      font-weight: bold
+
   
 
     >LABEL
       display: block
       padding: 0
       margin: 0
-      width: 34px
-      height: 21px
+      width: 18px
+      height: 18px
 
-      border-radius: 2px
+      border-radius: 50%
       +transition(left .4s ease)
       cursor: pointer
       position: absolute
-      top: 0
-      left: 0
+      top: 3px
+      left: 3px
       z-index: 1
-      //+box-shadow(0 2px 5px 0 rgba(0,0,0,0.3))
-      background: #CBCBCB
-      +background(linear-gradient(top, #CBCBCB, #8E8E8E))
+      background: #fff
   
 
     >input
       visibility: hidden
 
       &[type=checkbox]:checked + label
-        left: 42px
+        left: 39px
