@@ -1,0 +1,38 @@
+mixin TooltipWithOverflow(text)
+    -attributes['data-tooltip'] = text
+    -attributes['data-tooltip-type'] = 'overflow'
+    p(attributes)=text
+
+.week-calendar-body
+    -selectedItem = self.getTopData() ? self.getTopData().getSelectedItemId() : ''
+    .day-names
+        each item in self.getItems()
+            .week
+                p=item.getDate().format('DD') + ' ' + item.getDay()
+    .tb-announcements
+        each item in self.getItems()
+            div
+                anns = item.getAnnouncements();
+                if anns && anns.length
+                    +ActionLink('calendar', 'showWeekBarPopUp', item.getDate().toStandardFormat(), null, selectedItem)(class = self.isMainCalendar() ? '' : 'disabled').bar-item
+    .items-table
+        each item in self.groupAnnouncementsAsTable()
+            .item
+                each calendarDayItem, order in item
+                    -var period = calendarDayItem.period
+                    -var day = calendarDayItem.day
+                    -console.info(item, order, calendarDayItem, period, day)
+                    if order == 0
+                        .cell: A: .period-info= period.getOrder()
+                    else if order == 6
+                        .cell
+                    else
+                        .cell(class = day.getTodayClassName())
+                            each ann in calendarDayItem
+                                -VALIDATE_ARG('ann', [chlk.models.announcement.Announcement], ann)
+                                +ActionLink('calendar', 'showWeekBarPopUp', day.getDate().format('mm-dd-yy'), period.getClassId(), selectedItem || '')(
+                                    class = self.isMainCalendar() ? '' : 'disabled'
+                                ).period-item.announcement
+                                    .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
+                                        strong= ann.getTitle()
+                                        = ' - ' + ann.getClassName()
