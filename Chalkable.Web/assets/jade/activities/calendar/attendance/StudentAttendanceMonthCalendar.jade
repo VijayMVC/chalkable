@@ -1,0 +1,4 @@
+actions = {currentAction: 'attendanceMonth'}
+params = [self.getMinDate().format('mm-dd-yy'), self.getMaxDate().format('mm-dd-yy'), self.getStudentId()]
+div
+    +Calendar(self, chlk.templates.calendar.attendance.StudentAttendanceCalendarBodyTpl, self.getModel(), 'students', actions, params).student-attendance-calendar
