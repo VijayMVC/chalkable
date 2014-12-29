@@ -30,7 +30,7 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Boolean, function isStudentGraded(){
                 var grade = this.getGrade();
-                return this.isDropped() || this.isExempt() || this.isLate() || this.isIncomplete() || grade || grade == 0;
+                return this.isDropped() || this.isExempt()  || grade || grade == 0;
             },
 
             String, function displayStudentGradeValue(){
@@ -38,11 +38,7 @@ NAMESPACE('chlk.templates.announcement', function () {
                 if(this.isExempt()) return Msg.Exempt;
                 var grade = this.getGrade();
                 if(grade || grade == 0) return grade;
-
-                var resBuilder = [];
-                if(this.isLate()) resBuilder.push(Msg.Late);
-                if(this.isIncomplete()) resBuilder.push(Msg.Incomplete);
-                return resBuilder.join(', ');
+                return '';
             }
         ])
 });

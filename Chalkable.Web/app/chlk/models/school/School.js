@@ -31,7 +31,7 @@ NAMESPACE('chlk.models.school', function () {
             READONLY, Boolean, 'upgraded',
             Boolean, function isUpgraded(){
                 var upgradedDate = this.getStudyCenterEnabledTill();
-                return upgradedDate && upgradedDate.toStandardFormat() ==  (new chlk.models.common.ChlkDate()).toStandardFormat();
+                return upgradedDate && upgradedDate.toStandardFormat() >=  (new chlk.models.common.ChlkDate()).toStandardFormat();
             }
         ]);
 });

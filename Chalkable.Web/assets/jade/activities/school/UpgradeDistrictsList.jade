@@ -7,17 +7,7 @@
                   .row(index=i)
                      span.title.district-name= 'District ' +  item.getName()
                      +ActionLink('schools', 'showSchoolsForUpgrade', item.getId()).show-schools-link.x-hidden
-                     .date-picker-container
-                        +DatePicker('tillDate', null)(
-                           data-options={
-                              showOtherMonths: true,
-                              selectOtherMonths: true
-                           },
-                           data-controller='schools',
-                           data-action='upgradeDistrict',
-                           data-params=[item.getId()],
-                           class='validate[required]'
-                        ).upgrade-district-date-picker
-                     +Button().special-button.blue-button.upgrade-district-btn Upgrade District
-                     +ActionButton('schools', 'upgradeDistrict', item.getId(), null).negative-button.special-button.red-button Un-upgrade District
+                     span.upgraded-date
+                     +ActionButton('schools', 'upgradeDistrict', item.getId()).special-button.blue-button.upgrade-district-btn Upgrade District
+                     +ActionButton('schools', 'downgradeDistrict', item.getId()).negative-button.special-button.red-button Un-upgrade District
                   .schools-list-container(data-districtId=item.getId().valueOf())
