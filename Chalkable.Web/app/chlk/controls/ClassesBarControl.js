@@ -36,7 +36,20 @@ NAMESPACE('chlk.controls', function () {
                     }
                 });
 
-                data.currentMPId = mpService.getCurrentMarkingPeriod().getId();
+                var currentMPId = mpService.getCurrentMarkingPeriod().getId();
+
+                var currentClassId = classes.getSelectedItemId();
+                if (currentClassId && currentClassId.valueOf()) {
+                    var currentClassMPs = clsService.getMarkingPeriodRefsOfClass(currentClassId);
+                    if (currentClassMPs.indexOf(currentMPId) < 0) {
+                        currentMPId = currentClassMPs
+                            .map(function (x) { return [x, Math.abs(x - currentMPId)]; })
+                            .sort(function (_1, _2) { return _1[1] - _2[1]; })
+                            [0][0];
+                    }
+                }
+
+                data.currentMPId = currentMPId;
 
                 return data;
             },
