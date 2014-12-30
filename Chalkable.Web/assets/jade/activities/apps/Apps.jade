@@ -50,15 +50,18 @@ mixin AppsFilterSelect(name, items)
                         .td= item.getShortDescription()
                         .td.app-state
                             +AppManagementControls(item.getId(), item.getState(), item.getLiveAppId())
-                        .td
-                            +ActionForm('apps', 'changeAppType')
-                                +Checkbox('isInternal', item.isInternal())
-                                +Hidden('appId', item.getId())
 
+                        .td
+                            if !self.isReadOnly()
+                                +ActionForm('apps', 'changeAppType')
+                                    +Checkbox('isInternal', item.isInternal())
+                                    +Hidden('appId', item.getId())
+                            else
+                                span=item.isInternal() ? "True" : "False"
                         .td.action-links
-                            if !self.isReadOnly
+                            if !self.isReadOnly()
                                 +ActionLink('apps', 'details', item.getId()).profile
                             +ActionLink('apps', 'testApplication', item.getDeveloperId()).profile
-                            if !self.isReadOnly
+                            if !self.isReadOnly()
                                 +ActionLink('apps', 'tryDeleteApplication', item.getId(), item.getName()).remove
 
