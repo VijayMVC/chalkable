@@ -1,9 +1,6 @@
 topData = self.getTopData()
-topItems = topData.getTopItems()
 selectedId = topData.getSelectedItemId()
-+LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'summary')(
-    selectedItemId=selectedId
-).classes-bar
++ClassesToolBar(topData, 'grading', 'summary')
 .profile-page
     clazz = self.getClazz()
     if clazz && self.getCurrentMarkingPeriod() && clazz.getTeacher()

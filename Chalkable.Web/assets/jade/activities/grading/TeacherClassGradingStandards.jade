@@ -1,5 +1,4 @@
 -var topData = self.getTopData()
--var topItems = topData.getTopItems()
 -var selectedId = topData.getSelectedItemId()
 -var action = self.getAction() || "summary"
 -var gridAction = self.getGridAction() || "summaryGrid"
@@ -8,9 +7,7 @@
 
     h2.page-title=Msg.Standard(true)
 
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', action)(
-        selectedItemId=selectedId
-    ).classes-bar
+    +ClassesToolBar(topData, 'grading', action)
 
     .action-bar
         .items

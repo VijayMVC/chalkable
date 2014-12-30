@@ -2,9 +2,7 @@ selectedId = self.getSelectedItemId()
 redirectData = self.getRedirectData()
 .students-list.loader-container
     h2.page-title Discipline
-    +LeftRightToolbar(self.getTopData().getTopItems(), chlk.templates.classes.TopBar, 'discipline', 'classList')(
-        selectedItemId=selectedId ? selectedId.valueOf() : ""
-    ).classes-bar
+    +ClassesToolBar(self.getTopData(), 'discipline', 'classList')
     .loader
     .buttons
         .buttons-group

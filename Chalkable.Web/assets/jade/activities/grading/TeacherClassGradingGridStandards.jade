@@ -1,13 +1,10 @@
 .standards-grid.grades-page
     -var topData = self.getTopData()
-    -var topItems = topData.getTopItems()
     -var selectedId = topData.getSelectedItemId()
 
     h2.page-title=Msg.Standard(true)
 
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'standardsGrid')(
-        selectedItemId=selectedId
-    ).classes-bar
+    +ClassesToolBar(topData, 'grading', 'standardsGrid')
     .autocomplete-list
     .action-bar
         .items

@@ -1,13 +1,11 @@
 .students-list
-    -topData = self.getTopData();
-    -topItems = topData.getTopItems();
-    -selectedId = topData.getSelectedItemId();
+    -var topData = self.getTopData();
+    -var selectedId = topData.getSelectedItemId();
 
     h2.page-title People
 
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'students', "my", [])(
-        selectedItemId=selectedId ? selectedId.valueOf() : ""
-    ).classes-bar
+    +ClassesToolBar(topData, 'students', 'my')
+
     if !selectedId || !selectedId.valueOf()
         .action-bar
             .items

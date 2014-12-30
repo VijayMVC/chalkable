@@ -16,9 +16,7 @@ h2.page-title Attendance
 -var selectedId = topData.getSelectedItemId()
 -var hasStudentOnChart = self.hasStudentOnChart()
 -var seatingList = self.getSeatingList() || []
-+LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'attendance', 'seatingChart')(
-    selectedItemId=selectedId ? selectedId.valueOf() : ""
-).classes-bar
++ClassesToolBar(topData, 'attendance', 'seatingChart', [self.getDate().format('mm-dd-yy')])
 .action-bar
     .items
         +ActionLink('attendance', 'classList', selectedId, self.getDate().toStandardFormat())= Msg.List

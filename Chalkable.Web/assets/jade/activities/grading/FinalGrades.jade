@@ -5,10 +5,7 @@
 
     h2.page-title=Msg.Final_Grade(true)
 
-    +LeftRightToolbar(topItems, chlk.templates.classes.TopBar, 'grading', 'finalGrades')(
-        selectedItemId=selectedId,
-        disabledClass = 'x-hidden'
-    ).classes-bar
+    +ClassesToolBar(topData, 'grading', 'finalGrades')
     .autocomplete-list.final-grades
     .action-bar
         .items

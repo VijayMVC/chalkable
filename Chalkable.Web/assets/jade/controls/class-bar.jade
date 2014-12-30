@@ -12,7 +12,7 @@ mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, show
             each item in group.items
                -var id = item.getId()
                if controller_
-                  +ActionLinkWithPrepend(controller_, action_, prepend_, id)(
+                  +ActionLinkWithPrepend(controller_, action_, prepend_ || [], id)(
                      class = id == currentClassId ? "pressed " : "",
                      index=item.getIndex(),
                      data-tooltip=id ? item.getFullClassName() : ''
