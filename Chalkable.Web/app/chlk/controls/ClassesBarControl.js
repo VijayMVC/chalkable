@@ -20,8 +20,9 @@ NAMESPACE('chlk.controls', function () {
                     clsService = this.context.getService(chlk.services.ClassService),
                     cls = classes.getTopItems();
 
-                return mpService.getMarkingPeriodsSync().map(function (mp) {
+                var data = mpService.getMarkingPeriodsSync().map(function (mp) {
                     return {
+                        id: mp.getId(),
                         title: mp.getName(),
                         items: cls.filter(function (c) {
                             var id = c.getId();
@@ -32,6 +33,10 @@ NAMESPACE('chlk.controls', function () {
                         })
                     }
                 });
+
+                data.currentMPId = mpService.getCurrentMarkingPeriod().getId();
+
+                return data;
             },
 
             OVERRIDE, VOID, function onCreate_() {

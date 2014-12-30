@@ -8,8 +8,14 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'MarkingPeriodService', EXTENDS(chlk.services.BaseService), [
 
+            READONLY, chlk.models.schoolYear.MarkingPeriod, 'currentMarkingPeriod',
+
             ArrayOf(chlk.models.schoolYear.MarkingPeriod), function getMarkingPeriodsSync() {
                 return this.context.getSession().get(ChlkSessionConstants.MARKING_PERIODS, []);
+            },
+
+            chlk.models.schoolYear.MarkingPeriod, function getCurrentMarkingPeriod() {
+                return this.context.getSession().get(ChlkSessionConstants.MARKING_PERIOD, []);
             },
 
             [[chlk.models.id.SchoolYearId]],
