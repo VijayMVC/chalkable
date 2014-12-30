@@ -6,33 +6,31 @@ mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, show
    -attributes.fixedElementMargin = true
    -attributes.fixedElementWidth = true
    -self.processAttrs(attributes)
-   .classes-bar.with-groups
-      +LeftRightToolbar()(attributes)
-         each group in data
-            .group(data-id = group.id, data-name = group.title)
-               each item in group.items
-                  -var id = item.getId()
-                  if controller_
-                     +ActionLinkWithPrepend(controller_, action_, prepend_, id)(
-                        class = id == currentClassId ? "pressed " : "",
-                        index=item.getIndex(),
-                        data-tooltip=id ? item.getFullClassName() : ''
-                     ).class-button.button-link.item
-                        if showAlerts_
-                           .alerts-icon.small(data-id=id)
-                        +ClassImg(item, 45, 80)
-                        SPAN.text-container= item.getName()
-                  else
-                     BUTTON(
-                        classId = id,
-                        index = item.getIndex(),
-                        class = id == currentClassId ? "pressed " : "",
-                        type = disabled_ ? "button" : "submit",
-                        data-default-announcement-type-id = item.getDefaultAnnouncementTypeId(),
-                        name="submitType",
-                        value="save",
-                        data-tooltip=id ? self.getFullClassName() : ''
-                     ).class-button.validate-skip.item
-                        +ClassImg(item, 45, 80).avatar
-                        SPAN.text-container= item.getName()
-      .group-title
+   +LeftRightToolbar()(attributes).classes-bar.with-groups
+      each group in data
+         .group(data-id = group.id, data-name = group.title)
+            each item in group.items
+               -var id = item.getId()
+               if controller_
+                  +ActionLinkWithPrepend(controller_, action_, prepend_, id)(
+                     class = id == currentClassId ? "pressed " : "",
+                     index=item.getIndex(),
+                     data-tooltip=id ? item.getFullClassName() : ''
+                  ).class-button.button-link.item
+                     if showAlerts_
+                        .alerts-icon.small(data-id=id)
+                     +ClassImg(item, 45, 80)
+                     SPAN.text-container= item.getName()
+               else
+                  BUTTON(
+                     classId = id,
+                     index = item.getIndex(),
+                     class = id == currentClassId ? "pressed " : "",
+                     type = disabled_ ? "button" : "submit",
+
+                     name="submitType",
+                     value="save",
+                     data-tooltip=id ? self.getFullClassName() : ''
+                  ).class-button.validate-skip.item
+                     +ClassImg(item, 45, 80).avatar
+                     SPAN.text-container= item.getName()
