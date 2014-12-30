@@ -1,0 +1,17 @@
++AddStandardDialog(self.getAnnouncementTypeName() + ' STANDARDS', 'announcement', 'addStandards')
+    +Hidden('announcementid', self.getAnnouncementId())
+    +Hidden('standardid', null)
+    +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
+    .standards-list-container
+        standardSubjects = self.getItemStandards() || []
+        table
+            tr.standards-row
+                td.name-td
+                    .standards-names.column
+                        each subject in standardSubjects
+                            +ActionLink('announcement', 'showStandardsByCategory', self.getClassId(), subject.getId(), subject.getDescription()).standard-name.column-cell
+                                .name=subject.getName()
+                                .right-triangle
+                td
+                    .standards-description
+

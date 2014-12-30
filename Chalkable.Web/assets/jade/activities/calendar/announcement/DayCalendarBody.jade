@@ -1,0 +1,26 @@
+.day-calendar-body
+    .day-names.day
+        each item,i in self.getItems()
+            div(class=item.getTodayClassName()).day
+                if(item.getDate().getDate().getDay())
+                    p=item.getDate().format('DD')
+    .items-table
+        -var lastPeriodOrder = null
+        each item in self.groupItemsAsTable()
+            .item
+                each calendarDayItem, order in item
+                    if order == 0
+                        .cell: A: .period-info= calendarDayItem[0].getPeriod().getOrder()
+                    else if order == 6
+                        .cell
+                    else
+                        .cell(class = calendarDayItem.day.getTodayClassName())
+                            each ann in calendarDayItem
+                                -var period = ann.getPeriod()
+                                -var className = period.getFullClassName()
+                                if className
+                                    +ActionLink('calendar', 'showWeekBarPopUp', calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId())(
+                                            class = period.getStartTime() && self.isMainCalendar() ? "" : "disabled"
+                                        ).period-item.day
+                                        .course-icon: +ClassImg(period, 45, 80)
+                                        .p-container(data-tooltip=className, data-tooltip-type ="overflow")= className
