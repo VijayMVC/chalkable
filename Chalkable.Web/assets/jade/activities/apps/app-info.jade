@@ -237,6 +237,8 @@ appPlatforms = appPlatforms.join(',')
                         .banner
                             if myAppsAccess.isAttachEnabled()
                                +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
+        .section.last
+            .pictures
                 .elem.screenshots
                         +RenderWith(app.getScreenshotPictures(), chlk.templates.apps.AppScreenshots)
 
