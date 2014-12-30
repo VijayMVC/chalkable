@@ -15,6 +15,8 @@ NAMESPACE('chlk.controls', function () {
         //ria.dom.Dom arrow, Boolean isLeft, Number index
         UPDATE: 'update',
 
+        UPDATE_ARROWS: 'updateArrows',
+
         //ria.dom.Dom arrow, Number index
         BEFORE_ANIMATION: 'beforeanimation',
 
@@ -52,6 +54,12 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function updateTb(node, event) {
                 this.updateToolbar(node);
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.UPDATE_ARROWS.valueOf(), '.lr-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function updateArr(node, event) {
+                this.updateArrows(node);
             },
 
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.ARROW_DISABLED.valueOf(), '.lr-toolbar')],
@@ -320,9 +328,10 @@ NAMESPACE('chlk.controls', function () {
                                     var interval = setInterval(function(){
                                         var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
                                         if(curLeft > left - eps && curLeft < left + eps){
-                                            toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft, index]);
+
                                             setTimeout(function(){
                                                 that.updateArrows(toolbar);
+                                                toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft, index]);
                                             }, 10);
                                             clearInterval(interval);
                                         }

@@ -54,8 +54,26 @@ NAMESPACE('chlk.controls', function () {
             function processAttrs(attributes) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        baseMargin = parseInt(new ria.dom.Dom('.classes-bar').find('.group').find('>a').getCss('margin-right'), 10);
+                        var classesBar = new ria.dom.Dom('.classes-bar');
+                        baseMargin = parseInt(classesBar.find('.group').find('>a').getCss('margin-right'), 10);
                         this.updateClassesBar();
+                        var selectedGroupId = attributes.selectedGroupId || classesBar.find('.group:first-child').grtData('id');
+                        var group = classesBar.find('.group[data-id=' + attributes.selectedGroupId + ']');
+
+                        if(!group.is(':first-child'))
+                            classesBar.find('.second-container').setCss('left', classesBar.offset().left - group.offset().left);
+
+                        classesBar.find('.group-title').setHTML(group.getData('name'));
+                        classesBar.on(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), function(node, event){
+                            var left = parseInt(node.find('.second-container').getCss('left'), 10);
+                            var offsetLeft = node.offset().left, eps = 10;
+                            node.find('.group').forEach(function(group){
+                                var groupOffsetLeft = group.offset().left - offsetLeft;
+                                if(groupOffsetLeft < eps && groupOffsetLeft > -group.width() + eps)
+                                    classesBar.find('.group-title').setHTML(group.getData('name'));
+                            })
+                        })
+
                     }.bind(this));
             },
 
