@@ -3,11 +3,11 @@ mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, show
    -var data = self.prepareModel(topBarData)
    -attributes.selectedGroupId = data.currentMPId
    -attributes.selectedItemId = currentClassId
-   .classes-bar.with-groups
-      +LeftRightToolbar()(attributes)
    -attributes.fixedElementMargin = true
    -attributes.fixedElementWidth = true
    -self.processAttrs(attributes)
+   .classes-bar.with-groups
+      +LeftRightToolbar()(attributes)
          each group in data
             .group(data-id = group.id, data-name = group.title)
                each item in group.items
