@@ -3,4 +3,4 @@ each item in self.getAppReviews().getItems()
     .rating-person-item
         person = item.getPerson()
             p=item.getReview() + ' - ' + person.getFullName()
-                +Rating('person-rating-' + person.getId().valueOf(), item.getRating())
+                +Rating('person-rating-' + person.getId().valueOf(), item.getRating()).right
