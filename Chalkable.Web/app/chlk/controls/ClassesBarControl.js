@@ -60,7 +60,9 @@ NAMESPACE('chlk.controls', function () {
                 var self = this;
 
                 jQuery(window).on('resize', function(){
-                    setTimeout(self.updateClassesBar, 1);
+                    setTimeout(function(){
+                        self.updateClassesBar(true);
+                    }, 1);
                 });
             },
 
@@ -77,20 +79,23 @@ NAMESPACE('chlk.controls', function () {
                             classesBar.find('.second-container').setCss('left', classesBar.offset().left - group.offset().left);
 
                         classesBar.find('.group-title').setHTML(group.getData('name'));
+                        classesBar.setData('group-id', group.getData('id'));
                         classesBar.on(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), function(node, event){
                             var left = parseInt(node.find('.second-container').getCss('left'), 10);
                             var offsetLeft = node.offset().left, eps = 10;
                             node.find('.group').forEach(function(group){
                                 var groupOffsetLeft = group.offset().left - offsetLeft;
-                                if(groupOffsetLeft < eps && groupOffsetLeft > -group.width() + eps)
+                                if(groupOffsetLeft < eps && groupOffsetLeft > -group.width() + eps){
                                     classesBar.find('.group-title').setHTML(group.getData('name'));
+                                    classesBar.setData('group-id', group.getData('id'));
+                                }
                             })
                         })
 
                     }.bind(this));
             },
 
-            function updateClassesBar(){
+            function updateClassesBar(resize_){
                 var classesBar = new ria.dom.Dom('.classes-bar');
                 var width = classesBar.width();
                 classesBar.find('.group').forEach(function(node){
@@ -108,6 +113,20 @@ NAMESPACE('chlk.controls', function () {
                     if(additionalMargin > 0)
                         node.find('>a:not(:last-child)').setCss('margin-right', baseMargin + additionalMargin);
                 });
+                if(resize_){
+                    var groupId = classesBar.getData('group-id');
+                    var firstGroup = classesBar.find('.group:first-child');
+                    if(firstGroup.getData('id') != groupId){
+                        var secondContainer = classesBar.find('.second-container');
+                        var curGroup = classesBar.find('.group[data-id=' + groupId + ']');
+                        secondContainer.addClass('freezed')
+                            .setCss('left', firstGroup.offset().left - curGroup.offset().left);
+                        setTimeout(function(){
+                            secondContainer.removeClass('freezed');
+                        }, 1)
+                    }
+                }
+
             }
         ]);
 });

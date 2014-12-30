@@ -344,6 +344,9 @@ NAMESPACE('chlk.controls', function () {
                             });*/
                             toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_RENDER.valueOf());
                         }
+                        setTimeout(function(){
+                            toolbar.find('.second-container').removeClass('freezed');
+                        }, 10);
                     }.bind(this));
                 return attributes;
             },

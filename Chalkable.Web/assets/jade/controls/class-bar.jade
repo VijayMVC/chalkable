@@ -27,10 +27,10 @@ mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, show
                      index = item.getIndex(),
                      class = id == currentClassId ? "pressed " : "",
                      type = disabled_ ? "button" : "submit",
-
+                     data-default-announcement-type-id = item.getDefaultAnnouncementTypeId(),
                      name="submitType",
                      value="save",
-                     data-tooltip=id ? self.getFullClassName() : ''
+                     data-tooltip=id ? item.getFullClassName() : ''
                   ).class-button.validate-skip.item
                      +ClassImg(item, 45, 80).avatar
                      SPAN.text-container= item.getName()

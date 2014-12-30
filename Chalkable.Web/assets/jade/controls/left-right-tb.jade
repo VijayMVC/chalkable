@@ -4,7 +4,7 @@ mixin LeftRightToolbar(data, tplClass, controller, action, params)
     .lr-toolbar(attributes)
         A(class=configs.disablePrevButton ? configs.disabledClass : "").prev-button.arrow
         .first-container
-            .second-container
+            .second-container.freezed
                 .third-container
                     if data && tplClass
                         each item,i in data
