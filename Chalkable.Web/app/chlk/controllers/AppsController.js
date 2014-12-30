@@ -809,12 +809,14 @@ NAMESPACE('chlk.controllers', function (){
 
                         return ria.async.wait(
                                 this.appsService.getAppAnalytics(data.getId()),
-                                this.appsService.getAppReviews(data.getId())
+                                this.appsService.getAppReviews(data.getId()),
+                                this.appsService.getDevApps()
                             )
                             .attach(this.validateResponse_())
                             .then(function(res){
                                var appReviews = res[1];
                                var analytics = res[0];
+                               var devApps = res[2];
 
                                return new chlk.models.apps.AppGeneralInfoViewData(
                                     data.getName(),
@@ -825,7 +827,8 @@ NAMESPACE('chlk.controllers', function (){
                                     5, //todo: pass rating,
                                     new chlk.models.common.ChlkDate(),
                                     appReviews,
-                                    analytics || new chlk.models.developer.HomeAnalytics()
+                                    analytics || new chlk.models.developer.HomeAnalytics(),
+                                    devApps
                                );
                             });
                     }

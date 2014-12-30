@@ -4,7 +4,7 @@ mixin DemoRoleButton(name, title, notReady)
 -apps = self.getDeveloperApps()
 -currentAppId = self.getCurrentAppId()
 
-+AppsList('dev-apps-list', apps, currentAppId)#dev-apps-list.left
++AppsList('dev-apps-list', 'dev-apps-list', apps, currentAppId).left
 #roles-buttons
     +DemoRoleButton('Teacher')
     +DemoRoleButton('Student')
