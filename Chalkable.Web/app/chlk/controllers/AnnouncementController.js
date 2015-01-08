@@ -944,13 +944,17 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.AddDuplicateAnnouncementViewData]],
         function duplicateAction(model){
+            var classesIds = this.getIdsList(model.getSelectedIds(), chlk.models.id.ClassId);
             var res = this.announcementService
                 .duplicateAnnouncement(model.getAnnouncementId(), model.getSelectedIds())
                 .attach(this.validateResponse_())
+                .thenCall(this.classService.updateClassAnnouncementTypes, [classesIds])
                 .then(function(data){
                     chlk.controls.updateWeekCalendar();
-                    return this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId()]);
-                }, this);
+                    this.BackgroundCloseView(chlk.activities.announcement.AddDuplicateAnnouncementDialog);
+                    this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId()]);
+                    return ria.async.BREAK;
+                }, this)
             return null;
         },
 

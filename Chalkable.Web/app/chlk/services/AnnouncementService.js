@@ -372,7 +372,13 @@ NAMESPACE('chlk.services', function () {
                     announcementId: announcementId.valueOf(),
                     standardId: standardId.valueOf()
                 });
-            }
+            },
 
+            [[ArrayOf(chlk.models.id.ClassId)]],
+            ria.async.Future, function getClassAnnouncementTypes(classIds){
+                return this.get('AnnouncementType/ListByClasses.json', chlk.models.announcement.ClassAnnouncementType,{
+                    classIds: this.arrayToCsv(classIds)
+                });
+            }
         ])
 });
