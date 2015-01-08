@@ -1,5 +1,4 @@
-﻿using System;
-using Chalkable.Data.Common;
+﻿using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
@@ -16,7 +15,6 @@ namespace Chalkable.Data.School.Model
         public int PersonRef { get; set; }
         [PrimaryKeyFieldAttr]
         public int MarkingPeriodRef { get; set; }
-        public int SchoolRef { get; set; }
         public bool IsEnrolled { get; set; }
    }
 }

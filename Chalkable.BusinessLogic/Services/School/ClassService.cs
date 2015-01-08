@@ -18,7 +18,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(int id);
         void Delete(IList<int> ids);
 
-        ClassDetails AddStudent(int classId, int personId, int markingPeriodId);
         void AddStudents(IList<ClassPerson> classPersons);
         void EditStudents(IList<ClassPerson> classPersons);
         void AddTeachers(IList<ClassTeacher> classTeachers);
@@ -35,7 +34,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled); 
         IList<ClassTeacher> GetClassTeachers(int? classId, int? teacherId); 
 
-        void AssignClassToMarkingPeriod(int classId, int markingPeriodId);
         void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses);
         void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId);
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
@@ -116,32 +114,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void AssignClassToMarkingPeriod(int classId, int markingPeriodId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            var c = GetClassDetailsById(classId);
-            if(!c.SchoolYearRef.HasValue)
-                throw new ChalkableException("school year is not assigned for this class");
-            if (!c.SchoolRef.HasValue)
-                throw new ChalkableException(string.Format("Class {0} is not assigned to any school. Looks like it's a general course", c.Name));
-            using (var uow = Update())
-            {
-                var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
-                var mp = new MarkingPeriodDataAccess(uow, Context.SchoolLocalId).GetById(markingPeriodId);
-                if(mp.SchoolYearRef != c.SchoolYearRef)
-                    throw new ChalkableException();
-                var mpc = new MarkingPeriodClass
-                {
-                    ClassRef = classId,
-                    MarkingPeriodRef = markingPeriodId,
-                    SchoolRef = c.SchoolRef.Value
-                };
-                mpClassDa.Insert(mpc);
-                uow.Commit();
-            }
-        }
-
         public void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -194,29 +166,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ClassDetails AddStudent(int classId, int personId, int markingPeriodId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            
-            using (var uow = Update())
-            {
-                var classPersonDa = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
-                var cClass = new ClassDataAccess(uow, Context.SchoolLocalId).GetById(classId);
-                if (!cClass.SchoolRef.HasValue)
-                    throw new ChalkableException(string.Format("Class {0} is not assigned to any school. Looks like it's a general course", cClass.Name));
-                classPersonDa.Insert(new ClassPerson
-                {
-                    PersonRef = personId,
-                    ClassRef = classId,
-                    MarkingPeriodRef = markingPeriodId,
-                    SchoolRef = cClass.SchoolRef.Value
-                });    
-                uow.Commit();
-            }
-            return GetClassDetailsById(classId);
-        }
-
         public void AddStudents(IList<ClassPerson> classPersons)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -224,7 +173,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var classPersonDa = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
+                var classPersonDa = new ClassPersonDataAccess(uow);
                 classPersonDa.Insert(classPersons);
                 uow.Commit();
             }
@@ -237,7 +186,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var classPersonDa = new ClassPersonDataAccess(uow, Context.SchoolLocalId);
+                var classPersonDa = new ClassPersonDataAccess(uow);
                 classPersonDa.Update(classPersons);
                 uow.Commit();
             }
@@ -249,7 +198,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new ClassPersonDataAccess(uow, Context.SchoolLocalId).Delete(classPersons);
+                new ClassPersonDataAccess(uow).Delete(classPersons);
                 uow.Commit();
             }
         }
@@ -328,7 +277,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                return new ClassPersonDataAccess(uow)
                     .GetClassPerson(new ClassPersonQuery
                         {
                             ClassId = classId,
@@ -419,7 +368,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                return new ClassPersonDataAccess(uow)
                     .GetClassPersons(new ClassPersonQuery
                         {
                             ClassId = classId,
