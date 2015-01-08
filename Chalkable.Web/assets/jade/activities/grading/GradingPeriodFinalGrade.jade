@@ -14,7 +14,7 @@
                     each item in self.getAverages()
                         +Option(item.getAverageId().valueOf(), item.getAverageName(), item.getAverageId() == self.getCurrentAverage().getAverageId())
 
-            +ActionButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId(), null, null, true).blue-button.post-gradebook-button=Msg.Post
+            +ActionButton('grading','postGradeBook', self.getClassId(), gradingPeriod.getId(), null, null, true)(class= !gradingPeriod.isAblePostGradeBook() ? "disabled" : "").blue-button.post-gradebook-button=Msg.Post
 .grades-container
     if !items.length
         .no-items-text=Msg.No_grades_yet
