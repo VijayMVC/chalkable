@@ -101,6 +101,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }, 10);
             },
 
+            [ria.mvc.DomEventBind('click', '.close-open-control .close')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function closeClick(node, event){
+                this.hideDropDown();
+            },
+
             [ria.mvc.DomEventBind('keypress', '.grade-input')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputKeyPress(node, event){
