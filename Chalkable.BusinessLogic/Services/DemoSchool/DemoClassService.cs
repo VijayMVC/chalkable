@@ -91,29 +91,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
         }
 
-        public void AssignClassToMarkingPeriod(int classId, int markingPeriodId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            var c = GetClassDetailsById(classId);
-            if(!c.SchoolYearRef.HasValue)
-                throw new ChalkableException("school year is not assigned for this class");
-
-            var mp = Storage.MarkingPeriodStorage.GetById(markingPeriodId);
-            if (mp.SchoolYearRef != c.SchoolYearRef)
-                throw new ChalkableException();
-
-            var mpc = new MarkingPeriodClass
-            {
-                ClassRef = classId,
-                MarkingPeriodRef = markingPeriodId,
-                SchoolRef = c.SchoolRef.Value
-            };
-
-            Storage.MarkingPeriodClassStorage.Add(mpc);
-
-        }
-
         public void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -141,25 +118,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             cClass.GradeLevelRef = gradeLevelId;
             Storage.ClassStorage.Update(cClass);
             return GetClassDetailsById(classId);
-        }
-
-        public ClassDetails AddStudent(int classId, int personId, int markingPeriodId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            
-            var cClass = Storage.ClassStorage.GetById(classId);
-
-            var classPerson = new ClassPerson
-            {
-                PersonRef = personId,
-                ClassRef = classId,
-                MarkingPeriodRef = markingPeriodId,
-                SchoolRef = cClass.SchoolRef.Value
-            };
-            Storage.ClassPersonStorage.Add(classPerson);
-            return GetClassDetailsById(classId);
-
         }
 
         public void AddStudents(IList<ClassPerson> classPersons)

@@ -478,7 +478,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassRef = classId,
                 MarkingPeriodRef = markingPeriodId,
                 PersonRef = studentId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
                 IsEnrolled = true
             });
 
@@ -537,7 +536,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Description = "",
                 StartDate = new DateTime(currentYear, 1, 1),
                 EndDate = new DateTime(currentYear, 6, 30),
-                SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
                 WeekDays = 62
             });
@@ -549,7 +547,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Description = "",
                 StartDate = new DateTime(currentYear, 7, 1),
                 EndDate = new DateTime(currentYear, 12, 31),
-                SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
                 WeekDays = 62
             });
@@ -1817,14 +1814,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             MarkingPeriodClassStorage.Add(new MarkingPeriodClass
             {
-                SchoolRef = DemoSchoolConstants.SchoolId,
                 MarkingPeriodRef = DemoSchoolConstants.FirstMarkingPeriodId,
                 ClassRef = id
             });
 
             MarkingPeriodClassStorage.Add(new MarkingPeriodClass
             {
-                SchoolRef = DemoSchoolConstants.SchoolId,
                 MarkingPeriodRef = DemoSchoolConstants.SecondMarkingPeriodId,
                 ClassRef = id
             });

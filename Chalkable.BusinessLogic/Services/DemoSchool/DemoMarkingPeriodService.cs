@@ -65,50 +65,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res.Where(x => (x.StartDate <= fromDate && x.EndDate >= fromDate)
                                       || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
         }
-
-        public MarkingPeriod Add(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-
-            var sy = Storage.SchoolYearStorage.GetById(schoolYearId);
-            var mp = UpdateMarkingPeriod(sy, startDate, endDate, name, description, weekDays, new MarkingPeriod{Id = id});
-            Storage.MarkingPeriodStorage.Add(mp);
-            return mp;
-        }
-
+        
         public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             return Storage.MarkingPeriodStorage.Add(markingPeriods);
-        }
-
-
-        private MarkingPeriod UpdateMarkingPeriod(SchoolYear sy, DateTime startDate, DateTime endDate, 
-            string name, string description, int weekDays, MarkingPeriod markingPeriod = null)
-        {
-            int? id = null;
-            if (markingPeriod != null)
-                id = markingPeriod.Id;
-            else markingPeriod = new MarkingPeriod();
-            
-            if(startDate > endDate)
-                throw new ChalkableException("Invalid date params. StartDate is bigger than EndDate");
-            if (Storage.MarkingPeriodStorage.IsOverlaped(sy.Id, startDate, endDate, id))
-                throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_CANT_OVERLAP);
-            if (!(sy.StartDate <= startDate && sy.EndDate >= endDate))
-                throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_INVALID_SCHOOL_YEAR);
-
-            markingPeriod.Description = description;
-            markingPeriod.Name = name;
-            markingPeriod.SchoolYearRef = sy.Id;
-            markingPeriod.StartDate = startDate;
-            markingPeriod.EndDate = endDate;
-            markingPeriod.WeekDays = weekDays;
-            markingPeriod.SchoolRef = sy.SchoolRef;
-            return markingPeriod;
         }
         
         public void Delete(int id)
@@ -130,41 +92,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
                 Storage.MarkingPeriodStorage.DeleteMarkingPeriods(markingPeriodIds);
         }
-
-
-        public MarkingPeriod Edit(int id, int schoolYearId, DateTime startDate, DateTime endDate, string name, string description, int weekDays)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            var sy = Storage.SchoolYearStorage.GetById(schoolYearId);
-            var mp = Storage.MarkingPeriodStorage.GetById(id);
-            mp = UpdateMarkingPeriod(sy, startDate, endDate, name, description, weekDays, mp);
-            Storage.MarkingPeriodStorage.Update(mp);
-            return mp;
-            
-        }
-
-
-        //TODO : think how to rewrite this for better performance
-        //TODO : needs testing
-        public bool ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            if (Storage.MarkingPeriodStorage.Exists(markingPeriodIds))
-                throw new ChalkableException("Can't change markingPeriod week days ");
-                
-            Storage.MarkingPeriodStorage.ChangeWeekDays(markingPeriodIds, weekDays);
-            return true;
-            
-        }
-
-        public MarkingPeriodClass GetMarkingPeriodClass(int markingPeriodClassId)
-        {
-            return Storage.MarkingPeriodClassStorage.GetById(markingPeriodClassId);
-        }
-    
 
         public MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId)
         {

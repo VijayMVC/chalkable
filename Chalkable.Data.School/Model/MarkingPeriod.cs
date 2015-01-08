@@ -19,7 +19,6 @@ namespace Chalkable.Data.School.Model
         public string Description { get; set; }
         public int SchoolYearRef { get; set; }
         public int WeekDays { get; set; }
-        public int SchoolRef { get; set; }
     }
 
     public class MarkingPeriodDetails : MarkingPeriod

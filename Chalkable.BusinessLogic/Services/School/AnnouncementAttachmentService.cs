@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanAttach(UnitOfWork uow, Announcement ann)
         {
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
-                   || new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                   || new ClassPersonDataAccess(uow)
                           .Exists(new ClassPersonQuery
                               {
                                   ClassId = ann.ClassRef,

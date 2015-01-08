@@ -373,14 +373,12 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Term>().Updated == null)
                 return;
-            var sys = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var mps = context.GetSyncResult<Term>().Updated.Select(x => new MarkingPeriod
                 {
                     Description = x.Description,
                     EndDate = x.EndDate,
                     Id = x.TermID,
                     Name = x.Name,
-                    SchoolRef = sys[x.AcadSessionID].SchoolRef,
                     SchoolYearRef = x.AcadSessionID,
                     StartDate = x.StartDate,
                     WeekDays = 62
@@ -614,7 +612,6 @@ namespace Chalkable.StiImport.Services
                     ClassRef = x.SectionID,
                     PersonRef = x.StudentID,
                     MarkingPeriodRef = x.TermID,
-                    SchoolRef = mps.First(y => y.Id == x.TermID).SchoolRef,
                     IsEnrolled = x.IsEnrolled
                 }).ToList();
             ServiceLocatorSchool.ClassService.EditStudents(studentSchedules);

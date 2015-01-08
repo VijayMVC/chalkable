@@ -369,7 +369,6 @@ namespace Chalkable.StiImport.Services
         private void InsertMarkingPeriods()
         {
             var terms = context.GetSyncResult<Term>().All;
-            var sys = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var mps = new List<MarkingPeriod>();
             foreach (var term in terms)
             {
@@ -379,7 +378,6 @@ namespace Chalkable.StiImport.Services
                         EndDate = term.EndDate,
                         Id = term.TermID,
                         Name = term.Name,
-                        SchoolRef = sys[term.AcadSessionID].SchoolRef,
                         SchoolYearRef = term.AcadSessionID,
                         StartDate = term.StartDate,
                         WeekDays = 62
@@ -568,13 +566,11 @@ namespace Chalkable.StiImport.Services
 
         private void InsertMarkingPeriodClasses()
         {
-            var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
             var cts = context.GetSyncResult<SectionTerm>().All
                 .Select(x => new MarkingPeriodClass
                 {
                     ClassRef = x.SectionID,
                     MarkingPeriodRef = x.TermID,
-                    SchoolRef = mps.First(y=>y.Id == x.TermID).SchoolRef
                 }).ToList();
             ServiceLocatorSchool.ClassService.AssignClassToMarkingPeriod(cts);
         }
@@ -647,7 +643,6 @@ namespace Chalkable.StiImport.Services
                     ClassRef = x.SectionID,
                     PersonRef = x.StudentID,
                     MarkingPeriodRef = x.TermID,
-                    SchoolRef = mps.First(y => y.Id == x.TermID).SchoolRef,
                     IsEnrolled = x.IsEnrolled
                 }).ToList();
             ServiceLocatorSchool.ClassService.AddStudents(studentSchedules);

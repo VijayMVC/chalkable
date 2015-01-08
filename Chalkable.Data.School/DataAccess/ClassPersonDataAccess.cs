@@ -5,9 +5,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassPersonDataAccess : BaseSchoolDataAccess<ClassPerson>
+    public class ClassPersonDataAccess : DataAccessBase<ClassPerson, int>
     {
-        public ClassPersonDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
+        public ClassPersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
