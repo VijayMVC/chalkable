@@ -58,6 +58,7 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.FundsService, 'fundsService',
 
         [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.apps.AppMarketPostData]],
         function listAction(filterData_) {
             var selectedPriceType = filterData_ ? new chlk.models.apps.AppPriceType(filterData_.getPriceType())
@@ -168,6 +169,7 @@ NAMESPACE('chlk.controllers', function (){
 
         //todo: refactor
         [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId]],
         function detailsAction(id) {
             var result = this.appMarketService
@@ -417,11 +419,10 @@ NAMESPACE('chlk.controllers', function (){
         function install_(appInstallData, installCompleteAction, completeActionArgs, installFailAction, failActionArgs){
 
             var appInstallArgs = this.prepareAppTotalPriceCallParams_(appInstallData);
-            var res = ria.async.wait([
-                this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs),
-                this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
-            ])
-                .attach(this.validateResponse_())
+            var res = ria.async.wait(
+                this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs).attach(this.validateResponse_()),
+                this.appMarketService.getPersonBalance(this.getCurrentPerson().getId()).attach(this.validateResponse_())
+            )
                 .then(function(res){
                     var totalAppPrice = res[0].getTotalPrice() || 0;
                     var personBalance = res[1];

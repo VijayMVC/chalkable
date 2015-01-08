@@ -40,10 +40,14 @@ NAMESPACE('chlk', function (){
             },
 
             OVERRIDE, ria.async.Future, function onStart_() {
+                var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);
+                var sidebarOptions = {
+                    isAppStoreEnabled: isStudyCenterEnabled
+                };
                 return BASE()
                     .then(function(data){
                         new ria.dom.Dom()
-                            .fromHTML(ASSET('~/assets/jade/sidebars/TeacherSidebar.jade')())
+                            .fromHTML(ASSET('~/assets/jade/sidebars/TeacherSidebar.jade')(sidebarOptions))
                             .appendTo("#sidebar");
                         return data;
                     });

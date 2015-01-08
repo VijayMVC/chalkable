@@ -17,7 +17,8 @@ namespace Chalkable.Web.Controllers
             IDictionary<SearchTypeEnum, Object> searchRes = new Dictionary<SearchTypeEnum, Object>();
             query = query.ToLower();
             searchRes.Add(SearchTypeEnum.Persons, SchoolLocator.PersonService.SearchPersons(query, true, 0, 30));
-            searchRes.Add(SearchTypeEnum.Applications, MasterLocator.ApplicationService.GetApplications(null, null, query, null, null));
+            if (Context.SCEnabled)
+                searchRes.Add(SearchTypeEnum.Applications, MasterLocator.ApplicationService.GetApplications(null, null, query, null, null));
             searchRes.Add(SearchTypeEnum.Announcements, SchoolLocator.AnnouncementService.GetAnnouncements(query));
             searchRes.Add(SearchTypeEnum.Attachments, SchoolLocator.AnnouncementAttachmentService.GetAttachments(query));
             searchRes.Add(SearchTypeEnum.Classes, SchoolLocator.ClassService.GetClasses(query));
