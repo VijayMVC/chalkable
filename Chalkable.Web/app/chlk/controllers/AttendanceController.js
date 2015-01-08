@@ -274,6 +274,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+        function seatingChartFromBarAction(date_, classId_) {
+            return this.seatingChartAction(classId_, date_);
+        },
+
+        [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.EditSeatingGridViewData]],
         function showEditGridWindowAction(model){
             var result = new ria.async.DeferredData(model);

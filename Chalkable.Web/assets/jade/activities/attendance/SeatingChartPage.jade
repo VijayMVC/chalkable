@@ -16,7 +16,7 @@ h2.page-title Attendance
 -var selectedId = topData.getSelectedItemId()
 -var hasStudentOnChart = self.hasStudentOnChart()
 -var seatingList = self.getSeatingList() || []
-+ClassesToolBar(topData, 'attendance', 'seatingChart', [self.getDate().format('mm-dd-yy')])
++ClassesToolBar(topData, 'attendance', 'seatingChartFromBar', [self.getDate().format('mm-dd-yy')])
 .action-bar
     .items
         +ActionLink('attendance', 'classList', selectedId, self.getDate().toStandardFormat())= Msg.List
@@ -66,26 +66,27 @@ div(class=showButtons ? 'can-post' : '').page-content.people-list-container
                     .black-arrow.add= Msg.Add_your_students
                 else
                     .add
-    if self.isScheduledInMp() && self.getColumns() * self.getRows() > 0
-        .seating-chart-container
-            +LeftRightToolbar()(
-                needDots = true,
-                roundedDots = true,
-                padding = 110
-            ).seating-toolbar.auto-h.big-arrows
-                -var emptyModel = new chlk.models.attendance.ClassAttendance
-                -var caTpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl
-                div(data-columns=self.getColumns(), data-rows=self.getRows()).droppable
-                    each items in seatingList
-                        .seating-row
-                            each item in items
-                                -var info = item.getInfo()
-                                .student-block.draggable(data-index= item.getIndex(), data-column= item.getColumn(), data-row= item.getRow(), class=info ? '' : 'empty-box')
-                                    -caTpl.assign(info || emptyModel)
-                                    !=caTpl.render()
-                                if info
-                                    .empty-box.student-block.absolute
-                                        .empty
+    if self.isScheduledInMp()
+        if self.getColumns() * self.getRows() > 0
+            .seating-chart-container
+                +LeftRightToolbar()(
+                    needDots = true,
+                    roundedDots = true,
+                    padding = 110
+                ).seating-toolbar.auto-h.big-arrows
+                    -var emptyModel = new chlk.models.attendance.ClassAttendance
+                    -var caTpl = new chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl
+                    div(data-columns=self.getColumns(), data-rows=self.getRows()).droppable
+                        each items in seatingList
+                            .seating-row
+                                each item in items
+                                    -var info = item.getInfo()
+                                    .student-block.draggable(data-index= item.getIndex(), data-column= item.getColumn(), data-row= item.getRow(), class=info ? '' : 'empty-box')
+                                        -caTpl.assign(info || emptyModel)
+                                        !=caTpl.render()
+                                    if info
+                                        .empty-box.student-block.absolute
+                                            .empty
     else
         .people-list
             .black-arrow.no-class-scheduled.row Selected class is not scaduled in current Term
