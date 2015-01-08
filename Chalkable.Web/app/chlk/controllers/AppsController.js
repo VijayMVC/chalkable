@@ -572,8 +572,12 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         function addDeveloperAction(){
-           var app = new chlk.models.apps.Application();
-           return this.ShadeView(chlk.activities.apps.AddAppDialog, new ria.async.DeferredData(app));
+            var result = this.ShowPromptBox('Pleace enter application name', '')
+                .then(function(appName){
+                    var app = new chlk.models.apps.Application();
+                    app.setName(appName);
+                    return this.BackgroundNavigate('apps', 'create', [app]);
+                }, this);
         },
 
         [chlk.controllers.AccessForRoles([
