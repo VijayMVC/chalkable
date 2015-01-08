@@ -9,9 +9,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodDataAccess : BaseSchoolDataAccess<MarkingPeriod>
+    public class MarkingPeriodDataAccess : DataAccessBase<MarkingPeriod, int>
     {
-        public MarkingPeriodDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
+        public MarkingPeriodDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
@@ -30,23 +30,11 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(sql, conds);
         }
         
-        public void ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
-        {
-            var b = new StringBuilder();
-            foreach (var markingPeriodId in markingPeriodIds)
-            {
-                b.AppendFormat(" update MarkingPeriod set WeekDays = @weekDays where Id = '{0}' ", markingPeriodId);
-            }
-            var conds = new Dictionary<string, object> {{"weekDays", weekDays}};
-            ExecuteNonQueryParametrized(b.ToString(), conds);
-        }
-
-        public MarkingPeriod GetLast(DateTime tillDate, int? schoolYearId)
+        public MarkingPeriod GetLast(DateTime tillDate, int schoolYearId)
         {
             var conds = new AndQueryCondition {{MarkingPeriod.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual}};
-            if(schoolYearId.HasValue)
-                conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId.Value);
-            var q = Orm.SimpleSelect<MarkingPeriod>(FilterBySchool(conds));
+            conds.Add(MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId);
+            var q = Orm.SimpleSelect<MarkingPeriod>(conds);
             q.Sql.AppendFormat("order by {0}  desc", MarkingPeriod.END_DATE_FIELD);
             return ReadOneOrNull<MarkingPeriod>(q);
         }

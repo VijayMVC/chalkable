@@ -21,6 +21,15 @@
       margin: 0 0 3px
 
     .permission
+      margin-top: 8px
+      margin-bottom: 15px
+
+    &.screenshots
+      margin-bottom: 25px
+    &.icons
+      margin-top: 15px
+    .icon
+      float: left
 
     .myapps-permission, label.description, .price-elem span
       display: inline-block
@@ -32,3 +41,69 @@
   .thumbnail
     position: relative
     display: inline-block
+
+    img
+      vertical-align:top
+
+
+    &.small-icon-item
+      width: 74px
+      height: 74px
+
+      img
+        width: 74px
+        height: 74px
+    &.big-icon-item
+      img
+        width: 170px
+        height: 110px
+
+    &.screenshot-item
+      width: 170px
+      height: 104px
+      display: inline-block
+      float: left
+      margin-bottom: 30px
+      margin-right: 19px
+
+      img
+        width: 170px
+        height: 104px
+        max-height: 104px
+
+  .section
+    border-bottom: 1px solid gray
+    margin-bottom: 5px
+    &.last
+      border:none
+
+  .labeled-checkbox
+    margin-right: 10px
+    margin-bottom: 10px
+    label
+      border-radius: 5px
+
+  .screenshot-pictures
+    &.short
+      margin-left: 0px
+      margin-top: 0px
+
+    .upload-img-block
+      margin-right: 15px
+      margin-bottom: 10px
+
+  .icons, .screenshot-pictures, .screenshots
+    display: inline-block
+    vertical-align: top
+
+.price-checkbox.slide-checkbox
+
+  &[checked]>DIV:before
+    content: 'FREE'
+    font: 10px/25px Arial, sans-serif
+
+  &:not([checked])>DIV:after
+    content: 'PAID'
+    font: 10px/25px Arial, sans-serif
+
+

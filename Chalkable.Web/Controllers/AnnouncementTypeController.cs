@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -20,6 +21,13 @@ namespace Chalkable.Web.Controllers
             var list = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             var res = ClassAnnouncementTypeViewData.Create(list);
             return Json(res, 3);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult ListByClasses(IntList classIds)
+        {
+            var list = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+            return Json(ClassAnnouncementTypeViewData.Create(list), 3);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

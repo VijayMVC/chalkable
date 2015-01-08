@@ -131,6 +131,10 @@ NAMESPACE('chlk', function (){
 
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
 
+
+                this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
+
+
                 var newClasses = session.get(ChlkSessionConstants.CLASSES_TO_FILTER, []).slice();
                 newClasses.unshift(chlk.lib.serialize.ChlkJsonSerializer().deserialize({
                     name: 'All',
@@ -161,6 +165,19 @@ NAMESPACE('chlk', function (){
 
                 session.set('siteRoot', siteRoot + serviceRoot);
                 return session;
+            },
+
+            [[ria.mvc.ISession, Object]],
+            function saveClassesInfoInSession(session,  key){
+                var resObj= {};
+                var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
+                var classesInfo = window[key];
+                if(classesInfo != undefined && classesInfo != null){
+                    for(var i in classesInfo) {
+                        resObj[i] = serializer.deserialize(classesInfo[i], chlk.models.classes.ClassForWeekMask);
+                    }
+                }
+                session.set(key, resObj);
             },
 
             [[ria.mvc.ISession, String, Object, String]],

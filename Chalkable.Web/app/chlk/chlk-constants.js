@@ -55,5 +55,6 @@ var ChlkSessionConstants = {
     USER_MODEL: 'userModel',
     DEMO_SCHOOL: 'DEMO_SCHOOL',
     DEMO_SCHOOL_PICTURE_DISTRICT: 'DEMO_SCHOOL_PICTURE_DISTRICT',
-    STUDY_CENTER_ENABLED: 'studyCenterEnabled'
+    STUDY_CENTER_ENABLED: 'studyCenterEnabled',
+    CLASSES_INFO: 'classesInfo'
 };

@@ -138,7 +138,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var fromPerson = ServiceLocator.PersonService.GetPerson(fromPersonId);
-            var teachers = ServiceLocator.StaffService.SearchStaff(null, announcement.ClassRef, null, null, false, 0, int.MaxValue);
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var teachers = ServiceLocator.StaffService.SearchStaff(syId, announcement.ClassRef, null, null, false, 0, int.MaxValue);
             var persons = teachers.Select(x => 
                 { 
                     var res = ServiceLocator.PersonService.GetPerson(x.Id);
@@ -153,7 +154,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         public void AddAnnouncementNotificationQnToTeacher(int announcementQnAId, int announcementId)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            var teachers = ServiceLocator.StaffService.SearchStaff(null, ann.ClassRef, null, null, false, 0, int.MaxValue);
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var teachers = ServiceLocator.StaffService.SearchStaff(syId, ann.ClassRef, null, null, false, 0, int.MaxValue);
             var authors = teachers.Select(x => 
                 { 
                     var res = ServiceLocator.PersonService.GetPerson(x.Id);

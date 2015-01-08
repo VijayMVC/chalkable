@@ -17,6 +17,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.common.PaginatedList, 'appReviews',
             chlk.models.developer.HomeAnalytics, 'appAnalytics',
             chlk.models.common.ChlkDate, 'reportDate',
+            ArrayOf(chlk.models.apps.Application), 'devApps',
 
             [[
                 String,
@@ -27,17 +28,21 @@ NAMESPACE('chlk.models.apps', function () {
                 Number,
                 chlk.models.common.ChlkDate,
                 chlk.models.common.PaginatedList,
-                chlk.models.developer.HomeAnalytics
+                chlk.models.developer.HomeAnalytics,
+                ArrayOf(chlk.models.apps.Application)
             ]],
-            function $(appName, draftId, liveId_, appState, appThumbnail, appRating,  reportDate, appReviews, appAnalytics){
+            function $(appName, draftId, liveId_, appState, appThumbnail,
+                       appRating,  reportDate, appReviews, appAnalytics, devApps){
                 BASE();
-                this.prepareFields_(appName, draftId, liveId_, appState, appThumbnail, appRating, reportDate, appReviews, appAnalytics);
+                this.prepareFields_(appName, draftId, liveId_, appState,
+                    appThumbnail, appRating, reportDate, appReviews, appAnalytics, devApps);
             },
 
             [[chlk.models.common.PaginatedList]],
             function $createFromReviews(reviews){
                 BASE();
-                this.prepareFields_("", null, null, null, "", null, null, reviews, new chlk.models.developer.HomeAnalytics());
+                this.prepareFields_("", null, null, null, "", null, null,
+                    reviews, new chlk.models.developer.HomeAnalytics(), []);
             },
 
             [[
@@ -49,9 +54,11 @@ NAMESPACE('chlk.models.apps', function () {
                 Number,
                 chlk.models.common.ChlkDate,
                 chlk.models.common.PaginatedList,
-                chlk.models.developer.HomeAnalytics
+                chlk.models.developer.HomeAnalytics,
+                ArrayOf(chlk.models.apps.Application)
             ]],
-            function prepareFields_(appName, draftId, liveId_, appState, appThumbnail, appRating,  reportDate, appReviews, appAnalytics){
+            function prepareFields_(appName, draftId, liveId_, appState, appThumbnail,
+                                    appRating,  reportDate, appReviews, appAnalytics, devApps){
                 this.setAppName(appName);
                 this.setDraftAppId(draftId);
                 this.setReportDate(reportDate);
@@ -63,6 +70,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setAppAnalytics(appAnalytics);
                 this.setAppRating(appRating);
                 this.setAppReviews(appReviews);
+                this.setDevApps(devApps);
             }
         ]);
 });

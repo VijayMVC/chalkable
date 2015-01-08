@@ -5,7 +5,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -43,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var announcementApplication = da.GetById(announcementAppId.Value);
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);
-                        var csp = new ClassPersonDataAccess(uow, Context.SchoolLocalId)
+                        var csp = new ClassPersonDataAccess(uow)
                             .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
                         res.AddRange(csp.Select(x=>x.PersonRef));
 

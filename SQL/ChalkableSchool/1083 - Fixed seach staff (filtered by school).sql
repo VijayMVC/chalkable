@@ -23,10 +23,10 @@ select
 	Staff.UserId
 from 
 	Staff
-	join StaffSchool on Staff.id = StaffSchool.StaffRef
+	join UserSchool on Staff.UserId = UserSchool.UserRef
 	join ClassTeacher on Staff.Id = ClassTeacher.PersonRef
 where		
-	StaffSchool.SchoolRef = @schoolId and
+	UserSchool.SchoolRef = @schoolId and
 	(@classId is null or ClassTeacher.ClassRef = @classId) and 
 	(@studentId is null or ClassTeacher.ClassRef in (select ClassPerson.ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId)) and 	
 	(@filter is null or FirstName like @filter or LastName like @filter)
@@ -49,10 +49,10 @@ select
 	Staff.UserId
 from 
 	Staff
-	join StaffSchool on Staff.id = StaffSchool.StaffRef
+	join UserSchool on Staff.UserId = UserSchool.UserRef
 	join ClassTeacher on Staff.Id = ClassTeacher.PersonRef
 where		
-	StaffSchool.SchoolRef = @schoolId and
+	UserSchool.SchoolRef = @schoolId and
 	(@classId is null or ClassTeacher.ClassRef = @classId) and 
 	(@studentId is null or ClassTeacher.ClassRef in (select ClassPerson.ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId)) and 	
 	(@filter is null or FirstName like @filter or LastName like @filter)
@@ -71,4 +71,7 @@ order by
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY 
 
 
+
 GO
+
+

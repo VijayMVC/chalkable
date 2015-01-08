@@ -91,6 +91,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,
             int start, int count)
         {
+            schoolYearId = schoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             return DoRead(u => new StaffDataAccess(u).SearchStaff(schoolYearId, classId, studentId, filter, orderByFirstName,
                             start, count));
         }

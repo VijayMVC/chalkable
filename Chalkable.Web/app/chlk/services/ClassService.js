@@ -52,7 +52,8 @@ NAMESPACE('chlk.services', function () {
             //TODO: refactor
             [[chlk.models.id.ClassId]],
             chlk.models.classes.ClassForWeekMask, function getClassAnnouncementInfo(id){
-                var res = window.classesInfo[id.valueOf()];
+                //var res = window.classesInfo[id.valueOf()];
+                var res = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_INFO, {})[id.valueOf()];
                 if(!res) {
                     var cls = chlk.models.classes.ClassForWeekMask();
                     cls.setAlphaGrades([]);
@@ -62,9 +63,29 @@ NAMESPACE('chlk.services', function () {
                     cls.setAlphaGradesForStandards([]);
                     return cls;
                 }
-                res.classId = id.valueOf();
-                res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
                 return res;
+                //res.classId = id.valueOf();
+                //res = new chlk.lib.serialize.ChlkJsonSerializer().deserialize(res, chlk.models.classes.ClassForWeekMask);
+                //return res;
+            },
+
+            [[ArrayOf(chlk.models.id.ClassId)]],
+            ria.async.Future, function updateClassAnnouncementTypes(classIds){
+                return this.getContext().getService(chlk.services.AnnouncementService)
+                    .getClassAnnouncementTypes(classIds)
+                    .then(function (classAnnTypes){
+                        var classesInfoMap = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_INFO, {});
+                        for(var i = 0; i < classIds.length; i++){
+                            var classInfo = classesInfoMap[classIds[i]];
+                            if(classInfo){
+                                classInfo.setTypesByClass(classAnnTypes.filter(function (annType){
+                                    annType.getClassId() == classIds[i];
+                                }));
+                            }
+                        }
+                        this.getContext().getSession().set(ChlkSessionConstants.CLASSES_INFO, classesInfoMap);
+                        return classesInfoMap;
+                    }, this);
             },
 
             [[chlk.models.id.ClassId]],

@@ -30,14 +30,14 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Boolean, function isStudentGraded(){
                 var grade = this.getGrade();
-                return this.isDropped() || this.isExempt()  || grade || grade == 0;
+                return this.isDropped() || this.isExempt() || grade >= 0;
             },
 
             String, function displayStudentGradeValue(){
                 if(this.isDropped()) return Msg.Dropped;
                 if(this.isExempt()) return Msg.Exempt;
                 var grade = this.getGrade();
-                if(grade || grade == 0) return grade;
+                if(grade || grade == 0) return grade.toString();
                 return '';
             }
         ])

@@ -45,6 +45,11 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.developer.HomeAnalytics, 'appAnalytics',
 
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.apps.Application), 'devApps',
+
+
+
             [[chlk.models.developer.DeveloperBalance]],
             function getCurrentBalanceChartData(devBalance){
 

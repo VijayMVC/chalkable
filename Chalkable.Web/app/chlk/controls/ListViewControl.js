@@ -167,7 +167,8 @@ NAMESPACE('chlk.controls', function () {
                 var next = selectedRow.next('.row');
                 if(next.exists()){
                     node.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [next, parseInt(next.getAttr('index'), 10)]);
-                }
+                }else
+                    node.trigger(chlk.controls.GridEvents.DESELECT_ROW.valueOf(), [selectedRow, parseInt(selectedRow.getAttr('index'), 10)]);
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_PREV_ROW.valueOf(), '.chlk-grid')],
