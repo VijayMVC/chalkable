@@ -12,7 +12,7 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public IList<ScheduleItem> GetSchedule(int schoolYearId, int? teacherId, int? studentId, int? classId, DateTime from, DateTime to)
+        public IList<ScheduleItem> GetSchedule(int schoolYearId, int? teacherId, int? studentId, int? classId, int? callerId, DateTime from, DateTime to)
         {
             Trace.Assert(teacherId.HasValue || studentId.HasValue || classId.HasValue);
             IDictionary<string, object> ps = new Dictionary<string, object>
@@ -21,6 +21,7 @@ namespace Chalkable.Data.School.DataAccess
                 {"@teacherId", teacherId},
                 {"@studentId", studentId},
                 {"@classId", classId},
+                {"@callerId", callerId},
                 {"@from", from.Date},
                 {"@to", to.Date},
             };
