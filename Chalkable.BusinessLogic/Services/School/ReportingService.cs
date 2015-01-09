@@ -216,7 +216,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetMissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput)
         {
+            bool? isEnrolled = missingAssignmentsInput.IncludeWithdrawn ? (bool?)null : true;
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(missingAssignmentsInput.GradingPeriodId);
+            var students = ServiceLocator.StudentService.GetClassStudents(missingAssignmentsInput.ClassId, gradingPeriod.MarkingPeriodRef, isEnrolled);
             var stiModel = new MissingAssignmentsParams
                 {
                     AcadSessionId = gradingPeriod.SchoolYearRef,
@@ -231,6 +233,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = missingAssignmentsInput.ClassId,
                     StartDate = missingAssignmentsInput.StartDate,
                     SuppressStudentName = missingAssignmentsInput.SuppressStudentName,
+                    StudentIds = students.Select(x=>x.Id).ToArray()
                 };
             return ConnectorLocator.ReportConnector.MissingAssignmentsReport(stiModel);
         }
