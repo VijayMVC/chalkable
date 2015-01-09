@@ -9,6 +9,5 @@
     ).comment-value
     +Hidden('studentid', self.getStudentId().valueOf())
     input(value=value, name="gradevalue", data-value=value, class=(value ? "" : "empty-grade" )).grade-autocomplete.value-input
-    .grading-input-popup
-        .popup-content
-            +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(addCallBack = true, containerClass = "fill-grade-container").fill-grade
+    .grading-input-popup.popup-bubble.no-triangle
+        +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(addCallBack = true, containerClass = "fill-grade-container").fill-grade
