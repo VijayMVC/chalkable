@@ -1,8 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
 
 NAMESPACE('chlk.activities.common.standards', function(){
-
-
     ASSET('~/assets/jade/common/standards/BaseStandardDialog.jade')();
     /**@class chlk.activities.common.standards.BaseStandardDialog*/
     CLASS(
@@ -20,20 +18,22 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 return standardIds;
             },
 
+            function getStandardIds_(){
+                var standardIdsNode = this.dom.find('.standard-ids');
+                var value = standardIdsNode.getValue();
+                var standardIds = value ? value.split(',') : [];
+
+                return standardIds;
+            },
+
             [ria.mvc.DomEventBind('click', '.column-cell')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function cellClick(node, event){
                 if(node.hasClass('active'))
                     return false;
-
-                var standardIdsNode = this.dom.find('.standard-ids');
-                var value = standardIdsNode.getValue();
-                var standardIds = value ? value.split(',') : [];
-
+                var standardIds = this.getStandardIds_();
                 var prevColumn = node.parent('.column').find('.column-cell.active');
                 prevColumn.removeClass('active');
-
-                standardIds = this.removeColumnId_(prevColumn, standardIds);
 
                 node.addClass('active');
                 var id = node.getData('id') || '';
@@ -42,20 +42,13 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 var btn = btnAddContainer.find('button');
 
                 var childNodes = node.parent('td').find('~ td');
-                var childColumns = childNodes
-                    .find('.column-cell')
-                    .forEach(function(column){
-                        standardIds = this.removeColumnId_(column, standardIds);
-                    }.bind(this));
-
                 childNodes.remove();
 
                 if(idIndex == -1 && id != ''){
-                    this.dom.find('input[name=standardid]').setValue(id);
-                    standardIds.push(id);
+                    this.dom.find('input[name=tmpStandardId]').setValue(id);
                 }
 
-                if (standardIds.length == 0){
+                if (idIndex >= 0 || id == ''){
                     btnAddContainer.addClass('disabled');
                     btnAddContainer.setAttr('disabled', true);
                     btn.setAttr('disabled', true);
@@ -64,14 +57,21 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     btnAddContainer.removeAttr('disabled');
                     btn.removeAttr('disabled');
                 }
-
-                standardIdsNode.setValue(standardIds.join(','));
                 return true;
             },
 
             [ria.mvc.DomEventBind('click', '.add-standard-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function submitClick(node, event){
+                var standardIds = this.getStandardIds_();
+                var newStandardId = this.dom.find('input[name=tmpStandardId]').getValue();
+
+                if (standardIds.indexOf(newStandardId) == -1){
+                    standardIds.push(newStandardId);
+                    this.dom.find('input[name=standardid]').setValue(newStandardId);
+                }
+                var standardIdsNode = this.dom.find('.standard-ids');
+                standardIdsNode.setValue(standardIds.join(','));
                 setTimeout(function(){
                     node.setAttr('disabled', true);
                 }, 1);

@@ -3,11 +3,11 @@ REQUIRE('chlk.models.standard.AddCCStandardViewData');
 
 NAMESPACE('chlk.templates.apps', function(){
 
-    /**@class chlk.templates.apps.AddCCStandardsTpl*/
+    /**@class chlk.templates.apps.AddCommonCoreStandardsDialogTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/apps/AddCCStandards.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/apps/AddCommonCoreStandardsDialog.jade')],
         [ria.templates.ModelBind(chlk.models.standard.AddCCStandardViewData)],
-        'AddCCStandardsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
+        'AddCommonCoreStandardsDialogTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.standard.CCStandardCategory), 'items',

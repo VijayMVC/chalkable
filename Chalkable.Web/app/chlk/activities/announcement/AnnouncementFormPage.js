@@ -65,7 +65,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
                         model.getClassId(),
                         model.getId(),
-                        suggestedApps);
+                        suggestedApps
+                    );
                     var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
                     suggestedAppsTpl.options({
                         userRole: this.getRole(),

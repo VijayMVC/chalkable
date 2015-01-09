@@ -5,7 +5,7 @@ NAMESPACE('chlk.templates.announcement', function(){
 
     /**@class chlk.templates.announcement.AddStandardsTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AddStandards.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AddStandardsDialog.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AddStandardViewData)],
         'AddStandardsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 

@@ -19,7 +19,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         public int OrderBy { get; set; }
         public int? SectionId { get; set; }
         public DateTime StartDate { get; set; }
-        public int? StudentId { get; set; }
+        public int[] StudentIds { get; set; }
         public bool SuppressStudentName { get; set; }
         public int UserId { get; set; }
     }

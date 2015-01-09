@@ -4,6 +4,7 @@ mixin AddStandardDialog(header, controller, action)
             h1=header
             span Choose a standard that describes the item
         +ActionForm(controller, action).add-standards-form
+            +Hidden('tmpStandardId', null)
             block
             .buttons-container
                 +Button.special-button2.cancel.close Cancel

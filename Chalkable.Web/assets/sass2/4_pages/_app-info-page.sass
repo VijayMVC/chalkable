@@ -1,4 +1,35 @@
 .app-info-page
+
+  .standards-list
+    padding-top: 8px
+
+    BUTTON
+      position: relative
+      padding-right: 29px
+
+      &:not(:last-child)
+        margin-right: 10px
+
+    .remove-standard
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-sprite(close-btn)
+      position: absolute
+      top: -2px
+      right: -2px
+
+  .add-standards .title
+    color: #e0e0e0
+    font-weight: 600
+    font-size: 12px
+    padding-top: 6px
+    padding-bottom: 0
+    cursor: pointer
+    text-align: center
+
+
   .api-key
     position: absolute
     right: 50px

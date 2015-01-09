@@ -1,13 +1,14 @@
-if self.getStandards() && self.getStandards().length > 0
-    .standards-list
-        standardCodesStr = (self.getStandardsCodes() || []).join(',')
-        +Hidden('standards', standardCodesStr)
-        each standard in self.getStandards()
-            div(data-tooltip = standard.getDescription()).grey-button.same-on-hover
-                span=standard.getStandardCode()
-                +ActionLink('apps', 'removeStandard', self.getApplicationId(), standard.getStandardCode()).remove-standard
-    +ActionLink('apps', 'removeAllStandards', self.getApplicationId()).remove-all-standards-btn.x-hidden
-    .title.add-more-title CLICK TO ADD MORE
-else
-    .title CLICK TO ADD STANDARD
-+ActionLink('apps', 'showStandards', self.getApplicationId()).add-standards-btn.x-hidden
+.standards-list
+    if self.getStandards() && self.getStandards().length > 0
+        .standards-list-container
+            standardCodesStr = (self.getStandardsCodes() || []).join(',')
+            +Hidden('standards', standardCodesStr)
+            each standard in self.getStandards()
+                button(data-tooltip = standard.getDescription(), type="button").grey-button.same-on-hover
+                    = standard.getStandardCode()
+                    +ActionLink('apps', 'removeStandard', self.getApplicationId(), standard.getStandardCode()).remove-standard
+        +ActionLink('apps', 'removeAllStandards', self.getApplicationId()).remove-all-standards-btn.x-hidden
+        .title.add-more-title CLICK TO ADD MORE
+    else
+        .title CLICK TO ADD STANDARD
+    +ActionLink('apps', 'showStandards', self.getApplicationId()).add-standards-btn.x-hidden
