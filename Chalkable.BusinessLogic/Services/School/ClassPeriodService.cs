@@ -55,7 +55,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime @from, DateTime to)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            return DoRead( u => new ScheduleDataAccess(u, null).GetSchedule(Context.SchoolYearId.Value, teacherId, studentId, classId, from, to));
+            return DoRead( u => new ScheduleDataAccess(u, null).GetSchedule(Context.SchoolYearId.Value, teacherId, studentId, classId, Context.PersonId, from, to));
 
         }
     }
