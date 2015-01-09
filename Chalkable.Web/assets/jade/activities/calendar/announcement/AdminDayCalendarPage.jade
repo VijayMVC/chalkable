@@ -1,0 +1,14 @@
+div
+    topData = self.gradeLevelsInputData
+    topItems = topData.getTopItems()
+    selectedIds2 = topData.getSelectedIds()
+    actions = {currentAction: 'day', day: 'day', week: 'week', month: 'month'}
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'calendar', 'day', [self.getCurrentDate().format('mm-dd-yy')])(
+        selectedIds=selectedIds2,
+        multiple
+    ).classes-bar
+    +Calendar(self, chlk.templates.calendar.announcement.AdminDayCalendarBodyTpl, self.getModel(), 'calendar', actions, selectedIds2).admin-day-calendar
+        .calendar-today-container.admin
+            A.admin-day-classes.pressed
+            A.admin-day-teachers
+
