@@ -1,6 +1,6 @@
-mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, showAlerts_, forCurrentMp_)
    -var currentClassId = topBarData.getSelectedItemId() || chlk.models.id.ClassId('')
-   -var data = self.prepareModel(topBarData)
+   -var data = self.prepareModel(topBarData, forCurrentMp_)
    -attributes.selectedGroupId = data.currentMPId
    -attributes.selectedItemId = currentClassId
    -attributes.fixedElementMargin = true

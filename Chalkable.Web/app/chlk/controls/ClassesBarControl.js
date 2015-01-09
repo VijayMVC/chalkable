@@ -17,12 +17,20 @@ NAMESPACE('chlk.controls', function () {
 
     CLASS(
         'ClassesBarControl', EXTENDS(chlk.controls.Base), [
-            function prepareModel(classes) {
+            function prepareModel(classes, forCurrentMp_) {
                 var mpService = this.context.getService(chlk.services.MarkingPeriodService),
                     clsService = this.context.getService(chlk.services.ClassService),
                     cls = classes.getTopItems();
 
-                var data = mpService.getMarkingPeriodsSync().map(function (mp) {
+                var currentMPId = mpService.getCurrentMarkingPeriod().getId();
+
+                var mPeriods = mpService.getMarkingPeriodsSync();
+                if(forCurrentMp_)
+                    mPeriods = mPeriods.filter(function(mp){
+                        return mp.getId() == currentMPId;
+                    });
+
+                var data = mPeriods.map(function (mp) {
                     return {
                         id: mp.getId(),
                         title: mp.getName(),
@@ -35,8 +43,6 @@ NAMESPACE('chlk.controls', function () {
                         })
                     }
                 });
-
-                var currentMPId = mpService.getCurrentMarkingPeriod().getId();
 
                 var currentClassId = classes.getSelectedItemId();
                 if (currentClassId && currentClassId.valueOf()) {

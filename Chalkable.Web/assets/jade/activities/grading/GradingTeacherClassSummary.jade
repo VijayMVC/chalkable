@@ -11,7 +11,7 @@ mixin StudentGradingItem(student)
             +PersonImg(student, 47)
 
 topData = self.getTopData()
-+ClassesToolBar(topData, 'grading', 'summaryGrid')
++ClassesToolBar(topData, 'grading', 'summaryGrid', null, null, null, true)
 .grading-summary
     if !self.getItems().length
         .no-items-text There is no grading summary data for current term
