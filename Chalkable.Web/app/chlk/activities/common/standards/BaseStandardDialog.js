@@ -48,7 +48,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     this.dom.find('input[name=tmpStandardId]').setValue(id);
                 }
 
-                if (idIndex >= 0){
+                if (idIndex >= 0 || id == ''){
                     btnAddContainer.addClass('disabled');
                     btnAddContainer.setAttr('disabled', true);
                     btn.setAttr('disabled', true);
