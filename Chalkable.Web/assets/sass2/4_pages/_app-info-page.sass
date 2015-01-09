@@ -1,0 +1,140 @@
+.app-info-page
+
+  .standards-list
+    padding-top: 8px
+
+    BUTTON
+      position: relative
+      padding-right: 29px
+
+      &:not(:last-child)
+        margin-right: 10px
+
+    .remove-standard
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-sprite(close-btn)
+      position: absolute
+      top: -2px
+      right: -2px
+
+  .add-standards .title
+    color: #e0e0e0
+    font-weight: 600
+    font-size: 12px
+    padding-top: 6px
+    padding-bottom: 0
+    cursor: pointer
+    text-align: center
+
+
+  .api-key
+    position: absolute
+    right: 50px
+    top: 20px
+
+    input[type=text]
+      color: #487389
+      font-weight: 600
+
+  .app-name
+    padding: 0 3px
+    font-weight: 600
+
+  .elem
+    margin: 15px 0
+
+    > label
+      font-weight: 600
+      display: block
+      margin: 0 0 3px
+
+    .permission
+      margin-top: 8px
+      margin-bottom: 15px
+
+    &.screenshots
+      margin-bottom: 25px
+    &.icons
+      margin-top: 15px
+    .icon
+      float: left
+
+    .myapps-permission, label.description, .price-elem span
+      display: inline-block
+      width: 350px
+
+  .upload-img-block
+    width: 150px
+
+  .thumbnail
+    position: relative
+    display: inline-block
+
+    img
+      vertical-align:top
+
+
+    &.small-icon-item
+      width: 74px
+      height: 74px
+
+      img
+        width: 74px
+        height: 74px
+    &.big-icon-item
+      img
+        width: 170px
+        height: 110px
+
+    &.screenshot-item
+      width: 170px
+      height: 104px
+      display: inline-block
+      float: left
+      margin-bottom: 30px
+      margin-right: 19px
+
+      img
+        width: 170px
+        height: 104px
+        max-height: 104px
+
+  .section
+    border-bottom: 1px solid gray
+    margin-bottom: 5px
+    &.last
+      border:none
+
+  .labeled-checkbox
+    margin-right: 10px
+    margin-bottom: 10px
+    label
+      border-radius: 5px
+
+  .screenshot-pictures
+    &.short
+      margin-left: 0px
+      margin-top: 0px
+
+    .upload-img-block
+      margin-right: 15px
+      margin-bottom: 10px
+
+  .icons, .screenshot-pictures, .screenshots
+    display: inline-block
+    vertical-align: top
+
+.price-checkbox.slide-checkbox
+
+  &[checked]>DIV:before
+    content: 'FREE'
+    font: 10px/25px Arial, sans-serif
+
+  &:not([checked])>DIV:after
+    content: 'PAID'
+    font: 10px/25px Arial, sans-serif
+
+
