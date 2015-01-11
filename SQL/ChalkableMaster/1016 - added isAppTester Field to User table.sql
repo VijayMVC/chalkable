@@ -18,10 +18,10 @@ CREATE TYPE [dbo].[TUser] AS TABLE(
 	[FullName] [nvarchar](1024) NULL,
 	[IsSysAdmin] [bit] NOT NULL,
 	[IsDeveloper] [bit] NOT NULL,
+	[IsAppTester] [bit] NOT NULL,
 	[ConfirmationKey] [nvarchar](256) NULL,
 	[SisUserName] [nvarchar](256) NULL,
 	[SisUserId] [int] NULL,
-	[DistrictRef] [uniqueidentifier] NULL,
-	[IsAppTester] bit not null
+	[DistrictRef] [uniqueidentifier] NULL
 )
 GO
