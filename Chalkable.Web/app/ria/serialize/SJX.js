@@ -33,7 +33,7 @@ NAMESPACE('ria.serialize', function () {
 
             Assert(ria.__API.isClassConstructor(Type) && ria.__API.implements(Type, ria.serialize.IDeserializable));
 
-            if (raw == undefined || raw == null)
+            if (raw == undefined || raw == null || !raw && Type == chlk.models.common.ChlkDate)
                 return null;
 
             var obj = Type.apply(_GLOBAL, specs);
