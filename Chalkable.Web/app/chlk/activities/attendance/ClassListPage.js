@@ -38,6 +38,20 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var container = this.dom.find('.container-' + model.getStudent().getId().valueOf());
                 container.empty();
                 tpl.renderTo(container);
+
+                var comboList = container.find('.combo-list');
+
+                if (comboList.exists() && comboList.height() + comboList.offset().top > jQuery(document).height() - jQuery('footer').height()){
+                     comboList.removeClass('top');
+                     comboList.addClass('bottom');
+                     comboList.setCss('top', (-comboList.height() + 15)+ 'px');
+                }
+                else {
+                     comboList.removeClass('bottom');
+                     comboList.addClass('top');
+                     comboList.setCss('top', '65px');
+                }
+
                 var row = container.parent('.row');
                 row.find('.student-attendance-container').removeClass('active');
                 if(row.hasClass('selected') && !row.hasClass('reason-changed')){
@@ -219,6 +233,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                 if(studentAttendance){
                     this.onPartialRender_(studentAttendance, chlk.activities.lib.DontShowLoader());
                     this.onPartialRefresh_(studentAttendance, chlk.activities.lib.DontShowLoader());
+
+
                 }
             },
 
