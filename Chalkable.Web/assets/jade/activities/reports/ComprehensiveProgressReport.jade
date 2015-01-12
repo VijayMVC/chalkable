@@ -9,6 +9,7 @@
          +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
          +Hidden('classId', self.getClassId().valueOf())
          +Hidden('absenceReasonIds', '')#absence-reasons
+         +Hidden('studentIds', '')#student-ids-value
          +Hidden('gradingPeriodIds', self.getGradingPeriodId().valueOf().toString())#grading-periods
          +Hidden('dailyAttendanceDisplayMethod', chlk.models.reports.AttendanceDisplayMethodEnum.NONE.valueOf())#daily-attendance-display-method
          .report-content
@@ -64,6 +65,19 @@
                      h3=Msg.Other
                      +LabeledCheckbox(Msg.Go_green, 'goGreen', false)
                      +LabeledCheckbox(Msg.Window_Envelope, 'windowEnvelope', false)
+               TR
+                  TD(colspan=3).item-1
+                     +Checkbox('select all', false)#select-all
+                     label(for="select-all")=Msg.Select_all
+                     .students-block
+                        each student, i in self.getStudents()
+                           .student-item
+                              .chk
+                                 id = student.getId().valueOf()
+                                    +Checkbox('student', false)(value=id, data-id=id).student-chk
+                              +ProfileLink(student, 'student').image-container.white.shadow
+                                 +PersonImg(student, 47)
+                              p=student.getDisplayName()
 
       .x-window-footer.report-bottom
          +ReportFormatSelect()

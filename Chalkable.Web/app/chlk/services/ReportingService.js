@@ -120,12 +120,12 @@ NAMESPACE('chlk.services', function () {
         [[chlk.models.id.ClassId, chlk.models.reports.StudentIdentifierEnum, chlk.models.reports.ReportFormatEnum, ArrayOf(chlk.models.id.GradingPeriodId),
             ArrayOf(chlk.models.id.AttendanceReasonId), chlk.models.reports.ComprehensiveProgressOrderByMethod, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
             Number, Number, Boolean, Boolean, Boolean, Boolean, chlk.models.reports.AttendanceDisplayMethodEnum, Boolean, Boolean,
-            Boolean,  Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.SchoolPersonId]],
+            Boolean,  Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.SchoolPersonId, String]],
 
         String, function submitComprehensiveProgressReport(classId, idToPrint, format, gradingPeriodIds, absenceReasonIds, orderBy,  startDate_, endDate_,
                maxStandardAverage_, minStandardAverage_, additionalMailings_, classAverageOnly_, displayCategoryAverages_, displayClassAverage_,
                dailyAttendanceDisplayMethod, displayPeriodAttendance_, displaySignatureLine_, displayStudentComments_, displayStudentMailingAddress_,
-               displayTotalPoints_, includePicture_, includeWithdrawn_, windowEnvelope_, goGreen_, studentFilterId_){
+               displayTotalPoints_, includePicture_, includeWithdrawn_, windowEnvelope_, goGreen_, studentFilterId_, studentIds_){
             return this.getUrl('Reporting/ComprehensiveProgressReport.json', {
                 classId : classId.valueOf(),
                 idToPrint: idToPrint.valueOf(),
@@ -151,7 +151,8 @@ NAMESPACE('chlk.services', function () {
                 goGreen: goGreen_,
                 windowEnvelope: windowEnvelope_,
                 studentFilterId_: studentFilterId_,
-                orderBy: orderBy.valueOf()
+                orderBy: orderBy.valueOf(),
+                studentIds: studentIds_
             });
         },
 

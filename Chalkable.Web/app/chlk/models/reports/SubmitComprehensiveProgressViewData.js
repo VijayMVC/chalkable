@@ -56,22 +56,24 @@ NAMESPACE('chlk.models.reports', function () {
 
         Boolean, 'windowEnvelope',
 
+        String, 'studentIds',
+
         chlk.models.id.SchoolPersonId, 'studentFilterId',
 
         ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
-        ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
+        ArrayOf(chlk.models.people.User), 'students',
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId,
             chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            ArrayOf(chlk.models.schoolYear.GradingPeriod),
             ArrayOf(chlk.models.attendance.AttendanceReason),
+            ArrayOf(chlk.models.people.User)
         ]],
-        function $(classId_, gradingPeriodId_, startDate_, endDate_, gradingPeriods_, reasons_){
+        function $(classId_, gradingPeriodId_, startDate_, endDate_,  reasons_, students_){
             BASE(classId_, gradingPeriodId_, startDate_, endDate_);
-            if(gradingPeriods_)
-                this.setGradingPeriods(gradingPeriods_);
             if(reasons_)
                 this.setReasons(reasons_);
+            if(students_)
+                this.setStudents(students_);
         }
     ]);
 });

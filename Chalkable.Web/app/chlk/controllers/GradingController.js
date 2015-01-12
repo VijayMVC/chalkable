@@ -7,6 +7,7 @@ REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.ReportingService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.services.GradingPeriodService');
+REQUIRE('chlk.services.StudentService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
@@ -59,6 +60,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.GradingPeriodService, 'gradingPeriodService',
+
+            [ria.mvc.Inject],
+            chlk.services.StudentService, 'studentService',
 
             Array, function getClassForGrading_(withAll_, forCurrentMp_){
                 return this.classService.getClassesForTopBar(withAll_, forCurrentMp_);
@@ -612,7 +616,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isIncludeWithdrawnStudents(),
                     reportViewData.isWindowEnvelope(),
                     reportViewData.isGoGreen(),
-                    reportViewData.getStudentFilterId()
+                    reportViewData.getStudentFilterId(),
+                    reportViewData.getStudentIds()
                 );
                 this.BackgroundCloseView(chlk.activities.reports.ComprehensiveProgressReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
@@ -831,11 +836,11 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             ria.async.Future, function getComprehensiveProgressReportInfo_(selectedGradingPeriodId, classId, startDate, endDate){
-                return this.gradingPeriodService.getList()
+                return this.studentService.getClassStudents(classId, selectedGradingPeriodId)
                     .attach(this.validateResponse_())
-                    .then(function(gradingPeriods){
+                    .then(function(students){
                         return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
-                            selectedGradingPeriodId, startDate, endDate, gradingPeriods, this.getReasonsForReport_());
+                            selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
                     }, this);
             },
 

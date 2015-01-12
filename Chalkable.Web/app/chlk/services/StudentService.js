@@ -25,6 +25,17 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getClassStudents(classId, gradingPeriodId){
+                //return this.get('Student/GetClassStudents.json', ArrayOf(chlk.models.people.User),{
+                //    classId: classId,
+                //    gradingPeriodId: gradingPeriodId
+                //});
+                return this.getStudents(classId, null, null, null, 0, 10000).then(function(data){
+                    return data.getItems();
+                });
+            },
+
             [[String]],
             ria.async.Future, function getStudentsByFilter(filter_) {
                 return this.getStudents(null, filter_, true, true)

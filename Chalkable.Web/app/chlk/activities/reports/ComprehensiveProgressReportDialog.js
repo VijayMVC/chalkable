@@ -21,6 +21,15 @@ NAMESPACE('chlk.activities.reports', function(){
                 if(reasonsArray && reasonsArray.length)
                     reasonsNode.setValue(reasonsArray.join(','));
 
+                var studentIdsNode = node.find('#student-ids-value'),
+                    studentsArray = [];
+                    node.find('.student-chk').forEach(function(item){
+                        if(item.is(':checked')){
+                            studentsArray.push(item.getValue());
+                        }
+                    });
+                studentIdsNode.setValue(studentsArray.join(','));
+
                 //var gradingPeriodsIdsNode = node.find('#grading-periods'),
                 //    gradingPeriodsIds = node.find('.grading-periods-select').getValue();
                 //if(gradingPeriodsIds && gradingPeriodsIds.length > 0)

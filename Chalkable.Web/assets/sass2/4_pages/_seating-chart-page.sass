@@ -1,3 +1,4 @@
+
 .seating-chart-popup, .attendance-combo .combo-list
   padding: 0
   width: 200px
@@ -5,6 +6,10 @@
   display: none
   z-index: 999
   +box-shadow(transparentize(#000, .8) 0 0 16px)
+
+  .combo-list-container
+    overflow-y: scroll
+    max-height: 600px
 
   .item
     position: relative

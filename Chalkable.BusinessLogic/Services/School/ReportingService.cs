@@ -157,7 +157,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Comment = studentComment.Comment
                 });
             }
-            return res.OrderBy(x=>x.Student.LastName).ThenBy(x=>x.Student.FirstName).ToList();
+            return res;
         }
 
         public void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment)
@@ -206,7 +206,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = comprehensiveProgressInput.ClassId,
                     WindowEnvelope = comprehensiveProgressInput.WindowEnvelope,
                     StudentFilterId = comprehensiveProgressInput.StudentFilterId,
-                    StudentIds = students.Select(student=>student.Id).ToArray(),
+                    StudentIds = comprehensiveProgressInput.StudentIds != null ? comprehensiveProgressInput.StudentIds.ToArray() : null,
                     IncludePicture = comprehensiveProgressInput.IncludePicture,
                     IncludeWithdrawn = comprehensiveProgressInput.IncludeWithdrawn,
                    
@@ -332,7 +332,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         public IntList GradingPeriodIds { get; set; }
         public IntList AbsenceReasonIds { get; set; }
-
+        public IntList StudentIds { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? StartDate { get; set; }
         
@@ -357,6 +357,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool GoGreen { get; set; }
         public int OrderBy { get; set; }
         public bool WindowEnvelope { get; set; }
+        
 
 
         public override int GradingPeriodId
