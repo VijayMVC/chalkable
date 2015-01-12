@@ -1,0 +1,22 @@
+.developer
+    .info
+        +ActionForm('account', 'profileSave')
+            h2 Base Info
+            span.hint *This info will appear in the App Store
+            -id = self.id ? self.id.valueOf() : null
+            +Hidden("id", id)
+            div
+                label Developer name
+                input(name="name", value=self.name)
+            div
+                label Developer email
+                input(name="email", value=self.email, class="validate[required, custom[email]]")
+            div
+                label Developer web site
+                input(name="websitelink", value=self.webSite, class="validate[required, custom[url]]")
+            div.align-right
+                +Button().special-button.blue-button Save
+        div.bg-line
+
+
+
