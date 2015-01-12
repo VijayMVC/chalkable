@@ -8,7 +8,8 @@ mixin TooltipWithOverflow(text)
     .day-names
         each item in self.getItems()
             .week
-                p=item.getDate().format('DD') + ' ' + item.getDay()
+                if(item.getDate().getDate().getDay())
+                    p=item.getDate().format('DD, M d')
     .tb-announcements
         each item in self.getItems()
             div

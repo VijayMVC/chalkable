@@ -3,7 +3,7 @@
         each item,i in self.getItems()
             div(class=item.getTodayClassName()).day
                 if(item.getDate().getDate().getDay())
-                    p=item.getDate().format('DD')
+                    p=item.getDate().format('DD, M d')
     .items-table
         -var lastPeriodOrder = null
         each item in self.groupItemsAsTable()
