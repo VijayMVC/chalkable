@@ -147,17 +147,17 @@ namespace Chalkable.BusinessLogic.Services.School
             int markingPeriodId = gp.MarkingPeriodRef;
             var students = ServiceLocator.StudentService.GetClassStudents(classId, markingPeriodId);
             var res = new List<StudentCommentInfo>();
-            foreach (var inowStudentComment in inowReportComments)
+            foreach (var student in students)
             {
-                var student = students.FirstOrDefault(x => x.Id == inowStudentComment.StudentId);
-                if(student == null) continue;
+                var studentComment = inowReportComments.FirstOrDefault(sc => sc.StudentId == student.Id);
+                if(studentComment == null) continue;
                 res.Add(new StudentCommentInfo
-                    {
-                        Student = student,
-                        Comment = inowStudentComment.Comment
-                    });
+                {
+                    Student = student,
+                    Comment = studentComment.Comment
+                });
             }
-            return res;
+            return res.OrderBy(x=>x.Student.LastName).ThenBy(x=>x.Student.FirstName).ToList();
         }
 
         public void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment)
