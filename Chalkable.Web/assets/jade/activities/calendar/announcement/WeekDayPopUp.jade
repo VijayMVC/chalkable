@@ -23,7 +23,7 @@
                         +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
-    if !self.getUserRole().isStudent()
+    if !self.getUserRole().isStudent() && period.isTeaching() !== false
         +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || period.getClassId() || '').ann-button.plus-ann New item
 
 
