@@ -78,14 +78,14 @@ mixin Glue_()
         -var attachments = self.getAnnouncementAttachments() || []
         -var applications = self.getApplications() || []
         if attachments.length + applications.length
-            +CloseOpen('Apps')
+            +CloseOpen('Attachments')
                 .content.attachments-and-applications
                     +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
                         userRole = self.getUserRole()
                     )
 
         if self.getUserRole().isStudent()
-            +CloseOpen('Attachments')
+            +CloseOpen('My Attachments')
                 .student-attachments.content
                     +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
                         userRole = self.getUserRole()
