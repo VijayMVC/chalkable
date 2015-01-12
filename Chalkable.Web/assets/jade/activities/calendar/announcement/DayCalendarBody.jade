@@ -10,7 +10,6 @@
             .item
                 each calendarDayItem, order in item
                     if order == 0
-                        -console.info(item)
                         .cell: A: .period-info= item.period.getOrder()
                     else if order == 6
                         .cell
