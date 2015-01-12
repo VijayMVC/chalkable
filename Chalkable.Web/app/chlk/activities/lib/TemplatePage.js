@@ -57,7 +57,11 @@ NAMESPACE('chlk.activities.lib', function () {
             OVERRIDE, VOID, function onRender_(model) {
                 BASE(model);
 
-                this.dom.find('.classes-bar').removeSelf().appendTo(ria.dom.Dom('#classes-bar-holder').empty());
+                var target = ria.dom.Dom('#classes-bar-holder').empty();
+
+                this.dom.find('> div > form > .classes-bar').removeSelf().appendTo(target);
+                this.dom.find('> div > .classes-bar').removeSelf().appendTo(target);
+                this.dom.find('> .classes-bar').removeSelf().appendTo(target);
             },
 
             OVERRIDE, VOID, function onPartialRender_(model, msg_) {
