@@ -3,9 +3,9 @@
 .profile-page.scheduling-view
     h2.page-title= isStudent ? Msg.Student_profile : Msg.Profile
     if isStudent
-        +ProfileTopBar(self, 'schedule')
+        +ProfileTopBar(self, 'daySchedule')
     else
-        +UserProfileTopBar(self, 'schedule')
+        +UserProfileTopBar(self, 'daySchedule')
 
     #top-panel
         #avatar-photo-conainer.left-block.panel-block

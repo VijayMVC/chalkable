@@ -281,11 +281,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.student.StudentProfileGradingPage, res);
             },
 
-            [[chlk.models.id.SchoolPersonId]],
-            function scheduleAction(personId){
-                return this.Redirect('students', 'daySchedule', [personId, null]);
-            },
-
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function dayScheduleAction(personId, date_){
                 return this.schedule_(

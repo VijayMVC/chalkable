@@ -48,11 +48,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(chlk.activities.profile.SchoolPersonInfoPage, res);
             },
 
-            [[chlk.models.id.SchoolPersonId]],
-            function scheduleAction(personId){
-                return this.Redirect('teachers', 'daySchedule', [personId, null]);
-            },
-
 
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function dayScheduleAction(personId, date_){
