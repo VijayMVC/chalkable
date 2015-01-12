@@ -283,11 +283,11 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.SchoolPersonId]],
             function scheduleAction(personId){
-                return this.Redirect('students', 'daySchedule', [null, personId]);
+                return this.Redirect('students', 'daySchedule', [personId, null]);
             },
 
-            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            function dayScheduleAction(date_, personId){
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            function dayScheduleAction(personId, date_){
                 return this.schedule_(
                     chlk.models.common.RoleNamesEnum.STUDENT.valueOf(),
                     personId,
@@ -300,8 +300,8 @@ NAMESPACE('chlk.controllers', function (){
                 );
             },
 
-            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            function weekScheduleAction(date_, personId){
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            function weekScheduleAction(personId, date_){
                 return this.schedule_(
                     chlk.models.common.RoleNamesEnum.STUDENT.valueOf(),
                     personId,
@@ -314,8 +314,8 @@ NAMESPACE('chlk.controllers', function (){
                 );
             },
 
-            [[chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            function monthScheduleAction(date_, personId){
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            function monthScheduleAction(personId, date_){
                 return this.schedule_(
                     chlk.models.common.RoleNamesEnum.STUDENT.valueOf(),
                     personId,
