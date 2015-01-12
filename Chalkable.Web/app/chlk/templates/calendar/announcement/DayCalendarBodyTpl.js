@@ -29,6 +29,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
                     dayItems.forEach(function (periodItems, order) {
                         periodItems.day = day;
                         (rows[order] = rows[order] || [[],[],[],[],[],[],[]])[index] = periodItems;
+                        rows[order].period = rows[order].period || (periodItems.length ? periodItems[0].getPeriod() : null);
                     });
                 });
 

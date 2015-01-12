@@ -28,9 +28,10 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
                         }));
 
                         res.day = day;
-                        res.period = periodItems[0].getPeriod();
 
                         (rows[order] = rows[order] || [[],[],[],[],[],[],[]])[index] = res;
+
+                        rows[order].period = rows[order].period || (periodItems.length ? periodItems[0].getPeriod() : null);
                     });
                 });
 
