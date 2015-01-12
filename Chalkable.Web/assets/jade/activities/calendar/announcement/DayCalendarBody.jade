@@ -18,10 +18,10 @@
                         .cell(class = calendarDayItem.day.getTodayClassName())
                             each ann in calendarDayItem
                                 -var period = ann.getPeriod()
-                                -var className = period.getFullClassName()
+                                -var className = period.getClassName()
                                 if className
                                     +ActionLink('calendar', 'showWeekBarPopUp', calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId())(
                                             class = period.getStartTime() && self.isMainCalendar() ? "" : "disabled"
                                         ).period-item.day
                                         .course-icon: +ClassImg(period, 45, 80)
-                                        .p-container(data-tooltip=className, data-tooltip-type ="overflow")= className
+                                        .p-container(data-tooltip=period.getFullClassName())= className
