@@ -1,0 +1,59 @@
+.loader-container
+  position: relative
+
+.loader
+  display: none
+  position: absolute
+  top: 0px
+  left: 0
+  bottom: 0
+  right: 0
+  background: image-url("images/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
+  z-index: 999
+
+.partial-update
+  position: relative
+
+  &:after 
+    content: ' '
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    background: image-url("images/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
+    z-index: 999
+
+.activity-model-wait, .loading
+  .loader
+    display: block
+
+    .loader
+      display: none
+
+.loading-page, .activity-model-wait
+  background: image-url("images/loaders/horizontal.gif") center center no-repeat
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  z-index: 1000
+
+  >DIV
+    display: none
+
+.dialog-model-wait
+  background: image-url("images/loaders/horizontal.gif") center center no-repeat
+  position: fixed !important
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  z-index: 1000
+  pointer-events: none
+
+  >DIV
+    display: none
+
+    
