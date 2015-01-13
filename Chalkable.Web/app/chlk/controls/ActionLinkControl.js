@@ -64,7 +64,7 @@ NAMESPACE('chlk.controls', function () {
                         else
                             res.push(JSON.stringify(item));
                 });
-                return '#' + res.join('/');
+                return '#' + res.map(encodeURIComponent).join('/');
             },
 
             [[String]],
