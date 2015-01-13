@@ -34,14 +34,15 @@
                     BUTTON.blue-button.small.add-comment.right=Msg.Add
         each gradingPeriod,i in self.getGradingPeriods()
             -var item = self.getCurrentGradingGrid()
+            -var selectedGradingPeriodId = item.getGradingPeriod().getId()
             .chlk-calendar.marking-period-container(
-                class=((gradingPeriod.getId() == self.getGradingPeriodId()) ? "open " : "") + ((!item.getGradingItems().length || !item.getStudents().length) ? 'no-items' : ''),
+                class=((gradingPeriod.getId() == selectedGradingPeriodId) ? "open " : "") + ((!item.getGradingItems().length || !item.getStudents().length) ? 'no-items' : ''),
                 data-index=i
             )
                 .header.mp-title
                     -var mpName = gradingPeriod.getName()
                     span(
-                        data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
+                        data-tooltip=gradingPeriod.getId() == selectedGradingPeriodId ? item.getTooltipText() : ''
                     ).mp-name=mpName
 
                     .collapse
@@ -68,7 +69,7 @@
                         +ActionButton('grading', 'getGradeComments').blue-button.button-like.comment-button.gp-button=Msg.Comment
                         +ActionButton('grading', 'getGradeComments').blue-button.button-like.codes-button.gp-button=Msg.Code(true)
                     .grades-container
-                        if gradingPeriod.getId() == self.getGradingPeriodId()
+                        if gradingPeriod.getId() == selectedGradingPeriodId
                             +RenderWith(item, chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl)(
                                 classId = selectedId
                             )

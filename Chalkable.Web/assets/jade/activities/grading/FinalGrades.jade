@@ -2,6 +2,8 @@
     -var topData = self.getTopData()
     -var topItems = topData.getTopItems()
     -var selectedId = topData.getSelectedItemId()
+    -var gp = self.getCurrentFinalGrade()
+    -var selectedGradingPeriodId = gp.getGradingPeriod().getId()
 
     h2.page-title=Msg.Final_Grade(true)
 
@@ -17,7 +19,7 @@
             -var ableEdit = self.isAbleEdit()
             -var ableEditDirectValue = self.isAbleEditDirectValue()
             div(
-                class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "",
+                class=(gradingPeriod.getId() == selectedGradingPeriodId) ? "open" : "",
                 data-index=i,
                 data-grading-period-id=gradingPeriod.getId(),
                 data-able-edit=ableEdit,
@@ -28,8 +30,7 @@
 
                     .collapse
                 div(data-grading-period-id=gradingPeriod.getId()).mp-data
-                    if gradingPeriod.getId() == self.getGradingPeriodId()
-                        -var gp = self.getCurrentFinalGrade()
+                    if gradingPeriod.getId() == selectedGradingPeriodId
                         +RenderWith(gp, chlk.templates.grading.GradingPeriodFinalGradeTpl)(
                             classId = selectedId,
                             ableEdit = ableEdit,

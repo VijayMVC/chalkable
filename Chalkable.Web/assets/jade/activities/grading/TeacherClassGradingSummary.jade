@@ -19,10 +19,11 @@
 
     .mps-container
         each gradingPeriod,i in self.getGradingPeriods()
-            .chlk-calendar.marking-period-container(class=(gradingPeriod.getId() == self.getGradingPeriodId()) ? "open" : "", data-index=i)
-                -var item = self.getCurrentGradingBox()
+            -var item = self.getCurrentGradingBox()
+            -var selectedGradingPeriodId = item.getGradingPeriod().getId()
+            .chlk-calendar.marking-period-container(class=(gradingPeriod.getId() == selectedGradingPeriodId) ? "open" : "", data-index=i)
                 .header.mp-title(
-                    data-tooltip=gradingPeriod.getId() == self.getGradingPeriodId() ? item.getTooltipText() : ''
+                    data-tooltip=gradingPeriod.getId() == selectedGradingPeriodId ? item.getTooltipText() : ''
                 )
                     -var mpName = gradingPeriod.getName()
                     span(data-tooltip=mpName, data-tooltip-type="overflow").mp-name= mpName
@@ -34,5 +35,5 @@
                     .collapse
                 .mp-data(data-grading-period-id=gradingPeriod.getId())
                     .grades-container
-                        if gradingPeriod.getId() == self.getGradingPeriodId()
+                        if gradingPeriod.getId() == selectedGradingPeriodId
                             +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)
