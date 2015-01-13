@@ -223,3 +223,18 @@
       .announcement
         padding: 20px 10px
         white-space: nowrap
+
+
+  .current-section
+    position: relative
+    &::before
+      content: ' '
+      pointer-events: none
+      position: absolute
+      right: 0
+      top: 50%
+      height: 24px
+      width: 24px
+      opacity: .7
+      +icons-sprite(people, -6px, -6px)
+      +transform(translate(0, -50%))

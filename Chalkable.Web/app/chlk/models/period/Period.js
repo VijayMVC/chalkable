@@ -50,6 +50,9 @@ NAMESPACE('chlk.models.period', function () {
             [ria.serialize.SerializeProperty('teacherid')],
             chlk.models.id.SchoolPersonId, 'teacherId',
 
+            [ria.serialize.SerializeProperty('iscurrentsection')],
+            Boolean, 'currentSection',
+
             String, function getSerialOrder(){
                 var order = this.getOrder();
                 return order && getSerial(order);
