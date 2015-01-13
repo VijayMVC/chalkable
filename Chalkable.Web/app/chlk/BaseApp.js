@@ -128,21 +128,12 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.REDIRECT_URL, String);
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
                 this.saveInSession(session, ChlkSessionConstants.CLASSES_TO_FILTER, ArrayOf(chlk.models.classes.ClassForTopBar));
-
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
 
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
 
-                var newClasses = session.get(ChlkSessionConstants.CLASSES_TO_FILTER, []).slice();
-                newClasses.unshift(chlk.lib.serialize.ChlkJsonSerializer().deserialize({
-                    name: 'All',
-                    description: 'All',
-                    id: ''
-                }, chlk.models.classes.ClassForTopBar));
-
-                session.set(ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL, newClasses);
                 if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');
                 }else{

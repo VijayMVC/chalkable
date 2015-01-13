@@ -57,7 +57,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         model = model || new chlk.models.settings.Preference();
-                        var classes = this.classService.getClassesForTopBar();
+                        var classes = this.classService.getClassesForTopBarSync();
                         model.setType(classes.length);
                         return model;
                     }, this);
@@ -67,7 +67,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.SchoolPersonId]],
             function startAction(personId_){
                 var model = chlk.models.settings.Preference();
-                var classes = this.classService.getClassesForTopBar();
+                var classes = this.classService.getClassesForTopBarSync();
                 model.setType(classes.length);
                 var result =  ria.async.DeferredData(model);
                 return this.PushView(chlk.activities.setup.StartPage, result);
@@ -118,7 +118,7 @@ NAMESPACE('chlk.controllers', function (){
                             finalGradeAnnouncementTypes.push(item)
                         });
 
-                        var classes = this.classService.getClassesForTopBar();
+                        var classes = this.classService.getClassesForTopBarSync();
 
                         this.finalGradeService.update(model.getId(), model.getParticipation(), model.getAttendance(), model.getDropLowestAttendance(),
                             model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), finalGradeAnnouncementTypes, model.isNeedsTypesForClasses())

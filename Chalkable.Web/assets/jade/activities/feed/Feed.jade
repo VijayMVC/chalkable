@@ -1,9 +1,8 @@
 noComplete = self.completeOnly && !self.items.length
 div(class = noComplete ? "no-complete" : "").feed-container
     -var topData = self.getTopData();
-    -var topItems = topData.getTopItems();
     -var selectedId = topData.getSelectedItemId();
-    +ClassesToolBar(topData, 'feed', 'list', [true, self.importantOnly])
+    +ClassesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
     h2.page-title Inbox
     .action-bar
         .items

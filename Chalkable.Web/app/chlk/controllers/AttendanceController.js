@@ -57,7 +57,7 @@ NAMESPACE('chlk.controllers', function (){
                         }.bind(this));
                     this.BackgroundUpdateView(chlk.activities.attendance.SummaryPage, res, chlk.activities.lib.DontShowLoader());
 
-                    var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(true));
+                    var topModel = new chlk.models.classes.ClassesForTopBar(null);
                     return new chlk.models.attendance.SummaryPage(topModel, summary);
                 }, this);
             return this.PushView(chlk.activities.attendance.SummaryPage, result);
@@ -244,8 +244,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.attendance.SeatingChart, chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
         chlk.models.attendance.SeatingChart, function prepareSeatingData(model, classId, date_){
             date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
-            var classes = this.classService.getClassesForTopBar(true);
-            var topModel = new chlk.models.classes.ClassesForTopBar(classes);
+            var topModel = new chlk.models.classes.ClassesForTopBar(null);
             topModel.setSelectedItemId(classId);
             model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
             model.setAbleChangeReasons(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
@@ -369,8 +368,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
                     this.getContext().getSession().set(ChlkSessionConstants.ATTENDANCE_DATA, items);
-                    var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.classes.ClassesForTopBar(classes);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(null);
                     var model = new chlk.models.attendance.ClassList(
                         topModel,
                         classId,

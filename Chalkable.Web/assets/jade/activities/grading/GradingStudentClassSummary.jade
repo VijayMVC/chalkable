@@ -1,6 +1,6 @@
 topData = self.getTopData()
 selectedId = topData.getSelectedItemId()
-+ClassesToolBar(topData, 'grading', 'summary', null, null, null, true)
++ClassesToolBarWithAll(topData, 'grading', 'summary', null, null, null)
 .profile-page
     clazz = self.getClazz()
     if clazz && self.getCurrentMarkingPeriod() && clazz.getTeacher()

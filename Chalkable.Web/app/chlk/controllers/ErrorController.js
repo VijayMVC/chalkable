@@ -34,7 +34,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[String]],
             function generalServerErrorWithClassesAction(message, withAll_, controller_, action_, params_){
-                var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(withAll_));
+                var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBarSync(withAll_));
                 var res = new ria.async.DeferredData(new chlk.models.common.ServerErrorWithClassesModel.$create(topModel, message, controller_, action_, params_));
                 return this.PushView(chlk.activities.chlkerror.GeneralServerErrorWithClassesPage, res);
             },
@@ -52,7 +52,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Array]],
             function permissionsAction(permissions){
-                var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBar(true));
+                var topModel = new chlk.models.classes.ClassesForTopBar(null);
                 var result = new ria.async.DeferredData(new chlk.models.common.PermissionsError(topModel, null, permissions));
                 return this.PushView(chlk.activities.common.PermissionsErrorPage, result);
             },

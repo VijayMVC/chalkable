@@ -44,7 +44,7 @@ mixin AbsentLatePage(data, header)
 topData = self.getTopData()
 topItems = topData.getTopItems() || []
 h2.page-title= Msg.Attendance
-+ClassesToolBar(topData, 'attendance', 'classList', null, false, true).attendance
++ClassesToolBarWithAll(topData, 'attendance', 'classList', null, false, true).attendance
 .action-bar
     .items
         a(data-page=1).action-button.absent-late-button.absent-button.pressed=Msg.Absent

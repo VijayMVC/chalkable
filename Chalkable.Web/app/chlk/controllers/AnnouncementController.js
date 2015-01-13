@@ -8,6 +8,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.AnnouncementReminderService');
 REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.StandardService');
+REQUIRE('chlk.services.MarkingPeriodService');
 
 REQUIRE('chlk.activities.announcement.AdminAnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
@@ -78,6 +79,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.StandardService, 'standardService',
+
+        [ria.mvc.Inject],
+        chlk.services.MarkingPeriodService, 'markingPeriodService',
 
         ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
@@ -217,8 +221,8 @@ NAMESPACE('chlk.controllers', function (){
                 this.prepareRecipientsData(model);
             }
             else{
-                var classes = this.classService.getClassesForTopBar(false, false);
-                var markingPeriods = this.context.getSession().get(ChlkSessionConstants.MARKING_PERIODS, []);
+                var classes = this.classService.getClassesForTopBarSync();
+                var markingPeriods = this.markingPeriodService.getMarkingPeriodsSync();
                 var classId_ = announcement.getClassId(), classInfo, types;
                 var announcementTypeId_ = announcement.getAnnouncementTypeId();
                 var savedClassInfo = this.getContext().getSession().get('classInfo', null);
@@ -330,7 +334,7 @@ NAMESPACE('chlk.controllers', function (){
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
-            var classes = this.classService.getClassesForTopBar(false, false);
+            var classes = this.classService.getClassesForTopBarSync();
             var classesBarData = new chlk.models.classes.ClassesForTopBar(classes), p = false;
             classes.forEach(function(item){
                 if(!p && item.getId() == classId_)
@@ -932,7 +936,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showDuplicateFormAction(announcementId, selectedClassId){
-            var classes = this.classService.getClassesForTopBar(false, false);
+            var classes = this.classService.getClassesForTopBarSync();
             classes.forEach(function(item){
                 item.setDisabled(true);
             });

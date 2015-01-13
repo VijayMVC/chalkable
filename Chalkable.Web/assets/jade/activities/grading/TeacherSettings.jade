@@ -2,7 +2,7 @@
     topData = self.getTopData();
     gradingInfo = self.getGradingInfo();
     .loader
-    +ClassesToolBar(topData, 'grading', 'teacherSettings', null, null, null, true)
+    +ClassesToolBar(topData, 'grading', 'teacherSettings', null, null, null)
     if gradingInfo
         classInfo = gradingInfo.getClazz();
         +ActionForm('grading', 'teacherSettingsEdit')#update-ann-type-submit-form

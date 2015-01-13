@@ -13,7 +13,6 @@ Alter Table ClassPerson
 GO
 
 DROP TYPE [dbo].[TMarkingPeriod]
-GO
 CREATE TYPE [dbo].[TMarkingPeriod] AS TABLE(
 	[Id] [int] NOT NULL,
 	[Name] [nvarchar](255) NOT NULL,
@@ -26,13 +25,21 @@ CREATE TYPE [dbo].[TMarkingPeriod] AS TABLE(
 GO
 
 DROP TYPE [dbo].[TMarkingPeriodClass]
-GO
-
 CREATE TYPE [dbo].[TMarkingPeriodClass] AS TABLE(
 	[ClassRef] [int] NOT NULL,
 	[MarkingPeriodRef] [int] NOT NULL
 )
 GO
+
+DROP TYPE [dbo].[TClassPerson]
+CREATE TYPE [dbo].[TClassPerson] AS TABLE(
+	[ClassRef] [int] NOT NULL,
+	[PersonRef] [int] NOT NULL,
+	[MarkingPeriodRef] [int] NOT NULL,
+	[IsEnrolled] [bit] NOT NULL
+)
+GO
+
 
 
 

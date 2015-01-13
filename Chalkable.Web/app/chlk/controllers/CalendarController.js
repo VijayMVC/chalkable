@@ -129,8 +129,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getDayWeekInfo(date_, null, classId_, gradeLevels_)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     model.setTopData(topModel);
                     model.setGradeLevelsForToolBar(glsInputData);
                     model.setAdmin(this.userIsAdmin());
@@ -162,8 +161,7 @@ NAMESPACE('chlk.controllers', function (){
                 .listForMonth(classId_, date_, gradeLevels_)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    var classes = this.classService.getClassesForTopBar(true);
-                    var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                    var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     model.setTopData(topModel);
                     model.setGradeLevelsForToolBar(glsInputData);
                     model.setAdmin(this.userIsAdmin());

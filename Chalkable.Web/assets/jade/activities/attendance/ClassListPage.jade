@@ -25,7 +25,7 @@ h2.page-title Attendance
     -var additionalParams = self.getAdditionalParams()
    
     if(self.hasLeftRightToolBar())
-        +ClassesToolBar(topData, 'attendance', 'classList', [self.getDate().format('mm-dd-yy')], false, true).attendance
+        +ClassesToolBarWithAll(topData, 'attendance', 'classList', [self.getDate().format('mm-dd-yy')], false, true).attendance
     if self.getItems().length == 0
         .people-list-container
             .header

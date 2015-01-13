@@ -1,6 +1,6 @@
-mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, showAlerts_, forCurrentMp_)
+mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
    -var currentClassId = topBarData.getSelectedItemId() || chlk.models.id.ClassId('')
-   -var data = self.prepareModel(topBarData, forCurrentMp_)
+   -var data = self.prepareModel(topBarData, includeAll)
    -attributes.selectedGroupId = data.currentMPId
    -attributes.selectedItemId = currentClassId
    -attributes.fixedElementMargin = true
@@ -35,3 +35,9 @@ mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, show
                   ).class-button.validate-skip.item
                      +ClassImg(item, 45, 80).avatar
                      SPAN.text-container= item.getName()
+
+mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+   +doRender_(false, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+
+mixin ClassesToolBarWithAll(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+   +doRender_(true, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)

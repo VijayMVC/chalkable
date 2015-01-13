@@ -75,8 +75,7 @@ NAMESPACE('chlk.controllers', function (){
                 }
                 result = result.then(function(users){
                         var usersModel = this.prepareUsersModel(users, 0, true);
-                        var classes = this.classService.getClassesForTopBar(true);
-                        var topModel = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                        var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                         return new chlk.models.teacher.StudentsList(usersModel, topModel, isMy);
                     }, this);
                 return this.PushView(chlk.activities.person.ListPage, result);

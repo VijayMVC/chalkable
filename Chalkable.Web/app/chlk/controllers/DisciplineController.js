@@ -87,8 +87,7 @@ NAMESPACE('chlk.controllers', function(){
                     ])
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var classes = this.getClassForDisciplines_();
-                        var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
+                        var classBarData = new chlk.models.classes.ClassesForTopBar(null);
 
                         var model = new chlk.models.discipline.ClassDisciplinesViewData(
                             classBarData, classId_, result[0], result[1], date_, true,
@@ -139,14 +138,9 @@ NAMESPACE('chlk.controllers', function(){
                     .attach(this.validateResponse_())
                     .then(function(data){
                         date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
-                        var classes = this.getClassForDisciplines_();
-                        var classBarData = new chlk.models.classes.ClassesForTopBar(classes);
+                        var classBarData = new chlk.models.classes.ClassesForTopBar(null);
                         return new ria.async.DeferredData(new chlk.models.discipline.PaginatedListByDateModel(classBarData, data, date_));
                     }, this);
-            },
-
-            Array, function getClassForDisciplines_(){
-                return this.classService.getClassesForTopBar();
             },
 
             [[chlk.models.discipline.DisciplineInputModel]],

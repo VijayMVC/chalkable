@@ -4,6 +4,9 @@
         .no-items-text=Msg.No_grades_yet
     else
         +LeftRightToolbar(items, chlk.templates.grading.GradingClassSummaryItemTpl)(
-            needDots = true,
-            roundedDots = true
+            itemClass='ann-type-container',
+            fixedElementMargin=true,
+            fixedElementWidth=false,
+            rightPadding=-1,
+            elWidth=200
         ).big-arrows

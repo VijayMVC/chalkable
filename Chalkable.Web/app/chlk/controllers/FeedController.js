@@ -101,8 +101,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(!postback_ && importantOnly_ && feedItems.length == 0)
                         return this.getFeedItems(postback_, false, classId_, pageIndex_);
 
-                    var classes = this.classService.getClassesForTopBar(true);
-                    var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(classes, classId_);
+                    var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     var firstLogin = this.getContext().getSession().get(ChlkSessionConstants.FIRST_LOGIN, false);
                     this.getContext().getSession().set(ChlkSessionConstants.FIRST_LOGIN, false);
 

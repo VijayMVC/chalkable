@@ -232,12 +232,15 @@ namespace Chalkable.StiImport.Services
 
         private void TopologicSort<T>(int id, Func<T, int?> reference, Dictionary<int, T> source, HashSet<int> was, IList<T> res)
         {
-            was.Add(id);
-            var standard = source[id];
-            var r = reference(standard);
-            if (r.HasValue && !was.Contains(r.Value))
-                TopologicSort(r.Value, reference, source, was, res);
-            res.Add(standard);
+            if (source.ContainsKey(id))
+            {
+                was.Add(id);
+                var item = source[id];
+                var r = reference(item);
+                if (r.HasValue && !was.Contains(r.Value))
+                    TopologicSort(r.Value, reference, source, was, res);
+                res.Add(item);    
+            }
         }
     }
 

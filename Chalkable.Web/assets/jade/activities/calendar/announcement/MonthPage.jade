@@ -2,6 +2,6 @@
     actions = {currentAction: 'month', day: 'day', week: 'week', month: 'month'}
     -var topData = self.getTopData()
     -var param = topData.getSelectedItemId()
-    +ClassesToolBar(topData, 'calendar', 'month', [self.getCurrentDate().format('mm-dd-yy')])
+    +ClassesToolBarWithAll(topData, 'calendar', 'month', [self.getCurrentDate().format('mm-dd-yy')])
     +Calendar(self, chlk.templates.calendar.announcement.MonthCalendarBodyTpl, self.getModel(), 'calendar', actions, param ? [param] : [''])
 
