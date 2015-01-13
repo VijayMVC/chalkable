@@ -20,7 +20,21 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<GradingPeriodDetails> GetGradingPeriodsDetails(GradingPeriodQuery query)
         {
-            return ReadMany<GradingPeriodDetails>(BuildGetGradingPeriodQuery(BuildCondition(query)), true);
+            var res = BuildGetGradingPeriodQuery(BuildCondition(query));
+
+            if (query.ClassId.HasValue)
+            {
+                // Yura suggested to use IN subquery. In case of any perf problems blame him! AHAHAHA
+                res.Sql.Append(string.Format(" AND [{4}].[{0}] IN (SELECT {1} FROM {2} WHERE [{2}].[{3}] = @classId)"
+                    , MarkingPeriod.ID_FIELD
+                    , MarkingPeriodClass.MARKING_PERIOD_REF_FIELD, typeof (MarkingPeriodClass).Name
+                    , MarkingPeriodClass.CLASS_REF_FIELD
+                    , typeof(MarkingPeriod).Name));
+
+                res.Parameters.Add("classId", query.ClassId);
+            }
+
+            return ReadMany<GradingPeriodDetails>(res, true);
         }
 
         private QueryCondition BuildCondition(GradingPeriodQuery query)
@@ -55,6 +69,7 @@ namespace Chalkable.Data.School.DataAccess
         public int? GradingPeriodId { get; set; }
         public int? MarkingPeriodId { get; set; }
         public int? SchoolYearId { get; set; }
+        public int? ClassId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
     }

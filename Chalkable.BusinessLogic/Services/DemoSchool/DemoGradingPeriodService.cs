@@ -14,12 +14,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null)
+        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null, int? classId = null)
         {
             return Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
             {
                 SchoolYearId = schoolYearId,
-                MarkingPeriodId = markingPeriodId
+                MarkingPeriodId = markingPeriodId,
+                ClassId = classId
             });
         }
 

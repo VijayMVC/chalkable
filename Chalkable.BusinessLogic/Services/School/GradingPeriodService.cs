@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IGradingPeriodService
     {
-        IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null);
+        IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null, int? classId = null);
         GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date, bool useLastExisting = true);
         GradingPeriodDetails GetGradingPeriodById(int id);
         void Add(IList<GradingPeriod> gradingPeriods);
@@ -25,14 +25,15 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null)
+        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null, int? classId = null)
         {
             using (var uow = Read())
             {
                 return new GradingPeriodDataAccess(uow).GetGradingPeriodsDetails(new GradingPeriodQuery
                     {
                         SchoolYearId = schoolYearId,
-                        MarkingPeriodId = markingPeriodId
+                        MarkingPeriodId = markingPeriodId,
+                        ClassId = classId
                     });
             }
         }

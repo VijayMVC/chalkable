@@ -45,7 +45,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 gps = gps.Where(x => x.StartDate <= query.FromDate);
             if (query.ToDate.HasValue)
                 gps = gps.Where(x => x.EndDate >= query.ToDate);
-
+            if (query.ClassId.HasValue)
+                gps = gps.Where(x => Storage.MarkingPeriodClassStorage.GetByClassId(query.ClassId).Any(y => y.MarkingPeriodRef == x.MarkingPeriodRef));
 
             return Convert(gps.ToList());
         }

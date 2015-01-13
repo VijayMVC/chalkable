@@ -63,5 +63,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 });
             }
         }
+
+        public IEnumerable<MarkingPeriodClass> GetByClassId(int? classId)
+        {
+            return GetMarkingPeriodClasses(new MarkingPeriodClassQuery
+            {
+                ClassId = classId
+            });
+        }
     }
 }
