@@ -34,7 +34,7 @@ namespace Chalkable.StiConnector.Connectors
         public void UpdatePrimaryPersonEmail(int personId, StiPersonEmail personEmail)
         {
             var url = string.Format("{0}persons/{1}/emailaddresses/primary", BaseUrl, personId);
-            Post<Object, StiPersonEmail>(url, personEmail);
+            Put<Object, StiPersonEmail>(url, personEmail);
         }
 
         public int[] GetUserAcadSessionsIds()
