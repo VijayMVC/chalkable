@@ -1,22 +1,40 @@
-Begin Transaction
-
 Alter Table MarkingPeriod
 	Drop FK_MarkingPeriod_School
-GO
 Alter Table MarkingPeriod
 	Drop Column SchoolRef
-GO
 Alter Table MarkingPeriodClass
 	Drop FK_MarkingPeriodClass_School
-GO
 Alter Table MarkingPeriodClass
 	Drop Column SchoolRef
-GO
 Alter Table ClassPerson
 	Drop FK_ClassPerson_School
-GO
 Alter Table ClassPerson
 	Drop Column SchoolRef
 GO
 
-Commit
+DROP TYPE [dbo].[TMarkingPeriod]
+GO
+CREATE TYPE [dbo].[TMarkingPeriod] AS TABLE(
+	[Id] [int] NOT NULL,
+	[Name] [nvarchar](255) NOT NULL,
+	[StartDate] [datetime2](7) NULL,
+	[EndDate] [datetime2](7) NULL,
+	[Description] [nvarchar](1024) NULL,
+	[SchoolYearRef] [int] NOT NULL,
+	[WeekDays] [int] NOT NULL
+)
+GO
+
+DROP TYPE [dbo].[TMarkingPeriodClass]
+GO
+
+CREATE TYPE [dbo].[TMarkingPeriodClass] AS TABLE(
+	[ClassRef] [int] NOT NULL,
+	[MarkingPeriodRef] [int] NOT NULL
+)
+GO
+
+
+
+
+

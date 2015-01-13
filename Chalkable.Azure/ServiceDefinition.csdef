@@ -102,6 +102,9 @@
       <Setting name="TaskProducer.CleanupManager.Interval"/>
       <Setting name="TaskProducer.CleanupManager.IntervalStart"/>
       <Setting name="TaskProducer.CleanupManager.IntervalEnd"/>
+      <Setting name="TaskProducer.DbBackupProducer.Interval"/>
+      <Setting name="TaskProducer.DbBackupProducer.IntervalStart"/>
+      <Setting name="TaskProducer.DbBackupProducer.IntervalEnd"/>
       <!--tracking-->
       <Setting name="mixpanel-token"/>
     </ConfigurationSettings>

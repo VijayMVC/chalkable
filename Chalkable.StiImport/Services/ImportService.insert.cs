@@ -654,7 +654,6 @@ namespace Chalkable.StiImport.Services
 
         private void InsertClassPersons()
         {
-            var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
             var studentSchedules = context.GetSyncResult<StudentScheduleTerm>().All
                 .Select(x => new ClassPerson
                 {
