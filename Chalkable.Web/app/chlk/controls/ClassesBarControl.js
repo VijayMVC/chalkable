@@ -17,32 +17,26 @@ NAMESPACE('chlk.controls', function () {
 
     CLASS(
         'ClassesBarControl', EXTENDS(chlk.controls.Base), [
-            function prepareModel(classes, forCurrentMp_) {
+            function prepareModel(classes) {
                 var mpService = this.context.getService(chlk.services.MarkingPeriodService),
                     clsService = this.context.getService(chlk.services.ClassService),
                     cls = classes.getTopItems();
 
                 var currentMPId = mpService.getCurrentMarkingPeriod().getId();
+                var data = mpService.getMarkingPeriodsSync()
+                    .map(function (mp) {
+                        return {
+                            id: mp.getId(),
+                            title: mp.getName(),
+                            items: cls.filter(function (c) {
+                                var id = c.getId();
+                                if (id.valueOf() == '')
+                                    return true;
 
-                var mPeriods = mpService.getMarkingPeriodsSync();
-                if(forCurrentMp_)
-                    mPeriods = mPeriods.filter(function(mp){
-                        return mp.getId() == currentMPId;
+                                return clsService.getMarkingPeriodRefsOfClass(id).indexOf(mp.getId()) >= 0;
+                            })
+                        }
                     });
-
-                var data = mPeriods.map(function (mp) {
-                    return {
-                        id: mp.getId(),
-                        title: mp.getName(),
-                        items: cls.filter(function (c) {
-                            var id = c.getId();
-                            if (id.valueOf() == '')
-                                return true;
-
-                            return clsService.getMarkingPeriodRefsOfClass(id).indexOf(mp.getId()) >= 0;
-                        })
-                    }
-                });
 
                 var currentClassId = classes.getSelectedItemId();
                 if (currentClassId && currentClassId.valueOf()) {

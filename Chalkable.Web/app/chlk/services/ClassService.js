@@ -18,17 +18,10 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'ClassService', EXTENDS(chlk.services.BaseService), [
 
-            [[Boolean, Boolean]],
-            Array, function getClassesForTopBar(withAll_, forCurrentMp_) {
-                var res = this.getContext().getSession().get(withAll_ ? ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL : ChlkSessionConstants.CLASSES_TO_FILTER);
-
-                if(forCurrentMp_){
-                    var mpId = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD).getId();
-                    res = res.filter(function(item){
-                        return item.getName() == 'All' || item.getMarkingPeriodsId().indexOf(mpId) > -1;
-                    })
-                }
-
+            [[Boolean]],
+            Array, function getClassesForTopBar(withAll_) {
+                var res = this.getContext().getSession()
+                    .get(withAll_ ? ChlkSessionConstants.CLASSES_TO_FILTER_WITH_ALL : ChlkSessionConstants.CLASSES_TO_FILTER);
                 return res;
             },
 

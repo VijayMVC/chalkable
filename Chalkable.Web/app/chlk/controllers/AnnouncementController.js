@@ -217,7 +217,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.prepareRecipientsData(model);
             }
             else{
-                var classes = this.classService.getClassesForTopBar(false, false);
+                var classes = this.classService.getClassesForTopBar(false);
                 var markingPeriods = this.context.getSession().get(ChlkSessionConstants.MARKING_PERIODS, []);
                 var classId_ = announcement.getClassId(), classInfo, types;
                 var announcementTypeId_ = announcement.getAnnouncementTypeId();
@@ -330,7 +330,7 @@ NAMESPACE('chlk.controllers', function (){
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
-            var classes = this.classService.getClassesForTopBar(false, false);
+            var classes = this.classService.getClassesForTopBar(false);
             var classesBarData = new chlk.models.classes.ClassesForTopBar(classes), p = false;
             classes.forEach(function(item){
                 if(!p && item.getId() == classId_)
@@ -932,7 +932,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showDuplicateFormAction(announcementId, selectedClassId){
-            var classes = this.classService.getClassesForTopBar(false, false);
+            var classes = this.classService.getClassesForTopBar(false);
             classes.forEach(function(item){
                 item.setDisabled(true);
             });
