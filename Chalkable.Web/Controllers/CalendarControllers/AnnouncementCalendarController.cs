@@ -103,7 +103,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              {
                  var currentDayAnns = announcements.Where(x => x.Expires.Date == d).ToList();
                  var daySchedule = schedule.Where(x => x.Day == d).ToList();
-                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, currentDayAnns);
+                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, currentDayAnns, locator.Context.NowSchoolTime);
                  res.Add(AnnouncementCalendarWeekViewData.Create(d, annPeriods, currentDayAnns));
              }
              return res;

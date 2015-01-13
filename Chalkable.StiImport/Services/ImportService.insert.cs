@@ -318,6 +318,8 @@ namespace Chalkable.StiImport.Services
         private void InsertPhones()
         {
             var phones = context.GetSyncResult<PersonTelephone>().All;
+            var ps = new List<Phone>();
+
             foreach (var pt in phones)
             {
                 var type = PhoneType.Home;
@@ -327,9 +329,17 @@ namespace Chalkable.StiImport.Services
                     type = PhoneType.Mobile;
                 if (!string.IsNullOrEmpty(pt.FormattedTelephoneNumber))
                 {
-                    ServiceLocatorSchool.PhoneService.Add(pt.TelephoneNumber, pt.PersonID, pt.FormattedTelephoneNumber, type, pt.IsPrimary);
+                    ps.Add(new Phone
+                    {
+                        Value = pt.FormattedTelephoneNumber,
+                        DigitOnlyValue = pt.TelephoneNumber,
+                        PersonRef = pt.PersonID,
+                        IsPrimary = pt.IsPrimary,
+                        Type = type
+                    });
                 }
             }
+            ServiceLocatorSchool.PhoneService.AddPhones(ps);
         }
 
         private void InsertGradeLevels()
@@ -436,11 +446,19 @@ namespace Chalkable.StiImport.Services
 
         private void InsertRooms()
         {
-            var rooms = context.GetSyncResult<Room>().All;
-            foreach (var room in rooms)
-            {
-                ServiceLocatorSchool.RoomService.AddRoom(room.RoomID, room.SchoolID, room.RoomNumber ?? UNKNOWN_ROOM_NUMBER, room.Description, null, room.StudentCapacity ?? 0, null);
-            }
+            var rooms = context.GetSyncResult<Room>().All
+                .ToList()
+                .Select(x=>new Data.School.Model.Room
+                {
+                    Id = x.RoomID,
+                    SchoolRef = x.SchoolID,
+                    Capacity = x.StudentCapacity,
+                    Description = x.Description,
+                    PhoneNumber = null,
+                    RoomNumber = x.RoomNumber ?? UNKNOWN_ROOM_NUMBER,
+                    Size = null,
+                }).ToList();
+            ServiceLocatorSchool.RoomService.AddRooms(rooms);
         }
 
         private List<Pair<string, Guid>> PrepareChalkableDepartmentKeywords()
@@ -636,7 +654,6 @@ namespace Chalkable.StiImport.Services
 
         private void InsertClassPersons()
         {
-            var mps = ServiceLocatorSchool.MarkingPeriodService.GetMarkingPeriods(null);
             var studentSchedules = context.GetSyncResult<StudentScheduleTerm>().All
                 .Select(x => new ClassPerson
                 {

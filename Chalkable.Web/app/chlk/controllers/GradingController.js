@@ -64,15 +64,11 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.StudentService, 'studentService',
 
-            Array, function getClassForGrading_(withAll_, forCurrentMp_){
-                return this.classService.getClassesForTopBar(withAll_, forCurrentMp_);
-            },
-
             //TODO: refactor
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function teacherSettingsAction(classId_){
-                var classes = this.getClassForGrading_();
+                var classes = this.classService.getClassesForTopBar();
                 var model = new chlk.models.setup.TeacherSettings();
                 var classBarMdl= new chlk.models.classes.ClassesForTopBar(classes, classId_, true);
                 model.setTopData(classBarMdl);
@@ -117,7 +113,7 @@ NAMESPACE('chlk.controllers', function (){
             function summaryTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
-                var classes = this.getClassForGrading_(true, true);
+                var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var result = this.gradingService
                     .getClassSummary(classId_)
@@ -151,7 +147,7 @@ NAMESPACE('chlk.controllers', function (){
             function standardsTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
-                var classes = this.getClassForGrading_(true, true);
+                var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var model = new chlk.models.grading.GradingClassSummary();
                 model.setTopData(topData);
@@ -239,7 +235,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
-                var classes = this.getClassForGrading_(true, true);
+                var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var alphaGrades = classInfo.getAlphaGrades();
                 var gradingComments = this.getContext().getSession().get(ChlkSessionConstants.GRADING_COMMENTS, []);
@@ -275,7 +271,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CLASS_ID, classId_);
-                var classes = this.getClassForGrading_(true, true);
+                var classes = this.classService.getClassesForTopBar(true);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var alphaGrades = classInfo.getAlphaGrades();
                 var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
@@ -327,7 +323,7 @@ NAMESPACE('chlk.controllers', function (){
             function standardsGridTeacherAction(classId_){
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
-                var classes = this.getClassForGrading_(true, true);
+                var classes = this.classService.getClassesForTopBar(true);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
                 var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                 var alphaGrades = classInfo.getAlphaGradesForStandards();
@@ -392,7 +388,7 @@ NAMESPACE('chlk.controllers', function (){
                                 });
                             });
                         }
-                        var classes = this.classService.getClassesForTopBar(true, true);
+                        var classes = this.classService.getClassesForTopBar(true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                         var gradingPeriod = this.getCurrentGradingPeriod();
                         model.setGradingPeriodId(gradingPeriod.getId());
@@ -411,7 +407,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getTeacherSummary(teacherId)
                     .attach(this.validateResponse_())
                     .then(function(items){
-                        var classes = this.getClassForGrading_(true, true);
+                        var classes = this.classService.getClassesForTopBar(true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, null);
                         return new chlk.models.grading.GradingTeacherClassSummaryViewDataList(topData, items);
                     }, this);
@@ -426,7 +422,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getStudentSummary(studentId, classId_)
                     .attach(this.validateResponse_())
                     .then(function(model){
-                        var classes = this.classService.getClassesForTopBar(true, true);
+                        var classes = this.classService.getClassesForTopBar(true);
                         var topData = new chlk.models.classes.ClassesForTopBar(classes, classId_);
                         model.setTopData(topData);
                         return model;

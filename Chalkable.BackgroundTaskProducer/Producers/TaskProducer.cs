@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using Chalkable.Common;
 
@@ -30,6 +29,8 @@ namespace Chalkable.BackgroundTaskProducer.Producers
 
         public void Produce()
         {
+            if (interval == 0)
+                return;
             var now = DateTime.UtcNow;
             var secondsOfDay = (now - now.Date).TotalSeconds;
             if (secondsOfDay >= intervalStart && secondsOfDay <= intervalEnd)
@@ -37,7 +38,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
                 var currentTime = startTime.AddSeconds(interval * count);//TODO: this logic doesn't take into account working interval 2014-10-16
                 if (currentTime <= now)
                 {
-                    Trace.TraceWarning(string.Format(ChlkResources.BG_PROCESSING_FOR_TIME, currentTime));
+                    Trace.TraceWarning(ChlkResources.BG_PROCESSING_FOR_TIME, currentTime);
                     ProduceInternal(currentTime);
                     count++;
                 }
@@ -60,11 +61,11 @@ namespace Chalkable.BackgroundTaskProducer.Producers
         {
             foreach (var taskProducer in producers)
             {
-                Trace.TraceInformation(string.Format("Start producer {0}", taskProducer.Key));
+                Trace.TraceInformation("Start producer {0}", taskProducer.Key);
                 try
                 {
                     taskProducer.Value.Produce();
-                    Trace.TraceInformation(string.Format("Producer {0} finishes", taskProducer.Key));
+                    Trace.TraceInformation("Producer {0} finishes", taskProducer.Key);
                 }
                 catch (Exception ex)
                 {

@@ -84,6 +84,9 @@
       <Setting name="TaskProducer.CleanupManager.Interval" value="600" />
       <Setting name="TaskProducer.CleanupManager.IntervalStart" value="0" />
       <Setting name="TaskProducer.CleanupManager.IntervalEnd" value="86400" />
+      <Setting name="TaskProducer.DbBackupProducer.Interval" value="86400" />
+      <Setting name="TaskProducer.DbBackupProducer.IntervalStart" value="0" />
+      <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
       <!--tracking-->
       <Setting name="mixpanel-token" value=""/>
     </ConfigurationSettings>

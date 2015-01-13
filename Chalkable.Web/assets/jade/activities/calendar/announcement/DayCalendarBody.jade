@@ -19,7 +19,7 @@
                                 -var className = period.getClassName()
                                 if className
                                     +ActionLink('calendar', 'showWeekBarPopUp', calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId())(
-                                            class = period.getStartTime() && self.isMainCalendar() ? "" : "disabled"
+                                            class = [period.getStartTime() && self.isMainCalendar() ? "" : "disabled", period.isCurrentSection() ? 'current-section' : null]
                                         ).period-item.day
                                         .course-icon: +ClassImg(period, 45, 80)
                                         .p-container(data-tooltip=period.getFullClassName())= className

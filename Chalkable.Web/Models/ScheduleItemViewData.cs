@@ -22,8 +22,9 @@ namespace Chalkable.Web.Models
         public string TeacherLastName { get; set; }
         public string TeacherGender { get; set; }
         public string TeacherDisplayName { get; set; }
+        public bool? IsCurrentSection { get; set; }
 
-        protected ScheduleItemViewData(ScheduleItem scheduleItem)
+        protected ScheduleItemViewData(ScheduleItem scheduleItem, DateTime nowSchoolTime)
             : base(scheduleItem.PeriodId, scheduleItem.SchoolYearId, scheduleItem.PeriodOrder)
         {
             Day = scheduleItem.Day;
@@ -39,11 +40,15 @@ namespace Chalkable.Web.Models
             CanCreateItem = scheduleItem.CanCreateItem;
             TeacherId = scheduleItem.TeacherId;
             TeacherDisplayName = scheduleItem.TeacherDisplayName();
+
+            var periodDatePart = scheduleItem.Day.Date; // ensure no time part
+            IsCurrentSection = nowSchoolTime >= periodDatePart.AddMinutes(scheduleItem.StartTime??0)
+                               && nowSchoolTime < periodDatePart.AddMinutes(scheduleItem.EndTime??0);
         }
 
-        public static ScheduleItemViewData Create(ScheduleItem scheduleItem)
+        public static ScheduleItemViewData Create(ScheduleItem scheduleItem, DateTime nowSchoolTime)
         {
-            return new ScheduleItemViewData(scheduleItem);
+            return new ScheduleItemViewData(scheduleItem, nowSchoolTime);
         }
     }
 }
