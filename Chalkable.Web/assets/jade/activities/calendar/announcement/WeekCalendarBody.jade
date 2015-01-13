@@ -21,7 +21,6 @@ mixin TooltipWithOverflow(text)
                 each calendarDayItem, order in item
                     -var period = item.period
                     -var day = calendarDayItem.day
-                    -console.info(item, order, calendarDayItem, period, day)
                     if order == 0
                         .cell: A: .period-info= period.getOrder()
                     else if order == 6

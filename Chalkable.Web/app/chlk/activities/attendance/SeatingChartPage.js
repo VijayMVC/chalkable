@@ -19,8 +19,6 @@ NAMESPACE('chlk.activities.attendance', function () {
         hoverClass: "hover",
 
         drop: function(event, ui) {
-            console.info('drop', event, ui);
-
             var $uiDroppable = jQuery('.ui-droppable'),
                 $studentBox = $uiDroppable.find('.student-block').first();
 
@@ -38,9 +36,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                 height = $studentBox.innerHeight(),
                 topPadding = vertical - height,
                 leftPadding = horizontal - width;
-
-            console.info(leftPos, uidrLeft, horizontal, toolbarLeftOffset);
-            console.info(topPos, top, vertical);
 
             var vKil = Math.floor((leftPos - uidrLeft)/horizontal);
             var hKil = Math.floor((topPos - top)/vertical);
@@ -425,13 +420,13 @@ NAMESPACE('chlk.activities.attendance', function () {
                         try{
                             $( ".droppable" ).droppable( "destroy" );
                         }catch(e){
-                            console.info('droppable', e);
+                            _DEBUG && console.error('droppable', e);
                         }
                     if($( ".draggable:not(.empty-box)" )[0])
                         try{
                             $( ".draggable:not(.empty-box)" ).draggable( "destroy" );
                         }catch(e){
-                            console.info('draggable', e);
+                            _DEBUG && console.error('draggable', e);
                         }
                     activeDragging = false;
                 }

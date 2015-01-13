@@ -165,7 +165,7 @@ NAMESPACE('ria.dom', function () {
      * @returns {String}
      */
     ria.dom.NewGID = function () {
-        console.info('ria.dom.NewGID() is deprecated, please use ria.dom.Dom.GID() instead.');
+        _DEBUG && console.warn('ria.dom.NewGID() is deprecated, please use ria.dom.Dom.GID() instead.');
         return ria.dom.Dom.GID();
     };
 

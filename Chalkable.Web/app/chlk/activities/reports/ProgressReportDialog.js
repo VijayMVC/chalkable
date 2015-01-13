@@ -40,7 +40,7 @@ NAMESPACE('chlk.activities.reports', function(){
             [ria.mvc.DomEventBind('change', '.reasons-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function reasonsSelectChange(node, event, options_){
-                console.info(node.getValue(), options_);
+                _DEBUG && console.info(node.getValue(), options_);
             },
 
             [ria.mvc.DomEventBind('submit', '.progress-report-form')],

@@ -69,7 +69,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.KEY_DOWN.valueOf(), '.chlk-grid')],
             [[ria.dom.Dom, ria.dom.Event, Number]],
-            VOID, function gridKeyDownSelect(node, event, key_) {console.info('gridKeyDownSelect');
+            VOID, function gridKeyDownSelect(node, event, key_) {_DEBUG && console.info('gridKeyDownSelect');
                 switch(event.which){
                     case ria.dom.Keys.ENTER.valueOf(): node.trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());break;
                     case ria.dom.Keys.LEFT.valueOf(): node.find('.row.selected').find('.' + this._LEFT_ARROW).trigger('click');break;
@@ -145,7 +145,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [ria.mvc.DomEventBind('keydown', '.combo-input')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function keyComboArrowsClick(node, event) {console.info('keyComboArrowsClick');
+            VOID, function keyComboArrowsClick(node, event) {_DEBUG && console.info('keyComboArrowsClick');
                 var parent = node.parent('.combo-list'), prev, next;
                 var selected = parent.find('.option.selected');
                 switch (event.which){
