@@ -13,9 +13,6 @@ NAMESPACE('chlk.templates.reports', function () {
             //ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.people.ShortUserInfo), 'students'
+            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons'
         ]);
 });

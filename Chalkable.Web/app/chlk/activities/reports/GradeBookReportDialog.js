@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateDialog');
+REQUIRE('chlk.activities.reports.BaseReportWithStudentsDialog');
 REQUIRE('chlk.templates.reports.GradeBookReportTpl');
 
 NAMESPACE('chlk.activities.reports', function(){
@@ -8,5 +8,5 @@ NAMESPACE('chlk.activities.reports', function(){
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.ActivityGroup('ReportDialog')],
         [ria.mvc.TemplateBind(chlk.templates.reports.GradeBookReportTpl)],
-        'GradeBookReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[]);
+        'GradeBookReportDialog', EXTENDS(chlk.activities.reports.BaseReportWithStudentsDialog),[]);
 });

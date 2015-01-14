@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateDialog');
+REQUIRE('chlk.activities.reports.BaseReportWithStudentsDialog');
 REQUIRE('chlk.templates.reports.WorksheetReportTpl');
 REQUIRE('chlk.templates.reports.WorksheetReportGridTpl');
 
@@ -10,7 +10,7 @@ NAMESPACE('chlk.activities.reports', function(){
         [ria.mvc.ActivityGroup('ReportDialog')],
         [ria.mvc.TemplateBind(chlk.templates.reports.WorksheetReportTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.reports.WorksheetReportGridTpl, 'grid', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
-        'WorksheetReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
+        'WorksheetReportDialog', EXTENDS(chlk.activities.reports.BaseReportWithStudentsDialog),[
             [ria.mvc.DomEventBind('change', '.report-date-picker')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function reportDatePickerChange(node, event){

@@ -11,9 +11,9 @@ NAMESPACE('chlk.templates.reports', function () {
         'ProgressReportTpl', EXTENDS(chlk.templates.reports.BaseReportTpl), [
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.reports.UserForReport), 'students',
+            ArrayOf(chlk.models.reports.UserForReport), 'studentsWithComments',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
+            ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons'
         ])
 });

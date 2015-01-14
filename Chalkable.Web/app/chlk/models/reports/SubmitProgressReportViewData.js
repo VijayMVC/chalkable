@@ -50,9 +50,7 @@ NAMESPACE('chlk.models.reports', function () {
 
         String, 'classComment',
 
-        String, 'studentIds',
-
-        ArrayOf(chlk.models.reports.UserForReport), 'students',
+        ArrayOf(chlk.models.reports.UserForReport), 'studentsWithComments',
 
         ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
@@ -64,7 +62,7 @@ NAMESPACE('chlk.models.reports', function () {
         function $(reasons_, students_, gradingPeriodId_, classId_, startDate_, endDate_){
             BASE(classId_, gradingPeriodId_, startDate_, endDate_);
             if(students_)
-                this.setStudents(students_);
+                this.setStudentsWithComments(students_);
             if(reasons_)
                 this.setReasons(reasons_);
         }

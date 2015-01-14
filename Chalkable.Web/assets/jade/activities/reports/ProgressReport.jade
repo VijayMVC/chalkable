@@ -1,5 +1,5 @@
 .dialog.report-window
-    +ActionForm('grading', 'submitProgressReport').progress-report-form.no-working
+    +ActionForm('grading', 'submitProgressReport').progress-report-form.no-working.report-form
         .x-window-header
             .close.close-btn.dark
             h1=Msg.Create_Report
@@ -66,7 +66,7 @@
                             +Checkbox('select all', false)#select-all
                             label(for="select-all")=Msg.Select_all
                             .students-block
-                                each student, i in self.getStudents()
+                                each student, i in self.getStudentsWithComments()
                                     .student-item
                                         .chk
                                             id = student.getId().valueOf()
