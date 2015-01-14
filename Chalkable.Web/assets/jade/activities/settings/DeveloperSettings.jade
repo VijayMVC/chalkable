@@ -1,10 +1,6 @@
 .settings
-    .action-bar.not-transparent.buttons
-        .container.panel-bg
-            .left
-                +ActionLink('settings', 'dashboard').pressed General
-            .right
-                +ActionLink('account', 'profile', self.developerId) Profile
+    .row
+        +ActionLink('account', 'profile', self.developerId) Profile
     .row
         +ActionLinkButton('developer', 'paypalSettings').special-button.yellow-button PayPal
     .row
