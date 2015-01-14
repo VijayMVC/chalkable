@@ -572,7 +572,7 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         function addDeveloperAction(){
-            var result = this.ShowPromptBox('Pleace enter application name', '')
+            var result = this.ShowPromptBox('Please enter application name', '')
                 .then(function(appName){
                     var app = new chlk.models.apps.Application();
                     app.setName(appName);
@@ -723,17 +723,13 @@ NAMESPACE('chlk.controllers', function (){
 
                 if (appAccess.isAttachEnabled()){
                     if (appIconId == null || appBannerId == null){
-                        return this.ShowMsgBox('You need to upload icon and banner picture for you app', 'Error', [{
-                            text: 'Ok'
-                        }], 'center'), null;
+                        return this.ShowAlertBox('You need to upload icon and banner picture for you app', 'Error'), null;
                     }
                 }
                 else
                 {
                     if (appIconId == null){
-                        return this.ShowMsgBox('You need to upload icon picture for you app', 'Error', [{
-                            text: 'Ok'
-                        }], 'center'), null;
+                        return this.ShowAlertBox('You need to upload icon picture for you app', 'Error'), null;
                     }
                 }
 
@@ -742,9 +738,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 if ((developerWebsite == null || developerWebsite == "") ||
                     (developerName == null || developerName == "")){
-                    return this.ShowMsgBox('We just need you to enter your Developer Name and Website. You can do that in settings, on the left.', null, [{
-                        text: 'Ok'
-                    }], 'center'), null;
+                    return this.ShowAlertBox('We just need you to enter your Developer Name and Website. You can do that in settings, on the left.'), null;
                 }
             }
 
@@ -766,15 +760,13 @@ NAMESPACE('chlk.controllers', function (){
                  .attach(this.validateResponse_())
                  .then(function(newApp){
                      if(newApp.getMessage()){
-                         this.getView().pop();
-                         this.ShowMsgBox(newApp.getMessage(), null, [{
-                            text: 'Ok'
-                         }], 'center');
-                         return this.BackgroundUpdateView(chlk.activities.apps.AppInfoPage, new ria.async.DeferredData(new chlk.models.Success()), chlk.activities.lib.DontShowLoader())
+                         return this
+                             .ShowAlertBox(newApp.getMessage())
+                             .thenBreak()
                      }
                      return this.updateApp(newApp);
                  }, this);
-             return this.ShadeLoader();
+             return this.UpdateView(chlk.activities.apps.AppInfoPage, result);
         },
 
 
