@@ -799,9 +799,9 @@ NAMESPACE('chlk.controllers', function (){
         ])],
 
         [[chlk.models.id.AppId]],
-        function generalDeveloperAction(){
+        function generalDeveloperAction(appId_){
             var result = this.appsService
-                .getInfo()
+                .getInfo(appId_, !!appId_)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
