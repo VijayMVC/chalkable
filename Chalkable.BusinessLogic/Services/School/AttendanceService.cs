@@ -240,7 +240,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var classes = ServiceLocator.ClassService.GetClasses(syId).ToList();
+            var classes = ServiceLocator.ClassService.GetClasses(syId).Where(x=>x.StudentsCount > 0).ToList();
             var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
             if (postedAttendances != null)
             {
