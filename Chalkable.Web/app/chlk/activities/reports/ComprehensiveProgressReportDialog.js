@@ -1,0 +1,75 @@
+REQUIRE('chlk.activities.lib.TemplateDialog');
+REQUIRE('chlk.templates.reports.ComprehensiveProgressReportTpl');
+
+NAMESPACE('chlk.activities.reports', function(){
+
+    var attDisplayMethodEnum = chlk.models.reports.AttendanceDisplayMethodEnum;
+
+    /**@class chlk.activities.reports.ComprehensiveProgressReportDialog*/
+    CLASS(
+        [ria.mvc.DomAppendTo('#chlk-dialogs')],
+        [ria.mvc.ActivityGroup('ReportDialog')],
+        [ria.mvc.TemplateBind(chlk.templates.reports.ComprehensiveProgressReportTpl)],
+        'ComprehensiveProgressReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
+
+            [ria.mvc.DomEventBind('submit', '.comprehensive-progress-report-form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function formSubmit(node, event){
+
+                var reasonsNode = node.find('#absence-reasons'),
+                    reasonsArray = node.find('.reasons-select').getValue();
+                if(reasonsArray && reasonsArray.length)
+                    reasonsNode.setValue(reasonsArray.join(','));
+
+                var studentIdsNode = node.find('#student-ids-value'),
+                    studentsArray = [];
+                    node.find('.student-chk').forEach(function(item){
+                        if(item.is(':checked')){
+                            studentsArray.push(item.getValue());
+                        }
+                    });
+                studentIdsNode.setValue(studentsArray.join(','));
+
+                //var gradingPeriodsIdsNode = node.find('#grading-periods'),
+                //    gradingPeriodsIds = node.find('.grading-periods-select').getValue();
+                //if(gradingPeriodsIds && gradingPeriodsIds.length > 0)
+                //    gradingPeriodsIdsNode.setValue(gradingPeriodsIds.join(','));
+                var yearToDate = node.find('#year-to-date-chk').checked();
+                var gradingPeriod = node.find('#grading-period-chk').checked();
+                var dailyAttendanceDisplayMethodNode = node.find('#daily-attendance-display-method');
+                dailyAttendanceDisplayMethodNode.setValue(this.getAttDisplayMethod(yearToDate, gradingPeriod).valueOf());
+            },
+
+            [ria.mvc.DomEventBind('change', '#select-all')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function allAnnouncementsChange(node, event){
+                var value = node.checked(), jNode;
+                jQuery(node.valueOf()).parents('td')
+                    .find('.students-block')
+                    .find('[type=checkbox]')
+                    .each(function(index, item){
+                        jNode = jQuery(this);
+                        if(!!item.getAttribute('checked') != !!value){
+                            jNode.prop('checked', value);
+                            value ? this.setAttribute('checked', 'checked') : this.removeAttribute('checked');
+                            value && this.setAttribute('checked', 'checked');
+                            var node = jNode.parent().find('.hidden-checkbox');
+                            node.val(value);
+                            node.data('value', value);
+                            node.attr('data-value', value);
+                        }
+                    });
+            },
+
+            [[Boolean, Boolean]],
+            attDisplayMethodEnum, function getAttDisplayMethod(isYearToDate, isGradingPeriodNode){
+                if(isYearToDate && isGradingPeriodNode)
+                    return attDisplayMethodEnum.BOTH;
+                if(isYearToDate)
+                    return attDisplayMethodEnum.YEAR_TO_DATE;
+                if(isGradingPeriodNode)
+                    return attDisplayMethodEnum.GRADING_PERIOD;
+                return attDisplayMethodEnum.NONE;
+            }
+    ]);
+});
