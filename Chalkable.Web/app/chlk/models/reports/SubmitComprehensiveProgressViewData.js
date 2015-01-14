@@ -61,12 +61,12 @@ NAMESPACE('chlk.models.reports', function () {
         chlk.models.id.SchoolPersonId, 'studentFilterId',
 
         ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
-        ArrayOf(chlk.models.people.User), 'students',
+        ArrayOf(chlk.models.people.ShortUserInfo), 'students',
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId,
             chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
             ArrayOf(chlk.models.attendance.AttendanceReason),
-            ArrayOf(chlk.models.people.User)
+            ArrayOf(chlk.models.people.ShortUserInfo)
         ]],
         function $(classId_, gradingPeriodId_, startDate_, endDate_,  reasons_, students_){
             BASE(classId_, gradingPeriodId_, startDate_, endDate_);

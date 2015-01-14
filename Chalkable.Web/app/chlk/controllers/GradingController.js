@@ -287,8 +287,11 @@ NAMESPACE('chlk.controllers', function (){
                                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
                             model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                             model.getCurrentGradingGrid().setAbleEdit(canEdit);
+                            var students = model.getCurrentGradingGrid().getStudents().map(function (item){return item.getStudentInfo()});
+                            this.getContext().getSession().set('StudentsForReport', students);
                         }
                         model.setAbleEdit(canEdit);
+
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
@@ -823,24 +826,29 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             ria.async.Future, function getComprehensiveProgressReportInfo_(selectedGradingPeriodId, classId, startDate, endDate){
-                return this.studentService.getClassStudents(classId, selectedGradingPeriodId)
-                    .attach(this.validateResponse_())
-                    .then(function(students){
-                        return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
-                            selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
-                    }, this);
+                var students = this.getContext().getSession().get('StudentsForReport', []);
+                var res = new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
+                    selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
+                return new ria.async.DeferredData(res);
+                //return this.studentService.getClassStudents(classId, selectedGradingPeriodId)
+                //    .attach(this.validateResponse_())
+                //    .then(function(students){
+                //        return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
+                //            selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
+                //    }, this);
             },
 
             ArrayOf(chlk.models.attendance.AttendanceReason), function getReasonsForReport_(){
                 var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
-                return reasons.filter(function(item){
-                    var len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
-                        /*return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
-                         reason.getLevel() == 'H' || reason.getLevel() == 'HO';*/
-                        return reason.getLevel() == 'A';
-                    }).length;
-                    return !!len;
-                });
+                //return reasons.filter(function(item){
+                //    var len = (item.getAttendanceLevelReasons() || []).filter(function(reason){
+                //        /*return reason.getLevel() == 'A' || reason.getLevel() == 'AO' ||
+                //         reason.getLevel() == 'H' || reason.getLevel() == 'HO';*/
+                //        //return reason.getLevel() == 'A';
+                //    }).length;
+                //    return !!len;
+                //});
+                return reasons;
             }
         ])
 });

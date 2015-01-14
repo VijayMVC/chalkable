@@ -16,6 +16,6 @@ NAMESPACE('chlk.templates.reports', function () {
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.people.User), 'students'
+            ArrayOf(chlk.models.people.ShortUserInfo), 'students'
         ]);
 });
