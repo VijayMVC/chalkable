@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateDialog');
+REQUIRE('chlk.activities.reports.BaseReportWithStudentsDialog');
 REQUIRE('chlk.templates.reports.MissingAssignmentsReportTpl');
 
 NAMESPACE('chlk.activities.reports', function(){
@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.reports', function(){
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.ActivityGroup('ReportDialog')],
         [ria.mvc.TemplateBind(chlk.templates.reports.MissingAssignmentsReportTpl)],
-        'MissingAssignmentsReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
+        'MissingAssignmentsReportDialog', EXTENDS(chlk.activities.reports.BaseReportWithStudentsDialog),[
 
             [ria.mvc.DomEventBind('submit', '.missing-assignments-report-form')],
             [[ria.dom.Dom, ria.dom.Event]],

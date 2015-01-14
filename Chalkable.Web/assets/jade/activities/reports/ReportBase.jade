@@ -44,3 +44,19 @@ mixin OrderBySelect(withHeader)
       +Option(chlk.models.reports.OrderByEnum.STUDENT_ID.valueOf(), Msg.Student_ID, true)
       +Option(chlk.models.reports.OrderByEnum.STATE_AVERAGE, Msg.Section_average, false)
       +Option(chlk.models.reports.OrderByEnum.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, false)
+
+mixin StudentsBlock(students)
+   TR
+      TD(colspan=3).item-1
+         +Checkbox('select all', false)#select-all
+         label(for="select-all")=Msg.Select_all
+         .students-block
+            each student, i in students
+               .student-item
+                  .chk
+                     id = student.getId().valueOf()
+                        +Checkbox('student', false)(value=id, data-id=id).student-chk
+                  +ProfileLink(student, 'student').image-container.white.shadow
+                     +PersonImg(student, 47)
+                  p=student.getDisplayName()
+                  block

@@ -32,11 +32,11 @@ NAMESPACE('chlk.services', function () {
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
             Number, chlk.models.reports.OrderByEnum, chlk.models.reports.StudentIdentifierEnum,
-            chlk.models.reports.ReportFormatEnum, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
+            chlk.models.reports.ReportFormatEnum, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, String]],
         String, function submitGradeBookReport(classId, gradingPeriodId, startDate, endDate, reportType, orderBy,
                                                          idToPrint, format, displayLetterGrade_, displayTotalPoints_,
                                                          displayStudentAverage_, includeWithdrawnStudents_, includeNonGradedActivities_,
-                                                         suppressStudentName_) {
+                                                         suppressStudentName_, studentIds_) {
             return this.getUrl('Reporting/GradeBookReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
@@ -51,14 +51,15 @@ NAMESPACE('chlk.services', function () {
                 displayStudentAverage: displayStudentAverage_,
                 includeWithdrawnStudents: includeWithdrawnStudents_,
                 includeNonGradedActivities: includeNonGradedActivities_,
-                suppressStudentName: suppressStudentName_
+                suppressStudentName: suppressStudentName_,
+                studentIds: studentIds_
             });
         },
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.reports.StudentIdentifierEnum,
-            String, String, String, String, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
+            String, String, String, String, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, String]],
         String, function submitWorksheetReport(classId, gradingPeriodId, startDate, endDate, idToPrint, announcementIds, title1, title2, title3,
-                    title4, title5, printAverage_, printLetterGrade_, printScores_, printStudent_, workingFilter_, appendToExisting_, overwriteExisting_) {
+                    title4, title5, printAverage_, printLetterGrade_, printScores_, printStudent_, workingFilter_, appendToExisting_, overwriteExisting_, studentIds_) {
             return this.getUrl('Reporting/WorksheetReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
@@ -77,7 +78,8 @@ NAMESPACE('chlk.services', function () {
                 printStudent: printStudent_,
                 workingFilter: workingFilter_,
                 appendToExisting: appendToExisting_,
-                overwriteExisting: overwriteExisting_
+                overwriteExisting: overwriteExisting_,
+                studentIds: studentIds_
             });
         },
 
@@ -158,10 +160,10 @@ NAMESPACE('chlk.services', function () {
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.StudentIdentifierEnum,
             chlk.models.reports.ReportFormatEnum, chlk.models.reports.MissingAssignmentsOrderByMethod, chlk.models.common.ChlkDate,
-            chlk.models.common.ChlkDate, ArrayOf(chlk.models.id.AlternateScoreId), Boolean, Boolean, Boolean, Boolean, Boolean]],
+            chlk.models.common.ChlkDate, ArrayOf(chlk.models.id.AlternateScoreId), Boolean, Boolean, Boolean, Boolean, Boolean, String]],
         String, function submitMissingAssignmentsReport(classId, gradingPeriodId, idToPrint, format, orderBy, startDate, endDate,
                 alternateScoreIds_, alternateScoresOnly_, considerZerosAsMissingGrades_, includeWithdrawn_, onePerPage_,
-                suppressStudentName_){
+                suppressStudentName_, studentIds_){
             return this.getUrl('Reporting/MissingAssignmentsReport.json',{
                 classId: classId.valueOf(),
                 gradingPeriodId : gradingPeriodId.valueOf(),
@@ -175,7 +177,8 @@ NAMESPACE('chlk.services', function () {
                 considerZerosAsMissingGrades: considerZerosAsMissingGrades_,
                 includeWithdrawn: includeWithdrawn_,
                 onePerPage: onePerPage_,
-                suppressStudentName: suppressStudentName_
+                suppressStudentName: suppressStudentName_,
+                studentIds: studentIds_
             });
         },
 

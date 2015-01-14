@@ -1,5 +1,5 @@
 .dialog.report-window
-   +ActionForm('grading', 'submitMissingAssignmentsReport').missing-assignments-report-form.no-working
+   +ActionForm('grading', 'submitMissingAssignmentsReport').missing-assignments-report-form.no-working.report-form
       .x-window-header
          .close.close-btn.dark
          h1=Msg.Create_Report
@@ -10,6 +10,7 @@
          +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
          +Hidden('classId', self.getClassId().valueOf())
          +Hidden('alternateScoreIds', '')#alternate-scores
+         +Hidden('studentIds', '')#student-ids-value
          .report-content
             TABLE.report-table
                TR
@@ -38,6 +39,7 @@
                      +LabeledCheckbox(Msg.Count_Zeros_as_Missing, 'considerZerosAsMissingGrades', true)
                      +LabeledCheckbox(Msg.One_Per_Page, 'onePerPage', false)
                      +LabeledCheckbox(Msg.Suppress_student_name, 'suppressStudentName', false)
+               +StudentsBlock(self.getStudents())
       .x-window-footer.report-bottom
          +ReportFormatSelect()
          BUTTON(type="submit").chlk-button.blue-button=Msg.Download

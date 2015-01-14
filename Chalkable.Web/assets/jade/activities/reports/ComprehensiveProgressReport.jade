@@ -1,5 +1,5 @@
 .dialog.report-window
-   +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working
+   +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working.report-form
       .x-window-header
          .close.close-btn.dark
          h1=Msg.Create_Report
@@ -65,19 +65,7 @@
                      h3=Msg.Other
                      +LabeledCheckbox(Msg.Go_green, 'goGreen', false)
                      +LabeledCheckbox(Msg.Window_Envelope, 'windowEnvelope', false)
-               TR
-                  TD(colspan=3).item-1
-                     +Checkbox('select all', false)#select-all
-                     label(for="select-all")=Msg.Select_all
-                     .students-block
-                        each student, i in self.getStudents()
-                           .student-item
-                              .chk
-                                 id = student.getId().valueOf()
-                                    +Checkbox('student', false)(value=id, data-id=id).student-chk
-                              +ProfileLink(student, 'student').image-container.white.shadow
-                                 +PersonImg(student, 47)
-                              p=student.getDisplayName()
+               +StudentsBlock(self.getStudents())
 
       .x-window-footer.report-bottom
          +ReportFormatSelect()

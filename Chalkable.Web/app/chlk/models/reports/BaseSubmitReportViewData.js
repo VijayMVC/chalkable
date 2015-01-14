@@ -43,11 +43,12 @@ NAMESPACE('chlk.models.reports', function () {
 
         chlk.models.reports.StudentIdentifierEnum, 'idToPrint',
         chlk.models.reports.ReportFormatEnum, 'format',
+        String, 'studentIds',
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId,
-            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-        function $(classId_, gradingPeriodId_, startDate_, endDate_){
-            BASE(classId_, gradingPeriodId_, startDate_, endDate_);
+            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, ArrayOf(chlk.models.people.ShortUserInfo)]],
+        function $(classId_, gradingPeriodId_, startDate_, endDate_, students_){
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_);
         }
     ]);
 });

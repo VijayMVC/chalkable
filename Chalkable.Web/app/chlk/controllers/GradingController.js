@@ -526,7 +526,8 @@ NAMESPACE('chlk.controllers', function (){
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
-                var res = new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate));
+                var students = this.getContext().getSession().get('StudentsForReport', []);
+                var res = new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, students));
                 return this.ShadeView(chlk.activities.reports.GradeBookReportDialog, res);
             },
 
@@ -559,9 +560,10 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function missingAssignmentsReportAction(gradingPeriodId, classId, startDate, endDate){
+                var students = this.getContext().getSession().get('StudentsForReport', []);
                 var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
                 var model = new chlk.models.reports.SubmitMissingAssignmentsReportViewData(classId,
-                    gradingPeriodId, startDate, endDate, alternateScores);
+                    gradingPeriodId, startDate, endDate, students, alternateScores);
                 return this.ShadeView(chlk.activities.reports.MissingAssignmentsReportDialog, new ria.async.DeferredData(model));
             },
 
@@ -582,7 +584,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isConsiderZerosAsMissingGrades(),
                     reportViewData.isIncludeWithdrawnStudents(),
                     reportViewData.isOnePerPage(),
-                    reportViewData.isSuppressStudentName()
+                    reportViewData.isSuppressStudentName(),
+                    reportViewData.getStudentIds()
                 );
                 this.BackgroundCloseView(chlk.activities.reports.MissingAssignmentsReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
@@ -643,7 +646,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isDisplayStudentAverage(),
                     reportViewData.isIncludeWithdrawnStudents(),
                     reportViewData.isIncludeNonGradedActivities(),
-                    reportViewData.isSuppressStudentName()
+                    reportViewData.isSuppressStudentName(),
+                    reportViewData.getStudentIds()
                 );
                 this.BackgroundCloseView(chlk.activities.reports.GradeBookReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
@@ -747,7 +751,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.isPrintStudent(),
                         model.isWorkingFilter(),
                         model.isAppendToExisting(),
-                        model.isOverwriteExisting()
+                        model.isOverwriteExisting(),
+                        model.getStudentIds()
                     );
                     this.BackgroundCloseView(chlk.activities.reports.WorksheetReportDialog);
                     this.getContext().getDefaultView().submitToIFrame(src);
@@ -831,8 +836,9 @@ NAMESPACE('chlk.controllers', function (){
             function getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate){
                 var res = this.calendarService.listByDateRange(startDate, endDate, classId)
                     .then(function(announcements){
-                        return new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, announcements));
-                    });
+                        var students = this.getContext().getSession().get('StudentsForReport', []);
+                        return new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, students, announcements));
+                    }, this);
                 return res;
             },
 

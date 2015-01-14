@@ -1,5 +1,5 @@
 .dialog.report-window
-    +ActionForm('grading', 'submitWorksheetReport').report-form
+    +ActionForm('grading', 'submitWorksheetReport').report-form.no-working
         .x-window-header
             .close.close-btn.dark
             h1=Msg.Create_Report
@@ -9,6 +9,7 @@
 
             +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
             +Hidden('classId', self.getClassId().valueOf())
+            +Hidden('studentIds', '')#student-ids-value
             .report-content
                 TABLE.report-table
                     TR
@@ -39,6 +40,7 @@
                             +LabeledCheckbox(Msg.Save_to_Working_filter, 'workingFilter', false)
                             +LabeledCheckbox(Msg.Append_to_existing, 'appendToExisting', false)
                             +LabeledCheckbox(Msg.Overwrite_existing, 'overwriteExisting', false)
+                    +StudentsBlock(self.getStudents())
         .x-window-footer.report-bottom
             +ReportFormatSelect()
             BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-button=Msg.Download
