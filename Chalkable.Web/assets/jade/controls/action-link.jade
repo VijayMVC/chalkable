@@ -2,7 +2,8 @@ mixin ActionLink(controller, action)
     -VALIDATE_ARG('controller', [String], controller)
     -VALIDATE_ARG('action', [String], action)
     link = self.getLink(ria.__API.clone(arguments))
-    -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
+    if !attributes['data-no-href']
+        -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
     -attributes['data-link'] = link
     A.action-link(attributes)
         block

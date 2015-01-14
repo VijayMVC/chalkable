@@ -36,6 +36,8 @@ REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
+    var needStudentReverse;
+
     /** @class chlk.controllers.GradingController */
     CLASS(
         'GradingController', EXTENDS(chlk.controllers.BaseController), [
@@ -257,12 +259,20 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.FinalGradesPage, result);
             },
 
+            function changeStudentsOrderAction(){
+                needStudentReverse = !needStudentReverse;
+                var students = this.getContext().getSession().get('StudentsForReport', []);
+                students.reverse();
+                return null;
+            },
+
             [chlk.controllers.Permissions([
                 chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],
             function summaryGridTeacherAction(classId_){
+                needStudentReverse = false;
                 if(!classId_ || !classId_.valueOf())
                     return this.BackgroundNavigate('grading', 'summaryAll', []);
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
@@ -532,6 +542,8 @@ NAMESPACE('chlk.controllers', function (){
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
                 var res = this.reportingService.getStudentsForReport(classId, gradingPeriodId)
                     .then(function(students){
+                        if(needStudentReverse)
+                            students.reverse();
                         return new chlk.models.reports.SubmitProgressReportViewData(this.getReasonsForReport_(), students, gradingPeriodId, classId, startDate, endDate);
                     }, this);
                 return this.ShadeView(chlk.activities.reports.ProgressReportDialog, res);

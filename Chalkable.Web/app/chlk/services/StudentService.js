@@ -31,7 +31,7 @@ NAMESPACE('chlk.services', function () {
                 //    classId: classId,
                 //    gradingPeriodId: gradingPeriodId
                 //});
-                return this.getStudents(classId, null, null, null, 0, 10000).then(function(data){
+                return this.getStudents(classId, null, null, true, 0, 10000).then(function(data){
                     return data.getItems();
                 });
             },
