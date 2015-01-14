@@ -37,7 +37,7 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
                      SPAN.text-container= item.getName()
 
 mixin ClassesToolBar(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
-   +doRender_(false, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+   +doRender_(false, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)(attributes)
 
 mixin ClassesToolBarWithAll(topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
-   +doRender_(true, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)
+   +doRender_(true, topBarData, controller_, action_, prepend_, disabled_, showAlerts_)(attributes)
