@@ -153,7 +153,7 @@ appPlatforms = appPlatforms.join(',')
                 +Textbox("name", app.getName(), self.isReadOnly(), "required")
             .elem
                 label.hint App URL:
-                +Textbox("url", app.getUrl(), self.isReadOnly(), "required, custom[url]")
+                +Textbox("url", app.getUrl(), self.isReadOnly(), _DEBUG ? "required" : "required, custom[url]")
         .section
             .elem
                 label.top.hint My Apps:
