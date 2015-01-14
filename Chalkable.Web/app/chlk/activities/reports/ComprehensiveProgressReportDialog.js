@@ -40,6 +40,27 @@ NAMESPACE('chlk.activities.reports', function(){
                 dailyAttendanceDisplayMethodNode.setValue(this.getAttDisplayMethod(yearToDate, gradingPeriod).valueOf());
             },
 
+            [ria.mvc.DomEventBind('change', '#select-all')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function allAnnouncementsChange(node, event){
+                var value = node.checked(), jNode;
+                jQuery(node.valueOf()).parents('td')
+                    .find('.students-block')
+                    .find('[type=checkbox]')
+                    .each(function(index, item){
+                        jNode = jQuery(this);
+                        if(!!item.getAttribute('checked') != !!value){
+                            jNode.prop('checked', value);
+                            value ? this.setAttribute('checked', 'checked') : this.removeAttribute('checked');
+                            value && this.setAttribute('checked', 'checked');
+                            var node = jNode.parent().find('.hidden-checkbox');
+                            node.val(value);
+                            node.data('value', value);
+                            node.attr('data-value', value);
+                        }
+                    });
+            },
+
             [[Boolean, Boolean]],
             attDisplayMethodEnum, function getAttDisplayMethod(isYearToDate, isGradingPeriodNode){
                 if(isYearToDate && isGradingPeriodNode)
