@@ -1,0 +1,107 @@
+﻿@using Chalkable.Web.Common
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>
+    @ChlkHelpers.RenderPageMetadata()
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    <!--Fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
+    <!-- Whole Site CSS -->
+    <link href="@Url.StaticContent("/Content/screen.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="~/Content/fonts.css" rel="stylesheet" media="screen, projection" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
+
+    <!-- Page specific CSS -->
+    @RenderSection("Styles", false)
+    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        ChlkHelpers.GoogleAnalytics();
+        ChlkHelpers.Olark();
+    }
+    @ChlkHelpers.RenderSiteRoot(Url)
+    <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autosize-min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autoresize.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.scrollTo.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/carousel/jquery.jcarousel.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/carousel/jquery.carouFredSel-6.2.1-packed.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/datepicker/jquery-ui-1.10.3.custom.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.validate.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
+    <script type="text/javascript" src="~/Scripts/api/chlk-post-message-api.js"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.signaturepad.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.quicksand.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.creditCardValidator.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>   
+
+</head>
+    <body>
+        <div id="fb-root"></div>
+        <input type="hidden" value=" ServerTime : @ViewData["CurrentServerDateTime"]"/>
+        <input type="hidden" value=" ServerDbTime: @ViewData["CurrentServerDBDateTime"]"/>
+
+        <div id="page-header">
+            Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+        </div>
+
+        <div class="page demo-index">
+            <div id="sidebar">
+                    <h2>App store for school</h2>
+                    <p><img src="@Url.StaticContent("/Content/images/login/talk.png")" align="left" />   Amazing digital tools and
+                           content can transform the way students learn in school. The Chalkable app store lists the best education apps from across the web.
+                    </p>
+
+                    <h2>The chalkable platform</h2>
+                    <p><img src="@Url.StaticContent("/Content/images/login/folder.png")" align="left" />Lots of Apps. One login.
+                           One calendar. One gradebo-ok. It all just works. The platform is the set of tools for students, tea-chers, admins, and parents. Tools like the Feed, Calendar, Grading, Messaging and more.
+                    </p>
+
+                    <h2>Make learning better</h2>
+                    <p><img src="@Url.StaticContent("/Content/images/login/hw.png")" align="left" /> Learning, we all do it. It’s an
+                           important part of what makes us human. When thinking about learning, it seemed to us that “good learning” has an awful lot to do with good tools and good content.</p>
+
+                <p>The most powerful tools and most immersive content live on the web. With the Chalkable App store and platform, schools gain access...and that makes for a better learning experience</p>
+            </div>
+            <div id="content">
+                <div class="ribbon"></div>
+                <div id="content-wrapper">
+                    <div id="main-top">
+                    </div>
+                    <div id="main-wrapper">
+                        <div id="main">
+                            @RenderBody()
+                        </div>
+                    </div>
+                    @ChlkHelpers.RenderChlkCopyrightYear()
+                </div>
+            </div>
+            
+            
+        </div>
+
+        @RenderSection("MixPanelTracking", false)
+    
+    @RenderSection("BottomScripts", false)
+    
+    
+    
+    </body> 
+</html>
