@@ -70,6 +70,12 @@ NAMESPACE('chlk.templates.announcement', function () {
                 var gradingMapping = this.getMapping();
                 var gradingStyle = this.getGradingStyle();
                 return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)
+            },
+
+
+            [[Number]],
+            String, function getClassAvg(count_){
+                return this.getModel().getGradesAvg(2);
             }
         ])
 });
