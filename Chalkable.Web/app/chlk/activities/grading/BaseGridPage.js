@@ -210,7 +210,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function commentBtnClick(node, event){
                 var active = this.dom.find('.active-cell');
-                var popUp = this.dom.find('.chlk-pop-up-container.comment');
+                var popUp = this.dom.find('.popup-bubble.comment');
                 var main = this.dom.parent('#main');
                 var comment = active.find('.comment-value').getValue();
                 popUp.find('textarea').setValue(comment);
@@ -233,7 +233,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.cancel-comment')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelBtnClick(node, event){
-                node.parent('.chlk-pop-up-container.comment').hide();
+                node.parent('.popup-bubble.comment').hide();
                 var cell = this.dom.find('.active-cell');
                 setTimeout(function(){
                     cell.find('input').trigger('focus');
@@ -247,9 +247,9 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function addCommentBtnClick(node, event){
                 var cell = this.dom.find('.active-cell');
                 var commentInput = cell.find('.comment-value');
-                var comment = node.parent('.chlk-pop-up-container').find('textarea').getValue();
+                var comment = node.parent('.popup-bubble').find('textarea').getValue();
                 commentInput.setValue(comment).setData('comment', comment);
-                node.parent('.chlk-pop-up-container.comment').hide();
+                node.parent('.popup-bubble.comment').hide();
                 setTimeout(function(){
                     cell.find('input').trigger('focus');
                 }, 1);
@@ -821,10 +821,10 @@ NAMESPACE('chlk.activities.grading', function () {
                         dom.find('.grading-comments-list').hide();
                     }
 
-                    var popUp = dom.find('.chlk-pop-up-container.comment, .chlk-pop-up-container.codes');
+                    var popUp = dom.find('.popup-bubble.comment, .popup-bubble.codes');
                     if(!node.hasClass('value-input') && !node.hasClass('arrow')
-                        && !node.isOrInside('.chlk-pop-up-container.comment') && !node.isOrInside('.grading-input-popup')
-                        && !node.isOrInside('.autocomplete-list') && !node.isOrInside('.chlk-pop-up-container.codes')){
+                        && !node.isOrInside('.popup-bubble.comment') && !node.isOrInside('.grading-input-popup')
+                        && !node.isOrInside('.autocomplete-list') && !node.isOrInside('.popup-bubble.codes')){
                             dom.find('.autocomplete-list').setHTML('').hide();
                             if(!node.hasClass('gp-button')){
                                 popUp.hide();

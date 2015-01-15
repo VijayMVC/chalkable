@@ -296,25 +296,19 @@
   .dropped-value
     text-decoration: line-through
 
-  .chlk-pop-up-container
-    position: absolute
-    text-shadow: white 0px 1px 1px
-    z-index: 100
+  .popup-bubble
+    .buttons-bottom
+      margin-top: 14px
+      text-align: center
 
-    .pop-up-triangle
-      left: 0
-      right: 0
-      height: 10px
-      background: url(images/common/window-triangle-top.png) center 0 no-repeat
-      position: absolute
-      bottom: -10px
-      @include transform(rotate(180deg))
+      button
+        margin-bottom: 0
+        width: 80px
 
-    &.comment
-      padding: 8px 18px
+        &:not(:last-child)
+          margin-right: 10px
 
     &.comment, &.codes
-      border-radius: 3px
       display: none
 
     &.codes
@@ -325,17 +319,6 @@
         text-align: center
         font: bold 18px Arial
         margin-bottom: 20px
-
-      .buttons-bottom
-        margin-top: 14px
-        text-align: center
-
-        .chlk-button
-          margin-bottom: 0
-          width: 80px
-
-        button:first-child
-          margin-right: 10px
 
       .row
         &.header
