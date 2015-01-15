@@ -52,7 +52,7 @@ NAMESPACE('chlk.models.apps', function () {
                             status = 'Live - Update approved';
                             break;
                         case chlk.models.apps.AppStateEnum.REJECTED.valueOf():
-                            status = 'Live - Update approved';
+                            status = 'Live - Update rejected';
                             break;
                         default :
                             status = 'Your app is live in the Chalkable App Store';
