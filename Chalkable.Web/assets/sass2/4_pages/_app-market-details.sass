@@ -13,8 +13,7 @@
     min-height: 200px
 
   .side-panel
-    width: 320px
-    padding-left: 20px
+    float: right
 
 
   .permissions
@@ -37,3 +36,61 @@
     background: #eee
     border-radius: 5px
     padding: 5px
+
+
+  .reviews
+    margin-right: 8px
+    min-height: 110px
+    margin-top: 32px
+
+    .review-link
+      font-weight: bold
+      color: #383838
+      text-decoration: none
+      font-size: 22px
+      cursor: pointer
+
+    .review-area
+      position: relative
+
+    .review-container
+      position: absolute
+      bottom: 0
+
+      .rating-hint
+        background: url(images/app/rating-hint.png) 0 0 no-repeat
+        width: image-width('images/app/rating-hint.png')
+        height: image-height('images/app/rating-hint.png')
+        position: absolute
+        left: 130px
+        bottom: 10px
+        display: none
+
+    .review-text
+      min-height: 50px
+      resize: vertical !important
+      padding: 5px 5px 40px
+      margin-top: 25px
+      display: block
+      margin-bottom: 15px
+      width: 100%
+
+    .cancel-btn
+      color: #878787
+      text-shadow: 0 1px 0 white
+      cursor: pointer
+      margin-left: 20px
+      padding: 0
+      text-decoration: underline
+      font-size: 12px
+      font-weight: bold
+
+    .user-reviews
+      .rating-person-item
+        margin-bottom: 20px
+        p
+          margin: 15px 0 5px
+          word-wrap: break-word
+      .rating
+        margin-top: -25px
+        float: right
