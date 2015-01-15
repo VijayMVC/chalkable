@@ -242,7 +242,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var classes = ServiceLocator.ClassService.GetClasses(syId).Where(x=>x.StudentsCount > 0).ToList();
             var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
-            if (postedAttendances != null)
+            if (postedAttendances != null && dateTime <= Context.NowSchoolYearTime.Date)
             {
                 if (dateTime.Date == Context.NowSchoolYearTime.Date)
                 {
@@ -251,7 +251,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 classes = classes.Where(x => postedAttendances.Any(y => y.SectionId == x.Id && !y.AttendancePosted)).ToList();
             }
-
             else
                 classes = new List<ClassDetails>();
             return classes;
