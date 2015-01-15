@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
         {
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
-            var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
+            //var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new GradebookReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
@@ -47,8 +47,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     ReportType = inputModel.ReportType,
                     GradingPeriodId = inputModel.GradingPeriodId,
                     SectionId = inputModel.ClassId,
-                    StudentIds = students.Select(x=>x.Id).ToArray()
+                    //StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null
+                    //StudentIds = students.Select(x=>x.Id).ToArray()
                 };
+            if (inputModel.StudentIds == null)
+            {
+                var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
+                stiModel.StudentIds = students.Select(x => x.Id).ToArray();
+            }
+            else stiModel.StudentIds = inputModel.StudentIds.ToArray();
             if (CoreRoles.TEACHER_ROLE == Context.Role)
                 stiModel.StaffId = Context.PersonId;
             return ConnectorLocator.ReportConnector.GradebookReport(stiModel);
@@ -65,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
 
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
-            var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
+            //var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new WorksheetReportParams
                 {
                     ActivityIds = activityIds,
@@ -84,8 +91,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     Title5 = inputModel.Title5,
                     SectionId = inputModel.ClassId,
                     GradingPeriodId = inputModel.GradingPeriodId,
-                    StudentIds = students.Select(x=>x.Id).ToArray()
+                 //   StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null //students.Select(x=>x.Id).ToArray()
                 };
+            if (inputModel.StudentIds == null)
+            {
+                var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
+                stiModel.StudentIds = students.Select(x => x.Id).ToArray();
+            }
+            else stiModel.StudentIds = inputModel.StudentIds.ToArray();
+
             if (CoreRoles.TEACHER_ROLE == Context.Role)
                 stiModel.StaffId = Context.PersonId;
             stiModel.AcadSessionId = gp.SchoolYearRef;
@@ -178,9 +192,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput)
         {
-            bool? isEnrolled = comprehensiveProgressInput.IncludeWithdrawn ? (bool?)null : true;
             var defaultGp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(comprehensiveProgressInput.GradingPeriodId);
-            var students = ServiceLocator.StudentService.GetClassStudents(comprehensiveProgressInput.ClassId, defaultGp.MarkingPeriodRef, isEnrolled);
             var stiModel = new ComprehensiveProgressParams
                 {
                     EndDate = comprehensiveProgressInput.EndDate,
@@ -218,7 +230,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             bool? isEnrolled = missingAssignmentsInput.IncludeWithdrawn ? (bool?)null : true;
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(missingAssignmentsInput.GradingPeriodId);
-            var students = ServiceLocator.StudentService.GetClassStudents(missingAssignmentsInput.ClassId, gradingPeriod.MarkingPeriodRef, isEnrolled);
             var stiModel = new MissingAssignmentsParams
                 {
                     AcadSessionId = gradingPeriod.SchoolYearRef,
@@ -232,9 +243,14 @@ namespace Chalkable.BusinessLogic.Services.School
                     OrderBy = missingAssignmentsInput.OrderBy,
                     SectionId = missingAssignmentsInput.ClassId,
                     StartDate = missingAssignmentsInput.StartDate,
-                    SuppressStudentName = missingAssignmentsInput.SuppressStudentName,
-                    StudentIds = students.Select(x=>x.Id).ToArray()
+                    SuppressStudentName = missingAssignmentsInput.SuppressStudentName, 
                 };
+            if (missingAssignmentsInput.StudentIds == null)
+            {
+                var students = ServiceLocator.StudentService.GetClassStudents(missingAssignmentsInput.ClassId, gradingPeriod.MarkingPeriodRef, isEnrolled);
+                stiModel.StudentIds = students.Select(x => x.Id).ToArray();
+            }
+            else stiModel.StudentIds = missingAssignmentsInput.StudentIds.ToArray();
             return ConnectorLocator.ReportConnector.MissingAssignmentsReport(stiModel);
         }
     }
@@ -250,6 +266,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public virtual int Format { get; set; }
         public virtual int GradingPeriodId { get; set; }
         public virtual int ClassId { get; set; }
+        public IntList StudentIds { get; set; }
     }
 
     public class GradebookReportInputModel : BaseReportInputModel
@@ -326,6 +343,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public bool OnePerPage { get; set; }
         public int OrderBy { get; set; }
         public bool SuppressStudentName { get; set; }
+
     }
 
     public class ComprehensiveProgressInputModel : BaseReportInputModel

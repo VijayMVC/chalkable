@@ -183,7 +183,7 @@ NAMESPACE('chlk.services', function () {
         },
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
-        ria.async.Future, function getStudentsForReport(classId, gradingPeriodId) {
+        ria.async.Future, function getStudentReportComments(classId, gradingPeriodId) {
             return this.get('Reporting/GetStudentProgressReportComments.json', ArrayOf(chlk.models.reports.UserForReport), {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),

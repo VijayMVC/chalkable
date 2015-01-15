@@ -261,7 +261,7 @@ NAMESPACE('chlk.controllers', function (){
 
             function changeStudentsOrderAction(){
                 needStudentReverse = !needStudentReverse;
-                var students = this.getContext().getSession().get('StudentsForReport', []);
+                var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                 students.reverse();
                 return null;
             },
@@ -298,7 +298,7 @@ NAMESPACE('chlk.controllers', function (){
                             model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                             model.getCurrentGradingGrid().setAbleEdit(canEdit);
                             var students = model.getCurrentGradingGrid().getStudents().map(function (item){return item.getStudentInfo()});
-                            this.getContext().getSession().set('StudentsForReport', students);
+                            this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, students);
                         }
                         model.setAbleEdit(canEdit);
 
@@ -526,7 +526,7 @@ NAMESPACE('chlk.controllers', function (){
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
-                var students = this.getContext().getSession().get('StudentsForReport', []);
+                var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                 var res = new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, students));
                 return this.ShadeView(chlk.activities.reports.GradeBookReportDialog, res);
             },
@@ -541,7 +541,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
-                var res = this.reportingService.getStudentsForReport(classId, gradingPeriodId)
+                var res = this.reportingService.getStudentReportComments(classId, gradingPeriodId)
                     .then(function(students){
                         if(needStudentReverse)
                             students.reverse();
@@ -560,7 +560,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function missingAssignmentsReportAction(gradingPeriodId, classId, startDate, endDate){
-                var students = this.getContext().getSession().get('StudentsForReport', []);
+                var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                 var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
                 var model = new chlk.models.reports.SubmitMissingAssignmentsReportViewData(classId,
                     gradingPeriodId, startDate, endDate, students, alternateScores);
@@ -836,7 +836,7 @@ NAMESPACE('chlk.controllers', function (){
             function getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate){
                 var res = this.calendarService.listByDateRange(startDate, endDate, classId)
                     .then(function(announcements){
-                        var students = this.getContext().getSession().get('StudentsForReport', []);
+                        var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                         return new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, students, announcements));
                     }, this);
                 return res;
@@ -844,7 +844,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             ria.async.Future, function getComprehensiveProgressReportInfo_(selectedGradingPeriodId, classId, startDate, endDate){
-                var students = this.getContext().getSession().get('StudentsForReport', []);
+                var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                 var res = new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
                     selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
                 return new ria.async.DeferredData(res);
