@@ -480,7 +480,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 else{
                     var grade = cell.find('.grade-text').getData('grade-value'),
                         comment = node.getData('comment');
-                    grade = grade ? grade.toString() : '';
+                    grade = grade != null  ? grade.toString() : '';
                     comment = comment ? comment.toString() : '';
                     model = new chlk.models.announcement.ShortStudentAnnouncementViewData(
                         new chlk.models.id.StudentAnnouncementId(node.getData('id')),
