@@ -1,0 +1,463 @@
+
+@charset "UTF-8";
+@import "compass/css3/images";
+@import "compass/css3/border-radius";
+@import "compass/css3/transition";
+/* CSS Document */
+body{background-image:url(images/index/BG.gif);
+font:normal 13px/16px Arial, Helvetica, sans-serif;
+overflow-x:hidden;
+margin:0 auto;
+}
+
+:focus{outline:none}
+.clear{clear:both;}
+
+#faq .faq_content{
+	margin-top: 70px !important;
+}
+
+#form{
+	margin: 100px 0 50px 100px;
+}
+.button_bar{
+    height: 34px;
+    width: 261px;
+    text-indent: -9999px;
+    margin: 0 0 -30px 246px;
+	cursor: pointer;
+
+
+  &.sis-types{
+    width: 349px;
+	margin: 0 0 -30px 200px;
+  }
+
+  >div >a{
+    display: block;
+    height: 100%;
+  }
+}
+#dropdown{
+  position: relative;
+  top: -60px;
+  left: 550px;
+  border: 1px solid black;
+  border-radius: 6px;
+  height: 32px !important;
+  width: 131px;
+
+  &.new-combo{
+    input{
+      width: 110px;
+      height: 28px !important;
+      font-size: 17px !important;
+
+      @include background(linear-gradient(top, #ffffff, #dadada) !important);
+    }
+     img.x-form-trigger {
+        background-position: 0 -1px !important;
+        height: 36px !important;
+        background-size: auto 33px !important;
+     }
+  }
+}
+#form .signupformclass{
+  margin-top: -220px;
+}
+#form.developers{
+  margin: 100px 0 -80px 280px;
+
+}
+select#dropper.more{
+  width: 120px;
+  height: 25px;
+  font-size: 15px;
+  margin-top: 5px;
+}
+.button_admin{
+  background: url(images/index/admin_button_bar.png) 0px 0px no-repeat;
+  display: block;
+  height: 34px;
+  width: 87px;
+  cursor: pointer;
+}
+.button_admin_up{
+  background: url(images/index/admin_up.png) 0px 0px no-repeat;
+  display: block;
+  height: 34px;
+  width: 87px;
+  cursor: pointer;
+}
+.button_admin_up:hover{
+  background: url(images/index/admin_button_bar.png) 0px 0px no-repeat;
+}
+.button_teacher{
+  background: url(images/index/admin_button_bar.png) 0px -34px no-repeat;
+  display: block;
+  height: 34px;
+  width: 87px;
+  cursor: pointer;
+  margin-left: 87px;
+  margin-top: -34px;
+}
+.button_teacher:hover{
+  background-position: 0px -169px;
+}
+.button_teacher_active{
+  display: block;
+  height: 34px;
+  width: 87px;
+  cursor: pointer;
+  margin-left: 87px;
+  margin-top: -34px;
+  background: url(images/index/admin_button_bar.png) 0px -169px no-repeat;
+}
+.button_student{
+  background: url(images/index/admin_button_bar.png) 0px -68px no-repeat;
+  display: block;
+  height: 34px;
+  width: 88px;
+  cursor: pointer;
+  margin-left: 174px;
+  margin-top: -34px;
+}
+.button_student:hover{
+  background-position: 0px -203px;
+}
+.button_student_active{
+  display: block;
+  height: 34px;
+  width: 88px;
+  cursor: pointer;
+  margin-left: 174px;
+  margin-top: -34px;
+  background: url(images/index/admin_button_bar.png) 0px -203px no-repeat;
+
+}
+.button_parent{
+  background: url(images/index/admin_button_bar.png) 0px -102px no-repeat;
+  display: block;
+  height: 34px;
+  width: 87px;
+  cursor: pointer;
+  margin-left: 261px;
+  margin-top: -34px;
+}
+.button_parent:hover{
+  background-position: 0px -237px;
+}
+.button_ps{
+  background: url(images/index/sis_sprite.png) 0px 0px;
+  background-repeat: no-repeat;
+  width: 107px;
+  height: 34px;
+}
+.button_ps:hover, .button_ps.active-type{
+  background-position: 0px -102px;
+}
+
+.button_ic{
+  background: url(images/index/sis_sprite.png) 0px -34px;
+  background-repeat: no-repeat;
+  width: 127px;
+  margin-left: 107px;
+  margin-top: -34px;
+  height: 34px;
+}
+.button_ic:hover, .button_ic.active-type{
+  background-position: 0px -136px;
+}
+.button_esd{
+  background: url(images/index/sis_sprite.png) 0px -68px;
+  background-repeat: no-repeat;
+  width: 114px;
+  margin-left: 228px;
+  margin-top: -34px;
+  height: 34px;
+}
+.button_esd:hover, .button_esd.active-type{
+  background-position: 0px -170px;
+}
+
+ul#form li {
+  height: 90px;
+}
+ul#form {
+
+}
+
+label{
+  color: #564d40 !important;
+  text-shadow: 1px 1px 0 #ffffff;
+  font: bolder 28px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+}
+label.stay {
+  text-align: left;
+  color: #7e684e;
+  position: relative;
+  height: 45px;
+  top: -40px;
+  left: -90px;
+  padding-left: 60px;
+  padding-top: 20px;
+  text-shadow: 1px 1px 0 #ffffff;
+  font: 16px Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 500;
+}
+input[type=checkbox] {
+  visibility: hidden;
+}
+
+.slideThree {
+  width: 80px;
+  height: 26px;
+  background: #333;
+  margin: 20px auto;
+  left: -153px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  position: relative;
+  background: url(images/index/textfield_brown.png);
+}
+
+.slideThree:after {
+  content: 'No';
+  font: bold 12px/26px Arial, sans-serif;
+  color: #7e684e;
+  position: absolute;
+  right: 9px;
+  top: 0px;
+  z-index: 0;
+  text-shadow: 1px 1px 0px rgba(255,255,255,.15);
+}
+
+.slideThree:before {
+  content: 'Yes';
+  font: 12px/26px Arial, sans-serif;
+  color: #7e684e;
+  position: absolute;
+  left: 9px;
+  z-index: 0;
+  font-weight: bold;
+}
+
+.slideThree label {
+  display: block;
+  width: 32px;
+  height: 18px;
+
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+
+  -webkit-transition: all .4s ease;
+  -moz-transition: all .4s ease;
+  -o-transition: all .4s ease;
+  -ms-transition: all .4s ease;
+  transition: all .4s ease;
+  cursor: pointer;
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  z-index: 1;
+
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+  background: #fcfff4;
+
+  background: rgb(171,133,84); /* Old browsers */
+  background: -moz-linear-gradient(top, rgba(171,133,84,1) 0%, rgba(107,80,52,1) 98%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(171,133,84,1)), color-stop(98%,rgba(107,80,52,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(171,133,84,1) 0%,rgba(107,80,52,1) 98%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(171,133,84,1) 0%,rgba(107,80,52,1) 98%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(171,133,84,1) 0%,rgba(107,80,52,1) 98%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(171,133,84,1) 0%,rgba(107,80,52,1) 98%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ab8554', endColorstr='#6b5034',GradientType=0 ); }
+
+.slideThree input[type=checkbox]:checked + label {
+  left: 43px;
+}
+
+.instruct{
+  text-align: left;
+  color: #7e684e;
+  position: relative;
+  height: 45px;
+  top: -50px;
+  left: 345px;
+  padding-left: 60px;
+  padding-top: 20px;
+  text-shadow: 1px 1px 0 #ffffff;
+  font: 20px Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 500;
+  background-image: url(images/index/locked.png);
+  background-repeat: no-repeat;
+  background-position: .6em 0.9em;
+}
+.instruct.index {
+  background-position:2em 0.9em;
+}
+p.instructpw{
+  margin-top: -20px;
+}
+.instruct.sisurl{
+  top: -64px;
+  background-position: 0.5em 1.6em;
+
+}
+p.instruct.terms{
+  position: relative;
+  left: -60px;
+  top: 10px;
+  background: none;
+}
+p.instruct.terms a{
+  text-shadow: 1px 1px 0 #ffffff;
+  font: 20px Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 500;
+  color: #7e684e;
+}
+p.instruct.secure{
+  position: relative;
+  left: -60px;
+  padding-top: 50px;
+  top: 20px;
+  background: url(images/index/p_secure_bg_line.gif) top center no-repeat;
+  margin-bottom: 220px;
+}
+.instruct.message{
+  position: relative;
+  top: -224px;
+  background: none;
+}
+li.principal{
+  margin-top: 180px;
+}
+li.button_container.dev {
+  margin-top:-30px;
+}
+input, select{
+  width: 380px;
+  height: 34px !important;
+  background: url(images/index/textfield_brown.png) !important;
+  border-radius: 6px;
+  margin-bottom: 0px;
+  font: 500 24px Helvetica, Arial, "Lucida Grande", sans-serif  !important;
+  color: #564d40;
+  padding: 1px 0 1px 5px;
+  border: 1px solid rgba(119, 92, 1, 0.32);
+}
+li{
+  >DIV{
+    >input{
+      width: 348px !important;
+      padding-right: 31px;
+    }
+  }
+}
+
+input[type="password"]{
+  font-size: 35px;
+}
+textarea.fieldtext.message{
+  height: 191px;
+  width: 380px;
+  border-radius: 6px;
+  margin-bottom: 0px;
+  font: 500 24px Helvetica, Arial, "Lucida Grande", sans-serif;
+  color: #564d40;
+  padding-left: 5px;
+  border: 1px solid rgba(119, 92, 1, 0.32);
+  background: url(images/index/textfield_brown_long.png) !important;
+  resize: none;
+  font-size: 17px;
+  overflow: auto;
+}
+input::-webkit-input-placeholder {
+  color: rgba(93, 93, 93, 0.66);
+  font-size:22px;
+  font-style:italic;
+}
+input:-moz-placeholder {
+  color:    rgba(93, 93, 93, 0.49);
+  font-size:22px;
+  font-style:italic;
+}
+li.signin_button_container {
+  position:relative;
+  top:-130px;
+  left:33px;
+}
+.signupbutton{
+  display: block;
+  cursor: pointer ;
+  background: url(images/index/sign_up_sprite.png) no-repeat 0px 0px;
+  width: 108px;
+  height: 54px;
+  margin: 20px 0 0 -5px;
+}
+.signupbutton:hover{
+  display: block;
+  cursor: pointer;
+  background-position: 0px -57px;
+  width: 108px;
+  height: 54px;
+  color: rgba(255, 255, 255, 0);
+  text-indent: -9999px;
+}
+.signupbutton a{
+  font-size: 40px;
+}
+
+.signinformclass{
+  margin-top: 200px;
+}
+
+.sign_in_button{
+  display: block;
+  cursor: pointer ;
+  background: url(images/index/sign_in_sprite.png) no-repeat 0px 0px;
+  width: 108px;
+  height: 54px;
+  margin: 20px 0 0 -5px;
+}
+.sign_in_button:hover{
+  display: block;
+  cursor: pointer;
+  background-position: 0px -57px;
+  width: 108px;
+  height: 54px;
+  color: rgba(255, 255, 255, 0);
+  text-indent: -9999px;
+}
+.sign_in_button a{
+  font-size: 40px;
+}
+.signinformlabel{
+  float: left;
+  margin-left: 30px;
+}
+.donebutton{
+  display: block;
+  cursor: pointer ;
+  background: url(images/index/done_sprite.png) no-repeat 0px 0px;
+  width: 108px;
+  height: 54px;
+  margin: 20px 0 0 -5px;
+  text-indent: -9999px;
+}
+.donebutton:hover{
+  display: block;
+  cursor: pointer;
+background-position: 0px -62px;
+  width: 108px;
+  height: 54px;
+  color: rgba(255, 255, 255, 0);
+  text-indent: -9999px;
+}
+.signupbutton a{
+  font-size: 40px;
+}
