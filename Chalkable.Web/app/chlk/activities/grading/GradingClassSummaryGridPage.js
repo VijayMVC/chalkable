@@ -294,7 +294,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         active.getData('grading-period-name'), active.getData('average-id'), parseInt(active.getAttr('row-index'), 10));
                     var tpl = new chlk.templates.grading.AvgCodesPopupTpl();
                     tpl.assign(model);
-                    var popUp = this.dom.find('.chlk-pop-up-container.codes');
+                    var popUp = this.dom.find('.popup-bubble.codes');
                     popUp.find('.codes-content').setHTML(tpl.render());
 
                     var container = active.parent('.mps-container');
@@ -309,7 +309,7 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             function setCommentByNode(node){
-                var popUp = node.parent('.chlk-pop-up-container');
+                var popUp = node.parent('.popup-bubble');
                 var input = popUp.find('.comment-value');
                 input.setValue(node.getHTML());
                 popUp.find('.grading-comments-list').hide();
@@ -333,13 +333,13 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.cancel-codes')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelCodesBtnClick(node, event){
-                node.parent('.chlk-pop-up-container.codes').hide();
+                node.parent('.popup-bubble.codes').hide();
             },
 
             [ria.mvc.DomEventBind('click', '.save-codes')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function saveCodesBtnClick(node, event){
-                var popUp = node.parent('.chlk-pop-up-container.codes');
+                var popUp = node.parent('.popup-bubble.codes');
                 var res = [], o;
                 popUp.find('.row:not(.header)').forEach(function(item){
                     var input = item.find('.code-input');

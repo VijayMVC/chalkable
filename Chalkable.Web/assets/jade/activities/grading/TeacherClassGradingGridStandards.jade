@@ -15,16 +15,17 @@
         +ActionButton('grading', 'standards', selectedId).boxes=Msg.Box(true)
         +ActionButton('grading', 'standardsGrid', selectedId).pressed.grid=Msg.Grid
     .mps-container
-        .chlk-pop-up-container.popup-top.comment
+        .popup-bubble.bottom.comment.centered
             .pop-up-triangle
             div
                 h5=Msg.Add_comment
                 .text-container
                     textarea(maxlength=500).comment-value
                     .grading-comments-list
-                BUTTON.grey-button.small.cancel-comment=Msg.Cancel
-                if self.isAbleEdit()
-                    BUTTON.blue-button.small.add-comment.right=Msg.Add
+                .buttons-bottom
+                    BUTTON.grey-button.small.cancel-comment=Msg.Cancel
+                    if self.isAbleEdit()
+                        BUTTON.blue-button.small.add-comment=Msg.Add
         each gradingPeriod,i in self.getGradingPeriods()
             -var item = self.getCurrentGradingGrid()
             -var selectedGradingPeriodId = item.getGradingPeriod().getId()
