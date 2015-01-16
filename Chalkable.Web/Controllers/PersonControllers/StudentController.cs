@@ -59,9 +59,15 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult Info(int personId)
         {
             var syId = GetCurrentSchoolYearId();
-            var res = (StudentInfoViewData)GetInfo(personId, studentInfo=> StudentInfoViewData.Create(studentInfo, syId));
+            var res = (StudentInfoViewData)GetInfo(personId, personInfo=> StudentInfoViewData.Create(personInfo, syId));
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
+            var studentDetailsInfo = SchoolLocator.StudentService.GetById(personId, syId);
+            res.HasMedicalAlert = studentDetailsInfo.HasMedicalAlert;
+            res.IsAllowedInetAccess = studentDetailsInfo.IsAllowedInetAccess;
+            res.SpecialInstructions = studentDetailsInfo.SpecialInstructions;
+            res.SpEdStatus = studentDetailsInfo.SpEdStatus;
+            
             //parents functionality are not implemanted yet
             //var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
             //res.Parents = StudentParentViewData.Create(studentParents);
