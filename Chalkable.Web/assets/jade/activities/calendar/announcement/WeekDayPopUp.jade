@@ -12,7 +12,7 @@
                     span=period.getClassName()
     .info
         if teacherDisplayName
-            .day-down: +ActionLink('teacher', 'info', period.getTeacherId())= teacherDisplayName
+            .day-down: +ActionLink('teachers', 'details', period.getTeacherId())= teacherDisplayName
         if roomNumber
             .day-down Rm #{roomNumber}
         .day-down #{period.displayPeriodTimeRange()}
