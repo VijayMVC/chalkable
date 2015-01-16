@@ -3,7 +3,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
     -var topData = self.getTopData();
     -var selectedId = topData.getSelectedItemId();
     +ClassesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
-    h2.page-title Inbox
+    h2.page-title Feed
     .action-bar
         .items
             if self.importantOnly
