@@ -675,6 +675,15 @@ NAMESPACE('chlk.activities.grading', function () {
 
                         _DEBUG && console.timeEnd('repainting');
                     }, this);
+
+                var studentIds = [];
+                this._lastModel.getCurrentGradingGrid().getStudents().forEach(function(item){
+                    studentIds.push(item.getStudentInfo().getId().valueOf())
+                });
+
+                var form = $node.parent('.marking-period-container').find('.change-order-form');
+                form.find('.student-ids').setValue(studentIds.join(','));
+                form.trigger('submit');
             }
         ]);
 });

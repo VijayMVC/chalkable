@@ -62,6 +62,14 @@ NAMESPACE('chlk.templates.grading', function () {
 
             function getTbWidth(){
                 return ria.dom.Dom('#content').width() - 412;
+            },
+
+            function getStudentIds(){
+                var res = [];
+                this.getStudents().forEach(function(item){
+                    res.push(item.getStudentInfo().getId().valueOf());
+                });
+                return res.join(',');
             }
         ]);
 });

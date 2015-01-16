@@ -36,7 +36,7 @@ REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
-    var needStudentReverse;
+    var needStudentReverse, studentIds = [];
 
     /** @class chlk.controllers.GradingController */
     CLASS(
@@ -259,10 +259,18 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.FinalGradesPage, result);
             },
 
-            function changeStudentsOrderAction(){
-                needStudentReverse = !needStudentReverse;
+            [[chlk.models.reports.BaseSubmitReportViewData]],
+            function changeStudentsOrderAction(model){
+                studentIds = (model.getStudentIds() || '').split(',');
+                var res = [];
                 var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
-                students.reverse();
+                studentIds.forEach(function(id){
+                    res.push(students.filter(function(student){return student.getId().valueOf() == id})[0]);
+                });
+                this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, res);
+                //needStudentReverse = !needStudentReverse;
+
+                //students.reverse();
                 return null;
             },
 
@@ -299,6 +307,8 @@ NAMESPACE('chlk.controllers', function (){
                             model.getCurrentGradingGrid().setAbleEdit(canEdit);
                             var students = model.getCurrentGradingGrid().getStudents().map(function (item){return item.getStudentInfo()});
                             this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, students);
+
+                            studentIds = students.map(function(item){return item.getId().valueOf()});
                         }
                         model.setAbleEdit(canEdit);
 
@@ -543,9 +553,11 @@ NAMESPACE('chlk.controllers', function (){
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
                 var res = this.reportingService.getStudentReportComments(classId, gradingPeriodId)
                     .then(function(students){
-                        if(needStudentReverse)
-                            students.reverse();
-                        return new chlk.models.reports.SubmitProgressReportViewData(this.getReasonsForReport_(), students, gradingPeriodId, classId, startDate, endDate);
+                        var res = [];
+                        studentIds.forEach(function(id){
+                            res.push(students.filter(function(student){return student.getId().valueOf() == id})[0]);
+                        });
+                        return new chlk.models.reports.SubmitProgressReportViewData(this.getReasonsForReport_(), res, gradingPeriodId, classId, startDate, endDate);
                     }, this);
                 return this.ShadeView(chlk.activities.reports.ProgressReportDialog, res);
             },

@@ -66,12 +66,14 @@ mixin DisplayTotalPoints(model)
             .dotted-h.grade-value
 
 .ann-types-container
+    +ActionForm('grading', 'changeStudentsOrder').change-order-form
+        +Hidden('studentIds', self.getStudentIds()).student-ids
     if !self.getGradingItems().length || !self.getStudents().length
         .no-items-text=Msg.No_grades_yet
     else
         .dotted-container.name-container.with-horizontal-dots
             .grading-grid-th
-                +ActionLink('grading', 'changeStudentsOrder').type-name(data-sort-type = "name", data-sort-order="asc", data-no-href=true)
+                .type-name(data-sort-type = "name", data-sort-order="asc", data-no-href=true)
                     =Msg.Student(true)
                 +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
                 .time
