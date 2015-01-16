@@ -1,0 +1,67 @@
+#chlk-dialogs{
+
+  .dialog{
+    &.set-discipline-dialog{
+      min-height: 350px !important;
+
+      .set-discipline-form{
+
+        font-size: 12px;
+        .grid{
+
+          margin: 10px;
+          height: 300px;
+          width: 530px;
+          overflow-x: scroll;
+
+          .head{
+            .th{
+              display: inline-block;
+              width: 120px;
+            }
+          }
+
+          .body{
+            .discipline-info{
+              .row{
+                .td{
+                  vertical-align: middle;
+                  margin-top: 10px;
+                  display: inline-block;
+                  width: 120px;
+
+                  .checkbox-list{
+                    .discipline-type{
+                      span{
+                        margin-left: 8px;
+                        font-size: 14px;
+                        color: #808080;
+                      }
+                    }
+                  }
+                  textarea{
+                    border: 1px solid #ccc;
+                    font: 15px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+                    padding: 5px;
+                    color: #6e6e6e;
+                    &:disabled{
+                      background-color: rgb(235, 235, 228);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .submit-btn{
+          margin-top: 15px;
+          text-align: right;
+        }
+        .cancel-btn{
+
+        }
+      }
+    }
+  }
+}
