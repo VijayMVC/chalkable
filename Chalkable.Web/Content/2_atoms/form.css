@@ -1,0 +1,21 @@
+/* line 1, ../../assets/sass2/2_atoms/form.sass */
+.x-form-field {
+  display: block;
+  margin-bottom: 5px;
+}
+/* line 5, ../../assets/sass2/2_atoms/form.sass */
+.x-form-field label {
+  display: inline-block;
+  min-width: 80px;
+  width: 25%;
+}
+
+/* line 10, ../../assets/sass2/2_atoms/form.sass */
+.form-buttons, .buttons-container {
+  margin-top: 10px;
+  text-align: center;
+}
+/* line 14, ../../assets/sass2/2_atoms/form.sass */
+.form-buttons > *, .buttons-container > * {
+  margin: 0 3px;
+}
