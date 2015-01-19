@@ -61,9 +61,16 @@ NAMESPACE('chlk.activities.apps', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleRoleReviews(node, event){
                  this.dom.find('.rating-roles').toggleClass('x-hidden');
+            },
+
+            OVERRIDE, VOID, function onPause_() {
+                BASE();
+                this.dom.find('iframe[wmode]').addClass('x-hidden');
+            },
+
+            OVERRIDE, VOID, function onResume_() {
+                BASE();
+                this.dom.find('iframe[wmode]').removeClass('x-hidden');
             }
-
-
-
         ]);
 });
