@@ -135,7 +135,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public void CreateUserLoginInfos()
         {
-            using (ExecuteStoredProcedureReader("spCreateLoginInfos", new Dictionary<string, object>()))
+            using (ExecuteStoredProcedureReader("spCreateLoginInfos", new Dictionary<string, object>(), 3600))
             {
             }
         }
