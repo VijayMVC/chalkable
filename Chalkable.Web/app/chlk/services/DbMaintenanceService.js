@@ -22,6 +22,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            function getDbListBackupsSync(){
+                return this.getContext().getSession().get(ChlkSessionConstants.DB_LIST_BACKUPS);
+            },
+
             [[String, String]],
             ria.async.Future, function databaseUpdate(masterSql, schoolSql) {
                 return this.post('dbmaintenance/DatabaseUpdate.json', chlk.models.Success, {
@@ -37,5 +41,7 @@ NAMESPACE('chlk.services', function () {
                     count: count_
                 });
             }
+
+
         ])
 });
