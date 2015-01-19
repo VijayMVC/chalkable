@@ -17,17 +17,14 @@ mixin ActionLinkOrNull_(isActionLink, date, classId)
         each item in self.groupItemsAsTable()
             .item
                 each calendarDayItem, order in item
-                    if order == 0
-                        .cell: A: .period-info= item.period.getOrder()
-                    else if order == 6
-                        .cell
-                    else
-                        .cell(class = calendarDayItem.day.getTodayClassName())
-                            each ann in calendarDayItem
-                                -var period = ann.getPeriod()
-                                -var className = period.getClassName()
-                                if className
-                                    +ActionLinkOrNull_(period.getStartTime() && self.isMainCalendar(), calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId())(
-                                            class = period.isCurrentSection() ? 'current-section' : null).period-item.day
-                                        .course-icon: +ClassImg(period, 45, 80)
-                                        .p-container(data-tooltip=period.getFullClassName())= className
+                    .cell(class = calendarDayItem.day ? calendarDayItem.day.getTodayClassName() : null)
+                        if order == 0
+                            A: .period-info= item.period.getOrder()
+
+                        each ann in calendarDayItem
+                            -var period = ann.getPeriod()
+                            if period && period.getStartTime() && period.getClassName()
+                                +ActionLinkOrNull_(self.isMainCalendar(), calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId())(
+                                        class = period.isCurrentSection() ? 'current-section' : null).period-item.day
+                                    .course-icon: +ClassImg(period, 45, 80)
+                                    .p-container(data-tooltip=period.getFullClassName())= period.getClassName()
