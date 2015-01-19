@@ -39,7 +39,8 @@ NAMESPACE('chlk.services', function () {
                     late: late,
                     absent: absent,
                     incomplete: incomplete,
-                    exempt: exempt
+                    exempt: exempt,
+                    callFromGradeBook: !!model_
                 });
             },
 

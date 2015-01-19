@@ -1,3 +1,12 @@
+mixin ActionLinkOrNull_(isActionLink, date, classId)
+    if isActionLink
+        +ActionLink('calendar', 'showWeekBarPopUp', date, classId)(attributes)
+            block
+    else
+        A(href="javascript:;")(attributes)
+            block
+
+
 .day-calendar-body
     .day-names.day
         each item,i in self.getItems()
@@ -18,8 +27,7 @@
                                 -var period = ann.getPeriod()
                                 -var className = period.getClassName()
                                 if className
-                                    +ActionLink('calendar', 'showWeekBarPopUp', calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId())(
-                                            class = [period.getStartTime() && self.isMainCalendar() ? "" : "disabled", period.isCurrentSection() ? 'current-section' : null]
-                                        ).period-item.day
+                                    +ActionLinkOrNull_(period.getStartTime() && self.isMainCalendar(), calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId())(
+                                            class = period.isCurrentSection() ? 'current-section' : null).period-item.day
                                         .course-icon: +ClassImg(period, 45, 80)
                                         .p-container(data-tooltip=period.getFullClassName())= className

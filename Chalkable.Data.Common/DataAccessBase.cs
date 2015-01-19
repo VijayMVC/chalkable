@@ -29,10 +29,12 @@ namespace Chalkable.Data.Common
             }
         }
 
-        protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters)
+        protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters, int? timeout = null)
         {
             using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
             {
+                if (timeout.HasValue)
+                    command.CommandTimeout = timeout.Value;
                 var res = command.ExecuteReader();
                 return res;
             }

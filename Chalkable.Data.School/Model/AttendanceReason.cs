@@ -26,6 +26,7 @@ namespace Chalkable.Data.School.Model
     public class AttendanceLevelReason
     {
         public const string ATTENDACNE_REASON_REF_FIELD = "AttendanceReasonRef";
+        public const string ID_FIELD = "Id";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }

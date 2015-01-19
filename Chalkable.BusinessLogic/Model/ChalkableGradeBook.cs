@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Model
     public class StudentTotalPoint
     {
         public int StudentId { get; set; }
-        public decimal TotalPointsEarned { get; set; }
+        public decimal? TotalPointsEarned { get; set; }
         public decimal TotalPointsPossible { get; set; }
 
         public static StudentTotalPoint Create(StudentTotalPoints studentTotalPoint)

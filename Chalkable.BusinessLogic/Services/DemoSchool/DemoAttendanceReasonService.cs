@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
@@ -47,9 +48,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.AttendanceReasonStorage.Delete(ids);
         }
 
-        public IList<AttendanceReason> List()
+        public IList<AttendanceReason> List(bool onlyWithLevel = true)
         {
-            return Storage.AttendanceReasonStorage.GetAll();
+            var res = Storage.AttendanceReasonStorage.GetAll();
+            if (onlyWithLevel)
+                res = res.Where(x => x.AttendanceLevelReasons.Count > 0).ToList();
+            return res;
         }
 
         public AttendanceReason Get(int id)

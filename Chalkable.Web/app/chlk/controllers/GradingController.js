@@ -8,6 +8,7 @@ REQUIRE('chlk.services.ReportingService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.StudentService');
+REQUIRE('chlk.services.AttendanceService');
 
 REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
@@ -65,6 +66,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.StudentService, 'studentService',
+
+            [ria.mvc.Inject],
+            chlk.services.AttendanceService, 'attendanceService',
 
             //TODO: refactor
             [chlk.controllers.SidebarButton('statistic')],
@@ -551,13 +555,18 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
-                var res = this.reportingService.getStudentReportComments(classId, gradingPeriodId)
-                    .then(function(students){
+                var res = ria.async.wait([
+                        this.reportingService.getStudentReportComments(classId, gradingPeriodId),
+                        this.attendanceService.getAllAttendanceReasons()
+                    ])
+                    .then(function(data){
+                        var students = data[0];
+                        var attendanceReasons = data[1];
                         var res = [];
                         studentIds.forEach(function(id){
                             res.push(students.filter(function(student){return student.getId().valueOf() == id})[0]);
                         });
-                        return new chlk.models.reports.SubmitProgressReportViewData(this.getReasonsForReport_(), res, gradingPeriodId, classId, startDate, endDate);
+                        return new chlk.models.reports.SubmitProgressReportViewData(attendanceReasons, res, gradingPeriodId, classId, startDate, endDate);
                     }, this);
                 return this.ShadeView(chlk.activities.reports.ProgressReportDialog, res);
             },
@@ -851,9 +860,15 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             ria.async.Future, function getComprehensiveProgressReportInfo_(selectedGradingPeriodId, classId, startDate, endDate){
                 var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
-                var res = new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
-                    selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
-                return new ria.async.DeferredData(res);
+                //var attendanceReasons =
+                return this.attendanceService.getAllAttendanceReasons()
+                    .then(function (attendanceReasons){
+                        return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
+                            selectedGradingPeriodId, startDate, endDate,  attendanceReasons, students)
+                    });
+                //var res = new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
+                //    selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
+                //return new ria.async.DeferredData(res);
                 //return this.studentService.getClassStudents(classId, selectedGradingPeriodId)
                 //    .attach(this.validateResponse_())
                 //    .then(function(students){
