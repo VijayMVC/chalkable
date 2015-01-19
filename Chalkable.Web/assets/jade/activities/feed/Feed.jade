@@ -8,9 +8,9 @@ div(class = noComplete ? "no-complete" : "").feed-container
         .items
             if self.importantOnly
                 .pressed= Msg.ToDo
-                +ActionLinkButton('feed', 'list', true, false, selectedId || '', 0)= Msg.All
+                +ActionLinkButton('feed', 'list', selectedId || '', true, false, 0)= Msg.All
             else
-                +ActionLinkButton('feed', 'list', true, true, selectedId || '', 0)= Msg.ToDo
+                +ActionLinkButton('feed', 'list', selectedId || '', true, true, 0)= Msg.ToDo
                 .pressed= Msg.All
     //+ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
     if noComplete
