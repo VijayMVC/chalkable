@@ -43,7 +43,7 @@ namespace Chalkable.StiImport.Services
 
         void PingConnection(object o)
         {
-            ImportDbService dbService = (ImportDbService)o;
+            var dbService = (ImportDbService)o;
             while (true)
             {
                 try
@@ -74,6 +74,42 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("download data to sync");
             DownloadSyncData();
 
+            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for import");
+            var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
+            if (d.LastSync.HasValue)
+                DoRegularSync();
+            else
+                DoInitialSync();
+            
+            Log.LogInfo("process pictures");
+            ProcessPictures();
+            Log.LogInfo("setting link status");
+            foreach (var importedSchoolId in importedSchoolIds)
+                connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
+            
+            Log.LogInfo("updating district last sync");
+            UpdateDistrictLastSync(d);
+            Log.LogInfo("creating user login infos");
+            ServiceLocatorMaster.UserService.CreateUserLoginInfos();
+            Log.LogInfo("import is completed");
+        }
+
+        private void DoInitialSync()
+        {
+            try
+            {
+                SyncDb();
+            }
+            catch (Exception ex)
+            {
+                Log.LogException(ex);
+                throw;
+            }
+        }
+
+        private void DoRegularSync()
+        {
             ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
 
@@ -87,8 +123,8 @@ namespace Chalkable.StiImport.Services
             var t2 = new Thread(PingConnection);
             t1.Start(masterDb);
             t2.Start(schoolDb);
-            
-            
+
+
             bool schoolCommited = false;
             try
             {
@@ -109,7 +145,7 @@ namespace Chalkable.StiImport.Services
                 }
                 else
                     Log.LogInfo("!!!!!!!!school is commited but master is going to rollback!!!!!!!!!!!!!!!!!!!!!");
-                        //TODO.....
+                //TODO.....
                 Log.LogInfo("rollback master db");
                 masterDb.Rollback();
                 throw;
@@ -124,23 +160,12 @@ namespace Chalkable.StiImport.Services
                 catch (Exception ex)
                 {
                     Trace.TraceError(ex.Message);
-                }    
+                }
             }
             schoolDb.Dispose();
             masterDb.Dispose();
-            Log.LogInfo("process pictures");
-            ProcessPictures();
-            Log.LogInfo("setting link status");
-            foreach (var importedSchoolId in importedSchoolIds)
-                connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
-            //recreating locator bc previous one could have expired connection
-            ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
-            Log.LogInfo("updating district last sync");
-            UpdateDistrictLastSync();
-            Log.LogInfo("creating user login infos");
-            ServiceLocatorMaster.UserService.CreateUserLoginInfos();
-            Log.LogInfo("import is completed");
-            ((ImportDbService)ServiceLocatorMaster.DbService).Dispose();
+            ServiceLocatorMaster = new ServiceLocatorMaster(sysadminCntx);
+            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
         private void SyncDb()
@@ -155,11 +180,9 @@ namespace Chalkable.StiImport.Services
             UpdateVersion();
         }
 
-        private void UpdateDistrictLastSync()
+        private void UpdateDistrictLastSync(District d)
         {
-            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
-                throw new Exception("District id should be defined for import");
-            var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
+            
             d.LastSync = DateTime.UtcNow;
             ServiceLocatorMaster.DistrictService.Update(d);
         }
