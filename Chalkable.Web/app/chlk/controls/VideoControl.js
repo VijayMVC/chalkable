@@ -9,7 +9,7 @@ NAMESPACE('chlk.controls', function () {
                 BASE();
                 ASSET('~/assets/jade/controls/video.jade')(this);
                 this.setConfigs({
-                    wmode: 'transparent',
+                    wmode: 'opaque',
                     allowScriptAccess: 'always',
                     allowfullscreen: 'true',
                     frameborder: 0,
@@ -27,6 +27,13 @@ NAMESPACE('chlk.controls', function () {
                 }
                 if(url.indexOf('youtube') > -1){
                     url = 'https://www.youtube.com/v/' + (url && url.slice(url.lastIndexOf('v=') + 2));
+
+                    if (url.indexOf('wmode=transparent') == -1)
+                        url += url.indexOf('?') > -1 ? '&wmode=transparent' : '?wmode=transparent';
+
+                    if (url.indexOf('rel=0') == -1){
+                        url += '&rel=0'
+                    }
                 }
                 return url;
             },
