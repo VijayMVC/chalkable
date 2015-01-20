@@ -9,10 +9,11 @@ mixin RolesGroupButtonsForMsg(isInbox, keyword, role)
 
 items = self.getMessages().getItems()
 h2.page-title Messages
-
+-console.log(self.isInbox())
+-console.log(self.isInbox().toString())
 +ActionForm('message', 'do')
     input(name="role", type="hidden", value=self.getRole())
-    input(name="inbox", type="hidden", value=self.isInbox())
+    input(name="inbox", type="hidden", value=self.isInbox().toString())
 
     .right.wrapper
         input(name="keyword", type="text", value=self.getKeyword(), placeholder="Filter list...")#keyword.search-input
@@ -25,10 +26,9 @@ h2.page-title Messages
 
 +ActionForm('message', 'do')
     input(name="role", type="hidden", value=self.getRole())
-    input(name="inbox", type="hidden", value=self.isInbox())
+    input(name="inbox", type="hidden", value=self.isInbox().toString())
 
     DIV(class=items.length ? '' : 'no-messages').grid-container
-        input(name="inbox", type="hidden", value=self.isInbox().toString())
         input(name="selectedIds", type="hidden")#selectedIds
         +Hidden('start', self.getStart())
         +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword()])
