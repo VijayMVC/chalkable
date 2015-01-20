@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_IndexLayout.cshtml";
+    ViewBag.Title = "Chalkable";
+}
+
+@section MixPanelTracking {
+    
+    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        <script type="text/javascript">
+            $(document).ready(function() {
+                mixpanel.track_links(".taglineMessage a", "Clicked demo from com", {
+                    "referrer": document.referrer
+                });
+            });
+        </script>   
+    }
+}
