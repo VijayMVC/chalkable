@@ -203,7 +203,7 @@ namespace Chalkable.Web.Controllers
             return false;
         }
 
-        private const string htmlContentType = "text/html";
+        private const string HTML_CONTENT_TYPE = "text/html";
         protected ActionResult UploadPicture(IPictureService pictureService, Guid id, int? width, int? height)
         {
             byte[] bin;
@@ -217,7 +217,7 @@ namespace Chalkable.Web.Controllers
             }
             else pictureService.UploadPicture(id, bin);
             
-            return Json(id, htmlContentType);
+            return Json(id, HTML_CONTENT_TYPE);
         }
 
         protected int GetCurrentSchoolYearId()
@@ -243,7 +243,7 @@ namespace Chalkable.Web.Controllers
             if(role == CoreRoles.ADMIN_GRADE_ROLE 
                 || role == CoreRoles.ADMIN_EDIT_ROLE 
                 || role == CoreRoles.ADMIN_VIEW_ROLE)
-                return Redirect<HomeController>(x => x.Admin());
+                throw new NotImplementedException();
             if (role == CoreRoles.TEACHER_ROLE)
                 return Redirect<HomeController>(x => x.Teacher());
             if (role == CoreRoles.STUDENT_ROLE)

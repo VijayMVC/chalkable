@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -12,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IGradingPeriodService
     {
         IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null, int? classId = null);
-        GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date, bool useLastExisting = true);
+        GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date);
         GradingPeriodDetails GetGradingPeriodById(int id);
         void Add(IList<GradingPeriod> gradingPeriods);
         void Edit(IList<GradingPeriod> gradingPeriods);
@@ -37,19 +36,12 @@ namespace Chalkable.BusinessLogic.Services.School
                     });
             }
         }
-
-        private void ValidateGradingPeriods(IEnumerable<GradingPeriod> gradingPeriods)
-        {
-            if (gradingPeriods.Any(gradingPeriod => gradingPeriod.StartDate > gradingPeriod.EndDate))
-                throw new ChalkableException(ChlkResources.ERR_PERIOD_INVALID_TIME);     
-        }
-
+        
         public void Add(IList<GradingPeriod> gradingPeriods)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            ValidateGradingPeriods(gradingPeriods);
             using (var uow = Update())
             {
                 new GradingPeriodDataAccess(uow).Insert(gradingPeriods);
@@ -62,7 +54,6 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             
-            ValidateGradingPeriods(gradingPeriods);
             using (var uow = Update())
             {
                 new GradingPeriodDataAccess(uow).Update(gradingPeriods);
@@ -82,7 +73,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date, bool useLastExisting = true)
+        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
         {
             using (var uow = Update())
             {
@@ -94,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                 var gps = da.GetGradingPeriodsDetails(gradingPeriodQuery);
                 var res = gps.FirstOrDefault(x => x.EndDate >= date);
-                if (res == null && useLastExisting)
+                if (res == null)
                     res = gps.OrderByDescending(x => x.StartDate).FirstOrDefault();
                 return res;
             }

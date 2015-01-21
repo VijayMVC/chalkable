@@ -18,7 +18,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods); 
         MarkingPeriod GetMarkingPeriodById(int id);
         MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null);
-        MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId);
         MarkingPeriodClass GetMarkingPeriodClass(int classId, int markingPeriodId);
         IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
@@ -43,10 +42,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<MarkingPeriod> GetMarkingPeriodsByDateRange(DateTime fromDate, DateTime toDate, int? schoolYearId)
         {
             var res = GetMarkingPeriods(schoolYearId);
-            //if (fromDate.HasValue)
-            //    res = res.Where(x => x.StartDate <= fromDate.Value).ToList();
-            //if (toDate.HasValue)
-            //    res = res.Where(x =>  x.EndDate >= toDate).ToList();
             return res.Where(x =>(x.StartDate <= fromDate && x.EndDate >= fromDate)
                             || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
         }
@@ -114,15 +109,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
-
-        public MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId)
-        {
-            using (var uow = Read())
-            {
-                return new MarkingPeriodDataAccess(uow).GetNextInYear(markingPeriodId);
-            }
-        }
-
 
         public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
         {

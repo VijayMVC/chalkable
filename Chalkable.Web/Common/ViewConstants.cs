@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Chalkable.Web.Common
+﻿namespace Chalkable.Web.Common
 {
     public static class ViewConstants
     {
@@ -17,7 +12,6 @@ namespace Chalkable.Web.Common
         public const string CURRENT_USER_ROLE_ID = "CurrentUserRoleId";
         public const string MARKING_PERIOD = "MarkingPeriod";
         public const string GRADING_PERIOD = "GradingPeriod";
-        public const string NEXT_MARKING_PERIOD = "NextMarkingPeriod";
         public const string ATTENDANCE_REASONS = "AttendanceReasons";
         public const string SCHOOL = "School";
         public const string FINALIZED_CLASSES_IDS = "FinalizedClassesIds";

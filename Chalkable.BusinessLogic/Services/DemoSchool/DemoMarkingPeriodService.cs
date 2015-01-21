@@ -92,10 +92,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
                 Storage.MarkingPeriodStorage.DeleteMarkingPeriods(markingPeriodIds);
         }
-
-        public MarkingPeriod GetNextMarkingPeriodInYear(int markingPeriodId)
-        {
-            return Storage.MarkingPeriodStorage.GetNextInYear(markingPeriodId);
-        }
     }
 }

@@ -35,11 +35,6 @@ namespace Chalkable.Web.Controllers
         {
             if (!SchoolLocator.Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var markingPeriod = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            if (markingPeriod.EndDate < SchoolLocator.Context.NowSchoolYearTime.Date)
-                markingPeriod = SchoolLocator.MarkingPeriodService.GetNextMarkingPeriodInYear(markingPeriod.Id);
-            if (markingPeriod == null)
-                return Json(new NoMarkingPeriodException());
             var res = GetTypesByClass(SchoolLocator, classId);
             return Json(ClassAnnouncementTypeViewData.Create(res), 3);
         }

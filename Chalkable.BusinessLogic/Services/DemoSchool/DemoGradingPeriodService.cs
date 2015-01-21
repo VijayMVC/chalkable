@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             });
         }
 
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date, bool useLastExisting = true)
+        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
         {
             var grPeriods = Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
             {
