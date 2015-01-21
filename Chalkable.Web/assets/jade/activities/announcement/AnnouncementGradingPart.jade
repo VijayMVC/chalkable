@@ -18,7 +18,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
         div(class=(autoCount == 1 ? 'double' : '')).grid-modal
             div Accept auto-grades from #{self.getAutoGradeApps().length == 1 ? self.getAutoGradeApps()[0] : 'apps'}#
     each item, i in items
-        readonly = self.isReadonly() || (!self.getSchoolOptions().isAllowScoreEntryForUnexcused() && item.isUnExcusedAbsent())
+        readonly = self.isReadonly()
+        ablePutOnlyZero = !self.getSchoolOptions().isAllowScoreEntryForUnexcused() && item.isUnExcusedAbsent()
         .row(class=(item.getState() == 0 ? 'z-0' : 'z-10') + (self.isGradable() && !readonly ? '' : ' readonly') + (item.needStrikeThrough() ? ' dropped-value' : ''), index=i).fixed-bg
             +Hidden('readonly', readonly)
             +Hidden('gradingStyle', gradingStyle)
@@ -59,7 +60,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                 ableDropStudentScore = self.isAbleDropStudentScore()
                                 ableToExempt = self.isAbleToExempt(),
                                 readonly = readonly,
-                                rowIndex = i
+                                rowIndex = i,
+                                ablePutOnlyZero=ablePutOnlyZero
                             )
         .attachments-container.z-10.sub-row(class = ((item.getAttachments().length || self.getApplications().length) ? 'with-data' : '') )
             .attachments-container-2

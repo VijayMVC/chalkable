@@ -1,4 +1,4 @@
-mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
+mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable, canPutOnlyZero)
     normalValue = info.getNormalValue()
     -numericV = parseFloat(normalValue)
     if info.getGradeValue() && isNaN(parseInt(info.getGradeValue(), 10)) && numericV
@@ -108,14 +108,16 @@ mixin DisplayTotalPoints(model)
                         .max-score.dotted-h(data-sort-type="anno", data-sort-anno-id=announcement.getId().valueOf())=maxScore
                     studentItems = announcement.getStudentAnnouncements().getItems()
                     each info,i in studentItems
-                        gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent())
+                        gradable = self.isAbleEdit() && announcement.isGradable()
+                        canPutOnlyZeroScore = !(self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent());
                         div(
                             row-index=i
                             data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                             data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
                             data-gradable= gradable,
                             data-max-score= maxScore,
+                            data-canputonlyzero= canPutOnlyZeroScore.toString(),
                             class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 1 ? " top-popup" : "") + (studentItems.length == 1 ? " one" : "")
                         ).dotted-h.grade-value
-                            +TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
+                            +TeacherClassGradingGridSummaryCell(info, maxScore, gradable, canPutOnlyZeroScore)
                     div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=self.getModel().displayAverages(announcement.calculateGradesAvg(2))
