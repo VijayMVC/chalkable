@@ -1,4 +1,4 @@
-@using System.Configuration
+﻿@using System.Configuration
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -26,7 +26,7 @@
 			</div>
 			<nav>
 				<ul class="mainNav">
-					<li><a data-type="feature" href="#appStore">App Store</a></li>
+					<li><a data-type="feature" href="#classroom">Classroom</a></li>
 					<li><a data-type="feature" href="#developers">Developers</a></li>
 					<li><a href="#" class='lg'>Login</a></li>
 				</ul>
@@ -38,51 +38,67 @@
 	<section id="tagline">
 		<div class="wrap">
 			<div class="taglineMessage">
-				<h1>Web Apps<br> for your school</h1>
-				<p>Chalkable is an app store for school and platform to make those apps work.</p>
-				<a href="@Url.Content("~/DemoSchool/Index")" class="btnBig">Launch demo</a>
-				<p class="signup"><a href="mailto:pilot@chalkable.com?subject=I'm interested in piloting Chalkable at my school">Get your school on Chalkable</a></p>
+				<h1>Make classtime count. <br/>Introducing Chalkable Classroom.</h1>
+				<p>Helping teachers manage daily tasks so they can focus on what matters most — their students.</p>
+                <a href="mailto:sales@sti-k12.com?subject=I'm interested in having Chalkable at my school" class="btnBig">Get your school on Chalkable</a>
 			</div>
 		</div>
 	</section>
 
 	<section id="features">
-			<div id="appStore" class="feature feature1">
-				<div class="wrap">
-					<figure>
-						<img src="@Url.StaticContent("/Content/images/illustration-1.png")" alt="App store image">
-					</figure>
-					<div class="description">
-						<h1>App store</h1>
-						<p>Amazing digital tools and content can transform the way students learn in school. The Chalkable app store lists the best educational apps from across the web. You can browse apps by category or common core standard. Purchase, install, and set up the app for your whole class in just one click.</p>
-					</div>
+		<div class="feature feature1">
+			<div class="wrap">
+				<figure>
+					<img src="@Url.StaticContent("/Content/images/illustration-2.png")" alt="Platform image">
+				</figure>
+				<div class="description">
+					<h1>Study Center</h1>
+				    <p>
+				        Boost learning power with a comprehensive suite of digital learning tools. Students take control of 
+				        their progress with prescriptive learning. Teachers personalize instruction and third party content 
+				        for each student—without compromising the classroom. Powered by data in your SIS, Chalkable 
+				        Study Center supports an app store for third party content, provides a prescriptive learning engine, 
+				        integrates powerful assessments, and gives an at-a-glance view of student and school activity. And it’s 
+				        all available on the devices students and teachers prefer.
+				    </p>
 				</div>
 			</div>
+		</div>
 
-			<div class="feature feature2">
-				<div class="wrap">
-					<figure>
-						<img src="@Url.StaticContent("/Content/images/illustration-2.png")" alt="Platform image">
-					</figure>
-					<div class="description">
-						<h1>Platform</h1>
-						<p>Lots of Apps. One login. One calendar. One gradebook. It all just works. The Chalkable platform is a basic set of tools for students, teachers, admins, and parents. We built Feed, Calendar, Attendance, Gradebook, Messaging and more to get the day to day done, and make using Apps simple.</p>
-					</div>
-				</div>
-			</div>
+        <div id="classroom" class="feature feature2">
+            <div class="wrap">
+                <figure>
+                    <img src="@Url.StaticContent("/Content/images/illustration-1.png")" alt="App store image">
+                </figure>
+                <div class="description">
+                    <h1>Classroom</h1>
+                    <p>
+                        Enable teachers to spend more time and energy on student achievement, less on administrative tasks.
+                        Intuitive classroom tools manage grading, attendance, assignments, and reporting—in one place, with
+                        one student information system.  Available for free as part of STI’s InformationNOW, Classroom syncs
+                        seamlessly, requiring no double entry.
+                    </p>
+                </div>
+            </div>
+        </div>
 
-			<div id="developers" class="feature feature1">
-				<div class="wrap">
-					<figure>
-						<img src="@Url.StaticContent("/Content/images/illustration-3.png")" alt="Developers image">
-					</figure>
-					<div class="description">
-						<h1>Developers</h1>
-						<p>Integrating your web app with the Chalkable App Store gives you the opportunity to be exposed to millions of users, collect payments, and deeply integrate into the core Chalkable experience. Using the API, your app will be able to leverage the Chalkable platform (user info, schedule, grading, attendance, discipline, messaging, notifications, etc) to help you deliver a great experience to students, teachers, parents, or administrators.</p>
-						<a href="@Url.Content("~/Developer/Info")" class="btn">Submit your app</a>
-					</div>
+		<div id="developers" class="feature feature1">
+			<div class="wrap">
+				<figure>
+					<img src="@Url.StaticContent("/Content/images/illustration-3.png")" alt="Developers image">
+				</figure>
+				<div class="description">
+					<h1>Developers</h1>
+				    <p>
+				        Integrate your web app with Chalkable Study Center for the opportunity to be exposed to millions of users, 
+				        collect payments, and deeply integrate into the core Chalkable experience. Using the API, your app will 
+				        be able to leverage the Chalkable platform (user info, schedule, grading, attendance, discipline, messaging, 
+				        notifications, etc.) to help you deliver a great experience to students, teachers, parents, or administrators. 
+				    </p>
+					<a href="@Url.Content("~/Developer/Info")" class="btn">Submit your app</a>
 				</div>
 			</div>
+		</div>
 	</section>
 
 	<footer>
@@ -127,7 +143,7 @@
 			</div> <!-- /footerTop -->
 
 			<div class="footerBottom">
-				<p>&copy; 2014 STI</p>
+				<p>&copy; @DateTime.Now.Year STI</p>
 			</div>
 		</div>
 	</footer>
