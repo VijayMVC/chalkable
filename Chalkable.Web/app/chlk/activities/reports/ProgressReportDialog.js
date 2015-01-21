@@ -27,11 +27,15 @@ NAMESPACE('chlk.activities.reports', function(){
             VOID, function formSubmit(node, event){
                 var commentsNode = node.find('#coments-list'),
                     notSelectedNode = node.find('#not-selected-count'),
-                    commentsArray = [], comment, notSelectedCount = 0;
+                    commentsArray = [], comment, notSelectedCount = 0, id;
                 node.find('.student-chk').forEach(function(item){
                     comment = item.parent('.student-item').find('.student-comment').getValue();
+                    id = item.parent('.student-item').find('.student-chk').getValue();
                     if(item.is(':checked'))
-                        commentsArray.push(comment);
+                        commentsArray.push({
+                            studentId:id,
+                            comment: comment
+                        });
                     else
                         if(comment)
                             notSelectedCount++;
@@ -41,7 +45,7 @@ NAMESPACE('chlk.activities.reports', function(){
                 notSelectedNode.setValue(notSelectedCount);
 
                 if(commentsArray.length)
-                    commentsNode.setValue(commentsArray.join(','));
+                    commentsNode.setValue(JSON.stringify(commentsArray));
 
                 var yearToDate = node.find('#year-to-date-chk').checked();
                 var gradingPeriod = node.find('#grading-period-chk').checked();

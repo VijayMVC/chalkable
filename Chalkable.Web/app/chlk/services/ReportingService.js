@@ -114,7 +114,8 @@ NAMESPACE('chlk.services', function () {
                 printFromHomePortal: printFromHomePortal_,
                 classComment: classComment,
                 studentIds: studentIds,
-                comments: commentsList
+                studentComments: commentsList
+                //comments:
             });
         },
 
