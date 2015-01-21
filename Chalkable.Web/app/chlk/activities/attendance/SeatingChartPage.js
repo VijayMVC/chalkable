@@ -461,7 +461,12 @@ NAMESPACE('chlk.activities.attendance', function () {
                     this.recalculateChartInfo();
                     this.dom.removeClass('edited');
                     node.hide(100);
+                    var postButton = this.dom.find('#submit-attendance-button');
                     this.dom.find('.save-chart-form').trigger('submit');
+                    if(postButton.exists() && this.dom.find('.attendance-data').count())
+                        postButton.removeClass('disabled');
+                    else
+                        postButton.addClass('disabled');
                 }.bind(this));
 
                 jQuery(window).on('resize.seating', function(){
