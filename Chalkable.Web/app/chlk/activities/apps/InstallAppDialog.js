@@ -13,6 +13,18 @@ NAMESPACE('chlk.activities.apps', function () {
 
         'InstallAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                if(msg_ == 'getAppPrice'){
+                    var installGroups = this.dom.find('input[install-group]:checked:not(:disabled)');
+                    var isInstallBtnEnabled = installGroups.count() > 0;
+                    if(isInstallBtnEnabled)
+                        this.enableInstallBtn_();
+                }
+            },
+
             VOID, function prepareAppInstallPostData_(){
                 var ids = [{
                     id: chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ,
@@ -54,6 +66,18 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.dom.find('input[name=submitActionType]').setValue('install');
             },
 
+            VOID, function enableInstallBtn_(){
+                this.dom.find('.chlk-button').removeAttr('disabled');
+                this.dom.find('.chlk-button').removeClass('disabled');
+                this.dom.find('button').removeAttr('disabled');
+            },
+
+            VOID, function disableInstallBtn_(){
+                this.dom.find('.chlk-button').setAttr('disabled', 'disabled');
+                this.dom.find('.chlk-button').addClass('disabled');
+                this.dom.find('button').setAttr('disabled', 'disabled');
+            },
+
             [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleInstallGroups(node, event){
@@ -62,16 +86,8 @@ NAMESPACE('chlk.activities.apps', function () {
                 var installGroups = this.dom.find('input[install-group]:checked:not(:disabled)');
                 var isInstallBtnEnabled = installGroups.count() > 0;
                 var event = chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf();
-
-                if (isInstallBtnEnabled) {
-                    this.dom.find('.chlk-button').removeAttr('disabled');
-                    this.dom.find('.chlk-button').removeClass('disabled');
-                    this.dom.find('button').removeAttr('disabled');
-                } else {
-                    this.dom.find('.chlk-button').setAttr('disabled', 'disabled');
-                    this.dom.find('.chlk-button').addClass('disabled');
-                    this.dom.find('button').setAttr('disabled', 'disabled');
-                }
+                if(!isInstallBtnEnabled)
+                    this.disableInstallBtn_();
 
                 if(groupType == chlk.models.apps.AppInstallGroupTypeEnum.ALL
                     || groupType == chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER){
