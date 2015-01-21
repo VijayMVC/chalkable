@@ -1,0 +1,47 @@
+mixin IfBlock_(items, i, index)
+    if items && (index == 0 || i + index < items.length)
+        TD
+            .image-container
+                +PersonImg(items[i+index], 64)
+
+classSummary = self.getClassSummary()
+.class-info.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self, 'details')
+    .info-view.summary-view
+        #top-summary-panel
+            #avatar-photo-conainer
+                .images-wrapper
+                    TABLE
+                        TBODY
+                            each student,i in classSummary.getStudents()
+                                if i % 4 == 0
+                                    TR
+                                        +IfBlock_(classSummary.getStudents(), i, 0)
+                                        +IfBlock_(classSummary.getStudents(), i, 1)
+                                        +IfBlock_(classSummary.getStudents(), i, 2)
+                                        +IfBlock_(classSummary.getStudents(), i, 3)
+            #student-info-panel
+                h1.info
+                    .class-icon-container
+                        +ClassImg(classSummary, 45, 80)
+                    =classSummary.getName()
+                h2.no-line
+                    +ProfileLink(classSummary.getTeacher(), 'teacher')=classSummary.getTeacher().getDisplayName()
+                    | - #{classSummary.getRoom() && classSummary.getRoom().getDescription()}
+                .glance-container
+                    if(classSummary.getClassAverageBox())
+                        +GlanceBox(null, null, self.buildCommonGlanceBoxData(classSummary.getClassAverageBox(), Msg.Class_average))
+                    if(classSummary.getClassAttendanceBox())
+                        +GlanceBox(null, null, self.buildCommonGlanceBoxData(classSummary.getClassAttendanceBox(), Msg.Attendance_count))
+                    if(classSummary.getClassDisciplineBox())
+                        +GlanceBox(null, null, self.buildDisciplineGlanceBoxData(), null)
+                    if(classSummary.getClassSize())
+                        +GlanceBox(null, null, {value: classSummary.getClassSize(), title: Msg.Class_size}, 'brown')
+        .today-work-panel
+            h2=Msg.Upcoming_assignments
+            .period-toolbar
+                if classSummary.getAnnouncementsByDate()
+                    +LeftRightToolbar(classSummary.getAnnouncementsByDate(), chlk.templates.announcement.AnnouncementsByDate)(hideArrows)
+        .today-work-panel
+            h2.stats=Msg.Stats_and_facts

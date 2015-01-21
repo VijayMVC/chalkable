@@ -1,0 +1,10 @@
+//@import "blueprint";
+
+// Generate the blueprint IE-specific customizations:
+//@include blueprint-ie;
+
+BODY {
+  .ext-el-mask {
+    filter: alpha(opacity=30);
+  }
+}
