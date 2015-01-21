@@ -2,6 +2,7 @@ REQUIRE('chlk.activities.attendance.BasePostAttendancePage');
 REQUIRE('chlk.templates.attendance.SeatingChartTpl');
 REQUIRE('chlk.templates.attendance.SeatingChartPeopleTpl');
 REQUIRE('chlk.templates.attendance.ClassAttendanceWithSeatPlaceTpl');
+REQUIRE('chlk.templates.attendance.NotTakenAttendanceClassesTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
     "use strict";
@@ -122,6 +123,14 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'savedChart')],
             VOID, function updateSeatingChart(tpl, model, msg_) {
 
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.attendance.NotTakenAttendanceClassesTpl)],
+            VOID, function doUpdateClasses(tpl, model, msg_) {
+                var dom = ria.dom.Dom();
+                model.getItems().forEach(function(item){
+                    dom.find('.alerts-icon[data-id=' + item.getId() + ']').show();
+                })
             },
 
             function checkEqualsAttendances(){
@@ -404,7 +413,6 @@ NAMESPACE('chlk.activities.attendance', function () {
             OVERRIDE, VOID, function onPartialRender_(model, msg_){
                 BASE(model, msg_);
                 this.stopDragging();
-                this.setModel(model);
             },
 
             function stopDragging(remove_){
@@ -440,7 +448,6 @@ NAMESPACE('chlk.activities.attendance', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
                 this._canChangeReasons = model.isAbleChangeReasons();
-                this.setModel(model);
                 this.setAbleRePost(model.isAbleRePost());
 
                 var tpl = new chlk.templates.attendance.SeatingChartPeopleTpl();
@@ -461,12 +468,12 @@ NAMESPACE('chlk.activities.attendance', function () {
                     this.recalculateChartInfo();
                     this.dom.removeClass('edited');
                     node.hide(100);
-                    var postButton = this.dom.find('#submit-attendance-button');
+                    var postButtons = this.dom.find('#submit-attendance-button, #all-present-link');
                     this.dom.find('.save-chart-form').trigger('submit');
-                    if(postButton.exists() && this.dom.find('.attendance-data').count())
-                        postButton.removeClass('disabled');
+                    if(postButtons.exists() && this.dom.find('.attendance-data').count())
+                        postButtons.removeClass('disabled');
                     else
-                        postButton.addClass('disabled');
+                        postButtons.addClass('disabled');
                 }.bind(this));
 
                 jQuery(window).on('resize.seating', function(){
