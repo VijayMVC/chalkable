@@ -26,6 +26,8 @@ NAMESPACE('chlk.activities.grading', function () {
 
             Array, 'standardScores',
 
+            Array, 'zeroPercentageScores',
+
             ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
 
             [[ria.dom.Dom]],
@@ -121,6 +123,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(parent.find('.grade-info').getData('may-be-exempt'))
                         scores = scores.concat([['Exempt', '']]);
                 }else{
+                    if(parent.getData('canputonlyzero') == true)
+                        return this.getZeroPercentageScores();
+
                     scores = this.getAllScores();
                     if(parent.getData('able-drop-student-score'))
                         scores = scores.concat([['Dropped', ''], ['Dropped (fill all)', '']]);
@@ -237,7 +242,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 var parsed = parseFloat(text);
                 if(parsed || parsed == 0){
                     node.removeClass('error');
-                    if(parsed != text || parsed > 9999.99 || parsed < -9999.99){
+                    var canPutScore = node.getData('able-put-score');
+                    if(parsed != text || parsed > 9999.99 || parsed < -9999.99 || (!canPutScore && parsed != 0)){
                         node.addClass('error');
                     }else{
                         this.hideDropDown();
@@ -432,10 +438,14 @@ NAMESPACE('chlk.activities.grading', function () {
 
             OVERRIDE, function prepareAllScores(model){
                 BASE(model);
-                var allScores = [], standardScores = [];
+                var allScores = [], standardScores = [], zeroPercentageScores = [];
                  model.getAlternateScores().forEach(function(item){
                     allScores.push([item.getName(), '']);
                     allScores.push([item.getName() + ' (fill all)', '']);
+                    if(item.getPercentOfMaximumScore() == 0){
+                        zeroPercentageScores.push([item.getName(), ''])
+                        zeroPercentageScores.push([item.getName() + ' (fill all)', ''])
+                    }
                 });
                 model.getAlphaGrades().forEach(function(item){
                     allScores.push([item.getName(), '']);
@@ -446,6 +456,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.setAllScores(allScores);
                 this.setStandardScores(standardScores);
                 this.setGradingComments(model.getGradingComments());
+                this.setZeroPercentageScores(zeroPercentageScores);
             },
 
             function afterCellShow(parent){
@@ -512,7 +523,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(!cell.hasClass('avg-value-container')){
                     tpl.options({
                         ableDropStudentScore: this.getBooleanValue_(cell.getData('able-drop-student-score')),
-                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score'))
+                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score')),
+                        notAblePutScore: this.getBooleanValue_(cell.getData('canputonlyzero'))
                     });
                 }else{
                     tpl.options({

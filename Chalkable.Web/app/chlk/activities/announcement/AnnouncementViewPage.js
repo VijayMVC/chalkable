@@ -67,6 +67,8 @@ NAMESPACE('chlk.activities.announcement', function () {
             Boolean, 'ableDropStudentScore',
             Boolean, 'ableToExempt',
 
+            Array, 'zeroPercentageScores',
+
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
                 tpl.options({
@@ -262,13 +264,17 @@ NAMESPACE('chlk.activities.announcement', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
 
-                var allScores = [];
+                var allScores = [], zeroPercentageScores = [];
                 if(!this.getRole().isStudent()){
                     this.setAbleDropStudentScore(model.isAbleDropStudentScore());
                     this.setAbleToExempt(model.isAbleToExempt());
                     model.getAlternateScores().forEach(function(item){
                         allScores.push(item.getName());
                         allScores.push(item.getName() + ' (fill all)');
+                        if(item.getPercentOfMaximumScore() == 0){
+                            zeroPercentageScores.push(item.getName());
+                            zeroPercentageScores.push(item.getName() + ' (fill all)');
+                        }
                     });
                     model.getAlphaGrades().forEach(function(item){
                         allScores.push(item.getName());
@@ -284,6 +290,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         allScores = allScores.concat(['Exempt', 'Exempt (fill all)']);
                     }
                     this.setAllScores(allScores);
+                    this.setZeroPercentageScores(zeroPercentageScores);
                 }
 
                 this.setOwner(model.getOwner());
@@ -361,16 +368,22 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             ArrayOf(String), 'allScores',
 
-            [[String]],
-            ArrayOf(String), function getSuggestedValues(text){
+            [[String, ria.dom.Dom]],
+            ArrayOf(String), function getSuggestedValues(text, inputNode){
                 var text = text.toLowerCase();
                 var res = [];
-                this.getAllScores().forEach(function(score){
+                this.getScores_(inputNode).forEach(function(score){
                     if(score.toLowerCase().indexOf(text) == 0)
                         res.push(score);
                 });
                 return res;
             },
+
+            [[ria.dom.Dom]],
+            ArrayOf(String), function getScores_(inputNode){
+                return inputNode.getData('only-zero-score') ? this.getZeroPercentageScores() : this.getAllScores();
+            },
+
 
             VOID, function updateDropDown(suggestions, node, all_){
                 var list = this.dom.find('.autocomplete-list');
@@ -471,18 +484,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
                 if(!isDown && !isUp){
                     node.removeClass('not-equals');
+                    var onlyZeroScore = node.getData('only-zero-score');
                     if(value){
                         var text = node.getValue() ? node.getValue().trim() : '';
                         var parsed = parseFloat(text);
                         if(!isNaN(parsed)){
                             node.removeClass('error');
-                            if(text && parsed != text || parsed > 9999.99 || parsed < -9999.99){
+                            if(text && parsed != text || parsed > 9999.99 || parsed < -9999.99 || (onlyZeroScore && parsed != 0)){
                                 node.addClass('error');
                             }else{
                                 this.hideDropDown();
                             }
                         }else{
-                            suggestions = text  ? this.getSuggestedValues(text) : [];
+                            suggestions = text  ? this.getSuggestedValues(text, node) : [];
                             if(!suggestions.length)
                                 node.addClass('error');
                             else{
@@ -550,16 +564,17 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var input = this.dom.find('.row.selected').find('.grade-input');
                 input.addClass('disabled-submit');
                 input.removeClass('not-equals');
-                this.updateDropDown(this.getAllScores(), input, true);
+                this.updateDropDown(this.getScores_(input), input, true);
                 return false;
             },
 
             [ria.mvc.DomEventBind('dblclick', '.grade-autocomplete')],
             [[ria.dom.Dom, ria.dom.Event]],
             function inputDblClickClick(node, event){
+                var input = this.dom.find('.row.selected').find('.grade-input');
                 node.removeClass('not-equals');
                 node.addClass('disabled-submit');
-                this.updateDropDown(this.getAllScores(), node, true);
+                this.updateDropDown(this.getScores_(input), node, true);
             },
 
             [ria.mvc.DomEventBind('mouseover', '.autocomplete-item')],
