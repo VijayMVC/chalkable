@@ -87,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     Day = day,
                     SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
-                    IsSchoolDay = day.DayOfWeek != DayOfWeek.Thursday && day.DayOfWeek != DayOfWeek.Friday,
+                    IsSchoolDay = day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday,
                     DayTypeRef = typeRef,
                     BellScheduleRef = DemoSchoolConstants.BellScheduleId
                 });
