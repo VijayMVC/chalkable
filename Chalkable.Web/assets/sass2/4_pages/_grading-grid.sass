@@ -399,7 +399,9 @@
   width: 185px
   height: 100px
   margin: 10px 0
-  background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
+
+  &:not(.processed)
+    background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
 
   .chart-container
     background: #ffffff
