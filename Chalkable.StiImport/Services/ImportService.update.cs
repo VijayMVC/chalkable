@@ -430,7 +430,8 @@ namespace Chalkable.StiImport.Services
                     DayTypeRef = x.DayTypeID,
                     IsSchoolDay = x.InSchool,
                     BellScheduleRef = x.BellScheduleID,
-                    SchoolYearRef = x.AcadSessionID
+                    SchoolYearRef = x.AcadSessionID,
+                    Day = x.Date
                 }).ToList();
             ServiceLocatorSchool.CalendarDateService.Edit(ds);
         }
