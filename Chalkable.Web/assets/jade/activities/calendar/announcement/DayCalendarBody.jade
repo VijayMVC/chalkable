@@ -1,6 +1,6 @@
-mixin ActionLinkOrNull_(isActionLink, date, classId)
+mixin ActionLinkOrNull_(isActionLink, date, classId, periodOrder)
     if isActionLink
-        +ActionLink('calendar', 'showWeekBarPopUp', date, classId)(attributes)
+        +ActionLink('calendar', 'showWeekBarPopUp', date, classId, '', periodOrder)(attributes)
             block
     else
         A(href="javascript:;")(attributes)
@@ -19,7 +19,7 @@ mixin ActionLinkOrNull_(isActionLink, date, classId)
                 each calendarDayItem, order in item
                     .cell(class = calendarDayItem.day ? calendarDayItem.day.getTodayClassName() : null)
                         if order == 0
-                            A: .period-info= item.period.getOrder()
+                            A: .period-info= item.period.getName()
 
                         each ann in calendarDayItem
                             -var period = ann.getPeriod()

@@ -30,7 +30,7 @@ mixin TooltipWithOverflow(text)
                     -var day = calendarDayItem.day
                     .cell(class = day ? day.getTodayClassName() : null)
                         if order == 0
-                            A: .period-info= period.getOrder()
+                            A: .period-info= period.getName()
                         each ann in calendarDayItem
                             -VALIDATE_ARG('ann', [chlk.models.announcement.Announcement], ann)
                             +ActionLink('calendar', 'showWeekBarPopUp', day.getDate().format('mm-dd-yy'), period.getClassId(), selectedItem || '')(
