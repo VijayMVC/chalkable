@@ -1,0 +1,46 @@
+.alert-flag
+  position: absolute
+  width: 12px
+  height: 18px
+  background-position: center center
+  background-repeat: no-repeat
+
+  &.incomplete
+    background-image: url(images2/grading/incomplete-flag.png)
+
+  &.late
+    background-image: url(images2/grading/orange-flag.png)
+
+  &.absent
+    background-image: url(images2/grading/blue-flag.png)
+
+  &.multiple
+    background-image: url(images2/grading/alerts.png)
+
+  &.error
+    background-image: url(images2/grading/red-flag.png)
+
+.grading-input-popup
+  z-index: 100
+  top: 78px
+  text-align: left
+  text-shadow: white 0px 1px 1px
+  position: absolute
+  display: none
+
+  &.no-triangle
+    left: 0
+
+    &::before
+      content: none
+
+  .labeled-checkbox
+    margin: 0 0 3px 0
+    line-height: initial
+    display: block
+    font: normal 14px Arial
+
+.no-items-text
+  font: bold 22px/260px 'Reenie Beanie'
+  text-align: center
+  height: 260px
