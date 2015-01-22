@@ -33,7 +33,7 @@ mixin TooltipWithOverflow(text)
                             A: .period-info= period.getName()
                         each ann in calendarDayItem
                             -VALIDATE_ARG('ann', [chlk.models.announcement.Announcement], ann)
-                            +ActionLink('calendar', 'showWeekBarPopUp', day.getDate().format('mm-dd-yy'), period.getClassId(), selectedItem || '')(
+                            +ActionLink('calendar', 'showWeekBarPopUp', day.getDate().format('mm-dd-yy'), period.getClassId(), selectedItem || '', period.getOrder())(
                                 class = self.isMainCalendar() ? '' : 'disabled'
                             ).period-item.announcement
                                 .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
