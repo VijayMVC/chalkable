@@ -108,7 +108,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
             ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
             ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-            ViewData[ViewConstants.DEMO_PREFIX_KEY] = Context.UserId.ToString();
+            ViewData[ViewConstants.DISTRICT_ID] = Context.UserId.ToString();
             ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
 
             if (Context.DistrictId.HasValue)
@@ -162,7 +162,7 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.Id.ToString();
+                    ViewData[ViewConstants.DISTRICT_ID] = district.Id.ToString();
                     ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
                 }
                 ViewData[ViewConstants.LAST_SYNC_DATE] = district.LastSync.HasValue 

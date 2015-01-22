@@ -25,7 +25,7 @@ namespace Chalkable.Web.Models
         public bool? IsCurrentSection { get; set; }
 
         protected ScheduleItemViewData(ScheduleItem scheduleItem, DateTime nowSchoolTime)
-            : base(scheduleItem.PeriodId, scheduleItem.SchoolYearId, scheduleItem.PeriodOrder)
+            : base(scheduleItem.PeriodId, scheduleItem.SchoolYearId, scheduleItem.PeriodOrder, scheduleItem.PeriodName)
         {
             Day = scheduleItem.Day;
             StartTime = scheduleItem.StartTime;

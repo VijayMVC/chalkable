@@ -21,7 +21,7 @@ namespace Chalkable.Web.Controllers
                 CoreRoles.TEACHER_ROLE,
                 CoreRoles.STUDENT_ROLE
             };
-            ViewData[ViewConstants.DEMO_PREFIX_KEY] = Guid.NewGuid().ToString();
+            ViewData[ViewConstants.DISTRICT_ID] = Guid.NewGuid().ToString();
             return View(RoleViewData.Create(roles));
         }
 
