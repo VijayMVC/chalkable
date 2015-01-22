@@ -37,14 +37,15 @@ mixin Glue_()
     h2.page-title: +Glue_(self.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), self.getClassName())
     .announcement-details-panel
         .details-container.silver-panel
-            if self.getUserRole().isStudent() && ( self.isStudentGraded() || self.getComment() )
+
+            if self.getUserRole().isStudent() && ( (self.isStudentGraded() && self.displayStudentGradeValue()) || self.getComment() )
                 .comment-grade-container
-                    .grade-value.right= self.displayStudentGradeValue()
+                    .grade-value.right=self.displayStudentGradeValue()
                     .comment(
                         data-tooltip = self.getComment(),
                         data-tooltip-type = "overflow",
                         data-tooltip-class = "wide"
-                    )= self.getComment() || Msg.Your_grade + ":"
+                    )= self.getComment() || (Msg.Your_grade + ":")
             if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
                 +AnnouncementTooltip().make-visible-container
                     .comment This item is hidden from students.
