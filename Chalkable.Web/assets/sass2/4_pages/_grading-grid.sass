@@ -264,9 +264,17 @@
     top: 0
     bottom: 1px
     background-color: #eeeeee
-    +icons-24-sprite(edit-cell)
     z-index: 1
     opacity: 0
+
+    &::after
+      content: ' '
+      position: absolute
+      top: 2px
+      left: 2px
+      +icons-24-sprite(edit-cell)
+      width: 12px
+      height: 12px
 
     &:hover
       opacity: 1
