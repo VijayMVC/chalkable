@@ -1,0 +1,51 @@
+body.setup
+  #sidebar
+    display: none
+
+  #main >DIV.hello-page
+    margin: 113px 129px
+
+.hello-page
+  height: 574px
+
+  h1
+    font-size: 21px
+
+  .info
+    margin: 20px 2px
+    line-height: 16px
+
+  form
+    font-weight: bold
+
+    label
+      margin: 25px 0 4px 5px
+      margin-bottom: 4px
+      display: inline-block
+
+    input[type=text]
+      line-height: 39px
+      padding: 0 8px
+      font-weight: bold
+      font-size: 14px
+      width: 212px
+
+      &[readonly]
+        color: #2b2a28
+        background: transparent
+        border: none
+        @include box-shadow(none)
+
+      &.password
+        background: image_url('images2/common/password.png') right center no-repeat
+
+    .buttons
+      margin: 54px 3px
+
+    BUTTON
+      width: 118px
+      height: 31px
+      font-size: 16px
+
+      &:not(:last-child)
+        margin-right: 31px
