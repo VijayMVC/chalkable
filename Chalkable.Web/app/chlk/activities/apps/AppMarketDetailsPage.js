@@ -26,6 +26,16 @@ NAMESPACE('chlk.activities.apps', function () {
                 });
             },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+
+                if(msg_ == 'updateReviews' && model instanceof chlk.models.apps.AppMarketApplication){
+                    this.dom.find('.side-panel')
+                            .find('input[value=' + model.getApplicationRating().getAverage() + ']').setAttr('checked', true);
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '.write-review-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleReviewArea(node, event){
