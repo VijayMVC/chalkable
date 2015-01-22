@@ -1,0 +1,19 @@
+autoCount = self.getAutoGradeCount()
+.right.x-hidden
+    //do not delete this commented code ... we will need this later
+    +ActionButton('announcement', 'applyAutoGrade', self.getAnnouncementId())(disabled = autoCount == 0).green-button= Msg.Auto_grade
+    +ActionButton('announcement', 'applyManualGrade', self.getAnnouncementId())(disabled = autoCount == 0).blue-button= Msg.Grade_manually
+.section= Msg.Class_Avg + ': ' + (self.getClassAvg() != null ? self.getClassAvg() : 'N/A')
+.section= self.getGradedStudentCount() + '/' + self.getItems().length + ' ' + Msg.Graded
+.section.x-hidden= Msg.Show_grades_to_students
+.section(class=self.isShowToStudents() ? "" : "not-show", data-value="#{self.isShowToStudents()}").show-student-grades.x-hidden
+    .chlk-pop-up-container.popup-top
+        .pop-up-triangle
+        .show-student-grades-container
+            .text=Msg.Show_grades_to_students
+            .show-grade-checkbox-container
+                +ActionForm('announcement', 'setShowGradesToStudents')
+                    +SlideCheckbox("showGradesToStudents", self.isShowToStudents())
+                    +Hidden('showToStudents', self.isShowToStudents()).show-grades-input
+                    +Hidden('announcementId', self.getAnnouncementId())
+.clear-right
