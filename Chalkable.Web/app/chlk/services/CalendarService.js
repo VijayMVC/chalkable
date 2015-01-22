@@ -74,17 +74,26 @@ NAMESPACE('chlk.services', function () {
                 return new ria.async.DeferredData(res);
             },
 
-            [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
-            function getWeekDayInfo(date, classId_){
+            [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, Number]],
+            function getWeekDayInfo(date, classId_, periodOrder_) {
                 var res = this.getContext()
                     .getSession().get(ChlkSessionConstants.WEEK_CALENDAR_DATA, [])
-                    .filter(function(day){ return day.getDate().isSameDay(date) })[0];
+                    .filter(function (day) {
+                        return day.getDate().isSameDay(date)
+                    })[0];
 
-                if(classId_ != undefined)
-                    res = res.getAnnouncementPeriods()
-                        .filter(function (item) { return item.getPeriod().getClassId() == classId_ })[0];
+                if (classId_ == undefined) {
+                    return res;
+                }
 
-                return res;
+                res = res.getAnnouncementPeriods();
+
+                if (periodOrder_ != undefined)
+                    res = res.filter(function (item) { return item.getPeriod().getOrder() == periodOrder_ });
+
+                res = res.filter(function (item) { return item.getPeriod().getClassId() == classId_ });
+
+                return res[0];
             },
 
             [[ArrayOf(chlk.models.calendar.announcement.DayItem)]],
