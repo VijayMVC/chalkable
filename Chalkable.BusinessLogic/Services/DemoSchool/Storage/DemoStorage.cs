@@ -1376,24 +1376,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PeriodStorage.Add(new Period
             {
                 Order = 1,
+                Name = "01",
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
                 Order = 2,
+                Name = "02",
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
                 Order = 3,
+                Name = "03",
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 
             PeriodStorage.Add(new Period
             {
                 Order = 4,
+                Name = "04",
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
         }

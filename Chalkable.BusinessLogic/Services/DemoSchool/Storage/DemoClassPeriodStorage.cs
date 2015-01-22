@@ -70,7 +70,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     PeriodOrder = period.Order,
                     IsSchoolDay = date.IsSchoolDay,
                     SchoolYearId = date.SchoolYearRef,
-                    DayTypeId = date.DayTypeRef
+                    DayTypeId = date.DayTypeRef,
+                    PeriodName = period.Name
                 };
             if (c != null)
             {
