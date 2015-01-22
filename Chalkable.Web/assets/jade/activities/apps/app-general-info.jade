@@ -88,7 +88,7 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
                     -cls = "item"
                     if app.getId() == self.draftAppId
                         -cls+=" pressed"
-                    +ActionLink('apps', 'details', app.getId())(class=cls)=app.getName()
+                    +ActionLink('apps', 'general', app.getId())(class=cls)=app.getName()
 
 
 
