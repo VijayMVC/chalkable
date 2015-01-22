@@ -14,7 +14,7 @@ NAMESPACE('chlk.templates', function () {
                     return null;
                 var url = this.isDemoSchool() ? window.demoAzurePictureUrl : window.azurePictureUrl;
 
-                var districtId = this.isDemoSchool() ? window.DEMO_SCHOOL_PICTURE_DISTRICT : window.school.districtid;
+                var districtId = this.isDemoSchool() ? window.DEMO_SCHOOL_PICTURE_DISTRICT : window.districtId;
 
                 if (notDepartmentSpecific_ == null)
                     url += districtId + '_';

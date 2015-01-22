@@ -302,7 +302,7 @@
             var studyCenterEnabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.STUDY_CENTER_ENABLED)';
             var DEMO_SCHOOL = @isDemoSchool.ToString().ToLowerInvariant();
             var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
-            var demoPrefix = @ViewData.GetJsConstantValueOrNull(ViewConstants.DISTRICT_ID) || '';
+            var districtId = @ViewData.GetJsConstantValueOrNull(ViewConstants.DISTRICT_ID) || '';
             var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
         </script>
     
