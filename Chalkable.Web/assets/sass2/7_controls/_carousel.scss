@@ -73,14 +73,16 @@
 
   .dot{
     display: inline-block;
-    height: 10px;
-    width: 10px;
-    background: url(images2/app/dot.png) 0 0 no-repeat;
+    height: 9px;
+    width: 9px;
+    border-radius: 5px;
+    background: #2B2A28;
     margin: 0 2px;
     cursor: pointer;
+    border: 1px solid #9F9D97;
 
     &.selected{
-      background: url(images2/app/dot-active.png) 0 0 no-repeat;
+      background: #E7E6E2;
     }
   }
 }
