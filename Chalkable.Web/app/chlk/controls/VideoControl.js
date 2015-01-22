@@ -32,7 +32,7 @@ NAMESPACE('chlk.controls', function () {
                         url += url.indexOf('?') > -1 ? '&wmode=transparent' : '?wmode=transparent';
 
                     if (url.indexOf('rel=0') == -1){
-                        url += '&rel=0'
+                        url += '&rel=0&showinfo=0&allownetworking=internal'
                     }
                 }
                 return url;
