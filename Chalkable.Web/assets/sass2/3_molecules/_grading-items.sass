@@ -2,23 +2,21 @@
   position: absolute
   width: 12px
   height: 18px
-  background-position: center center
-  background-repeat: no-repeat
 
   &.incomplete
-    background-image: url(images2/grading/incomplete-flag.png)
+    +icons-24-sprite(incomplete-flag)
 
   &.late
-    background-image: url(images2/grading/orange-flag.png)
+    +icons-24-sprite(orange-flag)
 
   &.absent
-    background-image: url(images2/grading/blue-flag.png)
+    +icons-24-sprite(blue-flag)
 
   &.multiple
-    background-image: url(images2/grading/alerts.png)
+    +icons-24-sprite(alerts)
 
   &.error
-    background-image: url(images2/grading/red-flag.png)
+    +icons-24-sprite(red-flag)
 
 .grading-input-popup
   z-index: 100
