@@ -29,7 +29,7 @@
                             +ActionLink('appmarket', 'getSuggestedApps', classItem.getClazz().getId(), code)(
                                 class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (code ? 'with-code' : '')
                             ).block-item.standard
-                                .left-block=standard.getName()
+                                .left-block(data-tooltip-type="overflow", data-tooltip=standard.getName())=standard.getName()
                                 .right-block=standard.getStandardGrading().getGradeValue()
                                     .circle(class=self.getStandardColor(standard))
                         if self.showMoreButton(classItem)
