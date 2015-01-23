@@ -50,18 +50,18 @@ NAMESPACE('chlk.controllers', function (){
                     .backup()
                     .attach(this.validateResponse_())
                     .then(function(success){
-                        return this.getContext().getSession().get(ChlkSessionConstants.DB_LIST_BACKUPS);
+                        return this.dbMaintenanceService.getDbListBackupsSync();
                     }, this);
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             },
 
             [[String]],
             function restoreAction(ticks){
-                var result = this.dbMaintenanceService
-                    .restore(ticks)
+                var result = this.ShowConfirmBox('Are you sure you want to restore this backup?', '')
+                    .thenCall(this.dbMaintenanceService.restore, [ticks])
                     .attach(this.validateResponse_())
                     .then(function(success){
-                        return this.getContext().getSession().get(ChlkSessionConstants.DB_LIST_BACKUPS);
+                        return this.dbMaintenanceService.getDbListBackupsSync();
                     }, this);
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
             }

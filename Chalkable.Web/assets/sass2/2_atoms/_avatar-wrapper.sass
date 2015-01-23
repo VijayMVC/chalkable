@@ -1,5 +1,5 @@
 .alerts-icon
-  background: image-url("images/icons/alerts-white.png") 0 0 no-repeat
+  background: image-url("images2/common/alerts-white.png") 0 0 no-repeat
   width: 38px
   height: 37px
   right: 0
@@ -8,11 +8,11 @@
   z-index: 1000
 
   &.small
-    background: image-url("images/attendance/alerts.png") 0 0 no-repeat
-    width: 25px
-    height: 27px
+    +icons-24-sprite(alert) // was yellow alert triangle
+    width: 24px
+    height: 24px
     right: -13px
-    top: -12px
+    top: -13px
 
 .avatar-wrapper
   position: relative

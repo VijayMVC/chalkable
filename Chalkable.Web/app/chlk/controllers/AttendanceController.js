@@ -267,6 +267,13 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     if(!model)
                         model = new chlk.models.attendance.SeatingChart();
+                    var res = this.attendanceService
+                        .getNotTakenAttendanceClasses(date_)
+                        .attach(this.validateResponse_())
+                        .then(function(items){
+                            return new chlk.models.attendance.NotTakenAttendanceClassesViewData(items);
+                        }.bind(this));
+                    this.BackgroundUpdateView(chlk.activities.attendance.SeatingChartPage, res, chlk.activities.lib.DontShowLoader());
                     return this.prepareSeatingData(model, classId, date_);
                 }, this);
             return this.PushView(chlk.activities.attendance.SeatingChartPage, result);

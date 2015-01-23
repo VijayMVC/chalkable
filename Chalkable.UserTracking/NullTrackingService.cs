@@ -129,7 +129,7 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits)
+        public void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits, bool callFromGradeBook)
         {
         }
 

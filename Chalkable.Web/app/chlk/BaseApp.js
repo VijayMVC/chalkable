@@ -302,7 +302,7 @@ NAMESPACE('chlk', function (){
                         if(!$node.hasClass('pressed')) {
                             window.location.href = WEB_SITE_ROOT + 'DemoSchool/LogOnIntoDemo.json'
                                 + '?rolename=' + $node.getData('rolename')
-                                + '&prefix=' + window.school.demoprefix;
+                                + '&prefix=' + window.districtId;
                         }
                         return false;
                     });

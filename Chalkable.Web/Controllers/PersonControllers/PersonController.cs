@@ -37,8 +37,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
         protected PersonScheduleViewData PrepareScheduleData(ShortPersonViewData person)
         {
-            var schoolYearId = GetCurrentSchoolYearId();
-            var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, person.Id);
+            //var schoolYearId = GetCurrentSchoolYearId();
+            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolYearTime.Date);
+            IList<ClassDetails> classes = new List<ClassDetails>();
+            if(mp != null)
+                classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, mp.Id, person.Id, 0, int.MaxValue);
             return PersonScheduleViewData.Create(person, classes);
         }
 

@@ -15,8 +15,12 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.StandardService*/
     CLASS(
         'StandardService', EXTENDS(chlk.services.BaseService), [
-            ria.async.Future, function getSubjects() {
-                return this.get('Standard/GetStandardSubject.json', ArrayOf(chlk.models.standard.StandardSubject), {});
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getSubjects(classId_) {
+                return this.get('Standard/GetStandardSubject.json', ArrayOf(chlk.models.standard.StandardSubject), {
+                    classId: classId_ && classId_.valueOf()
+                });
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId]],

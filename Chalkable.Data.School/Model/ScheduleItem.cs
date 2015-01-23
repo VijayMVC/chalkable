@@ -10,6 +10,7 @@ namespace Chalkable.Data.School.Model
         public int SchoolYearId { get; set; }
         public int PeriodId { get; set; }
         public int PeriodOrder { get; set; }
+        public string PeriodName { get; set; }
         public int? ClassId { get; set; }
         public string ClassName { get; set; }
         public string ClassDescription { get; set; }

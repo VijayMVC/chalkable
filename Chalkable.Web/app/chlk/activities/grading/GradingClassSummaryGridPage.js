@@ -26,6 +26,8 @@ NAMESPACE('chlk.activities.grading', function () {
 
             Array, 'standardScores',
 
+            Array, 'zeroPercentageScores',
+
             ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
 
             [[ria.dom.Dom]],
@@ -121,6 +123,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(parent.find('.grade-info').getData('may-be-exempt'))
                         scores = scores.concat([['Exempt', '']]);
                 }else{
+                    if(parent.getData('canputonlyzero') == true)
+                        return this.getZeroPercentageScores();
+
                     scores = this.getAllScores();
                     if(parent.getData('able-drop-student-score'))
                         scores = scores.concat([['Dropped', ''], ['Dropped (fill all)', '']]);
@@ -237,7 +242,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 var parsed = parseFloat(text);
                 if(parsed || parsed == 0){
                     node.removeClass('error');
-                    if(parsed != text || parsed > 9999.99 || parsed < -9999.99){
+                    var canPutScore = node.getData('able-put-score');
+                    if(parsed != text || parsed > 9999.99 || parsed < -9999.99 || (!canPutScore && parsed != 0)){
                         node.addClass('error');
                     }else{
                         this.hideDropDown();
@@ -294,7 +300,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         active.getData('grading-period-name'), active.getData('average-id'), parseInt(active.getAttr('row-index'), 10));
                     var tpl = new chlk.templates.grading.AvgCodesPopupTpl();
                     tpl.assign(model);
-                    var popUp = this.dom.find('.chlk-pop-up-container.codes');
+                    var popUp = this.dom.find('.popup-bubble.codes');
                     popUp.find('.codes-content').setHTML(tpl.render());
 
                     var container = active.parent('.mps-container');
@@ -309,7 +315,7 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             function setCommentByNode(node){
-                var popUp = node.parent('.chlk-pop-up-container');
+                var popUp = node.parent('.popup-bubble');
                 var input = popUp.find('.comment-value');
                 input.setValue(node.getHTML());
                 popUp.find('.grading-comments-list').hide();
@@ -333,13 +339,13 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.cancel-codes')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function cancelCodesBtnClick(node, event){
-                node.parent('.chlk-pop-up-container.codes').hide();
+                node.parent('.popup-bubble.codes').hide();
             },
 
             [ria.mvc.DomEventBind('click', '.save-codes')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function saveCodesBtnClick(node, event){
-                var popUp = node.parent('.chlk-pop-up-container.codes');
+                var popUp = node.parent('.popup-bubble.codes');
                 var res = [], o;
                 popUp.find('.row:not(.header)').forEach(function(item){
                     var input = item.find('.code-input');
@@ -432,10 +438,14 @@ NAMESPACE('chlk.activities.grading', function () {
 
             OVERRIDE, function prepareAllScores(model){
                 BASE(model);
-                var allScores = [], standardScores = [];
+                var allScores = [], standardScores = [], zeroPercentageScores = [];
                  model.getAlternateScores().forEach(function(item){
                     allScores.push([item.getName(), '']);
                     allScores.push([item.getName() + ' (fill all)', '']);
+                    if(item.getPercentOfMaximumScore() == 0){
+                        zeroPercentageScores.push([item.getName(), ''])
+                        zeroPercentageScores.push([item.getName() + ' (fill all)', ''])
+                    }
                 });
                 model.getAlphaGrades().forEach(function(item){
                     allScores.push([item.getName(), '']);
@@ -446,6 +456,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.setAllScores(allScores);
                 this.setStandardScores(standardScores);
                 this.setGradingComments(model.getGradingComments());
+                this.setZeroPercentageScores(zeroPercentageScores);
             },
 
             function afterCellShow(parent){
@@ -480,7 +491,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 else{
                     var grade = cell.find('.grade-text').getData('grade-value'),
                         comment = node.getData('comment');
-                    grade = grade ? grade.toString() : '';
+                    grade = grade != null  ? grade.toString() : '';
                     comment = comment ? comment.toString() : '';
                     model = new chlk.models.announcement.ShortStudentAnnouncementViewData(
                         new chlk.models.id.StudentAnnouncementId(node.getData('id')),
@@ -512,7 +523,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(!cell.hasClass('avg-value-container')){
                     tpl.options({
                         ableDropStudentScore: this.getBooleanValue_(cell.getData('able-drop-student-score')),
-                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score'))
+                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score')),
+                        notAblePutScore: this.getBooleanValue_(cell.getData('canputonlyzero'))
                     });
                 }else{
                     tpl.options({
@@ -675,6 +687,15 @@ NAMESPACE('chlk.activities.grading', function () {
 
                         _DEBUG && console.timeEnd('repainting');
                     }, this);
+
+                var studentIds = [];
+                this._lastModel.getCurrentGradingGrid().getStudents().forEach(function(item){
+                    studentIds.push(item.getStudentInfo().getId().valueOf())
+                });
+
+                var form = $node.parent('.marking-period-container').find('.change-order-form');
+                form.find('.student-ids').setValue(studentIds.join(','));
+                form.trigger('submit');
             }
         ]);
 });

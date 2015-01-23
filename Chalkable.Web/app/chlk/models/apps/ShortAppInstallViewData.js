@@ -12,10 +12,16 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.AppMarketApplication, 'app',
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AnnouncementId, 'announcementId',
+            chlk.models.apps.AppTotalPrice, 'appTotalPrice',
 
-            [[chlk.models.apps.AppMarketApplication, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
-            function $(app, classId, announcementId_){
+            [[chlk.models.apps.AppMarketApplication,
+                chlk.models.apps.AppTotalPrice,
+                chlk.models.id.ClassId,
+                chlk.models.id.AnnouncementId]],
+            function $(app, totalPrice, classId, announcementId_){
                 BASE();
+                if (totalPrice)
+                    this.setAppTotalPrice(totalPrice);
                 if(app)
                     this.setApp(app);
                 if(classId)

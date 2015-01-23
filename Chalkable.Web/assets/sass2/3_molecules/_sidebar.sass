@@ -42,8 +42,10 @@
 
     &:hover
       background-color: #f1f0ee
+      +single-transition(background-color, .15s, ease-in)
       &::before
         opacity: 1
+        +single-transition(opacity, .15s, ease-in)
 
     &.active
       z-index: 2
@@ -62,8 +64,8 @@
       left: 24px
       width: 32px
       height: 32px
-      opacity: .75
+      opacity: .5
 
-  @each $button in inbox, new-item, apps, messages, people, grades, discipline, attendance, calendar
+  @each $button in inbox, new-item, apps, messages, people, grades, discipline, attendance, calendar, settings, dashboard, home
     .#{$button}::before
-      +icons-sprite($button)
+      +icons-32-sprite($button)

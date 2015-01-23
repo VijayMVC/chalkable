@@ -53,7 +53,7 @@ NAMESPACE('chlk.templates.grading', function () {
                 var tickPositions = [], ticksLetters = [], graphdata=[], max = 0;
 
                 if(graphpoints && len){
-                    var XY = [];
+                    /*var XY = [];
                     graphpoints.forEach(function(item){
                         XY.push([item.grade, item.studentcount]);
                     });
@@ -74,22 +74,25 @@ NAMESPACE('chlk.templates.grading', function () {
                         graphdata.push([x, fx]);
                         if(fx > max)
                             max = fx;
-                    }.bind(this));
+                    }.bind(this));*/
+
+                    var isLine = (graphpoints.length == 1 && graphpoints[0].startinterval == graphpoints[0].endinterval);
+
+                    graphpoints.forEach(function(item){
+                        graphdata.push([item.startinterval, item.studentcount]);
+                        graphdata.push([item.endinterval, item.studentcount]);
+                        if(item.studentcount > max)
+                            max = item.studentcount;
+                    });
 
                     var tickYInterval = ((max/2 > 10) ? 10 : Math.floor(max/2)) || 1;
 
                     return {
                         backgroundColor: 'transparent',
                         chart: {
-                            type: 'spline',
-                            backgroundColor: 'transparent',
+                            type: isLine ? 'line' : 'area',
                             width: 180,
-                            height: 100,
-                            style: {
-                                fontFamily: 'Arial',
-                                fontSize: '10px',
-                                color: '#a6a6a6'
-                            }
+                            height: 100
 
                         },
                         credits: {
@@ -102,7 +105,7 @@ NAMESPACE('chlk.templates.grading', function () {
                             showLastLabel: true,
                             showFirstLabel: true,
                             startOnTick: true,
-                            tickPositions: tickPositions,
+                            //tickPositions: tickPositions,
                             labels: {
                                 formatter: function(){
                                     return '<div class="chart-label">' + ticksLetters[this.value] + '</div>';
@@ -127,7 +130,7 @@ NAMESPACE('chlk.templates.grading', function () {
                             enabled: false
                         },
                         plotOptions: {
-                            spline: {
+                            area: {
                                 lineWidth: 1,
                                 marker: {
                                     enabled: false,
@@ -145,14 +148,7 @@ NAMESPACE('chlk.templates.grading', function () {
                         series: [{
                             name: '',
                             data: graphdata
-                        }],
-
-                        labels: {
-                            style: {
-                                fontSize: '9px',
-                                fontWeight: 'bold'
-                            }
-                        }
+                        }]
                     }
                 }else
                     return null;

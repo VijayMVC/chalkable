@@ -20,7 +20,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         
         public IList<ScheduleItem> GetSchedule(int schoolYearId, int? teacherId, int? studentId, int? classId, DateTime from, DateTime to)
         {
-            var dates = Storage.DateStorage.GetDates(new DateQuery {FromDate = from, ToDate = to, SchoolYearId = schoolYearId});
+            var dates = Storage.DateStorage.GetDates(new DateQuery
+            {
+                FromDate = from, 
+                ToDate = to, 
+                SchoolYearId = schoolYearId,
+                SchoolDaysOnly = true
+            });
             var periods = Storage.PeriodStorage.GetPeriods(schoolYearId);
             var classes = Storage.ClassStorage.GetClassesComplex(new ClassQuery
                 {
@@ -37,16 +43,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var res = new List<ScheduleItem>();
             foreach (var date in dates)
             {
+                if (date.IsSchoolDay)
                 foreach (var period in periods)
                 {
                     var scheduleSlot = scheduleTimeSlots.FirstOrDefault(x => x.BellScheduleRef == date.BellScheduleRef && x.PeriodRef == period.Id);
-                    var cp = classsPeriods.First(x => x.PeriodRef == period.Id);
+                    var clsIds = classsPeriods.Where(x => x.PeriodRef == period.Id).Select(x => x.ClassRef);
+
+                    var classesList = classes.Where(x => clsIds.Contains(x.Id));
+                    foreach (var cls in classesList)
+                    {
+                        var room = rooms.FirstOrDefault(x => x.Id == cls.RoomRef);
+                        res.Add(CreateScheduleItem(date, period, scheduleSlot, cls, room));
+                    }
                     
-                           var c = classes.FirstOrDefault(x => x.Id == cp.ClassRef);
-                            Room room = null;
-                            if (c != null)
-                                room = rooms.FirstOrDefault(x => x.Id == c.RoomRef);
-                            res.Add(CreateScheduleItem(date, period, scheduleSlot, c, room));
                 }
             }
             return res;
@@ -61,7 +70,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     PeriodOrder = period.Order,
                     IsSchoolDay = date.IsSchoolDay,
                     SchoolYearId = date.SchoolYearRef,
-                    DayTypeId = date.DayTypeRef
+                    DayTypeId = date.DayTypeRef,
+                    PeriodName = period.Name
                 };
             if (c != null)
             {

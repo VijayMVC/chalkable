@@ -62,10 +62,10 @@ NAMESPACE('chlk.controllers', function (){
         },*/
 
         [chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, chlk.models.id.ClassId]],
-        function showWeekBarPopUpAction(date, periodClassId_, classId_) {
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, chlk.models.id.ClassId, Number]],
+        function showWeekBarPopUpAction(date, periodClassId_, classId_, periodOrder_) {
             var model = this.calendarService
-                .getWeekDayInfo(date, periodClassId_);
+                .getWeekDayInfo(date, periodClassId_, periodOrder_);
 
             Assert(model);
 

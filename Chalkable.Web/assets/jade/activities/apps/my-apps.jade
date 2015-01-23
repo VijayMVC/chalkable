@@ -15,10 +15,11 @@ mixin MyAppsIconLink(app, editable)
             +Hidden('uninstallable', app.isUninstallable())
     else
         +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).application
-            .icon(class=editable ? "jiggly" : undefined)
-                img(src=self.getAppPictureURL(app.getSmallPictureId(), 74, 74))
-            .title=app.getName()
-            BUTTON Open
+            .wrapper
+                .icon(class=editable ? "jiggly" : undefined)
+                    img(src=self.getAppPictureURL(app.getSmallPictureId(), 74, 74))
+                .title=app.getName()
+                BUTTON Open
 .my-apps
     .buttons
         if self.isEditable()

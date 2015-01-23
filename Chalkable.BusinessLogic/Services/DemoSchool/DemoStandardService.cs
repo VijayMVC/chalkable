@@ -103,11 +103,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.StandardSubjectStorage.Update(standardSubjects);
         }
 
-        public IList<StandardSubject> GetStandardSubjects()
+        public IList<StandardSubject> GetStandardSubjects(int? classId)
         {
-            return Storage.StandardSubjectStorage.GetAll();
+            var res = Storage.StandardSubjectStorage.GetAll();
+            if (classId.HasValue)
+            {
+                var standards = GetStandards(classId, null, null);
+                res = res.Where(x => standards.Any(s => s.StandardSubjectRef == x.Id)).ToList();
+            }
+            return res;
         }
-
+        
         public void DeleteStandardSubjects(IList<int> ids)
         {
             if (!BaseSecurity.IsDistrict(Context))

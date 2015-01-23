@@ -103,9 +103,23 @@
       z-index: 11
       line-height: 15px
 
+  .grade-triangle
+    position: absolute
+    right: -15px
+    top: 25px
+    width: 24px
+    height: 24px
+    +icons-24-sprite(student-arrow)
+    @include transition-property("all")
+    @include transition-duration("0.5s")
+
+    &:not(.down)
+      @include transform(rotate(-90deg))
+
   .grade-block
     position: relative
     width: 100px
+    padding-right: 20px
 
     .text-value
       color: #2f7790
@@ -275,12 +289,17 @@
 
 
 
+  .grade-container
+    .letters
+      bottom: -25px !important
+      z-index: 0 !important
+
   .grades-individual
     border: 1px solid #c8c7c3
 
   .loading .grade-block .text-value
     font-size: 0
-    background: image-url("images/loader.gif") 50% 50% no-repeat
+    background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
     height: 20px
 
   .comment-grade-container

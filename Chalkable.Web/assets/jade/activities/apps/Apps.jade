@@ -1,7 +1,11 @@
 mixin AppManagementControls(id, state, liveId)
     if (liveId && liveId.valueOf())
         if state.getStateId() != chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
-            span=state.toString(true)
+
+            -var statusText = state.toString(true)
+            if state.getStateId() == chlk.models.apps.AppStateEnum.DRAFT || state.getStateId() == chlk.models.apps.AppStateEnum.LIVE
+                -statusText= "Live"
+            span=statusText
         else
             +ActionLink('apps', 'approve', id).btn Approve
             +ActionLink('apps', 'decline', id).btn Reject

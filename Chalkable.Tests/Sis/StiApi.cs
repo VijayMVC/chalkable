@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Transactions;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
@@ -32,18 +29,15 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest()
         {
-            //var cl = ConnectorLocator.Create("administrator", "1234qwer", "http://localhost/");
-            //var cl = ConnectorLocator.Create("Chalkable", "tN7nC9sI4", "http://sandbox.sti-k12.com/Chalkable/api/");
-            var cl = ConnectorLocator.Create("Chalkable", "k8Xz3Ka2D", "http://208.83.95.80:8222/api/");
-            //var cl = ConnectorLocator.Create("Chalkable", "r3Hp1Dm5Q", "http://208.83.95.80:8222/API/");
+            var cl = ConnectorLocator.Create("Chalkable", "n8Ad8Rg7Y", "http://208.83.95.80:8285/API/");
 
-            var items = (cl.SyncConnector.GetDiff(typeof(BellSchedule), null) as SyncResult<BellSchedule>).All;
-                
-            foreach (var s in items)
+            var items = (cl.SyncConnector.GetDiff(typeof(CalendarDay), null) as SyncResult<CalendarDay>).All;
+
+            var ds = items.Where(x => x.AcadSessionID == 176 && x.Date == new DateTime(2015, 1, 22)).ToList();
+            foreach (var calendarDay in ds)
             {
-                Debug.WriteLine(s.BellScheduleID + " " + s.AcadSessionID + " " + s.Name);
+                Debug.WriteLine(calendarDay.BellScheduleID);
             }
-
 
         }
 

@@ -32,7 +32,29 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             else 
                 value = null;
 
-            var numericScore = GetNumericScore(value, gradingStyle);
+            decimal numericScore;
+            var isDecimal = decimal.TryParse(value, out numericScore);
+
+            if (value != null && !isDecimal)
+            {
+                var numScore = Storage.AlphaGradeStorage.GetAll()
+                    .FirstOrDefault(x => String.Equals(x.Name, value, StringComparison.InvariantCultureIgnoreCase));
+                if (numScore != null)
+                {
+                    var gradingScaleRange = Storage.GradingScaleRangeStorage
+                        .GetAll()
+                        .FirstOrDefault(x => x.AlphaGradeRef == numScore.Id);
+
+                    if (gradingScaleRange != null)
+                    {
+                        numericScore = gradingScaleRange.AveragingEquivalent;
+                        value = numScore.Name;
+                    }
+                        
+                }
+            }
+
+
             var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
 
             var oldScore = Storage.StiActivityScoreStorage.GetScore(announcementId, studentId);
@@ -41,10 +63,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(studentAnnouncement, oldScore);
             studentAnnouncement.AnnouncementId = oldScore.ActivityId;
 
-            if (numericScore >= 0)
+            if (numericScore >= 0 && value != null)
             {
                 studentAnnouncement.NumericScore = numericScore;
-                studentAnnouncement.ScoreValue = numericScore.ToString(CultureInfo.InvariantCulture);
+                studentAnnouncement.ScoreValue = value.ToString(CultureInfo.InvariantCulture);
             }
 
             if (studentAnnouncement.NumericScore.HasValue || studentAnnouncement.Late ||
@@ -71,32 +93,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, studentAnnouncement.StudentId);
             return studentAnnouncement;
-        }
-
-        private decimal GetNumericScore(string value, GradingStyleEnum? gradingStyle)
-        {
-            decimal numericScore = -1;
-            if (gradingStyle.HasValue && value != null)
-            {
-                if (gradingStyle.Value != GradingStyleEnum.Numeric100)
-                {
-                    var numScore = Storage.AlphaGradeStorage.GetAll().FirstOrDefault(x => x.Name.ToLowerInvariant() == value);
-                    if (numScore != null)
-                    {
-                        var gradingScaleRange = Storage.GradingScaleRangeStorage
-                            .GetAll()
-                            .FirstOrDefault(x => x.AlphaGradeRef == numScore.Id);
-
-                        if (gradingScaleRange != null)
-                            numericScore = gradingScaleRange.AveragingEquivalent;
-                    }
-                }
-                else
-                {
-                    decimal.TryParse(value, out numericScore);
-                }
-            }
-            return numericScore;
         }
 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)

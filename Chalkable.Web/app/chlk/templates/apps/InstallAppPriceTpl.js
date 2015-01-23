@@ -5,7 +5,7 @@ NAMESPACE('chlk.templates.apps', function () {
 
     /** @class chlk.templates.apps.InstallAppPriceTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/apps/install-app-price.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-install-price.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppTotalPrice)],
         'InstallAppPriceTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 

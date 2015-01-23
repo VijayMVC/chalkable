@@ -33,7 +33,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             return Read(BuildGetReasonsDbQuery(conditions), ReadGetAttendanceReasonReasult);
         }
-
+        
         public override AttendanceReason GetById(int key)
         {
             var conds = new AndQueryCondition {{AttendanceReason.ID_FIELD, key}};
@@ -49,7 +49,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var res = new DbQuery();
             var types = new List<Type> { typeof(AttendanceReason), typeof(AttendanceLevelReason) };
-            res.Sql.AppendFormat(@"select {0} from [{1}] join [{3}] on [{3}].[{4}] = [{1}].[{2}]"
+            res.Sql.AppendFormat(@"select {0} from [{1}] left join [{3}] on [{3}].[{4}] = [{1}].[{2}]"
                                  , Orm.ComplexResultSetQuery(types), types[0].Name, AttendanceReason.ID_FIELD
                                  , types[1].Name, AttendanceLevelReason.ATTENDACNE_REASON_REF_FIELD);
 
@@ -63,6 +63,7 @@ namespace Chalkable.Data.School.DataAccess
         private IList<AttendanceReason> ReadGetAttendanceReasonReasult(DbDataReader reader)
         {
             IDictionary<int, AttendanceReason> attReasonDic = new Dictionary<int, AttendanceReason>();
+            var tableName = typeof (AttendanceLevelReason).Name;
             while (reader.Read())
             {
                 var reason = reader.Read<AttendanceReason>(true);
@@ -71,9 +72,16 @@ namespace Chalkable.Data.School.DataAccess
                     reason.AttendanceLevelReasons = new List<AttendanceLevelReason>();
                     attReasonDic.Add(reason.Id, reason);
                 }
-                var attLevelReason = reader.Read<AttendanceLevelReason>(true);
-                attLevelReason.AttendanceReason = reason;
-                attReasonDic[reason.Id].AttendanceLevelReasons.Add(attLevelReason);
+                if (!reader.IsDBNull(reader.GetOrdinal(string.Format("{0}_{1}", tableName, AttendanceLevelReason.ID_FIELD))))
+                {
+                    var attLevelReason = reader.Read<AttendanceLevelReason>(true);
+                    if (attLevelReason != null && attLevelReason.Id > 0)
+                    {
+                        attLevelReason.AttendanceReason = reason;
+                        attReasonDic[reason.Id].AttendanceLevelReasons.Add(attLevelReason);
+                    }
+                }
+
             }
             return attReasonDic.Select(x=>x.Value).ToList();
         } 

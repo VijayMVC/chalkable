@@ -1055,7 +1055,7 @@ NAMESPACE('chlk.controllers', function (){
         [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showStandardsAction(typeName, announcementId, classId){
             var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
-            var res = this.standardService.getSubjects()
+            var res = this.standardService.getSubjects(classId)
                 .then(function(subjects){
                     return new chlk.models.announcement.AddStandardViewData(typeName, announcementId, classId, subjects, standardIds);
                 })

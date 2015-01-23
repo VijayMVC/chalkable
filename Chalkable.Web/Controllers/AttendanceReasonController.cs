@@ -14,5 +14,10 @@ namespace Chalkable.Web.Controllers
         {
             return Json(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()));
         }
+
+        public ActionResult GetAllReasons()
+        {
+            return Json(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List(false)));
+        }
     }
 }

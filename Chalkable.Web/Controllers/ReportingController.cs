@@ -7,6 +7,7 @@ using Chalkable.Common;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
+using Newtonsoft.Json;
 
 namespace Chalkable.Web.Controllers
 {
@@ -41,20 +42,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, IntList studentIds, StringList comments)
+        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, string studentComments)
         {
-            if (studentIds != null && comments != null && studentIds.Count == comments.Count)
-            {
-                progressReportInput.StudentComments = new List<StudentCommentInputModel>();
-                for (int i = 0; i < studentIds.Count; i++)
-                {
-                    progressReportInput.StudentComments.Add(new StudentCommentInputModel
-                        {
-                            Comment = comments[i],
-                            StudentId = studentIds[i]
-                        });
-                }
-            }
+            progressReportInput.StudentComments = JsonConvert.DeserializeObject<IList<StudentCommentInputModel>>(studentComments);
             return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
         }
 

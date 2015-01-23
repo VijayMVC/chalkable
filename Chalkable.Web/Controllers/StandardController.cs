@@ -18,9 +18,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetStandardSubject()
+        public ActionResult GetStandardSubject(int? classId)
         {
-            var subjects = SchoolLocator.StandardService.GetStandardSubjects();
+            var subjects = SchoolLocator.StandardService.GetStandardSubjects(classId);
             return Json(StandardSubjectViewData.Create(subjects));
         }
 

@@ -16,7 +16,7 @@ h2.page-title Attendance
 -var selectedId = topData.getSelectedItemId()
 -var hasStudentOnChart = self.hasStudentOnChart()
 -var seatingList = self.getSeatingList() || []
-+ClassesToolBarWithAll(topData, 'attendance', 'seatingChart', [self.getDate().format('mm-dd-yy')])
++ClassesToolBarWithAll(topData, 'attendance', 'seatingChart', [self.getDate().format('mm-dd-yy')], false, true).attendance
 .action-bar
     .items
         +ActionLink('attendance', 'classList', selectedId, self.getDate().toStandardFormat())= Msg.List
@@ -90,7 +90,7 @@ div(class=showButtons ? 'can-post' : '').page-content.people-list-container
                                             .empty
     else
         .people-list
-            .black-arrow.no-class-scheduled.row Selected class is not scaduled in current Term
+            .black-arrow.no-class-scheduled.row Selected class is not sceduled in current term
 typesEnum = chlk.models.attendance.AttendanceTypeEnum
 .chlk-pop-up-container.seating-chart-popup.popup-bubble.bottom
     .pop-up-triangle.big

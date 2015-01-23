@@ -13,6 +13,6 @@ NAMESPACE('chlk.models.grading', function () {
         Boolean, 'includeInAverage',
 
         [ria.serialize.SerializeProperty('percentofmaximumscore')],
-        String, 'percentOfMaximumScore'
+        Number, 'percentOfMaximumScore'
     ]);
 });

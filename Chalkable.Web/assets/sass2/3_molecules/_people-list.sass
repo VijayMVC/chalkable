@@ -20,6 +20,11 @@
     +text-shadow(transparentize(#fff, .5) 0 2px 1px)
 
 .people-list
+
+  &.scroll-freezed
+    .load-all-button
+      opacity: 0.5
+
   .sub-row
     display: none
     background: #f7f7f5
@@ -86,7 +91,7 @@
       z-index: 1000
       left: 23px
       cursor: pointer
-      +icons-sprite(user-grid-top-arrow)
+      +icons-32-sprite(user-grid-top-arrow)
 
     >A
       width: 100%

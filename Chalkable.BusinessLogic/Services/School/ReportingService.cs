@@ -110,7 +110,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public byte[] GetProgressReport(ProgressReportInputModel inputModel)
         {
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
-            int[] studentIds = new int[0];
             if (inputModel.StudentComments != null && inputModel.StudentComments.Count > 0)
             {
                 var inowStudentProgressReportComments =
@@ -122,7 +121,6 @@ namespace Chalkable.BusinessLogic.Services.School
                             SectionId = inputModel.ClassId
                         }).ToList();
                 ConnectorLocator.ReportConnector.UpdateProgressReportComment(inputModel.ClassId, inowStudentProgressReportComments);
-                studentIds = inputModel.StudentComments.Select(x => x.StudentId).ToArray();
             }
             var stiModel = new ProgressReportParams
                 {
@@ -148,7 +146,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     MaxStandardAverage = inputModel.MaxStandardAverage,
                     MinStandardAverage = inputModel.MinStandardAverage,
                     SectionComment = inputModel.ClassComment,
-                    StudentIds = studentIds
+                    StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null,
                 };
             return ConnectorLocator.ReportConnector.ProgressReport(stiModel);
         }
@@ -350,7 +348,6 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         public IntList GradingPeriodIds { get; set; }
         public IntList AbsenceReasonIds { get; set; }
-        public IntList StudentIds { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? StartDate { get; set; }
         

@@ -138,6 +138,11 @@ NAMESPACE('chlk.services', function () {
                     personId: studentId && studentId.valueOf(),
                     markingPeriodId: markingPeriodId && markingPeriodId.valueOf()
                 });
+            },
+
+            ria.async.Future, function getAllAttendanceReasons(){
+                return this.get('AttendanceReason/GetAllReasons.json', ArrayOf(chlk.models.attendance.AttendanceReason),{
+                });
             }
         ])
 });

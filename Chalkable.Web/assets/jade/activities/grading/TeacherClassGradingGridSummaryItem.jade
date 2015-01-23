@@ -1,4 +1,4 @@
-mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
+mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable, canPutOnlyZero)
     normalValue = info.getNormalValue()
     -numericV = parseFloat(normalValue)
     if info.getGradeValue() && isNaN(parseInt(info.getGradeValue(), 10)) && numericV
@@ -66,12 +66,14 @@ mixin DisplayTotalPoints(model)
             .dotted-h.grade-value
 
 .ann-types-container
+    +ActionForm('grading', 'changeStudentsOrder').change-order-form
+        +Hidden('studentIds', self.getStudentIds()).student-ids
     if !self.getGradingItems().length || !self.getStudents().length
         .no-items-text=Msg.No_grades_yet
     else
         .dotted-container.name-container.with-horizontal-dots
             .grading-grid-th
-                +ActionLink('grading', 'changeStudentsOrder').type-name(data-sort-type = "name", data-sort-order="asc", data-no-href=true)
+                .type-name(data-sort-type = "name", data-sort-order="asc", data-no-href=true)
                     =Msg.Student(true)
                 +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
                 .time
@@ -106,14 +108,16 @@ mixin DisplayTotalPoints(model)
                         .max-score.dotted-h(data-sort-type="anno", data-sort-anno-id=announcement.getId().valueOf())=maxScore
                     studentItems = announcement.getStudentAnnouncements().getItems()
                     each info,i in studentItems
-                        gradable = self.isAbleEdit() && announcement.isGradable() && (self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent())
+                        gradable = self.isAbleEdit() && announcement.isGradable()
+                        canPutOnlyZeroScore = !(self.getSchoolOptions().isAllowScoreEntryForUnexcused() || !info.isUnExcusedAbsent());
                         div(
                             row-index=i
                             data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                             data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
                             data-gradable= gradable,
                             data-max-score= maxScore,
-                            class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "")
+                            data-canputonlyzero= canPutOnlyZeroScore.toString(),
+                            class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 1 ? " top-popup" : "") + (studentItems.length == 1 ? " one" : "")
                         ).dotted-h.grade-value
-                            +TeacherClassGradingGridSummaryCell(info, maxScore, gradable)
+                            +TeacherClassGradingGridSummaryCell(info, maxScore, gradable, canPutOnlyZeroScore)
                     div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=self.getModel().displayAverages(announcement.calculateGradesAvg(2))

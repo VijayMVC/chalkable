@@ -1,7 +1,7 @@
 mixin Textbox(tName, val, isReadonly, validationRule, placeholder)
     rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
     if isReadonly
-        -attributes.disabled = isReadonly
+        -attributes.readonly = isReadonly
     placeholderText = placeholder ? placeholder : ""
     input(type="text", name=tName, value=val, class=rule, placeholder=placeholderText)(attributes).text
 
@@ -11,7 +11,7 @@ mixin TextArea(tName, val, isReadonly, validationRule)
     //todo: fix duplicate attrs
     rule = validationRule ? "validate[" + validationRule + "]": "validate[required]"
     if isReadonly
-        -attributes.disabled = isReadonly
+        -attributes.readonly = isReadonly
     textarea(name=tName, class=rule)(attributes)=val
 
 mixin MyAppsPermission(prefix, appName, suffix, shortText)

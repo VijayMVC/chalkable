@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
         void EditStandardSubjects(IList<StandardSubject> standardSubjects);
-        IList<StandardSubject> GetStandardSubjects();
+        IList<StandardSubject> GetStandardSubjects(int? classId);
 
         void DeleteStandardSubjects(IList<int> ids);
         void DeleteClassStandards(IList<ClassStandard> classStandards);
@@ -109,11 +109,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
         }
 
-        public IList<StandardSubject> GetStandardSubjects()
+        public IList<StandardSubject> GetStandardSubjects(int? classId)
         {
             using (var uow = Read())
             {
-                return new StandardSubjectDataAccess(uow).GetAll();
+                var da = new StandardSubjectDataAccess(uow);
+                if (classId.HasValue)
+                    return da.GetStandardSubjectByClass(classId.Value);
+                return da.GetAll();
             }
         }
 

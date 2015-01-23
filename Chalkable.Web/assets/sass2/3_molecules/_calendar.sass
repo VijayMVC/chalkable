@@ -15,6 +15,7 @@
     width: 45px
     height: 40px
     overflow: hidden
+    opacity: .5
 
   .p-container
     width: 120px
@@ -127,6 +128,15 @@
         background-color: transparentize(#fff, .95) !important
 
 
+      .course-icon
+        position: relative
+        opacity: .8
+        img
+          position: absolute
+          top: auto
+          bottom: 0
+          left: 0
+
     .week-day
       $height: 116px - 32px
       vertical-align: top
@@ -168,9 +178,8 @@
       left: -16px
       top: 58px
       margin-top: - 16px
-      width: 24px
       height: 24px
-      border-radius: 50%
+      border-radius: 16px
       background: #fff
       text-align: center
       line-height: 24px
@@ -178,6 +187,9 @@
       color: #000
       font-size: 13px
       pointer-events: none
+      padding: 0 2px
+      z-index: 2
+      min-width: 20px
 
     .items-table
       display: table
@@ -224,6 +236,9 @@
         padding: 20px 10px
         white-space: nowrap
 
+  .whole-day
+    background-color: transparentize(#eee, .5)
+
 
   .current-section
     position: relative
@@ -235,6 +250,9 @@
       top: 50%
       height: 24px
       width: 24px
-      opacity: .7
-      +icons-sprite(people, -6px, -6px)
+      opacity: .8
+      +icons-32-sprite(people-white, -6px, -6px)
       +transform(translate(0, -50%))
+
+    .p-container
+      padding-right: 32px

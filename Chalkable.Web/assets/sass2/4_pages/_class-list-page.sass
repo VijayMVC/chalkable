@@ -1,3 +1,11 @@
+.readonly-banner
+  position: absolute
+  top: 5px
+  right: 25px
+  width: 200px
+  line-height: 26px
+  height: 53px
+
 .classes-bar.attendance
   .class-button
     overflow: visible
@@ -15,7 +23,7 @@
   .absent-yesterday
     width: 15px
     height: 15px
-    background: image_url('images/attendance/absent-yesterday.png') center center no-repeat
+    +icons-24-sprite(absent-yesterday)
     margin: 33px 10px
     position: absolute
 
@@ -27,14 +35,6 @@
   .r
     width: 120px
     text-align: right
-
-  .readonly-banner
-    position: absolute
-    top: 5px
-    right: 25px
-    width: 200px
-    line-height: 26px
-    height: 53px
 
   .title
     position: relative

@@ -6,6 +6,10 @@
   .ann-form-container > *
     margin-bottom: 24px
 
+  .title-block-container:not(.with-date)
+    .save-title-btn
+      display: none
+
   .title-block
     margin-top: 16px
 
@@ -68,7 +72,7 @@
       width: 32px
       height: 32px
       box-shadow: none
-      +icons-sprite(close-btn)
+      +icons-32-sprite(close)
       position: absolute
       top: -2px
       right: -2px
@@ -86,7 +90,7 @@
     width: 32px
     height: 32px
     position: absolute
-    +icons-sprite(inbox)
+    +icons-32-sprite(inbox)
     right: 15px
     bottom: 80px
     opacity: .5
@@ -149,17 +153,17 @@
     .question-mark, .calendar-mark
       position: absolute
       right: 5px
-      +icons-sprite(question-mark)
       width: 24px
       height: 24px
       bottom: 18px
       font-size: 0
+      opacity: .5
 
     .question-mark
-      +icons-sprite(question-mark)
+      +icons-24-sprite(question)
 
     .calendar-mark
-      +icons-sprite(calendar-mark)
+      +icons-24-sprite(calendar)
 
 
   .advanced-options-container
@@ -182,13 +186,13 @@
 .choose-class
   width: 210px
   height: 40px
-  background: image_url('images/announcement/choose-class.png')
+  background: image_url('images2/announcement/choose-class.png')
 
 .choose-type
   top: 132px
   width: 205px
   height: 45px
-  background: image_url('images/announcement/choose-type.png')
+  background: image_url('images2/announcement/choose-type.png')
 
 .choose-type, .choose-class
   position: absolute

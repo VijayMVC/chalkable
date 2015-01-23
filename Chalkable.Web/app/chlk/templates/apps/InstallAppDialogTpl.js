@@ -5,7 +5,7 @@ NAMESPACE('chlk.templates.apps', function () {
 
     /** @class chlk.templates.apps.InstallAppDialogTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/apps/install-app-dialog.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-install-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppMarketInstallViewData)],
 
 

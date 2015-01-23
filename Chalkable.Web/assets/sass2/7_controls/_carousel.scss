@@ -38,17 +38,17 @@
     .picture-button{
       top: 137px;
       position: absolute;
-      width: image-width('images/app/photo-left.png');
-      height: image-height('images/app/photo-right.png');
+      width: image-width('images2/app/photo-left.png');
+      height: image-height('images2/app/photo-right.png');
 
       &.picture-left{
         left: 31px;
-        background: url(images/app/photo-left.png) 0 0 no-repeat;
+        background: url(images2/app/photo-left.png) 0 0 no-repeat;
       }
 
       &.picture-right{
         right: 31px;
-        background: url(images/app/photo-right.png) 0 0 no-repeat;
+        background: url(images2/app/photo-right.png) 0 0 no-repeat;
       }
 
       &:hover:not(:disabled){
@@ -73,14 +73,16 @@
 
   .dot{
     display: inline-block;
-    height: 10px;
-    width: 10px;
-    background: url(images/app/dot.png) 0 0 no-repeat;
+    height: 9px;
+    width: 9px;
+    border-radius: 5px;
+    background: #2B2A28;
     margin: 0 2px;
     cursor: pointer;
+    border: 1px solid #9F9D97;
 
     &.selected{
-      background: url(images/app/dot-active.png) 0 0 no-repeat;
+      background: #E7E6E2;
     }
   }
 }

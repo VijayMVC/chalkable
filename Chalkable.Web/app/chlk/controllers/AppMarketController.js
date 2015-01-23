@@ -12,7 +12,7 @@ REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
 REQUIRE('chlk.activities.apps.MyAppsPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
 REQUIRE('chlk.activities.apps.InstallAppDialog');
-REQUIRE('chlk.activities.apps.ShortInstallAppDialog');
+REQUIRE('chlk.activities.apps.QuickAppInstallDialog');
 
 
 REQUIRE('chlk.models.apps.AppMarketInstallViewData');
@@ -313,8 +313,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
-        function tryToQuickInstallAction(applicationId, classId, announcementId){
+        [[chlk.models.id.AppId, chlk.models.apps.AppTotalPrice, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
+        function tryToQuickInstallAction(applicationId, appTotalPrice, classId, announcementId){
             var res = this.appMarketService
                 .getDetails(applicationId)
                 .attach(this.validateResponse_())
@@ -322,16 +322,15 @@ NAMESPACE('chlk.controllers', function (){
                     //todo: make picture dimensions constants
                     var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), 640, 390);
                     app.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshots, false));
-
-                    return new chlk.models.apps.ShortAppInstallViewData(app, classId, announcementId);
+                    return new chlk.models.apps.ShortAppInstallViewData(app, appTotalPrice, classId, announcementId);
                 }, this);
-            return this.ShadeView(chlk.activities.apps.ShortInstallAppDialog, res);
+            return this.ShadeView(chlk.activities.apps.QuickAppInstallDialog, res);
         },
 
 
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId]],
         function quickAppAttachAction(announcementId, applicationId){
-            this.BackgroundCloseView(chlk.activities.apps.ShortInstallAppDialog);
+            this.BackgroundCloseView(chlk.activities.apps.QuickAppInstallDialog);
             return this.Redirect('apps', 'tryToAttach', [announcementId, applicationId]);
         },
 
@@ -361,10 +360,10 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.appMarketService.getPersonBalance(personId, true)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var text = 'App succesfully installed! Your new balence is ' + data.getBalance();
+                    var text = 'App succesfully installed! Your new balance is ' + data.getBalance();
                     return new chlk.models.common.RequestResultViewData(true, text);
                 });
-            return this.UpdateView(chlk.activities.apps.ShortInstallAppDialog, res);
+            return this.UpdateView(chlk.activities.apps.QuickAppInstallDialog, res);
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -372,7 +371,7 @@ NAMESPACE('chlk.controllers', function (){
             //todo: show dialog for adding funds
             return this.ShowMsgBox('You have insufficient funds to buy this app', 'Error')
                 .then(function(){
-                    this.BackgroundCloseView(chlk.activities.apps.ShortInstallAppDialog);
+                    this.BackgroundCloseView(chlk.activities.apps.QuickAppInstallDialog);
                 }, this), null;
         },
 
@@ -383,7 +382,7 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.install_(appInstallData, 'quickInstallComplete'
                 , [this.getCurrentPerson().getId()]
                 , 'quickInstallFail', null);
-            return this.UpdateView(chlk.activities.apps.ShortInstallAppDialog, res);
+            return this.UpdateView(chlk.activities.apps.QuickAppInstallDialog, res);
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -430,7 +429,8 @@ NAMESPACE('chlk.controllers', function (){
                     if(res[0].getTotalPersonsCount() <= 0){
                         return this.ShowMsgBox('This app is already installed.', 'Error')
                             .then(function(){
-                                this.BackgroundCloseView(chlk.activities.apps.ShortInstallAppDialog);
+                                this.BackgroundCloseView(chlk.activities.apps.QuickAppInstallDialog);
+                                this.BackgroundCloseView(chlk.activities.apps.InstallAppDialog);
                                 return ria.async.BREAK;
                             }, this);
                     }

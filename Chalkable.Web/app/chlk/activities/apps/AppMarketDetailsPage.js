@@ -26,6 +26,16 @@ NAMESPACE('chlk.activities.apps', function () {
                 });
             },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+
+                if(msg_ == 'updateReviews' && model instanceof chlk.models.apps.AppMarketApplication){
+                    this.dom.find('.side-panel')
+                            .find('input[value=' + model.getApplicationRating().getAverage() + ']').setAttr('checked', true);
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '.write-review-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleReviewArea(node, event){
@@ -61,9 +71,16 @@ NAMESPACE('chlk.activities.apps', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleRoleReviews(node, event){
                  this.dom.find('.rating-roles').toggleClass('x-hidden');
+            },
+
+            OVERRIDE, VOID, function onPause_() {
+                BASE();
+                this.dom.find('iframe[wmode]').addClass('x-hidden');
+            },
+
+            OVERRIDE, VOID, function onResume_() {
+                BASE();
+                this.dom.find('iframe[wmode]').removeClass('x-hidden');
             }
-
-
-
         ]);
 });

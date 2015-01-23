@@ -15,9 +15,9 @@
     position: absolute
     right: 25px
     top: 26px
-    width: 8px
-    height: 12px
-    background: url(images/grading/gp-arrow.png) 0 0 no-repeat
+    +icons-24-sprite(arrow, 0, -6px, -4px)
+    width: 12px
+    height: 16px
     +transition(all, .2s, easy-in-out)
 
   .arrows-row
@@ -38,10 +38,10 @@
       margin-right: 10px
 
     &.prev-arrow
-      background: url(images/grading/arrow-prevr.png) 0 0 no-repeat
+      background: url(images2/grading/arrow-prevr.png) 0 0 no-repeat
 
     &.next-arrow
-      background: url(images/grading/arrow-next.png) 0 0 no-repeat
+      background: url(images2/grading/arrow-next.png) 0 0 no-repeat
 
     &:active
       opacity: 0.5
@@ -233,10 +233,17 @@
       .edit-cell
         display: none
 
+    .grading-input-popup
+      padding-bottom: 17px
+
     &.top-popup
       .grading-input-popup
         top: auto
-        bottom: 47px
+        bottom: 76px
+
+      &.one
+        .grading-input-popup
+          bottom: 0
 
     &.avg-value-container
       font-weight: bold
@@ -247,7 +254,7 @@
     left: 6px
     width: 11px
     height: 12px
-    background: url(images/grading/comment-icon2.png) 0 0 no-repeat
+    +icons-24-sprite(comment-icon2)
     z-index: 2
 
   .edit-cell
@@ -256,9 +263,18 @@
     right: 1px
     top: 0
     bottom: 1px
-    background: url(images/grading/edit-cell.png) center center no-repeat, #eeeeee
+    background-color: #eeeeee
     z-index: 1
     opacity: 0
+
+    &::after
+      content: ' '
+      position: absolute
+      top: 4px
+      left: 4px
+      +icons-24-sprite(edit-cell)
+      width: 12px
+      height: 12px
 
     &:hover
       opacity: 1
@@ -296,25 +312,19 @@
   .dropped-value
     text-decoration: line-through
 
-  .chlk-pop-up-container
-    position: absolute
-    text-shadow: white 0px 1px 1px
-    z-index: 100
+  .popup-bubble
+    .buttons-bottom
+      margin-top: 14px
+      text-align: center
 
-    .pop-up-triangle
-      left: 0
-      right: 0
-      height: 10px
-      background: url(images/common/window-triangle-top.png) center 0 no-repeat
-      position: absolute
-      bottom: -10px
-      @include transform(rotate(180deg))
+      button
+        margin-bottom: 0
+        width: 80px
 
-    &.comment
-      padding: 8px 18px
+        &:not(:last-child)
+          margin-right: 10px
 
     &.comment, &.codes
-      border-radius: 3px
       display: none
 
     &.codes
@@ -325,17 +335,6 @@
         text-align: center
         font: bold 18px Arial
         margin-bottom: 20px
-
-      .buttons-bottom
-        margin-top: 14px
-        text-align: center
-
-        .chlk-button
-          margin-bottom: 0
-          width: 80px
-
-        button:first-child
-          margin-right: 10px
 
       .row
         &.header
@@ -382,7 +381,14 @@
     padding-left: 13px
     bottom: 1px
     left: 46px
-    background: url(images/grading/edited-avg.png) 0 center no-repeat
+
+    &::before
+      content: ' '
+      position: absolute
+      top: 50%
+      left: 0
+      margin-top: -5px
+      +icons-24-sprite(edited-avg)
 
   .chlk-pop-up-container.comment
     h5
@@ -399,9 +405,7 @@
 
 .report-link
   position: absolute
-  width: 27px
-  height: 23px
-  background: image_url('images/icons/printer-icon.png') center center no-repeat
+  +icons-32-sprite(printer-icon, 0)
   right: 10px
   top: 17px
 
@@ -409,7 +413,12 @@
   width: 185px
   height: 100px
   margin: 10px 0
-  background: image-url("images/loader.gif") 50% 50% no-repeat
+
+  &:not(.processed)
+    background: image-url("images2/loaders/circular-grey.gif") 50% 50% no-repeat
 
   .chart-container
     background: #ffffff
+
+  .highcharts-container::before
+    left: 24px

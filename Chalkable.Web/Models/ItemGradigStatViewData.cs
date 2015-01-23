@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models
         public IList<StudentAnnouncementDetails> StudentAnnouncements { get; set; }
 
         private const int INTERVALS_COUNT = 4;
-        private const int MAX_GRADE = 100;
+        //private const int MAX_GRADE = 100;
 
         public static ItemGradigStatViewData Create(IList<StudentAnnouncementDetails> studentAnnouncements, int announcementId)
         {
@@ -26,20 +26,23 @@ namespace Chalkable.Web.Models
                 if (grades.Count > 0)
                 {
                     double minGrade = (double)grades.Min();
-                    double intervalLength = (MAX_GRADE - minGrade) / INTERVALS_COUNT;
+                    double maxGrade = (double) grades.Max();
+                    double intervalLength = (maxGrade - minGrade) / INTERVALS_COUNT;
                     if (intervalLength < 1)
-                        intervalLength = MAX_GRADE - minGrade;
-                    if ((int)minGrade == MAX_GRADE)
+                        intervalLength = maxGrade - minGrade;
+                    if ((int)minGrade == (int)maxGrade)
                     {
-                        graphPoints.Add(ItemGradingGraphViewData.Create((int)minGrade, grades.Count, (int)minGrade, (int)minGrade));
+                        graphPoints.Add(ItemGradingGraphViewData.Create((int)minGrade, grades.Count, (int)minGrade, (int)maxGrade));
                     }
                     double position = minGrade;
-                    while (position < MAX_GRADE)
+                    while (position < maxGrade)
                     {
                         var startInterval = position;
                         position += intervalLength;
                         var endInterval = position;
                         var grade = (startInterval + position) / 2;
+                        if ((int)position == (int)maxGrade)
+                            position++;
                         var studentCount = grades.Count(x => (double)x >= startInterval && (double)x < position);
                         graphPoints.Add(ItemGradingGraphViewData.Create((int)grade, studentCount, (int)startInterval, (int)endInterval));
                     }

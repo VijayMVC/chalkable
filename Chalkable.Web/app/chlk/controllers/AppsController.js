@@ -242,7 +242,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.apps.AppInfoPage, new ria.async.DeferredData(res))
         },
 
-        [chlk.controllers.SidebarButton('apps-info')],
+        [chlk.controllers.SidebarButton('new-item')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
@@ -466,9 +466,9 @@ NAMESPACE('chlk.controllers', function (){
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
             this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    if(data.getTotalPersonsCount() > 0)
-                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, classId, annId]);
+                .then(function(appTotalPrice){
+                    if(appTotalPrice.getTotalPersonsCount() > 0)
+                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, annId]);
                     return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId]);
                 }, this);
             return null;
@@ -615,7 +615,7 @@ NAMESPACE('chlk.controllers', function (){
                 .deleteApp(id)
                 .attach(this.validateResponse_())
                 .then(function(){
-                    return this.Redirect('apps', 'details', []);
+                    return this.Redirect('apps', 'general', []);
                 }, this);
         },
 
@@ -789,7 +789,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-
+        [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
         function generalDeveloperAction(appId_){
             var result = this.appsService

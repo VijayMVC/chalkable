@@ -23,6 +23,16 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 
     public class PictureService : MasterServiceBase, IPictureService
     {
+        private static string picturesRelativeAddress;
+        private static string demoPicturesRelativeAddress;
+
+        static PictureService()
+        {
+            var bh = new BlobHelper();
+            picturesRelativeAddress = bh.GetBlobsRelativeAddress(PICTURE_CONTAINER_NAME);
+            demoPicturesRelativeAddress = bh.GetBlobsRelativeAddress(DEMO_PICTURE_CONTAINER_NAME);
+        }
+
         protected IList<PictureSize> SupportedSizes; 
         public PictureService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
@@ -31,12 +41,12 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 
         public static string GetPicturesRelativeAddress()
         {
-            return (new BlobHelper()).GetBlobsRelativeAddress(PICTURE_CONTAINER_NAME);
+            return picturesRelativeAddress;
         }
 
         public static string GeDemoPicturesRelativeAddress()
         {
-            return (new BlobHelper()).GetBlobsRelativeAddress(DEMO_PICTURE_CONTAINER_NAME);
+            return demoPicturesRelativeAddress;
         }
 
         private const string PICTURE_CONTAINER_NAME = "pictureconteiner";

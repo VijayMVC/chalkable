@@ -89,6 +89,21 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleDelete(ids.Select(x => new StandardSubject {Id = x}).ToList());
         }
+
+        public IList<StandardSubject> GetStandardSubjectByClass(int classId)
+        {
+            var dbQuery = new DbQuery();
+            var classT = typeof (Class);
+            dbQuery.Sql.AppendFormat(@"select  distinct [{0}].* from [{0}]
+                                       join [{1}] on [{1}].StandardSubjectRef = [{0}].Id
+                                       join [{2}] on [{2}].StandardRef = Standard.Id or  [{2}].StandardRef = [{1}].ParentStandardRef
+                                       join [{3}] on [{3}].Id = [{2}].ClassRef or [{3}].CourseRef = [{2}].ClassRef "
+                                     , typeof (StandardSubject).Name, typeof (Standard).Name, typeof (ClassStandard).Name,
+                                     classT.Name);
+            var conds = new AndQueryCondition {{Class.ID_FIELD, classId}};
+            conds.BuildSqlWhere(dbQuery, classT.Name);
+            return ReadMany<StandardSubject>(dbQuery);
+        } 
     }
 
     public class ClassStandardDataAccess: DataAccessBase<ClassStandard, int>

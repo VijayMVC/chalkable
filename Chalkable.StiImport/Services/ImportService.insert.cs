@@ -600,7 +600,8 @@ namespace Chalkable.StiImport.Services
                 {
                     Id = x.TimeSlotID,
                     Order = x.Sequence,
-                    SchoolYearRef = x.AcadSessionID
+                    SchoolYearRef = x.AcadSessionID,
+                    Name = x.Name
                 })
                 .ToList();
             ServiceLocatorSchool.PeriodService.AddPeriods(periods);

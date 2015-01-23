@@ -21,7 +21,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// <summary>
         /// Sum of activity points the student earned for the grading period
         /// </summary>
-        public decimal TotalPointsEarned { get; set; }
+        public decimal? TotalPointsEarned { get; set; }
 
         /// <summary>
         /// Sum of the activity maxiumum possible points for activities the student recieved grades for during the grading period

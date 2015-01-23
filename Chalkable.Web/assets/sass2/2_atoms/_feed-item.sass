@@ -17,11 +17,11 @@
     &::before
       content: ' '
       position: absolute
-      left: 15px
-      top: 24px
-      height: 32px
-      width: 32px
-      +icons-sprite(todo)
+      left: 18px
+      top: 27px
+      height: 24px
+      width: 24px
+      +icons-24-sprite(todo)
       opacity: .75
 
     &:hover::before
@@ -31,7 +31,7 @@
       display: none
 
       &::before
-        +icons-sprite(done)
+        +icons-24-sprite(done)
 
   &.complete
     .star
@@ -82,19 +82,19 @@
     &::before
       content: ' '
       position: absolute
-      right: -8px
-      top: 24px
-      height: 32px
-      width: 32px
+      right: -5px
+      top: 27px
+      height: 24px
+      width: 24px
 
   .attachment::before
-    +icons-sprite(attachment)
+    +icons-24-sprite(attachment)
 
   .grades::before
-    +icons-sprite(grades)
+    +icons-24-sprite(chart)
 
   .visible::before
-    +icons-sprite(invisible)
+    +icons-24-sprite(invisible)
 
   &.no-attachments .attachment, &.no-attachment-icon .attachment, &.non-gradable .grades, &.visible-for-students .visible
     padding-right: 0

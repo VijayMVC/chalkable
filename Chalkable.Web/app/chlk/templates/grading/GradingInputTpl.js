@@ -12,6 +12,8 @@ NAMESPACE('chlk.templates.grading', function () {
 
             Boolean, 'ableExemptStudentScore',
 
+            Boolean, 'notAblePutScore',
+
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 

@@ -56,7 +56,7 @@
       position: absolute
       top: 8px
       left: 17px
-      opacity: .75
+      opacity: .5
 
       IMG
         position: absolute
@@ -68,10 +68,11 @@
         //filter: invert(100%)
 
     &:hover
-      color: #7b7974
+      color: #56554f
+      +single-transition(color, .15s, ease-in)
       .class-img-wrapper
         opacity: 1
-
+        +single-transition(opacity, .15s, ease-in)
 
     &.pressed
       &, &:hover
@@ -82,8 +83,8 @@
         .class-img-wrapper
           opacity: 1
 
-        IMG
-          //-webkit-filter: invert(0%)
-          //filter: invert(0%)
+        img
+          top: auto
+          bottom: 0
 
 

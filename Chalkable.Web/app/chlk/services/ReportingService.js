@@ -114,7 +114,8 @@ NAMESPACE('chlk.services', function () {
                 printFromHomePortal: printFromHomePortal_,
                 classComment: classComment,
                 studentIds: studentIds,
-                comments: commentsList
+                studentComments: commentsList
+                //comments:
             });
         },
 
@@ -145,7 +146,7 @@ NAMESPACE('chlk.services', function () {
                 displayClassAverage: displayClassAverage_,
                 displayPeriodAttendance: displayPeriodAttendance_,
                 displaySignatureLine: displaySignatureLine_,
-                displayStudentComments: displayStudentComments_,
+                displayStudentComment: displayStudentComments_,
                 displayStudentMailingAddress: displayStudentMailingAddress_,
                 displayTotalPoints: displayTotalPoints_,
                 includePicture: includePicture_,

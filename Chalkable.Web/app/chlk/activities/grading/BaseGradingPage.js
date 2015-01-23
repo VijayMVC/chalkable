@@ -69,6 +69,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 tpl.assign(model);
                                 container.html(tpl.render());
                                 container.find('.chart-container').trigger(chlk.controls.ChartEvents.CHART_UPDATE.valueOf());
+                                container.addClass('processed');
                             }
                         })
                     },

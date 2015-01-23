@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -13,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<AttendanceReason> reasons);
         void Delete(int id);
         void Delete(IList<int> ids);
-        IList<AttendanceReason> List();
+        IList<AttendanceReason> List(bool onlyWithLevel = true);
         AttendanceReason Get(int id);
         void AddAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons);
         void EditAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons);
@@ -45,12 +46,15 @@ namespace Chalkable.BusinessLogic.Services.School
             Delete(new List<int>{id});
         }
 
-        public IList<AttendanceReason> List()
+        public IList<AttendanceReason> List(bool onlyWithLevel = true)
         {
             using (var uow = Read())
             {
                 var da = new AttendanceReasonDataAccess(uow);
-                return da.GetAll();
+                var res = da.GetAll();
+                if (onlyWithLevel)
+                    res = res.Where(x => x.AttendanceLevelReasons.Count > 0).ToList();
+                return res;
             }
         }
 

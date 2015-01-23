@@ -27,6 +27,8 @@ NAMESPACE('chlk.controls', function () {
 
             [[Object]],
             VOID, function updateControls(target){
+
+                if (!target) return;
                 var index = target.data('page');
 
                 if (index == this.getStartPage()){

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
@@ -110,7 +108,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
             ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
             ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-            ViewData[ViewConstants.DEMO_PREFIX_KEY] = Context.UserId.ToString();
+            ViewData[ViewConstants.DISTRICT_ID] = Context.UserId.ToString();
             ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
 
             if (Context.DistrictId.HasValue)
@@ -138,16 +136,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult Teacher()
         {
-            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            PrepareTeacherJsonData(mp);
-            return View();
-        }
-
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
-        public ActionResult Admin()
-        {
-            PrepareAdminJsonData();
-            
+            PrepareTeacherJsonData();
             return View();
         }
 
@@ -158,15 +147,12 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
-        private void PrepareCommonViewData(MarkingPeriod markingPeriod = null)
+        private void PrepareCommonViewData()
         {
             //TODO: render data for demo school 
             if (Context.DistrictId.HasValue && Context.SchoolLocalId.HasValue)
             {
                 var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
-                var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value, Context.SchoolLocalId.Value);
-                school.District = district;
-                PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
                 if (Context.DeveloperId != null)
                     ViewData[ViewConstants.IS_DEV] = true;
                 if (district.IsDemoDistrict)
@@ -176,7 +162,7 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-                    ViewData[ViewConstants.DEMO_PREFIX_KEY] = district.Id.ToString();
+                    ViewData[ViewConstants.DISTRICT_ID] = district.Id.ToString();
                     ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
                 }
                 ViewData[ViewConstants.LAST_SYNC_DATE] = district.LastSync.HasValue 
@@ -201,86 +187,52 @@ namespace Chalkable.Web.Controllers
             //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
 
             ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = SchoolLocator.NotificationService.GetUnshownNotifications().Count;
+
+            var mps = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId);
+            MarkingPeriod markingPeriod = mps.Where(x=>x.StartDate <= Context.NowSchoolYearTime).OrderBy(x=>x.StartDate).LastOrDefault();
             if (markingPeriod != null && SchoolLocator.Context.SchoolLocalId.HasValue)
             {
                 PrepareJsonData(MarkingPeriodViewData.Create(markingPeriod), ViewConstants.MARKING_PERIOD);
                 var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolYearTime.Date);
                 if (gradingPeriod != null)
                     PrepareJsonData(ShortGradingPeriodViewData.Create(gradingPeriod), ViewConstants.GRADING_PERIOD);
-
-                var nextmp = SchoolLocator.MarkingPeriodService.GetNextMarkingPeriodInYear(markingPeriod.Id);
-                if (nextmp != null)
-                    PrepareJsonData(MarkingPeriodViewData.Create(nextmp), ViewConstants.NEXT_MARKING_PERIOD);
             }
             PrepareJsonData(AlphaGradeViewData.Create(SchoolLocator.AlphaGradeService.GetAlphaGrades()), ViewConstants.ALPHA_GRADES);
             PrepareJsonData(AlternateScoreViewData.Create(SchoolLocator.AlternateScoreService.GetAlternateScores()), ViewConstants.ALTERNATE_SCORES);
-            PrepareJsonData(MarkingPeriodViewData.Create(SchoolLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId)), ViewConstants.MARKING_PERIODS);
+            PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
         }
         
 
         private void PrepareStudentJsonData()
         {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            PrepareCommonViewData();
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonInfoViewData.Create(person);
-            personView.DisplayName = person.FullName();
-
-            if (!person.FirstLoginDate.HasValue)
-            {
-                SchoolLocator.PersonService.ProcessPersonFirstLogin(person.Id);
-            }
-            if (!person.Active)
-            {
-                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
-                var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
-                personView.Email = personEmail == null ? null : personEmail.EmailAddress;
-            }
+            ProcessFirstLogin(person);
+            ProcessActive(person, personView);
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
             
             //todo: move this logic to getClass stored procedure later
             var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
             var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod().Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
-            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-           
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
-            PrepareCommonViewData(mp);
+            
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.DistrictId.ToString(), "", person.FirstLoginDate, Context.DistrictTimeZone, ip);
         }           
 
-        private void PrepareAdminJsonData()
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod();
-            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
-            var personView = PersonViewData.Create(person);
-            PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
-            var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
-            PrepareJsonData(GradeLevelViewData.Create(gradeLevels), ViewConstants.GRADE_LEVELS);
-            PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
-            PrepareCommonViewData(mp);
-            var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyAdmin(person.Email, person.FirstName, person.LastName, Context.DistrictId.ToString(), person.FirstLoginDate, Context.DistrictTimeZone, "Admin", ip);
-        }
-
-        private void PrepareTeacherJsonData(MarkingPeriod mp)
+        private void PrepareTeacherJsonData()
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-
-            PrepareCommonViewData(mp);
+            PrepareCommonViewData();
             var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var personView = PersonInfoViewData.Create(person);
-            if (!person.FirstLoginDate.HasValue)
-            {
-                SchoolLocator.PersonService.ProcessPersonFirstLogin(person.Id);
-            }
-            if (!person.Active)
-            {
-                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
-                var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
-                personView.Email = personEmail == null ? null : personEmail.EmailAddress;
-            }
+            ProcessFirstLogin(person);
+            ProcessActive(person, personView);
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
 
@@ -300,6 +252,22 @@ namespace Chalkable.Web.Controllers
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), 
                 gradeLevels, classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip);
+        }
+
+        private void ProcessFirstLogin(PersonDetails person)
+        {
+            if (!person.FirstLoginDate.HasValue)
+                SchoolLocator.PersonService.ProcessPersonFirstLogin(person.Id);
+        }
+
+        private void ProcessActive(PersonDetails person, PersonInfoViewData personView)
+        {
+            if (!person.Active)
+            {
+                ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
+                var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
+                personView.Email = personEmail == null ? null : personEmail.EmailAddress;
+            }
         }
         
         private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailsList)
