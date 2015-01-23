@@ -18,7 +18,7 @@ NAMESPACE('chlk.templates.student', function(){
                 var studentName = this.getStudentExplorer().getFirstName(), res = '';
                 if(index == 0)
                     res = studentName + '\'s weakest class is ';
-                res += item.getClazz().getName() + (item.getAvg() === null ? '' : ' - Avg. ' + item.getAvg());
+                res += item.getClazz().getName() + (item.getAvg() === null ? '' : ' - Avg. ' + Math.round(item.getAvg()));
                 return res;
             },
 
