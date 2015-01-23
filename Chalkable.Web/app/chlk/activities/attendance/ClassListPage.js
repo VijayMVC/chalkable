@@ -40,19 +40,26 @@ NAMESPACE('chlk.activities.attendance', function () {
                 tpl.renderTo(container);
 
                 var comboList = container.find('.combo-list');
+                var row = container.parent('.row');
 
                 if (comboList.exists() && comboList.height() + comboList.offset().top > jQuery(document).height() - jQuery('footer').height()){
-                     comboList.removeClass('top');
-                     comboList.addClass('bottom');
-                     comboList.setCss('top', (-comboList.height() + 15)+ 'px');
+                    comboList.removeClass('top');
+                    comboList.addClass('bottom');
+                    comboList.setCss('top', (-comboList.height() + 15)+ 'px');
+                    row.addClass('top-list');
+                    if(!comboList.find('.selected').exists())
+                        comboList.find('.option:last').addClass('selected');
                 }
                 else {
-                     comboList.removeClass('bottom');
-                     comboList.addClass('top');
-                     comboList.setCss('top', '65px');
+                    comboList.removeClass('bottom');
+                    comboList.addClass('top');
+                    comboList.setCss('top', '65px');
+                    row.removeClass('top-list');
+                    if(!comboList.find('.selected').exists())
+                        comboList.find('.option:first').addClass('selected');
                 }
 
-                var row = container.parent('.row');
+
                 row.find('.student-attendance-container').removeClass('active');
                 if(row.hasClass('selected') && !row.hasClass('reason-changed')){
                     this.showDropDown();
@@ -134,13 +141,22 @@ NAMESPACE('chlk.activities.attendance', function () {
                             row.find('.student-attendance-container').addClass('active');
                         }
                         var input = row.find('input.combo-input');
+                        if(row.find('.combo-list').exists())
+                            this.scrollToOption(null, row.find('.combo-list-container'));
                         if(input.exists())
                             input.trigger('focus');
                         else
                             gridFocus.trigger('focus');
-                    }, 1);
+                    }.bind(this), 1);
 
                 }
+            },
+
+            function scrollToOption(option_, list_){
+                var list = list_ || (option_ ? option_.parent('.combo-list-container') : this.dom.find('.combo-list-container'));
+                var top = (option_ || list.find('.selected')).offset().top - list.find('.option:eq(0)').offset().top - list.height()/2;
+                if(top > 0)
+                    list.scrollTop(top);
             },
 
             [ria.mvc.DomEventBind('keydown', '.combo-input')],
@@ -154,6 +170,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                         if(next.exists()){
                             selected.removeClass('selected');
                             next.addClass('selected');
+                            this.scrollToOption(next);
                         }else{
                             this.dom.find('.chlk-grid').trigger(this._gridEvents.SELECT_NEXT_ROW.valueOf());
                         }; break;
@@ -162,6 +179,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                         if(prev.exists()){
                             selected.removeClass('selected');
                             prev.addClass('selected');
+                            this.scrollToOption(prev);
                         }else{
                             this.dom.find('.chlk-grid').trigger(this._gridEvents.SELECT_PREV_ROW.valueOf());
                         }; break;
