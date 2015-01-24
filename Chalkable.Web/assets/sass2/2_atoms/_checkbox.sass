@@ -1,0 +1,73 @@
+.labeled-checkbox
+  display: inline-block
+  position: relative
+  padding: 0 5px
+  margin-bottom: 2px
+  vertical-align: top
+  height: 24px
+  min-width: 100px
+  text-align: left
+
+  label
+    cursor: pointer
+    background: #DEDEDE
+    color: #444
+    padding-left: 24px
+
+  &.with-input
+    height: 27px
+    width: 265px
+    margin-right: 0
+    margin-bottom: 10px
+
+    &:nth-child(2n)
+      margin-right: 7px
+
+    .checkbox
+      margin: 7px 3px
+
+  label, .label-input
+    overflow: hidden
+    text-overflow: ellipsis
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    border-radius: 12px
+    line-height: 24px
+    display: inline-block
+    text-align: left
+    font-size: 13px
+    white-space: nowrap
+
+  .label-input
+    padding-left: 29px
+    width: 238px
+
+  .checkbox
+    position: relative
+    z-index: 1
+    margin: 6px 0
+    width: auto
+    &:checked
+      & + label
+        background: #41b768
+        color: white
+        line-height: 23px
+        padding-left: 23px
+        text-shadow: none
+
+      & + .label-input
+        border: 1px solid #888888
+        color: #000
+
+    &:disabled
+      & + label
+        background: #DEDEDE
+        box-shadow: none
+        border: 0
+        color: #444
+        opacity: 0.5
+  
+
