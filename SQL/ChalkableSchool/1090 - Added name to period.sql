@@ -7,6 +7,16 @@ GO
 Alter Table Period
 	Alter Column Name nvarchar(20) not null
 GO
+DROP TYPE [dbo].[TPeriod]
+GO
+CREATE TYPE [dbo].[TPeriod] AS TABLE(
+	[Id] [int] NOT NULL,
+	[SchoolYearRef] [int] NOT NULL,
+	[Order] [int] NOT NULL,
+	Name nvarchar(20) not null
+)
+GO
+
 
 Alter Procedure [dbo].[spGetSchedule]
 	@schoolYearId int,
