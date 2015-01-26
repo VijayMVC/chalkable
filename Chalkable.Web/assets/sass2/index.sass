@@ -2,6 +2,8 @@
 @import "compass/css3"
 @include global-reset
 
+@import "0_ephir/shake"
+
 // color palette
 
 $mainText: #7b7974
@@ -573,6 +575,11 @@ footer
   +MQ(M)
     .loginContainer
       top: 50px
+
++shake-keyframes('shake-horizontal', 40px)
+
+.shaking
+  +animation(shake-horizontal .25s .1s)
 
 // animations
 

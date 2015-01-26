@@ -6,10 +6,10 @@ $(document).ready(function () {
         var password = fieldPassword.val();
         if (!fieldPassword.hasClass('shaking') && password != ''){
             fieldPassword.addClass('shaking');
-            fieldPassword.effect('shake', options, 250, function () {
+            setTimeout(function () {
                 fieldPassword.focus();
                 fieldPassword.removeClass('shaking');
-            });
+            }, 500);
         }
 
     }
