@@ -43,6 +43,27 @@
     .current-month-container
       padding: 0 50px
 
+    .current-month
+      display: inline-block
+      min-width: 100px
+
+  .prev-month, .next-month
+    display: inline-block
+    width: 32px
+    height: 32px
+    opacity: 0.75
+    font-size: 0
+    vertical-align: middle
+
+    &:hover
+      opacity: 1
+
+  .prev-month
+    +icons-32-sprite(arrow-left)
+
+  .next-month
+    +icons-32-sprite(arrow-right)
+
   .day-names
     background: #f7f7f5
     color: #2b2a28
