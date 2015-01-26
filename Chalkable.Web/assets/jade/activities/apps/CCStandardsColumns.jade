@@ -1,0 +1,25 @@
+standards = self.getStandards() || []
+categories = self.getCategories() || []
+if categories.length > 0
+    td.name-td
+        .standards-names.column
+            each category in categories
+                +ActionLink('apps', 'showStandardCategories', category.getId(), category.getName())(
+                ).standard-name.column-cell
+                    .name=category.getName()
+                    .right-triangle
+    td
+        .standards-description
+else
+    td.name-td
+        .standards-names.column
+            each standard in standards
+                div(
+                    data-id=standard.getStandardCode(),
+                    data-description=standard.getDescription()
+                ).standard-name.column-cell
+                    .name=standard.getStandardCode()
+                    .right-triangle
+    td
+        .standards-description
+
