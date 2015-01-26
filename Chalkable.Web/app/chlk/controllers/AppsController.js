@@ -477,15 +477,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean]],
         function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned){
-            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
-            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    if(data.getTotalPersonsCount() > 0)
-                        return this.BackgroundNavigate('apps', 'viewApp', [appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, appId, isBanned]);
-                    return this.BackgroundNavigate('appmarket', 'details', [appId]);
-                }, this);
-            return null;
+            if(viewUrl)
+                return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned);
+            return this.Redirect('appmarket', 'details', [appId]);
         },
 
         [chlk.controllers.StudyCenterEnabled()],
