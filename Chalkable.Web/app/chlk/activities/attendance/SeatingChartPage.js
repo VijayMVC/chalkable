@@ -337,6 +337,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                         dataNode.setData('old-reason-id', null);
                     }
                 });
+                setTimeout(function(){
+                    if(!this.isAbleRePost()){
+                        this.dom.find('#submit-attendance-button, #all-present-link').remove();
+                    }
+                }.bind(this));
             },
 
             function recalculateChartInfo(){
@@ -400,7 +405,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 if(this.isAbleRePost()){
                     this.dom.find('#submit-attendance-button').setHTML('POST IT');
                 }else{
-                    this.dom.find('.save-attendances-buttons').remove();
+                    this.dom.find('#submit-attendance-button, #all-present-link').remove();
                 }
             },
 

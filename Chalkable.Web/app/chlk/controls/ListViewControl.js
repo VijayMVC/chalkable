@@ -210,12 +210,14 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function loadAllButtonClick(node, event){
                 var grid = this.getGrid();
-                var form = grid.parent('form');
-                var configs = this.getConfigs();
-                configs.currentStart = 0;
-                form.find('[name=count]').setValue(configs.totalCount);
-                this._loadAllButtonClicked = true;
-                this.scrollAction_(grid, true);
+                if(!grid.hasClass('scroll-freezed')){
+                    var form = grid.parent('form');
+                    var configs = this.getConfigs();
+                    configs.currentStart = 0;
+                    form.find('[name=count]').setValue(configs.totalCount);
+                    this._loadAllButtonClicked = true;
+                    this.scrollAction_(grid, true);
+                }
             },
 
             VOID, function scrollToBottom_(){
