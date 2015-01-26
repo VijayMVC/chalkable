@@ -43,23 +43,32 @@ namespace Chalkable.Data.Master.DataAccess
             var table = typeof (User).Name;
             if (users.Count > 0)
             {
-                var builder = new StringBuilder();
-                IDictionary<string, object> ps = new Dictionary<string, object>();
-                int counter = 0;
-                foreach (var user in users)
+                if (users.Count * 2 > MAX_PARAMETER_NUMBER)
                 {
-                    var pSisUserName = "sisUserName" + counter;
-                    var pFullName = "fullName" + counter;
-                    ps.Add(pSisUserName, user.SisUserName);
-                    ps.Add(pFullName, user.FullName);
-                    counter++;
-                    builder.AppendFormat("Update [{0}] set [{1}]=@{2}, [{3}]=@{4} where [{5}]='{6}' and {7}={8} ",
-                                         table, User.SIS_USER_NAME_FIELD, pSisUserName
-                                         , User.FULL_NAME_FIELD, pFullName, User.DISTRICT_REF_FIELD,
-                                         user.DistrictRef, User.SIS_USER_ID_FIELD, user.SisUserId);
+                    var list1 = users.Take(users.Count / 2).ToList();
+                    UpdateUsersForImport(list1);
+                    UpdateUsersForImport(users.Skip(list1.Count).ToList());
                 }
+                else
+                {
+                    var builder = new StringBuilder();
+                    IDictionary<string, object> ps = new Dictionary<string, object>();
+                    int counter = 0;
+                    foreach (var user in users)
+                    {
+                        var pSisUserName = "sisUserName" + counter;
+                        var pFullName = "fullName" + counter;
+                        ps.Add(pSisUserName, user.SisUserName);
+                        ps.Add(pFullName, user.FullName);
+                        counter++;
+                        builder.AppendFormat("Update [{0}] set [{1}]=@{2}, [{3}]=@{4} where [{5}]='{6}' and {7}={8} ",
+                                             table, User.SIS_USER_NAME_FIELD, pSisUserName
+                                             , User.FULL_NAME_FIELD, pFullName, User.DISTRICT_REF_FIELD,
+                                             user.DistrictRef, User.SIS_USER_ID_FIELD, user.SisUserId);
+                    }
                 
-                ExecuteNonQueryParametrized(builder.ToString(), ps, 10+users.Count);
+                    ExecuteNonQueryParametrized(builder.ToString(), ps, 10+users.Count);    
+                }
             }
             
         }

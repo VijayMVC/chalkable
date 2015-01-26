@@ -45,8 +45,6 @@ namespace Chalkable.StiImport.Services
             UpdateStudent();
             Log.LogInfo("update StudentSchool");
             UpdateStudentSchool();
-            Log.LogInfo("update StaffSchool");
-            UpdateStaffSchool();
             Log.LogInfo("update persons emails");
             UpdatePersonsEmails();
             Log.LogInfo("update phones");
@@ -253,18 +251,6 @@ namespace Chalkable.StiImport.Services
                 SpEdStatus = x.SpEdStatusID.HasValue ? statuses[x.SpEdStatusID.Value].Name : ""
             }).ToList();
             ServiceLocatorSchool.StudentService.EditStudents(students);
-        }
-
-        private void UpdateStaffSchool()
-        {
-            if (context.GetSyncResult<StaffSchool>().Updated == null)
-                return;
-            var staffSchool = context.GetSyncResult<StaffSchool>().Updated.Select(x => new Data.School.Model.StaffSchool
-            {
-                SchoolRef = x.SchoolID,
-                StaffRef = x.StaffID
-            }).ToList();
-            ServiceLocatorSchool.StaffService.EditStaffSchools(staffSchool);
         }
 
         private void UpdateStudentSchool()

@@ -33,16 +33,15 @@ div(
             .combo-list.no-row-click.popup-bubble.top
                 input.combo-input.x-zero
                 .connector
-                firstSelected = true
                 .combo-list-container
-                    div(class=(firstSelected ? "selected " : "") + name.toLowerCase()).option.item
+                    div(class=name.toLowerCase()).option.item
                         .student-seating-type
                         .text=name
                     each reasonItem in reasons
                         div(
                             data-id=reasonItem.getId().valueOf(),
                             data-level=reasonItem.getLevel(value),
-                            class=name.toLowerCase()
+                            class=name.toLowerCase() + ((reason && reason.getId() == reasonItem.getId()) ? ' selected' :'')
                         ).option.item
                             .student-seating-type
                             .text(

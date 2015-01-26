@@ -23,7 +23,7 @@ mixin ActionLinkOrNull_(isActionLink, date, classId, periodOrder)
 
                         each ann in calendarDayItem
                             -var period = ann.getPeriod()
-                            if period && period.getStartTime() && period.getClassName()
+                            if period && period.getClassName()
                                 +ActionLinkOrNull_(self.isMainCalendar(), calendarDayItem.day.getDate().format('mm-dd-yy'), period.getClassId(), period.getOrder())(
                                         class = period.isCurrentSection() ? 'current-section' : null).period-item.day
                                     .course-icon: +ClassImg(period, 45, 80)
