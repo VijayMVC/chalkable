@@ -41,7 +41,12 @@ NAMESPACE('chlk.controllers', function (){
                         this.view.setNewNotificationCount(data2);
                     }, this);
 
-                return this.ShadeView(chlk.activities.notification.ListNewPopup, result);
+                var res = new chlk.models.notification.NotificationList();
+                res.setNotifications(null);
+                res.setTarget(new ria.dom.Dom('.notifications-link'));
+
+                return this.ShadeView(chlk.activities.notification.ListNewPopup, ria.async.Future.$fromData(res))
+                    .ChainUpdateView(result);
             },
 
             [[Number, Number, Boolean]],

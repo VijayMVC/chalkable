@@ -82,13 +82,13 @@ NAMESPACE('chlk.activities.lib', function () {
             OVERRIDE, VOID, function onRefresh_(model) {
                 BASE(model);
                 var target = model.getTarget();
+                Assert(target, 'There is no target for Popup activity');
                 var offset = target.offset();
                 if(offset){
                     this._popupHolder = model.getContainer() || this._popupHolder;
-                this._popupClass && this._popupHolder.addClass(this._popupClass);
-                this._popupHolder.removeClass(HIDDEN_CLASS);
-                if(!target)
-                    throw new ria.mvc.MvcException('There is no target for Popup activity');
+                    this._popupClass && this._popupHolder.addClass(this._popupClass);
+                    this._popupHolder.removeClass(HIDDEN_CLASS);
+
                     var container = this.getContainer(), res;
                     if(this._isHorizontal){
                         this._popupHolder.setCss('top', offset.top - 10);
