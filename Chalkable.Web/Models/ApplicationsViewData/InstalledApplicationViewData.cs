@@ -30,6 +30,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
     public class InstalledApplicationViewData : BaseApplicationViewData
     {
         public bool HasMyApp { get; set; }
+        public bool Installed { get; set; }
         public IList<ApplicationInstallViewData> ApplicationInstalls { get; set; }
 
         protected InstalledApplicationViewData(Application application) : base(application)
@@ -40,18 +41,21 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                                                          IList<Application> applications, IDictionary<Guid, bool> hasMyAppsDic = null)
         {
             var res = new List<InstalledApplicationViewData>();
-            var dicApp = installedApp.GroupBy(x => x.ApplicationRef).ToDictionary(x => x.Key, x => x.ToList());
-            foreach (var appKey in dicApp.Keys)
+            //var dicApp = installedApp.GroupBy(x => x.ApplicationRef).ToDictionary(x => x.Key, x => x.ToList());
+            foreach (var app in applications)
             {
-                var appInstalls = dicApp[appKey];
-                var app = applications.FirstOrDefault(x => x.Id == appKey);
-                if (app != null)
-                    res.Add(new InstalledApplicationViewData(app)
-                        {
-                            ApplicationInstalls = ApplicationInstallViewData.Create(appInstalls, personId),
-                            HasMyApp = hasMyAppsDic != null && hasMyAppsDic.ContainsKey(appKey) && hasMyAppsDic[appKey],
-                            MyAppsUrl = AppTools.BuildAppUrl(app, null, appInstalls.First().Id, AppMode.MyView)
-                        });
+                var item = new InstalledApplicationViewData(app)
+                    {
+                        HasMyApp = hasMyAppsDic != null && hasMyAppsDic.ContainsKey(app.Id) && hasMyAppsDic[app.Id],
+                    };
+                var appInstalls = installedApp.Where(x => x.ApplicationRef == app.Id).ToList();
+                item.ApplicationInstalls = ApplicationInstallViewData.Create(appInstalls, personId);
+                if (appInstalls.Count > 0)
+                {
+                    item.MyAppsUrl = AppTools.BuildAppUrl(app, null, appInstalls.First().Id, AppMode.MyView);
+                    item.Installed = item.ApplicationInstalls.Any(x => personId.HasValue && x.PersonId == personId.Value);    
+                }
+                res.Add(item);
             }
             return res;
         }

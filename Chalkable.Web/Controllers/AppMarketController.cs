@@ -51,7 +51,8 @@ namespace Chalkable.Web.Controllers
             var installedAppsIds = appInstalls.GroupBy(x=>x.ApplicationRef).Select(x => x.Key).Distinct().ToList();
             var applications = MasterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, st, cnt);
             var hasMyAppsDic = applications.ToDictionary(app=> app.Id, app => MasterLocator.ApplicationService.HasMyApps(app));
-            return Json(InstalledApplicationViewData.Create(appInstalls, Context.PersonId.Value, applications, hasMyAppsDic));
+            var res = InstalledApplicationViewData.Create(appInstalls, Context.PersonId.Value, applications, hasMyAppsDic);
+            return Json(res);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
