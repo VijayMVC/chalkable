@@ -46,7 +46,7 @@ namespace Chalkable.Web.Controllers
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var st = start ?? 0;
-            var cnt = count ?? 3;
+            var cnt = count ?? int.MaxValue;
             var appInstalls = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstalls.GroupBy(x=>x.ApplicationRef).Select(x => x.Key).Distinct().ToList();
             var applications = MasterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, st, cnt);
