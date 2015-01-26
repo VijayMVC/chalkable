@@ -162,13 +162,13 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
-                    ViewData[ViewConstants.DISTRICT_ID] = district.Id.ToString();
+                    
                     ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
                 }
                 ViewData[ViewConstants.LAST_SYNC_DATE] = district.LastSync.HasValue 
                     ? district.LastSync.Value.ToString("yyyy/MM/dd hh:mm:ss")
                     : "";
-
+                ViewData[ViewConstants.DISTRICT_ID] = district.Id.ToString();
             }
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
