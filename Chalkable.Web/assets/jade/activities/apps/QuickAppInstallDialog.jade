@@ -26,4 +26,5 @@ app = self.getApp()
                 .install-info
                     .install-btn
                         +Button(type="submit").special-button.blue-button Install App
-        +ActionLinkButton('appmarket', 'quickAppAttach', self.getAnnouncementId(), app.getId().valueOf()).special-button.green-button.open-app-btn.x-hidden Open App
+        if self.getAnnouncementId()
+            +ActionLinkButton('appmarket', 'quickAppAttach', self.getAnnouncementId(), app.getId().valueOf()).special-button.green-button.open-app-btn.x-hidden Open App

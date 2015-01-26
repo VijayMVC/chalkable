@@ -1,19 +1,22 @@
 .lr-toolbar
   position: relative
+
   .first-container
     white-space: nowrap
     overflow: hidden
 
-    .second-container
-      position: relative
-      left: 0
+  .second-container
+    position: relative
+    left: 0
 
-      &:not(.freezed)
-        @include transition-property("all")
-        @include transition-duration("0.5s")
+    .third-container
+      display: table
 
-      .third-container
-        display: table
+  &:not(.no-animation)
+    .second-container:not(.freezed)
+      @include transition-property("all")
+      @include transition-duration("0.5s")
+
 
   .arrow
     position: absolute

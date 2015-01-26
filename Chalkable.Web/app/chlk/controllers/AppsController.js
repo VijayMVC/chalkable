@@ -479,7 +479,13 @@ NAMESPACE('chlk.controllers', function (){
         function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned){
             if(viewUrl)
                 return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned);
-            return this.Redirect('appmarket', 'details', [appId]);
+            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
+            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
+                .attach(this.validateResponse_())
+                .then(function(appTotalPrice){
+                    return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId]);
+                }, this);
+            return null;
         },
 
         [chlk.controllers.StudyCenterEnabled()],
