@@ -22,7 +22,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(studentExplorer){
                     return new chlk.models.student.StudentExplorerViewData(
-                        this.getCurrentRole(), studentExplorer, this.getUserClaims_()
+                        this.getCurrentRole(), studentExplorer, this.getUserClaims_(), 'Study Center'
                     )
                 }, this);
             return this.PushView(chlk.activities.student.StudentExplorerPage, res);

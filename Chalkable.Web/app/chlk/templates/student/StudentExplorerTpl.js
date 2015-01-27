@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.student', function(){
 
     /**@class chlk.templates.student.StudentExplorerTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentExplorerView.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentProfileExplorerView.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentExplorerViewData)],
         'StudentExplorerTpl', EXTENDS(chlk.templates.student.StudentProfileExplorerTpl),[
             [[String]],
