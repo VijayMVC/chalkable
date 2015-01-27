@@ -219,6 +219,7 @@
     <Compile Include="Controllers\StaticContentController.cs" />
     <Compile Include="Controllers\StorageMonitorController.cs" />
     <Compile Include="Controllers\PersonControllers\PersonController.cs" />
+    <Compile Include="Controllers\StudyCenterController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\StaticContentExtenstion.cs" />
     <Compile Include="Extensions\ViewDataExtension.cs" />
@@ -296,6 +297,7 @@
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
+    <Compile Include="Models\PracticeGradeViewData.cs" />
     <Compile Include="Models\ScheduleItemViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />
     <Compile Include="Models\DeveloperViewData.cs" />

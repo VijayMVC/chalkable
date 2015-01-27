@@ -86,6 +86,7 @@
     <Compile Include="DataAccess\InfractionDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\PersonEmailDataAccess.cs" />
+    <Compile Include="DataAccess\PracticeGradeDataAccess.cs" />
     <Compile Include="DataAccess\ScheduleDataAccess.cs" />
     <Compile Include="DataAccess\ScheduledTimeSlotDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Model\PersonEmail.cs" />
     <Compile Include="Model\PersonsForApplicationInstall.cs" />
     <Compile Include="Model\Phone.cs" />
+    <Compile Include="Model\PracticeGrade.cs" />
     <Compile Include="Model\PrivateMessage.cs" />
     <Compile Include="Model\ReportDownload.cs" />
     <Compile Include="Model\ReportMailDelivery.cs" />
