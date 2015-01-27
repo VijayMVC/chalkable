@@ -89,9 +89,11 @@
     <Compile Include="DataAccess\PracticeGradeDataAccess.cs" />
     <Compile Include="DataAccess\ScheduleDataAccess.cs" />
     <Compile Include="DataAccess\ScheduledTimeSlotDataAccess.cs" />
+    <Compile Include="DataAccess\ScheduledTimeSlotVariationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\SchoolOptionDataAccess.cs" />
     <Compile Include="DataAccess\SchoolPersonDataAccess.cs" />
+    <Compile Include="DataAccess\SectionTimeSlotVariationDataAccess.cs" />
     <Compile Include="DataAccess\StaffDataAccess.cs" />
     <Compile Include="DataAccess\StaffSchoolDataAccess.cs" />
     <Compile Include="DataAccess\StandardDataAccess.cs" />
@@ -166,12 +168,14 @@
     <Compile Include="Model\Room.cs" />
     <Compile Include="Model\DayType.cs" />
     <Compile Include="Model\ScheduledTimeSlot.cs" />
+    <Compile Include="Model\ScheduledTimeSlotVariation.cs" />
     <Compile Include="Model\ScheduleItem.cs" />
     <Compile Include="Model\School.cs" />
     <Compile Include="Model\SchoolGradeLevel.cs" />
     <Compile Include="Model\SchoolOption.cs" />
     <Compile Include="Model\SchoolPerson.cs" />
     <Compile Include="Model\SchoolYear.cs" />
+    <Compile Include="Model\SectionTimeSlotVariation.cs" />
     <Compile Include="Model\Staff.cs" />
     <Compile Include="Model\StaffSchool.cs" />
     <Compile Include="Model\Standard.cs" />

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.Common;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -15,13 +13,9 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void FullDelete(int periodId, int classId, int dayTypeId)
+        public void Delete(IList<ClassPeriod> classPeriods)
         {
-            var conds = new AndQueryCondition();
-            conds.Add(ClassPeriod.CLASS_REF_FIELD, classId);
-            conds.Add(ClassPeriod.PERIOD_REF_FIELD, periodId);
-            conds.Add(ClassPeriod.DAY_TYPE_REF_FIELD, dayTypeId);
-            SimpleDelete(conds);
+            SimpleDelete(classPeriods);
         }
 
         public Class CurrentClassForTeacher(int schoolYearId, int personId, DateTime date, int time)

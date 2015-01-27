@@ -29,14 +29,13 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest()
         {
-            var cl = ConnectorLocator.Create("Chalkable", "n8Ad8Rg7Y", "http://208.83.95.80:8285/API/");
+            var cl = ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/Chalkable/api/");
 
-            var items = (cl.SyncConnector.GetDiff(typeof(CalendarDay), null) as SyncResult<CalendarDay>).All;
-
-            var ds = items.Where(x => x.AcadSessionID == 176 && x.Date == new DateTime(2015, 1, 22)).ToList();
-            foreach (var calendarDay in ds)
+            var items = (cl.SyncConnector.GetDiff(typeof(ScheduledTimeSlotVariation), null) as SyncResult<ScheduledTimeSlotVariation>).All;
+            
+            foreach (var calendarDay in items)
             {
-                Debug.WriteLine(calendarDay.BellScheduleID);
+                Debug.WriteLine(calendarDay.Name);
             }
 
         }

@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IClassPeriodService
     {
         void Add(IList<ClassPeriod> classPeriods);
-        void Delete(int periodId, int classId, int dayTypeId);
+        void Delete(IList<ClassPeriod> classPeriods);
         Class CurrentClassForTeacher(int personId, DateTime dateTime);
         IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime from, DateTime to);
     }
@@ -29,14 +29,14 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new ClassPeriodDataAccess(u, Context.SchoolLocalId).Insert(classPeriods));
         }
 
-        public void Delete(int periodId, int classId, int dayTypeId)
+        public void Delete(IList<ClassPeriod> classPeriods)
         {
             if(!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
-                new ClassPeriodDataAccess(uow, Context.SchoolLocalId).FullDelete(periodId, classId, dayTypeId);
+                new ClassPeriodDataAccess(uow, Context.SchoolLocalId).Delete(classPeriods);
                 uow.Commit();
             }
         }

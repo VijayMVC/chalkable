@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -27,12 +24,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.ClassPeriodStorage.Add(classPeriods);
         }
 
-        public void Delete(int periodId, int classId, int dayTypeId)
+        public void Delete(IList<ClassPeriod> classPeriods)
         {
-            if(!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            Storage.ClassPeriodStorage.FullDelete(periodId, classId, dayTypeId);
+            throw new NotImplementedException();
         }
 
         public Class CurrentClassForTeacher(int personId, DateTime dateTime)
