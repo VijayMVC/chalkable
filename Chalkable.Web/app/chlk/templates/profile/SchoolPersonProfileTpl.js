@@ -17,6 +17,9 @@ NAMESPACE('chlk.templates.profile', function(){
                 this._studentControllerName = 'students';
             },
 
+            [ria.templates.ModelPropertyBind],
+            String, 'title',
+
             TUser, function getUser(){
                 return this.getModel().getUser();},
 
