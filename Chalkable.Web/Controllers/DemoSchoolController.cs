@@ -1,30 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
-using Chalkable.Web.Common;
-using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Controllers
 {
     [RequireHttps, TraceControllerFilter]
     public class DemoSchoolController : UserController
     {
-        public ActionResult Index()
-        {
-            var roles = new List<CoreRole>
-            {
-                CoreRoles.ADMIN_GRADE_ROLE,
-                CoreRoles.TEACHER_ROLE,
-                CoreRoles.STUDENT_ROLE
-            };
-            ViewData[ViewConstants.DISTRICT_ID] = Guid.NewGuid().ToString();
-            return View(RoleViewData.Create(roles));
-        }
-
         public ActionResult LogOnIntoDemo(string rolename, string prefix)
         {
             if (string.IsNullOrEmpty(prefix))

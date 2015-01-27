@@ -4,7 +4,7 @@
 
 @{
     var isDeveloperSchool = (ViewData.ContainsKey(ViewConstants.IS_DEV) && (bool)ViewData[ViewConstants.IS_DEV]);
-    var isDemoSchool = ViewData.ContainsKey(ViewConstants.DISTRICT_ID) && !string.IsNullOrEmpty(ViewData[ViewConstants.DISTRICT_ID].ToString());
+    var isDemoSchool = (ViewData.ContainsKey(ViewConstants.IS_DEMO_DISTRICT) && (bool)ViewData[ViewConstants.IS_DEMO_DISTRICT]);
     var demoSchoolPictureDistrictRef = ViewData.GetJsConstantValueOrNull(ViewConstants.DEMO_PICTURE_DISTRICT_REF);
 
 }
@@ -106,17 +106,6 @@
             var isStudent = currentRoleId == CoreRoles.STUDENT_ROLE.Id;
                 
             <div id="demo-footer" class="top">
-                @if (isDeveloper)
-                {
-                    <div id="dev-apps-list" class="left"></div>
-                }
-                else if (!isDeveloperSchool)
-                {
-                    <div class="left">
-                        <button class="blue-button">Sign up</button>
-                    </div>
-                }
-            
                 <div id="roles-buttons">
                     @if (isDeveloperSchool)
                     {

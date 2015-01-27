@@ -2,6 +2,7 @@
 {
     public static class ViewConstants
     {
+        public const string IS_DEMO_DISTRICT = "IsDemoDistrict";
         public const string STUDY_CENTER_ENABLED = "StudyCenterEnabled";
         public const string SCHOOL_OPTIONS="SchoolOptions";
         public const string CLASSES = "Classes";

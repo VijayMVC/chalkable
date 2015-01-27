@@ -384,6 +384,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Views\DemoSchool\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -455,9 +456,6 @@
     <Content Include="Views\Developer\SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\DemoSchool\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Developer\Info.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -490,7 +488,6 @@
     <Content Include="fakeData\creditCardData.json" />
     <Content Include="fakeData\personFunds.json" />
     <Content Include="fakeData\teacherGradingGrid.json" />
-    <Content Include="Views\Shared\_BasicDemoLayout.cshtml" />
     <Content Include="fakeData\seatingChart.json" />
     <Content Include="fakeData\seatingChart1.json" />
     <Content Include="fakeData\seatingChart2.json" />

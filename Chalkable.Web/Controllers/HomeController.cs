@@ -110,7 +110,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
             ViewData[ViewConstants.DISTRICT_ID] = Context.UserId.ToString();
             ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
-
+            ViewData[ViewConstants.IS_DEMO_DISTRICT] = true;
             if (Context.DistrictId.HasValue)
             {
                 var district = DemoDistrictStorage.CreateDemoDistrict(Context.DistrictId.Value);
@@ -164,6 +164,7 @@ namespace Chalkable.Web.Controllers
                     ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
                     
                     ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
+                    ViewData[ViewConstants.IS_DEMO_DISTRICT] = true;
                 }
                 ViewData[ViewConstants.LAST_SYNC_DATE] = district.LastSync.HasValue 
                     ? district.LastSync.Value.ToString("yyyy/MM/dd hh:mm:ss")
