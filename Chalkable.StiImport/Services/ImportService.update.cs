@@ -17,6 +17,7 @@ using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
 using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
+using ScheduledTimeSlotVariation = Chalkable.StiConnector.SyncModel.ScheduledTimeSlotVariation;
 using School = Chalkable.StiConnector.SyncModel.School;
 using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
 using Staff = Chalkable.StiConnector.SyncModel.Staff;
@@ -85,8 +86,10 @@ namespace Chalkable.StiImport.Services
             UpdatePeriods();
             Log.LogInfo("update scheduled time slots");
             UpdateScheduledTimeSlots();
-            Log.LogInfo("update class periods");
-            UpdateClassPeriods();
+            
+            Log.LogInfo("update scheduled time slot variations");
+            UpdateScheduledTimeSlotVariations();
+
             Log.LogInfo("update class persons");
             UpdateClassPersons();
             Log.LogInfo("update attendance reasons");
@@ -584,9 +587,22 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.ScheduledTimeSlotService.Edit(allSts);
         }
 
-        private void UpdateClassPeriods()
+        private void UpdateScheduledTimeSlotVariations()
         {
-            //TODO: no way to update. delete or insert only
+            if (context.GetSyncResult<ScheduledTimeSlotVariation>().Updated == null)
+                return;
+            var scheduledTimeSlotVariations = context.GetSyncResult<ScheduledTimeSlotVariation>().All
+                .Select(x => new Data.School.Model.ScheduledTimeSlotVariation
+                {
+                    Id = x.TimeSlotVariationId,
+                    BellScheduleRef = x.BellScheduleId,
+                    PeriodRef = x.TimeSlotId,
+                    Name = x.Name,
+                    Description = x.Description,
+                    StartTime = x.StartTime,
+                    EndTime = x.EndTime
+                }).ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.EditScheduledTimeSlotVariations(scheduledTimeSlotVariations);
         }
         
         private void UpdateClassPersons()

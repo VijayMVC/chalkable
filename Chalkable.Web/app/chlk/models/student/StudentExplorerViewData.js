@@ -20,9 +20,10 @@ NAMESPACE('chlk.models.student', function () {
                 chlk.models.common.Role,
                 chlk.models.student.StudentExplorer,
                 ArrayOf(chlk.models.people.Claim),
+                String
             ]],
-            function $(role, studentExplorer_, claims_){
-                BASE(role, studentExplorer_, claims_);
+            function $(role, studentExplorer_, claims_, title_){
+                BASE(role, studentExplorer_, claims_, title_);
             }
         ]);
 });

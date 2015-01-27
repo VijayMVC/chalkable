@@ -26,6 +26,8 @@ using GradingScaleRange = Chalkable.StiConnector.SyncModel.GradingScaleRange;
 using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using ScheduledTimeSlot = Chalkable.Data.School.Model.ScheduledTimeSlot;
+using ScheduledTimeSlotVariation = Chalkable.StiConnector.SyncModel.ScheduledTimeSlotVariation;
+using SectionTimeSlotVariation = Chalkable.StiConnector.SyncModel.SectionTimeSlotVariation;
 using Staff = Chalkable.StiConnector.SyncModel.Staff;
 using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
 using Student = Chalkable.StiConnector.SyncModel.Student;
@@ -99,6 +101,12 @@ namespace Chalkable.StiImport.Services
             InsertScheduledTimeSlots();
             Log.LogInfo("insert class periods");
             InsertClassPeriods();
+
+            Log.LogInfo("insert scheduled time slot variations");
+            InsertScheduledTimeSlotVariations();
+            Log.LogInfo("insert section time slot variations");
+            InsertSectionTimeSlotVariation();
+
             Log.LogInfo("insert class persons");
             InsertClassPersons();
             Log.LogInfo("insert attendance reasons");
@@ -651,6 +659,34 @@ namespace Chalkable.StiImport.Services
                     PeriodRef = x.TimeSlotID,
                 }).ToList();
             ServiceLocatorSchool.ClassPeriodService.Add(classPeriods);
+        }
+
+        private void InsertScheduledTimeSlotVariations()
+        {
+            var scheduledTimeSlotVariations = context.GetSyncResult<ScheduledTimeSlotVariation>().All
+                .Select(x=>new Data.School.Model.ScheduledTimeSlotVariation
+                {
+                    Id = x.TimeSlotVariationId,
+                    BellScheduleRef = x.BellScheduleId,
+                    PeriodRef = x.TimeSlotId,
+                    Name = x.Name,
+                    Description = x.Description,
+                    StartTime = x.StartTime,
+                    EndTime = x.EndTime
+                }).ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.AddScheduledTimeSlotVariations(scheduledTimeSlotVariations);
+        }
+
+        private void InsertSectionTimeSlotVariation()
+        {
+            var sectionTimeSlotVariations = 
+            context.GetSyncResult<SectionTimeSlotVariation>().All
+                .Select(x => new Data.School.Model.SectionTimeSlotVariation
+                {
+                    ClassRef = x.SectionID,
+                    ScheduledTimeSlotVariationRef = x.TimeSlotVariationID
+                }).ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.AddSectionTimeSlotVariations(sectionTimeSlotVariations);
         }
 
         private void InsertClassPersons()

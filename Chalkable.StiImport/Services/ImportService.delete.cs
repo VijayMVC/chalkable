@@ -17,8 +17,10 @@ using Infraction = Chalkable.StiConnector.SyncModel.Infraction;
 using Person = Chalkable.StiConnector.SyncModel.Person;
 using Room = Chalkable.StiConnector.SyncModel.Room;
 using ScheduledTimeSlot = Chalkable.StiConnector.SyncModel.ScheduledTimeSlot;
+using ScheduledTimeSlotVariation = Chalkable.StiConnector.SyncModel.ScheduledTimeSlotVariation;
 using School = Chalkable.StiConnector.SyncModel.School;
 using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
+using SectionTimeSlotVariation = Chalkable.StiConnector.SyncModel.SectionTimeSlotVariation;
 using Staff = Chalkable.StiConnector.SyncModel.Staff;
 using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
@@ -53,6 +55,10 @@ namespace Chalkable.StiImport.Services
             DeleteAttendanceReasons();
             Log.LogInfo("delete class persons");
             DeleteClassPersons();
+            Log.LogInfo("delete section time slot variations");
+            DeleteSectionTimeSlotVariation();
+            Log.LogInfo("delete scheduled time slot variations");
+            DeleteScheduledTimeSlotVariations();
             Log.LogInfo("delete class periods");
             DeleteClassPeriods();
             Log.LogInfo("delete schedule time slot");
@@ -215,16 +221,44 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.ClassService.DeleteStudent(students);
         }
 
+        private void DeleteSectionTimeSlotVariation()
+        {
+            if (context.GetSyncResult<SectionTimeSlotVariation>().Deleted == null)
+                return;
+            var sectionTimeSlotVariations = context.GetSyncResult<SectionTimeSlotVariation>().Deleted
+                                  .Select(x => new Data.School.Model.SectionTimeSlotVariation
+                                  {
+                                      ClassRef = x.SectionID,
+                                      ScheduledTimeSlotVariationRef = x.TimeSlotVariationID
+                                  })
+                                  .ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.DeleteSectionTimeSlotVariations(sectionTimeSlotVariations);
+        }
+
+        private void DeleteScheduledTimeSlotVariations()
+        {
+            if (context.GetSyncResult<ScheduledTimeSlotVariation>().Deleted == null)
+                return;
+            var sectionTimeSlotVariations = context.GetSyncResult<ScheduledTimeSlotVariation>().Deleted
+                                  .Select(x => new Data.School.Model.ScheduledTimeSlotVariation
+                                  {
+                                      Id = x.TimeSlotVariationId
+                                  }).ToList();
+            ServiceLocatorSchool.ScheduledTimeSlotService.DeleteScheduledTimeSlotVariations(sectionTimeSlotVariations);
+        }
+
         private void DeleteClassPeriods()
         {
             if (context.GetSyncResult<ScheduledSection>().Deleted == null)
                 return;
-            var scheduleSections = context.GetSyncResult<ScheduledSection>().Deleted.ToList();
-            foreach (var scheduledSection in scheduleSections)
-            {
-                ServiceLocatorSchool.ClassPeriodService.Delete(scheduledSection.TimeSlotID, scheduledSection.SectionID,
-                                                               scheduledSection.DayTypeID);
-            }
+            var classPeriods = context.GetSyncResult<ScheduledSection>().Deleted
+                .Select(x=> new ClassPeriod
+                {
+                    ClassRef = x.SectionID,
+                    DayTypeRef = x.DayTypeID,
+                    PeriodRef = x.TimeSlotID
+                }).ToList();
+            ServiceLocatorSchool.ClassPeriodService.Delete(classPeriods);
         }
 
         private void DeleteScheduledTimeSlots()
@@ -451,7 +485,7 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Staff>().Deleted == null)
                 return;
-            var staff = context.GetSyncResult<Staff>().Deleted.Select(x => new Data.School.Model.Staff() { Id = x.StaffID }).ToList();
+            var staff = context.GetSyncResult<Staff>().Deleted.Select(x => new Data.School.Model.Staff { Id = x.StaffID }).ToList();
             ServiceLocatorSchool.StaffService.Delete(staff);
         }
         
