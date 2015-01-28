@@ -51,7 +51,9 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.StudyCenterEnabled()],
-        function startPracticeAction(){
+        [[Object]],
+        function startPracticeAction(ccStandardCode){
+            console.info(ccStandardCode);
             return null;
         },
 
