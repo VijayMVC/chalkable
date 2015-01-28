@@ -41,6 +41,19 @@ NAMESPACE('chlk.templates.studyCenter', function(){
                     this.createActionLinkModel_(controller, 'practice', 'Practice', pressedLinkName, [null, userId], !this.isStudyCenterEnabled())
                 ];
                 return res;
+            },
+
+            function getCurrentCode(){
+                var standardId = this.getStandardId();
+                if(standardId && standardId.valueOf())
+                    return this.getStandards().filter(function(item){return item.getStandardId() == standardId})[0].getCommonCoreStandardCode();
+
+                var filerFunction = function(item){
+                    return item.getCommonCoreStandardCode();
+                };
+
+                return this.getStandards().filter(filerFunction).map(filerFunction);
+
             }
         ]);
 });
