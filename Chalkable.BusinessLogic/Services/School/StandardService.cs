@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStandard(int id);
         void DeleteStandards(IList<int> ids);
         Standard GetStandardById(int id);
+        Standard GetStandardByCode(string ccStandardCode);
         IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
@@ -198,6 +199,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 new ClassStandardDataAccess(uow).Delete(classStandards);
                 uow.Commit();
             } 
+        }
+
+
+        public Standard GetStandardByCode(string ccStandardCode)
+        {
+            return DoRead(uow => new StandardDataAccess(uow).GetStandardByCode(ccStandardCode));
         }
     }
 }
