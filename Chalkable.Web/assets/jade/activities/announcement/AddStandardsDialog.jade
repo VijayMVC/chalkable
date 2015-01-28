@@ -10,7 +10,7 @@
                     .standards-names.column
                         each subject in standardSubjects
                             +ActionLink('announcement', 'showStandardsByCategory', self.getClassId(), subject.getId(), subject.getDescription()).standard-name.column-cell
-                                .name=subject.getName()
+                                .name(data-tooltip=subject.getName(), data-tooltip-type="overflow")=subject.getName()
                                 .right-triangle
                 td
                     .standards-description

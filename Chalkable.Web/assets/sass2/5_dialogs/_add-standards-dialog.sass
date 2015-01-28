@@ -38,28 +38,26 @@
     font: normal 12px Arial
     color: #9c9c9c
     overflow-x: auto
+    height: 340px
 
   .standards-description
     padding: 10px 30px 10px 13px
+    min-width: 200px
 
 
   table
     border-spacing: 0
+    height: 100%
 
     .standards-row
-      white-space: normal
+      white-space: nowrap
+
+  td
+    width: 238px
+    vertical-align: top
 
   td.name-td
-    width: 243px
-    height: 340px
-    vertical-align: top
     border-right: 1px solid #d7d7d7
-    display: inline-block
-
-
-  td:not(.name-td)
-    vertical-align: top
-        
 
   .column
     width: 243px
@@ -92,6 +90,9 @@
     display: table-cell
     height: 30px
     vertical-align: middle
+    max-width: 210px
+    overflow: hidden
+    text-overflow: ellipsis
             
 
     &.active, &:hover
