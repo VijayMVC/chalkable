@@ -22,7 +22,8 @@
                             each item in self.getStandards()
                                 +Option(item.getStandardId().valueOf(), item.getName(), standardId == item.getStandardId())
 
-                +ActionButton('studycenter', 'startPractice').blue-button.button-like.start-practice Start Practice
+                -var cCode = self.getCurrentCode()
+                +ActionButton('studycenter', 'startPractice', cCode)(disabled = !cCode).blue-button.button-like.start-practice Start Practice
             .mp-data
                 .grades-container
                     .row-item.title-row
@@ -43,7 +44,8 @@
                         -var standard = item.getStandard()
                         .row-item
                             .td-item.standard-name.name-item=standard.getName()
-                            .td-item.code.code-item=standard.getCommonCoreStandardCode()
+                            .td-item.code.code-item
+                                +ActionLink('studycenter', 'startPractice', standard.getCommonCoreStandardCode())(disabled = !standard.getCommonCoreStandardCode())=standard.getCommonCoreStandardCode()
                             .td-item.description.description-item=standard.getDescription()
                             .td-item.score.practice.grade-item=item.getPracticeScore()
                             .td-item.score.grade-book.grade-item=item.getGradeBookScore()
