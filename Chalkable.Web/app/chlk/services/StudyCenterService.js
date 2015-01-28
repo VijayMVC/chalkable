@@ -1,5 +1,7 @@
 REQUIRE('chlk.services.BaseService');
-REQUIRE('ria.async.Future');
+
+REQUIRE('chlk.models.studyCenter.PracticeGradesViewData');
+REQUIRE('chlk.models.apps.MiniQuizViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -14,16 +16,14 @@ NAMESPACE('chlk.services', function () {
                     classId : classId.valueOf(),
                     standardId : standardId_ && standardId_.valueOf()
                 });
-            }
-        ]),
+            },
 
-        [[chlk.models.id.SchoolPersonId, chlk.models.id.StandardId, chlk.models.id.AppId, String]],
-            ria.async.Future, function setPracticeGrade(studentId, standardId, applicationId, score) {
-                return this.get('StudyCenter/SetPracticeGrade.json', Boolean, {
-                    studentId : studentId.valueOf(),
-                    applicationId : applicationId.valueOf(),
-                    standardId : standardId.valueOf(),
-                    score: score
+            [[String]],
+            ria.async.Future, function getMiniQuizInfo(ccStandardCode) {
+                return this.get('StudyCenter/MiniQuizInfo.json', chlk.models.apps.MiniQuizViewData, {
+                    ccStandardCode : ccStandardCode
                 });
             }
+
+        ]);
 });

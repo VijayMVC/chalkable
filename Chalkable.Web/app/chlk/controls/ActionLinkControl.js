@@ -12,15 +12,28 @@ NAMESPACE('chlk.controls', function () {
         return lastClickedNode;
     };
 
+    function s_ (x) {
+        if (x === undefined || x === null)
+            return null;
+
+        if (Array.isArray(x))
+            return x.map(s_);
+
+        if (x.hasOwnProperty("valueOf"))
+            return s_(x.valueOf());
+
+        return x;
+    }
+
     function s (x) {
         if (x === undefined || x === null)
             return "null";
 
         if (Array.isArray(x))
-            return JSON.stringify(x.map(s));
+            return JSON.stringify(x.map(s_));
 
         if (x.hasOwnProperty("valueOf"))
-            return s(x.valueOf());
+            x = s_(x.valueOf());
 
         return JSON.stringify(x);
     }

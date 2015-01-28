@@ -37,8 +37,8 @@ NAMESPACE('chlk.templates.studyCenter', function(){
             ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){
                 var controller = 'studycenter';
                 var userId = this.getCurrentUser().getId().valueOf();
-                var res = [this.createActionLinkModel_(controller, 'explorer', 'Explorer', pressedLinkName, [userId], !this.isStudyCenterEnabled()),
-                    this.createActionLinkModel_(controller, 'practice', 'Practice', pressedLinkName, [null, userId], !this.isStudyCenterEnabled())
+                var res = [this.createActionLinkModel_(controller, 'explorer', 'Explorer', pressedLinkName, [], !this.isStudyCenterEnabled()),
+                    this.createActionLinkModel_(controller, 'practice', 'Practice', pressedLinkName, [null], !this.isStudyCenterEnabled())
                 ];
                 return res;
             },

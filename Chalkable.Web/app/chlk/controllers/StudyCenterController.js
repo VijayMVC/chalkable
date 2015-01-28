@@ -5,6 +5,7 @@ REQUIRE('chlk.services.StudyCenterService');
 
 REQUIRE('chlk.activities.student.StudentExplorerPage');
 REQUIRE('chlk.activities.studyCenter.PracticeGradesPage');
+REQUIRE('chlk.activities.apps.MiniQuizDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -19,10 +20,9 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.StudyCenterService, 'studyCenterService',
 
         [chlk.controllers.SidebarButton('play')],
-        [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.SchoolPersonId]],
-        function explorerAction(personId_){
-            var personId = personId_ || this.getCurrentPerson().getId();
+        [chlk.controllers.StudyCenterEnabled],
+        function explorerAction(){
+            var personId = this.getCurrentPerson().getId();
             var res = this.studentService.getExplorer(personId)
                 .attach(this.validateResponse_())
                 .then(function(studentExplorer){
@@ -33,10 +33,11 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.student.StudentExplorerPage, res);
         },
 
-        [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.StandardId]],
-        function practiceAction(classId_, personId_, standardId_){
-            var personId = (personId_ && personId_.valueOf()) ? personId_ : this.getCurrentPerson().getId(), res;
+        [chlk.controllers.StudyCenterEnabled],
+        [chlk.controllers.SidebarButton('play')],
+        [[chlk.models.id.ClassId, chlk.models.id.StandardId]],
+        function practiceAction(classId_, standardId_){
+            var personId = this.getCurrentPerson().getId(), res;
             if(!classId_ || !classId_.valueOf())
                 res = ria.async.DeferredData(new chlk.models.studyCenter.PracticeGradesViewData(new chlk.models.classes.ClassesForTopBar(null)));
             else
@@ -50,17 +51,28 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.studyCenter.PracticeGradesPage, res);
         },
 
-        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.StudyCenterEnabled],
+        [chlk.controllers.SidebarButton('play')],
         [[Object]],
         function startPracticeAction(ccStandardCode){
-            console.info(ccStandardCode);
-            return null;
+            if (!Array.isArray(ccStandardCode))
+                ccStandardCode = [ccStandardCode];
+
+            var res = this.studyCenterService
+                .getMiniQuizInfo(ccStandardCode[0])
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    model.setCurrentStandardCode(ccStandardCode[0]);
+                    model.setCcStandardCodes(ccStandardCode);
+                    return model;
+                });
+
+            return this.ShadeView(chlk.activities.apps.MiniQuizDialog, res);
         },
 
-        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.studyCenter.PracticeGradesViewData]],
         function filterPracticeGradesByStandardIdAction(model){
-            return this.Redirect('studycenter', 'practice', [model.getClassId(), model.getStudentId(), model.getStandardId()]);
+            return this.Redirect('studycenter', 'practice', [model.getClassId(), model.getStandardId()]);
         }
     ])
 });

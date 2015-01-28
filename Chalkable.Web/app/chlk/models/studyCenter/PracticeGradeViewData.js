@@ -18,7 +18,7 @@ NAMESPACE('chlk.models.studyCenter', function(){
                 this.standard = SJX.fromDeserializable(raw.standard, chlk.models.standard.Standard);
                 this.practiceScore = SJX.fromValue(raw.practicescore, Number);
                 this.gradeBookScore = SJX.fromValue(raw.gradebookscore, Number);
-                this.gradedDate = SJX.fromValue(raw.gradeddate, chlk.models.common.ChlkDate);
+                this.gradedDate = SJX.fromDeserializable(raw.gradeddate, chlk.models.common.ChlkDate);
                 this.applicationId = SJX.fromValue(raw.applicationid, chlk.models.id.AppId);
             },
 
