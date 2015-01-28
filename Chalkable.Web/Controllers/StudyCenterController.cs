@@ -48,7 +48,10 @@ namespace Chalkable.Web.Controllers
             //TODO : getting standards scores from inow 
             var standardsScores = new List<GradingStandardInfo>();
             //var standardsScores = SchoolLocator.GradingStandardService.GetGradingStandards(classId, gradingPeriod.Id);
-            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards, standardsScores));
+            var selectedStandards = stadnards.ToList();
+            if(standardId.HasValue)
+                selectedStandards = selectedStandards.Where(s => s.Id == standardId).ToList();
+            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards, standardsScores, selectedStandards));
         }
 
 
