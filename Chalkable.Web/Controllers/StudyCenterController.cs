@@ -17,12 +17,26 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class StudyCenterController : ChalkableController
     {
-        [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new[] { AppPermissionType.Announcement })]
-        public ActionResult SetPracticeGrade(int studentId, int standardId, Guid applicationId, string score)
+        [AuthorizationFilter("Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new[] { AppPermissionType.Announcement })]
+        public ActionResult SetPracticeGrade(string ccStandardCode, string score)
         {
-            SchoolLocator.PracticeGradeService.Add(standardId, studentId, applicationId, score);
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var standard = SchoolLocator.StandardService.GetStandardByCode(ccStandardCode);
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
+            if (!HasInstalledApp(app.Id, Context.PersonId.Value))
+                throw new ChalkableSecurityException("Current studented has no installed app");
+            SchoolLocator.PracticeGradeService.Add(standard.Id, Context.PersonId.Value, app.Id, score);
             return Json(true);
         }
+
+        private bool HasInstalledApp(Guid applicationId, int studentId)
+        {
+            var practiceAppId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            return practiceAppId == applicationId
+                   || SchoolLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
+        }
+
 
         [AuthorizationFilter("SysAdmin, Teacher, Student")]
         public ActionResult PracticeGrades(int studentId, int classId, int? standardId)

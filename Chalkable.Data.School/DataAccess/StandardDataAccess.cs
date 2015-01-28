@@ -35,6 +35,14 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
+        public Standard GetStandardByCode(string ccStandardCode)
+        {
+            return SelectOne<Standard>(new AndQueryCondition
+                {
+                    {Standard.CC_STANDARD_CODE, ccStandardCode}
+                });
+        }
+
         public IList<Standard> GetStandards(StandardQuery query)
         {
             var condition = new AndQueryCondition();

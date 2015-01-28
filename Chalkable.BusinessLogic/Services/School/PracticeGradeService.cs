@@ -29,11 +29,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public PracticeGrade Add(int standardId, int studentId, Guid applicationId, string score)
         {
             //TODO: add security 
-            if(!(Context.Role == CoreRoles.TEACHER_ROLE || Context.PersonId == studentId))
+            if(Context.PersonId != studentId)
                 throw new ChalkableSecurityException();
-            if (!HasInstalledApp(applicationId, studentId))
-                throw new ChalkableSecurityException("Current studented has no installed app");
-
             var classes = ServiceLocator.ClassService.GetClasses(Context.SchoolYearId, null, studentId);
             using (var uow = Update())
             {
@@ -65,15 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return res.Last();
             }
         }
-
-        
-        private bool HasInstalledApp(Guid applicationId, int studentId)
-        {
-            var practiceAppId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
-            return practiceAppId == applicationId
-                   || ServiceLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
-        }
-
+    
         public IList<PracticeGrade> GetPracticeGrades(int studentId, int? standardId)
         {
             return DoRead(uow => new PracticeGradeDataAccess(uow)
