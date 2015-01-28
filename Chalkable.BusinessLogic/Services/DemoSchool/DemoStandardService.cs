@@ -136,5 +136,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.ClasStandardStorage.Add(classStandards);
         }
 
+
+        public Standard GetStandardByCode(string ccStandardCode)
+        {
+            return Storage.StandardStorage.GetAll().First(x => x.CCStandardCode == ccStandardCode);
+        }
     }
 }
