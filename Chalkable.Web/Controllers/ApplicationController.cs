@@ -207,8 +207,11 @@ namespace Chalkable.Web.Controllers
             //TODO: check if app is installed??
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-            return Json(authorizationCode);
-            
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl);
+            return Json( new {
+                                AuthorizationCode = authorizationCode,
+                                BaseApplicationViewData = BaseApplicationViewData.Create(app)
+                             });
         }
 
         private const string CONTENT_TYPE = "text/html";
