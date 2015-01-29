@@ -14,7 +14,14 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
             ArrayOf(chlk.models.calendar.announcement.MonthItem), 'items',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.classes.ClassesForTopBar, 'topData'
+            chlk.models.classes.ClassesForTopBar, 'topData',
 
+            ArrayOf(ArrayOf(chlk.models.calendar.announcement.MonthItem)), function getItemsGroupped() {
+                var res = [], source = this.items.slice(0);
+                while (source.length) {
+                    res.push(source.splice(0, 7));
+                }
+                return res;
+            }
     ]);
 });
