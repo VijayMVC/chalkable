@@ -29,11 +29,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 var classStandarts = Storage.ClasStandardStorage.GetAll(query.ClassId).Select(x => x.StandardRef);
                 standards = standards.Where(x => classStandarts.Contains(x.Id));
             }
-            if (query.CourseId.HasValue)
-            {
-                var classStandarts = Storage.ClasStandardStorage.GetAll(query.CourseId).Select(x => x.StandardRef);
-                standards = standards.Where(x => classStandarts.Contains(x.Id));
-            }
+            //if (query.CourseId.HasValue)
+            //{
+            //    var classStandarts = Storage.ClasStandardStorage.GetAll(query.CourseId).Select(x => x.StandardRef);
+            //    standards = standards.Where(x => classStandarts.Contains(x.Id));
+            //}
 
             return standards.ToList();
         }
