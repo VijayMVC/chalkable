@@ -3,7 +3,7 @@
   border-radius: 5px
   border: 1px solid #c8c7c3
   background: #fff
-  //overflow: hidden
+  overflow: hidden
 
   .day-calendar-list-item
     >DIV
@@ -95,12 +95,16 @@
       display: table
       width: 100%
       border-collapse: collapse
+      overflow: hidden
 
-    .items > A, .week-day
+    .items > .row
+      display: table-row
+
+    .items > .row > A, .week-day
       width: 100 / 7 * 1%
 
-    .items > A
-      display: inline-block
+    .items > .row > A
+      display: table-cell
       height: 116px
       text-decoration: none
       margin-left: -1px
