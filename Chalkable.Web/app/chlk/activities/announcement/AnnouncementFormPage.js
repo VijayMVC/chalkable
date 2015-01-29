@@ -291,7 +291,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         var titleInput = titleBlock.find('input[name=title]');
                         titleBlock.removeClass('active');
                         var text = titleInput.getValue();
-                        if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == '' || text == null || text == undefined)){
+                        if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == null || text == undefined || text.trim() == '')){
                             var oldText = titleInput.getData('title');
                             if(oldText != text){
                                 that.updateFormByNotExistingTitle();
@@ -301,7 +301,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                                     that.removeDisabledClass();
                             }
                         }
-                        if(text && !dom.find('.title-block-container').hasClass('with-date')){
+                        if(text && text.trim() && !dom.find('.title-block-container').hasClass('with-date')){
                             titleBlock.find('.title-text').setHTML(text);
                         }
                     }
