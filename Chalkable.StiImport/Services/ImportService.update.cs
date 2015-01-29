@@ -591,7 +591,7 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<ScheduledTimeSlotVariation>().Updated == null)
                 return;
-            var scheduledTimeSlotVariations = context.GetSyncResult<ScheduledTimeSlotVariation>().All
+            var scheduledTimeSlotVariations = context.GetSyncResult<ScheduledTimeSlotVariation>().Updated
                 .Select(x => new Data.School.Model.ScheduledTimeSlotVariation
                 {
                     Id = x.TimeSlotVariationId,
