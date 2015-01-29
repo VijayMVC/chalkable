@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -205,12 +206,18 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetOauthCode(string applicationUrl)
         {
             //TODO: check if app is installed??
+           
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl);
+            var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
+            var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
+            var appView = InstalledApplicationViewData.Create(new List<ApplicationInstall>{appInstall}, Context.PersonId, app, hasMyApps);
             return Json( new {
                                 AuthorizationCode = authorizationCode,
-                                BaseApplicationViewData = BaseApplicationViewData.Create(app)
+                                ApplicationInfo = appView
                              });
         }
 

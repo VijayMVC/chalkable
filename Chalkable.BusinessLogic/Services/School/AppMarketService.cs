@@ -251,6 +251,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public ApplicationInstall GetInstallationForPerson(Guid applicationId, int personId)
         {
             //TODO: security
+
+            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
@@ -258,7 +260,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         {ApplicationInstall.APPLICATION_REF_FIELD, applicationId},
                         {ApplicationInstall.PERSON_REF_FIELD, personId},
-                        {ApplicationInstall.ACTIVE_FIELD, true}
+                        {ApplicationInstall.ACTIVE_FIELD, true},
+                        {ApplicationInstall.SCHOOL_YEAR_REF_FIELD, sy.Id}
                     };
                 return da.GetAll(ps).FirstOrDefault();
             }

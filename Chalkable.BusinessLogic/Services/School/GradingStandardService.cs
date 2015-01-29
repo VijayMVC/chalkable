@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface  IGradingStandardService
     {
-        IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId);
+        IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId); 
         GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note);
         
     }

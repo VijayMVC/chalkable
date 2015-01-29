@@ -41,33 +41,18 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, Teacher, Student")]
         public ActionResult PracticeGrades(int studentId, int classId, int? standardId)
         {
-            var syId = GetCurrentSchoolYearId();
-            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime);
             var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
-            var practiceGrades = SchoolLocator.PracticeGradeService.GetPracticeGrades(studentId, standardId);
-            //TODO : getting standards scores from inow 
-            var standardsScores = new List<GradingStandardInfo>();
-            //var standardsScores = SchoolLocator.GradingStandardService.GetGradingStandards(classId, gradingPeriod.Id);
-            var selectedStandards = stadnards.ToList();
-            if(standardId.HasValue)
-                selectedStandards = selectedStandards.Where(s => s.Id == standardId).ToList();
-            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards, standardsScores, selectedStandards));
+            var practiceGrades = SchoolLocator.PracticeGradeService.GetPracticeGradesDetails(classId, studentId, standardId);
+            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards));
         }
-
-
+        
         [AuthorizationFilter("SysAdmin, Teacher, Student")]
         public ActionResult MiniQuizInfo(string ccStandardCode)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-
-            int start = 0, count= 4;
             var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
-
-            //var miniQuizApp = new Application(){Pictures = new List<ApplicationPicture>()};
-            
             var miniQuizApp = MasterLocator.ApplicationService.GetApplicationById(appId);
-            
             var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
             var suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(new List<string>{ccStandardCode}, installedAppsIds, 0, int.MaxValue);

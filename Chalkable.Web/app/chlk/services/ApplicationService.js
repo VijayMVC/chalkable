@@ -11,6 +11,7 @@ REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.BannedAppData');
 REQUIRE('chlk.models.apps.AppPersonRating');
+REQUIRE('chlk.models.apps.ApplicationAuthorization');
 
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -141,17 +142,17 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            [[chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function addToAnnouncement(appId, announcementId) {
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function addToAnnouncement(personId, appId, announcementId) {
                 return this
                     .post('Application/AddToAnnouncement.json', chlk.models.apps.AppAttachment, {
                         applicationId: appId.valueOf(),
                         announcementId: announcementId.valueOf()
                     })
                     .then(function(attachment){
-                        return this.getOauthCode(attachment.getUrl())
-                            .then(function(code){
-                                attachment.setOauthCode(code);
+                        return this.getOauthCode(personId, attachment.getUrl())
+                            .then(function(data){
+                                attachment.setOauthCode(data.getAuthorizationCode());
                                 return attachment;
                             });
                     }, this);
@@ -165,10 +166,31 @@ NAMESPACE('chlk.services', function () {
                   });
             },
 
-            [[String]],
-            ria.async.Future, function getOauthCode(appUrl){
-                return this.get('Application/GetOauthCode.json', String, {
+            [[chlk.models.id.SchoolPersonId, String]],
+            ria.async.Future, function getOauthCode(personId, appUrl){
+                var forEdit = false;
+                return this.get('Application/GetOauthCode.json', chlk.models.apps.ApplicationAuthorization, {
                     applicationUrl: appUrl
+                }).transform(function (applicationAuthorization) {
+                    var app = applicationAuthorization.getApplication();
+                    var appInstalls = app.getApplicationInstalls() || [];
+                    app.setSelfInstalled(false);
+                    var uninstallAppIds = [];
+
+                    appInstalls.forEach(function(appInstall){
+                        if (appInstall.isOwner() && forEdit){
+                            uninstallAppIds.push(appInstall.getAppInstallId());
+                            app.setSelfInstalled(appInstall.getPersonId() == appInstall.getInstallationOwnerId());
+                        }
+                        app.setPersonal(appInstall.getPersonId() == personId);
+                    });
+                    app.setUninstallable(forEdit && uninstallAppIds.length > 0);
+                    var ids = uninstallAppIds.map(function(item){
+                        return item.valueOf()
+                    }).join(',');
+                    app.setApplicationInstallIds(ids);
+
+                    return applicationAuthorization;
                 });
             },
 
@@ -253,7 +275,8 @@ NAMESPACE('chlk.services', function () {
                     new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.ANNOUNCEMENT, "Announcement"),
                     new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.CLAZZ, "Class"),
                     new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.SCHEDULE, "Schedule"),
-                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.DISCIPLINE, "Discipline")
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.DISCIPLINE, "Discipline"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.PRACTICE, "Practice")
                 ];
             },
 
