@@ -275,7 +275,8 @@ NAMESPACE('chlk.services', function () {
                     new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.ANNOUNCEMENT, "Announcement"),
                     new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.CLAZZ, "Class"),
                     new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.SCHEDULE, "Schedule"),
-                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.DISCIPLINE, "Discipline")
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.DISCIPLINE, "Discipline"),
+                    new chlk.models.apps.AppPermission(chlk.models.apps.AppPermissionTypeEnum.PRACTICE, "Practice")
                 ];
             },
 
