@@ -496,7 +496,7 @@ NAMESPACE('chlk.controllers', function (){
         function tryToAttachTeacherAction(announcementId, appId) {
 
             var result = this.appsService
-                .addToAnnouncement(appId, announcementId)
+                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 }, this)
@@ -513,29 +513,24 @@ NAMESPACE('chlk.controllers', function (){
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId]],
         function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_) {
             var result = this.appsService
-                .getOauthCode(url)
+                .getOauthCode(this.getCurrentPerson().getId(), url)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 }, this)
                 .attach(this.validateResponse_())
-                .then(function(code){
+                .then(function(data){
                     if (isBanned){
                         return chlk.models.apps.AppWrapperViewData.$createAppBannedViewData(url);
                     }
 
-                    var appData = null;
+                    var appData = data.getApplication();
                     if (mode == chlk.models.apps.AppModes.MYAPPSVIEW){
-                        appData =  this.appMarketService.getMyAppByUrl(url);
-
                         var appAccess = appData.getAppAccess();
-
                         var hasMyAppsView = appAccess.isStudentMyAppsEnabled() && this.userInRole(chlk.models.common.RoleEnum.STUDENT) ||
                             appAccess.isTeacherMyAppsEnabled() && this.userInRole(chlk.models.common.RoleEnum.TEACHER) ||
                             appAccess.isAdminMyAppsEnabled() && this.userIsAdmin() ||
                             appAccess.isParentMyAppsEnabled() && this.userInRole(chlk.models.common.RoleEnum.PARENT);
                         appAccess.setMyAppsForCurrentRoleEnabled(hasMyAppsView);
-                        appData.setAppAccess(appAccess);
-
                     }
 
                     if (studentId_){
@@ -544,7 +539,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var app = new chlk.models.apps.AppAttachment.$create(
                         viewUrl,
-                        code,
+                        data.getAuthorizationCode(),
                         announcementAppId_,
                         appData
                     );

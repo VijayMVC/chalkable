@@ -191,18 +191,6 @@ NAMESPACE('chlk.services', function () {
                 return this.getMyApps(personId, false, 0, filter);
             },
 
-
-
-
-            [[String]],
-            chlk.models.apps.AppMarketApplication, function getMyAppByUrl(url){
-                var myApps = this.getContext().getSession().get(ChlkSessionConstants.MY_APPS_CACHED) || [];
-                var result = myApps.filter(function(item){
-                   return item.getUrl() == url;
-                }) || [];
-                return result.length > 0 ? result[0] : new chlk.models.apps.AppMarketApplication();
-            },
-
             [[chlk.models.id.AppId]],
             ria.async.Future, function getDetails(appId) {
                 return this
