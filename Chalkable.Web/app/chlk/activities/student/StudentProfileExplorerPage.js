@@ -26,7 +26,7 @@ NAMESPACE('chlk.activities.student', function () {
                 setTimeout(function(){
                     node.addClass('pressed');
                 }, 1);
-                var top = node.offset().top - node.parent('.explorer-view').offset().top - (node.height() + 2 * parseInt(node.getCss('border-width'), 10)) / 2;
+                var top = node.offset().top - node.parent('.explorer-view').offset().top - (node.height() + 2 * (parseInt(node.getCss('border-width'), 10) || 1)) / 2;
                 this.dom.find('.suggested-apps-container').setCss('margin-top', top);
             }
         ]);
