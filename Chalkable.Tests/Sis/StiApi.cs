@@ -31,11 +31,11 @@ namespace Chalkable.Tests.Sis
         {
             var cl = ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/Chalkable/api/");
 
-            var items = (cl.SyncConnector.GetDiff(typeof(ScheduledTimeSlotVariation), null) as SyncResult<ScheduledTimeSlotVariation>).All;
-            
-            foreach (var calendarDay in items)
+            var items = (cl.SyncConnector.GetDiff(typeof(ScheduledTimeSlotVariation), null) as SyncResult<ScheduledTimeSlotVariation>).All.ToList();
+            items = items.Where(x => x.BellScheduleId == 156 && x.TimeSlotId == 565).ToList();
+            foreach (var item in items)
             {
-                Debug.WriteLine(calendarDay.Name);
+                Debug.WriteLine(item.Name);
             }
 
         }
