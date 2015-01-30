@@ -32,6 +32,13 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[ArrayOf(chlk.models.id.StandardId)]],
+            ria.async.Future, function getStandardsList(ids) {
+                return this.get('Standard/GetStandardsByIds.json', ArrayOf(chlk.models.standard.Standard), {
+                    ids: this.arrayToIds(ids)
+                });
+            },
+
             [[chlk.models.id.CCStandardCategoryId, chlk.models.id.CommonCoreStandardId, Boolean]],
             ria.async.Future, function getCommonCoreStandards(standardCategoryId_, parentStandardId_, allStandards_) {
                 return this.get('Standard/GetCommonCoreStandards.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {

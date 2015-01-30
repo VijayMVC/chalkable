@@ -16,15 +16,18 @@ NAMESPACE('chlk.models.standard', function () {
             this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
             this.standardId = SJX.fromValue(raw.standardid, chlk.models.id.StandardId);
             this.grade = SJX.fromValue(raw.grade, String);
+            this.standardName = SJX.fromValue(raw.standardname, String);
             this.commonCoreStandardCode = SJX.fromValue(raw.ccstandardcode, String);
+            this.academicBenchmarkId = SJX.fromValue(raw.academicbenchmarkid, String);
         },
 
+        String, 'academicBenchmarkId',
+        String, 'standardName',
         String, 'name',
         String, 'description',
         chlk.models.id.AnnouncementId, 'announcementId',
         chlk.models.id.StandardId, 'standardId',
         String, 'grade',
-
         String, 'commonCoreStandardCode',
 
         [[chlk.models.id.StandardId, String, String, String]],

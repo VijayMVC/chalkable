@@ -1,11 +1,14 @@
+REQUIRE('chlk.models.apps.Application');
+REQUIRE('chlk.models.standard.Standard');
+
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
     /** @class chlk.models.apps.MiniQuizViewData*/
     CLASS(
         'MiniQuizViewData', [
-            ArrayOf(String), 'ccStandardCodes',
-            String, 'currentStandardCode',
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+            chlk.models.id.StandardId, 'currentStandardId',
 
             [ria.serialize.SerializeProperty('applicationinfo')],
             chlk.models.apps.Application, 'applicationInfo',

@@ -18,10 +18,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String]],
-            ria.async.Future, function getMiniQuizInfo(ccStandardCode) {
+            [[chlk.models.id.StandardId]],
+            ria.async.Future, function getMiniQuizInfo(standardId) {
                 return this.get('StudyCenter/MiniQuizInfo.json', chlk.models.apps.MiniQuizViewData, {
-                    ccStandardCode : ccStandardCode
+                    standardId : standardId.valueOf()
                 });
             }
 

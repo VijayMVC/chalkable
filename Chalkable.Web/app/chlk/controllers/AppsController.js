@@ -205,10 +205,8 @@ NAMESPACE('chlk.controllers', function (){
         [[Array, ArrayOf(chlk.models.standard.CommonCoreStandard), chlk.models.id.AppId]],
             chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standardsIds, standards, appId){
             standards = standards.filter(function(standard){
-                return standardsIds.filter(function(sc){
-                    return sc == standard.getId().valueOf();
-                }).length > 0;
-            }, this);
+                return standardsIds.indexOf(standard.getId()) >= 0;
+            });
             this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, standards);
             return new chlk.models.standard.ApplicationStandardsViewData(appId, standards);
         },
@@ -464,9 +462,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean]],
-        function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned){
+        function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned, appUrlSuffix_){
             if(viewUrl)
-                return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned);
+                return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, appUrlSuffix_);
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
             this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
                 .attach(this.validateResponse_())
@@ -498,8 +496,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.StudyCenterEnabled()],
-        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId]],
-        function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_) {
+        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId, String]],
+        function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_, appUrlSuffix_) {
             var result = this.appsService
                 .getOauthCode(this.getCurrentPerson().getId(), url)
                 .catchError(function(error_){
@@ -523,6 +521,10 @@ NAMESPACE('chlk.controllers', function (){
 
                     if (studentId_){
                         viewUrl += "&studentId=" + studentId_.valueOf();
+                    }
+
+                    if (appUrlSuffix_) {
+                        viewUrl += "&" + appUrlSuffix_;
                     }
 
                     var app = new chlk.models.apps.AppAttachment.$create(

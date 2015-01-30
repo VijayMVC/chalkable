@@ -17,6 +17,9 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.StudentService, 'studentService',
 
         [ria.mvc.Inject],
+        chlk.services.StandardService, 'standardService',
+
+        [ria.mvc.Inject],
         chlk.services.StudyCenterService, 'studyCenterService',
 
         [chlk.controllers.SidebarButton('play')],
@@ -54,17 +57,19 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.StudyCenterEnabled],
         [chlk.controllers.SidebarButton('play')],
         [[Object]],
-        function startPracticeAction(ccStandardCode){
-            if (!Array.isArray(ccStandardCode))
-                ccStandardCode = [ccStandardCode];
+        function startPracticeAction(standardId){
+            if (!Array.isArray(standardId))
+                standardId = [standardId];
 
-            var res = this.studyCenterService
-                .getMiniQuizInfo(ccStandardCode[0])
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    model.setCurrentStandardCode(ccStandardCode[0]);
-                    model.setCcStandardCodes(ccStandardCode);
-                    return model;
+            standardId = standardId.map(chlk.models.id.StandardId);
+
+            var res = ria.async.wait(
+                    this.studyCenterService.getMiniQuizInfo(standardId[0]).attach(this.validateResponse_()),
+                    this.standardService.getStandardsList(standardId).attach(this.validateResponse_())
+                ).then(function(models){
+                    models[0].setCurrentStandardId(standardId[0]);
+                    models[0].setStandards(models[1]);
+                    return models[0];
                 });
 
             return this.ShadeView(chlk.activities.apps.MiniQuizDialog, res);

@@ -43,17 +43,14 @@ NAMESPACE('chlk.templates.studyCenter', function(){
                 return res;
             },
 
-            function getCurrentCode(){
+            function getCurrentStandardCodes(){
                 var standardId = this.getStandardId();
-                if(standardId && standardId.valueOf())
-                    return this.getStandards().filter(function(item){return item.getStandardId() == standardId})[0].getCommonCoreStandardCode();
+                if (standardId && standardId.valueOf())
+                    return [this.getStandardId()];
 
-                var filerFunction = function(item){
-                    return item.getCommonCoreStandardCode();
-                };
-
-                return this.getStandards().filter(filerFunction).map(filerFunction);
-
+                return this.getStandards().map(function f(item){
+                    return item.getStandardId();
+                });
             }
         ]);
 });

@@ -22,8 +22,8 @@
                             each item in self.getStandards()
                                 +Option(item.getStandardId().valueOf(), item.getName(), standardId == item.getStandardId())
 
-                -var cCode = self.getCurrentCode()
-                +ActionButton('studycenter', 'startPractice', cCode)(disabled = !cCode).blue-button.button-like.start-practice Start Practice
+                -var cCode = self.getCurrentStandardCodes()
+                +ActionButton('studycenter', 'startPractice', cCode)(disabled = !cCode.length).blue-button.button-like.start-practice Start Practice
             .mp-data
                 .grades-container
                     .row-item.title-row

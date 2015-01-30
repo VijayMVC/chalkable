@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("SysAdmin, Teacher, Student")]
+        [AuthorizationFilter("Student")]
         public ActionResult PracticeGrades(int studentId, int classId, int? standardId)
         {
             var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
@@ -46,16 +46,19 @@ namespace Chalkable.Web.Controllers
             return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards));
         }
         
-        [AuthorizationFilter("SysAdmin, Teacher, Student")]
-        public ActionResult MiniQuizInfo(Guid abId)
+        [AuthorizationFilter("Student")]
+        public ActionResult MiniQuizInfo(int standardId)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
+            var standard = SchoolLocator.StandardService.GetStandardById(standardId);
             var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
             var miniQuizApp = MasterLocator.ApplicationService.GetApplicationById(appId);
             var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
-            var suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { abId }, installedAppsIds, 0, int.MaxValue);
+            var suggestedApps = standard.AcademicBenchmarkId.HasValue 
+                    ? MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { standard.AcademicBenchmarkId.Value }, installedAppsIds, 0, int.MaxValue)
+                    : new Application[]{};
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps, appInstallations, hasMyAppDic, Context.PersonId));
         }
