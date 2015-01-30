@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -35,11 +33,11 @@ namespace Chalkable.Data.School.DataAccess
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
-        public Standard GetStandardByCode(string ccStandardCode)
+        public Standard GetStandardByABId(Guid id)
         {
             return SelectOne<Standard>(new AndQueryCondition
                 {
-                    {Standard.CC_STANDARD_CODE, ccStandardCode}
+                    {Standard.ACADEMIC_BENCHMARK_ID_FIELD, id}
                 });
         }
 

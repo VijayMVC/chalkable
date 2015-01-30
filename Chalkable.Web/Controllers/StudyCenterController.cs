@@ -18,11 +18,11 @@ namespace Chalkable.Web.Controllers
     public class StudyCenterController : ChalkableController
     {
         [AuthorizationFilter("Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new []{ AppPermissionType.Practice })]
-        public ActionResult SetPracticeGrade(string ccStandardCode, string score)
+        public ActionResult SetPracticeGrade(Guid id, string score)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var standard = SchoolLocator.StandardService.GetStandardByCode(ccStandardCode);
+            var standard = SchoolLocator.StandardService.GetStandardByABId(id);
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
             if (!HasInstalledApp(app.Id, Context.PersonId.Value))
                 throw new ChalkableSecurityException("Current studented has no installed app");
@@ -47,7 +47,7 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("SysAdmin, Teacher, Student")]
-        public ActionResult MiniQuizInfo(string ccStandardCode)
+        public ActionResult MiniQuizInfo(Guid abId)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -55,7 +55,7 @@ namespace Chalkable.Web.Controllers
             var miniQuizApp = MasterLocator.ApplicationService.GetApplicationById(appId);
             var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
-            var suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(new List<string>{ccStandardCode}, installedAppsIds, 0, int.MaxValue);
+            var suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { abId }, installedAppsIds, 0, int.MaxValue);
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps, appInstallations, hasMyAppDic, Context.PersonId));
         }

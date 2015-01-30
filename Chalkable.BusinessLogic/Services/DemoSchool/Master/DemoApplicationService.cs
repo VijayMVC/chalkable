@@ -160,11 +160,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Context.Role.Id == CoreRoles.STUDENT_ROLE.Id && application.HasStudentMyApps;
         }
 
-        public IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow).GetSuggestedApplications(standardsCodes, installedAppsIds, start, count);
+                return new ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
             }
         }
 

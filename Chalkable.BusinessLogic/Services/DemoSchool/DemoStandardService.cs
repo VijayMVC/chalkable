@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
@@ -137,9 +138,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public Standard GetStandardByCode(string ccStandardCode)
+        public Standard GetStandardByABId(Guid id)
         {
-            return Storage.StandardStorage.GetAll().First(x => x.CCStandardCode == ccStandardCode);
+            return Storage.StandardStorage.GetAll().First(x => x.AcademicBenchmarkId == id);
         }
     }
 }

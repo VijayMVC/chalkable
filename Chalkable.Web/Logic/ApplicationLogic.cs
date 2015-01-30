@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
@@ -91,13 +92,13 @@ namespace Chalkable.Web.Logic
 
 
         public static IList<ApplicationForAttachViewData> GetSuggestedAppsForAttach(IServiceLocatorMaster masterLocator, IServiceLocatorSchool schooLocator
-            , int personId, int classId, IList<string> standardsCodes, int markingPeriodId, int? start = null, int? count = null)
+            , int personId, int classId, IList<Guid> abIds, int markingPeriodId, int? start = null, int? count = null)
         {
             start = start ?? 0;
             count = count ?? 3;
             var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
-            var applications = masterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, start.Value, count.Value);
+            var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, start.Value, count.Value);
             var classSize = schooLocator.ClassService.GetClassPersons(null, classId, true, markingPeriodId).Count;
             foreach (var application in applications)
             {

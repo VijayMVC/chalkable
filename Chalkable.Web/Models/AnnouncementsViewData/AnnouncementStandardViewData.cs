@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
 
@@ -13,7 +14,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Description { get; set; }
         public int StandardSubjectId { get; set; }
         public string CCStandardCode { get; set; }
- 
+        public Guid? AcademicBenchmarkId { get; set; }
+        
         protected AnnouncementStandardViewData(){}
 
         protected AnnouncementStandardViewData(Standard standard)
@@ -23,7 +25,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             Name = standard.Name;
             ParentStandardId = standard.ParentStandardRef;
             StandardSubjectId = standard.StandardSubjectRef;
-            CCStandardCode = standard.CCStandardCode;
+            AcademicBenchmarkId = standard.AcademicBenchmarkId;
+            //CCStandardCode = standard.CCStandardCode;//TODO: get from AB to CC mapping
         }
 
         public static AnnouncementStandardViewData Create(Standard standard)

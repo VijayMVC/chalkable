@@ -55,10 +55,10 @@ namespace Chalkable.Web.Controllers
                     var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
                     if(mp == null)
                         throw new NoMarkingPeriodException();
-                    var codes = annDetails.AnnouncementStandards.Where(x=>!string.IsNullOrEmpty(x.Standard.CCStandardCode))
-                        .Select(x => x.Standard.CCStandardCode).ToList();
+                    var abIds = annDetails.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
+                        .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
                     annViewData.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                                                              Context.PersonId.Value, annDetails.ClassRef, codes, mp.Id);
+                                                              Context.PersonId.Value, annDetails.ClassRef, abIds, mp.Id);
                 }
 
             }
@@ -73,10 +73,10 @@ namespace Chalkable.Web.Controllers
                 var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
                 if (mp == null)
                     throw new NoMarkingPeriodException();
-                var codes = announcementDetails.AnnouncementStandards.Where(x => !string.IsNullOrEmpty(x.Standard.CCStandardCode))
-                    .Select(x => x.Standard.CCStandardCode).ToList();
+                var abIds = announcementDetails.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
+                    .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
                 return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                                                          Context.PersonId.Value, announcementDetails.ClassRef, codes, mp.Id);
+                                                          Context.PersonId.Value, announcementDetails.ClassRef, abIds, mp.Id);
             }
             return new List<ApplicationForAttachViewData>();
         }

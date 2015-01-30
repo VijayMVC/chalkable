@@ -331,9 +331,10 @@ namespace Chalkable.Data.Master.DataAccess
             return PreparePicturesData(res);
         }
 
-        public IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
-            IDictionary<string, object> parameters = new Dictionary<string, object>
+            throw new NotImplementedException();
+            /*IDictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"start", start},
                     {"count", count},
@@ -345,7 +346,7 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 res = reader.ReadList<Application>();
             }
-            return PreparePicturesData(res);
+            return PreparePicturesData(res);*/
         }
     }
 
