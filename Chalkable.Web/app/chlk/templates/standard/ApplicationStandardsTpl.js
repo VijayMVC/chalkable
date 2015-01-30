@@ -15,9 +15,9 @@ NAMESPACE('chlk.templates.standard', function(){
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'applicationId',
 
-            Array, function getStandardsCodes(){
+            Array, function getStandardsIds(){
                 var standards = this.getStandards();
-                return standards && standards.map(function(standard){return standard.getStandardCode();});
+                return standards && standards.map(function(standard){return standard.getId().valueOf();});
             }
         ]);
 });

@@ -11,17 +11,17 @@ NAMESPACE('chlk.models.standard', function(){
 
         chlk.models.id.AppId, 'applicationId',
 
-        Array, 'standardCodes',
+        Array, 'standardsIds',
 
         [[chlk.models.id.AppId, ArrayOf(chlk.models.standard.CCStandardCategory), Array]],
-        function $(applicationId,  itemStandards, standardCodes){
+        function $(applicationId,  itemStandards, standardsIds){
             BASE();
             if(applicationId)
                 this.setApplicationId(applicationId);
             if(itemStandards)
                 this.setItems(itemStandards);
-            if(standardCodes)
-                this.setStandardCodes(standardCodes);
+            if(standardsIds)
+                this.setStandardsIds(standardsIds);
         }
     ]);
 });

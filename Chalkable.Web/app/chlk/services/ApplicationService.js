@@ -240,7 +240,7 @@ NAMESPACE('chlk.services', function () {
                 ArrayOf(chlk.models.id.GradeLevelId),
                 ArrayOf(chlk.models.apps.AppPlatformTypeEnum),
                 Boolean,
-                ArrayOf(String)
+                ArrayOf(chlk.models.id.CommonCoreStandardId)
             ]],
             ria.async.Future, function updateApp(
                 appId, shortAppInfo, permissionIds, appPricesInfo, devId, appAccess, categories, pictures_,
@@ -257,7 +257,7 @@ NAMESPACE('chlk.services', function () {
                     gradeLevels: this.arrayToIds(gradeLevels),
                     platforms: this.arrayToIds(platforms),
                     forSubmit: forSubmit,
-                    standardsCodes : this.arrayToIds(standards)
+                    standardsIds : this.arrayToIds(standards)
                 })
                 .then(function(newApp){
                     return this.switchApp(newApp);

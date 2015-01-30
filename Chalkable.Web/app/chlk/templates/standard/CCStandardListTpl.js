@@ -20,7 +20,5 @@ NAMESPACE('chlk.templates.standard', function(){
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards'
-
-
     ]);
 });

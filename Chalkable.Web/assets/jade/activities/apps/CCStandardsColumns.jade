@@ -1,25 +1,18 @@
 standards = self.getStandards() || []
 categories = self.getCategories() || []
-if categories.length > 0
+if standards.length
     td.name-td
         .standards-names.column
-            each category in categories
-                +ActionLink('apps', 'showStandardCategories', category.getId(), category.getName())(
+            each standard in standards
+                +ActionLink('apps', 'showStandardsByCategory', self.getCategoryId(), standard.getStandardCode(), standard.getId())(
+                    data-id=standard.getId().valueOf(),
+                    data-description=standard.getDescription()
                 ).standard-name.column-cell
-                    .name(data-tooltip=category.getName(), data-tooltip-type="overflow")=category.getName()
+                    .name(data-tooltip=standard.getDescription(), data-tooltip-type="overflow")=standard.getStandardCode()
                     .right-triangle
     td
         .standards-description
 else
-    td.name-td
-        .standards-names.column
-            each standard in standards
-                div(
-                    data-id=standard.getStandardCode(),
-                    data-description=standard.getDescription()
-                ).standard-name.column-cell
-                    .name(data-tooltip=standard.getName(), data-tooltip-type="overflow")=standard.getStandardCode()
-                    .right-triangle
     td
-        .standards-description
+        .standards-description=self.getDescription()
 

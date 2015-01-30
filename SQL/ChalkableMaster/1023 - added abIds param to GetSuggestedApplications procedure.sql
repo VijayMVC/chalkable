@@ -4,7 +4,7 @@ as
 declare @standardsIdsT table ([id] uniqueidentifier)
 declare @installedAppsIdsT table ([id] uniqueidentifier)
 
-if @academicBenchmarkIds is not null
+if @academicBenchmarkIds is not null and RTRIM(LTRIM(@academicBenchmarkIds)) <> ''
 begin
 	insert into @standardsIdsT
 	select distinct ABToCCMapping.CCStandardRef 
