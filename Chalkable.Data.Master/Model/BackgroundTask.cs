@@ -44,7 +44,8 @@ namespace Chalkable.Data.Master.Model
         ProcessReminder = 7,
         AttendanceNotification = 8,
         TeacherAttendanceNotification = 9,
-        PictureImport = 10
+        PictureImport = 10,
+        SisDataResync = 11
     }
 
     public enum BackgroundTaskStateEnum
