@@ -20,6 +20,7 @@ namespace Chalkable.BackgroundTaskProcessor
             handlers.Add(BackgroundTaskTypeEnum.AttendanceNotification, new AttendanceNotificationTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.TeacherAttendanceNotification, new TeacherAttendanceNotificationTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.PictureImport, new PictureImportTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.SisDataResync, new SisResyncTaskHandler());
         }
 
         public void Process()

@@ -54,7 +54,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.permissions = SJX.fromArrayOfDeserializables(raw.permissions, chlk.models.apps.AppPermission);
                 this.validRoles = SJX.fromArrayOfDeserializables(raw.canlaunchroles, chlk.models.people.Role);
                 this.gradeLevels = SJX.fromArrayOfValues(raw.gradelevels, chlk.models.id.AppGradeLevelId);
-                this.standardsCodes = SJX.fromArrayOfValues(raw.standardscodes, String);
+                this.standardsIds = SJX.fromArrayOfValues(raw.standardsids, String);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.CommonCoreStandard);
                 this.platforms = SJX.fromArrayOfDeserializables(raw.platforms, chlk.models.apps.AppPlatform);
                 this.banInfo = SJX.fromDeserializable(raw.baninfo, chlk.models.apps.BannedAppData);
@@ -88,7 +88,7 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels',
             ArrayOf(chlk.models.apps.AppPlatform), 'platforms',
-            ArrayOf(String), 'standardsCodes',
+            ArrayOf(chlk.models.id.CommonCoreStandardId), 'standardsIds',
             ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
             chlk.models.apps.BannedAppData, 'banInfo'
         ]);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -78,7 +79,7 @@ namespace Chalkable.StiImport.Services
                 throw new Exception("District id should be defined for import");
             var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
             if (d.LastSync.HasValue)
-                DoRegularSync();
+                DoRegularSync(true);
             else
                 DoInitialSync();
             
@@ -95,11 +96,52 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("import is completed");
         }
 
+        public void Resync(string tableName)
+        {
+            Log.LogInfo("start resync");
+            connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+            ServiceLocatorMaster = new ServiceLocatorMaster(sysadminCntx);
+            ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
+            Log.LogInfo("download data to resync");
+            context = new SyncContext();
+            var toSync = context.TablesToSync;
+            var results = new List<SyncResultBase>();
+            foreach (var table in toSync)
+            {
+                var type = context.Types[table.Key];
+                SyncResultBase res;
+                var resType = (typeof(SyncResult<>)).MakeGenericType(new[] { type });
+                if (table.Key == tableName)
+                {
+                    Log.LogInfo("Start downloading " + table.Key);
+                    res = (SyncResultBase) connectorLocator.SyncConnector.GetDiff(type, null);
+                    Log.LogInfo("Table downloaded: " + table.Key + " " + res.RowCount);
+                    object o = resType.GetProperty("Rows").GetValue(res);
+                    resType.GetProperty("Updated").SetValue(res, o);
+                    resType.GetProperty("Inserted").SetValue(res, null);
+                    resType.GetProperty("Deleted").SetValue(res, null);
+                    resType.GetProperty("Rows").SetValue(res, null);
+                }
+                else
+                {
+                    res = (SyncResultBase)Activator.CreateInstance(resType, new object[0]);
+                }
+                results.Add(res);
+            }
+            foreach (var syncResultBase in results)
+            {
+                context.SetResult(syncResultBase);
+            }
+            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
+                throw new Exception("District id should be defined for import");
+            DoRegularSync(false);
+        }
+
         private void DoInitialSync()
         {
             try
             {
-                SyncDb();
+                SyncDb(true);
             }
             catch (Exception ex)
             {
@@ -108,7 +150,7 @@ namespace Chalkable.StiImport.Services
             }
         }
 
-        private void DoRegularSync()
+        private void DoRegularSync(bool updateVersions)
         {
             ServiceLocatorMaster = new ImportServiceLocatorMaster(sysadminCntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
@@ -128,7 +170,7 @@ namespace Chalkable.StiImport.Services
             bool schoolCommited = false;
             try
             {
-                SyncDb();
+                SyncDb(updateVersions);
                 Log.LogInfo("commit school db");
                 schoolDb.CommitAll();
                 schoolCommited = true;
@@ -168,7 +210,7 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
         }
 
-        private void SyncDb()
+        private void SyncDb(bool updateVersions)
         {
             Log.LogInfo("process inserts");
             ProcessInsert();
@@ -176,8 +218,11 @@ namespace Chalkable.StiImport.Services
             ProcessUpdate();
             Log.LogInfo("process deletes");
             ProcessDelete();
-            Log.LogInfo("update versions");
-            UpdateVersion();
+            if (updateVersions)
+            {
+                Log.LogInfo("update versions");
+                UpdateVersion();    
+            }
         }
 
         private void UpdateDistrictLastSync(District d)
@@ -214,10 +259,8 @@ namespace Chalkable.StiImport.Services
             //Tables we need all data
             context.TablesToSync[typeof(Gender).Name] = null;
             context.TablesToSync[typeof(SpEdStatus).Name] = null;
-
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();
-            
             foreach (var table in toSync)
             {
                 var type = context.Types[table.Key];

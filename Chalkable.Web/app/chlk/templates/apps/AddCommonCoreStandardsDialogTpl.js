@@ -16,6 +16,6 @@ NAMESPACE('chlk.templates.apps', function(){
             chlk.models.id.AppId, 'applicationId',
 
             [ria.templates.ModelPropertyBind],
-            Array, 'standardCodes'
+            Array, 'standardsIds'
         ]);
 });
