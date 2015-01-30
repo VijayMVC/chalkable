@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Enums;
+using Chalkable.Data.Master.Model;
+using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models;
+using Chalkable.Web.Models.ApplicationsViewData;
+
+namespace Chalkable.Web.Controllers
+{
+    [RequireHttps, TraceControllerFilter]
+    public class StudyCenterController : ChalkableController
+    {
+        [AuthorizationFilter("Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new []{ AppPermissionType.Practice })]
+        public ActionResult SetPracticeGrade(Guid id, string score)
+        {
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var standard = SchoolLocator.StandardService.GetStandardByABId(id);
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
+            if (!HasInstalledApp(app.Id, Context.PersonId.Value))
+                throw new ChalkableSecurityException("Current studented has no installed app");
+            SchoolLocator.PracticeGradeService.Add(standard.Id, Context.PersonId.Value, app.Id, score);
+            return Json(true);
+        }
+
+        private bool HasInstalledApp(Guid applicationId, int studentId)
+        {
+            var practiceAppId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            return practiceAppId == applicationId
+                   || SchoolLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
+        }
+
+
+        [AuthorizationFilter("SysAdmin, Teacher, Student")]
+        public ActionResult PracticeGrades(int studentId, int classId, int? standardId)
+        {
+            var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
+            var practiceGrades = SchoolLocator.PracticeGradeService.GetPracticeGradesDetails(classId, studentId, standardId);
+            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards));
+        }
+        
+        [AuthorizationFilter("SysAdmin, Teacher, Student")]
+        public ActionResult MiniQuizInfo(Guid abId)
+        {
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            var miniQuizApp = MasterLocator.ApplicationService.GetApplicationById(appId);
+            var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
+            var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
+            var suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { abId }, installedAppsIds, 0, int.MaxValue);
+            var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
+            return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps, appInstallations, hasMyAppDic, Context.PersonId));
+        }
+    }
+}
