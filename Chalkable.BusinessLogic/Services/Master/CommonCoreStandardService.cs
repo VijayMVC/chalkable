@@ -8,8 +8,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface ICommonCoreStandardService
     {
-        IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId);
-        IList<CC_StandardCategory> GetCCStandardCategories(Guid? paretnCategoryId, bool allCategories = true);
+        IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId = null, Guid? parentStandardId = null);
+        IList<CommonCoreStandardCategory> GetCCStandardCategories();
     }
 
     public class CommonCoreStandardService : MasterServiceBase, ICommonCoreStandardService
@@ -18,20 +18,19 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId)
+        public IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId, Guid? parentStandardId)
         {
             var conds = new AndQueryCondition();
             if (standardCategoryId.HasValue)
                 conds.Add(CommonCoreStandard.STANDARD_CATEGORY_REF_FIELD, standardCategoryId);
+            if(parentStandardId.HasValue)
+                conds.Add(CommonCoreStandard.PARENT_STANDARD_REF_FIELD, parentStandardId);
             return DoRead(u => new CommonCoreStandardDataAccess(u).GetAll(conds));
         }
 
-        public IList<CC_StandardCategory> GetCCStandardCategories(Guid? paretnCategoryId, bool allCategories = true)
+        public IList<CommonCoreStandardCategory> GetCCStandardCategories()
         {
-            var conds = new AndQueryCondition();
-            if (!allCategories || paretnCategoryId.HasValue)
-                conds.Add(CC_StandardCategory.PARENT_CATEGORY_REF_FIELD, paretnCategoryId);
-            return DoRead(u => new CC_StandardCategoryDataAccess(u).GetAll(conds));
+            return DoRead(u => new CC_StandardCategoryDataAccess(u).GetAll());
         }
     }
 }

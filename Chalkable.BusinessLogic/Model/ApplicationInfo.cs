@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Model
         public IList<int> GradeLevels { get; set; }
         public Guid DeveloperId { get; set; }
         public IList<AppPermissionType> PermissionIds { get; set; }
-        public IList<string> StandardsCodes { get; set; }
+        public IList<Guid> StandardsIds { get; set; }
 
         protected BaseApplicationInfo()
         {
@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Model
         public static BaseApplicationInfo Create(ShortApplicationInfo shortApplicationInfo, Guid developerId
             , IList<AppPermissionType> permissionIds = null,  IList<Guid> picturesId = null
             , ApplicationPricesInfo applicationPricesInfo = null, IList<Guid> categories = null
-            , ApplicationAccessInfo applicationAccess = null, IList<int> gradeLevels = null, IList<string> standardsCodes = null)
+            , ApplicationAccessInfo applicationAccess = null, IList<int> gradeLevels = null, IList<Guid> standardsIds = null)
         {
             return new BaseApplicationInfo
             {
@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Model
                 GradeLevels = gradeLevels,
                 DeveloperId = developerId,
                 PermissionIds = permissionIds ?? new List<AppPermissionType>(),
-                StandardsCodes = standardsCodes ?? new List<string>()
+                StandardsIds = standardsIds ?? new List<Guid>()
             };
         }
 
@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Model
                 PicturesId = application.Pictures.Select(x => x.Id).ToList(),
                 GradeLevels = application.GradeLevels.Select(x => x.GradeLevel).ToList(),
                 PermissionIds = application.Permissions.Select(x=>x.Permission).ToList(),
-                StandardsCodes = application.ApplicationStandards.Select(x=>x.StandardCode).ToList()
+                StandardsIds = application.ApplicationStandards.Select(x=>x.StandardRef).ToList()
             };
         }
     }

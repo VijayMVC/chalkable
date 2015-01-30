@@ -8,6 +8,8 @@ namespace Chalkable.Web.Models
 {
     public class CommonCoreStandardViewData
     {
+        public Guid Id { get; set; }
+        public Guid? ParentStandardId { get; set; }
         public string StandardCode { get; set; }
         public string Description { get; set; }
         public Guid StandardCategoryId { get; set; }
@@ -16,6 +18,8 @@ namespace Chalkable.Web.Models
         {
             return new CommonCoreStandardViewData
                 {
+                    Id = commonCoreStandard.Id,
+                    ParentStandardId = commonCoreStandard.ParentStandardRef,
                     Description = commonCoreStandard.Description,
                     StandardCode = commonCoreStandard.Code,
                     StandardCategoryId = commonCoreStandard.StandardCategoryRef

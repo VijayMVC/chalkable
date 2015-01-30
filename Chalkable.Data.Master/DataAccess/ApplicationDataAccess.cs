@@ -272,19 +272,18 @@ namespace Chalkable.Data.Master.DataAccess
         }
 
 
-        public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<string> standardsCodes)
+        public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<Guid> standardsIds)
         {
             SimpleDelete<ApplicationStandard>(new AndQueryCondition{{ApplicationStandard.APPLICATION_REF_FIELD, id}});
             IList<ApplicationStandard> applicationStandards = new List<ApplicationStandard>();
-            if (standardsCodes != null)
+            if (standardsIds != null)
             {
-                foreach (var standardCode in standardsCodes)
+                foreach (var standardId in standardsIds)
                 {
-                    if (string.IsNullOrEmpty(standardCode)) continue;
                     applicationStandards.Add(new ApplicationStandard
                     {
                         ApplicationRef = id,
-                        StandardCode = standardCode
+                        StandardRef = standardId
                     });
                 }
             }

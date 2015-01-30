@@ -177,6 +177,6 @@ namespace Chalkable.Data.Master.Model
         [PrimaryKeyFieldAttr]
         public Guid ApplicationRef { get; set; }
         [PrimaryKeyFieldAttr]
-        public string StandardCode { get; set; }
+        public Guid StandardRef { get; set; }
     }
 }

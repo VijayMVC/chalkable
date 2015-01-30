@@ -232,7 +232,7 @@ namespace Chalkable.Web.Controllers
             bool canGetSecretKey = false;
             if (needsSecretKey)
                 canGetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
-            var standards = locator.CommonCoreStandardService.GetStandards(null);
+            var standards = locator.CommonCoreStandardService.GetStandards();
             var categories = locator.CategoryService.ListCategories();
             var res = ApplicationViewData.Create(application, categories, standards, canGetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)
