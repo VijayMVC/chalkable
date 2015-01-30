@@ -7,10 +7,6 @@ NAMESPACE('chlk.models.standard', function () {
         'CCStandardCategory', [
 
             chlk.models.id.CCStandardCategoryId, 'id',
-
-            [ria.serialize.SerializeProperty('parentcategoryid')],
-            chlk.models.id.CCStandardCategoryId, 'parentCategoryId',
-
             String, 'name'
         ]);
 });

@@ -8,12 +8,12 @@ NAMESPACE('chlk.models.standard', function(){
 
         chlk.models.id.AppId, 'applicationId',
 
-        READONLY, Array, 'standardCodes',
+        READONLY, Array, 'standardsIds',
 
-        Array, function getStandardCodes(){
-            return this.getStandardCodesStr() ? this.getStandardCodesStr().split(',') : [];
+        Array, function getStandardsIds(){
+            return this.getStandardsIdsStr() ? this.getStandardsIdsStr().split(',') : [];
         },
 
-        String, 'standardCodesStr'
+        String, 'standardsIdsStr'
     ]);
 });
