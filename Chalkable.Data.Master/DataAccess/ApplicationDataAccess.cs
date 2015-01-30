@@ -332,20 +332,19 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
-            throw new NotImplementedException();
-            /*IDictionary<string, object> parameters = new Dictionary<string, object>
+            IDictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"start", start},
                     {"count", count},
                     {"installedAppsIds", installedAppsIds != null ? installedAppsIds.Select(x=> x.ToString()).JoinString(",") : null},
-                    {"standardsCodes", standardsCodes != null ? standardsCodes.JoinString(",") : null}
+                    {"academicBenchmarkIds", abIds != null ? abIds.JoinString(",") : null}
                 };
             IList<Application> res;
             using (var reader = ExecuteStoredProcedureReader("spGetSuggestedApplications", parameters))
             {
                 res = reader.ReadList<Application>();
             }
-            return PreparePicturesData(res);*/
+            return PreparePicturesData(res);
         }
     }
 
