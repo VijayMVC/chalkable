@@ -30,7 +30,9 @@
                                 class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (abId ? 'with-code' : '')
                             ).block-item.standard
                                 .left-block(data-tooltip-type="overflow", data-tooltip=standard.getName())=standard.getName()
-                                .right-block=standard.getStandardGrading().getGradeValue()
+                                -var value = standard.getStandardGrading().getGradeValue()
+                                -console.info(value, parseInt(value), Math.round(value))
+                                .right-block=(parseInt(value) ? Math.round(value) : value)
                                     .circle(class=self.getStandardColor(standard))
                         if self.showMoreButton(classItem)
                             .block-item.more-button Show more
