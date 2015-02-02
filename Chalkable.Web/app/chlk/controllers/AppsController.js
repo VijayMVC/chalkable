@@ -176,7 +176,7 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.standardService.getCCStandardCategories()
                 .attach(this.validateResponse_())
                 .then(function (data){
-                    var standardsIds = standards.map(function(s){return s.getId()});
+                    var standardsIds = standards.map(function(s){return s.getId().valueOf()});
                     return new chlk.models.standard.AddCCStandardViewData(applicationId, data, standardsIds);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
@@ -205,7 +205,7 @@ NAMESPACE('chlk.controllers', function (){
         [[Array, ArrayOf(chlk.models.standard.CommonCoreStandard), chlk.models.id.AppId]],
             chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standardsIds, standards, appId){
             standards = standards.filter(function(standard){
-                return standardsIds.indexOf(standard.getId()) >= 0;
+                return standardsIds.indexOf(standard.getId().valueOf()) >= 0;
             });
             this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, standards);
             return new chlk.models.standard.ApplicationStandardsViewData(appId, standards);
