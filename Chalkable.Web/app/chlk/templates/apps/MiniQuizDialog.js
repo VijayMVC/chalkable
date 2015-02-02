@@ -27,15 +27,6 @@ NAMESPACE('chlk.templates.apps', function () {
             chlk.models.standard.Standard, function getCurrentStandard() {
                 var c = this.getCurrentStandardId();
                 return this.standards.filter(function (_) { return _.getStandardId() == c; })[0];
-            },
-
-            String, function getCurrentStandardUrlComponents() {
-                var c = this.getCurrentStandard();
-                return [
-                    'standardId[0]=' + encodeURIComponent(c.getAcademicBenchmarkId()),
-                    'ccStandardId[0]=' + encodeURIComponent(c.getCommonCoreStandardCode()),
-                    'standardName[0]=' + encodeURIComponent(c.getStandardName())
-                ].join('&');
             }
         ])
 });

@@ -13,7 +13,7 @@ NAMESPACE('chlk.activities.apps', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function appIconClick(node, event){
                 var target = new ria.dom.Dom(event.target);
-                if(!target.is('.action-link')){
+                if(!target.is('.action-link')) {
                     var link = node.find('.app-link');
                     if(link.exists()){
                         link.trigger('click');

@@ -227,5 +227,9 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'assessmentApplicationId',
+
+            String, function getStandardsUrlComponents() {
+                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+            }
         ]);
 });

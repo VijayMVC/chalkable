@@ -447,24 +447,24 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
-        function openSuggestedAppTeacherAction(appId, classId, annId){
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, String]],
+        function openSuggestedAppTeacherAction(appId, classId, annId, appUrlAppend_){
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
             this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
                 .attach(this.validateResponse_())
                 .then(function(appTotalPrice){
                     if(appTotalPrice.getTotalPersonsCount() > 0)
                         return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, annId]);
-                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId]);
+                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId, appUrlAppend_]);
                 }, this);
             return null;
         },
 
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean]],
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean, String]],
         function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned, appUrlSuffix_){
             if(viewUrl)
-                return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, appUrlSuffix_);
+                return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, null, appUrlSuffix_);
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
             this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
                 .attach(this.validateResponse_())
@@ -478,8 +478,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId]],
-        function tryToAttachTeacherAction(announcementId, appId) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
+        function tryToAttachTeacherAction(announcementId, appId, appUrlAppend_) {
 
             var result = this.appsService
                 .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId)
@@ -488,7 +488,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(app){
-                    app.setCurrentModeUrl(app.getEditUrl());
+                    app.setCurrentModeUrl(app.getEditUrl() + (appUrlAppend_ ? '&' + appUrlAppend_ : ''));
                     return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);

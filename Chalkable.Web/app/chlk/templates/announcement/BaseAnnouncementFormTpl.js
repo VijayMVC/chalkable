@@ -2,6 +2,9 @@ REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 REQUIRE('chlk.models.apps.SuggestedAppsList');
+REQUIRE('chlk.models.standard.StandardsListViewData');
+
+REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -26,5 +29,13 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Array, 'classScheduleDateRanges',
 
+            chlk.models.standard.StandardsListViewData, function prepareStandardsListData() {
+                var ann = this.announcement;
+                return new chlk.models.standard.StandardsListViewData(
+                    null, ann.getClassId(),
+                    null, ann.getStandards(),
+                    ann.getId()
+                );
+            }
         ]);
 });

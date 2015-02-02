@@ -11,6 +11,6 @@
                                 div(data-tooltip='Attach').attach-icon
                             +LoadingImage(src=pictureUrl, id="loading-image-" + i)
                             .title= app.getName()
-                            +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId()) Open
+                            +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getStandardsUrlComponents()) Open
     else
         .title No recomended apps

@@ -1,4 +1,4 @@
-mixin AppAttachmentBlock(item, pictureHref, i)
+mixin AppAttachmentBlock_(item, pictureHref, i)
     div(attributes)
         .wrapper
             .title= item.getName()
@@ -72,14 +72,12 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                 A(href=attachment.getUrl()).download-link Download
                                 .title=attachment.getName()
                     else
-                        +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
-                            .wrapper
-                                +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
+                        +AppAttachmentBlock_(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
+                            +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
 
                 each app, i in self.getApplications()
                     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
-                    +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
-                        .wrapper
-                            +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()) Open
+                    +AppAttachmentBlock_(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
+                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId(), self.getStandardsUrlComponents()) Open
 
 

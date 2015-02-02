@@ -385,20 +385,18 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number]],
-        function attachAppAction(announcementId, classId, pageIndex_) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, Number]],
+        function attachAppAction(announcementId, classId, appUrlAppend_, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
             var result = this.appMarketService
                 .getAppsForAttach(userId, classId, mp.getId(), pageIndex_ | 0, null)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data);
+                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data, appUrlAppend_ || '');
                 });
-            if (pageIndex_ || pageIndex_ == 0)
-                return this.UpdateView(chlk.activities.apps.AttachAppDialog, result);
-            else
-                return this.ShadeView(chlk.activities.apps.AttachAppDialog, result);
+
+            return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppDialog, result);
         },
 
         [chlk.controllers.Permissions([

@@ -50,29 +50,34 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var standardsData = new chlk.models.standard.StandardsListViewData(
                     null, model.getClassId(),
                     null, model.getStandards(),
-                    model.getId());
-                var standardsTpl =  new chlk.templates.standard.AnnouncementStandardsTpl();
+                    model.getId()
+                );
+                var standardsTpl = new chlk.templates.standard.AnnouncementStandardsTpl();
+                this.onPrepareTemplate_(standardsTpl, standardsData, msg_);
+                standardsTpl.options({
+                    ableToRemoveStandard: model.isAbleToRemoveStandard()
+                });
                 standardsTpl.assign(standardsData);
-                var stsListNode = this.dom.find('.standards-list');
-                stsListNode.setHTML('');
-                standardsTpl.renderTo(stsListNode);
+                standardsTpl.renderTo(this.dom.find('.standards-list').empty());
 
-                var suggestedAppsNode = this.dom.find('.suggested-apps');
-                suggestedAppsNode.setHTML('');
+                model.setNeedButtons(true);
+                model.setNeedDeleteButton(true);
+                var attachmentsTpl = new chlk.templates.announcement.Announcement();
+                this.onPrepareTemplate_(attachmentsTpl, model, msg_);
+                attachmentsTpl.assign(model);
+                attachmentsTpl.renderTo(this.dom.find('.apps-attachments-bock').empty());
 
+                var suggestedAppsNode = this.dom.find('.suggested-apps').empty();
                 if(model.getStandards() && model.getStandards().length > 0 && this.isStudyCenterEnabled()){
                     var suggestedApps = model.getSuggestedApps();
                     var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
                         model.getClassId(),
                         model.getId(),
-                        suggestedApps
+                        suggestedApps,
+                        model.getStandards()
                     );
                     var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
-                    suggestedAppsTpl.options({
-                        userRole: this.getRole(),
-                        currentUser: this.getCurrentUser(),
-                        studyCenterEnabled: this.isStudyCenterEnabled()
-                    });
+                    this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);
                     suggestedAppsTpl.assign(suggestedAppsListData);
                     suggestedAppsTpl.renderTo(suggestedAppsNode);
                 }

@@ -14,10 +14,10 @@ mixin App_(app)
         .action-bar
             .items
                 each value in self.getStandards()
-                    ActionLink('studycenter', 'start-practice', [value.getStandardId()])(class = value.getStandardId() == self.getCurrentStandardId() ? 'pressed' : null)= value.getCommonCoreStandardCode() ||  value.getStandardName() || value.getName()
+                    ActionLink('studycenter', 'start-practice', [value.getStandardId()])(class = value.getStandardId() == self.getCurrentStandardId() ? 'pressed' : null)= value.getCommonCoreStandardCode() ||  value.getName()
         //h2.practice Practice
         .iframe-wrap
-            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&' + self.getCurrentStandardUrlComponents())
+            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&' + self.getCurrentStandard().getUrlComponents()())
 
         h2.apps Suggested Apps
         h3 My Apps
@@ -26,10 +26,10 @@ mixin App_(app)
                 each app in self.getInstalledApplications()
                     +App_(app)
                         - var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
-                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, self.getCurrentStandardUrlComponents()) Open
+                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
         h3 Recommended
         +LeftRightToolbar()
             .attachments-and-applications
                 each app in self.getRecommendedApplications()
                     +App_(app)
-                        +ActionButton('apps', 'openSuggestedAppFromExplorer', app.getId(), null, null, null, null, self.getCurrentStandardUrlComponents()) Install
+                        +ActionButton('appmarket', 'details', app.getId()) App Market

@@ -10,12 +10,14 @@ NAMESPACE('chlk.models.apps', function() {
     CLASS(
         'SuggestedAppsList', [
 
+            ArrayOf(chlk.models.standard.Standard), 'standards',
             ArrayOf(chlk.models.apps.ApplicationForAttach), 'suggestedApps',
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AnnouncementId, 'announcementId',
+            String, 'standardUrlComponents',
 
-            [[chlk.models.id.ClassId, chlk.models.id.AnnouncementId, ArrayOf(chlk.models.apps.ApplicationForAttach)]],
-            function $(classId_, announcementId_, suggestedApps_){
+            [[chlk.models.id.ClassId, chlk.models.id.AnnouncementId, ArrayOf(chlk.models.apps.ApplicationForAttach), ArrayOf(chlk.models.standard.Standard)]],
+            function $(classId_, announcementId_, suggestedApps_, standards_, standardUrlComponents_){
                 BASE();
                 if(classId_)
                     this.setClassId(classId_);
@@ -23,6 +25,10 @@ NAMESPACE('chlk.models.apps', function() {
                     this.setAnnouncementId(announcementId_);
                 if(suggestedApps_)
                     this.setSuggestedApps(suggestedApps_);
+                if(standards_)
+                    this.setStandards(standards_);
+                if(standardUrlComponents_)
+                    this.setStandardUrlComponents(standardUrlComponents_);
             }
     ]);
 

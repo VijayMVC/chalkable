@@ -9,5 +9,8 @@ NAMESPACE('chlk.templates.apps', function() {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/SuggestedAppsListForExplorer.jade')],
         [ria.templates.ModelBind(chlk.models.apps.SuggestedAppsList)],
-        'SuggestedAppsForExplorerListTpl', EXTENDS(chlk.templates.apps.SuggestedAppsListTpl), []);
+        'SuggestedAppsForExplorerListTpl', EXTENDS(chlk.templates.apps.SuggestedAppsListTpl), [
+            [ria.templates.ModelPropertyBind],
+            String, 'standardUrlComponents'
+        ]);
 });

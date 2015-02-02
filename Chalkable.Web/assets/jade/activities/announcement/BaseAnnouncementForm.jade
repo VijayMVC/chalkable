@@ -1,5 +1,5 @@
 //TODO refactor
-mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges)
+mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges)
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
     +Hidden('statetyped', announcement.getStateTyped())
@@ -15,7 +15,7 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
 
     //+AnnouncementFormDescriptionBlock(announcement)
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-    isAdminAnnouncement = adminRecipients && tplData.getUserRole().isAdmin()
+    isAdminAnnouncement = adminRecipients && self.getUserRole().isAdmin()
     isAnnouncement = (announcement.isStandartAnnouncement() || isAdminAnnouncement)
     disableDeleteBtn = !!(announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0)
     standards = announcement.getStandards() || []
@@ -50,11 +50,10 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
                         .add-standards-container
                             .add-standards
                                 .standards-list
-                                    each standard in standards
-                                        button(data-tooltip = standard.getDescription(), type="button").grey-button.same-on-hover
-                                            = standard.getName()
-                                            if announcement.isAbleToRemoveStandard()
-                                                +ActionLink('announcement', 'removeStandard', announcement.getId(), standard.getStandardId()).remove-standard
+                                    +RenderWith(self.prepareStandardsListData(), chlk.templates.standard.AnnouncementStandardsTpl)(
+                                        userRole = userRole
+                                        studyCenterEnabled = self.isStudyCenterEnabled()
+                                        ableToRemoveStandard=announcement.isAbleToRemoveStandard())
                                 if !isAdminAnnouncement && announcement.isCanAddStandard()
                                     .title=Msg.Click_to_add_standard
                                     +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
@@ -109,11 +108,11 @@ mixin BaseAnnouncementFormContainer(tplData, announcement, classId, adminRecipie
         -ann.setNeedDeleteButton(true)
             +RenderWith(ann, chlk.templates.announcement.Announcement)(
                 userRole = userRole,
-                studyCenterEnabled = tplData.isStudyCenterEnabled()
+                studyCenterEnabled = self.isStudyCenterEnabled()
             )
     .suggested-apps
-        if announcement.getStandards() && announcement.getStandards().length > 0 && tplData.isStudyCenterEnabled()
-            +RenderWith(tplData.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
+        if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
+            +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)
     .bottom-block
         +Button()(
             type="submit",
