@@ -1,0 +1,69 @@
+mixin SmallChart(data, header, chartId)
+    configs = self.getChartData(data)
+    smallChartOptions = self.prepareSmallChartOptions(configs)
+    chartTitle = (data.getStat() ? data.getDisplayNumber() || "0" : "0")
+    .block(attributes)
+        .panel-header=header
+        .chart-block.relative
+            .chart-bg.button-block=chartTitle
+            +Chart()(
+                id = chartId,
+                data-showmarkeronhover = true,
+                data-options = smallChartOptions)
+
+mixin If3Block_(items, i, index)
+    if index == 0 || i + index < items.length
+        TD
+            .image-container
+                +PersonImg(items[i+index].getStudent(), 64)
+
+mixin StudentsBlock_(data, header, controller, action)
+    .block(attributes)
+        .panel-header=header
+        .button-block
+            +ActionLink(controller, action).images-wrapper
+                TABLE
+                    TBODY
+                        each item,i in data
+                            if i % 3 == 0
+                                TR
+                                    +If3Block_(data, i, 0)
+                                    +If3Block_(data, i, 1)
+                                    +If3Block_(data, i, 2)
+
+topData = self.getTopData()
+topItems = topData.getTopItems()
+selectedIds = topData.getSelectedIds()
+
+.admin-home.loader-container
+    .loader
+    +LeftRightToolbar(topItems, chlk.templates.grading.GradeLevelForTopBar, 'feed', 'list', [true])(
+        selectedIds=selectedIds,
+        multiple
+    ).classes-bar
+    #admin-home-charts.third-blocks-container
+        +SmallChart(self.getNotInClassBox(), Msg.Not_In_Class_Now, 'now-chart').first-block
+        +SmallChart(self.getAbsentForDay(), Msg.Absent_Today, 'today-chart').second-block
+        +SmallChart(self.getAbsentForMp(), Msg.Absent_Average_MP(self.getMarkingPeriodName()), 'mp-chart').third-block
+    #admin-second-block.third-blocks-container
+        +StudentsBlock_(self.getDisciplines(), Msg.Discipline, 'feed', 'list').discipline-block
+        .block.budget-block.relative
+            budget = self.getBudgetBalance()
+            budgetChartOptions = self.prepareBudgetChartOptions(budget)
+            .absolute
+                .panel-header=Msg.App_budget
+                .budget-chart-container.relative
+                    .inside
+                        .big $#{budget.getCurrentBalance()}
+                        .small $#{budget.getStartSchoolBalance()}
+                    .outside
+                    +ActionLink('feed', 'list').hover-area.button-block
+            +Chart()(data-options = budgetChartOptions)#budget-chart
+        +StudentsBlock_(self.getAttendances(), Msg.Attendance, 'feed', 'list').attendance-block
+    #grades-chart-container
+        .panel-header=Msg.Grade(true)
+        .chart-block.relative
+            .chart-bg.button-block
+            configs = self.getGradingChartData()
+            gradingChartOptions = self.prepareGradingChartOptions(configs)
+            +Chart()(data-options = gradingChartOptions)#grading-chart
