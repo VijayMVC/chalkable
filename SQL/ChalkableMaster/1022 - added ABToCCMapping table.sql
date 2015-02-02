@@ -5,6 +5,6 @@ create table ABToCCMapping
 )
 
 alter table ABToCCMapping
-add constraint PK_ABToCCMappingID unique (AcademicBenchmarkId, CCStandardRef)
+add constraint PK_ABToCCMappingID primary key (AcademicBenchmarkId, CCStandardRef)
 go
 
