@@ -135,11 +135,11 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, String, String, Number]],
-            ria.async.Future, function getSuggestedApps(classId, markingPeriodId, standardsCodes, start_, count_){
+            ria.async.Future, function getSuggestedApps(classId, markingPeriodId, academicBenchmarkIds, start_, count_){
                 return this.get('AppMarket/SuggestedApps.json', ArrayOf(chlk.models.apps.ApplicationForAttach),{
                     classId : classId.valueOf(),
                     markingPeriodId: markingPeriodId ? markingPeriodId.valueOf() : this.getContext().getSession().get('markingPeriod').getId().valueOf(),
-                    standardsCodes : standardsCodes,
+                    abIds : academicBenchmarkIds,
                     start: start_ | 0,
                     count: count_ || 9999
                 });

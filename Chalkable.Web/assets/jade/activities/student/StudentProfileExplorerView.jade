@@ -25,9 +25,9 @@
                                 .right-block __
                                     .circle.white
                         each standard, i in classItem.getStandards()
-                            -var code = standard.getCommonCoreStandardCode()
-                            +ActionLink('appmarket', 'getSuggestedApps', classItem.getClazz().getId(), code)(
-                                class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (code ? 'with-code' : '')
+                            -var abId = standard.getAcademicBenchmarkId()
+                            +ActionLink('appmarket', 'getSuggestedApps', classItem.getClazz().getId(), abId)(
+                                class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (abId ? 'with-code' : '')
                             ).block-item.standard
                                 .left-block(data-tooltip-type="overflow", data-tooltip=standard.getName())=standard.getName()
                                 .right-block=standard.getStandardGrading().getGradeValue()

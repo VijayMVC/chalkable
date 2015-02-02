@@ -249,10 +249,10 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.ClassId, String]],
-        function getSuggestedAppsAction(classId, commonCoreStandardCode) {
-            if(commonCoreStandardCode){
+        function getSuggestedAppsAction(classId, academicBenchmarkIds) {
+            if(academicBenchmarkIds && academicBenchmarkIds != ''){
                 var result = this.appMarketService
-                    .getSuggestedApps(classId, null, commonCoreStandardCode)
+                    .getSuggestedApps(classId, null, academicBenchmarkIds)
                     .attach(this.validateResponse_())
                     .then(function(apps){
                         return new chlk.models.apps.SuggestedAppsList(classId, null, apps)
