@@ -5,6 +5,7 @@ REQUIRE('chlk.templates.grading.StandardsInputTpl');
 REQUIRE('chlk.activities.common.InfoByMpPage');
 REQUIRE('chlk.models.grading.GradingClassSummary');
 REQUIRE('chlk.activities.grading.BaseGridPage');
+REQUIRE('chlk.templates.grading.GradingStandardsPopUpTpl');
 
 NAMESPACE('chlk.activities.grading', function () {
 
@@ -95,6 +96,13 @@ NAMESPACE('chlk.activities.grading', function () {
                 );
 
                 return model;
+            },
+
+            OVERRIDE, function addPopUpByModel(cell, model){
+                BASE(cell, model);
+                var popUpTpl = new chlk.templates.grading.GradingStandardsPopUpTpl();
+                popUpTpl.assign(model);
+                this.dom.find('#grading-popup').setHTML(popUpTpl.render());
             },
 
             OVERRIDE, function prepareTplForForm_(cell, model){
