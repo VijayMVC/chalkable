@@ -24,6 +24,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Array, 'reminders',
 
             [ria.templates.ModelPropertyBind],
-            Array, 'classScheduleDateRanges'
+            Array, 'classScheduleDateRanges',
+
         ]);
 });

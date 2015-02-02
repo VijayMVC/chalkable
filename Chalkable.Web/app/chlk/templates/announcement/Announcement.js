@@ -223,6 +223,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'ableDropStudentScore',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'ableToExempt'
+            Boolean, 'ableToExempt',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AppId, 'assessmentApplicationId',
         ]);
 });

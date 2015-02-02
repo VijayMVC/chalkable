@@ -12,6 +12,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('isdraft')],
             Boolean, 'isDraft',
 
-            Array, 'recipients'
+            Array, 'recipients',
         ]);
 });

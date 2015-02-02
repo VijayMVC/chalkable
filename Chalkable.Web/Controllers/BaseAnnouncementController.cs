@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -26,6 +29,8 @@ namespace Chalkable.Web.Controllers
             var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.PersonId.Value, attInfo);
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, announcementId);
             annViewData.ApplicationsCount = annViewData.Applications.Count;
+            annViewData.AssessmentApplicationId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
+         
             if (annViewData.Applications.Count > 0)
             {
                 annViewData.ApplicationName = annViewData.Applications.Count == 1

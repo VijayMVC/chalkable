@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
@@ -75,13 +76,14 @@ namespace Chalkable.Web.Controllers
                 var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
                 Debug.Assert(Context.PersonId.HasValue);
                 var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
+                avd.AssessmentApplicationId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
                 avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
                 avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
                 avd.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(annDetails);
                 return Json(new CreateAnnouncementViewData
                 {
                     Announcement = avd,
-                    IsDraft = annDetails.IsDraft
+                    IsDraft = annDetails.IsDraft,
                 });
             }
 

@@ -104,6 +104,8 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
+                this.assessmentApplicationId = SJX.fromValue(raw.assessmentapplicationid, chlk.models.id.AppId);
+
             },
             function $(){
                 BASE();
@@ -212,6 +214,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'needDeleteButton',
             String, 'annRecipients',
             Boolean, 'ableEdit',
+            chlk.models.id.AppId, 'assessmentApplicationId',
 
             function prepareExpiresDateText(){
                 var now = getSchoolYearServerDate();
