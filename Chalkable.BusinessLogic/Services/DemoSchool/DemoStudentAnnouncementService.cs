@@ -136,14 +136,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         }
 
-        //TODO: check application existing  
-        public StudentAnnouncement SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
+        public void ResolveAutoGrading(int announcementId, bool apply)
         {
             throw new NotImplementedException();
         }
 
 
-        public void ResolveAutoGrading(int announcementId, bool apply)
+        public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
         {
             throw new NotImplementedException();
         }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -324,5 +325,13 @@ namespace Chalkable.Web.Controllers
 
             return Json(StudentAveragesViewData.Create(res));
         }
+
+        [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        public ActionResult SetAutoGrade(int announcementApplicationId,int studentId, string gradeValue)
+        {
+            var res = SchoolLocator.StudentAnnouncementService.SetAutoGrade(announcementApplicationId, studentId, gradeValue);
+            return Json(true);
+        }
+
     }
 }

@@ -5,6 +5,8 @@ using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -17,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //IList<StudentAnnouncement> GetStudentAnnouncements(int schoolPersonId, int classId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
-        //StudentAnnouncementInfo SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId);
+        AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value);
         //IList<StudentGradingComplex> GetStudentGradedAnnouncements(int schoolPersonId, int markingPeriodId);
 
         //int? GetAssignmentAverage(int announcementId);
@@ -180,7 +182,36 @@ namespace Chalkable.BusinessLogic.Services.School
         //            });
         //    }
         //}
-        
-        
+
+
+        public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
+        {
+            if(studentId != Context.PersonId)
+                throw new ChalkableSecurityException();
+
+            //TODO: chekc if student has installed current application
+            var annApp = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
+            if(annApp.ApplicationRef == app.Id)
+                throw new ChalkableSecurityException("There is no announcemenApplication with such Id and ApplicationId");
+            if(!annApp.Active)
+                throw new ChalkableSecurityException("Application is not attached to an item");
+
+            ServiceLocator.AnnouncementService.GetAnnouncementById(annApp.AnnouncementRef); // security here
+
+            using (var uow = Update())
+            {
+                var da = new AutoGradeDataAccess(uow);
+                var autoGrade =  da.GetAutoGrade(announcementApplicationId, studentId) ?? new AutoGrade
+                    {
+                        AnnouncementApplicationRef = announcementApplicationId,
+                        StudentRef = studentId
+                    };
+                autoGrade.Date = Context.NowSchoolTime;
+                autoGrade.Grade = value;
+                autoGrade.Posted = false;
+                return autoGrade;
+            }
+        }
     }
 }
