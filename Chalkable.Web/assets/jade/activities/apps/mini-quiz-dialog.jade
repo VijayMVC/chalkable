@@ -1,0 +1,35 @@
+mixin App_(app)
+    -VALIDATE_ARG('app', [chlk.models.apps.Application], app)
+    .application
+        .wrapper
+            +LoadingImage(src=self.getAppPictureURL(app.getBigPictureId(), 170, 110))
+            .title= app.getName()
+            block
+
+.dialog
+    .x-window-header
+        .close.close-btn.dark
+        h1 Practice
+    .x-window-body
+        .action-bar
+            .items
+                each value in self.getStandards()
+                    ActionLink('studycenter', 'start-practice', [value.getStandardId()])(class = value.getStandardId() == self.getCurrentStandardId() ? 'pressed' : null)= value.getCommonCoreStandardCode() ||  value.getName()
+        //h2.practice Practice
+        .iframe-wrap
+            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&' + self.getCurrentStandard().getUrlComponents())
+
+        h2.apps Suggested Apps
+        h3 My Apps
+        +LeftRightToolbar()
+            .attachments-and-applications
+                each app in self.getInstalledApplications()
+                    +App_(app)
+                        - var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
+        h3 Recommended
+        +LeftRightToolbar()
+            .attachments-and-applications
+                each app in self.getRecommendedApplications()
+                    +App_(app)
+                        +ActionButton('appmarket', 'details', app.getId()) App Market
