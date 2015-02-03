@@ -28,7 +28,7 @@ namespace Chalkable.Web.Models
     {
         public GradingGridViewData CurrentGradingGrid { get; set; }
         public IList<GradingPeriodViewData> GradingPeriods { get; set; }
-        public IList<AnnouncementStandardViewData> Standards { get; set; }
+        public IList<StandardViewData> Standards { get; set; }
         public IList<ClassAnnouncementTypeViewData> ClassAnnouncementTypes { get; set; }
 
         public static GradingGridsViewData Create(ChalkableGradeBook grid, IList<GradingPeriodDetails> gradingPeriods
@@ -38,7 +38,7 @@ namespace Chalkable.Web.Models
                 {
                     CurrentGradingGrid = grid != null ? GradingGridViewData.Create(grid) : null,
                     GradingPeriods = gradingPeriods.Select(GradingPeriodViewData.Create).ToList(),
-                    Standards = AnnouncementStandardViewData.Create(standards),
+                    Standards = StandardViewData.Create(standards),
                     ClassAnnouncementTypes = ClassAnnouncementTypeViewData.Create(classAnnouncementTypes)
                 };
         }

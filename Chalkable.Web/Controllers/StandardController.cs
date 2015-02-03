@@ -16,9 +16,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards)
         {
-            var standards = SchoolLocator.StandardService.GetStandards(classId, gradeLevelId
+            var standards = SchoolLocator.StandardService.GetStandardsDetails(classId, gradeLevelId
                 , subjectId, parentStandardId, allStandards ?? false);
-            return Json(AnnouncementStandardViewData.Create(standards));
+            return Json(standards.Select(StandardViewData.Create).ToList());
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Controllers
         {
             // TODO: replace with fetch all with ONE query
             var standards = ids.Select(id => SchoolLocator.StandardService.GetStandardById(id)).ToList();
-            return Json(AnnouncementStandardViewData.Create(standards));
+            return Json(StandardViewData.Create(standards));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
