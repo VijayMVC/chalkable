@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="DataAccess\AlphaGradeDataAccess.cs" />
     <Compile Include="DataAccess\AlternateScoreDataAccess.cs" />
+    <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
     <Compile Include="DataAccess\BaseDataAccess.cs" />
     <Compile Include="DataAccess\AddressDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionGradeLevel.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionRole.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
+    <Compile Include="Model\AutoGrade.cs" />
     <Compile Include="Model\BellSchedule.cs" />
     <Compile Include="Model\Class.cs" />
     <Compile Include="Model\ClassAnnouncementType.cs" />
