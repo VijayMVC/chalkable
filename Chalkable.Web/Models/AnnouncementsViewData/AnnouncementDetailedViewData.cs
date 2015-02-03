@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<AnnouncementAttachmentViewData> AnnouncementAttachments { get; set; }
         public IList<AnnouncementQnAViewData> AnnouncementQnAs { get; set; }
         public IList<AnnouncementApplicationViewData> Applications { get; set; }
-        public IList<AnnouncementStandardViewData> Standards { get; set; }
+        public IList<StandardViewData> Standards { get; set; }
         public StudentAnnouncementsViewData StudentAnnouncements { get; set; }
         public IList<String> AutoGradeApps { get; set; }
 
@@ -35,7 +35,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             if(announcementDetails.Owner != null)
                 Owner = ShortPersonViewData.Create(announcementDetails.Owner);
             if(announcementDetails.AnnouncementStandards != null)
-                Standards = AnnouncementStandardViewData.Create(announcementDetails.AnnouncementStandards);
+                Standards = StandardViewData.Create(announcementDetails.AnnouncementStandards);
             if (announcementDetails.AnnouncementApplications == null) return;
             Exempt = studentAnnouncements.Count > 0 && studentAnnouncements.All(x => x.Exempt);
             CanRemoveStandard = studentAnnouncements.Count == 0

@@ -50,7 +50,7 @@ namespace Chalkable.Web.Models
         public IList<StandardGradingItemViewData> Items { get; set; }
         public int? NumericAvg { get; set; }
         public string AlphaGradeNameAvg { get; set; }
-        public AnnouncementStandardViewData Standard { get; set; }
+        public StandardViewData Standard { get; set; }
 
         public static IList<StandardGradingViewData> Create(IList<GradingStandardInfo> gradingStandards, IList<int> studentIds)
         {
@@ -61,7 +61,7 @@ namespace Chalkable.Web.Models
                 var gradingSt = kv.Value.First();
                 var standardGrading = new StandardGradingViewData
                     {
-                        Standard = AnnouncementStandardViewData.Create(gradingSt.Standard),
+                        Standard = StandardViewData.Create(gradingSt.Standard),
                         NumericAvg = (int?) kv.Value.Average(x => x.NumericGrade),
                         Items = new List<StandardGradingItemViewData>()
                     };

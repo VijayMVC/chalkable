@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
 
-    public class AnnouncementStandardViewData
+    public class StandardViewData
     {
         public int StandardId { get; set; }
         public int? ParentStandardId { get; set; }
@@ -16,9 +17,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string CCStandardCode { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
         
-        protected AnnouncementStandardViewData(){}
+        protected StandardViewData(){}
 
-        protected AnnouncementStandardViewData(Standard standard)
+        protected StandardViewData(Standard standard)
         {
             StandardId = standard.Id;
             Description = standard.Description;
@@ -28,17 +29,25 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AcademicBenchmarkId = standard.AcademicBenchmarkId;
             //CCStandardCode = standard.CCStandardCode;//TODO: get from AB to CC mapping
         }
-
-        public static AnnouncementStandardViewData Create(Standard standard)
+        
+        public static StandardViewData Create(Standard standard)
         {
-            return new AnnouncementStandardViewData(standard);
+            return new StandardViewData(standard);
         }
 
-        public static IList<AnnouncementStandardViewData> Create(IList<Standard> standards)
+        public static StandardViewData Create(StandardDetailsInfo standardDetailsInfo)
+        {
+            var res = Create(standardDetailsInfo.Standard);
+            if (standardDetailsInfo.CommonCoreStandard != null)
+                res.CCStandardCode = standardDetailsInfo.CommonCoreStandard.Code;
+            return res;
+        }
+
+        public static IList<StandardViewData> Create(IList<Standard> standards)
         {
             return standards.Select(Create).ToList();
         }
-        public static IList<AnnouncementStandardViewData> Create(IList<AnnouncementStandardDetails> standardDetailses)
+        public static IList<StandardViewData> Create(IList<AnnouncementStandardDetails> standardDetailses)
         {
             return standardDetailses.Select(x => Create(x.Standard)).ToList();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -10,6 +11,8 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId = null, Guid? parentStandardId = null, bool allStandards = true);
         IList<CommonCoreStandardCategory> GetCCStandardCategories();
+        CommonCoreStandard GetStandardByABId(Guid academicBenchmarkId);
+        IList<CommonCoreStandard> GetStandardsByABIds(IList<Guid> academicBenchmarkIds);
     }
 
     public class CommonCoreStandardService : MasterServiceBase, ICommonCoreStandardService
@@ -31,6 +34,19 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IList<CommonCoreStandardCategory> GetCCStandardCategories()
         {
             return DoRead(u => new CC_StandardCategoryDataAccess(u).GetAll());
+        }
+
+
+        public CommonCoreStandard GetStandardByABId(Guid academicBenchmarkId)
+        {
+            var abIds = new List<Guid> {academicBenchmarkId};
+            return GetStandardsByABIds(abIds).FirstOrDefault();
+        }
+
+        public IList<CommonCoreStandard> GetStandardsByABIds(IList<Guid> academicBenchmarkIds)
+        {
+            if(academicBenchmarkIds.Count == 0) return new List<CommonCoreStandard>();
+            return DoRead(uow => new CommonCoreStandardDataAccess(uow).GetByABIds(academicBenchmarkIds));
         }
     }
 }

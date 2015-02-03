@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -141,6 +143,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public Standard GetStandardByABId(Guid id)
         {
             return Storage.StandardStorage.GetAll().First(x => x.AcademicBenchmarkId == id);
+        }
+
+
+        public StandardDetailsInfo GetStandardDetailsById(int standardId)
+        {
+            var standard = GetStandardById(standardId);
+            CommonCoreStandard ccStandard = null;
+            if (standard.AcademicBenchmarkId.HasValue)
+                ccStandard = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardByABId(
+                        standard.AcademicBenchmarkId.Value);
+            return StandardDetailsInfo.Create(standard, ccStandard);
+        }
+
+        public IList<StandardDetailsInfo> GetStandardsDetails(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
+        {
+            var standards = GetStandards(classId, gradeLevelId, subjectId, parentStandardId, allStandards);
+            var abIds = standards.Where(s => s.AcademicBenchmarkId.HasValue).Select(s => s.AcademicBenchmarkId.Value).ToList();
+            var ccStandards = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardsByABIds(abIds);
+            var res = new List<StandardDetailsInfo>();
+            foreach (var standard in standards)
+            {
+                CommonCoreStandard ccStandard = null;
+                if (standard.AcademicBenchmarkId.HasValue)
+                    ccStandard = ccStandards.FirstOrDefault(x => x.AcademicBenchmarkId == standard.AcademicBenchmarkId);
+                res.Add(StandardDetailsInfo.Create(standard, ccStandard));
+            }
+            return res;
         }
     }
 }

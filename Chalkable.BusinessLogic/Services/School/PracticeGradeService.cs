@@ -77,9 +77,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<PracticeGradeDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
         {
-            var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
+            var standards = ServiceLocator.StandardService.GetStandardsDetails(classId, null, null);
             if (standardId.HasValue)
-                standards = standards.Where(x => x.Id == standardId).ToList();
+                standards = standards.Where(x => x.Standard.Id == standardId).ToList();
             var practiceGrades = GetPracticeGrades(studentId, standardId);
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var standardsScores = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(sy.Id, studentId, Context.NowSchoolTime)
@@ -87,8 +87,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = new List<PracticeGradeDetailedInfo>();
             foreach (var standard in standards)
             {
-                var standardScore = standardsScores.FirstOrDefault(x => x.StandardId == standard.Id);
-                var pGrades = practiceGrades.Where(x => x.StandardId == standard.Id).ToList();
+                var standardScore = standardsScores.FirstOrDefault(x => x.StandardId == standard.Standard.Id);
+                var pGrades = practiceGrades.Where(x => x.StandardId == standard.Standard.Id).ToList();
                 if (pGrades.Count > 0)
                 {
                     res.AddRange(pGrades.Select(pg => PracticeGradeDetailedInfo.Create(pg, standard, standardScore)));

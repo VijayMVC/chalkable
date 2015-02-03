@@ -10,14 +10,14 @@ namespace Chalkable.Web.Models
 {
     public class PracticeGradeGridViewData
     {
-        public IList<AnnouncementStandardViewData> Standrds { get; set; }
+        public IList<StandardViewData> Standrds { get; set; }
         public IList<PracticeGradeViewData> PracticeGrades { get; set; }
  
         public static PracticeGradeGridViewData Create(IList<PracticeGradeDetailedInfo> practiceGrades, IList<Standard> standards)
         {
             var res = new PracticeGradeGridViewData
                 {
-                    Standrds = AnnouncementStandardViewData.Create(standards),
+                    Standrds = StandardViewData.Create(standards),
                     PracticeGrades = practiceGrades.Select(x => PracticeGradeViewData.Create(x.PracticeGrade, x.GradingStandardInfo, x.Standard)).ToList()
                 };
             return res;
@@ -26,17 +26,17 @@ namespace Chalkable.Web.Models
 
     public class PracticeGradeViewData
     {
-        public AnnouncementStandardViewData Standard { get; set; }
+        public StandardViewData Standard { get; set; }
         public string PracticeScore { get; set; }
         public string GradeBookScore { get; set; }
         public DateTime? GradedDate { get; set; }
         public Guid? ApplicationId { get; set; }
 
-        public static PracticeGradeViewData Create(PracticeGrade practiceGrade, GradingStandardInfo gradingStandardInfo, Standard standard)
+        public static PracticeGradeViewData Create(PracticeGrade practiceGrade, GradingStandardInfo gradingStandardInfo, StandardDetailsInfo standard)
         {
             var res = new PracticeGradeViewData
                 {
-                    Standard = AnnouncementStandardViewData.Create(standard)
+                    Standard = StandardViewData.Create(standard)
                 };
             if (practiceGrade != null)
             {
