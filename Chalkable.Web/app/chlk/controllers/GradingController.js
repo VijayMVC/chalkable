@@ -592,7 +592,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitMissingAssignmentsReportViewData]],
             function submitMissingAssignmentsReportAction(reportViewData){
-                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) >= 0){
+                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -621,7 +621,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitComprehensiveProgressViewData]],
             function submitComprehensiveProgressReportAction(reportViewData){
-                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) >= 0){
+                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -662,7 +662,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(reportViewData){
 
-                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) >= 0){
+                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
@@ -761,7 +761,7 @@ NAMESPACE('chlk.controllers', function (){
                         return this.UpdateView(chlk.activities.reports.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData), 'stop');
                     }
 
-                    if (Date.compare(getDate(model.getStartDate()) , getDate(model.getEndDate())) >= 0){
+                    if (Date.compare(getDate(model.getStartDate()) , getDate(model.getEndDate())) > 0){
                         return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                     }
 
