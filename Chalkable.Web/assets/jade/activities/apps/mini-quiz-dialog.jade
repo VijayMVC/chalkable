@@ -17,7 +17,7 @@ mixin App_(app)
                     ActionLink('studycenter', 'start-practice', [value.getStandardId()])(class = value.getStandardId() == self.getCurrentStandardId() ? 'pressed' : null)= value.getCommonCoreStandardCode() ||  value.getName()
         //h2.practice Practice
         .iframe-wrap
-            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&' + self.getCurrentStandard().getUrlComponents())
+            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents())
 
         h2.apps Suggested Apps
         h3 My Apps

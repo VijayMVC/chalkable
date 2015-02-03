@@ -17,6 +17,9 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.Application), 'installedApplications',
 
             [ria.serialize.SerializeProperty('recommendedapplications')],
-            ArrayOf(chlk.models.apps.Application), 'recommendedApplications'
+            ArrayOf(chlk.models.apps.Application), 'recommendedApplications',
+
+            [ria.serialize.SerializeProperty('authorizationcode')],
+            String, 'authorizationCode'
         ]);
 });

@@ -24,6 +24,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.Application), 'recommendedApplications',
 
+            [ria.templates.ModelPropertyBind],
+            String, 'authorizationCode',
+
             chlk.models.standard.Standard, function getCurrentStandard() {
                 var c = this.getCurrentStandardId();
                 return this.standards.filter(function (_) { return _.getStandardId() == c; })[0];
