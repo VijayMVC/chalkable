@@ -27,7 +27,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ParentStandardId = standard.ParentStandardRef;
             StandardSubjectId = standard.StandardSubjectRef;
             AcademicBenchmarkId = standard.AcademicBenchmarkId;
-            //CCStandardCode = standard.CCStandardCode;//TODO: get from AB to CC mapping
         }
         
         public static StandardViewData Create(Standard standard)

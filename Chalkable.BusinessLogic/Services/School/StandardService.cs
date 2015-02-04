@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         StandardDetailsInfo GetStandardDetailsById(int standardId);
         IList<StandardDetailsInfo> GetStandardsDetails(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
-        
+        IList<StandardDetailsInfo> GetStandardsDetails(IList<int> standardIds); 
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
@@ -227,17 +227,33 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<StandardDetailsInfo> GetStandardsDetails(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
         {
             var standards = GetStandards(classId, gradeLevelId, subjectId, parentStandardId, allStandards);
+            return PrepareStandardsDetailsInfo(standards);
+        }
+
+
+        public IList<StandardDetailsInfo> GetStandardsDetails(IList<int> standardIds)
+        {
+            if(standardIds == null || standardIds.Count == 0)
+                return new List<StandardDetailsInfo>();
+
+            var standards = DoRead(uow => new StandardDataAccess(uow).GetStandardsByIds(standardIds));
+            return PrepareStandardsDetailsInfo(standards);
+        }
+
+        private IList<StandardDetailsInfo> PrepareStandardsDetailsInfo(IList<Standard> standards)
+        {
             var abIds = standards.Where(s => s.AcademicBenchmarkId.HasValue).Select(s => s.AcademicBenchmarkId.Value).ToList();
             var ccStandards = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardsByABIds(abIds);
             var res = new List<StandardDetailsInfo>();
             foreach (var standard in standards)
             {
                 CommonCoreStandard ccStandard = null;
-                if(standard.AcademicBenchmarkId.HasValue)
+                if (standard.AcademicBenchmarkId.HasValue)
                     ccStandard = ccStandards.FirstOrDefault(x => x.AcademicBenchmarkId == standard.AcademicBenchmarkId);
                 res.Add(StandardDetailsInfo.Create(standard, ccStandard));
             }
             return res;
+ 
         }
     }
 }

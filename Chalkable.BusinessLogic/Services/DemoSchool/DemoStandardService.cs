@@ -159,6 +159,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<StandardDetailsInfo> GetStandardsDetails(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
         {
             var standards = GetStandards(classId, gradeLevelId, subjectId, parentStandardId, allStandards);
+            return PrepareStandardsDetailsInfo(standards);
+        }
+
+
+        public IList<StandardDetailsInfo> GetStandardsDetails(IList<int> standardIds)
+        {
+            if (standardIds == null || standardIds.Count == 0)
+                return new List<StandardDetailsInfo>();
+            var standards = Storage.StandardStorage.GetAll().Where(s=>standardIds.Contains(s.Id)).ToList();
+            return PrepareStandardsDetailsInfo(standards);
+        }
+
+        private IList<StandardDetailsInfo> PrepareStandardsDetailsInfo(IList<Standard> standards)
+        {
             var abIds = standards.Where(s => s.AcademicBenchmarkId.HasValue).Select(s => s.AcademicBenchmarkId.Value).ToList();
             var ccStandards = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardsByABIds(abIds);
             var res = new List<StandardDetailsInfo>();
@@ -170,6 +184,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 res.Add(StandardDetailsInfo.Create(standard, ccStandard));
             }
             return res;
+
         }
     }
 }
