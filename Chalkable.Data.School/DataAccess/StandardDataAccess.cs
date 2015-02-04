@@ -44,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess
         public IList<Standard> GetStandardsByIds(IList<int> ids)
         {
             var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat("select * form [{0}] where [{0}].[{1}] in ({2})"
+            dbQuery.Sql.AppendFormat("select * from [{0}] where [{0}].[{1}] in ({2})"
                 , typeof(Standard).Name,  Standard.ID_FIELD, ids.JoinString(","));
             return ReadMany<Standard>(dbQuery);
         } 
