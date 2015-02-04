@@ -2,6 +2,88 @@
   .dialog
     width: 1024px
 
+    .close-btn
+      right: 9px
+
+  .x-window-header-white
+    border-bottom: 1px solid #d7d7d7
+    height: 62px
+
+  .add-new
+    border: none
+    box-shadow: none
+    border-radius: 0
+    width: 175px
+    padding: 0 22px
+
+  .add-new, .standard-item
+    height: 62px
+    line-height: 62px
+    border-right: 1px solid #d7d7d7
+    vertical-align: top
+
+  .close
+    position: absolute
+    right: 0
+    top: 0
+    height: 62px
+    width: 50px
+    border-left: 1px solid #d7d7d7
+    cursor: pointer
+
+  .lr-toolbar
+    width: 673px
+    display: inline-block
+    margin-left: 40px
+
+    .prev-button
+      left: -25px
+
+    .next-button
+      right: -26px
+
+    .disabled
+      display: inline-block
+      opacity: 0.5
+
+    .first-container
+      border-right: 1px solid #d7d7d7
+      border-left: 1px solid #d7d7d7
+
+    .standard-item
+      display: inline-block
+      width: 167px
+      position: relative
+      background: #f7f7f5
+
+      .standard-link
+        text-decoration: none
+        overflow: hidden
+        text-overflow: ellipsis
+        position: absolute
+        padding: 0 15px
+        z-index: 1
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+
+      .close-btn
+        position: absolute
+        top: 15px
+        right: 9px
+        display: none
+        z-index: 2
+
+      &:hover
+        .close-btn
+          display: block
+
+      &.pressed
+        background: #2f7790
+
+        .standard-link
+          color: #ffffff
 
   .iframe-wrap
     position: relative
