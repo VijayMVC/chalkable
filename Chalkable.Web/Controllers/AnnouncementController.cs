@@ -193,6 +193,7 @@ namespace Chalkable.Web.Controllers
             res.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
             res.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             res.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(ann);
+            res.AssessmentApplicationId = Guid.Parse((PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value));
             return Json(res);
         }
         
