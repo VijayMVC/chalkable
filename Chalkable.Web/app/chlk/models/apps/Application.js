@@ -32,7 +32,6 @@ NAMESPACE('chlk.models.apps', function () {
                 this.message = SJX.fromValue(raw.message, String);
                 this.internal = SJX.fromValue(raw.isinternal, Boolean);
                 this.name = SJX.fromValue(raw.name, String);
-                this.internal = SJX.fromValue(raw.internal, Boolean);
                 this.url = SJX.fromValue(raw.url, String);
                 this.videoDemoUrl = SJX.fromValue(raw.videodemourl, String);
                 this.shortDescription = SJX.fromValue(raw.shortdescription, String);
