@@ -43,9 +43,10 @@
                     each item in self.getPracticeGrades()
                         -var standard = item.getStandard()
                         .row-item
-                            .td-item.standard-name.name-item=standard.getName()
+                            .td-item.standard-name.name-item
+                                +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getName()
                             .td-item.code.code-item
-                                +ActionLink('studycenter', 'startPractice', standard.getCommonCoreStandardCode())(disabled = !standard.getCommonCoreStandardCode())=standard.getCommonCoreStandardCode()
+                                +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getCommonCoreStandardCode()
                             .td-item.description.description-item=standard.getDescription()
                             .td-item.score.practice.grade-item=item.getPracticeScore()
                             .td-item.score.grade-book.grade-item=item.getGradeBookScore()
