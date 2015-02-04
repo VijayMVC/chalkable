@@ -29,6 +29,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
 
+        Application GetPracticeGradesApplication();
+
         IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count);
     }
 
@@ -209,6 +211,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 return new ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
             }
+        }
+
+        public Application GetPracticeGradesApplication()
+        {
+            var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
         }
     }
 

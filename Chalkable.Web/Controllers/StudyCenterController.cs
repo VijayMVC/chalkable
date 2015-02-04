@@ -52,8 +52,7 @@ namespace Chalkable.Web.Controllers
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var standard = SchoolLocator.StandardService.GetStandardById(standardId);
-            var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
-            var miniQuizApp = MasterLocator.ApplicationService.GetApplicationById(appId);
+            var miniQuizApp = MasterLocator.ApplicationService.GetPracticeGradesApplication();
             var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
             var suggestedApps = standard.AcademicBenchmarkId.HasValue 
