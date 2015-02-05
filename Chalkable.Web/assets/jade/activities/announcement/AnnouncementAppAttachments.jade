@@ -35,7 +35,6 @@ items = self.getSortedAppsAndAttachments();
 +Hidden('attachments', self.getAttachments())
 +Hidden('applicationsids', self.getApplicationsIds())
 if self.needButtons
-    -console.info(self.getStandards())
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement && self.isStudyCenterEnabled()
             +ActionButton('announcement', 'attachApp', self.getId(), self.getClassId(), self.getStandardsUrlComponents())#add-application.simple-gray-button Attach App
