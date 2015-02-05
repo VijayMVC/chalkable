@@ -214,7 +214,10 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl);
             var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
             var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
-            var appView = InstalledApplicationViewData.Create(new List<ApplicationInstall>{appInstall}, Context.PersonId, app, hasMyApps);
+            var applicationInstalls = new List<ApplicationInstall>();
+            if(appInstall != null)
+                applicationInstalls.Add(appInstall);
+            var appView = InstalledApplicationViewData.Create(applicationInstalls, Context.PersonId, app, hasMyApps);
             return Json( new {
                                 AuthorizationCode = authorizationCode,
                                 ApplicationInfo = appView

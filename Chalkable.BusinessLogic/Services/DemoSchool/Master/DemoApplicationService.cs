@@ -182,6 +182,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
             return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
         }
+
+
+        public Application GetAssessmentApplication()
+        {
+            var appId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
+        }
     }
 
 }

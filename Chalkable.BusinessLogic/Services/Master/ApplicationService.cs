@@ -30,6 +30,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         bool HasMyApps(Application application);
 
         Application GetPracticeGradesApplication();
+        Application GetAssessmentApplication();
 
         IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count);
     }
@@ -90,6 +91,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         
         public Application GetApplicationById(Guid id)
         {
+            if (id == Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value))
+                return GetPracticeGradesApplication();
+            if (id == Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value))
+                return GetAssessmentApplication();
+
             using (var uow = Read())
             {
                 return new ApplicationDataAccess(uow)
@@ -216,6 +222,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         public Application GetPracticeGradesApplication()
         {
             var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
+        }
+
+
+        public Application GetAssessmentApplication()
+        {
+            var appId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
             return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
         }
     }

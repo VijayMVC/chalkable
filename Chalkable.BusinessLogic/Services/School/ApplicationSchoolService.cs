@@ -99,10 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementApplication GetAnnouncementApplication(int announcementAppId)
         {
-            using (var uow = Read())
-            {
-                return new AnnouncementApplicationDataAccess(uow).GetById(announcementAppId);
-            }
+            return DoRead(uow => new AnnouncementApplicationDataAccess(uow).GetById(announcementAppId));
         }
 
         public void AttachAppToAnnouncement(int announcementAppId)
