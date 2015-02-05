@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'MiniQuizViewData', [
             ArrayOf(chlk.models.standard.Standard), 'standards',
+
             chlk.models.id.StandardId, 'currentStandardId',
 
             [ria.serialize.SerializeProperty('applicationinfo')],
@@ -20,6 +21,8 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.Application), 'recommendedApplications',
 
             [ria.serialize.SerializeProperty('authorizationcode')],
-            String, 'authorizationCode'
+            String, 'authorizationCode',
+
+            String, 'standardIds'
         ]);
 });

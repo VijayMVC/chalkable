@@ -36,6 +36,19 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getStandardsList(ids) {
                 return this.get('Standard/GetStandardsByIds.json', ArrayOf(chlk.models.standard.Standard), {
                     ids: this.arrayToIds(ids)
+                }).then(function(model){
+                    var res = [];
+                    ids.forEach(function(id){
+                        res.push(model.filter(function(item){return item.getStandardId() == id})[0]);
+                    });
+                    return res;
+                });
+            },
+
+            [[String]],
+            ria.async.Future, function searchStandards(filter) {
+                return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
+                    filter: filter
                 });
             },
 

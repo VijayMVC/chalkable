@@ -22,7 +22,7 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.StudyCenterService, 'studyCenterService',
 
-        [chlk.controllers.SidebarButton('play')],
+        [chlk.controllers.SidebarButton('study-center')],
         [chlk.controllers.StudyCenterEnabled],
         function explorerAction(){
             var personId = this.getCurrentPerson().getId();
@@ -37,7 +37,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.StudyCenterEnabled],
-        [chlk.controllers.SidebarButton('play')],
+        [chlk.controllers.SidebarButton('study-center')],
         [[chlk.models.id.ClassId, chlk.models.id.StandardId]],
         function practiceAction(classId_, standardId_){
             var personId = this.getCurrentPerson().getId(), res;
@@ -55,24 +55,39 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.StudyCenterEnabled],
-        [chlk.controllers.SidebarButton('play')],
-        [[Object]],
-        function startPracticeAction(standardId){
+        [chlk.controllers.SidebarButton('study-center')],
+        [[Object, Boolean, chlk.models.id.StandardId]],
+        function startPracticeAction(standardId, changeStandard_, currentId_){
             if (!Array.isArray(standardId))
                 standardId = [standardId];
+
+            if(!standardId.length){
+                this.BackgroundCloseView(chlk.activities.apps.MiniQuizDialog);
+                return null;
+            }
 
             standardId = standardId.map(chlk.models.id.StandardId);
 
             var res = ria.async.wait(
-                    this.studyCenterService.getMiniQuizInfo(standardId[0]).attach(this.validateResponse_()),
+                    this.studyCenterService.getMiniQuizInfo(currentId_ || standardId[0]).attach(this.validateResponse_()),
                     this.standardService.getStandardsList(standardId).attach(this.validateResponse_())
                 ).then(function(models){
-                    models[0].setCurrentStandardId(standardId[0]);
+                    models[0].setCurrentStandardId(currentId_ || standardId[0]);
                     models[0].setStandards(models[1]);
                     return models[0];
                 });
 
-            return this.ShadeView(chlk.activities.apps.MiniQuizDialog, res);
+            if(changeStandard_)
+                return this.UpdateView(chlk.activities.apps.MiniQuizDialog, res, 'content');
+            return this.ShadeOrUpdateView(chlk.activities.apps.MiniQuizDialog, res);
+        },
+
+        [chlk.controllers.StudyCenterEnabled],
+        [chlk.controllers.SidebarButton('study-center')],
+        [[chlk.models.apps.MiniQuizViewData]],
+        function updateMiniQuizAction(model){
+            var standardIds = JSON.parse(model.getStandardIds());
+            return this.Redirect('studycenter', 'startPractice', [standardIds, null, model.getCurrentStandardId().valueOf() ? model.getCurrentStandardId() : null]);
         },
 
         [[chlk.models.studyCenter.PracticeGradesViewData]],

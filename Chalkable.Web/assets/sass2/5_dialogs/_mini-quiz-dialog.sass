@@ -1,6 +1,13 @@
 .mini-quiz-dialog
+  &.partial-update
+    position: static
+
   .dialog
     width: 1024px
+    position: absolute
+    top: 20px
+    +transform(translate(-50%, 0px))
+    max-height: none
 
     .close-btn
       right: 9px
@@ -31,7 +38,7 @@
     border-left: 1px solid #d7d7d7
     cursor: pointer
 
-  .lr-toolbar
+  .standards-tb
     width: 673px
     display: inline-block
     margin-left: 40px
