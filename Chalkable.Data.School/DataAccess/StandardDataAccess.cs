@@ -40,6 +40,13 @@ namespace Chalkable.Data.School.DataAccess
                     {Standard.ACADEMIC_BENCHMARK_ID_FIELD, id}
                 });
         }
+        public IList<Standard> GetStandardsByABIds(IList<Guid> ids)
+        {
+            var dbQuery = Orm.SimpleSelect<Standard>(new AndQueryCondition());
+            var idsStr = ids.Select(x => string.Format("'{0}'", x)).JoinString(",");
+            dbQuery.Sql.AppendFormat(" and [{0}] in ({1})", Standard.ACADEMIC_BENCHMARK_ID_FIELD, idsStr);
+            return ReadMany<Standard>(dbQuery);
+        } 
 
         public IList<Standard> GetStandardsByIds(IList<int> ids)
         {
@@ -87,6 +94,27 @@ namespace Chalkable.Data.School.DataAccess
                                 .Append(subQuery).Append("))");
                 }
             }
+            return ReadMany<Standard>(dbQuery);
+        }
+
+        public IList<Standard> SearchStandards(string filter)
+        {
+            if(string.IsNullOrEmpty(filter)) return new List<Standard>();
+            var words = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            if(words.Length == 0)
+                return new List<Standard>();
+
+            var dbQuery = Orm.SimpleSelect<Standard>(new AndQueryCondition());
+            dbQuery.Sql.Append(" and (");
+            for (int i = 0; i < words.Length; i++)
+            {
+                if (i > 0) dbQuery.Sql.Append(" or ");
+                var param = string.Format("@word{0}", i + 1);
+                dbQuery.Sql.AppendFormat(" [{0}] like {2} or [{1}] like {2}", Standard.NAME_FIELD,
+                                         Standard.DESCRIPTION_FIELD, param);
+                dbQuery.Parameters.Add(param, "%" + words[i] + "%");
+            }
+            dbQuery.Sql.Append(")");
             return ReadMany<Standard>(dbQuery);
         }
     }

@@ -23,7 +23,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         StandardDetailsInfo GetStandardDetailsById(int standardId);
         IList<StandardDetailsInfo> GetStandardsDetails(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
-        IList<StandardDetailsInfo> GetStandardsDetails(IList<int> standardIds); 
+        IList<StandardDetailsInfo> GetStandardsDetails(IList<int> standardIds);
+        IList<StandardDetailsInfo> GetStandardsDetails(string filter); 
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
@@ -240,6 +241,21 @@ namespace Chalkable.BusinessLogic.Services.School
             return PrepareStandardsDetailsInfo(standards);
         }
 
+        public IList<StandardDetailsInfo> GetStandardsDetails(string filter)
+        {
+            var commonCoreStandards = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandards(filter);
+            commonCoreStandards = commonCoreStandards.Where(x => x.AcademicBenchmarkId.HasValue).ToList();
+            IList<Standard> standards = null;
+            using (var uow = Read())
+            {
+                var da = new StandardDataAccess(uow);
+                standards = da.SearchStandards(filter);
+                if (commonCoreStandards.Count > 0)
+                   standards = standards.Union(da.GetStandardsByABIds(commonCoreStandards.Select(x => x.AcademicBenchmarkId.Value).ToList())).ToList();
+            }
+            return PrepareStandardsDetailsInfo(standards);
+        }
+
         private IList<StandardDetailsInfo> PrepareStandardsDetailsInfo(IList<Standard> standards)
         {
             var abIds = standards.Where(s => s.AcademicBenchmarkId.HasValue).Select(s => s.AcademicBenchmarkId.Value).ToList();
@@ -255,5 +271,8 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
  
         }
+
+
+        
     }
 }

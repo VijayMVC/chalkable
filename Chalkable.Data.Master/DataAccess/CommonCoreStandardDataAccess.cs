@@ -18,18 +18,46 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<CommonCoreStandard> GetByABIds(IList<Guid> academicBenchmarkIds)
         {
-            var dbQuery = new DbQuery();
             if(academicBenchmarkIds == null || academicBenchmarkIds.Count == 0)
                 return new List<CommonCoreStandard>();
-            var academicBenchmarkIdsStr = academicBenchmarkIds.Select(x => string.Format("'{0}'", x)).JoinString(",");
-            dbQuery.Sql.AppendFormat(@"select distinct [{0}].*, [{1}].[{4}] as [{6}]  from [{0}] join [{1}] on [{1}].[{3}] = [{0}].[{2}] 
-                                       where [{1}].[{4}] in ({5})"
-                                     , typeof (CommonCoreStandard).Name, typeof (ABToCCMapping).Name,
-                                     CommonCoreStandard.ID_FIELD, ABToCCMapping.CC_STANADARD_REF_FIELD
-                                     , ABToCCMapping.ACADEMIC_BENCHMARK_ID_FIELD, academicBenchmarkIdsStr
-                                     ,CommonCoreStandard.ACADEMIC_BENCHMARK_ID_FIELD);
 
+            var dbQuery = BuildGetCommonCoreStandardQuery();
+            var academicBenchmarkIdsStr = academicBenchmarkIds.Select(x => string.Format("'{0}'", x)).JoinString(",");
+            dbQuery.Sql.AppendFormat(" and [{0}].[{1}] in ({2})", typeof (ABToCCMapping).Name,
+                                     ABToCCMapping.ACADEMIC_BENCHMARK_ID_FIELD, academicBenchmarkIdsStr);          
+            
             return ReadMany<CommonCoreStandard>(dbQuery);
-        } 
+        }
+
+        public IList<CommonCoreStandard> GetByFilter(string filter)
+        {
+            if(string.IsNullOrEmpty(filter)) return new List<CommonCoreStandard>();
+            var words = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            if(words.Length == 0) return new List<CommonCoreStandard>();
+
+            var dbQuery = BuildGetCommonCoreStandardQuery();
+            var stadnardTName = typeof (CommonCoreStandard).Name;
+            dbQuery.Sql.Append(" and (");
+            for (var i = 0; i < words.Length; i++)
+            {
+                if (i > 0) dbQuery.Sql.Append(" or ");
+                var paramkey = string.Format("@word{0}", i + 1);
+                dbQuery.Sql.AppendFormat(" [{0}].[{1}] like {2} ", stadnardTName, CommonCoreStandard.CODE_FIELD, paramkey);
+                dbQuery.Parameters.Add(paramkey, string.Format("%{0}%", words[i]));
+            }
+            dbQuery.Sql.Append(")");
+            return ReadMany<CommonCoreStandard>(dbQuery);
+        }
+
+        private DbQuery BuildGetCommonCoreStandardQuery()
+        {
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(
+                "select distinct [{0}].*, [{1}].[{4}] as [{5}]  from [{0}] join [{1}] on [{1}].[{3}] = [{0}].[{2}] where 1=1 "
+                , typeof(CommonCoreStandard).Name, typeof(ABToCCMapping).Name, CommonCoreStandard.ID_FIELD, ABToCCMapping.CC_STANADARD_REF_FIELD
+                                     , ABToCCMapping.ACADEMIC_BENCHMARK_ID_FIELD, CommonCoreStandard.ACADEMIC_BENCHMARK_ID_FIELD);
+
+            return dbQuery;
+        }
     }
 }
