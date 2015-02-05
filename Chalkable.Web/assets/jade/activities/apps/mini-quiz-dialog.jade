@@ -1,0 +1,43 @@
+mixin App_(app)
+    -VALIDATE_ARG('app', [chlk.models.apps.Application], app)
+    .application
+        .wrapper
+            +LoadingImage(src=self.getAppPictureURL(app.getBigPictureId(), 170, 110))
+            .title= app.getName()
+            block
+
+.dialog
+    .x-window-header-white
+        .close
+            .close-btn.dark
+        input(type="text", name="standardName", placeholder="Add new").add-new
+        +LeftRightToolbar()(constantWidth = true, fixedElementMargin = true, rightPadding = -1)
+            each value in self.getStandards()
+                -var name = value.getCommonCoreStandardCode() ||  value.getName()
+                -var className = value.getStandardId() == self.getCurrentStandardId() ? 'pressed' : null
+                .standard-item(class = className)
+                    +ActionLink('studycenter', 'start-practice', [value.getStandardId()], true)(
+                        data-tooltip = name,
+                        data-tooltip-type = "overflow",
+                        class = className
+                    ).standard-link= name
+                    a.close-btn
+    .x-window-body
+        h2.practice Practice
+        .iframe-wrap
+            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents())
+
+        h2.apps Suggested Apps
+        h3 My Apps
+        +LeftRightToolbar()
+            .attachments-and-applications
+                each app in self.getInstalledApplications()
+                    +App_(app)
+                        - var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
+        h3 Recommended
+        +LeftRightToolbar()
+            .attachments-and-applications
+                each app in self.getRecommendedApplications()
+                    +App_(app)
+                        +ActionButton('appmarket', 'details', app.getId()) App Market
