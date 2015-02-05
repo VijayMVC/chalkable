@@ -72,25 +72,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
             return Storage.MarkingPeriodStorage.Add(markingPeriods);
         }
-        
-        public void Delete(int id)
-        {
-            Delete(new List<int> {id});
-        }
 
-        public void DeleteMarkingPeriods(IList<int> ids)
-        {
-            Delete(ids);
-        }
-
-        private void Delete(IList<int> markingPeriodIds)
+        public void DeleteMarkingPeriods(IList<MarkingPeriod> markingPeriods)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            if (Storage.MarkingPeriodStorage.Exists(markingPeriodIds))
-                    throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
-                Storage.MarkingPeriodStorage.DeleteMarkingPeriods(markingPeriodIds);
+            Storage.MarkingPeriodStorage.DeleteMarkingPeriods(markingPeriods.Select(x=>x.Id).ToList());
         }
+
     }
 }

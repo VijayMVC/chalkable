@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
+using ScheduledTimeSlot = Chalkable.StiConnector.SyncModel.ScheduledTimeSlot;
 
 namespace Chalkable.Tests.Sis
 {
@@ -29,14 +33,18 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest()
         {
-            var cl = ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/Chalkable/api/");
+            var cl = ConnectorLocator.Create("Chalkable", "qP8vI4rL2", "https://inowhome.madison.k12.al.us/api/");
 
-            var items = (cl.SyncConnector.GetDiff(typeof(ScheduledTimeSlotVariation), null) as SyncResult<ScheduledTimeSlotVariation>).All.ToList();
-            items = items.Where(x => x.BellScheduleId == 156 && x.TimeSlotId == 565).ToList();
-            foreach (var item in items)
+            var items2 = (cl.SyncConnector.GetDiff(typeof(TimeSlot), 26960989) as SyncResult<TimeSlot>);
+            var items = (cl.SyncConnector.GetDiff(typeof(ScheduledSection), 26960989) as SyncResult<ScheduledSection>);
+            //26960989
+            //26960987
+            //ScheduledTimeSlot
+            foreach (var ts in items2.Deleted)
             {
-                Debug.WriteLine(item.Name);
+                Debug.WriteLine(ts.TimeSlotID);
             }
+            Debug.WriteLine(items.Deleted != null ? "deleted" : "not deleted");
 
         }
 

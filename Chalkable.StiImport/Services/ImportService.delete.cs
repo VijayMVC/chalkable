@@ -394,7 +394,7 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Term>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<Term>().Deleted.Select(x => x.TermID).ToList();
+            var ids = context.GetSyncResult<Term>().Deleted.Select(x => new MarkingPeriod { Id = x.TermID }).ToList();
             ServiceLocatorSchool.MarkingPeriodService.DeleteMarkingPeriods(ids);
         }
 

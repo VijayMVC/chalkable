@@ -21,29 +21,14 @@ namespace Chalkable.Web.Controllers
             if (context != null)
             {
                 var district = sl.DistrictService.GetByIdOrNull(data.DistrictGuid);
-                if (district == null && string.IsNullOrEmpty(data.SisPassword))
+                if (district != null)
+                    throw new Exception(string.Format("District with guid {0} already exists", district.Id));
+                if (string.IsNullOrEmpty(data.SisPassword))
                     throw new Exception("SIS password can not be null for a new district");
-                var pwd = data.SisPassword;
-                if (string.IsNullOrEmpty(pwd))
-                    pwd = district.SisPassword;
-                var locator = ConnectorLocator.Create(data.SisUserName, pwd, data.ApiUrl);
+                var locator = ConnectorLocator.Create(data.SisUserName, data.SisPassword, data.ApiUrl);
                 if (!locator.LinkConnector.Link(data.LinkKey))
                     throw new Exception("The link keys do not match.");
-                if (district == null)
-                {
-                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.RedirectUrl, data.SisUserName, data.SisPassword, timeZone);
-                }
-                else
-                {
-                    district.Name = name;
-                    if (!string.IsNullOrEmpty(data.SisPassword))
-                        district.SisPassword = data.SisPassword;
-                    district.SisUrl = data.ApiUrl;
-                    district.SisUserName = data.SisUserName;
-                    district.TimeZone = timeZone;
-                    district.SisRedirectUrl = data.RedirectUrl;
-                    sl.DistrictService.Update(district);
-                }
+                sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.RedirectUrl, data.SisUserName, data.SisPassword, timeZone);
                 return Json(true);
             }
             return new HttpUnauthorizedResult();

@@ -15,19 +15,9 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void DeleteMarkingPeriods(IList<int> markingPeriodIds)
+        public void DeleteMarkingPeriods(IList<MarkingPeriod> markingPeriods)
         {
-            if (markingPeriodIds.Count == 0)
-                return;
-            var b = new StringBuilder();
-            var mpidsString = markingPeriodIds.Select(x => "'" + x + "'").JoinString(",");
-            b.Append(@"delete from ClassPeriod where PeriodRef in (select Id from Period where MarkingPeriodRef in ({0})) ");
-            b.Append(@"delete from Period where MarkingPeriodRef in ({0}) ");
-            b.Append(@"delete from ScheduleSection where MarkingPeriodRef in ({0}) ");
-            b.Append(@"delete from MarkingPeriod where Id in ({0}) ");
-            var conds = new Dictionary<string, object> ();
-            var sql = string.Format(b.ToString(), mpidsString);
-            ExecuteNonQueryParametrized(sql, conds);
+            SimpleDelete(markingPeriods);
         }
         
         public MarkingPeriod GetLast(DateTime tillDate, int schoolYearId)
