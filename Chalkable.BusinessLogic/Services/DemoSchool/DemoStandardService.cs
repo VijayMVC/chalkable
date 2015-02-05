@@ -186,5 +186,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
 
         }
+
+
+        public IList<StandardDetailsInfo> GetStandardsDetails(string filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

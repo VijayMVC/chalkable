@@ -13,6 +13,7 @@ namespace Chalkable.Data.Master.Model
         public const string PARENT_STANDARD_REF_FIELD = "ParentStandardRef";
         public const string STANDARD_CATEGORY_REF_FIELD = "StandardCategoryRef";
         public const string ACADEMIC_BENCHMARK_ID_FIELD = "AcademicBenchmarkId";
+        public const string CODE_FIELD = "Code";
 
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }

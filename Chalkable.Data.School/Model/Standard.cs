@@ -12,6 +12,9 @@ namespace Chalkable.Data.School.Model
         public const string PARENT_STANDARD_REF_FIELD = "ParentStandardRef";
         public const string ACADEMIC_BENCHMARK_ID_FIELD = "AcademicBenchmarkId";
 
+        public const string NAME_FIELD = "Name";
+        public const string DESCRIPTION_FIELD = "Description";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
 

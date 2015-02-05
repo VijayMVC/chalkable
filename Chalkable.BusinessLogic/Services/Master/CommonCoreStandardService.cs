@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<CommonCoreStandardCategory> GetCCStandardCategories();
         CommonCoreStandard GetStandardByABId(Guid academicBenchmarkId);
         IList<CommonCoreStandard> GetStandardsByABIds(IList<Guid> academicBenchmarkIds);
+        IList<CommonCoreStandard> GetStandards(string filter);
     }
 
     public class CommonCoreStandardService : MasterServiceBase, ICommonCoreStandardService
@@ -47,6 +48,14 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             if(academicBenchmarkIds.Count == 0) return new List<CommonCoreStandard>();
             return DoRead(uow => new CommonCoreStandardDataAccess(uow).GetByABIds(academicBenchmarkIds));
+        }
+
+
+        public IList<CommonCoreStandard> GetStandards(string filter)
+        {
+            if(string.IsNullOrEmpty(filter)) return new List<CommonCoreStandard>();
+
+            return DoRead(uow => new CommonCoreStandardDataAccess(uow).GetByFilter(filter));
         }
     }
 }

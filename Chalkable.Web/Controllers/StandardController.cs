@@ -13,6 +13,14 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class StandardController : ChalkableController
     {
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult SearchStandards(string filter)
+        {
+            var stadnards = SchoolLocator.StandardService.GetStandardsDetails(filter);
+            return Json(stadnards.Select(StandardViewData.Create).ToList());
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards)
         {
