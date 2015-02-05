@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -13,8 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IMarkingPeriodService
     {
         IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods);
-        void Delete(int id);
-        void DeleteMarkingPeriods(IList<int> ids);
+        void DeleteMarkingPeriods(IList<MarkingPeriod> markingPeriods);
         IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods); 
         MarkingPeriod GetMarkingPeriodById(int id);
         MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null);
@@ -90,22 +88,17 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return null;
         }
-        
-        public void Delete(int id)
-        {
-            DeleteMarkingPeriods(new List<int> { id });
-        }
 
-        public void DeleteMarkingPeriods(IList<int> markingPeriodIds)
+        public void DeleteMarkingPeriods(IList<MarkingPeriod> markingPeriods)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
-                if (new MarkingPeriodClassDataAccess(uow, null).Exists(markingPeriodIds))
-                    throw new ChalkableException(ChlkResources.ERR_MARKING_PERIOD_ASSIGNED_TO_CLASS);
-                new MarkingPeriodDataAccess(uow).DeleteMarkingPeriods(markingPeriodIds);
+                if (!BaseSecurity.IsDistrict(Context))
+                    throw new ChalkableSecurityException();
+                new MarkingPeriodDataAccess(uow).DeleteMarkingPeriods(markingPeriods);
                 uow.Commit();
             }
         }
