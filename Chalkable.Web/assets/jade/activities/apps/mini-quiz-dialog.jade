@@ -23,11 +23,11 @@ mixin App_(app)
                     ).standard-link= name
                     a.close-btn
     .x-window-body
-        h2.practice Practice
+        h2.practice: span Practice
         .iframe-wrap
             iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents())
 
-        h2.apps Suggested Apps
+        h2.apps: span Suggested Apps
         h3 My Apps
         +LeftRightToolbar()
             .attachments-and-applications
