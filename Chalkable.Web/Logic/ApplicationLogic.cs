@@ -15,9 +15,12 @@ namespace Chalkable.Web.Logic
     public class ApplicationLogic
     {
 
-        public static IList<AnnouncementApplicationViewData> PrepareAnnouncementApplicationInfo(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster maseterLocator, int announcementId)
+        public static IList<AnnouncementApplicationViewData> PrepareAnnouncementApplicationInfo(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator, int announcementId)
         {
-            var applications = maseterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
+            var applications = masterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
+            var assessmentApp = masterLocator.ApplicationService.GetAssessmentApplication();
+            if(applications.All(x=>x.Id != assessmentApp.Id))
+                applications.Add(assessmentApp);
             var annApps = schoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
             var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.PersonId ?? 0);
             return AnnouncementApplicationViewData.Create(annApps, applications, installs, schoolLocator.Context.PersonId);
