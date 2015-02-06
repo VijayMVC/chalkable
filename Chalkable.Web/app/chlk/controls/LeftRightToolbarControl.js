@@ -317,11 +317,10 @@ NAMESPACE('chlk.controls', function () {
                                         if(left > -eps)
                                             left = 0;
                                         else{
-                                            /*if(left && configs.itemClass){
-                                                var itemWidth = toolbar.find('.' + configs.itemClass).getData('width');
-                                                left = Math.floor(left/itemWidth + 0.5) * itemWidth;
-                                            }*/
-                                            left = left + configs.rightPadding;
+                                            if(isLeft)
+                                                left = left - configs.rightPadding;
+                                            else
+                                                left = left + configs.rightPadding;
                                         }
 
                                         secondContainer.setCss('left', left);

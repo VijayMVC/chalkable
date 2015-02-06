@@ -20,6 +20,12 @@ NAMESPACE('chlk.activities.apps', function () {
                 this._addedStandards = [];
             },
 
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                this.dom.find('.dialog').setCss('top', ria.dom.Dom(document).scrollTop() + 70);
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.apps.MiniQuizDialog, 'content')],
             [[Object, Object, String]],
             VOID, function updateContent(tpl, model, msg_) {

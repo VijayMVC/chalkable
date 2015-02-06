@@ -40,7 +40,7 @@ mixin App_(app)
             h2.apps: span Suggested Apps
             if self.getInstalledApplications().length
                 h3 My Apps
-                +LeftRightToolbar()
+                +LeftRightToolbar()(rightPadding = -20)
                     .attachments-and-applications
                         each app in self.getInstalledApplications()
                             +App_(app)
@@ -48,7 +48,7 @@ mixin App_(app)
                                 +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
             if self.getRecommendedApplications().length
                 h3 Recommended
-                +LeftRightToolbar()
+                +LeftRightToolbar()(rightPadding = -20)
                     .attachments-and-applications
                         each app in self.getRecommendedApplications()
                             +App_(app)
