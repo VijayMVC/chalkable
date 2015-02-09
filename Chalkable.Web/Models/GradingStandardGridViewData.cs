@@ -83,6 +83,7 @@ namespace Chalkable.Web.Models
         public int StandardId { get; set; }
         public int? GradeId { get; set; }
         public string GradeValue { get; set; }
+        public decimal? NumericGrade { get; set; }
         public int GradingPeriodId { get; set; }
         public int ClassId { get; set; }
         public string Comment { get; set; }
@@ -101,6 +102,7 @@ namespace Chalkable.Web.Models
                 };
             if (string.IsNullOrEmpty(res.GradeValue) && gradingStandard.NumericGrade.HasValue)
                 res.GradeValue = gradingStandard.NumericGrade.Value.ToString();
+            res.NumericGrade = gradingStandard.NumericGrade;
             return res;
         }
     }
