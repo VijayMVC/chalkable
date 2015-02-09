@@ -64,7 +64,7 @@ namespace Chalkable.Tests.Sis
                 IList<Class> classes;
                 using (var uow = new UnitOfWork(cs, false))
                 {
-                    var da = new ClassDataAccess(uow, null);
+                    var da = new ClassDataAccess(uow);
                     classes = da.GetAll();
                 }
 
