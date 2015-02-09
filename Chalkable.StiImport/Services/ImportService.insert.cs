@@ -504,7 +504,9 @@ namespace Chalkable.StiImport.Services
             var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var departmenPairs = PrepareChalkableDepartmentKeywords();
 
-            var courses = context.GetSyncResult<Course>().All;
+            var courses = context.GetSyncResult<Course>().All.ToList();
+            var d = courses.ToDictionary(x => x.CourseID);
+            courses = TopologicSort(x => x.CourseID, x => x.SectionOfCourseID, d).ToList();
             var classes = new List<Class>();
             foreach (var course in courses)
             {
