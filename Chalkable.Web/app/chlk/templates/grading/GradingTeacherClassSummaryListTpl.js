@@ -40,6 +40,19 @@ NAMESPACE('chlk.templates.grading', function () {
                             student.setWellTroubleType(chlk.models.grading.StudentWellTroubleEnum.NORMALL);
                 }
                 return students;
+            },
+
+            [[ArrayOf(chlk.models.grading.StudentGradingViewData), String]],
+            function getTooltipForSmallPic(students, avg){
+                var tooltips = [];
+                students.forEach(function(student){
+                    var curAvg = student.getAvg().toFixed(2);
+                    if(avg == curAvg)
+                        tooltips.push(student.getFullName() + ' ' + avg + '%');
+                });
+                if(tooltips.length > 1)
+                    return tooltips.join('</br>');
+                return null;
             }
         ]);
 });
