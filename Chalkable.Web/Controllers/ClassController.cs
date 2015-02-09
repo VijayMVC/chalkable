@@ -94,5 +94,13 @@ namespace Chalkable.Web.Controllers
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
             return Json(ClassAttendanceSummaryViewData.Create(c)); //TODO: create ClassAttendanceSummaryViewData 
         }
+
+        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult Explorer(int classId)
+        {
+            var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null, false);
+            return Json(ClassExpolorerViewData.Create(c, gradingStandards));
+        }
     }
 }
