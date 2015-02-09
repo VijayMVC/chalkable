@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
@@ -11,11 +12,8 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassService
     {
-        ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name, string description, int? teacherId, int gradeLevelId, int? roomId = null);
         void Add(IList<Class> classes);
-        ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name, string description, int teacherId, int gradeLevelId);
         void Edit(IList<Class> classes); 
-        void Delete(int id);
         void Delete(IList<int> ids);
 
         void AddStudents(IList<ClassPerson> classPersons);
@@ -47,41 +45,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-
-        //TODO: needs test
-        public ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name
-            , string description, int? teacherId, int gradeLevelId, int? roomId = null)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            if (!CanAssignDepartment(chlkableDepartmentId))
-                   throw new ChalkableException("There are no department with such id");
-            
-            using (var uow = Update())
-            {
-                var da = new ClassDataAccess(uow, Context.SchoolLocalId);
-                SchoolYear sy = null;
-                if (schoolYearId.HasValue)
-                    sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetById(schoolYearId.Value);
-                var cClass = new Class
-                    {
-                        Id = classId,
-                        ChalkableDepartmentRef = chlkableDepartmentId,
-                        Description = description,
-                        GradeLevelRef = gradeLevelId,
-                        Name = name,
-                        SchoolYearRef = schoolYearId,
-                        PrimaryTeacherRef = teacherId,
-                        RoomRef = roomId,
-                        SchoolRef = sy != null ? sy.SchoolRef : (int?)null
-                    };
-                da.Insert(cClass);
-                uow.Commit();
-                return GetClassDetailsById(classId);
-            }
-        }
-
         public void Add(IList<Class> classes)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -89,31 +52,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var da = new ClassDataAccess(uow, Context.SchoolLocalId);
+                var da = new ClassDataAccess(uow);
                 da.Insert(classes);
                 uow.Commit();
             }
         }
-
-        private bool CanAssignDepartment(Guid? departmentId)
-        {
-            return !departmentId.HasValue
-                   || ServiceLocator.ServiceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartmentById(
-                       departmentId.Value) != null;
-        }
-
-        public void Delete(int id)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                new ClassDataAccess(uow, Context.SchoolLocalId).Delete(id);
-                uow.Commit();
-            }
-        }
-
+        
         public void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -126,33 +70,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name
-            , string description, int teacherId, int gradeLevelId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            if (!CanAssignDepartment(chlkableDepartmentId))
-                throw new ChalkableException("There are no department with such id");
-            
-            using (var uow = Update())
-            {
-                var classDa = new ClassDataAccess(uow, Context.SchoolLocalId);
-                var cClass = classDa.GetById(classId);
-                if (!(new SchoolPersonDataAccess(uow).Exists(teacherId, CoreRoles.TEACHER_ROLE.Id, cClass.SchoolRef)))
-                    throw new ChalkableException("Teacher is not assigned to current school");
-                
-                cClass.Name = name;
-                cClass.ChalkableDepartmentRef = chlkableDepartmentId;
-                cClass.Description = description;
-                cClass.PrimaryTeacherRef = teacherId;
-                cClass.GradeLevelRef = gradeLevelId;
-                classDa.Update(cClass);
-                uow.Commit();
-            }
-            return GetClassDetailsById(classId);
-        }
-
-
         public void Edit(IList<Class> classes)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -161,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
 
-                new ClassDataAccess(uow, Context.SchoolLocalId).Update(classes);
+                new ClassDataAccess(uow).Update(classes);
                 uow.Commit();
             }
         }
@@ -228,7 +145,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new ClassDataAccess(uow, Context.SchoolLocalId)
+                return new ClassDataAccess(uow)
                     .GetById(id);
             }
         }
@@ -239,7 +156,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Read())
             {
-                return new ClassDataAccess(uow, Context.SchoolLocalId)
+                return new ClassDataAccess(uow)
                     .GetAll();
             } 
         }
@@ -264,11 +181,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private  ClassQueryResult GetClassesQueryResult(ClassQuery query)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Read())
             {
-                query.CallerId = Context.PersonId.HasValue ? Context.PersonId.Value : 0;
+                query.CallerId = Context.PersonId.Value;
                 query.CallerRoleId = Context.Role.Id;
-                return new ClassDataAccess(uow, Context.SchoolLocalId)
+                return new ClassDataAccess(uow)
                     .GetClassesComplex(query);
             }
         }
@@ -300,7 +218,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Update())
             {
-                new ClassDataAccess(uow, Context.SchoolLocalId).Delete(ids);
+                new ClassDataAccess(uow).Delete(ids);
                 uow.Commit();
             }
         }

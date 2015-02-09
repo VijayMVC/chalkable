@@ -170,8 +170,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableException(string.Format("Announcement with such activity Ids {0} already exists", ids.Select(x => x.ToString()).JoinString() ));
                     
             }
-            IList<ClassDetails> classes = ServiceLocator.ClassService.GetClasses(null, null, Context.PersonId);
-            
             IList<Announcement> addToChlkAnns = new List<Announcement>();
             foreach (var activity in activities)
             {
@@ -190,9 +188,6 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 using (var uow = Update())
                 {
-                    if (addToChlkAnns.Any(x => classes.All(y => y.Id != x.ClassRef)))
-                            throw new ChalkableSecurityException();
-                    
                     var da = CreateAnnoucnementDataAccess(uow); 
                     da.Insert(addToChlkAnns);
                     uow.Commit();

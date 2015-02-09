@@ -27,8 +27,8 @@ namespace Chalkable.UserTracking
 
         private static double UnixTimeStamp(DateTime date) 
         {
-            var unix_time = (date - new DateTime(1970, 1, 1, 0, 0, 0));
-            return unix_time.TotalSeconds;
+            var unixTime = (date - new DateTime(1970, 1, 1, 0, 0, 0));
+            return unixTime.TotalSeconds;
         }
 
 
@@ -107,15 +107,13 @@ namespace Chalkable.UserTracking
         }
 
         private const string TEACHER_ROLE = "teacher";
-        public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName,
-            List<string> gradeLevels, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip)
+        public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip)
         {
             try
             {
                 var engage = GetEngage();
                 var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, "student");
                 properties[CLASSES] = classes;
-                properties[GRADE_LEVELS] = gradeLevels;
                 properties[ROLE] = TEACHER_ROLE;
                 //created at
                 engage.Set(MakeId(email), ip, properties);
@@ -303,7 +301,7 @@ namespace Chalkable.UserTracking
             properties[APP_NAME] = appName;
             properties[APP_SHORT_DESCRIPTION] = shortDescription;
             properties[APP_SUBJECTS] = subjects;
-            properties[APP_PRICE] = price > 0 ? price.ToString() : FREE;
+            properties[APP_PRICE] = price > 0 ? price.ToString(CultureInfo.InvariantCulture) : FREE;
 
             if (pricePerSchool.HasValue)
             {

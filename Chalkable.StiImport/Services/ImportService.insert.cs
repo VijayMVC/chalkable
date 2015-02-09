@@ -501,9 +501,7 @@ namespace Chalkable.StiImport.Services
 
         private void InsertCourses()
         {
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var departmenPairs = PrepareChalkableDepartmentKeywords();
-
             var courses = context.GetSyncResult<Course>().All;
             var classes = new List<Class>();
             foreach (var course in courses)
@@ -519,11 +517,11 @@ namespace Chalkable.StiImport.Services
                 {
                     ChalkableDepartmentRef = closestDep != null ? closestDep.Second : (Guid?)null,
                     Description = course.FullName,
-                    GradeLevelRef = glId.Value,
+                    MinGradeLevelRef = course.MinGradeLevelID,
+                    MaxGradeLevelRef = course.MaxGradeLevelID,
                     Id = course.CourseID,
                     ClassNumber = course.FullSectionNumber,
                     Name = course.ShortName,
-                    SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
                     SchoolYearRef = course.AcadSessionID,
                     PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,

@@ -16,37 +16,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public DemoClassService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
         {
         }
-
-
-        //TODO: needs test
-        public ClassDetails Add(int classId, int? schoolYearId, Guid? chlkableDepartmentId, string name
-            , string description, int? teacherId, int gradeLevelId, int? roomId = null)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            if (!CanAssignDepartment(chlkableDepartmentId))
-                   throw new ChalkableException("There are no department with such id");
-
-            SchoolYear sy = null;
-            if (schoolYearId.HasValue)
-                sy = Storage.SchoolYearStorage.GetById(schoolYearId.Value);
-            var cClass = new Class
-            {
-                Id = classId,
-                ChalkableDepartmentRef = chlkableDepartmentId,
-                Description = description,
-                GradeLevelRef = gradeLevelId,
-                Name = name,
-                SchoolYearRef = schoolYearId,
-                PrimaryTeacherRef = teacherId,
-                RoomRef = roomId,
-                SchoolRef = sy != null ? sy.SchoolRef : (int?)null
-            };
-            Storage.ClassStorage.Add(cClass);
-            return GetClassDetailsById(classId);
-        }
-
+        
         public void Add(IList<Class> classes)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -70,24 +40,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             Storage.ClassStorage.Update(classes);
         }
-
-        public void Delete(int id)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-
-            Storage.MarkingPeriodClassStorage.Delete(new MarkingPeriodClassQuery { ClassId = id });
-            Storage.ClassPersonStorage.Delete(new ClassPersonQuery { ClassId = id });
-            Storage.ClassStorage.Delete(id);
-
-        }
-
+        
         public void Delete(IList<int> ids)
         {
             foreach (var id in ids)
             {
-                Delete(id);
+                Storage.MarkingPeriodClassStorage.Delete(new MarkingPeriodClassQuery { ClassId = id });
+                Storage.ClassPersonStorage.Delete(new ClassPersonQuery { ClassId = id });
+                Storage.ClassStorage.Delete(id);
             }
         }
 
@@ -98,28 +58,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             Storage.MarkingPeriodClassStorage.Add(markingPeriodClasses);
         }
-
-        public ClassDetails Edit(int classId, Guid? chlkableDepartmentId, string name
-            , string description, int teacherId, int gradeLevelId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            if (!CanAssignDepartment(chlkableDepartmentId))
-                throw new ChalkableException("There are no department with such id");
-            
-            var cClass = Storage.ClassStorage.GetById(classId);
-            if (!(Storage.SchoolPersonStorage.Exists(teacherId, CoreRoles.TEACHER_ROLE.Id, cClass.SchoolRef)))
-                throw new ChalkableException("Teacher is not assigned to current school");
-                
-            cClass.Name = name;
-            cClass.ChalkableDepartmentRef = chlkableDepartmentId;
-            cClass.Description = description;
-            cClass.PrimaryTeacherRef = teacherId;
-            cClass.GradeLevelRef = gradeLevelId;
-            Storage.ClassStorage.Update(cClass);
-            return GetClassDetailsById(classId);
-        }
-
+        
         public void AddStudents(IList<ClassPerson> classPersons)
         {
             if (!BaseSecurity.IsDistrict(Context))

@@ -33,22 +33,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.ApplicationInstallStorage.GetInstalled(personId);
         }
 
-        public IList<ApplicationInstall> ListInstalledForClass(int classId)
-        {
-            var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-            if (!BaseSecurity.IsAdminViewerOrClassTeacher(clazz, Context))
-                throw new ChalkableSecurityException();
-
-            return Storage.ApplicationInstallStorage.GetInstalledForClass(clazz);
-        }
-
-        public IList<Application> ListInstalledAppsForClass(int classId)
-        {
-            var installed = ListInstalledForClass(classId);
-            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
-            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
-        }
-
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
         {
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();

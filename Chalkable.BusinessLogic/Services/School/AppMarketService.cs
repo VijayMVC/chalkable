@@ -20,8 +20,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId);
  
         IList<ApplicationInstall> ListInstalledAppInstalls(int personId);
-        IList<ApplicationInstall> ListInstalledForClass(int classId);
-        IList<Application> ListInstalledAppsForClass(int classId);
         IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId);
         ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, int schoolYearId, DateTime dateTime);
         IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true);
@@ -63,26 +61,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return da.GetInstalled(personId, syId.Value);
             }
         }
-
-        public IList<ApplicationInstall> ListInstalledForClass(int classId)
-        {
-            var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-            if (!BaseSecurity.IsAdminViewerOrClassTeacher(clazz, Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Read())
-            {
-                var da = new ApplicationInstallDataAccess(uow);
-                return da.GetInstalledForClass(clazz);
-            }
-        }
-
-        public IList<Application> ListInstalledAppsForClass(int classId)
-        {
-            var installed = ListInstalledForClass(classId);
-            var all = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplications();
-            return all.Where(x => installed.Any(y => y.ApplicationRef == x.Id)).ToList();
-        }
-
+        
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
         {
             if (!Context.SchoolYearId.HasValue)
@@ -152,7 +131,7 @@ namespace Chalkable.BusinessLogic.Services.School
             descriptionBuilder.AppendFormat(APP_INSTALLED_FOR_FMT, app.Name);
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
             {
-                var teacherClasses = new ClassDataAccess(uow, Context.SchoolLocalId)
+                var teacherClasses = new ClassDataAccess(uow)
                     .GetAll(new AndQueryCondition { { Class.PRIMARY_TEACHER_REF_FIELD, personId } });
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
                 var da = new ApplicationInstallActionClassesDataAccess(uow);

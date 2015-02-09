@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         res.AddRange(csp.Select(x=>x.PersonRef));
 
                     //TODO: think about this
-                    var teacherId = new ClassDataAccess(uow, Context.SchoolLocalId).GetById(ann.ClassRef).PrimaryTeacherRef; 
+                    var teacherId = new ClassDataAccess(uow).GetById(ann.ClassRef).PrimaryTeacherRef; 
                     if(teacherId.HasValue) res.Add(teacherId.Value);
                 }
                 else

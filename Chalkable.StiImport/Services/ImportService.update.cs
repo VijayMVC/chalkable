@@ -446,26 +446,19 @@ namespace Chalkable.StiImport.Services
                 return;
             var courses = context.GetSyncResult<Course>().Updated.ToList();
             var classes = new List<Class>();
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var departmenPairs = PrepareChalkableDepartmentKeywords();
             foreach (var course in courses)
             {
-                var glId = course.MaxGradeLevelID ?? course.MinGradeLevelID;
-                if (!glId.HasValue)
-                {
-                    Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
-                    continue;
-                }
                 var closestDep = FindClosestDepartment(departmenPairs, course.ShortName.ToLower());
                 classes.Add(new Class
                 {
                     ChalkableDepartmentRef = closestDep != null ? closestDep.Second : (Guid?)null,
                     Description = course.FullName,
-                    GradeLevelRef = glId.Value,
+                    MinGradeLevelRef = course.MinGradeLevelID,
+                    MaxGradeLevelRef = course.MaxGradeLevelID,
                     Id = course.CourseID,
                     ClassNumber = course.FullSectionNumber,
                     Name = course.ShortName,
-                    SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
                     SchoolYearRef = course.AcadSessionID,
                     PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,

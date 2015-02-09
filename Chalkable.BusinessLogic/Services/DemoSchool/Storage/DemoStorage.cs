@@ -1807,11 +1807,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Id = id,
                 Name = name,
                 Description = name,
-                GradeLevelRef = gradeLevelRef,
                 ChalkableDepartmentRef = null,
                 ClassNumber =  classNumber,
                 PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
-                SchoolRef = DemoSchoolConstants.SchoolId,
                 SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId
             });
 

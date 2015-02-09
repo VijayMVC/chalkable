@@ -31,14 +31,12 @@ namespace Chalkable.Web.Models.ClassesViewData
     public class ClassViewData : ShortClassViewData
     {
         public Guid? DepartmentId { get; set; }
-        public GradeLevelViewData GradeLevel { get; set; }
         public ShortPersonViewData Teacher { get; set; }
         public IList<int> MarkingPeriodsId { get; set; }
         
         protected ClassViewData(ClassDetails classComplex) : base(classComplex)
         {
             DepartmentId = classComplex.ChalkableDepartmentRef;
-            GradeLevel =  GradeLevelViewData.Create(classComplex.GradeLevel);
             if (classComplex.PrimaryTeacherRef.HasValue && classComplex.PrimaryTeacher != null)
             {
                 Teacher = ShortPersonViewData.Create(classComplex.PrimaryTeacher);

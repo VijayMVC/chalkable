@@ -322,7 +322,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ClassAnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                 ChalkableAnnouncementType = announcement.ChalkableAnnouncementType,
                 ClassName = announcement.ClassName,
-                GradeLevelId = announcement.GradeLevelId,
                 MaxScore = announcement.MaxScore
             };
         }
@@ -333,7 +332,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             var annId = GetNextFreeId();
             var person = Storage.PersonStorage.GetById(userId);
-            var gradeLevelRef = Storage.ClassStorage.GetById(classId).GradeLevelRef;
 
             if (!classAnnouncementTypeId.HasValue)
                 classAnnouncementTypeId = Storage.ClassAnnouncementTypeStorage.GetAll(classId).First().Id;
@@ -348,7 +346,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 ChalkableAnnouncementType = classAnnouncementTypeId,
                 PrimaryTeacherName = person.FullName(),
                 ClassName = cls.Name,
-                GradeLevelId = gradeLevelRef,
                 PrimaryTeacherGender = person.Gender,
                 FullClassName = cls.Name + " " + cls.ClassNumber,
                 IsScored = false,
@@ -521,7 +518,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 announcement.ClassAnnouncementTypeName = sourceAnnouncement.ClassAnnouncementTypeName;
                 announcement.ChalkableAnnouncementType = sourceAnnouncement.ChalkableAnnouncementType;
                 announcement.ClassName = sourceAnnouncement.ClassName;
-                announcement.GradeLevelId = sourceAnnouncement.GradeLevelId;
                 announcement.MaxScore = sourceAnnouncement.MaxScore;
                 // Added this copying 'cause of CHLK-3240
                 announcement.SisActivityId = sourceAnnouncement.Id;
