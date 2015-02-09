@@ -37,8 +37,8 @@ namespace Chalkable.Data.Master.DataAccess
 
         public PaginatedList<DistrictSyncStatus> GetSyncStatuses(int start, int count)
         {
-            var sql = "select * from vwDistrictSyncStatus Order by LastSync";
-            return PaginatedSelect<DistrictSyncStatus>(new DbQuery(sql, null), District.ID_FIELD, start, count);
+            var sql = "select * from vwDistrictSyncStatus";
+            return PaginatedSelect<DistrictSyncStatus>(new DbQuery(sql, null), District.LAST_SYNC_FIELD, start, count);
         }
 
         //---------------------------------------------------------------------

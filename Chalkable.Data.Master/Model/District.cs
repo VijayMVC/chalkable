@@ -9,6 +9,7 @@ namespace Chalkable.Data.Master.Model
         public const string SERVER_URL_FIELD = "ServerUrl";
         public const string SIS_URL_FIELD = "SisUrl";
         public const string SIS_DISTRICT_IF_FIELD = "SisDistrictId";
+        public const string LAST_SYNC_FIELD = "LastSync";
 
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
