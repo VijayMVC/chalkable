@@ -35,6 +35,8 @@ namespace Chalkable.Web.Controllers
                 }
                 else
                 {
+                    if (district.SisUrl != data.ApiUrl)
+                        throw new Exception("API url can't be changed for existing district");
                     district.Name = name;
                     if (!string.IsNullOrEmpty(data.SisPassword))
                         district.SisPassword = data.SisPassword;
