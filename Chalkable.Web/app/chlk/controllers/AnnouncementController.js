@@ -960,6 +960,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.id.AnnouncementId, Boolean]],
         function starAction(id, complete_){
             this.announcementService
