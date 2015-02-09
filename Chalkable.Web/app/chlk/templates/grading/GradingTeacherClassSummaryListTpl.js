@@ -48,10 +48,10 @@ NAMESPACE('chlk.templates.grading', function () {
                 students.forEach(function(student){
                     var curAvg = student.getAvg().toFixed(2);
                     if(avg == curAvg)
-                        tooltips.push(student.getFullName() + ' ' + avg + '%');
+                        tooltips.push(student.getFullName());
                 });
                 if(tooltips.length > 1)
-                    return tooltips.join('</br>');
+                    return tooltips.join('</br>') + '</br>' + avg + '%';
                 return null;
             }
         ]);
