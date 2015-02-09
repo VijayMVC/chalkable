@@ -19,6 +19,7 @@ NAMESPACE('chlk.models.standard', function () {
             chlk.models.id.ClassId, 'classId',
             String, 'gradeValue',
             String, 'comment',
+            Number, 'numericGrade',
 
             VOID, function deserialize(raw){
                 this.gradingPeriodId = SJX.fromValue(raw.gradingperiodid, chlk.models.id.GradingPeriodId);
@@ -28,6 +29,7 @@ NAMESPACE('chlk.models.standard', function () {
                 this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
                 this.gradeValue = SJX.fromValue(raw.gradevalue, String);
                 this.comment = SJX.fromValue(raw.comment, String);
+                this.numericGrade = SJX.fromValue(raw.numericgrade, Number);
             },
 
             [[String, chlk.models.id.StandardId, chlk.models.id.GradingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, String]],

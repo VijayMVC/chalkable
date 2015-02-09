@@ -24,7 +24,7 @@ NAMESPACE('chlk.templates.student', function(){
 
             [[chlk.models.standard.StandardForExplorer]],
             String, function getStandardColor(item){
-                var grade = item.getStandardGrading().getGradeValue();
+                var grade = item.getStandardGrading().getNumericGrade();
                 if(!grade)
                     return '';
                 if(grade >= 75)
