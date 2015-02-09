@@ -44,7 +44,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     student.addClass('hovered');
                 else
                     student.removeClass('hovered');
-                student.trigger(event.type);
+                if(student.count() == 1)
+                    student.trigger(event.type);
             },
 
             [ria.mvc.DomEventBind('click', '.all-button')],
