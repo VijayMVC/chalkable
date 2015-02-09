@@ -1,0 +1,55 @@
+mixin App_(app)
+    -VALIDATE_ARG('app', [chlk.models.apps.Application], app)
+    .application
+        .wrapper
+            +LoadingImage(src=self.getAppPictureURL(app.getBigPictureId(), 170, 110))
+            .title= app.getName()
+            block
+
+.dialog
+    .x-window-header-white
+        .close
+            .close-btn.dark
+        +ActionForm('studycenter', 'updateMiniQuiz')
+            +Hidden('standardIds', JSON.stringify(self.getStandardIds())).standard-ids
+            +Hidden('currentStandardId').current-standard-id
+        +SearchBox(chlk.services.StandardService, "searchStandards", chlk.templates.standard.StandardAutoCompleteTpl)(name="filter", placeholder="Add new").add-new
+        +LeftRightToolbar()(constantWidth = true, fixedElementMargin = true, rightPadding = -1).standards-tb
+            each value in self.getStandards()
+                -var name = value.getCommonCoreStandardCode() ||  value.getName()
+                -var className = value.getStandardId() == self.getCurrentStandardId() ? 'pressed' : null
+                .standard-item(class = className)
+                    +ActionLink('studycenter', 'start-practice', self.getStandardIds(value.getStandardId()), true)(
+                        data-tooltip = name,
+                        data-tooltip-type = "overflow",
+                        class = className,
+                        data-id= value.getStandardId().valueOf()
+                    ).standard-link= name
+                    -var ids = self.getStandardIdsForRemove(value.getStandardId())
+                    if ids.length
+                        //+ActionLink('studycenter', 'start-practice', self.getStandardIdsForRemove(value.getStandardId()))
+                        a(data-id= value.getStandardId().valueOf()).close-btn.standard-remove
+                    else
+                        a.close.close-btn
+    .x-window-body
+        h2.practice: span Practice
+        .iframe-wrap
+            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents())
+
+        if self.getInstalledApplications().length || self.getRecommendedApplications().length
+            h2.apps: span Suggested Apps
+            if self.getInstalledApplications().length
+                h3 My Apps
+                +LeftRightToolbar()(rightPadding = -20)
+                    .attachments-and-applications
+                        each app in self.getInstalledApplications()
+                            +App_(app)
+                                - var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+                                +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
+            if self.getRecommendedApplications().length
+                h3 Recommended
+                +LeftRightToolbar()(rightPadding = -20)
+                    .attachments-and-applications
+                        each app in self.getRecommendedApplications()
+                            +App_(app)
+                                +ActionButton('appmarket', 'details', app.getId()) App Market
