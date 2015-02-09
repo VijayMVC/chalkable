@@ -273,8 +273,13 @@ NAMESPACE('chlk.controllers', function (){
             ));
             var installedCount = 0;
             installedForGroups = installedForGroups.map(function(item){
-                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL && this.userIsAdmin())
-                    item.setDescription(Msg.Whole_School);
+                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL){
+                    if (this.userIsAdmin()){
+                        item.setDescription(Msg.Whole_School);
+                    }
+                    item.setId(new chlk.models.id.AppInstallGroupId('all'));
+                }
+
                 if (item.isInstalled()) ++installedCount;
 
                 if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
@@ -396,7 +401,12 @@ NAMESPACE('chlk.controllers', function (){
                 } break;
                 case 'getAppPrice': {
                     var appInstallArgs = this.prepareAppTotalPriceCallParams_(appInstallData);
-                    var res = this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs);
+
+                    var res;
+                    if (!appInstallData.isEmpty())
+                        res = this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs);
+                    else
+                        res = new ria.async.DeferredData(new chlk.models.apps.AppTotalPrice.$createEmpty());
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res, 'getAppPrice');
                 } break;
             }

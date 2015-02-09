@@ -153,7 +153,6 @@ namespace Chalkable.Web.Controllers
             if(!Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException();
             var finalGrade = SchoolLocator.GradingStatisticService.GetFinalGrade(classId, gradingPeriod);
-            //var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.SchoolLocalId.Value, gradingPeriod.Id);
             var average = finalGrade.Averages.FirstOrDefault(x => !averageId.HasValue || x.AverageId == averageId);
             return GradingPeriodFinalGradeViewData.Create(finalGrade, average);
         }
@@ -172,13 +171,6 @@ namespace Chalkable.Web.Controllers
                 currentStandardGrid = StandardGradingGridViewData.Create(currentGradingPeriod, gradingStandards, students);
             }
             return Json(StandardGradingGridsViewData.Create(gradingPeriods, currentStandardGrid));
-            //var res = new List<StandardGradingGridViewData>();
-            //foreach (var gradingPeriod in gradingPeriods)
-            //{
-            //    var gs = gradingStandards.Where(x => gradingPeriod.Id == x.GradingPeriodId).ToList();
-            //    var currentStudents = students.Where(x => gs.Any(y => y.StudentId == x.Id)).ToList();
-            //    res.Add(StandardGradingGridViewData.Create(gradingPeriod, gs, currentStudents));
-            //}
         }
         
         [AuthorizationFilter("Teacher")]

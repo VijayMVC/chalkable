@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'totalPersonsCount',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'empty',
+
             function formatPrice(price){
                 price = price.toString();
                 if(price.indexOf('.') > -1){
