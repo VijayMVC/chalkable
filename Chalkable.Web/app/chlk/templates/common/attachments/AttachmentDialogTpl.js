@@ -18,6 +18,10 @@ NAMESPACE('chlk.templates.common.attachments', function () {
             String, 'url',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'type'
+            Number, 'type',
+
+            String, function getUrl() {
+                return this.url + (/\?/.test(this.url) ? '&' : '?') + 'apiRoot=' + encodeURIComponent(_GLOBAL.location.origin);
+            }
         ])
 });

@@ -34,7 +34,7 @@ mixin App_(app)
     .x-window-body
         h2.practice: span Practice
         .iframe-wrap
-            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents())
+            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
 
         if self.getInstalledApplications().length || self.getRecommendedApplications().length
             h2.apps: span Suggested Apps
