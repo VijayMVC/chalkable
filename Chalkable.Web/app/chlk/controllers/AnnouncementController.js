@@ -1081,6 +1081,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.BackgroundCloseView(chlk.activities.announcement.AddStandardsDialog);
                     this.saveStandardIds(announcement);
                     //return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
+                    this.prepareAttachments(announcement);
                     return announcement;
                 }, this)
                 .attach(this.validateResponse_());
