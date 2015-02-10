@@ -508,12 +508,6 @@ namespace Chalkable.StiImport.Services
             var classes = new List<Class>();
             foreach (var course in courses)
             {
-                var glId = course.MaxGradeLevelID ?? course.MinGradeLevelID;
-                if (!glId.HasValue)
-                {
-                    Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
-                    continue;
-                }
                 var closestDep = FindClosestDepartment(departmenPairs, course.ShortName.ToLower());
                 classes.Add(new Class
                 {
