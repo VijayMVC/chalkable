@@ -2,7 +2,6 @@ REQUIRE('chlk.models.attendance.StudentAttendances');
 REQUIRE('chlk.models.discipline.StudentDisciplines');
 REQUIRE('chlk.models.grading.GradingStat');
 REQUIRE('chlk.models.attendance.AttendanceStatBox');
-REQUIRE('chlk.models.funds.BudgetBalance');
 REQUIRE('chlk.models.common.PageWithGrades');
 
 NAMESPACE('chlk.models.admin', function () {
@@ -27,18 +26,15 @@ NAMESPACE('chlk.models.admin', function () {
             [ria.serialize.SerializeProperty('absentformp')],
             chlk.models.attendance.AttendanceStatBox, 'absentForMp',
 
-            chlk.models.funds.BudgetBalance, 'budgetBalance',
-
             Boolean, 'forGradeLevels',
 
             String, 'markingPeriodName',
 
 
-            [[chlk.models.grading.GradeLevelsForTopBar, String, chlk.models.funds.BudgetBalance, Boolean]],
+            [[chlk.models.grading.GradeLevelsForTopBar, String, Object, Boolean]],
             function prepareBaseInfo(gradeLvlBarItems, mpName, balance, forGradeLevels_){
                 this.setTopData(gradeLvlBarItems);
                 this.setMarkingPeriodName(mpName);
-                this.setBudgetBalance(balance);
                 if (forGradeLevels_)
                     this.setForGradeLevels(true);
             }

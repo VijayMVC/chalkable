@@ -5,7 +5,6 @@ REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.PictureService');
 REQUIRE('chlk.services.ApplicationService');
-REQUIRE('chlk.services.FundsService');
 
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
@@ -53,9 +52,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
-
-        [ria.mvc.Inject],
-        chlk.services.FundsService, 'fundsService',
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],

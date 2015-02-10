@@ -3,7 +3,6 @@ REQUIRE('ria.async.Timer');
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.FeedService');
-REQUIRE('chlk.services.FundsService');
 REQUIRE('chlk.services.NotificationService');
 REQUIRE('chlk.activities.feed.FeedListPage');
 REQUIRE('chlk.activities.admin.HomePage');
@@ -27,9 +26,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
-
-        [ria.mvc.Inject],
-        chlk.services.FundsService, 'fundsService',
 
         [ria.mvc.Inject],
         chlk.services.NotificationService, 'notificationService',
@@ -113,30 +109,6 @@ NAMESPACE('chlk.controllers', function (){
                         firstLogin
                     );
                 }, this);
-        },
-
-        [[Boolean, String]],
-        function listAdminAction(update_, gradeLevels_) {
-            var res = ria.async.wait([
-                    this.feedService.getAdminFeed(gradeLevels_),
-                    this.fundsService.getBalance()
-                ])
-                .attach(this.validateResponse_())
-                .then(function(result){
-                    var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
-                    var gradeLevelsBarMdl = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
-                    var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD, null); //todo: move to base controller
-
-                    var model = result[0];
-                    model.prepareBaseInfo(gradeLevelsBarMdl, markingPeriod.getName(), result[1], gradeLevels_);
-                    return model;
-                }, this);
-            if (update_)
-                return this.UpdateView(chlk.activities.admin.HomePage, res);
-            else
-                return this.PushView(chlk.activities.admin.HomePage, res);
         }
-
-
     ])
 });

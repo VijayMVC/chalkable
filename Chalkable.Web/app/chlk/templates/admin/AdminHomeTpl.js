@@ -27,9 +27,6 @@ NAMESPACE('chlk.templates.admin', function () {
             chlk.models.attendance.AttendanceStatBox, 'absentForMp',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.funds.BudgetBalance, 'budgetBalance',
-
-            [ria.templates.ModelPropertyBind],
             String, 'markingPeriodName',
 
             [ria.templates.ModelPropertyBind],
@@ -191,7 +188,7 @@ NAMESPACE('chlk.templates.admin', function () {
                 };
             },
 
-            [[chlk.models.funds.BudgetBalance]],
+            [[Object]],
             function prepareBudgetChartOptions(budget){
                 return {
                     chart: {
@@ -222,7 +219,7 @@ NAMESPACE('chlk.templates.admin', function () {
                 };
             },
 
-            [[chlk.models.funds.BudgetBalance]],
+            [[Object]],
             function getBudgetChartData(info){
                 var percentSpent = (info.getPercentSpent() > 100) ? 100 : info.getPercentSpent();
 
