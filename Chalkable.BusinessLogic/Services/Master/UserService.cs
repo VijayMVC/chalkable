@@ -176,8 +176,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private UserContext SimpleUserLogin(User user,  string password)
         {
-            if (user == null) return null;
-            if (!string.IsNullOrEmpty(password) && user.Password != PasswordMd5(password)) return null;
+            if (user == null || string.IsNullOrEmpty(password) || user.Password != PasswordMd5(password)) 
+                return null;
             if (user.IsSysAdmin)
                 return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null, null);
             if (user.IsDeveloper)
