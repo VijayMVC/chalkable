@@ -19,7 +19,7 @@ NAMESPACE('chlk.activities.student', function () {
                 node.remove();
             },
 
-            [ria.mvc.DomEventBind('click', '.with-code.standard:not(.pressed)')],
+            [ria.mvc.DomEventBind('click', '.standard:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function standardClick(node, event){
                 this.dom.find('.standard.pressed').removeClass('pressed');

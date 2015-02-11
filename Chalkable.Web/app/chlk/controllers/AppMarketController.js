@@ -246,16 +246,13 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.ClassId, String, String]],
         function getSuggestedAppsAction(classId, academicBenchmarkIds, standardUrlComponents_) {
-            if(academicBenchmarkIds && academicBenchmarkIds != ''){
-                var result = this.appMarketService
-                    .getSuggestedApps(classId, null, academicBenchmarkIds)
-                    .attach(this.validateResponse_())
-                    .then(function(apps){
-                        return new chlk.models.apps.SuggestedAppsList(classId, null, apps, null, standardUrlComponents_)
-                    });
-                return this.UpdateView(this.getView().getCurrent().getClass(), result, 'apps');
-            }
-            return null;
+            var result = this.appMarketService
+                .getSuggestedApps(classId, null, academicBenchmarkIds)
+                .attach(this.validateResponse_())
+                .then(function(apps){
+                    return new chlk.models.apps.SuggestedAppsList(classId, null, apps, null, standardUrlComponents_)
+                });
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'apps');
         },
 
 
