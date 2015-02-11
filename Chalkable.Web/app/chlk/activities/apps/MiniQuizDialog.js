@@ -20,10 +20,20 @@ NAMESPACE('chlk.activities.apps', function () {
                 this._addedStandards = [];
             },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.afterRefresh_();
+            },
+
+            function afterRefresh_(){
+                this.dom.find('.dialog').setCss('top', ria.dom.Dom(document).scrollTop() + 80);
+            },
+
             [[Object]],
             OVERRIDE, VOID, function onRefresh_(model){
                 BASE(model);
-                this.dom.find('.dialog').setCss('top', ria.dom.Dom(document).scrollTop() + 70);
+                this.afterRefresh_();
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.apps.MiniQuizDialog, 'content')],
