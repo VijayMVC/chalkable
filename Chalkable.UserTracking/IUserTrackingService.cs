@@ -14,8 +14,7 @@ namespace Chalkable.UserTracking
         void IdentifyStudent(string email, string firstName, string lastName, string schoolName, 
             string grade, DateTime? firstLoginDate, string timeZoneId, string ip);
 
-        void IdentifyTeacher(string email, string firstName, string lastName, string schoolName,
-            List<string> gradeLevels, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip);
+        void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip);
 
         void IdentifyDeveloper(string email, string userName,
             DateTime? firstLoginDate, string timeZoneId, string ip);

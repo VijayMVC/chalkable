@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class ClassDataAccess : BaseSchoolDataAccess<Class>
+    public class ClassDataAccess : DataAccessBase<Class, int>
     {
-        public ClassDataAccess(UnitOfWork unitOfWork, int? schoolId)
-            : base(unitOfWork, schoolId)
+        public ClassDataAccess(UnitOfWork unitOfWork)
+            : base(unitOfWork)
         {
         }
 
@@ -41,8 +41,7 @@ namespace Chalkable.Data.School.DataAccess
                     {CALLER_ID_PARAM, query.CallerId},
                     {START_PARAM, query.Start},
                     {COUNT_PARAM, query.Count},
-                    {CALLER_ROLE_ID_PARAM, query.CallerRoleId},
-                    {SCHOOL_ID, schoolId}
+                    {CALLER_ROLE_ID_PARAM, query.CallerRoleId}
                 };
 
             string filter1 = null;
@@ -73,7 +72,6 @@ namespace Chalkable.Data.School.DataAccess
                     var c = reader.Read<ClassDetails>(true);
                     if (c.PrimaryTeacherRef.HasValue)
                         c.PrimaryTeacher = reader.Read<Person>(true);
-                    c.GradeLevel = reader.Read<GradeLevel>(true);
                     classes.Add(c);
                 }
                 reader.NextResult();
@@ -93,7 +91,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 const string sqlFormat = "delete from [{0}] where [{0}].[{1}] in ({2}) ";
                 var sqlBuilder = new StringBuilder();
-                var idsString = ids.Select(x => x.ToString()).JoinString(",");
+                var idsString = ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(",");
                 sqlBuilder.AppendFormat(sqlFormat, "ClassPerson", ClassPerson.CLASS_REF_FIELD, idsString)
                           .AppendFormat(sqlFormat, "MarkingPeriodClass", MarkingPeriodClass.CLASS_REF_FIELD, idsString)
                           .AppendFormat(sqlFormat, "Class", Class.ID_FIELD, idsString);

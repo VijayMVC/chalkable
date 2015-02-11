@@ -28,7 +28,7 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> gradeLevels, List<string> classes,
+        public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes,
             DateTime? firstLoginDate, string timeZoneId, string ip)
         {
         }

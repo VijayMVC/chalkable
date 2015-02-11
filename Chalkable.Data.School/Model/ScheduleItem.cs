@@ -15,7 +15,8 @@ namespace Chalkable.Data.School.Model
         public string ClassName { get; set; }
         public string ClassDescription { get; set; }
         public string ClassNumber { get; set; }
-        public int? GradeLevelId { get; set; }
+        public int? MinGradeLevelId { get; set; }
+        public int? MaxGradeLevelId { get; set; }
         public int? RoomId { get; set; }
         public string RoomNumber { get; set; }
         public int? StartTime { get; set; }

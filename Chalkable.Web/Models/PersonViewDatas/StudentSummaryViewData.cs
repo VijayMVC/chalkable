@@ -10,8 +10,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class StudentSummaryViewData : StudentViewData
     {
-
-        public int GradeLevelNumber { get; set; }
         public string CurrentClassName { get; set; }
         public string CurrentAttendanceLevel { get; set; }
         public int MaxPeriodNumber { get; set; }
@@ -49,10 +47,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 };
             res.CurrentClassName = NO_CLASS_SCHEDULED;
             if (currentClass != null)
-            {
-                res.GradeLevelNumber = currentClass.GradeLevel.Number;
                 res.CurrentClassName = currentClass.Name;
-            }
 
             res.CurrentAttendanceLevel = studentSummary.CurrentAttendanceLevel;
             return res;

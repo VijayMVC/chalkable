@@ -25,7 +25,6 @@ NAMESPACE('chlk.templates.classes', function () {
                     res.push({title: 'ROOM NUMBER', value: room.getRoomNumber() || ''});
                 if(department)
                     res.push({title: 'DEPARTMENT', value: department.getName()});
-                res.push({title: 'GRADE', value: model.getGradeLevel().getName() || ''});
                 return res;
             }
         ])

@@ -3,31 +3,31 @@
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
       <!-- DB Settings -->
-      <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
+      <Setting name="ChalkableSchoolDbServers" value="zbqa56h95p.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <!-- More DB servers should be joined by comma-->
       <!-- CDN and content settings-->
       <Setting name="Domain" value="dev2.chalkable.com" />
       <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />
       <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="s6L1PpCuOrYHg93h+zszvnbFDSKPIFwwMmWGbfxLc0U=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="dev.chalkable.com" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://dev.chalkable.com/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-dev-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="5e4ner6DWKJqPblD+rrit2FblrM5cAdasvA8XAFu630=" />
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="" />
       <!-- API Explorer -->
-      <Setting name="api.explorer.client-id" value="https://dev.chalkable.com" />
-      <Setting name="api.explorer.secret" value="Qwerty1@" />
-      <Setting name="api.explorer.redirecturi" value="https://dev.chalkable.com" />
+      <Setting name="api.explorer.client-id" value="" />
+      <Setting name="api.explorer.secret" value="" />
+      <Setting name="api.explorer.redirecturi" value="" />
       <Setting name="api.explorer.client-name" value="api explorer" />
-      <Setting name="api.explorer.scope" value="https://dev.chalkable.com/" />
+      <Setting name="api.explorer.scope" value="" />
       <!--tracking-->
       <Setting name="mixpanel-token" value=""/>
     </ConfigurationSettings>
@@ -38,25 +38,25 @@
   <Role name="Chalkable.BackgroundTaskProcessor">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
       <!-- DB Settings -->
-      <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
+      <Setting name="ChalkableSchoolDbServers" value="zbqa56h95p.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
 
       <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="s6L1PpCuOrYHg93h+zszvnbFDSKPIFwwMmWGbfxLc0U=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="dev.chalkable.com" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://dev.chalkable.com/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-dev-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="5e4ner6DWKJqPblD+rrit2FblrM5cAdasvA8XAFu630=" />
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="" />
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="10000" />
-      <Setting name="DbBackupServiceUrl" value="https://bl2prod-dacsvc.azure.com/DACWebService.svc" />
+      <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
     <!--tracking-->
       <Setting name="mixpanel-token" value=""/>
     </ConfigurationSettings>
@@ -64,23 +64,23 @@
   <Role name="Chalkable.BackgroundTaskProducer">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
       <!-- DB Settings -->
-      <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
+      <Setting name="ChalkableSchoolDbServers" value="zbqa56h95p.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <!-- OAuth -->
-      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="s6L1PpCuOrYHg93h+zszvnbFDSKPIFwwMmWGbfxLc0U=" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="dev.chalkable.com" />
-      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="https://dev.chalkable.com/" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="chalkable-dev-access-control" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
-      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="5e4ner6DWKJqPblD+rrit2FblrM5cAdasvA8XAFu630=" />
+      <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="" />
+      <Setting name="WindowsAzure.OAuth.RelyingPartyRealm" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespace" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="" />
+      <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="" />
       <!-- Task settings -->
-      <Setting name="TaskProducer.SisImportProducer.Interval" value="600" />
+      <Setting name="TaskProducer.SisImportProducer.Interval" value="300" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />
       <Setting name="TaskProducer.SisImportProducer.IntervalEnd" value="86400" />
       <Setting name="TaskProducer.CleanupManager.Interval" value="600" />

@@ -268,7 +268,6 @@
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\BaseApplicationViewData.cs" />
     <Compile Include="Models\Binders\DateTimeBinder.cs" />
-    <Compile Include="Models\CalendarsViewData\AdminDayCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementCalendarWeekViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AnnouncementMonthCalendarViewData.cs" />
     <Compile Include="Models\CalendarsViewData\AttendanceCalendarViewData.cs" />

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -100,7 +98,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PrepareDepartmentInstalls(departmentIds, personsForInstall, result);
             PrepareClassInstalls(classIds, personsForInstall, result, callerRoleId);
             PreparePersonInstalls(personId, roleIds, departmentIds, gradeLevelIds, classIds, callerRoleId, callerId, result, personsForInstall);
-            PrepareGradeLevelInstalls(gradeLevelIds, schoolYearId, personsForInstall, result);
+            if (gradeLevelIds != null && gradeLevelIds.Count > 0)
+                throw new NotImplementedException();
             return result;
         }
 
@@ -177,7 +176,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Storage.ClassPersonStorage.GetAll()
                         .Where(x => x.ClassRef == classId && ids.Contains(x.PersonRef) && x.MarkingPeriodRef == mpId)
                         .Distinct()
-                        .Select(x => new PersonsForApplicationInstall()
+                        .Select(x => new PersonsForApplicationInstall
                         {
                             GroupId = classId.ToString(CultureInfo.InvariantCulture),
                             PersonId = x.PersonRef,
@@ -191,7 +190,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 result.AddRange(
                     Storage.ClassStorage.GetAll()
                         .Where(cls => cls.Id == classId && cls.PrimaryTeacherRef != null && ids.Contains(cls.PrimaryTeacherRef.Value))
-                        .Select(x => new PersonsForApplicationInstall()
+                        .Select(x => new PersonsForApplicationInstall
                         {
                             GroupId = classId.ToString(CultureInfo.InvariantCulture),
                             PersonId = x.PrimaryTeacherRef.Value,
@@ -232,39 +231,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Type = PersonsForAppInstallTypeEnum.Person
                 }));
             }
-        }
-
-        private void PrepareGradeLevelInstalls(ICollection<int> gradeLevelIds, int schoolYearId, List<KeyValuePair<int, int>> personsForInstall,
-            List<PersonsForApplicationInstall> result)
-        {
-            if (gradeLevelIds == null) return;
-            var personIds = personsForInstall.Select(x => x.Key).ToList();
-            var ssyPersons =
-                Storage.StudentSchoolYearStorage.GetAll()
-                    .Where(
-                        x =>
-                            personIds.Contains(x.StudentRef) && x.SchoolYearRef == schoolYearId &&
-                            gradeLevelIds.Contains(x.GradeLevelRef));
-
-            result.AddRange(ssyPersons.Select(x => new PersonsForApplicationInstall
-            {
-                Type = PersonsForAppInstallTypeEnum.GradeLevel,
-                GroupId = x.GradeLevel.Number.ToString(CultureInfo.InvariantCulture),
-                PersonId = x.StudentRef
-            }));
-
-
-            var teacherRefs = personsForInstall.Select(x => x.Key).ToList();
-            var classes =
-                Storage.ClassStorage.GetAll()
-                    .Where(x => x.PrimaryTeacherRef != null && (gradeLevelIds.Contains(x.GradeLevelRef) && teacherRefs.Contains(x.PrimaryTeacherRef.Value)));
-
-            result.AddRange(classes.Select(x => new PersonsForApplicationInstall
-            {
-                Type = PersonsForAppInstallTypeEnum.GradeLevel,
-                GroupId = Storage.GradeLevelStorage.GetById(x.GradeLevelRef).Number.ToString(CultureInfo.InvariantCulture),
-                PersonId = x.PrimaryTeacherRef.Value
-            }));
         }
 
         public IEnumerable<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int userId, int roleId)

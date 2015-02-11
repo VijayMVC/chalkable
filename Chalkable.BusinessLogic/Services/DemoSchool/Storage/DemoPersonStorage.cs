@@ -93,15 +93,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 var filter = query.Filter.ToLowerInvariant();
                 persons = persons.Where(x => x.FullName().ToLowerInvariant().Contains(filter));
             }
-                
             
-            if (query.GradeLevelIds != null)
-            {
-                var gradeLevelIds = Storage.GradeLevelStorage.GetAll().Select(x => x.Id).ToList();
-                persons = persons.Where(x => x.RoleRef == CoreRoles.STUDENT_ROLE.Id && Storage.StudentSchoolYearStorage.Exists(gradeLevelIds, x.Id) || 
-                    x.RoleRef == CoreRoles.TEACHER_ROLE.Id && Storage.ClassStorage.Exists(gradeLevelIds, x.Id));
-            }
-
             if (query.RoleIds != null)
                 persons = persons.Where(x => query.RoleIds.Contains(x.RoleRef));
 
@@ -226,7 +218,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public string StartFrom { get; set; }
         public string Filter { get; set; }
-        public IEnumerable<int> GradeLevelIds { get; set; }
         public SortTypeEnum SortType { get; set; }
 
         public int? MarkingPeriodId { get; set; }

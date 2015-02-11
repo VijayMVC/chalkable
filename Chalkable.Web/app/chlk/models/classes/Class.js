@@ -1,5 +1,4 @@
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.DepartmentId');
@@ -16,7 +15,6 @@ NAMESPACE('chlk.models.classes', function () {
             VOID, function deserialize(raw){
                 this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
                 this.description = SJX.fromValue(raw.description, String);
-                this.gradeLevel = SJX.fromDeserializable(raw.gradelevel, chlk.models.grading.GradeLevel);
                 this.id = SJX.fromValue(raw.id, chlk.models.id.ClassId);
                 this.markingPeriodsId = SJX.fromArrayOfValues(raw.markingperiodsid, chlk.models.id.MarkingPeriodId);
                 this.classNumber = SJX.fromValue(raw.classnumber, String);
@@ -27,7 +25,6 @@ NAMESPACE('chlk.models.classes', function () {
 
             chlk.models.id.DepartmentId, 'departmentId',
             String, 'description',
-            chlk.models.grading.GradeLevel, 'gradeLevel',
             chlk.models.id.ClassId, 'id',
             ArrayOf(chlk.models.id.MarkingPeriodId), 'markingPeriodsId',
             String, 'classNumber',

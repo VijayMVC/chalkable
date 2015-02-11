@@ -80,7 +80,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 res.ClassNumber = c.ClassNumber;
                 res.ClassDescription = c.Description;
                 res.ChalkableDepartmentId = c.ChalkableDepartmentRef;
-                res.GradeLevelId = c.GradeLevelRef;
             }
             if (room != null)
             {

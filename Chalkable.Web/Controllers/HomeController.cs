@@ -240,7 +240,6 @@ namespace Chalkable.Web.Controllers
             if (!CanTeacherViewChalkable()) return;
 
             var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod();
-            var gradeLevels = classes.Select(x => x.GradeLevel.Name).Distinct().ToList();
             var classNames = classes.Select(x => x.Name).ToList();
 
             var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
@@ -252,7 +251,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), 
-                gradeLevels, classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip);
+                classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip);
         }
 
         private void ProcessFirstLogin(PersonDetails person)

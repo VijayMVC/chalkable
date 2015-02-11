@@ -58,23 +58,6 @@ namespace Chalkable.Data.School.DataAccess
             }
         } 
 
-        public IList<ApplicationInstall> GetInstalledForClass(Class clazz)
-        {
-            var sql = string.Format(@"select ApplicationInstall.* from 
-	                                        ApplicationInstall
-	                                        join ApplicationInstallAction on ApplicationInstall.AppInstallActionRef = ApplicationInstallAction.Id
-                                        where 
-	                                        exists (select * from ApplicationInstallActionClasses where AppInstallActionRef = ApplicationInstallAction.Id and {0} = @{0})
-	                                        and exists (select * from ApplicationInstallActionGradeLevel where AppInstallActionRef = ApplicationInstallAction.Id and {1} = @{1})
-	                                        and {2} = 1", ApplicationInstallActionClasses.CLASS_REF_FIELD, ApplicationInstallActionGradeLevel.GRADE_LEVEL_REF_FIELD, ApplicationInstall.ACTIVE_FIELD);
-            var ps = new Dictionary<string, object>
-                {
-                    {ApplicationInstallActionClasses.CLASS_REF_FIELD, clazz.Id},
-                    {ApplicationInstallActionGradeLevel.GRADE_LEVEL_REF_FIELD, clazz.GradeLevelRef}
-                };
-            return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
-        }
-
         public IList<ApplicationInstall> GetInstalledByAppId(Guid applicationId, int schoolYearId)
         {
             return SelectMany<ApplicationInstall>(new AndQueryCondition

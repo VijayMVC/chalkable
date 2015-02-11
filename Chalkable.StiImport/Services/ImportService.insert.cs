@@ -501,31 +501,23 @@ namespace Chalkable.StiImport.Services
 
         private void InsertCourses()
         {
-            var years = ServiceLocatorSchool.SchoolYearService.GetSchoolYears().ToDictionary(x => x.Id);
             var departmenPairs = PrepareChalkableDepartmentKeywords();
-
             var courses = context.GetSyncResult<Course>().All.ToList();
             var d = courses.ToDictionary(x => x.CourseID);
             courses = TopologicSort(x => x.CourseID, x => x.SectionOfCourseID, d).ToList();
             var classes = new List<Class>();
             foreach (var course in courses)
             {
-                var glId = course.MaxGradeLevelID ?? course.MinGradeLevelID;
-                if (!glId.HasValue)
-                {
-                    Log.LogWarning(string.Format("No grade level for class {0}", course.CourseID));
-                    continue;
-                }
                 var closestDep = FindClosestDepartment(departmenPairs, course.ShortName.ToLower());
                 classes.Add(new Class
                 {
                     ChalkableDepartmentRef = closestDep != null ? closestDep.Second : (Guid?)null,
                     Description = course.FullName,
-                    GradeLevelRef = glId.Value,
+                    MinGradeLevelRef = course.MinGradeLevelID,
+                    MaxGradeLevelRef = course.MaxGradeLevelID,
                     Id = course.CourseID,
                     ClassNumber = course.FullSectionNumber,
                     Name = course.ShortName,
-                    SchoolRef = course.AcadSessionID != null ? years[course.AcadSessionID.Value].SchoolRef : (int?)null,
                     SchoolYearRef = course.AcadSessionID,
                     PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,
@@ -574,8 +566,7 @@ namespace Chalkable.StiImport.Services
                 Name = x.Name,
                 ParentStandardRef = x.ParentStandardID,
                 StandardSubjectRef = x.StandardSubjectID,
-                UpperGradeLevelRef = x.UpperGradeLevelID,
-                AcademicBenchmarkId = x.AcademicBenchmarkId
+                UpperGradeLevelRef = x.UpperGradeLevelID
             }).ToList();
             var toInsert = sts.ToDictionary(x=>x.Id);
             var sorted = TopologicSort(x => x.Id, x => x.ParentStandardRef, toInsert);

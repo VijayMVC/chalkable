@@ -15,9 +15,6 @@ NAMESPACE('chlk.templates.classes', function () {
             String, 'description',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.grading.GradeLevel, 'gradeLevel',
-
-            [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'id',
 
             [ria.templates.ModelPropertyBind],
