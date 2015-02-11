@@ -28,8 +28,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                     }
             },
 
-            [[ria.dom.Dom, Object]],
-            function showLeavePopUp(node, needChange_){
+            [[ria.dom.Dom, Boolean]],
+            function showLeavePopUp(node, chart_){
                 var buttons = [{
                     text: Msg.Leave_anyways,
                     color: chlk.models.common.ButtonColor.RED.valueOf(),
@@ -48,7 +48,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 buttons.forEach(function(item){
                     buttonsModel.push(serializer.deserialize(item, chlk.models.common.Button));
                 });
-                var model = new chlk.models.common.InfoMsg(Msg.Click_post_to_save, Msg.Whoa.capitalize(), buttonsModel, 'attendance-leave');
+                var model = new chlk.models.common.InfoMsg(chart_ ? 'Seating chart isn\'t saved' : Msg.Click_post_to_save, Msg.Whoa.capitalize(), buttonsModel, 'attendance-leave');
                 var tpl = new chlk.templates.common.InfoMsg();
                 tpl.assign(model);
                 tpl.renderTo(new ria.dom.Dom('#chlk-dialogs'));
@@ -89,10 +89,10 @@ NAMESPACE('chlk.activities.attendance', function () {
                 document.removeEventListener('click', this.datePickerHandler, true);
             },
 
-            [[ria.dom.Dom, Boolean]],
-            function tryToLeave(node, needChange_){
+            [[ria.dom.Dom]],
+            function tryToLeave(node){
                 if(this._needPopUp && !node.parent(this._submitFormSelector).exists()){
-                    this.showLeavePopUp(node, needChange_);
+                    this.showLeavePopUp(node);
                     return false;
                 }
                 return true;

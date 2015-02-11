@@ -6,6 +6,8 @@ REQUIRE('chlk.templates.attendance.NotTakenAttendanceClassesTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {
     "use strict";
+    
+    var needChartPopUp = false;
 
     var draggableOptions = {
         revert: true,
@@ -48,6 +50,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             if((diffTop > topPadding) && (diffTop < topPadding + height) && (diffLeft > leftPadding) && (diffLeft < leftPadding + width)){
                 jQuery('#submit-chart').show(100);
+                needChartPopUp = true;
                 jQuery('.seating-chart-page').addClass('edited');
                 var droppable = $(this).find('.student-block[data-index=' + index + ']');
                 if(droppable.find('.empty')[0]){
@@ -116,8 +119,18 @@ NAMESPACE('chlk.activities.attendance', function () {
         'SeatingChartPage', EXTENDS(chlk.activities.attendance.BasePostAttendancePage), [
             function $(){
                 BASE();
+                needChartPopUp = false;
                 this._submitFormSelector = '.save-attendances-form';
                 this._canChangeReasons = null;
+            },
+
+            [[ria.dom.Dom]],
+            OVERRIDE, function tryToLeave(node){
+                if(this._needPopUp && !node.parent(this._submitFormSelector).exists() || needChartPopUp && !node.is('#submit-chart')){
+                    this.showLeavePopUp(node, needChartPopUp);
+                    return false;
+                }
+                return true;
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'savedChart')],
@@ -171,8 +184,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                     var chart = new ria.dom.Dom('.seating-chart-people');
                     chart.show();
                     this.dom.addClass('dragging-on');
-                    if(this.dom.hasClass('edited'))
+                    if(this.dom.hasClass('edited')){
                         this.dom.find('#submit-chart').show(100);
+                        needChartPopUp = true;
+                    }
+
                     $(".draggable:not(.empty-box)").draggable(draggableOptions);
                     $(".droppable").droppable(droppableOptions);
                     activeDragging = true;
@@ -302,6 +318,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function removeStudentClick(node, event){
                 this.dom.find('#submit-chart').show(100);
+                needChartPopUp = true;
                 this.dom.addClass('edited');
                 var parent = node.parent('.student-block ');
                 var clone = parent.clone();
@@ -471,6 +488,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 }.bind(this));
 
                 new ria.dom.Dom().on('click.seating', '#submit-chart', function(node, event){
+                    needChartPopUp = false;
                     this.recalculateChartInfo();
                     this.dom.removeClass('edited');
                     node.hide(100);
