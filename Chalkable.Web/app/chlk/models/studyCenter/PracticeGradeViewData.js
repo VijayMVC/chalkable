@@ -16,17 +16,17 @@ NAMESPACE('chlk.models.studyCenter', function(){
 
             VOID, function deserialize(raw) {
                 this.standard = SJX.fromDeserializable(raw.standard, chlk.models.standard.Standard);
-                this.practiceScore = SJX.fromValue(raw.practicescore, Number);
-                this.gradeBookScore = SJX.fromValue(raw.gradebookscore, Number);
+                this.practiceScore = SJX.fromValue(raw.practicescore, String);
+                this.gradeBookScore = SJX.fromValue(raw.gradebookscore, String);
                 this.gradedDate = SJX.fromDeserializable(raw.gradeddate, chlk.models.common.ChlkDate);
                 this.applicationId = SJX.fromValue(raw.applicationid, chlk.models.id.AppId);
             },
 
             chlk.models.standard.Standard, 'standard',
 
-            Number, 'practiceScore',
+            String, 'practiceScore',
 
-            Number, 'gradeBookScore',
+            String, 'gradeBookScore',
 
             chlk.models.common.ChlkDate, 'gradedDate',
 
