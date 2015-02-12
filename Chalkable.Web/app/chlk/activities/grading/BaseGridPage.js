@@ -745,7 +745,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     var value = (input.getValue() || '').toLowerCase();
                     var isAvg = node.hasClass('avg-form');
                     if(value == 'dropped' || value == 'exempt'){
-                        input.setValue(input.getData('grade-value'));
+                        var gradeValue = input.getData('grade-value').toLowerCase();
+                        gradeValue = (gradeValue == 'exempt') ? '' : input.getData('grade-value');
+                        input.setValue(gradeValue);
                     }
 
                     var activeCell = node.parent('.grade-value');
