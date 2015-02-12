@@ -1,3 +1,6 @@
+mixin PracticeScore_(score)
+    = score != undefined ? score : '-'
+
 .profile-page.grades-page
     +ClassesToolBar(self.getTopData(), 'studycenter', 'practice')
     -var classId = self.getTopData().getSelectedItemId()
@@ -43,14 +46,8 @@
                     each item in self.getPracticeGrades()
                         -var standard = item.getStandard()
                         .row-item
-                            .td-item.standard-name.name-item
-                                +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getName()
-                            .td-item.code.code-item
-                                +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getCommonCoreStandardCode()
+                            .td-item.standard-name.name-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getName()
+                            .td-item.code.code-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getCommonCoreStandardCode()
                             .td-item.description.description-item=standard.getDescription()
-                            .td-item.score.practice.grade-item=item.getPracticeScore()
-                            .td-item.score.grade-book.grade-item=item.getGradeBookScore()
-
-
-
-
+                            .td-item.score.practice.grade-item: +PracticeScore_(item.getPracticeScore())
+                            .td-item.score.grade-book.grade-item: +PracticeScore_(item.getGradeBookScore())

@@ -32,6 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue, bool exempt, IList<ChalkableStudentAverageComment> comments, string note);
         IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId);
         FinalGradeInfo GetFinalGrade(int classId, GradingPeriodDetails gradingPeriod);
+        void PostStandards(int classId, int? gradingPeriodId);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -418,6 +419,11 @@ namespace Chalkable.BusinessLogic.Services.School
                            .Select(x => ChalkableAverage.Create(x.Key, x.First().AverageName))
                            .ToList()
                 };
+        }
+
+        public void PostStandards(int classId, int? gradingPeriodId)
+        {
+            ConnectorLocator.GradebookConnector.PostStandards(classId, gradingPeriodId);
         }
     }
 }

@@ -256,6 +256,14 @@ NAMESPACE('chlk.services', function () {
                     classId: classId && classId.valueOf(),
                     gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf()
                 });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function postStandards(classId, gradingPeriodId){
+                return this.post('Grading/PostStandards', Boolean, {
+                    classId: classId && classId.valueOf(),
+                    gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf()
+                });
             }
         ])
 });
