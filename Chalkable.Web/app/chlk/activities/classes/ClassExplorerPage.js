@@ -15,8 +15,16 @@ NAMESPACE('chlk.activities.classes', function () {
             [ria.mvc.DomEventBind('click', '.more-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function moreStandardsClick(node, event){
-                node.parent().find('.hidden-item').removeClass('hidden-item');
-                node.remove();
+                node.parent().find('.hidden-item, .less-button').setCss('display', 'block');
+                node.hide();
+            },
+
+            [ria.mvc.DomEventBind('click', '.less-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function lessStandardsClick(node, event){
+                node.parent().find('.hidden-item').hide();
+                node.parent().find('.more-button').show();
+                node.hide();
             },
 
             [ria.mvc.DomEventBind('click', '.standard:not(.pressed)')],
