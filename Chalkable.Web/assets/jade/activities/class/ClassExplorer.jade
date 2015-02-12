@@ -1,0 +1,20 @@
+.profile-page
+    h2.page-title=Msg.Class_profile
+
+    +ProfileTopBar(self, 'explorer')
+    .explorer-view
+        .classes-blocks
+            .class-block
+                .announcement-block
+                    each standard, i in self.getStandards()
+                        -var abId = standard.getAcademicBenchmarkId()
+                        +ActionLink('appmarket', 'getSuggestedApps', self.getClazz().getId(), abId, standard.getUrlComponents())(
+                            class = (self.showStandard(i) ? '' : 'hidden-item ') + (abId ? 'with-code' : '')
+                        ).block-item.standard
+                            .left-block(data-tooltip-type="overflow", data-tooltip=standard.getName())=standard.getName()
+                            -var value = standard.getNumericGrade()
+                            .right-block=(parseInt(value) ? Math.round(value) : value)
+                                .circle(class=self.getStandardColor(standard))
+                    if self.showMoreButton()
+                        .block-item.more-button Show more
+        .suggested-apps-container
