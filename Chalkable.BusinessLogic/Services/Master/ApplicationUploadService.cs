@@ -135,6 +135,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var da = new ApplicationDataAccess(uow);
                 application = da.GetApplicationById(applicationId);
             }
+            if (application.IsLive)
+                throw  new ChalkableSecurityException("Only draft applications can be updated");
             if (string.IsNullOrEmpty(appInfo.ShortApplicationInfo.Name))
                 throw new ChalkableException(ChlkResources.ERR_APP_NAME_MISSING);
             if (string.IsNullOrEmpty(appInfo.ShortApplicationInfo.Url))
@@ -152,6 +154,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 application = da.GetApplicationById(applicationId);
             }
             var shortAppInfo = appInfo.ShortApplicationInfo;
+            if (application.IsLive)
+                throw new ChalkableSecurityException("Only draft applications can't be submitted");
             if (string.IsNullOrEmpty(shortAppInfo.Name))
                 throw new ChalkableException(ChlkResources.ERR_APP_NAME_MISSING);
             if (string.IsNullOrEmpty(shortAppInfo.Url))

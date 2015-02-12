@@ -21,7 +21,7 @@ namespace Chalkable.StandardImport
             string error;
             if(!ValidateConnectionString(args[0], out error))
                 throw new Exception(string.Format("Invalid connection string. {0}", error));
-            if(!Path.IsPathRooted(args[1]))
+            if (!Path.IsPathRooted(args[1]))
                 throw new Exception("Invalid CC_StandardFilesDirectory");
             if (!Path.IsPathRooted(args[2]))
                 throw new Exception("Invalid Ab_StandardFilesDirectory");

@@ -59,6 +59,8 @@ namespace Chalkable.Data.Master.Model
         public const string AVG_FIELD = "Avg";
         [NotDbFieldAttr]
         public IList<ApplicationStandard> ApplicationStandards { get; set; }
+        [NotDbFieldAttr]
+        public bool IsLive { get { return State == ApplicationStateEnum.Live; } }
     }
 
     public enum ApplicationStateEnum
