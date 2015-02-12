@@ -164,6 +164,13 @@ namespace Chalkable.Web.Controllers
             MasterLocator.ApplicationUploadService.ChangeApplicationType(applicationId, isinternal);
             return Json(true);
         }
+        
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult SetApplicationInternalData(Guid applicationId, int? internalScore, string interanlDescription)
+        {
+            MasterLocator.ApplicationUploadService.SetApplicationInternalData(applicationId, internalScore, interanlDescription);
+            return Json(true);
+        }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult AddToAnnouncement(int announcementId, Guid applicationId)

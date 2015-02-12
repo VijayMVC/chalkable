@@ -46,6 +46,9 @@ namespace Chalkable.Data.Master.Model
         public decimal? PricePerSchool { get; set; }
         public const string ORIGINAL_REF_FIELD = "OriginalRef";
         public Guid? OriginalRef { get; set; }
+        public int? InternalScore { get; set; }
+        public string InternalDescription { get; set; }
+
         [NotDbFieldAttr]
         public IList<ApplicationPicture> Pictures { get; set; }
         [NotDbFieldAttr]
