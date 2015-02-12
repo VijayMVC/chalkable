@@ -266,6 +266,7 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('click', '.comment-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function commentBtnClick(node, event){
+                this.hideGradingPopUp();
                 var active = this.dom.find('.active-cell');
                 var popUp = this.dom.find('.popup-bubble.comment');
                 var main = this.dom.parent('#main');
