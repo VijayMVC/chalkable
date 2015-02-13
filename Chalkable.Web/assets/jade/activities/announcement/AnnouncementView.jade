@@ -86,11 +86,13 @@ mixin Glue_()
                     )
 
         if self.getUserRole().isStudent()
-            +CloseOpen('My Attachments')
-                .student-attachments.content
-                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
-                        userRole = self.getUserRole()
-                    )
+            -var myAttachments = (self.getAnnouncementAttachments() || []).filter(function (_) { return _.isOwner(); });
+            if self.isGradable() || myAttachments.length
+                +CloseOpen('My Attachments')
+                    .student-attachments.content
+                        +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
+                            userRole = self.getUserRole()
+                        )
             if self.getStandards() && self.getStandards().length > 0
                 +CloseOpen('Practice & Improve')
                     .student-attachments.content
@@ -99,6 +101,7 @@ mixin Glue_()
                                 img(src="")
                                 .title Study Center
                                 +ActionButton('studycenter', 'startPractice', self.getStandards().map(function (_) { return _.getStandardId(); })) Start Practice
+
 
         -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
         if showPostQuestion || self.getAnnouncementQnAs().length
