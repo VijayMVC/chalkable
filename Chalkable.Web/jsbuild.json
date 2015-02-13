@@ -66,10 +66,10 @@
             "jQuery",
             "jade"
         ]
-    }, {
-        "name": "AdminApp",
-        "app": "chlk.AdminApp",
-        "out": "app/AdminApp.compiled.js",
+    },{
+        "name": "StudentApp",
+        "app": "chlk.StudentApp",
+        "out": "app/StudentApp.compiled.js",
 
         "prepend": [
             "lib/jade.runtime.js"
@@ -79,10 +79,12 @@
             "jQuery",
             "jade"
         ]
-    },{
-        "name": "StudentApp",
-        "app": "chlk.StudentApp",
-        "out": "app/StudentApp.compiled.js",
+    }],
+
+    "dropped": [{
+        "name": "AdminApp",
+        "app": "chlk.AdminApp",
+        "out": "app/AdminApp.compiled.js",
 
         "prepend": [
             "lib/jade.runtime.js"
