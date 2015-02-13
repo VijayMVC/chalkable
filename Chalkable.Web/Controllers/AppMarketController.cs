@@ -49,7 +49,7 @@ namespace Chalkable.Web.Controllers
             var cnt = count ?? int.MaxValue;
             var appInstalls = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstalls.GroupBy(x=>x.ApplicationRef).Select(x => x.Key).Distinct().ToList();
-            var applications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds.ToList(), installedAppsIds, st, cnt);
+            var applications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, st, cnt);
             var hasMyAppsDic = applications.ToDictionary(app=> app.Id, app => MasterLocator.ApplicationService.HasMyApps(app));
             var res = InstalledApplicationViewData.Create(appInstalls, Context.PersonId.Value, applications, hasMyAppsDic);
             return Json(res);
