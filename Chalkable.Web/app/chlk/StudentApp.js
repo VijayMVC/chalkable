@@ -15,7 +15,6 @@ REQUIRE('chlk.controllers.StudentsController');
 REQUIRE('chlk.controllers.TeachersController');
 REQUIRE('chlk.controllers.MessageController');
 REQUIRE('chlk.controllers.DisciplineController');
-REQUIRE('chlk.controllers.AdminsController');
 REQUIRE('chlk.controllers.NotificationController');
 REQUIRE('chlk.controllers.StudyCenterController');
 

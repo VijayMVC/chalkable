@@ -5,7 +5,6 @@ REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.FeedService');
 REQUIRE('chlk.services.NotificationService');
 REQUIRE('chlk.activities.feed.FeedListPage');
-REQUIRE('chlk.activities.admin.HomePage');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
