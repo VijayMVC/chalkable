@@ -1,5 +1,5 @@
-#attach-file-area.announcement-item.attach-file-area
-    if self.isGradable()
+if self.isGradable()
+    #attach-file-area.announcement-item.attach-file-area
         div.simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each attachment, i in self.getAnnouncementAttachments()
