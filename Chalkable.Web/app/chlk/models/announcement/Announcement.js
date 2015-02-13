@@ -11,7 +11,6 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
-REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
@@ -50,7 +49,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.clazz = raw['class'] || null;
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
-                this.announcementReminders = SJX.fromArrayOfDeserializables(raw.announcementreminders, chlk.models.announcement.Reminder);
                 this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
                 this.gradesSummary = SJX.fromValue(raw.gradesummary, Number);
                 this.gradingStudentsCount = SJX.fromValue(raw.gradingstudentscount, Number);
@@ -126,7 +124,6 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'canAddStandard',
             Boolean, 'ableToRemoveStandard',
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
-            ArrayOf(chlk.models.announcement.Reminder), 'announcementReminders',
             String, 'applicationName',
             Number, 'applicationsCount',
             Number, 'attachmentsCount',

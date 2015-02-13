@@ -12,7 +12,6 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
             chlk.models.classes.ClassForWeekMask, 'classInfo',
             Number, 'selectedTypeId',
-            Array, 'reminders',
             chlk.models.announcement.AdminRecipients, 'adminRecipients',
             String, 'adminRecipientId',
             Array, 'classScheduleDateRanges',

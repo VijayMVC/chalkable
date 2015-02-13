@@ -1,7 +1,6 @@
 REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
 REQUIRE('chlk.templates.announcement.AnnouncementFormTpl');
 REQUIRE('chlk.templates.announcement.Announcement');
-REQUIRE('chlk.templates.announcement.AnnouncementReminder');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.classes.TopBar');
@@ -18,7 +17,6 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementFormTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementReminder, '', '.reminders', ria.mvc.PartialUpdateRuleActions.Append)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],

@@ -258,7 +258,6 @@ var Msg = {
     Add_comment: 'Add comment',
     Add_a_comment: 'Add a comment',
     Add_discipline: 'Add discipline',
-    Add_reminder: 'Add Reminder',
     Add_remove_students: 'Add/Remove students',
     Add_student: 'Add student',
     Add_students: 'Add students',

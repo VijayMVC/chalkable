@@ -5,7 +5,6 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.GradeLevelService');
-REQUIRE('chlk.services.AnnouncementReminderService');
 REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.StandardService');
 REQUIRE('chlk.services.MarkingPeriodService');
@@ -19,7 +18,6 @@ REQUIRE('chlk.activities.announcement.AddStandardsDialog');
 REQUIRE('chlk.activities.announcement.AddDuplicateAnnouncementDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
-REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
@@ -29,7 +27,6 @@ REQUIRE('chlk.models.standard.Standard');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
-REQUIRE('chlk.models.id.ReminderId');
 REQUIRE('chlk.models.id.AttachmentId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.StandardSubjectId');
@@ -60,9 +57,6 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.AnnouncementService, 'announcementService',
 
         [ria.mvc.Inject],
-        chlk.services.AnnouncementReminderService, 'announcementReminderService',
-
-        [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
 
         [ria.mvc.Inject],
@@ -90,41 +84,6 @@ NAMESPACE('chlk.controllers', function (){
                 return chlk.activities.announcement.AdminAnnouncementFormPage;
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER))
                 return chlk.activities.announcement.AnnouncementFormPage;
-        },
-
-        [[chlk.models.announcement.Reminder]],
-        function editAddReminderAction(model) {
-            if(model.isDuplicate()){
-                this.ShowMsgBox('This reminder was added before!.', 'fyi.', [{
-                    text: Msg.GOT_IT.toUpperCase()
-                }])
-            }else{
-                var before = model.getBefore();
-                if(model.getId().valueOf()){
-                    return this.announcementReminderService
-                        .editReminder(model.getId(), before)
-                        .attach(this.validateResponse_());
-                }else{
-                    var result = this.announcementReminderService
-                        .addReminder(model.getAnnouncementId(), before)
-                        .attach(this.validateResponse_())
-                        .then(function(announcement){
-                            var reminders = announcement.getAnnouncementReminders(), res;
-                            res = reminders.filter(function(item){
-                                return item.getBefore() == before;
-                            });
-                            return res[0];
-                        });
-                    return this.UpdateView(this.getAnnouncementFormPageType_(), result, chlk.activities.lib.DontShowLoader());
-                }
-            }
-        },
-
-        [[chlk.models.id.ReminderId]],
-        function removeReminderAction(announcementReminderId) {
-            this.announcementReminderService
-                .deleteReminder(announcementReminderId)
-                .attach(this.validateResponse_());
         },
 
         [[chlk.models.announcement.ShowGradesToStudents]],
@@ -209,13 +168,7 @@ NAMESPACE('chlk.controllers', function (){
         function addEditAction(model, isEdit){
             this.disableAnnouncementSaving(false);
             var announcement = model.getAnnouncement();
-            var reminders = announcement.getAnnouncementReminders() || [];
-            var remindersArray = [], redirectToNoCategoriesPage;
-
-            reminders.forEach(function(item){
-                remindersArray.push(item.getBefore());
-            });
-            model.setReminders(remindersArray);
+            var redirectToNoCategoriesPage;
 
             if(this.userIsAdmin()){
                 this.prepareRecipientsData(model);

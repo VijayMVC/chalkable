@@ -1,7 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.BaseAnnouncementFormTpl');
 REQUIRE('chlk.templates.announcement.Announcement');
-REQUIRE('chlk.templates.announcement.AnnouncementReminder');
 REQUIRE('chlk.templates.announcement.LastMessages');
 
 NAMESPACE('chlk.activities.announcement', function () {
@@ -142,26 +141,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                 return true;
             },
 
-            OVERRIDE, VOID, function onPartialRender_(model, msg_) {
-                BASE(model, msg_);
-                /*if(model.getClass() == chlk.models.announcement.LastMessages){
-                    this.dom.find('#content').trigger('focus');
-                }*/
-
-                if(model.getClass() == chlk.models.announcement.Reminder){
-                    var parent = this.dom.find('.new-reminder');
-                    var input = parent.find('.reminder-input');
-                    var select = parent.find('.reminder-select');
-                    input.setAttr('disabled', false).setValue('');
-                    select.setAttr('disabled', false)
-                        .find('option[value=1]').setAttr('selected', true)
-                        .find('option[value=7]').setAttr('selected', false);
-                    parent.find('.remove-reminder').removeClass('x-hidden');
-                    jQuery(select.valueOf()).trigger('liszt:updated');
-                    parent.addClass('x-hidden');
-                }
-            },
-
             OVERRIDE, VOID, function onStart_() {
                 BASE();
                 var that = this;
@@ -173,9 +152,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     }
 
                 };
-                jQuery(this.dom.valueOf()).on('change', '.reminder-select', function(){
-                    that.addEditReminder(new ria.dom.Dom(this));
-                });
                 new ria.dom.Dom().on('click.dropdown', this._handler);
             },
 
@@ -185,37 +161,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     button.trigger('click');
                 new ria.dom.Dom().off('click.dropdown', this._handler);
                 BASE();
-            },
-
-            [[ria.dom.Dom]],
-            VOID, function addEditReminder(node) {
-                var parent = node.parent('.reminder');
-                var input = parent.find('.reminder-input');
-                var inputValue = input.getValue();
-                if(inputValue){
-                    var select = parent.find('.reminder-select');
-                    var id = parent.getData('id');
-                    var form = this.dom.find('#add-edit-reminder');
-                    var reminders = form.getData('reminders'), isDuplicate = false;
-                    var before = parseInt(select.getValue(), 10) * parseInt(inputValue, 10);
-                    isDuplicate = reminders.indexOf(before) > -1;
-                    if(!isDuplicate){
-                        reminders.push(before);
-                        form.setData('reminders', reminders);
-
-                        if(!id){
-                            input.setAttr('disabled', true);
-                            select.setAttr('disabled', true);
-                            parent.find('.remove-reminder').addClass('x-hidden');
-                            jQuery(select.valueOf()).trigger('liszt:updated');
-                        }
-                    }
-                    form.find('[name=duplicate]').setValue(isDuplicate);
-                    form.find('[name=id]').setValue(id || '');
-                    form.find('[name=before]').setValue(before);
-                    form.trigger('submit');
-                }
-
             }
         ]
     );

@@ -24,9 +24,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'isDraft',
 
             [ria.templates.ModelPropertyBind],
-            Array, 'reminders',
-
-            [ria.templates.ModelPropertyBind],
             Array, 'classScheduleDateRanges',
 
             chlk.models.standard.StandardsListViewData, function prepareStandardsListData() {
