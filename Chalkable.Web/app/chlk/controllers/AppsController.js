@@ -835,6 +835,14 @@ NAMESPACE('chlk.controllers', function (){
                     return this.Redirect('apps', 'page', []);
                 }, this);
 
+        },
+        [[chlk.models.apps.Application]],
+        function setInternalDataSysAdminAction(app){
+            return this.appsService.setInternalData(app.getId(), app.getInternalScore(), app.getInternalDescription())
+                .attach(this.validateResponse_())
+                .then(function(data){
+                   return this.BackgroundNavigate('apps', 'details', [app.getId()]);
+                }, this);
         }
     ])
 });

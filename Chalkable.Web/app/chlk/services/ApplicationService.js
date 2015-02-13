@@ -344,6 +344,15 @@ NAMESPACE('chlk.services', function () {
                         isInternal: isInternal,
                         applicationId: appId.valueOf()
                     });
+            },
+
+            [[chlk.models.id.AppId, Number, String]],
+            ria.async.Future, function setInternalData(appId, internalScore, internalDescription){
+                return this.post('Application/SetApplicationInternalData.json', chlk.models.Success,{
+                    applicationId: appId.valueOf(),
+                    internalScore: internalScore,
+                    internalDescription: internalDescription
+                });
             }
 
         ])

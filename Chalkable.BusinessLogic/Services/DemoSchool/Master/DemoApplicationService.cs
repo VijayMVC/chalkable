@@ -47,6 +47,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0,
+                                                     int count = Int32.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
         public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, Services.Master.AppFilterMode? filterMode, Services.Master.AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
         {
             var query = new ApplicationQuery

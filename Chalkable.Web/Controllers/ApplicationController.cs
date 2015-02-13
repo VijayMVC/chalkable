@@ -20,8 +20,8 @@ namespace Chalkable.Web.Controllers
     {
         [AuthorizationFilter("SysAdmin, Developer, AppTester")]
         public ActionResult List(Guid? developerId, int? state, int? start, int? count)
-        {
-            var applications = MasterLocator.ApplicationService.GetApplications(developerId, (ApplicationStateEnum?)state, null, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
+        {           
+            var applications = MasterLocator.ApplicationService.GetApplicationsWithLive(developerId, (ApplicationStateEnum?)state, null, start ?? 0, count ?? DEFAULT_PAGE_SIZE);  
             return Json(applications.Transform(BaseApplicationViewData.Create));
         }
 
@@ -166,9 +166,9 @@ namespace Chalkable.Web.Controllers
         }
         
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult SetApplicationInternalData(Guid applicationId, int? internalScore, string interanlDescription)
+        public ActionResult SetApplicationInternalData(Guid applicationId, int? internalScore, string internalDescription)
         {
-            MasterLocator.ApplicationUploadService.SetApplicationInternalData(applicationId, internalScore, interanlDescription);
+            MasterLocator.ApplicationUploadService.SetApplicationInternalData(applicationId, internalScore, internalDescription);
             return Json(true);
         }
 

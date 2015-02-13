@@ -5,6 +5,8 @@ REQUIRE('chlk.templates.apps.AppScreenshots');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.ApplicationStandardsTpl');
 
+REQUIRE('chlk.activities.lib.ChlkTemplateActivity');
+
 NAMESPACE('chlk.activities.apps', function () {
 
 
@@ -21,7 +23,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppScreenshots, 'screenshots', '.elem.screenshots', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppInfo, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
 
-        'AppInfoPage', EXTENDS(chlk.activities.lib.TemplatePage), [
+        'AppInfoPage', EXTENDS(chlk.activities.lib.ChlkTemplateActivity), [
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function doUpdateItem(allTpl, allModel, msg_) {

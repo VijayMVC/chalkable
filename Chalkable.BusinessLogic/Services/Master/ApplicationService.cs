@@ -16,6 +16,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
         PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
+
+        PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
         
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
             , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
@@ -62,6 +64,31 @@ namespace Chalkable.BusinessLogic.Services.Master
                 Filter = filter
             };
             return GetApplications(query);
+        }
+
+        public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
+        {
+            var onlyWithLive = state == ApplicationStateEnum.Live;
+            var query = new ApplicationQuery
+            {
+                DeveloperId = developerId,
+                State = onlyWithLive ? null : state,
+                Filter = filter
+            };
+            var apps = GetApplications(query).Where(x=> x.State != ApplicationStateEnum.Live).ToList();
+            if (onlyWithLive)
+                apps = apps.Where(a => a.OriginalRef.HasValue).ToList();
+            var appsLiveIds = apps.Where(x => x.OriginalRef.HasValue).Select(x => x.OriginalRef.Value).ToList();
+            if (appsLiveIds.Count > 0)
+            {
+               var liveApps = GetApplicationsByIds(appsLiveIds);
+               foreach (var app in apps)
+               {
+                   if(app.OriginalRef.HasValue)
+                    app.LiveApplication = liveApps.First(x => x.Id == app.OriginalRef);
+               }
+            }
+            return new PaginatedList<Application>(apps, start / count, count);
         }
 
         public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
