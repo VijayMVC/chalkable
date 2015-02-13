@@ -132,7 +132,6 @@ NAMESPACE('chlk.controllers', function (){
                     var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     model.setTopData(topModel);
                     model.setGradeLevelsForToolBar(glsInputData);
-                    model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
                 }, this);
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.WeekPage, result);
@@ -164,7 +163,6 @@ NAMESPACE('chlk.controllers', function (){
                     var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     model.setTopData(topModel);
                     model.setGradeLevelsForToolBar(glsInputData);
-                    model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
                 }, this);
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.MonthPage, result);

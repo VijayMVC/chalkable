@@ -153,7 +153,7 @@ NAMESPACE('chlk.controllers', function(){
                 var res = this.listStudentDiscipline_(studentId, date)
                     .then(function(model){
                         model.setTarget(chlk.controls.getActionLinkControlLastNode());
-                        model.setAbleEdit(this.userIsAdmin() || this.userInRole(chlk.models.common.RoleEnum.TEACHER));
+                        model.setAbleEdit(this.userInRole(chlk.models.common.RoleEnum.TEACHER));
                         if(controller_)
                             model.setController(controller_);
                         if(action_)
@@ -229,7 +229,7 @@ NAMESPACE('chlk.controllers', function(){
                 var result = this.listStudentDiscipline_(studentId, date_)
                     .then(function(model){
                         model.setTarget(chlk.controls.getActionLinkControlLastNode());
-                        model.setAbleEdit(this.userIsAdmin() || this.userInRole(chlk.models.common.RoleEnum.TEACHER));
+                        model.setAbleEdit(this.userInRole(chlk.models.common.RoleEnum.TEACHER));
                         if(controller_)
                             model.setController(controller_);
                         if(action_)

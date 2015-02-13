@@ -3,11 +3,14 @@ REQUIRE('chlk.services.AppCategoryService');
 
 REQUIRE('ria.async.Future');
 
+REQUIRE('chlk.models.id.MarkingPeriodId');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.SchoolPersonId');
+
 REQUIRE('chlk.models.apps.AppGradeLevel');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppMarketApplication');
-REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.apps.AppTotalPrice');
@@ -95,7 +98,7 @@ NAMESPACE('chlk.services', function () {
             },
 
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId,   Number, Number]],
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, Number, Number]],
             ria.async.Future, function getAppsForAttach(personId, classId, markingPeriodId,  start_, count_){
                 return this.getPaginatedList('AppMarket/ListInstalledForAttach', chlk.models.apps.ApplicationForAttach,{
                     personId: personId.valueOf(),

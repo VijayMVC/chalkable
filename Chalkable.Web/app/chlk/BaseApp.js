@@ -20,7 +20,6 @@ REQUIRE('chlk.controls.GridControl');
 REQUIRE('chlk.controls.ImageControl');
 REQUIRE('chlk.controls.LabeledCheckboxControl');
 REQUIRE('chlk.controls.LeftRightToolbarControl');
-REQUIRE('chlk.controls.ListForWeekCalendarControl');
 REQUIRE('chlk.controls.ListViewControl');
 REQUIRE('chlk.controls.LoadingImgControl');
 REQUIRE('chlk.controls.LogoutControl');

@@ -267,9 +267,6 @@ NAMESPACE('chlk.controllers', function (){
             var installedCount = 0;
             installedForGroups = installedForGroups.map(function(item){
                 if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL){
-                    if (this.userIsAdmin()){
-                        item.setDescription(Msg.Whole_School);
-                    }
                     item.setId(new chlk.models.id.AppInstallGroupId('all'));
                 }
 

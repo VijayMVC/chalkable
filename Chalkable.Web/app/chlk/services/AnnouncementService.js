@@ -164,28 +164,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, String,String, String, chlk.models.common.ChlkDate,  String]],
-            ria.async.Future, function saveAdminAnnouncement(id, recipients,title_, content_, expiresdate_, attachments_) {
-                return this.get('Announcement/SaveForAdmin.json', chlk.models.announcement.AnnouncementTitleViewData, {
-                    announcementId:id.valueOf(),
-                    content: content_,
-                    attachments: attachments_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    annRecipients: recipients
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId, String,String, String, chlk.models.common.ChlkDate,  String]],
-            ria.async.Future, function submitAdminAnnouncement(id, recipients,title_, content_, expiresdate_, attachments_) {
-                return this.post('Announcement/SubmitForAdmin.json', chlk.models.announcement.AnnouncementForm, {
-                    announcementId:id.valueOf(),
-                    content: content_,
-                    attachments: attachments_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    annRecipients: recipients
-                });
-            },
-
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
                 , chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId
                 , Number, Number, Number, Boolean, Boolean

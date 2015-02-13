@@ -177,7 +177,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     model.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
-                    model.setAbleEdit(this.userIsAdmin() || this.userInRole(chlk.models.common.RoleEnum.TEACHER));
+                    model.setAbleEdit(this.userInRole(chlk.models.common.RoleEnum.TEACHER));
                     if(controller_)
                         model.setController(controller_);
                     if(action_)
