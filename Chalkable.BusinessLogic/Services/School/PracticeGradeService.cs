@@ -87,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = new List<PracticeGradeDetailedInfo>();
             foreach (var standard in standards)
             {
-                var standardScore = standardsScores.FirstOrDefault(x => x.StandardId == standard.Standard.Id);
+                var standardScore = standardsScores.FirstOrDefault(x => x.StandardId == standard.Standard.Id && x.SectionId == classId);
                 var pGrades = practiceGrades.Where(x => x.StandardId == standard.Standard.Id).ToList();
                 if (pGrades.Count > 0)
                 {
