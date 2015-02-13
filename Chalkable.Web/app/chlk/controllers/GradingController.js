@@ -825,7 +825,18 @@ NAMESPACE('chlk.controllers', function (){
                         model.getNote()
                     )
                     .attach(this.validateResponse_());
+
                 return this.UpdateView(chlk.activities.grading.FinalGradesPage, result, chlk.activities.lib.DontShowLoader());
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.id.StandardId]],
+            function postStandardsAction(classId, gradingPeriodId) {
+                var result = this.gradingService
+                    .postStandards(classId, gradingPeriodId)
+                    .thenCall(this.ShowAlertBox, ['Standards posted successfully.'])
+                    .thenBreak();
+
+                return this.UpdateView(chlk.activities.grading.GradingClassStandardsGridPage, result);
             },
 
             function updateStudentAvgFromModel(model){

@@ -344,5 +344,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                        .ToList()
             };
         }
+
+        public void PostStandards(int classId, int? gradingPeriodId)
+        {
+            Storage.StiGradeBookStorage.PostStandards(classId, gradingPeriodId);
+        }
     }
 }

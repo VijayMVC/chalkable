@@ -120,5 +120,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             }
             return res;
         }
+
+        public void PostStandards(int classId, int? gradingPeriodId)
+        {
+             
+        }
     }
 }

@@ -86,5 +86,13 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
             return Call<AverageDashboard>(url, nvc);
         }
+
+        public void PostStandards(int sectionId, int? gradingPeriodId)
+        {
+            var nvc = new NameValueCollection();
+            if (gradingPeriodId.HasValue)
+                nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
+            Post<Object, Object>(string.Format(BaseUrl + "chalkable/sections/{0}/gradebook/poststandards", sectionId), new Object(), nvc);
+        }
     }
 }

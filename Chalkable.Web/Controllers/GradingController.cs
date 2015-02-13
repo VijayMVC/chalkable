@@ -121,7 +121,14 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        
+        [AuthorizationFilter("Teacher")]
+        public ActionResult PostStandards(int classId, int gradingPeriodId)
+        {
+            SchoolLocator.GradingStatisticService.PostStandards(classId, gradingPeriodId);
+            MasterLocator.UserTrackingService.PostedGrades(Context.Login, classId, gradingPeriodId);
+            return Json(true);
+        }
+
         [AuthorizationFilter("Teacher")]
         public ActionResult GetStudentAverages(int classId, int gradingPeriodId, int averageId)
         {
