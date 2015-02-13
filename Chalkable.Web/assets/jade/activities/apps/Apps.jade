@@ -1,0 +1,71 @@
+mixin AppManagementControls(app)
+    -var id = app
+    if app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
+        +ActionLink('apps', 'approve', id).btn Approve
+        +ActionLink('apps', 'decline', id).btn Reject
+    else
+        span=app.getState().toString()
+
+
+mixin ApplicationActionLinks(tplObj, app)
+    if !tplObj.isReadOnly()
+        +ActionLink('apps', 'details', app.getId()).profile
+    +ActionLink('apps', 'testApplication', app.getDeveloperId()).profile
+    if !tplObj.isReadOnly()
+        +ActionLink('apps', 'tryDeleteApplication', app.getId(), app.getName()).remove
+
+mixin AppsFilterSelect(name, items)
+    +Select(name)(attributes)
+        each item in items
+            +Option(item.value, item.displayValue, item.selected)
+
+.apps-list
+    +ActionForm('apps', 'list')#apps-list-form
+        +Hidden('start', self.applications.getPageIndex())
+        +Hidden('totalCount', self.applications.getTotalCount())
+        +Hidden('actualCount', self.applications.getActualCount())
+        +Hidden('pageSize', self.applications.getPageSize())
+
+        .x-form-field
+            label  Developer:
+            +AppsFilterSelect('developerid', self.prepareDevelopersSelectModel())#developers-select
+        .x-form-field
+            label States:
+            +AppsFilterSelect('state', self.prepareStatesSelectModel())#states-select
+
+
+        +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
+            +GridHead()
+                .th
+                .th Application Name
+                .th Description
+                .th State
+                .th.narrow isInternal
+                .th Has Live
+                .th Draft Actions
+                .th Live Actions
+                .th
+            +GridBody()
+                each item in self.applications.getItems()
+                    +GridRow()
+                        pictureLink = item.getSmallPictureId() ? self.getAppPictureURL(item.getSmallPictureId(), 74, 74) : '#'
+                        .td
+                            img.app-icon(src=pictureLink, width=24, height=24)
+                        .td= item.getName()
+                        .td= item.getShortDescription()
+                        .td.app-state
+                            +AppManagementControls(item)
+                        .td
+                            if !self.isReadOnly()
+                                +ActionForm('apps', 'changeAppType')
+                                    +Checkbox('isInternal', item.isInternal())
+                                    +Hidden('appId', item.getId())
+                            else
+                                span=item.isInternal() ? "True" : "False"
+                        .td
+                            span=item.getLiveAppId() ? "True" : "False"
+                        .td.action-links
+                            +ApplicationActionLinks(self, item)
+                        .td.action-links
+                            if item.getLiveAppId() && item.getLiveApplication()
+                                +ApplicationActionLinks(self, item.getLiveApplication())
