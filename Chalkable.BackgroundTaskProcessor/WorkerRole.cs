@@ -33,7 +33,7 @@ namespace Chalkable.BackgroundTaskProcessor
             {
                 if (delay <= 0)
                 {
-                    Thread.Sleep(10000);                    
+                    Thread.Sleep(1000);                    
                     continue;
                 }
                 try
