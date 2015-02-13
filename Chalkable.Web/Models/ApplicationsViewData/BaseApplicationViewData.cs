@@ -24,11 +24,13 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public Guid? DeveloperId { get; set; }
         public Guid? LiveAppId { get; set; }
         public bool IsInternal { get; set; }
+        public int? InternalScore { get; set; }
+        public string InternalDescription { get; set; }
         public ApplicationAccessViewData ApplicationAccess { get; set; }
         public ApplicationPriceViewData ApplicationPrice { get; set; }
         public IList<Guid> Picturesid { get; set; }
-       
-
+        public BaseApplicationViewData LiveApplication { get; set; }
+        
         protected BaseApplicationViewData(Application application)
         {
             Id = application.Id;
@@ -45,7 +47,11 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             ApplicationPrice = ApplicationPriceViewData.Create(application);
             LiveAppId = application.OriginalRef;
             IsInternal = application.IsInternal;
+            InternalScore = application.InternalScore;
+            InternalDescription = application.InternalDescription;
             Picturesid = application.Pictures.Select(x => x.Id).ToList();
+            if (application.LiveApplication != null)
+                LiveApplication = Create(application.LiveApplication);
         }
 
         public static BaseApplicationViewData Create(Application application)
@@ -66,7 +72,6 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<int> GradeLevels { get; set; }
         public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
-        public BaseApplicationViewData LiveApplication { get; set; }
         public IList<CommonCoreStandardViewData> Standards { get; set; } 
 
         protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey, IList<CommonCoreStandard> standards)

@@ -3,8 +3,16 @@ mixin AppManagementControls(app)
     if app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
         +ActionLink('apps', 'approve', id).btn Approve
         +ActionLink('apps', 'decline', id).btn Reject
-    span=app.getStatusText()
+    else
+        span=app.getState().toString()
 
+
+mixin ApplicationActionLinks(tplObj, app)
+    if !tplObj.isReadOnly()
+        +ActionLink('apps', 'details', app.getId()).profile
+    +ActionLink('apps', 'testApplication', app.getDeveloperId()).profile
+    if !tplObj.isReadOnly()
+        +ActionLink('apps', 'tryDeleteApplication', app.getId(), app.getName()).remove
 
 mixin AppsFilterSelect(name, items)
     +Select(name)(attributes)
@@ -33,6 +41,9 @@ mixin AppsFilterSelect(name, items)
                 .th Description
                 .th State
                 .th.narrow isInternal
+                .th Has Live
+                .th Draft Actions
+                .th Live Actions
                 .th
             +GridBody()
                 each item in self.applications.getItems()
@@ -44,7 +55,6 @@ mixin AppsFilterSelect(name, items)
                         .td= item.getShortDescription()
                         .td.app-state
                             +AppManagementControls(item)
-
                         .td
                             if !self.isReadOnly()
                                 +ActionForm('apps', 'changeAppType')
@@ -52,10 +62,10 @@ mixin AppsFilterSelect(name, items)
                                     +Hidden('appId', item.getId())
                             else
                                 span=item.isInternal() ? "True" : "False"
+                        .td
+                            span=item.getLiveAppId() ? "True" : "False"
                         .td.action-links
-                            if !self.isReadOnly()
-                                +ActionLink('apps', 'details', item.getId()).profile
-                            +ActionLink('apps', 'testApplication', item.getDeveloperId()).profile
-                            if !self.isReadOnly()
-                                +ActionLink('apps', 'tryDeleteApplication', item.getId(), item.getName()).remove
-
+                            +ApplicationActionLinks(self, item)
+                        .td.action-links
+                            if item.getLiveAppId() && item.getLiveApplication()
+                                +ApplicationActionLinks(self, item.getLiveApplication())

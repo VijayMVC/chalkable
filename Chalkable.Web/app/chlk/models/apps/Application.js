@@ -58,6 +58,10 @@ NAMESPACE('chlk.models.apps', function () {
                 this.platforms = SJX.fromArrayOfDeserializables(raw.platforms, chlk.models.apps.AppPlatform);
                 this.banInfo = SJX.fromDeserializable(raw.baninfo, chlk.models.apps.BannedAppData);
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.apps.AppCategory);
+                this.internalScore = SJX.fromValue(raw.internalscore, Number);
+                this.internalDescription = SJX.fromValue(raw.internaldescription, String);
+                if(raw.liveapplication)
+                    this.liveApplication = SJX.fromDeserializable(raw.liveapplication, SELF);
             },
 
             chlk.models.id.AppId, 'id',
@@ -90,6 +94,15 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.id.CommonCoreStandardId), 'standardsIds',
             ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
             chlk.models.apps.BannedAppData, 'banInfo',
+            Number, 'internalScore',
+            String, 'internalDescription',
+
+            SELF, 'liveApplication',
+
+            READONLY, Boolean, 'live',
+            Boolean, function isLive(){
+                return this.getState() && this.getState().getStateId() == chlk.models.apps.AppStateEnum.LIVE;
+            },
 
             READONLY, String, 'statusText',
             String, function getStatusText(){

@@ -63,6 +63,8 @@ namespace Chalkable.Data.Master.Model
         [NotDbFieldAttr]
         public IList<ApplicationStandard> ApplicationStandards { get; set; }
         [NotDbFieldAttr]
+        public Application LiveApplication { get; set; }
+        [NotDbFieldAttr]
         public bool IsLive { get { return State == ApplicationStateEnum.Live; } }
     }
 
