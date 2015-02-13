@@ -9,7 +9,6 @@ REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.StandardService');
 REQUIRE('chlk.services.MarkingPeriodService');
 
-REQUIRE('chlk.activities.announcement.AdminAnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.activities.apps.AttachAppDialog');
@@ -763,20 +762,6 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [[chlk.models.announcement.Announcement]],
-        function saveAnnouncementAdminAction(model){
-            var res = this.announcementService
-                .saveAdminAnnouncement(
-                    model.getId(),
-                    model.getAnnRecipients(),
-                    model.getTitle(),
-                    model.getContent(),
-                    model.getExpiresDate(),
-                    model.getAttachments()
-                ).attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res);
-        },
-
         [[chlk.models.announcement.Announcement, chlk.models.announcement.AnnouncementForm]],
         function saveAnnouncementTeacherAction(model, form_) {
             if(!(model.getClassId() && model.getClassId().valueOf() && model.getAnnouncementTypeId() && model.getAnnouncementTypeId().valueOf()))
@@ -953,32 +938,6 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },
-
-        //TODO: refactor
-        [[chlk.models.announcement.AnnouncementForm]],
-        function prepareRecipientsData(model){
-            var rolesEnum = chlk.models.common.RoleEnum,
-                nameIdModel = chlk.models.common.NameId,
-                studentsId = rolesEnum.STUDENT.valueOf(),
-                teachersId = rolesEnum.TEACHER.valueOf(),
-                gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(),
-                studentsData = [new nameIdModel('0|' + studentsId + '|-1|-1', Msg.All_students)],
-                teachersData = [new nameIdModel('0|' + teachersId + '|-1|-1', Msg.All_teachers)];
-
-            gradeLevels.forEach(function(item){
-                studentsData.push(new nameIdModel('0|' + studentsId + '|' + item.getId().valueOf() + '|-1', Msg.Student(true) + ' - ' + item.getFullText()));
-                teachersData.push(new nameIdModel('0|' + teachersId + '|' + item.getId().valueOf() + '|-1', Msg.Teacher(true) + ' - ' + item.getFullText()));
-            });
-
-            model.setAdminRecipientId('0|' + rolesEnum.ADMINEDIT.valueOf() + '|-1|-1,0|'
-                + rolesEnum.ADMINGRADE.valueOf() + '|-1|-1,0|'
-                + rolesEnum.ADMINVIEW.valueOf() + '|-1|-1');
-
-            var recipientsData = {};
-            recipientsData[studentsId] = studentsData;
-            recipientsData[teachersId] = teachersData;
-            model.setAdminRecipients(new chlk.models.announcement.AdminRecipients([], recipientsData));
-         },
 
         [chlk.controllers.SidebarButton('add-new')],
         [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
