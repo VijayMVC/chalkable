@@ -98,5 +98,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new UnassignedUserException(); 
             return Storage.SchoolOptionStorage.GetById(Context.SchoolLocalId.Value);
         }
+
+        public StartupData GetStartupData()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -81,23 +81,23 @@ namespace Chalkable.Data.School.DataAccess
             return queryCondition;
         }
 
-        public PersonDetails GetPersonDetails(int personId, int callerId, int callerRoleId)
+        public PersonDetails GetPersonDetails(int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {"personId", personId},
-                    {"callerId", callerId},
-                    {"callerRoleId", callerRoleId},
                     {"schoolId", schoolId}
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetPersonDetails", parameters))
             {
-                return reader.Read() ? ReadPersonDetailsData(reader) : null;
+                return ReadPersonDetailsData(reader);
             }
         }
 
         public static PersonDetails ReadPersonDetailsData(SqlDataReader reader)
         {
+            if (!reader.Read())
+                return null;
             var res = ReadPersonData(reader);
             reader.NextResult();
             res.Address = reader.ReadOrNull<Address>();

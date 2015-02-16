@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models
         public StandardGradingGridViewData CurrentStandardGradingGrid { get; set; }
         public IList<GradingPeriodViewData> GradingPeriods { get; set; }
 
-        public static StandardGradingGridsViewData Create(IList<GradingPeriodDetails> gradingPeriods, StandardGradingGridViewData standardGradingGrid)
+        public static StandardGradingGridsViewData Create(IList<GradingPeriod> gradingPeriods, StandardGradingGridViewData standardGradingGrid)
         {
             return new StandardGradingGridsViewData
                 {

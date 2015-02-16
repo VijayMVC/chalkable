@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models
         public IList<GradingPeriodViewData> GradingPeriods { get; set; }
         public GradingClassSummaryViewData CurrentGradingBox { get; set; }
 
-        public static ClassGradingBoxesViewData Create(IList<GradingPeriodDetails> gradingPeriods,
+        public static ClassGradingBoxesViewData Create(IList<GradingPeriod> gradingPeriods,
                                                 TeacherClassGrading gradingSummary)
         {
             return new ClassGradingBoxesViewData

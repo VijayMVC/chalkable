@@ -11,9 +11,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        private IList<GradingPeriodDetails> Convert(IEnumerable<GradingPeriod> gps)
+        private IList<GradingPeriod> Convert(IEnumerable<GradingPeriod> gps)
         {
-            return gps.Select(gp => new GradingPeriodDetails
+            return gps.Select(gp => new GradingPeriod
             {
                 AllowGradePosting = gp.AllowGradePosting,
                 Code = gp.Code,
@@ -26,25 +26,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 SchoolYearRef = gp.SchoolYearRef,
                 StartDate = gp.StartDate,
                 SchoolAnnouncement = gp.SchoolAnnouncement,
-                MarkingPeriod = Storage.MarkingPeriodStorage.GetById(gp.MarkingPeriodRef)
             }).ToList();
         } 
 
-        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(GradingPeriodQuery query)
+        public IList<GradingPeriod> GetGradingPeriodsDetails(GradingPeriodQuery query)
         {
 
             var gps = data.Select(x => x.Value);
 
             if (query.GradingPeriodId.HasValue)
                 gps = gps.Where(x => x.Id == query.GradingPeriodId);
-            if (query.MarkingPeriodId.HasValue)
-                gps = gps.Where(x => x.MarkingPeriodRef == query.MarkingPeriodId);
             if (query.SchoolYearId.HasValue)
                 gps = gps.Where(x => x.SchoolYearRef == query.SchoolYearId);
-            if (query.FromDate.HasValue)
-                gps = gps.Where(x => x.StartDate <= query.FromDate);
-            if (query.ToDate.HasValue)
-                gps = gps.Where(x => x.EndDate >= query.ToDate);
             if (query.ClassId.HasValue)
                 gps = gps.Where(x => Storage.MarkingPeriodClassStorage.GetByClassId(query.ClassId).Any(y => y.MarkingPeriodRef == x.MarkingPeriodRef));
 

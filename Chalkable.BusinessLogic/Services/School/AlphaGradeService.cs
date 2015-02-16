@@ -10,10 +10,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddAlphaGrades(IList<AlphaGrade> alphaGrades);
         void EditAlphaGrades(IList<AlphaGrade> alphaGrades);
         void Delete(IList<int> ids);
-        IList<AlphaGrade> GetAlphaGrades();
-
-        IList<AlphaGrade> GetAlphaGradesForClass(int classId);
-        IList<AlphaGrade> GetAlphaGradesForClassStandards(int classId);
     }
 
     public class AlphaGradeService : SchoolServiceBase, IAlphaGradeService
@@ -28,11 +24,6 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new AlphaGradeDataAccess(u, null).Insert(alphaGrades));
         }
 
-        public IList<AlphaGrade> GetAlphaGrades()
-        {
-            return DoRead(u => new AlphaGradeDataAccess(u, Context.SchoolLocalId).GetList());
-        }
-
         public void Delete(IList<int> ids)
         {
             BaseSecurity.EnsureSysAdmin(Context);
@@ -43,16 +34,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new AlphaGradeDataAccess(u, null).Update(alphaGrades));
-        }
-        
-        public IList<AlphaGrade> GetAlphaGradesForClass(int classId)
-        {
-            return DoRead(u => new AlphaGradeDataAccess(u, Context.SchoolLocalId).GetForClass(classId));
-        }
-
-        public IList<AlphaGrade> GetAlphaGradesForClassStandards(int classId)
-        {
-            return DoRead(u => new AlphaGradeDataAccess(u, Context.SchoolLocalId).GetForClassStandards(classId));
         }
     }
 }

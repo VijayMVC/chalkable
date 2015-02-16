@@ -14,28 +14,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null, int? classId = null)
+        public IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId, int? classId = null)
         {
             return Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
             {
                 SchoolYearId = schoolYearId,
-                MarkingPeriodId = markingPeriodId,
                 ClassId = classId
             });
         }
 
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
+        public GradingPeriod GetGradingPeriodDetails(int schoolYearId, DateTime date)
         {
-            var grPeriods = Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
+            var gps = Storage.GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery
             {
-                FromDate = date,
-                ToDate = date,
                 SchoolYearId = schoolYearId
-            });
-            return grPeriods.FirstOrDefault();
+            }); 
+            var res = gps.FirstOrDefault(x => x.StartDate <= date && x.EndDate >= date);
+            if (res == null)
+                res = gps.OrderByDescending(x => x.StartDate).FirstOrDefault();
+            return res;
         }
 
-        public GradingPeriodDetails GetGradingPeriodById(int id)
+        public GradingPeriod GetGradingPeriodById(int id)
         {
 
             return Storage.GradingPeriodStorage

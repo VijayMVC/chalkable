@@ -45,7 +45,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolYearTime.Date);
             IList<ClassDetails> classes = new List<ClassDetails>();
             if(mp != null)
-                classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, mp.Id, person.Id, 0, int.MaxValue);
+                classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, mp.Id, person.Id);
             return PersonScheduleViewData.Create(person, classes);
         }
 

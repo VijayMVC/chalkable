@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -66,24 +67,29 @@ namespace Chalkable.Data.School.DataAccess
             {
                 var sourceCount = reader.Read() ? SqlTools.ReadInt32(reader, "SourceCount") : 0;
                 reader.NextResult();
-                var classes = new List<ClassDetails>();
-                while (reader.Read())
-                {
-                    var c = reader.Read<ClassDetails>(true);
-                    if (c.PrimaryTeacherRef.HasValue)
-                        c.PrimaryTeacher = reader.Read<Person>(true);
-                    classes.Add(c);
-                }
-                reader.NextResult();
-                var markingPeriodClasses = reader.ReadList<MarkingPeriodClass>();
-                foreach (var classComplex in classes)
-                {
-                    classComplex.MarkingPeriodClasses = markingPeriodClasses.Where(x => x.ClassRef == classComplex.Id).ToList();
-                }
+                var classes = ReadClasses(reader);
                 return new ClassQueryResult { Classes = classes, Query = query, SourceCount = sourceCount };
             }
         }
 
+        public static IList<ClassDetails> ReadClasses(SqlDataReader reader)
+        {
+            var classes = new List<ClassDetails>();
+            while (reader.Read())
+            {
+                var c = reader.Read<ClassDetails>(true);
+                if (c.PrimaryTeacherRef.HasValue)
+                    c.PrimaryTeacher = reader.Read<Person>(true);
+                classes.Add(c);
+            }
+            reader.NextResult();
+            var markingPeriodClasses = reader.ReadList<MarkingPeriodClass>();
+            foreach (var classComplex in classes)
+            {
+                classComplex.MarkingPeriodClasses = markingPeriodClasses.Where(x => x.ClassRef == classComplex.Id).ToList();
+            }
+            return classes;
+        }
 
         public void Delete(IList<int> ids)
         {

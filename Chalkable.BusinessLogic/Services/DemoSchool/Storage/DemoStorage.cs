@@ -222,8 +222,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             var gp = GradingPeriodStorage.GetGradingPeriodsDetails(new GradingPeriodQuery()
             {
-                SchoolYearId = DemoSchoolConstants.CurrentSchoolYearId,
-                FromDate = Context.NowSchoolTime.Date
+                SchoolYearId = DemoSchoolConstants.CurrentSchoolYearId
             }).FirstOrDefault();
 
             if (gp == null) return;

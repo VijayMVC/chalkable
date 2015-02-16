@@ -38,21 +38,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             Storage.AlphaGradeStorage.Delete(ids);
         }
-
-        public IList<AlphaGrade> GetAlphaGrades()
-        {
-            return Storage.AlphaGradeStorage.GetAll();
-        }
-
-
-        public IList<AlphaGrade> GetAlphaGradesForClass(int classId)
-        {
-            return Storage.AlphaGradeStorage.GetForClass(classId);
-        }
-
-        public IList<AlphaGrade> GetAlphaGradesForClassStandards(int classId)
-        {
-            return Storage.AlphaGradeStorage.GetForClassStandarts(classId);
-        }
     }
 }
