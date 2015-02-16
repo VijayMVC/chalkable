@@ -112,6 +112,9 @@
       border-width: 0 1px 1px 0
       overflow: hidden
 
+      &.disabled:not(.not-current-month)
+        color: #56554f !important
+
       &:hover
         background-color: transparentize(#000, .95)
 
@@ -139,7 +142,7 @@
         line-height: 116px
 
       &.not-current-month
-        color: #d0d0ce
+        color: #d0d0ce !important
 
     .today
       border-color: #13495c

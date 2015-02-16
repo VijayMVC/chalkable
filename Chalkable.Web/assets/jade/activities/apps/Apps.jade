@@ -1,5 +1,5 @@
 mixin AppManagementControls(app)
-    -var id = app
+    -var id = app.getId()
     if app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
         +ActionLink('apps', 'approve', id).btn Approve
         +ActionLink('apps', 'decline', id).btn Reject
@@ -47,6 +47,7 @@ mixin AppsFilterSelect(name, items)
                 .th
             +GridBody()
                 each item in self.applications.getItems()
+                    -var liveApp = item.getLiveApplication()
                     +GridRow()
                         pictureLink = item.getSmallPictureId() ? self.getAppPictureURL(item.getSmallPictureId(), 74, 74) : '#'
                         .td
@@ -58,10 +59,13 @@ mixin AppsFilterSelect(name, items)
                         .td
                             if !self.isReadOnly()
                                 +ActionForm('apps', 'changeAppType')
-                                    +Checkbox('isInternal', item.isInternal())
-                                    +Hidden('appId', item.getId())
+                                    if liveApp
+                                        +Checkbox('isInternal', liveApp.isInternal())
+                                        +Hidden('appId', liveApp.getId())
+                                    else
+                                        span -
                             else
-                                span=item.isInternal() ? "True" : "False"
+
                         .td
                             span=item.getLiveAppId() ? "True" : "False"
                         .td.action-links

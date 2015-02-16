@@ -395,12 +395,11 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function approveSysAdminAction(appId) {
-            return this.appsService
+            this.appsService
                 .approveApp(appId)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    return this.BackgroundNavigate('apps', 'list', []);
-                }, this);
+                .thenCall(this.BackgroundNavigate, ['apps', 'list', []]);
+            return null;
         },
 
         [chlk.controllers.AccessForRoles([
@@ -408,12 +407,11 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function declineSysAdminAction(appId) {
-            return this.appsService
+            this.appsService
                 .declineApp(appId)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    return this.BackgroundNavigate('apps', 'list', []);
-                }, this);
+                .thenCall(this.BackgroundNavigate, ['apps', 'list', []]);
+            return null;
         },
 
         [chlk.controllers.AccessForRoles([
@@ -421,12 +419,11 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function goLiveDeveloperAction(appId) {
-            return this.appsService
+            this.appsService
                 .goLive(appId)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    return this.BackgroundNavigate('apps', 'general', []);
-                }, this);
+                .thenCall(this.BackgroundNavigate, ['apps', 'general', []]);
+            return null;
         },
 
         [chlk.controllers.AccessForRoles([
@@ -434,12 +431,11 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId, chlk.models.id.AppId]],
         function unlistDeveloperAction(liveAppId) {
-            return this.appsService
+            this.appsService
                 .unlist(liveAppId)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    return this.BackgroundNavigate('apps', 'general', []);
-                }, this);
+                .thenCall(this.BackgroundNavigate, ['apps', 'general', []]);
+            return null;
         },
 
 
@@ -646,7 +642,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-
         [chlk.controllers.SidebarButton('apps-info')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
@@ -821,28 +816,25 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN
         ])],
-
+        [chlk.controllers.SidebarButton('apps')],
         [[Object]],
-        function changeAppTypeAction(data){
+        function changeAppTypeSysAdminAction(data){
 
             var isInternal = Boolean(data.isInternal === 'true' || data.isInternal === 'on');
             var appId = new chlk.models.id.AppId(data.appId);
 
-            return this.appsService
+            this.appsService
                 .changeAppType(appId, isInternal)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    return this.Redirect('apps', 'page', []);
-                }, this);
-
+                .thenCall(this.BackgroundNavigate, ['apps', 'page', []]);
+            return null;
         },
         [[chlk.models.apps.Application]],
         function setInternalDataSysAdminAction(app){
-            return this.appsService.setInternalData(app.getId(), app.getInternalScore(), app.getInternalDescription())
+            this.appsService.setInternalData(app.getId(), app.getInternalScore(), app.getInternalDescription())
                 .attach(this.validateResponse_())
-                .then(function(data){
-                   return this.BackgroundNavigate('apps', 'details', [app.getId()]);
-                }, this);
+                .thenCall(this.BackgroundNavigate, ['apps', 'details', [app.getId()]]);
+            return null;
         }
     ])
 });
