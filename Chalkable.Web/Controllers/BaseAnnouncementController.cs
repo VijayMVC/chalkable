@@ -1,0 +1,89 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
+using Chalkable.Web.Logic;
+using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.ApplicationsViewData;
+
+namespace Chalkable.Web.Controllers
+{
+    public class AnnouncementBaseController : ChalkableController
+    {
+        protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, bool needsAllAttachments = true, bool isRead = false)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var annDetails = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            if (annDetails.SisActivityId.HasValue)
+            {
+                annDetails.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
+                annDetails.GradingStudentsCount = annDetails.StudentAnnouncements.Count(x=>x.IsGraded);
+            }
+            var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x=>x.PersonRef).ToList();
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
+            var annViewData = AnnouncementDetailedViewData.Create(annDetails, SchoolLocator.GradingStyleService.GetMapper(), Context.PersonId.Value, attInfo);
+            annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, announcementId);
+            annViewData.ApplicationsCount = annViewData.Applications.Count;
+            annViewData.AssessmentApplicationId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
+         
+            if (annViewData.Applications.Count > 0)
+            {
+                annViewData.ApplicationName = annViewData.Applications.Count == 1
+                                  ? annViewData.Applications.First().Name
+                                  : annViewData.Applications.Count.ToString();
+            }
+
+            if (isRead && annDetails.State == AnnouncementState.Created)
+            {
+                IList<string> appNames = new List<string>();  
+                var stAnnouncements = annDetails.StudentAnnouncements;
+                annViewData.AutoGradeApps = appNames;
+                if (SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
+                {
+                    annViewData.Dropped = stAnnouncements.Count > 0 && stAnnouncements[0].Dropped;
+                    annViewData.Exempt = stAnnouncements.Count > 0 && stAnnouncements[0].Exempt;
+                }
+                
+                if (stAnnouncements.Count > 0 && annDetails.GradableType)
+                    annViewData.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annDetails, attInfo);
+            }
+            if (!isRead)
+            {
+                annViewData.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(announcementId);
+                if (annViewData.Standards != null && annViewData.Standards.Count > 0)
+                {
+                    var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
+                    if(mp == null)
+                        throw new NoMarkingPeriodException();
+                    var abIds = annDetails.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
+                        .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
+                    annViewData.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                                                              Context.PersonId.Value, annDetails.ClassRef, abIds, mp.Id);
+                }
+
+            }
+
+            return annViewData;
+        }
+
+        protected IList<ApplicationForAttachViewData> PrepareSuggestedAppsForAnnouncementViewData(AnnouncementDetails announcementDetails)
+        {
+            if (announcementDetails.AnnouncementStandards != null && announcementDetails.AnnouncementStandards.Count > 0)
+            {
+                var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
+                if (mp == null)
+                    throw new NoMarkingPeriodException();
+                var abIds = announcementDetails.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
+                    .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
+                return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                                                          Context.PersonId.Value, announcementDetails.ClassRef, abIds, mp.Id);
+            }
+            return new List<ApplicationForAttachViewData>();
+        }
+    }
+}
