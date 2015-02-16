@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                foreach (var app in apps)
                {
                    if(app.OriginalRef.HasValue)
-                    app.LiveApplication = liveApps.First(x => x.Id == app.OriginalRef);
+                        app.LiveApplication = liveApps.First(x => x.Id == app.OriginalRef);
                }
             }
             return new PaginatedList<Application>(apps, start / count, count);

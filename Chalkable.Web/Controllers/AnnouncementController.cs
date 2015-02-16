@@ -72,17 +72,17 @@ namespace Chalkable.Web.Controllers
                 if (!expiresDate.HasValue)
                     annDetails.Expires = DateTime.MinValue;
 
-                var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x => x.PersonRef).ToList();
-                var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
+                //var teachersIds = SchoolLocator.ClassService.GetClassTeachers(annDetails.ClassRef, null).Select(x => x.PersonRef).ToList();
+                //var attachments = AttachmentLogic.PrepareAttachmentsInfo(annDetails.AnnouncementAttachments, teachersIds);
                 Debug.Assert(Context.PersonId.HasValue);
-                var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
-                avd.AssessmentApplicationId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
-                avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
-                avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
-                avd.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(annDetails);
+                //var avd = AnnouncementDetailedViewData.Create(annDetails, null, Context.PersonId.Value, attachments);
+                //avd.AssessmentApplicationId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
+                //avd.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(annDetails.Id);
+                //avd.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, annDetails.Id);
+                //avd.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(annDetails);
                 return Json(new CreateAnnouncementViewData
                 {
-                    Announcement = avd,
+                    Announcement = PrepareAnnouncmentViewDataForEdit(annDetails),
                     IsDraft = annDetails.IsDraft,
                 });
             }
@@ -132,7 +132,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Edit(int announcementId)
         {
-            var viewData = PrepareFullAnnouncementViewData(announcementId, false);
+            var viewData = PrepareFullAnnouncementViewData(announcementId);
             var res = new CreateAnnouncementViewData
                 {
                     Announcement = viewData,
@@ -157,7 +157,7 @@ namespace Chalkable.Web.Controllers
             Preference.API_DESCR_ANNOUNCEMENT_READ, true, CallType.Get, new[] {AppPermissionType.Announcement})]
         public ActionResult Read(int announcementId)
         {
-            var res = PrepareFullAnnouncementViewData(announcementId, true, true);
+            var res = PrepareFullAnnouncementViewData(announcementId, true);
             //if (res.SystemType != SystemAnnouncementType.Admin)
             MasterLocator.UserTrackingService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
             return Json(res, 7);
@@ -185,16 +185,18 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId)
         {
-            if(!Context.SchoolLocalId.HasValue)
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var ann = Save(announcementInfo, classId);
-            var res = AnnouncementDetailedViewData.Create(ann
-                , SchoolLocator.GradingStyleService.GetMapper(), Context.SchoolLocalId.Value);
-            res.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
-            res.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
-            res.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(ann);
-            res.AssessmentApplicationId = Guid.Parse((PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value));
-            return Json(res);
+            //var res = AnnouncementDetailedViewData.Create(ann
+            //    , SchoolLocator.GradingStyleService.GetMapper(), Context.PersonId.Value);
+            //res.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
+            //res.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
+            //res.SuggestedApps = PrepareSuggestedAppsForAnnouncementViewData(ann);
+            //res.AssessmentApplicationId = Guid.Parse((PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value));
+            //var res = PrepareAnnouncmentViewDataForEdit(ann); 
+            //return Json(res);
+            return Json(PrepareAnnouncmentViewDataForEdit(ann));
         }
         
         [AuthorizationFilter("Teacher")]
@@ -252,14 +254,14 @@ namespace Chalkable.Web.Controllers
         public ActionResult AddStandard(int announcementId, int standardId)
         {
             SchoolLocator.AnnouncementService.AddAnnouncementStandard(announcementId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcementId, true, false));
+            return Json(PrepareFullAnnouncementViewData(announcementId));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult RemoveStandard(int announcementId, int standardId)
         {
             SchoolLocator.AnnouncementService.RemoveStandard(announcementId, standardId);
-            return Json(PrepareFullAnnouncementViewData(announcementId, true, false));
+            return Json(PrepareFullAnnouncementViewData(announcementId));
         }
 
     }
