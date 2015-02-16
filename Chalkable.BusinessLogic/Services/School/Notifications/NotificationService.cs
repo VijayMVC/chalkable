@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -11,6 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 {
     public interface INotificationService
     {
+        int GetUnshownNotificationsCount();
         IList<Notification> GetUnshownNotifications();
         PaginatedList<NotificationDetails> GetNotifications(int start, int count);
         IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null);
@@ -36,6 +38,12 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         public NotificationService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
             builder = new NotificationBuilder(serviceLocator);
+        }
+
+        public int GetUnshownNotificationsCount()
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            return DoRead(uow => new NotificationDataAccess(uow).GetUnshownNotificationsCount(Context.PersonId.Value));
         }
 
         public IList<Notification> GetUnshownNotifications()

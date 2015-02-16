@@ -42,8 +42,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetUnShownCount()
         {
-            var notifications = SchoolLocator.NotificationService.GetUnshownNotifications();
-            return Json(notifications.Count);
+            var cnt = SchoolLocator.NotificationService.GetUnshownNotificationsCount();
+            return Json(cnt);
         }
 
         [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]

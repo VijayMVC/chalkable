@@ -31,7 +31,7 @@ namespace Chalkable.Web.Models
         public IList<StandardViewData> Standards { get; set; }
         public IList<ClassAnnouncementTypeViewData> ClassAnnouncementTypes { get; set; }
 
-        public static GradingGridsViewData Create(ChalkableGradeBook grid, IList<GradingPeriodDetails> gradingPeriods
+        public static GradingGridsViewData Create(ChalkableGradeBook grid, IList<GradingPeriod> gradingPeriods
             , IList<Standard> standards, IList<ClassAnnouncementType> classAnnouncementTypes)
         {
             return new GradingGridsViewData

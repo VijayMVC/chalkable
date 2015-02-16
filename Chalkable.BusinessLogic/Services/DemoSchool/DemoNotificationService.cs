@@ -23,6 +23,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             builder = new NotificationBuilder(serviceLocator);
         }
 
+        public int GetUnshownNotificationsCount()
+        {
+            return GetUnshownNotifications().Count;
+        }
+
         public IList<Notification> GetUnshownNotifications()
         {
             return Storage.NotificationStorage.GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.PersonId });

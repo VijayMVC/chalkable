@@ -10,9 +10,9 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IGradingPeriodService
     {
-        IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null, int? classId = null);
-        GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date);
-        GradingPeriodDetails GetGradingPeriodById(int id);
+        IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId, int? classId = null);
+        GradingPeriod GetGradingPeriodDetails(int schoolYearId, DateTime date);
+        GradingPeriod GetGradingPeriodById(int id);
         void Add(IList<GradingPeriod> gradingPeriods);
         void Edit(IList<GradingPeriod> gradingPeriods);
         void Delete(IList<int> ids);
@@ -24,14 +24,13 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<GradingPeriodDetails> GetGradingPeriodsDetails(int schoolYearId, int? markingPeriodId = null, int? classId = null)
+        public IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId, int? classId = null)
         {
             using (var uow = Read())
             {
                 return new GradingPeriodDataAccess(uow).GetGradingPeriodsDetails(new GradingPeriodQuery
                     {
                         SchoolYearId = schoolYearId,
-                        MarkingPeriodId = markingPeriodId,
                         ClassId = classId
                     });
             }
@@ -73,25 +72,24 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public GradingPeriodDetails GetGradingPeriodDetails(int schoolYearId, DateTime date)
+        public GradingPeriod GetGradingPeriodDetails(int schoolYearId, DateTime date)
         {
             using (var uow = Update())
             {
                 var da = new GradingPeriodDataAccess(uow);
                 var gradingPeriodQuery = new GradingPeriodQuery
                     {
-                        FromDate = date,
                         SchoolYearId = schoolYearId
                     };
                 var gps = da.GetGradingPeriodsDetails(gradingPeriodQuery);
-                var res = gps.FirstOrDefault(x => x.EndDate >= date);
+                var res = gps.FirstOrDefault(x => x.StartDate <= date && x.EndDate >= date);
                 if (res == null)
                     res = gps.OrderByDescending(x => x.StartDate).FirstOrDefault();
                 return res;
             }
         }
 
-        public GradingPeriodDetails GetGradingPeriodById(int id)
+        public GradingPeriod GetGradingPeriodById(int id)
         {
             using (var uow = Update())
             {

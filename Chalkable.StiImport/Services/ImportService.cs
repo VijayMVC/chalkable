@@ -10,6 +10,7 @@ using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
+using User = Chalkable.StiConnector.SyncModel.User;
 
 namespace Chalkable.StiImport.Services
 {
@@ -91,8 +92,11 @@ namespace Chalkable.StiImport.Services
             
             Log.LogInfo("updating district last sync");
             UpdateDistrictLastSync(d);
-            Log.LogInfo("creating user login infos");
-            ServiceLocatorMaster.UserService.CreateUserLoginInfos();
+            if (context.GetSyncResult<User>().All.Length > 0)
+            {
+                Log.LogInfo("creating user login infos");
+                ServiceLocatorMaster.UserService.CreateUserLoginInfos();    
+            }
             Log.LogInfo("import is completed");
         }
 

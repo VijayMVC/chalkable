@@ -60,14 +60,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public ChalkableGradeBook GetGradeBook(int classId, GradingPeriodDetails gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
+        public ChalkableGradeBook GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
           
             var stiGradeBook = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, classAnnouncementType, gradingPeriod.Id, standardId);
             return GetGradeBooks(classId, gradingPeriod, stiGradeBook);
         }
 
-        private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriodDetails gradingPeriod, Gradebook gradebook)
+        private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriod gradingPeriod, Gradebook gradebook)
         {
             var students = ServiceLocator.StudentService.GetClassStudents(classId, gradingPeriod.MarkingPeriodRef);
             var annQuery = new AnnouncementsQuery
@@ -157,7 +157,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.StiGradeBookStorage.GetGradebookComments(schoolYearId, teacherId);
         }
 
-        public TeacherClassGrading GetClassGradingSummary(int classId, GradingPeriodDetails gradingPeriod)
+        public TeacherClassGrading GetClassGradingSummary(int classId, GradingPeriod gradingPeriod)
         {
             var gradeBook = ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod);
             var gradedCAnnTypes = ServiceLocator.ClassAnnouncementTypeService.CalculateAnnouncementTypeAvg(classId, gradeBook.Announcements);
@@ -328,7 +328,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
-        public FinalGradeInfo GetFinalGrade(int classId, GradingPeriodDetails gradingPeriod)
+        public FinalGradeInfo GetFinalGrade(int classId, GradingPeriod gradingPeriod)
         {
         
             var gradeBook = GetGradeBook(classId, gradingPeriod, null, null, false);

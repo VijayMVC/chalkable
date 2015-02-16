@@ -147,7 +147,7 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
-        private void PrepareCommonViewData()
+        private void PrepareCommonViewData(StartupData startupData)
         {
             //TODO: render data for demo school 
             if (Context.DistrictId.HasValue && Context.SchoolLocalId.HasValue)
@@ -185,21 +185,20 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
-            //PrepareJsonData(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
 
-            ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = SchoolLocator.NotificationService.GetUnshownNotifications().Count;
+            ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = startupData.UnshownNotificationsCount;
 
-            var mps = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId);
+            var mps = startupData.MarkingPeriods;
             MarkingPeriod markingPeriod = mps.Where(x=>x.StartDate <= Context.NowSchoolYearTime).OrderBy(x=>x.StartDate).LastOrDefault();
             if (markingPeriod != null && SchoolLocator.Context.SchoolLocalId.HasValue)
             {
                 PrepareJsonData(MarkingPeriodViewData.Create(markingPeriod), ViewConstants.MARKING_PERIOD);
-                var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef, Context.NowSchoolYearTime.Date);
+                var gradingPeriod = startupData.GradingPeriod;
                 if (gradingPeriod != null)
                     PrepareJsonData(ShortGradingPeriodViewData.Create(gradingPeriod), ViewConstants.GRADING_PERIOD);
             }
-            PrepareJsonData(AlphaGradeViewData.Create(SchoolLocator.AlphaGradeService.GetAlphaGrades()), ViewConstants.ALPHA_GRADES);
-            PrepareJsonData(AlternateScoreViewData.Create(SchoolLocator.AlternateScoreService.GetAlternateScores()), ViewConstants.ALTERNATE_SCORES);
+            PrepareJsonData(AlphaGradeViewData.Create(startupData.AlphaGrades), ViewConstants.ALPHA_GRADES);
+            PrepareJsonData(AlternateScoreViewData.Create(startupData.AlternateScores), ViewConstants.ALTERNATE_SCORES);
             PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
         }
         
@@ -208,29 +207,28 @@ namespace Chalkable.Web.Controllers
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            PrepareCommonViewData();
-            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
+            var startupData = SchoolLocator.SchoolService.GetStartupData();
+
+            PrepareCommonViewData(startupData);
+            var person = startupData.Person;
             var personView = PersonInfoViewData.Create(person);
             ProcessFirstLogin(person);
             ProcessActive(person, personView);
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
-            
-            //todo: move this logic to getClass stored procedure later
-            var classPersons = SchoolLocator.ClassService.GetClassPersons(person.Id, true);
-            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod().Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            var classes = startupData.Classes;
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
-            
-
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyStudent(person.Email, person.FirstName, person.LastName, Context.DistrictId.ToString(), "", person.FirstLoginDate, Context.DistrictTimeZone, ip);
+            MasterLocator.UserTrackingService.IdentifyStudent(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), "", person.FirstLoginDate, Context.DistrictTimeZone, ip);
         }           
 
         private void PrepareTeacherJsonData()
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            PrepareCommonViewData();
-            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
+            var startupData = SchoolLocator.SchoolService.GetStartupData();
+
+            PrepareCommonViewData(startupData);
+            var person = startupData.Person;
             var personView = PersonInfoViewData.Create(person);
             ProcessFirstLogin(person);
             ProcessActive(person, personView);
@@ -239,16 +237,16 @@ namespace Chalkable.Web.Controllers
 
             if (!CanTeacherViewChalkable()) return;
 
-            var classes = SchoolLocator.ClassService.GetClassesSortedByPeriod();
+            var classes = startupData.Classes;
             var classNames = classes.Select(x => x.Name).ToList();
 
-            var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
+            var schoolOption = startupData.SchoolOption;
             PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
             var classesList = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(classesList, ViewConstants.CLASSES);
-            PrepareClassesAdvancedData(classes);
-            PrepareJsonData(GradingCommentViewData.Create(SchoolLocator.GradingCommentService.GetGradingComments()), ViewConstants.GRADING_COMMMENTS);
-            PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.List()), ViewConstants.ATTENDANCE_REASONS);
+            PrepareClassesAdvancedData(startupData);
+            PrepareJsonData(GradingCommentViewData.Create(startupData.GradingComments), ViewConstants.GRADING_COMMMENTS);
+            PrepareJsonData(AttendanceReasonDetailsViewData.Create(startupData.AttendanceReasons), ViewConstants.ATTENDANCE_REASONS);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), 
                 classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip);
@@ -270,12 +268,12 @@ namespace Chalkable.Web.Controllers
             }
         }
         
-        private void PrepareClassesAdvancedData(IEnumerable<ClassDetails> classDetailsList)
+        private void PrepareClassesAdvancedData(StartupData startupData)
         {
             var classesAdvancedData = new List<object>();
-            var allAlphaGrades = SchoolLocator.AlphaGradeService.GetAlphaGrades();
-            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classDetailsList.Select(x => x.Id).ToList());
-            foreach (var classDetails in classDetailsList)
+            var allAlphaGrades = startupData.AlphaGrades;
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(startupData.Classes.Select(x => x.Id).ToList());
+            foreach (var classDetails in startupData.Classes)
             {
                 int classId = classDetails.Id;
                 var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
@@ -284,9 +282,9 @@ namespace Chalkable.Web.Controllers
                     ClassId = classId,
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
                     AlphaGrades = classDetails.GradingScaleRef.HasValue
-                                        ? SchoolLocator.AlphaGradeService.GetAlphaGradesForClass(classDetails.Id)
+                                        ? startupData.AlphaGradesForClasses[classId]
                                         : allAlphaGrades,
-                    AlphaGradesForStandards = SchoolLocator.AlphaGradeService.GetAlphaGradesForClassStandards(classId)
+                    AlphaGradesForStandards = startupData.AlphaGradesForClassStandards[classId]
                 });
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);

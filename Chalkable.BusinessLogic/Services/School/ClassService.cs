@@ -24,9 +24,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStudent(IList<ClassPerson> classPersons);
         ClassDetails GetClassDetailsById(int id);
         PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
-        IList<ClassDetails> GetClassesSortedByPeriod(); 
         IList<ClassDetails> GetClasses(string filter);
-        PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue);
+        PaginatedList<ClassDetails> GetClasses(int? schoolYearId);
         ClassPerson GetClassPerson(int classId, int personId);
         IList<ClassPerson> GetClassPersons(int? personId, int? classId, bool? isEnrolled, int? markingPeriodId); 
         IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled); 
@@ -204,9 +203,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int start = 0, int count = int.MaxValue)
+        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId)
         {
-            return GetClasses(schoolYearId, null, null, start, count);
+            return GetClasses(schoolYearId, null, null);
         }
 
         public IList<ClassDetails> GetClasses(string filter)
@@ -295,32 +294,6 @@ namespace Chalkable.BusinessLogic.Services.School
                             MarkingPeriodId = markingPeriodId
                         });
             }
-        }
-
-        public IList<ClassDetails> GetClassesSortedByPeriod()
-        {
-            var classes = GetClasses(Context.SchoolYearId, null, Context.PersonId).ToList();
-            int? teacherId = null;
-            int? studentId = null;
-            if (Context.RoleId == CoreRoles.TEACHER_ROLE.Id)
-                teacherId = Context.PersonId;
-            else if (Context.RoleId == CoreRoles.STUDENT_ROLE.Id)
-                studentId = Context.PersonId;
-            else
-                throw new NotImplementedException();
-            var schedule = ServiceLocator.ClassPeriodService.GetSchedule(teacherId, studentId, null,
-                Context.NowSchoolYearTime.Date, Context.NowSchoolYearTime.Date).OrderBy(x=>x.PeriodOrder);
-            var res = new List<ClassDetails>();
-            
-            foreach (var classPeriod in schedule)
-            {
-                var c = classes.FirstOrDefault(x => x.Id == classPeriod.ClassId);
-                if (c != null && res.All(x => x.Id != c.Id))
-                    res.Add(c);
-            }
-            classes = classes.Where(x => res.All(y => y.Id != x.Id)).OrderBy(x=>x.Name).ToList();
-            
-            return res.Concat(classes).ToList();
         }
     }
 }
