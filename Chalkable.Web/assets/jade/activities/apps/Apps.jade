@@ -1,5 +1,5 @@
 mixin AppManagementControls(app)
-    -var id = app
+    -var id = app.getId()
     if app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
         +ActionLink('apps', 'approve', id).btn Approve
         +ActionLink('apps', 'decline', id).btn Reject
