@@ -636,7 +636,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var attOrder = announcement.AnnouncementAttachments.Max(x => (int?)x.Order);
             var appOrder = announcement.AnnouncementApplications.Max(x => (int?)x.Order);
-            int order = 0;
+            var order = 0;
             if (attOrder.HasValue)
             {
                 if (appOrder.HasValue)

@@ -642,7 +642,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-
         [chlk.controllers.SidebarButton('apps-info')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
@@ -817,9 +816,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN
         ])],
-
+        [chlk.controllers.SidebarButton('apps')],
         [[Object]],
-        function changeAppTypeAction(data){
+        function changeAppTypeSysAdminAction(data){
 
             var isInternal = Boolean(data.isInternal === 'true' || data.isInternal === 'on');
             var appId = new chlk.models.id.AppId(data.appId);
