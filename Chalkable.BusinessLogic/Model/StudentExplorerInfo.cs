@@ -52,12 +52,13 @@ namespace Chalkable.BusinessLogic.Model
  
 
         public static StudentClassExplorerInfo Create(Class classInfo, IList<StudentAverage> studentAverages, IList<StandardScore> standardScores
-            , IList<Standard> standards, Announcement importantAnnouncement)
+            , IList<Standard> standards, AnnouncementComplex importantAnnouncement)
         {
             var res = new StudentClassExplorerInfo
                 {
                     ClassInfo = classInfo,
                     StudentAverages = studentAverages.Select(ChalkableStudentAverage.Create).ToList(),
+                    MostImportantAnnouncement = importantAnnouncement
                 };
             var generalAvg = res.StudentAverages.FirstOrDefault(x => x.IsGradingPeriodAverage);
             if (generalAvg != null)

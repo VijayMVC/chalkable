@@ -44,6 +44,12 @@ NAMESPACE('chlk.templates.student', function(){
                 var announcementsLength = (item.getAnnouncement() ? 1 : 0);
 
                 return !this.showMoreButton(item) || (announcementsLength + index < 3);
+            },
+
+            [[chlk.models.announcement.Announcement]],
+            String, function getDaysForAnnouncement(announcement){
+                announcement.prepareExpiresDateText();
+                return announcement.getExpiresDateText();
             }
 
         ]);
