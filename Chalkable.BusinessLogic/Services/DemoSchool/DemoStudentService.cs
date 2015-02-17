@@ -195,7 +195,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
                 announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(importanActivitiesIds));
             }
-            return StudentExplorerInfo.Create(student, classes, inowStExpolorer, announcements, standards);
+            return StudentExplorerInfo.Create(student, classes, inowStExpolorer.Averages.ToList()
+                , inowStExpolorer.Standards.ToList(), announcements, standards);
         }
     }
 }

@@ -8,7 +8,7 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Model
 {
-    public class GradingStandardInfo
+    public class GradingStandardInfo 
     {
         public int StudentId { get; set; }
         public int ClassId { get; set; }
@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? NumericGrade { get; set; }
         public string Note { get; set; }
         public Standard Standard { get; set; }
-
+        
         public static GradingStandardInfo Create(StandardScore standardScore, Standard standard)
         {
             return new GradingStandardInfo
@@ -32,6 +32,42 @@ namespace Chalkable.BusinessLogic.Model
                     GradingPeriodId = standardScore.GradingPeriodId,
                     Note = standardScore.Note
                 };
+        }
+        
+
+        public static IList<GradingStandardInfo> Create(IList<StandardScore> standardScores, IList<Standard> standards)
+        {
+            var res = new List<GradingStandardInfo>();
+            foreach (var standardScore in standardScores)
+            {
+                var standard = standards.FirstOrDefault(st => st.Id == standardScore.StandardId);
+                res.Add(Create(standardScore, standard));
+            }
+            return res;
+
+        }
+    }
+
+    public class AlphaGradeNameComperator : IComparer<string>
+    {
+        private static string[] defaultAlphaGrades = new []
+            {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"};
+
+        public int Compare(string x, string y)
+        {
+            if (!string.IsNullOrEmpty(x) && !string.IsNullOrEmpty(y))
+            {
+                var xIndex = Array.IndexOf(defaultAlphaGrades, x);
+                var yIndex = Array.IndexOf(defaultAlphaGrades, y);
+
+                if (xIndex  < 0 &&  yIndex < 0) 
+                    return String.Compare(x, y, StringComparison.Ordinal);
+
+                if (xIndex >= 0 && xIndex < yIndex || yIndex < 0) return 1;
+                if (yIndex >= 0 && xIndex > yIndex || xIndex < 0) return -1; 
+              
+            }
+            return String.Compare(x, y, StringComparison.Ordinal);
         }
     }
 }

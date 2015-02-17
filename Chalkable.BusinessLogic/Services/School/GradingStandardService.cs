@@ -29,13 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
-            var res = new List<GradingStandardInfo>();
-            foreach (var standardScore in standardScores)
-            {
-                var standard = standards.First(x => x.Id == standardScore.StandardId);
-                res.Add(GradingStandardInfo.Create(standardScore, standard));
-            }
-            return res;
+            return GradingStandardInfo.Create(standardScores, standards);
         }
         
         public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note)
