@@ -52,7 +52,7 @@ namespace Chalkable.Data.School.DataAccess
                 reader.NextResult();
                 res.GradingComments = reader.ReadList<GradingComment>();
                 reader.NextResult();
-                res.AttendanceReasons = reader.ReadList<AttendanceReason>();
+                res.AttendanceReasons = AttendanceReasonDataAccess.ReadGetAttendanceReasonResult(reader);
                 reader.NextResult();
                 reader.Read();
                 res.UnshownNotificationsCount = SqlTools.ReadInt32(reader, "UnshownNotificationsCount");
@@ -91,6 +91,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 res.AlphaGradesForClassStandards[classAlphaGrade.ClassId].Add(agDic[classAlphaGrade.AlphaGradeId]);
             }
+            res.AttendanceReasons = res.AttendanceReasons.Where(x => x.AttendanceLevelReasons.Count > 0).ToList();
             return res;
         }
 
