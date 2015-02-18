@@ -31,9 +31,7 @@ namespace Chalkable.Web.Controllers
             var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo);
             if (ann.State == AnnouncementState.Created)
             {
-                IList<string> appNames = new List<string>();
                 var stAnnouncements = ann.StudentAnnouncements;
-                annView.AutoGradeApps = appNames;
                 if (SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
                 {
                     annView.Dropped = stAnnouncements.Count > 0 && stAnnouncements[0].Dropped;
@@ -43,9 +41,11 @@ namespace Chalkable.Web.Controllers
                 {
                     annView.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, ann, attInfo);
                     var autoGrades = SchoolLocator.StudentAnnouncementService.GetAutoGradesByAnnouncementId(ann.Id);
-                    foreach (var item in annView.StudentAnnouncements.Items)
+                    annView.AutoGradeApps = new List<AutoGradeViewData>();
+                    foreach (var autoGrade in autoGrades)
                     {
-                        item.AutoGrades = AutoGradeViewData.Create(autoGrades, annView.Applications);
+                        var appView = annView.Applications.FirstOrDefault(x => x.Id == autoGrade.AnnouncementApplication.ApplicationRef);
+                        annView.AutoGradeApps.Add(AutoGradeViewData.Create(autoGrade, appView));
                     }
                 }
             }

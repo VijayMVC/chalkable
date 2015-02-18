@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -26,18 +27,23 @@ namespace Chalkable.Web.Models
 
     public class AutoGradeViewData : ShortAutoGradeViewData
     {
-        public AnnouncementApplicationViewData Application { get; set; }
+        public BaseApplicationViewData Application { get; set; }
 
         protected AutoGradeViewData(AutoGrade autoGrade) : base(autoGrade)
         {
         }
-        public static IList<AutoGradeViewData> Create(IList<AutoGrade> autoGrades, IList<AnnouncementApplicationViewData> announcementApplications)
+        public static AutoGradeViewData Create(AutoGrade autoGrade, BaseApplicationViewData application)
+        {
+            return new AutoGradeViewData(autoGrade) {Application = application};
+        }
+       
+        public static IList<AutoGradeViewData> Create(IList<AutoGrade> autoGrades, IList<Application> applications)
         {
             var res = new List<AutoGradeViewData>();
             foreach (var autoGrade in autoGrades)
             {
-                var annApp = announcementApplications.FirstOrDefault(x=>x.AnnouncementApplicationId == autoGrade.AnnouncementApplicationRef);
-                res.Add(new AutoGradeViewData(autoGrade) {Application = annApp});
+                var app = applications.FirstOrDefault(x=>x.Id == autoGrade.AnnouncementApplication.ApplicationRef);
+                res.Add(Create(autoGrade, BaseApplicationViewData.Create(app)));
             }
             return res;
         }

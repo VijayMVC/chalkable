@@ -92,8 +92,7 @@ namespace Chalkable.Web.Models
         public StudentViewData StudentInfo { get; set; }
         public string Raw { get; set; }
         public IList<AnnouncementAttachmentViewData> Attachments { get; set; }
-        public IList<AutoGradeViewData> AutoGrades { get; set; }
-
+        
         protected StudentAnnouncementViewData(StudentAnnouncement studentAnnouncement)
             : base(studentAnnouncement)
         {
