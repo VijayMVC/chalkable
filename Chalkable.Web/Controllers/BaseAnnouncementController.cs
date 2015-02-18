@@ -8,6 +8,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -41,6 +42,11 @@ namespace Chalkable.Web.Controllers
                 if (stAnnouncements.Count > 0 && ann.GradableType)
                 {
                     annView.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, ann, attInfo);
+                    var autoGrades = SchoolLocator.StudentAnnouncementService.GetAutoGradesByAnnouncementId(ann.Id);
+                    foreach (var item in annView.StudentAnnouncements.Items)
+                    {
+                        item.AutoGrades = AutoGradeViewData.Create(autoGrades, annView.Applications);
+                    }
                 }
             }
             return annView;

@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value);
+        IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId);
         //IList<StudentGradingComplex> GetStudentGradedAnnouncements(int schoolPersonId, int markingPeriodId);
 
         //int? GetAssignmentAverage(int announcementId);
@@ -202,16 +203,30 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new AutoGradeDataAccess(uow);
-                var autoGrade =  da.GetAutoGrade(announcementApplicationId, studentId) ?? new AutoGrade
+                Action<AutoGrade> modifyAction = da.Update;
+                var autoGrade = da.GetAutoGrade(announcementApplicationId, studentId);
+                if (autoGrade == null)
+                {
+                    autoGrade = new AutoGrade
                     {
                         AnnouncementApplicationRef = announcementApplicationId,
-                        StudentRef = studentId
+                        StudentRef = studentId,
                     };
+                    modifyAction = da.Insert;
+                }
                 autoGrade.Date = Context.NowSchoolTime;
                 autoGrade.Grade = value;
                 autoGrade.Posted = false;
+                autoGrade.AnnouncementApplication = annApp;
+                modifyAction(autoGrade);
+                uow.Commit();
                 return autoGrade;
             }
+        }
+        
+        public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
+        {
+            return DoRead(uow => new AutoGradeDataAccess(uow).GetAutoGradesByAnnouncementId(announcementId));
         }
     }
 }
