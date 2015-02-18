@@ -24,6 +24,22 @@ namespace Chalkable.Data.School.DataAccess
             return ReadOne<AutoGrade>(res);
         }
 
+        public void DiscardAutoGrades(IList<AutoGrade> autoGrades)
+        {
+            SimpleDelete<AutoGrade>(autoGrades);
+        }
+
+        public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
+        {
+            var res = BuildAutoGradesSelect();
+            var conds = new AndQueryCondition
+                {
+                    {AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD, announcementApplicationId}
+                };
+            conds.BuildSqlWhere(res, typeof (AutoGrade).Name);
+            return ReadMany<AutoGrade>(res);
+        }
+
         public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
         {
             var query = BuildAutoGradesSelect();

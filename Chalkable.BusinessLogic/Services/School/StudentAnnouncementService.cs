@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IStudentAnnouncementService
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
-        void ResolveAutoGrading(int announcementId, bool apply);
+        void ResolveAutoGrading(int announcementApplicationId, bool apply);
         //IList<StudentAnnouncement> GetStudentAnnouncements(int schoolPersonId, int classId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         //double GetAvgByAnnouncements(IList<StudentAnnouncement> studentAnnouncements, bool dropLowest);
 
         //IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue);
-
+        IList<AutoGrade> GetAutoGrades(int announcementApplicationId);
     }
 
     public class StudentAnnouncementService : SisConnectedService, IStudentAnnouncementService
@@ -149,25 +149,25 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public void ResolveAutoGrading(int announcementId, bool apply)
+        public void ResolveAutoGrading(int announcementApplicationId, bool apply)
         {
-            //using (var uow = Update())
-            //{
-            //    if (!BaseSecurity.IsAdminOrTeacher(ServiceLocator.Context))
-            //        throw new ChalkableSecurityException();
-            //    var state = StudentAnnouncementStateEnum.Auto;
-            //    var da = new StudentAnnouncementDataAccess(uow);
-            //    var sas = da.GetList(new StudentAnnouncementShortQuery {AnnouncementId = announcementId, State = state});
-            //    foreach (var studentAnnouncement in sas)
-            //    {
-            //        studentAnnouncement.State = StudentAnnouncementStateEnum.Manual;
-            //        if (!apply)
-            //            studentAnnouncement.GradeValue = null;
-            //    }
-            //    da.Update(sas);
-            //    uow.Commit();
-            //}
-            throw new NotImplementedException();
+            using (var uow = Update())
+            {
+                var da = new AutoGradeDataAccess(uow);
+                var autoGrades = da.GetAutoGrades(announcementApplicationId);
+                if (autoGrades.Any(x => x.Posted))
+                    throw new ChalkableException("Grades was already posted");
+                if (apply)
+                {
+                    foreach (var autoGrade in autoGrades)
+                    {
+                        autoGrade.Posted = true;
+                    }
+                    da.Update(autoGrades);
+                }
+                else da.DiscardAutoGrades(autoGrades);               
+                uow.Commit();
+            }
         }
 
 
@@ -227,6 +227,29 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
         {
             return DoRead(uow => new AutoGradeDataAccess(uow).GetAutoGradesByAnnouncementId(announcementId));
+        }
+
+
+        public bool DiscardAutoGrades(int announcementApplicationId)
+        {
+            var success = true;
+            DoUpdate(uow =>
+                {
+                    var da = new AutoGradeDataAccess(uow);
+                    var autoGrades  = da.GetAutoGrades(announcementApplicationId);
+                    if (autoGrades.Any(x => x.Posted))
+                    {
+                        success = false;
+                        return;
+                    }
+                    da.DiscardAutoGrades(autoGrades);
+                });
+            return success;
+        }
+
+        public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
+        {
+            return DoRead(uow => new AutoGradeDataAccess(uow).GetAutoGrades(announcementApplicationId));
         }
     }
 }

@@ -332,5 +332,25 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ApplyAutoGrades(int announcementApplicationId, DateTime lastSettedGradeTime)
+        {
+            var autoGrades = SchoolLocator.StudentAnnouncementService.GetAutoGrades(announcementApplicationId);
+            if (autoGrades.Any(x => x.Date > lastSettedGradeTime))
+            {
+                return Json(false);
+            }
+            SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementApplicationId, true);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult DiscardAutoGrades(int announcementApplicationId)
+        {
+            SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementApplicationId, false);
+            return Json(true);
+        }
+
     }
 }
