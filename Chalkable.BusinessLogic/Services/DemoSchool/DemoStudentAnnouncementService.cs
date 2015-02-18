@@ -151,5 +151,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

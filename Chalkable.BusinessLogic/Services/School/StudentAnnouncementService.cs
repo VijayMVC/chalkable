@@ -230,23 +230,6 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public bool DiscardAutoGrades(int announcementApplicationId)
-        {
-            var success = true;
-            DoUpdate(uow =>
-                {
-                    var da = new AutoGradeDataAccess(uow);
-                    var autoGrades  = da.GetAutoGrades(announcementApplicationId);
-                    if (autoGrades.Any(x => x.Posted))
-                    {
-                        success = false;
-                        return;
-                    }
-                    da.DiscardAutoGrades(autoGrades);
-                });
-            return success;
-        }
-
         public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
         {
             return DoRead(uow => new AutoGradeDataAccess(uow).GetAutoGrades(announcementApplicationId));
