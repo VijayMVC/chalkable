@@ -44,7 +44,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.applicationsCount = SJX.fromValue(raw.applicationscount, Number);
                 this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
                 this.attachmentsSummary = SJX.fromValue(raw.attachmentsummary, Number);
-                this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, String);
+                this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, Object);
                 this.avgNumeric = SJX.fromValue(raw.avgnumeric, Number);
                 this.clazz = raw['class'] || null;
                 this.className = SJX.fromValue(raw.fullclassname, String);
@@ -104,6 +104,23 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.assessmentApplicationId = SJX.fromValue(raw.assessmentapplicationid, chlk.models.id.AppId);
 
+                if(this.autoGradeApps.length){
+                    var autoGradeApps = [];
+                    this.autoGradeApps.forEach(function(item){
+                        var app = autoGradeApps.filter(function(app){return app.id == item.application.id})[0];
+                        if(!app){
+                            autoGradeApps.push({
+                                name: item.application.name,
+                                id: item.application.announcementapplicationid,
+                                students: [{id:item.studentid, grade:item.grade}]
+                            })
+                        }else{
+                            app.students.push({id:item.studentid, grade:item.grade});
+                        }
+                    });
+                    this.autoGradeApps = autoGradeApps;
+                }
+
             },
             function $(){
                 BASE();
@@ -128,7 +145,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'applicationsCount',
             Number, 'attachmentsCount',
             Number, 'attachmentsSummary',
-            ArrayOf(String), 'autoGradeApps',
+            Array, 'autoGradeApps',
             Number ,'avgNumeric',
             Object, 'clazz',
             String, 'className',

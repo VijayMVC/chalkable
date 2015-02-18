@@ -89,6 +89,50 @@ NAMESPACE('chlk.activities.announcement', function () {
                 grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [grid.find('.row:eq(0)'), 0]);
             },
 
+            [ria.mvc.DomEventBind('click', '.view-auto-grades')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function viewAutoGradesClick(node, event){
+                node.hide();
+                node.parent('.item').find('.accept-decline').show();
+                var id = node.parent('.item').getData('id');
+                var app = this.getAutoGradeApps().filter(function(item){return item.id == id})[0];
+                var dom = this.dom;
+                app.students.forEach(function(student){
+                    var block = dom.find('#grade-container-' + student.id);
+                    block.addClass('auto-grade');
+                    var grade = student.grade;
+                    block.find('.text-value').setHTML(grade);
+                    block.find('.grade-input').setValue(grade);
+                });
+                return false;
+            },
+
+            [ria.mvc.DomEventBind('click', '.decline-auto-grades')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function declineAutoGradesClick(node, event){
+                node.parent('.item').remove();
+                this.dom.find('.auto-grade').forEach(function(block){
+                    block.removeClass('auto-grade');
+                    var grade = block.find('.grade-input').getData('grade-value');
+                    if(grade === undefined)
+                        grade = '';
+                    block.find('.text-value').setHTML(grade);
+                    block.find('.grade-input').setValue(grade);
+                });
+                return false;
+            },
+
+            [ria.mvc.DomEventBind('click', '.accept-auto-grades')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function acceptAutoGradesClick(node, event){
+                node.parent('.item').remove();
+                this.dom.find('.auto-grade').forEach(function(block){
+                    block.removeClass('auto-grade');
+                    block.parent('form').trigger('submit');
+                });
+                return false;
+            },
+
             [ria.mvc.DomEventBind('click', '.make-visible-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             function makeVisibleClick(node, event){
