@@ -183,7 +183,7 @@ namespace Chalkable.Data.Common
                 else
                 {
                     var q = Orm.Orm.SimpleDelete(objs);
-                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);    
+                    ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters, 10 + objs.Count);    
                 }
             }
         }
