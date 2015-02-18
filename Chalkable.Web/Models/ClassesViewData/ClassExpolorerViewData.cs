@@ -23,11 +23,18 @@ namespace Chalkable.Web.Models.ClassesViewData
                     Standards = new List<ClassStandardViewData>()
                 };
             var standardsDic = gradingStandards.GroupBy(x => x.Standard.Id).ToDictionary(x => x.Key, x => x);
+            IList<ClassStandardViewData> graded = new List<ClassStandardViewData>();
+            IList<ClassStandardViewData> notGraded =new List<ClassStandardViewData>();
             foreach (var item in standardsDic)
             {
                 var standard = item.Value.First().Standard;
-                res.Standards.Add(ClassStandardViewData.Create(standard, item.Value.ToList()));
+                var classStandardView = ClassStandardViewData.Create(standard, item.Value.ToList());
+                if(classStandardView.NumericGrade.HasValue)
+                    graded.Add(classStandardView);
+                else notGraded.Add(classStandardView);
             }
+            graded = graded.OrderBy(x => x.NumericGrade).ThenBy(x => x.Name).ToList();
+            res.Standards = graded.Concat(notGraded.OrderBy(x => x.Name)).ToList();
             return res;
         }
     }
