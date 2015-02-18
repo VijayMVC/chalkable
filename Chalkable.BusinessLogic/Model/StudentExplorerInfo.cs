@@ -13,12 +13,13 @@ namespace Chalkable.BusinessLogic.Model
         public StudentDetails Student { get; set; }
         public IList<StudentClassExplorerInfo> ClassesGradingInfo { get; set; }
 
-        public static StudentExplorerInfo Create(StudentDetails student, IList<ClassDetails> classDetailses, StudentExplorerDashboard studentExplorer
+        public static StudentExplorerInfo Create(StudentDetails student, IList<ClassDetails> classDetailses, 
+            IList<StudentAverage> mostRecentAvgWithGrades, IList<StandardScore> standardScores  
             , IList<AnnouncementComplex> announcements, IList<Standard> standards)
         {
             var res = new StudentExplorerInfo { Student = student};
-            var classesInfo = StudentClassExplorerInfo.Create(classDetailses, studentExplorer, announcements, standards);
-            res.ClassesGradingInfo = classesInfo.OrderBy(x => x.Avg).ToList();
+            var classesInfo = StudentClassExplorerInfo.Create(classDetailses, mostRecentAvgWithGrades, standardScores, announcements, standards);
+            res.ClassesGradingInfo = classesInfo;
             return res;
         }
     }
@@ -29,47 +30,53 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? Avg { get; set; }
         public IList<GradingStandardInfo> Standards { get; set; }
         public AnnouncementComplex MostImportantAnnouncement { get; set; }
-        public IList<ChalkableStudentAverage> StudentAverages { get; set; } 
+        public IList<ChalkableStudentAverage> StudentAverages { get; set; }
 
-        public static IList<StudentClassExplorerInfo> Create(IList<ClassDetails> classDetailses, StudentExplorerDashboard studentExplorer
+        public static IList<StudentClassExplorerInfo> Create(IList<ClassDetails> classDetailses, IList<StudentAverage> mostRecentAveragesWithGrade
+                                                             , IList<StandardScore> standardScores
                                                              , IList<AnnouncementComplex> announcements, IList<Standard> standards)
         {
             var res = new List<StudentClassExplorerInfo>();
             foreach (var classDetailse in classDetailses)
             {
-                if (studentExplorer != null)
-                {
-                    var averages = studentExplorer.Averages.Where(avg=>avg.SectionId == classDetailse.Id).ToList();
-                    var standardScores = studentExplorer.Standards.Where(x => x.SectionId == classDetailse.Id).ToList();
-                    var importantItem = announcements.FirstOrDefault(x => x.ClassRef == classDetailse.Id);
-                    res.Add(Create(classDetailse, averages, standardScores, standards, importantItem));                   
-                }
-                else res.Add(Create(classDetailse, new List<StudentAverage>(), new List<StandardScore>(), standards, null));
-
+                var avg = mostRecentAveragesWithGrade.FirstOrDefault(x => x.SectionId == classDetailse.Id);
+                var gradeValue = avg != null ? (avg.EnteredNumericAverage ?? avg.CalculatedNumericAverage) : null;
+                var stScores = standardScores.Where(x => x.SectionId == classDetailse.Id).ToList();
+                var importantItem = announcements.FirstOrDefault(x => x.ClassRef == classDetailse.Id);
+                res.Add(Create(classDetailse, gradeValue, stScores, standards, importantItem));                   
             }
-            return res;
+            return OrderClassGradeInfo(res);
         }
  
-
-        public static StudentClassExplorerInfo Create(Class classInfo, IList<StudentAverage> studentAverages, IList<StandardScore> standardScores
-            , IList<Standard> standards, Announcement importantAnnouncement)
+        public static StudentClassExplorerInfo Create(Class classInfo, decimal? avg, IList<StandardScore> standardScores
+            , IList<Standard> standards, AnnouncementComplex importantAnnouncement)
         {
             var res = new StudentClassExplorerInfo
                 {
                     ClassInfo = classInfo,
-                    StudentAverages = studentAverages.Select(ChalkableStudentAverage.Create).ToList(),
+                    MostImportantAnnouncement = importantAnnouncement,
+                    Avg = avg,
+                    Standards = OrderGradingStandards(GradingStandardInfo.Create(standardScores, standards))
                 };
-            var generalAvg = res.StudentAverages.FirstOrDefault(x => x.IsGradingPeriodAverage);
-            if (generalAvg != null)
-                res.Avg = generalAvg.EnteredAvg ?? generalAvg.CalculatedAvg; 
-            var gradingStandardsInfo = new List<GradingStandardInfo>();
-            foreach (var standardScore in standardScores)
-            {
-                var standard = standards.FirstOrDefault(st => st.Id == standardScore.StandardId);
-                gradingStandardsInfo.Add(GradingStandardInfo.Create(standardScore, standard));
-            }
-            res.Standards = gradingStandardsInfo.OrderBy(x => x.NumericGrade).ToList();
             return res;
+        }
+
+        private static IList<GradingStandardInfo> OrderGradingStandards(IList<GradingStandardInfo> gradingStandards)
+        {
+            gradingStandards = gradingStandards.OrderBy(x => x.Standard.Name).ToList();
+            var graded = gradingStandards.Where(x => !string.IsNullOrEmpty(x.AlphaGradeName)).ToList();
+            if (graded.Count > 0)
+                graded = graded.OrderBy(x => x.AlphaGradeName, new AlphaGradeNameComperator()).ThenBy(x => x.Standard.Name).ToList();
+            return graded.Concat(gradingStandards.Where(x => string.IsNullOrEmpty(x.AlphaGradeName))).ToList();
+        } 
+
+        private static IList<StudentClassExplorerInfo> OrderClassGradeInfo(
+            IList<StudentClassExplorerInfo> classGradeInfo)
+        {
+            classGradeInfo = classGradeInfo.OrderBy(x => x.ClassInfo.Name).ToList();
+            var notGraded = classGradeInfo.Where(x => !x.Avg.HasValue).ToList();
+            var graded = classGradeInfo.Where(x => x.Avg.HasValue).OrderByDescending(x=>x.Avg).ThenBy(x=>x.ClassInfo.Name).ToList();
+            return graded.Concat(notGraded).ToList();
         }
     }
 }

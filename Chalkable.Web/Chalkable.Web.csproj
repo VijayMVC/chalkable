@@ -246,6 +246,7 @@
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
+    <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />

@@ -19,5 +19,8 @@ namespace Chalkable.Data.School.Model
         public DateTime Date { get; set; }
         public bool Posted { get; set; }
         public string Grade { get; set; }
+
+        [DataEntityAttr]
+        public AnnouncementApplication AnnouncementApplication { get; set; }
     }
 }

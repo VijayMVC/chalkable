@@ -12,7 +12,6 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<AttendanceReason> reasons);
         void Edit(IList<AttendanceReason> reasons);
-        void Delete(int id);
         void Delete(IList<int> ids);
         IList<AttendanceReason> List(bool onlyWithLevel = true);
         AttendanceReason Get(int id);
@@ -39,11 +38,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Insert(reasons);
                 uow.Commit();
             }
-        }
-
-        public void Delete(int id)
-        {
-            Delete(new List<int>{id});
         }
 
         public IList<AttendanceReason> List(bool onlyWithLevel = true)

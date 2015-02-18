@@ -94,5 +94,10 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// </summary>
         public int StudentId { get; set; }
 
+        public bool HasGrade
+        {
+            get { return EnteredNumericAverage.HasValue || CalculatedNumericAverage.HasValue; }
+        }
+
     }
 }

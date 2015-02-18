@@ -65,7 +65,7 @@ NAMESPACE('chlk.models.attendance', function () {
                     })[0];
                     if(!reason)
                         return null;
-                    attLevelReasons = reason.attendancelevelreason;
+                    attLevelReasons = reason.attendancelevelreason || [];
                     res = attLevelReasons.filter(function(item){return item.level == level;});
                 }else{
                     res = attLevelReasons.filter(function(item){return item.getLevel() == level;});

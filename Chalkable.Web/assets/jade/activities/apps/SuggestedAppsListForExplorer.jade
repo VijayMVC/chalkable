@@ -5,6 +5,7 @@ mixin AppItem(app)
            div(data-tooltip='').icon
                pictureUrl = self.getAppPictureURL(app.getBigPictureId(), 170, 110)
            img(src=pictureUrl)
+           h2(data-tooltip = app.getName(), data-tooltip-type = "overflow")=app.getName()
 
 div
     h3 Recommended apps:

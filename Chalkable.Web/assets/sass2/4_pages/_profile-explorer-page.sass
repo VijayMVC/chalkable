@@ -118,6 +118,7 @@
     width: 324px
     height: 184px
     background: inline-image('images2/explorer/default-item.png') 0 0 no-repeat
+    position: relative
 
     &:first-child
       background-image: inline-image('images2/explorer/first-item.png')
@@ -127,6 +128,14 @@
 
     &:last-child
       background-image: inline-image('images2/explorer/last-item.png')
+
+    h2
+      text-decoration: none
+      font-size: 14px
+      overflow: hidden
+      text-overflow: ellipsis
+      position: absolute
+      bottom: -20px
 
   .app-link
     margin-left: 152px
