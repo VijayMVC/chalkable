@@ -277,7 +277,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function applyAutoGrades(announcementApplicationId){
                 return this.get('Grading/ApplyAutoGrades', null, {
                     announcementApplicationId: announcementApplicationId.valueOf(),
-                    lastSettedGradeTime: new chlk.models.common.ChlkDate().toString('mm-dd-yy hh-min-ss')
+                    lastSettedGradeTime: new chlk.models.common.ChlkDate().toString('mm-dd-yy hh:min:ss')
                 });
             }
         ])

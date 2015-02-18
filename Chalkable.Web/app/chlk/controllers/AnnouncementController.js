@@ -138,15 +138,15 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.AnnouncementApplicationId]],
-        function discardAutoGrades(model){
-            this.setAnnouncementGrade(model, true);
+        function discardAutoGradesAction(appId){
+            this.gradingService.discardAutoGrades(appId);
             return null;
         },
 
-        [[chlk.models.announcement.StudentAnnouncement]],
-        function updateAnnouncementGradeFromGridAction(model){
-            var result = this.setAnnouncementGrade(model, true);
-            return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
+        [[chlk.models.id.AnnouncementApplicationId]],
+        function applyAutoGradesAction(appId){
+            this.gradingService.applyAutoGrades(appId);
+            return null;
         },
 
         [[chlk.models.announcement.StudentAnnouncement]],

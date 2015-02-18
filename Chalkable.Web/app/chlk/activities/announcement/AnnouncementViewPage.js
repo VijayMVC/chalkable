@@ -119,7 +119,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     block.find('.text-value').setHTML(grade);
                     block.find('.grade-input').setValue(grade);
                 });
-                return false;
             },
 
             [ria.mvc.DomEventBind('click', '.accept-auto-grades')],
@@ -130,7 +129,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     block.removeClass('auto-grade');
                     block.parent('form').trigger('submit');
                 });
-                return false;
             },
 
             [ria.mvc.DomEventBind('click', '.make-visible-btn')],

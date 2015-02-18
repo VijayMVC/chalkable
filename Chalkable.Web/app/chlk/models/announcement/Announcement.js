@@ -107,7 +107,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 if(this.autoGradeApps.length){
                     var autoGradeApps = [];
                     this.autoGradeApps.forEach(function(item){
-                        var app = autoGradeApps.filter(function(app){return app.id == item.application.id})[0];
+                        var app = autoGradeApps.filter(function(app){return app.id == item.application.announcementapplicationid})[0];
                         if(!app){
                             autoGradeApps.push({
                                 name: item.application.name,
