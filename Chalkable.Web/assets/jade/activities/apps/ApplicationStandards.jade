@@ -1,0 +1,14 @@
+.standards-list
+    if self.getStandards() && self.getStandards().length > 0
+        .standards-list-container
+            standardsIdsStr = (self.getStandardsIds() || []).join(',')
+            +Hidden('standards', standardsIdsStr)
+            each standard in self.getStandards()
+                button(data-tooltip = standard.getDescription(), type="button").grey-button.same-on-hover
+                    = standard.getStandardCode()
+                    +ActionLink('apps', 'removeStandard', self.getApplicationId(), standard.getId()).remove-standard
+        +ActionLink('apps', 'removeAllStandards', self.getApplicationId()).remove-all-standards-btn.x-hidden
+        .title.add-more-title CLICK TO ADD MORE
+    else
+        .title CLICK TO ADD STANDARD
+    +ActionLink('apps', 'showStandards', self.getApplicationId()).add-standards-btn.x-hidden
