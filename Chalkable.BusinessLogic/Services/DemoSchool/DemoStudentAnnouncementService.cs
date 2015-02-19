@@ -136,12 +136,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         }
 
-        public void ResolveAutoGrading(int announcementId, bool apply)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
         {
             throw new NotImplementedException();

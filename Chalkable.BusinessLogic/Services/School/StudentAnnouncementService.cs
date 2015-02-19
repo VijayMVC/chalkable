@@ -15,18 +15,10 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IStudentAnnouncementService
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
-        void ResolveAutoGrading(int announcementApplicationId, bool apply);
-        //IList<StudentAnnouncement> GetStudentAnnouncements(int schoolPersonId, int classId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value);
         IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId);
-        //IList<StudentGradingComplex> GetStudentGradedAnnouncements(int schoolPersonId, int markingPeriodId);
-
-        //int? GetAssignmentAverage(int announcementId);
-        //double GetAvgByAnnouncements(IList<StudentAnnouncement> studentAnnouncements, bool dropLowest);
-
-        //IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue);
         IList<AutoGrade> GetAutoGrades(int announcementApplicationId);
     }
 
@@ -128,63 +120,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         }
 
-        //TODO: check application existing  
-        public StudentAnnouncement SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
-        {
-            //using (var uow = Update())
-            //{
-            //    var da = new StudentAnnouncementDataAccess(uow);
-            //    var sa = da.GetById(studentAnnouncementId);
-            //    if (sa.State == StudentAnnouncementStateEnum.None)
-            //    {
-            //        sa.GradeValue = value;
-            //        sa.ApplicationRef = applicationId;
-            //        sa.State = StudentAnnouncementStateEnum.Auto;
-            //        da.Update(sa);
-            //    }
-            //    uow.Commit();
-            //    return sa;
-            //}
-            throw new NotImplementedException();
-        }
-
-
-        public void ResolveAutoGrading(int announcementApplicationId, bool apply)
-        {
-            using (var uow = Update())
-            {
-                var da = new AutoGradeDataAccess(uow);
-                var autoGrades = da.GetAutoGrades(announcementApplicationId);
-                if (autoGrades.Any(x => x.Posted))
-                    throw new ChalkableException("Grades was already posted");
-                if (apply)
-                {
-                    foreach (var autoGrade in autoGrades)
-                    {
-                        autoGrade.Posted = true;
-                    }
-                    da.Update(autoGrades);
-                }
-                else da.DiscardAutoGrades(autoGrades);               
-                uow.Commit();
-            }
-        }
-
-
-        //public IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue)
-        //{
-        //    using (var uow = Read())
-        //    {
-        //        return new StudentAnnouncementDataAccess(uow).GetStudentAnnouncementGrades(new StudentAnnouncementQuery
-        //            {
-        //                StudentId = studentId,
-        //                ClassId = classId,
-        //                Count = count
-        //            });
-        //    }
-        //}
-
-
         public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
         {
             if(studentId != Context.PersonId)
@@ -228,7 +163,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return DoRead(uow => new AutoGradeDataAccess(uow).GetAutoGradesByAnnouncementId(announcementId));
         }
-
 
         public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
         {
