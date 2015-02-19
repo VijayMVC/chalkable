@@ -112,6 +112,15 @@ mixin Glue_()
 
         if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
             +CloseOpen('Grades')
+                .auto-grades
+                    each app in self.getAutoGradeApps()
+                        .item(data-id=app.id)
+                            -var count = app.students.length
+                            .title #{app.name} posted #{count} #{count > 1 ? "grades" : "grade"}
+                            .buttons: +ActionButton('', '').green-button.view-auto-grades View
+                                +ActionButton('announcement', 'applyAutoGrades', app.id).blue-button.accept-auto-grades.accept-decline Accept
+                                +ActionButton('announcement', 'discardAutoGrades', app.id).red-button.decline-auto-grades.accept-decline Decline
+
                 div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
                     +Hidden('maxScore', self.getMaxScore())#max-score
                     +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(

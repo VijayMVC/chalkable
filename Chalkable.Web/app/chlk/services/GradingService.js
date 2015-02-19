@@ -264,6 +264,21 @@ NAMESPACE('chlk.services', function () {
                     classId: classId && classId.valueOf(),
                     gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf()
                 });
+            },
+
+            [[chlk.models.id.AnnouncementApplicationId]],
+            ria.async.Future, function discardAutoGrades(announcementApplicationId){
+                return this.get('Grading/DiscardAutoGrades', null, {
+                    announcementApplicationId: announcementApplicationId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementApplicationId]],
+            ria.async.Future, function applyAutoGrades(announcementApplicationId){
+                return this.get('Grading/ApplyAutoGrades', null, {
+                    announcementApplicationId: announcementApplicationId.valueOf(),
+                    lastSettedGradeTime: new chlk.models.common.ChlkDate().toString('mm-dd-yy hh:min:ss')
+                });
             }
         ])
 });

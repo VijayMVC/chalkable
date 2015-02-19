@@ -137,6 +137,18 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
         },
 
+        [[chlk.models.id.AnnouncementApplicationId]],
+        function discardAutoGradesAction(appId){
+            this.gradingService.discardAutoGrades(appId);
+            return null;
+        },
+
+        [[chlk.models.id.AnnouncementApplicationId]],
+        function applyAutoGradesAction(appId){
+            this.gradingService.applyAutoGrades(appId);
+            return null;
+        },
+
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeAction(model){
             var result = this.setAnnouncementGrade(model)

@@ -13,7 +13,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         'AnnouncementGradingPartTpl', EXTENDS(chlk.templates.announcement.StudentAnnouncementsTpl), [
             Boolean, 'readonly',
 
-            ArrayOf(String), 'autoGradeApps',
+            Array, 'autoGradeApps',
 
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 

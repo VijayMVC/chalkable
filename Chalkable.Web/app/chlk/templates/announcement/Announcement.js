@@ -70,7 +70,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'attachmentsSummary',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(String), 'autoGradeApps',
+            Array, 'autoGradeApps',
 
             [ria.templates.ModelPropertyBind],
             Number, 'avg',
