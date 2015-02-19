@@ -97,7 +97,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult EditTitle(int announcementId, string title)
         {
             var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (Exists(title, ann.ClassRef, ann.Expires, announcementId))
+            if (!Exists(title, ann.ClassRef, ann.Expires, announcementId))
             {
                 SchoolLocator.AnnouncementService.EditTitle(announcementId, title);
                 return Json(true);
