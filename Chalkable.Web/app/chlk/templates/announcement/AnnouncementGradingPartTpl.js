@@ -13,7 +13,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         'AnnouncementGradingPartTpl', EXTENDS(chlk.templates.announcement.StudentAnnouncementsTpl), [
             Boolean, 'readonly',
 
-            ArrayOf(String), 'autoGradeApps',
+            Array, 'autoGradeApps',
 
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
@@ -40,6 +40,20 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             String, function getStandardsUrlComponents() {
                 return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+            },
+
+            function getAppGrade(announcementApplicationId, studentId){
+                var app = this.getAutoGradeApps().filter(function(item){return item.id == announcementApplicationId})[0];
+
+                if(!app)
+                    return null;
+
+                var student = app.students.filter(function(item){return item.id == studentId})[0];
+
+                if(!student)
+                    return null;
+
+                return student.grade;
             }
         ])
 });
