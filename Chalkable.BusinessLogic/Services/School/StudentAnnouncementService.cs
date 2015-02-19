@@ -15,19 +15,11 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IStudentAnnouncementService
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
-        void ResolveAutoGrading(int announcementId, bool apply);
-        //IList<StudentAnnouncement> GetStudentAnnouncements(int schoolPersonId, int classId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
         AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value);
         IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId);
-        //IList<StudentGradingComplex> GetStudentGradedAnnouncements(int schoolPersonId, int markingPeriodId);
-
-        //int? GetAssignmentAverage(int announcementId);
-        //double GetAvgByAnnouncements(IList<StudentAnnouncement> studentAnnouncements, bool dropLowest);
-
-        //IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue);
-
+        IList<AutoGrade> GetAutoGrades(int announcementApplicationId);
     }
 
     public class StudentAnnouncementService : SisConnectedService, IStudentAnnouncementService
@@ -128,63 +120,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         }
 
-        //TODO: check application existing  
-        public StudentAnnouncement SetAutoGrade(int studentAnnouncementId, int value, Guid applicationId)
-        {
-            //using (var uow = Update())
-            //{
-            //    var da = new StudentAnnouncementDataAccess(uow);
-            //    var sa = da.GetById(studentAnnouncementId);
-            //    if (sa.State == StudentAnnouncementStateEnum.None)
-            //    {
-            //        sa.GradeValue = value;
-            //        sa.ApplicationRef = applicationId;
-            //        sa.State = StudentAnnouncementStateEnum.Auto;
-            //        da.Update(sa);
-            //    }
-            //    uow.Commit();
-            //    return sa;
-            //}
-            throw new NotImplementedException();
-        }
-
-
-        public void ResolveAutoGrading(int announcementId, bool apply)
-        {
-            //using (var uow = Update())
-            //{
-            //    if (!BaseSecurity.IsAdminOrTeacher(ServiceLocator.Context))
-            //        throw new ChalkableSecurityException();
-            //    var state = StudentAnnouncementStateEnum.Auto;
-            //    var da = new StudentAnnouncementDataAccess(uow);
-            //    var sas = da.GetList(new StudentAnnouncementShortQuery {AnnouncementId = announcementId, State = state});
-            //    foreach (var studentAnnouncement in sas)
-            //    {
-            //        studentAnnouncement.State = StudentAnnouncementStateEnum.Manual;
-            //        if (!apply)
-            //            studentAnnouncement.GradeValue = null;
-            //    }
-            //    da.Update(sas);
-            //    uow.Commit();
-            //}
-            throw new NotImplementedException();
-        }
-
-
-        //public IList<StudentAnnouncementGrade> GetLastGrades(int studentId, int? classId = null, int count = int.MaxValue)
-        //{
-        //    using (var uow = Read())
-        //    {
-        //        return new StudentAnnouncementDataAccess(uow).GetStudentAnnouncementGrades(new StudentAnnouncementQuery
-        //            {
-        //                StudentId = studentId,
-        //                ClassId = classId,
-        //                Count = count
-        //            });
-        //    }
-        //}
-
-
         public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
         {
             if(studentId != Context.PersonId)
@@ -227,6 +162,11 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
         {
             return DoRead(uow => new AutoGradeDataAccess(uow).GetAutoGradesByAnnouncementId(announcementId));
+        }
+
+        public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
+        {
+            return DoRead(uow => new AutoGradeDataAccess(uow).GetAutoGrades(announcementApplicationId));
         }
     }
 }

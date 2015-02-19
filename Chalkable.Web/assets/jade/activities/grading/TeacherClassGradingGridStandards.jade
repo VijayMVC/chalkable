@@ -48,7 +48,7 @@
                             .prev-arrow.grid-arrow
                             .next-arrow.grid-arrow
 
-                        +ActionButton('grading', 'post-standards', selectedId, gradingPeriod.getId()).blue-button.button-like.right Post
+                        +ActionButton('grading', 'post-standards', selectedId, gradingPeriod.getId())(class= !gradingPeriod.isAblePostGradeBook() ? "disabled" : "").blue-button.button-like.right Post
                         if self.isAbleEdit()
                             +ActionButton('grading', 'getGradeComments').blue-button.button-like.comment-button.gp-button.right= Msg.Comment
                     .grades-container

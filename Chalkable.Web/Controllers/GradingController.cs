@@ -59,8 +59,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
-            //return FakeJson("~/fakeData/itemGradingStat.json");
-            //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
             var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
             return Json(ItemGradigStatViewData.Create(studentAnns, announcementId));
         }
@@ -264,18 +262,6 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }*/
 
-        /*public ActionResult ApplyAutoGrade(int announcementId)
-        {
-            SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, true);
-            return ItemGradesList(announcementId);
-        }
-
-        public ActionResult ApplyManualGrade(int announcementId)
-        {
-            SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, false);
-            return ItemGradesList(announcementId);
-        }*/
-
         //TODO: do we need this in API still?
         //[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         [AuthorizationFilter("Teacher")]
@@ -328,9 +314,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult SetAutoGrade(int announcementApplicationId,int studentId, string gradeValue)
         {
-            var res = SchoolLocator.StudentAnnouncementService.SetAutoGrade(announcementApplicationId, studentId, gradeValue);
+            SchoolLocator.StudentAnnouncementService.SetAutoGrade(announcementApplicationId, studentId, gradeValue);
             return Json(true);
         }
-
     }
 }
