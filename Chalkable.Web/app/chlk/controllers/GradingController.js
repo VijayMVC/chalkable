@@ -755,10 +755,11 @@ NAMESPACE('chlk.controllers', function (){
                         if(model['getTitle' + i]() && model['getTitle' + i]().trim()) len++;
                     }
                     if(model.getAnnouncementIds().split(',').length + len > 8){
-                        this.ShowMsgBox(Msg.Worksheet_report_msg, 'fyi.', [{
+                        return this.ShowAlertBox(Msg.Worksheet_report_msg, "fyi."), null;
+                        /*this.ShowMsgBox(Msg.Worksheet_report_msg, 'fyi.', [{
                             text: Msg.GOT_IT.toUpperCase()
                         }]);
-                        return this.UpdateView(chlk.activities.reports.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData), 'stop');
+                        return this.UpdateView(chlk.activities.reports.WorksheetReportDialog, new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData), 'stop');*/
                     }
 
                     if (Date.compare(getDate(model.getStartDate()) , getDate(model.getEndDate())) > 0){
