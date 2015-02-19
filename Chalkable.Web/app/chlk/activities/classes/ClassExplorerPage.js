@@ -24,6 +24,12 @@ NAMESPACE('chlk.activities.classes', function () {
             VOID, function lessStandardsClick(node, event){
                 node.parent().find('.hidden-item').hide();
                 node.parent().find('.more-button').show();
+                var item = this.dom.find('.block-item.standard.pressed');
+                if(item.exists() && item.hasClass('hidden-item')){
+                    this.dom.find('.suggested-apps-container').setHTML('');
+                    item.removeClass('pressed');
+                }
+
                 node.hide();
             },
 
