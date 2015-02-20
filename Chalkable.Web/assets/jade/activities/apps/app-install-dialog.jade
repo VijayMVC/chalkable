@@ -58,8 +58,9 @@ devName = app.getDeveloperInfo().getName()
             .row
                 .group-header.first User:
                 .items
-                    each item in app.getInstalledForGroups()
-                        +InstallItem(item)
+                    div
+                        each item in app.getInstalledForGroups()
+                            +InstallItem(item)
             .calculated-price
             .install-info
                 .install-btn
