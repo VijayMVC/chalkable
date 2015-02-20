@@ -89,7 +89,7 @@ mixin Glue_()
             -var myAttachments = (self.getAnnouncementAttachments() || []).filter(function (_) { return _.isOwner(); });
             if self.isGradable() || myAttachments.length
                 +CloseOpen('My Attachments')
-                    .student-attachments.content
+                    #attachments-block.student-attachments.content
                         +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
                             userRole = self.getUserRole()
                         )
