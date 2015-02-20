@@ -138,17 +138,44 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
         {
-            throw new NotImplementedException();
+            var autogrades = GetAutoGradesByAnnouncementId(announcementId);
+
+            if (apply)
+            {
+                foreach (var autograde in autogrades)
+                {
+                    SetGrade(autograde.AnnouncementApplication.AnnouncementRef, autograde.StudentRef, autograde.Grade,
+                        null, null, false, false, false, false);
+                }
+            }
+            Storage.AutoGradeStorage.Delete(autogrades);
         }
 
         public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
         {
-            throw new NotImplementedException();
+            var announcementApplication = Storage.AnnouncementApplicationStorage.GetById(announcementApplicationId);
+            var autograde = new AutoGrade()
+            {
+                AnnouncementApplication = announcementApplication,
+                AnnouncementApplicationRef = announcementApplicationId,
+                Date = DateTime.Now,
+                Grade = value,
+                Posted = false,
+                StudentRef = studentId
+            };
+
+            Storage.AutoGradeStorage.SetAutoGrade(announcementApplicationId, autograde);
+            return autograde;
         }
 
         public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
         {
-            throw new NotImplementedException();
+            var autogrades =
+                Storage.AutoGradeStorage.GetAll()
+                    .Where(x => x.AnnouncementApplication.AnnouncementRef == announcementId)
+                    .Select(x => x)
+                    .ToList();
+            return autogrades;
         }
     }
 }

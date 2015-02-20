@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -101,8 +102,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStaffSchoolStorage StaffSchoolStorage { get; private set; }
 
         public DemoScheduledTimeSlotStorage ScheduledTimeSlotStorage { get; private set; }
+        public DemoAutoGradeStorage AutoGradeStorage { get; private set; }
 
         public UserContext Context { get; private set; }
+        public IServiceLocatorSchool SchoolLocator { get; set; }
 
         public void UpdateContext(UserContext context)
         {
@@ -201,6 +204,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StaffStorage = new DemoStaffStorage(this);
             StudentSchoolStorage = new DemoStudentSchoolStorage(this);
             ScheduledTimeSlotStorage = new DemoScheduledTimeSlotStorage(this);
+            AutoGradeStorage = new DemoAutoGradeStorage(this);
 
             CreateAnnouncementStorage(Context);
             Setup();
@@ -1613,7 +1617,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     Name = "Math 1",
                     LowerGradeLevelRef = DemoSchoolConstants.GradeLevel10,
                     UpperGradeLevelRef = DemoSchoolConstants.GradeLevel10,
-                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject
+                    StandardSubjectRef = DemoSchoolConstants.ScienceStandardSubject,
+                    
                 },
 
                 new Standard
@@ -1649,7 +1654,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                     AdoptionYear = 2010,
                     Name = "Math Standards",
                     Description = "",
-                    IsActive = true
+                    IsActive = true,
                 },
 
                 new StandardSubject()
