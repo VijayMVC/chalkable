@@ -57,6 +57,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
             : base(serviceLocatorMaster.Context)
         {
+            storage.SchoolLocator = this;
             this.serviceLocatorMaster = serviceLocatorMaster;
             notificationService = new DemoNotificationService(this, storage);
             appMarketService = new DemoAppMarketService(this, storage);

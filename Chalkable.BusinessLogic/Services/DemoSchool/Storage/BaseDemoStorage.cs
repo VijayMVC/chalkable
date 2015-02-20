@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {

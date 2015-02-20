@@ -101,7 +101,39 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public StartupData GetStartupData()
         {
-            throw new System.NotImplementedException();
+            var mps = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId);
+            var markingPeriod = mps.Where(x=>x.StartDate <= Context.NowSchoolYearTime).OrderBy(x=>x.StartDate).LastOrDefault();
+
+            var startupData = new StartupData()
+            {
+                UnshownNotificationsCount = ServiceLocator.NotificationService.GetUnshownNotifications().Count,
+                AttendanceReasons = ServiceLocator.AttendanceReasonService.List(),
+                AlternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores(),
+                MarkingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId),
+                AlphaGrades = Storage.AlphaGradeStorage.GetAll(),
+                GradingComments = ServiceLocator.GradingCommentService.GetGradingComments(),
+                SchoolOption = GetSchoolOption(),
+                Person = ServiceLocator.PersonService.GetPersonDetails(Context.PersonId.Value),
+                Classes = Storage.ClassStorage.GetClassesSortedByPeriod(),
+            };
+
+            startupData.GradingPeriod = markingPeriod != null && Context.SchoolLocalId.HasValue
+                ? ServiceLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef,
+                    Context.NowSchoolYearTime.Date)
+                : null;
+
+            var alphaGradesForClasses = new Dictionary<int, IList<AlphaGrade>>();
+            var alphaGradesForClassStandards = new Dictionary<int, IList<AlphaGrade>>();
+
+            foreach (var classDetail in startupData.Classes)
+            {
+                alphaGradesForClasses.Add(classDetail.Id, Storage.AlphaGradeStorage.GetForClass(classDetail.Id));
+                alphaGradesForClassStandards.Add(classDetail.Id, Storage.AlphaGradeStorage.GetForClassStandarts(classDetail.Id));
+            }
+            startupData.AlphaGradesForClassStandards = alphaGradesForClassStandards;
+            startupData.AlphaGradesForClasses = alphaGradesForClasses;
+
+            return startupData;
         }
     }
 }

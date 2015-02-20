@@ -56,31 +56,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
             return Storage.StudentStorage.GetClassStudents(classId, markingPeriodId, isEnrolled);
-
-            throw new NotImplementedException();
-            /*IList<Person> res = ServiceLocator.PersonService.GetPaginatedPersons(new PersonQuery
-            {
-                ClassId = classId,
-                CallerId = Context.PersonId,
-                CallerRoleId = Context.Role.Id,
-                Count = int.MaxValue,
-                RoleId = CoreRoles.STUDENT_ROLE.Id
-            });
-
-
-            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-            var enrollmentStatus = isEnrolled.HasValue && isEnrolled.Value
-                                      ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
-                                      : (StudentEnrollmentStatusEnum?)null;
-            var studentSys = Storage.StudentSchoolYearStorage.GetList(sy.Id, enrollmentStatus);
-            res = res.Where(x => studentSys.Any(y => y.StudentRef == x.Id)).ToList();
-            if (isEnrolled.HasValue)
-            {
-                var classPersons = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId, IsEnrolled = isEnrolled, MarkingPeriodId = markingPeriodId });
-                res = res.Where(x => classPersons.Any(y => y.PersonRef == x.Id)).ToList();
-            }
-
-            return res;*/
         }
 
         public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName,
@@ -101,18 +76,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
         {
-
-
-            /*
-             * public ClassRank ClassRank { get; set; }
-        public string CurrentAttendanceStatus { get; set; }
-        public DailyAbsenceSummary DailyAttendance { get; set; }
-        public IEnumerable<InfractionSummary> Infractions { get; set; }
-        public IEnumerable<Score> Scores { get; set; }
-        public IEnumerable<SectionAbsenceSummary> SectionAttendance { get; set; }
-             */
-
-
             var classRank = new ClassRank
             {
                 StudentId = studentId,
@@ -123,7 +86,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var discipline = Storage.StiDisciplineStorage.GetList(DateTime.Today);
 
-            var infractions = new List<Chalkable.StiConnector.Connectors.Model.Infraction>();
+            var infractions = new List<StiConnector.Connectors.Model.Infraction>();
 
             foreach (var disciplineReferral in discipline)
             {

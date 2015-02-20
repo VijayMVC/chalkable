@@ -124,5 +124,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 classes = classes.Where(x => x.PrimaryTeacherRef == teacherRef).ToList();
             return classes.Where(x => x.PrimaryTeacherRef == teacherRef).Select(x => (Class)x).ToList();
         }
+
+        public IList<ClassDetails> GetClassesSortedByPeriod()
+        {
+            var classes = Storage.SchoolLocator.ClassService.GetClasses(Storage.Context.SchoolYearId, null, Storage.Context.PersonId).ToList();
+            int? teacherId = null;
+            int? studentId = null;
+            if (Storage.Context.RoleId == CoreRoles.TEACHER_ROLE.Id)
+                teacherId = Storage.Context.PersonId;
+            else if (Storage.Context.RoleId == CoreRoles.STUDENT_ROLE.Id)
+                studentId = Storage.Context.PersonId;
+            else
+                throw new NotImplementedException();
+            var schedule = Storage.SchoolLocator.ClassPeriodService.GetSchedule(teacherId, studentId, null,
+                Storage.Context.NowSchoolYearTime.Date, Storage.Context.NowSchoolYearTime.Date).OrderBy(x => x.PeriodOrder);
+            var res = new List<ClassDetails>();
+            foreach (var classPeriod in schedule)
+            {
+                var c = classes.FirstOrDefault(x => x.Id == classPeriod.ClassId);
+                if (c != null && res.All(x => x.Id != c.Id))
+                    res.Add(c);
+            }
+            classes = classes.Where(x => res.All(y => y.Id != x.Id)).OrderBy(x => x.Name).ToList();
+
+            return res.Concat(classes).ToList();
+        }
     }
 }
