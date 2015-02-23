@@ -9,7 +9,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        public void SetAutoGrade(int announcementApplicationId, AutoGrade autograde)
+
+        public void SetAutoGrade(int announcementApplicationId,  AutoGrade autograde)
         {
             data[announcementApplicationId] = autograde;
         }

@@ -138,41 +138,45 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
         {
-            var autogrades = GetAutoGradesByAnnouncementId(announcementId);
-
-            if (apply)
+            var annApp = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            var autoGrade = Storage.AutoGradeStorage.GetAll()
+                                   .FirstOrDefault(x => x.AnnouncementApplicationRef == announcementApplicationId
+                                                        && x.StudentRef == studentId);
+            if (autoGrade == null)
             {
-                foreach (var autograde in autogrades)
-                {
-                    SetGrade(autograde.AnnouncementApplication.AnnouncementRef, autograde.StudentRef, autograde.Grade,
-                        null, null, false, false, false, false);
-                }
+                autoGrade = new AutoGrade
+                    {
+                        AnnouncementApplicationRef = announcementApplicationId,
+                        StudentRef = studentId,
+                        AnnouncementApplication = annApp,
+                        Date = Context.NowSchoolYearTime,
+                        Grade = value,
+                    };
+                Storage.AutoGradeStorage.Add(autoGrade);
             }
-            Storage.AutoGradeStorage.Delete(autogrades);
+            else
+            {
+                autoGrade.Grade = value;
+                autoGrade.Date = Context.NowSchoolYearTime;
+                Storage.AutoGradeStorage.Update(autoGrade);
+            }
+
+            return autoGrade;
         }
 
         public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
         {
-            var announcementApplication = Storage.AnnouncementApplicationStorage.GetById(announcementApplicationId);
-            var autograde = new AutoGrade()
-            {
-                AnnouncementApplication = announcementApplication,
-                AnnouncementApplicationRef = announcementApplicationId,
-                Date = DateTime.Now,
-                Grade = value,
-                Posted = false,
-                StudentRef = studentId
-            };
-
-            Storage.AutoGradeStorage.SetAutoGrade(announcementApplicationId, autograde);
-            return autograde;
+            var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId);
+            return Storage.AutoGradeStorage.GetAll()
+                       .Where(x => annApps.Any(y => y.Id == x.AnnouncementApplicationRef))
+                       .ToList();
         }
 
         public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
         {
             var autogrades =
                 Storage.AutoGradeStorage.GetAll()
-                    .Where(x => x.AnnouncementApplication.AnnouncementRef == announcementId)
+                    .Where(x => x.AnnouncementApplication.Id == announcementApplicationId)
                     .Select(x => x)
                     .ToList();
             return autogrades;
