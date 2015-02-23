@@ -36,10 +36,10 @@ namespace Chalkable.Web.ActionFilters
             if (filterContext.Exception == null)
             {
                 // DO nothing, no exception
-            } 
-            else if (filterContext.HttpContext.Request.IsAjaxRequest())
+            }
+            else if (filterContext.HttpContext.Request.IsAjaxRequest() || filterContext.HttpContext.Request.IsApiRequest())
             {
-                ProcessAjaxRequestError(filterContext);
+                ProcessJsonRequestError(filterContext);
             }
             else
             {
@@ -63,7 +63,7 @@ namespace Chalkable.Web.ActionFilters
             }
         }
 
-        private static void ProcessAjaxRequestError(ExceptionContext filterContext)
+        private static void ProcessJsonRequestError(ExceptionContext filterContext)
         {
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
