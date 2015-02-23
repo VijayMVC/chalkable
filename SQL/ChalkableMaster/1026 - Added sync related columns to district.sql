@@ -8,7 +8,7 @@ Alter Table District
 	Add FailDelta int
 Go
 Update District
-	Set FailCounter = 0, FailDelta = 0
+	Set FailCounter = 0, FailDelta = 0, SyncFrequency = 300, MaxSyncFrequency = 3600
 Go
 Alter Table District
 	Alter Column FailCounter int not null
