@@ -1,4 +1,4 @@
-mixin AppManagementControls(app)
+mixin AppManagementControls_(app)
     -var id = app.getId()
     if app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
         +ActionLink('apps', 'approve', id).btn Approve
@@ -7,14 +7,14 @@ mixin AppManagementControls(app)
         span=app.getState().toString()
 
 
-mixin ApplicationActionLinks(tplObj, app)
-    if !tplObj.isReadOnly()
+mixin ApplicationActionLinks_(app)
+    if !self.isReadOnly()
         +ActionLink('apps', 'details', app.getId()).profile
     +ActionLink('apps', 'testApplication', app.getDeveloperId()).profile
-    if !tplObj.isReadOnly()
+    if !self.isReadOnly()
         +ActionLink('apps', 'tryDeleteApplication', app.getId(), app.getName()).remove
 
-mixin AppsFilterSelect(name, items)
+mixin AppsFilterSelect_(name, items)
     +Select(name)(attributes)
         each item in items
             +Option(item.value, item.displayValue, item.selected)
@@ -28,10 +28,10 @@ mixin AppsFilterSelect(name, items)
 
         .x-form-field
             label  Developer:
-            +AppsFilterSelect('developerid', self.prepareDevelopersSelectModel())#developers-select
+            +AppsFilterSelect_('developerid', self.prepareDevelopersSelectModel())#developers-select
         .x-form-field
             label States:
-            +AppsFilterSelect('state', self.prepareStatesSelectModel())#states-select
+            +AppsFilterSelect_('state', self.prepareStatesSelectModel())#states-select
 
 
         +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
@@ -39,11 +39,11 @@ mixin AppsFilterSelect(name, items)
                 .th
                 .th Application Name
                 .th Description
-                .th State
-                .th.narrow isInternal
-                .th Has Live
+                .th Is Live
+                .th Draft State
                 .th Draft Actions
                 .th Live Actions
+                .th.narrow Is Internal
                 .th
             +GridBody()
                 each item in self.applications.getItems()
@@ -54,8 +54,16 @@ mixin AppsFilterSelect(name, items)
                             img.app-icon(src=pictureLink, width=24, height=24)
                         .td= item.getName()
                         .td= item.getShortDescription()
+                        .td: span=item.getLiveAppId() ? "True" : "False"
                         .td.app-state
-                            +AppManagementControls(item)
+                            +AppManagementControls_(item)
+                        .td.action-links
+                            +ApplicationActionLinks_(item)
+                        .td.action-links
+                            if item.getLiveAppId() && item.getLiveApplication()
+                                +ApplicationActionLinks_(item.getLiveApplication())
+                            else
+                                span -
                         .td
                             if !self.isReadOnly()
                                 +ActionForm('apps', 'changeAppType')
@@ -64,12 +72,3 @@ mixin AppsFilterSelect(name, items)
                                         +Hidden('appId', liveApp.getId())
                                     else
                                         span -
-                            else
-
-                        .td
-                            span=item.getLiveAppId() ? "True" : "False"
-                        .td.action-links
-                            +ApplicationActionLinks(self, item)
-                        .td.action-links
-                            if item.getLiveAppId() && item.getLiveApplication()
-                                +ApplicationActionLinks(self, item.getLiveApplication())
