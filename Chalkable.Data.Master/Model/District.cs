@@ -25,6 +25,10 @@ namespace Chalkable.Data.Master.Model
         public int MaxSyncTime { get; set; }
         public int SyncLogFlushSize { get; set; }
         public int SyncHistoryDays { get; set; }
+        public int? SyncFrequency { get; set; }
+        public int? MaxSyncFrequency { get; set; }
+        public int FailCounter { get; set; }
+        public int FailDelta { get; set; }
         
         [NotDbFieldAttr]
         public bool IsDemoDistrict { get; set; }
@@ -58,5 +62,7 @@ namespace Chalkable.Data.Master.Model
         public DateTime? CanceledCreated { get; set; }
         public DateTime? CanceledStarted { get; set; }
         public DateTime? CanceledCompleted { get; set; }
+        public Guid? NewId { get; set; }
+        public DateTime? NewCreated { get; set; }
     }
 }

@@ -79,10 +79,20 @@ namespace Chalkable.StiImport.Services
             if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
                 throw new Exception("District id should be defined for import");
             var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
-            if (d.LastSync.HasValue)
-                DoRegularSync(true);
-            else
-                DoInitialSync();
+            try
+            {
+                if (d.LastSync.HasValue)
+                    DoRegularSync(true);
+                else
+                    DoInitialSync();
+                Log.LogInfo("updating district last sync");
+                UpdateDistrictLastSync(d, true);
+            }
+            catch (Exception)
+            {
+                UpdateDistrictLastSync(d, false);
+                throw;
+            }
             
             Log.LogInfo("process pictures");
             ProcessPictures();
@@ -90,8 +100,6 @@ namespace Chalkable.StiImport.Services
             foreach (var importedSchoolId in importedSchoolIds)
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
             
-            Log.LogInfo("updating district last sync");
-            UpdateDistrictLastSync(d);
             if (context.GetSyncResult<User>().All.Length > 0)
             {
                 Log.LogInfo("creating user login infos");
@@ -229,27 +237,30 @@ namespace Chalkable.StiImport.Services
             }
         }
 
-        private void UpdateDistrictLastSync(District d)
+        private void UpdateDistrictLastSync(District d, bool success)
         {
-            
-            d.LastSync = DateTime.UtcNow;
+            if (success)
+            {
+                d.LastSync = DateTime.UtcNow;
+                d.FailCounter = 0;    
+            }
+            else
+                d.FailCounter = d.FailCounter + 1;
             ServiceLocatorMaster.DistrictService.Update(d);
         }
 
         private void ProcessPictures()
         {
-            if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
-                throw new Exception("District id should be defined for import");
             IList<int> ids = new List<int>();
             const int personsPerTask = 5000;
-            var districtId = ServiceLocatorSchool.Context.DistrictId.Value;
             for (int i = 0; i < personsForImportPictures.Count; i++ )
             {
                 ids.Add(personsForImportPictures[i].PersonID);
                 if (ids.Count >= personsPerTask || ids.Count > 0 && i + 1 == personsForImportPictures.Count)
                 {
                     var data = new PictureImportTaskData(districtId, ids);
-                    ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.PictureImport, DateTime.UtcNow, null, data.ToString());
+                    var domain = String.Format("picture processing for {0} at {1}", districtId, DateTime.UtcNow.Ticks);
+                    ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.PictureImport, DateTime.UtcNow, districtId, data.ToString(), domain);
                     ids.Clear();
                 }
             }

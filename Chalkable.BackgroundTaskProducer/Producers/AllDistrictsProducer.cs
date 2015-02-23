@@ -19,7 +19,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
             var districts = sl.DistrictService.GetDistricts();
             foreach (var district in districts)
             {
-                sl.BackgroundTaskService.ScheduleTask(type, currentTimeUtc, district.Id, string.Empty);
+                sl.BackgroundTaskService.ScheduleTask(type, currentTimeUtc, district.Id, string.Empty, district.Id.ToString());
             }
         }
     }

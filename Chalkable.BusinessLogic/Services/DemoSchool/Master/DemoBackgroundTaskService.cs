@@ -13,7 +13,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
         }
 
-        public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data)
+        public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data,
+            string domain)
         {
             throw new NotImplementedException();
         }
@@ -35,11 +36,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public PaginatedList<BackgroundTask> Find(Guid? districtId, BackgroundTaskStateEnum? state = null, BackgroundTaskTypeEnum? type = null,
             bool allDistricts = false, int start = 0, int count = Int32.MaxValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BackgroundTask Find(Guid? schoolId, BackgroundTaskStateEnum state, BackgroundTaskTypeEnum type)
         {
             throw new NotImplementedException();
         }

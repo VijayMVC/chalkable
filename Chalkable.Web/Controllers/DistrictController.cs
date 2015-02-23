@@ -66,20 +66,12 @@ namespace Chalkable.Web.Controllers
             var tzCollection = DateTimeTools.GetAll();
             return Json(tzCollection);
         }
-
-        [RequireHttps]
-        [AuthorizationFilter("SysAdmin")]
-        public ActionResult Delete(Guid districtId)
-        {
-            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DeleteDistrict, DateTime.UtcNow, districtId, districtId.ToString());
-            return Json(true);
-        }
-
+        
         [RequireHttps]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Sync(Guid districtId)
         {
-            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.SisDataImport, DateTime.UtcNow, districtId, string.Empty);
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.SisDataImport, DateTime.UtcNow, districtId, string.Empty, districtId.ToString());
             return Json(true);
         }
 

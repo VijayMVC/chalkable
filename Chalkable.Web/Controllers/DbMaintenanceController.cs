@@ -16,7 +16,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult Backup()
         {
             var data = new DatabaseBackupRestoreTaskData(DateTime.UtcNow.Ticks, true);
-            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString());
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
             return Json(true);
         }
 
@@ -25,7 +25,7 @@ namespace Chalkable.Web.Controllers
         {
             var sl = SchoolLocator.ServiceLocatorMaster;
             var data = new DatabaseBackupRestoreTaskData(time, true);
-            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.RestoreDatabases, DateTime.UtcNow, null, data.ToString());
+            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.RestoreDatabases, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
             return Json(true);
         }
 
@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers
             sqls.AddRange(mSqls);
             sqls.AddRange(sSqls);
             var data = new DatabaseUpdateTaskData(sqls);
-            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseUpdate, DateTime.UtcNow, null, data.ToString());
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseUpdate, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
             return Json(true);
 
         }
