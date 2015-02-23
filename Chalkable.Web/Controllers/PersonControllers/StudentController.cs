@@ -100,10 +100,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Grading(int personId, int markingPeriodId)
         {
-            //throw new NotImplementedException();
             var student = SchoolLocator.PersonService.GetPerson(personId);
-            //if (!BaseSecurity.IsAdminTeacherOrExactStudent(MasterLocator.UserService.GetByLogin(student.Email), Context))
-            //    throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
             var gardingStats = SchoolLocator.GradingStatisticService.GetFullGradingStats(markingPeriodId, student.Id);
             var gradingMapper = SchoolLocator.GradingStyleService.GetMapper();
             var res = StudentGradingViewData.Create(student, gardingStats, gradingMapper);
