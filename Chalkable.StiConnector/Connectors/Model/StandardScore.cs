@@ -48,6 +48,13 @@ namespace Chalkable.StiConnector.Connectors.Model
         public string EnteredScoreAlphaGradeName { get; set; }
 
         /// <summary>
+        /// The averaging equivalent of the alpha grade entered for the manually overridden score.  
+        /// You do not need to set this property on update.  This is not something that should be shown to the user.
+        /// Instead, you should show the Alpha Grade.  This property is being added for class average calculations done in Chalkable
+        /// </summary>
+        public short? EnteredScoreAveragingEquivalent { get; set; }
+
+        /// <summary>
         /// A note field for entering comments about the standard score.  There is a 500 character limit on this field
         /// </summary>
         public string Note { get; set; }
