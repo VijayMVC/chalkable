@@ -1,4 +1,5 @@
-﻿using Chalkable.Data.School.Model;
+﻿using System.Linq;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
@@ -10,9 +11,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        public void SetAutoGrade(int announcementApplicationId,  AutoGrade autograde)
+        public void SetAutoGrade(AutoGrade autograde)
         {
-            data[announcementApplicationId] = autograde;
+           var item = data.First(
+                x => x.Value.AnnouncementApplicationRef == autograde.AnnouncementApplicationRef && autograde.StudentRef == x.Value.StudentRef);
+
+            data[item.Key] = autograde;
         }
     }
 }

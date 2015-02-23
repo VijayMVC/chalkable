@@ -158,9 +158,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 autoGrade.Grade = value;
                 autoGrade.Date = Context.NowSchoolYearTime;
-                Storage.AutoGradeStorage.Update(autoGrade);
+                Storage.AutoGradeStorage.SetAutoGrade(autoGrade);
             }
-
             return autoGrade;
         }
 
