@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.DataAccess
                     {AutoGrade.STUDENT_REF_FIELD, studentId}
                 };
             conds.BuildSqlWhere(res, typeof (AutoGrade).Name);
-            return ReadOne<AutoGrade>(res);
+            return ReadOneOrNull<AutoGrade>(res, true);
         }
 
         public void DiscardAutoGrades(IList<AutoGrade> autoGrades)
