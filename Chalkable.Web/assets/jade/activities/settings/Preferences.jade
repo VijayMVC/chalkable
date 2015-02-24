@@ -1,0 +1,24 @@
+.settings
+    h2 Preferences
+    .preferences.grid
+        .loader
+        .scroller
+            .container
+                .body
+                    .row.header
+                        .col Key
+                        .col Value
+                        .col Hint
+                        .col Is public
+                        .col
+                    each item in self.items
+                        +ActionForm('settings', 'setPreference').row
+                            .col=item.getKey()
+                            input(name="key", type="hidden", value=item.getKey())
+                            .col
+                                input(name="value", value=item.getValue())
+                            .col.hint=item.getHint()
+                            .col.centered
+                                +Checkbox('ispublicpref', item.isPublicPreference())
+                            .col
+                                +Button Set
