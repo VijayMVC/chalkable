@@ -136,18 +136,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         }
 
-        public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
+        public AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value)
         {
             var annApp = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var autoGrade = Storage.AutoGradeStorage.GetAll()
                                    .FirstOrDefault(x => x.AnnouncementApplicationRef == announcementApplicationId
-                                                        && x.StudentRef == studentId);
+                                                        && x.StudentRef == recepientId);
             if (autoGrade == null)
             {
                 autoGrade = new AutoGrade
                     {
                         AnnouncementApplicationRef = announcementApplicationId,
-                        StudentRef = studentId,
+                        StudentRef = recepientId ?? Context.PersonId ?? 0,
                         AnnouncementApplication = annApp,
                         Date = Context.NowSchoolYearTime,
                         Grade = value,

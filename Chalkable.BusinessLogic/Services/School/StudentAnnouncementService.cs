@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
             , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
-        AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value);
+        AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value);
         IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId);
         IList<AutoGrade> GetAutoGrades(int announcementApplicationId);
     }
@@ -120,32 +120,34 @@ namespace Chalkable.BusinessLogic.Services.School
 
         }
 
-        public AutoGrade SetAutoGrade(int announcementApplicationId, int studentId, string value)
+        public AutoGrade SetAutoGrade(int announcementApplicationId, int? studentId, string value)
         {
-            if(studentId != Context.PersonId)
-                throw new ChalkableSecurityException();
-
-            //TODO: chekc if student has installed current application
+            var recepientId = studentId ?? Context.PersonId ?? 0;
             var annApp = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
-            if(annApp.ApplicationRef == app.Id)
+            
+            if(annApp.ApplicationRef != app.Id)
                 throw new ChalkableSecurityException("There is no announcemenApplication with such Id and ApplicationId");
-            if(!annApp.Active)
-                throw new ChalkableSecurityException("Application is not attached to an item");
 
-            ServiceLocator.AnnouncementService.GetAnnouncementById(annApp.AnnouncementRef); // security here
+            if(!annApp.Active)
+                throw new ChalkableSecurityException("This application is not attached to an item");
+
+            var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(annApp.AnnouncementRef); // security here
+
+            if (recepientId != Context.PersonId && !announcement.IsOwner)
+                throw new ChalkableSecurityException("Only owner can post auto grade for student");
 
             using (var uow = Update())
             {
                 var da = new AutoGradeDataAccess(uow);
                 Action<AutoGrade> modifyAction = da.Update;
-                var autoGrade = da.GetAutoGrade(announcementApplicationId, studentId);
+                var autoGrade = da.GetAutoGrade(announcementApplicationId, recepientId);
                 if (autoGrade == null)
                 {
                     autoGrade = new AutoGrade
                     {
                         AnnouncementApplicationRef = announcementApplicationId,
-                        StudentRef = studentId,
+                        StudentRef = recepientId,
                     };
                     modifyAction = da.Insert;
                 }
