@@ -14,6 +14,8 @@
                 displayName =self.getStudentExplorer().getDisplayName() || self.getStudentExplorer().getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
     .explorer-view
+        if !classesInfo.length
+            .no-items-text No standards yet
         .classes-blocks
             each classItem, i in classesInfo
                 .class-block
