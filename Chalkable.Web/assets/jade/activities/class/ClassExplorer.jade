@@ -3,6 +3,8 @@
 
     +ProfileTopBar(self, 'explorer')
     .explorer-view
+        if !self.getStandards().length
+            .no-items-text No standards yet
         .classes-blocks
             .class-block
                 .announcement-block
