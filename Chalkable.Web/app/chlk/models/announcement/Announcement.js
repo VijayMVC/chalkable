@@ -107,11 +107,11 @@ NAMESPACE('chlk.models.announcement', function () {
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];
                     this.autoGradeApps.forEach(function(item){
-                        var app = autoGradeApps.filter(function(app){return app.id == item.application.announcementapplicationid})[0];
+                        var app = autoGradeApps.filter(function(app){return app.id == item.announcementapplicationid})[0];
                         if(!app){
                             autoGradeApps.push({
                                 name: item.application.name,
-                                id: item.application.announcementapplicationid,
+                                id: item.announcementapplicationid,
                                 students: [{id:item.studentid, grade:item.grade}]
                             })
                         }else{
