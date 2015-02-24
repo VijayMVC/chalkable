@@ -3,10 +3,13 @@ mixin StudentGradingItem(student)
         a.empty-container
     else
         tooltipText = student.getFullName() + '<br/>'
+        -var avg = 0
         if student.getAvg() || student.getAvg() == 0
-            tooltipText = tooltipText + student.getAvg().toFixed(2) + '%'
+            avg = student.getAvg().toFixed(2)
+            tooltipText = tooltipText + avg + '%'
         -attributes['data-tooltip'] = tooltipText
         -attributes['studentId'] = student.getId().valueOf()
+        -attributes['data-avg'] = avg
         +ProfileLink(student, 'student')(attributes).image-container.white.student-item
             +PersonImg(student, 47)
 
@@ -46,11 +49,16 @@ topData = self.getTopData()
             .students-line
                 SPAN.n-0 0
                 SPAN.n-100=item.getMaxScore()
-                each student in students
+                each student, index in students
+                    -var avgValue = 0
+                    if student.getAvg() || student.getAvg() == 0
+                        avg = student.getAvg().toFixed(2)
                     div(
                         class=(student.getWellTroubleType() == typeEnum.WELL ? 'well' : (student.getWellTroubleType() == typeEnum.TROUBLE ? 'trouble' : '')),
                         style = "right:" + student.getRight() + "%",
-                        studentId=student.getId().valueOf()
+                        studentId=student.getId().valueOf(),
+                        data-tooltip=self.getTooltipForSmallPic(students, avg),
+                        data-avg=avg
                     ).student-pic-container
                         .student-pic
                         br

@@ -10,7 +10,6 @@ REQUIRE('chlk.models.calendar.announcement.CalendarDayItem');
 REQUIRE('chlk.models.calendar.TeacherSettingsCalendarDay');
 REQUIRE('chlk.models.calendar.announcement.DayItem');
 REQUIRE('chlk.models.calendar.announcement.Day');
-REQUIRE('chlk.models.calendar.ListForWeekCalendarItem');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
@@ -24,13 +23,6 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.CalendarService */
     CLASS(
         'CalendarService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.common.ChlkDate]],
-            ria.async.Future, function getListForWeek(date_) {
-                return this.get('AnnouncementCalendar/ListForWeek.json', ArrayOf(chlk.models.calendar.ListForWeekCalendarItem) , {
-                    date: date_ && date_.toString('mm-dd-yy')
-                });
-            },
-
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
             ria.async.Future, function listByDateRange(startDate_, endDate_, classId_) {
                 return this.get('AnnouncementCalendar/ListByDateRange.json', ArrayOf(chlk.models.announcement.BaseAnnouncementViewData) , {
@@ -140,7 +132,7 @@ NAMESPACE('chlk.services', function () {
 
             [[ArrayOf(chlk.models.calendar.announcement.MonthItem), chlk.models.common.ChlkDate]],
             chlk.models.calendar.announcement.Month, function prepareMonthData(days, date_){
-                var isAdmin = this.userIsAdmin();
+                var isAdmin = false;
                 var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
                 var mpStartDate = markingPeriod.getStartDate();
                 var mpEndDate = markingPeriod.getEndDate();

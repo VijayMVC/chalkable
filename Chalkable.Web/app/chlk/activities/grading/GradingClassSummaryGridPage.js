@@ -6,6 +6,8 @@ REQUIRE('chlk.templates.grading.GradingCommentsTpl');
 REQUIRE('chlk.templates.grading.StudentAverageTpl');
 REQUIRE('chlk.templates.grading.AvgCodesPopupTpl');
 REQUIRE('chlk.templates.grading.StudentAverageInputTpl');
+REQUIRE('chlk.templates.grading.GradingPopUpTpl');
+REQUIRE('chlk.templates.grading.GradingAvgPopUpTpl');
 
 REQUIRE('chlk.activities.grading.BaseGridPage');
 
@@ -68,50 +70,17 @@ NAMESPACE('chlk.activities.grading', function () {
                 }
             },
 
-            [ria.mvc.DomEventBind('keyup', '.comment-value')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function commentKeyUp(node, event, options_){
-                var popUp = node.parent().find('.grading-comments-list');
-                if(popUp.is(':visible') && (event.which == ria.dom.Keys.UP.valueOf()
-                    || event.which == ria.dom.Keys.DOWN.valueOf() || event.which == ria.dom.Keys.ENTER.valueOf())
-                    && popUp.find('.item').exists()){
-                        var selected = popUp.find('.item.selected'), next = selected;
-                        if(!selected.exists())
-                            selected = popUp.find('.item:first');
-                        switch(event.which){
-                            case ria.dom.Keys.UP.valueOf():
-                                if(selected.previous().exists()){
-                                    selected.removeClass('selected');
-                                    selected.previous().addClass('selected');
-                                }
-                                break;
-                            case ria.dom.Keys.DOWN.valueOf():
-                                if(selected.next().exists()){
-                                    selected.removeClass('selected');
-                                    selected.next().addClass('selected');
-                                }
-                                break;
-                            case ria.dom.Keys.ENTER.valueOf():
-                                this.setCommentByNode(next);
-                                break;
-                        }
-                }else{
-                    if(node.getValue() && node.getValue().trim())
-                        popUp.hide();
-                    else
-                        popUp.show();
-                }
-            },
+
 
             [ria.mvc.DomEventBind('change', '.exempt-checkbox')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function exemptChange(node, event, options_){
-                var input = node.parent('form').find('.value-input');
+                var input = this.dom.find('.active-cell').find('.value-input');
                 if(node.checked())
                     input.setValue('');
                 else{
                     var oldValue = input.getData('grade-value');
-                    input.setValue(oldValue.toLowerCase() == 'exempt' ? '' : oldValue);
+                    input.setValue((oldValue && oldValue.toLowerCase() == 'exempt') ? '' : oldValue);
                 }
 
             },
@@ -175,7 +144,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
                 (model.getStudentTotalPoints() || [])
                     .forEach(function (item, index) {
-                        var value = item.getMaxTotalPoint() ? (item.getTotalPoint().toFixed(model.isRoundDisplayedAverages() ? 0 : 2) + '/' + item.getMaxTotalPoint()) : '';
+                        var value = (item.getMaxTotalPoint() && item.getTotalPoint()) ? (item.getTotalPoint().toFixed(model.isRoundDisplayedAverages() ? 0 : 2) + '/' + item.getMaxTotalPoint()) : '';
                         dom.find('.total-point[data-student-id=' + item.getStudentId().valueOf() + ']').setHTML(value);
                     });
 
@@ -197,6 +166,23 @@ NAMESPACE('chlk.activities.grading', function () {
                     maxScore: container.getData('max-score')
                 });
                 tpl.renderTo(container.setHTML(''));
+            },
+
+            OVERRIDE, function addPopUpByModel(cell, model){
+                BASE(cell, model);
+                var popUpTpl;
+                if(cell.hasClass('avg-value-container'))
+                    popUpTpl = new chlk.templates.grading.GradingAvgPopUpTpl();
+                else{
+                    popUpTpl = new chlk.templates.grading.GradingPopUpTpl();
+                    popUpTpl.options({
+                        ableDropStudentScore: this.getBooleanValue_(cell.getData('able-drop-student-score')),
+                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score'))
+                    });
+                }
+
+                popUpTpl.assign(model);
+                this.dom.find('#grading-popup').setHTML(popUpTpl.render());
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.StudentAverageTpl, chlk.activities.lib.DontShowLoader())],
@@ -311,28 +297,6 @@ NAMESPACE('chlk.activities.grading', function () {
                     popUp.setCss('bottom', bottom);
                     popUp.setCss('left', left);
                     popUp.show();
-                }
-            },
-
-            function setCommentByNode(node){
-                var popUp = node.parent('.popup-bubble');
-                var input = popUp.find('.comment-value');
-                input.setValue(node.getHTML());
-                popUp.find('.grading-comments-list').hide();
-            },
-
-            [ria.mvc.DomEventBind('click', '.grading-comments-list .item')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function commentItemClick(node, event){
-                this.setCommentByNode(node);
-            },
-
-            [ria.mvc.DomEventBind('mouseover', '.grading-comments-list .item')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function commentItemMouseOver(node, event){
-                if(!node.hasClass('selected')){
-                    node.parent('.grading-comments-list').find('.selected').removeClass('selected');
-                    node.addClass('selected');
                 }
             },
 

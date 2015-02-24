@@ -47,7 +47,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         } 
     }
 
-    public class StudentStandardGradeViewData : AnnouncementStandardViewData
+    public class StudentStandardGradeViewData : StandardViewData
     {
         public StandardGradingItemViewData StandardGrading { get; set; }
 

@@ -307,7 +307,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime);
                 annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassRef);
-                res = annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
+                res = GetDetails(annDa, res.Id);// annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
                 if (res.ClassAnnouncementTypeRef.HasValue)
                 {
                     res.ClassAnnouncementTypeName = classAnnType.Name;
@@ -324,9 +324,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
-                var res = da.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id);
-                if(res == null)
-                    throw new NoAnnouncementException();
+                var res = GetDetails(da, announcementId);
                 if (res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
@@ -350,6 +348,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 return res;
             }
+        }
+
+        private AnnouncementDetails GetDetails(AnnouncementDataAccess dataAccess, int announcementId)
+        {
+            var ann = dataAccess.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id);
+            if (ann == null)
+                throw new NoAnnouncementException();
+            ann.AnnouncementStandards = ServiceLocator.StandardService.GetAnnouncementStandards(announcementId);
+            return ann;
         }
 
         private void InsertMissingAttachments(AnnouncementDetails res, UnitOfWork uow)
@@ -487,7 +494,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (ann.ClassAnnouncementTypeRef.HasValue && Context.SchoolYearId.HasValue)
                     da.ReorderAnnouncements(Context.SchoolYearId.Value, ann.ClassAnnouncementTypeRef.Value, ann.ClassRef);
 
-                var res = da.GetDetails(announcement.AnnouncementId, Context.PersonId.Value, Context.RoleId);
+                var res = GetDetails(da, announcement.AnnouncementId);// da.GetDetails(announcement.AnnouncementId, Context.PersonId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.SisActivityId.Value);
@@ -636,7 +643,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var attOrder = announcement.AnnouncementAttachments.Max(x => (int?)x.Order);
             var appOrder = announcement.AnnouncementApplications.Max(x => (int?)x.Order);
-            int order = 0;
+            var order = 0;
             if (attOrder.HasValue)
             {
                 if (appOrder.HasValue)
@@ -823,7 +830,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new AnnouncementStandardDataAccess(uow).GetAnnouncementStandards(classId);
+                return new AnnouncementStandardDataAccess(uow).GetAnnouncementStandardsByClassId(classId);
             }
         }
         

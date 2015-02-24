@@ -11,13 +11,15 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.SchoolPersonId, 'teacherId',
             chlk.models.id.AnnouncementId, 'announcementId',
             chlk.models.common.PaginatedList, 'apps',
+            String, 'appUrlAppend',
 
             [[chlk.models.id.SchoolPersonId, chlk.models.id.AnnouncementId, chlk.models.common.PaginatedList]],
-            function $(teacherId, announcementId, apps){
+            function $(teacherId, announcementId, apps, appUrlAppend){
                 BASE();
                 this.setTeacherId(teacherId);
                 this.setAnnouncementId(announcementId);
                 this.setApps(apps);
+                this.setAppUrlAppend(appUrlAppend);
             }
         ]);
 });

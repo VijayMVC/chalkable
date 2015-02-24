@@ -14,8 +14,7 @@
 
   &:not(.no-animation)
     .second-container:not(.freezed)
-      @include transition-property("all")
-      @include transition-duration("0.5s")
+      +single-transition(all, 0.5s)
 
 
   .arrow

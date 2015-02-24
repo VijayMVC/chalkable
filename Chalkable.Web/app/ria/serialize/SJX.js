@@ -16,7 +16,7 @@ NAMESPACE('ria.serialize', function () {
         },
 
         fromArrayOfValues: function (raw, cvt) {
-            Assert(typeof cvt == 'function');
+            Assert(!cvt || typeof cvt == 'function');
             if (raw == undefined || raw == null)
                 return null;
 

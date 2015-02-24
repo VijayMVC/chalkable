@@ -12,12 +12,19 @@ NAMESPACE('chlk.templates.apps', function() {
         'SuggestedAppsListTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.ApplicationForAttach), 'suggestedApps',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.AnnouncementId, 'announcementId'
+            chlk.models.id.AnnouncementId, 'announcementId',
+
+            String, function getStandardsUrlComponents() {
+                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+            }
         ]);
 });

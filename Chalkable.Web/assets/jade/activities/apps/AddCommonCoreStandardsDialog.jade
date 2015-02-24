@@ -1,6 +1,6 @@
 +AddStandardDialog(' STANDARDS', 'apps', 'addStandards').dialog.add-standards
     +Hidden('applicationId', self.getApplicationId())
-    +Hidden('standardCodesStr', self.getStandardCodes().join(',')).standard-ids
+    +Hidden('standardsIdsStr', self.getStandardsIds().join(',')).standard-ids
     .standards-list-container
         standardCategories = self.getItems() || []
         table
@@ -8,8 +8,8 @@
                 td.name-td
                     .standards-names.column
                         each category in standardCategories
-                            +ActionLink('apps', 'showStandardCategories', category.getId(), category.getName()).standard-name.column-cell
-                                .name=category.getName()
+                            +ActionLink('apps', 'showStandardsByCategory', category.getId(), category.getName()).standard-name.column-cell
+                                .name(data-tooltip=category.getName(), data-tooltip-type="overflow")=category.getName()
                                 .right-triangle
                 td
                     .standards-description

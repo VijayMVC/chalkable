@@ -56,11 +56,9 @@ NAMESPACE('chlk.templates.student', function () {
             Object, function buildAttendanceGlanceBoxData(){
                 return this.buildGlanceBoxData_(this.getUser().getAttendanceBox()
                     , function(item){
-                        console.log(item.getAbsences());
                         return item.getAbsences()
                     }
                     , function(item){
-                        console.log(item.getClazz().getName());
                         return item.getClazz().getName()
                     }
                     , Msg.Attendance);

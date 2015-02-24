@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IBackgroundTaskService
     {
-        BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data);
+        BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data, string domain);
         BackgroundTask GetTaskToProcess(DateTime now);
         PaginatedList<BackgroundTask> GetTasks(int start, int count);
         void Complete(Guid id, bool success);
@@ -113,7 +113,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data)
+        public BackgroundTask ScheduleTask(BackgroundTaskTypeEnum type, DateTime scheduled, Guid? districtRef, string data, string domain)
         {
             BaseSecurity.EnsureSysAdmin(Context);
             var task = new BackgroundTask
@@ -124,7 +124,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Scheduled = scheduled,
                     DistrictRef = districtRef,
                     State = BackgroundTaskStateEnum.Created,
-                    Type = type
+                    Type = type,
+                    Domain = domain
                 };
             DoUpdate(u => new BackgroundTaskDataAccess(u).Insert(task));
             return task;

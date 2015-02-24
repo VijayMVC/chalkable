@@ -10,6 +10,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public DemoSchoolServiceBase(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator)
         {
             Storage = demoStorage;
+            Storage.SchoolLocator = serviceLocator;
         }
     }
 }

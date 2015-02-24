@@ -14,7 +14,8 @@ NAMESPACE('chlk.models.bgtasks', function () {
             DELETE_SCHOOL: 6,
             PROCESS_REMINDERS: 7,
             ATTENDANCE_NOTIFICATION: 8,
-            TEACHER_ATTENDANCE_NOTIFICATION: 9
+            TEACHER_ATTENDANCE_NOTIFICATION: 9,
+            RE_SYNC: 11
         });
 
 
@@ -35,6 +36,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.PROCESS_REMINDERS] = "Process Reminders";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.ATTENDANCE_NOTIFICATION] = "Attendance Notification";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.TEACHER_ATTENDANCE_NOTIFICATION] = "Teacher Attendance Notification";
+              this._types[chlk.models.bgtasks.BgTaskTypeEnum.RE_SYNC] = "Re Sync";
             },
             String, function toString(){
                 return this._types[this.getTypeId()];

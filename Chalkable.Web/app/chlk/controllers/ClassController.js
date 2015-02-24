@@ -12,6 +12,7 @@ REQUIRE('chlk.activities.classes.ClassSchedulePage');
 REQUIRE('chlk.activities.classes.ClassProfileAttendancePage');
 REQUIRE('chlk.activities.classes.ClassProfileGradingPage');
 REQUIRE('chlk.activities.classes.ClassProfileAppsPage');
+REQUIRE('chlk.activities.classes.ClassExplorerPage');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -53,6 +54,14 @@ NAMESPACE('chlk.controllers', function (){
                         );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassInfoPage, res);
+            },
+
+            [[chlk.models.id.ClassId]],
+            function explorerAction(classId){
+                var res = this.classService
+                    .getExplorer(classId)
+                    .attach(this.validateResponse_());
+                return this.PushView(chlk.activities.classes.ClassExplorerPage, res);
             },
 
             [[chlk.models.id.ClassId]],

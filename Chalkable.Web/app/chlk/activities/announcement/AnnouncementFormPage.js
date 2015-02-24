@@ -1,7 +1,6 @@
 REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
 REQUIRE('chlk.templates.announcement.AnnouncementFormTpl');
 REQUIRE('chlk.templates.announcement.Announcement');
-REQUIRE('chlk.templates.announcement.AnnouncementReminder');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.classes.TopBar');
@@ -18,7 +17,6 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementFormTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementReminder, '', '.reminders', ria.mvc.PartialUpdateRuleActions.Append)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
@@ -50,29 +48,34 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var standardsData = new chlk.models.standard.StandardsListViewData(
                     null, model.getClassId(),
                     null, model.getStandards(),
-                    model.getId());
-                var standardsTpl =  new chlk.templates.standard.AnnouncementStandardsTpl();
+                    model.getId()
+                );
+                var standardsTpl = new chlk.templates.standard.AnnouncementStandardsTpl();
+                this.onPrepareTemplate_(standardsTpl, standardsData, msg_);
+                standardsTpl.options({
+                    ableToRemoveStandard: model.isAbleToRemoveStandard()
+                });
                 standardsTpl.assign(standardsData);
-                var stsListNode = this.dom.find('.standards-list');
-                stsListNode.setHTML('');
-                standardsTpl.renderTo(stsListNode);
+                standardsTpl.renderTo(this.dom.find('.standards-list').empty());
 
-                var suggestedAppsNode = this.dom.find('.suggested-apps');
-                suggestedAppsNode.setHTML('');
+                model.setNeedButtons(true);
+                model.setNeedDeleteButton(true);
+                var attachmentsTpl = new chlk.templates.announcement.Announcement();
+                this.onPrepareTemplate_(attachmentsTpl, model, msg_);
+                attachmentsTpl.assign(model);
+                attachmentsTpl.renderTo(this.dom.find('.apps-attachments-bock').empty());
 
+                var suggestedAppsNode = this.dom.find('.suggested-apps').empty();
                 if(model.getStandards() && model.getStandards().length > 0 && this.isStudyCenterEnabled()){
                     var suggestedApps = model.getSuggestedApps();
                     var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
                         model.getClassId(),
                         model.getId(),
-                        suggestedApps
+                        suggestedApps,
+                        model.getStandards()
                     );
                     var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
-                    suggestedAppsTpl.options({
-                        userRole: this.getRole(),
-                        currentUser: this.getCurrentUser(),
-                        studyCenterEnabled: this.isStudyCenterEnabled()
-                    });
+                    this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);
                     suggestedAppsTpl.assign(suggestedAppsListData);
                     suggestedAppsTpl.renderTo(suggestedAppsNode);
                 }
@@ -291,7 +294,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         var titleInput = titleBlock.find('input[name=title]');
                         titleBlock.removeClass('active');
                         var text = titleInput.getValue();
-                        if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == '' || text == null || text == undefined)){
+                        if(titleBlock.exists() && (titleBlock.hasClass('exists') || text == null || text == undefined || text.trim() == '')){
                             var oldText = titleInput.getData('title');
                             if(oldText != text){
                                 that.updateFormByNotExistingTitle();
@@ -301,7 +304,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                                     that.removeDisabledClass();
                             }
                         }
-                        if(text && !dom.find('.title-block-container').hasClass('with-date')){
+                        if(text && text.trim() && !dom.find('.title-block-container').hasClass('with-date')){
                             titleBlock.find('.title-text').setHTML(text);
                         }
                     }

@@ -13,8 +13,8 @@ NAMESPACE('chlk.templates.student', function(){
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function buildActionLinkModels(pressedLinkName){
                 var controller = 'studycenter';
                 var userId = this.getUser().getId().valueOf();
-                var res = [this.createActionLinkModel_(controller, 'explorer', 'Explorer', pressedLinkName, [userId], !this.isStudyCenterEnabled()),
-                    this.createActionLinkModel_(controller, 'practice', 'Practice', pressedLinkName, [userId], true)
+                var res = [this.createActionLinkModel_(controller, 'explorer', 'Explorer', pressedLinkName, [], !this.isStudyCenterEnabled()),
+                    this.createActionLinkModel_(controller, 'practice', 'Practice', pressedLinkName, [null], !this.isStudyCenterEnabled())
                 ];
                 return res;
             }

@@ -1,9 +1,9 @@
 .install-app-dialog
   .dialog
-    transform: none
+    +transform(none)
     width: 872px
     margin-left: -398px
-    top: 10%
+    top: 6%
 
     .app-description
       border-bottom: 1px solid #e7e6e2
@@ -31,6 +31,10 @@
       display: table-cell
     .items
       display: table-cell
+
+      >DIV
+        max-height: 120px
+        overflow-y: auto
 
     .labeled-checkbox
       margin-right: 15px

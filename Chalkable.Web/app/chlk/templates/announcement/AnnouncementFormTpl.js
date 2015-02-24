@@ -23,7 +23,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.apps.SuggestedAppsList, function prepareSuggestedAppListData(){
                 var ann = this.getAnnouncement();
                 if(!ann) return null;
-                return new chlk.models.apps.SuggestedAppsList(ann.getClassId(), ann.getId(), ann.getSuggestedApps());
+                return new chlk.models.apps.SuggestedAppsList(ann.getClassId(), ann.getId(), ann.getSuggestedApps(), ann.getStandards());
             }
         ]);
 });

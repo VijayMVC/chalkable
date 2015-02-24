@@ -24,10 +24,4 @@ namespace Chalkable.Data.School.Model
         public string SchoolAnnouncement { get; set; }
         public bool AllowGradePosting { get; set; } 
     }
-
-    public class GradingPeriodDetails : GradingPeriod
-    {
-        [DataEntityAttr]
-        public MarkingPeriod MarkingPeriod { get; set; }
-    }
 }

@@ -24,5 +24,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+
+        public IList<Model.PracticeGradeDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

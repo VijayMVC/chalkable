@@ -39,7 +39,7 @@ namespace Chalkable.Web.Models
 
     public class GradingStandardClassItemViewData
     {
-        public AnnouncementStandardViewData ItemDescription { get; set; }
+        public StandardViewData ItemDescription { get; set; }
         public decimal? Avg { get; set; } 
         public IList<AnnouncementShortViewData> Announcements { get; set; }
  
@@ -48,7 +48,7 @@ namespace Chalkable.Web.Models
         {
             return new GradingStandardClassItemViewData
                 {
-                    ItemDescription = AnnouncementStandardViewData.Create(standard),
+                    ItemDescription = StandardViewData.Create(standard),
                     Avg = avg,
                     Announcements = AnnouncementShortViewData.Create(announcements)
                 };

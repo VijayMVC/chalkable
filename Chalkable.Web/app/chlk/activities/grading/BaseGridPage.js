@@ -142,7 +142,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(!all_)
                         html += '<div class="autocomplete-item see-all">See all »</div>';
                     var top = node.offset().top - list.parent().offset().top + node.height() + 3;
-                    var left = node.offset().left - list.parent().offset().left + 130;
+                    var left = node.offset().left - list.parent().offset().left;
                     list.setCss('top', top)
                         .setCss('left', left)
                         .setCss('width', node.width());
@@ -206,9 +206,67 @@ NAMESPACE('chlk.activities.grading', function () {
 
             /* Comments */
 
+            [ria.mvc.DomEventBind('keyup', '.comment-value')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function commentKeyUp(node, event, options_){
+                var popUp = node.parent().find('.grading-comments-list');
+                if(popUp.is(':visible') && (event.which == ria.dom.Keys.UP.valueOf()
+                    || event.which == ria.dom.Keys.DOWN.valueOf() || event.which == ria.dom.Keys.ENTER.valueOf())
+                    && popUp.find('.item').exists()){
+                        var selected = popUp.find('.item.selected'), next = selected;
+                        if(!selected.exists())
+                            selected = popUp.find('.item:first');
+                        switch(event.which){
+                            case ria.dom.Keys.UP.valueOf():
+                                if(selected.previous().exists()){
+                                    selected.removeClass('selected');
+                                    selected.previous().addClass('selected');
+                                }
+                                break;
+                            case ria.dom.Keys.DOWN.valueOf():
+                                if(selected.next().exists()){
+                                    selected.removeClass('selected');
+                                    selected.next().addClass('selected');
+                                }
+                                break;
+                            case ria.dom.Keys.ENTER.valueOf():
+                                this.setCommentByNode(next);
+                                break;
+                        }
+                }else{
+                    if(node.getValue() && node.getValue().trim())
+                        popUp.hide();
+                    else
+                        popUp.show();
+                }
+            },
+
+            function setCommentByNode(node){
+                var popUp = node.parent('.popup-bubble');
+                var input = popUp.find('.comment-value');
+                input.setValue(node.getHTML());
+                popUp.find('.grading-comments-list').hide();
+            },
+
+            [ria.mvc.DomEventBind('click', '.grading-comments-list .item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentItemClick(node, event){
+                this.setCommentByNode(node);
+            },
+
+            [ria.mvc.DomEventBind('mouseover', '.grading-comments-list .item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentItemMouseOver(node, event){
+                if(!node.hasClass('selected')){
+                    node.parent('.grading-comments-list').find('.selected').removeClass('selected');
+                    node.addClass('selected');
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '.comment-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function commentBtnClick(node, event){
+                this.hideGradingPopUp();
                 var active = this.dom.find('.active-cell');
                 var popUp = this.dom.find('.popup-bubble.comment');
                 var main = this.dom.parent('#main');
@@ -363,7 +421,14 @@ NAMESPACE('chlk.activities.grading', function () {
             Boolean, function gradeMouseDown(node, event){
                 var cell = node.parent('.grade-value');
                 if(!cell.hasClass('avg-value-container') || cell.find('.grade-info').getData('may-be-exempt')){
-                    node.parent().find('.grading-input-popup').show();
+                    var popUp = this.dom.find('#grading-popup');
+                    var gradesPageOffset = this.dom.find('.grades-page').offset();
+                    var cellOffset = cell.offset();
+                    var top = cellOffset.top - gradesPageOffset.top + cell.height();
+                    var left = cellOffset.left - gradesPageOffset.left;
+                    popUp.setCss('top', top);
+                    popUp.setCss('left', left);
+                    popUp.show();
                     this.hideDropDown();
                     return false;
                 }
@@ -493,7 +558,7 @@ NAMESPACE('chlk.activities.grading', function () {
             function gradeKeyUp(node, event){
                 var suggestions = [], cell = node.parent('.active-cell');
                 var list = this.dom.find('.autocomplete-list:visible');
-                var value = (node.getValue() || '').trim(), fillItem = node.parent().find('.fill-grade');
+                var value = (node.getValue() || '').trim(), fillItem = this.dom.find('#grading-popup').find('.fill-grade');
                 if(!value){
                     node.addClass('empty-grade');
                     node.removeClass('error');
@@ -579,8 +644,21 @@ NAMESPACE('chlk.activities.grading', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function gradingPopUpClick(node, event){
                 setTimeout(function(){
-                    node.parent('form').find('.value-input').trigger('focus');
-                }, 1)
+                    this.dom.find('.active-cell').find('.value-input').trigger('focus');
+                }.bind(this), 1)
+            },
+
+            [ria.mvc.DomEventBind('change', '.main-check')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function mainDropChange(node, event, options_){
+                var cell = this.dom.find('.active-cell');
+                if(node.parent('.fill-grade-container').exists())
+                    cell.find('.fill-grade-container').trigger('click');
+                else{
+                    var name = node.getAttr('name');
+                    this.dom.find('.active-cell').find('[name=' + name + ']').setValue(node.checked());
+                }
+
             },
 
             /* Data sorting */
@@ -635,6 +713,12 @@ NAMESPACE('chlk.activities.grading', function () {
                 tpl.assign(model);
 
                 tpl.renderTo(cell);
+
+                this.addPopUpByModel(cell, model);
+            },
+
+            function addPopUpByModel(cell, model){
+
             },
 
             function prepareTplForForm_(cell, model){},
@@ -662,7 +746,9 @@ NAMESPACE('chlk.activities.grading', function () {
                     var value = (input.getValue() || '').toLowerCase();
                     var isAvg = node.hasClass('avg-form');
                     if(value == 'dropped' || value == 'exempt'){
-                        input.setValue(input.getData('grade-value'));
+                        var gradeValue = (input.getData('grade-value') || '').toLowerCase();
+                        gradeValue = (gradeValue == 'exempt') ? '' : input.getData('grade-value');
+                        input.setValue(gradeValue);
                     }
 
                     var activeCell = node.parent('.grade-value');

@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\ABToCCMappingDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationRatingDataAccess.cs" />
     <Compile Include="DataAccess\BackgroundTaskDataAccess.cs" />

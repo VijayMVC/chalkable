@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -19,8 +20,8 @@ namespace Chalkable.Web.Controllers
     {
         [AuthorizationFilter("SysAdmin, Developer, AppTester")]
         public ActionResult List(Guid? developerId, int? state, int? start, int? count)
-        {
-            var applications = MasterLocator.ApplicationService.GetApplications(developerId, (ApplicationStateEnum?)state, null, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
+        {           
+            var applications = MasterLocator.ApplicationService.GetApplicationsWithLive(developerId, (ApplicationStateEnum?)state, null, start ?? 0, count ?? DEFAULT_PAGE_SIZE);  
             return Json(applications.Transform(BaseApplicationViewData.Create));
         }
 
@@ -163,6 +164,13 @@ namespace Chalkable.Web.Controllers
             MasterLocator.ApplicationUploadService.ChangeApplicationType(applicationId, isinternal);
             return Json(true);
         }
+        
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult SetApplicationInternalData(Guid applicationId, int? internalScore, string internalDescription)
+        {
+            MasterLocator.ApplicationUploadService.SetApplicationInternalData(applicationId, internalScore, internalDescription);
+            return Json(true);
+        }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult AddToAnnouncement(int announcementId, Guid applicationId)
@@ -205,10 +213,22 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetOauthCode(string applicationUrl)
         {
             //TODO: check if app is installed??
+           
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-            return Json(authorizationCode);
-            
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl);
+            var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
+            var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
+            var applicationInstalls = new List<ApplicationInstall>();
+            if(appInstall != null)
+                applicationInstalls.Add(appInstall);
+            var appView = InstalledApplicationViewData.Create(applicationInstalls, Context.PersonId, app, hasMyApps);
+            return Json( new {
+                                AuthorizationCode = authorizationCode,
+                                ApplicationInfo = appView
+                             });
         }
 
         private const string CONTENT_TYPE = "text/html";
@@ -222,7 +242,7 @@ namespace Chalkable.Web.Controllers
             bool canGetSecretKey = false;
             if (needsSecretKey)
                 canGetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
-            var standards = locator.CommonCoreStandardService.GetStandards(null);
+            var standards = locator.CommonCoreStandardService.GetStandards();
             var categories = locator.CategoryService.ListCategories();
             var res = ApplicationViewData.Create(application, categories, standards, canGetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)

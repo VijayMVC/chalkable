@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
@@ -22,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditSchoolOptions(IList<SchoolOption> schoolOptions);
         void DeleteSchoolOptions(IList<int> ids);
         SchoolOption GetSchoolOption();
+        StartupData GetStartupData();
     }
 
     public class SchoolService : SchoolServiceBase, ISchoolService
@@ -121,6 +123,17 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 return new SchoolOptionDataAccess(uow).GetByIdOrNull(Context.SchoolLocalId.Value);
             }
+        }
+
+        public StartupData GetStartupData()
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+            var res = DoRead(uow =>
+                        new SchoolDataAccess(uow).GetStartupData(Context.SchoolYearId.Value, Context.PersonId.Value,
+                            Context.RoleId, Context.NowSchoolYearTime.Date));
+
+            return res;
         }
     }
 }

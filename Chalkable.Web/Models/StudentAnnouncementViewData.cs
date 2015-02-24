@@ -22,13 +22,15 @@ namespace Chalkable.Web.Models
 
         private StudentAnnouncementsViewData() { }
 
-        public static StudentAnnouncementsViewData Create(IList<StudentAnnouncementDetails> items, IList<AnnouncementAttachmentInfo> attachments,
-            GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
+        public static StudentAnnouncementsViewData Create(IList<StudentAnnouncementDetails> items, IList<AnnouncementAttachmentInfo> attachments
+            , GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
         {
-            var res = new StudentAnnouncementsViewData {GradingStyle = (int) gradingStyle};
+            return new StudentAnnouncementsViewData
+                {
+                    GradingStyle = (int) gradingStyle,
+                    Items = StudentAnnouncementViewData.Create(items, attachments)
+                };
             //CalculateClassAvg(res, items);
-            res.Items = StudentAnnouncementViewData.Create(items, attachments);
-            return res;
         }
 
         public static StudentAnnouncementsViewData Create(AnnouncementComplex anouncement, IList<StudentAnnouncementDetails> items,
@@ -78,7 +80,6 @@ namespace Chalkable.Web.Models
             StudentId = studentAnnouncement.StudentId;
             IncludeInAverage = studentAnnouncement.IncludeInAverage;
         }
-
         public static ShortStudentAnnouncementViewData Create(StudentAnnouncement studentAnnouncement)
         {
             return new ShortStudentAnnouncementViewData(studentAnnouncement);
@@ -91,7 +92,7 @@ namespace Chalkable.Web.Models
         public StudentViewData StudentInfo { get; set; }
         public string Raw { get; set; }
         public IList<AnnouncementAttachmentViewData> Attachments { get; set; }
-
+        
         protected StudentAnnouncementViewData(StudentAnnouncement studentAnnouncement)
             : base(studentAnnouncement)
         {
@@ -114,6 +115,7 @@ namespace Chalkable.Web.Models
             {
                 StudentInfo = StudentViewData.Create(studentAnnouncement.Student),
                 Attachments = attachments.Select(x => AnnouncementAttachmentViewData.Create(x, true)).ToList(),
+
             };
         }
     }

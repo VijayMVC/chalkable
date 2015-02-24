@@ -12,6 +12,11 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.GradingClassStandardsItems), 'items',
 
-            chlk.models.id.GradingPeriodId, 'gradingPeriodId'
+            chlk.models.id.GradingPeriodId, 'gradingPeriodId',
+
+            [[chlk.models.grading.GradingClassStandardsItems]],
+            String, function getGPAvgToolTipText(item){
+                return item.getAvg() != null ? Msg.Avg + " " + item.getAvg().toFixed(2) : 'No grades yet';
+            }
         ]);
 });

@@ -28,9 +28,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Reminder), 'announcementReminders',
-
-            [ria.templates.ModelPropertyBind],
             Number, 'announcementTypeId', // make enum
 
             [ria.templates.ModelPropertyBind],
@@ -73,7 +70,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'attachmentsSummary',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(String), 'autoGradeApps',
+            Array, 'autoGradeApps',
 
             [ria.templates.ModelPropertyBind],
             Number, 'avg',
@@ -223,6 +220,13 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'ableDropStudentScore',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'ableToExempt'
+            Boolean, 'ableToExempt',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AppId, 'assessmentApplicationId',
+
+            String, function getStandardsUrlComponents() {
+                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+            }
         ]);
 });

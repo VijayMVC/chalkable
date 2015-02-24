@@ -17,6 +17,7 @@ NAMESPACE('chlk.models.apps', function () {
         CLAZZ: 5,
         SCHEDULE: 6,
         DISCIPLINE: 7,
+        PRACTICE: 8,
         UNKNOWN: 999
     });
 

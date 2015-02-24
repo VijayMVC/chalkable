@@ -11,7 +11,6 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
-REQUIRE('chlk.models.announcement.Reminder');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
@@ -45,12 +44,11 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.applicationsCount = SJX.fromValue(raw.applicationscount, Number);
                 this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
                 this.attachmentsSummary = SJX.fromValue(raw.attachmentsummary, Number);
-                this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, String);
+                this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, Object);
                 this.avgNumeric = SJX.fromValue(raw.avgnumeric, Number);
                 this.clazz = raw['class'] || null;
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
-                this.announcementReminders = SJX.fromArrayOfDeserializables(raw.announcementreminders, chlk.models.announcement.Reminder);
                 this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
                 this.gradesSummary = SJX.fromValue(raw.gradesummary, Number);
                 this.gradingStudentsCount = SJX.fromValue(raw.gradingstudentscount, Number);
@@ -104,6 +102,25 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
+                this.assessmentApplicationId = SJX.fromValue(raw.assessmentapplicationid, chlk.models.id.AppId);
+
+                if(this.autoGradeApps && this.autoGradeApps.length){
+                    var autoGradeApps = [];
+                    this.autoGradeApps.forEach(function(item){
+                        var app = autoGradeApps.filter(function(app){return app.id == item.application.announcementapplicationid})[0];
+                        if(!app){
+                            autoGradeApps.push({
+                                name: item.application.name,
+                                id: item.application.announcementapplicationid,
+                                students: [{id:item.studentid, grade:item.grade}]
+                            })
+                        }else{
+                            app.students.push({id:item.studentid, grade:item.grade});
+                        }
+                    });
+                    this.autoGradeApps = autoGradeApps;
+                }
+
             },
             function $(){
                 BASE();
@@ -124,12 +141,11 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'canAddStandard',
             Boolean, 'ableToRemoveStandard',
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
-            ArrayOf(chlk.models.announcement.Reminder), 'announcementReminders',
             String, 'applicationName',
             Number, 'applicationsCount',
             Number, 'attachmentsCount',
             Number, 'attachmentsSummary',
-            ArrayOf(String), 'autoGradeApps',
+            Array, 'autoGradeApps',
             Number ,'avgNumeric',
             Object, 'clazz',
             String, 'className',
@@ -212,6 +228,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'needDeleteButton',
             String, 'annRecipients',
             Boolean, 'ableEdit',
+            chlk.models.id.AppId, 'assessmentApplicationId',
 
             function prepareExpiresDateText(){
                 var now = getSchoolYearServerDate();

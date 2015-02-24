@@ -566,7 +566,8 @@ namespace Chalkable.StiImport.Services
                 Name = x.Name,
                 ParentStandardRef = x.ParentStandardID,
                 StandardSubjectRef = x.StandardSubjectID,
-                UpperGradeLevelRef = x.UpperGradeLevelID
+                UpperGradeLevelRef = x.UpperGradeLevelID,
+                AcademicBenchmarkId = x.AcademicBenchmarkId
             }).ToList();
             var toInsert = sts.ToDictionary(x=>x.Id);
             var sorted = TopologicSort(x => x.Id, x => x.ParentStandardRef, toInsert);

@@ -355,9 +355,9 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<Course>().Deleted == null)
                 return;
             var courses = context.GetSyncResult<Course>().Deleted.ToList();
-            var d = courses.ToDictionary(x => x.CourseID);
-            courses = TopologicSort(x => x.CourseID, x => x.SectionOfCourseID, d).Reverse().ToList();
-            var ids = courses.Select(x=>x.CourseID).ToList();
+            var d = courses.ToDictionary(x => x.CourseID, x=>ServiceLocatorSchool.ClassService.GetById(x.CourseID));
+            var toDelete = TopologicSort(x => x.Id, x => x.CourseRef, d).Reverse().ToList();
+            var ids = toDelete.Select(x => x.Id).ToList();
             ServiceLocatorSchool.ClassService.Delete(ids);
         }
 

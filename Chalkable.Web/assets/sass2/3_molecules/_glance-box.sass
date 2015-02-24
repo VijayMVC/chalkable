@@ -4,14 +4,10 @@
 
 .glance-box
   >DIV
-    @include transition-property("all")
-    @include transition-duration("0.2s")
-    @include transition-delay("0.3s")
+    +single-transition(all, 0.2s, linear, 0.3s)
 
     .details-container
-      @include transition-property("all")
-      @include transition-duration("0.2s")
-      @include transition-delay("0.3s")
+      +single-transition(all, 0.2s, linear, 0.3s)
       height: 80px
       overflow-y: auto
       opacity: 0

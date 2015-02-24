@@ -5,7 +5,6 @@ REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.PictureService');
 REQUIRE('chlk.services.ApplicationService');
-REQUIRE('chlk.services.FundsService');
 
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
@@ -53,9 +52,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
-
-        [ria.mvc.Inject],
-        chlk.services.FundsService, 'fundsService',
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
@@ -248,18 +244,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.apps.AppMarketPage, result);
         },
 
-        [[chlk.models.id.ClassId, String]],
-        function getSuggestedAppsAction(classId, commonCoreStandardCode) {
-            if(commonCoreStandardCode){
-                var result = this.appMarketService
-                    .getSuggestedApps(classId, null, commonCoreStandardCode)
-                    .attach(this.validateResponse_())
-                    .then(function(apps){
-                        return new chlk.models.apps.SuggestedAppsList(classId, null, apps)
-                    });
-                return this.UpdateView(this.getView().getCurrent().getClass(), result, 'apps');
-            }
-            return null;
+        [[chlk.models.id.ClassId, String, String]],
+        function getSuggestedAppsAction(classId, academicBenchmarkIds, standardUrlComponents_) {
+            var result = this.appMarketService
+                .getSuggestedApps(classId, null, academicBenchmarkIds)
+                .attach(this.validateResponse_())
+                .then(function(apps){
+                    return new chlk.models.apps.SuggestedAppsList(classId, null, apps, null, standardUrlComponents_)
+                });
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'apps');
         },
 
 
@@ -273,8 +266,10 @@ NAMESPACE('chlk.controllers', function (){
             ));
             var installedCount = 0;
             installedForGroups = installedForGroups.map(function(item){
-                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL && this.userIsAdmin())
-                    item.setDescription(Msg.Whole_School);
+                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL){
+                    item.setId(new chlk.models.id.AppInstallGroupId('all'));
+                }
+
                 if (item.isInstalled()) ++installedCount;
 
                 if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
@@ -396,7 +391,12 @@ NAMESPACE('chlk.controllers', function (){
                 } break;
                 case 'getAppPrice': {
                     var appInstallArgs = this.prepareAppTotalPriceCallParams_(appInstallData);
-                    var res = this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs);
+
+                    var res;
+                    if (!appInstallData.isEmpty())
+                        res = this.appMarketService.getApplicationTotalPrice.apply(null, appInstallArgs);
+                    else
+                        res = new ria.async.DeferredData(new chlk.models.apps.AppTotalPrice.$createEmpty());
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res, 'getAppPrice');
                 } break;
             }

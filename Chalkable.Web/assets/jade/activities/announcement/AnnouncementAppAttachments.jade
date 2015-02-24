@@ -24,7 +24,7 @@ mixin AnnouncementFormApplicationItem(app, i)
         .wrapper
             +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
             .title= app.getName()
-            +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned) Open
+            +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned, null, self.getStandardsUrlComponents()) Open
 
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
@@ -37,7 +37,10 @@ items = self.getSortedAppsAndAttachments();
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement && self.isStudyCenterEnabled()
-            +ActionButton('announcement', 'attachApp', self.getId(), self.getClassId())#add-application.simple-gray-button Attach App
+            +ActionButton('announcement', 'attachApp', self.getId(), self.getClassId(), self.getStandardsUrlComponents())#add-application.simple-gray-button Attach App
+            br
+            if self.getAssessmentApplicationId()
+                +ActionButton('apps', 'tryToAttach', self.getId(), self.getAssessmentApplicationId(), self.getStandardsUrlComponents())#add-assesment.simple-gray-button Assessment
         .simple-gray-button.file Attach File
             +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each item, i in items

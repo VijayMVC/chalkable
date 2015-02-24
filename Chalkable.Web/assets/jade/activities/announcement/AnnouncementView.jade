@@ -86,11 +86,22 @@ mixin Glue_()
                     )
 
         if self.getUserRole().isStudent()
-            +CloseOpen('My Attachments')
-                .student-attachments.content
-                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
-                        userRole = self.getUserRole()
-                    )
+            -var myAttachments = (self.getAnnouncementAttachments() || []).filter(function (_) { return _.isOwner(); });
+            if self.isGradable() || myAttachments.length
+                +CloseOpen('My Attachments')
+                    #attachments-block.student-attachments.content
+                        +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
+                            userRole = self.getUserRole()
+                        )
+            if self.getStandards() && self.getStandards().length > 0
+                +CloseOpen('Practice & Improve')
+                    .student-attachments.content
+                        .announcement-item.attachment
+                            .wrapper
+                                img(src="")
+                                .title Study Center
+                                +ActionButton('studycenter', 'startPractice', self.getStandards().map(function (_) { return _.getStandardId(); })) Start Practice
+
 
         -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
         if showPostQuestion || self.getAnnouncementQnAs().length
@@ -101,6 +112,15 @@ mixin Glue_()
 
         if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
             +CloseOpen('Grades')
+                .auto-grades
+                    each app in self.getAutoGradeApps()
+                        .item(data-id=app.id)
+                            -var count = app.students.length
+                            .title #{app.name} posted #{count} #{count > 1 ? "grades" : "grade"}
+                            .buttons: +ActionButton('', '').green-button.view-auto-grades View
+                                +ActionButton('announcement', 'applyAutoGrades', app.id).blue-button.accept-auto-grades.accept-decline Accept
+                                +ActionButton('announcement', 'discardAutoGrades', app.id).negative-button.decline-auto-grades.accept-decline Decline
+
                 div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
                     +Hidden('maxScore', self.getMaxScore())#max-score
                     +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
@@ -114,5 +134,6 @@ mixin Glue_()
                         maxScore = self.getMaxScore(),
                         ableDropStudentScore = self.isAbleDropStudentScore(),
                         ableToExempt = self.isAbleToExempt(),
-                        gradable = self.isGradable()
+                        gradable = self.isGradable(),
+                        standards = self.getStandards()
                     )

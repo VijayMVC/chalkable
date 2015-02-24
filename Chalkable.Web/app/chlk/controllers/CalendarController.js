@@ -8,7 +8,6 @@ REQUIRE('chlk.activities.calendar.announcement.DayPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthDayPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekBarPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekDayPopUp');
-REQUIRE('chlk.activities.calendar.announcement.AdminDayCalendarPage');
 
 REQUIRE('chlk.models.calendar.announcement.Month');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
@@ -93,27 +92,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, String]],
-        function dayAdminAction(date_, gradeLevels_){
-            var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
-            var result = this.calendarService
-                .getAdminDay(date_, gradeLevels_)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    var glsInputData = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevels_);
-                    data.setGradeLevelsInputData(glsInputData);
-                    return data;
-                }, this);
-            return this.PushOrUpdateView(chlk.activities.calendar.announcement.AdminDayCalendarPage, result);
-        },
-
-        [chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, String]],
-        function weekAdminAction(date_, gradeLevels_){
-            return this.week(date_, null, gradeLevels_);
-        },
-
-        [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
         function weekAction(classId_, date_){
             return this.week(date_, classId_);
@@ -132,16 +110,9 @@ NAMESPACE('chlk.controllers', function (){
                     var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     model.setTopData(topModel);
                     model.setGradeLevelsForToolBar(glsInputData);
-                    model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
                 }, this);
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.WeekPage, result);
-        },
-
-        [chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, String]],
-        function monthAdminAction(date_, gradeLevels_){
-            return this.month(date_, null, gradeLevels_);
         },
 
         [chlk.controllers.SidebarButton('calendar')],
@@ -164,7 +135,6 @@ NAMESPACE('chlk.controllers', function (){
                     var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     model.setTopData(topModel);
                     model.setGradeLevelsForToolBar(glsInputData);
-                    model.setAdmin(this.userIsAdmin());
                     return new ria.async.DeferredData(model);
                 }, this);
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.MonthPage, result);

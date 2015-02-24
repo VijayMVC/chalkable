@@ -35,7 +35,6 @@ mixin MyAppsIconLink(app, editable)
         .items
             +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn.pressed My Apps
             +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
-            //+ActionLink('funds', 'view').toolbar-btn App Funds
             //+ActionForm('', '')
                 +SearchBox(chlk.services.AppMarketService, "getMyAppsByFilter",
                 chlk.templates.apps.MyAppsSearchBoxTpl)#app-market-searchbox.market-search-box(name="appMarketSearch", triggerBtnId="app-market-search-btn")

@@ -13,7 +13,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         'AnnouncementGradingPartTpl', EXTENDS(chlk.templates.announcement.StudentAnnouncementsTpl), [
             Boolean, 'readonly',
 
-            ArrayOf(String), 'autoGradeApps',
+            Array, 'autoGradeApps',
 
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
 
@@ -25,6 +25,8 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Boolean, 'ableToExempt',
 
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
             ArrayOf(chlk.models.announcement.StudentAnnouncement), function getSortedStudentAnnouncements(){
                 var studentAnnouncement = this.getItems().slice(), res=[];
                 studentAnnouncement.forEach(function(item){
@@ -34,6 +36,24 @@ NAMESPACE('chlk.templates.announcement', function () {
                         res.push(item);
                 });
                 return res;
+            },
+
+            String, function getStandardsUrlComponents() {
+                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+            },
+
+            function getAppGrade(announcementApplicationId, studentId){
+                var app = this.getAutoGradeApps().filter(function(item){return item.id == announcementApplicationId})[0];
+
+                if(!app)
+                    return null;
+
+                var student = app.students.filter(function(item){return item.id == studentId})[0];
+
+                if(!student)
+                    return null;
+
+                return student.grade;
             }
         ])
 });

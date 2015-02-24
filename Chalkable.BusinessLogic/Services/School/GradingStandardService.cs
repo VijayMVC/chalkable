@@ -13,9 +13,8 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface  IGradingStandardService
     {
-        IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId);
-        GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note);
-        
+        IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true); 
+        GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note);  
     }
 
     public class GradingStandardService : SisConnectedService, IGradingStandardService
@@ -24,19 +23,13 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId)
+        public IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
         {
-            if(Context.Role == CoreRoles.TEACHER_ROLE)
+            if (reCalculateStandards) 
                 ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
-            var res = new List<GradingStandardInfo>();
-            foreach (var standardScore in standardScores)
-            {
-                var standard = standards.First(x => x.Id == standardScore.StandardId);
-                res.Add(GradingStandardInfo.Create(standardScore, standard));
-            }
-            return res;
+            return GradingStandardInfo.Create(standardScores, standards);
         }
         
         public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note)

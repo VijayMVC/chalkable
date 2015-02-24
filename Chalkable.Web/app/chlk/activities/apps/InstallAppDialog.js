@@ -7,22 +7,21 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.InstallAppDialogTpl)],
         [chlk.activities.lib.ModelWaitClass('install-app-dialog-model-wait dialog-model-wait')],
-        [chlk.activities.lib.PartialUpdateClass('app-market-install')],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.InstallAppDialogTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.InstallAppPriceTpl, 'getAppPrice', '.calculated-price', ria.mvc.PartialUpdateRuleActions.Replace)],
 
         'InstallAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
-
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
-                BASE(model, msg_);
                 if(msg_ == 'getAppPrice'){
                     var installGroups = this.dom.find('input[install-group]:checked:not(:disabled)');
                     var isInstallBtnEnabled = installGroups.count() > 0;
                     if(isInstallBtnEnabled)
                         this.enableInstallBtn_();
                 }
+                BASE(model, msg_);
+
             },
 
             VOID, function prepareAppInstallPostData_(){

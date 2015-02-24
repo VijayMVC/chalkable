@@ -41,7 +41,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult SuggestedApps(int classId, StringList standardsCodes, int markingPeriodId, int? start, int? count)
+        public ActionResult SuggestedApps(int classId, GuidList abIds, int markingPeriodId, int? start, int? count)
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -49,18 +49,18 @@ namespace Chalkable.Web.Controllers
             var cnt = count ?? int.MaxValue;
             var appInstalls = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstalls.GroupBy(x=>x.ApplicationRef).Select(x => x.Key).Distinct().ToList();
-            var applications = MasterLocator.ApplicationService.GetSuggestedApplications(standardsCodes.ToList(), installedAppsIds, st, cnt);
+            var applications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, st, cnt);
             var hasMyAppsDic = applications.ToDictionary(app=> app.Id, app => MasterLocator.ApplicationService.HasMyApps(app));
             var res = InstalledApplicationViewData.Create(appInstalls, Context.PersonId.Value, applications, hasMyAppsDic);
             return Json(res);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult SuggestedAppsForAttach(int classId, StringList standardsCodes, int markingPeriodId, int? start, int? count)
+        public ActionResult SuggestedAppsForAttach(int classId, GuidList abIds, int markingPeriodId, int? start, int? count)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            return Json(ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, classId, standardsCodes, markingPeriodId, start, count));
+            return Json(ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, classId, abIds, markingPeriodId, start, count));
         }
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

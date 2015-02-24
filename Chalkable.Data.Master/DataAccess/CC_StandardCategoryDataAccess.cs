@@ -8,7 +8,7 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Data.Master.DataAccess
 {
-    public class CC_StandardCategoryDataAccess : DataAccessBase<CC_StandardCategory, Guid>
+    public class CC_StandardCategoryDataAccess : DataAccessBase<CommonCoreStandardCategory, Guid>
     {
         public CC_StandardCategoryDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {

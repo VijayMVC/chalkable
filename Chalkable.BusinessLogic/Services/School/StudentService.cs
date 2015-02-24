@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
@@ -164,20 +165,29 @@ namespace Chalkable.BusinessLogic.Services.School
             classes = classes.Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
             var inowStExpolorer = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(schoolYearId, student.Id, date);
             var standards = ServiceLocator.StandardService.GetStandards(null, null, null);
+
             IList<int> importanActivitiesIds = new List<int>();
             IList<AnnouncementComplex> announcements = new List<AnnouncementComplex>();
-            if (inowStExpolorer != null && inowStExpolorer.Activities != null && inowStExpolorer.Activities.Any())
+            IList<StandardScore> inowStandardScores = new List<StandardScore>();
+            IList<StudentAverage> mostRecentAverages = new List<StudentAverage>();
+            if (inowStExpolorer != null)
             {
-                foreach (var classDetailse in classes)
+                mostRecentAverages = inowStExpolorer.Averages.Where(x => x.IsGradingPeriodAverage && (x.HasGrade)).OrderBy(x => x.GradingPeriodId).ToList();
+                inowStandardScores = inowStExpolorer.Standards.ToList();
+                if (inowStExpolorer.Activities != null && inowStExpolorer.Activities.Any())
                 {
-                    var activity = inowStExpolorer.Activities.Where(x => x.SectionId == classDetailse.Id)
-                                                .OrderByDescending(x => x.MaxScore * x.WeightMultiplier + x.WeightAddition).FirstOrDefault();
-                    if (activity == null) continue;
-                    importanActivitiesIds.Add(activity.Id);
+                    foreach (var classDetailse in classes)
+                    {
+                        var activity = inowStExpolorer.Activities.Where(x => x.SectionId == classDetailse.Id)
+                                                    .OrderByDescending(x => x.MaxWeight)
+                                                    .FirstOrDefault();
+                        if (activity == null) continue;
+                        importanActivitiesIds.Add(activity.Id);
+                    }
+                    announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(importanActivitiesIds));
                 }
-                announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(importanActivitiesIds));
             }
-            return StudentExplorerInfo.Create(student, classes, inowStExpolorer, announcements, standards);
+            return StudentExplorerInfo.Create(student, classes, mostRecentAverages, inowStandardScores, announcements, standards);
         }
     }
 }

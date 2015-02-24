@@ -31,7 +31,7 @@
 
     .title-text
       line-height: 31px
-      width: 250px
+      display: inline-block
 
     BUTTON
       vertical-align: top
@@ -94,7 +94,7 @@
     right: 15px
     bottom: 80px
     opacity: .5
-    +transition(opacity, .3s, easy-in-out)
+    +transition(opacity .3s ease-in-out)
     cursor: pointer
 
     &:hover
@@ -109,6 +109,7 @@
     left: 0
     right: 0
     background: #fff
+    display: none
     //border: 1px solid #000
     margin-top: -80px
 
@@ -182,19 +183,3 @@
       top: -7px
       left: 30%
       margin-left: -7px
-
-.choose-class
-  width: 210px
-  height: 40px
-  background: image_url('images2/announcement/choose-class.png')
-
-.choose-type
-  top: 132px
-  width: 205px
-  height: 45px
-  background: image_url('images2/announcement/choose-type.png')
-
-.choose-type, .choose-class
-  position: absolute
-  left: 271px
-  display: block

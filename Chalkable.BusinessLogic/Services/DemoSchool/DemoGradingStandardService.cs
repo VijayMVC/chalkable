@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId)
+        public IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
         {
             var standardScores = Storage.StiStandardScoreStorage.GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);

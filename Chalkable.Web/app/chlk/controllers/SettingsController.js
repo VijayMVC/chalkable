@@ -1,7 +1,6 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.activities.settings.DashboardPage');
 REQUIRE('chlk.activities.settings.TeacherPage');
-REQUIRE('chlk.activities.settings.AdminPage');
 REQUIRE('chlk.activities.settings.PreferencesPage');
 REQUIRE('chlk.activities.settings.DeveloperPage');
 REQUIRE('chlk.activities.settings.StudentPage');
@@ -70,17 +69,6 @@ NAMESPACE('chlk.controllers', function (){
             function dashboardTeacherAction() {
                 var teacherSettings = new chlk.models.settings.TeacherSettings(this.getCurrentPerson().getId());
                 return this.PushView(chlk.activities.settings.TeacherPage, ria.async.DeferredData(teacherSettings));
-            },
-
-            [chlk.controllers.AccessForRoles([
-                chlk.models.common.RoleEnum.ADMINGRADE,
-                chlk.models.common.RoleEnum.ADMINEDIT,
-                chlk.models.common.RoleEnum.ADMINVIEW
-            ])],
-            [chlk.controllers.SidebarButton('settings')],
-            function dashboardAdminAction() {
-                var adminSettings = new chlk.models.settings.SchoolPersonSettings(this.getCurrentPerson().getId());
-                return this.PushView(chlk.activities.settings.AdminPage, ria.async.DeferredData(adminSettings));
             },
 
             [chlk.controllers.AccessForRoles([

@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 res = new PersonDataAccess(uow, Context.SchoolLocalId)
-                    .GetPersonDetails(id, Context.PersonId ?? 0, Context.Role.Id);
+                    .GetPersonDetails(id);
             }
             var userId = GetSisUserId(id);
             var user = ServiceLocator.ServiceLocatorMaster.UserService.GetBySisUserId(userId, Context.DistrictId);

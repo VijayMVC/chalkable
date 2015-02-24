@@ -57,6 +57,12 @@ NAMESPACE('chlk.models.common', function () {
                     this.setRoleName(roleName_);
             },
 
+            Boolean, function isSysAdmin(){
+                var roleEnums = chlk.models.common.RoleEnum;
+                var roleId = this.getRoleId();
+                return roleId == roleEnums.SYSADMIN;
+            },
+
             Boolean, function isAdmin(){
                 var roleEnums = chlk.models.common.RoleEnum;
                 var roleId = this.getRoleId();

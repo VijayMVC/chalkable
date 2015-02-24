@@ -117,7 +117,7 @@ mixin DisplayTotalPoints(model)
                             data-gradable= gradable,
                             data-max-score= maxScore,
                             data-canputonlyzero= canPutOnlyZeroScore.toString(),
-                            class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 1 ? " top-popup" : "") + (studentItems.length == 1 ? " one" : "")
+                            class='item-' + info.getAnnouncementId().valueOf() + '-' + info.getStudentId() + (gradable ? ' gradable' : '') + (i >= studentItems.length - 2 ? " top-popup" : "") + (studentItems.length == 1 ? " one" : "")
                         ).dotted-h.grade-value
                             +TeacherClassGradingGridSummaryCell(info, maxScore, gradable, canPutOnlyZeroScore)
                     div(class='avg-' + announcement.getId().valueOf()).dotted-h.grade-value=self.getModel().displayAverages(announcement.calculateGradesAvg(2))

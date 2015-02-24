@@ -47,6 +47,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0,
+                                                     int count = Int32.MaxValue)
+        {
+            throw new NotImplementedException();
+        }
+
         public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, Services.Master.AppFilterMode? filterMode, Services.Master.AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
         {
             var query = new ApplicationQuery
@@ -160,11 +166,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Context.Role.Id == CoreRoles.STUDENT_ROLE.Id && application.HasStudentMyApps;
         }
 
-        public IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow).GetSuggestedApplications(standardsCodes, installedAppsIds, start, count);
+                return new ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
             }
         }
 
@@ -175,6 +181,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             {
                 return new ApplicationDataAccess(uow).GetByIds(ids);
             }
+        }
+        
+        public Application GetPracticeGradesApplication()
+        {
+            var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
+        }
+
+
+        public Application GetAssessmentApplication()
+        {
+            var appId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
         }
     }
 

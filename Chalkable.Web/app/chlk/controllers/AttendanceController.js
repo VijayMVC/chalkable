@@ -7,7 +7,6 @@ REQUIRE('chlk.services.MarkingPeriodService');
 
 REQUIRE('chlk.activities.attendance.SummaryPage');
 REQUIRE('chlk.activities.attendance.ClassListPage');
-REQUIRE('chlk.activities.attendance.AdminAttendanceSummaryPage');
 REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.classes.ClassProfileAttendanceListPage');
 REQUIRE('chlk.activities.attendance.SeatingChartPage');
@@ -64,56 +63,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[Boolean, String, Number, chlk.models.common.ChlkDate, String]],
-        function summaryAdminAction(update_, gradeLevels_, currentPage_, date_, types_) {
-            var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD, null), //TODO: use method getCurrentMarkingPeriod
-                currentSchoolYearId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null), //TODO: use method getCurrentSchoolYearId
-                fromMarkingPeriodId = markingPeriod.getId(),
-                toMarkingPeriodId = markingPeriod.getId();
-            var res = ria.async.wait([
-                    this.attendanceService.getAdminAttendanceSummary(true, true, true, gradeLevels_, date_, fromMarkingPeriodId, toMarkingPeriodId),
-                    this.markingPeriodService.list(currentSchoolYearId)
-                ])
-                .attach(this.validateResponse_())
-                .then(function(result){
-                    var model = result[0];
-                    model.setMarkingPeriods(result[1]);
-                    if(currentPage_)
-                        model.setCurrentPage(currentPage_);
-                    if(types_)
-                        model.setAttendanceTypes(types_);
-                    return this.prepareAttendanceSummaryModel(model, gradeLevels_, date_, fromMarkingPeriodId, toMarkingPeriodId);
-                }, this);
-            return /*!update_ && this.PushView(chlk.activities.attendance.AdminAttendanceSummaryPage, res); */update_ ?
-                this.UpdateView(chlk.activities.attendance.AdminAttendanceSummaryPage, res) :
-                this.PushView(chlk.activities.attendance.AdminAttendanceSummaryPage, res);
-        },
-
-        [[chlk.models.attendance.AdminAttendanceSummary]],
-        function updateSummaryAdminAction(model) {
-            var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD, null);
-            var renderNow = model.isRenderNow(),
-                renderDay = model.isRenderDay(),
-                renderMp = model.isRenderMp(),
-                gradeLevelsIds = model.getGradeLevelsIds(),
-                nowDateTime = model.getNowDateTime(),
-                fromMarkingPeriodId = model.getFromMarkingPeriodId() || markingPeriod.getId(),
-                toMarkingPeriodId = model.getToMarkingPeriodId() || markingPeriod.getId(),
-                startDate = model.getStartDate(),
-                endDate = model.getEndDate();
-            var res = this.attendanceService
-                .getAdminAttendanceSummary(renderNow, renderDay, renderMp, gradeLevelsIds, nowDateTime,
-                    fromMarkingPeriodId, toMarkingPeriodId, startDate, endDate)
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    var result =  this.prepareAttendanceSummaryModel(model, gradeLevelsIds, nowDateTime,
-                        fromMarkingPeriodId, toMarkingPeriodId, startDate, endDate);
-                    return renderNow ? model.getNowAttendanceData() : (renderDay ? model.getAttendanceByDayData() : model.getAttendanceByMpData())
-                }, this);
-            return this.UpdateView(chlk.activities.attendance.AdminAttendanceSummaryPage, res);
-        },
-
-        [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.AttendanceList]],
         function setAttendanceForListAction(model){
             if(model.getClassIds()){
@@ -146,25 +95,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'savedChart');
         },
 
-        [[chlk.models.attendance.AdminAttendanceSummary, String, chlk.models.common.ChlkDate, chlk.models.id.MarkingPeriodId,
-                chlk.models.id.MarkingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-        chlk.models.attendance.AdminAttendanceSummary,
-            function prepareAttendanceSummaryModel(model, gradeLevelsIds_, nowDateTime_, fromMarkingPeriodId, toMarkingPeriodId, startDate_, endDate_){
-                var gradeLevels = this.gradeLevelService.getGradeLevelsForTopBar(true);
-                var topModel = new chlk.models.grading.GradeLevelsForTopBar(gradeLevels, gradeLevelsIds_);
-                model.setTopData(topModel);
-                model.setFromMarkingPeriodId(fromMarkingPeriodId);
-                model.getAttendanceByDayData().setDate(nowDateTime_ ? nowDateTime_ : new chlk.models.common.ChlkSchoolYearDate());
-                model.setToMarkingPeriodId(toMarkingPeriodId);
-                if(gradeLevelsIds_)
-                    model.setGradeLevelsIds(gradeLevelsIds_);
-                if(startDate_)
-                    model.setStartDate(startDate_);
-                if(endDate_)
-                    model.setEndDate(endDate_);
-                return model;
-        },
-
         VOID, function addStudentClickAction(){
 
         },
@@ -177,7 +107,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     model.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
-                    model.setAbleEdit(this.userIsAdmin() || this.userInRole(chlk.models.common.RoleEnum.TEACHER));
+                    model.setAbleEdit(this.userInRole(chlk.models.common.RoleEnum.TEACHER));
                     if(controller_)
                         model.setController(controller_);
                     if(action_)
@@ -248,8 +178,7 @@ NAMESPACE('chlk.controllers', function (){
             topModel.setSelectedItemId(classId);
             model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
             model.setAbleChangeReasons(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
-                || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN)
-                || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE));
+                || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN));
             model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN));
             model.setTopData(topModel);
@@ -388,7 +317,6 @@ NAMESPACE('chlk.controllers', function (){
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN),
                         this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN)
-                            || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                     );
                     this.getContext().getSession().set(ChlkSessionConstants.ATTENDANCE_PAGE_DATA, model);
                     return model;

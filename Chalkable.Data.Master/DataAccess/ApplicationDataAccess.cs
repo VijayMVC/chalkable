@@ -272,19 +272,18 @@ namespace Chalkable.Data.Master.DataAccess
         }
 
 
-        public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<string> standardsCodes)
+        public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<Guid> standardsIds)
         {
             SimpleDelete<ApplicationStandard>(new AndQueryCondition{{ApplicationStandard.APPLICATION_REF_FIELD, id}});
             IList<ApplicationStandard> applicationStandards = new List<ApplicationStandard>();
-            if (standardsCodes != null)
+            if (standardsIds != null)
             {
-                foreach (var standardCode in standardsCodes)
+                foreach (var standardId in standardsIds)
                 {
-                    if (string.IsNullOrEmpty(standardCode)) continue;
                     applicationStandards.Add(new ApplicationStandard
                     {
                         ApplicationRef = id,
-                        StandardCode = standardCode
+                        StandardRef = standardId
                     });
                 }
             }
@@ -331,14 +330,14 @@ namespace Chalkable.Data.Master.DataAccess
             return PreparePicturesData(res);
         }
 
-        public IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
             IDictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"start", start},
                     {"count", count},
                     {"installedAppsIds", installedAppsIds != null ? installedAppsIds.Select(x=> x.ToString()).JoinString(",") : null},
-                    {"standardsCodes", standardsCodes != null ? standardsCodes.JoinString(",") : null}
+                    {"academicBenchmarkIds", abIds != null ? abIds.JoinString(",") : null}
                 };
             IList<Application> res;
             using (var reader = ExecuteStoredProcedureReader("spGetSuggestedApplications", parameters))

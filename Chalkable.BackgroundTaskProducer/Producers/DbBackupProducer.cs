@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Data.Master.Model;
 
@@ -16,7 +15,7 @@ namespace Chalkable.BackgroundTaskProducer.Producers
         {
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             var data = new DatabaseBackupRestoreTaskData(DateTime.UtcNow.Ticks, true);
-            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString());
+            sl.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.BackupDatabases, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
         }
     }
 }

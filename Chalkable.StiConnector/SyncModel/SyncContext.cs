@@ -116,7 +116,9 @@ namespace Chalkable.StiConnector.SyncModel
             {
                 if (Rows != null)
                     return Rows;
-                return Inserted;
+                if (Inserted != null)
+                    return Inserted;
+                return new T[0];
             }
         }
 

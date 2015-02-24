@@ -21,7 +21,6 @@ using ScheduledTimeSlotVariation = Chalkable.StiConnector.SyncModel.ScheduledTim
 using School = Chalkable.StiConnector.SyncModel.School;
 using SchoolOption = Chalkable.StiConnector.SyncModel.SchoolOption;
 using Staff = Chalkable.StiConnector.SyncModel.Staff;
-using StaffSchool = Chalkable.StiConnector.SyncModel.StaffSchool;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StandardSubject = Chalkable.StiConnector.SyncModel.StandardSubject;
 using Student = Chalkable.StiConnector.SyncModel.Student;
@@ -512,7 +511,8 @@ namespace Chalkable.StiImport.Services
                 Name = x.Name,
                 ParentStandardRef = x.ParentStandardID,
                 StandardSubjectRef = x.StandardSubjectID,
-                UpperGradeLevelRef = x.UpperGradeLevelID
+                UpperGradeLevelRef = x.UpperGradeLevelID,
+                AcademicBenchmarkId = x.AcademicBenchmarkId
             }).ToList();
             ServiceLocatorSchool.StandardService.EditStandard(sts);
         }

@@ -58,13 +58,8 @@ NAMESPACE('chlk.activities.apps', function () {
                 var rating = this.dom.find('[name=newRating]:checked').getValue();
                 if (!rating){
                     this.dom.find('.rating-hint').show();
-                    return;
+                    return false;
                 }
-                var reviewText = this.dom.find('.review-text').getValue() || "";
-                if (reviewText.length == 0)
-                    return;
-                this.dom.find('#submit-review-form').trigger('submit');
-                //todo: disable button and submit form
             },
 
             [ria.mvc.DomEventBind('click', '.review-link')],

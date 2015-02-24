@@ -1,11 +1,9 @@
-mixin AppAttachmentBlock(item, pictureHref, i)
-    div(attributes)
-        .wrapper
-            .title= item.getName()
-            +LoadingImage(src=pictureHref, id="loading-image-" + i)
-            block
+mixin AppAttachmentBlock_(item, pictureHref, i)
+    .wrapper
+        .title= item.getName()
+        +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        block
 
-autoCount = self.getAutoGradeCount()
 studentAnnouncements = self.getItems()
 gradingStyle = self.getGradingStyle()
 getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
@@ -14,11 +12,9 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
     +RenderWith(self.getModel(), chlk.templates.announcement.StudentAnnouncementsTpl)
 +ListView(self)().grades-individual.people-list.grading
     items = self.getSortedStudentAnnouncements()
-    if autoCount > 0
-        div(class=(autoCount == 1 ? 'double' : '')).grid-modal
-            div Accept auto-grades from #{self.getAutoGradeApps().length == 1 ? self.getAutoGradeApps()[0] : 'apps'}#
     each item, i in items
         readonly = self.isReadonly()
+        student = item.getStudentInfo()
         ablePutOnlyZero = !self.getSchoolOptions().isAllowScoreEntryForUnexcused() && item.isUnExcusedAbsent()
         .row(class=(item.getState() == 0 ? 'z-0' : 'z-10') + (self.isGradable() && !readonly ? '' : ' readonly') + (item.needStrikeThrough() ? ' dropped-value' : ''), index=i).fixed-bg
             +Hidden('readonly', readonly)
@@ -26,7 +22,6 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
             .top-content(id = "top-content-" + item.getStudentInfo().getId().valueOf())
                 value = item.getGradeValue()
                 lbl = 'A - F'
-                student = item.getStudentInfo();
                 owner = self.getOwner()
                 alertsEnum = chlk.models.grading.AlertsEnum
                 +ActionForm('announcement', 'updateAnnouncementGrade')(
@@ -46,7 +41,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                                     div(data-tooltip=Msg.Withdrawn).withdrawn
                         if !readonly
                             .grade-options.selected
-                                +ActionLink('grading', 'getGradeComments').comment-text= (item.getComment() ? Msg.Commented : Msg.Comment)
+                                +ActionLink('grading', 'getGradeCommentsFromView').comment-text= (item.getComment() ? Msg.Commented : Msg.Comment)
                                 .small-pop-up.popup-bubble.top
                                     +TextArea(name="comment", maxlength=500, data-comment=item.getComment(), placeholder=Msg.Enter_when_done).comment-input.with-grid-focus= item.getComment()
                                     .grading-comments-list
@@ -66,20 +61,21 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
         .attachments-container.z-10.sub-row(class = ((item.getAttachments().length || self.getApplications().length) ? 'with-data' : '') )
             .attachments-container-2
                 each attachment, i in item.getAttachments()
-                    if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
-                        .announcement-item.attachment
+                    .announcement-item.attachment
+                        if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
                             .wrapper
                                 A(href=attachment.getUrl()).download-link Download
                                 .title=attachment.getName()
-                    else
-                        +AppAttachmentBlock(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
-                            .wrapper
+                        else
+                            +AppAttachmentBlock_(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
                                 +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open
 
                 each app, i in self.getApplications()
-                    isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
-                    +AppAttachmentBlock(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
-                        .wrapper
-                            +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId()) Open
-
+                    -var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+                        .announcement-item.attachment
+                            +AppAttachmentBlock_(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
+                                +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId(), self.getStandardsUrlComponents()) Open
+                            -var grade = self.getAppGrade(app.getAnnouncementApplicationId(), student.getId())
+                            if grade
+                                .app-auto-grade Auto grade #{grade}
 

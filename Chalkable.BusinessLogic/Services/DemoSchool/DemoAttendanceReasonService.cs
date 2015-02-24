@@ -34,13 +34,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.AttendanceReasonStorage.Update(reasons);
         }
 
-        public void Delete(int id)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.AttendanceReasonStorage.Delete(id);
-        }
-
         public void Delete(IList<int> ids)
         {
             if (!BaseSecurity.IsDistrict(Context))

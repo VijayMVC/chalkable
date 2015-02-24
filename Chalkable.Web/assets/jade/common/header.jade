@@ -6,6 +6,8 @@ if chlk.templates.search && chlk.templates.search.SiteSearch
             withButton = true)
         label(for="siteSearch")#search-glass
 
-+ActionButton('notification', 'list-new').blue.notifications-link &nbsp;
+
+if chlk.controllers.NotificationController
+    +ActionButton('notification', 'list-new').blue.notifications-link &nbsp;
 
 +Logout('account', 'logout', self.getCurrentPerson().getDisplayName())

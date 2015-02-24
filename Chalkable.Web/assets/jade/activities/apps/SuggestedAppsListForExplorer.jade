@@ -1,13 +1,15 @@
 mixin AppItem(app)
    div.app-icon-link-container
        -var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
-       +ActionLink('apps', 'openSuggestedAppFromExplorer', app.getId(), self.getClassId(), app.getUrl(), app.getMyAppsUrl(), isBanned).app-link
+       +ActionLink('apps', 'openSuggestedAppFromExplorer', app.getId(), self.getClassId(), app.getUrl(), app.getMyAppsUrl(), isBanned, self.getStandardUrlComponents()).app-link
            div(data-tooltip='').icon
                pictureUrl = self.getAppPictureURL(app.getBigPictureId(), 170, 110)
            img(src=pictureUrl)
+           h2(data-tooltip = app.getName(), data-tooltip-type = "overflow")=app.getName()
 
 div
-    h3 Recommended apps:
+    if self.getSuggestedApps().length
+        h3 Recommended apps:
 
     +LeftRightToolbar().suggester-apps-tb.no-animation
         each app, i in self.getSuggestedApps()

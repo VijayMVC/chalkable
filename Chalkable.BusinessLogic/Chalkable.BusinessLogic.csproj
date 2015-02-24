@@ -119,8 +119,10 @@
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\FinalGradeInfo.cs" />
     <Compile Include="Model\GradingStandardInfo.cs" />
+    <Compile Include="Model\PracticeGradeDetailedInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\SeatingChartInfo.cs" />
+    <Compile Include="Model\StandardDetailsInfo.cs" />
     <Compile Include="Model\StudentCommentInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
     <Compile Include="Model\StudentSummaryInfo.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAutoGradeStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPersonBalanceStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPersonEmailStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoScheduledTimeSlotStorage.cs" />

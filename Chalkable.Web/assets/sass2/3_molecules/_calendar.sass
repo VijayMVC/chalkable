@@ -3,7 +3,6 @@
   border-radius: 5px
   border: 1px solid #c8c7c3
   background: #fff
-  //overflow: hidden
 
   .day-calendar-list-item
     >DIV
@@ -95,12 +94,16 @@
       display: table
       width: 100%
       border-collapse: collapse
+      overflow: hidden
 
-    .items > A, .week-day
+    .items > .row
+      display: table-row
+
+    .items > .row > A, .week-day
       width: 100 / 7 * 1%
 
-    .items > A
-      display: inline-block
+    .items > .row > A
+      display: table-cell
       height: 116px
       text-decoration: none
       margin-left: -1px
@@ -108,6 +111,9 @@
       border: solid #ededed
       border-width: 0 1px 1px 0
       overflow: hidden
+
+      &.disabled:not(.not-current-month)
+        color: #56554f !important
 
       &:hover
         background-color: transparentize(#000, .95)
@@ -136,7 +142,7 @@
         line-height: 116px
 
       &.not-current-month
-        color: #d0d0ce
+        color: #d0d0ce !important
 
     .today
       border-color: #13495c
@@ -244,7 +250,7 @@
         position: absolute
         left: 5px
         top: 50%
-        transform: translate(0, -50%)
+        +transform(translate(0, -50%))
 
       .p-container
         margin: 0 5px 0 55px

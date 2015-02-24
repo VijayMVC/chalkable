@@ -32,17 +32,37 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.CCStandardCategoryId]],
-            ria.async.Future, function getCommonCoreStandards(standardCategoryId_) {
-                return this.get('Standard/GetCommonCoreStandards.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {
-                    standardCategoryId: standardCategoryId_ && standardCategoryId_.valueOf()
+            [[ArrayOf(chlk.models.id.StandardId)]],
+            ria.async.Future, function getStandardsList(ids) {
+                return this.get('Standard/GetStandardsByIds.json', ArrayOf(chlk.models.standard.Standard), {
+                    ids: this.arrayToIds(ids)
+                }).then(function(model){
+                    var res = [];
+                    ids.forEach(function(id){
+                        res.push(model.filter(function(item){return item.getStandardId() == id})[0]);
+                    });
+                    return res;
                 });
             },
 
-            [[chlk.models.id.CCStandardCategoryId]],
-            ria.async.Future, function getCCStandardCategories(parentCategoryId_){
+            [[String]],
+            ria.async.Future, function searchStandards(filter) {
+                return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
+                    filter: filter
+                });
+            },
+
+            [[chlk.models.id.CCStandardCategoryId, chlk.models.id.CommonCoreStandardId, Boolean]],
+            ria.async.Future, function getCommonCoreStandards(standardCategoryId_, parentStandardId_, allStandards_) {
+                return this.get('Standard/GetCommonCoreStandards.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {
+                    standardCategoryId: standardCategoryId_ && standardCategoryId_.valueOf(),
+                    parentStandardId: parentStandardId_ && parentStandardId_.valueOf(),
+                    allStandards: allStandards_
+                });
+            },
+
+            ria.async.Future, function getCCStandardCategories(){
                 return this.get('Standard/GetCommonCoreStandardCategories.json', ArrayOf(chlk.models.standard.CCStandardCategory), {
-                    parentCategoryId: parentCategoryId_ && parentCategoryId_.valueOf()
                 });
             }
         ])

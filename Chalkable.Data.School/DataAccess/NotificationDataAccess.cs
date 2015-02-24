@@ -143,6 +143,23 @@ namespace Chalkable.Data.School.DataAccess
             var q = Orm.PaginationSelect(innerQuery, orderBy, query.Start, query.Count);
             return ReadPaginatedResult(q, query.Start, query.Count, ReadListNotifcationDetails);
         }
+
+        public int GetUnshownNotificationsCount(int personId)
+        {
+            var sql = string.Format("select count(*) as UnshownCount from Notification where {0} =@{0} and {1} = @{1}"
+                , Notification.SHOWN_FIELD, Notification.PERSON_REF_FIELD);
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {Notification.SHOWN_FIELD, false},
+                {Notification.PERSON_REF_FIELD, personId},
+            };
+            using (var reader = ExecuteReaderParametrized(sql, ps))
+            {
+                reader.Read();
+                var res = SqlTools.ReadInt32(reader, "UnshownCount");
+                return res;
+            }
+        }
     }
 
     public class NotificationQuery

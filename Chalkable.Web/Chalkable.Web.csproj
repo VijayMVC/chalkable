@@ -243,8 +243,10 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
-    <Compile Include="Models\AnnouncementsViewData\AnnouncementStandardViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
+    <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
+    <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
@@ -284,6 +286,7 @@
     <Compile Include="Models\AttendancesViewData\ClassAttendanceViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAppsViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAttendanceSummaryViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassExpolorerViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassScheduleViewData.cs" />
@@ -361,6 +364,7 @@
     <Compile Include="Models\AttendancesViewData\StudentAttendanceViewData.cs" />
     <Compile Include="Models\SysAdminViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\ApiRequestExtensions.cs" />
     <Compile Include="Tools\CompilerHelper.cs" />
     <Compile Include="Tools\RequestHelpers.cs" />
   </ItemGroup>
@@ -386,7 +390,9 @@
     <Folder Include="Views\DemoSchool\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />

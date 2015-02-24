@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models
         public StandardGradingGridViewData CurrentStandardGradingGrid { get; set; }
         public IList<GradingPeriodViewData> GradingPeriods { get; set; }
 
-        public static StandardGradingGridsViewData Create(IList<GradingPeriodDetails> gradingPeriods, StandardGradingGridViewData standardGradingGrid)
+        public static StandardGradingGridsViewData Create(IList<GradingPeriod> gradingPeriods, StandardGradingGridViewData standardGradingGrid)
         {
             return new StandardGradingGridsViewData
                 {
@@ -50,7 +50,7 @@ namespace Chalkable.Web.Models
         public IList<StandardGradingItemViewData> Items { get; set; }
         public int? NumericAvg { get; set; }
         public string AlphaGradeNameAvg { get; set; }
-        public AnnouncementStandardViewData Standard { get; set; }
+        public StandardViewData Standard { get; set; }
 
         public static IList<StandardGradingViewData> Create(IList<GradingStandardInfo> gradingStandards, IList<int> studentIds)
         {
@@ -61,7 +61,7 @@ namespace Chalkable.Web.Models
                 var gradingSt = kv.Value.First();
                 var standardGrading = new StandardGradingViewData
                     {
-                        Standard = AnnouncementStandardViewData.Create(gradingSt.Standard),
+                        Standard = StandardViewData.Create(gradingSt.Standard),
                         NumericAvg = (int?) kv.Value.Average(x => x.NumericGrade),
                         Items = new List<StandardGradingItemViewData>()
                     };
@@ -83,6 +83,7 @@ namespace Chalkable.Web.Models
         public int StandardId { get; set; }
         public int? GradeId { get; set; }
         public string GradeValue { get; set; }
+        public decimal? NumericGrade { get; set; }
         public int GradingPeriodId { get; set; }
         public int ClassId { get; set; }
         public string Comment { get; set; }
@@ -101,6 +102,7 @@ namespace Chalkable.Web.Models
                 };
             if (string.IsNullOrEmpty(res.GradeValue) && gradingStandard.NumericGrade.HasValue)
                 res.GradeValue = gradingStandard.NumericGrade.Value.ToString();
+            res.NumericGrade = gradingStandard.NumericGrade;
             return res;
         }
     }

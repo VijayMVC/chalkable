@@ -84,9 +84,17 @@ NAMESPACE('chlk.services', function () {
                     classId: classId.valueOf()
                 });
             },
+
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getInfo(classId){
                 return this.get('Class/ClassInfo.json', chlk.models.classes.ClassInfo,{
+                    classId: classId && classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getExplorer(classId){
+                return this.get('Class/Explorer.json', chlk.models.classes.ClassExplorerViewData,{
                     classId: classId && classId.valueOf()
                 });
             },

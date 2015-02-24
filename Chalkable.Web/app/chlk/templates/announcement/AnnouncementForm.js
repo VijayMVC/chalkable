@@ -25,9 +25,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'isDraft',
 
             [ria.templates.ModelPropertyBind],
-            Array, 'recipients',
-
-            [ria.templates.ModelPropertyBind],
-            Array, 'reminders'
+            Array, 'recipients'
         ])
 });

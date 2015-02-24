@@ -4,34 +4,65 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers
 {
     [RequireHttps, TraceControllerFilter]
     public class StudyCenterController : ChalkableController
     {
-        [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new[] { AppPermissionType.Announcement })]
-        public ActionResult SetPracticeGrade(int studentId, int standardId, Guid applicationId, string score)
+        [AuthorizationFilter("Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new []{ AppPermissionType.Practice })]
+        public ActionResult SetPracticeGrade(Guid id, string score)
         {
-            SchoolLocator.PracticeGradeService.Add(standardId, studentId, applicationId, score);
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var standard = SchoolLocator.StandardService.GetStandardByABId(id);
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
+            if (!HasInstalledApp(app.Id, Context.PersonId.Value))
+                throw new ChalkableSecurityException("Current studented has no installed app");
+            SchoolLocator.PracticeGradeService.Add(standard.Id, Context.PersonId.Value, app.Id, score);
             return Json(true);
         }
 
-        [AuthorizationFilter("SysAdmin, Teacher, Student")]
+        private bool HasInstalledApp(Guid applicationId, int studentId)
+        {
+            var practiceAppId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            return practiceAppId == applicationId
+                   || SchoolLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
+        }
+
+
+        [AuthorizationFilter("Student")]
         public ActionResult PracticeGrades(int studentId, int classId, int? standardId)
         {
-            var syId = GetCurrentSchoolYearId();
-            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime);
             var stadnards = SchoolLocator.StandardService.GetStandards(classId, null, null);
-            var practiceGrades = SchoolLocator.PracticeGradeService.GetPracticeGrades(studentId, standardId);
-            //TODO : getting standards scores from inow 
-            var standardsScores = new List<GradingStandardInfo>();
-            //var standardsScores = SchoolLocator.GradingStandardService.GetGradingStandards(classId, gradingPeriod.Id);
-            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards, standardsScores));
+            var practiceGrades = SchoolLocator.PracticeGradeService.GetPracticeGradesDetails(classId, studentId, standardId);
+            return Json(PracticeGradeGridViewData.Create(practiceGrades, stadnards));
+        }
+        
+        [AuthorizationFilter("Student")]
+        public ActionResult MiniQuizInfo(int standardId)
+        {
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var standard = SchoolLocator.StandardService.GetStandardById(standardId);
+            var miniQuizApp = MasterLocator.ApplicationService.GetPracticeGradesApplication();
+            var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
+            var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
+            var suggestedApps = standard.AcademicBenchmarkId.HasValue 
+                    ? MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { standard.AcademicBenchmarkId.Value }, installedAppsIds, 0, int.MaxValue)
+                    : new Application[]{};
+            var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
+
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, Context.Login, Context.SchoolYearId);
+
+            return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps, appInstallations, hasMyAppDic, Context.PersonId, authorizationCode));
         }
     }
 }

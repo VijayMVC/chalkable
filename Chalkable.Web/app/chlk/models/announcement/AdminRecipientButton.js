@@ -1,6 +1,3 @@
-REQUIRE('chlk.models.id.ReminderId');
-REQUIRE('chlk.models.id.AnnouncementId');
-
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 

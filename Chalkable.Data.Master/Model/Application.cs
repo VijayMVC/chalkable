@@ -46,6 +46,9 @@ namespace Chalkable.Data.Master.Model
         public decimal? PricePerSchool { get; set; }
         public const string ORIGINAL_REF_FIELD = "OriginalRef";
         public Guid? OriginalRef { get; set; }
+        public int? InternalScore { get; set; }
+        public string InternalDescription { get; set; }
+
         [NotDbFieldAttr]
         public IList<ApplicationPicture> Pictures { get; set; }
         [NotDbFieldAttr]
@@ -59,6 +62,10 @@ namespace Chalkable.Data.Master.Model
         public const string AVG_FIELD = "Avg";
         [NotDbFieldAttr]
         public IList<ApplicationStandard> ApplicationStandards { get; set; }
+        [NotDbFieldAttr]
+        public Application LiveApplication { get; set; }
+        [NotDbFieldAttr]
+        public bool IsLive { get { return State == ApplicationStateEnum.Live; } }
     }
 
     public enum ApplicationStateEnum
@@ -177,6 +184,6 @@ namespace Chalkable.Data.Master.Model
         [PrimaryKeyFieldAttr]
         public Guid ApplicationRef { get; set; }
         [PrimaryKeyFieldAttr]
-        public string StandardCode { get; set; }
+        public Guid StandardRef { get; set; }
     }
 }

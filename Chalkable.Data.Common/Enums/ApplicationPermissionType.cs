@@ -15,6 +15,7 @@ namespace Chalkable.Data.Common.Enums
         Announcement = 4,
         Class = 5,
         Schedule = 6,
-        Discipline = 7
+        Discipline = 7,
+        Practice = 8
     }
 }

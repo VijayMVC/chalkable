@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'apps',
 
+            [ria.templates.ModelPropertyBind],
+            String, 'appUrlAppend',
+
             [[chlk.models.apps.ApplicationForAttach]],
             String, function getAppIconToolTip(app){
                 var res = null;

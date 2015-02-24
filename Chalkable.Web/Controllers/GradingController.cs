@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -37,7 +38,7 @@ namespace Chalkable.Web.Controllers
         private ClassGradingBoxesViewData PrepareClassGradingBoxes(int classId)
         {
             var syId = GetCurrentSchoolYearId();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId, null, classId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId, classId);
             var currentGradingPeriod = CurrentGradingPeriodFromList(gradingPeriods, Context.NowSchoolYearTime.Date);
             TeacherClassGrading gradingSummary = null;
             if (currentGradingPeriod != null)
@@ -58,8 +59,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
-            //return FakeJson("~/fakeData/itemGradingStat.json");
-            //var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
             var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
             return Json(ItemGradigStatViewData.Create(studentAnns, announcementId));
         }
@@ -71,7 +70,7 @@ namespace Chalkable.Web.Controllers
             Trace.WriteLine("GetCurrentSchoolYearId " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             var syId = GetCurrentSchoolYearId();
             Trace.WriteLine("GetGradingPeriodsDetails " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId, null, classId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId, classId);
             Trace.WriteLine("GetStandards " + DateTime.Now.Ticks * 100.0 / TimeSpan.TicksPerSecond);
             var standards = SchoolLocator.StandardService.GetStandards(classId, null, null);
             Trace.WriteLine("GetClassAnnouncementTypes " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
@@ -87,7 +86,7 @@ namespace Chalkable.Web.Controllers
             return Json(GradingGridsViewData.Create(gradeBook, gradingPeriods, standards, classAnnouncementTypes));
         }
 
-        private static GradingPeriodDetails CurrentGradingPeriodFromList(IList<GradingPeriodDetails> gradingPeriods, DateTime date)
+        private static GradingPeriod CurrentGradingPeriodFromList(IList<GradingPeriod> gradingPeriods, DateTime date)
         {
             var currentGradingPeriod = gradingPeriods.FirstOrDefault(x => x.StartDate.Date <= date && x.EndDate >= date);
             if (currentGradingPeriod == null)
@@ -120,7 +119,14 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        
+        [AuthorizationFilter("Teacher")]
+        public ActionResult PostStandards(int classId, int gradingPeriodId)
+        {
+            SchoolLocator.GradingStatisticService.PostStandards(classId, gradingPeriodId);
+            MasterLocator.UserTrackingService.PostedGrades(Context.Login, classId, gradingPeriodId);
+            return Json(true);
+        }
+
         [AuthorizationFilter("Teacher")]
         public ActionResult GetStudentAverages(int classId, int gradingPeriodId, int averageId)
         {
@@ -132,7 +138,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult FinalGrade(int classId)
         {
             var syId = GetCurrentSchoolYearId();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId, null, classId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId, classId);
             var currentGradingPeriod = CurrentGradingPeriodFromList(gradingPeriods, Context.NowSchoolYearTime.Date);
             GradingPeriodFinalGradeViewData gradingPeriodFinalGrade = null;
             if (currentGradingPeriod != null)
@@ -147,12 +153,11 @@ namespace Chalkable.Web.Controllers
             return Json(GetGradingPeriodFinalGrade(classId, gradingPeriod, averageId));
         }
 
-        private GradingPeriodFinalGradeViewData GetGradingPeriodFinalGrade(int classId, GradingPeriodDetails gradingPeriod, int? averageId)
+        private GradingPeriodFinalGradeViewData GetGradingPeriodFinalGrade(int classId, GradingPeriod gradingPeriod, int? averageId)
         {
             if(!Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException();
             var finalGrade = SchoolLocator.GradingStatisticService.GetFinalGrade(classId, gradingPeriod);
-            //var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.SchoolLocalId.Value, gradingPeriod.Id);
             var average = finalGrade.Averages.FirstOrDefault(x => !averageId.HasValue || x.AverageId == averageId);
             return GradingPeriodFinalGradeViewData.Create(finalGrade, average);
         }
@@ -161,7 +166,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassStandardGrids(int classId)
         {
             var schoolYearId = GetCurrentSchoolYearId();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId, null, classId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId, classId);
             var currentGradingPeriod = CurrentGradingPeriodFromList(gradingPeriods, Context.NowSchoolYearTime.Date);
             StandardGradingGridViewData currentStandardGrid = null;
             if (currentGradingPeriod != null)
@@ -171,13 +176,6 @@ namespace Chalkable.Web.Controllers
                 currentStandardGrid = StandardGradingGridViewData.Create(currentGradingPeriod, gradingStandards, students);
             }
             return Json(StandardGradingGridsViewData.Create(gradingPeriods, currentStandardGrid));
-            //var res = new List<StandardGradingGridViewData>();
-            //foreach (var gradingPeriod in gradingPeriods)
-            //{
-            //    var gs = gradingStandards.Where(x => gradingPeriod.Id == x.GradingPeriodId).ToList();
-            //    var currentStudents = students.Where(x => gs.Any(y => y.StudentId == x.Id)).ToList();
-            //    res.Add(StandardGradingGridViewData.Create(gradingPeriod, gs, currentStudents));
-            //}
         }
         
         [AuthorizationFilter("Teacher")]
@@ -203,7 +201,7 @@ namespace Chalkable.Web.Controllers
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null);
             var anns = SchoolLocator.AnnouncementService.GetAnnouncements(null, 0, int.MaxValue, classId);
             var schoolYearId = GetCurrentSchoolYearId();
-            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId, null, classId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId, classId);
             var res = new List<GradingStandardClassSummaryViewData>();
             var annSts = SchoolLocator.AnnouncementService.GetAnnouncementStandards(classId);
             foreach (var gradingPeriod in gradingPeriods)
@@ -264,18 +262,6 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }*/
 
-        /*public ActionResult ApplyAutoGrade(int announcementId)
-        {
-            SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, true);
-            return ItemGradesList(announcementId);
-        }
-
-        public ActionResult ApplyManualGrade(int announcementId)
-        {
-            SchoolLocator.StudentAnnouncementService.ResolveAutoGrading(announcementId, false);
-            return ItemGradesList(announcementId);
-        }*/
-
         //TODO: do we need this in API still?
         //[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         [AuthorizationFilter("Teacher")]
@@ -323,6 +309,13 @@ namespace Chalkable.Web.Controllers
                 averageValue, exempt, note);
 
             return Json(StudentAveragesViewData.Create(res));
+        }
+
+        [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        public ActionResult SetAutoGrade(int announcementApplicationId,int studentId, string gradeValue)
+        {
+            SchoolLocator.StudentAnnouncementService.SetAutoGrade(announcementApplicationId, studentId, gradeValue);
+            return Json(true);
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 {AppPermissionType.Discipline, "Discipline"},
                 {AppPermissionType.Message, "Message"},
                 {AppPermissionType.Schedule, "Schedule"},
+                {AppPermissionType.Practice, "Practice"},
             }; 
 
         public static ApplicationPersmissionsViewData Create(ApplicationPermission applicationPermission)

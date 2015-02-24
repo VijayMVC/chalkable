@@ -9,7 +9,7 @@ mixin AppIconLink(announcementId, app, iconTooltip)
             if app.needToInstall()
                 +ActionButton('appmarket', 'details', app.getId()) Install
             else
-                +ActionButton('apps', 'tryToAttach', announcementId, appId) Attach
+                +ActionButton('apps', 'tryToAttach', announcementId, appId, self.getAppUrlAppend()) Attach
 
 teacherId = self.teacherId.valueOf()
 announcementId = self.announcementId.valueOf()
@@ -23,6 +23,6 @@ announcementId = self.announcementId.valueOf()
                 each app in self.apps.getItems()
                     +AppIconLink(announcementId, app, self.getAppIconToolTip(app))
             .paging
-                +Paginator('announcement', 'attachApp', self.apps, [announcementId])
+                +Paginator('announcement', 'attachApp', self.apps, [announcementId, null, self.getAppUrlAppend()])
         else
             .no-apps No Apps Installed, try one now in the App Store

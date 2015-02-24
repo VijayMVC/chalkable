@@ -105,6 +105,10 @@ NAMESPACE('chlk.controllers', function (){
 
            [[Object]],
            function handleServerError(error){
+               setTimeout(function(){
+                   this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+               }.bind(this), 1);
+
                if(error.getStatus && error.getStatus() == 500){
                     var response = JSON.parse(error.getResponse());
                     if(response.exceptiontype == 'ChalkableSisException')

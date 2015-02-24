@@ -84,21 +84,21 @@ NAMESPACE('chlk.templates.grading', function () {
                 var all = item.getPresentCount() + item.getLateCount() + item.getAbsentCount();
                 if(!all || !item.getPresentCount())
                     return 0;
-                return Math.ceil(item.getPresentCount() * 100 /all) + '%';
+                return item.getPresentCount() * 100 /all + '%';
             },
 
             function getLateWidth(item){
                 var all = item.getPresentCount() + item.getLateCount() + item.getAbsentCount();
                 if(!all || !item.getLateCount())
                     return 0;
-                return Math.ceil(item.getLateCount() * 100 /all) + '%';
+                return item.getLateCount() * 100 /all + '%';
             },
 
             function getAbsentWidth(item){
                 var all = item.getPresentCount() + item.getLateCount() + item.getAbsentCount();
                 if(!all || !item.getAbsentCount())
                     return 0;
-                return 100 - parseInt(this.getPresentWidth(item)) - parseInt(this.getLateWidth(item)) + '%';
+                return item.getAbsentCount() * 100 /all + '%';
             },
 
             Object, function getChartOptions(){

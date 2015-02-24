@@ -22,6 +22,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         bool Exists(Guid? currentApplicationId, string name, string url);
         bool DeleteApplication(Guid id);
         void ChangeApplicationType(Guid applicationId, bool isInternal);
+        void SetApplicationInternalData(Guid applicationId, int? internalScore, string internalDescription);
     }
 
     public class ApplicationUploadService : MasterServiceBase, IApplicationUploadService
@@ -88,7 +89,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 application.Pictures = da.UpdatePictures(application.Id, applicationInfo.PicturesId);
                 application.GradeLevels = da.UpdateGradeLevels(application.Id, applicationInfo.GradeLevels);
                 application.Permissions = da.UpdatePermissions(application.Id, applicationInfo.PermissionIds);
-                application.ApplicationStandards = da.UpdateApplicationStandards(application.Id, applicationInfo.StandardsCodes);
+                application.ApplicationStandards = da.UpdateApplicationStandards(application.Id, applicationInfo.StandardsIds);
                 if (addToOauth)
                 {
                     if (!string.IsNullOrEmpty(application.Url))
@@ -135,6 +136,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var da = new ApplicationDataAccess(uow);
                 application = da.GetApplicationById(applicationId);
             }
+            if (application.IsLive)
+                throw  new ChalkableSecurityException("Only draft applications can be updated");
             if (string.IsNullOrEmpty(appInfo.ShortApplicationInfo.Name))
                 throw new ChalkableException(ChlkResources.ERR_APP_NAME_MISSING);
             if (string.IsNullOrEmpty(appInfo.ShortApplicationInfo.Url))
@@ -152,6 +155,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 application = da.GetApplicationById(applicationId);
             }
             var shortAppInfo = appInfo.ShortApplicationInfo;
+            if (application.IsLive)
+                throw new ChalkableSecurityException("Only draft applications can't be submitted");
             if (string.IsNullOrEmpty(shortAppInfo.Name))
                 throw new ChalkableException(ChlkResources.ERR_APP_NAME_MISSING);
             if (string.IsNullOrEmpty(shortAppInfo.Url))
@@ -313,8 +318,32 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new ApplicationDataAccess(uow);
                 var application = da.GetApplicationById(applicationId);
+               
+                if(!application.IsLive)
+                    throw new ChalkableException("Only live application can be internal");
                 application.IsInternal = isInternal;
                 da.Update(application);
+                uow.Commit();
+            }
+        }
+
+        public void SetApplicationInternalData(Guid applicationId, int? internalScore, string internalDescription)
+        {
+            if (!BaseSecurity.IsSysAdmin(Context))
+                throw new ChalkableSecurityException();
+            
+            if(internalScore.HasValue && (internalScore.Value < 0 || internalScore.Value > 100))
+                throw new ChalkableException("Internal score out of range. Internal score should be in range [0,100]");
+            
+            using (var uow = Update())
+            {
+                var da = new ApplicationDataAccess(uow);
+                var app = da.GetApplicationById(applicationId);
+                if(!app.IsLive)
+                    throw new ChalkableException("Only live application can have internal data");
+                app.InternalScore = internalScore;
+                app.InternalDescription = internalDescription;
+                da.Update(app);
                 uow.Commit();
             }
         }

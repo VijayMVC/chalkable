@@ -1,4 +1,5 @@
 .standards-grid.grades-page
+    #grading-popup.grading-input-popup.popup-bubble.no-triangle
     -var topData = self.getTopData()
     -var selectedId = topData.getSelectedItemId()
 
@@ -46,8 +47,10 @@
                         .arrows-row
                             .prev-arrow.grid-arrow
                             .next-arrow.grid-arrow
+
+                        +ActionButton('grading', 'post-standards', selectedId, gradingPeriod.getId())(class= !gradingPeriod.isAblePostGradeBook() ? "disabled" : "").blue-button.button-like.right Post
                         if self.isAbleEdit()
-                        +ActionButton('grading', 'getGradeComments').blue-button.button-like.comment-button.gp-button=Msg.Comment
+                            +ActionButton('grading', 'getGradeComments').blue-button.button-like.comment-button.gp-button.right= Msg.Comment
                     .grades-container
                         if gradingPeriod.getId() == selectedGradingPeriodId
                             +RenderWith(item, chlk.templates.grading.ShortGradingClassStandardsGridItemsTpl)(

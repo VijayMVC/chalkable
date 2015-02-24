@@ -24,11 +24,13 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public Guid? DeveloperId { get; set; }
         public Guid? LiveAppId { get; set; }
         public bool IsInternal { get; set; }
+        public int? InternalScore { get; set; }
+        public string InternalDescription { get; set; }
         public ApplicationAccessViewData ApplicationAccess { get; set; }
         public ApplicationPriceViewData ApplicationPrice { get; set; }
         public IList<Guid> Picturesid { get; set; }
-       
-
+        public BaseApplicationViewData LiveApplication { get; set; }
+        
         protected BaseApplicationViewData(Application application)
         {
             Id = application.Id;
@@ -45,7 +47,11 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             ApplicationPrice = ApplicationPriceViewData.Create(application);
             LiveAppId = application.OriginalRef;
             IsInternal = application.IsInternal;
+            InternalScore = application.InternalScore;
+            InternalDescription = application.InternalDescription;
             Picturesid = application.Pictures.Select(x => x.Id).ToList();
+            if (application.LiveApplication != null)
+                LiveApplication = Create(application.LiveApplication);
         }
 
         public static BaseApplicationViewData Create(Application application)
@@ -66,7 +72,6 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<int> GradeLevels { get; set; }
         public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
-        public BaseApplicationViewData LiveApplication { get; set; }
         public IList<CommonCoreStandardViewData> Standards { get; set; } 
 
         protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey, IList<CommonCoreStandard> standards)
@@ -81,7 +86,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             GradeLevels = application.GradeLevels.Select(x => x.GradeLevel).ToList();
             if (application.ApplicationStandards != null && standards != null)
                 Standards = CommonCoreStandardViewData.Create(
-                        standards.Where(x => application.ApplicationStandards.Any(y => y.StandardCode == x.Code))
+                        standards.Where(x => application.ApplicationStandards.Any(y => y.StandardRef == x.Id))
                                  .ToList());
         }
         public static ApplicationViewData Create(Application application, IList<Category> categories, IList<CommonCoreStandard> standards, bool canGetSecretKey = false)
@@ -107,10 +112,10 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories
             , IList<ApplicationRating> appRatings)
         {
-            var res = new ApplicationDetailsViewData(application, categories, false);
-            res.ApplicationRating = ApplicationRatingViewData.Create(appRatings);
-
-            return res;
+            return new ApplicationDetailsViewData(application, categories, false)
+                {
+                    ApplicationRating = ApplicationRatingViewData.Create(appRatings)
+                };
         }
     }
 

@@ -244,3 +244,16 @@ appPlatforms = appPlatforms.join(',')
 
         if !self.isReadOnly()
             +Button()(disabled = !self.isDraft(),name="submit-draft-btn", class = !self.isDraft() ? "x-item-disabled" : "").submit-draft-btn.special-button.blue-button Update Draft
+
+    if app.isLive() && self.getUserRole().isSysAdmin()
+        +ActionForm('apps','setInternalData')
+            +Hidden('id', app.getId())
+            .section
+                .elem
+                    label.wide.hint Internal Score:
+                    +Textbox("internalscore", app.getInternalScore(), false, "required, maxSize[100]")
+                .elem
+                    label.wide.hint Internal Description:
+                    +Textbox("internaldescription", app.getInternalDescription(), false, "required, maxSize[150]")
+            +Button(name="submit-internal-data-btn").submit-draft-btn.special-button.blue-button Set Internal Data
+

@@ -10,6 +10,16 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'gradeLevels',
             String, 'roles',
             String, 'submitActionType',
-            chlk.models.id.AppInstallGroupId, 'currentPerson'
+            String, 'forAll',
+            chlk.models.id.AppInstallGroupId, 'currentPerson',
+
+            Boolean, function isInstallForAll(){
+                return this.getForAll() == 'all';
+            },
+
+            Boolean, function isEmpty(){
+                return this.getClasses() == '' && this.getDepartments() == '' &&
+                    this.getGradeLevels() == '' && this.getRoles() == '' && this.getCurrentPerson().valueOf() == '' && this.getForAll() == '';
+            }
         ]);
 });

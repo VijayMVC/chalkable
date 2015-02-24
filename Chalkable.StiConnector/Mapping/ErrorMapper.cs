@@ -200,6 +200,9 @@ namespace Chalkable.StiConnector.Mapping
             "StudentStandardComment_CannotDeleteStudentData";
 
         public const string OCCURRENCE_NOTE_INVALIDFORMAT_ERROR = "Occurrence_Note_InvalidFormat";
+        public const string AVERAGESCORE_INVALID_ALPHAGRADE_FOR_GRADING_SCALE_ERROR = 
+            "AverageScore_InvalidAlphaGradeForGradingScale";
+    
     }
 
     
@@ -335,7 +338,8 @@ namespace Chalkable.StiConnector.Mapping
                 {InowErrors.STUDENTPERIODABSENCE_TIMESLOT_REQUIRED_ERROR,  String.Format(ChlkResources.ERR_REQUIRED_FIELD_MSG_FORMAT, "Period")},
                 {InowErrors.STUDENTPERIODABSENCE_TIMESLOT_NOTINSTUDENTSCHEDULE_ERROR,  "Period is not in Student Schedule."},
 
-                {InowErrors.OCCURRENCE_NOTE_INVALIDFORMAT_ERROR, String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Note")}
+                {InowErrors.OCCURRENCE_NOTE_INVALIDFORMAT_ERROR, String.Format(ChlkResources.ERR_INVALID_FORMAT_MSG_FORMAT, "Note")},
+                {InowErrors.AVERAGESCORE_INVALID_ALPHAGRADE_FOR_GRADING_SCALE_ERROR, "Invalid Alpha grade for Grading Scale."}
             }; 
 
            

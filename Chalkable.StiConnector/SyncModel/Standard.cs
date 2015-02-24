@@ -15,5 +15,6 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsActive { get; set; }
         public Guid RowVersion { get; set; }
         public Guid DistrictGuid { get; set; }
+        public Guid? AcademicBenchmarkId { get; set; }
     }
 }

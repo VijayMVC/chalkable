@@ -38,13 +38,14 @@ NAMESPACE('chlk.activities.grading', function () {
             [ria.mvc.DomEventBind('mouseover mouseleave', '.student-pic-container')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function picHover(node, event){
-                var id = node.getAttr('studentId');
-                var student = node.parent('.class-block').find('.student-item[studentId=' + id +']');
+                var avg = node.getData('avg');
+                var student = node.parent('.class-block').find('.student-item[data-avg="' + avg +'"]');
                 if(event.type == 'mouseover')
                     student.addClass('hovered');
                 else
                     student.removeClass('hovered');
-                student.trigger(event.type);
+                if(student.count() == 1)
+                    student.trigger(event.type);
             },
 
             [ria.mvc.DomEventBind('click', '.all-button')],

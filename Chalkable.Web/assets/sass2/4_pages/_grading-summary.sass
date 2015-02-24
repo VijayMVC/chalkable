@@ -27,24 +27,21 @@
 
       .student-pic
         display: inline-block
-        background: 0 no-repeat
         width: 16px
         height: 21px
 
       .student-triangle
         display: none
-        background: 0 no-repeat
         width: 8px
         height: 6px
         margin: 0 auto
         margin-top: -2px
 
-      &
-        .student-pic
-          +icons-24-sprite(smal-pic-grey)
+      .student-pic
+        +icons-24-sprite(smal-pic-grey)
 
-        .student-triangle
-          +icons-24-sprite(smal-pic-triangle-grey)
+      .student-triangle
+        +icons-24-sprite(smal-pic-triangle-grey)
 
       &.trouble
         .student-pic

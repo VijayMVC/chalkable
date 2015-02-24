@@ -28,7 +28,7 @@ NAMESPACE('chlk.models.grading', function () {
                 this.averageValue = SJX.fromValue(raw.averageValue, String);
                 this.note = SJX.fromValue(raw.note, String);
                 this.oldValue = SJX.fromValue(raw.oldValue, String);
-                this.oldExempt = SJX.fromValue(raw.oldExempt, String);
+                this.oldExempt = SJX.fromValue(raw.oldExempt, Boolean);
                 this.codes = SJX.fromArrayOfValues(raw.codes, null);
                 this.codesString = SJX.fromValue(raw.codesString, String);
             },

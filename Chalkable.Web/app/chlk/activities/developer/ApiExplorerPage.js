@@ -111,6 +111,8 @@ NAMESPACE('chlk.activities.developer', function () {
                 delete formData.controllerName;
                 delete formData.methodName;
                 delete formData.apiCallRole;
+                delete formData.response;
+                delete formData.callType;
 
                 var params = JSON.stringify(formData);
                 var codeArea = tabContent.find('pre');

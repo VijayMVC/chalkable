@@ -231,122 +231,123 @@ NAMESPACE('chlk.controls', function () {
                     .onActivityRefreshed(function (activity, model) {
                         var toolbar = ria.dom.Dom().find('#' + attributes.id),
                             thirdContainer = toolbar.find('.third-container');
-                        if(thirdContainer.exists){
-                            var baseMargin = parseInt(thirdContainer.find('>*').getCss('margin-right'));
-                            configs.baseMargin = baseMargin;
-                            toolbar.setData('configs', configs);
-                        }
-
-                        this.updateToolbar(toolbar);
-                        if (toolbar.exists()) {
-                            toolbar.setData('currentIndex', 0);
-                            if(!configs.equalItems){
-                                var t2 = toolbar.find('.second-container');
-                                var t3 = toolbar.find('.third-container');
-                                if(t3.exists() && t3.width() > t2.width()){
-                                    toolbar.find('.next-button').removeClass(configs.disabledClass);
-                                    var dotsK = Math.ceil(t3.width()/(t2.width() - configs.padding));
-                                    configs.pagesCount = dotsK;
-                                    toolbar.setData('configs', configs);
-                                    var res = '<a class="current" index="0"></a>';
-                                    for(var i = 0; i < dotsK - 1; i++){
-                                        res += '<a index="' + (i + 1) + '"></a>';
-                                    }
-                                    toolbar.find('.paginator').setHTML(res);
-                                }
+                        if(toolbar.exists()){
+                            if(thirdContainer.exists){
+                                var baseMargin = parseInt(thirdContainer.find('>*').getCss('margin-right'));
+                                configs.baseMargin = baseMargin;
+                                toolbar.setData('configs', configs);
                             }
-                            if (configs.pressAfterClick) {
-                                /*var pressedIndex = parseInt(toolbar.find('.pressed').getAttr('index'), 10);
-                                var pageIndex = Math.floor(pressedIndex / configs.itemsCount) || 0;
-                                that.setPageByCurrentDot(null, toolbar, pageIndex);*/
-                                toolbar.on('click', '.second-container>*:not(.pressed)', function (node, event) {
-                                    if (!configs.multiple)
-                                        toolbar.find('.second-container>.pressed').removeClass('pressed');
-                                    setTimeout(function () {
-                                        node.addClass('pressed');
-                                    }, 1);
-                                });
-                            }
-                            if (configs.multiple) {
-                                toolbar.on('click', '.second-container>*', function (node, event) {
-                                    var state = that.context.getState();
-                                    state.setController(configs.controller);
-                                    state.setAction(configs.action);
-                                    var params = configs.params;
-                                    var ids = Array.isArray(configs.selectedIds) ? configs.selectedIds : configs.selectedIds.split(',');
-                                    var currentId = node.getData('id');
-                                    if (currentId) {
-                                        if (node.hasClass('pressed'))
-                                            ids.splice(ids.indexOf(currentId), 1);
-                                        else
-                                            ids.push(currentId);
-                                        params.push(ids.join(','));
-                                    }
-                                    state.setParams(params);
-                                    state.setPublic(false);
-                                    that.context.stateUpdated();
-                                });
-                            }
-                            toolbar.on('click', '.arrow:not(.disabled)', function (node, event) {
-                                var configs = toolbar.getData('configs'), eps = 10;
-                                toolbar.find('.arrow').addClass(configs.disabledClass);
-                                var index = toolbar.getData('currentIndex'), isLeft = false;
-                                if (node.hasClass('prev-button')) {
-                                    toolbar.setData('currentIndex', --index);
-                                    isLeft = true;
-                                } else {
-                                    toolbar.setData('currentIndex', ++index);
-                                }
-                                toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_CLICK.valueOf(), [node, isLeft, index]);
 
-                                if (configs.needDots) {
-                                    var dot = toolbar.find('.paginator A[index="' + index + '"]');
-                                    var current =  toolbar.find('.paginator .current');
-                                    current.removeClass('current');
-                                    dot.addClass('current');
-                                }
-                                toolbar.trigger(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), [isLeft, index]);
-                                toolbar.setData('currentIndex', index);
-                                var width = toolbar.find('.first-container').width();
-                                var secondContainer = toolbar.find('.second-container');
-                                if(toolbar.is(':visible')){
-                                    var currentLeft = parseInt(secondContainer.getCss('left'), 10),
-                                        diff = width - configs.padding;
-                                    var left = isLeft ? currentLeft + diff : currentLeft - diff;
-                                    if(left > -eps)
-                                        left = 0;
-                                    else{
-                                        /*if(left && configs.itemClass){
-                                            var itemWidth = toolbar.find('.' + configs.itemClass).getData('width');
-                                            left = Math.floor(left/itemWidth + 0.5) * itemWidth;
-                                        }*/
-                                        left = left + configs.rightPadding;
-                                    }
-
-                                    secondContainer.setCss('left', left);
-
-                                    var interval = setInterval(function(){
-                                        var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
-                                        if(curLeft > left - eps && curLeft < left + eps){
-
-                                            setTimeout(function(){
-                                                that.updateArrows(toolbar);
-                                                toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft, index]);
-                                            }, 10);
-                                            clearInterval(interval);
+                            this.updateToolbar(toolbar);
+                            if (toolbar.exists()) {
+                                toolbar.setData('currentIndex', 0);
+                                if(!configs.equalItems){
+                                    var t2 = toolbar.find('.second-container');
+                                    var t3 = toolbar.find('.third-container');
+                                    if(t3.exists() && t3.width() > t2.width()){
+                                        toolbar.find('.next-button').removeClass(configs.disabledClass);
+                                        var dotsK = Math.ceil(t3.width()/(t2.width() - configs.padding));
+                                        configs.pagesCount = dotsK;
+                                        toolbar.setData('configs', configs);
+                                        var res = '<a class="current" index="0"></a>';
+                                        for(var i = 0; i < dotsK - 1; i++){
+                                            res += '<a index="' + (i + 1) + '"></a>';
                                         }
-                                    }, 10)
+                                        toolbar.find('.paginator').setHTML(res);
+                                    }
                                 }
-                            });
-                            /*toolbar.find('.paginator').on('click', 'a:not(.current)', function (node, event) {
-                                that.setPageByCurrentDot(node, toolbar);
-                                return false;
-                            });*/
-                            toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_RENDER.valueOf());
+                                if (configs.pressAfterClick) {
+                                    /*var pressedIndex = parseInt(toolbar.find('.pressed').getAttr('index'), 10);
+                                    var pageIndex = Math.floor(pressedIndex / configs.itemsCount) || 0;
+                                    that.setPageByCurrentDot(null, toolbar, pageIndex);*/
+                                    toolbar.on('click', '.second-container>*:not(.pressed)', function (node, event) {
+                                        if (!configs.multiple)
+                                            toolbar.find('.second-container>.pressed').removeClass('pressed');
+                                        setTimeout(function () {
+                                            node.addClass('pressed');
+                                        }, 1);
+                                    });
+                                }
+                                if (configs.multiple) {
+                                    toolbar.on('click', '.second-container>*', function (node, event) {
+                                        var state = that.context.getState();
+                                        state.setController(configs.controller);
+                                        state.setAction(configs.action);
+                                        var params = configs.params;
+                                        var ids = Array.isArray(configs.selectedIds) ? configs.selectedIds : configs.selectedIds.split(',');
+                                        var currentId = node.getData('id');
+                                        if (currentId) {
+                                            if (node.hasClass('pressed'))
+                                                ids.splice(ids.indexOf(currentId), 1);
+                                            else
+                                                ids.push(currentId);
+                                            params.push(ids.join(','));
+                                        }
+                                        state.setParams(params);
+                                        state.setPublic(false);
+                                        that.context.stateUpdated();
+                                    });
+                                }
+                                toolbar.on('click', '.arrow:not(.disabled)', function (node, event) {
+                                    var configs = toolbar.getData('configs'), eps = 10;
+                                    toolbar.find('.arrow').addClass(configs.disabledClass);
+                                    var index = toolbar.getData('currentIndex'), isLeft = false;
+                                    if (node.hasClass('prev-button')) {
+                                        toolbar.setData('currentIndex', --index);
+                                        isLeft = true;
+                                    } else {
+                                        toolbar.setData('currentIndex', ++index);
+                                    }
+                                    toolbar.trigger(chlk.controls.LRToolbarEvents.ARROW_CLICK.valueOf(), [node, isLeft, index]);
+
+                                    if (configs.needDots) {
+                                        var dot = toolbar.find('.paginator A[index="' + index + '"]');
+                                        var current =  toolbar.find('.paginator .current');
+                                        current.removeClass('current');
+                                        dot.addClass('current');
+                                    }
+                                    toolbar.trigger(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), [isLeft, index]);
+                                    toolbar.setData('currentIndex', index);
+                                    var width = toolbar.find('.first-container').width();
+                                    var secondContainer = toolbar.find('.second-container');
+                                    if(toolbar.is(':visible')){
+                                        var currentLeft = parseInt(secondContainer.getCss('left'), 10),
+                                            diff = width - configs.padding;
+                                        var left = isLeft ? currentLeft + diff : currentLeft - diff;
+                                        if(left > -eps)
+                                            left = 0;
+                                        else{
+                                            if(isLeft)
+                                                left = left - configs.rightPadding;
+                                            else
+                                                left = left + configs.rightPadding;
+                                        }
+
+                                        secondContainer.setCss('left', left);
+
+                                        var interval = setInterval(function(){
+                                            var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
+                                            if(curLeft > left - eps && curLeft < left + eps){
+
+                                                setTimeout(function(){
+                                                    that.updateArrows(toolbar);
+                                                    toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft, index]);
+                                                }, 10);
+                                                clearInterval(interval);
+                                            }
+                                        }, 10)
+                                    }
+                                });
+                                /*toolbar.find('.paginator').on('click', 'a:not(.current)', function (node, event) {
+                                    that.setPageByCurrentDot(node, toolbar);
+                                    return false;
+                                });*/
+                                toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_RENDER.valueOf());
+                            }
+                            setTimeout(function(){
+                                toolbar.find('.second-container').removeClass('freezed');
+                            }, 10);
                         }
-                        setTimeout(function(){
-                            toolbar.find('.second-container').removeClass('freezed');
-                        }, 10);
                     }.bind(this));
                 return attributes;
             },

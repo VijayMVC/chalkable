@@ -21,6 +21,9 @@ namespace Chalkable.Data.Master.Model
         public DateTime Created { get; set; }
         public string Data { get; set; }
         public DateTime? Started { get; set; }
+        public string Domain { get; set; }
+
+        public const string GLOBAL_DOMAIN = "";
 
         public void SetData(object data)
         {
@@ -44,7 +47,8 @@ namespace Chalkable.Data.Master.Model
         ProcessReminder = 7,
         AttendanceNotification = 8,
         TeacherAttendanceNotification = 9,
-        PictureImport = 10
+        PictureImport = 10,
+        SisDataResync = 11
     }
 
     public enum BackgroundTaskStateEnum

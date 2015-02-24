@@ -40,26 +40,8 @@ NAMESPACE('chlk.models.apps', function () {
             },
 
             [[Boolean]],
-            String, function toString(isLive_){
-                var status = this._states[this.getStateId()];
-                var currentStateId = this.getStateId();
-                if (isLive_){
-                    switch (currentStateId.valueOf()){
-                        case chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL.valueOf():
-                            status = 'Live - Update awaiting approval';
-                            break;
-                        case chlk.models.apps.AppStateEnum.APPROVED.valueOf():
-                            status = 'Live - Update approved';
-                            break;
-                        case chlk.models.apps.AppStateEnum.REJECTED.valueOf():
-                            status = 'Live - Update rejected';
-                            break;
-                        default :
-                            status = 'Your app is live in the Chalkable App Store';
-                            break;
-                    }
-                }
-                return status;
+            String, function toString(){
+                return this.getStatus();
             },
             [[Object]],
             VOID, function deserialize(raw) {

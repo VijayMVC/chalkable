@@ -11,6 +11,18 @@ namespace Chalkable.Data.Common.Orm
     public static class Orm
     {
 
+        public const string SELECT_FORMAT = "SELECT {0} FROM [{1}] ";
+        public const string JOIN = "JOIN";
+        public const string SIMPLE_JOIN_FORMAT = JOIN + " [{0}] ON [{0}].[{1}] = [{2}].[{3}]";
+        public const string ASC = "ASC";
+        public const string DESC = "DESC";
+        
+        private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
+        private const string ORDER_BY_FORMAT = "ORDER BY [{0}].[{1}] {2}";
+        private const string OFFSET_ROWS_FORMAT = " OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ";
+
+        private const string DELETE_FORMAT = "DELETE FROM [{0}]";
+
         public enum OrderType
         {
             Asc = 1,
@@ -18,8 +30,8 @@ namespace Chalkable.Data.Common.Orm
         }
         private static IDictionary<OrderType, string> orederTypesMap = new Dictionary<OrderType, string>
             {
-                {OrderType.Asc, "ASC"},
-                {OrderType.Desc, "DESC"}
+                {OrderType.Asc, ASC},
+                {OrderType.Desc, DESC}
             }; 
 
         private static bool IsDbField(PropertyInfo propertyInfo)
@@ -57,8 +69,6 @@ namespace Chalkable.Data.Common.Orm
                 throw new ChalkableException("There are no primary keys attributes in current model");
             return primaryKeyFields;
         } 
-
-        private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
         
         public static IList<string> FullFieldsNames(Type t)
         {
@@ -234,7 +244,7 @@ namespace Chalkable.Data.Common.Orm
         {
             var res = new DbQuery();
             var t = typeof(T);
-            res.Sql.AppendFormat("Delete from [{0}]", t.Name);
+            res.Sql.AppendFormat(DELETE_FORMAT, t.Name);
             conditioins.BuildSqlWhere(res, t.Name);
             return res;
         }
@@ -256,7 +266,6 @@ namespace Chalkable.Data.Common.Orm
             return SimpleSelect(typeof(T).Name, queryCondition, count);
         }
 
-        private const string ORDER_BY_FORMAT = "ORDER BY [{0}].[{1}] {2}";
         public static DbQuery OrderedSelect(string tName, QueryCondition queryCondition, string orderBy, OrderType orderType, int? count = null)
         {
             return OrderBy(SimpleSelect(tName, queryCondition, count), tName, orderBy, orderType);
@@ -306,7 +315,7 @@ namespace Chalkable.Data.Common.Orm
                 orderBy = order.Select(x => string.Format("x.[{0}] {1}", x.Key, orederTypesMap[x.Value])).JoinString(",");
             }
             b.AppendFormat(" order by {0}", orderBy);
-            b.AppendFormat(" OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ", start, count);
+            b.AppendFormat(OFFSET_ROWS_FORMAT, start, count);
             innerSelect.Sql = b;
             return innerSelect;
         }

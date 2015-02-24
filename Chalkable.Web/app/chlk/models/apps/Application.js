@@ -32,7 +32,6 @@ NAMESPACE('chlk.models.apps', function () {
                 this.message = SJX.fromValue(raw.message, String);
                 this.internal = SJX.fromValue(raw.isinternal, Boolean);
                 this.name = SJX.fromValue(raw.name, String);
-                this.internal = SJX.fromValue(raw.internal, Boolean);
                 this.url = SJX.fromValue(raw.url, String);
                 this.videoDemoUrl = SJX.fromValue(raw.videodemourl, String);
                 this.shortDescription = SJX.fromValue(raw.shortdescription, String);
@@ -54,11 +53,15 @@ NAMESPACE('chlk.models.apps', function () {
                 this.permissions = SJX.fromArrayOfDeserializables(raw.permissions, chlk.models.apps.AppPermission);
                 this.validRoles = SJX.fromArrayOfDeserializables(raw.canlaunchroles, chlk.models.people.Role);
                 this.gradeLevels = SJX.fromArrayOfValues(raw.gradelevels, chlk.models.id.AppGradeLevelId);
-                this.standardsCodes = SJX.fromArrayOfValues(raw.standardscodes, String);
+                this.standardsIds = SJX.fromArrayOfValues(raw.standardsids, String);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.CommonCoreStandard);
                 this.platforms = SJX.fromArrayOfDeserializables(raw.platforms, chlk.models.apps.AppPlatform);
                 this.banInfo = SJX.fromDeserializable(raw.baninfo, chlk.models.apps.BannedAppData);
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.apps.AppCategory);
+                this.internalScore = SJX.fromValue(raw.internalscore, Number);
+                this.internalDescription = SJX.fromValue(raw.internaldescription, String);
+                if(raw.liveapplication)
+                    this.liveApplication = SJX.fromDeserializable(raw.liveapplication, SELF);
             },
 
             chlk.models.id.AppId, 'id',
@@ -88,9 +91,36 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels',
             ArrayOf(chlk.models.apps.AppPlatform), 'platforms',
-            ArrayOf(String), 'standardsCodes',
+            ArrayOf(chlk.models.id.CommonCoreStandardId), 'standardsIds',
             ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
-            chlk.models.apps.BannedAppData, 'banInfo'
+            chlk.models.apps.BannedAppData, 'banInfo',
+            Number, 'internalScore',
+            String, 'internalDescription',
+
+            SELF, 'liveApplication',
+
+            READONLY, Boolean, 'live',
+            Boolean, function isLive(){
+                return this.getState() && this.getState().getStateId() == chlk.models.apps.AppStateEnum.LIVE;
+            },
+
+            READONLY, String, 'statusText',
+            String, function getStatusText(){
+                var state = this.getState();
+                if(this.getLiveAppId()){
+                    switch(state.getStateId()){
+                        case chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL.valueOf():
+                            return 'Live - Update awaiting approval';
+                        case chlk.models.apps.AppStateEnum.APPROVED.valueOf():
+                            return 'Live - Update approved';
+                        case chlk.models.apps.AppStateEnum.REJECTED.valueOf():
+                            return 'Live - Update rejected';
+                        default :
+                            return state.toString(); //'Your app is live in the Chalkable App Store';
+                    }
+                }
+                return state.toString()
+            }
         ]);
 
 

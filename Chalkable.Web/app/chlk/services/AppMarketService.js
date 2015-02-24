@@ -3,11 +3,14 @@ REQUIRE('chlk.services.AppCategoryService');
 
 REQUIRE('ria.async.Future');
 
+REQUIRE('chlk.models.id.MarkingPeriodId');
+REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.SchoolPersonId');
+
 REQUIRE('chlk.models.apps.AppGradeLevel');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.apps.AppMarketApplication');
-REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppInstallPostData');
 REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.apps.AppTotalPrice');
@@ -95,7 +98,7 @@ NAMESPACE('chlk.services', function () {
             },
 
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId,   Number, Number]],
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, Number, Number]],
             ria.async.Future, function getAppsForAttach(personId, classId, markingPeriodId,  start_, count_){
                 return this.getPaginatedList('AppMarket/ListInstalledForAttach', chlk.models.apps.ApplicationForAttach,{
                     personId: personId.valueOf(),
@@ -135,11 +138,11 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, String, String, Number]],
-            ria.async.Future, function getSuggestedApps(classId, markingPeriodId, standardsCodes, start_, count_){
+            ria.async.Future, function getSuggestedApps(classId, markingPeriodId, academicBenchmarkIds, start_, count_){
                 return this.get('AppMarket/SuggestedApps.json', ArrayOf(chlk.models.apps.ApplicationForAttach),{
                     classId : classId.valueOf(),
                     markingPeriodId: markingPeriodId ? markingPeriodId.valueOf() : this.getContext().getSession().get('markingPeriod').getId().valueOf(),
-                    standardsCodes : standardsCodes,
+                    abIds : academicBenchmarkIds,
                     start: start_ | 0,
                     count: count_ || 9999
                 });
@@ -189,18 +192,6 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getMyAppsByFilter(filter) {
                 var personId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId();
                 return this.getMyApps(personId, false, 0, filter);
-            },
-
-
-
-
-            [[String]],
-            chlk.models.apps.AppMarketApplication, function getMyAppByUrl(url){
-                var myApps = this.getContext().getSession().get(ChlkSessionConstants.MY_APPS_CACHED) || [];
-                var result = myApps.filter(function(item){
-                   return item.getUrl() == url;
-                }) || [];
-                return result.length > 0 ? result[0] : new chlk.models.apps.AppMarketApplication();
             },
 
             [[chlk.models.id.AppId]],

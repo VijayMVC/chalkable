@@ -24,8 +24,26 @@ NAMESPACE('chlk.templates.student', function(){
 
             [[chlk.models.standard.StandardForExplorer]],
             String, function getStandardColor(item){
-                var grade = item.getStandardGrading().getGradeValue();
-                if(!grade)
+                var alphaGrade = item.getStandardGrading().getGradeValue()
+                if(alphaGrade && alphaGrade.trim() != '')
+                    return  this.getStandardColorByAlphaGrade_(alphaGrade);
+                return this.getStandardColorByNumericValue_(item.getStandardGrading().getNumericGrade());
+            },
+
+            [[String]],
+            String, function getStandardColorByAlphaGrade_(grade){
+                if(!grade) return '';
+                grade = grade.toUpperCase();
+                if(['A+', 'A', 'A-', 'B+', 'B', 'B-'].indexOf(grade) >= 0)
+                    return 'green';
+                if(['C+', 'C', 'C-'].indexOf(grade) >= 0)
+                    return 'yellow';
+                return 'red';
+            },
+
+            [[Number]],
+            String, function getStandardColorByNumericValue_(grade){
+                if(!grade && grade !== 0)
                     return '';
                 if(grade >= 75)
                     return 'green';
@@ -44,7 +62,12 @@ NAMESPACE('chlk.templates.student', function(){
                 var announcementsLength = (item.getAnnouncement() ? 1 : 0);
 
                 return !this.showMoreButton(item) || (announcementsLength + index < 3);
-            }
+            },
 
+            [[chlk.models.announcement.Announcement]],
+            String, function getDaysForAnnouncement(announcement){
+                announcement.prepareExpiresDateText();
+                return announcement.getExpiresDateText();
+            }
         ]);
 });

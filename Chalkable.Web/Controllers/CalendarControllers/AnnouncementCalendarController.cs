@@ -48,16 +48,6 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          }
 
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-         public ActionResult ListForWeek(DateTime? date)
-         {
-             DateTime start, end;
-             var dates = GetWeekDates(ref date, out start, out end);
-             var anns = SchoolLocator.AnnouncementService.GetAnnouncements(start, end);
-             var listDayAnnouncements = AnnouncementByDateViewData.Create(dates, anns);
-             return Json(listDayAnnouncements);
-         }
-
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
          public ActionResult ListByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
              var query = new AnnouncementsQuery {FromDate = startDate, ToDate = endDate, ClassId = classId};

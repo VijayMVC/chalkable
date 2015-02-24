@@ -25,7 +25,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 throw new ChalkableException("User has no valid school year id");
             if (!Context.DistrictId.HasValue || !Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException("User is not assigned to any school");
-            return Json(CurrentPersonViewData.Create(person, Context.DistrictId.Value, Context.SchoolYearId.Value, Context.SchoolLocalId.Value, Context.DistrictTimeZone));
+
+            var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
+            var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value, Context.SchoolLocalId.Value);
+            var schoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
+            return Json(CurrentPersonViewData.Create(person, district, school, schoolYear));
         }
 
         //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
@@ -41,7 +45,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolYearTime.Date);
             IList<ClassDetails> classes = new List<ClassDetails>();
             if(mp != null)
-                classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, mp.Id, person.Id, 0, int.MaxValue);
+                classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, mp.Id, person.Id);
             return PersonScheduleViewData.Create(person, classes);
         }
 

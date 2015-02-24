@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
+using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -97,10 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementApplication GetAnnouncementApplication(int announcementAppId)
         {
-            using (var uow = Read())
-            {
-                return new AnnouncementApplicationDataAccess(uow).GetById(announcementAppId);
-            }
+            return DoRead(uow => new AnnouncementApplicationDataAccess(uow).GetById(announcementAppId));
         }
 
         public void AttachAppToAnnouncement(int announcementAppId)
@@ -123,8 +122,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool CanAddToAnnouncement(Guid appId)
         {
+            var assessmentId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
             var appInstall = ServiceLocator.AppMarketService.GetInstallationForPerson(appId, Context.PersonId.Value);
-            return appInstall != null && appInstall.Active;
+            return assessmentId == appId  || (appInstall != null && appInstall.Active);
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)
@@ -133,8 +133,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
-                var ps = new AndQueryCondition();
-                ps.Add(AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId);
+                var ps = new AndQueryCondition {{AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId}};
                 if (onlyActive)
                     ps.Add(AnnouncementApplication.ACTIVE_FIELD, true);
                 return da.GetAll(ps);

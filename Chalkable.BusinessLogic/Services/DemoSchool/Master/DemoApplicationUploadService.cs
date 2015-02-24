@@ -63,5 +63,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             throw new NotImplementedException();
         }
+
+
+        public void SetApplicationInternalData(Guid applicationId, int? internalScore, string internalDescription)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

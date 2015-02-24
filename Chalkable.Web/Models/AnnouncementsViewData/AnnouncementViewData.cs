@@ -49,6 +49,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool? WasAnnouncementTypeGraded { get; set; }
         public bool ShowGradingIcon { get; set; }
 
+        public Guid AssessmentApplicationId { get; set; }
+
         protected AnnouncementViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded)
             : base(announcement)
         {

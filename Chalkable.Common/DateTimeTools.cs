@@ -45,5 +45,17 @@ namespace Chalkable.Common
             var tz = GetById(timeZoneId);
             return TimeZoneInfo.ConvertTimeToUtc(dateTime, tz);
         }
+
+        public static string WindowsToIana(string windowsZoneId)
+        {
+            if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
+                return "Etc/UTC";
+
+            var tzdbSource = NodaTime.TimeZones.TzdbDateTimeZoneSource.Default;
+            var tzi = TimeZoneInfo.FindSystemTimeZoneById(windowsZoneId);
+            var timeZoneId = tzdbSource.MapTimeZoneId(tzi);
+
+            return tzdbSource.CanonicalIdMap.ContainsKey(timeZoneId) ? tzdbSource.CanonicalIdMap[timeZoneId] : "Etc/UTC";
+        }
     }
 }

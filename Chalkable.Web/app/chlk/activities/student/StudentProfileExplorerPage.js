@@ -15,18 +15,31 @@ NAMESPACE('chlk.activities.student', function () {
             [ria.mvc.DomEventBind('click', '.more-button')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function moreStandardsClick(node, event){
-                node.parent().find('.hidden-item').removeClass('hidden-item');
-                node.remove();
+                node.parent().find('.hidden-item, .less-button').setCss('display', 'block');
+                node.hide();
             },
 
-            [ria.mvc.DomEventBind('click', '.with-code.standard:not(.pressed)')],
+            [ria.mvc.DomEventBind('click', '.less-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function lessStandardsClick(node, event){
+                node.parent().find('.hidden-item').hide();
+                node.parent().find('.more-button').show();
+                var item = this.dom.find('.block-item.standard.pressed');
+                if(item.exists() && item.hasClass('hidden-item')){
+                    this.dom.find('.suggested-apps-container').setHTML('');
+                    item.removeClass('pressed');
+                }
+                node.hide();
+            },
+
+            [ria.mvc.DomEventBind('click', '.standard:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function standardClick(node, event){
                 this.dom.find('.standard.pressed').removeClass('pressed');
                 setTimeout(function(){
                     node.addClass('pressed');
                 }, 1);
-                var top = node.offset().top - node.parent('.explorer-view').offset().top - (node.height() + 2 * parseInt(node.getCss('border-width'), 10)) / 2;
+                var top = node.offset().top - node.parent('.explorer-view').offset().top - (node.height() + 2 * (parseInt(node.getCss('border-width'), 10) || 1)) / 2;
                 this.dom.find('.suggested-apps-container').setCss('margin-top', top);
             }
         ]);

@@ -543,7 +543,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         html += '<div class="autocomplete-item see-all">See all »</div>';
 
                     var top = node.offset().top - list.parent().offset().top + node.height();
-                        var left = node.offset().left - list.parent().offset().left + 130;
+                        var left = node.offset().left - list.parent().offset().left;
                         list.setCss('top', top)
                             .setCss('left', left);
                     list.setHTML(html)

@@ -1,7 +1,6 @@
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.classes.ClassForWeekMask');
 REQUIRE('chlk.models.announcement.AnnouncementCreate');
-REQUIRE('chlk.models.announcement.AdminRecipients');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -12,8 +11,6 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
             chlk.models.classes.ClassForWeekMask, 'classInfo',
             Number, 'selectedTypeId',
-            Array, 'reminders',
-            chlk.models.announcement.AdminRecipients, 'adminRecipients',
             String, 'adminRecipientId',
             Array, 'classScheduleDateRanges',
 

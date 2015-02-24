@@ -16,6 +16,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
         PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
+
+        PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
         
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
             , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
@@ -29,7 +31,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
 
-        IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count);
+        Application GetPracticeGradesApplication();
+        Application GetAssessmentApplication();
+
+        IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count);
     }
 
 
@@ -61,6 +66,31 @@ namespace Chalkable.BusinessLogic.Services.Master
             return GetApplications(query);
         }
 
+        public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
+        {
+            var onlyWithLive = state == ApplicationStateEnum.Live;
+            var query = new ApplicationQuery
+            {
+                DeveloperId = developerId,
+                State = onlyWithLive ? null : state,
+                Filter = filter
+            };
+            var apps = GetApplications(query).Where(x=> x.State != ApplicationStateEnum.Live).ToList();
+            if (onlyWithLive)
+                apps = apps.Where(a => a.OriginalRef.HasValue).ToList();
+            var appsLiveIds = apps.Where(x => x.OriginalRef.HasValue).Select(x => x.OriginalRef.Value).ToList();
+            if (appsLiveIds.Count > 0)
+            {
+               var liveApps = GetApplicationsByIds(appsLiveIds);
+               foreach (var app in apps)
+               {
+                   if(app.OriginalRef.HasValue)
+                        app.LiveApplication = liveApps.First(x => x.Id == app.OriginalRef);
+               }
+            }
+            return new PaginatedList<Application>(apps, start / count, count);
+        }
+
         public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
         {
             var query = new ApplicationQuery
@@ -88,6 +118,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         
         public Application GetApplicationById(Guid id)
         {
+            if (id == Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value))
+                return GetPracticeGradesApplication();
+            if (id == Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value))
+                return GetAssessmentApplication();
+
             using (var uow = Read())
             {
                 return new ApplicationDataAccess(uow)
@@ -197,18 +232,31 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                var res = new ApplicationDataAccess(uow).GetByIds(ids);
-                return res.Where(x=>x.State == ApplicationStateEnum.Live).ToList();
+                return new ApplicationDataAccess(uow).GetByIds(ids);
+                //return res.Where(x=>x.State == ApplicationStateEnum.Live).ToList();
             }
         }
 
 
-        public IList<Application> GetSuggestedApplications(List<string> standardsCodes, List<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow).GetSuggestedApplications(standardsCodes, installedAppsIds, start, count);
+                return new ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
             }
+        }
+
+        public Application GetPracticeGradesApplication()
+        {
+            var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
+        }
+
+
+        public Application GetAssessmentApplication()
+        {
+            var appId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
         }
     }
 
