@@ -38,7 +38,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                                     ableToRemoveStandard=announcement.isAbleToRemoveStandard())
                             if announcement.isCanAddStandard()
                                 .title=Msg.Click_to_add_standard
-                                +ActionLink('announcement', 'showStandards', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
+                                +ActionLink('announcement', announcement.getState() ? 'showStandards' : 'showStandardsOnCreate', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
                 .drawer-icon
             .drop-down-container.popup-bubble.top
             input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')

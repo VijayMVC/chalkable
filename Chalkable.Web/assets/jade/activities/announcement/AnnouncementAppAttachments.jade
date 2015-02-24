@@ -37,12 +37,12 @@ items = self.getSortedAppsAndAttachments();
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if !isAnnouncement && self.isStudyCenterEnabled()
-            +ActionButton('announcement', 'attachApp', self.getId(), self.getClassId(), self.getStandardsUrlComponents())#add-application.simple-gray-button Attach App
+            +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), self.getClassId(), self.getStandardsUrlComponents())#add-application.simple-gray-button Attach App
             br
             if self.getAssessmentApplicationId()
                 +ActionButton('apps', 'tryToAttach', self.getId(), self.getAssessmentApplicationId(), self.getStandardsUrlComponents())#add-assesment.simple-gray-button Assessment
         .simple-gray-button.file Attach File
-            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+            +FileUpload('announcement', self.getState() ? 'uploadAttachment' : 'uploadAttachmentOnCreate', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each item, i in items
     if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
         +AnnouncementFormApplicationItem(item, i)

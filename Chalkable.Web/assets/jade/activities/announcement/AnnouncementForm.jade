@@ -38,7 +38,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
     if announcement && announcement.getClassId()
         h2.page-title= announcement.getClassName()
         .loader
-        +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
+        +ActionForm('announcement', state ? 'save' : 'saveOnCreate')(onlySubmitValidate=true).no-working
             +ClassesToolBar(topData)(pressAfterClick=!announcement.getState())
             .not-transparent(class=(classId ? '' : 'x-hidden'))
                 +AnnouncementTypeToolBar(types, announcement, typeId)

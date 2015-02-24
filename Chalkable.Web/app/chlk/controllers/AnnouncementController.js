@@ -337,12 +337,21 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(this.getAnnouncementFormPageType_(), result);
         },
 
-
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, Number]],
+        function attachAppOnCreateAction(announcementId, classId, appUrlAppend_, pageIndex_) {
+            return this.attachAppAction(announcementId, classId, appUrlAppend_, pageIndex_);
+        },
+
+
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, Number]],
         function attachAppAction(announcementId, classId, appUrlAppend_, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
@@ -434,6 +443,12 @@ NAMESPACE('chlk.controllers', function (){
                     return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
             }
             throw error;
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, Object]],
+        function uploadAttachmentOnCreateAction(announcementId, files) {
+            return this.uploadAttachmentAction(announcementId, files);
         },
 
         [[chlk.models.id.AnnouncementId, Object]],
@@ -722,10 +737,15 @@ NAMESPACE('chlk.controllers', function (){
             if(!announcement.getAnnouncementTypeId() || !announcement.getAnnouncementTypeId().valueOf())
                 return this.Redirect('error', 'createAnnouncementError', []);
             var announcementForm = this.prepareAnnouncementForm_(announcement);
-            return this.Redirect('announcement', 'saveAnnouncement', [announcement, announcementForm]);
+            return this.saveAnnouncementTeacherAction(announcement, announcementForm);
         },
 
         [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.announcement.Announcement]],
+        function saveOnCreateAction(model){
+            return this.saveAction(model);
+        },
+
         [[chlk.models.announcement.Announcement]],
         function saveAction(model) {
             if(this.isAnnouncementSavingDisabled()) return;
@@ -752,12 +772,12 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'save'){
-                return this.Redirect('announcement', 'saveAnnouncementForm', [model]);
+                return this.saveAnnouncementFormAction(model);
             }
 
             if (submitType == 'saveNoUpdate'){
                 this.setNotAblePressSidebarButton(true);
-                return this.Redirect('announcement', 'saveAnnouncement', [model]);
+                return this.saveAnnouncementTeacherAction(model);
             }
             var classIdInFinalizedClassIds = session.get(ChlkSessionConstants.FINALIZED_CLASS_IDS).indexOf(classId.valueOf()) > -1;
 
@@ -952,6 +972,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('add-new')],
+        [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
+        function showStandardsOnCreateAction(typeName, announcementId, classId){
+            return this.showStandardsAction(typeName, announcementId, classId);
+        },
+
         [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showStandardsAction(typeName, announcementId, classId){
             var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
