@@ -26,5 +26,8 @@ namespace Chalkable.Data.School.Model
         public int? UpperGradeLevelRef { get; set; }
         public bool IsActive { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
+
+        [NotDbFieldAttr]
+        public string CCStandardCode { get; set; }
     }
 }

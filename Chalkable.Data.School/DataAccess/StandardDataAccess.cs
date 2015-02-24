@@ -207,7 +207,7 @@ namespace Chalkable.Data.School.DataAccess
             return res;
         }
 
-        public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
+        public IList<AnnouncementStandard> GetAnnouncementStandardsByClassId(int classId)
         {
             var cond = new AndQueryCondition {{Class.ID_FIELD, classId}};
             var classStDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, cond);
@@ -216,6 +216,20 @@ namespace Chalkable.Data.School.DataAccess
                 AnnouncementStandard.STANDARD_REF_FIELD, classStDbQuery.Sql);
             dbQuery.Parameters = classStDbQuery.Parameters;
             return ReadMany<AnnouncementStandard>(dbQuery);
+        }
+
+        public IList<AnnouncementStandardDetails> GetAnnouncementStandardsByAnnId(int announcementId)
+        {
+            var dbQuery = new DbQuery();
+            var types = new List<Type> {typeof (AnnouncementStandard), typeof (Standard)};
+            dbQuery.Sql
+                   .AppendFormat(Orm.SELECT_FORMAT, Orm.ComplexResultSetQuery(types), types[0].Name).Append(" ")
+                   .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, types[1].Name, Standard.ID_FIELD,
+                                 types[0].Name, AnnouncementStandard.STANDARD_REF_FIELD)
+                   .Append(" ");
+            var conds = new AndQueryCondition { { AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId } };
+            conds.BuildSqlWhere(dbQuery, types[0].Name);
+            return ReadMany<AnnouncementStandardDetails>(dbQuery, true);
         }
     }
 

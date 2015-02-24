@@ -21,6 +21,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         CommonCoreStandard GetStandardByABId(Guid academicBenchmarkId);
         IList<CommonCoreStandard> GetStandardsByABIds(IList<Guid> academicBenchmarkIds);
         IList<CommonCoreStandard> GetStandards(string filter);
+        IDictionary<Guid, string> GetStandardsCodeByABIds(IList<Guid> academicBenchmarkIds);
+        string GetStandardCodeByABId(Guid academicBenchmarkIds);
     }
 
     public class CommonCoreStandardService : MasterServiceBase, ICommonCoreStandardService
@@ -67,23 +69,16 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void AddStandards(IList<CommonCoreStandard> commonCoreStandards)
         {
-            //if (!BaseSecurity.IsSysAdmin(Context))
-            //    throw new ChalkableSecurityException();
             DoUpdate(uow=> new CommonCoreStandardDataAccess(uow).Insert(commonCoreStandards));
         }
 
         public void AddStandardsCategories(IList<CommonCoreStandardCategory> standardCategories)
         {
-            //if (!BaseSecurity.IsSysAdmin(Context))
-            //    throw new ChalkableSecurityException();
-
             DoUpdate(uow => new CC_StandardCategoryDataAccess(uow).Insert(standardCategories));
         }
 
         public void AddABToCCMapping(IList<ABToCCMapping> abtoCcMappings)
         {
-            //if (!BaseSecurity.IsSysAdmin(Context))
-            //    throw new ChalkableSecurityException();
             DoUpdate(uow => new ABToCCMappingDataAccess(uow).Insert(abtoCcMappings));
         }
 
@@ -96,6 +91,20 @@ namespace Chalkable.BusinessLogic.Services.Master
             if(ccStandardId.HasValue)
                 conds.Add(ABToCCMapping.CC_STANADARD_REF_FIELD, ccStandardId);
             return DoRead(uow => new ABToCCMappingDataAccess(uow).GetAll(conds));
+        }
+
+        public IDictionary<Guid, string> GetStandardsCodeByABIds(IList<Guid> academicBenchmarkIds)
+        {
+            //TODO: get this codes from static dictionary
+            var standards = GetStandardsByABIds(academicBenchmarkIds).Where(x=>x.AcademicBenchmarkId.HasValue).ToList();
+            var res = standards.GroupBy(x => x.AcademicBenchmarkId).ToDictionary(x => x.Key.Value, x => x.First().Code);
+            return res;
+        }
+
+        public string GetStandardCodeByABId(Guid academicBenchmarkIds)
+        {
+            var res = GetStandardsCodeByABIds(new List<Guid> {academicBenchmarkIds});
+            return !res.ContainsKey(academicBenchmarkIds) ? null : res[academicBenchmarkIds];
         }
     }
 }

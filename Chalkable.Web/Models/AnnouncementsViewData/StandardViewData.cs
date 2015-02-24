@@ -27,6 +27,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ParentStandardId = standard.ParentStandardRef;
             StandardSubjectId = standard.StandardSubjectRef;
             AcademicBenchmarkId = standard.AcademicBenchmarkId;
+            CCStandardCode = standard.CCStandardCode;
         }
         
         public static StandardViewData Create(Standard standard)
@@ -36,10 +37,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public static StandardViewData Create(StandardDetailsInfo standardDetailsInfo)
         {
-            var res = Create(standardDetailsInfo.Standard);
-            if (standardDetailsInfo.CommonCoreStandard != null)
-                res.CCStandardCode = standardDetailsInfo.CommonCoreStandard.Code;
-            return res;
+            return Create(standardDetailsInfo.Standard);
         }
 
         public static IList<StandardViewData> Create(IList<Standard> standards)

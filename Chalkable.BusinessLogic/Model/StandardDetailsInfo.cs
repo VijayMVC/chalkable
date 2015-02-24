@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.Master.Model;
+﻿using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Model
@@ -17,7 +12,10 @@ namespace Chalkable.BusinessLogic.Model
         {
             var res = new StandardDetailsInfo {Standard = standard};
             if (commonCoreStandard != null)
+            {
                 res.CommonCoreStandard = commonCoreStandard;
+                res.Standard.CCStandardCode = commonCoreStandard.Code;
+            }
             return res;
         }
     }

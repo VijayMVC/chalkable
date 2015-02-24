@@ -17,14 +17,14 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult SearchStandards(string filter)
         {
-            var stadnards = SchoolLocator.StandardService.GetStandardsDetails(filter);
+            var stadnards = SchoolLocator.StandardService.GetStandards(filter);
             return Json(stadnards.Select(StandardViewData.Create).ToList());
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards)
         {
-            var standards = SchoolLocator.StandardService.GetStandardsDetails(classId, gradeLevelId
+            var standards = SchoolLocator.StandardService.GetStandards(classId, gradeLevelId
                 , subjectId, parentStandardId, allStandards ?? false);
             return Json(standards.Select(StandardViewData.Create).ToList());
         }
@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetStandardsByIds(IntList ids)
         {
-            var standards = SchoolLocator.StandardService.GetStandardsDetails(ids).ToList();
+            var standards = SchoolLocator.StandardService.GetStandards(ids).ToList();
             return Json(standards.Select(StandardViewData.Create));
         }
 

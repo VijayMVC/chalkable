@@ -32,7 +32,7 @@ namespace Chalkable.Web.Models
         public DateTime? GradedDate { get; set; }
         public Guid? ApplicationId { get; set; }
 
-        public static PracticeGradeViewData Create(PracticeGrade practiceGrade, GradingStandardInfo gradingStandardInfo, StandardDetailsInfo standard)
+        public static PracticeGradeViewData Create(PracticeGrade practiceGrade, GradingStandardInfo gradingStandardInfo, Standard standard)
         {
             var res = new PracticeGradeViewData {Standard = StandardViewData.Create(standard)};
             if (practiceGrade != null)

@@ -120,8 +120,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            return Storage.AnnouncementStorage.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id); ;
-                
+            var res = Storage.AnnouncementStorage.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id); ;
+            res.AnnouncementStandards =  ServiceLocator.StandardService.GetAnnouncementStandards(announcementId);
+            return res;
         }
 
         public void DeleteAnnouncement (int announcementId)
