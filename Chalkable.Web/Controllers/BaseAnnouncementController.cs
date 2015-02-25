@@ -41,12 +41,7 @@ namespace Chalkable.Web.Controllers
                 {
                     annView.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, ann, attInfo);
                     var autoGrades = SchoolLocator.StudentAnnouncementService.GetAutoGradesByAnnouncementId(ann.Id);
-                    annView.AutoGradeApps = new List<AutoGradeViewData>();
-                    foreach (var autoGrade in autoGrades)
-                    {
-                        var appView = annView.Applications.FirstOrDefault(x => x.Id == autoGrade.AnnouncementApplication.ApplicationRef);
-                        annView.AutoGradeApps.Add(AutoGradeViewData.Create(autoGrade, appView));
-                    }
+                    annView.AutoGradeApps = AutoGradeViewData.Create(autoGrades);
                 }
             }
             return annView;

@@ -14,10 +14,44 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public override void Delete(int key)
+        {
+            var queries = new List<DbQuery>
+                {
+                    Orm.SimpleDelete<AutoGrade>(new AndQueryCondition 
+                        {
+                            {AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD, key}
+                        }),
+                    Orm.SimpleDelete<AnnouncementApplication>(new AndQueryCondition
+                        {
+                            {AnnouncementApplication.ID_FIELD, key}
+                        })
+
+                };
+            var dbQuery = new DbQuery(queries);
+            ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);
+        }
+
         public void DeleteByAnnouncementId(int announcementId)
         {
-            var conds = new AndQueryCondition {{AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId}};
-            SimpleDelete(conds);
+            var query1 = new DbQuery();
+            query1.Sql.AppendFormat(Orm.DELETE_FORMAT, typeof (AutoGrade).Name).Append(" ")
+                  .Append(" where ").AppendFormat(" [{0}] in (", AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD)
+                  .AppendFormat(Orm.SELECT_FORMAT, AnnouncementApplication.ID_FIELD, typeof(AnnouncementApplication).Name)
+                  .Append(" where ").AppendFormat(" [{0}] = @{0}", AnnouncementApplication.ANNOUNCEMENT_REF_FIELD)
+                  .Append(")");
+            query1.Parameters.Add(AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId);
+            var queries = new List<DbQuery>
+                {   
+                    query1,
+                    Orm.SimpleDelete<AnnouncementApplication>(new AndQueryCondition
+                        {
+                            {AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId}
+                        })
+
+                };
+            var dbQuery = new DbQuery(queries);
+            ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsbyAnnIds(IList<int> announcementIds)
