@@ -24,7 +24,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string DELETE_PROCEDURE = "spDeleteAnnouncement";
         private const string REORDER_PROCEDURE = "spReorderAnnouncements";
 
-        private const string ANNOUNCEMENT_TYPE_ID_PARAM = "announcementTypeId";
         private const string CLASS_ANNOUNCEMENT_TYPE_ID_PARAM = "classAnnouncementTypeId";
         private const string CREATED_PARAM = "created";
         private const string EXPIRES_PARAM = "expires";
@@ -34,7 +33,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string CLASS_ID_PARAM = "classId";
         private const string MARKING_PERIOD_ID_PARAM = "markingPeriodId";
 
-        private const string OWNER_ID_PARAM = "ownerId";
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
         private const string ID_PARAM = "id";
         private const string CALLER_ID_PARAM = "callerId";
@@ -226,7 +224,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             if (activitiesIds == null || activitiesIds.Count == 0) return new List<AnnouncementComplex>();
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append(@"select * from vwAnnouncement ");
-            dbQuery.Sql.AppendFormat("where SisActivityId in ({0})", activitiesIds.Select(x => x.ToString()).JoinString(","));
+            dbQuery.Sql.AppendFormat("where SisActivityId in ({0})", activitiesIds.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(","));
             return ReadMany<AnnouncementComplex>(dbQuery);
         }
 
@@ -269,7 +267,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             {
                 var dbQuery = new DbQuery();
                 var tableName = "Announcement";
-                var idsString = sisActivitiesIds.Select(x => x.ToString()).JoinString(",");
+                var idsString = sisActivitiesIds.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(",");
                 dbQuery.Sql.Append(string.Format(@"select * from [{0}] where [{0}].[{1}] in ({2})"
                     , tableName, Announcement.SIS_ACTIVITY_ID_FIELD,idsString));
                 return Exists(dbQuery);
@@ -307,7 +305,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool GradedOnly { get; set; }
         public bool AllSchoolItems { get; set; }
 
-        public IList<int> GradeLevelIds { get; set; }
         public IList<int> SisActivitiesIds { get; set; }
 
         public bool? Graded { get; set; }

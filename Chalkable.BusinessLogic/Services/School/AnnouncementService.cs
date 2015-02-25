@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly);
         IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
         IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null);
-        IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null);
+        IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, int? classId = null);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
         IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null);
         Announcement GetLastDraft();
@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private AnnouncementDataAccess CreateAnnoucnementDataAccess(UnitOfWork unitOfWork)
         {
             if(BaseSecurity.IsAdminViewer(Context))
-                return new AnnouncementForAdminDataAccess(unitOfWork, Context.SchoolLocalId);
+                throw new NotImplementedException();
             if(Context.Role == CoreRoles.TEACHER_ROLE)
                 return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId);
             if(Context.Role == CoreRoles.STUDENT_ROLE)
@@ -111,13 +111,12 @@ namespace Chalkable.BusinessLogic.Services.School
             return GetAnnouncementsComplex(q);
         }
 
-        public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null)
+        public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, int? classId = null)
         {
             var q = new AnnouncementsQuery
                 {
                     FromDate = fromDate.Date,
                     ToDate = toDate.Date,
-                    GradeLevelIds = gradeLevelsIds,
                     ClassId = classId
                 };
             return GetAnnouncementsComplex(q);

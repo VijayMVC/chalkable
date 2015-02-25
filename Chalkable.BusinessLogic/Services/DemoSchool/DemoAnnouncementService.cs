@@ -51,13 +51,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return GetAnnouncementsComplex(q);
         }
 
-        public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, IList<int> gradeLevelsIds = null, int? classId = null)
+        public IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, int? classId = null)
         {
             var q = new AnnouncementsQuery
                 {
                     FromDate = fromDate,
                     ToDate = toDate,
-                    GradeLevelIds = gradeLevelsIds,
                     ClassId = classId
                 };
             return GetAnnouncementsComplex(q);

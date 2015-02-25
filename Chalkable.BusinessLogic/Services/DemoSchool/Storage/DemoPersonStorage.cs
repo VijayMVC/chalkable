@@ -46,10 +46,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 {
                     if (query.RoleId == CoreRoles.TEACHER_ROLE.Id)
                     {
-                        var teacherRef = Storage.ClassStorage.GetClassesComplex(new ClassQuery
-                        {
-                            ClassId = query.ClassId
-                        }).Classes.Select(x => x.PrimaryTeacherRef).First();
+                        var teacherRef = Storage.ClassStorage.GetClassDetailsById(query.ClassId.Value).PrimaryTeacherRef;
 
                         persons = persons.Where(x => x.Id == teacherRef);
                     }

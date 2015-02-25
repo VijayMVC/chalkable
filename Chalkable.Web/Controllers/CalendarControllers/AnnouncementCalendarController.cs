@@ -27,17 +27,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  throw new UnassignedUserException();
              DateTime start, end;
              MonthCalendar(ref date, out start, out end);
-             var isAdmin = BaseSecurity.IsAdminViewer(SchoolLocator.Context);
              var schoolYearId = GetCurrentSchoolYearId();
-             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, gradeLevelIds, !isAdmin ? classId : null);
-
-             
-             if (schoolPersonId.HasValue)
-             {
-                 var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, null, schoolPersonId);
-                 announcements = announcements.Where(x => classes.Any(y => y.Id == x.ClassRef)).ToList();
-             }
-
+             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId);
              if (DemoUserService.IsDemoUser(Context))
              {
                  announcements = announcements.Where(x => x.State == AnnouncementState.Created).ToList();
@@ -86,7 +77,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              int? teacherId, studentId;
              PrepareUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
              var res = new List<AnnouncementCalendarWeekViewData>();
-             var announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, null, classId);
+             var announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, classId);
              var schedule = locator.ClassPeriodService.GetSchedule(teacherId, studentId, classId, start, end);
                     
              for (var d = start; d <= end; d = d.AddDays(1))

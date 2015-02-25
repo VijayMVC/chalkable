@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
@@ -78,8 +79,8 @@ namespace Chalkable.Web.Logic
             {
                 if (!schoolLocator.Context.SchoolYearId.HasValue)
                     throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
-
-                var classes = schoolLocator.ClassService.GetClasses(schoolLocator.Context.SchoolYearId.Value, null, schoolLocator.Context.PersonId);
+                Trace.Assert(schoolLocator.Context.PersonId.HasValue);
+                var classes = schoolLocator.ClassService.GetTeacherClasses(schoolLocator.Context.SchoolYearId.Value, schoolLocator.Context.PersonId.Value);
                 var studentCountToAppInstall = schoolLocator.AppMarketService.GetStudentCountToAppInstallByClass(schoolLocator.Context.SchoolYearId.Value, application.Id);
                 foreach (var clazz in classes)
                 {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
@@ -19,10 +21,21 @@ namespace Chalkable.Web.Controllers
     public class ClassController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_CLASS_LIST, true, CallType.Post, new[] { AppPermissionType.Class })]
-        public ActionResult List(int? schoolYearId, int? markingPeriodId, int? personId, int? start, int? count)
+        public ActionResult List(int? schoolYearId, int? markingPeriodId, int? personId, int? start, int? count)//TODO: remove pagination from there
         {
-            var res = SchoolLocator.ClassService.GetClasses(schoolYearId, markingPeriodId, personId, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
-            return Json(res.Transform(ClassViewData.Create));
+            IList<ClassDetails> res;
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+            if (Context.RoleId == CoreRoles.TEACHER_ROLE.Id)
+                res = SchoolLocator.ClassService.GetTeacherClasses(Context.SchoolYearId.Value, Context.PersonId.Value, markingPeriodId);
+            else if (Context.RoleId == CoreRoles.STUDENT_ROLE.Id)
+                res = SchoolLocator.ClassService.GetStudentClasses(Context.SchoolYearId.Value, Context.PersonId.Value, markingPeriodId);
+            else
+                throw new NotImplementedException();
+            start = start ?? 0;
+            count = count ?? 10;
+            var pl = new PaginatedList<ClassDetails>(res, start.Value/count.Value, count.Value, res.Count);
+            return Json(pl.Transform(ClassViewData.Create));
         }
 
         [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
@@ -64,7 +77,7 @@ namespace Chalkable.Web.Controllers
             var dates = SchoolLocator.CalendarDateService.GetLastDays(mp.SchoolYearRef, true, currentDateTime.Date, currentDateTime.Date.AddDays(8), 9).Select(x => x.Day).ToList();
             IList<AnnouncementComplex> anns = new List<AnnouncementComplex>();
             if (dates.Count > 0)
-                anns = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, dates.Last().Date, false, null, classId);
+                anns = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, dates.Last().Date, false, classId);
             var annsByDate = AnnouncementByDateViewData.Create(dates, anns);
             var gradePerMps = SchoolLocator.GradingStatisticService.GetClassGradeAvgPerMP(classId, mp.SchoolYearRef, null, null);
             gradePerMps = gradePerMps.Where(x => x.MarkingPeriod.StartDate <= mp.StartDate).ToList();

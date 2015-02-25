@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.Common;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -22,17 +19,18 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditTeachers(IList<ClassTeacher> classTeachers);
         void DeleteTeachers(IList<ClassTeacher> classTeachers);
         void DeleteStudent(IList<ClassPerson> classPersons);
+
+        IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null);
+        IList<ClassDetails> GetStudentClasses(int schoolYearId, int studentId, int? markingPeriodId = null);
+        IList<ClassDetails> SearchClasses(string filter);
+        
         ClassDetails GetClassDetailsById(int id);
-        PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue);
-        IList<ClassDetails> GetClasses(string filter);
-        PaginatedList<ClassDetails> GetClasses(int? schoolYearId);
-        ClassPerson GetClassPerson(int classId, int personId);
+        
         IList<ClassPerson> GetClassPersons(int? personId, int? classId, bool? isEnrolled, int? markingPeriodId); 
         IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled); 
         IList<ClassTeacher> GetClassTeachers(int? classId, int? teacherId); 
 
         void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses);
-        void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId);
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
         Class GetById(int id);
         IList<Class> GetAll();
@@ -119,34 +117,39 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public ClassDetails GetClassDetailsById(int id)
+        public IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null)
         {
-            return GetClasses(new ClassQuery {ClassId = id, Count = 1}).First();
-        }
-        
-        public void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId)
-        {
-            if(!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId)
-                    .Delete(new MarkingPeriodClassQuery
-                    {
-                        ClassId = classId,
-                        MarkingPeriodId = markingPeriodId
-                    });
-                uow.Commit();
-            }
+            return DoRead(uow => new ClassDataAccess(uow).GetTeacherClasses(schoolYearId, teacherId, markingPeriodId));
         }
 
+        public IList<ClassDetails> GetStudentClasses(int schoolYearId, int studentId, int? markingPeriodId)
+        {
+            return DoRead(uow => new ClassDataAccess(uow).GetStudentClasses(schoolYearId, studentId, markingPeriodId));
+        }
+
+        public IList<ClassDetails> SearchClasses(string filter)
+        {
+            var sl = filter.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string f1 = null, f2 = null, f3 = null;
+            if (sl.Length == 0)
+                return new List<ClassDetails>();
+            if (sl.Length > 0)
+                f1 = sl[0];
+            if (sl.Length > 1)
+                f2 = sl[1];
+            if (sl.Length > 2)
+                f3 = sl[2];
+            return DoRead(uow => new ClassDataAccess(uow).SearchClasses(f1, f2, f3));
+        }
+
+        public ClassDetails GetClassDetailsById(int id)
+        {
+            return DoRead(uow => new ClassDataAccess(uow).GetClassDetailsById(id));
+        }
+        
         public Class GetById(int id)
         {
-            using (var uow = Read())
-            {
-                return new ClassDataAccess(uow)
-                    .GetById(id);
-            }
+            return DoRead(uow => new ClassDataAccess(uow).GetById(id));
         }
 
         public IList<Class> GetAll()
@@ -158,59 +161,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new ClassDataAccess(uow)
                     .GetAll();
             } 
-        }
-
-        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
-        {
-            var  res = GetClassesQueryResult(new ClassQuery
-                {
-                    SchoolYearId = schoolYearId,
-                    MarkingPeriodId = markingPeriodId,
-                    PersonId = personId,
-                    Start = start,
-                    Count = count
-                });
-            return new PaginatedList<ClassDetails>(res.Classes, start / count, count, res.SourceCount);
-        }
-
-        private IList<ClassDetails> GetClasses(ClassQuery query)
-        {
-            return GetClassesQueryResult(query).Classes;
-        } 
-
-        private  ClassQueryResult GetClassesQueryResult(ClassQuery query)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            using (var uow = Read())
-            {
-                query.CallerId = Context.PersonId.Value;
-                query.CallerRoleId = Context.Role.Id;
-                return new ClassDataAccess(uow)
-                    .GetClassesComplex(query);
-            }
-        }
-        //TODO: add markingPeriodId param 
-        public ClassPerson GetClassPerson(int classId, int personId)
-        {
-            using (var uow = Read())
-            {
-                return new ClassPersonDataAccess(uow)
-                    .GetClassPerson(new ClassPersonQuery
-                        {
-                            ClassId = classId,
-                            PersonId = personId
-                        });
-            }
-        }
-
-        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId)
-        {
-            return GetClasses(schoolYearId, null, null);
-        }
-
-        public IList<ClassDetails> GetClasses(string filter)
-        {
-            return GetClasses(new ClassQuery {Filter = filter});
         }
         
         public void Delete(IList<int> ids)

@@ -257,9 +257,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
             var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            var classesDetails = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, (int?)gradingPeriod.MarkingPeriodRef, (int?)teacherId);
+            var classesDetails = ServiceLocator.ClassService.GetTeacherClasses(gradingPeriod.SchoolYearRef, teacherId, gradingPeriod.MarkingPeriodRef);
             var classesIds = classesDetails.Select(x => x.Id).ToList();
-
 
             var stiSectionsGrades = Storage.StiGradeBookStorage.GetSectionGradesSummary(classesIds, gradingPeriodId);
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);

@@ -67,11 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
                 if (callerRoleId == CoreRoles.TEACHER_ROLE.Id)
                 {
-                    var classes = Storage.ClassStorage.GetClassesComplex(new ClassQuery
-                    {
-                        PersonId = callerId
-                    }).Classes.Select(x => x.Id);
-
+                    var classes = Storage.ClassStorage.GetTeacherClasses(schoolYearId, callerId.Value).Select(x=>x.Id);
                     var personRefs =
                         Storage.ClassPersonStorage.GetAll()
                             .Where(x => classes.Contains(x.ClassRef))
@@ -235,17 +231,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IEnumerable<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int userId, int roleId)
         {
-            var classes = Storage.ClassStorage.GetClassesComplex(new ClassQuery
-            {
-                CallerRoleId = roleId,
-                CallerId = userId,
-                SchoolYearId = schoolYearId
-            });
-            var csps = Storage.ClassPersonStorage.GetAll().Where(cp=>classes.Classes.Any(c=>c.Id == cp.ClassRef)).ToList();
+
+            var classes = Storage.ClassStorage.GetStudentClasses(schoolYearId, userId, null);
+            var csps = Storage.ClassPersonStorage.GetAll().Where(cp=>classes.Any(c=>c.Id == cp.ClassRef)).ToList();
             var appInstalls = Storage.ApplicationInstallStorage.GetAll()
                 .Where(x => x.ApplicationRef == applicationId && x.Active && x.SchoolYearRef == schoolYearId).ToList();
 
-            return classes.Classes.Select(c => new StudentCountToAppInstallByClass
+            return classes.Select(c => new StudentCountToAppInstallByClass
                 {
                     ClassId = c.Id,
                     ClassName = c.Name,

@@ -21,7 +21,7 @@ namespace Chalkable.Web.Controllers
                 searchRes.Add(SearchTypeEnum.Applications, MasterLocator.ApplicationService.GetApplications(null, null, query, null, null));
             searchRes.Add(SearchTypeEnum.Announcements, SchoolLocator.AnnouncementService.GetAnnouncements(query));
             searchRes.Add(SearchTypeEnum.Attachments, SchoolLocator.AnnouncementAttachmentService.GetAttachments(query));
-            searchRes.Add(SearchTypeEnum.Classes, SchoolLocator.ClassService.GetClasses(query));
+            searchRes.Add(SearchTypeEnum.Classes, SchoolLocator.ClassService.SearchClasses(query));
             return Json(SearchViewData.Create(searchRes));
         }
     }

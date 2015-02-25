@@ -81,13 +81,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        private ApplicationInstallAction RegisterApplicationInstallAction(Application app, int? schoolPersonId, IList<int> roleids, IList<int> classids, IList<Guid> departmentids, IList<int> gradelevelids)
+        private ApplicationInstallAction RegisterApplicationInstallAction(Application app, int? personId, IList<int> roleids, IList<int> classids, IList<Guid> departmentids, IList<int> gradelevelids)
         {
             
             var res = new ApplicationInstallAction
             {
                 ApplicationRef = app.Id,
-                PersonRef = schoolPersonId,
+                PersonRef = personId,
                 Description = string.Empty,
                 OwnerRef = Context.PersonId.Value
             };
@@ -98,7 +98,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             descriptionBuilder.AppendFormat(APP_INSTALLED_FOR_FMT, app.Name);
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
             {
-                var teacherClasses = Storage.ClassStorage.GetAll(schoolPersonId);
+                var teacherClasses = Storage.ClassStorage.GetTeacherClasses(Context.SchoolYearId.Value, personId.Value, null);
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
 
                 var appInstallAcClasses = new List<ApplicationInstallActionClasses>();
