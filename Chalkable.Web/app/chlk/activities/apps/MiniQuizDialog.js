@@ -11,6 +11,7 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.ActivityGroup('MiniQuizDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
+        [chlk.activities.lib.FixedTop(80)],
         [ria.mvc.TemplateBind(chlk.templates.apps.MiniQuizDialog)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.MiniQuizDialog, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'MiniQuizDialog', EXTENDS(chlk.activities.apps.AppWrapperDialog), [
@@ -18,22 +19,6 @@ NAMESPACE('chlk.activities.apps', function () {
                 BASE();
 
                 this._addedStandards = [];
-            },
-
-            [[Object, String]],
-            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
-                BASE(model, msg_);
-                this.afterRefresh_();
-            },
-
-            function afterRefresh_(){
-                this.dom.find('.dialog').setCss('top', ria.dom.Dom(document).scrollTop() + 80);
-            },
-
-            [[Object]],
-            OVERRIDE, VOID, function onRefresh_(model){
-                BASE(model);
-                this.afterRefresh_();
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.apps.MiniQuizDialog, 'content')],

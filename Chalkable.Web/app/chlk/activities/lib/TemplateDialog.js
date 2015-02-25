@@ -6,14 +6,49 @@ NAMESPACE('chlk.activities.lib', function () {
     var HIDDEN_CLASS = 'x-hidden';
     var INNER_PARTIAL_UPDATE_CLASS = "partial-update-inner";
 
+    /** @class chlk.activities.lib.FixedTop */
+    ANNOTATION(
+        function FixedTop(top_) {});
+
     /** @class chlk.activities.lib.TemplateDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('body')],
         'TemplateDialog', EXTENDS(chlk.activities.lib.ChlkTemplateActivity), [
             function $() {
+                this._fixedTopOffest = false;
+
                 BASE();
                 this._overlay = new ria.dom.Dom('#chlk-overlay');
                 this._dialogsHolder = new ria.dom.Dom('#chlk-dialogs');
+            },
+
+            [[ria.reflection.ReflectionClass]],
+            OVERRIDE, VOID, function processAnnotations_(ref) {
+                BASE(ref);
+
+                if (ref.isAnnotatedWith(chlk.activities.lib.FixedTop)) {
+                    this._fixedTopOffest = ref.findAnnotation(chlk.activities.lib.FixedTop).pop().top_ || 50;
+                }
+            },
+
+            function afterRefresh_() {
+                if (this._fixedTopOffest !== false) {
+                    this.dom.find('.dialog')
+                        .setCss('top', ria.dom.Dom(document).scrollTop() + 80)
+                        .addClass('fixed-top');
+                }
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.afterRefresh_();
+            },
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                this.afterRefresh_();
             },
 
             OVERRIDE, VOID, function onResume_() {

@@ -1,4 +1,3 @@
-Drop Procedure spGetTeacherClasses
 Create Procedure spGetTeacherClasses
 @schoolYearId int, 
 @personId int,
