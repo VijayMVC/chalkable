@@ -135,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             //var date = Context.NowSchoolYearTime;
             var student = GetById(studentId, schoolYearId);
-            var classes = ServiceLocator.ClassService.GetClasses(schoolYearId, null, studentId).ToList();
+            var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();
             var classPersons = ServiceLocator.ClassService.GetClassPersons(studentId, true);
             classes = classes.Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
             var inowStExpolorer = new StudentExplorerDashboard

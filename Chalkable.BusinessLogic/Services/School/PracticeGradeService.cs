@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -31,10 +24,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PracticeGrade Add(int standardId, int studentId, Guid applicationId, string score)
         {
+            Trace.Assert(Context.SchoolYearId.HasValue);
             //TODO: add security 
             if(Context.PersonId != studentId)
                 throw new ChalkableSecurityException();
-            var classes = ServiceLocator.ClassService.GetClasses(Context.SchoolYearId, null, studentId);
+            var classes = ServiceLocator.ClassService.GetStudentClasses(Context.SchoolYearId.Value, studentId);
             using (var uow = Update())
             {
                 var classStandards = new ClassStandardDataAccess(uow).GetAll(new AndQueryCondition

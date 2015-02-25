@@ -32,20 +32,20 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(CurrentPersonViewData.Create(person, district, school, schoolYear));
         }
 
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        //public ActionResult Schedule(int personId)
-        //{
-        //    var person = SchoolLocator.PersonService.GetPerson(personId);
-
-        //}
-
         protected PersonScheduleViewData PrepareScheduleData(ShortPersonViewData person)
         {
-            //var schoolYearId = GetCurrentSchoolYearId();
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolYearTime.Date);
             IList<ClassDetails> classes = new List<ClassDetails>();
-            if(mp != null)
-                classes = SchoolLocator.ClassService.GetClasses(mp.SchoolYearRef, mp.Id, person.Id);
+            if (mp != null)
+            {
+                if (person.Role.Id == CoreRoles.TEACHER_ROLE.Id)
+                    classes = SchoolLocator.ClassService.GetTeacherClasses(mp.SchoolYearRef, person.Id, mp.Id);
+                else if (person.Role.Id == CoreRoles.STUDENT_ROLE.Id)
+                    classes = SchoolLocator.ClassService.GetStudentClasses(mp.SchoolYearRef, person.Id, mp.Id);
+                else
+                    throw new NotImplementedException();
+            }
+                
             return PersonScheduleViewData.Create(person, classes);
         }
 
@@ -84,11 +84,13 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult UpdateInfo(int personId, string email)
         {
+            if (personId != Context.PersonId)
+                throw new ChalkableSecurityException("User can change email just for himself");
             string errorMessage;
-            SchoolLocator.PersonService.EditEmail(personId, email, out errorMessage);
+            SchoolLocator.PersonService.EditEmailForCurrentUser(email, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
                 return Json(new { data = errorMessage, success = false });
-            //ReLogOn(res);
+            
             var res = SchoolLocator.PersonService.GetPersonDetails(personId);
             return Json(PersonInfoViewData.Create(res));
         }

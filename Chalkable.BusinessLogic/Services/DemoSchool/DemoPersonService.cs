@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Mapping.ModelMappers;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -145,24 +141,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.PersonStorage.GetPersonDetails(id, Context.PersonId ?? 0, Context.Role.Id);
         }
 
-        public Person EditEmail(int id, string email, out string error)
+        public void EditEmailForCurrentUser(string email, out string error)
         {
             throw new NotImplementedException();
-            //var res = GetPerson(id);
-            //error = null;
-            //if (!(CanChangeEmail(res)))
-            //    throw new ChalkableSecurityException();
-            //if (res.Email != email)
-            //{
-            //    if (Storage.PersonStorage.Exists(email, res.Id))
-            //        error = "There is user with that email in Chalkable";
-            //    else
-            //    {
-            //        res.Email = email;
-            //        Storage.PersonStorage.Update(res);
-            //    }
-            //}
-            //return res;
         }
 
         private bool CanChangeEmail(Person person)
@@ -202,13 +183,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
-
-
-        void IPersonService.EditEmail(int id, string email, out string error)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public int GetSisUserId(int personId)
         {
             throw new NotImplementedException();

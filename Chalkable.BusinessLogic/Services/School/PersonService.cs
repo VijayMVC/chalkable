@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Person GetPerson(int id);
         void ActivatePerson(int id);
         void ProcessPersonFirstLogin(int id);
-        void EditEmail(int id, string email, out string error);
+        void EditEmailForCurrentUser(string email, out string error);
         IList<Person> GetAll();
         int GetSisUserId(int personId);
         PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count);
@@ -104,49 +104,42 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public void EditEmail(int id, string email, out string error)
+        public void EditEmailForCurrentUser(string email, out string error)
         {
-            var person = GetPerson(id);
-            var userId = GetSisUserId(id);
+            Trace.Assert(Context.PersonId.HasValue);
             error = null;
-            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetBySisUserId(userId, Context.DistrictId);
-            string oldEmail = user.Login;
+            string oldEmail = Context.Login;
             using (var uow = Update())
             {
-                
-                if (!(CanChangeEmail(id)))
-                    throw new ChalkableSecurityException();
+                if (!BaseSecurity.IsAdminOrTeacher(Context))
+                    throw new ChalkableSecurityException(string.Format("User of role {0} can not change password for himself"
+                        , Context.Role.Name));
 
-                if (user.Login != email)
+                if (oldEmail != email)
                 {
                     var newUser = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(email);
-                    if (newUser != null && user.Id != newUser.Id)
-                        error = "There is user with that email in Chalkable";
+                    if (newUser != null && Context.UserId != newUser.Id)
+                        error = "User with such email already exists in chalkable";
                     else
                     {
-                        ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(user.Id, email);
+                        ServiceLocator.ServiceLocatorMaster.UserService.ChangeUserLogin(Context.UserId, email);
                         var stiPersonEmail = new StiPersonEmail
                             {
                                 Description = "",
                                 EmailAddress = email,
                                 IsListed = true,
                                 IsPrimary = true,
-                                PersonId = id
+                                PersonId = Context.PersonId.Value
                             };
-                        ConnectorLocator.UsersConnector.UpdatePrimaryPersonEmail(id, stiPersonEmail);                           
+                        ConnectorLocator.UsersConnector.UpdatePrimaryPersonEmail(stiPersonEmail.PersonId, stiPersonEmail);
+                        var person = GetPerson(Context.PersonId.Value);
                         ServiceLocator.ServiceLocatorMaster.EmailService.SendChangedEmailToPerson(person, oldEmail, email);
                     }
                 }
                 uow.Commit();
             }
         }
-
-        private bool CanChangeEmail(int personId)
-        {
-            return BaseSecurity.IsAdminEditorOrCurrentPerson(personId, Context)
-                   || (Context.Role == CoreRoles.TEACHER_ROLE);
-        }
-
+        
         public void ActivatePerson(int id)
         {
             if(!BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))

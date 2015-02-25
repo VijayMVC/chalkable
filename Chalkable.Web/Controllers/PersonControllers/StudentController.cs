@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -18,8 +17,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Summary(int schoolPersonId)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
 
             if (SchoolLocator.Context.PersonId != schoolPersonId &&
                 SchoolLocator.Context.Role == CoreRoles.STUDENT_ROLE)
@@ -28,7 +27,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 return Json(ShortPersonViewData.Create(student));
             }
             var studentSummaryInfo = SchoolLocator.StudentService.GetStudentSummaryInfo(schoolPersonId);
-            var classes = SchoolLocator.ClassService.GetClasses(Context.SchoolYearId, null, schoolPersonId).ToList();
+            var classes = SchoolLocator.ClassService.GetStudentClasses(Context.SchoolYearId.Value, schoolPersonId).ToList();
             var classPersons = SchoolLocator.ClassService.GetClassPersons(schoolPersonId, true);
             classes = classes.Where(x => classPersons.Any(y => y.ClassRef == x.Id)).ToList();
             var schedule = SchoolLocator.ClassPeriodService.GetSchedule(null, studentSummaryInfo.StudentInfo.Id, null,

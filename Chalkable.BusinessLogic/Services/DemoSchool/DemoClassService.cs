@@ -4,7 +4,6 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -72,22 +71,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null)
+        {
+            return Storage.ClassStorage.GetTeacherClasses(schoolYearId, teacherId, markingPeriodId);
+        }
+
+        public IList<ClassDetails> GetStudentClasses(int schoolYearId, int studentId, int? markingPeriodId)
+        {
+            return Storage.ClassStorage.GetStudentClasses(schoolYearId, studentId, markingPeriodId);
+        }
+
+        public IList<ClassDetails> SearchClasses(string filter)
+        {
+            var res = new List<ClassDetails>();
+            var classes = Storage.ClassStorage.GetAll();
+            var words = filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var @class in classes)
+            {
+                if (words.Any(x => @class.Name.Contains(x) || @class.ClassNumber.Contains(x)))
+                    res.Add(GetClassDetailsById(@class.Id));
+            }
+            return res;
+        }
+
         public ClassDetails GetClassDetailsById(int id)
         {
-            return GetClasses(new ClassQuery {ClassId = id, Count = 1}).First();
-        }
-        
-        public void UnassignClassFromMarkingPeriod(int classId, int markingPeriodId)
-        {
-            if(!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            Storage.MarkingPeriodClassStorage.Delete(new MarkingPeriodClassQuery
-            {
-                ClassId = classId,
-                MarkingPeriodId = markingPeriodId
-            });
-            
+            return Storage.ClassStorage.GetClassDetailsById(id);
         }
 
         public void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)
@@ -107,43 +116,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return Storage.ClassStorage.GetAll();
         }
-
-        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)
-        {
-            var res =  GetClassesQueryResult(new ClassQuery
-                {
-                    SchoolYearId = schoolYearId,
-                    MarkingPeriodId = markingPeriodId,
-                    PersonId = personId,
-                    Start = start,
-                    Count = count
-                });
-            return new PaginatedList<ClassDetails>(res.Classes, start / count, count, res.SourceCount);
-        }
-
-        private IList<ClassDetails> GetClasses(ClassQuery query)
-        {
-            return GetClassesQueryResult(query).Classes;
-        } 
-
-        private  ClassQueryResult GetClassesQueryResult(ClassQuery query)
-        {
-            query.CallerId = Context.PersonId.HasValue ? Context.PersonId.Value : 0;
-            query.CallerRoleId = Context.Role.Id;
-            return Storage.ClassStorage.GetClassesComplex(query);
-            
-        }
-        //TODO: add markingPeriodId param 
-        public ClassPerson GetClassPerson(int classId, int personId)
-        {
-            return Storage.ClassPersonStorage.GetClassPerson(new ClassPersonQuery
-            {
-                ClassId = classId,
-                PersonId = personId
-            });
-            
-        }
-
+        
         public IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled)
         {
             return Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
@@ -152,18 +125,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     IsEnrolled = isEnrolled
                 }).ToList();
         }
-
-        public PaginatedList<ClassDetails> GetClasses(int? schoolYearId)
-        {
-            return GetClasses(schoolYearId, null, null);
-        }
-
-        public IList<ClassDetails> GetClasses(string filter)
-        {
-            return GetClasses(new ClassQuery {Filter = filter});
-        }
-
-
+        
         public void AddTeachers(IList<ClassTeacher> classTeachers)
         {
             Storage.ClassTeacherStorage.Add(classTeachers);

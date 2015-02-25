@@ -14,128 +14,93 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
         }
 
-        public ClassQueryResult GetClassesComplex(ClassQuery query)
+        public IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null)
         {
-            var classes = data.Select(x => x.Value);
-
-            var classDetailsList = new List<ClassDetails>();
-
-            if (query.ClassId.HasValue)
-                classes = classes.Where(x => x.Id == query.ClassId);
-
-            if (query.SchoolYearId.HasValue)
-                classes = classes.Where(x => x.SchoolYearRef == query.SchoolYearId);
-            if (query.MarkingPeriodId.HasValue)
-                classes = classes.Where(x => Storage.MarkingPeriodClassStorage.Exists(x.Id, query.MarkingPeriodId));
-
-            string filter1 = null;
-            string filter2 = null;
-            string filter3 = null;
-            if (!string.IsNullOrEmpty(query.Filter))
+            var res = new List<ClassDetails>();
+            var classes = Storage.ClassStorage.GetAll();
+            var classteachers = Storage.ClassTeacherStorage.GetAll();
+            foreach (var @class in classes)
             {
-                string[] sl = query.Filter.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                if (sl.Length > 0)
-                    filter1 = sl[0];
-                if (sl.Length > 1)
-                    filter2 = sl[1];
-                if (sl.Length > 2)
-                    filter3 = sl[2];
-            }
-
-            if (query.CallerRoleId == 3)
-            {
-                classes = classes.Where(x => Storage.ClassPersonStorage.Exists(new ClassPersonQuery
+                if (@class.SchoolYearRef == schoolYearId)
                 {
-                    ClassId = x.Id,
-                    PersonId = query.CallerId
-                }));
-            }
-
-            if (query.PersonId.HasValue)
-            {
-
-                var roleId = query.PersonId.HasValue
-                ? Storage.SchoolPersonStorage.GetRoleId(query.PersonId.Value, DemoSchoolConstants.SchoolId)
-                : (int?)null;
-
-                if (roleId == CoreRoles.TEACHER_ROLE.Id)
-                    classes = classes.Where(x => x.PrimaryTeacherRef == query.PersonId);
-
-                if (roleId == CoreRoles.STUDENT_ROLE.Id)
-                    classes = classes.Where(x => Storage.ClassPersonStorage.Exists(new ClassPersonQuery
+                    if (classteachers.Any(x => x.ClassRef == @class.Id && x.PersonRef == teacherId))
                     {
-                        ClassId = x.Id,
-                        PersonId = query.PersonId
-                    }));
+                        var cd = GetClassDetailsById(@class.Id);
+                        if (!markingPeriodId.HasValue || cd.MarkingPeriodClasses.Any(x => x.MarkingPeriodRef == markingPeriodId.Value))
+                            res.Add(cd);
+                    }
+                }
             }
+            return res;
+        }
 
-            if (!string.IsNullOrEmpty(filter1))
-                classes = classes.Where(x => x.Name.Contains(filter1));
-            if (!string.IsNullOrEmpty(filter2))
-                classes = classes.Where(x => x.Name.Contains(filter2));
-            if (!string.IsNullOrEmpty(filter3))
-                classes = classes.Where(x => x.Name.Contains(filter3));
+        public IList<ClassDetails> GetStudentClasses(int schoolYearId, int studentId, int? markingPeriodId)
+        {
+            var res = new List<ClassDetails>();
+            var classes = Storage.ClassStorage.GetAll();
+            var classPersons = Storage.ClassPersonStorage.GetAll();
+            foreach (var @class in classes)
+            {
+                if (@class.SchoolYearRef == schoolYearId)
+                {
+                    if (classPersons.Any(x => x.ClassRef == @class.Id && x.PersonRef == studentId))
+                    {
+                        var cd = GetClassDetailsById(@class.Id);
+                        if (!markingPeriodId.HasValue || cd.MarkingPeriodClasses.Any(x => x.MarkingPeriodRef == markingPeriodId.Value))
+                            res.Add(cd);
+                    }
+                }
+            }
+            return res;
+        }
 
-
-            classes = classes.Skip(query.Start).Take(query.Count);
-
-
+        public ClassDetails GetClassDetailsById(int id)
+        {
+            var clazz = GetById(id);
+            var clsDetails = new ClassDetails
+            {
+                ChalkableDepartmentRef = clazz.ChalkableDepartmentRef,
+                CourseRef = clazz.CourseRef,
+                ClassNumber = clazz.ClassNumber,
+                Description = clazz.Description,
+                Id = clazz.Id,
+                Name = clazz.Name,
+                RoomRef = clazz.RoomRef,
+                SchoolYearRef = clazz.SchoolYearRef,
+                PrimaryTeacher = Storage.PersonStorage.GetById(DemoSchoolConstants.TeacherId),
+                PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
+                StudentsCount = 10
+            };
 
             var markingPeriodClasses = Storage.MarkingPeriodClassStorage.GetAll();
-
-            foreach (var cls in classes)
-            {
-                var clsDetails = new ClassDetails
-                {
-                    ChalkableDepartmentRef = cls.ChalkableDepartmentRef,
-                    CourseRef = cls.CourseRef,
-                    ClassNumber = cls.ClassNumber,
-                    Description = cls.Description,
-                    Id = cls.Id,
-                    Name = cls.Name,
-                    RoomRef = cls.RoomRef,
-                    SchoolYearRef = cls.SchoolYearRef,
-                    PrimaryTeacher = Storage.PersonStorage.GetById(DemoSchoolConstants.TeacherId),
-                    PrimaryTeacherRef = DemoSchoolConstants.TeacherId,
-                    StudentsCount = 10
-                };
-
-
-                if (clsDetails.PrimaryTeacherRef.HasValue)
-                    clsDetails.PrimaryTeacher = Storage.PersonStorage.GetById(clsDetails.PrimaryTeacherRef.Value);
-                clsDetails.MarkingPeriodClasses = markingPeriodClasses.Where(x => x.ClassRef == clsDetails.Id).ToList();
-                classDetailsList.Add(clsDetails);
-            }
-
-
-            return new ClassQueryResult
-            {
-                Classes = classDetailsList,
-                Query = query,
-                SourceCount = data.Count
-            };
+            if (clsDetails.PrimaryTeacherRef.HasValue)
+                clsDetails.PrimaryTeacher = Storage.PersonStorage.GetById(clsDetails.PrimaryTeacherRef.Value);
+            clsDetails.MarkingPeriodClasses = markingPeriodClasses.Where(x => x.ClassRef == clsDetails.Id).ToList();
+            return clsDetails;
         }
 
-        public List<Class> GetAll(int? teacherRef)
-        {
-            var classes = GetClassesComplex(new ClassQuery()).Classes;
-
-            if (teacherRef.HasValue)
-                classes = classes.Where(x => x.PrimaryTeacherRef == teacherRef).ToList();
-            return classes.Where(x => x.PrimaryTeacherRef == teacherRef).Select(x => (Class)x).ToList();
-        }
 
         public IList<ClassDetails> GetClassesSortedByPeriod()
         {
-            var classes = Storage.SchoolLocator.ClassService.GetClasses(Storage.Context.SchoolYearId, null, Storage.Context.PersonId).ToList();
+            IList<ClassDetails> classes;
             int? teacherId = null;
             int? studentId = null;
             if (Storage.Context.RoleId == CoreRoles.TEACHER_ROLE.Id)
+            {
                 teacherId = Storage.Context.PersonId;
+                classes = Storage.SchoolLocator.ClassService.GetTeacherClasses(Storage.Context.SchoolYearId.Value, Storage.Context.PersonId.Value);
+            }
             else if (Storage.Context.RoleId == CoreRoles.STUDENT_ROLE.Id)
+            {
                 studentId = Storage.Context.PersonId;
+                classes = Storage.SchoolLocator.ClassService.GetStudentClasses(Storage.Context.SchoolYearId.Value, Storage.Context.PersonId.Value);
+            }
             else
                 throw new NotImplementedException();
+
+             
+
+
             var schedule = Storage.SchoolLocator.ClassPeriodService.GetSchedule(teacherId, studentId, null,
                 Storage.Context.NowSchoolYearTime.Date, Storage.Context.NowSchoolYearTime.Date).OrderBy(x => x.PeriodOrder);
             var res = new List<ClassDetails>();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
@@ -149,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
         {
-            var classes = ServiceLocator.ClassService.GetClasses(gradingPeriod.SchoolYearRef, gradingPeriod.MarkingPeriodRef, teacherId, 0);
+            var classes = ServiceLocator.ClassService.GetTeacherClasses(gradingPeriod.SchoolYearRef, teacherId, gradingPeriod.MarkingPeriodRef);
             if (classes.Count == 0)
             {
                 return new AttendanceSummary
@@ -239,8 +240,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var classes = ServiceLocator.ClassService.GetClasses(syId).Where(x=>x.StudentsCount > 0).ToList();
+            var classes = ServiceLocator.ClassService.GetTeacherClasses(syId, Context.PersonId.Value).Where(x=>x.StudentsCount > 0).ToList();
             var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
             if (postedAttendances != null && dateTime.Date <= Context.NowSchoolYearTime.Date)
             {

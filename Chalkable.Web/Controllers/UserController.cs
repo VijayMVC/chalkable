@@ -72,7 +72,7 @@ namespace Chalkable.Web.Controllers
             if (!Context.PersonId.HasValue)
                 return Json(new UnassignedUserException());
             string error;
-            SchoolLocator.PersonService.EditEmail(Context.PersonId.Value, newUserEmail, out error);
+            SchoolLocator.PersonService.EditEmailForCurrentUser(newUserEmail, out error);
             if (!string.IsNullOrEmpty(error))
                 return Json(new ChalkableException(error));
             SchoolLocator.PersonService.ActivatePerson(Context.PersonId.Value);
@@ -103,7 +103,6 @@ namespace Chalkable.Web.Controllers
    
         private ActionResult AfterConfirmAction(UserContext context)
         {
-            //TODO: create default Announcement for teacher
             if (context.PersonId.HasValue)
                 SchoolLocator.PersonService.ActivatePerson(context.PersonId.Value);
             //TODO: mix panel 

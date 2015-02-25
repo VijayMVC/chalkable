@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
@@ -160,7 +159,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var date = Context.NowSchoolYearTime;
             var student = GetById(studentId, schoolYearId);
-            var classes = ServiceLocator.ClassService.GetClasses(schoolYearId, null, studentId).ToList();
+            var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();
             var classPersons = ServiceLocator.ClassService.GetClassPersons(studentId, true);
             classes = classes.Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
             var inowStExpolorer = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(schoolYearId, student.Id, date);

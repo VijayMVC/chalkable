@@ -233,9 +233,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (query.OwnedOnly)
                 announcements = announcements.Where(x => x.PrimaryTeacherRef == query.PersonId);
 
-            if (query.GradeLevelIds != null)
-                announcements = announcements.Where(x => query.GradeLevelIds.Contains(x.Id));
-
             if (query.SisActivitiesIds != null)
                 announcements = announcements.Where(x => query.SisActivitiesIds.Contains(x.Id));
 
