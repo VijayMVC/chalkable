@@ -101,15 +101,22 @@ namespace Chalkable.BusinessLogic.Services
         private static IServiceLocatorSchool CreateDemoSchoolLocator(UserContext context)
         {
             //district ref not user id
+            bool firstTimeCreated = false;
             if (HttpRuntime.Cache[context.DistrictId.ToString()] == null)
             {
                 HttpRuntime.Cache.Add(context.DistrictId.ToString(), new DemoStorage(context), null,
                     DateTime.Now.AddHours(3), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+                firstTimeCreated = true;
             }
             var storage = (DemoStorage)HttpRuntime.Cache[context.DistrictId.ToString()];
             storage.UpdateContext(context);
             var masterLocator = new DemoServiceLocatorMaster(context, storage);
-            return new DemoServiceLocatorSchool(masterLocator, storage);
+            var res = new DemoServiceLocatorSchool(masterLocator, storage);
+            if (firstTimeCreated)
+            {
+                ((DemoStandardService)res.StandardService).SetupDefaultData();   
+            }
+            return res;
         }
     }
 }

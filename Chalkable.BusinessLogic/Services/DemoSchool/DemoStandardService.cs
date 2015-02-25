@@ -20,7 +20,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-
         public void SetupDefaultData()
         {
             var masterLocator = ServiceLocator.ServiceLocatorMaster;
@@ -31,8 +30,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     subjectId++;
                     return subjectId;
                 });
-
-            
             InsertDefaultSubjects(subjectIdsDic, ccStandardCategories);
             InsertDefaultStandards(subjectIdsDic);
             InsertDefaultClassStandards();
@@ -55,13 +52,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var masterLocator = ServiceLocator.ServiceLocatorMaster;
             var abToccMapper = masterLocator.CommonCoreStandardService.GetAbToCCMapper();
-            //var ccStandards = abToccMapper.GroupBy(x => x.Value.Id).Select(x => x.First().Value).ToList();
             var standardId = GetStandards(null, null, null).Max(x => x.Id);
-            //var ccStandardsIdsDic = ccStandards.ToDictionary(x => x.Id, x =>
-            //{
-            //    standardId++;
-            //    return standardId;
-            //});
             IDictionary<Guid, int> ccStandardsIdsDic = new Dictionary<Guid, int>();
             var ccStandards = new List<CommonCoreStandard>();
             foreach (var ccStandard in abToccMapper.Values)
@@ -97,18 +88,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private void InsertDefaultClassStandards()
         {
-            var standardsIds = Storage.StandardStorage.GetData().Keys; 
+            var standardsIds = Storage.StandardStorage.GetData().Keys.ToList();
+            var classStandards = Storage.ClassStandardStorage.GetAll();
+            standardsIds = standardsIds.Where(x => classStandards.All(y => y.StandardRef != x)).ToList();
             var classes =  ServiceLocator.ClassService.GetAll();
-            var classStandards = new List<ClassStandard>();
+            var newClassStandards = new List<ClassStandard>();
             foreach (var c in classes)
             {
-                classStandards.AddRange(standardsIds.Select(id=> new ClassStandard
+                newClassStandards.AddRange(standardsIds.Select(id=> new ClassStandard
                 {
                     ClassRef = c.Id,
                     StandardRef = id
                 }).ToList());
             }
-            Storage.ClassStandardStorage.Add(classStandards);
+            Storage.ClassStandardStorage.Add(newClassStandards);
         }
 
         public Standard AddStandard(int id, string name, string description, int standardSubjectId, int? parentStandardId

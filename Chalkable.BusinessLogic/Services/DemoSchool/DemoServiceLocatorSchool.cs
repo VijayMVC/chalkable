@@ -103,14 +103,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             staffService = new DemoStaffService(this, storage);
             userSchoolService = new DemoUserSchoolService(this, storage);
             practiceGradeService = new DemoPracticeGradeService(this, storage);
-
-            Setup();
         }
 
-        private void Setup()
-        {
-            ((DemoStandardService) standardService).SetupDefaultData();
-        }
 
         public IPersonService PersonService { get { return personService; } }
         public IAddressService AddressService { get { return addressService; } }
