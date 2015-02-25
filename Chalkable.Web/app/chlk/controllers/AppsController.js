@@ -553,12 +553,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         function addDeveloperAction(){
-            var result = this.ShowPromptBox('Please enter application name', '')
+            this.ShowPromptBox('Please enter application name', '')
                 .then(function(appName){
                     var app = new chlk.models.apps.Application();
                     app.setName(appName);
                     return this.BackgroundNavigate('apps', 'create', [app]);
                 }, this);
+
+            return null;
         },
 
         [chlk.controllers.AccessForRoles([
@@ -772,45 +774,43 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
         function generalDeveloperAction(appId_){
-            var result = this.appsService
+            return this.appsService
                 .getInfo(appId_, !!appId_)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        this.BackgroundNavigate('apps', 'add', []);
-                        return ria.async.BREAK;
+                        return this.Redirect('apps', 'add', []);
                     }
-                    else{
-                        var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);
 
-                        return ria.async.wait(
-                                this.appsService.getAppAnalytics(data.getId()),
-                                this.appsService.getAppReviews(data.getId()),
-                                this.appsService.getDevApps()
-                            )
-                            .attach(this.validateResponse_())
-                            .then(function(res){
-                               var appReviews = res[1];
-                               var analytics = res[0];
-                               var devApps = res[2];
+                    var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);
 
-                               return new chlk.models.apps.AppGeneralInfoViewData(
-                                    data.getName(),
-                                    data.getId(),
-                                    data.getLiveAppId(),
-                                    data.getState(),
-                                    pictureUrl,
-                                    5, //todo: pass rating,
-                                    new chlk.models.common.ChlkDate(),
-                                    appReviews,
-                                    analytics || new chlk.models.developer.HomeAnalytics(),
-                                    devApps
-                               );
-                            });
-                    }
+                    var result = ria.async.wait(
+                            this.appsService.getAppAnalytics(data.getId()),
+                            this.appsService.getAppReviews(data.getId()),
+                            this.appsService.getDevApps()
+                        )
+                        .attach(this.validateResponse_())
+                        .then(function(res){
+                           var appReviews = res[1];
+                           var analytics = res[0];
+                           var devApps = res[2];
+
+                           return new chlk.models.apps.AppGeneralInfoViewData(
+                                data.getName(),
+                                data.getId(),
+                                data.getLiveAppId(),
+                                data.getState(),
+                                pictureUrl,
+                                5, //todo: pass rating,
+                                new chlk.models.common.ChlkDate(),
+                                appReviews,
+                                analytics || new chlk.models.developer.HomeAnalytics(),
+                                devApps
+                           );
+                        });
+
+                    return this.PushView(chlk.activities.apps.AppGeneralInfoPage, result);
                 }, this);
-
-            return this.PushView(chlk.activities.apps.AppGeneralInfoPage, result);
         },
 
         [chlk.controllers.AccessForRoles([
