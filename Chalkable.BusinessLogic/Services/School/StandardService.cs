@@ -20,13 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Standard GetStandardById(int id);
         Standard GetStandardByABId(Guid id);
         IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
-
-        //StandardDetailsInfo GetStandardDetailsById(int standardId);
-        //IList<StandardDetailsInfo> GetStandardsDetails(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
-        //IList<StandardDetailsInfo> GetStandardsDetails(IList<int> standardIds);
-        //IList<StandardDetailsInfo> GetStandardsDetails(string filter);
-
-
+        
         IList<Standard> GetStandards(IList<int> standardIds);
         IList<Standard> GetStandards(string filter); 
 
@@ -147,16 +141,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 return classStandards;
             }
         }
-        
-        //public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
-        //{
-        //    using (var uow = Read())
-        //    {
-        //       new AnnouncementStandardDataAccess(uow).
-        //    }
-        //}
-
-
         public void DeleteStandards(IList<int> ids)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -219,25 +203,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return DoRead(uow => new StandardDataAccess(uow).GetStandardByABId(id));
         }
-
-
-        //public StandardDetailsInfo GetStandardDetailsById(int standardId)
-        //{
-        //    var standard = GetStandardById(standardId);
-        //    CommonCoreStandard ccStandard = null;
-        //    if (standard.AcademicBenchmarkId.HasValue)
-        //        ccStandard = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardByABId(
-        //                standard.AcademicBenchmarkId.Value);
-        //    return StandardDetailsInfo.Create(standard, ccStandard);
-        //}
-
-        //public IList<Standard> GetStandardsDetails(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
-        //{
-        //    var standards = GetStandards(classId, gradeLevelId, subjectId, parentStandardId, allStandards);
-        //    return PrepareStandardsDetailsInfo(standards);
-        //}
-
-
+        
         public IList<Standard> GetStandards(IList<int> standardIds)
         {
             if(standardIds == null || standardIds.Count == 0)
@@ -251,7 +217,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var commonCoreStandards = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandards(filter);
             commonCoreStandards = commonCoreStandards.Where(x => x.AcademicBenchmarkId.HasValue).ToList();
-            IList<Standard> standards = null;
+            IList<Standard> standards;
             using (var uow = Read())
             {
                 var da = new StandardDataAccess(uow);
@@ -264,29 +230,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private IList<Standard> PrepareStandards(IList<Standard> standards)
         {
-            var abIds = standards.Where(s => s.AcademicBenchmarkId.HasValue).Select(s => s.AcademicBenchmarkId.Value).ToList();
-            var ccDisc = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardsCodeByABIds(abIds);
-            //var res = new List<StandardDetailsInfo>();
-            //foreach (var standard in standards)
-            //{
-            //    CommonCoreStandard ccStandard = null;
-            //    if (standard.AcademicBenchmarkId.HasValue)
-            //        ccStandard = ccStandards.FirstOrDefault(x => x.AcademicBenchmarkId == standard.AcademicBenchmarkId);
-            //    res.Add(StandardDetailsInfo.Create(standard, ccStandard));
-            //}
-            //return res;
-
-            foreach (var standard in standards)
+            var ccStandardService = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService;
+            foreach (var standard in standards.Where(standard => standard.AcademicBenchmarkId.HasValue))
             {
-                if (standard.AcademicBenchmarkId.HasValue && ccDisc.ContainsKey(standard.AcademicBenchmarkId.Value))
-                    standard.CCStandardCode = ccDisc[standard.AcademicBenchmarkId.Value];
+                standard.CCStandardCode = ccStandardService.GetStandardCodeByABId(standard.AcademicBenchmarkId.Value);
             }
             return standards;
         }
-
-
-
-
 
         public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
         {

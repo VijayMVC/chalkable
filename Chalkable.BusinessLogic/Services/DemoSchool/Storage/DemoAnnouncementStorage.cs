@@ -189,7 +189,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             var announcement = GetById(announcementId);
             var cls = Storage.ClassStorage.GetById(announcement.ClassRef);  
-            return Storage.ClasStandardStorage.GetAll().Count(x => x.ClassRef == cls.Id || x.ClassRef == cls.CourseRef) > 0;
+            return Storage.ClassStandardStorage.GetAll().Count(x => x.ClassRef == cls.Id || x.ClassRef == cls.CourseRef) > 0;
         }
 
         public bool Exists(int id)

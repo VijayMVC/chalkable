@@ -8,6 +8,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
@@ -50,8 +51,14 @@ namespace Chalkable.Web
                 throw new ArgumentException("To enable OAuth2 support for your web project, configure WindowsAzure.OAuth.RelyingPartyRealm, WindowsAzure.OAuth.ServiceNamespace and WindowsAzure.OAuth.SwtSigningKey in your applications's appSettings.");
             }
             ConfigureDiagnostics();
+            PrepareBaseServiceData();
         }
 
+
+        private void PrepareBaseServiceData()
+        {
+            ServiceLocatorFactory.CreateMasterSysAdmin().CommonCoreStandardService.BuildAbToCCMapper();
+        }
 
         private void ConfigureDiagnostics()
         {

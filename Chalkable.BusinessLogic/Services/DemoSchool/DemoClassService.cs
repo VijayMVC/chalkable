@@ -100,12 +100,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Class GetById(int id)
         {
-            throw new NotImplementedException();
+            return Storage.ClassStorage.GetById(id);
         }
 
         public IList<Class> GetAll()
         {
-            throw new NotImplementedException();
+            return Storage.ClassStorage.GetAll();
         }
 
         public PaginatedList<ClassDetails> GetClasses(int? schoolYearId, int? markingPeriodId, int? personId, int start = 0, int count = int.MaxValue)

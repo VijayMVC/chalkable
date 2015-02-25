@@ -45,4 +45,10 @@ namespace Chalkable.Data.Master.Model
         [PrimaryKeyFieldAttr]
         public Guid AcademicBenchmarkId { get; set; }
     }
+
+    public class AbToCCMappingDetails : ABToCCMapping
+    {
+        [DataEntityAttr]
+        public CommonCoreStandard Standard { get; set; }
+    }
 }

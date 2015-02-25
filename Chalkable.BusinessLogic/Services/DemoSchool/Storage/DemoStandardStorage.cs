@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             if (query.ClassId.HasValue)
             {
-                var classStandarts = Storage.ClasStandardStorage.GetAll(query.ClassId).Select(x => x.StandardRef);
+                var classStandarts = Storage.ClassStandardStorage.GetAll(query.ClassId).Select(x => x.StandardRef);
                 standards = standards.Where(x => classStandarts.Contains(x.Id));
             }
             //if (query.CourseId.HasValue)

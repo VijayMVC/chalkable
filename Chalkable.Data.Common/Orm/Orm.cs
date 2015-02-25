@@ -21,7 +21,7 @@ namespace Chalkable.Data.Common.Orm
         private const string ORDER_BY_FORMAT = "ORDER BY [{0}].[{1}] {2}";
         private const string OFFSET_ROWS_FORMAT = " OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ";
 
-        private const string DELETE_FORMAT = "DELETE FROM [{0}]";
+        public const string DELETE_FORMAT = "DELETE FROM [{0}]";
 
         public enum OrderType
         {

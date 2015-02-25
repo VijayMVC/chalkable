@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoStudentParentStorage StudentParentStorage { get; private set; }
         public DemoStandardStorage StandardStorage { get; private set; }
         public DemoStandardSubjectStorage StandardSubjectStorage { get; private set; }
-        public DemoClassStandardStorage ClasStandardStorage { get; private set; }
+        public DemoClassStandardStorage ClassStandardStorage { get; private set; }
         public DemoSchoolStorage SchoolStorage { get; private set; }
         public DemoSchoolPersonStorage SchoolPersonStorage { get; private set; }
         public DemoRoomStorage RoomStorage { get; private set; }
@@ -139,7 +139,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             StudentParentStorage = new DemoStudentParentStorage(this);
             StandardStorage = new DemoStandardStorage(this);
             StandardSubjectStorage = new DemoStandardSubjectStorage(this);
-            ClasStandardStorage = new DemoClassStandardStorage(this);
+            ClassStandardStorage = new DemoClassStandardStorage(this);
             SchoolStorage = new DemoSchoolStorage(this);
             SchoolPersonStorage = new DemoSchoolPersonStorage(this);
             RoomStorage = new DemoRoomStorage(this);
@@ -1930,7 +1930,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void AddClassStandard(int classId, int standardId)
         {
-            ClasStandardStorage.Add(new ClassStandard()
+            ClassStandardStorage.Add(new ClassStandard()
             {
                 ClassRef = classId,
                 StandardRef = standardId

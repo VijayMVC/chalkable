@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -11,18 +9,18 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface ICommonCoreStandardService
     {
-        void AddStandards(IList<CommonCoreStandard> commonCoreStandards);
         void AddStandardsCategories(IList<CommonCoreStandardCategory> standardCategories);
-        void AddABToCCMapping(IList<ABToCCMapping> abtoCcMappings);
-
-        IList<ABToCCMapping> GetABToCCMappings(Guid? academicBenchmarkId, Guid? ccStandardId); 
-        IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId = null, Guid? parentStandardId = null, bool allStandards = true);
         IList<CommonCoreStandardCategory> GetCCStandardCategories();
-        CommonCoreStandard GetStandardByABId(Guid academicBenchmarkId);
-        IList<CommonCoreStandard> GetStandardsByABIds(IList<Guid> academicBenchmarkIds);
+
+        void AddStandards(IList<CommonCoreStandard> commonCoreStandards);
+        IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId = null, Guid? parentStandardId = null, bool allStandards = true);
         IList<CommonCoreStandard> GetStandards(string filter);
-        IDictionary<Guid, string> GetStandardsCodeByABIds(IList<Guid> academicBenchmarkIds);
+        
+        void AddABToCCMapping(IList<ABToCCMapping> abtoCcMappings);
+        IList<ABToCCMapping> GetABToCCMappings(Guid? academicBenchmarkId, Guid? ccStandardId);
         string GetStandardCodeByABId(Guid academicBenchmarkIds);
+        IDictionary<Guid, CommonCoreStandard> GetAbToCCMapper();
+        void BuildAbToCCMapper();
     }
 
     public class CommonCoreStandardService : MasterServiceBase, ICommonCoreStandardService
@@ -31,6 +29,19 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
+
+        private static IDictionary<Guid, CommonCoreStandard> abToccMapper;
+        public void BuildAbToCCMapper()
+        {
+            var abToccMappingDetailsList = DoRead(u => new ABToCCMappingDataAccess(u).GetDetailsList());
+            abToccMapper = abToccMappingDetailsList.ToDictionary(x => x.AcademicBenchmarkId, 
+                x =>
+                {
+                    x.Standard.AcademicBenchmarkId = x.AcademicBenchmarkId;
+                    return x.Standard;
+                });           
+        }
+        
         public IList<CommonCoreStandard> GetStandards(Guid? standardCategoryId, Guid? parentStandardId, bool allStandards = true)
         {
             var conds = new AndQueryCondition();
@@ -45,20 +56,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             return DoRead(u => new CC_StandardCategoryDataAccess(u).GetAll());
         }
-
-
-        public CommonCoreStandard GetStandardByABId(Guid academicBenchmarkId)
-        {
-            var abIds = new List<Guid> {academicBenchmarkId};
-            return GetStandardsByABIds(abIds).FirstOrDefault();
-        }
-
-        public IList<CommonCoreStandard> GetStandardsByABIds(IList<Guid> academicBenchmarkIds)
-        {
-            if(academicBenchmarkIds.Count == 0) return new List<CommonCoreStandard>();
-            return DoRead(uow => new CommonCoreStandardDataAccess(uow).GetByABIds(academicBenchmarkIds));
-        }
-
 
         public IList<CommonCoreStandard> GetStandards(string filter)
         {
@@ -80,9 +77,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         public void AddABToCCMapping(IList<ABToCCMapping> abtoCcMappings)
         {
             DoUpdate(uow => new ABToCCMappingDataAccess(uow).Insert(abtoCcMappings));
+            BuildAbToCCMapper();
         }
-
-
+        
         public IList<ABToCCMapping> GetABToCCMappings(Guid? academicBenchmarkId, Guid? ccStandardId)
         {
             var conds = new AndQueryCondition();
@@ -93,18 +90,17 @@ namespace Chalkable.BusinessLogic.Services.Master
             return DoRead(uow => new ABToCCMappingDataAccess(uow).GetAll(conds));
         }
 
-        public IDictionary<Guid, string> GetStandardsCodeByABIds(IList<Guid> academicBenchmarkIds)
-        {
-            //TODO: get this codes from static dictionary
-            var standards = GetStandardsByABIds(academicBenchmarkIds).Where(x=>x.AcademicBenchmarkId.HasValue).ToList();
-            var res = standards.GroupBy(x => x.AcademicBenchmarkId).ToDictionary(x => x.Key.Value, x => x.First().Code);
-            return res;
-        }
-
         public string GetStandardCodeByABId(Guid academicBenchmarkIds)
         {
-            var res = GetStandardsCodeByABIds(new List<Guid> {academicBenchmarkIds});
-            return !res.ContainsKey(academicBenchmarkIds) ? null : res[academicBenchmarkIds];
+            var  mapper = GetAbToCCMapper();
+            return !mapper.ContainsKey(academicBenchmarkIds) ? null : mapper[academicBenchmarkIds].Code;
+        }
+
+        public IDictionary<Guid, CommonCoreStandard> GetAbToCCMapper()
+        {
+            if(abToccMapper == null)
+                BuildAbToCCMapper();
+            return abToccMapper;
         }
     }
 }

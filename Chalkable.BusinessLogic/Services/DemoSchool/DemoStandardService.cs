@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -17,6 +18,97 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
     {
         public DemoStandardService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
         {
+        }
+
+
+        public void SetupDefaultData()
+        {
+            var masterLocator = ServiceLocator.ServiceLocatorMaster;
+            var ccStandardCategories = masterLocator.CommonCoreStandardService.GetCCStandardCategories();
+            var subjectId = GetStandardSubjects(null).Max(x => x.Id);
+            var subjectIdsDic = ccStandardCategories.ToDictionary(x => x.Id, x =>
+                {
+                    subjectId++;
+                    return subjectId;
+                });
+
+            
+            InsetDefaultSubjects(subjectIdsDic, ccStandardCategories);
+            InsertDefaultStandards(subjectIdsDic);
+            InsertDefaultClassStandards();
+        }
+
+        private void InsetDefaultSubjects(IDictionary<Guid, int> subjectIdsDic
+            , IEnumerable<CommonCoreStandardCategory> ccStandardCategories)
+        {
+            var standardSubjects = ccStandardCategories.Select(standardCategory => new StandardSubject
+                {
+                    Id = subjectIdsDic[standardCategory.Id], 
+                    Name = standardCategory.Name, 
+                    IsActive = true
+                }).ToList();
+            if (standardSubjects.Count > 0)
+                Storage.StandardSubjectStorage.Add(standardSubjects);
+        }
+
+        private void InsertDefaultStandards(IDictionary<Guid, int> subjectIdsDic)
+        {
+            var masterLocator = ServiceLocator.ServiceLocatorMaster;
+            var abToccMapper = masterLocator.CommonCoreStandardService.GetAbToCCMapper();
+            //var ccStandards = abToccMapper.GroupBy(x => x.Value.Id).Select(x => x.First().Value).ToList();
+            var standardId = GetStandards(null, null, null).Max(x => x.Id);
+            //var ccStandardsIdsDic = ccStandards.ToDictionary(x => x.Id, x =>
+            //{
+            //    standardId++;
+            //    return standardId;
+            //});
+            IDictionary<Guid, int> ccStandardsIdsDic = new Dictionary<Guid, int>();
+            var ccStandards = new List<CommonCoreStandard>();
+            foreach (var ccStandard in abToccMapper.Values)
+            {
+                if (!ccStandardsIdsDic.ContainsKey(ccStandard.Id))
+                {
+                    standardId++;
+                    ccStandardsIdsDic.Add(ccStandard.Id, standardId);
+                    ccStandards.Add(ccStandard);
+                }
+            }
+            var standards = new List<Standard>();
+            foreach (var ccStandard in ccStandards)
+            {
+                if (ccStandard.AcademicBenchmarkId.HasValue && subjectIdsDic.ContainsKey(ccStandard.StandardCategoryRef)
+                    && (!ccStandard.ParentStandardRef.HasValue || ccStandardsIdsDic.ContainsKey(ccStandard.ParentStandardRef.Value)))
+                    standards.Add(new Standard
+                        {
+                            Id = ccStandardsIdsDic[ccStandard.Id],
+                            AcademicBenchmarkId = ccStandard.AcademicBenchmarkId,
+                            CCStandardCode = ccStandard.Code,
+                            Description = ccStandard.Description,
+                            IsActive = true,
+                            Name = ccStandard.Code,
+                            ParentStandardRef = ccStandard.ParentStandardRef.HasValue ? ccStandardsIdsDic[ccStandard.ParentStandardRef.Value] : (int?)null,
+                            StandardSubjectRef = subjectIdsDic[ccStandard.StandardCategoryRef]
+                        });
+            }
+            if (standards.Count > 0)
+                Storage.StandardStorage.Add(standards);
+        }
+
+
+        private void InsertDefaultClassStandards()
+        {
+            var standardsIds = Storage.StandardStorage.GetData().Keys; 
+            var classes =  ServiceLocator.ClassService.GetAll();
+            var classStandards = new List<ClassStandard>();
+            foreach (var c in classes)
+            {
+                classStandards.AddRange(standardsIds.Select(id=> new ClassStandard
+                    {
+                        ClassRef = c.Id,
+                        StandardRef = id
+                    }).ToList());
+            }
+            Storage.ClassStandardStorage.Add(classStandards);
         }
 
         public Standard AddStandard(int id, string name, string description, int standardSubjectId, int? parentStandardId
@@ -87,7 +179,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 StandardSubjectId = subjectId,
                 ParentStandardId = parentStandardId
             });
-            return PrepareStandardsDetailsInfo(res);
+            return res; // PrepareStandardsDetailsInfo(res);
         }
 
         public void AddStandardSubjects(IList<StandardSubject> standardSubjects)
@@ -130,14 +222,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            Storage.ClasStandardStorage.Delete(classStandards);
+            Storage.ClassStandardStorage.Delete(classStandards);
         }
 
         public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
         {
             var annStandards = Storage.AnnouncementStandardStorage.GetAll().Where(x => x.AnnouncementRef == announcementId);
             IList<Standard> standards = Storage.StandardStorage.GetAll().Where(x => annStandards.Any(y => y.StandardRef == x.Id)).ToList();
-            standards = PrepareStandardsDetailsInfo(standards);
+            //standards = PrepareStandardsDetailsInfo(standards);
             return annStandards.Select(announcementStandard => 
                 new AnnouncementStandardDetails
                 {
@@ -151,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
-            return Storage.ClasStandardStorage.Add(classStandards);
+            return Storage.ClassStandardStorage.Add(classStandards);
         }
 
 
@@ -167,20 +259,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (standardIds == null || standardIds.Count == 0)
                 return new List<Standard>();
             var standards = Storage.StandardStorage.GetAll().Where(s=>standardIds.Contains(s.Id)).ToList();
-            return PrepareStandardsDetailsInfo(standards);
+            return standards;
+            //return PrepareStandardsDetailsInfo(standards);
         }
 
-        private IList<Standard> PrepareStandardsDetailsInfo(IList<Standard> standards)
-        {
-            var abIds = standards.Where(s => s.AcademicBenchmarkId.HasValue).Select(s => s.AcademicBenchmarkId.Value).ToList();
-            var ccDisc = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardsCodeByABIds(abIds);
-            foreach (var standard in standards)
-            {
-                if (standard.AcademicBenchmarkId.HasValue && ccDisc.ContainsKey(standard.AcademicBenchmarkId.Value))
-                    standard.CCStandardCode = ccDisc[standard.AcademicBenchmarkId.Value];
-            }
-            return standards;
-        }
+        //private IList<Standard> PrepareStandardsDetailsInfo(IList<Standard> standards)
+        //{
+        //    var abIds = standards.Where(s => s.AcademicBenchmarkId.HasValue).Select(s => s.AcademicBenchmarkId.Value).ToList();
+        //    var ccDisc = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandardsCodeByABIds(abIds);
+        //    foreach (var standard in standards)
+        //    {
+        //        if (standard.AcademicBenchmarkId.HasValue && ccDisc.ContainsKey(standard.AcademicBenchmarkId.Value))
+        //            standard.CCStandardCode = ccDisc[standard.AcademicBenchmarkId.Value];
+        //    }
+        //    return standards;
+        //}
         
 
         public IList<Standard> GetStandards(string filter)
