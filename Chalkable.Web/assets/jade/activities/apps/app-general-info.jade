@@ -50,30 +50,27 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
     isRejected = stateId == chlk.models.apps.AppStateEnum.REJECTED
     isAppLive = liveAppId != null && liveAppId.valueOf() != ""
 
-
-
+    -var appStatus= "You app is not submitted"
     if isAppLive
         appStatus = "You app is live in Chalkable app store"
-        if isApproved || isRejected
-            +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button.go-live-btn(disabled = !isApproved? "disabled" : undefined) Go Live
-            if isApproved
-               appStatus = "Click to GO LIVE in the App Store!"
-            if isRejected
-               appStatus = "Your app update was not approved, please address any issues and resubmit."
+        if isApproved
+           appStatus = "Click to GO LIVE in the App Store!"
+        if isRejected
+           appStatus = "Your app update was not approved, please address any issues and resubmit."
         if isSubmitted
            appStatus = "Your app update has been submitted and is awaiting approval."
-        .app-status=appStatus
     else
-        appStatus = "You app is not submitted"
-        if isApproved || isRejected
-            +ActionLinkButton('apps', 'goLive', self.draftAppId).special-button.blue-button.go-live-btn(disabled = !isApproved? "disabled" : undefined) Go Live
-            if isApproved
-                appStatus = "Click to GO LIVE in the App Store!"
-            if isRejected
-                appStatus = "Your app was not approved, please address any issues and resubmit."
+        if isApproved
+            appStatus = "Click to GO LIVE in the App Store!"
+        if isRejected
+            appStatus = "Your app was not approved, please address any issues and resubmit."
         if isSubmitted
            appStatus = "Your app has been submitted and is awaiting approval."
-        .app-status=appStatus
+
+    h3.app-status(class = isRejected ? 'red' : '')= appStatus
+
+    if isApproved || isRejected
+        +ActionButton('apps', 'goLive', self.draftAppId).green-button.go-live-btn(disabled = !isApproved || isRejected ? "disabled" : undefined) Go Live
 
 .app-general-info
     h2.page-title My Apps
@@ -102,7 +99,7 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
                     .title= self.appName
                     +ActionButton('apps', 'details', self.draftAppId) Details
         .app-description
-            .title=self.appName
+            h2.title=self.appName
             +AppStatus_(self.appState, self.draftAppId, self.liveAppId)
 
 
