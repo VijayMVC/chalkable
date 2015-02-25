@@ -111,6 +111,8 @@ namespace Chalkable.Data.School.DataAccess
                 studentSchoolYear.GradeLevel = reader.Read<GradeLevel>();
                 res.StudentSchoolYears.Add(studentSchoolYear);
             }
+            reader.NextResult();
+            res.PersonEmails = new List<PersonEmail>();
             return res;
         }
         

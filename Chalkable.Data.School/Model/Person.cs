@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -58,9 +59,21 @@ namespace Chalkable.Data.School.Model
         }
         public IList<Phone> Phones { get; set; }
         public IList<StudentSchoolYear> StudentSchoolYears { get; set; }
-        
-      
-        public string Email { get; set; }
+        public IList<PersonEmail> PersonEmails { get; set; }
+
+        public string Email
+        {
+            get
+            {
+                if (PersonEmails == null)
+                    return null;
+                var res =
+                    PersonEmails.FirstOrDefault(x => x.IsPrimary) ??
+                    PersonEmails.FirstOrDefault();
+                return res != null ? res.EmailAddress : null;
+            }
+            
+        }
     }
 
     public class StudentHealthCondition

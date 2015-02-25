@@ -128,11 +128,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 LastName = person.LastName,
                 Gender = person.Gender,
                 Id = person.Id,
-                Email = DemoStorage.BuildDemoEmail(person.Id, Storage.Context.DistrictId.ToString()),
+                
                 LastMailNotification = person.LastMailNotification,
                 RoleRef = person.RoleRef,
                 Salutation = person.Salutation
             };
+
+            personDetails.PersonEmails.Add(new PersonEmail
+            {
+                Description = "default demo email",
+                EmailAddress = DemoStorage.BuildDemoEmail(person.Id, Storage.Context.DistrictId.ToString()),
+                IsListed = true,
+                IsPrimary = true,
+                PersonRef = personDetails.Id
+            });
 
             if (personDetails.AddressRef.HasValue)
                 personDetails.Address = Storage.AddressStorage.GetById(personDetails.AddressRef.Value);

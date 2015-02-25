@@ -81,16 +81,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PersonDetails GetPersonDetails(int id)
         {
-            PersonDetails res;
-            using (var uow = Read())
-            {
-                res = new PersonDataAccess(uow, Context.SchoolLocalId)
-                    .GetPersonDetails(id);
-            }
-            var userId = GetSisUserId(id);
-            var user = ServiceLocator.ServiceLocatorMaster.UserService.GetBySisUserId(userId, Context.DistrictId);
-            res.Email = user.Login;
-            return res;
+            return DoRead(uow => new PersonDataAccess(uow, Context.SchoolLocalId)
+                .GetPersonDetails(id));
         }
 
         public void Edit(IList<Person> persons)
