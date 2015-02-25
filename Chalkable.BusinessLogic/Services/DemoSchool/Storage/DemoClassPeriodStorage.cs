@@ -28,9 +28,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 SchoolDaysOnly = true
             });
             var periods = Storage.PeriodStorage.GetPeriods(schoolYearId);
-            var classes = Storage.ClassStorage.GetStudentClasses(schoolYearId, studentId.Value, null);
+            var classes = studentId.HasValue
+                ? Storage.ClassStorage.GetStudentClasses(schoolYearId, studentId.Value, null)
+                : new List<ClassDetails>();
+
             if (teacherId.HasValue)
+            {
+                Storage.ClassStorage.GetTeacherClasses(schoolYearId, teacherId.Value, null);
                 classes = classes.Where(x => x.PrimaryTeacherRef == teacherId).ToList();
+            }
+                
             var classsPeriods = GetAll().Where(x =>x.Period.SchoolYearRef == schoolYearId).ToList();
             var rooms = Storage.RoomStorage.GetAll();
             var scheduleTimeSlots = Storage.ScheduledTimeSlotStorage.GetAll();

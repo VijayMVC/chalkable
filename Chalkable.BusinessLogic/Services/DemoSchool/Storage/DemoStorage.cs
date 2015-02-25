@@ -1879,14 +1879,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 DisplayStudentAverage = true
             });
 
-            AddClassStandard(id, DemoSchoolConstants.MathStandard1);
-            AddClassStandard(id, DemoSchoolConstants.MathStandard2);
-            AddClassStandard(id, DemoSchoolConstants.MathStandard3);
-
-            AddClassStandard(id, DemoSchoolConstants.MathStandard1);
-            AddClassStandard(id, DemoSchoolConstants.MathStandard2);
-            AddClassStandard(id, DemoSchoolConstants.MathStandard3);
-
             for(var gp = DemoSchoolConstants.GradingPeriodQ1; gp <= DemoSchoolConstants.GradingPeriodQ4; ++gp)
                 AddGradeBookForClass(id, gp);
             AnnouncementStorage.AddDemoAnnouncementsForClass(id);
@@ -1926,15 +1918,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Rows = seatCount,
                 Seats = seats
             }));
-        }
-
-        private void AddClassStandard(int classId, int standardId)
-        {
-            ClassStandardStorage.Add(new ClassStandard()
-            {
-                ClassRef = classId,
-                StandardRef = standardId
-            });
         }
 
     }

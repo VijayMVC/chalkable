@@ -33,12 +33,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 });
 
             
-            InsetDefaultSubjects(subjectIdsDic, ccStandardCategories);
+            InsertDefaultSubjects(subjectIdsDic, ccStandardCategories);
             InsertDefaultStandards(subjectIdsDic);
             InsertDefaultClassStandards();
         }
 
-        private void InsetDefaultSubjects(IDictionary<Guid, int> subjectIdsDic
+        private void InsertDefaultSubjects(IDictionary<Guid, int> subjectIdsDic
             , IEnumerable<CommonCoreStandardCategory> ccStandardCategories)
         {
             var standardSubjects = ccStandardCategories.Select(standardCategory => new StandardSubject
@@ -103,10 +103,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             foreach (var c in classes)
             {
                 classStandards.AddRange(standardsIds.Select(id=> new ClassStandard
-                    {
-                        ClassRef = c.Id,
-                        StandardRef = id
-                    }).ToList());
+                {
+                    ClassRef = c.Id,
+                    StandardRef = id
+                }).ToList());
             }
             Storage.ClassStandardStorage.Add(classStandards);
         }

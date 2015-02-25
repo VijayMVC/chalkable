@@ -131,7 +131,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 
                 LastMailNotification = person.LastMailNotification,
                 RoleRef = person.RoleRef,
-                Salutation = person.Salutation
+                Salutation = person.Salutation,
+                PersonEmails = new List<PersonEmail>()
             };
 
             personDetails.PersonEmails.Add(new PersonEmail
