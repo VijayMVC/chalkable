@@ -14,7 +14,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 var roleId = user.getRole().getId();
                 if(roleId == chlk.models.common.RoleEnum.TEACHER && user.getRoomName())
                     return "Current room location - " + user.getRoomName();
-                return "";
+                return "no class now";
             }
     ]);
 });
