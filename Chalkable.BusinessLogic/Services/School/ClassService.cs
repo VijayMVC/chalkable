@@ -22,6 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null);
         IList<ClassDetails> GetStudentClasses(int schoolYearId, int studentId, int? markingPeriodId = null);
+        IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null); 
         IList<ClassDetails> SearchClasses(string filter);
         
         ClassDetails GetClassDetailsById(int id);
@@ -244,6 +245,17 @@ namespace Chalkable.BusinessLogic.Services.School
                             MarkingPeriodId = markingPeriodId
                         });
             }
+        }
+
+
+        public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)
+        {
+            IList<ClassDetails> classes = new List<ClassDetails>();
+            if (studentId.HasValue)
+                classes = GetStudentClasses(schoolYearId, studentId.Value, markingPeriodId);
+            if (teacherId.HasValue)
+                classes = GetTeacherClasses(schoolYearId, teacherId.Value, markingPeriodId);
+            return classes;
         }
     }
 }

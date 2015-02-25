@@ -154,19 +154,21 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.setAnnouncementGrade(model)
                 .then(function(currentItem){
                     var announcement = this.getCachedAnnouncement();
-                    announcement.getStudentAnnouncements().getItems().forEach(function(item){
-                        if(item.getStudentId() == currentItem.getStudentId()){
-                            item.setGradeValue(currentItem.getGradeValue());
-                            item.setNumericGradeValue(currentItem.getNumericGradeValue());
-                            item.setAbsent(currentItem.isAbsent());
-                            item.setExempt(currentItem.isExempt());
-                            item.setIncomplete(currentItem.isIncomplete());
-                            item.setLate(currentItem.isLate());
-                            item.setDropped(currentItem.isDropped());
-                            item.setIncludeInAverage(currentItem.isIncludeInAverage());
-                        }
-                    });
-                    announcement.calculateGradesAvg();
+                    if(currentItem){
+                        announcement.getStudentAnnouncements().getItems().forEach(function(item){
+                            if(item.getStudentId() == currentItem.getStudentId()){
+                                item.setGradeValue(currentItem.getGradeValue());
+                                item.setNumericGradeValue(currentItem.getNumericGradeValue());
+                                item.setAbsent(currentItem.isAbsent());
+                                item.setExempt(currentItem.isExempt());
+                                item.setIncomplete(currentItem.isIncomplete());
+                                item.setLate(currentItem.isLate());
+                                item.setDropped(currentItem.isDropped());
+                                item.setIncludeInAverage(currentItem.isIncludeInAverage());
+                            }
+                        });
+                        announcement.calculateGradesAvg();
+                    }
                     this.cacheAnnouncement(announcement);
                     return new chlk.activities.announcement.UpdateAnnouncementItemViewModel(announcement, currentItem);
             }, this);

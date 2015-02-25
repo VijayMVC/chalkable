@@ -156,5 +156,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     PersonId = personId
                 }).ToList();
         }
+
+
+        public IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null)
+        {
+            IList<ClassDetails> classes = new List<ClassDetails>();
+            if (studentId.HasValue)
+                classes = GetStudentClasses(schoolYearId, studentId.Value, markingPeriodId);
+            if (teacherId.HasValue)
+                classes = GetTeacherClasses(schoolYearId, teacherId.Value, markingPeriodId);
+            return classes;
+        }
     }
 }
