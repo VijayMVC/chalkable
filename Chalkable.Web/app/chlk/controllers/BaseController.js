@@ -111,10 +111,12 @@ NAMESPACE('chlk.controllers', function (){
 
                if(error.getStatus && error.getStatus() == 500){
                     var response = JSON.parse(error.getResponse());
-                    if(response.exceptiontype == 'ChalkableSisException')
-                       return this.ShowMsgBox(response.message, 'oops',[{
-                           text: Msg.GOT_IT.toUpperCase()
-                       }]), null;
+                    if(response.exceptiontype == 'ChalkableSisException'){
+                        return this.ShowMsgBox(response.message, 'oops',[{
+                                text: Msg.GOT_IT.toUpperCase()
+                            }])
+                            .thenBreak();
+                    }
                     if(response.exceptiontype == 'NoAnnouncementException')
                        return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
                     if(response.exceptiontype == 'NoClassAnnouncementTypeException')

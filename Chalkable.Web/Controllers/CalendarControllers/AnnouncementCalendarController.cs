@@ -29,6 +29,13 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              MonthCalendar(ref date, out start, out end);
              var schoolYearId = GetCurrentSchoolYearId();
              var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId);
+             if (schoolPersonId.HasValue)
+             {
+                 int? studentId, teacherId;
+                 PrepareUsersIdsForCalendar(SchoolLocator, schoolPersonId, out teacherId, out studentId);
+                 var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
+                 announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+             }
              if (DemoUserService.IsDemoUser(Context))
              {
                  announcements = announcements.Where(x => x.State == AnnouncementState.Created).ToList();
@@ -79,7 +86,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var res = new List<AnnouncementCalendarWeekViewData>();
              var announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, classId);
              var schedule = locator.ClassPeriodService.GetSchedule(teacherId, studentId, classId, start, end);
-                    
+             var classes = locator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
+             announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
              for (var d = start; d <= end; d = d.AddDays(1))
              {
                  var currentDayAnns = announcements.Where(x => x.Expires.Date == d).ToList();

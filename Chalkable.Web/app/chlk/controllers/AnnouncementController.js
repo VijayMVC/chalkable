@@ -125,15 +125,15 @@ NAMESPACE('chlk.controllers', function (){
                     studentAnnouncement.isIncomplete(),
                     studentAnnouncement.isExempt(),
                     fromGrid_ ? chlk.models.announcement.ShortStudentAnnouncementViewData : null
-                )
-                .attach(this.validateResponse_());
+                );
             return result;
         },
 
         [chlk.controllers.SidebarButton('statistic')],
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeFromGridAction(model){
-            var result = this.setAnnouncementGrade(model, true);
+            var result = this.setAnnouncementGrade(model, true)
+                .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
         },
 
@@ -151,9 +151,17 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeAction(model){
+            var needToHideLoader = true;
             var result = this.setAnnouncementGrade(model)
-                .then(function(currentItem){
+                .catchError(function (error) {
                     var announcement = this.getCachedAnnouncement();
+                    this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementViewPage, announcement);
+                    throw error;
+                }, this)
+                .attach(this.validateResponse_())
+                .then(function(currentItem){
+                    var announcement = this.getCachedAnnouncement(),
+                    needToHideLoader = false;
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
                         if(item.getStudentId() == currentItem.getStudentId()){
                             item.setGradeValue(currentItem.getGradeValue());
@@ -169,7 +177,7 @@ NAMESPACE('chlk.controllers', function (){
                     announcement.calculateGradesAvg();
                     this.cacheAnnouncement(announcement);
                     return new chlk.activities.announcement.UpdateAnnouncementItemViewModel(announcement, currentItem);
-            }, this);
+                }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, chlk.activities.lib.DontShowLoader());
         },
 

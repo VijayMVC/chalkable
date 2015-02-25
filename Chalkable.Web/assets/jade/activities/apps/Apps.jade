@@ -2,6 +2,7 @@ mixin AppManagementControls_(app)
     -var id = app.getId()
     if app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
         +ActionLink('apps', 'approve', id).btn Approve
+        | &nbsp;
         +ActionLink('apps', 'decline', id).btn Reject
     else
         span=app.getState().toString()
@@ -34,41 +35,41 @@ mixin AppsFilterSelect_(name, items)
             +AppsFilterSelect_('state', self.prepareStatesSelectModel())#states-select
 
 
-        +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
-            +GridHead()
-                .th
-                .th Application Name
-                .th Description
-                .th Is Live
-                .th Draft State
-                .th Draft Actions
-                .th Live Actions
-                .th.narrow Is Internal
-                .th
-            +GridBody()
-                each item in self.applications.getItems()
-                    -var liveApp = item.getLiveApplication()
-                    +GridRow()
-                        pictureLink = item.getSmallPictureId() ? self.getAppPictureURL(item.getSmallPictureId(), 74, 74) : '#'
-                        .td
-                            img.app-icon(src=pictureLink, width=24, height=24)
-                        .td= item.getName()
-                        .td= item.getShortDescription()
-                        .td: span=item.getLiveAppId() ? "True" : "False"
-                        .td.app-state
-                            +AppManagementControls_(item)
-                        .td.action-links
-                            +ApplicationActionLinks_(item)
-                        .td.action-links
-                            if item.getLiveAppId() && item.getLiveApplication()
-                                +ApplicationActionLinks_(item.getLiveApplication())
-                            else
-                                span -
-                        .td
-                            if !self.isReadOnly()
-                                +ActionForm('apps', 'changeAppType')
-                                    if liveApp
-                                        +Checkbox('isInternal', liveApp.isInternal())
-                                        +Hidden('appId', liveApp.getId())
-                                    else
-                                        span -
+    +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
+        +GridHead()
+            .th
+            .th Application Name
+            .th Description
+            .th Is Live
+            .th Draft State
+            .th Draft Actions
+            .th Live Actions
+            .th.narrow Is Internal
+            .th
+        +GridBody()
+            each item in self.applications.getItems()
+                -var liveApp = item.getLiveApplication()
+                +GridRow()
+                    pictureLink = item.getSmallPictureId() ? self.getAppPictureURL(item.getSmallPictureId(), 74, 74) : '#'
+                    .td
+                        img.app-icon(src=pictureLink, width=24, height=24)
+                    .td= item.getName()
+                    .td= item.getShortDescription()
+                    .td: span=item.getLiveAppId() ? "True" : "False"
+                    .td.app-state
+                        +AppManagementControls_(item)
+                    .td.action-links
+                        +ApplicationActionLinks_(item)
+                    .td.action-links
+                        if item.getLiveAppId() && item.getLiveApplication()
+                            +ApplicationActionLinks_(item.getLiveApplication())
+                        else
+                            span -
+                    .td
+                        if !self.isReadOnly()
+                            +ActionForm('apps', 'changeAppType')
+                                if liveApp
+                                    +Checkbox('isInternal', liveApp.isInternal())
+                                    +Hidden('appId', liveApp.getId())
+                                else
+                                    span -
