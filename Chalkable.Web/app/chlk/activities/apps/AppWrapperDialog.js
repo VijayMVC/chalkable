@@ -6,7 +6,7 @@ REQUIRE('chlk.AppApiHost');
  NAMESPACE('chlk.activities.apps', function () {
      /** @class chlk.activities.apps.AppWrapperDialog*/
 
-      CLASS(
+    CLASS(
         [ria.mvc.ActivityGroup('AppWrapperDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppWrapperDialogTpl)],
@@ -82,5 +82,5 @@ REQUIRE('chlk.AppApiHost');
                   this.onAttachClick_();
               }
 
-          ]);
+        ]);
 });
