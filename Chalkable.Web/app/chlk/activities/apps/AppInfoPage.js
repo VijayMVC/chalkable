@@ -69,18 +69,6 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.onFormChange(node, event);
             },
 
-            [ria.mvc.DomEventBind('change', 'input[name=attachEnabled]')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function attachChanged(node, event){
-                var val = node.checked();
-                this.dom.find('input[name=bannerEnabled]').setValue(val);
-                if (val){
-                    this.dom.find('#toggle-banner-form').trigger('submit');
-                }
-                else
-                    this.dom.find('.banner').empty();
-            },
-
             [ria.mvc.DomEventBind('keyup', 'input')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function inputsChanged(node, event){
