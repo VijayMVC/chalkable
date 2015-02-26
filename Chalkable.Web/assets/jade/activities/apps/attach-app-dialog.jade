@@ -1,9 +1,8 @@
-mixin AppIconLink(announcementId, app, iconTooltip)
+mixin AppIconLink_(announcementId, app, iconTooltip)
     -var appId = app.getId().valueOf()
-    -var pictureUrl = app.getBannerPictureUrl()
     .announcement-item.application(data-tooltip=iconTooltip)
         .wrapper
-            +LoadingImage(src=pictureUrl, id="loading-image-" + appId)
+            +LoadingImage(src=app.getBannerPictureUrl(), id="loading-image-" + appId)
             .title= app.getName()
             .shortdesc= app.getShortDescription()
             if app.needToInstall()
@@ -21,7 +20,7 @@ announcementId = self.announcementId.valueOf()
         if self.apps.getItems().length > 0
             .attachments-and-applications
                 each app in self.apps.getItems()
-                    +AppIconLink(announcementId, app, self.getAppIconToolTip(app))
+                    +AppIconLink_(announcementId, app, self.getAppIconToolTip(app))
             .paging
                 +Paginator('announcement', 'attachApp', self.apps, [announcementId, null, self.getAppUrlAppend()])
         else

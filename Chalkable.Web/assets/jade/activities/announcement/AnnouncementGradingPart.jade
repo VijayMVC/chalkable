@@ -1,7 +1,7 @@
-mixin AppAttachmentBlock_(item, pictureHref, i)
+mixin AppAttachmentBlock_(item, pictureHref)
     .wrapper
         .title= item.getName()
-        +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        +LoadingImage(src=pictureHref)
         block
 
 studentAnnouncements = self.getItems()
@@ -73,7 +73,8 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                 each app, i in self.getApplications()
                     -var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
                         .announcement-item.attachment
-                            +AppAttachmentBlock_(app, self.getPictureURL(app.getSmallPictureId(), 74, 74, true), i).announcement-item.application
+                            -var appPictureUrl = self.getPictureURL(app.getBigPictureId(), 170, 110)
+                            +AppAttachmentBlock_(app, appPictureUrl).announcement-item.application
                                 +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId(), self.getStandardsUrlComponents()) Open
                             -var grade = self.getAppGrade(app.getAnnouncementApplicationId(), student.getId())
                             if grade

@@ -1,11 +1,15 @@
-mixin MyAppsIconLink(app, editable)
+mixin AppIconEditable_(app, editable)
+    -var appPictureUrl = app.getBannerPictureUrl()
+    .icon(class=editable ? "jiggly" : undefined)
+        +LoadingImage(src=appPictureUrl)
+
+mixin MyAppsIconLink_(app, editable)
     appId = app.getId().valueOf()
     isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
     if editable
         +ActionForm('appmarket', 'tryToUninstall').my-app-icon-link.application
             .wrapper
-                .icon(class=editable ? "jiggly" : undefined)
-                    img(src=app.getBannerPictureUrl())
+                +AppIconEditable_(app, editable)
                 .title=app.getName()
             Button(type="submit").close-btn
             +Hidden('appName', app.getName())
@@ -16,8 +20,7 @@ mixin MyAppsIconLink(app, editable)
     else
         +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).application
             .wrapper
-                .icon(class=editable ? "jiggly" : undefined)
-                    img(src=app.getBannerPictureUrl())
+                +AppIconEditable_(app, editable)
                 .title=app.getName()
                 BUTTON Open
 .my-apps
@@ -41,4 +44,4 @@ mixin MyAppsIconLink(app, editable)
                 button(type="submit").search-btn#app-market-search-btn
     .apps
         each app in self.apps.getItems()
-            +MyAppsIconLink(app, self.isEditable())
+            +MyAppsIconLink_(app, self.isEditable())

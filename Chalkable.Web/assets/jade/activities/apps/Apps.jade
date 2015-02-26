@@ -50,9 +50,8 @@ mixin AppsFilterSelect_(name, items)
             each item in self.applications.getItems()
                 -var liveApp = item.getLiveApplication()
                 +GridRow()
-                    pictureLink = item.getSmallPictureId() ? item.getIconPictureUrl() : '#'
                     .td
-                        img.app-icon(src=pictureLink, width=24, height=24)
+                        img.app-icon(src=item.getSmallPictureId() ? item.getIconPictureUrl() : '#', width=24, height=24)
                     .td= item.getName()
                     .td= item.getShortDescription()
                     .td: span=item.getLiveAppId() ? "True" : "False"
