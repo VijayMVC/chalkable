@@ -283,8 +283,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 var da = new ApplicationDataAccess(uow);
                 application = da.GetApplicationById(id);
-                draftApps = da.GetAll(new AndQueryCondition {{Application.ORIGINAL_REF_FIELD, id}});
-            
                 if (!ApplicationSecurity.CanEditApplication(Context, application))
                     throw new ChalkableSecurityException(ChlkResources.ERR_APP_INVALID_RIGHTS);
 
@@ -297,6 +295,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
                 else
                 {
+                    draftApps = da.GetAll(new AndQueryCondition { { Application.ORIGINAL_REF_FIELD, id } });
                     foreach (var draftApp in draftApps)
                     {
                         draftApp.OriginalRef = null;

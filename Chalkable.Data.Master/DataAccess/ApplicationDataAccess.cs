@@ -308,12 +308,17 @@ namespace Chalkable.Data.Master.DataAccess
 
         public override void Delete(Guid id)
         {
-            SimpleDelete<ApplicationPermission>(new AndQueryCondition{{ApplicationPermission.APPLICATION_REF_FIELD, id}});
-            SimpleDelete<ApplicationCategory>(new AndQueryCondition { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
-            SimpleDelete<ApplicationPicture>(new AndQueryCondition { { ApplicationPicture.APPLICATION_REF_FIELD, id } });
-            SimpleDelete<ApplicationRating>(new AndQueryCondition { { ApplicationRating.APPLICATION_REF_FIELD, id } });
-            SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
-            base.Delete(id);
+            var query = new DbQuery(new List<DbQuery>
+                {
+                    Orm.SimpleDelete<ApplicationPermission>(new AndQueryCondition { {ApplicationPermission.APPLICATION_REF_FIELD, id} }),
+                    Orm.SimpleDelete<ApplicationCategory>(new AndQueryCondition { {ApplicationCategory.APPLICATION_REF_FIELD, id} }),
+                    Orm.SimpleDelete<ApplicationPicture>(new AndQueryCondition { {ApplicationPicture.APPLICATION_REF_FIELD, id} }),
+                    Orm.SimpleDelete<ApplicationRating>(new AndQueryCondition { {ApplicationRating.APPLICATION_REF_FIELD, id} }),
+                    Orm.SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { {ApplicationGradeLevel.APPLICATION_REF_FIELD, id} }),
+                    Orm.SimpleDelete<ApplicationStandard>(new AndQueryCondition { {ApplicationStandard.APPLICATION_REF_FIELD, id} }),
+                    Orm.SimpleDelete<Application>(new AndQueryCondition { {Application.ID_FIELD, id} }),
+                });
+            ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
         }
 
         public IList<Application> GetByIds(IList<Guid> ids)
