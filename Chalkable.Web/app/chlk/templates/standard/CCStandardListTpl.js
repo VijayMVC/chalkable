@@ -19,6 +19,12 @@ NAMESPACE('chlk.templates.standard', function(){
             chlk.models.id.CCStandardCategoryId, 'categoryId',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards'
+            ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
+
+            [[chlk.models.standard.CommonCoreStandard]],
+            String, function getStandardColumnTitle(standard){
+                var code = standard.getStandardCode();
+                return (!code || code == '') ? standard.getDescription() : code;
+            }
     ]);
 });

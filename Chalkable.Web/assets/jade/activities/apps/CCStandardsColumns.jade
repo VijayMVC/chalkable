@@ -8,7 +8,7 @@ if standards.length
                     data-id=standard.getId().valueOf(),
                     data-description=standard.getDescription()
                 ).standard-name.column-cell
-                    .name(data-tooltip=standard.getDescription(), data-tooltip-type="overflow")=standard.getStandardCode()
+                    .name(data-tooltip=standard.getDescription(), data-tooltip-type="overflow")=self.getStandardColumnTitle(standard)
                     .right-triangle
     td
         .standards-description
