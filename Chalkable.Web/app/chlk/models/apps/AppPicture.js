@@ -51,12 +51,15 @@ NAMESPACE('chlk.models.apps', function () {
                 var tplImgType = 1;
                 var tplDownloadLinkUrl = '/Developer/DownloadPictureTemplate?type=';
 
-                if (this.getWidth() == 170){
+                var screenshotDims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS();
+                var bannerDims = chlk.models.apps.AppPicture.BANNER_DIMS();
+
+                if (this.getWidth() == bannerDims.width){
                     cls = "big-icon-item";
                     tplImgType = 2;
                 }
 
-                if (this.getWidth() == 640){
+                if (this.getWidth() == screenshotDims.width){
                     cls = "screenshot-item";
                     tplImgType = 3;
                 }
