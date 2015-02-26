@@ -57,6 +57,14 @@ NAMESPACE('chlk.activities.person', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind('keypress', '.people-search')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function filterKeyPress(node, event){
+                if(event.keyCode == ria.dom.Keys.ENTER){
+                    event.preventDefault();
+                }
+            },
+
             [ria.mvc.DomEventBind('click', '.first-last:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function firstLastClick(node, event){
