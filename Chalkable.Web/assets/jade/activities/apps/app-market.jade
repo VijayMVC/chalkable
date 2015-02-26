@@ -1,13 +1,3 @@
-mixin AppIconLink(app)
-    appId = app.getId().valueOf()
-    +ActionLink('appmarket', 'details', appId).app-icon-link
-        .app-list-item
-            .icon
-                img(src=app.getBannerPictureUrl())
-            .description
-                .name=app.getName()
-                .shortdesc=app.getShortDescription()
-
 .app-market
     +AppMarketToolbar(self.currentBalance, self.categories, self.gradeLevels, true, null, self.isStudyCenterEnabled())
     .app-screenshots-panel
