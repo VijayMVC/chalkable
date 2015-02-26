@@ -246,7 +246,9 @@ namespace Chalkable.BusinessLogic.Services.School
                        gradeBook.Students.Add(student);
                 }    
             }
-            gradeBook.Students = gradeBook.Students.OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
+            gradeBook.Students = gradeBook.Students
+                                .OrderBy(x => x.LastName, StringComparer.OrdinalIgnoreCase)
+                                .ThenBy(x => x.FirstName, StringComparer.OrdinalIgnoreCase).ToList();
             if (stiGradeBook.StudentTotalPoints != null)
             {
                 var totalPoints = stiGradeBook.StudentTotalPoints.Where(x => x.GradingPeriodId == gradingPeriod.Id).ToList();
