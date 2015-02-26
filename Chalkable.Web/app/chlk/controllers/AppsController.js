@@ -338,17 +338,6 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
-        [[Object]],
-        function toggleBannerAction(data){
-            if (data.bannerEnabled){
-                var mdl = new chlk.models.apps.AppPicture(new chlk.models.id.PictureId(''), '', 170, 110, 'Banner', true);
-                return this.UpdateView(chlk.activities.apps.AppInfoPage, ria.async.DeferredData(mdl), 'banner');
-            }
-        },
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
         [[String, Number, Number]],
         function deletePictureDeveloperAction(title, width, height) {
             var result = new ria.async.DeferredData(new chlk.models.apps.AppPicture(
@@ -703,16 +692,8 @@ NAMESPACE('chlk.controllers', function (){
                     if (appBannerId.length == 0) appBannerId = null;
                 }
 
-                if (appAccess.isAttachEnabled()){
-                    if (appIconId == null || appBannerId == null){
-                        return this.ShowAlertBox('You need to upload icon and banner picture for you app', 'Error'), null;
-                    }
-                }
-                else
-                {
-                    if (appIconId == null){
-                        return this.ShowAlertBox('You need to upload icon picture for you app', 'Error'), null;
-                    }
+                if (appIconId == null || appBannerId == null){
+                    return this.ShowAlertBox('You need to upload icon and banner picture for you app', 'Error'), null;
                 }
 
                 var developerWebsite = model.getDeveloperWebSite();

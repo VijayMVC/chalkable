@@ -137,8 +137,6 @@ appPlatforms = appPlatforms.join(',')
         .action-bar.not-transparent.dev-app-info
             .container.panel-bg
                 label= "Status: " + app.getState().toString()
-    +ActionForm('apps', 'toggleBanner')#toggle-banner-form
-        +Hidden('bannerEnabled', myAppsAccess.isAttachEnabled())
     +ActionForm('apps', 'update').app-info
         if !self.isReadOnly()
             disableSubmitBtn = self.isDraft() || app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
@@ -233,10 +231,9 @@ appPlatforms = appPlatforms.join(',')
                     label.hint Icons:
                     .icons
                         .icon
-                            +RenderWith(app.getIconPicture(), chlk.templates.apps.AppPicture)
+                           +RenderWith(app.getIconPicture(), chlk.templates.apps.AppPicture)
                         .banner
-                            if myAppsAccess.isAttachEnabled()
-                               +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
+                           +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
         .section.last
             .pictures
                 .elem.screenshots
