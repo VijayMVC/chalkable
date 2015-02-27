@@ -104,21 +104,8 @@ mixin AppStatus_(appState, appDraftId, liveAppId)
 
 
     .app-reviews.reviews.developer
-        .review-link Reviews
         if self.liveAppId != null
-            devAppReviews = self.getAppReviews()
-            +Rating("appRating", self.getAppRating(), false).all
-            +ActionForm('apps', 'getAppReviews')#appReviews
-                +Hidden('start',devAppReviews.getPageIndex()) * devAppReviews.getPageSize())
-                +Hidden('totalCount', devAppReviews.getTotalCount())
-                +Hidden('actualCount', devAppReviews.getActualCount())
-                +Hidden('pageSize', devAppReviews.getPageSize())
-                +Hidden('appId', self.liveAppId)
-                +Hidden('scroll', 0)
-            +ScrollBox('appReviews', 100)
-                .user-reviews
-                    .rating-persons
-                        +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
+            +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
         else
             div Your app is not live in the app store
 

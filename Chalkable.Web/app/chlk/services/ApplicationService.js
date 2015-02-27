@@ -316,7 +316,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AppId, Number]],
             ria.async.Future, function getAppReviews(appId, start_){
                 return this
-                    .getPaginatedList('Application/GetAppReviews.json', chlk.models.apps.AppPersonRating, {
+                    .get('Application/GetAppReviews.json', chlk.models.apps.AppRating, {
                         applicationId: appId.valueOf(),
                         start: start_ || 0
                     });

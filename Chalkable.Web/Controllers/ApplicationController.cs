@@ -104,7 +104,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Developer")]
         public ActionResult GetAppReviews(Guid applicationId)
         {
-            return FakeJson("~/fakeData/appGeneralReviews.json");
+            var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
+            return Json(ApplicationRatingViewData.Create(appRatings));
         }
 
         [AuthorizationFilter("District, AdminGrade")]

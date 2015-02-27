@@ -40,7 +40,7 @@ NAMESPACE('chlk.templates.apps', function () {
             chlk.models.common.ChlkDate, 'reportDate',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.PaginatedList, 'appReviews',
+            chlk.models.apps.AppRating, 'appReviews',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.developer.HomeAnalytics, 'appAnalytics',

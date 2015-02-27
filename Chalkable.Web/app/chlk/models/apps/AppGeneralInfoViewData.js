@@ -14,7 +14,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'appName',
             Number, 'appRating',
             chlk.models.apps.AppState,  'appState',
-            chlk.models.common.PaginatedList, 'appReviews',
+            chlk.models.apps.AppRating, 'appReviews',
             chlk.models.developer.HomeAnalytics, 'appAnalytics',
             chlk.models.common.ChlkDate, 'reportDate',
             ArrayOf(chlk.models.apps.Application), 'devApps',
@@ -27,7 +27,7 @@ NAMESPACE('chlk.models.apps', function () {
                 String,
                 Number,
                 chlk.models.common.ChlkDate,
-                chlk.models.common.PaginatedList,
+                chlk.models.apps.AppRating,
                 chlk.models.developer.HomeAnalytics,
                 ArrayOf(chlk.models.apps.Application)
             ]],
@@ -38,7 +38,7 @@ NAMESPACE('chlk.models.apps', function () {
                     appThumbnail, appRating, reportDate, appReviews, appAnalytics, devApps);
             },
 
-            [[chlk.models.common.PaginatedList]],
+            [[chlk.models.apps.AppRating]],
             function $createFromReviews(reviews){
                 BASE();
                 this.prepareFields_("", null, null, null, "", null, null,
@@ -53,7 +53,7 @@ NAMESPACE('chlk.models.apps', function () {
                 String,
                 Number,
                 chlk.models.common.ChlkDate,
-                chlk.models.common.PaginatedList,
+                chlk.models.apps.AppRating,
                 chlk.models.developer.HomeAnalytics,
                 ArrayOf(chlk.models.apps.Application)
             ]],

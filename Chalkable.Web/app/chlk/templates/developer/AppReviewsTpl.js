@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.developer', function () {
         [ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData)],
         'AppReviewsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.PaginatedList, 'appReviews'
+            chlk.models.apps.AppRating, 'appReviews'
         ])
 });
 
