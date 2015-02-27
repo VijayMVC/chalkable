@@ -72,8 +72,8 @@ NAMESPACE('chlk.models.apps', function () {
 
             function ICON_DIMS(){
                 return {
-                    width: 74,
-                    height: 74
+                    width: 47,
+                    height: 47
                 }
             },
 

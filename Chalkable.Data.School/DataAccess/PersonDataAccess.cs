@@ -112,7 +112,7 @@ namespace Chalkable.Data.School.DataAccess
                 res.StudentSchoolYears.Add(studentSchoolYear);
             }
             reader.NextResult();
-            res.PersonEmails = new List<PersonEmail>();
+            res.PersonEmails = reader.ReadList<PersonEmail>();
             return res;
         }
         

@@ -14,7 +14,7 @@
 
     .items
       position: absolute
-      top: 25px
+      top: 40px
       +box-shadow(transparentize(#000, .5) 0 0 16px)
       z-index: 99
       width: 150px
@@ -58,6 +58,7 @@
         border: 1px outset #010a0e !important
         @include box-shadow(0 1px 0 transparentize(#fff, .6) inset, 0 1px 3px transparentize(#000, .55))
         cursor: pointer
+        outline: none
 
     .start-range
       margin-left: -24%
@@ -79,3 +80,6 @@
       &.notch
         margin-top: -15px
         font-size: 6px
+
+  .apps, .app-filter
+    text-align: center

@@ -36,6 +36,8 @@ NAMESPACE('chlk.activities.lib', function () {
                     this.dom.find('.dialog')
                         .setCss('top', ria.dom.Dom(document).scrollTop() + 80)
                         .addClass('fixed-top');
+
+                    this._fixedTopOffest = false;
                 }
             },
 
