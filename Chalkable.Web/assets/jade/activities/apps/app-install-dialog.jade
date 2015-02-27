@@ -1,0 +1,70 @@
+mixin InstallItem(item)
+    descr = item.getDescription()
+    tooltipText = item.getTooltipHint() || ""
+    withoutTooltip = tooltipText.length == 0
+    if item.isInstalled()
+        .labeled-checkbox
+            label(class="disabled-lbl", data-tooltip=tooltipText)=descr
+    else
+        +LabeledCheckbox(
+            item.getDescription(),
+            'chk-' + item.getId(),
+            item.isInstalled(),
+            item.isInstalled(), tooltipText)(
+            install-group="#{item.getGroupType().valueOf()}",
+            noTooltip = withoutTooltip ? "true" : undefined,
+            withoutOverflow="true",
+            data-tooltip=tooltipText
+        )
+
+app = self.getApp()
+webSiteLink = app.getDeveloperInfo().getWebSite()
+devName = app.getDeveloperInfo().getName()
+
+
+
+.dialog.app-market-install
+    .x-window-header
+        a.close.close-btn.dark
+        h1=app.getName()
+    .x-window-body
+        .app-screenshots-panel.content
+            +Carousel()
+                -videoUrl = app.getVideoDemoUrl() || ''
+                -dims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS()
+                if videoUrl
+                    +CarouselItem().img(data-page = 1)
+                        +Video(true)(src=videoUrl, width=dims.width, height=dims.height)
+                each picture, index in app.getScreenshotPictures().getItems()
+                    +CarouselItem().img(data-page= index + 2)
+                        img(src=picture.getPictureUrl())
+        .content
+            .app-title
+                span="by "
+                a(href=webSiteLink, target="blank").dev-web-site=devName
+            .right.rating-margin
+                +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+        .content
+            .app-info-details
+                .app-description
+                    textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
+        +ActionForm('appmarket', 'install').content
+            +Hidden('appId', app.getId().valueOf())
+            +Hidden('classes', "")
+            +Hidden('submitActionType', "")
+            +Hidden('gradeLevels', "")
+            +Hidden('departments', "")
+            +Hidden('roles', "")
+            +Hidden('currentPerson', "")
+            +Hidden('forAll', "")
+
+            .row
+                .group-header.first User:
+                .items
+                    div
+                        each item in app.getInstalledForGroups()
+                            +InstallItem(item)
+            .calculated-price
+            .install-info
+                .install-btn
+                    +Button(disabled = true, type="submit").special-button.blue-button Install App
