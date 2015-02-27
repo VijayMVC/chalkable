@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -63,9 +64,15 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             if (!CanGetInfo(id))
                 throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
-
+            
             var person = SchoolLocator.PersonService.GetPersonDetails(id);
-            return vdCreator(person);
+            var res = vdCreator(person);
+            if (Context.PersonId == person.Id) //just for current user
+            {
+                var user = MasterLocator.UserService.GetById(Context.UserId);
+                res.Email = user.Login;
+            }
+            return res;
         }
 
         private bool CanGetInfo(int personId)
@@ -86,13 +93,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             if (personId != Context.PersonId)
                 throw new ChalkableSecurityException("User can change email just for himself");
+            Trace.Assert(email != null);
             string errorMessage;
             SchoolLocator.PersonService.EditEmailForCurrentUser(email, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
                 return Json(new { data = errorMessage, success = false });
-            
-            var res = SchoolLocator.PersonService.GetPersonDetails(personId);
-            return Json(PersonInfoViewData.Create(res));
+
+            var res = GetInfo(personId, PersonInfoViewData.Create);
+            return Json(res);
         }
     }
 }
