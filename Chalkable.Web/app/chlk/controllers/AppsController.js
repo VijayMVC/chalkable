@@ -774,7 +774,7 @@ NAMESPACE('chlk.controllers', function (){
                         return this.Redirect('apps', 'add', []);
                     }
 
-                    var pictureUrl = this.pictureService.getPictureUrl(data.getSmallPictureId(), 74);
+                    var pictureUrl = data.getBannerPictureUrl();
 
                     var result = ria.async.wait(
                             this.appsService.getAppAnalytics(data.getId()),
