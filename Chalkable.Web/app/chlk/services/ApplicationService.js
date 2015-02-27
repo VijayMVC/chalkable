@@ -44,7 +44,8 @@ NAMESPACE('chlk.services', function () {
                         start: pageIndex_,
                         developerId: developerId_ ? developerId_.valueOf() : null,
                         state: state_ || null,
-                        filter: filter_
+                        filter: filter_,
+                        count: 25
                     })
             },
 

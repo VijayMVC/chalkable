@@ -145,9 +145,10 @@ NAMESPACE('chlk.controllers', function (){
                     if (!app_.getAppAccess())
                         app_.setAppAccess(new chlk.models.apps.AppAccess());
 
+                    var iconDims = chlk.models.apps.AppPicture.ICON_DIMS();
                     var appIconId = app_.getSmallPictureId() || new chlk.models.id.PictureId('');
-                    var iconUrl = this.pictureService.getPictureUrl(appIconId, 74);
-                    app_.setIconPicture(new chlk.models.apps.AppPicture(appIconId, iconUrl, 74, 74, 'Icon', !readOnly));
+                    var iconUrl = this.pictureService.getPictureUrl(appIconId, iconDims.width, iconDims.height);
+                    app_.setIconPicture(new chlk.models.apps.AppPicture(appIconId, iconUrl, iconDims.width, iconDims.height, 'Icon', !readOnly));
 
 
                     var bannerDims = chlk.models.apps.AppPicture.BANNER_DIMS();

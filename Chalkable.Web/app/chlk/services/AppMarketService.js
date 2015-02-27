@@ -71,7 +71,7 @@ NAMESPACE('chlk.services', function () {
                 return this
                     .getPaginatedList('AppMarket/List.json', chlk.models.apps.AppMarketApplication, {
                         start: start_ | 0,
-                        count: count_ || 9,
+                        count: count_ || 20,
                         categoriesIds:  categoryIds,
                         gradeLevelsIds: gradeLvlsIds,
                         filter: filter,
