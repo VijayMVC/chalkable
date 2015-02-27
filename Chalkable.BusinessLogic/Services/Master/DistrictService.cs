@@ -22,6 +22,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         private const int MAX_SYNC_TIME_DEFAULT = 1800;
         private const int SYNC_LOG_FLUSH_SIZE_DEFAULT = 100;
         private const int SYNC_HISTORY_DAYS_DEFAULT = 15;
+        private const int SYNC_FREQUENCY = 300;
+        private const int MAX_SYNC_FREQUENCY = 3600;
 
         public DistrictService(IServiceLocatorMaster serviceLocator)
             : base(serviceLocator)
@@ -49,7 +51,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                         TimeZone = timeZone,
                         MaxSyncTime = MAX_SYNC_TIME_DEFAULT,
                         SyncLogFlushSize = SYNC_LOG_FLUSH_SIZE_DEFAULT,
-                        SyncHistoryDays = SYNC_HISTORY_DAYS_DEFAULT
+                        SyncHistoryDays = SYNC_HISTORY_DAYS_DEFAULT,
+                        FailCounter = 0,
+                        FailDelta = 0,
+                        IsDemoDistrict = false,
+                        SyncFrequency = SYNC_FREQUENCY,
+                        MaxSyncFrequency = 3600
                     };
                 da.Insert(res);
                 uow.Commit();

@@ -23,7 +23,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void ProcessPersonFirstLogin(int id);
         void EditEmailForCurrentUser(string email, out string error);
         IList<Person> GetAll();
-        int GetSisUserId(int personId);
         PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count);
     }
 
@@ -81,8 +80,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PersonDetails GetPersonDetails(int id)
         {
-            return DoRead(uow => new PersonDataAccess(uow, Context.SchoolLocalId)
-                .GetPersonDetails(id));
+            return DoRead(uow => new PersonDataAccess(uow, Context.SchoolLocalId).GetPersonDetails(id));
         }
 
         public void Edit(IList<Person> persons)
@@ -100,7 +98,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Trace.Assert(Context.PersonId.HasValue);
             error = null;
-            string oldEmail = Context.Login;
+            string oldEmail = ServiceLocator.ServiceLocatorMaster.UserService.GetById(Context.UserId).Login;
             using (var uow = Update())
             {
                 if (!BaseSecurity.IsAdminOrTeacher(Context))
@@ -170,21 +168,6 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 new SchoolPersonDataAccess(uow).Delete(schoolPersons);
                 uow.Commit();
-            }
-        }
-        
-        public int GetSisUserId(int personId)
-        {
-            using (var uow = Read())
-            {
-                var student = new StudentDataAccess(uow).GetByIdOrNull(personId);
-                if (student != null) return student.UserId;
-                var staff = new StaffDataAccess(uow).GetByIdOrNull(personId);
-                if (staff != null && staff.UserId.HasValue) return staff.UserId.Value;
-                var person = new PersonDataAccess(uow, Context.SchoolLocalId).GetByIdOrNull(personId);
-                if (person != null && person.UserId.HasValue) return person.UserId.Value;
-
-                throw new ChalkableException("Current person doesn't have user data");
             }
         }
 

@@ -184,11 +184,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
         
-        public int GetSisUserId(int personId)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ProcessPersonFirstLogin(int id)
         {
             if (BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))

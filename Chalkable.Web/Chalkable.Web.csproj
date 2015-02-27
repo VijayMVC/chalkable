@@ -206,7 +206,6 @@
     <Compile Include="Controllers\GradingStyleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MarkingPeriodController.cs" />
-    <Compile Include="Controllers\PersonControllers\AdminController.cs" />
     <Compile Include="Controllers\PersonControllers\StudentController.cs" />
     <Compile Include="Controllers\PersonControllers\TeacherController.cs" />
     <Compile Include="Controllers\PreferenceController.cs" />
