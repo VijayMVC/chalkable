@@ -20,12 +20,23 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
                 this.standardsIds = SJX.fromValue(raw.standardsids, String);
                 this.standardsGrades = SJX.fromValue(raw.standardsgrades, String);
+                this.oldGradeValue = SJX.fromValue(raw.oldGradeValue, String);
+                this.oldDropped = SJX.fromValue(raw.oldDropped, Boolean);
+                this.oldLate = SJX.fromValue(raw.oldLate, Boolean);
+                this.oldIncomplete = SJX.fromValue(raw.oldIncomplete, Boolean);
+                this.oldExempt = SJX.fromValue(raw.oldExempt, Boolean);
             },
 
             ArrayOf(chlk.models.attachment.Attachment), 'attachments',
             chlk.models.people.User, 'studentInfo',
             chlk.models.people.User, 'owner',
             ArrayOf(chlk.models.standard.Standard), 'standards',
+
+            String, 'oldGradeValue',
+            Boolean, 'oldDropped',
+            Boolean, 'oldLate',
+            Boolean, 'oldIncomplete',
+            Boolean, 'oldExempt',
 
             Object, function getGrade(value){
                 return value;//GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())

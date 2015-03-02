@@ -133,6 +133,16 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.StudentAnnouncement]],
         function updateAnnouncementGradeFromGridAction(model){
             var result = this.setAnnouncementGrade(model, true)
+                .catchError(function (error) {
+                    model.setGradeValue(model.getOldGradeValue());
+                    model.setDropped(model.isOldDropped());
+                    model.setLate(model.isOldLate());
+                    model.setIncomplete(model.isOldIncomplete());
+                    model.setExempt(model.isOldExempt());
+                    this.BackgroundUpdateView(chlk.activities.grading.GradingClassSummaryGridPage, model, chlk.activities.lib.DontShowLoader());
+
+                    throw error;
+                }, this)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
         },

@@ -6,6 +6,11 @@ normalValue = self.getModel().getNormalValue()
         data-comment = self.getComment()
     ).comment-value
     +Hidden('id', self.getId())
+    +Hidden('oldGradeValue', self.getGradeValue())
+    +Hidden('isOldDropped', self.isDropped())
+    +Hidden('isOldLate', self.isLate())
+    +Hidden('isOldIncomplete', self.isIncomplete())
+    +Hidden('isOldExempt', self.isExempt())
     +Hidden('announcementid', self.getAnnouncementId())
     +Hidden('studentid', self.getStudentId())
     input(value=normalValue, name="gradevalue", data-able-put-score=(!self.isNotAblePutScore()).toString() data-grade-value=self.getGradeValue()).grade-autocomplete.value-input
