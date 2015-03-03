@@ -1,18 +1,19 @@
 app = self
 appRating = app.getApplicationRating()
 
-BUTTON.write-review-btn Write a review
-.add-review.x-hidden
-    +ActionForm('appmarket', 'writeReview')#submit-review-form
-        +Hidden('appId', app.getId().valueOf())
-        .review-area
-            textarea(class="validate[required]").review-text(placeholder="Write a review", name="reviewText")
-            .review-container
-                +Rating('newRating', 0, true)
-                .rating-hint
-        .btns
-            +Button()(type="submit", class="special-button blue-button submit-review-btn") Submit
-            span.cancel-btn Cancel
+if !self.userRole.isStudent()
+    BUTTON.write-review-btn Write a review
+    .add-review.x-hidden
+        +ActionForm('appmarket', 'writeReview')#submit-review-form
+            +Hidden('appId', app.getId().valueOf())
+            .review-area
+                textarea(class="validate[required]").review-text(placeholder="Write a review", name="reviewText")
+                .review-container
+                    +Rating('newRating', 0, true)
+                    .rating-hint
+            .btns
+                +Button()(type="submit", class="special-button blue-button submit-review-btn") Submit
+                span.cancel-btn Cancel
 .user-reviews
     .rating-roles.x-hidden
         each item in appRating.getRoleRatings()

@@ -24,6 +24,8 @@ NAMESPACE('chlk.models.apps', function () {
 
     var SJX = ria.serialize.SJX;
 
+    function valueOf(x) { return x != null && x.valueOf ? x.valueOf() : x}
+
     /** @class chlk.models.apps.Application */
     CLASS(
         UNSAFE,  'Application', IMPLEMENTS(ria.serialize.IDeserializable), [
@@ -106,15 +108,13 @@ NAMESPACE('chlk.models.apps', function () {
 
             String, function getIconPictureUrl(){
                 var dims = chlk.models.apps.AppPicture.ICON_DIMS();
-                var result = window.azurePictureUrl + this.getSmallPictureId().valueOf() + '-' + dims.width + 'x' + dims.height;
-                return result;
+                return window.azurePictureUrl + valueOf(this.getSmallPictureId()) + '-' + dims.width + 'x' + dims.height;
             },
 
             String, function getBannerPictureUrl(){
                 var dims = chlk.models.apps.AppPicture.BANNER_DIMS();
-                var id = this.getBigPictureId() && this.getBigPictureId().valueOf() ? this.getBigPictureId() : this.getSmallPictureId();
-                var result = window.azurePictureUrl + id.valueOf() + '-' + dims.width + 'x' + dims.height;
-                return result;
+                var id = valueOf(this.getBigPictureId() || this.getSmallPictureId());
+                return window.azurePictureUrl + id + '-' + dims.width + 'x' + dims.height;
             },
 
             READONLY, String, 'statusText',

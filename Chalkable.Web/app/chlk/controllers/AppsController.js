@@ -112,9 +112,8 @@ NAMESPACE('chlk.controllers', function (){
                         this.userInRole(chlk.models.common.RoleEnum.APPTESTER)
                     );
                 }, this);
-            if(startIndex_ || developerId_ || state_ || filter_)
-                return this.UpdateView(chlk.activities.apps.AppsListPage, result);
-            return this.PushView(chlk.activities.apps.AppsListPage, result);
+
+            return this.PushOrUpdateView(chlk.activities.apps.AppsListPage, result);
         },
 
         [[chlk.models.apps.Application, Boolean, Boolean]],

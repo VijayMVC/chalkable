@@ -42,7 +42,6 @@ namespace Chalkable.Web.Controllers
         {
             if(string.IsNullOrEmpty(userName))
                 return Json(new { Success = false, ErrorMessage = "Enter your email", UserName = userName }, JsonRequestBehavior.AllowGet);
-
             string error = null;
             var context = LogOn(remember, us => us.Login(userName, password, out error));
             if (context != null)
@@ -50,7 +49,6 @@ namespace Chalkable.Web.Controllers
                 MasterLocator.UserTrackingService.LoggedInFromChalkable(context.Login);
                 return Json(new { Success = true, data = new { Role = context.Role.LoweredName } }, JsonRequestBehavior.AllowGet);
             }
-                
             return Json(new { Success = false, ErrorMessage = error, UserName = userName }, JsonRequestBehavior.AllowGet);
         }
 

@@ -80,8 +80,17 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
       +background-image(linear-gradient(top, #ccc 0%, transparentize(#ccc, 1) 100%))
       +box-shadow(transparentize(#000, .5) 0 1px 3px, transparentize(#fff, .22) 0 1px 0px inset)
 
+  &.mid-button
+    line-height: 40px
+    width: 174px
+    text-transform: uppercase
+    font-size: 15px
+
+    &+.grey-link, &+button, &+.action-link
+      margin-left: 17px
+
   &.big-button
-    height: 52px
+    line-height: 52px
     width: 218px
     text-transform: uppercase
     font-size: 17px

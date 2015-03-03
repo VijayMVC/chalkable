@@ -3,18 +3,44 @@
     width: 820px
     margin: 0 auto
 
+  .close-open-control
+    margin-bottom: 25px
+
   .app-market-details > DIV
     margin-bottom: 24px
 
   .app-info-details
     width: 100%
 
-  .app-description TEXTAREA
-    border: none
-    background: none
-    box-shadow: none
-    width: 100%
-    min-height: 200px
+    .review-link
+      font-style: italic
+      color: #aaa
+
+  .app-description
+    white-space: pre-line
+
+  .side-panel
+    width: 225px
+    margin-left: 25px
+    text-align: right
+
+  .app-price-info
+    vertical-align: middle
+    line-height: 67px
+    margin: 25px 0 15px
+
+    .app-title
+      font-style: italic
+
+    A
+      color: #2f7790
+
+    b
+      display: inline-block
+      margin-right: 15px
+
+  .app-description A
+    color: #2f7790
 
   .side-panel
     float: right
@@ -28,7 +54,42 @@
 
       > *
         display: table-cell
-        padding-bottom: 8px
+        padding-bottom: 16px
+        vertical-align: middle
+
+  .permission
+    .icon, .description
+      display: inline-block
+      line-height: 26px
+      vertical-align: middle
+      margin: 0 5px
+
+    .icon
+      width: 24px
+      height: 24px
+      opacity: .5
+
+    .description
+      font-weight: 600
+
+    .permission-role-student
+      +icons-24-sprite(students)
+    .permission-role-teacher
+      +icons-24-sprite(teacher)
+    .permission-type-none
+      +icons-24-sprite(basic-info, 0, 0, 1px)
+    .permission-message
+      +icons-24-sprite(basic-info, 0, 0, 1px)
+    .permission-grade
+      +icons-24-sprite(chart)
+    .permission-schedule
+      +icons-24-sprite(calendar)
+    .permission-attendance
+      +icons-24-sprite(attendance)
+    .platform-web
+      +icons-24-sprite(computer)
+    .platform-ios, .platform-android, .permission-discipline
+      +icons-24-sprite(basic-info, 0, 0, 1px)
 
   .group-header
     width: 200px
@@ -36,10 +97,14 @@
 
   .permission
     display: inline-block
-    margin-right: 8px
-    background: #eee
+    margin: 0 8px 4px 0
+    background: #EDEDED
     border-radius: 5px
     padding: 5px
+
+  .review-link
+    vertical-align: top
+    line-height: 28px
 
 
   .reviews
