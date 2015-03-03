@@ -36,9 +36,9 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
         +CloseOpen('Info')
             .content
                 .table.app-info-details
-                    .app-description= self.linkify(app.getDescription())
+                    .app-description!= self.linkify(app.getDescription())
                     .side-panel
-                        span.review-link User Ratings
+                        span.review-link User Rating:
                         +Rating("appRating", app.getApplicationRating().getAverage(), false).all
 
 
