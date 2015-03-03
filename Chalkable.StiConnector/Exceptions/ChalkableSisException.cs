@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 
@@ -26,5 +22,11 @@ namespace Chalkable.StiConnector.Exceptions
         }
 
         public IList<string> SisMessages { get; private set; } 
+    }
+
+    public class ChalkableSisNotFoundException : ChalkableSisException
+    {
+        public ChalkableSisNotFoundException() { }
+        public ChalkableSisNotFoundException(string messsage) : base(messsage){}
     }
 }
