@@ -38,7 +38,7 @@ NAMESPACE('chlk.services', function () {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy'),
                     gradeLevelIds : gradeLevels_ && gradeLevels_.toString(),
-                    schoolPersonId : schoolPersonId_ && schoolPersonId_.valueOf()
+                    personId : schoolPersonId_ && schoolPersonId_.valueOf()
                 }).then(function(model){
                     this.getContext().getSession().set(ChlkSessionConstants.MONTH_CALENDAR_DATA, model);
                     return this.prepareMonthData(model, date_);
@@ -107,7 +107,7 @@ NAMESPACE('chlk.services', function () {
                     classId: classId_ && classId_.valueOf(),
                     date: date_ && date_.toString('mm-dd-yy'),
                     gradeLevelIds : gradeLevels_,
-                    schoolPersonId : schoolPersonId_ && schoolPersonId_.valueOf()
+                    personId : schoolPersonId_ && schoolPersonId_.valueOf()
                 }).then(function(data){
                     return this.prepareWeekData(data, date_);
                 }.bind(this));
