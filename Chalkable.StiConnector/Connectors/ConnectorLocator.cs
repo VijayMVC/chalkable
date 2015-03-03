@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web;
 using Chalkable.Common.Exceptions;
+using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -100,6 +101,8 @@ namespace Chalkable.StiConnector.Connectors
                     if (ex.Response is HttpWebResponse)
                     {
                         HttpStatusCode status = (ex.Response as HttpWebResponse).StatusCode;
+                        if (status == HttpStatusCode.NotFound)
+                            throw new ChalkableSisNotFoundException(ex.Message + Environment.NewLine + msg);
                         throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
                     }
                     throw new ChalkableException(ex.Message + Environment.NewLine + msg);    

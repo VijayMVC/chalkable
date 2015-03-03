@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -20,6 +21,7 @@ using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
@@ -106,9 +108,10 @@ namespace Chalkable.BusinessLogic.Services.Master
             user.OriginalPassword = password;
             using (var uow = Update(IsolationLevel.ReadUncommitted))
             {
-                var res = SisUserLogin(user, uow);
+                UserContext context;
+                context = SisUserLogin(user, uow);
                 uow.Commit();
-                return res;
+                return context;
             }
         }
 
@@ -199,7 +202,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     SaveSisToken(user, uow, ref iNowConnector);
                 }
-                catch (HttpException)
+                catch (HttpException ex)
                 {
                     return null;
                 }
@@ -308,7 +311,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     if (user.OriginalPassword == null)
                         throw new ChalkableException(ChlkResources.ERR_SIS_CONNECTION_REQUERED_NOT_ENCRYPED_PASSWORD);
-                    iNowConnector = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, user.District.SisUrl); //"http://localhost/"); //"http://sandbox.sti-k12.com/Chalkable/");//
+                    iNowConnector = ConnectorLocator.Create(user.SisUserName, user.OriginalPassword, //user.District.SisUrl);
+                        "https://chalkabletest.stiinformationnow.com/InformationNow");
+                    //user.District.SisUrl); //"http://localhost/"); //"http://sandbox.sti-k12.com/Chalkable/");//
                 }
                 if (!string.IsNullOrEmpty(iNowConnector.Token))
                 {
