@@ -67,7 +67,7 @@
       &.picture-right{
         right: 31px;
         &::after {
-          @include icons-24-sprite(arrow-right-white, 0, 3px);
+          @include icons-24-sprite(arrow-right-white, 0, 3px, 1px);
         }
       }
 
