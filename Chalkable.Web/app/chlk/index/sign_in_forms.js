@@ -51,7 +51,14 @@ $(document).ready(function () {
                         role = "admin";
                     window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 }
-            } .bind(this)
+            } .bind(this),
+            error: function (response){
+                if(response.responseJSON.exceptiontype == 'ChalkableSisNotFoundException'){
+                    alert('Your iNow Server is not responding. Please try again soon');
+                    return;
+                }
+                return;
+            }.bind(this)
          });
             form.find('input[type=submit]').attr('disabled', true);
         }

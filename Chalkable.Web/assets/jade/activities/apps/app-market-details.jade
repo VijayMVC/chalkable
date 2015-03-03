@@ -25,27 +25,27 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
         .app-price-info
             .right
                 if self.isStudyCenterEnabled()
-                    +ActionButton('appmarket', 'tryToInstall', app.getId()).blue-button(class=self.isInstalled()? "installed" : undefined)=self.installBtnTitle
+                    b= self.installBtnTitle
+                    | &nbsp;
+                    +ActionButton('appmarket', 'tryToInstall', app.getId()).blue-button.mid-button(class=self.isInstalled()? "installed" : undefined) Install App
             .app-title
-                span="by "
+                span By&nbsp;
                 a(href=webSiteLink, target="blank").dev-web-site=devName
 
 
         +CloseOpen('Info')
             .content
                 .table.app-info-details
-                    .app-description
-                        textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
-
+                    .app-description!= self.linkify(app.getDescription())
                     .side-panel
-                        span.review-link User Ratings
+                        span.review-link User Rating:
                         +Rating("appRating", app.getApplicationRating().getAverage(), false).all
 
 
         +CloseOpen('Reviews')
             .content
                 .reviews
-                    +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)
+                    +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)(userRole = self.userRole)
 
         +CloseOpen('App Features')
             .content.table.permissions
@@ -59,10 +59,14 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                 .row
                     .group-header Info used:
                     .items
-                        each permission in app.getPermissions()
+                        if app.getPermissions().length
+                            each permission in app.getPermissions()
+                                .permission
+                                    .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
+                                    .description=permission.getName()
+                        else
                             .permission
-                                .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
-                                .description=permission.getName()
+                                .description None
                 .row
                     .group-header.first Works on:
                     .items
