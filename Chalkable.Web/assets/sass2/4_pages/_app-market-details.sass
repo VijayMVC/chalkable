@@ -17,7 +17,7 @@
       color: #aaa
 
   .app-description
-    white-space: pre-line
+    white-space: pre-wrap
 
   .side-panel
     width: 225px
@@ -109,25 +109,33 @@
 
   .reviews
     margin-right: 8px
-    min-height: 110px
-    margin-top: 32px
+
+    .rating-large
+      line-height: 32px
+
+      >*
+        vertical-align: middle
 
     .review-link
       font-weight: bold
       color: #383838
       text-decoration: none
-      font-size: 22px
-      cursor: pointer
+      font-size: 18px
 
     .review-area
       position: relative
+      border: 1px solid #C8C7C3
+      border-radius: 5px
+      margin-bottom: 15px
+      padding: 10px 0 40px
 
     .review-container
       position: absolute
-      bottom: 0
+      bottom: 5px
+      left: 15px
 
       .rating-hint
-        background: url(images2/app/rating-hint.png) 0 0 no-repeat
+        background: image-url("images2/app/rating-hint.png")
         width: image-width('images2/app/rating-hint.png')
         height: image-height('images2/app/rating-hint.png')
         position: absolute
@@ -137,12 +145,13 @@
 
     .review-text
       min-height: 50px
-      resize: vertical !important
-      padding: 5px 5px 40px
-      margin-top: 25px
+      resize: none
+      padding: 0 15px
       display: block
-      margin-bottom: 15px
       width: 100%
+      border: none
+      box-sizing: border-box
+      +box-shadow(none)
 
     .cancel-btn
       color: #878787
@@ -155,11 +164,108 @@
       font-weight: bold
 
     .user-reviews
+      margin-top: 15px
+
+      .chat-bubble
+        padding-bottom: 15px
+        margin-left: 47px + 25px
+
       .rating-person-item
-        margin-bottom: 20px
+        margin-bottom: 35px
         p
           margin: 15px 0 5px
           word-wrap: break-word
+
+      .rate-container
+        margin: 5px 15px
+        zoom: .7
+
       .rating
-        margin-top: -25px
         float: right
+
+      .role-avatar
+        width: 47px
+        height: 47px
+        position: relative
+        background: #EDEDED
+        border-radius: 5px
+        float: left
+
+        &::after
+          content: ' '
+          position: absolute
+          left: 12px
+          top: 12px
+          width: 24px
+          height: 24px
+          opacity: .75
+
+        &.teacher::after
+          +icons-24-sprite(teacher)
+
+    .add-review
+      margin-top: 15px
+
+      .btns
+        text-align: right
+
+      button
+        padding: 0 25px
+
+  .inline-tabs
+    margin-bottom: 25px
+
+    .tabs
+      position: relative
+      margin-bottom: 25px
+
+      &::before
+        content: ' '
+        position: absolute
+        left: 0
+        right: 0
+        bottom: 0
+        height: 1px
+        background: #E7E6E2
+        z-index: 1
+
+    .tab
+      position: relative
+      z-index: 0
+      border: 1px solid #EDEDED
+      border-bottom-width: 0
+      background: #EDEDED
+      line-height: 36px
+      padding: 0 15px 5px
+      border-top-left-radius: 4px
+      border-top-right-radius: 4px
+      display: inline-block
+      margin-right: 3px
+      min-width: 55px
+      text-align: center
+      cursor: pointer
+      font-weight: 600
+
+      &.active
+        z-index: 2
+        background: white
+        border-color: #E7E6E2
+        cursor: default
+
+    .wrapper
+      position: relative
+      background: inherit
+
+      .content
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        z-index: -1
+        opacity: 0
+
+        &.active
+          position: relative
+          z-index: 1
+          opacity: 1
+          +single-transition(opacity, .3s, ease-in)

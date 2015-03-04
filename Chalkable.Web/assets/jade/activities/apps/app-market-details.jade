@@ -32,20 +32,27 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                 span By&nbsp;
                 a(href=webSiteLink, target="blank").dev-web-site=devName
 
+        -var appRating = app.getApplicationRating()
+        -var reviewsCount = appRating ? appRating.getPersonRatings().length : 0
+        .inline-tabs
+            .tabs
+                .tab(data-tab-content="info-tab") Info
+                .tab(data-tab-content="reviews-tab") Reviews (#{reviewsCount})
+                .tab.x-hidden(data-tab-content="similar-tab") Similar apps
 
-        +CloseOpen('Info')
-            .content
-                .table.app-info-details
-                    .app-description!= self.linkify(app.getDescription())
-                    .side-panel
-                        span.review-link User Rating:
-                        +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+            .wrapper
+                .content(data-tab-content="info-tab")
+                    .table.app-info-details
+                        .app-description!= self.linkify(app.getDescription())
+                        .side-panel
+                            span.review-link Users rating:
+                            +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+                .content(data-tab-content="reviews-tab")
+                    .reviews
+                        +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)(userRole = self.userRole)
+                .content(data-tab-content="similar-tab")
+                    .attachments-and-applications
 
-
-        +CloseOpen('Reviews')
-            .content
-                .reviews
-                    +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)(userRole = self.userRole)
 
         +CloseOpen('App Features')
             .content.table.permissions
@@ -74,7 +81,7 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                             .permission
                                 .icon(class=self.getPlatformTypeClass(platform.getId().valueOf()))
                                 .description=platform.getName()
-        // if admin
-        if false
+
+        if self.userRole.isAdmin()
             .ban-app
                 +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)

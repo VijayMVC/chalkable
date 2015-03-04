@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -13,10 +14,8 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IPersonService
     {
         void Add(IList<Person> persons);
-        void Edit(IList<Person> personInfos);
         void UpdateForImport(IList<Person> persons);
-        void Delete(int id);
-        void Delete(IList<int> ids);
+        void Delete(IList<Person> persons);
         PersonDetails GetPersonDetails(int id);
         Person GetPerson(int id);
         void ActivatePerson(int id);
@@ -57,19 +56,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         
-        public void Delete(int id)
-        {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                da.Delete(id);
-                uow.Commit();
-            }
-        }
-
         public Person GetPerson(int id)
         {
             using (var uow = Read())
@@ -82,17 +68,6 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return DoRead(uow => new PersonDataAccess(uow, Context.SchoolLocalId).GetPersonDetails(id));
         }
-
-        public void Edit(IList<Person> persons)
-        {
-            using (var uow = Update())
-            {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
-                da.Update(persons);
-                uow.Commit();
-            }
-        }
-
 
         public void EditEmailForCurrentUser(string email, out string error)
         {
@@ -145,8 +120,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
-        
-        public void Delete(IList<int> ids)
+
+        public void Delete(IList<Person> persons)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -154,10 +129,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                new PersonDataAccess(uow, null).Delete(ids);
+                new PersonDataAccess(uow, null).Delete(persons);
                 uow.Commit();
             }
-            ServiceLocator.ServiceLocatorMaster.UserService.DeleteUsers(ids, Context.DistrictId.Value);
         }
         
         public void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons)

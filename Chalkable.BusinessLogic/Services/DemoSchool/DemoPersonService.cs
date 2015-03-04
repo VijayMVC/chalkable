@@ -74,35 +74,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.SchoolPersonStorage.Add(assignments);*/
         }
 
-        public void Edit(IList<Person> personInfos)
-        {
-            //var res = new List<Person>();
-            //foreach (var personInfo in personInfos)
-            //{
-            //    res.Add(Edit(personInfo.Id, personInfo.Email, personInfo.FirstName,
-            //                 personInfo.LastName, personInfo.Gender, personInfo.Salutation,
-            //                 personInfo.BirthDate, personInfo.AddressRef));
-            //}
-        }
-
         public void UpdateForImport(IList<Person> persons)
         {
             throw new NotImplementedException();
         }
-
-        public void Delete(int id)
+        
+        public void Delete(IList<Person> persons)
         {
             if (!BaseSecurity.IsAdminEditor(Context))
                 throw new ChalkableSecurityException();
-
-            Storage.PersonStorage.Delete(id);
-        }
-
-        public void Delete(IList<int> ids)
-        {
-            if (!BaseSecurity.IsAdminEditor(Context))
-                throw new ChalkableSecurityException();
-            Storage.PersonStorage.Delete(ids);
+            Storage.PersonStorage.Delete(persons);
         }
 
         public void DeleteSchoolPersons(IList<SchoolPerson> schoolPersons)

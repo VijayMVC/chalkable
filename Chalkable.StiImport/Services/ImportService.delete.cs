@@ -496,8 +496,9 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Person>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<Person>().Deleted.Select(x => x.PersonID).ToList();
-            ServiceLocatorSchool.PersonService.Delete(ids);
+            var persons = context.GetSyncResult<Person>().Deleted.Select(x => 
+                new Data.School.Model.Person{Id = x.PersonID} ).ToList();
+            ServiceLocatorSchool.PersonService.Delete(persons);
         }
 
         private void DeleteSchoolUsers()

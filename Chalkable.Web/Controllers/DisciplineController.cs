@@ -66,15 +66,6 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<DisciplineView>(res, start.Value / count.Value, count.Value));
         }
 
-
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST_STUDENT_DISCIPLINE, true, CallType.Get, new[] { AppPermissionType.Discipline })]
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
-        public ActionResult ListStudentDiscipline(int? schoolYearId, int schoolPersonId, DateTime? date)
-        {
-            return FakeJson("~/fakeData/studentDisciplines.json");
-            //return Json(GetDisciplines(schoolYearId, schoolPersonId, null, date));
-        }
-
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetClassDiscipline(ClassDisciplineInputModel discipline)
         {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -21,7 +20,6 @@ using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.StiConnector.Connectors;
-using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {

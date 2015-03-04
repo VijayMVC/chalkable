@@ -21,20 +21,6 @@ namespace Chalkable.Data.School.DataAccess
         
         public void UpdateForImport(IList<Person> persons)
         {
-            //if(persons.Count == 0) return;
-
-            //var fieldsCount = 8;
-            //if (fieldsCount*persons.Count > MAX_PARAMETER_NUMBER)
-            //{
-            //    var list1 = persons.Take(persons.Count/2).ToList();
-            //    UpdateForImport(list1);
-            //    UpdateForImport(persons.Skip(list1.Count).ToList());
-            //}
-            //else
-            //{
-            //    var dbQuery = BuildQueryForImportUpdate(persons);
-            //    ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);
-            //}
             ModifyList(persons, UpdateForImport, BuildQueryForImportUpdate);
         }
 
@@ -63,17 +49,10 @@ namespace Chalkable.Data.School.DataAccess
             return new DbQuery(queries);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Person> persons)
         {
-            if (ids.Count == 0)
-                return;
-            var res = new StringBuilder();
-            var idsS = ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(",");
-            var sqlFormat = " delete from [{0}] where [{0}].[{1}] in ({2})";
-            res.AppendFormat(sqlFormat, typeof(SchoolPerson).Name, SchoolPerson.PERSON_REF_FIELD, idsS);
-            res.AppendFormat(sqlFormat, typeof(StudentSchoolYear).Name, StudentSchoolYear.STUDENT_FIELD_REF_FIELD, idsS);
-            res.AppendFormat(sqlFormat, typeof(Person).Name, Person.ID_FIELD, idsS);
-            ExecuteNonQueryParametrized(res.ToString(), new Dictionary<string, object>());
+            SimpleDelete(persons);
+
         }
 
         protected override QueryCondition FilterBySchool(QueryCondition queryCondition)
