@@ -1,4 +1,5 @@
 REQUIRE('chlk.BaseApp');
+REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.AppsController');
 
 NAMESPACE('chlk', function (){
