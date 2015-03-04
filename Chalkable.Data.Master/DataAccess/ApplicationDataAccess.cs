@@ -59,7 +59,7 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var res = new DbQuery();
             res.Sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg from Application where 1 = 1");
-            if (query.Role == CoreRoles.SUPER_ADMIN_ROLE.Id)
+            if (query.Role == CoreRoles.SUPER_ADMIN_ROLE.Id || query.Role == CoreRoles.APP_TESTER_ROLE.Id)
             {
                 //TODO: do nothing
                 if (query.DeveloperId.HasValue)
