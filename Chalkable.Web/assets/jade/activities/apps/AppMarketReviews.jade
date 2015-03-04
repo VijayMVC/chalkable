@@ -2,7 +2,10 @@ app = self
 appRating = app.getApplicationRating()
 
 if !self.userRole.isStudent()
-    BUTTON.write-review-btn Write a review
+    BUTTON.write-review-btn.right Write a review
+    .rating-large
+        span.review-link User Rating:
+        +Rating("appRating", appRating.getAverage(), false).all
     .add-review.x-hidden
         +ActionForm('appmarket', 'writeReview')#submit-review-form
             +Hidden('appId', app.getId().valueOf())
@@ -13,19 +16,26 @@ if !self.userRole.isStudent()
                     .rating-hint
             .btns
                 +Button()(type="submit", class="special-button blue-button submit-review-btn") Submit
-                span.cancel-btn Cancel
+                //span.cancel-btn Cancel
+
 .user-reviews
     .rating-roles.x-hidden
         each item in appRating.getRoleRatings()
             .rating-role-item
-                role = item.getRole()
+                -var role = item.getRole()
                 .rolename=role.getName()
                 .app-rating
                     +Rating('role-' + role.getName(), item.getRating())
                     .personcount=item.getPersonCount()
+
     .rating-persons
         each item in appRating.getPersonRatings()
             .rating-person-item
-                person = item.getPerson()
-                p=item.getReview() + ' - ' + person.getFullName()
+                -var person = item.getPerson()
+                .role-avatar.teacher
+                .chat-bubble
+                    h3= person.getFullName()
+                    p!= self.linkify(item.getReview())
+                .rate-container
                     +Rating('person-rating-' + person.getId().valueOf(), item.getRating())
+
