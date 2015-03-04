@@ -37,7 +37,7 @@ NAMESPACE('chlk.templates.profile', function(){
                     links.push(this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_, true));
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
                     links.push(this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, true));
-                    links.push(this.buildActionLinkModelForClass('explorer', 'Explorer', pressedActionName, classId_));
+                    links.push(this.buildActionLinkModelForClass('explorer', 'Explorer', pressedActionName, classId_, !this.isStudyCenterEnabled()));
                 }
                 return links;
             },
