@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Enums;
@@ -54,123 +55,89 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
-
         private DbQuery BuildGetApplicationsQuery(ApplicationQuery query)
         {
             var res = new DbQuery();
-            res.Sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg from Application where 1 = 1");
-            if (query.Role == CoreRoles.SUPER_ADMIN_ROLE.Id)
+            res.Sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg from Application");
+            var conds = BuildCondsForGetApps(query);
+            conds.BuildSqlWhere(res, typeof(Application).Name);
+            res = FilterAppsByCategories(res, query.CategoryIds);
+            res = FilterAppsByGradeLevels(res, query.GradeLevels);
+            if (!string.IsNullOrEmpty(query.Filter))
             {
-                //TODO: do nothing
-                if (query.DeveloperId.HasValue)
-                {
-                    res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
-                    res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);                    
-                }
+                var keyWords = query.Filter.Split(new[] { ' ', '.', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                res = FilterAppsByKewWords(res, keyWords);
             }
-            else
+            return res;
+        }
+
+        private DbQuery FilterAppsByGradeLevels(DbQuery dbQuery, IList<int> gradeLevels)
+        {
+            if (gradeLevels != null && gradeLevels.Count > 0)
             {
-                if (query.Role == CoreRoles.DEVELOPER_ROLE.Id)
-                {
-                    res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
-                    res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.UserId);
-                }
-                else
-                {
-                    query.Live = true;
-                    if (query.DeveloperId.HasValue)
-                    {
-                        query.Live = false;
-                        res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
-                        res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);
-                    }
-                }
-                
-                if (!query.IncludeInternal)
-                {
-                    res.Sql.Append(string.Format(" and [{0}] <> 1", Application.IS_INTERNAL_FIELD));
-                }
-                if (query.OnlyForInstall)
-                {
-                    if (query.Role == CoreRoles.TEACHER_ROLE.Id)
-                        res.Sql.Append(string.Format(" and ([{0}] = 1 or [{1}] = 1 or [{2}] = 1)", Application.HAS_STUDENT_MY_APPS_FIELD, Application.HAS_TEACHER_MY_APPS_FIELD, Application.CAN_ATTACH_FIELD));
-                    if (query.Role == CoreRoles.STUDENT_ROLE.Id)
-                        res.Sql.Append(string.Format(" and [{0}] = 1", Application.HAS_STUDENT_MY_APPS_FIELD));
-                }
-    
+                dbQuery.Sql.AppendFormat(" and exists(select * from ApplicationGradeLevel where ApplicationRef = Application.Id and GradeLevel in ({0}))"
+                    , gradeLevels.Select(x => x.ToString()).JoinString(","));
             }
-            if (query.Id.HasValue)
-            {
-                res.Sql.AppendFormat(" and [{0}] = @{0}", Application.ID_FIELD);
-                res.Parameters.Add(Application.ID_FIELD, query.Id.Value);
-            }
-            if (query.Live.HasValue || query.State.HasValue)
-            {
-                string sqlOperator = " = ";
-                int? state = (int?) query.State;
-                if (query.Live.HasValue)
-                {
-                    if(!query.Live.Value) sqlOperator = " <> ";
-                    state = (int?) ApplicationStateEnum.Live;
-                }
-                res.Sql.Append(string.Format(" and [{0}] {1} @{0}", Application.STATE_FIELD, sqlOperator));
-                res.Parameters.Add(Application.STATE_FIELD, state);
-            }
-            
-            if (query.Free.HasValue)
-            {
-                res.Sql.AppendFormat(" and [{0}] {1} 0", Application.PRICE_FIELD, query.Free.Value ? "=" : ">");
-            }
-            
-            if (query.GradeLevels != null && query.GradeLevels.Count > 0)
-            {
-                res.Sql.AppendFormat(" and exists(select * from ApplicationGradeLevel where ApplicationRef = Application.Id and GradeLevel in ({0}))"
-                    , query.GradeLevels.Select(x => x.ToString()).JoinString(","));
-            }
-            if (query.CategoryIds != null && query.CategoryIds.Count > 0)
+            return dbQuery;
+        }
+        private DbQuery FilterAppsByCategories(DbQuery dbQuery, IList<Guid> categories)
+        {
+            if (categories != null && categories.Count > 0)
             {
                 var categoriesParam = new List<string>();
-                for (int i = 0; i < query.CategoryIds.Count; i++)
+                for (int i = 0; i < categories.Count; i++)
                 {
                     var categoryParam = "@categoryId_" + i;
                     categoriesParam.Add(categoryParam);
-                    res.Parameters.Add(categoryParam, query.CategoryIds[i]);
+                    dbQuery.Parameters.Add(categoryParam, categories[i]);
                 }
-                res.Sql.AppendFormat(" and exists (select * from ApplicationCategory where ApplicationRef = Application.Id and CategoryRef in ({0}))"
+                dbQuery.Sql.AppendFormat(" and exists (select * from ApplicationCategory where ApplicationRef = Application.Id and CategoryRef in ({0}))"
                     , categoriesParam.JoinString(","));
-
             }
-            if (!string.IsNullOrEmpty(query.Filter))
+            return dbQuery;
+        }
+
+        private DbQuery FilterAppsByKewWords(DbQuery dbQuery, IList<string> keyWords)
+        {
+            var keyWordsParams = new List<string>();
+            for (int i = 0; i < keyWords.Count; i++)
             {
-                var keyWords = query.Filter.Split(new [] {' ', '.', ','}, StringSplitOptions.RemoveEmptyEntries);
-                var keyWordsParams = new List<string>();
-                for (int i = 0; i < keyWords.Length; i++)
+                if (!string.IsNullOrEmpty(keyWords[i]))
                 {
-                    if (!string.IsNullOrEmpty(keyWords[i]))
-                    {
-                        var keyWordParam = "@keyWord_" + i;
-                        res.Parameters.Add(keyWordParam, "%" + keyWords[i] + "%");
-                        keyWordsParams.Add(" like " + keyWordParam);
-                    }
+                    var keyWordParam = "@keyWord_" + i;
+                    dbQuery.Parameters.Add(keyWordParam, "%" + keyWords[i] + "%");
+                    keyWordsParams.Add(" like " + keyWordParam);
                 }
-                if (keyWordsParams.Count > 0)
-                {
-                    res.Sql.Append(" and (");
-                    res.Sql.AppendFormat(" LOWER(Name) {0} ", keyWordsParams.JoinString(" or LOWER(Name) "));
-                    res.Sql.AppendFormat(" or LOWER(Description) {0} ", keyWordsParams.JoinString(" or LOWER(Description) "));
-                    res.Sql.AppendFormat(@" or exists(select ac.Id from ApplicationCategory ac
+            }
+            if (keyWordsParams.Count > 0)
+            {
+                dbQuery.Sql.Append(" and (");
+                dbQuery.Sql.AppendFormat(" LOWER(Name) {0} ", keyWordsParams.JoinString(" or LOWER(Name) "));
+                dbQuery.Sql.AppendFormat(" or LOWER(Description) {0} ", keyWordsParams.JoinString(" or LOWER(Description) "));
+                dbQuery.Sql.AppendFormat(@" or exists(select ac.Id from ApplicationCategory ac
                                                   join Category c on c.Id = ac.CategoryRef
                                                   where ApplicationRef = [Application].Id and (LOWER(c.Name) {0})
                                                  )", keyWordsParams.JoinString(" or LOWER(c.Name) "));
-                    res.Sql.Append(" or exists(select * from Developer where Id = [Application].DeveloperRef and (");
-                    res.Sql.AppendFormat(" LOWER(Name) {0}", keyWordsParams.JoinString(" or LOWER(Name) "));
-                    res.Sql.AppendFormat(" or LOWER(WebSite) {0} ", keyWordsParams.JoinString(" or LOWER(WebSite)"));
-                    res.Sql.Append(")))");
-                }
+                dbQuery.Sql.Append(" or exists(select * from Developer where Id = [Application].DeveloperRef and (");
+                dbQuery.Sql.AppendFormat(" LOWER(Name) {0}", keyWordsParams.JoinString(" or LOWER(Name) "));
+                dbQuery.Sql.AppendFormat(" or LOWER(WebSite) {0} ", keyWordsParams.JoinString(" or LOWER(WebSite)"));
+                dbQuery.Sql.Append(")))");
             }
-
-            return res;
-
+            return dbQuery;
+        }
+        
+        protected virtual QueryCondition FilterByPerson(QueryCondition conds, ApplicationQuery query)
+        {
+            return conds;
+        }
+        private QueryCondition BuildCondsForGetApps(ApplicationQuery query)
+        {
+            var conds = new AndQueryCondition();
+            if(query.Id.HasValue)
+                conds.Add(Application.ID_FIELD, query.Id);
+            if(query.Free.HasValue)
+                conds.Add(Application.PRICE_FIELD, 0, query.Free.Value ? ConditionRelation.Equal : ConditionRelation.Greater);
+            return FilterByPerson(conds, query);
         }
 
         private IList<Application> PreparePicturesData(IList<Application> applications)
@@ -202,7 +169,8 @@ namespace Chalkable.Data.Master.DataAccess
         public PaginatedList<Application> GetPaginatedApplications(ApplicationQuery query)
         {
             var q = BuildGetApplicationsQuery(query);
-            var paginatedApps = PaginatedSelect<Application>(q, query.OrderBy, query.Start, query.Count, Orm.OrderType.Desc);
+            var paginatedApps = PaginatedSelect<Application>(q, query.OrderBy, query.Start, query.Count
+                , query.OrderByDesc ?  Orm.OrderType.Desc : Orm.OrderType.Asc);
             return PreparePicturesData(paginatedApps) as PaginatedList<Application>;
         }  
 
@@ -270,7 +238,6 @@ namespace Chalkable.Data.Master.DataAccess
             SimpleInsert(applicationPermissions);
             return SelectMany<ApplicationPermission>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
         }
-
 
         public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<Guid> standardsIds)
         {
@@ -353,38 +320,97 @@ namespace Chalkable.Data.Master.DataAccess
         }
     }
 
+    public class SysAdminApplicationDataAccess : ApplicationDataAccess
+    {
+        public SysAdminApplicationDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+        protected override QueryCondition FilterByPerson(QueryCondition conds, ApplicationQuery query)
+        {
+            var res = new AndQueryCondition();
+            if (query.DeveloperId.HasValue)
+                res.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);
+            if (query.State.HasValue)
+                res.Add(Application.STATE_FIELD, (int)query.State.Value);
+            res.Add(conds);
+            return res;
+        }
+    }
+
+    public class DeveloperApplicationDataAccess : ApplicationDataAccess
+    {
+        public DeveloperApplicationDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+        protected override QueryCondition FilterByPerson(QueryCondition conds, ApplicationQuery query)
+        {
+            var res = new AndQueryCondition {conds, {Application.DEVELOPER_REF_FIELD, query.UserId}};           
+            if (!query.IncludeInternal)
+                res.Add(Application.IS_INTERNAL_FIELD, 1, ConditionRelation.NotEqual);
+            return res;
+        }
+    }
+
+    public class PersonApplicationDataAccess : ApplicationDataAccess
+    {
+        public PersonApplicationDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+        protected override QueryCondition FilterByPerson(QueryCondition conds, ApplicationQuery query)
+        {
+            var res = new AndQueryCondition { conds, { Application.STATE_FIELD, (int)ApplicationStateEnum.Live } };           
+            if (!query.IncludeInternal)
+                res.Add(Application.IS_INTERNAL_FIELD, 1, ConditionRelation.NotEqual);
+            return res;
+        }
+    }
+
+    public class DemoPersonApplicationDataAccess : ApplicationDataAccess
+    {
+        public DemoPersonApplicationDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+        protected override QueryCondition FilterByPerson(QueryCondition conds, ApplicationQuery query)
+        {
+            var res = new AndQueryCondition
+                {
+                    conds,
+                    {Application.STATE_FIELD, (int) ApplicationStateEnum.Live, ConditionRelation.NotEqual},
+                    {Application.DEVELOPER_REF_FIELD, query.DeveloperId}
+                };
+            if (!query.IncludeInternal)
+                res.Add(Application.IS_INTERNAL_FIELD, 1, ConditionRelation.NotEqual);
+            return res;
+        }
+    }
+
     public class ApplicationQuery
     {
         public Guid? Id { get; set; }
         public Guid UserId { get; set; }
-        public int Role { get; set; }
         public bool IncludeInternal { get; set; }
         public IList<Guid> CategoryIds { get; set; }
         public IList<int> GradeLevels { get; set; }
         public Guid? DeveloperId { get; set; }
+        
         public string OrderBy { get; set; }
-
+        public bool OrderByDesc { get; set; }
+        
         public int Start { get; set; }
         public int Count { get; set; }
 
         public ApplicationStateEnum? State { get; set; }
-
-        public bool? Live { get; set; }
         public bool? Free { get; set; }
-
         public string Filter { get; set; }
-
-        public bool OnlyForInstall { get; set; }
-
+        
         public ApplicationQuery()
         {
             Start = 0;
             Count = int.MaxValue;
-            OrderBy = Application.ID_FIELD;
+            OrderBy = Application.CREATE_DATE_TIME_FIELD;
             IncludeInternal = false;
-            Live = null;
             Free = null;
-            OnlyForInstall = true;
+            OrderByDesc = true;
         }
 
     }

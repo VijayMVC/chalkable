@@ -16,12 +16,15 @@ namespace Chalkable.Data.Common.Orm
         public const string SIMPLE_JOIN_FORMAT = JOIN + " [{0}] ON [{0}].[{1}] = [{2}].[{3}]";
         public const string ASC = "ASC";
         public const string DESC = "DESC";
+        public const string WHERE = "WHERE";
+        public const string AVG = "AVG";
         
         private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
         private const string ORDER_BY_FORMAT = "ORDER BY [{0}].[{1}] {2}";
         private const string OFFSET_ROWS_FORMAT = " OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ";
 
         public const string DELETE_FORMAT = "DELETE FROM [{0}]";
+
 
         public enum OrderType
         {

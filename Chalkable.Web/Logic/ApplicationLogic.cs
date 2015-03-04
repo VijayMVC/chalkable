@@ -18,7 +18,7 @@ namespace Chalkable.Web.Logic
 
         public static IList<AnnouncementApplicationViewData> PrepareAnnouncementApplicationInfo(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator, int announcementId)
         {
-            var applications = masterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
+            var applications = masterLocator.ApplicationService.GetApplications(null, null, null);
             var assessmentApp = masterLocator.ApplicationService.GetAssessmentApplication();
             if(applications.All(x=>x.Id != assessmentApp.Id))
                 applications.Add(assessmentApp);

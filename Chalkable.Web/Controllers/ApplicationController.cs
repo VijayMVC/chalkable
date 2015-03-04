@@ -18,13 +18,21 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class ApplicationController : AnnouncementBaseController //TODO: think about this
     {
-        [AuthorizationFilter("SysAdmin, Developer, AppTester")]
-        public ActionResult List(Guid? developerId, int? state, int? start, int? count)
-        {           
-            var applications = MasterLocator.ApplicationService.GetApplicationsWithLive(developerId, (ApplicationStateEnum?)state, null, start ?? 0, count ?? DEFAULT_PAGE_SIZE);  
+        [AuthorizationFilter("SysAdmin, AppTester")]
+        public ActionResult SysAdminApps(Guid? developerId, int? state, int? sortBy, int? start, int? count)
+        {
+            var applications = MasterLocator.ApplicationService.GetSysAdminApplications(developerId, (ApplicationStateEnum?)state, (AppSortingMode?)sortBy, null, start ?? 0, count ?? DEFAULT_PAGE_SIZE);  
             return Json(applications.Transform(BaseApplicationViewData.Create));
         }
 
+        [AuthorizationFilter("Developer")]
+        public ActionResult DeveloperApps(bool? live)
+        {
+            var applications = MasterLocator.ApplicationService.GetDeveloperApplications(live);
+            var res = BaseApplicationViewData.Create(applications);
+            return Json(res);
+        }
+        
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult Create(Guid developerId, string name)
         {

@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
@@ -42,13 +43,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Storage.ApplicationRatingStorage.GetAll(applicationId);
         }
 
-        public PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0,
-                                                     int count = Int32.MaxValue)
+        
+        public PaginatedList<Application> GetSysAdminApplications(Guid? developerId, ApplicationStateEnum? state, AppSortingMode? sorting,
+                                                     string filter, int start = 0, int count = Int32.MaxValue)
         {
             throw new NotImplementedException();
         }
@@ -94,14 +91,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             }
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue)
         {
             var query = new ApplicationQuery
                 {
                     Start = start,
                     Count = count,
-                    Live = live,
-                    OnlyForInstall = onlyForInstall
                 };
             return GetApplications(query);
         }
@@ -111,9 +106,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             using (var uow = Read())
             {
                 query.UserId = Context.UserId;
-                query.Role = Context.Role.Id;
-                query.DeveloperId = Context.DeveloperId;
-                return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
+                if(!BaseSecurity.IsSysAdmin(Context))
+                    query.DeveloperId = Context.DeveloperId;
+                return CreateApplicationDataAccess(uow).GetPaginatedApplications(query);
             }
         }
 
@@ -122,16 +117,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow)
+                return CreateApplicationDataAccess(uow)
                     .GetApplication(new ApplicationQuery
                     {
                         Id = id,
                         UserId = Context.UserId,
-                        Role = Context.Role.Id,
                         DeveloperId = Context.DeveloperId,
-                        OnlyForInstall = false
                     });
             }
+        }
+
+        private ApplicationDataAccess CreateApplicationDataAccess(UnitOfWork uow)
+        {
+            if (BaseSecurity.IsSysAdmin(Context))
+                return new SysAdminApplicationDataAccess(uow);
+            if (Context.Role == CoreRoles.DEVELOPER_ROLE)
+                return new DeveloperApplicationDataAccess(uow);
+            if (Context.DeveloperId.HasValue)
+                return new DemoPersonApplicationDataAccess(uow);
+            return new PersonApplicationDataAccess(uow);
         }
 
         //TODO: security
@@ -194,6 +198,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             var appId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
             return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
+        }
+
+        public PaginatedList<Application> GetDeveloperApplications(bool? live = false)
+        {
+            var apps = GetApplications(new ApplicationQuery()).ToList();
+            if (live.HasValue)
+                apps = live.Value ? apps.Where(x => x.IsLive).ToList() : apps.Where(x => !x.IsLive).ToList();
+            return new PaginatedList<Application>(apps, 0, int.MaxValue);
         }
     }
 

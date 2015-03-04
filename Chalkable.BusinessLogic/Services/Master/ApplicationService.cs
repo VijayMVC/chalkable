@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
@@ -14,13 +15,11 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IApplicationService
     {
         IList<AppPermissionType> GetPermisions(string applicationUrl);
-        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
-        PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
+        PaginatedList<Application> GetSysAdminApplications(Guid? developerId, ApplicationStateEnum? state, AppSortingMode? sorting, string filter, int start = 0, int count = int.MaxValue);
+        PaginatedList<Application> GetDeveloperApplications(bool? live = false);
 
-        PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
-        
-        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
-            , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
+        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords
+            , AppFilterMode? filterMode = null, AppSortingMode? sortingMode = null, int start = 0, int count = int.MaxValue);
 
         IList<Application> GetApplicationsByIds(IList<Guid> ids);
         Application GetApplicationById(Guid id);
@@ -53,29 +52,21 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue)
-        {
-            var query = new ApplicationQuery
-            {
-                Start = start,
-                Count = count,
-                DeveloperId = developerId,
-                State = state,
-                Filter = filter
-            };
-            return GetApplications(query);
-        }
-
-        public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
+        public PaginatedList<Application> GetSysAdminApplications(Guid? developerId, ApplicationStateEnum? state, AppSortingMode? sorting, string filter, int start = 0, int count = Int32.MaxValue)
         {
             var onlyWithLive = state == ApplicationStateEnum.Live;
+            sorting = sorting ?? AppSortingMode.Newest;
             var query = new ApplicationQuery
             {
+                UserId = Context.UserId,
                 DeveloperId = developerId,
                 State = onlyWithLive ? null : state,
-                Filter = filter
+                Filter = filter,
+                OrderBy = MapSortingModeToColumnName(sorting.Value),
+                OrderByDesc = sorting != AppSortingMode.Name
             };
-            var apps = GetApplications(query).Where(x=> x.State != ApplicationStateEnum.Live).ToList();
+            var apps = DoRead(uow=> new SysAdminApplicationDataAccess(uow).GetPaginatedApplications(query))
+                        .Where(x=> x.State != ApplicationStateEnum.Live).ToList();
             if (onlyWithLive)
                 apps = apps.Where(a => a.OriginalRef.HasValue).ToList();
             var appsLiveIds = apps.Where(x => x.OriginalRef.HasValue).Select(x => x.OriginalRef.Value).ToList();
@@ -90,17 +81,30 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
             return new PaginatedList<Application>(apps, start / count, count);
         }
-
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
+        
+        public PaginatedList<Application> GetDeveloperApplications(bool? live = false)
         {
-            var query = new ApplicationQuery
-                {
-                    Start = start, 
-                    Count = count, 
-                    Live = live, 
-                    OnlyForInstall = onlyForInstall,
-                };
-            return GetApplications(query);
+            var apps = GetApplications(new ApplicationQuery()).ToList();
+            if (live.HasValue)
+                apps = live.Value ? apps.Where(x => x.IsLive).ToList() : apps.Where(x => !x.IsLive).ToList();
+            return new PaginatedList<Application>(apps, 0, int.MaxValue);
+        }
+
+        private string MapSortingModeToColumnName(AppSortingMode sortingMode)
+        {
+            switch (sortingMode)
+            {
+                case AppSortingMode.Newest:
+                    return Application.CREATE_DATE_TIME_FIELD;
+                case AppSortingMode.Name:
+                    return Application.NAME_FIELD;
+                case AppSortingMode.HighestRated:
+                    return Application.AVG_FIELD;
+                case AppSortingMode.Updated:
+                    return Application.UPDATE_DATE_TIME_FIELD;
+                default: 
+                    return Application.CREATE_DATE_TIME_FIELD;
+            }
         }
 
         private PaginatedList<Application> GetApplications(ApplicationQuery query)
@@ -108,34 +112,40 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 query.UserId = Context.UserId;
-                query.Role = Context.Role.Id;
                 if(!BaseSecurity.IsSysAdmin(Context))
                     query.DeveloperId = Context.DeveloperId;
-                return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
+                return CreateApplicationDataAccess(uow).GetPaginatedApplications(query);
             }
         }
- 
-        
+
         public Application GetApplicationById(Guid id)
         {
             if (id == Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value))
                 return GetPracticeGradesApplication();
             if (id == Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value))
                 return GetAssessmentApplication();
-
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow)
+                return CreateApplicationDataAccess(uow)
                     .GetApplication(new ApplicationQuery
                         {
                             Id = id,
                             UserId = Context.UserId,
-                            Role = Context.Role.Id,
-                            OnlyForInstall = false
                         });
             }
         }
 
+        private ApplicationDataAccess CreateApplicationDataAccess(UnitOfWork uow)
+        {
+            if (BaseSecurity.IsSysAdmin(Context))
+                return new SysAdminApplicationDataAccess(uow);
+            if (Context.Role == CoreRoles.DEVELOPER_ROLE)
+                return new DeveloperApplicationDataAccess(uow);
+            if (Context.DeveloperId.HasValue)
+                return new DemoPersonApplicationDataAccess(uow);
+            return new PersonApplicationDataAccess(uow);
+        }
+ 
         //TODO: security
         public Application GetApplicationByUrl(string url)
         {
@@ -192,29 +202,19 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords
+            , AppFilterMode? filterMode, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
         {
             var query = new ApplicationQuery
                 {
                     CategoryIds = categoriesIds,
                     GradeLevels = gradeLevels,
                     Filter = filterWords,
+                    Free = filterMode == AppFilterMode.Free,
+                    OrderBy = MapSortingModeToColumnName(sortingMode ?? AppSortingMode.Newest),
                     Start = start,
-                    Count = count
+                    Count = count,
                 };
-            filterMode = filterMode ?? AppFilterMode.All;
-            sortingMode = sortingMode ?? AppSortingMode.Newest;
-            if (filterMode != AppFilterMode.All)
-                query.Free = filterMode == AppFilterMode.Free;
-            switch (sortingMode)
-            {
-                case AppSortingMode.Newest:
-                    query.OrderBy = Application.CREATE_DATE_TIME_FIELD;
-                    break;
-                case AppSortingMode.HighestRated:
-                    query.OrderBy = Application.AVG_FIELD;
-                    break;
-            }
             return GetApplications(query);
         }
 
@@ -233,7 +233,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 return new ApplicationDataAccess(uow).GetByIds(ids);
-                //return res.Where(x=>x.State == ApplicationStateEnum.Live).ToList();
             }
         }
 
@@ -264,7 +263,9 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         Popular = 1,
         Newest = 2,
-        HighestRated = 3
+        HighestRated = 3,
+        Name = 4,
+        Updated = 5,
     }
 
     public  enum AppFilterMode

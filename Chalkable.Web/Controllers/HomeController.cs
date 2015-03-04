@@ -94,7 +94,7 @@ namespace Chalkable.Web.Controllers
 
             var developer = MasterLocator.DeveloperService.GetById(MasterLocator.Context.UserId);
             PrepareJsonData(DeveloperViewData.Create(developer), ViewConstants.CURRENT_PERSON);
-            var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, false);
+            var applications = MasterLocator.ApplicationService.GetDeveloperApplications();
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");

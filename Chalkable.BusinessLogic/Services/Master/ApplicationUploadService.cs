@@ -76,11 +76,11 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update())
             {
                 var da = new ApplicationDataAccess(uow);
-                
+                application.UpdateDateTime = Context.NowSchoolTime;
                 if (application.Id == Guid.Empty)
                 {
                     application.Id = Guid.NewGuid();
-                    application.CreateDateTime = DateTime.UtcNow;
+                    application.CreateDateTime = Context.NowSchoolTime;
                     da.Insert(application);
                 }
                 else da.Update(application);

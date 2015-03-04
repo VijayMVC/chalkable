@@ -15,6 +15,8 @@ namespace Chalkable.Data.Master.Model
         public string Description { get; set; }
         public const string CREATE_DATE_TIME_FIELD = "CreateDateTime";
         public DateTime CreateDateTime { get; set; }
+        public const string UPDATE_DATE_TIME_FIELD = "UpdateDateTime";
+        public DateTime UpdateDateTime { get; set; }
         public const string URL_FIELD = "Url";
         public string Url { get; set; }
         public string SecretKey { get; set; }
@@ -123,6 +125,7 @@ namespace Chalkable.Data.Master.Model
         public const string ID_FIELD = "Id";
         public const string APPLICATION_REF_FIELD = "ApplicationRef";
         public const string USER_REF_FIELD = "UserRef";
+        public const string RATING_FIELD = "Rating";
 
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }

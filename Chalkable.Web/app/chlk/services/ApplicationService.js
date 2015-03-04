@@ -40,7 +40,7 @@ NAMESPACE('chlk.services', function () {
 
             [[Number, chlk.models.id.SchoolPersonId, Number, String]],
             ria.async.Future, function getApps(pageIndex_, developerId_, state_, filter_) {
-                return this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
+                return this.getPaginatedList('Application/SysAdminApps.json', chlk.models.apps.Application, {
                         start: pageIndex_,
                         developerId: developerId_ ? developerId_.valueOf() : null,
                         state: state_ || null,
@@ -54,12 +54,12 @@ NAMESPACE('chlk.services', function () {
                 var apps = this.getContext().getSession().get(ChlkSessionConstants.DEV_APPS) || [];
 
                 return apps.length == 0 || refresh_
-                    ? this.getPaginatedList('Application/List.json', chlk.models.apps.Application, {
-                            state: chlk.models.apps.AppStateEnum.DRAFT.valueOf()
+                    ? this.get('Application/DeveloperApps.json', ArrayOf(chlk.models.apps.Application), {
+                            live : false
                         })
                           .then(function(data){
-                                this.getContext().getSession().set(ChlkSessionConstants.DEV_APPS, data.getItems());
-                                return data.getItems();
+                                this.getContext().getSession().set(ChlkSessionConstants.DEV_APPS, data);
+                                return data;
                     }, this)
                     : new ria.async.DeferredData(apps);
             },
