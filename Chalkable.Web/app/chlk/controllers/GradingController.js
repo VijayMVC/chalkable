@@ -829,6 +829,11 @@ NAMESPACE('chlk.controllers', function (){
                         model.getCodesString() ? JSON.parse(model.getCodesString()) : null,
                         model.getNote()
                     )
+                    .catchError(function (error) {
+                        this.BackgroundUpdateView(chlk.activities.grading.FinalGradesPage, new chlk.models.grading.StudentFinalGradeViewData(), chlk.activities.lib.DontShowLoader());
+
+                        throw error;
+                    }, this)
                     .attach(this.validateResponse_());
 
                 return this.UpdateView(chlk.activities.grading.FinalGradesPage, result, chlk.activities.lib.DontShowLoader());

@@ -201,23 +201,34 @@ NAMESPACE('chlk.activities.grading', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.FinalGradeStudentBlockTpl, chlk.activities.lib.DontShowLoader())],
             VOID, function updateStudentBlock(tpl, model, msg_) {
-                var row = this.dom.find('.row[data-student-id=' + model.getStudent().getId().valueOf() + ']');
-                if(row.find('.top-content').hasClass('loading')){
-                    tpl.options({
-                        selected: row.hasClass('selected'),
-                        ableEdit: !!row.getData('able-edit'),
-                        ableEditDirectValue: !!row.getData('able-edit-direct-value'),
-                        index: parseInt(row.getAttr('index'), 10),
-                        gradingPeriodId: new chlk.models.id.GradingPeriodId(row.parent('.big-grading-period-container').getData('grading-period-id')),
-                        gradingComments: this.getGradingComments()
-                    });
-                    var html = new ria.dom.Dom(tpl.render());
-                    html.insertBefore(row);
-                    row.next('.attachments-container').remove();
-                    row.remove();
+                if(model.getStudent()){
+                    var row = this.dom.find('.row[data-student-id=' + model.getStudent().getId().valueOf() + ']');
+                    if(row.find('.top-content').hasClass('loading')){
+                        tpl.options({
+                            selected: row.hasClass('selected'),
+                            ableEdit: !!row.getData('able-edit'),
+                            ableEditDirectValue: !!row.getData('able-edit-direct-value'),
+                            index: parseInt(row.getAttr('index'), 10),
+                            gradingPeriodId: new chlk.models.id.GradingPeriodId(row.parent('.big-grading-period-container').getData('grading-period-id')),
+                            gradingComments: this.getGradingComments()
+                        });
+                        var html = new ria.dom.Dom(tpl.render());
+                        html.insertBefore(row);
+                        row.next('.attachments-container').remove();
+                        row.remove();
+                    }else{
+                        row.next('.attachments-container').removeClass('loading');
+                    }
                 }else{
-                    row.next('.attachments-container').removeClass('loading');
+                    var content = this.dom.find('.top-content.loading');
+                    if(content.exists()){
+                        content.removeClass('loading');
+                        content.parent('.row').next('.attachments-container').removeClass('loading');
+                        var node = content.find('.grade-autocomplete');
+                        node.setValue(node.getData('display-value'));
+                    }
                 }
+
             },
 
             chlk.models.id.ClassId, 'classId',
@@ -424,6 +435,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 }else{
                     if(!!checkbox.getData('value') == checkbox.checked())
                         checkbox.setValue(false);
+                    else
+                        checkbox.setValue(checkbox.checked());
                 }
                 if((value || '') == (input.getData('grade-value') || '') && (!checkbox.exists() || !!checkbox.getData('value') == checkbox.checked()))
                     return false;

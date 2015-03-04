@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -21,7 +20,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     public class AnnouncementCalendarController : CalendarController
     {
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_LIST, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-        public ActionResult List(DateTime? date, int? classId, IntList gradeLevelIds, int? schoolPersonId)
+        public ActionResult List(DateTime? date, int? classId, int? personId)
          {
              if (!SchoolLocator.Context.PersonId.HasValue)
                  throw new UnassignedUserException();
@@ -29,10 +28,10 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              MonthCalendar(ref date, out start, out end);
              var schoolYearId = GetCurrentSchoolYearId();
              var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId);
-             if (schoolPersonId.HasValue)
+             if (personId.HasValue)
              {
                  int? studentId, teacherId;
-                 PrepareUsersIdsForCalendar(SchoolLocator, schoolPersonId, out teacherId, out studentId);
+                 PrepareUsersIdsForCalendar(SchoolLocator, personId, out teacherId, out studentId);
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
                  announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
              }
@@ -52,26 +51,19 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var anns = SchoolLocator.AnnouncementService.GetAnnouncementsComplex(query);
              return Json(AnnouncementShortViewData.Create(anns));
          }
-        
-
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_ADMIN_DAY, true, CallType.Get, new[] { AppPermissionType.Schedule })]
-         public ActionResult AdminDay(DateTime? day, IntList gradeLevelIds)
-         {
-             throw new NotImplementedException();
-         }
 
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_WEEK, true, CallType.Get, new[] { AppPermissionType.Announcement })]
-         public ActionResult Week(DateTime? date, int? classId, int? schoolPersonId)
+         public ActionResult Week(DateTime? date, int? classId, int? personId)
          {
 
-             var res = BuildDayAnnCalendar(SchoolLocator, date, classId, schoolPersonId, GetCurrentSchoolYearId());
+             var res = BuildDayAnnCalendar(SchoolLocator, date, classId, personId, GetCurrentSchoolYearId());
              return Json(res, 8);
          }
 
          [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_DAY, true, CallType.Get, new[] { AppPermissionType.Schedule })]
-         public ActionResult Day(DateTime? date, int? schoolPersonId)
+         public ActionResult Day(DateTime? date, int? personId)
          {
-             var res = BuildDayAnnCalendar(SchoolLocator, date, null, schoolPersonId, GetCurrentSchoolYearId());
+             var res = BuildDayAnnCalendar(SchoolLocator, date, null, personId, GetCurrentSchoolYearId());
              return Json(res, 8);
          }
 
