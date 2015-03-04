@@ -1,30 +1,24 @@
 .labeled-checkbox
   display: inline-block
   position: relative
-  padding: 0 5px
-  margin-bottom: 2px
-  vertical-align: top
-  height: 24px
-  min-width: 100px
-  text-align: left
+
+  min-width: 97px
+  height: 28px
+  line-height: 28px
+  vertical-align: middle
+  margin-bottom: 5px
 
   label
     cursor: pointer
-    background: #DEDEDE
     color: #444
-    padding-left: 24px
 
   &.with-input
-    height: 27px
     width: 265px
     margin-right: 0
     margin-bottom: 10px
 
     &:nth-child(2n)
       margin-right: 7px
-
-    .checkbox
-      margin: 7px 3px
 
   label, .label-input
     overflow: hidden
@@ -34,29 +28,63 @@
     left: 0
     right: 0
     bottom: 0
-    border-radius: 12px
-    line-height: 24px
-    display: inline-block
+    line-height: 28px
+    display: block
     text-align: left
     font-size: 13px
     white-space: nowrap
+    vertical-align: middle
+    padding-left: 26px
+    z-index: 1
+
+    font-family: 'Open Sans', sans-serif
+    font-weight: 600
+    +text-shadow(transparentize(#fff, .5) 0 1px 0px)
+    +transition(background-color .1s ease-in)
+
+    outline: none
+    cursor: pointer
+    border-radius: 3px
+    border: 1px solid #c8c7c3
+
 
   .label-input
-    padding-left: 29px
     width: 238px
+    line-height: 26px
+    height: 24px
 
-  .checkbox
+  input[type=checkbox]
     position: relative
-    z-index: 1
-    margin: 6px 0
-    width: auto
+    z-index: 2
+    vertical-align: middle
+    display: inline-block
+    margin: 8px
+
+    & + label
+
+      border-color: #C8C7C3
+      color: #56554F
+      +text-shadow(transparentize(#C8C7C3, .5) 0 1px 1px)
+      background-color: #FEFEFE
+      +box-shadow(transparentize(#000, .75) 0 1px 3px, #FFFFFF 0 1px 0px inset)
+
+      &:hover
+        background: #FFFFFF
+
+      &:active, &.pressed, &.pressed:hover
+        background: #F2F1ED
+
     &:checked
       & + label
-        background: #41b768
-        color: white
-        line-height: 23px
-        padding-left: 23px
-        text-shadow: none
+        border-color: #29596E
+        color: #fff
+        +text-shadow(transparentize(#29596E, .5) 0 1px 1px)
+        background-color: #548BA5
+        +background-image(linear-gradient(top, #558CA6 0%, #447B94 50%, #30677E 100%))
+        +box-shadow(transparentize(#000, .55) 0 1px 3px, #82A3B0 0 1px 0px inset)
+
+        &:hover
+          background: #568EA8
 
       & + .label-input
         border: 1px solid #888888
@@ -64,10 +92,17 @@
 
     &:disabled
       & + label
-        background: #DEDEDE
-        box-shadow: none
-        border: 0
-        color: #444
-        opacity: 0.5
-  
+        cursor: default
+        color: #888
+        +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+        &:hover
+          background-color: #FEFEFE
+
+    &:checked:disabled
+      & + label
+        color: #aaa
+        +text-shadow(transparentize(#29596E, .5) 0 1px 1px)
+        &:hover
+          background-color: #548BA5
+
 

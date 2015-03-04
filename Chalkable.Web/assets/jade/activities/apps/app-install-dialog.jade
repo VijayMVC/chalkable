@@ -3,7 +3,8 @@ mixin InstallItem(item)
     tooltipText = item.getTooltipHint() || ""
     withoutTooltip = tooltipText.length == 0
     if item.isInstalled()
-        .labeled-checkbox
+        .labeled-checkbox.disbaled
+            input(type="checkbox", disabled, checked)
             label(class="disabled-lbl", data-tooltip=tooltipText)=descr
     else
         +LabeledCheckbox(
