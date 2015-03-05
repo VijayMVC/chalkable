@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.studentId = SJX.fromValue(raw.studentid, chlk.models.id.SchoolPersonId);
                 this.comment = SJX.fromValue(raw.comment, String);
                 this.dropped = SJX.fromValue(raw.dropped, Boolean);
-                this.ableToUnDrop = SJX.fromValue(raw.canbeundropped, Boolean);
+                this.automaticalyDropped = SJX.fromValue(raw.automaticalydropped, Boolean);
                 this.gradeValue = SJX.fromValue(raw.gradevalue, String);
                 this.numericGradeValue = SJX.fromValue(raw.numericgradevalue, Number);
                 this.id = SJX.fromValue(raw.id, chlk.models.id.StudentAnnouncementId);
@@ -36,7 +36,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.SchoolPersonId, 'studentId',
             String, 'comment',
             Boolean, 'dropped',
-            Boolean, 'ableToUnDrop',
+            Boolean, 'automaticalyDropped',
             String, 'gradeValue',
             Number, 'numericGradeValue',
             chlk.models.id.StudentAnnouncementId, 'id',
@@ -52,7 +52,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             [[chlk.models.id.StudentAnnouncementId, chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId,
                 Boolean, Boolean, Boolean, Boolean, Boolean, String, String, Boolean, Boolean]],
-            function $(id_, announcementId_, studentId_, dropped_, late_, exempt_, absent_, incomplete_, comment_, gradeValue_, includeInAverage_, ableToUnDrop_){
+            function $(id_, announcementId_, studentId_, dropped_, late_, exempt_, absent_, incomplete_, comment_, gradeValue_, includeInAverage_, automaticalyDropped_){
                 BASE();
                 if(id_)
                     this.setId(id_);
@@ -74,14 +74,12 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setComment(comment_);
                 if(gradeValue_)
                     this.setGradeValue(gradeValue_);
-                if(includeInAverage_)
-                    this.setIncludeInAverage(includeInAverage_);
-                if(ableToUnDrop_)
-                    this.setAbleToUnDrop(ableToUnDrop_);
+                if(automaticalyDropped_)
+                    this.setAutomaticalyDropped(automaticalyDropped_);
             },
 
             Boolean, function needStrikeThrough(){
-                return this.isDropped() && !!this.getGradeValue()
+                return (this.isDropped() || this.isAutomaticalyDropped()) && !!this.getGradeValue()
             },
 
             [[Number, Boolean]],
@@ -138,7 +136,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, function getNormalValue(){
                 var value = this.getGradeValue();
-                if(this.isDropped() && !this.getGradeValue())
+                if((this.isDropped() || this.isAutomaticalyDropped()) && !this.getGradeValue())
                     return Msg.Dropped;
                 if(this.isExempt())
                     return Msg.Exempt;

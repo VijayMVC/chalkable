@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
@@ -9,7 +8,6 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 

@@ -16,12 +16,10 @@
         public int StudentId { get; set; }
         public string Comment { get; set; }
         public string ExtraCredit { get; set; }
-        
         public bool ScoreDropped { get; set; }
         public bool AverageDropped { get; set; }
         public bool CategoryDropped { get; set; }
         public bool AnnouncementDropped { get; set; }
-
         public decimal? NumericScore { get; set; }
         public string ScoreValue { get; set; }
         public int? AlternateScoreId { get; set; }
@@ -39,12 +37,12 @@
 
         public bool Dropped
         {
-            get { return ScoreDropped || AverageDropped || CategoryDropped || AnnouncementDropped; }
+            get { return ScoreDropped || AutomaticalyDropped; }
         }
 
-        public bool CanBeUndropped
+        public bool AutomaticalyDropped
         {
-            get { return !AverageDropped && !CategoryDropped && !AnnouncementDropped; }
+            get { return AverageDropped || CategoryDropped || AnnouncementDropped; }
         }
 
         public bool IncludeInAverage

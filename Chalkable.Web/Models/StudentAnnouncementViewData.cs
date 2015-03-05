@@ -50,12 +50,12 @@ namespace Chalkable.Web.Models
         public string GradeValue { get; set; }
         public decimal? NumericGradeValue { get; set; }
         
-        public bool ScoreDropped { get; set; }
+        //public bool ScoreDropped { get; set; }
         public bool AverageDropped { get; set; }
         public bool CategoryDropped { get; set; }
         public bool AnnouncementDropped { get; set; }
         public bool Dropped { get; set; }
-        public bool CanBeUndropped { get; set; }
+        public bool AutomaticalyDropped { get; set; }
         
         public bool IsExempt { get; set; }
         public bool IsIncomplete { get; set; }
@@ -78,12 +78,12 @@ namespace Chalkable.Web.Models
             IsLate = studentAnnouncement.Late;
             AnnouncementId = studentAnnouncement.AnnouncementId;
             Comment = studentAnnouncement.Comment;
-            ScoreDropped = studentAnnouncement.ScoreDropped;
+            //ScoreDropped = studentAnnouncement.ScoreDropped;
             AverageDropped = studentAnnouncement.AverageDropped;
             CategoryDropped = studentAnnouncement.CategoryDropped;
             AnnouncementDropped = studentAnnouncement.AnnouncementDropped;
-            Dropped = studentAnnouncement.Dropped;
-            CanBeUndropped = studentAnnouncement.CanBeUndropped;
+            Dropped = studentAnnouncement.ScoreDropped;
+            AutomaticalyDropped = studentAnnouncement.AutomaticalyDropped;
             GradeValue = studentAnnouncement.ScoreValue;
             ExtraCredits = studentAnnouncement.ExtraCredit;
             NumericGradeValue = studentAnnouncement.NumericScore;
