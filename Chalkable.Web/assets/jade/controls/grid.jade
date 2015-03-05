@@ -8,13 +8,13 @@ mixin Grid(controller, action, data, params, noDisplaying)
         +Paginator(controller, action, data, params, noDisplaying)
 
 mixin GridHead()
-    .head.panel-bg
+    .head.panel-bg(attributes)
         block
 
 mixin GridBody()
-    .body
+    .body(attributes)
         block
 
 mixin GridRow()
-    .row
+    .row(attributes)
         block

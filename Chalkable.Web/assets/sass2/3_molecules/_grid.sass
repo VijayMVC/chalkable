@@ -15,6 +15,8 @@
   .th, .td, .col
     display: table-cell
     padding: 2px
+    vertical-align: middle
+    line-height: 20px
 
   .head
     font-weight: 600
@@ -28,26 +30,27 @@
   .body .row:nth-child(2n)
     background-color: #eee
     
-  .action-links A
-    display: inline-block
-    width: 16px
-    height: 16px
-    vertical-align: middle
+  .action-links
+    white-space: nowrap
 
-    &.profile
-      background: url(images2/controls/grid/report.png) 0 0 no-repeat
+    A
+      display: inline-block
+      width: 24px
+      height: 24px
+      vertical-align: middle
+      margin: 0 2px 0 0
 
-    &.view
-      background: url(images2/controls/grid/information.png) 0 0 no-repeat
+      &.profile, &.view
+        +icons-24-sprite(basic-info)
 
-    &.remove
-      background: url(images2/controls/grid/delete.gif) 0 0 no-repeat
+      &.persons
+        +icons-24-sprite(students)
 
-    &.persons
-      background: url(images2/controls/grid/user.png) 0 0 no-repeat
+      &.plugin
+        +icons-24-sprite(complete)
 
-    &.plugin
-      background: url(images2/controls/grid/plugin.gif) 0 0 no-repeat
-    
-  
-  
+      &.computer
+        +icons-24-sprite(computer)
+
+      &.remove
+        +icons-24-sprite(remove)
