@@ -8,12 +8,13 @@ mixin AppManagementControls_(app)
         span=app.getState().toString()
 
 
-mixin ApplicationActionLinks_(app)
+mixin ApplicationActionLinks_(app, isLive)
     if !self.isReadOnly()
-        +ActionLink('apps', 'details', app.getId()).profile
-    +ActionLink('apps', 'testApplication', app.getDeveloperId()).profile
+        +ActionLink('apps', 'details', app.getId())(title="View info").profile
+    if !isLive
+        +ActionLink('apps', 'testApplication', app.getDeveloperId())(title="Test app").computer
     if !self.isReadOnly()
-        +ActionLink('apps', 'tryDeleteApplication', app.getId(), app.getName()).remove
+        +ActionLink('apps', 'tryDeleteApplication', app.getId(), app.getName())(title="Remove app").remove
 
 mixin AppsFilterSelect_(name, items)
     +Select(name)(attributes)
@@ -60,7 +61,7 @@ mixin AppsFilterSelect_(name, items)
                     .td.action-links: +ApplicationActionLinks_(item)
                     .td.action-links
                         if item.getLiveAppId() && item.getLiveApplication()
-                            +ApplicationActionLinks_(item.getLiveApplication())
+                            +ApplicationActionLinks_(item.getLiveApplication(), true)
                         else
                             span -
                     .td

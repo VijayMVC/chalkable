@@ -30,24 +30,22 @@
     
   .action-links A
     display: inline-block
-    width: 16px
-    height: 16px
+    width: 24px
+    height: 24px
     vertical-align: middle
+    margin: 0 2px 0 0
 
-    &.profile
-      background: url(images2/controls/grid/report.png) 0 0 no-repeat
-
-    &.view
-      background: url(images2/controls/grid/information.png) 0 0 no-repeat
-
-    &.remove
-      background: url(images2/controls/grid/delete.gif) 0 0 no-repeat
+    &.profile, &.view
+      +icons-24-sprite(basic-info)
 
     &.persons
-      background: url(images2/controls/grid/user.png) 0 0 no-repeat
+      +icons-24-sprite(students)
 
     &.plugin
-      background: url(images2/controls/grid/plugin.gif) 0 0 no-repeat
-    
-  
-  
+      +icons-24-sprite(complete)
+
+    &.computer
+      +icons-24-sprite(computer)
+
+    &.remove
+      +icons-24-sprite(remove)
