@@ -50,6 +50,13 @@ function PutDir($dbase) {
 	}
 }
 
+function PutContentDir($dbase, $exclude) {
+  foreach ($d in $input) {
+		$dir = $d.FullName
+		Get-ChildItem $dir -force -recurse | Where-Object {$_.mode -match "-a---"} | Where-Object { $_.FullName -notmatch $exclude } | PutFile -sbase $dir -dbase $dbase
+	}
+}
+
 #Get-Item ".\to-publish" | PutDir -dbase $buildNo
 
 [xml] $xml = Get-Content "./PublishArtifacts.config.xml"
@@ -82,4 +89,4 @@ Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
 Get-Item "Chalkable.Web\app\lib" | PutDir -dbase "app\lib"
 Get-Item "Chalkable.Web\app\highcharts" | PutDir -dbase "app\highcharts"
 
-Get-Item "Chalkable.Web\Content" | PutDir -dbase "Content"
+Get-Item "Chalkable.Web\Content" | PutContentDir -dbase "Content" -exclude ".*\\(icons-24|icons-32|alerts-icons)\\.*"

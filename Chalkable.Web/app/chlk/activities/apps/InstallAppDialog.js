@@ -104,7 +104,7 @@ NAMESPACE('chlk.activities.apps', function () {
                 setTimeout(function(){
                     this.prepareAppInstallPostData_();
                     this.dom.find('form').trigger('submit');
-                }.bind(this), 3000);
+                }.bind(this), 700);
 
             }
         ]);

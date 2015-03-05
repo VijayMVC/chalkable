@@ -22,7 +22,7 @@ mixin AppsFilterSelect_(name, items)
             +Option(item.value, item.displayValue, item.selected)
 
 .apps-list
-    style(type="text/css", scoped) .td { vertical-align: middle }
+    style(type="text/css", scoped) .bold { font-weight: 600; }
     +ActionForm('apps', 'list')#apps-list-form
         +Hidden('start', self.applications.getPageIndex())
         +Hidden('totalCount', self.applications.getTotalCount())
@@ -46,12 +46,12 @@ mixin AppsFilterSelect_(name, items)
             .th Draft State
             .th Draft Actions
             .th Live Actions
-            .th.narrow Is Internal
+            .th.narrow
             .th
         +GridBody()
             each item in self.applications.getItems()
                 -var liveApp = item.getLiveApplication()
-                +GridRow()
+                +GridRow()(class = liveApp ? 'bold' : '')
                     .td
                         img.app-icon(src=item.getIconPictureUrl(), height=47)
                     .td= item.getName()
@@ -66,9 +66,9 @@ mixin AppsFilterSelect_(name, items)
                             span -
                     .td
                         if !self.isReadOnly()
-                            +ActionForm('apps', 'changeAppType')
-                                if liveApp
-                                    +Checkbox('isInternal', liveApp.isInternal())
+                            if liveApp
+                                +ActionForm('apps', 'changeAppType')
+                                    +LabeledCheckbox('Is Internal', 'isInternal', liveApp.isInternal(), false, 'Click to change app internal status')
                                     +Hidden('appId', liveApp.getId())
-                                else
-                                    span -
+                            else
+                                span -

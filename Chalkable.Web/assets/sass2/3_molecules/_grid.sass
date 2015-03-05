@@ -30,24 +30,27 @@
   .body .row:nth-child(2n)
     background-color: #eee
     
-  .action-links A
-    display: inline-block
-    width: 24px
-    height: 24px
-    vertical-align: middle
-    margin: 0 2px 0 0
+  .action-links
+    white-space: nowrap
 
-    &.profile, &.view
-      +icons-24-sprite(basic-info)
+    A
+      display: inline-block
+      width: 24px
+      height: 24px
+      vertical-align: middle
+      margin: 0 2px 0 0
 
-    &.persons
-      +icons-24-sprite(students)
+      &.profile, &.view
+        +icons-24-sprite(basic-info)
 
-    &.plugin
-      +icons-24-sprite(complete)
+      &.persons
+        +icons-24-sprite(students)
 
-    &.computer
-      +icons-24-sprite(computer)
+      &.plugin
+        +icons-24-sprite(complete)
 
-    &.remove
-      +icons-24-sprite(remove)
+      &.computer
+        +icons-24-sprite(computer)
+
+      &.remove
+        +icons-24-sprite(remove)
