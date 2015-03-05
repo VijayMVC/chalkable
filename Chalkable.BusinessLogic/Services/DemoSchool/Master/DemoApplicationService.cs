@@ -127,6 +127,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public Application GetApplicationById(Guid id)
         {
+            if (id == Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value))
+                return GetPracticeGradesApplication();
+            if (id == Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value))
+                return GetAssessmentApplication();
+            
             using (var uow = Read())
             {
                 return new ApplicationDataAccess(uow)
