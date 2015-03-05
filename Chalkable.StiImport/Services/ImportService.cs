@@ -67,20 +67,19 @@ namespace Chalkable.StiImport.Services
         public void Import()
         {
             Log.LogInfo("start import");
-            connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
-            importedSchoolIds.Clear();
-            personsForImportPictures.Clear();
-
             ServiceLocatorMaster = new ServiceLocatorMaster(sysadminCntx);
             ServiceLocatorSchool = ServiceLocatorMaster.SchoolServiceLocator(districtId, null);
-            Log.LogInfo("download data to sync");
-            DownloadSyncData();
-
             if (!ServiceLocatorSchool.Context.DistrictId.HasValue)
                 throw new Exception("District id should be defined for import");
+            importedSchoolIds.Clear();
+            personsForImportPictures.Clear();
+            
             var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
             try
             {
+                connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+                Log.LogInfo("download data to sync");
+                DownloadSyncData();
                 if (d.LastSync.HasValue)
                     DoRegularSync(true);
                 else
