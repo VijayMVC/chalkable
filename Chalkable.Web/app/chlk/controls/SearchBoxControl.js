@@ -207,6 +207,11 @@ NAMESPACE('chlk.controls', function () {
                                 + parseInt(node.getCss('padding-bottom'), 10));
                             menu.setCss('left', node.offset().left - 1);
                         }
+                        var wHeight = jQuery(window).height();
+                        var mHeight = menu.height();
+                        var top = parseInt(menu.getCss('top'));
+                        if(top + mHeight > wHeight)
+                            menu.setCss('top', top - mHeight - 35);
                     }
                 };
             }

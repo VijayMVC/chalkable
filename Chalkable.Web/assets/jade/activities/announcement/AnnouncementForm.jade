@@ -39,7 +39,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
         h2.page-title= announcement.getClassName()
         .loader
         +ActionForm('announcement', state ? 'save' : 'saveOnCreate')(onlySubmitValidate=true).no-working
-            +ClassesToolBar(topData)(pressAfterClick=!announcement.getState())
+            +ClassesToolBar(topData, null, null, null, announcement.getState())(pressAfterClick=!announcement.getState())
             .not-transparent(class=(classId ? '' : 'x-hidden'))
                 +AnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
