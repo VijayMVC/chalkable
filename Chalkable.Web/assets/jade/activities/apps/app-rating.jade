@@ -1,0 +1,11 @@
+mixin Rating(elemId, value, isEditable)
+    fieldset.rating(class = isEditable ? "editable" : undefined)(attributes)
+        each item in [5, 4, 3, 2, 1]
+            input(
+                type = "radio",
+                id = "#{elemId + item}",
+                value = item,
+                name = elemId,
+                disabled = !isEditable ? "disabled" : undefined,
+                checked = value == item ? "checked" : undefined)
+            label(for="#{elemId + item}")
