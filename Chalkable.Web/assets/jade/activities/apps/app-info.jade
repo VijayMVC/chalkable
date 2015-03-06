@@ -130,7 +130,7 @@ appPlatforms = appPlatforms.join(',')
 
     .api-key
         = 'API key: '
-        +Textbox("apikey", app.getSecretKey())
+        +Textbox("apikey", app.getSecretKey(), true)
 
 
     if !self.isReadOnly()
@@ -140,7 +140,7 @@ appPlatforms = appPlatforms.join(',')
     +ActionForm('apps', 'update').app-info
         if !self.isReadOnly()
             disableSubmitBtn = self.isDraft() || app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
-            +Button()(disabled = disableSubmitBtn, name="submit-btn", class = disableSubmitBtn ? "x-item-disabled" : "").blue-tb-right-button.submit-btn  Submit App
+            +Button()(disabled = disableSubmitBtn, name="submit-btn", class = disableSubmitBtn ? "x-item-disabled" : "").blue-button.submit-btn  Submit App
         +Hidden('draft', self.isDraft())
         +Hidden('id', app.getId())
         +Hidden('developerName', app.getDeveloperInfo().getName())

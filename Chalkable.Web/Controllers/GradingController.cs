@@ -311,9 +311,12 @@ namespace Chalkable.Web.Controllers
             return Json(StudentAveragesViewData.Create(res));
         }
 
-        [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
-        public ActionResult SetAutoGrade(int announcementApplicationId,int studentId, string gradeValue)
+        [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Post, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        public ActionResult SetAutoGrade(int announcementApplicationId, int? studentId, string gradeValue)
         {
+            if (string.IsNullOrWhiteSpace(gradeValue))
+                throw new ChalkableException("Param gradeValue is required");
+
             SchoolLocator.StudentAnnouncementService.SetAutoGrade(announcementApplicationId, studentId, gradeValue);
             return Json(true);
         }

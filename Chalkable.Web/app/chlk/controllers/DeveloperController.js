@@ -65,7 +65,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.AccessForRoles([chlk.models.common.RoleEnum.DEVELOPER])],
             function paypalSettingsAction(){
-                var developer = this.developerService.getCurrentDeveloper();
+                var developer = this.developerService.getCurrentDeveloperSync();
                 var paypalSettings = new chlk.models.developer.PayPalInfo(developer.getPayPalAddress());
                 return this.PushView(chlk.activities.developer.PayPalSettingsPage, new ria.async.DeferredData(paypalSettings));
             },
@@ -85,7 +85,7 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.developer.PayPalInfo]],
             function updatePaymentInfoAction(info){
-                var developer = this.developerService.getCurrentDeveloper();
+                var developer = this.developerService.getCurrentDeveloperSync();
                 var result = this.developerService.updatePaymentInfo(
                     developer.getId(),
                     info.getEmail()
@@ -128,6 +128,7 @@ NAMESPACE('chlk.controllers', function (){
                     ? ria.async.DeferredData(chlk.models.api.ApiResponse.$create(apiFormId, JSON.parse(fakeResponse)))
                     : this.apiService
                         .callApi(apiCallData)
+                        .attach(this.validateResponse_())
                         .then(function(data){
                             return chlk.models.api.ApiResponse.$create(apiFormId, data);
                         });
@@ -141,8 +142,7 @@ NAMESPACE('chlk.controllers', function (){
                      .getRequiredApiCalls(query, isMethod, role)
                      .attach(this.validateResponse_())
                      .then(function(data){
-                         var seq = chlk.models.api.ApiCallSequence.$create(data);
-                         return seq;
+                         return chlk.models.api.ApiCallSequence.$create(data);
                      });
                  return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result, 'update-api-calls-list');
             }

@@ -52,7 +52,7 @@ NAMESPACE('chlk.services', function () {
                 })
                 .then(function(data){
                     if(data === true){
-                        var developer = this.getCurrentDeveloper();
+                        var developer = this.getCurrentDeveloperSync();
                         developer.setPayPalAddress(paypalAddress);
                         this.getContext().getSession().set(ChlkSessionConstants.CURRENT_DEVELOPER, developer);
                         return new chlk.models.developer.PayPalInfo(paypalAddress);
@@ -60,7 +60,7 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
-            chlk.models.developer.DeveloperInfo, function getCurrentDeveloper(){
+            chlk.models.developer.DeveloperInfo, function getCurrentDeveloperSync(){
                 return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_DEVELOPER, null);
             }
 

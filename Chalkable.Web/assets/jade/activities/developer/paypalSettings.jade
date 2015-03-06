@@ -1,8 +1,13 @@
-btnTitle = self.email == null ? "Add PayPal" : "Change PayPal"
+-var btnTitle = self.email == null ? "Add PayPal" : "Change PayPal"
 
 .payment
-    h3 PayPal
+    h2.page-title PayPal
+    .action-bar
+        .items
+            +ActionLink('account', 'profile') Profile
+            +ActionLink('developer', 'paypalSettings').pressed PayPal
 
+    br
     div.paypal-info.x-hidden
         +ActionForm('developer', 'updatePaymentInfo')
             div

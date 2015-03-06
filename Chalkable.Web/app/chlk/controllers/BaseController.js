@@ -126,7 +126,8 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            function BackgroundNavigate(controller, action, args_) {
-               this.context.getDefaultView().queueViewResult(this.Redirect(controller, action, args_));
+               this.context.getDefaultView()
+                   .queueViewResult(this.Redirect(controller, action, args_));
                return null;
            },
 

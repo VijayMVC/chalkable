@@ -35,7 +35,10 @@ mixin ApiCallForm(controllerInfo, role)
                                             tbody
                                                 each methodParam in methodParams
                                                     tr
-                                                        td.param-name=methodParam.getName()
+                                                        td.param-name
+                                                            b= methodParam.getName()
+                                                            | &nbsp;:&nbsp;
+                                                            i= methodParam.getParamTypeAsString()
                                                         td.param-value
                                                             input(type="text",
                                                                 data-param-type = methodParam.getParamType().valueOf(),

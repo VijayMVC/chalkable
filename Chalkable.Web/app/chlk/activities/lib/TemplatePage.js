@@ -2,14 +2,26 @@ REQUIRE('chlk.activities.lib.ChlkTemplateActivity');
 REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.activities.lib', function () {
-    /** @class chlk.activities.lib.TemplatePage*/
 
+    var UNDER_OVERLAY_CLASS = 'under-overlay';
+
+    /** @class chlk.activities.lib.TemplatePage*/
     CLASS(
         'TemplatePage', EXTENDS(chlk.activities.lib.ChlkTemplateActivity), [
             function $() {
                 BASE();
                 this._wrapper = new ria.dom.Dom('#content-wrapper');
                 this._body = new ria.dom.Dom('body');
+            },
+
+            OVERRIDE, VOID, function onResume_() {
+                BASE();
+                this.dom.removeClass(UNDER_OVERLAY_CLASS);
+            },
+
+            OVERRIDE, VOID, function onPause_() {
+                this.dom.addClass(UNDER_OVERLAY_CLASS);
+                BASE();
             },
 
 

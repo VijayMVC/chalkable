@@ -244,16 +244,19 @@ NAMESPACE('chlk.controllers', function (){
         function detailsDeveloperAction(appId_, isSubmit_) {
             var isReadonly = false;
             var isDraft = !(!!isSubmit_);
-            return this.appsService
+            var result = this.appsService
                 .getInfo(appId_)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     if (!data.getId()){
-                        return this.Redirect('apps', 'add', []);
+                        return this.ShowAlertBox('This application was not found')
+                            .thenBreak();
                     }
-                    else
-                        return this.PushView(chlk.activities.apps.AppInfoPage, this.prepareAppInfo(data, isReadonly, isDraft));
+
+                    return this.prepareAppInfo(data, isReadonly, isDraft);
                 }, this);
+
+            return this.PushOrUpdateView(chlk.activities.apps.AppInfoPage, result);
         },
 
         [chlk.controllers.SidebarButton('apps-info')],
@@ -553,53 +556,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         function addDeveloperAction(){
-            this.ShowPromptBox('Please enter application name', '')
-                .then(function(appName){
-                    var app = new chlk.models.apps.Application();
-                    app.setName(appName);
-                    return this.BackgroundNavigate('apps', 'create', [app]);
-                }, this);
-
-            return null;
-        },
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
-
-        [[chlk.models.apps.Application]],
-        function createDeveloperAction(model){
-            var devId = this.getCurrentPerson().getId();
-            this.appsService
-                .createApp(devId, model.getName())
-                .catchError(function(error_){
-                    this.ShowMsgBox("App with this name already exists", "whoa.", [{
-                        text: 'Ok',
-                        controller: 'apps',
-                        action: 'general',
-                        params: [],
-                        color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                    }], 'center');
-                    return ria.async.BREAK;
-                }, this)
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    return this.BackgroundNavigate('apps', 'details', []);
-                }, this);
-            return this.ShadeLoader();
-        },
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
-        [[chlk.models.id.AppId]],
-        function deleteDeveloperAction(id) {
-            return this.appsService
-                .deleteApp(id)
-                .attach(this.validateResponse_())
-                .then(function(){
-                    return this.Redirect('apps', 'general', []);
-                }, this);
+            var result = this.createApp_(true);
+            return this.PushView(chlk.activities.lib.PendingActionDialog, result);
         },
 
         [chlk.controllers.AccessForRoles([
@@ -616,31 +574,24 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
-        [[chlk.models.apps.Application]],
-        function updateApp(app) {
-            return this.BackgroundNavigate('apps', 'details', [app.getId().valueOf(), true]);
-        },
-
-        [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER,
             chlk.models.common.RoleEnum.SYSADMIN
         ])],
         [[chlk.models.id.AppId, String]],
         function tryDeleteApplicationAction(id, appName) {
-            var msgText = "You are about to delete " + appName + " application.\n\n This can not be undone.";
+            var msgText = "You are about to delete application. This can not be undone!!!\n\nPlease type application name to confirm.",
+                buttons = [{text: 'DELETE', clazz: 'negative-button', value: 'ok'}, {text: 'Cancel'}];
 
-            return this.ShowMsgBox(msgText, "whoa.", [{
-                text: "Cancel",
-                color: chlk.models.common.ButtonColor.GREEN.valueOf()
-            }, {
-                text: 'Delete',
-                controller: 'apps',
-                action: 'delete',
-                params: [id.valueOf()],
-                color: chlk.models.common.ButtonColor.RED.valueOf()
-            }], 'center'), null;
+            var result = this.ShowMsgBox(msgText, "whoa.", buttons, null, false, 'text', "")
+                .then(function (mrResult) {
+                    return appName == mrResult ? mrResult : ria.async.BREAK; })
+                .thenCall(this.appsService.deleteApp, [id])
+                .attach(this.validateResponse_())
+                .then(function(){
+                    return this.BackgroundNavigate('apps', 'general', []); }, this)
+                .thenBreak();
+
+            return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result);
         },
 
 
@@ -738,6 +689,8 @@ NAMESPACE('chlk.controllers', function (){
                              .ShowAlertBox(newApp.getMessage())
                              .thenBreak()
                      }
+
+                     return this.BackgroundNavigate('apps', 'details', [app.getId().valueOf(), true]);
                      return this.updateApp(newApp);
                  }, this);
              return this.UpdateView(chlk.activities.apps.AppInfoPage, result);
@@ -760,23 +713,44 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result, 'loadReviews');
         },
 
+        ria.async.Future, function createApp_(navigate_) {
+            var devId = this.getCurrentPerson().getId();
+            return this.ShowPromptBox('Please enter application name', '')
+                .then(function(appName){
+                    return this.appsService.createApp(devId, appName);
+                }, this)
+                .catchError(function(error_){
+                    return this.ShowMsgBox("App with this name already exists", "whoa.", [{
+                            text: 'Ok',
+                            controller: 'apps',
+                            action: 'general',
+                            params: [],
+                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
+                        }], 'center')
+                        .thenBreak();
+                }, this)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    return navigate_ ? this.BackgroundNavigate('apps', 'details', []) : null;
+                }, this)
+                .thenBreak();
+        },
+
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DEVELOPER
         ])],
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.id.AppId]],
         function generalDeveloperAction(appId_){
-            return this.appsService
+            var result = this.appsService
                 .getInfo(appId_, !!appId_)
                 .attach(this.validateResponse_())
+                .then(function (data) {
+                    return data.getId() ? data : this.createApp_(true);
+                }, this)
                 .then(function(data){
-                    if (!data.getId()){
-                        return this.Redirect('apps', 'add', []);
-                    }
-
                     var pictureUrl = data.getBannerPictureUrl();
-
-                    var result = ria.async.wait(
+                    return ria.async.wait(
                             this.appsService.getAppAnalytics(data.getId()),
                             this.appsService.getAppReviews(data.getId()),
                             this.appsService.getDevApps()
@@ -800,9 +774,9 @@ NAMESPACE('chlk.controllers', function (){
                                 devApps
                            );
                         });
-
-                    return this.PushView(chlk.activities.apps.AppGeneralInfoPage, result);
                 }, this);
+
+            return this.PushView(chlk.activities.apps.AppGeneralInfoPage, result);
         },
 
         [chlk.controllers.AccessForRoles([
