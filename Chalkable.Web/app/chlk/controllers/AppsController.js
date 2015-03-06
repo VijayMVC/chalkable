@@ -715,7 +715,7 @@ NAMESPACE('chlk.controllers', function (){
 
         ria.async.Future, function createApp_(navigate_) {
             var devId = this.getCurrentPerson().getId();
-            return this.ShowPromptBox('Please enter application name', '')
+            return this.ShowPromptBox('Please enter application name', '', null, {"class":"validate[required]"})
                 .then(function(appName){
                     return this.appsService.createApp(devId, appName);
                 }, this)

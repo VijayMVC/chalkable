@@ -211,7 +211,7 @@ NAMESPACE('chlk.controllers', function (){
                }else{
                    buttons.push(new chlk.models.common.Button('Ok'));
                }
-               return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_, inputType_, inputAttrs_);
+               return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_);
            },
 
            ria.async.Future, function ShowAlertBox(text, header_) {
