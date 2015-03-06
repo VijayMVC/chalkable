@@ -79,7 +79,8 @@
                                             value=student.getComment(),
                                             default-value=""
                                             keepNonExsistentValue != true
-                                            minLength = 0,class="student-comment", id="comments-" + id
+                                            minLength = 0,class="student-comment", id="comments-" + id,
+                                            listCls = "max-200"
                                         )
         .x-window-footer.report-bottom
             +ReportFormatSelect()
