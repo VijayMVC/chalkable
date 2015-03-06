@@ -141,7 +141,13 @@ NAMESPACE('chlk.services', function () {
                             result = data;
                         }
                         return result;
-                    });
+                    })
+                    .catchError(function (error) {
+                        if(error instanceof ria.ajax.AjaxException && error.getStatus() == 500){
+                            return JSON.parse(error.getResponse());
+                        }
+                        throw error;
+                    }, this);
             },
 
             [[String, Object, Object]],

@@ -98,7 +98,7 @@ mixin Glue_()
                     .student-attachments.content
                         .announcement-item.attachment
                             .wrapper
-                                img(src="")
+                                img(src=window.scriptsRoot + '/Content/images2/study-center-banner.png')
                                 .title Study Center
                                 +ActionButton('studycenter', 'startPractice', self.getStandards().map(function (_) { return _.getStandardId(); })) Start Practice
 

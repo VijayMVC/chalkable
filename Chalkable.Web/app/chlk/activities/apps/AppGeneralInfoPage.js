@@ -9,6 +9,5 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AppGeneralTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.developer.AppReviewsTpl, 'loadReviews', '.rating-persons', ria.mvc.PartialUpdateRuleActions.Append)],
-        [chlk.activities.lib.PartialUpdateClass('partial-update-general-info')],
         'AppGeneralInfoPage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

@@ -2,7 +2,6 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.activities.settings.DashboardPage');
 REQUIRE('chlk.activities.settings.TeacherPage');
 REQUIRE('chlk.activities.settings.PreferencesPage');
-REQUIRE('chlk.activities.settings.DeveloperPage');
 REQUIRE('chlk.activities.settings.StudentPage');
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
@@ -85,16 +84,7 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [chlk.controllers.SidebarButton('settings')],
             function dashboardDeveloperAction() {
-
-                var devSettings = new chlk.models.settings.DeveloperSettings();
-                devSettings.setDeveloperId(this.getCurrentPerson().getId());
-                var app = this.appsService.getCurrentApp();
-                if (app){
-                    devSettings.setCurrentAppId(app.getId());
-                    devSettings.setCurrentAppName(app.getName());
-                }
-                return this.PushView(chlk.activities.settings.DeveloperPage, ria.async.DeferredData(devSettings));
+               return this.Redirect('account', 'profile')
             }
-
         ])
 });

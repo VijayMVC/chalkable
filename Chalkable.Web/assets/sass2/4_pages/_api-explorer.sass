@@ -38,7 +38,7 @@
 
     &.open .details
       //display: block
-      max-height: 10000px
+      max-height: 20000px
       opacity: 1
       +single-transition(all, .3s, ease-in-out)
 
@@ -125,7 +125,6 @@
 
     th
       height: 25px
-      width: 33%
       color: #333
       //font-family: Arial
       font-weight: bold
@@ -135,7 +134,6 @@
   
 
     td
-      width: 33%
       height: 45px
       color: #666
       font-size: 13px
@@ -146,7 +144,8 @@
         color: red
         display: inline-block
     
-  
+    .param-description
+      width: 40%
 
     .value-field
       &.error
