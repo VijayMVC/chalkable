@@ -557,7 +557,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         function addDeveloperAction(){
             var result = this.createApp_(true);
-            return this.PushView(chlk.activities.lib.PendingActionDialog, result);
+            return this.ShadeView(chlk.activities.lib.PendingActionDialog, result);
         },
 
         [chlk.controllers.AccessForRoles([
