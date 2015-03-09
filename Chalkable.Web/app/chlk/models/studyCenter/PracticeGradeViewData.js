@@ -20,6 +20,7 @@ NAMESPACE('chlk.models.studyCenter', function(){
                 this.gradeBookScore = SJX.fromValue(raw.gradebookscore, String);
                 this.gradedDate = SJX.fromDeserializable(raw.gradeddate, chlk.models.common.ChlkDate);
                 this.applicationId = SJX.fromValue(raw.applicationid, chlk.models.id.AppId);
+                this.previousScores = SJX.fromArrayOfValues(raw.previousscores, String);
             },
 
             chlk.models.standard.Standard, 'standard',
@@ -27,6 +28,8 @@ NAMESPACE('chlk.models.studyCenter', function(){
             String, 'practiceScore',
 
             String, 'gradeBookScore',
+
+            ArrayOf(String), 'previousScores',
 
             chlk.models.common.ChlkDate, 'gradedDate',
 
