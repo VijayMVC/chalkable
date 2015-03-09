@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         PracticeGrade Add(int standardId, int studentId, Guid applicationId, string score);
         IList<PracticeGrade> GetPracticeGrades(int studentId, int? standardId);
-        IList<PracticeGradeDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId);
+        IList<PracticeGradesDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId);
     }
     public class PracticeGradeService : SisConnectedService, IPracticeGradeService
     {
@@ -71,7 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     }));
         }
 
-        public IList<PracticeGradeDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
+        public IList<PracticeGradesDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
         {
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
             if (standardId.HasValue)
@@ -80,13 +80,12 @@ namespace Chalkable.BusinessLogic.Services.School
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var standardsScores = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(sy.Id, studentId, Context.NowSchoolTime)
                 .Standards.ToList();
-            var res = new List<PracticeGradeDetailedInfo>();
+            var res = new List<PracticeGradesDetailedInfo>();
             foreach (var standard in standards)
             {
                 var standardScore = standardsScores.FirstOrDefault(x => x.StandardId == standard.Id && x.SectionId == classId);
-                var pGrade = practiceGrades.Where(x => x.StandardId == standard.Id).OrderByDescending(x=>x.Date)
-                    .FirstOrDefault();
-                res.Add(PracticeGradeDetailedInfo.Create(pGrade, standard, standardScore));
+                var pGrades = practiceGrades.Where(x => x.StandardId == standard.Id).OrderByDescending(x=>x.Date).ToList();
+                res.Add(PracticeGradesDetailedInfo.Create(pGrades, standard, standardScore));
             }
             res = res.OrderBy(x => x)
                      .ThenBy(x=>x.Standard.Name)

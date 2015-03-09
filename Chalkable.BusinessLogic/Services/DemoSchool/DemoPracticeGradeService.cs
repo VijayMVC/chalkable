@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public IList<Model.PracticeGradeDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
+        public IList<Model.PracticeGradesDetailedInfo> GetPracticeGradesDetails(int classId, int studentId, int? standardId)
         {
 
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
@@ -64,16 +64,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 standards = standards.Where(x => x.Id == standardId).ToList();
             var practiceGrades = GetPracticeGrades(studentId, standardId);
             var standardsScores = Storage.StiStandardScoreStorage.GetStandardScores(classId, null, null);
-            var res = new List<PracticeGradeDetailedInfo>();
+            var res = new List<PracticeGradesDetailedInfo>();
             foreach (var standard in standards)
             {
                 var standardScore = standardsScores.FirstOrDefault(x => x.StandardId == standard.Id && x.SectionId == classId);
-                var pGrades = practiceGrades.Where(x => x.StandardId == standard.Id).ToList();
-                if (pGrades.Count > 0)
-                {
-                    res.AddRange(pGrades.Select(pg => PracticeGradeDetailedInfo.Create(pg, standard, standardScore)));
-                }
-                else res.Add(PracticeGradeDetailedInfo.Create(null, standard, standardScore));
+                var pGrades = practiceGrades.Where(x => x.StandardId == standard.Id).OrderByDescending(x=>x.Date).ToList();
+                res.Add(PracticeGradesDetailedInfo.Create(pGrades, standard, standardScore));
             }
             return res;
         }

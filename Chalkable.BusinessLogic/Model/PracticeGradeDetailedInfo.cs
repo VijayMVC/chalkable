@@ -1,22 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Logic.Comperators;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Model
 {
-    public class PracticeGradeDetailedInfo : IComparable<PracticeGradeDetailedInfo>
+    public class PracticeGradesDetailedInfo : IComparable<PracticeGradesDetailedInfo>
     {
-        public PracticeGrade PracticeGrade { get; set; }
+        public IList<PracticeGrade> PracticeGrades { get; set; }
         public Standard Standard { get; set; }
         public GradingStandardInfo GradingStandardInfo { get; set; }
     
-        public static PracticeGradeDetailedInfo Create(PracticeGrade practiceGrade, Standard standard,
+        public static PracticeGradesDetailedInfo Create(IList<PracticeGrade> practiceGrades, Standard standard,
                                                        StandardScore standardScore)
         {
-            var res = new PracticeGradeDetailedInfo
+            var res = new PracticeGradesDetailedInfo
                 {
-                    PracticeGrade = practiceGrade,
+                    PracticeGrades = practiceGrades,
                     Standard = standard,
                 };
             if (standardScore != null)
@@ -24,7 +26,7 @@ namespace Chalkable.BusinessLogic.Model
             return res;
         }
 
-        public int CompareTo(PracticeGradeDetailedInfo other)
+        public int CompareTo(PracticeGradesDetailedInfo other)
         {
             if (other == null) return 1;
             if (other == this) return 0;
@@ -32,8 +34,10 @@ namespace Chalkable.BusinessLogic.Model
             string pgScore1 = int.MaxValue.ToString(), 
                    pgScore2 = int.MaxValue.ToString();
 
-            if (PracticeGrade != null) pgScore1 = PracticeGrade.Score;
-            if (other.PracticeGrade != null) pgScore2 = other.PracticeGrade.Score;
+            if (PracticeGrades != null && PracticeGrades.Count > 0) 
+                pgScore1 = PracticeGrades.First().Score;
+            if (other.PracticeGrades != null && other.PracticeGrades.Count > 0)
+                pgScore2 = other.PracticeGrades.First().Score;
 
             var res = PracticeGradeScoreComperator.ComparePracticeScore(pgScore1, pgScore2);
             if (res == 0)

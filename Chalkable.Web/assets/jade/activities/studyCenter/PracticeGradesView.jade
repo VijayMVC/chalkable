@@ -1,5 +1,10 @@
+mixin PracticeScoreWithPreviousScores_(lastScore, previousScores)
+     -var res=previousScores && previousScores.length && previousScores.length > 0 ? previousScores.join(',') : '';
+     +PracticeScore_(lastScore)(data-tooltip=res)
+
 mixin PracticeScore_(score)
-    = score != undefined ? score : '-'
+    div(attributes)= score != undefined ? score : '-'
+
 
 .profile-page.grades-page
     +ClassesToolBar(self.getTopData(), 'studycenter', 'practice')
@@ -49,6 +54,6 @@ mixin PracticeScore_(score)
                             .td-item.standard-name.name-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getName()
                             .td-item.code.code-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getCommonCoreStandardCode()
                             .td-item.description.description-item=standard.getDescription()
-                            .td-item.score.practice.grade-item: +PracticeScore_(item.getPracticeScore())
+                            .td-item.score.practice.grade-item: +PracticeScoreWithPreviousScores_(item.getPracticeScore(), item.getPreviousScores())
                             -var grade = parseFloat(item.getGradeBookScore()).toFixed(2)
                             .td-item.score.grade-book.grade-item: +PracticeScore_(isNaN(grade) ? item.getGradeBookScore() : grade)

@@ -13,12 +13,12 @@ namespace Chalkable.Web.Models
         public IList<StandardViewData> Standrds { get; set; }
         public IList<PracticeGradeViewData> PracticeGrades { get; set; }
  
-        public static PracticeGradeGridViewData Create(IList<PracticeGradeDetailedInfo> practiceGrades, IList<Standard> standards)
+        public static PracticeGradeGridViewData Create(IList<PracticeGradesDetailedInfo> practiceGrades, IList<Standard> standards)
         {
             var res = new PracticeGradeGridViewData
                 {
                     Standrds = StandardViewData.Create(standards),
-                    PracticeGrades = practiceGrades.Select(x => PracticeGradeViewData.Create(x.PracticeGrade, x.GradingStandardInfo, x.Standard)).ToList()
+                    PracticeGrades = practiceGrades.Select(x => PracticeGradeViewData.Create(x.PracticeGrades, x.GradingStandardInfo, x.Standard)).ToList()
                 };
             return res;
         }
@@ -28,18 +28,21 @@ namespace Chalkable.Web.Models
     {
         public StandardViewData Standard { get; set; }
         public string PracticeScore { get; set; }
+        public IList<string> PreviousScores { get; set; }
         public string GradeBookScore { get; set; }
         public DateTime? GradedDate { get; set; }
         public Guid? ApplicationId { get; set; }
 
-        public static PracticeGradeViewData Create(PracticeGrade practiceGrade, GradingStandardInfo gradingStandardInfo, Standard standard)
+        public static PracticeGradeViewData Create(IList<PracticeGrade> practiceGrades, GradingStandardInfo gradingStandardInfo, Standard standard)
         {
             var res = new PracticeGradeViewData {Standard = StandardViewData.Create(standard)};
-            if (practiceGrade != null)
+            if (practiceGrades != null && practiceGrades.Count > 0)
             {
-                res.PracticeScore = practiceGrade.Score;
-                res.GradedDate = practiceGrade.Date;
-                res.ApplicationId = practiceGrade.ApplicationRef;
+                var lastSetted = practiceGrades.First();
+                res.PracticeScore = lastSetted.Score;
+                res.GradedDate = lastSetted.Date;
+                res.ApplicationId = lastSetted.ApplicationRef;
+                res.PreviousScores = practiceGrades.Where(x => x.Id != lastSetted.Id).Select(x => x.Score).ToList();
             }
             if (gradingStandardInfo != null)
             {
