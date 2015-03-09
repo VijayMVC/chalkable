@@ -54,7 +54,7 @@ NAMESPACE('chlk.activities.apps', function () {
 
             [ria.mvc.DomEventBind('change', '.add-new')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
-            function addNew(node, event, selected){
+            function addNew(node, event, selected_){
                 var name = node.getValue();
                 var id = this.dom.find('[type=hidden][name=filter]').getValue();
                 var standardNode = this.dom.find('.standard-link[data-id=' + id + ']');

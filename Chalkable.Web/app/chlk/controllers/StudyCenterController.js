@@ -61,33 +61,33 @@ NAMESPACE('chlk.controllers', function (){
             if (!Array.isArray(standardId))
                 standardId = [standardId];
 
-            if(!standardId.length){
-                this.BackgroundCloseView(chlk.activities.apps.MiniQuizDialog);
-                return null;
-            }
-
             standardId = standardId.map(chlk.models.id.StandardId);
 
-            var res = ria.async.wait(
-                    this.studyCenterService.getMiniQuizInfo(currentId_ || standardId[0]).attach(this.validateResponse_()),
-                    this.standardService.getStandardsList(standardId).attach(this.validateResponse_())
-                ).then(function(models){
-                    models[0].setCurrentStandardId(currentId_ || standardId[0]);
+            var miniQuizInfoFuture = (currentId_ || standardId.length)
+                ? this.studyCenterService.getMiniQuizInfo(currentId_ || standardId[0]).attach(this.validateResponse_())
+                : ria.async.Future.$fromData(new chlk.models.apps.MiniQuizViewData);
+
+            var standardsListFuture= standardId.length
+                ? this.standardService.getStandardsList(standardId).attach(this.validateResponse_())
+                : ria.async.Future.$fromData([]);
+
+            var res = ria.async.wait(miniQuizInfoFuture, standardsListFuture)
+                .transform(function(models){
+                    models[0].setCurrentStandardId(currentId_ || standardId[0] || null);
                     models[0].setStandards(models[1]);
                     return models[0];
                 });
 
-            if(changeStandard_)
-                return this.UpdateView(chlk.activities.apps.MiniQuizDialog, res, 'content');
-            return this.ShadeOrUpdateView(chlk.activities.apps.MiniQuizDialog, res);
+            return this.ShadeOrUpdateView(chlk.activities.apps.MiniQuizDialog, res, changeStandard_ ? 'content' : undefined);
         },
 
         [chlk.controllers.StudyCenterEnabled],
         [chlk.controllers.SidebarButton('study-center')],
         [[chlk.models.apps.MiniQuizViewData]],
         function updateMiniQuizAction(model){
-            var standardIds = JSON.parse(model.getStandardIds());
-            return this.Redirect('studycenter', 'startPractice', [standardIds, null, model.getCurrentStandardId().valueOf() ? model.getCurrentStandardId() : null]);
+            var standardIds = JSON.parse(model.getStandardIds()),
+                currentId = model.getCurrentStandardId();
+            return this.Redirect('studycenter', 'startPractice', [standardIds, null, currentId && currentId.valueOf() ? currentId : null]);
         },
 
         [[chlk.models.studyCenter.PracticeGradesViewData]],

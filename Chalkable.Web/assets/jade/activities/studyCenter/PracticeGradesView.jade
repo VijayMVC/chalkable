@@ -26,7 +26,7 @@ mixin PracticeScore_(score)
                                 +Option(item.getStandardId().valueOf(), item.getName(), standardId == item.getStandardId())
 
                 -var cCode = self.getCurrentStandardCodes()
-                +ActionButton('studycenter', 'startPractice', cCode)(disabled = !cCode.length).blue-button.button-like.start-practice Start Practice
+                +ActionButton('studycenter', 'startPractice', cCode).blue-button.start-practice Start Practice
             .mp-data
                 .grades-container
                     .row-item.title-row
@@ -46,8 +46,8 @@ mixin PracticeScore_(score)
                     each item in self.getPracticeGrades()
                         -var standard = item.getStandard()
                         .row-item
-                            .td-item.standard-name.name-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getName()
-                            .td-item.code.code-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())(disabled = !standard.getStandardId())= standard.getCommonCoreStandardCode()
+                            .td-item.standard-name.name-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())= standard.getName()
+                            .td-item.code.code-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())= standard.getCommonCoreStandardCode()
                             .td-item.description.description-item=standard.getDescription()
                             .td-item.score.practice.grade-item: +PracticeScore_(item.getPracticeScore())
                             -var grade = parseFloat(item.getGradeBookScore()).toFixed(2)

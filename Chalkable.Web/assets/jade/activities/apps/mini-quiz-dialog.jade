@@ -25,31 +25,31 @@ mixin App_(app)
                         class = className,
                         data-id= value.getStandardId().valueOf()
                     ).standard-link= name
-                    -var ids = self.getStandardIdsForRemove(value.getStandardId())
-                    if ids.length
-                        //+ActionLink('studycenter', 'start-practice', self.getStandardIdsForRemove(value.getStandardId()))
-                        a(data-id= value.getStandardId().valueOf()).close-btn.standard-remove
-                    else
-                        a.close.close-btn
+                    a(data-id= value.getStandardId().valueOf()).close-btn.standard-remove
     .x-window-body
         h2.practice: span Practice
         .iframe-wrap
-            iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
+            if self.getApplicationInfo()
+                iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
+            else
+                .banner Practice is not possible
 
-        if self.getInstalledApplications().length || self.getRecommendedApplications().length
+        -var installedApps = self.getInstalledApplications() || []
+        -var recommendedApps = self.getRecommendedApplications() || []
+        if installedApps.length || recommendedApps.length
             h2.apps: span Suggested Apps
-            if self.getInstalledApplications().length
+            if installedApps.length
                 h3 My Apps
                 +LeftRightToolbar()(rightPadding = -20)
                     .attachments-and-applications
-                        each app in self.getInstalledApplications()
+                        each app in installedApps
                             +App_(app)
                                 - var isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
                                 +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
-            if self.getRecommendedApplications().length
+            if recommendedApps.length
                 h3 Recommended
                 +LeftRightToolbar()(rightPadding = -20)
                     .attachments-and-applications
-                        each app in self.getRecommendedApplications()
+                        each app in recommendedApps
                             +App_(app)
                                 +ActionButton('appmarket', 'details', app.getId()) App Market

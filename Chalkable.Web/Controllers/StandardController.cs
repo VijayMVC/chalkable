@@ -32,7 +32,10 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetStandardsByIds(IntList ids)
         {
-            var standards = SchoolLocator.StandardService.GetStandards(ids).ToList();
+            var standards = SchoolLocator.StandardService
+                .GetStandards(ids)
+                .OrderBy(np => ids.IndexOf(np.Id))
+                .ToList();
             return Json(standards.Select(StandardViewData.Create));
         }
 
