@@ -68,6 +68,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 studentAnnouncement.NumericScore = numericScore;
                 studentAnnouncement.ScoreValue = value.ToString(CultureInfo.InvariantCulture);
             }
+            else if (value == null)
+            {
+                studentAnnouncement.NumericScore = null;
+                studentAnnouncement.ScoreValue = "";
+            }
 
             if (studentAnnouncement.NumericScore.HasValue || studentAnnouncement.Late ||
                 studentAnnouncement.Incomplete)
