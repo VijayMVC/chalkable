@@ -42,15 +42,14 @@ namespace Chalkable.BusinessLogic.Model
             var res = PracticeGradeScoreComperator.ComparePracticeScore(pgScore1, pgScore2);
             if (res == 0)
             {
-                bool a = GradingStandardInfo == null || string.IsNullOrEmpty(GradingStandardInfo.AlphaGradeName);
-                bool b = other.GradingStandardInfo == null || string.IsNullOrEmpty(other.GradingStandardInfo.AlphaGradeName);
+                bool a = GradingStandardInfo == null || !GradingStandardInfo.NumericGrade.HasValue;
+                bool b = other.GradingStandardInfo == null || !other.GradingStandardInfo.NumericGrade.HasValue;
                 
                 if (a && b) return 0;
                 if (a) return 1;
                 if (b) return -1;
 
-                return AlphaGradeNameComperator.CompareAlphaGrade(GradingStandardInfo.AlphaGradeName,
-                                                                  other.GradingStandardInfo.AlphaGradeName);
+               return GradingStandardInfo.NumericGrade.Value.CompareTo(other.GradingStandardInfo.NumericGrade.Value);
             }
             return res;
         }
