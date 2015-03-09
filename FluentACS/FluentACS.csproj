@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7257F961-4BFD-4D2C-9521-A4C711C90476}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FluentACS</RootNamespace>
+    <AssemblyName>FluentACS</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'STAGING|AnyCPU'">
+    <OutputPath>bin\STAGING\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel">
+      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AcsNamespace.cs" />
+    <Compile Include="AcsNamespaceDescription.cs" />
+    <Compile Include="Commands\AddIdentityProviderCommand.cs" />
+    <Compile Include="Commands\AddRelyingPartyCommand.cs" />
+    <Compile Include="Commands\AddRuleCommand.cs" />
+    <Compile Include="Commands\AddRuleGroupCommand.cs" />
+    <Compile Include="Commands\AddServiceIdentityCommand.cs" />
+    <Compile Include="Commands\AddServiceIdentityWithX509CertificateCommand.cs" />
+    <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Logging\LogInfo.cs" />
+    <Compile Include="Logging\LogInfoTypeEnum.cs" />
+    <Compile Include="ManagementService\Constants.cs" />
+    <Compile Include="ManagementService\EndpointType.cs" />
+    <Compile Include="ManagementService\IdentityKeyTypes.cs" />
+    <Compile Include="ManagementService\IdentityKeyUsages.cs" />
+    <Compile Include="ManagementService\KeyType.cs" />
+    <Compile Include="ManagementService\KeyUsage.cs" />
+    <Compile Include="ManagementService\RelyingPartyAddressEndpointType.cs" />
+    <Compile Include="ManagementService\RuleTypes.cs" />
+    <Compile Include="ManagementService\ServiceManagementException.cs" />
+    <Compile Include="ManagementService\ServiceManagementWrapper.cs" />
+    <Compile Include="ManagementService\SocialIdentityProvider.cs" />
+    <Compile Include="ManagementService\TokenType.cs" />
+    <Compile Include="ManagementService\WebSSOProtocolType.cs" />
+    <Compile Include="Guard.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\ManagementService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.datasvcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Specs\BaseSpec.cs" />
+    <Compile Include="Specs\FacebookApplicationPermission.cs" />
+    <Compile Include="Specs\FacebookIdentityProviderSpec.cs" />
+    <Compile Include="Specs\GoogleIdentityProviderSpec.cs" />
+    <Compile Include="Specs\IdentityProviderConsts.cs" />
+    <Compile Include="Specs\IdentityProviderSpec.cs" />
+    <Compile Include="Specs\RelyingPartySpec.cs" />
+    <Compile Include="Specs\RuleGroupSpec.cs" />
+    <Compile Include="Specs\Rules\Chaining\IAfterAndInputClaimTypeRuleSpec.cs" />
+    <Compile Include="Specs\Rules\Chaining\IAfterAndInputClaimValueRuleSpec.cs" />
+    <Compile Include="Specs\Rules\Chaining\IAfterAndOutputClaimValueRuleSpec.cs" />
+    <Compile Include="Specs\Rules\Chaining\IAfterDescription.cs" />
+    <Compile Include="Specs\Rules\Chaining\IAfterIfInputClaimIssuerRuleSpec.cs" />
+    <Compile Include="Specs\Rules\Chaining\IAfterThenOutputClaimTypeRuleSpec.cs" />
+    <Compile Include="Specs\Rules\Chaining\IStartRuleSpec.cs" />
+    <Compile Include="Specs\Rules\InputClaimIssuerSpec.cs" />
+    <Compile Include="Specs\Rules\InputClaimTypeSpec.cs" />
+    <Compile Include="Specs\Rules\InputClaimValueSpec.cs" />
+    <Compile Include="Specs\Rules\OutputClaimTypeSpec.cs" />
+    <Compile Include="Specs\Rules\OutputClaimValueSpec.cs" />
+    <Compile Include="Specs\Rules\RuleSpec.cs" />
+    <Compile Include="Specs\ServiceIdentityWithX509CertificateSpec.cs" />
+    <Compile Include="Specs\ServiceIdentitySpec.cs" />
+    <Compile Include="Specs\SigningCertificateSpec.cs" />
+    <Compile Include="Specs\X509CertificateHelper.cs" />
+    <Compile Include="Specs\YahooIdentityProviderSpec.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ServiceReferenceMetadataStorage Include="Service References\ManagementService\">
+      <Type>datasvcmap</Type>
+    </ServiceReferenceMetadataStorage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Service References\ManagementService\service.edmx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\ManagementService\Reference.datasvcmap">
+      <Generator>DataServiceClientGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
