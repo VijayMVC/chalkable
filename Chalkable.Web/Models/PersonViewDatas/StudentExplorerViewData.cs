@@ -14,11 +14,15 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         public static StudentExplorerViewData Create(StudentExplorerInfo studentExplorerInfo)
         {
-            return new StudentExplorerViewData
+            var res =  new StudentExplorerViewData
                 {
                     Student = StudentViewData.Create(studentExplorerInfo.Student),
                     ClassesGradingInfo = StudentClassExplorerViewData.Create(studentExplorerInfo.ClassesGradingInfo)
                 };
+            res.ClassesGradingInfo = res.ClassesGradingInfo
+                                    .OrderBy(x => x.Avg.HasValue ? x.Avg : int.MaxValue)
+                                    .ThenBy(x=>x.Class.Name).ToList();
+            return res;
         }
     }
 
