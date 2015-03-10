@@ -274,6 +274,13 @@ NAMESPACE('chlk.controllers', function (){
             var postInfo = this.prepareSeatingChartEdit(model, seatingChartInfo);
             var res = this.attendanceService.postSeatingChartWithInfo(model.getDate(), postInfo)
                 .then(function(resModel){
+                    var res = this.attendanceService
+                        .getNotTakenAttendanceClasses(model.getDate())
+                        .attach(this.validateResponse_())
+                        .then(function(items){
+                            return new chlk.models.attendance.NotTakenAttendanceClassesViewData(items);
+                        }.bind(this));
+                    this.BackgroundUpdateView(chlk.activities.attendance.SeatingChartPage, res, chlk.activities.lib.DontShowLoader());
                     return this.prepareSeatingData(resModel, model.getClassId(), model.getDate());
                 }, this);
             this.BackgroundCloseView(chlk.activities.attendance.EditSeatingGridDialog);
