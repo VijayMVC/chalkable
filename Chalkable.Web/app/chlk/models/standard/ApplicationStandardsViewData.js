@@ -10,9 +10,11 @@ NAMESPACE('chlk.models.standard', function(){
         ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
 
         chlk.models.id.AppId, 'applicationId',
+        Boolean, 'readOnly',
 
-        [[chlk.models.id.AppId, ArrayOf(chlk.models.standard.CommonCoreStandard)]],
-        function $(applicationId,  standards){
+        [[chlk.models.id.AppId, ArrayOf(chlk.models.standard.CommonCoreStandard), Boolean]],
+        function $(applicationId,  standards, readOnly_){
+            this.setReadOnly(readOnly_ ? readOnly_ : false);
             BASE();
             if(applicationId)
                 this.setApplicationId(applicationId);
