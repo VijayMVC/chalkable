@@ -32,7 +32,11 @@ NAMESPACE('chlk.templates.apps', function () {
             ArrayOf(chlk.models.apps.AppPlatform), 'supportedPlatforms',
 
             chlk.models.standard.ApplicationStandardsViewData, function prepareStandardListData(){
-                return new chlk.models.standard.ApplicationStandardsViewData(this.getApp().getId(), this.getApp().getStandards());
+                return new chlk.models.standard.ApplicationStandardsViewData(
+                    this.getApp().getId(),
+                    this.getApp().getStandards(),
+                    this.isReadOnly()
+                );
             }
         ])
 });
