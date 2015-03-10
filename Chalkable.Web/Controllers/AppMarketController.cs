@@ -186,8 +186,7 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult WriteReview(Guid applicationId, int rating, string review)
         {
-            if(!MasterLocator.ApplicationService.ReviewExists(applicationId))
-                MasterLocator.ApplicationService.WriteReview(applicationId, rating, review);
+            MasterLocator.ApplicationService.WriteReview(applicationId, rating, review);
             return Read(applicationId);
         }
     }

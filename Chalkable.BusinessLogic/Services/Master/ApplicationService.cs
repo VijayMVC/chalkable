@@ -151,17 +151,25 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Update())
             {
                 var da = new ApplicationRatingDataAccess(uow);
-                if(da.Exists(applicationId, Context.UserId))
-                    throw new ChalkableException("User can send only one review per application");
-                var res = new ApplicationRating
+                var res = da.GetAll(new AndQueryCondition
                     {
-                        Id = Guid.NewGuid(),
-                        ApplicationRef = applicationId,
-                        Rating = rating,
-                        Review = review,
-                        UserRef = Context.UserId
-                    };
-                da.Insert(res);
+                        {ApplicationRating.APPLICATION_REF_FIELD, applicationId},
+                        {ApplicationRating.USER_REF_FIELD, Context.UserId}
+                    }).FirstOrDefault();
+                Action<ApplicationRating> modifyAction = da.Update;
+                if (res == null)
+                {
+                    res = new ApplicationRating
+                        {
+                            Id = Guid.NewGuid(),
+                            ApplicationRef = applicationId,
+                            UserRef = Context.UserId 
+                        };
+                    modifyAction = da.Insert;
+                }
+                res.Rating = rating;
+                res.Review = review;
+                modifyAction(res);
                 uow.Commit();
                 return res;
             }
