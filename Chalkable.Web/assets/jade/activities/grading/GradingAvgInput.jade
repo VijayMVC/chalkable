@@ -1,6 +1,6 @@
 value = self.getModel().displayAvgGradeValue()
 +ActionForm('grading', 'updateStudentAvg').grading-form.avg-form
-    input(name="averageValue", value=value, data-grade-value=value data-able-put-score="true").avg-value.value-input
+    input(name="averageValue", value=value, data-grade-value=value data-able-put-score="true", type="text").avg-value.value-input
     +Hidden('averageid', self.getAverageId().valueOf())
     +Hidden('oldValue', value)
     +Hidden('isComment').is-comment

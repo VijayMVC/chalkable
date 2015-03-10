@@ -26,14 +26,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, String]],
-            ria.async.Future, function changePassword(personId, password){
-                return this.get('Person/ReChangePassword', Boolean, {
-                    id: personId.valueOf(),
-                    newPassword: password
-                });
-            },
-
             [[chlk.models.id.SchoolPersonId, String, String]],
             ria.async.Future, function updateInfo(personId, email, phones) {
                 return this.post('Person/UpdateInfo.json', chlk.models.people.User, {
