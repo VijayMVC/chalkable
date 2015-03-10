@@ -50,16 +50,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return PersonScheduleViewData.Create(person, classes);
         }
 
-        public ActionResult ReChangePassword(int id, string newPassword)
-        {
-            if (MasterLocator.Context.PersonId == id)
-            {
-                MasterLocator.UserService.ChangePassword(MasterLocator.Context.Login, newPassword);
-                return Json(true);
-            }
-            throw new ChalkableException(ChlkResources.ERR_NOT_CURRENT_USER);
-        }
-
         protected PersonInfoViewData GetInfo(int id, Func<PersonDetails, PersonInfoViewData> vdCreator)
         {
             if (!CanGetInfo(id))
