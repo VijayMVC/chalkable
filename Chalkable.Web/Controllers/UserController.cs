@@ -167,8 +167,5 @@ namespace Chalkable.Web.Controllers
             }
             return Json(false);
         }
-
-
-
     }
 }

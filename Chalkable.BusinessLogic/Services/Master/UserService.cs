@@ -116,6 +116,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public UserContext Login(string confirmationKey)
         {
+            if (string.IsNullOrEmpty(confirmationKey)) return null;
             using (var uow = Update())
             {
                 var da = new UserDataAccess(uow);
@@ -125,7 +126,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var districtId = user.DistrictRef;
                 if (user.SisUserId.HasValue)
                     throw new NotImplementedException();
-                var res = SimpleUserLogin(user, null);
+                var res = SimpleUserLogin(user);
                 if (res != null)
                 {
                     user.ConfirmationKey = null;
@@ -180,14 +181,20 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             if (user == null || string.IsNullOrEmpty(password) || user.Password != PasswordMd5(password)) 
                 return null;
+            return SimpleUserLogin(user);
+        }
+
+        private UserContext SimpleUserLogin(User user)
+        {
+            if (user == null) 
+                return null;
             if (user.IsSysAdmin)
                 return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null, null);
             if (user.IsDeveloper)
                 return DeveloperLogin(user);
-
             if (user.IsAppTester)
                 return new UserContext(user, CoreRoles.APP_TESTER_ROLE, user.District, null, null, null);
-            throw new UnknownRoleException();
+            throw new UnknownRoleException();           
         }
 
 
