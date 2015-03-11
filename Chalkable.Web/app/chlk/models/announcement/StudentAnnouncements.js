@@ -31,7 +31,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.mapping = SJX.fromDeserializable(raw.gradingstylemapper, chlk.models.grading.Mapping);
                 this.showToStudents = SJX.fromValue(raw.showtostudents, Boolean);
                 this.currentItem = SJX.fromDeserializable(raw.currentitem, chlk.models.announcement.StudentAnnouncement);
-                this.selectedIndex = SJX.fromDeserializable(raw.selectedindex, Number);
+                this.selectedIndex = SJX.fromValue(raw.selectedindex, Number);
             },
 
             Number, 'announcementTypeId',
