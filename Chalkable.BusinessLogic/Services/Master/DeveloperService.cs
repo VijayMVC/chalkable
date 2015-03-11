@@ -52,6 +52,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 new DeveloperDataAccess(u).Update(developer);
                 new UserDataAccess(u).Update(user);
             });
+            developer.User = user;
             return developer;
         }
 
