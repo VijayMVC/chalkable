@@ -13,11 +13,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void DeleteBySchoolYearId(int? schoolYearId)
-        {
-            SimpleDelete(GetCondsBySchoolYear(schoolYearId));
-        }
-
         public void Delete(IList<int> ids)
         {
             SimpleDelete(ids.Select(x => new Period {Id = x}).ToList());

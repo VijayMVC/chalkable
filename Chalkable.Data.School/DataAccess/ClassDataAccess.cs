@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
@@ -89,23 +86,10 @@ namespace Chalkable.Data.School.DataAccess
             return classes;
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Class> classes)
         {
-            if (ids != null && ids.Count > 0)
-            {
-                const string sqlFormat = "delete from [{0}] where [{0}].[{1}] in ({2}) ";
-                var sqlBuilder = new StringBuilder();
-                var idsString = ids.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(",");
-                sqlBuilder.AppendFormat(sqlFormat, "ClassPerson", ClassPerson.CLASS_REF_FIELD, idsString)
-                          .AppendFormat(sqlFormat, "MarkingPeriodClass", MarkingPeriodClass.CLASS_REF_FIELD, idsString)
-                          .AppendFormat(sqlFormat, "Class", Class.ID_FIELD, idsString);
-                ExecuteNonQueryParametrized(sqlBuilder.ToString(), new Dictionary<string, object>());
-            }
+            SimpleDelete(classes);
         }
 
-        public new void Delete(int id)
-        {
-            Delete(new List<int> {id});
-        }
     }
 }

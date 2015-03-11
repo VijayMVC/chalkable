@@ -1,8 +1,8 @@
 namespace Chalkable.StiConnector.SyncModel
 {
     using System;
-    
-    public class AlternateScore
+
+    public class AlternateScore : SyncModel
     {
         public int AlternateScoreID { get; set; }
         public string Name { get; set; }

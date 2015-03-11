@@ -30,7 +30,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IAttendanceService attendanceService;
         private IAttendanceReasonService attendanceReasonService;
         private IStudentParentService studentParentService;
-        private IGradingStyleService gradingStyleService;
         private IStudentAnnouncementService studentAnnouncementService;
         private IClassAnnouncementTypeService classAnnouncementTypeService;
         private IApplicationSchoolService applicationSchoolService;
@@ -65,7 +64,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             personService = new DemoPersonService(this, storage);
             schoolYearService = new DemoSchoolYearService(this, storage);
             markingPeriodService = new DemoMarkingPeriodService(this, storage);
-            gradingStyleService = new DemoGradingStyleService(this, storage);
             addressService = new DemoAddressService(this, storage);
             gradeLevelService = new DemoGradeLevelService(this, storage);
             classService = new DemoClassService(this, storage);
@@ -127,7 +125,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IAttendanceService AttendanceService { get { return attendanceService; } }
         public IAttendanceReasonService AttendanceReasonService { get { return attendanceReasonService; } }
         public IStudentParentService StudentParentService { get { return studentParentService; } }
-        public IGradingStyleService GradingStyleService { get { return gradingStyleService; } }
         public IStudentAnnouncementService StudentAnnouncementService { get { return studentAnnouncementService; } }
         public IClassAnnouncementTypeService ClassAnnouncementTypeService { get { return classAnnouncementTypeService; } }
         public IInfractionService InfractionService { get; private set; }

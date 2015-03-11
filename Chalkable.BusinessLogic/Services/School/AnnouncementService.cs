@@ -40,7 +40,6 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement GetLastDraft();
         Announcement DropUnDropAnnouncement(int announcementId, bool drop);
         IList<Announcement> GetDroppedAnnouncement(int markingPeriodClassId);
-        IList<AnnouncementRecipient> GetAnnouncementRecipients(int announcementId);
         IList<Person> GetAnnouncementRecipientPersons(int announcementId); 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
@@ -618,16 +617,6 @@ namespace Chalkable.BusinessLogic.Services.School
             
         }
        
-        //TODO: security check 
-        public IList<AnnouncementRecipient> GetAnnouncementRecipients(int announcementId)
-        {
-            using (var uow = Read())
-            {
-                var da = new AnnouncementRecipientDataAccess(uow);
-                return da.GetList(announcementId);
-            }
-        }
-        
         public Announcement GetAnnouncementById(int id)
         {
             using (var uow = Read())

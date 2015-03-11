@@ -12,22 +12,9 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public IList<GradeLevel> GetGradeLevels(int? schoolId)
-        {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.Append("select * from GradeLevel ");
-            if (schoolId.HasValue)
-            {
-                dbQuery.Parameters.Add(SchoolGradeLevel.SCHOOL_REF_FIELD, schoolId);
-                dbQuery.Sql.AppendFormat(" where Id in (select [{0}].{1} from [{0}] where [{0}].[{2}] = @{2})"
-                                         , "SchoolGradeLevel", SchoolGradeLevel.GRADE_LEVEL_REF_FIELD, SchoolGradeLevel.SCHOOL_REF_FIELD);
-            }
-            return ReadMany<GradeLevel>(dbQuery);
-        }
-
         public void Delete(IList<int> ids)
         {
-            SimpleDelete<GradeLevel>(ids.Select(x=>new GradeLevel{Id = x}).ToList());
+            SimpleDelete(ids.Select(x=>new GradeLevel{Id = x}).ToList());
         }
     }
 
@@ -40,10 +27,6 @@ namespace Chalkable.Data.School.DataAccess
         public void DeleteSchoolGradeLevel(int gradeLevel)
         {
             SimpleDelete(new AndQueryCondition { { SchoolGradeLevel.GRADE_LEVEL_REF_FIELD, gradeLevel } });
-        }
-        public bool Exists(int gradeLevel)
-        {
-            return Exists<SchoolGradeLevel>(new AndQueryCondition {{SchoolGradeLevel.GRADE_LEVEL_REF_FIELD, gradeLevel}});
         }
     }
 }

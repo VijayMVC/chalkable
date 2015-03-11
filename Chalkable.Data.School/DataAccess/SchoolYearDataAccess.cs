@@ -31,30 +31,10 @@ namespace Chalkable.Data.School.DataAccess
             q.Sql.AppendFormat("order by {0}  desc", SchoolYear.END_DATE_FIELD);
             return ReadOneOrNull<SchoolYear>(q);
         }
-
-
-        public bool Exists(string name)
-        {
-            var conds = new AndQueryCondition { { SchoolYear.NAME_FIELD, name } };
-            return Exists<SchoolYear>(conds);
-        }
-
-        public bool IsOverlaped(DateTime startDate, DateTime endDate, int? currentSchoolYearId)
-        {
-            var conds = new AndQueryCondition
-                {
-                    {SchoolYear.START_DATE_FIELD, SchoolYear.END_DATE_FIELD, endDate, ConditionRelation.LessEqual},
-                    {SchoolYear.END_DATE_FIELD, SchoolYear.START_DATE_FIELD, startDate, ConditionRelation.GreaterEqual},
-                };
-            if(currentSchoolYearId.HasValue)
-                conds.Add(SchoolYear.ID_FIELD, currentSchoolYearId.Value, ConditionRelation.NotEqual);
-            
-            return Exists<SchoolYear>(conds);
-        }
-
+        
         public void Delete(IList<int> ids)
         {
-            SimpleDelete<SchoolYear>(ids.Select(x => new SchoolYear {Id = x}).ToList());
+            SimpleDelete(ids.Select(x => new SchoolYear {Id = x}).ToList());
         }
     }
 }

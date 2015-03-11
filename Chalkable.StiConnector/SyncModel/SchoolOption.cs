@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class SchoolOption
+    public class SchoolOption : SyncModel
     {
         public int SchoolID { get; set; }
         public bool AllowSectionAverageModification { get; set; }

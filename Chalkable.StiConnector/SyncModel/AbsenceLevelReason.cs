@@ -2,7 +2,7 @@ using System;
 
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class AbsenceLevelReason
+    public class AbsenceLevelReason : SyncModel
     {
         public int AbsenceLevelReasonID { get; set; }
         public string AbsenceLevel { get; set; }

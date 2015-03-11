@@ -122,11 +122,6 @@ namespace Chalkable.Web.Controllers
         {
             var viewData = PrepareFullAnnouncementViewData(announcementId);
             var res = new CreateAnnouncementViewData {Announcement = viewData};
-            if (BaseSecurity.IsAdminViewer(SchoolLocator.Context))
-            {
-                var announcementRecipients = SchoolLocator.AnnouncementService.GetAnnouncementRecipients(announcementId);
-                res.Recipients = announcementRecipients.Select(AnnouncementRecipientViewData.Create).ToList();
-            }
             return Json(res, 6);
         }
 
