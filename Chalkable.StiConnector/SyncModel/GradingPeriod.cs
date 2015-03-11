@@ -2,7 +2,7 @@ using System;
 
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class GradingPeriod
+    public class GradingPeriod : SyncModel
     {
         public int GradingPeriodID { get; set; }
         public string Name { get; set; }

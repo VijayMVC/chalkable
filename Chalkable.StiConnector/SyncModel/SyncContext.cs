@@ -6,19 +6,21 @@ namespace Chalkable.StiConnector.SyncModel
 {
     public class SyncContext
     {
-        public IDictionary<string, int?> TablesToSync { get; private set; }
+        public IDictionary<string, long?> TablesToSync { get; private set; }
         public IDictionary<string, Type> Types { get; private set; }
         private IDictionary<string, object> results; 
 
         private void RegisterType(Type type)
         {
+            if (!type.IsSubclassOf(typeof(SyncModel)))
+                throw new Exception("Sync model class should be inherited from SyncModel");
             TablesToSync.Add(type.Name, null);
             Types.Add(type.Name, type);
         }
             
         public SyncContext()
         {
-            TablesToSync = new Dictionary<string, int?>();
+            TablesToSync = new Dictionary<string, long?>();
             results = new Dictionary<string, object>();
             Types = new Dictionary<string, Type>();
             
@@ -89,8 +91,8 @@ namespace Chalkable.StiConnector.SyncModel
             results.Add(tName, result);
             TablesToSync[tName] = result.CurrentVersion;
         }
-         
-        public SyncResult<T> GetSyncResult<T>()
+
+        public SyncResult<T> GetSyncResult<T>() where T : SyncModel
         {
             var tName = typeof (T).Name;
             return (SyncResult<T>)results[tName];
@@ -99,12 +101,12 @@ namespace Chalkable.StiConnector.SyncModel
 
     public abstract class SyncResultBase
     {
-        public int CurrentVersion { get; set; }
+        public long CurrentVersion { get; set; }
         public abstract string Name { get; }
         public abstract int RowCount { get; }
     }
 
-    public class SyncResult<T> : SyncResultBase
+    public class SyncResult<T> : SyncResultBase where T : SyncModel
     {
         public T[] Inserted { get; set; }
         public T[] Updated { get; set; }

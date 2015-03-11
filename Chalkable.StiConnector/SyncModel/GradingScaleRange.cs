@@ -1,6 +1,6 @@
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class GradingScaleRange
+    public class GradingScaleRange : SyncModel
     {
         public int GradingScaleID { get; set; }
         public int AlphaGradeID { get; set; }

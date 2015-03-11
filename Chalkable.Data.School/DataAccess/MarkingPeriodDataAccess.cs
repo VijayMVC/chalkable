@@ -65,20 +65,6 @@ namespace Chalkable.Data.School.DataAccess
             return SelectOneOrNull<MarkingPeriod>(conds);   
         }
 
-        public bool IsOverlaped(int schoolYearId, DateTime startDate, DateTime endDate, int? currentMarkingPeriodId)
-        {
-            var conds = new AndQueryCondition
-                {
-                    {MarkingPeriod.SCHOOL_YEAR_REF, schoolYearId},
-                    {MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, endDate, ConditionRelation.LessEqual},
-                    {MarkingPeriod.END_DATE_FIELD, MarkingPeriod.START_DATE_FIELD, startDate, ConditionRelation.GreaterEqual}
-                };
-            if (currentMarkingPeriodId.HasValue)
-                conds.Add(MarkingPeriod.ID_FIELD, currentMarkingPeriodId, ConditionRelation.NotEqual);
-            return Exists<MarkingPeriod>(conds);
-            
-        } 
-
         public void Delete(IList<int> ids)
         {
             SimpleDelete(ids.Select(x=>new MarkingPeriod{Id = x}).ToList());

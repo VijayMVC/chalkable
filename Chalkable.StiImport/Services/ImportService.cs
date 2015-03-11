@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -291,7 +290,7 @@ namespace Chalkable.StiImport.Services
 
         public void UpdateVersion()
         {
-            var newVersions = new Dictionary<string, int>();
+            var newVersions = new Dictionary<string, long>();
             foreach (var i in context.TablesToSync)
                 if (i.Value.HasValue)
                 {

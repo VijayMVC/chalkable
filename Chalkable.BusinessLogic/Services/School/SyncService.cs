@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -9,7 +8,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface ISyncService
     {
         IList<SyncVersion> GetVersions();
-        void UpdateVersions(Dictionary<string, int> versions);
+        void UpdateVersions(Dictionary<string, long> versions);
     }
 
     public class SyncService : SchoolServiceBase, ISyncService
@@ -27,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void UpdateVersions(Dictionary<string, int> versions)
+        public void UpdateVersions(Dictionary<string, long> versions)
         {
             using (var uow = Update())
             {

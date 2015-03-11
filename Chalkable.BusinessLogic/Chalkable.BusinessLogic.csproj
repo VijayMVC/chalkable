@@ -297,7 +297,6 @@
     <Compile Include="Services\DemoSchool\DemoAlphaGradeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAddressService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementService.cs" />
-    <Compile Include="Services\DemoSchool\DemoGradingStyleService.cs" />
     <Compile Include="Services\DemoSchool\DemoMarkingPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoPersonService.cs" />
     <Compile Include="Services\DemoSchool\DemoSchoolService.cs" />
@@ -324,7 +323,6 @@
     <Compile Include="Services\School\GradingPeriodService.cs" />
     <Compile Include="Services\School\GradingStandardService.cs" />
     <Compile Include="Services\School\GradingStatisticService.cs" />
-    <Compile Include="Services\School\GradingStyleService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
     <Compile Include="Services\School\Notifications\NotificationService.cs" />

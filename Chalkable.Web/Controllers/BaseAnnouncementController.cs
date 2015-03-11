@@ -78,7 +78,7 @@ namespace Chalkable.Web.Controllers
                 ann.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id);
                 ann.GradingStudentsCount = ann.StudentAnnouncements.Count(x => x.IsGraded);
             }
-            var annViewData = AnnouncementDetailedViewData.Create(ann, SchoolLocator.GradingStyleService.GetMapper(), Context.PersonId.Value, attachments);
+            var annViewData = AnnouncementDetailedViewData.Create(ann, Context.PersonId.Value, attachments);
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             annViewData.ApplicationsCount = annViewData.Applications.Count;
             annViewData.AssessmentApplicationId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);

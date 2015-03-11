@@ -95,17 +95,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res.Transform(StudentViewData.Create));
         }
 
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_GRADING_STAT, true, CallType.Get, new[] {AppPermissionType.User, AppPermissionType.Grade})]
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult Grading(int personId, int markingPeriodId)
-        {
-            var student = SchoolLocator.PersonService.GetPerson(personId);
-            var gardingStats = SchoolLocator.GradingStatisticService.GetFullGradingStats(markingPeriodId, student.Id);
-            var gradingMapper = SchoolLocator.GradingStyleService.GetMapper();
-            var res = StudentGradingViewData.Create(student, gardingStats, gradingMapper);
-            return Json(res);
-        }
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Explorer(int personId)
         {

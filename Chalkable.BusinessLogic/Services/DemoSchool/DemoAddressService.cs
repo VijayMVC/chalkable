@@ -40,15 +40,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
             return Storage.AddressStorage.GetAll();
         }
-
-        public IList<Address> GetAddress(int personId)
-        {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
-                throw new ChalkableSecurityException();
-            return Storage.AddressStorage.GetAddress(personId);
-            
-        }
-
-      
     }
 }

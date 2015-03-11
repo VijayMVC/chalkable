@@ -33,13 +33,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.ClassStorage.Update(classes);
         }
         
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Class> classes)
         {
-            foreach (var id in ids)
+            foreach (var c in classes)
             {
-                Storage.MarkingPeriodClassStorage.Delete(new MarkingPeriodClassQuery { ClassId = id });
-                Storage.ClassPersonStorage.Delete(new ClassPersonQuery { ClassId = id });
-                Storage.ClassStorage.Delete(id);
+                Storage.ClassStorage.Delete(c.Id);
             }
         }
 

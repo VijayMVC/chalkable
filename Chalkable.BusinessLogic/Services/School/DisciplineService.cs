@@ -19,7 +19,6 @@ namespace Chalkable.BusinessLogic.Services.School
         //TODO: old
         ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description);
         void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date);
-        IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<int> gradeLevelIds = null);
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, int personId, DateTime start, DateTime end, bool needsAllData = false);
         //IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, DateTime date);
         //IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(int studentId, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate);
@@ -246,11 +245,6 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         public void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(ClassDisciplineQuery query, IList<int> gradeLevelIds = null)
         {
             throw new NotImplementedException();
         }

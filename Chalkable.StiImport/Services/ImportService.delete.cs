@@ -357,8 +357,7 @@ namespace Chalkable.StiImport.Services
             var courses = context.GetSyncResult<Course>().Deleted.ToList();
             var d = courses.ToDictionary(x => x.CourseID, x=>ServiceLocatorSchool.ClassService.GetById(x.CourseID));
             var toDelete = TopologicSort(x => x.Id, x => x.CourseRef, d).Reverse().ToList();
-            var ids = toDelete.Select(x => x.Id).ToList();
-            ServiceLocatorSchool.ClassService.Delete(ids);
+            ServiceLocatorSchool.ClassService.Delete(toDelete);
         }
 
         private void DeleteRooms()
@@ -373,7 +372,10 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<CalendarDay>().Deleted == null)
                 return;
-            var dates = context.GetSyncResult<CalendarDay>().Deleted.Select(x => x.Date.Date).ToList();
+            var dates = context.GetSyncResult<CalendarDay>().Deleted.Select(x => new Date
+            {
+                Day = x.Date, SchoolYearRef = x.AcadSessionID
+            }).ToList();
             ServiceLocatorSchool.CalendarDateService.Delete(dates);
         }
 
@@ -381,8 +383,11 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<DayType>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<DayType>().Deleted.Select(x => x.DayTypeID).ToList();
-            ServiceLocatorSchool.DayTypeService.Delete(ids);
+            var dayTypes = context.GetSyncResult<DayType>().Deleted.Select(x => new Data.School.Model.DayType
+            {
+                Id = x.DayTypeID
+            }).ToList();
+            ServiceLocatorSchool.DayTypeService.Delete(dayTypes);
         }
 
         private void DeleteGradingPeriods()
@@ -427,7 +432,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<GradeLevel>().Deleted == null)
                 return;
             var ids = context.GetSyncResult<GradeLevel>().Deleted.Select(x => (int)x.GradeLevelID).ToList();
-            ServiceLocatorSchool.GradeLevelService.DeleteGradeLevels(ids);
+            ServiceLocatorSchool.GradeLevelService.Delete(ids);
         }
 
         private void DeletePhones()

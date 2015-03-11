@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<Class> classes);
         void Edit(IList<Class> classes); 
-        void Delete(IList<int> ids);
+        void Delete(IList<Class> classes);
 
         void AddStudents(IList<ClassPerson> classPersons);
         void EditStudents(IList<ClassPerson> classPersons);
@@ -164,13 +164,9 @@ namespace Chalkable.BusinessLogic.Services.School
             } 
         }
         
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Class> classes)
         {
-            using (var uow = Update())
-            {
-                new ClassDataAccess(uow).Delete(ids);
-                uow.Commit();
-            }
+            DoUpdate(uow => new ClassDataAccess(uow).Delete(classes));
         }
 
         public void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)
