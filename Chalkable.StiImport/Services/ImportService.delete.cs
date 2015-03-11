@@ -321,13 +321,14 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Standard>().Deleted == null)
                 return;
-            var toDelete = context.GetSyncResult<Standard>().Deleted.ToDictionary(x => x.StandardID, x => ServiceLocatorSchool.StandardService.GetStandardById(x.StandardID));
-            var sorted = TopologicSort(x => x.Id, x => x.ParentStandardRef, toDelete).Reverse();
-            var ids = sorted.Select(x => x.Id).ToList();
-            
-            foreach (var id in ids)
-                ServiceLocatorSchool.AnnouncementService.RemoveAllAnnouncementStandards(id);
-            ServiceLocatorSchool.StandardService.DeleteStandards(ids);
+            var toDelete = 
+                context.GetSyncResult<Standard>().Deleted.ToList()
+                .OrderBy(x => x.SYS_CHANGE_VERSION)
+                .Select(x=>new Data.School.Model.Standard
+                {
+                    Id = x.StandardID
+                }).ToList();
+            ServiceLocatorSchool.StandardService.DeleteStandards(toDelete);
         }
 
         private void DeleteStandardSubject()
@@ -354,10 +355,13 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Course>().Deleted == null)
                 return;
-            var courses = context.GetSyncResult<Course>().Deleted.ToList();
-            var d = courses.ToDictionary(x => x.CourseID, x=>ServiceLocatorSchool.ClassService.GetById(x.CourseID));
-            var toDelete = TopologicSort(x => x.Id, x => x.CourseRef, d).Reverse().ToList();
-            ServiceLocatorSchool.ClassService.Delete(toDelete);
+            var courses = context.GetSyncResult<Course>().Deleted.ToList()
+                .OrderBy(x=>x.SYS_CHANGE_VERSION)
+                .Select(x=>new Class
+                {
+                    Id = x.CourseID
+                }).ToList();
+            ServiceLocatorSchool.ClassService.Delete(courses);
         }
 
         private void DeleteRooms()

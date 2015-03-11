@@ -298,29 +298,6 @@ namespace Chalkable.StiImport.Services
                 }
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
         }
-
-        private IList<T> TopologicSort<T>(Func<T, int> id, Func<T, int?> reference, Dictionary<int, T> source)
-        {
-            var was = new HashSet<int>();
-            var res = new List<T>();
-            foreach (var s in source)
-                if (!was.Contains(s.Key))
-                    TopologicSort(id(s.Value), reference, source, was, res);
-            return res;
-        }
-
-        private void TopologicSort<T>(int id, Func<T, int?> reference, Dictionary<int, T> source, HashSet<int> was, IList<T> res)
-        {
-            if (source.ContainsKey(id))
-            {
-                was.Add(id);
-                var item = source[id];
-                var r = reference(item);
-                if (r.HasValue && !was.Contains(r.Value))
-                    TopologicSort(r.Value, reference, source, was, res);
-                res.Add(item);    
-            }
-        }
     }
 
     public class SisConnectionInfo
