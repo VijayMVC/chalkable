@@ -16,7 +16,7 @@ NAMESPACE('chlk.activities.notification', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function notificationClick(node, event){
                 var target = new ria.dom.Dom(event.target);
-                if(!target.is('.action-link')){
+                if(!target.is('.action-link') && !(target.is('a') && target.hasAttr('href'))){
                     var link = node.find('.notification-link');
                     if(link.exists()){
                         link.trigger('click');

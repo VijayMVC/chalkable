@@ -113,5 +113,22 @@ namespace Chalkable.Common
                     long.Parse(Get("TaskProducer." + sectionName + ".IntervalEnd"))
                 );
         }
+
+        /* Web Config */
+
+        public static int MinPasswordLength
+        {
+            get
+            {
+                int value;
+                int.TryParse(GetWebConfig("minPasswordLength"), out value);
+                return value;
+            }
+        }
+
+        private static string GetWebConfig(string field)
+        {
+            return ConfigurationManager.AppSettings[field];
+        }
     }
 }

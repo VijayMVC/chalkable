@@ -23,6 +23,15 @@ NAMESPACE('chlk.models.developer', function () {
                 this.payPalAddress = SJX.fromValue(raw.paypallogin, String);
             },
 
+
+            Boolean, function isValidInfo(){
+                return this.getEmail() != null && this.getName() != null && this.getWebSite() != null;
+            },
+
+            Boolean, function isValidEmail(){
+                return this.getEmail() != null;
+            },
+
             chlk.models.id.SchoolPersonId, 'id',
             String, 'displayName',
             String, 'email',

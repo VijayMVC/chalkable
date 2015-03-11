@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private const string ANNOUNCEMENT_NOT_OWNER_ATTACHMENT_NOTIFICATION_TO_PERSON_TEMPLATE = "<a href='#students/details/^.Notification.QuestionPerson.Id'>^.Other.AttachmentOwnerFullName</a> added  new attachment";
 
         public const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON = "ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON";
-        private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a> ^.Other.AnnouncementOwnerName </a> graded or commented your <a href='#announcement/view/^.Notification.AnnouncementRef'> ^.Other.AnnouncementTitle</a> ^.Other.AnnouncementTypeName";
+        private const string ANNOUNCEMENT_SET_GRADE_NOTIFICATION_TO_PERSON_TEMPLATE = "<a href='#teachers/details/^.Other.AnnouncementOwner.Id'> ^.Other.AnnouncementOwnerName </a> graded or commented your <a href='#announcement/view/^.Notification.AnnouncementRef'> ^.Other.AnnouncementTitle</a> ^.Other.AnnouncementTypeName";
 
         public const string APPLICATION_NOTIFICATION = "APPLICATION_NOTIFICATION";
         private const string APPLICATION_NOTIFICATION_TEMPLATE = "Application <a href='#applications/install/^.Notification.ApplicationRef'>^.Other.ApplicationName</a> was added to My Apps for you by " +

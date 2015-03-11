@@ -2,7 +2,6 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DeveloperService');
 REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.activities.profile.DeveloperPage');
-REQUIRE('chlk.activities.profile.ChangePasswordPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.account.ChangePassword');
@@ -15,11 +14,17 @@ NAMESPACE('chlk.controllers', function (){
         'AccountController', EXTENDS(chlk.controllers.BaseController), [
 
 
-         [ria.mvc.Inject],
-         chlk.services.DeveloperService, 'developerService',
+        [ria.mvc.Inject],
+        chlk.services.DeveloperService, 'developerService',
 
         [ria.mvc.Inject],
         chlk.services.AccountService, 'accountService',
+
+        [ria.mvc.ServiceEvent(chlk.services.DeveloperService)],
+        [[String]],
+        VOID, function onUserInfoChange(userName) {
+            this.getContext().getDefaultView().updateUserName(userName);
+        },
 
         [[chlk.models.account.ChangePassword]],
         function changePasswordAction(model){
@@ -29,7 +34,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(success){
                     return success
                         ? this.ShowAlertBox('Password was changed.')
-                        : this.ShowAlertBox('Change password failed.').thenBreak();
+                        : this.ShowAlertBox('Change password failed.');
                 }, this)
                 .then(function () {
                     return this.BackgroundNavigate('settings', 'dashboard', []);
@@ -67,16 +72,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('settings')],
         [[chlk.models.developer.DeveloperInfo]],
         function profileSaveDeveloperAction(model){
-            var result = this.developerService
+            this.developerService
                 .saveInfo(
                     model.getId(),
                     model.getName(),
                     model.getWebSite(),
                     model.getEmail()
                 )
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.profile.DeveloperPage, result);
-
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    return res != null && res.isValidInfo()
+                        ? this.ShowAlertBox('Info saved.')
+                        : this.ShowAlertBox(!res.isValidEmail() ? 'Email already exists' : 'Info save failed.')
+                }, this)
+                .then(function () {
+                    return this.BackgroundNavigate('settings', 'dashboard', []);
+                }, this);
+            return null;
         }
     ])
 });

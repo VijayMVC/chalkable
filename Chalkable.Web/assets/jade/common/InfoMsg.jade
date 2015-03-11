@@ -21,7 +21,7 @@ div(class=(self.getClazz() || "")).dialog.info-msg.gray
 
         .buttons-container.center
             input(name="button", type="hidden")
-            -var inputType = self.getInputType() || "text"
+            -var inputType = self.getInputType()
             each button in self.getButtons()
                 -attrs = button.getAttributes() || {};
                 -attrs.disabled = inputType == "text" && button.getValue() ? "disabled" : undefined;

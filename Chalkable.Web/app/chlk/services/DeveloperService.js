@@ -1,4 +1,3 @@
-REQUIRE('chlk.services.BaseInfoService');
 REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
@@ -6,9 +5,22 @@ REQUIRE('chlk.models.developer.DeveloperInfo');
 NAMESPACE('chlk.services', function () {
     "use strict";
 
+    /** @class chlk.services.UserInfoChangeEvent */
+    DELEGATE(
+        [[String]],
+        VOID, function UserInfoChangeEvent(userName) {});
+
+
     /** @class chlk.services.DeveloperService*/
     CLASS(
-        'DeveloperService', EXTENDS(chlk.services.BaseInfoService), [
+        'DeveloperService', EXTENDS(chlk.services.BaseService),  [
+            READONLY, ria.async.IObservable, 'onUserInfoChange',
+
+            function $() {
+                BASE();
+                this.onUserInfoChange = new ria.async.Observable(chlk.services.UserInfoChangeEvent);
+            },
+
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function getInfo(id) {
                 return this.get('Developer/DeveloperInfo.json', chlk.models.developer.DeveloperInfo, {
@@ -31,7 +43,10 @@ NAMESPACE('chlk.services', function () {
                         email: email
                     })
                     .then(function(result){
-                        this.userInfoChange.notify([result.getName()]);
+                        if (result.isValidInfo()){
+                            this.onUserInfoChange.notify([result.getName()]);
+                            this.setCurrentDeveloperSync(result);
+                        }
                         return result;
                     }, this);
             },
@@ -54,7 +69,7 @@ NAMESPACE('chlk.services', function () {
                     if(data === true){
                         var developer = this.getCurrentDeveloperSync();
                         developer.setPayPalAddress(paypalAddress);
-                        this.getContext().getSession().set(ChlkSessionConstants.CURRENT_DEVELOPER, developer);
+                        this.setCurrentDeveloperSync(developer);
                         return new chlk.models.developer.PayPalInfo(paypalAddress);
                     }
                 }, this);
@@ -62,6 +77,11 @@ NAMESPACE('chlk.services', function () {
 
             chlk.models.developer.DeveloperInfo, function getCurrentDeveloperSync(){
                 return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_DEVELOPER, null);
+            },
+
+            [[chlk.models.developer.DeveloperInfo]],
+            VOID, function setCurrentDeveloperSync(dev){
+                return this.getContext().getSession().set(ChlkSessionConstants.CURRENT_DEVELOPER, dev);
             }
 
         ])
