@@ -7,6 +7,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
+using Chalkable.Web.Tools;
 
 namespace Chalkable.Web.Controllers
 {
@@ -79,18 +80,19 @@ namespace Chalkable.Web.Controllers
         
         public ActionResult ChangePassword(string oldPassword, string newPassword, string newPasswordConfirmation)
         {
+            if (!PasswordTools.IsSecurePassword(newPassword))
+                return Json(new ChalkableException("new password is not secure enough"));
+
             var login = Context.Login;
-            if (string.IsNullOrEmpty(oldPassword) || MasterLocator.UserService.Login(login, oldPassword) != null)
-            {
-                if (newPassword == newPasswordConfirmation)
-                {
-                    MasterLocator.UserService.ChangePassword(login, newPassword);
-                    MasterLocator.UserTrackingService.ChangedPassword(Context.Login);
-                    return Json(true);
-                }
-                return Json(new ChalkableException("new password and confirmation dont't match"));
-            }
-            return Json(new ChalkableException("old password is incorrect"));
+            if (!string.IsNullOrEmpty(oldPassword) && MasterLocator.UserService.Login(login, oldPassword) == null)
+                return Json(new ChalkableException("old password is incorrect"));
+
+            if (newPassword != newPasswordConfirmation)
+                return Json(new ChalkableException("new password and confirmation doesn't match"));
+
+            MasterLocator.UserService.ChangePassword(login, newPassword);
+            MasterLocator.UserTrackingService.ChangedPassword(Context.Login);
+            return Json(true);
         }
         
         public ActionResult ResetPassword(string email)

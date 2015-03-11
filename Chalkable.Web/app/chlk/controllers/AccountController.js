@@ -2,7 +2,6 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.DeveloperService');
 REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.activities.profile.DeveloperPage');
-REQUIRE('chlk.activities.profile.ChangePasswordPage');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.account.ChangePassword');
@@ -29,7 +28,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(success){
                     return success
                         ? this.ShowAlertBox('Password was changed.')
-                        : this.ShowAlertBox('Change password failed.').thenBreak();
+                        : this.ShowAlertBox('Change password failed.');
                 }, this)
                 .then(function () {
                     return this.BackgroundNavigate('settings', 'dashboard', []);

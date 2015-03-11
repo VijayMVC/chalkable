@@ -23,10 +23,6 @@ NAMESPACE('chlk.services', function () {
                 return this.post('User/LogOut.json', chlk.models.common.SimpleResult, {});
             },
 
-//            ria.async.Future, function redirectToINOW(){
-//                return this.post('User/RedirectToINow.aspx', Object,{});
-//            },
-
             [[String,String,String]],
             ria.async.Future, function changePassword(oldPassword, newPassword, newPasswordConfirmation) {
                 return this.get('user/ChangePassword.json', Boolean
@@ -36,8 +32,5 @@ NAMESPACE('chlk.services', function () {
                         newPasswordConfirmation: newPasswordConfirmation
                     });
             }
-
-
-            //doChangePassword(model.oldPassword, model.newPassword, model.newPasswordConfirmation)
         ])
 });

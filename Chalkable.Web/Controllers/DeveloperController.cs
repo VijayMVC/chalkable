@@ -27,13 +27,18 @@ namespace Chalkable.Web.Controllers
         [HttpPost]
         public ActionResult SignUp(string email, string password, string confirmPassword)
         {
+            if (!PasswordTools.IsSecurePassword(password))
+                return Json(new ChalkableException("Your password is not secure enough"));
+
+            if (password != confirmPassword)
+                return Json(new ChalkableException("Your password and confirmation doesn't match"));
+
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            if (sysLocator.UserService.GetByLogin(email) == null)
-            {
-                sysLocator.DeveloperService.Add(email, password, null, null, null);
-                return LogOn(email, password, false);
-            }
-            return Json(new ChalkableException(ChlkResources.ERR_SIGNUP_USER_WITH_EMAIL_ALREADY_EXISTS));            
+            if (sysLocator.UserService.GetByLogin(email) != null)
+                return Json(new ChalkableException(ChlkResources.ERR_SIGNUP_USER_WITH_EMAIL_ALREADY_EXISTS));
+
+            sysLocator.DeveloperService.Add(email, password, null, null, null);
+            return LogOn(email, password, false);
         }
 
         public ActionResult SignUp()
