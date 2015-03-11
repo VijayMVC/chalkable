@@ -31,7 +31,7 @@ NAMESPACE('chlk.services', function () {
                         email: email
                     })
                     .then(function(result){
-                        this.userInfoChange.notify([result.getName()]);
+                        this.onUserInfoChange.notify([result.getName()]);
                         return result;
                     }, this);
             },

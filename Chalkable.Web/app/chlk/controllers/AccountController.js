@@ -14,11 +14,17 @@ NAMESPACE('chlk.controllers', function (){
         'AccountController', EXTENDS(chlk.controllers.BaseController), [
 
 
-         [ria.mvc.Inject],
-         chlk.services.DeveloperService, 'developerService',
+        [ria.mvc.Inject],
+        chlk.services.DeveloperService, 'developerService',
 
         [ria.mvc.Inject],
         chlk.services.AccountService, 'accountService',
+
+        [ria.mvc.ServiceEvent(chlk.services.DeveloperService)],
+        [[String]],
+        VOID, function onUserInfoChange(userName) {
+            this.getContext().getDefaultView().updateUserName(userName);
+        },
 
         [[chlk.models.account.ChangePassword]],
         function changePasswordAction(model){

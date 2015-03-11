@@ -67,6 +67,11 @@ NAMESPACE('chlk.lib.mvc', function () {
                     title = title.slice(0, pos - 1);
 
                 document.title = title +(count ? ' (' + count + ')' : '');
+            },
+
+            [[String]],
+            VOID, function updateUserName(userName) {
+                ria.dom.Dom('header .logout-area').setText(userName);
             }
         ]);
 });

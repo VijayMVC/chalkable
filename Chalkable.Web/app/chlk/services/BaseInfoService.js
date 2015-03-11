@@ -9,17 +9,17 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.UserInfoChangeEvent */
     DELEGATE(
         [[String]],
-        VOID, function UserInfoChangeEvent(string) {});
+        VOID, function UserInfoChangeEvent(userName) {});
 
     /** @class chlk.services.BaseInfoService */
     CLASS(
         'BaseInfoService', EXTENDS(chlk.services.BaseService), [
 
-            READONLY, ria.async.IObservable, 'userInfoChange',
+            READONLY, ria.async.IObservable, 'onUserInfoChange',
 
             function $() {
                 BASE();
-                this.userInfoChange = new ria.async.Observable(chlk.services.UserInfoChangeEvent);
+                this.onUserInfoChange = new ria.async.Observable(chlk.services.UserInfoChangeEvent);
             }
         ])
 });
