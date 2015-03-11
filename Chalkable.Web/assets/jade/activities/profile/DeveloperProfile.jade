@@ -10,7 +10,7 @@
             +Hidden("id", self.id ? self.id.valueOf() : null)
             .row
                 label Developer name*
-                input(name="name", value=self.name, type="text", class="text")
+                input(name="name", value=self.name, type="text", class="text validate[required]")
             .row
                 label Developer email
                 input(name="email", value=self.email, class="validate[required, custom[email]] text", type="text")

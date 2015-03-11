@@ -142,6 +142,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult UpdateInfo(Guid developerId, string name, string websiteLink, string email)
         {
+            var user = MasterLocator.UserService.GetByLogin(email);
+            if (user != null && user.Id != Context.UserId)
+            {
+                return Json(new ChalkableException("User email already exists"));    
+            }
+
             var res = MasterLocator.DeveloperService.Edit(developerId, name, email, websiteLink, null);
             MasterLocator.UserTrackingService.ChangedEmail(Context.Login, email);
             if (Context.Role.LoweredName == CoreRoles.DEVELOPER_ROLE.LoweredName)

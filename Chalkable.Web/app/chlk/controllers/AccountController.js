@@ -72,16 +72,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('settings')],
         [[chlk.models.developer.DeveloperInfo]],
         function profileSaveDeveloperAction(model){
-            var result = this.developerService
+            this.developerService
                 .saveInfo(
                     model.getId(),
                     model.getName(),
                     model.getWebSite(),
                     model.getEmail()
                 )
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.profile.DeveloperPage, result);
-
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    return res != null && res.isValidInfo()
+                        ? this.ShowAlertBox('Info saved.')
+                        : this.ShowAlertBox(!res.isValidEmail() ? 'Email already exists' : 'Info save failed.')
+                }, this)
+                .then(function () {
+                    return this.BackgroundNavigate('settings', 'dashboard', []);
+                }, this);
+            return null;
         }
     ])
 });
