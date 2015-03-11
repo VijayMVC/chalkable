@@ -321,7 +321,11 @@ NAMESPACE('chlk', function (){
                                 .fromHTML(ASSET('~/assets/jade/common/header.jade')(this))
                                 .appendTo("header");
                         return data;
-                    }, this);
+                    }, this)
+                    .then(function (data) {
+                        ria.dom.Dom('#content').removeClass('loading')
+                        return data;
+                    });
             },
 
             OVERRIDE, VOID, function onStop_() {
