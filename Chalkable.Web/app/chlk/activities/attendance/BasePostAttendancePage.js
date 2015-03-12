@@ -67,7 +67,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             function removeLeavePopUp(){
                 new ria.dom.Dom('#chlk-overlay, #chlk-dialogs').addClass('x-hidden');
-                new ria.dom.Dom('#chlk-dialogs').setHTML('');
+                new ria.dom.Dom('#chlk-dialogs').find('.info-msg').remove();
             },
 
             OVERRIDE, VOID, function onRender_(model){
