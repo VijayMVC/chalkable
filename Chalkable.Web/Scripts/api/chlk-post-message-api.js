@@ -7,11 +7,18 @@ var chlkRequestSiteRoot = function () {
     for (var index = 0; index < scripts.length; index++) {
         var script = scripts[index];
 
-        if (script.src.toString().match(/chlk-post-message-api.js$/i)) {
+        if (script.src.toString().match(/chlk-post-message-api\.js$/i)) {
             result = script.src.toString().toLowerCase().replace('scripts/api/chlk-post-message-api.js','');
-           break;
+            break;
         }
     }
+
+    if (result == 'https://chalkable.com/')
+        return 'https://classroom.chalkable.com/';
+
+    if (result == 'https://qa.chalkable.com/')
+        return 'https://classroom.qa.chalkable.com/';
+
     return result;
 };
 
