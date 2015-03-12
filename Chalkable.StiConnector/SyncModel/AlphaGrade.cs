@@ -1,8 +1,8 @@
 namespace Chalkable.StiConnector.SyncModel
 {
     using System;
-    
-    public class AlphaGrade
+
+    public class AlphaGrade : SyncModel
     {
         public int AlphaGradeID { get; set; }
         public int SchoolID { get; set; }

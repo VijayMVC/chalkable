@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -30,64 +32,70 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<ScheduledTimeSlot> scheduledTimeSlots)
         {
-            DoUpdate(u => new ScheduledTimeSlotDataAccess(u, null).Insert(scheduledTimeSlots));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ScheduledTimeSlot>(u).Insert(scheduledTimeSlots));
         }
 
         public void Edit(IList<ScheduledTimeSlot> scheduledTimeSlots)
         {
-            DoUpdate(u => new ScheduledTimeSlotDataAccess(u, null).Update(scheduledTimeSlots));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ScheduledTimeSlot>(u).Update(scheduledTimeSlots));
         }
 
         public void Delete(IList<ScheduledTimeSlot> scheduledTimeSlots)
         {
-            DoUpdate(u => new ScheduledTimeSlotDataAccess(u, null).Delete(scheduledTimeSlots));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ScheduledTimeSlot>(u).Delete(scheduledTimeSlots));
         }
 
         public IList<ScheduledTimeSlot> GetAll()
         {
-            return DoRead(u => new ScheduledTimeSlotDataAccess(u, null).GetAll());
+            return DoRead(u => new DataAccessBase<ScheduledTimeSlot>(u).GetAll());
         }
 
 
         public void AddSectionTimeSlotVariations(IList<SectionTimeSlotVariation> sectionTimeSlotVariations)
         {
-            DoUpdate(u => new SectionTimeSlotVariationDataAccess(u, null).Insert(sectionTimeSlotVariations));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<SectionTimeSlotVariation>(u).Insert(sectionTimeSlotVariations));
         }
 
         public void EditSectionTimeSlotVariations(IList<SectionTimeSlotVariation> sectionTimeSlotVariations)
         {
-            DoUpdate(u => new SectionTimeSlotVariationDataAccess(u, null).Update(sectionTimeSlotVariations));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<SectionTimeSlotVariation>(u).Update(sectionTimeSlotVariations));
         }
 
         public void DeleteSectionTimeSlotVariations(IList<SectionTimeSlotVariation> sectionTimeSlotVariations)
         {
-            DoUpdate(u => new SectionTimeSlotVariationDataAccess(u, null).Delete(sectionTimeSlotVariations));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<SectionTimeSlotVariation>(u).Delete(sectionTimeSlotVariations));
         }
 
         public IList<SectionTimeSlotVariation> GetAllSectionTimeSlotVariations()
         {
-            return DoRead(u => new SectionTimeSlotVariationDataAccess(u, null).GetAll());
+            return DoRead(u => new DataAccessBase<SectionTimeSlotVariation>(u).GetAll());
         }
 
 
         public void AddScheduledTimeSlotVariations(IList<ScheduledTimeSlotVariation> scheduledTimeSlotVariations)
         {
-            DoUpdate(u => new ScheduledTimeSlotVariationDataAccess(u, null).Insert(scheduledTimeSlotVariations));
+            DoUpdate(u => new ScheduledTimeSlotVariationDataAccess(u).Insert(scheduledTimeSlotVariations));
         }
 
         public void EditScheduledTimeSlotVariations(IList<ScheduledTimeSlotVariation> scheduledTimeSlotVariations)
         {
-            DoUpdate(u => new ScheduledTimeSlotVariationDataAccess(u, null).Update(scheduledTimeSlotVariations));
+            DoUpdate(u => new ScheduledTimeSlotVariationDataAccess(u).Update(scheduledTimeSlotVariations));
         }
 
         public void DeleteScheduledTimeSlotVariations(IList<ScheduledTimeSlotVariation> scheduledTimeSlotVariations)
         {
-            DoUpdate(u => new ScheduledTimeSlotVariationDataAccess(u, null).Delete(scheduledTimeSlotVariations));
+            DoUpdate(u => new ScheduledTimeSlotVariationDataAccess(u).Delete(scheduledTimeSlotVariations));
         }
 
         public IList<ScheduledTimeSlotVariation> GetAllScheduledTimeSlotVariations()
         {
-            return DoRead(u => new ScheduledTimeSlotVariationDataAccess(u, null).GetAll());
+            return DoRead(u => new ScheduledTimeSlotVariationDataAccess(u).GetAll());
         }
     }
 }

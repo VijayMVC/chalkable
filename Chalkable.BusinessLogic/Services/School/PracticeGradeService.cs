@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Common;
-using Chalkable.BusinessLogic.Logic.Comperators;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -40,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(!classes.Any(c=> classStandards.Any(cs=>cs.ClassRef == c.Id || cs.ClassRef == c.CourseRef)))
                     throw new ChalkableSecurityException();
 
-                var da = new PracticeGradeDataAccess(uow);
+                var da = new DataAccessBase<PracticeGrade>(uow);
                 var date = Context.NowSchoolYearTime;
                 da.Insert(new PracticeGrade
                 {
@@ -64,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
     
         public IList<PracticeGrade> GetPracticeGrades(int studentId, int? standardId)
         {
-            return DoRead(uow => new PracticeGradeDataAccess(uow)
+            return DoRead(uow => new DataAccessBase<PracticeGrade>(uow)
                 .GetAll(new AndQueryCondition
                     {
                         {PracticeGrade.STUDENT_ID_FIELD, studentId}

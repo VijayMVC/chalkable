@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
-using Chalkable.Web.Models.CalendarsViewData;
 using Chalkable.Web.Models.ClassesViewData;
 
 namespace Chalkable.Web.Controllers
@@ -49,39 +45,6 @@ namespace Chalkable.Web.Controllers
             if (classData.ChalkableDepartmentRef.HasValue)
                 department = MasterLocator.ChalkableDepartmentService.GetChalkableDepartmentById(classData.ChalkableDepartmentRef.Value);
             return Json(ClassInfoViewData.Create(classData, room, department));
-        }
-
-        [Obsolete]
-        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ClassSummary(int classId)
-        {
-            var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var currentDateTime = SchoolLocator.Context.NowSchoolYearTime;
-            var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(currentDateTime, true);
-            if (mp == null)
-                return Json(ClassViewData.Create(c));
-            Room curentRoom = null;
-            if (c.RoomRef.HasValue)
-                curentRoom = SchoolLocator.RoomService.GetRoomById(c.RoomRef.Value);
-            var students = SchoolLocator.StudentService.GetClassStudents(classId, mp.Id);
-            if (!BaseSecurity.IsAdminViewerOrClassTeacher(c, Context))
-                return Json(ClassSummaryViewData.Create(c, curentRoom, students));
-            var disciplineTypes = SchoolLocator.InfractionService.GetInfractions();
-            var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(new ClassDisciplineQuery
-            {
-                SchoolYearId = mp.SchoolYearRef,
-                ClassId = classId,
-                MarkingPeriodId = mp.Id,
-            });
-
-            var dates = SchoolLocator.CalendarDateService.GetLastDays(mp.SchoolYearRef, true, currentDateTime.Date, currentDateTime.Date.AddDays(8), 9).Select(x => x.Day).ToList();
-            IList<AnnouncementComplex> anns = new List<AnnouncementComplex>();
-            if (dates.Count > 0)
-                anns = SchoolLocator.AnnouncementService.GetAnnouncements(currentDateTime.Date, dates.Last().Date, false, classId);
-            var annsByDate = AnnouncementByDateViewData.Create(dates, anns);
-            var gradePerMps = SchoolLocator.GradingStatisticService.GetClassGradeAvgPerMP(classId, mp.SchoolYearRef, null, null);
-            gradePerMps = gradePerMps.Where(x => x.MarkingPeriod.StartDate <= mp.StartDate).ToList();
-            return Json(ClassSummaryViewData.Create(c, curentRoom, students, annsByDate, null, 0, disciplines, disciplineTypes, gradePerMps));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

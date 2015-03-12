@@ -6,10 +6,10 @@ using Chalkable.Data.School.Model;
 namespace Chalkable.Data.School.DataAccess
 {
 
-    public class ClassPeriodDataAccess : BaseSchoolDataAccess<ClassPeriod>
+    public class ClassPeriodDataAccess : DataAccessBase<ClassPeriod>
     {
-        public ClassPeriodDataAccess(UnitOfWork unitOfWork, int? schoolId)
-            : base(unitOfWork, schoolId)
+        public ClassPeriodDataAccess(UnitOfWork unitOfWork)
+            : base(unitOfWork)
         {
         }
 

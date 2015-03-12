@@ -1,8 +1,8 @@
 namespace Chalkable.StiConnector.SyncModel
 {
     using System;
-    
-    public class Address
+
+    public class Address : SyncModel
     {
         public int AddressID { get; set; }
         public string AddressNumber { get; set; }

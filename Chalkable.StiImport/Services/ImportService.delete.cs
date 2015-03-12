@@ -133,16 +133,18 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<GradingComment>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<GradingComment>().Deleted.Select(x => x.GradingCommentID).ToList();
-            ServiceLocatorSchool.GradingCommentService.Delete(ids);
+            var gradingComments = context.GetSyncResult<GradingComment>().Deleted
+                .Select(x => new Data.School.Model.GradingComment{Id = x.GradingCommentID}).ToList();
+            ServiceLocatorSchool.GradingCommentService.Delete(gradingComments);
         }
 
         private void DeleteClassroomOptions()
         {
             if (context.GetSyncResult<ClassroomOption>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<ClassroomOption>().Deleted.Select(x => x.SectionID).ToList();
-            ServiceLocatorSchool.ClassroomOptionService.Delete(ids);
+            var classroomOptions = context.GetSyncResult<ClassroomOption>().Deleted
+                .Select(x => new Data.School.Model.ClassroomOption{Id = x.SectionID}).ToList();
+            ServiceLocatorSchool.ClassroomOptionService.Delete(classroomOptions);
         }
 
         private void DeleteGradingScaleRanges()
@@ -162,32 +164,33 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<GradingScale>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<GradingScale>().Deleted.Select(x => x.GradingScaleID).ToList();
-            ServiceLocatorSchool.GradingScaleService.DeleteGradingScales(ids);
+            var gradingScales = context.GetSyncResult<GradingScale>()
+                .Deleted.Select(x => new Data.School.Model.GradingScale{Id = x.GradingScaleID}).ToList();
+            ServiceLocatorSchool.GradingScaleService.DeleteGradingScales(gradingScales);
         }
 
         private void DeleteInfractions()
         {
             if (context.GetSyncResult<Infraction>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<Infraction>().Deleted.Select(x => x.InfractionID).ToList();
-            ServiceLocatorSchool.InfractionService.Delete(ids);
+            var infractions = context.GetSyncResult<Infraction>().Deleted.Select(x => new Data.School.Model.Infraction { Id = x.InfractionID }).ToList();
+            ServiceLocatorSchool.InfractionService.Delete(infractions);
         }
 
         private void DeleteAlternateScores()
         {
             if (context.GetSyncResult<AlternateScore>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<AlternateScore>().Deleted.Select(x => x.AlternateScoreID).ToList();
-            ServiceLocatorSchool.AlternateScoreService.Delete(ids);
+            var alternateScores = context.GetSyncResult<AlternateScore>().Deleted.Select(x => new Data.School.Model.AlternateScore { Id = x.AlternateScoreID }).ToList();
+            ServiceLocatorSchool.AlternateScoreService.Delete(alternateScores);
         }
 
         private void DeleteAlphaGrades()
         {
             if (context.GetSyncResult<AlphaGrade>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<AlphaGrade>().Deleted.Select(x => x.AlphaGradeID).ToList();
-            ServiceLocatorSchool.AlphaGradeService.Delete(ids);
+            var alphaGrades = context.GetSyncResult<AlphaGrade>().Deleted.Select(x => new Data.School.Model.AlphaGrade { Id = x.AlphaGradeID }).ToList();
+            ServiceLocatorSchool.AlphaGradeService.Delete(alphaGrades);
         }
 
         private void DeleteAttendanceLevelReasons()
@@ -321,13 +324,14 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Standard>().Deleted == null)
                 return;
-            var toDelete = context.GetSyncResult<Standard>().Deleted.ToDictionary(x => x.StandardID, x => ServiceLocatorSchool.StandardService.GetStandardById(x.StandardID));
-            var sorted = TopologicSort(x => x.Id, x => x.ParentStandardRef, toDelete).Reverse();
-            var ids = sorted.Select(x => x.Id).ToList();
-            
-            foreach (var id in ids)
-                ServiceLocatorSchool.AnnouncementService.RemoveAllAnnouncementStandards(id);
-            ServiceLocatorSchool.StandardService.DeleteStandards(ids);
+            var toDelete = 
+                context.GetSyncResult<Standard>().Deleted.ToList()
+                .OrderBy(x => x.SYS_CHANGE_VERSION)
+                .Select(x=>new Data.School.Model.Standard
+                {
+                    Id = x.StandardID
+                }).ToList();
+            ServiceLocatorSchool.StandardService.DeleteStandards(toDelete);
         }
 
         private void DeleteStandardSubject()
@@ -354,18 +358,21 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Course>().Deleted == null)
                 return;
-            var courses = context.GetSyncResult<Course>().Deleted.ToList();
-            var d = courses.ToDictionary(x => x.CourseID, x=>ServiceLocatorSchool.ClassService.GetById(x.CourseID));
-            var toDelete = TopologicSort(x => x.Id, x => x.CourseRef, d).Reverse().ToList();
-            var ids = toDelete.Select(x => x.Id).ToList();
-            ServiceLocatorSchool.ClassService.Delete(ids);
+            var courses = context.GetSyncResult<Course>().Deleted.ToList()
+                .OrderBy(x=>x.SYS_CHANGE_VERSION)
+                .Select(x=>new Class
+                {
+                    Id = x.CourseID
+                }).ToList();
+            ServiceLocatorSchool.ClassService.Delete(courses);
         }
 
         private void DeleteRooms()
         {
             if (context.GetSyncResult<Room>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<Room>().Deleted.Select(x => x.RoomID).ToList();
+            var ids = context.GetSyncResult<Room>().Deleted
+                .Select(x => new Data.School.Model.Room { Id = x.RoomID }).ToList();
             ServiceLocatorSchool.RoomService.DeleteRooms(ids);
         }
 
@@ -373,7 +380,10 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<CalendarDay>().Deleted == null)
                 return;
-            var dates = context.GetSyncResult<CalendarDay>().Deleted.Select(x => x.Date.Date).ToList();
+            var dates = context.GetSyncResult<CalendarDay>().Deleted.Select(x => new Date
+            {
+                Day = x.Date, SchoolYearRef = x.AcadSessionID
+            }).ToList();
             ServiceLocatorSchool.CalendarDateService.Delete(dates);
         }
 
@@ -381,8 +391,11 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<DayType>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<DayType>().Deleted.Select(x => x.DayTypeID).ToList();
-            ServiceLocatorSchool.DayTypeService.Delete(ids);
+            var dayTypes = context.GetSyncResult<DayType>().Deleted.Select(x => new Data.School.Model.DayType
+            {
+                Id = x.DayTypeID
+            }).ToList();
+            ServiceLocatorSchool.DayTypeService.Delete(dayTypes);
         }
 
         private void DeleteGradingPeriods()
@@ -426,8 +439,9 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<GradeLevel>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<GradeLevel>().Deleted.Select(x => (int)x.GradeLevelID).ToList();
-            ServiceLocatorSchool.GradeLevelService.DeleteGradeLevels(ids);
+            var ids = context.GetSyncResult<GradeLevel>().Deleted
+                .Select(x => new Data.School.Model.GradeLevel { Id = (int)x.GradeLevelID }).ToList();
+            ServiceLocatorSchool.GradeLevelService.Delete(ids);
         }
 
         private void DeletePhones()
@@ -533,23 +547,26 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<Address>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<Address>().Deleted.Select(x => x.AddressID).ToList();
-            ServiceLocatorSchool.AddressService.Delete(ids);
+            var addresses = context.GetSyncResult<Address>()
+                .Deleted.Select(x => new Data.School.Model.Address { Id = x.AddressID }).ToList();
+            ServiceLocatorSchool.AddressService.Delete(addresses);
         }
 
         private void DeleteSchoolsOptions()
         {
             if (context.GetSyncResult<SchoolOption>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<SchoolOption>().Deleted.Select(x => x.SchoolID).ToList();
-            ServiceLocatorSchool.SchoolService.DeleteSchoolOptions(ids);
+            var schoolOptions = context.GetSyncResult<SchoolOption>()
+                .Deleted.Select(x => new Data.School.Model.SchoolOption { Id = x.SchoolID }).ToList();
+            ServiceLocatorSchool.SchoolService.DeleteSchoolOptions(schoolOptions);
         }
 
         private void DeleteSchools()
         {
             if (context.GetSyncResult<School>().Deleted == null)
                 return;
-            var ids = context.GetSyncResult<School>().Deleted.Select(x => x.SchoolID).ToList();
+            var ids = context.GetSyncResult<School>()
+                .Deleted.Select(x => new Data.School.Model.School { Id = x.SchoolID }).ToList();
             ServiceLocatorSchool.SchoolService.Delete(ids);
         }
     }

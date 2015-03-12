@@ -1,6 +1,6 @@
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class ClassroomOption
+    public class ClassroomOption : SyncModel
     {
         public int SectionID { get; set; }
         public string DefaultActivitySortOrder { get; set; }

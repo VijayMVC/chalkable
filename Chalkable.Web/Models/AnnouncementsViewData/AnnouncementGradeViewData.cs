@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
 
@@ -9,10 +8,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 {
     public class AnnouncementGradeViewData : AnnouncementViewData
     {
-        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, bool? wasAnnouncementTypeGraded = null)
+        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, bool? wasAnnouncementTypeGraded = null)
             : base(announcement, wasAnnouncementTypeGraded)
         {
-            PrepareGradingInfo(this, announcement, studentAnnouncements, mapper);
+            PrepareGradingInfo(this, announcement, studentAnnouncements);
         }
 
         protected AnnouncementGradeViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null)
@@ -22,11 +21,11 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public static AnnouncementGradeViewData Create(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, bool? wasAnnouncementTypeGraded = null)
         {
-            var res = new AnnouncementGradeViewData(announcement, studentAnnouncements, mapper, wasAnnouncementTypeGraded);
+            var res = new AnnouncementGradeViewData(announcement, studentAnnouncements, wasAnnouncementTypeGraded);
             return res;
         }
 
-        private static void PrepareGradingInfo(AnnouncementViewData res, AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper)
+        private static void PrepareGradingInfo(AnnouncementViewData res, AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements)
         {
             res.Avg = announcement.Avg;
             res.AvgNumeric = announcement.Avg;

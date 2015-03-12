@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
@@ -26,8 +24,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public IList<ApplicationForAttachViewData> SuggestedApps { get; set; }
 
 
-        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper)
-            : base(announcementDetails, studentAnnouncements, mapper, null)
+        private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements)
+            : base(announcementDetails, studentAnnouncements, null)
         {
             if (announcementDetails.AnnouncementQnAs != null)
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
@@ -52,7 +50,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return new AnnouncementDetailedViewData(announcement, wasAnnouncementTypeGraded);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, IGradingStyleMapper mapper, int currentSchoolPersonId)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId)
         {
             var studentAnnouncements = announcementDetails.StudentAnnouncements.Select(x => new StudentAnnouncement
             {
@@ -65,13 +63,12 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 NumericScore = x.NumericScore,
                 IsWithdrawn = x.Student.IsWithdrawn
             }).ToList();
-            return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements, mapper);
+            return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, IGradingStyleMapper mapper,
-            int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos)
         {
-            var res = Create(announcementDetails, mapper, currentSchoolPersonId);
+            var res = Create(announcementDetails, currentSchoolPersonId);
             res.AnnouncementAttachments = AnnouncementAttachmentViewData.Create(attachmentInfos, currentSchoolPersonId);
             return res;
         }

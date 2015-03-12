@@ -29,17 +29,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.InfractionStorage.Update(infractions);
         }
 
-        public void DeleteList(IList<int> ids)
+        public void DeleteList(IList<Infraction> infractions)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
-            Storage.InfractionStorage.Delete(ids);
+            Storage.InfractionStorage.Delete(infractions);
         }
 
-        public IList<Infraction> GetDisciplineTypes(bool onlyActive = true)
+        public IList<Infraction> GetDisciplineTypes()
         {
-            return Storage.InfractionStorage.GetAll(onlyActive);
+            return Storage.InfractionStorage.GetAll();
         }
 
         public void Add(IList<Infraction> infractions)
@@ -52,14 +52,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.InfractionStorage.Update(infractions);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Infraction> infractions)
         {
-            Storage.InfractionStorage.Delete(ids);
+            Storage.InfractionStorage.Delete(infractions);
         }
 
-        public IList<Infraction> GetInfractions(bool onlyActive = true)
+        public IList<Infraction> GetInfractions()
         {
-            return Storage.InfractionStorage.GetAll(onlyActive);
+            return Storage.InfractionStorage.GetAll();
         }
     }
 }

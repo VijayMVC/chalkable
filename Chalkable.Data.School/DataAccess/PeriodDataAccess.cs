@@ -6,16 +6,11 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PeriodDataAccess : BaseSchoolDataAccess<Period>
+    public class PeriodDataAccess : DataAccessBase<Period>
     {
-        public PeriodDataAccess(UnitOfWork unitOfWork, int? schoolId)
-            : base(unitOfWork, schoolId)
+        public PeriodDataAccess(UnitOfWork unitOfWork)
+            : base(unitOfWork)
         {
-        }
-
-        public void DeleteBySchoolYearId(int? schoolYearId)
-        {
-            SimpleDelete(GetCondsBySchoolYear(schoolYearId));
         }
 
         public void Delete(IList<int> ids)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -291,36 +290,13 @@ namespace Chalkable.StiImport.Services
 
         public void UpdateVersion()
         {
-            var newVersions = new Dictionary<string, int>();
+            var newVersions = new Dictionary<string, long>();
             foreach (var i in context.TablesToSync)
                 if (i.Value.HasValue)
                 {
                     newVersions.Add(i.Key, i.Value.Value);
                 }
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
-        }
-
-        private IList<T> TopologicSort<T>(Func<T, int> id, Func<T, int?> reference, Dictionary<int, T> source)
-        {
-            var was = new HashSet<int>();
-            var res = new List<T>();
-            foreach (var s in source)
-                if (!was.Contains(s.Key))
-                    TopologicSort(id(s.Value), reference, source, was, res);
-            return res;
-        }
-
-        private void TopologicSort<T>(int id, Func<T, int?> reference, Dictionary<int, T> source, HashSet<int> was, IList<T> res)
-        {
-            if (source.ContainsKey(id))
-            {
-                was.Add(id);
-                var item = source[id];
-                var r = reference(item);
-                if (r.HasValue && !was.Contains(r.Value))
-                    TopologicSort(r.Value, reference, source, was, res);
-                res.Add(item);    
-            }
         }
     }
 

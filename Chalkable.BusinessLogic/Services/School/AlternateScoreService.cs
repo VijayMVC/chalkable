@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void AddAlternateScores(IList<AlternateScore> alternateScores);
         void EditAlternateScores(IList<AlternateScore> alternateScores);
-        void Delete(IList<int> ids);
+        void Delete(IList<AlternateScore> alternateScores);
         IList<AlternateScore> GetAlternateScores();
         AlternateScore GetAlternateScore(int id);
     }
@@ -23,30 +23,30 @@ namespace Chalkable.BusinessLogic.Services.School
         public void AddAlternateScores(IList<AlternateScore> alternateScores)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new AlternateScoreDataAccess(u).Insert(alternateScores));
+            DoUpdate(u => new DataAccessBase<AlternateScore>(u).Insert(alternateScores));
         }
 
         public IList<AlternateScore> GetAlternateScores()
         {
-            return DoRead(u => new AlternateScoreDataAccess(u).GetAll());
+            return DoRead(u => new DataAccessBase<AlternateScore>(u).GetAll());
         }
-        
-        public void Delete(IList<int> ids)
+
+        public void Delete(IList<AlternateScore> alternateScores)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new AlternateScoreDataAccess(u).Delete(ids));
+            DoUpdate(u => new DataAccessBase<AlternateScore>(u).Delete(alternateScores));
         }
 
         public void EditAlternateScores(IList<AlternateScore> alternateScores)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new AlternateScoreDataAccess(u).Update(alternateScores));
+            DoUpdate(u => new DataAccessBase<AlternateScore>(u).Update(alternateScores));
         }
 
 
         public AlternateScore GetAlternateScore(int id)
         {
-            return DoRead(u=>new AlternateScoreDataAccess(u).GetByIdOrNull(id));
+            return DoRead(u => new DataAccessBase<AlternateScore, int>(u).GetByIdOrNull(id));
         }
     }
 }

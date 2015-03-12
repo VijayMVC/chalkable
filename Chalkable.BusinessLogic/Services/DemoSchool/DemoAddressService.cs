@@ -26,11 +26,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.AddressStorage.Update(addressInfos);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Address> addresses)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            Storage.AddressStorage.Delete(ids);
+            Storage.AddressStorage.Delete(addresses);
             
         }
 
@@ -40,15 +40,5 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
             return Storage.AddressStorage.GetAll();
         }
-
-        public IList<Address> GetAddress(int personId)
-        {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
-                throw new ChalkableSecurityException();
-            return Storage.AddressStorage.GetAddress(personId);
-            
-        }
-
-      
     }
 }

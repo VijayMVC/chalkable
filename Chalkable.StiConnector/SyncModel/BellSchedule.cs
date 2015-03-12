@@ -2,7 +2,7 @@ using System;
 
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class BellSchedule
+    public class BellSchedule : SyncModel
     {
         public int BellScheduleID { get; set; }
         public int AcadSessionID { get; set; }

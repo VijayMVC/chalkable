@@ -7,7 +7,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
     public class AnnouncementForStudentDataAccess : AnnouncementDataAccess
     {
-        public AnnouncementForStudentDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
+        public AnnouncementForStudentDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork, schoolId)
         {
         }
         

@@ -1,8 +1,8 @@
 namespace Chalkable.StiConnector.SyncModel
 {
     using System;
-    
-    public class AbsenceReason
+
+    public class AbsenceReason : SyncModel
     {
         public short AbsenceReasonID { get; set; }
         public string Code { get; set; }

@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            DoUpdate(u => new ClassPeriodDataAccess(u, Context.SchoolLocalId).Insert(classPeriods));
+            DoUpdate(u => new ClassPeriodDataAccess(u).Insert(classPeriods));
         }
 
         public void Delete(IList<ClassPeriod> classPeriods)
@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                new ClassPeriodDataAccess(uow, Context.SchoolLocalId).Delete(classPeriods);
+                new ClassPeriodDataAccess(uow).Delete(classPeriods);
                 uow.Commit();
             }
         }
@@ -48,14 +48,14 @@ namespace Chalkable.BusinessLogic.Services.School
             var time = (int) (dateTime - date).TotalMinutes;
             using (var uow = Read())
             {
-                return new ClassPeriodDataAccess(uow, null).CurrentClassForTeacher(Context.SchoolYearId.Value, personId,date, time);
+                return new ClassPeriodDataAccess(uow).CurrentClassForTeacher(Context.SchoolYearId.Value, personId,date, time);
             }  
         }
 
         public IList<ScheduleItem> GetSchedule(int? teacherId, int? studentId, int? classId, DateTime @from, DateTime to)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            return DoRead( u => new ScheduleDataAccess(u, null).GetSchedule(Context.SchoolYearId.Value, teacherId, studentId, classId, Context.PersonId, from, to));
+            return DoRead( u => new ScheduleDataAccess(u).GetSchedule(Context.SchoolYearId.Value, teacherId, studentId, classId, Context.PersonId, from, to));
 
         }
     }

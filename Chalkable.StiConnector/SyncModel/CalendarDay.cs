@@ -1,8 +1,8 @@
 namespace Chalkable.StiConnector.SyncModel
 {
     using System;
-    
-    public class CalendarDay
+
+    public class CalendarDay : SyncModel
     {
         public int AcadSessionID { get; set; }
         public DateTime Date { get; set; }

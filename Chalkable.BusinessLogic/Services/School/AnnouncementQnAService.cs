@@ -78,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 annQnA.Question = question;
                 if (Context.Role == CoreRoles.TEACHER_ROLE && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.PersonId))
                 {
-                    var answerer = new PersonDataAccess(uow, Context.SchoolLocalId).GetById(Context.PersonId.Value);
+                    var answerer = new PersonDataAccess(uow).GetById(Context.PersonId.Value);
                     annQnA.Answerer = answerer;
                     annQnA.AnswererRef = answerer.Id;
                     annQnA.AnsweredTime = Context.NowSchoolTime;

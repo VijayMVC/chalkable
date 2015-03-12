@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -101,7 +102,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                                           select new { Id = g.Key, Count = g.Count() };
 
             var attendances = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(studentId,
-                DateTime.Today.AddDays(-1), DateTime.Today).Select(sectionAttendanceSummary => new SectionAbsenceSummary()
+                DateTime.Today.AddDays(-1), DateTime.Today).Select(sectionAttendanceSummary => new SectionAbsenceSummary
                 {
                     SectionId = sectionAttendanceSummary.SectionId,
                     Tardies = sectionAttendanceSummary.Students.Select(x => x.Tardies).Sum(),
@@ -109,7 +110,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
                 }).ToList();
 
-            var infractionSummary = infractionSummaries.Select(x => new InfractionSummary()
+            var infractionSummary = infractionSummaries.Select(x => new InfractionSummary
             {
                 StudentId = studentId,
                 InfractionId = x.Id,
@@ -133,6 +134,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             //var date = Context.NowSchoolYearTime;
             var student = GetById(studentId, schoolYearId);
             var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();
@@ -156,7 +158,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     if (activity == null) continue;
                     importanActivitiesIds.Add(activity.Id);
                 }
-                announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(importanActivitiesIds));
+                announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value).GetByActivitiesIds(importanActivitiesIds));
             }
             return StudentExplorerInfo.Create(student, classes, inowStExpolorer.Averages.ToList()
                 , inowStExpolorer.Standards.ToList(), announcements, standards);
