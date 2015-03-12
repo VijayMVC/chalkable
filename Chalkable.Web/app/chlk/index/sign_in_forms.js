@@ -20,15 +20,19 @@ $(document).ready(function () {
         var form = jQuery(this);
         if (!form.validationEngine('validate')) {
             unSuccessLogIn();
-        } else {
+            return false;
+        }
 
-         jQuery.ajax({
-              url: WEB_SITE_ROOT + 'User/LogOn.json',
-              type: "post",
-              dataType: "json",
-              data: form.serialize(),
-              success: function (response) {
+        form.find('[type=submit]')
+            .attr('disabled', true)
+            .addClass('working');
 
+        jQuery.ajax({
+            url: WEB_SITE_ROOT + 'User/LogOn.json',
+            type: "post",
+            dataType: "json",
+            data: form.serialize(),
+            success: function (response) {
                 if (typeof window['mixpanel'] !== "undefined") {
                     mixpanel.track(
                         "Logged in from com",
@@ -37,7 +41,6 @@ $(document).ready(function () {
                 }
 
                 if (response.Success !== true) {
-                    form.find('input[type=submit]').attr('disabled', false);
                     //todo : think how to write this better
                     var text = response.data && response.data.errormessage || response.ErrorMessage || '';
                     if(text != '')
@@ -51,29 +54,64 @@ $(document).ready(function () {
                         role = "admin";
                     window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 }
-            } .bind(this),
+
+                form.find('[type=submit]')
+                    .removeAttr('disabled')
+                    .removeClass('working');
+            }.bind(this),
+
             error: function (response){
-                if(response.responseJSON.exceptiontype == 'ChalkableSisNotFoundException'){
+                if(!response.responseJSON){
+                    alert('Our Server is not responding. Please try again soon');
+                } else if(response.responseJSON.exceptiontype == 'ChalkableSisNotFoundException'){
                     alert('Your iNow Server is not responding. Please try again soon');
-                    return;
                 }
-                return;
+
+                form.find('[type=submit]')
+                    .removeAttr('disabled')
+                    .removeClass('working');
             }.bind(this)
-         });
-            form.find('input[type=submit]').attr('disabled', true);
-        }
+        });
+
         return false;
     });
 
 
     $('form#reset-form').on('submit.reset', function () {
         var form = jQuery(this);
-        if (!form.validationEngine('validate')) { return; }
+        if (!form.validationEngine('validate')) {
+            return false;
+        }
+
         var value = form.find('input[name=email]').val();
-        form.find('input[type=submit]').attr('disabled', true);
-        jQuery.getJSON(WEB_SITE_ROOT + 'User/ResetPassword.json', { email: value }, function (response, data) {
-            form.find('input[type=submit]').attr('disabled', false);
+        jQuery.ajax({
+            url: WEB_SITE_ROOT + 'User/ResetPassword.json',
+            type: "post",
+            dataType: "json",
+            data: {email: value},
+            success: function (response, data) {
+                form.find('[type=submit]')
+                    .removeAttr('disabled')
+                    .removeClass('working');
+            },
+
+            error: function (response) {
+                if (!response.responseJSON) {
+                    alert('Our Server is not responding. Please try again soon');
+                } else if (response.responseJSON.exceptiontype == 'ChalkableException') {
+                    alert(response.responseJSON.message);
+                }
+
+                form.find('[type=submit]')
+                    .removeAttr('disabled')
+                    .removeClass('working');
+            }.bind(this)
         });
+
+        form.find('[type=submit]')
+            .attr('disabled', true)
+            .addClass('working');
+
         return false;
     });
 
@@ -85,14 +123,19 @@ $(document).ready(function () {
 
     $('#sign-up-form').on('submit.dev-signup', function () {
         var form = jQuery(this);
-        if (!form.validationEngine('validate')) { return; }
-        var options = {
+        if (!form.validationEngine('validate')) {
+            return false;
+        }
+
+        jQuery.ajax({
             url: WEB_SITE_ROOT + 'Developer/SignUp.json',
             type: "post",
             dataType: "json",
             data: form.serialize(),
             success: function (response) {
-                form.find('input[type=submit]').prop('disabled', false);
+                form.find('[type=submit]')
+                    .removeAttr('disabled')
+                    .removeClass('working');
                 if (response.Success == true) {
                     var role = response.data.Role.toLowerCase();
                     window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
@@ -101,10 +144,25 @@ $(document).ready(function () {
                     var text = response.data && response.data.message || '';
                     if(text != '') $('#email2').validationEngine('showPrompt',text, 'red','topRight', false);
                 }
+            }.bind(this),
+
+            error: function (response) {
+                if (!response.responseJSON) {
+                    alert('Our Server is not responding. Please try again soon');
+                } else if (response.responseJSON.exceptiontype == 'ChalkableSisNotFoundException') {
+                    alert('Your iNow Server is not responding. Please try again soon');
+                }
+
+                form.find('[type=submit]')
+                    .removeAttr('disabled')
+                    .removeClass('working');
             }.bind(this)
-        };
-        jQuery.ajax(options);
-        form.find('input[type=submit]').prop('disabled', true);
+        });
+
+        form.find('[type=submit]')
+            .attr('disabled', true)
+            .addClass('working');
+
         return false;
     });
 });

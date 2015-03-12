@@ -123,8 +123,22 @@ h1, h2, h3, h4, h5, h6
   height: 100%
   position: relative
 
-input[type=submit][disabled]
+input[type=submit][disabled], button[type=submit][disabled]
   opacity: 0.5
+
+  &.working
+    //color: transparent !important
+    position: relative
+
+    &::after
+      content: ' '
+      position: absolute
+      top: 0
+      left: 0
+      width: 20%
+      bottom: 0
+      background: image-url("images2/loaders/circular-grey.gif") no-repeat 50% 50%
+      background-size: 50%
 
 .msg-button
   background: $blue
@@ -533,7 +547,7 @@ footer
         display: block
         font-size: .8125em
         margin-bottom: .5em
-      input
+      input, button[type='submit']
         width: 100%
         border: 1px solid #c8c7c3
         padding: .6em .4em
@@ -544,7 +558,7 @@ footer
           outline: none
           border-color: lighten($blue, 10%)
           +box-shadow(0 0 3px rgba($blue, 0.5))
-      input[type='submit']
+      button[type='submit']
         background: $blue
         +background(linear-gradient(top, #568ea8, #2e657c))
         border: 1px solid #29596e

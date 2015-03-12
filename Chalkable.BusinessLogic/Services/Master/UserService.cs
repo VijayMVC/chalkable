@@ -455,15 +455,15 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (user != null)
             {
                 var key = GenerateConfirmationKey();
-                if (user.IsDeveloper)
+                if (user.IsDeveloper || user.IsSysAdmin || user.IsAppTester)
                 {
                     var developer = ServiceLocator.DeveloperService.GetById(user.Id);
                     ServiceLocator.EmailService.SendResettedPasswordToDeveloper(developer, key);
                 }
                 else if (user.SisUserId.HasValue)
-                    ServiceLocator.EmailService.SendResettedPasswordToPerson(user, key);
+                    throw new ChalkableException("Please use iNOW to reset your password");
                 else
-                    throw new NotImplementedException();
+                    throw new ChalkableException("Please contact system administrator to reset your password");
 
                 using (var uow = Update())
                 {
