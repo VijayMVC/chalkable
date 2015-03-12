@@ -12,6 +12,8 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.AppModes, 'appMode',
             chlk.models.apps.AppAttachment, 'app',
             Boolean, 'myAppsError',
+            Boolean, 'appError',
+
             Boolean, 'banned',
             String, 'errorTitle',
             String, 'errorMessage',
@@ -53,7 +55,16 @@ NAMESPACE('chlk.models.apps', function () {
             function $createAppBannedViewData(url){
                 BASE(url, []);
                 this.setBanned(true);
+            },
+
+            [[String]],
+            function $createAppErrorViewData(url){
+                BASE(url, []);
+                this.setAppError(true);
             }
+
+
+
 
         ]);
 

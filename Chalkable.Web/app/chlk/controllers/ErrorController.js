@@ -1,8 +1,8 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.activities.chlkerror.Error404Page');
-REQUIRE('chlk.models.apps.AppErrorViewData');
+REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.common.ServerErrorModel');
-REQUIRE('chlk.activities.chlkerror.AppErrorDialog');
+REQUIRE('chlk.activities.apps.AppWrapperDialog');
 REQUIRE('chlk.activities.common.PermissionsErrorPage');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.activities.chlkerror.GeneralServerErrorPage');
@@ -46,8 +46,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             function appErrorAction(){
-                var result = new ria.async.DeferredData(new chlk.models.apps.AppErrorViewData('someemail'));
-                return this.ShadeView(chlk.activities.chlkerror.AppErrorDialog, result);
+                var result = new ria.async.DeferredData(chlk.models.apps.AppWrapperViewData.$createAppErrorViewData(''));
+                return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
             },
 
             [[Array]],

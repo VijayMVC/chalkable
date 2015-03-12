@@ -39,14 +39,26 @@ mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type)
 
 
 mixin AttachmentDialogMsg(title, text)
-    .base-attachment-dialog
+    .base-attachment-dialog.permission-error-dialog
         .x-window-header
             +Toolbar([], null, null)
         .iframe-wrap
-            .window-error-message
+            .error-msg-block
                 h2.error-title=title
                 span.error-text=text
 
+
+mixin AppErrorDialog()
+    .base-attachment-dialog.app-error-dialog
+        .x-window-header
+            .toolbar
+            .x-close-btn.close
+        .iframe-wrap
+            .error-msg-block
+                h2.error-title ooops!
+                span.error-text There seems to be problem with this app, please try later
+                .report-problem
+                    a(href="mailto:errors@chalkable.com").grey-link Report problem
 
 mixin AppBannedDialog()
     .base-attachment-dialog.app-error-dialog
@@ -54,6 +66,6 @@ mixin AppBannedDialog()
             .toolbar
             .x-close-btn.close
         .iframe-wrap
-            .window-error-message
+            .error-msg-block
                 h2.error-title ooops!
                 span.error-text this app has been banned.

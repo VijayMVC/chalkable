@@ -8,6 +8,8 @@ if self.isMyAppsError()
     +AttachmentDialogMsg(self.getErrorTitle(), self.getErrorMessage())
 else if self.isBanned()
     +AppBannedDialog()
+else if self.isAppError()
+    +AppErrorDialog()
 else
     +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId, self.getType()).app-wrapper
 

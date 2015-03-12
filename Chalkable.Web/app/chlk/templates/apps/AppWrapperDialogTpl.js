@@ -25,6 +25,9 @@ NAMESPACE('chlk.templates.apps', function () {
             Boolean, 'banned',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'appError',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'myAppsError',
 
             [ria.templates.ModelPropertyBind],
