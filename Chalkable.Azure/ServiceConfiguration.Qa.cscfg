@@ -12,7 +12,7 @@
       <Setting name="ChalkableSchoolDbServers" value="v8xjnk8au1.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <!-- CDN and content settings-->
-      <Setting name="Domain" value="qa.chalkable.com" />
+      <Setting name="Domain" value="classroom.qa.chalkable.com" />
       <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="Yqw/rtCv1iQ7eHejhSTVzV81Zv0Z51G/BCA/B9W4XU8=" />
