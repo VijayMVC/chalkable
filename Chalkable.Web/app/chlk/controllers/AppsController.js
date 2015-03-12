@@ -690,8 +690,8 @@ NAMESPACE('chlk.controllers', function (){
                              .thenBreak()
                      }
 
-                     return this.BackgroundNavigate('apps', 'details', [app.getId().valueOf(), true]);
-                     return this.updateApp(newApp);
+                     this.BackgroundNavigate('apps', 'details', [newApp.getId().valueOf(), true]);
+                     return ria.async.BREAK;
                  }, this);
              return this.UpdateView(chlk.activities.apps.AppInfoPage, result);
         },
