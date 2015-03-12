@@ -48,7 +48,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                var app = new ApplicationDataAccess(uow).GetApplicationByUrl(applicationUrl);
+                var app = new ApplicationDataAccess(uow).GetLiveApplicationByUrl(applicationUrl);
                 return app.Permissions.Select(x => x.Permission).ToList();
             }
         }
@@ -141,8 +141,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                var app = new ApplicationDataAccess(uow).GetApplicationByUrl(url);
-                return app;
+                return new ApplicationDataAccess(uow).GetLiveApplicationByUrl(url);
             }
         }
 

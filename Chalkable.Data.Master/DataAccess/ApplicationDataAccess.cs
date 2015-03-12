@@ -33,14 +33,26 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
-        public Application GetApplicationByUrl(string url)
+        public Application GetLiveApplicationByUrl(string url)
         {
             var res = SelectOne<Application>(new AndQueryCondition
                     {
                         {Application.URL_FIELD, url},
-                        {Application.ORIGINAL_REF_FIELD, null}
+                        {Application.STATE_FIELD, ApplicationStateEnum.Live}
                     });
-            
+
+            LoadApplicationData(res);
+            return res;
+        }
+
+        public Application GetDraftApplicationByUrl(string url)
+        {
+            var res = SelectOne<Application>(new AndQueryCondition
+                    {
+                        {Application.URL_FIELD, url},
+                        {Application.STATE_FIELD, ApplicationStateEnum.Live, ConditionRelation.NotEqual}
+                    });
+
             LoadApplicationData(res);
             return res;
         }
